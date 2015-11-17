@@ -278,7 +278,6 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod);
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod);
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod);
-unsigned Usr_GetNumUsrsInCountry (Rol_Role_t Role,long CtyCod);
 
 long Usr_GetRamdomStdFromCrs (long CrsCod);
 long Usr_GetRamdomStdFromGrp (long GrpCod);

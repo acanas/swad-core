@@ -11164,4 +11164,3 @@ SELECT TstCod,AllowTeachers,UNIX_TIMESTAMP(TstTime) AS T,NumQsts,NumQstsNotBlank
 SELECT * FROM expanded_folders WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+'1000';
 SELECT * FROM expanded_folders WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'1000');
 
-

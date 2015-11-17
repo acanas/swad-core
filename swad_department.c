@@ -176,7 +176,7 @@ void Dpt_SeeDepts (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Department_unspecified,
-	       Sta_GetTotalNumberOfUsers (Sco_SCOPE_INS,
+	       Sta_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/

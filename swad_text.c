@@ -5130,23 +5130,23 @@ const char *Txt_COUNTRIES_ORDER[2] =
 #endif
 	 ,
 #if   L==0
-	 "Usuaris"
+	 "Usuaris d'aquesta nacionalitat"
 #elif L==1
-	 "Benutzer"
+	 "Benutzer dieser Staatsangeh&ouml;rigkeit"
 #elif L==2
-	 "Users"
+	 "Users of that nationality"
 #elif L==3
-	 "Usuarios"
+	 "Usuarios de esa nacionalidad"
 #elif L==4
-	 "Utilisateurs"
+	 "Utilisateurs de cette nationalité"
 #elif L==5
-	 "Usuarios"	// Okoteve traducción
+	 "Usuarios de esa nacionalidad"	// Okoteve traducción
 #elif L==6
-	 "Utenti"
+	 "Utenti di questa nazionalit&agrave;"
 #elif L==7
-	 "Users"
+	 "U&zdot;ytkownicy tej narodowo&sacute;ci"
 #elif L==8
-	 "Utilizadores"
+	 "Utilizadores dessa nacionalidade"
 #endif
 	};
 
@@ -14779,27 +14779,6 @@ const char *Txt_Institutions =
 	"Instytucje";
 #elif L==8
 	"Institu&ccedil;&otilde;es";
-#endif
-
-const char *Txt_Institutions_ABBREVIATION =
-#if   L==0
-	"Instit.";
-#elif L==1
-	"Hochschulen";
-#elif L==2
-	"Instit.";
-#elif L==3
-	"Instit.";
-#elif L==4
-	"Instit.";
-#elif L==5
-	"Instit.";	// Okoteve traducción
-#elif L==6
-	"Istit.";
-#elif L==7
-	"Instyt.";
-#elif L==8
-	"Instit.";
 #endif
 
 const char *Txt_institutions =
@@ -47390,6 +47369,27 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 	"%u users have been removed.";		// Potrzebujesz tlumaczenie
 #elif L==8
 	"%u users have been removed.";		// Necessita de tradução
+#endif
+
+const char *Txt_Users_in_courses =
+#if   L==0
+	"Usuaris en assignatures";
+#elif L==1
+	"Benutzer in Kurse";
+#elif L==2
+	"Users in courses";
+#elif L==3
+	"Usuarios en asignaturas";
+#elif L==4
+	"Utilisateurs dans mati&egrave;res";
+#elif L==5
+	"Usuarios en asignaturas";	// Okoteve traducción
+#elif L==6
+	"Utenti in corsi";
+#elif L==7
+	"U&zdot;ytkownik&oacute;w w kurs&otilde;w";
+#elif L==8
+	"Usu&aacute;rios em disciplinas";
 #endif
 
 const char *Txt_usr =		// Abbreviation of user (three characters + dot)

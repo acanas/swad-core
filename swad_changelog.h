@@ -112,11 +112,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.39.1 (2015/11/16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.40 (2015/11/17)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.40:    Nov 17, 2015	Changes in listing of countries. (187275 lines)
         Version 15.39.1:  Nov 16, 2015	User' e-mail can be removed even if it is the unique. (187236 lines)
         Version 15.39:    Nov 16, 2015	Administrators can edit another user' e-mails. (187268 lines)
 					9 changes necessary in database:

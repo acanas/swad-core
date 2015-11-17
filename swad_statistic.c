@@ -4007,8 +4007,12 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_STUDENT);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_TEACHER);
+   Usr_GetAndShowNumUsrsInPlatform (Rol_STUDENT);	// Students
+   Usr_GetAndShowNumUsrsInPlatform (Rol_TEACHER);	// Teachers
+   Usr_GetAndShowNumUsrsInPlatform (Rol_UNKNOWN);	// Students and teachers
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th colspan=\"4\" style=\"height:10px;\">"
+                      "</tr>");
    Usr_GetAndShowNumUsrsInPlatform (Rol__GUEST_);	// Users not beloging to any course
 
    Lay_EndRoundFrameTable ();
@@ -5175,8 +5179,9 @@ static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res)
 /*****************************************************************************/
 /************************* Get total number of users *************************/
 /*****************************************************************************/
+// Here Rol_ROLE_UNKNOWN means "students or teachers"
 
-unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
+unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
   {
    char Query[512];
 
@@ -5184,15 +5189,16 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data");
+         if (Role == Rol_UNKNOWN)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+        	           " FROM crs_usr");
          else
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
         	           " FROM crs_usr WHERE Role='%u'",
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
+         if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
                            " WHERE institutions.CtyCod='%ld'"
@@ -5213,7 +5219,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
+         if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr"
                            " WHERE centres.InsCod='%ld'"
@@ -5232,7 +5238,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
+         if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM degrees,courses,crs_usr"
                            " WHERE degrees.CtrCod='%ld'"
@@ -5249,7 +5255,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
+         if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM courses,crs_usr"
                            " WHERE courses.DegCod='%ld'"
@@ -5264,7 +5270,7 @@ unsigned Sta_GetTotalNumberOfUsers (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "all users"
+         if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
                            " WHERE CrsCod='%ld'",
                      Gbl.CurrentCrs.Crs.CrsCod);
@@ -6593,13 +6599,14 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
             Txt_Number_of_BR_e_mails);
 
    /***** Get total number of users in platform *****/
-   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsers (Gbl.Scope.Current,Rol_UNKNOWN);
+   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);	// !!!!!!
 
    /***** Get total number of users who want to be notified by e-mail on some event, from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE EmailNtfEvents<>0");
+         sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+                        " WHERE EmailNtfEvents<>0");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -6666,7 +6673,8 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE ((EmailNtfEvents & %u)<>0)",
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+        	           " WHERE ((EmailNtfEvents & %u)<>0)",
                      (1 << NotifyEvent));
             break;
 	 case Sco_SCOPE_CTY:
@@ -8100,7 +8108,8 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE IconSet='%s'",
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+        	           " WHERE IconSet='%s'",
         	     Ico_IconSetId[IconSet]);
             break;
 	 case Sco_SCOPE_CTY:
@@ -8373,7 +8382,8 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE SideCols='%u'",
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+        	           " WHERE SideCols='%u'",
                      SideCols);
             break;
 	 case Sco_SCOPE_CTY:

@@ -70,7 +70,7 @@ static void Ins_ListInstitutionsForSeeing (void);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
-static unsigned Ins_GetNumUsrsInInstitution (long InsCod);
+static unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
@@ -993,12 +993,13 @@ void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
 /****************** Get number of users in an institution ********************/
 /*****************************************************************************/
 
-static unsigned Ins_GetNumUsrsInInstitution (long InsCod)
+static unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
   {
    char Query[256];
 
    /***** Get number of users in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+	          " WHERE InsCod='%ld'",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not check number of users in an institution");
   }
@@ -1407,7 +1408,7 @@ void Ins_RemoveInstitution (void)
 
    /***** Check if this institution has users *****/
    if (Ctr_GetNumCtrsInIns (Ins.InsCod) ||
-       Ins_GetNumUsrsInInstitution (Ins.InsCod))	// Institution has centres or users ==> don't remove
+       Ins_GetNumUsrsWhoClaimToBelongToIns (Ins.InsCod))	// Institution has centres or users ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {

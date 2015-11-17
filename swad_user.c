@@ -178,7 +178,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t RoleInClassPhoto);
 
 static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
-static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role);
 static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
@@ -1362,7 +1361,8 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
    char Query[512];
 
    /***** Get if an encrypted user's code already existed in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE EncryptedUsrCod='%s'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+	          " WHERE EncryptedUsrCod='%s'",
             EncryptedUsrCod);
    return (DB_QueryCOUNT (Query,"can not check if an encrypted user's code already existed") != 0);
   }
@@ -3424,43 +3424,32 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 /*****************************************************************************/
 /****** Count how many users with a role belong to courses of a country ******/
 /*****************************************************************************/
-
+// Here Rol_UNKNOWN means students or teachers
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
   {
    char Query[512];
 
    /***** Get the number of users in a degree from database ******/
-   sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM institutions,centres,degrees,courses,crs_usr"
-                  " WHERE institutions.CtyCod='%ld'"
-                  " AND institutions.InsCod=centres.InsCod"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
-            CtyCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a country");
-  }
-
-/*****************************************************************************/
-/*********************** Get number of users in a country ********************/
-/*****************************************************************************/
-
-unsigned Usr_GetNumUsrsInCountry (Rol_Role_t Role,long CtyCod)
-  {
-   char Query[256];
-
-   /***** Get the number of users (with a role) in a country from database ******/
-   if (Role == Rol_UNKNOWN)        // Here Rol_ROLE_UNKNOWN means "all users"
-      sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-                     " WHERE CtyCod='%ld'",CtyCod);
+   if (Role == Rol_UNKNOWN)	// Any user
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM institutions,centres,degrees,courses,crs_usr"
+		     " WHERE institutions.CtyCod='%ld'"
+		     " AND institutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=degrees.CtrCod"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod",
+	       CtyCod);
    else
-      sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-	             " FROM usr_data,crs_usr"
-                     " WHERE usr_data.CtyCod='%ld'"
-                     " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'",
-               CtyCod,(unsigned) Role);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a country");
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM institutions,centres,degrees,courses,crs_usr"
+		     " WHERE institutions.CtyCod='%ld'"
+		     " AND institutions.InsCod=centres.InsCod"
+		     " AND centres.CtrCod=degrees.CtrCod"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role='%u'",
+	       CtyCod,(unsigned) Role);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a country");
   }
 
 /*****************************************************************************/
@@ -7261,7 +7250,8 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
       return false;
 
    /***** Get if a user exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+	          " WHERE UsrCod='%ld'",
 	    UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user exists") != 0);
   }
@@ -7281,47 +7271,52 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 /*****************************************************************************/
 /************************ See stats about the platform ***********************/
 /*****************************************************************************/
+// Here Rol_ROLE_UNKNOWN means "all users"
 
 void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
   {
+   extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumUsrs;
    float NumCrssPerUsr;
    float NumUsrsPerCrs;
+   char *Class = (Role == Rol_UNKNOWN) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
+	                                 "DAT RIGHT_BOTTOM";
 
    /***** Get the number of users belonging to any course *****/
    if (Role == Rol__GUEST_)	// Users not beloging to any course
       NumUsrs = Usr_GetNumUsrsNotBelongingToAnyCrs ();
    else
-      NumUsrs = Usr_GetNumUsrsBelongingToAnyCrs (Role);
+      NumUsrs = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Role);
 
    /***** Get average number of courses per user *****/
    NumCrssPerUsr = (Role == Rol__GUEST_) ? 0 :
-	                                      Usr_GetNumCrssPerUsr (Role);
+	                                   Usr_GetNumCrssPerUsr (Role);
 
    /***** Query the number of users per course *****/
    NumUsrsPerCrs = (Role == Rol__GUEST_) ? 0 :
-	                                      Usr_GetNumUsrsPerCrs (Role);
+	                                   Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_BOTTOM\">"
+                      "<td class=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT RIGHT_BOTTOM\">"
+                      "<td class=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT RIGHT_BOTTOM\">"
+                      "<td class=\"%s\">"
                       "%.2f"
                       "</td>"
-                      "<td class=\"DAT RIGHT_BOTTOM\">"
+                      "<td class=\"%s\">"
                       "%.2f"
                       "</td>"
                       "</tr>",
-            Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            NumUsrs,
-            NumCrssPerUsr,
-            NumUsrsPerCrs);
+            Class,(Role == Rol_UNKNOWN) ? Txt_Total :
+        	                          Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Class,NumUsrs,
+            Class,NumCrssPerUsr,
+            Class,NumUsrsPerCrs);
   }
 
 /*****************************************************************************/
@@ -7340,81 +7335,7 @@ static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
   }
 
 /*****************************************************************************/
-/*************** Get number of courses with users of a type ******************/
-/*****************************************************************************/
-
-static unsigned Usr_GetNumUsrsBelongingToAnyCrs (Rol_Role_t Role)
-  {
-   char Query[1024];
-
-   /***** Get number of users who belong to any course *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-                        " FROM crs_usr"
-                        " WHERE Role='%u'",
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-                        " FROM centres,degrees,courses,crs_usr"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-                        " FROM degrees,courses,crs_usr"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-                        " FROM courses,crs_usr"
-                        " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-                        " FROM crs_usr"
-                        " WHERE crs_usr.CrsCod='%ld'"
-                        " AND crs_usr.Role='%u'",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  (unsigned) Role);
-         break;
-      default:
-         Lay_ShowErrorAndExit ("Wrong scope.");
-         break;
-     }
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who belong to any course");
-  }
-
-/*****************************************************************************/
-/************ Get average number of courses with users of a type *************/
+/************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
 static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
@@ -7428,61 +7349,109 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT AVG(NumCrss) FROM "
-                        "(SELECT COUNT(CrsCod) AS NumCrss"
-                        " FROM crs_usr"
-                        " WHERE Role='%u' GROUP BY UsrCod) AS NumCrssTable",
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(CrsCod) AS NumCrss"
+			   " FROM crs_usr"
+			   " GROUP BY UsrCod) AS NumCrssTable");
+	 else
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(CrsCod) AS NumCrss"
+			   " FROM crs_usr"
+			   " WHERE Role='%u' GROUP BY UsrCod) AS NumCrssTable",
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT AVG(NumCrss) FROM "
-                        "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-                        " FROM institutions,centres,degrees,courses,crs_usr"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM institutions,centres,degrees,courses,crs_usr"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentCty.Cty.CtyCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM institutions,centres,degrees,courses,crs_usr"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentCty.Cty.CtyCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT AVG(NumCrss) FROM "
-                        "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-                        " FROM centres,degrees,courses,crs_usr"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM centres,degrees,courses,crs_usr"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentIns.Ins.InsCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM centres,degrees,courses,crs_usr"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentIns.Ins.InsCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT AVG(NumCrss) FROM "
-                        "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-                        " FROM degrees,courses,crs_usr"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM degrees,courses,crs_usr"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentCtr.Ctr.CtrCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM degrees,courses,crs_usr"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentCtr.Ctr.CtrCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT AVG(NumCrss) FROM "
-                        "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
-                        " FROM courses,crs_usr"
-                        " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM courses,crs_usr"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentDeg.Deg.DegCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
+			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
+			   " FROM courses,crs_usr"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
+		     Gbl.CurrentDeg.Deg.DegCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
          return 1.0;
@@ -7517,65 +7486,114 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
-                        "(SELECT COUNT(UsrCod) AS NumUsrs"
-                        " FROM crs_usr"
-                        " WHERE Role='%u' GROUP BY CrsCod) AS NumUsrsTable",
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(UsrCod) AS NumUsrs"
+			   " FROM crs_usr"
+			   " GROUP BY CrsCod) AS NumUsrsTable");
+	 else
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(UsrCod) AS NumUsrs"
+			   " FROM crs_usr"
+			   " WHERE Role='%u' GROUP BY CrsCod) AS NumUsrsTable",
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
-                        "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-                        " FROM institutions,centres,degrees,courses,crs_usr"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM institutions,centres,degrees,courses,crs_usr"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentCty.Cty.CtyCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM institutions,centres,degrees,courses,crs_usr"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentCty.Cty.CtyCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
-                        "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-                        " FROM centres,degrees,courses,crs_usr"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM centres,degrees,courses,crs_usr"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentIns.Ins.InsCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM centres,degrees,courses,crs_usr"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentIns.Ins.InsCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
-                        "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-                        " FROM degrees,courses,crs_usr"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM degrees,courses,crs_usr"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentCtr.Ctr.CtrCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM degrees,courses,crs_usr"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentCtr.Ctr.CtrCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT AVG(NumUsrs) FROM "
-                        "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
-                        " FROM courses,crs_usr"
-                        " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Role);
+	 if (Role == Rol_UNKNOWN)	// Any user
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM courses,crs_usr"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentDeg.Deg.DegCod);
+	 else
+	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
+			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
+			   " FROM courses,crs_usr"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.Role='%u'"
+			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
+		     Gbl.CurrentDeg.Deg.DegCod,
+		     (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         return (float) ((Role == Rol_TEACHER) ? Gbl.CurrentCrs.Crs.NumTchs :
-                                                      Gbl.CurrentCrs.Crs.NumStds);
+         return (float) ( Role == Rol_UNKNOWN ? Gbl.CurrentCrs.Crs.NumUsrs :	// Any user
+                         (Role == Rol_TEACHER ? Gbl.CurrentCrs.Crs.NumTchs :	// Teachers
+                                                Gbl.CurrentCrs.Crs.NumStds));	// Students
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
          break;
