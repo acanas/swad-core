@@ -194,7 +194,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
   }
 
 /*****************************************************************************/
-/****************** Draw institution logo and name with link *****************/
+/******************** Draw centre logo and name with link ********************/
 /*****************************************************************************/
 
 void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
@@ -210,7 +210,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
    Act_LinkFormSubmit (Gbl.Title,ClassLink);
 
-   /***** Draw institution logo *****/
+   /***** Draw centre logo *****/
    Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
 		 16,ClassLogo,true);
 

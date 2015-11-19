@@ -3232,7 +3232,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3323,7 +3323,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3513,7 +3513,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3560,7 +3560,6 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
 
 static void Sta_WriteDegree (long DegCod)
   {
-   extern const char *Txt_Go_to_X;
    struct Degree Deg;
 
    /***** Start cell *****/
@@ -3577,15 +3576,8 @@ static void Sta_WriteDegree (long DegCod)
                Deg.FullName);
 
       /***** Form to go to degree *****/
-      Act_FormGoToStart (ActSeeDegInf);
-      Deg_PutParamDegCod (DegCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Deg.ShortName);
-      Act_LinkFormSubmit (Gbl.Title,"LOG");
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-		    16,"CENTER_TOP",true);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
-               Deg.ShortName);
-      Act_FormEnd ();
+      Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+                                         "LOG","CENTER_TOP");
      }
    else			// Hit with no degree selected
       /***** No degree selected *****/
@@ -3621,13 +3613,13 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"

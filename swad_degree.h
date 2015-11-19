@@ -98,6 +98,9 @@ struct DegreeType
 void Deg_SeePending (void);
 void Deg_SeeDegWithPendingCrss (void);
 
+void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassLogo);
+
 void Deg_ShowConfiguration (void);
 void Deg_PrintConfiguration (void);
 

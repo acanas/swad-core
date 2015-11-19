@@ -150,7 +150,6 @@ void Deg_SeeDegWithPendingCrss (void)
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -221,15 +220,8 @@ void Deg_SeeDegWithPendingCrss (void)
          fprintf (Gbl.F.Out,"<tr>"
 	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
-         Act_FormGoToStart (ActSeeCrs);
-         Deg_PutParamDegCod (Deg.DegCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,Deg.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
-         Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"&nbsp;%s</a>",
-	          Deg.FullName);
-         Act_FormEnd ();
+         Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
+                                            "DAT_NOBR","CENTER_MIDDLE");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending courses (row[1]) */
@@ -249,6 +241,34 @@ void Deg_SeeDegWithPendingCrss (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Draw degree logo and name with link ********************/
+/*****************************************************************************/
+
+void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassLogo)
+  {
+   extern const char *Txt_Go_to_X;
+
+   /***** Start form *****/
+   Act_FormGoToStart (Action);
+   Deg_PutParamDegCod (Deg->DegCod);
+
+   /***** Link to action *****/
+   sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+
+   /***** Draw degree logo *****/
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
+		 16,ClassLogo,true);
+
+   /***** End link *****/
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1222,7 +1242,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_DEGREE_With_year_for_optional_courses;
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
@@ -1274,17 +1293,9 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
             NumDeg);
 
    /***** Degree logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClassStrong,BgColor);
-   Act_FormGoToStart (ActSeeCrs);
-   Deg_PutParamDegCod (Deg->DegCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
-                 16,"CENTER_MIDDLE",true);
-   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
-            Deg->FullName);
-   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
+                                      TxtClassStrong,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Type of degree *****/
@@ -3893,18 +3904,18 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
-   long DegCod;
+   struct Degree Deg;
 
    /***** Get degrees admin by a user from database *****/
-   sprintf (Query,"(SELECT -1 AS DegCod,'' AS ShortName,''"
+   sprintf (Query,"(SELECT -1 AS DegCod,'' AS FullName"
 	          " FROM admin"
 	          " WHERE UsrCod='%ld' AND Scope='Sys')"
                   " UNION "
-                  "(SELECT degrees.DegCod,degrees.ShortName AS ShortName,degrees.FullName"
+                  "(SELECT DegCod,degrees.FullName"
                   " FROM admin,degrees"
                   " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
                   " AND admin.Cod=degrees.DegCod)"
-                  " ORDER BY ShortName",
+                  " ORDER BY FullName",
             UsrCod,UsrCod);
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by a user"))) // If degrees found for this administrator
       /***** Get the list of degrees *****/
@@ -3930,19 +3941,16 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
 
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
-         DegCod = Str_ConvertStrCodToLongCod (row[0]);
+         Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         if (DegCod > 0)
+         if (Deg.DegCod > 0)
            {
+	    /* Get data of degree */
+	    Deg_GetDataOfDegreeByCod (&Deg);
+
             /* Write degree logo and degree short name */
-            Act_FormGoToStart (ActSeeDegInf);
-            Deg_PutParamDegCod (DegCod);
-            sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
-            Act_LinkFormSubmit (Gbl.Title,"DAT_SMALL_NOBR");
-            Log_DrawLogo (Sco_SCOPE_DEG,DegCod,row[1],
-                          16,"LEFT_TOP",true);
-            fprintf (Gbl.F.Out,"&nbsp;%s</a>",row[2]);
-            Act_FormEnd ();
+            Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+                                               "DAT_SMALL_NOBR","LEFT_TOP");
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
