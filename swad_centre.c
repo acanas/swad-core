@@ -261,9 +261,6 @@ static void Ctr_Configuration (bool PrintView)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 /* Link to show degrees */
-	 Act_PutContextualLink (ActSeeDeg,NULL,"deg",Txt_Degrees);
-
          /* Link to print view */
          Act_PutContextualLink (ActPrnCtrInf,NULL,"print",Txt_Print);
 

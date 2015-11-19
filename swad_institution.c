@@ -158,7 +158,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          /* Get data of institution */
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
 
-         /* Institution logo and full name */
+         /* Institution logo and name */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
@@ -240,9 +240,6 @@ static void Ins_Configuration (bool PrintView)
       if (!PrintView)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-	 /* Link to show centres */
-         Act_PutContextualLink (ActSeeCtr,NULL,"ctr",Txt_Centres);
 
 	 /* Link to print view */
          Act_PutContextualLink (ActPrnInsInf,NULL,"print",Txt_Print);

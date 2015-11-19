@@ -297,9 +297,6 @@ static void Deg_Configuration (bool PrintView)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 /* Link to show courses */
-         Act_PutContextualLink (ActSeeCrs,NULL,"crs",Txt_Courses);
-
 	  /* Link to print view */
          Act_PutContextualLink (ActPrnDegInf,NULL,"print",Txt_Print);
 

@@ -220,9 +220,6 @@ static void Cty_Configuration (bool PrintView)
 	 /***** Links to show institutions and to print view  *****/
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 /* Link to show institutions */
-	 Act_PutContextualLink (ActSeeIns,NULL,"ins",Txt_Institutions);
-
 	 /* Link to print view */
 	 Act_PutContextualLink (ActPrnCtyInf,NULL,"print",Txt_Print);
 
