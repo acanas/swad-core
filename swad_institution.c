@@ -184,7 +184,6 @@ void Ins_SeeInsWithPendingCtrs (void)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-
 /*****************************************************************************/
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
@@ -572,10 +571,9 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
             NumIns);
 
    /***** Institution logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClassStrong,BgColor);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
-                                           "DAT_NOBR","CENTER_MIDDLE");
+                                           TxtClassStrong,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Stats *****/

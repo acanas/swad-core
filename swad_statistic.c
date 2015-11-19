@@ -3465,7 +3465,6 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
 
 static void Sta_WriteCentre (long CtrCod)
   {
-   extern const char *Txt_Go_to_X;
    struct Centre Ctr;
 
    /***** Start cell *****/
@@ -3482,15 +3481,8 @@ static void Sta_WriteCentre (long CtrCod)
                Ctr.FullName);
 
       /***** Form to go to centre *****/
-      Act_FormGoToStart (ActSeeCtrInf);
-      Ctr_PutParamCtrCod (CtrCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ctr.ShortName);
-      Act_LinkFormSubmit (Gbl.Title,"LOG");
-      Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
-		    16,"CENTER_TOP",true);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
-               Ctr.ShortName);
-      Act_FormEnd ();
+      Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+                                         "LOG","CENTER_TOP");
      }
    else			// Hit with no centre selected
       /***** No centre selected *****/

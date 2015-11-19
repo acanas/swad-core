@@ -85,6 +85,9 @@ typedef enum
 
 void Ctr_SeeCtrWithPendingDegs (void);
 
+void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassLogo);
+
 void Ctr_ShowConfiguration (void);
 void Ctr_PrintConfiguration (void);
 

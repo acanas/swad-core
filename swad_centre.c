@@ -101,7 +101,6 @@ void Ctr_SeeCtrWithPendingDegs (void)
    extern const char *Txt_Centres_with_pending_degrees;
    extern const char *Txt_Centre;
    extern const char *Txt_Degrees_ABBREVIATION;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -171,16 +170,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
-         Act_FormGoToStart (ActSeeDeg);
-         Ctr_PutParamCtrCod (Ctr.CtrCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,Ctr.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
-         Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"&nbsp;%s"
-                            "</a>",
-	          Ctr.FullName);
-         Act_FormEnd ();
+         Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeDeg,
+                                            "DAT_NOBR","CENTER_MIDDLE");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending degrees (row[1]) */
@@ -200,6 +191,34 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****************** Draw institution logo and name with link *****************/
+/*****************************************************************************/
+
+void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassLogo)
+  {
+   extern const char *Txt_Go_to_X;
+
+   /***** Start form *****/
+   Act_FormGoToStart (Action);
+   Ctr_PutParamCtrCod (Ctr->CtrCod);
+
+   /***** Link to action *****/
+   sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+
+   /***** Draw institution logo *****/
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
+		 16,ClassLogo,true);
+
+   /***** End link *****/
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -608,17 +627,9 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
             NumCtr);
 
    /***** Centre logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClassStrong,BgColor);
-   Act_FormGoToStart (ActSeeDeg);
-   Ctr_PutParamCtrCod (Ctr->CtrCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
-                 16,"CENTER_MIDDLE",true);
-   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
-	    Ctr->FullName);
-   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Ctr_DrawCentreLogoAndNameWithLink (Ctr,ActSeeDeg,
+                                      TxtClassStrong,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of teachers *****/
