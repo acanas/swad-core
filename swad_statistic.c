@@ -3232,7 +3232,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3291,7 +3291,7 @@ static void Sta_WriteCountry (long CtyCod)
       Cty_GetDataOfCountryByCod (&Cty);
 
       /***** Form to go to country *****/
-      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Cty,ActSeeCtyInf,
+      Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
                                              "LOG","COUNTRY_MAP_TINY");
      }
    else			// Hit with no country selected
@@ -3323,7 +3323,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3370,7 +3370,6 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
 
 static void Sta_WriteInstitution (long InsCod)
   {
-   extern const char *Txt_Go_to_X;
    struct Institution Ins;
 
    /***** Start cell *****/
@@ -3387,15 +3386,8 @@ static void Sta_WriteInstitution (long InsCod)
                Ins.FullName);
 
       /***** Form to go to institution *****/
-      Act_FormGoToStart (ActSeeInsInf);
-      Ins_PutParamInsCod (InsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ins.ShortName);
-      Act_LinkFormSubmit (Gbl.Title,"LOG");
-      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-		    16,"CENTER_TOP",true);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;</a>",
-               Ins.ShortName);
-      Act_FormEnd ();
+      Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
+                                              "LOG","CENTER_TOP");
      }
    else			// Hit with no institution selected
       /***** No institution selected *****/

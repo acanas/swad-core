@@ -92,6 +92,9 @@ typedef enum
 
 void Ins_SeeInsWithPendingCtrs (void);
 
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_t Action,
+                                             const char *ClassLink,const char *ClassLogo);
+
 void Ins_ShowConfiguration (void);
 void Ins_PrintConfiguration (void);
 

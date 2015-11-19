@@ -92,7 +92,6 @@ void Ins_SeeInsWithPendingCtrs (void)
    extern const char *Txt_Institutions_with_pending_centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Centres_ABBREVIATION;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -162,15 +161,8 @@ void Ins_SeeInsWithPendingCtrs (void)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
-         Act_FormGoToStart (ActSeeCtr);
-         Ins_PutParamInsCod (Ins.InsCod);
-         sprintf (Gbl.Title,Txt_Go_to_X,Ins.FullName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR");
-         Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-                       16,"CENTER_MIDDLE",true);
-         fprintf (Gbl.F.Out,"&nbsp;%s</a>",
-	          Ins.FullName);
-         Act_FormEnd ();
+         Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
+                                                 "DAT_NOBR","CENTER_MIDDLE");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending centres (row[1]) */
@@ -190,6 +182,35 @@ void Ins_SeeInsWithPendingCtrs (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+
+/*****************************************************************************/
+/****************** Draw institution logo and name with link *****************/
+/*****************************************************************************/
+
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_t Action,
+                                             const char *ClassLink,const char *ClassLogo)
+  {
+   extern const char *Txt_Go_to_X;
+
+   /***** Start form *****/
+   Act_FormGoToStart (Action);
+   Ins_PutParamInsCod (Ins->InsCod);
+
+   /***** Link to action *****/
+   sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+
+   /***** Draw institution logo *****/
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
+		 16,ClassLogo,true);
+
+   /***** End link *****/
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -523,7 +544,6 @@ static void Ins_ListInstitutionsForSeeing (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns)
   {
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -554,15 +574,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    /***** Institution logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
 	    TxtClassStrong,BgColor);
-   Act_FormGoToStart (ActSeeCtr);
-   Ins_PutParamInsCod (Ins->InsCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
-                 16,NULL,true);
-   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
-	    Ins->FullName);
-   Act_FormEnd ();
+   Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
+                                           "DAT_NOBR","CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Stats *****/

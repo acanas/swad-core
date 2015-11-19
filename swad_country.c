@@ -149,7 +149,7 @@ void Cty_SeeCtyWithPendingInss (void)
          fprintf (Gbl.F.Out,"<tr>"
 	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
-         Cty_DrawCountryMapWithLinkToSeeCtyInf (&Cty,ActSeeIns,
+         Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
                                                 "DAT_NOBR","COUNTRY_MAP_SMALL");
          fprintf (Gbl.F.Out,"</td>");
 
@@ -516,7 +516,7 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"LEFT_MIDDLE %s\">",
 	       BgColor);
-      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Gbl.Ctys.Lst[NumCty],ActSeeIns,
+      Cty_DrawCountryMapAndNameWithLink (&Gbl.Ctys.Lst[NumCty],ActSeeIns,
                                              "DAT_NOBR_N","COUNTRY_MAP_SMALL");
       fprintf (Gbl.F.Out,"</td>");
 
@@ -636,11 +636,11 @@ static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
   }
 
 /*****************************************************************************/
-/*********************** Check if country map exists *************************/
+/********************* Draw country map and name with link *******************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMapWithLinkToSeeCtyInf (struct Country *Cty,Act_Action_t Action,
-                                            const char *ClassLink,const char *ClassMap)
+void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassMap)
   {
    extern const char *Txt_Go_to_X;
 

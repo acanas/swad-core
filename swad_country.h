@@ -80,8 +80,8 @@ void Cty_ListCountries (void);
 void Cty_ListCountries1 (void);
 void Cty_ListCountries2 (void);
 
-void Cty_DrawCountryMapWithLinkToSeeCtyInf (struct Country *Cty,Act_Action_t Action,
-                                            const char *ClassLink,const char *ClassMap);
+void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
+                                        const char *ClassLink,const char *ClassMap);
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class);
 bool Cty_CheckIfCountryMapExists (struct Country *Cty);
 
