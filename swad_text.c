@@ -15205,17 +15205,17 @@ const char *Txt_Last_clicks_in_real_time =
 
 const char *Txt_Last_BR_year =	// "Last academic year", the opposite to "First academic year"
 #if   L==0
-	"&Uacute;lt..<br />curso";	// Necessita traduccio
+	"&Uacute;ltimo<br />curso";	// Necessita traduccio
 #elif L==1
 	"Last<br />year";		// Need Übersetzung
 #elif L==2
 	"Last<br />year";
 #elif L==3
-	"&Uacute;lt..<br />curso";
+	"&Uacute;ltimo<br />curso";
 #elif L==4
 	"Last<br />year";		// Besoin de traduction
 #elif L==5
-	"&Uacute;lt..<br />curso";	// Okoteve traducción
+	"&Uacute;ltimo<br />curso";	// Okoteve traducción
 #elif L==6
 	"Ultimo<br />anno";
 #elif L==7

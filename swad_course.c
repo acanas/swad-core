@@ -1272,7 +1272,8 @@ static void Crs_ListCoursesForSeeing (void)
    struct Course *Crs;
    unsigned Year;
    unsigned NumCrs;
-   const char *TxtClass;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
@@ -1294,8 +1295,16 @@ static void Crs_ListCoursesForSeeing (void)
          Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
          if (Crs->Year == Year)
            {
-            TxtClass = (Crs->Status & Crs_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
-        	                                                "DAT";
+            if (Crs->Status & Crs_STATUS_BIT_PENDING)
+              {
+               TxtClassNormal = "DAT_LIGHT";
+               TxtClassStrong = "DAT_LIGHT";
+              }
+            else
+              {
+               TxtClassNormal = "DAT";
+               TxtClassStrong = "DAT_N";
+              }
             BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                                    Gbl.ColorRows[Gbl.RowEvenOdd];
 
@@ -1319,30 +1328,30 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
-                     TxtClass,BgColor,
+                     TxtClassNormal,BgColor,
                      Crs->InstitutionalCrsCod);
 
             /* Course year */
             fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
-                     TxtClass,BgColor,
+                     TxtClassNormal,BgColor,
                      Txt_YEAR_OF_DEGREE[Crs->Year]);
 
             /* Course semester */
             fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
         	               "%s"
         	               "</td>",
-                     TxtClass,BgColor,
+                     TxtClassNormal,BgColor,
                      Txt_SEMESTER_OF_YEAR[Crs->Semester]);
 
             /* Course full name */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-                     TxtClass,BgColor);
+                     TxtClassStrong,BgColor);
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs->CrsCod);
             sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
-            Act_LinkFormSubmit (Gbl.Title,TxtClass);
+            Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
             fprintf (Gbl.F.Out,"%s</a>",
         	     Crs->FullName);
             Act_FormEnd ();
@@ -1352,13 +1361,13 @@ static void Crs_ListCoursesForSeeing (void)
             fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
         	               "%u"
         	               "</td>",
-                     TxtClass,BgColor,Crs->NumStds);
+                     TxtClassNormal,BgColor,Crs->NumStds);
 
             /* Current number of teachers in this course */
             fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
         	               "%u"
         	               "</td>",
-                     TxtClass,BgColor,Crs->NumTchs);
+                     TxtClassNormal,BgColor,Crs->NumTchs);
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1366,7 +1375,7 @@ static void Crs_ListCoursesForSeeing (void)
         	               "%s"
         	               "</td>"
                                "</tr>",
-                     TxtClass,BgColor,Txt_COURSE_STATUS[StatusTxt]);
+                     TxtClassNormal,BgColor,Txt_COURSE_STATUS[StatusTxt]);
            }
         }
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

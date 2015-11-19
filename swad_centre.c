@@ -580,7 +580,8 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    extern const char *Txt_Go_to_X;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
-   const char *TxtClass;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
@@ -588,8 +589,16 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    Plc.PlcCod = Ctr->PlcCod;
    Plc_GetDataOfPlaceByCod (&Plc);
 
-   TxtClass = (Ctr->Status & Ctr_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
-	                                               "DAT";
+   if (Ctr->Status & Ctr_STATUS_BIT_PENDING)
+     {
+      TxtClassNormal = "DAT_LIGHT";
+      TxtClassStrong = "DAT_LIGHT";
+     }
+   else
+     {
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_N";
+     }
    BgColor = (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
@@ -598,35 +607,19 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
             NumCtr);
 
-   /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
-		      "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-	    TxtClass,BgColor,
-	    Ctr->WWW,Ctr->FullName);
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
-                 16,"CENTER_MIDDLE",true);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</td>");
-
-   /***** Place *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-		      "%s"
-		      "</td>",
-	    TxtClass,BgColor,
-	    Plc.PlcCod > 0 ? Plc.ShortName :
-			     Txt_Another_place);
-
-   /***** Centre name *****/
+   /***** Centre logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeCtrInf);
+	    TxtClassStrong,BgColor);
+   Act_FormGoToStart (ActSeeDeg);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>",
+   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
+                 16,"CENTER_MIDDLE",true);
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
 	    Ctr->FullName);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -635,15 +628,23 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
 		      "</td>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
 	    Ctr->NumTchs);
 
    /***** Number of degrees *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
 		      "</td>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
 	    Ctr->NumDegs);
+
+   /***** Place *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
+		      "%s"
+		      "</td>",
+	    TxtClassNormal,BgColor,
+	    Plc.PlcCod > 0 ? Plc.ShortName :
+			     Txt_Another_place);
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
@@ -651,7 +652,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "%s"
 		      "</td>"
 		      "</tr>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
 	    Txt_CENTRE_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -2104,12 +2105,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    tCtrsOrderType Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
-                      "<th class=\"BM\"></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Place);
+                      "<th></th>");
    for (Order = Ctr_ORDER_BY_CENTRE;
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
@@ -2139,8 +2135,12 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
 	              "</tr>",
 	    Txt_Degrees_ABBREVIATION,
+            Txt_Place,
 	    Txt_Status);
   }
 

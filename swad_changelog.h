@@ -103,7 +103,6 @@
 // TODO: System admin should be able to remove/edit user's mail (when he/she detects a recipient does not exists, for example)
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Remove columns "first year, last year, optional, status" when listing degrees?
-// TODO: Row with total of users in figures
 // TODO: Show message indicating that mail could be in SPAM folder
 // TODO: List institution and centre admins
 // TODO: List of degrees administrated by a degree admin should be ordered by name
@@ -112,12 +111,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.40 (2015/11/17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.40.1 (2015/11/19)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.40:    Nov 17, 2015	Changes in listing of countries. (187275 lines)
+        Version 15.40.1:  Nov 19, 2015	Changes in behaviour of links to countries, institutions, centres and degrees. (187288 lines)
+        Version 15.40:    Nov 17, 2015	Changes in statistics of number of users.
+					Changes in listing of countries. (187275 lines)
         Version 15.39.1:  Nov 16, 2015	User' e-mail can be removed even if it is the unique. (187236 lines)
         Version 15.39:    Nov 16, 2015	Administrators can edit another user' e-mails. (187268 lines)
 					9 changes necessary in database:

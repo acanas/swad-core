@@ -528,12 +528,21 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
   {
    extern const char *Txt_Go_to_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
-   const char *TxtClass;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
-   TxtClass = (Ins->Status & Ins_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
-	                                               "DAT";
+   if (Ins->Status & Ins_STATUS_BIT_PENDING)
+     {
+      TxtClassNormal = "DAT_LIGHT";
+      TxtClassStrong = "DAT_LIGHT";
+     }
+   else
+     {
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_N";
+     }
    BgColor = (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
@@ -542,28 +551,19 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 		      "<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
             NumIns);
 
-   /***** Icon *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\""
-	              " style=\"width:25px;\">"
-		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">",
-	    BgColor,
-	    Ins->WWW,Ins->FullName);
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
-                 16,NULL,true);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</td>");
-
-   /***** Name and link to go to this institution *****/
+   /***** Institution logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeInsInf);
+	    TxtClassStrong,BgColor);
+   Act_FormGoToStart (ActSeeCtr);
    Ins_PutParamInsCod (Ins->InsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>",
+   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
+                 16,NULL,true);
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
 	    Ins->FullName);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -572,27 +572,27 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumUsrs);
+	    TxtClassNormal,BgColor,Ins->NumUsrs);
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumStds);
+	    TxtClassNormal,BgColor,Ins->NumStds);
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumTchs);
+	    TxtClassNormal,BgColor,Ins->NumTchs);
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumCtrs);
+	    TxtClassNormal,BgColor,Ins->NumCtrs);
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumDegs);
+	    TxtClassNormal,BgColor,Ins->NumDegs);
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Ins->NumDpts);
+	    TxtClassNormal,BgColor,Ins->NumDpts);
 
    /***** Institution status *****/
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
@@ -600,7 +600,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 	              "%s"
 	              "</td>"
 		      "</tr>",
-	    TxtClass,BgColor,Txt_INSTITUTION_STATUS[StatusTxt]);
+	    TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -622,8 +622,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    Ins_InssOrderType_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
-                      "<th style=\"width:25px;\"></th>");
+                      "<th></th>");
    for (Order = Ins_ORDER_BY_INSTITUTION;
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)

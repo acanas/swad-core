@@ -519,8 +519,8 @@ void Cty_ListCountries2 (void)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"LEFT_MIDDLE %s\">",
 	       BgColor);
-      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Gbl.Ctys.Lst[NumCty],ActSeeCtyInf,
-                                             "DAT_NOBR","COUNTRY_MAP_SMALL");
+      Cty_DrawCountryMapWithLinkToSeeCtyInf (&Gbl.Ctys.Lst[NumCty],ActSeeIns,
+                                             "DAT_NOBR_N","COUNTRY_MAP_SMALL");
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write stats of this country */

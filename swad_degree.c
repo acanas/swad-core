@@ -644,7 +644,7 @@ void Deg_WriteCtyInsCtrDeg (void)
 	       The_ClassDegree[Gbl.Prefs.Theme]);
 
       /***** Form to go to the country *****/
-      Act_FormGoToStart (ActSeeCtyInf);
+      Act_FormGoToStart (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
       Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
 	                  The_ClassDegree[Gbl.Prefs.Theme]);
@@ -659,7 +659,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                   The_ClassDegree[Gbl.Prefs.Theme]);
 
          /***** Form to go to the institution *****/
-         Act_FormGoToStart (ActSeeInsInf);
+         Act_FormGoToStart (ActSeeCtr);
          Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
          Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
                              The_ClassDegree[Gbl.Prefs.Theme]);
@@ -674,7 +674,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                      The_ClassDegree[Gbl.Prefs.Theme]);
 
             /***** Form to go to the centre *****/
-            Act_FormGoToStart (ActSeeCtrInf);
+            Act_FormGoToStart (ActSeeDeg);
             Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
             Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
         	                The_ClassDegree[Gbl.Prefs.Theme]);
@@ -689,7 +689,7 @@ void Deg_WriteCtyInsCtrDeg (void)
                         The_ClassDegree[Gbl.Prefs.Theme]);
 
                /***** Form to go to the degree *****/
-               Act_FormGoToStart (ActSeeDegInf);
+               Act_FormGoToStart (ActSeeCrs);
                Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
                Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
         	                   The_ClassDegree[Gbl.Prefs.Theme]);
@@ -1230,7 +1230,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    extern const char *Txt_DEGREE_Without_year_for_optional_courses;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    struct DegreeType DegTyp;
-   const char *TxtClass;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
 
@@ -1239,8 +1240,16 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    if (!Deg_GetDataOfDegreeTypeByCod (&DegTyp))
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
-   TxtClass = (Deg->Status & Deg_STATUS_BIT_PENDING) ? "DAT_LIGHT" :
-	                                               "DAT";
+   if (Deg->Status & Deg_STATUS_BIT_PENDING)
+     {
+      TxtClassNormal = "DAT_LIGHT";
+      TxtClassStrong = "DAT_LIGHT";
+     }
+   else
+     {
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_N";
+     }
    BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
@@ -1264,49 +1273,42 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
-	    TxtClass,BgColor,
+	    TxtClassNormal,BgColor,
             NumDeg);
 
-   /***** Degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
-		      "<a href=\"%s\" title=\"%s\" target=\"_blank\">",
-	    BgColor,
-	    Deg->WWW,Deg->FullName);
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
-                 16,"CENTER_MIDDLE",true);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</td>");
-
-   /* Degree full name */
+   /***** Degree logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClass,BgColor);
-   Act_FormGoToStart (ActSeeDegInf);
+	    TxtClassStrong,BgColor);
+   Act_FormGoToStart (ActSeeCrs);
    Deg_PutParamDegCod (Deg->DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
-   Act_LinkFormSubmit (Gbl.Title,TxtClass);
-   fprintf (Gbl.F.Out,"%s</a>",Deg->FullName);
+   Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
+                 16,"CENTER_MIDDLE",true);
+   fprintf (Gbl.F.Out,"&nbsp;%s</a>",
+            Deg->FullName);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Type of degree */
+   /***** Type of degree *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 	              "%s"
 	              "</td>",
-	    TxtClass,BgColor,DegTyp.DegTypName);
+	    TxtClassNormal,BgColor,DegTyp.DegTypName);
 
-   /* Degree first year */
+   /***** Degree first year *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Deg->FirstYear);
+	    TxtClassNormal,BgColor,Deg->FirstYear);
 
-   /* Degree last year */
+   /***** Degree last year *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Deg->LastYear);
+	    TxtClassNormal,BgColor,Deg->LastYear);
 
-   /* Degree optional year */
+   /***** Degree optional year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1321,19 +1323,19 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	    Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
 			   Txt_DEGREE_Without_year_for_optional_courses);
 
-   /* Current number of courses in this degree */
+   /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClass,BgColor,Deg->NumCourses);
+	    TxtClassNormal,BgColor,Deg->NumCourses);
 
-   /* Degree status */
+   /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
 	              "%s"
 	              "</td>"
 		      "</tr>",
-	    TxtClass,BgColor,Txt_DEGREE_STATUS[StatusTxt]);
+	    TxtClassNormal,BgColor,Txt_DEGREE_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1987,7 +1989,6 @@ static void Deg_PutHeadDegreesForSeeing (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th></th>"
                       "<th></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
