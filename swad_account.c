@@ -173,7 +173,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             NewEmail);
 
    /***** Password *****/
-   Pwd_PutFormToGetNewPasswordTwice ();
+   Pwd_PutFormToGetNewPasswordOnce ();
 
    /***** Send button and form end *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
@@ -327,10 +327,9 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    char Query[1024];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
+   char NewPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
@@ -391,24 +390,14 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
      }
 
    /***** Step 3/3: Get new password from form *****/
-   Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
-   Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
-   if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
+   Par_GetParToText ("Paswd",NewPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+   Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
+		     NewPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD,true);
+   Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
+   if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
-      // Passwords don't match
       Error = true;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_have_not_written_twice_the_same_new_password);
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                        NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD,true);
-      Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
-      if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,-1L))        // New password is good?
-	{
-	 Error = true;
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// Error message is set in Usr_SlowCheckIfPasswordIsGood
-	}
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// Error message is set in Usr_SlowCheckIfPasswordIsGood
      }
 
    return !Error;

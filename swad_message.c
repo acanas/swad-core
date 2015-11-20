@@ -2819,8 +2819,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
    Msg_PutHiddenParamMsgCod (MsgCod);
    Act_LinkFormSubmit (Expanded ? Txt_Hide_message :
 	                          Txt_See_message,
-                       Open ? "MSG_TIT_BG" :
-                	      "MSG_TIT_BG_NEW");
+                       Open ? "MSG_TIT" :
+                	      "MSG_TIT_NEW");
 
    /***** Write subject *****/
    if (Subject[0])

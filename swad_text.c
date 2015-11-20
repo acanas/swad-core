@@ -29542,27 +29542,6 @@ const char *Txt_Retype_new_password =
 	"Redigite a nova senha";
 #endif
 
-const char *Txt_Retype_password =
-#if   L==0
-	"Reescriviu la contrasenya";
-#elif L==1
-	"Wiederholung Passwort";
-#elif L==2
-	"Retype password";
-#elif L==3
-	"Reescriba la contrase&ntilde;a";
-#elif L==4
-	"Confirmez votre mot de passe";
-#elif L==5
-	"Reescriba la contrase&ntilde;a";	// Okoteve traducción
-#elif L==6
-	"Riscrivi la password";
-#elif L==7
-	"Powt&oacute;rz has&lstrok;o";
-#elif L==8
-	"Redigite a senha";
-#endif
-
 const char *Txt_Role =
 #if   L==0
 	"Rol";

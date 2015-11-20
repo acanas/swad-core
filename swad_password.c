@@ -721,6 +721,32 @@ void Pwd_ShowFormChgPwd (void)
   }
 
 /*****************************************************************************/
+/**************** Put form to request the new password once ******************/
+/*****************************************************************************/
+
+void Pwd_PutFormToGetNewPasswordOnce (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Password;
+   extern const char *Txt_HELP_password;
+
+   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s: "
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"password\" name=\"Paswd\""
+                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Password,
+            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Gbl.Message);
+  }
+
+/*****************************************************************************/
 /**************** Put form to request the new password twice *****************/
 /*****************************************************************************/
 
@@ -728,10 +754,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_password;
-   extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
-   extern const char *Txt_Retype_password;
 
    sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
@@ -753,13 +777,11 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
-            Gbl.Usrs.Me.Logged? Txt_New_password :		// Changing my password
-        	                Txt_Password,			// Creating new account
+            Txt_New_password,
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             Gbl.Message,
             The_ClassForm[Gbl.Prefs.Theme],
-            Gbl.Usrs.Me.Logged ? Txt_Retype_new_password :	// Changing my password
-        	                 Txt_Retype_password,		// Creating new account
+            Txt_Retype_new_password,
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             Gbl.Message);
   }
