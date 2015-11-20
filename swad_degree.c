@@ -2210,9 +2210,9 @@ static void Deg_ListDegrees (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees_have_been_created_in_this_centre);
       if (ICanEdit)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_PutContextualLink (ActEdiDeg,NULL,"edit",Txt_Create_degree);
-	 fprintf (Gbl.F.Out,"</div>");
+	 Act_FormStart (ActEdiDeg);
+         Lay_PutConfirmButton (Txt_Create_degree);
+         Act_FormEnd ();
 	}
      }
   }

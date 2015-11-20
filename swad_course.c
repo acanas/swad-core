@@ -1231,9 +1231,9 @@ static void Crs_ListCourses (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
       if (ICanEdit)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_PutContextualLink (ActEdiCrs,NULL,"edit",Txt_Create_course);
-	 fprintf (Gbl.F.Out,"</div>");
+	 Act_FormStart (ActEdiCrs);
+         Lay_PutConfirmButton (Txt_Create_course);
+         Act_FormEnd ();
 	}
      }
   }

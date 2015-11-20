@@ -6700,7 +6700,14 @@ void Usr_SeeStudents (void)
 	}
      }
    else
+     {
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+
+      /***** Form to enroll several students *****/
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
+	  Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)		// I am a teacher in current course
+         Enr_PutButtonToEnrollStudents ();
+     }
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
@@ -7265,7 +7272,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
 
-   Lay_ShowAlert (Lay_WARNING,Txt_No_users_found[Role]);
+   Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Role]);
   }
 
 /*****************************************************************************/

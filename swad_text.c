@@ -13439,34 +13439,25 @@ const char *Txt_I_have_read_this_information =
 	"Eu li esta informa&ccedil;&atilde;o";
 #endif
 
-const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone =
+const char *Txt_I_understand_that_this_action_can_not_be_undone =
 #if   L==0
-	"Entenc que aquesta acci&oacute; pot tenir conseq&uuml;&egrave;ncies greus"
-	" i que no es pot desfer.";
+	"Entenc que aquesta acci&oacute; no es pot desfer.";
 #elif L==1
-	"Ich verstehe, dass diese Aktion kann schwerwiegende Folgen haben"
-	" und kann nicht r&uuml;ckg&auml;ngig gemacht werden.";
+	"Ich verstehe, dass diese Aktion kann nicht r&uuml;ckg&auml;ngig gemacht werden.";
 #elif L==2
-	"I understand that this action may have serious consequences"
-	" and can not be undone.";
+	"I understand that this action can not be undone.";
 #elif L==3
-	"Entiendo que esta acci&oacute;n puede tener consecuencias graves"
-	" y que no se puede deshacer.";
+	"Entiendo que esta acci&oacute;n no se puede deshacer.";
 #elif L==4
-	"Je comprends que cette action peut avoir des cons&eacute;quences graves"
-	" et ne peut &ecirc;tre annul&eacute;e.";
+	"Je comprends que cette action ne peut &ecirc;tre annul&eacute;e.";
 #elif L==5
-	"Entiendo que esta acci&oacute;n puede tener consecuencias graves"
-	" y que no se puede deshacer.";		// Okoteve traducción
+	"Entiendo que esta acci&oacute;n no se puede deshacer.";		// Okoteve traducción
 #elif L==6
-	"Mi rendo conto che questa azione pu&ograve; avere gravi conseguenze"
-	" e non pu&ograve; essere annullata.";
+	"Mi rendo conto che questa azione non pu&ograve; essere annullata.";
 #elif L==7
-	"Rozumiem, &zdot;e dzia&lstrok;anie to mo&zdot;e mie&cacute; powa&zdot;ne konsekwencje"
-	" i nie mo&zdot;na cofn&aogon;&cacute;.";
+	"Rozumiem, &zdot;e dzia&lstrok;anie nie mo&zdot;na cofn&aogon;&cacute;.";
 #elif L==8
-	"Eu entendo que esta a&ccedil;&atilde;o pode ter consequ&ecirc;ncias graves"
-	" e n&atilde;o pode ser desfeita.";
+	"Eu entendo que esta a&ccedil;&atilde;o n&atilde;o pode ser desfeita.";
 #endif
 
 const char *Txt_Icons =

@@ -67,6 +67,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Enr_PutButtonToEnrollStudents (void);
+
 void Enr_PutLinkToRequestSignUp (void);
 
 void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
@@ -98,7 +100,6 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 void Enr_ReceiveFormAdminStds (void);
 void Enr_ReceiveFormAdminTchs (void);
 
-void Enr_PutLinkToRemAllStdsThisCrs (void);
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);

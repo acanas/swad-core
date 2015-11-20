@@ -100,6 +100,8 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
 static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecifiedUsrs);
 
+static void Enr_PutLinkToRemAllStdsThisCrs (void);
+
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
@@ -127,6 +129,19 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegName);
 static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName);
+
+/*****************************************************************************/
+/**************** Show form with button to enroll students *******************/
+/*****************************************************************************/
+
+void Enr_PutButtonToEnrollStudents (void)
+  {
+   extern const char *Txt_Register_students;
+
+   Act_FormStart (ActReqEnrSevStd);
+   Lay_PutConfirmButton (Txt_Register_students);
+   Act_FormEnd ();
+  }
 
 /*****************************************************************************/
 /************ Show form to request sign up in the current course *************/
@@ -559,8 +574,9 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
-   if (Role == Rol_STUDENT &&
-       Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+   if (Role == Rol_STUDENT &&		// Users to admin: students
+       Gbl.CurrentCrs.Crs.CrsCod > 0 && // Course selected
+       Gbl.CurrentCrs.Crs.NumStds)	// This course has students
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -1746,7 +1762,7 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 /**** Put a link (form) to remove all the students in the current course *****/
 /*****************************************************************************/
 
-void Enr_PutLinkToRemAllStdsThisCrs (void)
+static void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
    extern const char *Txt_Remove_all_students;
 
@@ -1784,7 +1800,7 @@ void Enr_AskRemAllStdsThisCrs (void)
      {
       sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
                Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
   }
 
@@ -1810,7 +1826,7 @@ void Enr_RemAllStdsThisCrs (void)
 	{
 	 sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
 		  Gbl.CurrentCrs.Crs.FullName);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	}
      }
   }

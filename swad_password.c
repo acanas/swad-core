@@ -881,7 +881,7 @@ bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod)
 void Pwd_AskForConfirmationOnDangerousAction (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone;
+   extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">"
@@ -892,7 +892,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 		      " size=\"16\" maxlength=\"%u\" autocomplete=\"off\" />"
 		      "</div>",
             The_ClassForm[Gbl.Prefs.Theme],
-	    Txt_I_understand_that_this_action_may_have_serious_consequences_and_can_not_be_undone,
+	    Txt_I_understand_that_this_action_can_not_be_undone,
             The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_For_security_enter_your_password,
 	    Pwd_MAX_LENGTH_PLAIN_PASSWORD);

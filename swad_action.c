@@ -2390,12 +2390,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUpdStd		*/{1423,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
    /* ActUpdTch		*/{1424,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
 
-   /* ActReqAccEnrStd	*/{1456,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActReqAccEnrTch	*/{1457,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActAccEnrStd	*/{1458,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActAccEnrTch	*/{1459,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActRemMe_Std	*/{1460,-1,TabUsr,ActLstStd		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
-   /* ActRemMe_Tch	*/{1461,-1,TabUsr,ActLstTch		,0x010,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActReqAccEnrStd	*/{1456,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActReqAccEnrTch	*/{1457,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActAccEnrStd	*/{1458,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActAccEnrTch	*/{1459,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActRemMe_Std	*/{1460,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActRemMe_Tch	*/{1461,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
 
    /* ActNewAdmIns	*/{1337,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToIns		,NULL},
    /* ActRemAdmIns	*/{1338,-1,TabUsr,ActLstOth		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmIns			,NULL},

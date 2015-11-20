@@ -554,9 +554,9 @@ static void Ctr_ListCentres (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
       if (ICanEdit)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_PutContextualLink (ActEdiCtr,NULL,"edit",Txt_Create_centre);
-	 fprintf (Gbl.F.Out,"</div>");
+	 Act_FormStart (ActEdiCtr);
+         Lay_PutConfirmButton (Txt_Create_centre);
+         Act_FormEnd ();
 	}
      }
   }

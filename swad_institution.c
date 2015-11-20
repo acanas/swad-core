@@ -505,9 +505,9 @@ static void Ins_ListInstitutions (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
       if (ICanEdit)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_PutContextualLink (ActEdiIns,NULL,"edit",Txt_Create_institution);
-	 fprintf (Gbl.F.Out,"</div>");
+	 Act_FormStart (ActEdiIns);
+         Lay_PutConfirmButton (Txt_Create_institution);
+         Act_FormEnd ();
 	}
      }
   }
