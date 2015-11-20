@@ -74,8 +74,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them;
    extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
-   extern const char *Txt_Upload_my_picture;
-   extern const char *Txt_Upload_photo;
+   extern const char *Txt_Register_students_in_the_course_X;
+   extern const char *Txt_Register_students;
    extern const char *Txt_Go_to_one_of_my_courses;
    extern const char *Txt_My_courses;
    extern const char *Txt_Sign_up;
@@ -97,6 +97,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Select_another_country;
    extern const char *Txt_Select_one_country;
    extern const char *Txt_Countries;
+   extern const char *Txt_Upload_my_picture;
+   extern const char *Txt_Upload_photo;
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
@@ -118,13 +120,25 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      if (Gbl.Usrs.Me.MyCourses.Num)		// I am enrolled in some courses
+      if (Gbl.Usrs.Me.MyCourses.Num)	// I am enrolled in some courses
 	{
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
+	     !Gbl.CurrentCrs.Crs.NumStds &&				// Current course has no students
+	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)	// I am a teacher in current course
+	   {
+	    /* Request students enrollment */
+	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,
+		     Gbl.CurrentCrs.Crs.ShortName);
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
+						 ActReqEnrSevStd,
+						 "BT_CONFIRM",Txt_Register_students);
+	   }
+
 	 if (Gbl.CurrentAct != ActMyCrs)	// I am not seeing the action to list my courses
 	    /* Request list my courses */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
-                                                 ActMyCrs,
-                                                 "BT_CONFIRM",Txt_My_courses);
+						 ActMyCrs,
+						 "BT_CONFIRM",Txt_My_courses);
 	}
 
       if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected

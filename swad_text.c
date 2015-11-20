@@ -28318,6 +28318,27 @@ const char *Txt_Register_students =
 	"Registrar estudantes";
 #endif
 
+const char *Txt_Register_students_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==0
+	"Inscriure estudiants en l'assignatura <strong>%s</strong>";
+#elif L==1
+	"Anmeldung Studenten im Kurs <strong>%s</strong>";
+#elif L==2
+	"Register students in the course <strong>%s</strong>";
+#elif L==3
+	"Inscribir estudiantes en la asignatura <strong>%s</strong>";
+#elif L==4
+	"Inscrire &eacute;tudiants dans la mati&egrave;re <strong>%s</strong>";
+#elif L==5
+	"Inscribir estudiantes en la asignatura <strong>%s</strong>";	// Okoteve traducción
+#elif L==6
+	"Registrare studenti nel corso <strong>%s</strong>";
+#elif L==7
+	"Rejestracja student&oacute;w w kurs <strong>%s</strong>";
+#elif L==8
+	"Registrar estudantes na disciplina <strong>%s</strong>";
+#endif
+
 const char *Txt_Register_the_users_indicated_in_step_1 =
 #if   L==0
 	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Necessita traduccio
