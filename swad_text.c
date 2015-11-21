@@ -36715,6 +36715,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Lingua"
 #endif
 	 ,
+#if   L==0				// Sta_FIRST_DAY_OF_WEEK
+	"Calendari"
+#elif L==1
+	"Kalender"
+#elif L==2
+	"Calendar"
+#elif L==3
+	"Calendario"
+#elif L==4
+	"Calendrier"
+#elif L==5
+	"Arapapaha"
+#elif L==6
+	"Calendario"
+#elif L==7
+	"Kalendarz"
+#elif L==8
+	"Calend&aacute;rio"
+#endif
+	 ,
 #if   L==0				// Sta_LAYOUTS
 	 "Disseny"
 #elif L==1

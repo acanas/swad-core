@@ -240,6 +240,7 @@ static void Sta_GetAndShowSurveysStats (void);
 static void Sta_GetAndShowNumUsrsPerPrivacy (void);
 static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);
 static void Sta_GetAndShowNumUsrsPerLanguage (void);
+static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void);
 static void Sta_GetAndShowNumUsrsPerLayout (void);
 static void Sta_GetAndShowNumUsrsPerTheme (void);
 static void Sta_GetAndShowNumUsrsPerIconSet (void);
@@ -3929,6 +3930,10 @@ void Sta_ShowUseOfPlatform (void)
       case Sta_LANGUAGES:
          /***** Number of users who have chosen a language *****/
          Sta_GetAndShowNumUsrsPerLanguage ();
+         break;
+      case Sta_FIRST_DAY_OF_WEEK:
+         /***** Number of users who have chosen a first day of week *****/
+         Sta_GetAndShowNumUsrsPerFirstDayOfWeek ();
          break;
       case Sta_LAYOUTS:
          /***** Number of users who have chosen a layout *****/
@@ -7767,6 +7772,145 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
                NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/***** Get and show number of users who have chosen a first day of week ******/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
+  {
+   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Calendar;
+   extern const char *Txt_First_day_of_the_week;
+   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   unsigned FirstDayOfWeek;
+   char Query[1024];
+   unsigned NumUsrs[Lay_NUM_LAYOUTS];
+   unsigned NumUsrsTotal = 0;
+
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK]);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Calendar,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users);
+
+   /***** For each day... *****/
+   for (FirstDayOfWeek = 0;	// Monday
+	FirstDayOfWeek <= 6;	// Sunday
+	FirstDayOfWeek++)
+      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	{
+	 /***** Get number of users who have chosen this first day of week from database *****/
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:
+	       sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+			      " WHERE FirstDayOfWeek='%u'",
+			(unsigned) FirstDayOfWeek);
+	       break;
+	    case Sco_SCOPE_CTY:
+	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+			      " WHERE institutions.CtyCod='%ld'"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.FirstDayOfWeek='%u'",
+			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FirstDayOfWeek);
+	       break;
+	    case Sco_SCOPE_INS:
+	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			      " FROM centres,degrees,courses,crs_usr,usr_data"
+			      " WHERE centres.InsCod='%ld'"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.FirstDayOfWeek='%u'",
+			Gbl.CurrentIns.Ins.InsCod,(unsigned) FirstDayOfWeek);
+	       break;
+	    case Sco_SCOPE_CTR:
+	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			      " FROM degrees,courses,crs_usr,usr_data"
+			      " WHERE degrees.CtrCod='%ld'"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.FirstDayOfWeek='%u'",
+			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FirstDayOfWeek);
+	       break;
+	    case Sco_SCOPE_DEG:
+	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			      " FROM courses,crs_usr,usr_data"
+			      " WHERE courses.DegCod='%ld'"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.FirstDayOfWeek='%u'",
+			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FirstDayOfWeek);
+	       break;
+	    case Sco_SCOPE_CRS:
+	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+			      " FROM crs_usr,usr_data"
+			      " WHERE crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.FirstDayOfWeek='%u'",
+			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FirstDayOfWeek);
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+	 NumUsrs[FirstDayOfWeek] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a layout");
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[FirstDayOfWeek];
+        }
+
+   /***** Write number of users who have chosen each layout *****/
+   for (FirstDayOfWeek = 0;	// Monday
+	FirstDayOfWeek <= 6;	// Sunday
+	FirstDayOfWeek++)
+      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"CENTER_MIDDLE\">"
+			    "<img src=\"%s/first-day-of-week-%u-64x64.png\""
+			    " alt=\"%s\" title=\"%s: %s\""
+			    " class=\"ICON32x32\" />"
+			    "</td>"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%5.2f%%"
+			    "</td>"
+			    "</tr>",
+		  Gbl.Prefs.IconsURL,FirstDayOfWeek,
+		  Txt_DAYS_SMALL[FirstDayOfWeek],
+		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
+		  NumUsrs[FirstDayOfWeek],
+		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
+				 (float) NumUsrsTotal :
+				 0);
 
    Lay_EndRoundFrameTable ();
   }
