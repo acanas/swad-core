@@ -619,7 +619,7 @@ function disableDetailedClicks() {
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
 
-function Cal_DrawCalendar (id,TimeUTC,CurrentPlcCod,PrintView,
+function Cal_DrawCalendar (id,Sunday,TimeUTC,CurrentPlcCod,PrintView,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var StartingMonth = [	// Calendar starts one row before current month
 		9,	// January   --> September
@@ -633,7 +633,7 @@ function Cal_DrawCalendar (id,TimeUTC,CurrentPlcCod,PrintView,
 		5,	// September --> May
 		5,	// October   --> May
 		5,	// November  --> May
-		5		// December  --> May
+		5	// December  --> May
 	];
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
@@ -662,9 +662,9 @@ function Cal_DrawCalendar (id,TimeUTC,CurrentPlcCod,PrintView,
 			MonthId = id + '_month_' + MonthIdNum;
 
 			Gbl_HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
-			DrawMonth(MonthId, Year, Month, CurrentMonth, CurrentDay,
-					CurrentPlcCod, true, PrintView, CGI,
-					FormGoToCalendarParams, FormEventParams);
+			DrawMonth (MonthId,Sunday,Year,Month,CurrentMonth,CurrentDay,
+						CurrentPlcCod,true,PrintView,CGI,
+						FormGoToCalendarParams,FormEventParams);
 			Gbl_HTMLContent += '</td>';
 			if (++Month == 13) {
 				Month = 1;
@@ -682,7 +682,7 @@ function Cal_DrawCalendar (id,TimeUTC,CurrentPlcCod,PrintView,
 /***************************** Draw current month ****************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,TimeUTC,CurrentPlcCod,
+function DrawCurrentMonth (id,Sunday,TimeUTC,CurrentPlcCod,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
@@ -690,17 +690,20 @@ function DrawCurrentMonth (id,TimeUTC,CurrentPlcCod,
 	var Month = d.getMonth() + 1;
 	var CurrentDay = d.getDate();
 
-	DrawMonth(id,Year,Month,Month,CurrentDay,CurrentPlcCod,false,false,
-			  CGI,FormGoToCalendarParams,FormEventParams);
+	DrawMonth (id,Sunday,Year,Month,Month,CurrentDay,
+				CurrentPlcCod,false,false,
+				CGI,FormGoToCalendarParams,FormEventParams);
 	document.getElementById(id).innerHTML = Gbl_HTMLContent;
 }
 
 /*****************************************************************************/
-/******************************** Draw a month *******************************/
+/******************************* Draw a month ********************************/
 /*****************************************************************************/
+// Sunday == 0 ==> Sunday is the first day of the week
+// Sunday == 6 ==> Sunday is the last day of the week
 
-function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlcCod,
-					DrawingCalendar,PrintView,
+function DrawMonth (id,Sunday,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
+					CurrentPlcCod,DrawingCalendar,PrintView,
 					CGI,FormGoToCalendarParams,FormEventParams) {
 	var NumDaysMonth = [
 		  0,
@@ -747,7 +750,7 @@ function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlc
 	   If it's  0 then write 1 box   of the previous month.
 	   If it's  1 then write 0 boxes of the previous month. */
 
-	if ((DayOfWeek = GetDayOfWeek(Yea, Mon, 1)) == 0)
+	if ((DayOfWeek = (GetDayOfWeekMondayFirst (Yea,Mon,1) + Sunday + 1) % 7) == 0)
 		Day = 1;
 	else {
 		if (Mon <= 1) {
@@ -784,10 +787,10 @@ function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlc
 	Gbl_HTMLContent += '<table class="MONTH_TABLE_DAYS">' + '<tr>';
 	for (DayOfWeek = 0; DayOfWeek < 7; DayOfWeek++)
 		Gbl_HTMLContent += '<td class="' +
-						   ((DayOfWeek == 6) ? 'DAY_NO_WRK_HEAD' :
-							   				   'DAY_WRK_HEAD') +
+						   ((DayOfWeek == Sunday) ? 'DAY_NO_WRK_HEAD' :
+													'DAY_WRK_HEAD') +
 						   '">' +
-						   DAYS_CAPS[DayOfWeek] +
+						   DAYS_CAPS[(DayOfWeek + 6 - Sunday) % 7] +
 						   '</td>';
 	Gbl_HTMLContent += '</tr>';
 
@@ -837,7 +840,7 @@ function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlc
 				}
 
 			/* Day being drawn is sunday? */
-			if (DayOfWeek == 6) // All the sundays are holidays
+			if (DayOfWeek == Sunday) // All the sundays are holidays
 				ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
 													 'DAY_HLD_LIGHT';
 
@@ -922,16 +925,16 @@ function DrawMonth (id,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,CurrentPlc
 }
 
 /*****************************************************************************/
-/***************** Compute day of the week from a given date *****************/
+/* Compute day of the week from a given date (monday as first day of a week) */
 /*****************************************************************************/
 // Return 0 for monday, 1 for tuesday,... 6 for sunday
 
-function GetDayOfWeek (Year,Month,Day) {
-   if (Month <= 2) {
-      Month += 12;
-      Year--;
-   }
-   return (((Day +
+function GetDayOfWeekMondayFirst (Year,Month,Day) {
+	if (Month <= 2) {
+	   Month += 12;
+	   Year--;
+	}
+	return (((Day +
              (Month * 2) +
              Math.floor (((Month + 1) * 3) / 5) +
              Year +
@@ -940,7 +943,7 @@ function GetDayOfWeek (Year,Month,Day) {
              Math.floor (Year/400) +
              2) % 7) + 5) % 7;
 }
-  
+
 /*****************************************************************************/
 /****************** Return the number of days of february ********************/
 /*****************************************************************************/

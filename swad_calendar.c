@@ -52,6 +52,7 @@ void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
+   unsigned Sunday = 6;
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -71,7 +72,8 @@ void Cal_DrawCurrentMonth (void)
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "	Gbl_HTMLContent = '';"
-	              "	DrawCurrentMonth ('CurrentMonth',%ld,%ld,'%s/%s',",
+	              "	DrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
+	    Sunday,
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language]);
@@ -109,6 +111,7 @@ void Cal_DrawCalendar (void)
   {
    extern const char *Txt_Print;
    bool PrintView = (Gbl.CurrentAct == ActPrnCal);
+   unsigned Sunday = 6;
 
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
@@ -147,7 +150,8 @@ void Cal_DrawCalendar (void)
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "	Gbl_HTMLContent = '';"
-	              "	Cal_DrawCalendar('calendar',%ld,%ld,%s,'%s/%s',",
+	              "	Cal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
+	    Sunday,
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    (Gbl.CurrentAct == ActPrnCal) ? "true" :
