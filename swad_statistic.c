@@ -1023,14 +1023,17 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
       case Sta_CLICKS_CRS_PER_WEEKS:
       case Sta_CLICKS_GBL_PER_WEEKS:
-	 /* With %v the weeks always are counted from monday to sunday.
-	    01/01/2006 was sunday => it's counted in the week 52 of 2005, that goes from 26/12/2005 (monday) to 01/01/2006 (sunday).
-	    The week 1 of 2006 goes from 02/01/2006 (monday) to 08/01/2006 (sunday) */
-         sprintf (Query,"SELECT SQL_NO_CACHE "
-                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
-                        "%s FROM %s",
-                  BrowserTimeZone,
-                  StrQueryCountType,LogTable);
+	 /* With %x%v the weeks are counted from monday to sunday.
+	    With %X%V the weeks are counted from sunday to saturday. */
+	 sprintf (Query,(Gbl.Prefs.FirstDayOfWeek == 0) ?
+			"SELECT SQL_NO_CACHE "	// Weeks start on monday
+			"DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%x%%v') AS Week,"
+			"%s FROM %s" :
+			"SELECT SQL_NO_CACHE "	// Weeks start on sunday
+			"DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"
+			"%s FROM %s",
+		  BrowserTimeZone,
+		  StrQueryCountType,LogTable);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTHS:
       case Sta_CLICKS_GBL_PER_MONTHS:
