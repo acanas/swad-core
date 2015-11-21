@@ -1094,11 +1094,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PRAC			{background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
 .TUTO			{background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
-.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:white;}
-.USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
-
-.LAYOUT_OFF		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
-.LAYOUT_ON		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
+.PREF_OFF		{height:40px; text-align:center; vertical-align:middle;}
+.PREF_ON		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
 
 .LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:11pt;}

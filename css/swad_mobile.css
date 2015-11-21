@@ -895,11 +895,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .CUR_TIME		{color:#BAD2DA; font-size:15pt; font-weight:bold;}
 
-.USR_LIST_TYPE_OFF	{border:solid 1px; border-color:white;}
-.USR_LIST_TYPE_ON	{border:solid 1px; border-color:#50B800;}
-
-.LAYOUT_OFF		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:white; background-color:white;}
-.LAYOUT_ON		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
+.PREF_OFF		{height:40px; text-align:center; vertical-align:middle;}
+.PREF_ON		{height:40px; text-align:center; vertical-align:middle; border:solid 1px; border-color:#C0DAE4; background-color:#DDECF1;}
 
 .LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:11pt;}

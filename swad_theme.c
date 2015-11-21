@@ -240,8 +240,8 @@ void The_PutIconsToSelectTheme (void)
 	Theme++)
      {
       fprintf (Gbl.F.Out,"<td class=\"%s\">",
-               Theme == Gbl.Prefs.Theme ? "LAYOUT_ON" :
-        	                          "LAYOUT_OFF");
+               Theme == Gbl.Prefs.Theme ? "PREF_ON" :
+        	                          "PREF_OFF");
       Act_FormStart (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       fprintf (Gbl.F.Out,"<input type=\"image\""

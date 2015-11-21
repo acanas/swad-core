@@ -111,11 +111,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.43.1 (2015/11/22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.43.2 (2015/11/22)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.43.2:  Nov 22, 2015	Minor changes in CSS. (187719 lines)
         Version 15.43.1:  Nov 22, 2015	New figure (statistic) about first day of week. (187722 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1485','es','N','Cambiar primer d&iacute;a semana en calendario');

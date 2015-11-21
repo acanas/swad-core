@@ -317,8 +317,8 @@ void Mnu_PutIconsToSelectMenu (void)
 	Menu++)
      {
       fprintf (Gbl.F.Out,"<td class=\"%s\">",
-               Menu == Gbl.Prefs.Menu ? "LAYOUT_ON" :
-        	                        "LAYOUT_OFF");
+               Menu == Gbl.Prefs.Menu ? "PREF_ON" :
+        	                        "PREF_OFF");
       Act_FormStart (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""

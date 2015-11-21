@@ -358,8 +358,8 @@ static void Pre_PutIconsToSelectSideCols (void)
 	SideCols++)
      {
       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
-               SideCols == Gbl.Prefs.SideCols ? "LAYOUT_ON" :
-        	                                "LAYOUT_OFF");
+               SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
+        	                                "PREF_OFF");
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""

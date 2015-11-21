@@ -4840,8 +4840,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:4px auto;\">"
 	              "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">",
-            Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "USR_LIST_TYPE_ON" :
-        	                                      "USR_LIST_TYPE_OFF");
+            Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "PREF_ON" :
+        	                                      "PREF_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
@@ -4856,8 +4856,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
 
    /***** Select Usr_LIST *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
-            Gbl.Usrs.Me.ListType == Usr_LIST ? "USR_LIST_TYPE_ON" :
-        	                               "USR_LIST_TYPE_OFF");
+            Gbl.Usrs.Me.ListType == Usr_LIST ? "PREF_ON" :
+        	                               "PREF_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST);
 
    /* See the photos in list? */

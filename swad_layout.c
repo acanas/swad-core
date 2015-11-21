@@ -1676,8 +1676,8 @@ void Lay_PutIconsToSelectLayout (void)
 	Layout++)
      {
       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
-               Layout == Gbl.Prefs.Layout ? "LAYOUT_ON" :
-        	                            "LAYOUT_OFF");
+               Layout == Gbl.Prefs.Layout ? "PREF_ON" :
+        	                            "PREF_OFF");
       Act_FormStart (ActChgLay);
       Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""

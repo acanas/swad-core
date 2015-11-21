@@ -84,7 +84,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 static void Cal_ShowFormInCalendarToSelectFirstDayOfWeek (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
-   Cal_ShowFormToSelectFirstDayOfWeek (ActChgCal1stDay,"ICON28x28");
+   Cal_ShowFormToSelectFirstDayOfWeek (ActChgCal1stDay,"ICON20x20");
    fprintf (Gbl.F.Out,"</table>");
   }
 
@@ -105,8 +105,8 @@ static void Cal_ShowFormToSelectFirstDayOfWeek (Act_Action_t Action,const char *
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">",
-		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "LAYOUT_ON" :
-							       "LAYOUT_OFF");
+		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
+							       "PREF_OFF");
 	 Act_FormStart (Action);
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u-64x64.png\""
