@@ -699,8 +699,8 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 /*****************************************************************************/
 /******************************* Draw a month ********************************/
 /*****************************************************************************/
-// FirstDayOfWeek == 0 (monday) <==> Sunday is the last day of the week
-// FirstDayOfWeek == 6 (sunday) <==> Sunday is the first day of the week
+// FirstDayOfWeek == 0 ==> Weeks from Monday to Sunday
+// FirstDayOfWeek == 6 ==> Weeks from Sunday to Saturday
 
 function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 					CurrentPlcCod,DrawingCalendar,PrintView,
@@ -750,7 +750,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	   If it's  0 then write 1 box   of the previous month.
 	   If it's  1 then write 0 boxes of the previous month. */
 
-	if ((DayOfWeek = (GetDayOfWeekMondayFirst (Yea,Mon,1) - FirstDayOfWeek) % 7) == 0)
+	if ((DayOfWeek = (GetDayOfWeekMondayFirst (Yea,Mon,1) + 7 - FirstDayOfWeek) % 7) == 0)
 		Day = 1;
 	else {
 		if (Mon <= 1) {
