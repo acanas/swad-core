@@ -772,6 +772,7 @@ Assessment:
 	629. ActSeeOneTstExaOth		Show one test exam of other user
 
 	630. ActPrnCal			Show print view of the academic calendar of the course
+------> 630. ActChgCal1stDay		Change first day of week and show academic calendar of the course
 
 	631. ActEdiExaAnn		Edit an exam announcement
 	632. ActRcvExaAnn		Receive an exam announcement
@@ -2200,6 +2201,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeOneTstExaOth*/{1082,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneTestExam		,NULL},
 
    /* ActPrnCal		*/{  71,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Cal_DrawCalendar		,NULL},
+   /* ActChgCal1stDay	*/{1485,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
 
    /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
    /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
@@ -4281,6 +4283,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActNewMaiStd,		// #1482
 	ActNewMaiTch,		// #1483
 	ActChg1stDay,		// #1484
+	ActChgCal1stDay,	// #1485
 	};
 
 /*****************************************************************************/
