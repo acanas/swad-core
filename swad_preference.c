@@ -125,6 +125,7 @@ void Pre_EditPrefs (void)
 
 void Pre_GetPrefsFromIP (void)
   {
+   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    char Query[1024];
    unsigned long NumRows;
    MYSQL_RES *mysql_res;
@@ -134,7 +135,7 @@ void Pre_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      sprintf (Query,"SELECT Layout,Theme,IconSet,Menu,SideCols"
+      sprintf (Query,"SELECT FirstDayOfWeek,Layout,Theme,IconSet,Menu,SideCols"
 		     " FROM IP_prefs WHERE IP='%s'",
 	       Gbl.IP);
       if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get preferences")))
@@ -145,26 +146,32 @@ void Pre_GetPrefsFromIP (void)
 	 /***** Get preferences from database *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get layout (row[0]) */
-	 Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;
+	 /* Get first day of week (row[0]) */
+	 Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 	 if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	    if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
+	       Gbl.Prefs.FirstDayOfWeek = UnsignedNum;
+
+	 /* Get layout (row[1]) */
+	 Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;
+	 if (sscanf (row[1],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Lay_NUM_LAYOUTS)
 	       Gbl.Prefs.Layout = (Lay_Layout_t) UnsignedNum;
 
-	 /* Get theme (row[1]) */
-	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[1]);
+	 /* Get theme (row[2]) */
+	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
 
-	 /* Get icon set (row[2]) */
-	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[2]);
+	 /* Get icon set (row[3]) */
+	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
 
-	 /* Get menu (row[3]) */
+	 /* Get menu (row[4]) */
 	 Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;
-	 if (sscanf (row[3],"%u",&UnsignedNum) == 1)
+	 if (sscanf (row[4],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Mnu_NUM_MENUS)
 	       Gbl.Prefs.Menu = (Lay_Layout_t) UnsignedNum;
 
-	 /* Get if user wants to show side columns (row[4]) */
-	 if (sscanf (row[4],"%u",&Gbl.Prefs.SideCols) == 1)
+	 /* Get if user wants to show side columns (row[5]) */
+	 if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
 	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
