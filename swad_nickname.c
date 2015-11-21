@@ -156,7 +156,8 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 
 	 /***** Get user's code from database *****/
 	 /* Check if user code from table usr_nicknames is also in table usr_data */
-	 sprintf (Query,"SELECT usr_nicknames.UsrCod FROM usr_nicknames,usr_data"
+	 sprintf (Query,"SELECT usr_nicknames.UsrCod"
+	                " FROM usr_nicknames,usr_data"
 			" WHERE usr_nicknames.Nickname='%s'"
 			" AND usr_nicknames.UsrCod=usr_data.UsrCod",
 		  NicknameWithoutArroba);

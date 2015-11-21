@@ -105,7 +105,8 @@ void Cty_SeeCtyWithPendingInss (void)
                         " FROM institutions,countries"
                         " WHERE (institutions.Status & %u)<>0"
                         " AND institutions.CtyCod=countries.CtyCod"
-                        " GROUP BY institutions.CtyCod ORDER BY countries.Name_%s",
+                        " GROUP BY institutions.CtyCod"
+                        " ORDER BY countries.Name_%s",
                   (unsigned) Ins_STATUS_BIT_PENDING,
                   Txt_STR_LANG_ID[Gbl.Prefs.Language]);
          break;
@@ -320,8 +321,10 @@ static void Cty_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCty.Cty.CtyCod);
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentCty.Cty.CtyCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentCty.Cty.CtyCod);
 
       if (PrintView)
 	{

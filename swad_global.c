@@ -35,6 +35,7 @@
 #include <unistd.h>		// For getpid
 
 #include "swad_action.h"
+#include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_exam.h"
@@ -125,14 +126,15 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.HiddenParamsInsertedIntoDB = false;
 
+   Gbl.Prefs.Language = Txt_Current_CGI_SWAD_Language;
+   Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;	// Default layout
+   Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;		// Default menu
+   Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;	// Show both side columns, left and right
    Gbl.Prefs.Theme = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet = Ico_ICON_SET_DEFAULT;	// Default icon set
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
-   Gbl.Prefs.Language = Txt_Current_CGI_SWAD_Language;
-   Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;		// Default menu
-   Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;	// Show both side columns, left and right
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,
 	    Cfg_ICON_FOLDER_THEMES,

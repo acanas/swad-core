@@ -46,7 +46,7 @@ extern struct Globals Gbl;
 /******************************** Private constants **************************/
 /*****************************************************************************/
 
-#define MAX_ICON_SET_ID 16
+#define Ico_MAX_BYTES_ICON_SET_ID 16
 
 const char *Ico_IconSetId[Ico_NUM_ICON_SETS] =
   {
@@ -129,17 +129,17 @@ void Ico_ChangeIconSet (void)
 
 Ico_IconSet_t Ico_GetParamIconSet (void)
   {
-   char IconSetId[MAX_ICON_SET_ID+1];
+   char IconSetId[Ico_MAX_BYTES_ICON_SET_ID+1];
    Ico_IconSet_t IconSet;
 
-   Par_GetParToText ("IconSet",IconSetId,MAX_ICON_SET_ID);
+   Par_GetParToText ("IconSet",IconSetId,Ico_MAX_BYTES_ICON_SET_ID);
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
       if (!strcmp (IconSetId,Ico_IconSetId[IconSet]))
          return IconSet;
 
-   return Ico_ICON_SET_UNKNOWN;
+   return Ico_ICON_SET_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -156,5 +156,5 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
       if (!strcasecmp (Str,Ico_IconSetId[IconSet]))
 	 return IconSet;
 
-   return Ico_ICON_SET_UNKNOWN;
+   return Ico_ICON_SET_DEFAULT;
   }

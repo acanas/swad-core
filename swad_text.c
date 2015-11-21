@@ -3578,6 +3578,27 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
 	"Calculate average photo of";			// Necessita de tradução
 #endif
 
+const char *Txt_Calendar =
+#if   L==0
+	"Calendari";
+#elif L==1
+	"Kalender";
+#elif L==2
+	"Calendar";
+#elif L==3
+	"Calendario";
+#elif L==4
+	"Calendrier";
+#elif L==5
+	"Arapapaha";
+#elif L==6
+	"Calendario";
+#elif L==7
+	"Kalendarz";
+#elif L==8
+	"Calend&aacute;rio";
+#endif
+
 const char *Txt_Call_the_roll =
 #if   L==0
 	"Passar llista";
@@ -11627,6 +11648,27 @@ const char *Txt_Files_works =
 	"Arquivos trabalhos";
 #endif
 
+const char *Txt_First_day_of_the_week =
+#if   L==0
+	"Primer dia de la setmana";
+#elif L==1
+	"Erster Tag der Woche";
+#elif L==2
+	"First day of the week";
+#elif L==3
+	"Primer d&iacute;a de la semana";
+#elif L==4
+	"Premier jour de la semaine";
+#elif L==5
+	"Primer d&iacute;a de la semana";	// Okoteve traducción
+#elif L==6
+	"Primo giorno della settimana";
+#elif L==7
+	"Pierwszy dzie&nacute; tygodnia";
+#elif L==8
+	"Primeiro dia da semana";
+#endif
+
 const char *Txt_first_message_not_allowed =
 #if   L==0
 	"primer mensaje no permitido";	// Necessita traduccio
@@ -15133,23 +15175,23 @@ const char *Txt_It_is_optional_to_choose_a_group =
 
 const char *Txt_Language =
 #if   L==0
-	"Idioma";
+	"Idioma (language)";
 #elif L==1
-	"Sprache";
+	"Sprache (language)";
 #elif L==2
 	"Language";
 #elif L==3
-	"Idioma";
+	"Idioma (language)";
 #elif L==4
-	"Langue";
+	"Langue (language)";
 #elif L==5
-	"&Ntilde;e'&#7869;";
+	"&Ntilde;e'&#7869; (language)";
 #elif L==6
-	"Lingua";
+	"Lingua (language)";
 #elif L==7
-	"J&eogon;zyk";
+	"J&eogon;zyk (language)";
 #elif L==8
-	"Lingua";
+	"Lingua (language)";
 #endif
 
 const char *Txt_Last_clicks =
@@ -40467,27 +40509,6 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 	"The integrated editor is not yet available.";			// Necessita de tradução
 #endif
 
-const char *Txt_The_language_has_changed_to_LANGUAGE =
-#if   L==0
-	"S'ha canviat l'idioma a catal&agrave;.";
-#elif L==1
-	"Die Sprache ist nun Deutsch.";
-#elif L==2
-	"The language has changed to English.";
-#elif L==3
-	"Se ha cambiado el idioma a espa&ntilde;ol.";
-#elif L==4
-	"La langue a chang&eacute; au fran&ccedil;ais.";
-#elif L==5
-	"Pe &ntilde;e'&#7869; ha moambuepapyre pe ava&ntilde;e'&#7869;.";
-#elif L==6
-	"La lingua &egrave; cambiata a italiano.";
-#elif L==7
-	"J&eogon;zyk zosta&lstrok; zmieniony na polski.";
-#elif L==8
-	"O idioma mudou para o portugu&ecirc;s.";
-#endif
-
 const char *Txt_The_link_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"El enlace <strong>%s</strong> ya existe.";	// Necessita traduccio
@@ -51947,27 +51968,6 @@ const char *Txt_Your_comment_has_been_updated =
 	"Komentarz zosta&lstrok; zaktualizowany.";
 #elif L==8
 	"O seu coment&aacute;rio foi atualizado.";
-#endif
-
-const char *Txt_Your_language_has_changed_to_LANGUAGE =
-#if   L==0
-	"El seu idioma ha canviat a catal&agrave;.";
-#elif L==1
-	"Ihre Sprache ist nun Deutsch.";
-#elif L==2
-	"Your language has changed to English.";
-#elif L==3
-	"Su idioma ha cambiado a espa&ntilde;ol.";
-#elif L==4
-	"Votre langue a chang&eacute; au fran&ccedil;ais.";
-#elif L==5
-	"Pe &ntilde;e'&#7869; ha moambuepapyre pe ava&ntilde;e'&#7869;.";
-#elif L==6
-	"La tua lingua &egrave; cambiata a italiano.";
-#elif L==7
-	"J&eogon;zyk zosta&lstrok; zmieniony na polski.";
-#elif L==8
-	"Suo idioma mudou para o portugu&ecirc;s.";
 #endif
 
 const char *Txt_Your_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences

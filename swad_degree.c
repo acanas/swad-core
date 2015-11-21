@@ -414,8 +414,10 @@ static void Deg_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentDeg.Deg.DegCod);
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentDeg.Deg.DegCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentDeg.Deg.DegCod);
 
       if (PrintView)
 	{

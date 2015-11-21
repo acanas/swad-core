@@ -28,7 +28,11 @@
 #include <string.h>		// For string functions
 
 #include "swad_exam.h"
+#include "swad_calendar.h"
+#include "swad_database.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
+#include "swad_preference.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -40,9 +44,102 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
+const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
+  {
+   true,	// 0: monday
+   false,	// 1: tuesday
+   false,	// 2: wednesday
+   false,	// 3: thursday
+   false,	// 4: friday
+   false,	// 5: saturday
+   true,	// 6: sunday
+  };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static unsigned Cal_GetParamFirstDayOfWeek (void);
+
+/*****************************************************************************/
+/************** Put icons to select the first day of the week ****************/
+/*****************************************************************************/
+
+void Cal_PutIconsToSelectFirstDayOfWeek (void)
+  {
+   extern const char *Txt_Calendar;
+   extern const char *Txt_First_day_of_the_week;
+   extern const char *Txt_DAYS_SMALL[7];
+   unsigned FirstDayOfWeek;
+
+   Lay_StartRoundFrameTable (NULL,2,Txt_Calendar);
+   fprintf (Gbl.F.Out,"<tr>");
+   for (FirstDayOfWeek = 0;	// Monday
+	FirstDayOfWeek <= 6;	// Sunday
+	FirstDayOfWeek++)
+      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	{
+	 fprintf (Gbl.F.Out,"<td class=\"%s\">",
+		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "LAYOUT_ON" :
+							       "LAYOUT_OFF");
+	 Act_FormStart (ActChg1stDay);
+	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
+	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u-64x64.png\""
+			    " alt=\"%s\" title=\"%s: %s\" class=\"ICON32x32B\""
+			    " style=\"margin:0 auto;\" />",
+		  Gbl.Prefs.IconsURL,
+		  FirstDayOfWeek,
+		  Txt_DAYS_SMALL[FirstDayOfWeek],
+		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
+        }
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/************************* Change first day of week **************************/
+/*****************************************************************************/
+
+void Cal_ChangeFirstDayOfWeek (void)
+  {
+   char Query[512];
+
+   /***** Get param with icon set *****/
+   Gbl.Prefs.FirstDayOfWeek = Cal_GetParamFirstDayOfWeek ();
+
+   /***** Store icon set in database *****/
+   if (Gbl.Usrs.Me.Logged)
+     {
+      sprintf (Query,"UPDATE usr_data SET FirstDayOfWeek='%u'"
+	             " WHERE UsrCod='%ld'",
+               Gbl.Prefs.FirstDayOfWeek,
+               Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE (Query,"can not update your preference about first day of week");
+     }
+
+   /***** Set preferences from current IP *****/
+   Pre_SetPrefsFromIP ();
+  }
+
+/*****************************************************************************/
+/*********************** Get parameter with icon set *************************/
+/*****************************************************************************/
+
+static unsigned Cal_GetParamFirstDayOfWeek (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+   unsigned FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
+
+   Par_GetParToText ("FirstDayOfWeek",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
+	 FirstDayOfWeek = UnsignedNum;
+
+   return FirstDayOfWeek;
+  }
 
 /*****************************************************************************/
 /***************************** Draw current month ****************************/

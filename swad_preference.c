@@ -30,6 +30,7 @@
 #include <stdio.h>		// For fprintf, etc.
 #include <string.h>
 
+#include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -67,35 +68,42 @@ void Pre_EditPrefs (void)
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
    char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   /***** Language *****/
+   /***** Language and first day of week *****/
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
+                      "<tr>"
+                      "<td>");
    Lay_StartRoundFrame (NULL,Txt_Language);
-   Pre_PutSelectorToSelectLanguage ();
+   fprintf (Gbl.F.Out,"<div style=\"height:46px;\">");
+   Pre_PutSelectorToSelectLanguage ();		// 1. Language
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td>");
+   Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+	              "</table>");
 
    /***** Layout, side columns, theme, icon set & menu *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_PutIconsToSelectLayout ();	// 1. Layout
+   Lay_PutIconsToSelectLayout ();		// 3. Layout
    fprintf (Gbl.F.Out,"</td>");
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
      {
       fprintf (Gbl.F.Out,"<td>");
-      Mnu_PutIconsToSelectMenu ();	// 2. Menu
+      Mnu_PutIconsToSelectMenu ();		// 4. Menu
       fprintf (Gbl.F.Out,"</td>"
                          "<td>");
-      Pre_PutIconsToSelectSideCols ();	// 3. Side columns
+      Pre_PutIconsToSelectSideCols ();		// 5. Side columns
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-                      "<table style=\"margin:0 auto; border-spacing:16px 0;\">"
-                      "<tr>"
-	              "<td>");
-   The_PutIconsToSelectTheme ();	// 4. Theme
+   fprintf (Gbl.F.Out,"<td>");
+   The_PutIconsToSelectTheme ();		// 6. Theme
    fprintf (Gbl.F.Out,"</td>"
                       "<td>");
-   Ico_PutIconsToSelectIconSet ();	// 5. Icon set
+   Ico_PutIconsToSelectIconSet ();		// 7. Icon set
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
 	              "</table>");
@@ -178,9 +186,10 @@ void Pre_SetPrefsFromIP (void)
    char Query[512];
 
    /***** Update preferences from current IP in database *****/
-   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,Layout,Theme,IconSet,Menu,SideCols)"
-                  " VALUES ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
+   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,FirstDayOfWeek,Layout,Theme,IconSet,Menu,SideCols)"
+                  " VALUES ('%s','%ld',NOW(),'%u','%u','%s','%s','%u','%u')",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
+            Gbl.Prefs.FirstDayOfWeek,
             (unsigned) Gbl.Prefs.Layout,
             The_ThemeId[Gbl.Prefs.Theme],
             Ico_IconSetId[Gbl.Prefs.IconSet],
@@ -191,8 +200,9 @@ void Pre_SetPrefsFromIP (void)
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs SET Layout='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
+      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek='%u',Layout='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
                      " WHERE UsrCod='%ld'",
+               Gbl.Prefs.FirstDayOfWeek,
                (unsigned) Gbl.Prefs.Layout,
                The_ThemeId[Gbl.Prefs.Theme],
                Ico_IconSetId[Gbl.Prefs.IconSet],
@@ -234,7 +244,8 @@ void Pre_PutSelectorToSelectLanguage (void)
      };
 
    Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\" style=\"width:%upx; margin:0;\""
+   fprintf (Gbl.F.Out,"<select name=\"Lan\""
+	              " style=\"width:%upx; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
             SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
@@ -286,11 +297,8 @@ void Pre_AskChangeLanguage (void)
 void Pre_ChangeLanguage (void)
   {
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Your_language_has_changed_to_LANGUAGE;
-   extern const char *Txt_The_language_has_changed_to_LANGUAGE;
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    char Query[512];
-   bool MyLanguageHasChanged = false;
 
    /***** Get param language *****/
    Gbl.Prefs.Language = Pre_GetParamLanguage ();
@@ -298,20 +306,14 @@ void Pre_ChangeLanguage (void)
    /***** Store language in database *****/
    if (Gbl.Usrs.Me.Logged && Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
      {
-      sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_data SET Language='%s'"
+	             " WHERE UsrCod='%ld'",
                Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your language");
-      MyLanguageHasChanged = true;
      }
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();
-
-   /***** Confirmation *****/
-   if (MyLanguageHasChanged)
-   Lay_ShowAlert (Lay_SUCCESS,
-                  MyLanguageHasChanged ? Txt_Your_language_has_changed_to_LANGUAGE :
-                                         Txt_The_language_has_changed_to_LANGUAGE);
   }
 
 /*****************************************************************************/
@@ -513,7 +515,8 @@ static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
    char Query[512];
 
-   sprintf (Query,"UPDATE usr_data SET SideCols='%u' WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET SideCols='%u'"
+	          " WHERE UsrCod='%ld'",
             Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about side columns");
   }

@@ -130,15 +130,16 @@ struct Globals
      } Imported;
    struct
      {
+      Txt_Language_t Language;
+      unsigned FirstDayOfWeek;
       Lay_Layout_t Layout;
+      Mnu_Menu_t Menu;
+      unsigned SideCols;
       The_Theme_t Theme;
       char PathTheme[PATH_MAX+1];
-      Txt_Language_t Language;
-      unsigned SideCols;
       Ico_IconSet_t IconSet;
       char PathIconSet[PATH_MAX+1];
       char IconsURL[PATH_MAX+1];
-      Mnu_Menu_t Menu;
      } Prefs;
 
    struct

@@ -111,11 +111,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.41 (2015/11/21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.42 (2015/11/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.42:    Nov 21, 2015	New option in preferences to select first day of the week. (187520 lines)
+					3 changes necessary in database:
+ALTER TABLE IP_prefs ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER LastChange;
+ALTER TABLE usr_data ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER Language,ADD INDEX (FirstDayOfWeek);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1484','es','N','Cambiar primer d&iacute;a de semana');
+
         Version 15.41:    Nov 21, 2015	Javascript code to draw a month with sunday as the first day of a week. (187316 lines)
         Version 15.40.8:  Nov 20, 2015	Password is requested only one time when creating a new account. (187309 lines)
         Version 15.40.7:  Nov 20, 2015	New help button to register students in courses without them. (187319 lines)

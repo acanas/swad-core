@@ -2721,7 +2721,8 @@ static int Svc_GetLanguageFromUsrCod (long UsrCod)
    Txt_Language_t Lan;
 
    /***** Get user's language *****/
-   sprintf (Query,"SELECT Language FROM usr_data WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT Language FROM usr_data"
+	          " WHERE UsrCod='%ld'",
 	    UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get user's language") != 1)
       return soap_receiver_fault (Gbl.soap,
@@ -2906,7 +2907,8 @@ int swad__sendMessage (struct soap *soap,
 
    /***** Build query for recipients from database *****/
    if (ReplyUsrCod > 0)
-      sprintf (Query,"SELECT UsrCod FROM usr_data WHERE UsrCod='%ld'",
+      sprintf (Query,"SELECT UsrCod FROM usr_data"
+	             " WHERE UsrCod='%ld'",
 	       ReplyUsrCod);
    else
       Query[0] = '\0';

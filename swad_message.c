@@ -1721,31 +1721,39 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
             StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                         "");
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
+               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt,usr_data"
                                  " WHERE msg_rcv.UsrCod='%ld'%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod AND msg_snt.CrsCod='%ld'"
+                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+                                 " AND msg_snt.CrsCod='%ld'"
                                  " AND msg_snt.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_rcv.MsgCod DESC",
                         UsrCod,StrUnreadMsg,FilterCrsCod,
                         FilterFromToSubquery);
             else
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt"
+               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt"
                                  " WHERE msg_rcv.UsrCod='%ld'%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod AND msg_snt.CrsCod='%ld'"
+                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+                                 " AND msg_snt.CrsCod='%ld'"
                                  " ORDER BY msg_rcv.MsgCod DESC",
                         UsrCod,StrUnreadMsg,
                         FilterCrsCod);
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod FROM msg_snt,msg_rcv,usr_data"
-                                 " WHERE msg_snt.UsrCod='%ld' AND msg_snt.CrsCod='%ld'"
-                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod AND msg_rcv.UsrCod=usr_data.UsrCod%s"
+               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
+        	                 " FROM msg_snt,msg_rcv,usr_data"
+                                 " WHERE msg_snt.UsrCod='%ld'"
+                                 " AND msg_snt.CrsCod='%ld'"
+                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_snt.MsgCod DESC",
                         UsrCod,FilterCrsCod,
                         FilterFromToSubquery);
             else
-               sprintf (PtrQuery,"SELECT MsgCod FROM msg_snt"
+               sprintf (PtrQuery,"SELECT MsgCod"
+        	                 " FROM msg_snt"
                                  " WHERE UsrCod='%ld' AND CrsCod='%ld'"
                                  " ORDER BY MsgCod DESC",
                         UsrCod,FilterCrsCod);
@@ -1761,9 +1769,11 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
               {
                StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                            "");
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
+               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt,usr_data"
                                  " WHERE msg_rcv.UsrCod='%ld'%s"
-                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod AND msg_snt.UsrCod=usr_data.UsrCod%s"
+                                 " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_rcv.MsgCod DESC",
                         UsrCod,StrUnreadMsg,
                         FilterFromToSubquery);
@@ -1772,7 +1782,8 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
               {
                StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND Open='N'" :
         	                                            "");
-               sprintf (PtrQuery,"SELECT MsgCod FROM msg_rcv"
+               sprintf (PtrQuery,"SELECT MsgCod"
+        	                 " FROM msg_rcv"
                                  " WHERE UsrCod='%ld'%s"
                                  " ORDER BY MsgCod DESC",
                         UsrCod,StrUnreadMsg);
@@ -1780,14 +1791,17 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod FROM msg_snt,msg_rcv,usr_data"
+               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
+        	                 " FROM msg_snt,msg_rcv,usr_data"
                                  " WHERE msg_snt.UsrCod='%ld'"
-                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod AND msg_rcv.UsrCod=usr_data.UsrCod%s"
+                                 " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_snt.MsgCod DESC",
                         UsrCod,
                         FilterFromToSubquery);
             else
-               sprintf (PtrQuery,"SELECT MsgCod FROM msg_snt"
+               sprintf (PtrQuery,"SELECT MsgCod"
+        	                 " FROM msg_snt"
                                  " WHERE UsrCod='%ld'"
                                  " ORDER BY MsgCod DESC",
                         UsrCod);
@@ -1797,7 +1811,8 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOf
         }
 
    if (Gbl.Msg.FilterContent[0])
-      sprintf (Query,"SELECT MsgCod FROM msg_content"
+      sprintf (Query,"SELECT MsgCod"
+	             " FROM msg_content"
                      " WHERE MsgCod IN (%s)"
                      " AND MATCH (Subject,Content) AGAINST ('%s')",
                SubQuery,

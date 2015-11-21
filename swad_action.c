@@ -1273,6 +1273,7 @@ Profile:
        1078. ActChgThe			Change theme
        1079. ActReqChgLan		Ask if change language
        1080. ActChgLan			Change language
+-----> 1080. ActChg1stDay		Change first day of the week
        1081. ActChgCol			Change side columns
        1082. ActHidLftCol		Hide left side column
        1083. ActHidRgtCol		Hide right side column
@@ -2754,6 +2755,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgThe		*/{ 841,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,The_ChangeTheme		,Pre_EditPrefs			,NULL},
    /* ActReqChgLan	*/{ 992,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_AskChangeLanguage		,NULL},
    /* ActChgLan		*/{ 654,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
+   /* ActChg1stDay	*/{1484,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
    /* ActChgCol		*/{ 674,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},
    /* ActHidLftCol	*/{ 668,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_HideLeftCol		,Pre_EditPrefs			,NULL},
    /* ActHidRgtCol	*/{ 669,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_HideRightCol		,Pre_EditPrefs			,NULL},
@@ -4278,6 +4280,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActNewMaiOth,		// #1481
 	ActNewMaiStd,		// #1482
 	ActNewMaiTch,		// #1483
+	ActChg1stDay,		// #1484
 	};
 
 /*****************************************************************************/

@@ -3734,8 +3734,7 @@ void Rec_UpdateMyOffice (void)
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Cns_MAX_BYTES_STRING);
 
    /***** Update office *****/
-   sprintf (Query,"UPDATE usr_data"
-	          " SET Office='%s'"
+   sprintf (Query,"UPDATE usr_data SET Office='%s'"
 	          " WHERE UsrCod='%ld'",
 	    Gbl.Usrs.Me.UsrDat.Tch.Office,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3757,8 +3756,7 @@ void Rec_UpdateMyOfficePhone (void)
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   sprintf (Query,"UPDATE usr_data"
-	          " SET OfficePhone='%s'"
+   sprintf (Query,"UPDATE usr_data SET OfficePhone='%s'"
 	          " WHERE UsrCod='%ld'",
 	    Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);

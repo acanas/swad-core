@@ -41,7 +41,6 @@ typedef enum
   {
    Ico_ICON_SET_AWESOME = 0,
    Ico_ICON_SET_NUVOLA  = 1,
-   Ico_ICON_SET_UNKNOWN = 2,
    } Ico_IconSet_t;
 #define Ico_ICON_SET_DEFAULT Ico_ICON_SET_AWESOME
 

@@ -276,7 +276,8 @@ void The_ChangeTheme (void)
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET Theme='%s' WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_data SET Theme='%s'"
+	             " WHERE UsrCod='%ld'",
                The_ThemeId[Gbl.Prefs.Theme],Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your preference about theme");
      }

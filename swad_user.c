@@ -36,6 +36,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
+#include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_course.h"
@@ -272,6 +273,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Tch.OfficePhone[0] = '\0';
 
    UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
+   UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    UsrDat->Prefs.Layout = Lay_LAYOUT_DEFAULT;
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
    UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
@@ -359,7 +361,8 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
    if (UsrDat->EncryptedUsrCod[0])
      {
       /***** Get user's code from database *****/
-      sprintf (Query,"SELECT UsrCod FROM usr_data WHERE EncryptedUsrCod='%s'",
+      sprintf (Query,"SELECT UsrCod FROM usr_data"
+	             " WHERE EncryptedUsrCod='%s'",
                UsrDat->EncryptedUsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
 
@@ -384,6 +387,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
   {
+   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -399,7 +403,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-                  "Layout,Theme,IconSet,Language,Photo,PhotoVisibility,ProfileVisibility,"
+                  "Layout,Theme,IconSet,Language,FirstDayOfWeek,Photo,PhotoVisibility,ProfileVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
@@ -480,47 +484,53 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
          break;
         }
 
-   /* Get rest of data */
-   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
-   UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
-   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
-   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
+   /* Get first day of week */
+   UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
+   if (sscanf (row[10],"%u",&UnsignedNum) == 1)
+      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
+         UsrDat->Prefs.FirstDayOfWeek = UnsignedNum;
 
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
-   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     ) - 1);
+   /* Get rest of data */
+   strncpy (UsrDat->Photo,row[11],sizeof (UsrDat->Photo) - 1);
+   UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[12]);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[13]);
+   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[14]);
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[15]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[16]);
+
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[17]);
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[18]);
+   strncpy (UsrDat->Tch.Office     ,row[19],sizeof (UsrDat->Tch.Office     ) - 1);
    UsrDat->Tch.Office     [sizeof (UsrDat->Tch.Office     ) - 1] = '\0';
-   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone) - 1);
+   strncpy (UsrDat->Tch.OfficePhone,row[20],sizeof (UsrDat->Tch.OfficePhone) - 1);
    UsrDat->Tch.OfficePhone[sizeof (UsrDat->Tch.OfficePhone) - 1] = '\0';
 
-   strncpy (UsrDat->LocalAddress ,row[20],sizeof (UsrDat->LocalAddress ) - 1);
+   strncpy (UsrDat->LocalAddress ,row[21],sizeof (UsrDat->LocalAddress ) - 1);
    UsrDat->LocalAddress [sizeof (UsrDat->LocalAddress ) - 1] = '\0';
-   strncpy (UsrDat->LocalPhone   ,row[21],sizeof (UsrDat->LocalPhone   ) - 1);
+   strncpy (UsrDat->LocalPhone   ,row[22],sizeof (UsrDat->LocalPhone   ) - 1);
    UsrDat->LocalPhone   [sizeof (UsrDat->LocalPhone   ) - 1] = '\0';
-   strncpy (UsrDat->FamilyAddress,row[22],sizeof (UsrDat->FamilyAddress) - 1);
+   strncpy (UsrDat->FamilyAddress,row[23],sizeof (UsrDat->FamilyAddress) - 1);
    UsrDat->FamilyAddress[sizeof (UsrDat->FamilyAddress) - 1] = '\0';
-   strncpy (UsrDat->FamilyPhone  ,row[23],sizeof (UsrDat->FamilyPhone  ) - 1);
+   strncpy (UsrDat->FamilyPhone  ,row[24],sizeof (UsrDat->FamilyPhone  ) - 1);
    UsrDat->FamilyPhone  [sizeof (UsrDat->FamilyPhone  ) - 1] = '\0';
-   strncpy (UsrDat->OriginPlace  ,row[24],sizeof (UsrDat->OriginPlace  ) - 1);
+   strncpy (UsrDat->OriginPlace  ,row[25],sizeof (UsrDat->OriginPlace  ) - 1);
    UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  ) - 1] = '\0';
    strcpy (StrBirthday,
-           row[25] ? row[25] :
+           row[26] ? row[26] :
 	             "0000-00-00");
-   Usr_GetUsrCommentsFromString (row[26] ? row[26] :
+   Usr_GetUsrCommentsFromString (row[27] ? row[27] :
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
 
    /* Get menu */
    UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
-   if (sscanf (row[27],"%u",&UnsignedNum) == 1)
+   if (sscanf (row[28],"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Mnu_NUM_MENUS)
          UsrDat->Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
 
    /* Get if user wants to show side columns */
-   if (sscanf (row[28],"%u",&UsrDat->Prefs.SideCols) == 1)
+   if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
          UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -529,11 +539,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified inside the platform */
-   if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   if (sscanf (row[30],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
    /* Get on which events I want to be notified by e-mail */
-   if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   if (sscanf (row[31],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
@@ -3705,7 +3715,11 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,
      }
 
    /***** The last part of the query is for ordering the list *****/
-   strcat (Query," ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod");
+   strcat (Query," ORDER BY "
+	         "usr_data.Surname1,"
+	         "usr_data.Surname2,"
+	         "usr_data.FirstName,"
+	         "usr_data.UsrCod");
   }
 
 /*****************************************************************************/
@@ -3754,7 +3768,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " (SELECT UsrCod FROM usr_data WHERE %s))"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			(unsigned) Role,UsrQuery,
 			(unsigned) Role,UsrQuery,
 			(unsigned) Role,UsrQuery);
@@ -3773,7 +3791,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " WHERE Role='%u' AND Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			(unsigned) Role,
 			(unsigned) Role,
 			(unsigned) Role);
@@ -3816,7 +3838,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			UsrQuery,Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
@@ -3854,7 +3880,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role,
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role,
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
@@ -3894,7 +3924,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			UsrQuery,Gbl.CurrentIns.Ins.InsCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentIns.Ins.InsCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
@@ -3929,7 +3963,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) Role,
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) Role,
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
@@ -3966,7 +4004,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			UsrQuery,Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
@@ -3998,7 +4040,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role,
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role,
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
@@ -4032,7 +4078,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			UsrQuery,Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role,
 			UsrQuery,Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
@@ -4058,7 +4108,11 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 			      " AND crs_usr.Accepted='N')"
 			      ") AS list_usrs,usr_data"
 			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role,
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role,
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
@@ -4098,8 +4152,11 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                        " WHERE (admin.Scope='Deg'"
                        " OR admin.Scope='Sys')"
                        " AND admin.UsrCod=usr_data.UsrCod "
-                       " ORDER BY usr_data.Surname1,usr_data.Surname2,"
-                       "usr_data.FirstName,usr_data.UsrCod");
+                       " ORDER BY "
+                       "usr_data.Surname1,"
+                       "usr_data.Surname2,"
+                       "usr_data.FirstName,"
+                       "usr_data.UsrCod");
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
@@ -4110,8 +4167,11 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " AND admin.Scope='Deg')"
                         " OR admin.Scope='Sys')"
                         " AND admin.UsrCod=usr_data.UsrCod "
-                        " ORDER BY usr_data.Surname1,usr_data.Surname2,"
-                        "usr_data.FirstName,usr_data.UsrCod",
+                        " ORDER BY "
+                        "usr_data.Surname1,"
+                        "usr_data.Surname2,"
+                        "usr_data.FirstName,"
+                        "usr_data.UsrCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
@@ -4122,8 +4182,11 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " AND admin.Scope='Deg')"
                         " OR admin.Scope='Sys')"
                         " AND admin.UsrCod=usr_data.UsrCod "
-                        " ORDER BY usr_data.Surname1,usr_data.Surname2,"
-                        "usr_data.FirstName,usr_data.UsrCod",
+                        " ORDER BY "
+                        "usr_data.Surname1,"
+                        "usr_data.Surname2,"
+                        "usr_data.FirstName,"
+                        "usr_data.UsrCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
@@ -4132,8 +4195,11 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " WHERE ((admin.Scope='Deg' AND admin.Cod='%ld')"
                         " OR admin.Scope='Sys')"
                         " AND admin.UsrCod=usr_data.UsrCod "
-                        " ORDER BY usr_data.Surname1,usr_data.Surname2,"
-                        "usr_data.FirstName,usr_data.UsrCod",
+                        " ORDER BY "
+                        "usr_data.Surname1,"
+                        "usr_data.Surname2,"
+                        "usr_data.FirstName,"
+                        "usr_data.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable

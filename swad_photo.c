@@ -985,7 +985,9 @@ static void Pho_ClearPhotoName (long UsrCod)
    char Query[128];
 
    /***** Clear photo name in user's data *****/
-   sprintf (Query,"UPDATE usr_data SET Photo='' WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"UPDATE usr_data SET Photo=''"
+	          " WHERE UsrCod='%ld'",
+	    UsrCod);
    DB_QueryUPDATE (Query,"can not clear the name of a user's photo");
   }
 
@@ -999,7 +1001,8 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
    char PathPublPhoto[PATH_MAX+1];
 
    /***** Update photo name in database *****/
-   sprintf (Query,"UPDATE usr_data SET Photo='%s' WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET Photo='%s'"
+	          " WHERE UsrCod='%ld'",
             Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
    DB_QueryUPDATE (Query,"can not update the name of a user's photo");
 
