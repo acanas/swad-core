@@ -111,11 +111,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.42 (2015/11/21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.42.1 (2015/11/21)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.42.1:  Nov 21, 2015	Calendar is drawn depending on user's preference about first day of the week. (187523 lines)
         Version 15.42:    Nov 21, 2015	New option in preferences to select first day of the week. (187520 lines)
 					3 changes necessary in database:
 ALTER TABLE IP_prefs ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER LastChange;

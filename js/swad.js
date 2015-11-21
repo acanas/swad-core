@@ -619,7 +619,7 @@ function disableDetailedClicks() {
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
 
-function Cal_DrawCalendar (id,Sunday,TimeUTC,CurrentPlcCod,PrintView,
+function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var StartingMonth = [	// Calendar starts one row before current month
 		9,	// January   --> September
@@ -662,7 +662,7 @@ function Cal_DrawCalendar (id,Sunday,TimeUTC,CurrentPlcCod,PrintView,
 			MonthId = id + '_month_' + MonthIdNum;
 
 			Gbl_HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
-			DrawMonth (MonthId,Sunday,Year,Month,CurrentMonth,CurrentDay,
+			DrawMonth (MonthId,FirstDayOfWeek,Year,Month,CurrentMonth,CurrentDay,
 						CurrentPlcCod,true,PrintView,CGI,
 						FormGoToCalendarParams,FormEventParams);
 			Gbl_HTMLContent += '</td>';
@@ -682,7 +682,7 @@ function Cal_DrawCalendar (id,Sunday,TimeUTC,CurrentPlcCod,PrintView,
 /***************************** Draw current month ****************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,Sunday,TimeUTC,CurrentPlcCod,
+function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
@@ -690,7 +690,7 @@ function DrawCurrentMonth (id,Sunday,TimeUTC,CurrentPlcCod,
 	var Month = d.getMonth() + 1;
 	var CurrentDay = d.getDate();
 
-	DrawMonth (id,Sunday,Year,Month,Month,CurrentDay,
+	DrawMonth (id,FirstDayOfWeek,Year,Month,Month,CurrentDay,
 				CurrentPlcCod,false,false,
 				CGI,FormGoToCalendarParams,FormEventParams);
 	document.getElementById(id).innerHTML = Gbl_HTMLContent;
@@ -699,10 +699,10 @@ function DrawCurrentMonth (id,Sunday,TimeUTC,CurrentPlcCod,
 /*****************************************************************************/
 /******************************* Draw a month ********************************/
 /*****************************************************************************/
-// Sunday == 0 ==> Sunday is the first day of the week
-// Sunday == 6 ==> Sunday is the last day of the week
+// FirstDayOfWeek == 0 (monday) <==> Sunday is the last day of the week
+// FirstDayOfWeek == 6 (sunday) <==> Sunday is the first day of the week
 
-function DrawMonth (id,Sunday,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
+function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 					CurrentPlcCod,DrawingCalendar,PrintView,
 					CGI,FormGoToCalendarParams,FormEventParams) {
 	var NumDaysMonth = [
@@ -750,7 +750,7 @@ function DrawMonth (id,Sunday,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 	   If it's  0 then write 1 box   of the previous month.
 	   If it's  1 then write 0 boxes of the previous month. */
 
-	if ((DayOfWeek = (GetDayOfWeekMondayFirst (Yea,Mon,1) + Sunday + 1) % 7) == 0)
+	if ((DayOfWeek = (GetDayOfWeekMondayFirst (Yea,Mon,1) - FirstDayOfWeek) % 7) == 0)
 		Day = 1;
 	else {
 		if (Mon <= 1) {
@@ -787,10 +787,10 @@ function DrawMonth (id,Sunday,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 	Gbl_HTMLContent += '<table class="MONTH_TABLE_DAYS">' + '<tr>';
 	for (DayOfWeek = 0; DayOfWeek < 7; DayOfWeek++)
 		Gbl_HTMLContent += '<td class="' +
-						   ((DayOfWeek == Sunday) ? 'DAY_NO_WRK_HEAD' :
-													'DAY_WRK_HEAD') +
+						   ((DayOfWeek == 6 - FirstDayOfWeek) ? 'DAY_NO_WRK_HEAD' :
+													            'DAY_WRK_HEAD') +
 						   '">' +
-						   DAYS_CAPS[(DayOfWeek + 6 - Sunday) % 7] +
+						   DAYS_CAPS[(DayOfWeek + FirstDayOfWeek) % 7] +
 						   '</td>';
 	Gbl_HTMLContent += '</tr>';
 
@@ -840,7 +840,7 @@ function DrawMonth (id,Sunday,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 				}
 
 			/* Day being drawn is sunday? */
-			if (DayOfWeek == Sunday) // All the sundays are holidays
+			if (DayOfWeek == 6 - FirstDayOfWeek) // All the sundays are holidays
 				ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
 													 'DAY_HLD_LIGHT';
 

@@ -2374,6 +2374,13 @@ static void Usr_SetUsrRoleAndPrefs (void)
    // In this point I am logged
 
    /***** Set preferences from my preferences *****/
+   Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
+   Gbl.Prefs.Layout = Gbl.Usrs.Me.UsrDat.Prefs.Layout;
+   // TODO: Should layout depend on session instead of user prefs?
+   // (for example, one user with two sessions with different layouts)
+   Gbl.Prefs.Menu = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
+   Gbl.Prefs.SideCols = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
+
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,
@@ -2383,9 +2390,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
    sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
 	    Ico_IconSetId[Gbl.Prefs.IconSet]);
-
-   Gbl.Prefs.Menu = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
-   Gbl.Prefs.SideCols = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    /***** Get my last data *****/
    Usr_GetMyLastData ();
