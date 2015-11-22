@@ -3895,31 +3895,51 @@ bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg)
   }
 
 /*****************************************************************************/
-/********** Write the degrees administrated by an administrator **************/
+/***** Write institutions, centres and degrees administrated by an admin *****/
 /*****************************************************************************/
 
-void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
+void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
    extern const char *Txt_Go_to_X;
    extern const char *Txt_all_degrees;
-   char Query[512];
+   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned NumRow;
+   unsigned NumRows;
+   struct Institution Ins;
+   struct Centre Ctr;
    struct Degree Deg;
 
-   /***** Get degrees admin by a user from database *****/
-   sprintf (Query,"(SELECT -1 AS DegCod,'' AS FullName"
+   /***** Get institutions, centres, degrees admin by user from database *****/
+   sprintf (Query,"(SELECT '%u' AS Scope,'-1' AS Cod,'' AS FullName"
 	          " FROM admin"
-	          " WHERE UsrCod='%ld' AND Scope='Sys')"
+	          " WHERE UsrCod='%ld'"
+	          " AND Scope='Sys')"
                   " UNION "
-                  "(SELECT DegCod,degrees.FullName"
+                  "(SELECT '%u' AS Scope,admin.Cod,institutions.FullName"
+                  " FROM admin,institutions"
+                  " WHERE admin.UsrCod='%ld'"
+                  " AND admin.Scope='Ins'"
+                  " AND admin.Cod=institutions.InsCod)"
+                  " UNION "
+                  "(SELECT '%u' AS Scope,admin.Cod,centres.FullName"
+                  " FROM admin,centres"
+                  " WHERE admin.UsrCod='%ld'"
+                  " AND admin.Scope='Ctr'"
+                  " AND admin.Cod=centres.CtrCod)"
+                  " UNION "
+                  "(SELECT '%u' AS Scope,admin.Cod,degrees.FullName"
                   " FROM admin,degrees"
-                  " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                  " WHERE admin.UsrCod='%ld'"
+                  " AND admin.Scope='Deg'"
                   " AND admin.Cod=degrees.DegCod)"
-                  " ORDER BY FullName",
-            UsrCod,UsrCod);
-   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by a user"))) // If degrees found for this administrator
+                  " ORDER BY Scope,FullName",
+            (unsigned) Sco_SCOPE_SYS,UsrCod,
+            (unsigned) Sco_SCOPE_INS,UsrCod,
+            (unsigned) Sco_SCOPE_CTR,UsrCod,
+            (unsigned) Sco_SCOPE_DEG,UsrCod);
+   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions, centres, degrees admin by a user")))
       /***** Get the list of degrees *****/
       for (NumRow = 1;
 	   NumRow <= NumRows;
@@ -3936,34 +3956,67 @@ void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan)
                   NumRow == NumRows ? "subend" :
                 	              "submid");
 
-         /***** Write degree *****/
+         /***** Write institution, centre, degree *****/
          fprintf (Gbl.F.Out,"<td colspan=\"%u\""
                             " class=\"DAT_SMALL_NOBR LEFT_TOP COLOR%u\">",
                   ColSpan - 1,Gbl.RowEvenOdd);
 
-         /* Get next degree */
+         /* Get next institution, centre, degree */
          row = mysql_fetch_row (mysql_res);
-         Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         if (Deg.DegCod > 0)
-           {
-	    /* Get data of degree */
-	    Deg_GetDataOfDegreeByCod (&Deg);
-
-            /* Write degree logo and degree short name */
-            Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-                                               "DAT_SMALL_NOBR","LEFT_TOP");
-           }
-         else
-            fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
-        	               " alt=\"%s\" title=\"%s\""
-                               " class=\"ICON16x16\" />"
-                               " %s",
+	 /* Get scope */
+	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
+	   {
+	    case Sco_SCOPE_SYS:	// System
+	       fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
+        	                  " alt=\"%s\" title=\"%s\""
+                                  " class=\"ICON16x16\" />"
+                                  "&nbsp;%s",
                      Gbl.Prefs.IconsURL,
                      Txt_all_degrees,
                      Txt_all_degrees,
                      Txt_all_degrees);
+	       break;
+	    case Sco_SCOPE_INS:	// Institution
+	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Ins.InsCod > 0)
+		 {
+		  /* Get data of institution */
+		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
 
+		  /* Write institution logo and name */
+		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
+						          "DAT_SMALL_NOBR","LEFT_TOP");
+		 }
+	       break;
+	    case Sco_SCOPE_CTR:	// Centre
+	       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Ctr.CtrCod > 0)
+		 {
+		  /* Get data of centre */
+		  Ctr_GetDataOfCentreByCod (&Ctr);
+
+		  /* Write centre logo and name */
+		  Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+						     "DAT_SMALL_NOBR","LEFT_TOP");
+		 }
+	       break;
+	    case Sco_SCOPE_DEG:	// Degree
+	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
+	       if (Deg.DegCod > 0)
+		 {
+		  /* Get data of degree */
+		  Deg_GetDataOfDegreeByCod (&Deg);
+
+		  /* Write degree logo and name */
+		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+						     "DAT_SMALL_NOBR","LEFT_TOP");
+		 }
+	       break;
+	    default:	// There are no administrators in other scopes
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+           }
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }

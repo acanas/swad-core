@@ -165,7 +165,7 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg);
 
-void Deg_GetAndWriteDegreesAdminBy (long UsrCod,unsigned ColSpan);
+void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
 unsigned Deg_ListDegsFound (const char *Query);
 

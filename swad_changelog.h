@@ -104,24 +104,22 @@
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Remove columns "first year, last year, optional, status" when listing degrees?
 // TODO: Show message indicating that mail could be in SPAM folder
-// TODO: List institution and centre admins
-// TODO: List of degrees administrated by a degree admin should be ordered by name
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.43.2 (2015/11/22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.44 (2015/11/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.43.2:  Nov 22, 2015	Minor changes in CSS. (187719 lines)
+        Version 15.44:    Nov 23, 2015	Changes in list of institution, centre and degree administrators. (187787 lines)
         Version 15.43.1:  Nov 22, 2015	New figure (statistic) about first day of week. (187722 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1485','es','N','Cambiar primer d&iacute;a semana en calendario');
 
-        Version 15.43:    Nov 21, 2015	New figure (statistic) about first day of week. (187693 lines)
+        Version 15.43:    Nov 21, 2015	Form in calendar to select first day of week. (187693 lines)
         Version 15.42.4:  Nov 21, 2015	Fixed bug when getting first day of week from IP preferences. (187535 lines)
         Version 15.42.3:  Nov 21, 2015	Stats of hits distributed by week depend on user's preference about first day of the week. (187528 lines)
         Version 15.42.2:  Nov 21, 2015	Fixed bug in JavaScript code to draw months. (187524 lines)
@@ -132,7 +130,7 @@ ALTER TABLE IP_prefs ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER 
 ALTER TABLE usr_data ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER Language,ADD INDEX (FirstDayOfWeek);
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1484','es','N','Cambiar primer d&iacute;a de semana');
 
-        Version 15.41:    Nov 21, 2015	Javascript code to draw a month with sunday as the first day of a week. (187316 lines)
+        Version 15.41:    Nov 21, 2015	JavaScript code to draw a month with sunday as the first day of a week. (187316 lines)
         Version 15.40.8:  Nov 20, 2015	Password is requested only one time when creating a new account. (187309 lines)
         Version 15.40.7:  Nov 20, 2015	New help button to register students in courses without them. (187319 lines)
         Version 15.40.6:  Nov 20, 2015	New button to register students in courses without them.

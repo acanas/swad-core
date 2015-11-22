@@ -3285,7 +3285,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write degrees which are administrated by this administrator *****/
-   Deg_GetAndWriteDegreesAdminBy (UsrDat->UsrCod,
+   Deg_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
                                   Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
                                 	                        Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
 
@@ -4153,24 +4153,35 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       case Sco_SCOPE_SYS:
          strcpy (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
                        " FROM admin,usr_data"
-                       " WHERE (admin.Scope='Deg'"
-                       " OR admin.Scope='Sys')"
-                       " AND admin.UsrCod=usr_data.UsrCod "
+                       " WHERE admin.UsrCod=usr_data.UsrCod"
                        " ORDER BY "
                        "usr_data.Surname1,"
                        "usr_data.Surname2,"
                        "usr_data.FirstName,"
                        "usr_data.UsrCod");
          break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
+                        " FROM institutions,centres,degrees,admin,usr_data"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=admin.Cod"
+                        " AND admin.UsrCod=usr_data.UsrCod"
+                        " ORDER BY "
+                        "usr_data.Surname1,"
+                        "usr_data.Surname2,"
+                        "usr_data.FirstName,"
+                        "usr_data.UsrCod",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
                         " FROM centres,degrees,admin,usr_data"
-                        " WHERE ((centres.InsCod='%ld'"
+                        " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=admin.Cod"
-                        " AND admin.Scope='Deg')"
-                        " OR admin.Scope='Sys')"
-                        " AND admin.UsrCod=usr_data.UsrCod "
+                        " AND admin.UsrCod=usr_data.UsrCod"
                         " ORDER BY "
                         "usr_data.Surname1,"
                         "usr_data.Surname2,"
@@ -4181,11 +4192,9 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
                         " FROM degrees,admin,usr_data"
-                        " WHERE ((degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=admin.Cod"
-                        " AND admin.Scope='Deg')"
-                        " OR admin.Scope='Sys')"
-                        " AND admin.UsrCod=usr_data.UsrCod "
+                        " AND admin.UsrCod=usr_data.UsrCod"
                         " ORDER BY "
                         "usr_data.Surname1,"
                         "usr_data.Surname2,"
@@ -4196,9 +4205,8 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
                         " FROM admin,usr_data"
-                        " WHERE ((admin.Scope='Deg' AND admin.Cod='%ld')"
-                        " OR admin.Scope='Sys')"
-                        " AND admin.UsrCod=usr_data.UsrCod "
+                        " WHERE admin.Cod='%ld'"
+                        " AND admin.UsrCod=usr_data.UsrCod"
                         " ORDER BY "
                         "usr_data.Surname1,"
                         "usr_data.Surname2,"

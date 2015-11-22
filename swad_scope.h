@@ -60,4 +60,6 @@ void Sco_GetScope (void);
 void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 
+Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
+
 #endif

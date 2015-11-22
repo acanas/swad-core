@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <string.h>		// For string functions
+
 #include "swad_config.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -37,7 +39,7 @@
 const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES] =
   {
    NULL,	// Sco_SCOPE_UNK
-   NULL,	// Sco_SCOPE_SYS,
+   "Sys",	// Sco_SCOPE_SYS,
    NULL,	// Sco_SCOPE_CTY,
    "Ins",	// Sco_SCOPE_INS,
    "Ctr",	// Sco_SCOPE_CTR,
@@ -190,30 +192,26 @@ void Sco_PutParamScope (Sco_Scope_t Scope)
 void Sco_GetScope (void)
   {
    char UnsignedStr[10+1];
-   unsigned UnsignedNum;
-
-   Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Get parameter location range if exists *****/
    Par_GetParToText ("Scope",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Sco_NUM_SCOPES)
-         Gbl.Scope.Current = (Sco_Scope_t) UnsignedNum;
+   if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
+      Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Sco_SCOPE_CRS      && Gbl.CurrentCrs.Crs.CrsCod <= 0)
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
       Gbl.Scope.Current = Sco_SCOPE_DEG;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_DEG      && Gbl.CurrentDeg.Deg.DegCod <= 0)
+   if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
       Gbl.Scope.Current = Sco_SCOPE_CTR;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTR      && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
+   if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
       Gbl.Scope.Current = Sco_SCOPE_INS;
 
    if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
       Gbl.Scope.Current = Sco_SCOPE_CTY;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTY     && Gbl.CurrentCty.Cty.CtyCod <= 0)
+   if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
       Gbl.Scope.Current = Sco_SCOPE_SYS;
 
    /***** Avoid forbidden scopes *****/
@@ -293,4 +291,19 @@ void Sco_SetScopesForListingStudents (void)
       	 Gbl.Scope.Default = Sco_SCOPE_UNK;
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/*************************** Get scope from string ***************************/
+/*****************************************************************************/
+
+Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Sco_NUM_SCOPES)
+         return (Sco_Scope_t) UnsignedNum;
+
+   return Sco_SCOPE_UNK;
   }
