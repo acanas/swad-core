@@ -111,11 +111,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.44.2 (2015/11/23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.44.3 (2015/11/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.44.3:  Nov 23, 2015	Improvement of speed in list of administrators. (187839 lines)
+					1 change necessary in database:
+ALTER TABLE admin ADD INDEX (Scope,Cod);
+
         Version 15.44.2:  Nov 23, 2015	Improvement of speed in list of administrators. (187819 lines)
         Version 15.44.1:  Nov 23, 2015	Fixed bug in list of administrators. (187809 lines)
         Version 15.44:    Nov 23, 2015	Changes in list of institution, centre and degree administrators. (187788 lines)

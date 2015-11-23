@@ -171,7 +171,7 @@ mysql> DESCRIBE admin;
 	           "UsrCod INT NOT NULL,"
 	           "Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
 	           "Cod INT NOT NULL,"
-	           "UNIQUE INDEX(UsrCod,Scope,Cod))");
+	           "UNIQUE INDEX(UsrCod,Scope,Cod),INDEX (Scope,Cod))");
 
    /***** Table ann_seen *****/
 /*
