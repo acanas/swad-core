@@ -11164,3 +11164,5 @@ SELECT TstCod,AllowTeachers,UNIX_TIMESTAMP(TstTime) AS T,NumQsts,NumQstsNotBlank
 SELECT * FROM expanded_folders WHERE UNIX_TIMESTAMP() > UNIX_TIMESTAMP(ClickTime)+'1000';
 SELECT * FROM expanded_folders WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'1000');
 
+-----
+SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN (SELECT DISTINCT UsrCod FROM admin WHERE Scope='Sys' UNION SELECT DISTINCT admin.UsrCod FROM admin,institutions WHERE admin.Scope='Ins' AND admin.Cod=institutions.InsCod AND institutions.CtyCod='724') AS admin_codes ORDER BY Surname1,Surname2,FirstName,UsrCod;

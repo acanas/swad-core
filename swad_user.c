@@ -4148,6 +4148,8 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    char Query[1024];
 
    /***** Build query *****/
+   // Very important: use UNION instead OR in the following queries
+   // (OR with different tables is very slow)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:	// All admins
@@ -4157,23 +4159,28 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
          break;
       case Sco_SCOPE_CTY:	// System admins
 				// and admins of the institutions, centres and degrees in the current country
-         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
-                        "(SELECT DISTINCT admin.UsrCod"
-                        " FROM admin,institutions,centres,degrees WHERE"
-                        " admin.Scope='Sys' OR "
-                        "(admin.Scope='Ins'"
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN ("
+                        "SELECT UsrCod FROM admin"
+                        " WHERE Scope='Sys'"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,institutions"
+                        " WHERE admin.Scope='Ins'"
                         " AND admin.Cod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld') OR "
-                        "(admin.Scope='Ctr'"
+                        " AND institutions.CtyCod='%ld'"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,centres,institutions"
+                        " WHERE admin.Scope='Ctr'"
                         " AND admin.Cod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld') OR "
-                        "(admin.Scope='Deg'"
+                        " AND institutions.CtyCod='%ld'"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,degrees,centres,institutions"
+                        " WHERE admin.Scope='Deg'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld'))"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                        " AND institutions.CtyCod='%ld'"
+                        ") ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod);
@@ -4181,19 +4188,22 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       case Sco_SCOPE_INS:	// System admins,
 				// admins of the current institution,
 				// and admins of the centres and degrees in the current institution
-         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
-                        "(SELECT DISTINCT admin.UsrCod"
-                        " FROM admin,centres,degrees WHERE"
-                        " admin.Scope='Sys' OR "
-                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
-                        "(admin.Scope='Ctr'"
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN ("
+                        "SELECT DISTINCT UsrCod FROM admin"
+                        " WHERE Scope='Sys' OR "
+                        " (Scope='Ins' AND Cod='%ld')"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,centres"
+                        " WHERE admin.Scope='Ctr'"
                         " AND admin.Cod=centres.CtrCod"
-                        " AND centres.InsCod='%ld') OR "
-                        "(admin.Scope='Deg'"
+                        " AND centres.InsCod='%ld'"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,degrees,centres"
+                        " WHERE admin.Scope='Deg'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
-                        " AND centres.InsCod='%ld'))"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                        " AND centres.InsCod='%ld'"
+                        ") ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentIns.Ins.InsCod);
@@ -4202,31 +4212,30 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 				// admins of the current institution,
 				// admins and the current centre,
 				// and admins of the degrees in the current centre
-         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
-                        "(SELECT DISTINCT admin.UsrCod"
-                        " FROM admin,degrees WHERE"
-                        " admin.Scope='Sys' OR "
-                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
-                        "(admin.Scope='Ctr' AND admin.Cod='%ld') OR "
-                        "(admin.Scope='Deg'"
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN ("
+                        "SELECT DISTINCT UsrCod FROM admin"
+                        " WHERE Scope='Sys' OR "
+                        " (Scope='Ins' AND Cod='%ld') OR"
+                        " (Scope='Ctr' AND Cod='%ld')"
+                        " UNION "
+                        "SELECT DISTINCT admin.UsrCod FROM admin,degrees"
+                        " WHERE admin.Scope='Deg'"
                         " AND admin.Cod=degrees.DegCod"
-                        " AND degrees.CtrCod='%ld'))"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                        " AND degrees.CtrCod='%ld'"
+                        ") ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:	// System admins
 				// and admins of the current institution, centre or degree
-         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data"
-                        " WHERE UsrCod IN "
-                        "(SELECT DISTINCT UsrCod"
-                        " FROM admin WHERE"
-                        " admin.Scope='Sys' OR "
-                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
-                        "(admin.Scope='Ctr' AND admin.Cod='%ld') OR "
-                        "(admin.Scope='Deg' AND admin.Cod='%ld'))"
-                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN ("
+                        "SELECT DISTINCT UsrCod FROM admin"
+                        " WHERE Scope='Sys' OR "
+                        " (Scope='Ins' AND Cod='%ld') OR"
+                        " (Scope='Ctr' AND Cod='%ld') OR"
+                        " (Scope='Deg' AND Cod='%ld')"
+                        ") ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentDeg.Deg.DegCod);
