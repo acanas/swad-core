@@ -104,17 +104,21 @@
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Remove columns "first year, last year, optional, status" when listing degrees?
 // TODO: Show message indicating that mail could be in SPAM folder
+// TODO: Do not show e-mails of administrators and teachers in lists openly
+// TODO: Show nicknames of users in lists?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.44 (2015/11/23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.44.1 (2015/11/23)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.44:    Nov 23, 2015	Changes in list of institution, centre and degree administrators. (187787 lines)
+        Version 15.44.1:  Nov 23, 2015	Fixed bug in list of administrators. (187809 lines)
+        Version 15.44:    Nov 23, 2015	Changes in list of institution, centre and degree administrators. (187788 lines)
+        Version 15.43.2:  Nov 22, 2015	Minor changes in CSS. (187719 lines)
         Version 15.43.1:  Nov 22, 2015	New figure (statistic) about first day of week. (187722 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1485','es','N','Cambiar primer d&iacute;a semana en calendario');

@@ -3902,7 +3902,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
    extern const char *Txt_Go_to_X;
    extern const char *Txt_all_degrees;
-   char Query[2048];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;
@@ -3912,29 +3912,29 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    struct Degree Deg;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
-   sprintf (Query,"(SELECT '%u' AS Scope,'-1' AS Cod,'' AS FullName"
+   sprintf (Query,"(SELECT '%u' AS S,'-1' AS Cod,'' AS FullName"
 	          " FROM admin"
 	          " WHERE UsrCod='%ld'"
 	          " AND Scope='Sys')"
                   " UNION "
-                  "(SELECT '%u' AS Scope,admin.Cod,institutions.FullName"
+                  "(SELECT '%u' AS S,admin.Cod,institutions.FullName"
                   " FROM admin,institutions"
                   " WHERE admin.UsrCod='%ld'"
                   " AND admin.Scope='Ins'"
                   " AND admin.Cod=institutions.InsCod)"
                   " UNION "
-                  "(SELECT '%u' AS Scope,admin.Cod,centres.FullName"
+                  "(SELECT '%u' AS S,admin.Cod,centres.FullName"
                   " FROM admin,centres"
                   " WHERE admin.UsrCod='%ld'"
                   " AND admin.Scope='Ctr'"
                   " AND admin.Cod=centres.CtrCod)"
                   " UNION "
-                  "(SELECT '%u' AS Scope,admin.Cod,degrees.FullName"
+                  "(SELECT '%u' AS S,admin.Cod,degrees.FullName"
                   " FROM admin,degrees"
                   " WHERE admin.UsrCod='%ld'"
                   " AND admin.Scope='Deg'"
                   " AND admin.Cod=degrees.DegCod)"
-                  " ORDER BY Scope,FullName",
+                  " ORDER BY S,FullName",
             (unsigned) Sco_SCOPE_SYS,UsrCod,
             (unsigned) Sco_SCOPE_INS,UsrCod,
             (unsigned) Sco_SCOPE_CTR,UsrCod,

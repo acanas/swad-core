@@ -3286,8 +3286,8 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write degrees which are administrated by this administrator *****/
    Deg_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
-                                  Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
-                                	                        Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
+                                    Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
+                                	                          Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -4145,77 +4145,95 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Build query *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
-         strcpy (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
-                       " FROM admin,usr_data"
-                       " WHERE admin.UsrCod=usr_data.UsrCod"
-                       " ORDER BY "
-                       "usr_data.Surname1,"
-                       "usr_data.Surname2,"
-                       "usr_data.FirstName,"
-                       "usr_data.UsrCod");
+      case Sco_SCOPE_SYS:	// All admins
+         strcpy (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
+                       "(SELECT DISTINCT UsrCod FROM admin)"
+                       " ORDER BY Surname1,Surname2,FirstName,UsrCod");
          break;
-      case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM institutions,centres,degrees,admin,usr_data"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=admin.Cod"
-                        " AND admin.UsrCod=usr_data.UsrCod"
-                        " ORDER BY "
-                        "usr_data.Surname1,"
-                        "usr_data.Surname2,"
-                        "usr_data.FirstName,"
-                        "usr_data.UsrCod",
+      case Sco_SCOPE_CTY:	// System admins
+				// and admins of the institutions, centres and degrees in the current country
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
+                        "(SELECT DISTINCT admin.UsrCod"
+                        " FROM admin,institutions,centres,degrees WHERE"
+                        " admin.Scope='Sys' OR "
+                        "(admin.Scope='Ins'"
+                        " AND admin.Cod=institutions.InsCod"
+                        " AND institutions.CtyCod='%ld') OR "
+                        "(admin.Scope='Ctr'"
+                        " AND admin.Cod=centres.CtrCod"
+                        " AND centres.InsCod=institutions.InsCod"
+                        " AND institutions.CtyCod='%ld') OR "
+                        "(admin.Scope='Deg'"
+                        " AND admin.Cod=degrees.DegCod"
+                        " AND degrees.CtrCod=centres.CtrCod"
+                        " AND centres.InsCod=institutions.InsCod"
+                        " AND institutions.CtyCod='%ld'))"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM centres,degrees,admin,usr_data"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=admin.Cod"
-                        " AND admin.UsrCod=usr_data.UsrCod"
-                        " ORDER BY "
-                        "usr_data.Surname1,"
-                        "usr_data.Surname2,"
-                        "usr_data.FirstName,"
-                        "usr_data.UsrCod",
+      case Sco_SCOPE_INS:	// System admins,
+				// admins of the current institution,
+				// and admins of the centres and degrees in the current institution
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
+                        "(SELECT DISTINCT admin.UsrCod"
+                        " FROM admin,centres,degrees WHERE"
+                        " admin.Scope='Sys' OR "
+                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
+                        "(admin.Scope='Ctr'"
+                        " AND admin.Cod=centres.CtrCod"
+                        " AND centres.InsCod='%ld') OR "
+                        "(admin.Scope='Deg'"
+                        " AND admin.Cod=degrees.DegCod"
+                        " AND degrees.CtrCod=centres.CtrCod"
+                        " AND centres.InsCod='%ld'))"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentIns.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM degrees,admin,usr_data"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=admin.Cod"
-                        " AND admin.UsrCod=usr_data.UsrCod"
-                        " ORDER BY "
-                        "usr_data.Surname1,"
-                        "usr_data.Surname2,"
-                        "usr_data.FirstName,"
-                        "usr_data.UsrCod",
+      case Sco_SCOPE_CTR:	// System admins,
+				// admins of the current institution,
+				// admins and the current centre,
+				// and admins of the degrees in the current centre
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN "
+                        "(SELECT DISTINCT admin.UsrCod"
+                        " FROM admin,degrees WHERE"
+                        " admin.Scope='Sys' OR "
+                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
+                        "(admin.Scope='Ctr' AND admin.Cod='%ld') OR "
+                        "(admin.Scope='Deg'"
+                        " AND admin.Cod=degrees.DegCod"
+                        " AND degrees.CtrCod='%ld'))"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT DISTINCT admin.UsrCod,'Y',usr_data.Sex"
-                        " FROM admin,usr_data"
-                        " WHERE admin.Cod='%ld'"
-                        " AND admin.UsrCod=usr_data.UsrCod"
-                        " ORDER BY "
-                        "usr_data.Surname1,"
-                        "usr_data.Surname2,"
-                        "usr_data.FirstName,"
-                        "usr_data.UsrCod",
+      case Sco_SCOPE_DEG:	// System admins
+				// and admins of the current institution, centre or degree
+         sprintf (Query,"SELECT UsrCod,'Y',Sex FROM usr_data"
+                        " WHERE UsrCod IN "
+                        "(SELECT DISTINCT UsrCod"
+                        " FROM admin WHERE"
+                        " admin.Scope='Sys' OR "
+                        "(admin.Scope='Ins' AND admin.Cod='%ld') OR "
+                        "(admin.Scope='Ctr' AND admin.Cod='%ld') OR "
+                        "(admin.Scope='Deg' AND admin.Cod='%ld'))"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
-         return;
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+         break;
      }
 
    /***** Get list of students from database *****/
