@@ -711,17 +711,16 @@ static void Lay_WritePageTopHeadingDesktop (void)
    /***** 1st. row *****/
    /* 1st. row, 2nd. column: logo */
    fprintf (Gbl.F.Out,"<tr class=\"%s\">"
-                      "<td colspan=\"3\">"
-                      "<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\" style=\"width:%upx;\">"
+                      "<td colspan=\"3\" style=\"vertical-align:middle; height:40px;\">"
+                      "<div style=\"display:table; width:100%%; height:40px;\">"
+                      "<div class=\"%s CENTER_MIDDLE\" style=\"display:table-cell; width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
-                      "</td>",
+                      "</div>",
             ClassHeadRow1[Gbl.Prefs.Theme],
 	    The_ClassHead[Gbl.Prefs.Theme],
 	    Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
@@ -732,7 +731,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
             Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT);
 
    /* 1st. row, 1st. column: search */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\" style=\"display:table-cell;\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
 		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
@@ -742,29 +741,28 @@ static void Lay_WritePageTopHeadingDesktop (void)
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 3rd. column: logged user or language selection */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\" style=\"width:340px;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\" style=\"display:table-cell;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
       Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 4th. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\" style=\"display:table-cell; width:160px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>"
-	              "</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>"
+	              "</div>"
+                      "</td>"
+                      "</tr>");
 
    /***** 2nd. row *****/
    /* 2nd. row, 1st. column
