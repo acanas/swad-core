@@ -288,8 +288,8 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
      {
-      112,        // Lay_LAYOUT_DESKTOP
-      112,        // Lay_LAYOUT_MOBILE
+      130,        // Lay_LAYOUT_DESKTOP
+      200,        // Lay_LAYOUT_MOBILE
      };
    Rol_Role_t Role;
 

@@ -51,8 +51,6 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD local"			// This title will appear on browser top
-#define Cfg_PLATFORM_LOGO_DESKTOP		"openswad220x40.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE		"openswad330x60.png"		// Logo displayed in the top of the page
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://localhost/swad"	// Without ending slash
@@ -60,6 +58,13 @@
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
+
+#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"openswad240x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		240
+#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
+#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"openswad330x60.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		330
+#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Ca&ntilde;as Vargas"	// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"	// Main responsible for the platform
@@ -99,8 +104,6 @@
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
 #define Cfg_PLATFORM_FULL_NAME			"OpenSWAD (Open Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD (free platform for learning & educational management)"				// This title will appear on browser top
-#define Cfg_PLATFORM_LOGO_DESKTOP		"openswad220x40.png"			// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE		"openswad330x60.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://openswad.org/swad"		// Without ending slash
@@ -108,6 +111,13 @@
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin/swad"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
+
+#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"openswad240x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		240
+#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
+#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"openswad330x60.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		330
+#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"		// Main responsible for the platform
@@ -164,8 +174,6 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UGR"				// This title will appear on browser top
-#define Cfg_PLATFORM_LOGO_DESKTOP		"swad220x40.png"			// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE		"swad330x60.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://swad.ugr.es/swad"		// Without ending slash
@@ -173,6 +181,13 @@
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
+
+#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"swad160x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		160
+#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
+#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"swad210x60.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		210
+#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"CEVUG"					// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"sctecnico@ugr.es"			// Main responsible for the platform
@@ -219,8 +234,6 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_PAGE_TITLE			"SWAD UNA"				// This title will appear on browser top
-#define Cfg_PLATFORM_LOGO_DESKTOP		"swad220x40.png"			// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE		"swad330x60.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_SERVER			"www.cevuna.una.py"			// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://www.cevuna.una.py/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://www.cevuna.una.py/swad"	// Without ending slash
@@ -228,6 +241,13 @@
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin/swad"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
+
+#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"swad160x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		160
+#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
+#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"swad210x60.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		210
+#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Carmen Varela B&aacute;ez"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"cevuna@rec.una.py"			// Main responsible for the platform

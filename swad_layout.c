@@ -700,17 +700,6 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeadingDesktop (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   const struct
-     {
-      const char *Icon;
-      const unsigned Width;
-      const unsigned Height;
-     } LogoLayout =
-     {
-      Cfg_PLATFORM_LOGO_DESKTOP,
-      220,
-      40,
-     };
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
       "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
@@ -720,14 +709,30 @@ static void Lay_WritePageTopHeadingDesktop (void)
       };
 
    /***** 1st. row *****/
-   /* 1st. row, 1st. column: search */
+   /* 1st. row, 2nd. column: logo */
    fprintf (Gbl.F.Out,"<tr class=\"%s\">"
                       "<td colspan=\"3\">"
                       "<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:500px;\">"
-                      "<div style=\"padding-left:10px;\">",
-            ClassHeadRow1[Gbl.Prefs.Theme]);
+                      "<td class=\"%s LEFT_MIDDLE\" style=\"width:%upx;\">"
+                      "<a href=\"%s\" target=\"_blank\">"
+	              "<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\""
+                      " class=\"CENTER_MIDDLE\""
+	              " style=\"width:%upx; height:%upx;\" />"
+                      "</a>"
+                      "</td>",
+            ClassHeadRow1[Gbl.Prefs.Theme],
+	    The_ClassHead[Gbl.Prefs.Theme],
+	    Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_DESKTOP_FILE,
+            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
+            Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
+            Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT);
+
+   /* 1st. row, 1st. column: search */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
 		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
@@ -737,24 +742,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>");
-
-   /* 1st. row, 2nd. column: logo */
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">"
-                      "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"CENTER_MIDDLE\""
-	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>"
-                      "</td>",
-	    The_ClassHead[Gbl.Prefs.Theme],
-            Cfg_HTTPS_URL_SWAD_CGI,
-            Gbl.Prefs.IconsURL,LogoLayout.Icon,
-            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            LogoLayout.Width,
-            LogoLayout.Height);
+   fprintf (Gbl.F.Out,"</td>");
 
    /* 1st. row, 3rd. column: logged user or language selection */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\" style=\"width:340px;\">",
@@ -849,17 +837,6 @@ static void Lay_WritePageTopHeadingDesktop (void)
 static void Lay_WritePageTopHeadingMobile (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   const struct
-     {
-      const char *Icon;
-      const unsigned Width;
-      const unsigned Height;
-     } LogoLayout =
-     {
-      Cfg_PLATFORM_LOGO_MOBILE,
-      330,
-      60,
-     };
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
       "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
@@ -879,12 +856,12 @@ static void Lay_WritePageTopHeadingMobile (void)
                       "</a>"
                       "</td>",
             ClassHeadRow1[Gbl.Prefs.Theme],
-            LogoLayout.Width + 20,
+            Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
-            Gbl.Prefs.IconsURL,LogoLayout.Icon,
+            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_MOBILE_FILE,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            LogoLayout.Width,
-            LogoLayout.Height);
+            Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
+            Cfg_PLATFORM_LOGO_MOBILE_HEIGHT);
 
    /***** 1st. row, 2nd. column:
           logged user / language selection *****/
