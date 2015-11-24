@@ -707,9 +707,8 @@ static void Lay_WritePageTopHeadingDesktop (void)
       const unsigned Height;
      } LogoLayout =
      {
-      // Lay_LAYOUT_DESKTOP
-      "swad112x32.gif",
-      140,
+      Cfg_PLATFORM_LOGO_DESKTOP,
+      220,
       40,
      };
    const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -751,8 +750,8 @@ static void Lay_WritePageTopHeadingDesktop (void)
                       "</a>"
                       "</td>",
 	    The_ClassHead[Gbl.Prefs.Theme],
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
-            LogoLayout.Icon,
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Gbl.Prefs.IconsURL,LogoLayout.Icon,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             LogoLayout.Width,
             LogoLayout.Height);
@@ -857,9 +856,8 @@ static void Lay_WritePageTopHeadingMobile (void)
       const unsigned Height;
      } LogoLayout =
      {
-      // Lay_LAYOUT_MOBILE
-      "swad168x48.gif",
-      210,
+      Cfg_PLATFORM_LOGO_MOBILE,
+      330,
       60,
      };
    const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -882,8 +880,8 @@ static void Lay_WritePageTopHeadingMobile (void)
                       "</td>",
             ClassHeadRow1[Gbl.Prefs.Theme],
             LogoLayout.Width + 20,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
-            LogoLayout.Icon,
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Gbl.Prefs.IconsURL,LogoLayout.Icon,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             LogoLayout.Width,
             LogoLayout.Height);
