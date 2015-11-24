@@ -89,7 +89,8 @@ static void Lay_WriteScriptInit (void);
 static void Lay_WriteScriptConnectedUsrs (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
-static void Lay_WritePageTopHeading (void);
+static void Lay_WritePageTopHeadingDesktop (void);
+static void Lay_WritePageTopHeadingMobile (void);
 
 static void Lay_WriteTitleAction (void);
 
@@ -270,12 +271,10 @@ void Lay_WriteStartOfPage (void)
    /***** Header of layout *****/
    fprintf (Gbl.F.Out,"<table class=\"%s\" style=\"width:100%%;\">",
             ClassBackground[Gbl.Prefs.Theme]);
-
-   Lay_WritePageTopHeading ();
-
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
+         Lay_WritePageTopHeadingDesktop ();
 	 if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)
 	    ColspanCentralPart = 1;	// 11: both side columns visible, left and right
 	 else if (Gbl.Prefs.SideCols == Lay_HIDE_BOTH_COLUMNS)
@@ -284,6 +283,7 @@ void Lay_WriteStartOfPage (void)
 	    ColspanCentralPart = 2;	// 10 or 01: only one side column visible, left or right
 	 break;
       case Lay_LAYOUT_MOBILE:
+         Lay_WritePageTopHeadingMobile ();
          ColspanCentralPart = 3;
          break;
       default:
@@ -697,7 +697,7 @@ static void Lay_WriteScriptCustomDropzone (void)
 /************************ Write top heading of the page **********************/
 /*****************************************************************************/
 
-static void Lay_WritePageTopHeading (void)
+static void Lay_WritePageTopHeadingDesktop (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
    const struct
@@ -705,14 +705,12 @@ static void Lay_WritePageTopHeading (void)
       const char *Icon;
       const unsigned Width;
       const unsigned Height;
-     } LogoLayout[Lay_NUM_LAYOUTS] =
+     } LogoLayout =
      {
-        {	// Lay_LAYOUT_DESKTOP
-         "swad112x32.gif",140,40,
-        },
-        {	// Lay_LAYOUT_MOBILE
-         "swad168x48.gif",210,60,
-        },
+      // Lay_LAYOUT_DESKTOP
+      "swad112x32.gif",
+      140,
+      40,
      };
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
@@ -722,49 +720,181 @@ static void Lay_WritePageTopHeading (void)
       "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
       };
 
-   fprintf (Gbl.F.Out,"<tr class=\"%s\">",ClassHeadRow1[Gbl.Prefs.Theme]);
-
-   /***** 1st. row, 1st. column: logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">",
-            LogoLayout[Gbl.Prefs.Layout].Width + 20);
-
-   /* Left logo */
-   fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">"
+   /***** 1st. row *****/
+   /* 1st. row, 1st. column: logo */
+   fprintf (Gbl.F.Out,"<tr class=\"%s\">"
+                      "<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
+                      "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",
+            ClassHeadRow1[Gbl.Prefs.Theme],
+            LogoLayout.Width + 20,
             Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
-            LogoLayout[Gbl.Prefs.Layout].Icon,
+            LogoLayout.Icon,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            LogoLayout[Gbl.Prefs.Layout].Width,
-            LogoLayout[Gbl.Prefs.Layout].Height);
+            LogoLayout.Width,
+            LogoLayout.Height);
    fprintf (Gbl.F.Out,"</td>");
+
+   /* 1st. row, 2nd. column:
+      search, and logged user / language selection */
+   /* Search courses / teachers */
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<table style=\"width:100%%;\">"
-                      "<tr>");
-   /***** 1st. row, 2nd. column:
-          search, and logged user / language selection *****/
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-     {
-      /* Search courses / teachers */
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-               The_ClassHead[Gbl.Prefs.Theme]);
-      Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
-	             (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
-	             (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
-	             (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
-	             (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
-	                                              ActSysSch)))));
-      Sco_PutParamScope (Sco_SCOPE_SYS);
-      Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
-     }
+                      "<tr>"
+                      "<td class=\"%s LEFT_MIDDLE\">",
+	    The_ClassHead[Gbl.Prefs.Theme]);
+   Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
+		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
+		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
+		  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
+		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
+						   ActSysSch)))));
+   Sco_PutParamScope (Sco_SCOPE_SYS);
+   Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /* Logged user or language selection */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
+            The_ClassHead[Gbl.Prefs.Theme]);
+   if (Gbl.Usrs.Me.Logged)
+      Usr_WriteLoggedUsrHead ();
+   else
+      Pre_PutSelectorToSelectLanguage ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>"
+	              "</table>"
+	              "</td>");
+
+   /* 1st. row, 3rd. column: link to open/close session */
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
+            The_ClassHead[Gbl.Prefs.Theme]);
+   if (Gbl.Usrs.Me.Logged)
+      Usr_PutFormLogOut ();
+   else
+      Usr_PutFormLogIn ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+
+   /***** 2nd. row *****/
+   /* 2nd. row, 1st. column
+      Clock with hour:minute (server hour is shown) */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"CENTER_TOP\""
+		      " style=\"width:160px; height:80px;\">");
+   Dat_ShowClientLocalTime ();
+   fprintf (Gbl.F.Out,"</td>");	// End of first column
+
+   /* 2nd. row, 2nd. column: degree and course */
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"height:80px;\">"
+		      "<div class=\"CENTER_TOP\""
+		      " style=\"padding-top:5px;\">");
+   Deg_WriteCtyInsCtrDeg ();
+   Crs_WriteSelectorMyCourses ();
+   Deg_WriteBigNameCtyInsCtrDegCrs ();
+   fprintf (Gbl.F.Out,"</div>"
+		      "</td>");
+
+   /* 2nd. row, 3rd. column */
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+		      " style=\"width:160px; height:80px;\">");
+   if (Gbl.Usrs.Me.Logged)
+     {
+      /* Number of new messages (not seen) */
+      fprintf (Gbl.F.Out,"<div id=\"msg\""	// Used for AJAX based refresh
+			 " style=\"padding-top:10px;\">");
+      Ntf_WriteNumberOfNewNtfs ();
+      fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
+     }
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+
+   /***** 3rd. row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /* 3rd. row, 1st. column */
+   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">"
+			 "</td>");
+
+   /* 3rd. row, 2nd. column */
+   Tab_DrawTabs ();
+
+   /* 3rd. row, 3rd. column */
+   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
+     {
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CENTER_TOP\""
+			 " style=\"width:160px;\">");
+      Lay_ShowRightColumn ();
+      fprintf (Gbl.F.Out,"</td>");
+     }
+
+   fprintf (Gbl.F.Out,"</tr>");
+
+   /***** 4th. row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /* 4th. row, 1st. column */
+   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
+     {
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
+			 " style=\"width:160px;\">");
+      Lay_ShowLeftColumn ();
+      fprintf (Gbl.F.Out,"</td>");
+     }
+  }
+
+static void Lay_WritePageTopHeadingMobile (void)
+  {
+   extern const char *The_ClassHead[The_NUM_THEMES];
+   const struct
+     {
+      const char *Icon;
+      const unsigned Width;
+      const unsigned Height;
+     } LogoLayout =
+     {
+      // Lay_LAYOUT_MOBILE
+      "swad168x48.gif",
+      210,
+      60,
+     };
+   const char *ClassHeadRow1[The_NUM_THEMES] =
+     {
+      "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
+      "GREY_HEAD_ROW_1",	// The_THEME_GREY
+      "BLUE_HEAD_ROW_1",	// The_THEME_BLUE
+      "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
+      };
+
+   /***** 1st. row, 1st. column: logo *****/
+   fprintf (Gbl.F.Out,"<tr class=\"%s\">"
+                      "<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
+                      "<a href=\"%s\" target=\"_blank\">"
+	              "<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\""
+                      " class=\"CENTER_MIDDLE\""
+	              " style=\"width:%upx; height:%upx;\" />"
+                      "</a>"
+                      "</td>",
+            ClassHeadRow1[Gbl.Prefs.Theme],
+            LogoLayout.Width + 20,
+            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
+            LogoLayout.Icon,
+            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
+            LogoLayout.Width,
+            LogoLayout.Height);
+
+   /***** 1st. row, 2nd. column:
+          logged user / language selection *****/
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                      "<table style=\"width:100%%;\">"
+                      "<tr>"
+                      "<td class=\"%s RIGHT_MIDDLE\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
@@ -786,95 +916,19 @@ static void Lay_WritePageTopHeading (void)
                       "</tr>");
 
    /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<tr>");
-
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-         /***** 2nd. row, 1st. column *****/
-         /* Clock with hour:minute (server hour is shown) */
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-                            " style=\"width:160px; height:80px;\">");
-         Dat_ShowClientLocalTime ();
-         fprintf (Gbl.F.Out,"</td>");	// End of first column
-
-         /***** 2nd. row, 2nd. column: degree and course *****/
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"height:80px;\">"
-                            "<div class=\"CENTER_TOP\""
-                            " style=\"padding-top:5px;\">");
-         Deg_WriteCtyInsCtrDeg ();
-         Crs_WriteSelectorMyCourses ();
-         Deg_WriteBigNameCtyInsCtrDegCrs ();
-         fprintf (Gbl.F.Out,"</div>"
-                            "</td>");
-
-         /***** 2nd. row, 3rd. column *****/
-         fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-                            " style=\"width:160px; height:80px;\">");
-         if (Gbl.Usrs.Me.Logged)
-           {
-            /* Number of new messages (not seen) */
-            fprintf (Gbl.F.Out,"<div id=\"msg\""	// Used for AJAX based refresh
-        	               " style=\"padding-top:10px;\">");
-            Ntf_WriteNumberOfNewNtfs ();
-            fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
-           }
-         break;
-      case Lay_LAYOUT_MOBILE:
-         fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_MIDDLE\""
-                            " style=\"height:40px;\">");
-         Deg_WriteCtyInsCtrDeg ();
-         Crs_WriteSelectorMyCourses ();
-         break;
-      default:
-      	 break;
-     }
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td colspan=\"3\" class=\"CENTER_MIDDLE\""
+		      " style=\"height:40px;\">");
+   Deg_WriteCtyInsCtrDeg ();
+   Crs_WriteSelectorMyCourses ();
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** 3rd. row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   Tab_DrawTabs ();
    fprintf (Gbl.F.Out,"</tr>"
-                      "<tr>");
-
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-         /***** 3rd. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-            fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">"
-        	               "</td>");
-
-         /***** 3rd. row, 2nd. column *****/
-         Tab_DrawTabs ();
-
-         /***** 3rd. row, 3rd. column *****/
-         if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
-           {
-            fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CENTER_TOP\""
-        	               " style=\"width:160px;\">");
-            Lay_ShowRightColumn ();
-            fprintf (Gbl.F.Out,"</td>");
-           }
-
-         fprintf (Gbl.F.Out,"</tr>"
-                            "<tr>");
-
-         /***** 4th. row, 1st. column *****/
-         if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-           {
-            fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-        	               " style=\"width:160px;\">");
-            Lay_ShowLeftColumn ();
-            fprintf (Gbl.F.Out,"</td>");
-           }
-         break;
-      case Lay_LAYOUT_MOBILE:
-         Tab_DrawTabs ();
-         fprintf (Gbl.F.Out,"</tr>"
-                            "<tr>");
-         break;
-      default:
-      	 break;
-     }
+		      "<tr>");
   }
 
 /*****************************************************************************/

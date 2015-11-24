@@ -4148,8 +4148,10 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    char Query[1024];
 
    /***** Build query *****/
-   // Very important: use UNION instead OR in the following queries
-   // (OR with different tables is very slow)
+   // Important: it is better to use:
+   // SELECT... WHERE UsrCod IN (SELECT...) OR UsrCod IN (SELECT...) <-- fast
+   // instead of using or with different joins:
+   // SELECT... WHERE (...) OR (...) <-- very slow
    switch (Scope)
      {
       case Sco_SCOPE_SYS:	// All admins
@@ -4811,7 +4813,7 @@ void Usr_AllocateListSelectedUsrCodStd (void)
   {
    if (!Gbl.Usrs.Select.Std)
      {
-      if ((Gbl.Usrs.Select.Std = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS+1)) == NULL)
+      if ((Gbl.Usrs.Select.Std = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
       Gbl.Usrs.Select.Std[0] = '\0';
      }
@@ -4825,7 +4827,7 @@ void Usr_AllocateListSelectedUsrCodTch (void)
   {
    if (!Gbl.Usrs.Select.Tch)
      {
-      if ((Gbl.Usrs.Select.Tch = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS+1)) == NULL)
+      if ((Gbl.Usrs.Select.Tch = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
       Gbl.Usrs.Select.Tch[0] = '\0';
      }
@@ -4862,7 +4864,7 @@ static void Usr_AllocateListOtherRecipients (void)
   {
    if (!Gbl.Usrs.ListOtherRecipients)
      {
-      if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS+1)) == NULL)
+      if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of recipients.");
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }
