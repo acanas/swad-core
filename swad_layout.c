@@ -723,6 +723,9 @@ static void Lay_WritePageTopHeadingDesktop (void)
    /***** 1st. row *****/
    /* 1st. row, 1st. column: logo */
    fprintf (Gbl.F.Out,"<tr class=\"%s\">"
+                      "<td colspan=\"3\">"
+                      "<table style=\"width:100%%;\">"
+                      "<tr>"
                       "<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
@@ -742,10 +745,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
    /* 1st. row, 2nd. column:
       search, and logged user / language selection */
    /* Search courses / teachers */
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\">",
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
 	    The_ClassHead[Gbl.Prefs.Theme]);
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
@@ -765,10 +765,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
       Usr_WriteLoggedUsrHead ();
    else
       Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</td>");
 
    /* 1st. row, 3rd. column: link to open/close session */
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
@@ -778,7 +775,10 @@ static void Lay_WritePageTopHeadingDesktop (void)
    else
       Usr_PutFormLogIn ();
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+	              "</tr>"
+	              "</table>"
+	              "</td>"
+	              "</tr>");
 
    /***** 2nd. row *****/
    /* 2nd. row, 1st. column
