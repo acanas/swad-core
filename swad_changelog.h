@@ -111,11 +111,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.44.5 (2015/11/24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.44.6 (2015/11/24)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.44.6:  Nov 24, 2015	Code refactoring in layout. (187893 lines)
         Version 15.44.5:  Nov 24, 2015	Code refactoring in layout. (187894 lines)
         Version 15.44.4:  Nov 24, 2015	Code refactoring in layout. (187893 lines)
         Version 15.44.3:  Nov 23, 2015	Improvement of speed in list of administrators. (187841 lines)

@@ -1635,12 +1635,12 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const unsigned NumCharsName[Lay_NUM_LAYOUTS] =
      {
-      16,        // Lay_LAYOUT_DESKTOP
+      12,        // Lay_LAYOUT_DESKTOP
       10,        // Lay_LAYOUT_MOBILE
      };
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
-   char UsrFullName[(Usr_MAX_BYTES_NAME+1)*3];
+   char UsrName[Usr_MAX_BYTES_NAME+1];
 
    /***** User's type *****/
    if (Rol_GetNumAvailableRoles () == 1)
@@ -1667,9 +1667,9 @@ void Usr_WriteLoggedUsrHead (void)
    /* Name */
    if (Gbl.Usrs.Me.UsrDat.FullName[0])
      {
-      strcpy (UsrFullName,Gbl.Usrs.Me.UsrDat.FullName);
-      Str_LimitLengthHTMLStr (UsrFullName,NumCharsName[Gbl.Prefs.Layout]);
-      fprintf (Gbl.F.Out,"%s",UsrFullName);
+      strcpy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName);
+      Str_LimitLengthHTMLStr (UsrName,NumCharsName[Gbl.Prefs.Layout]);
+      fprintf (Gbl.F.Out,"%s",UsrName);
      }
 
    fprintf (Gbl.F.Out,"</span>");

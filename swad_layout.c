@@ -721,32 +721,14 @@ static void Lay_WritePageTopHeadingDesktop (void)
       };
 
    /***** 1st. row *****/
-   /* 1st. row, 1st. column: logo */
+   /* 1st. row, 1st. column: search */
    fprintf (Gbl.F.Out,"<tr class=\"%s\">"
                       "<td colspan=\"3\">"
                       "<table style=\"width:100%%;\">"
                       "<tr>"
-                      "<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
-                      "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"CENTER_MIDDLE\""
-	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>",
-            ClassHeadRow1[Gbl.Prefs.Theme],
-            LogoLayout.Width + 20,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
-            LogoLayout.Icon,
-            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            LogoLayout.Width,
-            LogoLayout.Height);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /* 1st. row, 2nd. column:
-      search, and logged user / language selection */
-   /* Search courses / teachers */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-	    The_ClassHead[Gbl.Prefs.Theme]);
+                      "<td class=\"LEFT_MIDDLE\" style=\"width:500px;\">"
+                      "<div style=\"padding-left:10px;\">",
+            ClassHeadRow1[Gbl.Prefs.Theme]);
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
 		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
@@ -756,10 +738,27 @@ static void Lay_WritePageTopHeadingDesktop (void)
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>"
+	              "</td>");
 
-   /* Logged user or language selection */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
+   /* 1st. row, 2nd. column: logo */
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">"
+                      "<a href=\"%s\" target=\"_blank\">"
+	              "<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\""
+                      " class=\"CENTER_MIDDLE\""
+	              " style=\"width:%upx; height:%upx;\" />"
+                      "</a>"
+                      "</td>",
+	    The_ClassHead[Gbl.Prefs.Theme],
+            Cfg_HTTPS_URL_SWAD_CGI,Gbl.Prefs.PathTheme,
+            LogoLayout.Icon,
+            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
+            LogoLayout.Width,
+            LogoLayout.Height);
+
+   /* 1st. row, 3rd. column: logged user or language selection */
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\" style=\"width:340px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
@@ -767,7 +766,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
       Pre_PutSelectorToSelectLanguage ();
    fprintf (Gbl.F.Out,"</td>");
 
-   /* 1st. row, 3rd. column: link to open/close session */
+   /* 1st. row, 4th. column: link to open/close session */
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
