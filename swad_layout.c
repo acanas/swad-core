@@ -800,17 +800,10 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 2nd. row, 3rd. column */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
-	              " width:160px; height:80px;\">");
+   fprintf (Gbl.F.Out,"<div id=\"msg\">");	// Used for AJAX based refresh
    if (Gbl.Usrs.Me.Logged)
-     {
-      /* Number of new messages (not seen) */
-      fprintf (Gbl.F.Out,"<div id=\"msg\""	// Used for AJAX based refresh
-			 " style=\"padding-top:10px;\">");
       Ntf_WriteNumberOfNewNtfs ();
-      fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
-     }
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
    /* End of 2nd. row */
    fprintf (Gbl.F.Out,"</div>");
