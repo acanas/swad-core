@@ -788,8 +788,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
 
    /* 2nd. row, 1st. column
       Clock with hour:minute (server hour is shown) */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
-		      " width:160px; height:80px;\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_2_time\">");
    Dat_ShowClientLocalTime ();
    fprintf (Gbl.F.Out,"</div>");	// End of first column
 
