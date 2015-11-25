@@ -81,19 +81,9 @@ static void Tab_WriteBreadcrumbAction (void);
 
 void Tab_DrawTabs (void)
   {
-   unsigned ColspanCentralPart = 3;
-
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-     {
-      if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)	// 11: both side columns visible, left and right
-	 ColspanCentralPart = 1;
-      else if (Gbl.Prefs.SideCols != Lay_HIDE_BOTH_COLUMNS)	// 10 or 01: only one side column visible, left or right
-	 ColspanCentralPart = 2;
-     }
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\""
-	              " style=\"height:64px;\">"
-		      "<div id=\"tabs_container\">",
-            ColspanCentralPart);
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
+	              " style=\"display:table-cell; height:64px;\">"
+		      "<div id=\"tabs_container\">");
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
@@ -106,7 +96,7 @@ void Tab_DrawTabs (void)
       	 break;
      }
    fprintf (Gbl.F.Out,"</div>"
-	              "</td>");
+   	              "</div>");
   }
 
 /*****************************************************************************/

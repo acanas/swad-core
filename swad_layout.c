@@ -118,7 +118,6 @@ void Lay_WriteStartOfPage (void)
       "BLUE_BACKGROUND",	// The_THEME_BLUE
       "YELLOW_BACKGROUND",	// The_THEME_YELLOW
       };
-   unsigned ColspanCentralPart = 3;	// Initialized to avoid warnning
 
    /***** If, when this function is called, the head is being written
           or the head is already written ==> don't do anything *****/
@@ -268,36 +267,43 @@ void Lay_WriteStartOfPage (void)
                          "</div>",
 	       Gbl.Prefs.IconsURL);
 
-   /***** Header of layout *****/
-   fprintf (Gbl.F.Out,"<table class=\"%s\" style=\"width:100%%;\">",
+   /***** Start of box that contains the whole page except the foot *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\""
+	              " style=\"display:table; width:100%%;\">",
             ClassBackground[Gbl.Prefs.Theme]);
+
+   /***** Header of layout *****/
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
          Lay_WritePageTopHeadingDesktop ();
-	 if (Gbl.Prefs.SideCols == Lay_SHOW_BOTH_COLUMNS)
-	    ColspanCentralPart = 1;	// 11: both side columns visible, left and right
-	 else if (Gbl.Prefs.SideCols == Lay_HIDE_BOTH_COLUMNS)
-	    ColspanCentralPart = 3;	// 00: both side columns hidden
-	 else
-	    ColspanCentralPart = 2;	// 10 or 01: only one side column visible, left or right
 	 break;
       case Lay_LAYOUT_MOBILE:
          Lay_WritePageTopHeadingMobile ();
-         ColspanCentralPart = 3;
          break;
       default:
       	 break;
      }
 
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"CENTER_TOP\">"
+   /***** Main zone *****/
+   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
+
+   /* Left column */
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+      if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
+			    " style=\"display:table-cell; width:160px;\">");
+	 Lay_ShowLeftColumn ();
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+
+   /* Central (main) part */
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;\">"
 		      "<div id=\"CENTRAL_ZONE\" class=\"%s\">"
 		      "<table class=\"CENTER_TOP\" style=\"width:100%%;\">"
 		      "<tr>",
-	    ColspanCentralPart,
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
-
-   /***** Central (main) part *****/
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
@@ -330,7 +336,6 @@ void Lay_WriteStartOfPage (void)
       	 break;
      }
 
-   /***** Main zone *****/
    /* Start of main zone for actions output */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
 	              " style=\"padding:0 12px 12px 12px;\">");
@@ -393,9 +398,20 @@ static void Lay_WriteEndOfPage (void)
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</div>"
-			 "</td>"
-                         "</tr>"
-	                 "</table>\n");
+			 "</div>");
+
+      /* Right column */
+      if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
+	   {
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
+			       " style=\"display:table-cell; width:160px;\">");
+	    Lay_ShowRightColumn ();
+	    fprintf (Gbl.F.Out,"</div>");
+	   }
+
+      /***** End of box that contains the whole page except the foot *****/
+      fprintf (Gbl.F.Out,"</div>\n");
      }
   }
 
@@ -709,11 +725,14 @@ static void Lay_WritePageTopHeadingDesktop (void)
       };
 
    /***** 1st. row *****/
+   /* Start of 1st. row */
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table;"
+	              " width:100%%; height:40px;\">",
+            ClassHeadRow1[Gbl.Prefs.Theme]);
+
    /* 1st. row, 2nd. column: logo */
-   fprintf (Gbl.F.Out,"<tr class=\"%s\">"
-                      "<td colspan=\"3\" style=\"vertical-align:middle; height:40px;\">"
-                      "<div style=\"display:table; width:100%%; height:40px;\">"
-                      "<div class=\"%s CENTER_MIDDLE\" style=\"display:table-cell; width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
+	              " style=\"display:table-cell; width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
@@ -721,7 +740,6 @@ static void Lay_WritePageTopHeadingDesktop (void)
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
                       "</div>",
-            ClassHeadRow1[Gbl.Prefs.Theme],
 	    The_ClassHead[Gbl.Prefs.Theme],
 	    Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
@@ -731,7 +749,8 @@ static void Lay_WritePageTopHeadingDesktop (void)
             Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT);
 
    /* 1st. row, 1st. column: search */
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\" style=\"display:table-cell;\">");
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\""
+	              " style=\"display:table-cell;\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
 		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
@@ -744,7 +763,8 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 3rd. column: logged user or language selection */
-   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\" style=\"display:table-cell;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\""
+	              " style=\"display:table-cell;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
@@ -753,39 +773,44 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 4th. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\" style=\"display:table-cell; width:160px;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
+	              " style=\"display:table-cell; width:160px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</div>"
-	              "</div>"
-                      "</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Start of 1st. row */
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** 2nd. row *****/
+   /* Start of second row */
+   fprintf (Gbl.F.Out,"<div style=\"display:table; vertical-align:top;"
+	              " width:100%%; height:80px;\">");
+
    /* 2nd. row, 1st. column
       Clock with hour:minute (server hour is shown) */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_TOP\""
-		      " style=\"width:160px; height:80px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
+		      " width:160px; height:80px;\">");
    Dat_ShowClientLocalTime ();
-   fprintf (Gbl.F.Out,"</td>");	// End of first column
+   fprintf (Gbl.F.Out,"</div>");	// End of first column
 
    /* 2nd. row, 2nd. column: degree and course */
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"height:80px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
+	              " height:80px;\">"
 		      "<div class=\"CENTER_TOP\""
 		      " style=\"padding-top:5px;\">");
    Deg_WriteCtyInsCtrDeg ();
    Crs_WriteSelectorMyCourses ();
    Deg_WriteBigNameCtyInsCtrDegCrs ();
    fprintf (Gbl.F.Out,"</div>"
-		      "</td>");
+	              "</div>");
 
    /* 2nd. row, 3rd. column */
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-		      " style=\"width:160px; height:80px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
+	              " width:160px; height:80px;\">");
    if (Gbl.Usrs.Me.Logged)
      {
       /* Number of new messages (not seen) */
@@ -794,42 +819,15 @@ static void Lay_WritePageTopHeadingDesktop (void)
       Ntf_WriteNumberOfNewNtfs ();
       fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* End of 2nd. row */
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** 3rd. row *****/
-   fprintf (Gbl.F.Out,"<tr>");
-
-   /* 3rd. row, 1st. column */
-   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)	// Left column visible
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">"
-			 "</td>");
-
-   /* 3rd. row, 2nd. column */
+   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
    Tab_DrawTabs ();
-
-   /* 3rd. row, 3rd. column */
-   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
-     {
-      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CENTER_TOP\""
-			 " style=\"width:160px;\">");
-      Lay_ShowRightColumn ();
-      fprintf (Gbl.F.Out,"</td>");
-     }
-
-   fprintf (Gbl.F.Out,"</tr>");
-
-   /***** 4th. row *****/
-   fprintf (Gbl.F.Out,"<tr>");
-
-   /* 4th. row, 1st. column */
-   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-     {
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-			 " style=\"width:160px;\">");
-      Lay_ShowLeftColumn ();
-      fprintf (Gbl.F.Out,"</td>");
-     }
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Lay_WritePageTopHeadingMobile (void)
@@ -843,17 +841,21 @@ static void Lay_WritePageTopHeadingMobile (void)
       "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
       };
 
-   /***** 1st. row, 1st. column: logo *****/
-   fprintf (Gbl.F.Out,"<tr class=\"%s\">"
-                      "<td class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
+   /***** 1st. row *****/
+   /* Start of 1st. row */
+   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table; width:100%%; height:60px;\">",
+            ClassHeadRow1[Gbl.Prefs.Theme]);
+
+   /* 1st. row, 1st. column: logo */
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"display:table-cell; width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
-                      "</td>",
-            ClassHeadRow1[Gbl.Prefs.Theme],
+                      "</div>",
             Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_MOBILE_FILE,
@@ -861,46 +863,41 @@ static void Lay_WritePageTopHeadingMobile (void)
             Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
             Cfg_PLATFORM_LOGO_MOBILE_HEIGHT);
 
-   /***** 1st. row, 2nd. column:
-          logged user / language selection *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">",
+   /* 1st. row, 2nd. column:
+      logged user / language selection */
+   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\""
+	              " style=\"display:table-cell;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
       Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</div>");
 
-   /***** 1st. row, 3rd. column: link to open/close session *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\" style=\"width:160px;\">",
+   /* 1st. row, 3rd. column: link to open/close session */
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
+	              " style=\"display:table-cell; width:220px;\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* End of 1st. row */
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\" class=\"CENTER_MIDDLE\""
-		      " style=\"height:40px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+		      " style=\"display-table; height:40px;\">");
    Deg_WriteCtyInsCtrDeg ();
    Crs_WriteSelectorMyCourses ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** 3rd. row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
    Tab_DrawTabs ();
-   fprintf (Gbl.F.Out,"</tr>"
-		      "<tr>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1002,8 +999,7 @@ static void Lay_ShowRightColumn (void)
    fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
                       "<tr>"
                       "<td class=\"RIGHT_TOP\">"
-                      "<table style=\"width:100%%; padding-top:70px;"
-                      " border-spacing:5px;\">");
+                      "<table style=\"width:100%%; border-spacing:5px;\">");
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
