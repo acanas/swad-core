@@ -296,6 +296,27 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	overflow:hidden;
 	}
 
+/*********************** Layout (fourth row, main zone) **********************/
+#main_zone
+	{
+	display:table;
+	width:100%;
+	}
+#main_zone_left
+	{
+	display:table-cell;
+	width:160px;
+	text-align:center;
+	vertical-align:top;
+	}
+#main_zone_right
+	{
+	display:table-cell;
+	width:160px;
+	text-align:center;
+	vertical-align:top;
+	}
+
 /****************************** Main zone ************************************/
 #CENTRAL_ZONE
 	{

@@ -206,6 +206,13 @@ form			{margin:0; display:inline;}
 	white-space:nowrap;
 	}
 
+/*********************** Layout (fourth row, main zone) **********************/
+#main_zone
+	{
+	display:table;
+	width:100%;
+	}
+
 /****************************** Main zone ************************************/
 #CENTRAL_ZONE
 	{

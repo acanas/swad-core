@@ -283,15 +283,14 @@ void Lay_WriteStartOfPage (void)
       	 break;
      }
 
-   /***** Main zone *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
+   /***** 4th row: main zone *****/
+   fprintf (Gbl.F.Out,"<div id=\"main_zone\">");
 
    /* Left column */
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
       if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
-			    " style=\"display:table-cell; width:160px;\">");
+	 fprintf (Gbl.F.Out,"<div id=\"main_zone_left\">");
 	 Lay_ShowLeftColumn ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -408,8 +407,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
 	   {
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
-			       " style=\"display:table-cell; width:160px;\">");
+	    fprintf (Gbl.F.Out,"<div id=\"main_zone_right\">");
 	    Lay_ShowRightColumn ();
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
