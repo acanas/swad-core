@@ -91,23 +91,43 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	background-repeat:no-repeat;
 	}
 
-.WHITE_HEAD_ROW_1
+/************************* Layout (first heading row) ************************/
+#head_row_1_white
 	{
+	display:table;
+	width:100%;
+	height:40px;
 	background-color:black;
 	}
-.GREY_HEAD_ROW_1
+#head_row_1_grey
 	{
+	display:table;
+	width:100%;
+	height:40px;
 	background-image:linear-gradient(#383838 0,#383838 26px,#404040 100%);
 	background-repeat:no-repeat;
 	}
-.BLUE_HEAD_ROW_1
+#head_row_1_blue
 	{
+	display:table;
+	width:100%;
+	height:40px;
 	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 100%);
 	background-repeat:no-repeat;
 	}
-.YELLOW_HEAD_ROW_1
+#head_row_1_yellow
 	{
+	display:table;
+	width:100%;
+	height:40px;
 	background-color:#201420;
+	}
+
+#head_row_1_logo
+	{
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
 	}
 
 /************* Institution / Centre / Degree logo in top title ***************/

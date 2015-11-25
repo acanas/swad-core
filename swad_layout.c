@@ -720,23 +720,20 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeadingDesktop (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   const char *ClassHeadRow1[The_NUM_THEMES] =
+   const char *IdHeadRow1[The_NUM_THEMES] =
      {
-      "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
-      "GREY_HEAD_ROW_1",	// The_THEME_GREY
-      "BLUE_HEAD_ROW_1",	// The_THEME_BLUE
-      "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
+      "head_row_1_white",	// The_THEME_WHITE
+      "head_row_1_grey",	// The_THEME_GREY
+      "head_row_1_blue",	// The_THEME_BLUE
+      "head_row_1_yellow",	// The_THEME_YELLOW
       };
 
    /***** 1st. row *****/
    /* Start of 1st. row */
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table;"
-	              " width:100%%; height:40px;\">",
-            ClassHeadRow1[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdHeadRow1[Gbl.Prefs.Theme]);
 
    /* 1st. row, 2nd. column: logo */
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
-	              " style=\"display:table-cell; width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo\" style=\"width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
@@ -744,7 +741,6 @@ static void Lay_WritePageTopHeadingDesktop (void)
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
                       "</div>",
-	    The_ClassHead[Gbl.Prefs.Theme],
 	    Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_DESKTOP_FILE,
@@ -837,22 +833,20 @@ static void Lay_WritePageTopHeadingDesktop (void)
 static void Lay_WritePageTopHeadingMobile (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   const char *ClassHeadRow1[The_NUM_THEMES] =
+   const char *IdHeadRow1[The_NUM_THEMES] =
      {
-      "WHITE_HEAD_ROW_1",	// The_THEME_WHITE
-      "GREY_HEAD_ROW_1",	// The_THEME_GREY
-      "BLUE_HEAD_ROW_1",	// The_THEME_BLUE
-      "YELLOW_HEAD_ROW_1",	// The_THEME_YELLOW
+      "head_row_1_white",	// The_THEME_WHITE
+      "head_row_1_grey",	// The_THEME_GREY
+      "head_row_1_blue",	// The_THEME_BLUE
+      "head_row_1_yellow",	// The_THEME_YELLOW
       };
 
    /***** 1st. row *****/
    /* Start of 1st. row */
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table; width:100%%; height:60px;\">",
-            ClassHeadRow1[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdHeadRow1[Gbl.Prefs.Theme]);
 
    /* 1st. row, 1st. column: logo */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:table-cell; width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo\" style=\"width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
