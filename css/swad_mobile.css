@@ -141,7 +141,17 @@ form			{margin:0; display:inline;}
 .GREY_HEAD		{color:#E0E0E0; font-size:20pt; white-space:nowrap;}
 .BLUE_HEAD		{color:white;   font-size:20pt; white-space:nowrap;}
 .YELLOW_HEAD		{color:#B3B0B3; font-size:20pt; white-space:nowrap;}
-     
+
+/************************ Layout (second heading row) ************************/
+#head_row_2
+	{
+	display:table;
+	width:100%;
+	height:40px;
+	text-align:center;
+	vertical-align:middle;
+	}
+
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
 	{

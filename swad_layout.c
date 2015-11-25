@@ -784,8 +784,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
 
    /***** 2nd. row *****/
    /* Start of second row */
-   fprintf (Gbl.F.Out,"<div style=\"display:table; vertical-align:top;"
-	              " width:100%%; height:80px;\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_2\">");
 
    /* 2nd. row, 1st. column
       Clock with hour:minute (server hour is shown) */
@@ -881,8 +880,7 @@ static void Lay_WritePageTopHeadingMobile (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-		      " style=\"display-table; height:40px;\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_2\">");
    Deg_WriteCtyInsCtrDeg ();
    Crs_WriteSelectorMyCourses ();
    fprintf (Gbl.F.Out,"</div>");

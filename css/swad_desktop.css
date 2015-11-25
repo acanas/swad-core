@@ -153,6 +153,16 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .BLUE_HEAD	{color:white;   font-size:12pt; white-space:nowrap;}
 .YELLOW_HEAD	{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
+
+/************************ Layout (second heading row) ************************/
+#head_row_2
+	{
+	display:table;
+	width:100%;
+	height:80px;
+	vertical-align:top;
+	}
+
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
 	{
