@@ -290,31 +290,28 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
       if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	{
-	 fprintf (Gbl.F.Out,"<div id=\"main_zone_left\">");
+	 fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT\">");
 	 Lay_ShowLeftColumn ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
    /* Central (main) part */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;\">"
-		      "<div id=\"CENTRAL_ZONE\" class=\"%s\">"
-		      "<div class=\"CENTER_TOP\""
-		      " style=\"display:table; width:100%%;\">",
+   fprintf (Gbl.F.Out,"<div id=\"main_zone_central\">"
+		      "<div id=\"main_zone_central_container\" class=\"%s\">"
+		      "<div id=\"main_zone_central_content\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
          /* Left bar used to expand-contract central zone */
-         fprintf (Gbl.F.Out,"<div class=\"RIGHT_TOP\""
-                            " style=\"display:table-cell; width:12px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_EXPAND\">");
          Pre_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</div>");
 
          if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
            {
 	    /* Vertical menu (left) */
-	    fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
-		               " style=\"display:table-cell; width:175px;\">");
+	    fprintf (Gbl.F.Out,"<div id=\"main_zone_menu_vertical\">");
 	    Mnu_WriteVerticalMenuThisTabDesktop ();
 	    fprintf (Gbl.F.Out,"</div>");
            }
@@ -393,8 +390,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	{
 	 /* Right bar used to expand-contract central zone */
-	 fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
-	                    " style=\"display:table-cell; width:12px;\">");
+	 fprintf (Gbl.F.Out,"<div id=\"MAIN_ZONE_EXPAND\">");
 	 Pre_PutRigthIconToHideShowCols ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -407,7 +403,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
 	   {
-	    fprintf (Gbl.F.Out,"<div id=\"main_zone_right\">");
+	    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT\">");
 	    Lay_ShowRightColumn ();
 	    fprintf (Gbl.F.Out,"</div>");
 	   }

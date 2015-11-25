@@ -212,9 +212,13 @@ form			{margin:0; display:inline;}
 	display:table;
 	width:100%;
 	}
-
-/****************************** Main zone ************************************/
-#CENTRAL_ZONE
+#main_zone_central
+	{
+	display:table-cell;
+	text-align:center;
+	vertical-align:top;
+	}
+#main_zone_central_container
 	{
 	min-width:925px;
 	min-height:925px;
@@ -228,6 +232,11 @@ form			{margin:0; display:inline;}
 	overflow:hidden;
 	position:relative;
 	display:inline-block;
+	}
+#main_zone_central_content
+	{
+	display:table;
+	width:100%;
 	}
 
 /************************* Users connected globally **************************/

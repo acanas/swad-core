@@ -302,7 +302,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	display:table;
 	width:100%;
 	}
-#main_zone_left
+.MAIN_ZONE_LEFT_RIGHT
 	{
 	display:table-cell;
 	width:160px;
@@ -316,9 +316,13 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	vertical-align:top;
 	}
-
-/****************************** Main zone ************************************/
-#CENTRAL_ZONE
+#main_zone_central
+	{
+	display:table-cell;
+	text-align:center;
+	vertical-align:top;
+	}
+#main_zone_central_container
 	{
 	min-width:925px;
 	min-height:925px;
@@ -332,6 +336,24 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	overflow:hidden;
 	position:relative;
 	display:inline-block;
+	}
+#main_zone_central_content
+	{
+	display:table;
+	width:100%;
+	}
+.MAIN_ZONE_EXPAND
+	{
+	display:table-cell;
+	width:10px;
+	vertical-align:top;
+	}
+#main_zone_menu_vertical
+	{
+	display:table-cell;
+	width:175px;
+	text-align:left;
+	vertical-align:top;
 	}
 
 /****************** Title of current action in main block ********************/
