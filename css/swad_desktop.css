@@ -166,9 +166,15 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	{
 	display:table-cell;
 	width:160px;
-	height:80px;
 	text-align:center;
 	vertical-align:top;
+	}
+#head_row_2_hierarchy
+	{
+	display:table-cell;
+	text-align:center;
+	vertical-align:top;
+	padding-top:8px;
 	}
 
 /************* Institution / Centre / Degree logo in top title ***************/

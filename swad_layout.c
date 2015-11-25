@@ -793,15 +793,11 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");	// End of first column
 
    /* 2nd. row, 2nd. column: degree and course */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
-	              " height:80px;\">"
-		      "<div class=\"CENTER_TOP\""
-		      " style=\"padding-top:5px;\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
    Deg_WriteCtyInsCtrDeg ();
    Crs_WriteSelectorMyCourses ();
    Deg_WriteBigNameCtyInsCtrDegCrs ();
-   fprintf (Gbl.F.Out,"</div>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* 2nd. row, 3rd. column */
    fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;"
