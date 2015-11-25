@@ -111,11 +111,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.45.4 (2015/11/25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.45.5 (2015/11/25)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.45.5:  Nov 25, 2015	Some CSS styles related to layout are moved to CSS file. (187992 lines)
         Version 15.45.4:  Nov 25, 2015	Some CSS styles related to layout are moved to CSS file. (187979 lines)
         Version 15.45.3:  Nov 25, 2015	Some CSS styles related to layout are moved to CSS file. (187963 lines)
         Version 15.45.2:  Nov 25, 2015	Some CSS styles related to layout are moved to CSS file. (187929 lines)

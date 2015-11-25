@@ -141,6 +141,13 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:right;
 	vertical-align:middle;
 	}
+#head_row_1_session
+	{
+	display:table-cell;
+	width:160px;
+	text-align:center;
+	vertical-align:middle;
+	}
 .WHITE_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
 .GREY_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
 .BLUE_HEAD	{color:white;   font-size:12pt; white-space:nowrap;}

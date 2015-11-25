@@ -130,6 +130,13 @@ form			{margin:0; display:inline;}
 	text-align:right;
 	vertical-align:middle;
 	}
+#head_row_1_session
+	{
+	display:table-cell;
+	width:220px;
+	text-align:center;
+	vertical-align:middle;
+	}
 .WHITE_HEAD		{color:#E0E0E0; font-size:20pt; white-space:nowrap;}
 .GREY_HEAD		{color:#E0E0E0; font-size:20pt; white-space:nowrap;}
 .BLUE_HEAD		{color:white;   font-size:20pt; white-space:nowrap;}

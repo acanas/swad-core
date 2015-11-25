@@ -771,8 +771,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 4th. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
-	              " style=\"display:table-cell; width:160px;\">",
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_session\" class=\"%s\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
@@ -870,8 +869,7 @@ static void Lay_WritePageTopHeadingMobile (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 3rd. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
-	              " style=\"display:table-cell; width:220px;\">",
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_session\" class=\"%s\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
