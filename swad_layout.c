@@ -111,12 +111,12 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
-   const char *ClassBackground[The_NUM_THEMES] =
+   const char *IdWholePage[The_NUM_THEMES] =
      {
-      "WHITE_BACKGROUND",	// The_THEME_WHITE
-      "GREY_BACKGROUND",	// The_THEME_GREY
-      "BLUE_BACKGROUND",	// The_THEME_BLUE
-      "YELLOW_BACKGROUND",	// The_THEME_YELLOW
+      "whole_page_white",	// The_THEME_WHITE
+      "whole_page_grey",	// The_THEME_GREY
+      "whole_page_blue",	// The_THEME_BLUE
+      "whole_page_yellow",	// The_THEME_YELLOW
       };
 
    /***** If, when this function is called, the head is being written
@@ -268,9 +268,7 @@ void Lay_WriteStartOfPage (void)
 	       Gbl.Prefs.IconsURL);
 
    /***** Start of box that contains the whole page except the foot *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\""
-	              " style=\"display:table; width:100%%;\">",
-            ClassBackground[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdWholePage[Gbl.Prefs.Theme]);
 
    /***** Header of layout *****/
    switch (Gbl.Prefs.Layout)

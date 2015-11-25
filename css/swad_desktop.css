@@ -61,32 +61,54 @@ hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
-/********************************** Background *******************************/
-.WHITE_BACKGROUND
+/****************** Layout (the whole page with a background) ****************/
+#whole_page_white
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(black 0,black 40px,white 40px,#cfcfce 40px,white 80px,white 100%);
 	background-repeat:no-repeat;
 	}
-.GREY_BACKGROUND
+#whole_page_grey
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#383838 0,#404040 26px,#404040 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
-.BLUE_BACKGROUND
+#whole_page_blue
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
-.YELLOW_BACKGROUND
+#whole_page_yellow
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#201420 0,#201420 185px,white 185px,white 100%);
 	background-repeat:no-repeat;
 	}
 
-.WHITE_HEAD_ROW_1	{background-color:black;}
-.GREY_HEAD_ROW_1	{background-image:linear-gradient(#383838 0,#383838 26px,#404040 100%); background-repeat:no-repeat;}
-.BLUE_HEAD_ROW_1	{background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 100%); background-repeat:no-repeat;}
-.YELLOW_HEAD_ROW_1	{background-color:#201420;}
+.WHITE_HEAD_ROW_1
+	{
+	background-color:black;
+	}
+.GREY_HEAD_ROW_1
+	{
+	background-image:linear-gradient(#383838 0,#383838 26px,#404040 100%);
+	background-repeat:no-repeat;
+	}
+.BLUE_HEAD_ROW_1
+	{
+	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 100%);
+	background-repeat:no-repeat;
+	}
+.YELLOW_HEAD_ROW_1
+	{
+	background-color:#201420;
+	}
 
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
@@ -94,6 +116,129 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	margin-right:10px;
 	text-align:left;
 	vertical-align:top !important;
+	}
+
+/*********************************** Tabs ************************************/
+#tabs_container
+	{
+	width:672px;	/* 112 px * 6 visible tabs */
+	height:64px;
+	margin:0 auto;
+	}
+.TAB_OFF
+	{
+	float:left;
+	width:108px;height:70px;
+	margin:1px 1px 0 1px;
+	padding:0 1px 0 1px;
+	border-radius:6px 6px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+	text-align:center;
+	vertical-align:middle;
+	overflow:hidden;
+	display:inline-block;
+	}
+.TAB_ON
+	{
+	float:left;
+	width:110px; height:72px;
+	margin:0;
+	padding:1px 1px 0 1px;
+	border-radius:6px 6px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+	text-align:center;
+	vertical-align:middle;
+	overflow:hidden;
+	display:inline-block;
+	}
+.WHITE_TAB_OFF
+	{
+	color:#707070;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.GREY_TAB_OFF
+	{
+	color:#505050;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.BLUE_TAB_OFF
+	{
+	color:#365E6E;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.YELLOW_TAB_OFF
+	{
+	color:#7C4D2A;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.WHITE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.GREY_TAB_ON
+	{
+	color:#606060;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.BLUE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.YELLOW_TAB_ON
+	{
+	color:#BD4815;
+	font-size:9pt;
+	font-weight:bold;
+	line-height:100%;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+
+/****************************** Main zone ************************************/
+#CENTRAL_ZONE
+	{
+	min-width:925px;
+	min-height:925px;
+	width:100%;
+	margin:-8px 0 0 0;
+	padding:10px 0;
+	border-radius:6px;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+	text-align:center;
+	vertical-align:top;
+	overflow:hidden;
+	position:relative;
+	display:inline-block;
 	}
 
 /****************** Title of current action in main block ********************/
@@ -418,22 +563,6 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	color:#4D88A1;
 	}
 
-#CENTRAL_ZONE
-	{
-	min-width:925px;
-	min-height:925px;
-	width:100%;
-	margin:-8px 0 0 0;
-	padding:10px 0;
-	border-radius:6px;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:top;
-	overflow:hidden;
-	position:relative;
-	display:inline-block;
-	}
-
 /*********************************** Alerts **********************************/
 .ALERT
 	{
@@ -716,112 +845,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:inline-block;
 	opacity:1;
 	transform:scale(1.2,1.2);
-	}
-
-/*********************************** Tabs ************************************/
-#tabs_container
-	{
-	width:672px;	/* 112 px * 6 visible tabs */
-	height:64px;
-	margin:0 auto;
-	}
-.TAB_OFF
-	{
-	float:left;
-	width:108px;height:70px;
-	margin:1px 1px 0 1px;
-	padding:0 1px 0 1px;
-	border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:middle;
-	overflow:hidden;
-	display:inline-block;
-	}
-.TAB_ON
-	{
-	float:left;
-	width:110px; height:72px;
-	margin:0;
-	padding:1px 1px 0 1px;
-	border-radius:6px 6px 0 0;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:middle;
-	overflow:hidden;
-	display:inline-block;
-	}
-.WHITE_TAB_OFF
-	{
-	color:#707070;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.GREY_TAB_OFF
-	{
-	color:#505050;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.BLUE_TAB_OFF
-	{
-	color:#365E6E;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.YELLOW_TAB_OFF
-	{
-	color:#7C4D2A;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.WHITE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.GREY_TAB_ON
-	{
-	color:#606060;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.BLUE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
-	}
-.YELLOW_TAB_ON
-	{
-	color:#BD4815;
-	font-size:9pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	overflow:hidden;
 	}
 
 /***************************** Horizontal menu *******************************/

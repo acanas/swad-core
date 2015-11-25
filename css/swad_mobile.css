@@ -56,32 +56,54 @@ table td
 img			{border-width:0; border-style:none;}
 form			{margin:0; display:inline;}
 
-/********************************** Background *******************************/
-.WHITE_BACKGROUND
+/****************** Layout (the whole page with a background) ****************/
+#whole_page_white
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(black 0,black 60px,white 60px,#cfcfce 60px,white 94px,white 100%);
 	background-repeat:no-repeat;
 	}
-.GREY_BACKGROUND
+#whole_page_grey
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#383838 0,#404040 40px,#404040 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
-.BLUE_BACKGROUND
+#whole_page_blue
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
-.YELLOW_BACKGROUND
+#whole_page_yellow
 	{
+	display:table;
+	width:100%;
 	background-image:linear-gradient(#201420 0,#201420 170px,white 170px,white 100%);
 	background-repeat:no-repeat;
 	}
 
-.WHITE_HEAD_ROW_1	{background-color:black;}
-.GREY_HEAD_ROW_1	{background-image:linear-gradient(#383838 0,#383838 40px,#404040 100%); background-repeat:no-repeat;}
-.BLUE_HEAD_ROW_1	{background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 100%); background-repeat:no-repeat;}
-.YELLOW_HEAD_ROW_1	{background-color:#201420;}
+.WHITE_HEAD_ROW_1
+	{
+	background-color:black;
+	}
+.GREY_HEAD_ROW_1
+	{
+	background-image:linear-gradient(#383838 0,#383838 40px,#404040 100%);
+	background-repeat:no-repeat;
+	}
+.BLUE_HEAD_ROW_1
+	{
+	background-image:linear-gradient(#5fa5df 0,#4f90c8 40px,#4f90c8 100%);
+	background-repeat:no-repeat;
+	}
+.YELLOW_HEAD_ROW_1
+	{
+	background-color:#201420;
+	}
 
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
@@ -89,6 +111,42 @@ form			{margin:0; display:inline;}
 	margin-right:10px;
 	text-align:left;
 	vertical-align:top !important;
+	}
+
+/*********************************** Tabs ************************************/
+#tabs_container
+	{
+	height:64px;
+	margin:0 auto;
+	}
+.TAB_ON
+	{
+	height:72px;
+	margin:0;
+	padding:0 25px;
+	border-radius:8px 8px 0 0;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+	text-align:center;
+	vertical-align:middle;
+	overflow:hidden;
+	display:table-cell;
+	}
+
+/****************************** Main zone ************************************/
+#CENTRAL_ZONE
+	{
+	min-width:925px;
+	min-height:925px;
+	width:100%;
+	margin:-8px 0 0 0;
+	padding:10px 0;
+	border-radius:8px;
+	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+	text-align:center;
+	vertical-align:top;
+	overflow:hidden;
+	position:relative;
+	display:inline-block;
 	}
 
 /************************* Users connected globally **************************/
@@ -361,40 +419,6 @@ form			{margin:0; display:inline;}
 	padding:1px;
 	font-size:11pt;
 	color:#4D88A1;
-	}
-
-/***************************** Tabs and main zone ****************************/
-#tabs_container
-	{
-	height:64px;
-	margin:0 auto;
-	}
-.TAB_ON
-	{
-	height:72px;
-	margin:0;
-	padding:0 25px;
-	border-radius:8px 8px 0 0;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:middle;
-	overflow:hidden;
-	display:table-cell;
-	}
-#CENTRAL_ZONE
-	{
-	min-width:925px;
-	min-height:925px;
-	width:100%;
-	margin:-8px 0 0 0;
-	padding:10px 0;
-	border-radius:8px;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:top;
-	overflow:hidden;
-	position:relative;
-	display:inline-block;
 	}
 
 /********************************** Alerts ***********************************/
