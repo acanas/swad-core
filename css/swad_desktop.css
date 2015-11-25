@@ -302,25 +302,22 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	display:table;
 	width:100%;
 	}
-.MAIN_ZONE_LEFT_RIGHT_COL
+.LEFT_RIGHT_COL
 	{
 	display:table-cell;
 	width:160px;
 	text-align:center;
 	vertical-align:top;
 	}
-.MAIN_ZONE_LEFT_RIGHT_CELL
+.LEFT_RIGHT_CELL
 	{
 	padding:3px 6px;
 	text-align:center;
 	vertical-align:top;
 	}
-#main_zone_right
+.LEFT_RIGHT_CONTENT_WIDTH
 	{
-	display:table-cell;
-	width:160px;
-	text-align:center;
-	vertical-align:top;
+	width:138px;
 	}
 #main_zone_central
 	{

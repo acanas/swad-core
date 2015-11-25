@@ -290,7 +290,7 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
       if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_COL\">");
+	 fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_COL\">");
 	 Lay_ShowLeftColumn ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -399,7 +399,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
 	   {
-	    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_COL\">");
+	    fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_COL\">");
 	    Lay_ShowRightColumn ();
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
@@ -914,7 +914,7 @@ static void Lay_ShowLeftColumn (void)
    /***** Most frequently used actions *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Act_AllocateMFUActions (&ListMFUActions,6);
       Act_GetMFUActions (&ListMFUActions,6);
       Act_WriteSmallMFUActions (&ListMFUActions);
@@ -923,14 +923,14 @@ static void Lay_ShowLeftColumn (void)
      }
 
    /***** Month *****/
-   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
    Cal_DrawCurrentMonth ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Notices (yellow notes) *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
                        false);	// Nobody can not edit notices here
       fprintf (Gbl.F.Out,"</div>");
@@ -956,7 +956,7 @@ static void Lay_ShowRightColumn (void)
    Ban_WriteMenuWithBanners ();
 
    /***** Connected users *****/
-   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
    Act_FormStart (ActLstCon);
    Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s</a>",Txt_Connected_PLURAL);
@@ -982,7 +982,7 @@ static void Lay_ShowRightColumn (void)
    if (!Gbl.Usrs.Me.Logged ||
        Gbl.CurrentAct == ActAutUsrInt ||
        Gbl.CurrentAct == ActAutUsrExt)
-      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">"
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
 			 "<img src=\"%s/SWADroid120x200.png\""

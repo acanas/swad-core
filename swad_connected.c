@@ -347,65 +347,52 @@ void Con_ShowGlobalConnectedUsrs (void)
    unsigned WithoutCoursesTotal = Con_GetConnectedGuestsTotal ();
    unsigned UsrsTotal = StdsTotal + TchsTotal + WithoutCoursesTotal;
 
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
-	              " style=\"width:138px; \">"
-                      "<table style=\"width:138px;\">");
+   /***** Container start *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
 
    /***** Write total number of sessions *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_TOP\" style=\"width:138px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s"
-                      "</td>"
-                      "</tr>",
+                      "</div>",
             Gbl.Session.NumSessions,
             (Gbl.Session.NumSessions == 1) ? Txt_session :
         	                             Txt_sessions);
 
    /***** Write total number of users *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_TOP\" style=\"width:138px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s:"
-                      "</td>"
-                      "</tr>",
+                      "</div>",
             UsrsTotal,
             (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
         	               Txt_users);
 
    /***** Write total number of students *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_TOP\" style=\"width:138px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s"
-                      "</td>"
-                      "</tr>",
+                      "</div>",
             StdsTotal,
             (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
                                Txt_ROLES_PLURAL_abc  [Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of teachers *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_TOP\" style=\"width:138px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s"
-                      "</td>"
-                      "</tr>",
+                      "</div>",
             TchsTotal,
             (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
                                Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of users who do not belong to any course *****/
    if (WithoutCoursesTotal)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"CENTER_TOP\" style=\"width:138px;\">"
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                          "%u %s"
-                         "</td>"
-                         "</tr>",
+                         "</div>",
                WithoutCoursesTotal,
                (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
                                             Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>"
-	              "</div>");
+   /***** Container end *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -513,8 +500,8 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
                             "<table>");
 	 break;
       case Con_SHOW_ON_RIGHT_COLUMN:
-         fprintf (Gbl.F.Out,"<div class=\"CONNECTED\" style=\"width:138px;\">"
-                            "<table style=\"width:138px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">"
+                            "<table class=\"LEFT_RIGHT_CONTENT_WIDTH;\">");
          break;
      }
 
@@ -652,8 +639,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
       Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\" class=\"CENTER_TOP\""
-                      " style=\"width:138px;\">"
+                      "<td colspan=\"3\" class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
@@ -1101,7 +1087,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Con_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
-   fprintf (Gbl.F.Out,"</div>");					// Used for automatic update, only when displayed on right column
+   fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
