@@ -301,28 +301,41 @@ void Lay_WriteStartOfPage (void)
    /* Central (main) part */
    fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\" style=\"display:table-cell;\">"
 		      "<div id=\"CENTRAL_ZONE\" class=\"%s\">"
-		      "<table class=\"CENTER_TOP\" style=\"width:100%%;\">"
-		      "<tr>",
+		      "<div class=\"CENTER_TOP\""
+		      " style=\"display:table; width:100%%;\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
          /* Left bar used to expand-contract central zone */
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:12px;\">");
+         fprintf (Gbl.F.Out,"<div class=\"RIGHT_TOP\""
+                            " style=\"display:table-cell; width:12px;\">");
          Pre_PutLeftIconToHideShowCols ();
-         fprintf (Gbl.F.Out,"</td>");
+         fprintf (Gbl.F.Out,"</div>");
 
          if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
            {
-	    /* Tab content, including vertical menu (left) and main zone (right) */
-	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:175px;\">");
+	    /* Vertical menu (left) */
+	    fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
+		               " style=\"display:table-cell; width:175px;\">");
 	    Mnu_WriteVerticalMenuThisTabDesktop ();
-	    fprintf (Gbl.F.Out,"</td>");
+	    fprintf (Gbl.F.Out,"</div>");
            }
+
+	 /* Start of main zone for actions output */
+	 fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
+	                    " style=\"display:table-cell;"
+			    " padding:0 12px 12px 12px;\">");
+
+	 if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
+	    /* Horizontal menu */
+	    Mnu_WriteHorizontalMenuThisTabDesktop ();
          break;
       case Lay_LAYOUT_MOBILE:
-         /* Tab content */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+	 /* Start of main zone for actions output */
+         fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
+                            " style=\"display:table-cell;"
+                            " padding:0 12px 12px 12px;\">");
          Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
          if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu < 0)	// Write vertical menu
            {
@@ -336,14 +349,7 @@ void Lay_WriteStartOfPage (void)
       	 break;
      }
 
-   /* Start of main zone for actions output */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-	              " style=\"padding:0 12px 12px 12px;\">");
-
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-       Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
-      Mnu_WriteHorizontalMenuThisTabDesktop ();
-
+   /* Write warning when degree type does not allow direct login */
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
 
    /* If it is mandatory to read any information about course */
@@ -385,18 +391,18 @@ static void Lay_WriteEndOfPage (void)
    if (!Gbl.Layout.TablEndWritten)
      {
       Gbl.Layout.TablEndWritten = true;
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>");
 
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	{
 	 /* Right bar used to expand-contract central zone */
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:12px;\">");
+	 fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
+	                    " style=\"display:table-cell; width:12px;\">");
 	 Pre_PutRigthIconToHideShowCols ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"</div>");
 	}
 
-      fprintf (Gbl.F.Out,"</tr>"
-			 "</table>"
+      fprintf (Gbl.F.Out,"</div>"
 			 "</div>"
 			 "</div>");
 
