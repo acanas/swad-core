@@ -317,9 +317,7 @@ void Lay_WriteStartOfPage (void)
            }
 
 	 /* Start of main zone for actions output */
-	 fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
-	                    " style=\"display:table-cell;"
-			    " padding:0 12px 12px 12px;\">");
+	 fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
 
 	 if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
 	    /* Horizontal menu */
@@ -327,9 +325,7 @@ void Lay_WriteStartOfPage (void)
          break;
       case Lay_LAYOUT_MOBILE:
 	 /* Start of main zone for actions output */
-         fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\""
-                            " style=\"display:table-cell;"
-                            " padding:0 12px 12px 12px;\">");
+         fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
          Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
          if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu < 0)	// Write vertical menu
            {

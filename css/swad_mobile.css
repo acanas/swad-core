@@ -238,6 +238,24 @@ form			{margin:0; display:inline;}
 	display:table;
 	width:100%;
 	}
+#main_zone_canvas	/* Where content for each action is written */
+	{
+	display:table-cell;
+	text-align:left;
+	vertical-align:top;
+	padding:0 12px 12px 12px;
+	}
+
+/********************************* Menu fonts ********************************/
+.WHITE_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
+.GREY_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
+.BLUE_MENU_OFF		{color:#4D88A1; font-size:25pt; line-height:110%;}
+.YELLOW_MENU_OFF	{color:#FF4301; font-size:25pt; line-height:110%;}
+
+.WHITE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{color:#606060; font-size:25pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{color:#FF4301; font-size:25pt; font-weight:bold; line-height:110%;}
 
 /************************* Users connected globally **************************/
 .CONNECTED
@@ -761,17 +779,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:1;
 	}
-
-/********************************* Menu fonts ********************************/
-.WHITE_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:25pt; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:25pt; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#FF4301; font-size:25pt; line-height:110%;}
-
-.WHITE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:25pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:25pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#FF4301; font-size:25pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
 .WHITE_FORM		{color:#4D88A1; font-size:20pt;}

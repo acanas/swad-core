@@ -85,7 +85,7 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
    bool PreviousVisibleOptions = false;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul id=\"vertical_menu_container\">");
+   fprintf (Gbl.F.Out,"<ul id=\"vertical_menu\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -178,7 +178,7 @@ void Mnu_WriteHorizontalMenuThisTabDesktop (void)
    bool IsTheSelectedAction;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<div id=\"horizontal_menu_container\">"
+   fprintf (Gbl.F.Out,"<div id=\"horizontal_menu\">"
                       "<ul>");
 
    /***** Loop to write all options in menu. Each row holds an option *****/

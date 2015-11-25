@@ -355,6 +355,89 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:left;
 	vertical-align:top;
 	}
+#main_zone_canvas	/* Where content for each action is written */
+	{
+	display:table-cell;
+	text-align:left;
+	vertical-align:top;
+	padding:0 12px 12px 12px;
+	}
+
+/***************************** Horizontal menu *******************************/
+#horizontal_menu ul
+	{
+	display:table;
+	list-style-type:none;
+	border:0;
+	margin:0 auto;
+	padding:0 0 4px 0;
+	}
+#horizontal_menu li
+	{
+	display:table-cell;
+	width:138px;
+	height:64px;
+	border:0;
+	margin:0;
+	padding:0;
+	text-align:center;
+	vertical-align:middle;
+	}
+.MENU_OFF
+	{
+	display:inline-block;
+	width:138px; height:64px;
+	margin:0;
+	padding:0 2px;
+	text-align:center;
+	vertical-align:middle;
+	}
+.MENU_ON
+	{
+	display:inline-block;
+	width:138px; height:64px;
+	margin:0;
+	padding:0;
+	text-align:center;
+	vertical-align:middle;
+	}
+
+/******************************* Vertical menu *******************************/
+#vertical_menu
+	{
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	}
+.MENU_OPTION
+	{
+	height:40px;
+	clear:both;
+	margin:0 auto;
+	text-align:left;
+	vertical-align:middle;
+	background-repeat:no-repeat;
+	background-position:2px 2px;
+	padding:2px 2px 2px 50px;
+	overflow:hidden;
+	}
+.MENU_TEXT
+	{
+	height:40px;
+	display:table-cell;
+	vertical-align:middle;
+	}
+
+/********************************* Menu fonts ********************************/
+.WHITE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_OFF		{color:#707070; font-size:12pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_OFF	{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
+
+.WHITE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
+.GREY_MENU_ON		{color:#606060; font-size:12pt; font-weight:bold; line-height:110%;}
+.BLUE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
+.YELLOW_MENU_ON		{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
 
 /****************** Title of current action in main block ********************/
 #action_title
@@ -956,81 +1039,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	opacity:1;
 	transform:scale(1.2,1.2);
 	}
-
-/***************************** Horizontal menu *******************************/
-#horizontal_menu_container ul
-	{
-	display:table;
-	list-style-type:none;
-	border:0;
-	margin:0 auto;
-	padding:0 0 4px 0;
-	}
-#horizontal_menu_container li
-	{
-	display:table-cell;
-	width:138px; height:64px;
-	border:0;
-	margin:0;
-	padding:0;
-	text-align:center;
-	vertical-align:middle;
-	}
-.MENU_OFF
-	{
-	display:inline-block;
-	width:138px; height:64px;
-	margin:0;
-	padding:0 2px;
-	text-align:center;
-	vertical-align:middle;
-	}
-.MENU_ON
-	{
-	display:inline-block;
-	width:138px; height:64px;
-	margin:0;
-	padding:0;
-	text-align:center;
-	vertical-align:middle;
-	}
-
-/******************************* Vertical menu *******************************/
-#vertical_menu_container
-	{
-	list-style-type:none;
-	padding:0;
-	margin:0;
-	}
-.MENU_OPTION
-	{
-	height:40px;
-	clear:both;
-	margin:0 auto;
-	text-align:left;
-	vertical-align:middle;
-	background-repeat:no-repeat;
-	background-position:2px 2px;
-	padding:2px 2px 2px 50px;
-	overflow:hidden;
-	}
-.MENU_TEXT
-	{
-	height:40px;
-	display:table-cell;
-	vertical-align:middle;
-	}
-
-/********************************* Menu fonts ********************************/
-.WHITE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:12pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
-
-.WHITE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:12pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
 
 /********************************* Form fonts ********************************/
 .WHITE_FORM		{color:#4D88A1; font-size:13pt;}
