@@ -749,8 +749,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
             Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT);
 
    /* 1st. row, 1st. column: search */
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\""
-	              " style=\"display:table-cell;\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
 		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
@@ -763,8 +762,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /* 1st. row, 3rd. column: logged user or language selection */
-   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\""
-	              " style=\"display:table-cell;\">",
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_usr_lang\" class=\"%s\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
@@ -863,8 +861,7 @@ static void Lay_WritePageTopHeadingMobile (void)
 
    /* 1st. row, 2nd. column:
       logged user / language selection */
-   fprintf (Gbl.F.Out,"<div class=\"%s RIGHT_MIDDLE\""
-	              " style=\"display:table-cell;\">",
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_usr_lang\" class=\"%s\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();

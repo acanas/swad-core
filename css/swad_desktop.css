@@ -129,6 +129,22 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	vertical-align:middle;
 	}
+#head_row_1_search
+	{
+	display:table-cell;
+	text-align:left;
+	vertical-align:middle;
+	}
+#head_row_1_usr_lang
+	{
+	display:table-cell;
+	text-align:right;
+	vertical-align:middle;
+	}
+.WHITE_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
+.GREY_HEAD	{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
+.BLUE_HEAD	{color:white;   font-size:12pt; white-space:nowrap;}
+.YELLOW_HEAD	{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
 /************* Institution / Centre / Degree logo in top title ***************/
 .TOP_LOGO
@@ -807,11 +823,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GREY_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5; font-size:25pt; white-space:nowrap;}
 .BLUE_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
 .YELLOW_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
-
-.WHITE_HEAD		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
-.GREY_HEAD		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
-.BLUE_HEAD		{color:white;   font-size:12pt; white-space:nowrap;}
-.YELLOW_HEAD		{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
 .WHITE_CUR_TIME		{color:#808080; font-size:15pt; font-weight:bold;}
 .GREY_CUR_TIME		{color:#E0E0E0; font-size:15pt; font-weight:bold;}
