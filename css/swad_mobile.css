@@ -151,32 +151,59 @@ form			{margin:0; display:inline;}
 	text-align:center;
 	vertical-align:middle;
 	}
-
-/************* Institution / Centre / Degree logo in top title ***************/
-.TOP_LOGO
+.TOP_LOGO	/* Institution / Centre / Degree logo in top title */
 	{
 	margin-right:10px;
 	text-align:left;
 	vertical-align:top !important;
 	}
 
-/*********************************** Tabs ************************************/
-#tabs_container
+/**************** Layout (third heading row with breadcrumb) *****************/
+#head_row_3
 	{
-	height:64px;
-	margin:0 auto;
+	display:table;
+	// width:100%;
+	height:72px;
 	}
-.TAB_ON
+#breadcrumb_container
 	{
+	display:table-cell;
+	min-width:500px;
 	height:72px;
 	margin:0;
 	padding:0 25px;
 	border-radius:8px 8px 0 0;
 	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
 	vertical-align:middle;
 	overflow:hidden;
-	display:table-cell;
+	}
+.WHITE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:25pt;
+	font-weight:bold;
+	white-space:nowrap;
+	}
+.GREY_TAB_ON
+	{
+	color:#606060;
+	font-size:25pt;
+	font-weight:bold;
+	white-space:nowrap;
+	}
+.BLUE_TAB_ON
+	{
+	color:#4D88A1;
+	font-size:25pt;
+	font-weight:bold;
+	white-space:nowrap;
+	}
+.YELLOW_TAB_ON
+	{
+	color:#BD4815;
+	font-size:25pt;
+	font-weight:bold;
+	white-space:nowrap;
 	}
 
 /****************************** Main zone ************************************/
@@ -717,40 +744,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ICON_HIGHLIGHT:hover
 	{
 	opacity:1;
-	}
-
-/*********************************** Tabs ************************************/
-.WHITE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:25pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	}
-.GREY_TAB_ON
-	{
-	color:#606060;
-	font-size:25pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	}
-.BLUE_TAB_ON
-	{
-	color:#4D88A1;
-	font-size:25pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
-	}
-.YELLOW_TAB_ON
-	{
-	color:#BD4815;
-	font-size:25pt;
-	font-weight:bold;
-	line-height:100%;
-	white-space:nowrap;
 	}
 
 /********************************* Menu fonts ********************************/

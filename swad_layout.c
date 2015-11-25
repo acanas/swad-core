@@ -808,9 +808,9 @@ static void Lay_WritePageTopHeadingDesktop (void)
    /* End of 2nd. row */
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** 3rd. row *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
-   Tab_DrawTabs ();
+   /***** 3rd. row (tabs) *****/
+   fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
+   Tab_DrawTabsDeskTop ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -873,9 +873,9 @@ static void Lay_WritePageTopHeadingMobile (void)
    Crs_WriteSelectorMyCourses ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** 3rd. row *****/
-   fprintf (Gbl.F.Out,"<div style=\"display:table; width:100%%;\">");
-   Tab_DrawTabs ();
+   /***** 3rd. row (breadcrumb) *****/
+   fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
+   Tab_DrawBreadcrumb ();
    fprintf (Gbl.F.Out,"</div>");
   }
 

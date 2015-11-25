@@ -153,7 +153,6 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .BLUE_HEAD	{color:white;   font-size:12pt; white-space:nowrap;}
 .YELLOW_HEAD	{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
-
 /************************ Layout (second heading row) ************************/
 #head_row_2
 	{
@@ -176,6 +175,12 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	padding-top:8px;
 	}
+.TOP_LOGO	/* Institution / Centre / Degree logo in top title */
+	{
+	margin-right:10px;
+	text-align:left;
+	vertical-align:top !important;
+	}
 #msg	/* Notifications, used for AJAX based refresh */
 	{
 	display:table-cell;
@@ -185,19 +190,11 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	padding-top:10px;
 	}
 
-/************* Institution / Centre / Degree logo in top title ***************/
-.TOP_LOGO
-	{
-	margin-right:10px;
-	text-align:left;
-	vertical-align:top !important;
-	}
-
-/*********************************** Tabs ************************************/
-#tabs_container
+/******************* Layout (third heading row with tabs) ********************/
+#head_row_3
 	{
 	width:672px;	/* 112 px * 6 visible tabs */
-	height:64px;
+	height:72px;
 	margin:0 auto;
 	}
 .TAB_OFF

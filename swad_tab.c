@@ -68,7 +68,6 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tab_DrawTabsDeskTop (void);
 static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab);
 
 static void Tab_WriteBreadcrumbHome (void);
@@ -79,31 +78,7 @@ static void Tab_WriteBreadcrumbAction (void);
 /**************** Draw tabs with the current tab highlighted *****************/
 /*****************************************************************************/
 
-void Tab_DrawTabs (void)
-  {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\""
-	              " style=\"display:table-cell; height:64px;\">"
-		      "<div id=\"tabs_container\">");
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-         Tab_DrawTabsDeskTop ();
-         break;
-      case Lay_LAYOUT_MOBILE:
-         Tab_DrawBreadcrumb ();
-         break;
-      default:
-      	 break;
-     }
-   fprintf (Gbl.F.Out,"</div>"
-   	              "</div>");
-  }
-
-/*****************************************************************************/
-/**************** Draw tabs with the current tab highlighted *****************/
-/*****************************************************************************/
-
-static void Tab_DrawTabsDeskTop (void)
+void Tab_DrawTabsDeskTop (void)
   {
    extern const char *The_ClassTabOn[The_NUM_THEMES];
    extern const char *The_ClassTabOff[The_NUM_THEMES];
@@ -299,7 +274,7 @@ void Tab_DrawBreadcrumb (void)
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_ClassTabOn[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<div class=\"TAB_ON %s\">",
+   fprintf (Gbl.F.Out,"<div id=\"breadcrumb_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
 
    /***** Home *****/
