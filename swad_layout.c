@@ -290,7 +290,7 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
       if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT\">");
+	 fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_COL\">");
 	 Lay_ShowLeftColumn ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -399,7 +399,7 @@ static void Lay_WriteEndOfPage (void)
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
 	   {
-	    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT\">");
+	    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_COL\">");
 	    Lay_ShowRightColumn ();
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
@@ -909,46 +909,34 @@ static void Lay_ShowLeftColumn (void)
   {
    struct Act_ListMFUActions ListMFUActions;
 
-   fprintf (Gbl.F.Out,"<table style=\"width:160px;\">"
-                      "<tr>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<table style=\"width:160px; border-spacing:5px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"width:160px;\">");
 
    /***** Most frequently used actions *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"MFU_ACT CENTER_TOP\">");
+      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
       Act_AllocateMFUActions (&ListMFUActions,6);
       Act_GetMFUActions (&ListMFUActions,6);
       Act_WriteSmallMFUActions (&ListMFUActions);
       Act_FreeMFUActions (&ListMFUActions);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Month *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
    Cal_DrawCurrentMonth ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Notices (yellow notes) *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"CENTER_TOP\">");
+      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
                        false);	// Nobody can not edit notices here
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
      }
 
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
-	              "</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -964,17 +952,11 @@ static void Lay_ShowRightColumn (void)
 
    Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_RIGHT_COLUMN;
 
-   /***** Connected users *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                      "<tr>"
-                      "<td class=\"RIGHT_TOP\">"
-                      "<table style=\"width:100%%; border-spacing:5px;\">");
-
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_MIDDLE\">");
+   /***** Connected users *****/
+   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">");
    Act_FormStart (ActLstCon);
    Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s</a>",Txt_Connected_PLURAL);
@@ -994,33 +976,25 @@ static void Lay_ShowRightColumn (void)
      }
    fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** SWADroid advertisement *****/
    if (!Gbl.Usrs.Me.Logged ||
        Gbl.CurrentAct == ActAutUsrInt ||
        Gbl.CurrentAct == ActAutUsrExt)
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
 			 "<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
 			 " style=\"width:150px; height:250px;\" />"
 			 "</a>"
-			 "</td>"
-			 "</tr>",
+			 "</div>",
 	       Txt_If_you_have_an_Android_device_try_SWADroid,
 	       Gbl.Prefs.IconsURL);
 
    /***** Institutional links *****/
    Lnk_WriteMenuWithInstitutionalLinks ();
-
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
-	              "</tr>"
-	              "</table>");
   }
 
 /*****************************************************************************/

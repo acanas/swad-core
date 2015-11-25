@@ -911,8 +911,7 @@ void Ban_WriteMenuWithBanners (void)
 	NumBan++)
      {
       /* Write data of this banner */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:150px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
@@ -926,8 +925,7 @@ void Ban_WriteMenuWithBanners (void)
                Gbl.Banners.Lst[NumBan].ShortName,
                Gbl.Banners.Lst[NumBan].FullName);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>"
-                         "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Free list of banners *****/

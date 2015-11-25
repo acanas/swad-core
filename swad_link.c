@@ -109,14 +109,11 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"INS_LNK CENTER_MIDDLE\""
-			 " style=\"width:150px;\">"
-			 "<div id=\"institutional_links\">");
+      fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_LEFT_RIGHT_CELL\">"
+			 "<div id=\"institutional_links\" class=\"INS_LNK\">");
       Lnk_WriteListOfLinks ();
       fprintf (Gbl.F.Out,"</div>"
-			 "</td>"
-			 "</tr>");
+			 "</div>");
      }
 
    /***** Free list of links *****/
