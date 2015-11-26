@@ -106,6 +106,10 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
+// TODO: Edition of courses: Remove semester
+// TODO: Edition of courses: Rename "Optativas/libre conf." to "Optativas varios cursos"
+// TODO: Edition of courses: Rename "Curso" to "Año / semestre / cuatrimestre"
+// TODO: Listing of courses: Put "Optativas" year at the end
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
