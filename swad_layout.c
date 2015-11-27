@@ -760,7 +760,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
 		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
 						   ActSysSch)))));
    Sco_PutParamScope (Sco_SCOPE_SYS);
-   Sch_PutFormToSearch (Gbl.Prefs.PathTheme);
+   Sch_PutFormToSearch (Gbl.Prefs.PathTheme,"head_search_text");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
