@@ -461,7 +461,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	min-width:900px;
 	min-height:900px;
 	margin:-8px 0 0 0;
-	padding:10px 0;
+	padding:10px 20px;
 	border-radius:6px;
 	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
 	text-align:center;

@@ -151,7 +151,7 @@ void Cty_SeeCtyWithPendingInss (void)
 	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
-                                                "DAT_NOBR","COUNTRY_MAP_SMALL");
+                                            "DAT_NOBR","COUNTRY_MAP_SMALL");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
@@ -646,6 +646,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassMap)
   {
    extern const char *Txt_Go_to_X;
+   char CountryName[Cty_MAX_BYTES_COUNTRY_NAME+1];
 
    /***** Start form *****/
    Act_FormGoToStart (Action);
@@ -658,9 +659,12 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Draw country map *****/
    Cty_DrawCountryMap (Cty,ClassMap);
 
-   /***** End link *****/
+   /***** Write country name and end link *****/
+   strncpy (CountryName,Cty->Name[Gbl.Prefs.Language],Cty_MAX_BYTES_COUNTRY_NAME);
+   CountryName[Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
+   Str_LimitLengthHTMLStr (CountryName,30);
    fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>",
-	    Cty->Name[Gbl.Prefs.Language],
+	    CountryName,
 	    Cty->Alpha2);
 
    /***** End form *****/
