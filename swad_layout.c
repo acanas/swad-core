@@ -188,7 +188,7 @@ void Lay_WriteStartOfPage (void)
 	    Gbl.Prefs.IconsURL);
 
    /* Style sheet for SWAD */
-   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/swad_desktop.css\" type=\"text/css\" />\n",
+   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/swad.css\" type=\"text/css\" />\n",
             Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
@@ -300,7 +300,7 @@ void Lay_WriteStartOfPage (void)
      {
       /* Vertical menu (left) */
       fprintf (Gbl.F.Out,"<div id=\"main_zone_menu_vertical\">");
-      Mnu_WriteVerticalMenuThisTabDesktop ();
+      Mnu_WriteVerticalMenuThisTab ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -309,7 +309,7 @@ void Lay_WriteStartOfPage (void)
 
    if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
       /* Horizontal menu */
-      Mnu_WriteHorizontalMenuThisTabDesktop ();
+      Mnu_WriteHorizontalMenuThisTab ();
 
    /* Write warning when degree type does not allow direct login */
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
@@ -680,12 +680,12 @@ static void Lay_WritePageTopHeading (void)
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
                       "</div>",
-	    Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
+	    Cfg_PLATFORM_LOGO_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
-            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_DESKTOP_FILE,
+            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_FILE,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_LOGO_DESKTOP_WIDTH,
-            Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT);
+            Cfg_PLATFORM_LOGO_WIDTH,
+            Cfg_PLATFORM_LOGO_HEIGHT);
 
    /* 1st. row, 1st. column: search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
@@ -749,7 +749,7 @@ static void Lay_WritePageTopHeading (void)
 
    /***** 3rd. row (tabs) *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
-   Tab_DrawTabsDeskTop ();
+   Tab_DrawTabs ();
    fprintf (Gbl.F.Out,"</div>");
   }
 

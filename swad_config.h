@@ -59,12 +59,9 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"openswad240x40.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		240
-#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
-#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"openswad330x60.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		330
-#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
+#define Cfg_PLATFORM_LOGO_FILE			"openswad240x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_WIDTH			240
+#define Cfg_PLATFORM_LOGO_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Ca&ntilde;as Vargas"	// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"	// Main responsible for the platform
@@ -112,12 +109,9 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"openswad240x40.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		240
-#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
-#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"openswad330x60.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		330
-#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
+#define Cfg_PLATFORM_LOGO_FILE			"openswad240x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_WIDTH			240
+#define Cfg_PLATFORM_LOGO_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"		// Main responsible for the platform
@@ -182,12 +176,9 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"swad160x40.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		160
-#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
-#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"swad210x60.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		210
-#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
+#define Cfg_PLATFORM_LOGO_FILE			"swad160x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_WIDTH			160
+#define Cfg_PLATFORM_LOGO_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"CEVUG"					// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"sctecnico@ugr.es"			// Main responsible for the platform
@@ -242,12 +233,9 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_DESKTOP_FILE		"swad160x40.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_DESKTOP_WIDTH		160
-#define Cfg_PLATFORM_LOGO_DESKTOP_HEIGHT	40
-#define Cfg_PLATFORM_LOGO_MOBILE_FILE		"swad210x60.png"		// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_MOBILE_WIDTH		210
-#define Cfg_PLATFORM_LOGO_MOBILE_HEIGHT		60
+#define Cfg_PLATFORM_LOGO_FILE			"swad160x40.png"		// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_WIDTH			160
+#define Cfg_PLATFORM_LOGO_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Carmen Varela B&aacute;ez"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"cevuna@rec.una.py"			// Main responsible for the platform

@@ -78,7 +78,7 @@ static void Tab_WriteBreadcrumbAction (void);
 /**************** Draw tabs with the current tab highlighted *****************/
 /*****************************************************************************/
 
-void Tab_DrawTabsDeskTop (void)
+void Tab_DrawTabs (void)
   {
    extern const char *The_ClassTabOn[The_NUM_THEMES];
    extern const char *The_ClassTabOff[The_NUM_THEMES];

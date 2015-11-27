@@ -67,10 +67,10 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
   };
 
 /*****************************************************************************/
-/************* Write the menu of current tab (desktop layout) ****************/
+/******************* Write vertical menu of current tab **********************/
 /*****************************************************************************/
 
-void Mnu_WriteVerticalMenuThisTabDesktop (void)
+void Mnu_WriteVerticalMenuThisTab (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
@@ -163,10 +163,10 @@ void Mnu_WriteVerticalMenuThisTabDesktop (void)
   }
 
 /*****************************************************************************/
-/********** Write horizontal menu of current tab (desktop layout) ************/
+/******************* Write horizontal menu of current tab ********************/
 /*****************************************************************************/
 
-void Mnu_WriteHorizontalMenuThisTabDesktop (void)
+void Mnu_WriteHorizontalMenuThisTab (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];

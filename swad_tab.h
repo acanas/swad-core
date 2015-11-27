@@ -41,7 +41,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Tab_DrawTabsDeskTop (void);
+void Tab_DrawTabs (void);
 void Tab_DrawBreadcrumb (void);
 
 void Tab_SetCurrentTab (void);
