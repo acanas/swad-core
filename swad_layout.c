@@ -263,7 +263,7 @@ void Lay_WriteStartOfPage (void)
    /* Left column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
      {
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_COL\">");
+      fprintf (Gbl.F.Out,"<div id=\"left_col\" class=\"LEFT_RIGHT_COL\">");
       Lay_ShowLeftColumn ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -271,7 +271,7 @@ void Lay_WriteStartOfPage (void)
    /* Right column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
      {
-      fprintf (Gbl.F.Out,"<div class=\"RIGHT_COL\">");
+      fprintf (Gbl.F.Out,"<div id=\"right_col\" class=\"LEFT_RIGHT_COL\">");
       Lay_ShowRightColumn ();
       fprintf (Gbl.F.Out,"</div>");
      }
