@@ -132,7 +132,7 @@ void Lay_WriteStartOfPage (void)
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
       Gbl.Layout.WritingHTMLStart = false;
-      Gbl.Layout.HTMLStartWritten = Gbl.Layout.TablEndWritten = true;
+      Gbl.Layout.HTMLStartWritten = Gbl.Layout.DivsEndWritten = true;
       return;
      }
 
@@ -140,7 +140,7 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.WebService.IsWebService)
      {
       Gbl.Layout.WritingHTMLStart = false;
-      Gbl.Layout.HTMLStartWritten = Gbl.Layout.TablEndWritten = true;
+      Gbl.Layout.HTMLStartWritten = Gbl.Layout.DivsEndWritten = true;
       return;
      }
 
@@ -247,7 +247,7 @@ void Lay_WriteStartOfPage (void)
       fprintf (Gbl.F.Out,"<body>\n");
       Gbl.Layout.WritingHTMLStart = false;
       Gbl.Layout.HTMLStartWritten =
-      Gbl.Layout.TablEndWritten   = true;
+      Gbl.Layout.DivsEndWritten   = true;
       return;
      }
 
@@ -263,20 +263,24 @@ void Lay_WriteStartOfPage (void)
    /* Left column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
      {
-      fprintf (Gbl.F.Out,"<div id=\"left_col\" class=\"LEFT_RIGHT_COL\">");
+      fprintf (Gbl.F.Out,"<div id=\"left_col\">");
       Lay_ShowLeftColumn ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
    /* Right column */
+   // Right column is written before central column
+   // but it must be drawn at right using "position:absolute; right:0".
+   // The reason to write right column before central column
+   // is that central column may hold a lot of content drawn slowly.
    if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
      {
-      fprintf (Gbl.F.Out,"<div id=\"right_col\" class=\"LEFT_RIGHT_COL\">");
+      fprintf (Gbl.F.Out,"<div id=\"right_col\">");
       Lay_ShowRightColumn ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /* Central (main) part */
+   /* Central (main) column */
    switch (Gbl.Prefs.SideCols)
      {
       case 0:
@@ -349,15 +353,23 @@ void Lay_WriteStartOfPage (void)
 
 static void Lay_WriteEndOfPage (void)
   {
-   if (!Gbl.Layout.TablEndWritten)
+   if (!Gbl.Layout.DivsEndWritten)
      {
+      /***** End of central part of main zone *****/
       fprintf (Gbl.F.Out,"</div>"	// main_zone_canvas
                          "</div>"	// main_zone_central_content
-			 "</div>"	// main_zone_central_container
-			 "</div>"	// main_zone_central
+			 "</div>");	// main_zone_central_container
+
+      /***** Write page footer *****/
+      if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+         Lay_WritePageFooter ();
+
+      /***** End of main zone and page *****/
+      fprintf (Gbl.F.Out,"</div>"	// main_zone_central
 			 "</div>"	// main_zone
                          "</div>\n");	// whole_page_* (box that contains the whole page except the foot)
-      Gbl.Layout.TablEndWritten = true;
+
+      Gbl.Layout.DivsEndWritten = true;
      }
   }
 
@@ -1218,10 +1230,6 @@ void Lay_ShowErrorAndExit (const char *Message)
       /***** Compute time to send page *****/
       Sta_ComputeTimeToSendPage ();
 
-      /***** Write page footer *****/
-      if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
-         Lay_WritePageFooter ();
-
       /***** Log access *****/
       Sta_LogAccess (Message);
 
@@ -1318,7 +1326,7 @@ void Lay_RefreshNotifsAndConnected (void)
          fprintf (Gbl.F.Out,"%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
 
    /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -1332,7 +1340,7 @@ void Lay_RefreshLastClicks (void)
    Con_GetAndShowLastClicks ();
 
    /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -1344,10 +1352,9 @@ void Lay_WritePageFooter (void)
    extern const char *Txt_About_X;
    extern const char *Txt_Questions_and_problems;
 
-   Lay_WriteFootFromHTMLFile ();
+   fprintf (Gbl.F.Out,"<div id=\"foot_zone\" class=\"FOOT\">");
 
-   fprintf (Gbl.F.Out,"<div class=\"FOOT CENTER_MIDDLE\""
-		      " style=\"padding-bottom:12px;\">");
+   Lay_WriteFootFromHTMLFile ();
 
    /***** Institution and centre hosting the platform *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"

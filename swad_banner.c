@@ -956,6 +956,6 @@ void Ban_ClickOnBanner (void)
    // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
    // http://elouai.com/force-download.php
    Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.TablEndWritten   =
+   Gbl.Layout.DivsEndWritten   =
    Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
   }

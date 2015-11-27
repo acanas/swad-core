@@ -149,7 +149,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
 
       /* Don't write HTML at all */
       Gbl.Layout.HTMLStartWritten =
-      Gbl.Layout.TablEndWritten   =
+      Gbl.Layout.DivsEndWritten   =
       Gbl.Layout.HTMLEndWritten   = true;
 
       /* Start HTTP response */

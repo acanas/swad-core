@@ -118,7 +118,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Layout.WritingHTMLStart =
    Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.TablEndWritten   =
+   Gbl.Layout.DivsEndWritten   =
    Gbl.Layout.HTMLEndWritten   = false;
 
    Gbl.DB.DatabaseIsOpen = false;

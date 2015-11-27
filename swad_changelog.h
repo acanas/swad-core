@@ -115,12 +115,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.47.4 (2015/11/27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.48 (2015/11/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.47.4:  Nov 27, 2015	Fixed CSS problem in layout. (? lines)
+        Version 15.48:    Nov 27, 2015	Fixed problems in layout. (186384 lines)
+        Version 15.47.4:  Nov 27, 2015	Fixed CSS problem in layout. (186374 lines)
         Version 15.47.3:  Nov 27, 2015	Responsive design in notifications. (186365 lines)
         Version 15.47.2:  Nov 27, 2015	Responsive design in current local date and time. (? lines)
         Version 15.47.1:  Nov 27, 2015	swad_desktop.css is renamed to swad.css.

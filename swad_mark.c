@@ -690,7 +690,7 @@ void Mrk_ShowMyMarks (void)
          Fil_FastCopyOfOpenFiles (FileUsrMarks,Gbl.F.Out);
          fclose (FileUsrMarks);
 
-         Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
+         Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
         }
       else	// Problems in table of marks or user's ID not found
         {

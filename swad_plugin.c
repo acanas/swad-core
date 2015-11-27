@@ -1062,5 +1062,5 @@ void Plg_WebService (void)
    Svc_WebService ();
 
    /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }

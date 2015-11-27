@@ -543,5 +543,5 @@ void Cht_OpenChatWindow (void)
    /***** Close index.html file *****/
    fclose (FileChat);
 
-   Gbl.Layout.TablEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }

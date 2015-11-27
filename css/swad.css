@@ -348,16 +348,9 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 /*********************** Layout (fourth row, main zone) **********************/
 #main_zone
 	{
+	box-sizing:border-box;
 	display:table;
 	width:100%;
-	}
-.LEFT_RIGHT_COL
-	{
-	display:table-cell;
-	width:160px;
-	text-align:center;
-	vertical-align:top;
-	position:absolute;
 	}
 .LEFT_RIGHT_CELL
 	{
@@ -379,13 +372,11 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		}
 	#left_col
 		{
-		left:0;
-		visibility:hidden;
+		display:none;
 		}
 	#right_col
 		{
-		right:0;
-		visibility:hidden;
+		display:none;
 		}
 }
 @media only screen and (min-width: 1280px) {	/* For desktop */
@@ -400,7 +391,6 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		display:table-cell;
 		text-align:center;
 		vertical-align:top;
-		padding-left:160px;
 		}
 	#main_zone_central_right /* Hide left column, show right column */
 		{
@@ -414,23 +404,30 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		display:table-cell;
 		text-align:center;
 		vertical-align:top;
-		padding-left:160px;
 		padding-right:160px;
 		}
 	#left_col
 		{
-		left:0;
+		display:table-cell;
+		width:160px;
+		text-align:center;
+		vertical-align:top;
 		}
 	#right_col
 		{
+		display:table-cell;
+		width:160px;
+		text-align:center;
+		vertical-align:top;
+		position:absolute;
 		right:0;
 		}
 }
 
 #main_zone_central_container
 	{
-	min-width:925px;
-	min-height:925px;
+	min-width:900px;
+	min-height:900px;
 	margin:-8px 0 0 0;
 	padding:10px 0;
 	border-radius:6px;
@@ -1496,15 +1493,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 	              
 /********************************** Page foot ********************************/
+#foot_zone
+	{
+	box-sizing:border-box;
+	padding:20px;
+	}
 .FOOT_LIST_CONTAINER
 	{
 	position:relative;
 	float:left;
+	text-align:left;
+	padding-bottom:20px;
 	}
 .FOOT_LIST_TITLE
 	{
 	color:#666;
-	font-size:1em;
+	font-size:14pt;
 	font-weight:bold;
 	white-space:nowrap;
 	}
@@ -1514,7 +1518,7 @@ a:hover img.CENTRE_PHOTO_SHOW
  	margin:0;
 	padding:0;
 	border-width:0;
-	font-size:0.9em;
+	font-size:12pt;
 	white-space:nowrap;
  	line-height:140%;
 	}
@@ -1525,5 +1529,5 @@ a:hover img.CENTRE_PHOTO_SHOW
 .FOOT
 	{
 	color:#A0A0A0;
-	font-size:10pt;
+	font-size:12pt;
 	}

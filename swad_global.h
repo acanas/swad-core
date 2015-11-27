@@ -102,7 +102,7 @@ struct Globals
      {
       bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error
       bool HTMLStartWritten;	// Used to avoid writing more than once the HTML head
-      bool TablEndWritten;	// Used to avoid writing more than once the HTML end
+      bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
    struct
