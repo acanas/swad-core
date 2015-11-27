@@ -447,14 +447,13 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Layout='%u',Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek='%u',PhotoVisibility='%s',ProfileVisibility='%s',"
+		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek='%u',PhotoVisibility='%s',ProfileVisibility='%s',"
 		  "CtyCod='%ld',"
 		  "LocalAddress='%s',LocalPhone='%s',FamilyAddress='%s',FamilyPhone='%s',OriginPlace='%s',Birthday='%04u-%02u-%02u',Comments='%s'"
 		  " WHERE UsrCod='%ld'",
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	    Usr_StringsSexDB[UsrDat->Sex],
-	    (unsigned) UsrDat->Prefs.Layout,
 	    The_ThemeId[UsrDat->Prefs.Theme],
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],

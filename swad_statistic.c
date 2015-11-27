@@ -241,7 +241,6 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void);
 static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);
 static void Sta_GetAndShowNumUsrsPerLanguage (void);
 static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void);
-static void Sta_GetAndShowNumUsrsPerLayout (void);
 static void Sta_GetAndShowNumUsrsPerTheme (void);
 static void Sta_GetAndShowNumUsrsPerIconSet (void);
 static void Sta_GetAndShowNumUsrsPerMenu (void);
@@ -3934,10 +3933,6 @@ void Sta_ShowUseOfPlatform (void)
       case Sta_FIRST_DAY_OF_WEEK:
          /***** Number of users who have chosen a first day of week *****/
          Sta_GetAndShowNumUsrsPerFirstDayOfWeek ();
-         break;
-      case Sta_LAYOUTS:
-         /***** Number of users who have chosen a layout *****/
-         Sta_GetAndShowNumUsrsPerLayout ();
          break;
       case Sta_THEMES:
          /***** Number of users who have chosen a theme *****/
@@ -7791,7 +7786,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    extern const char *Txt_PERCENT_of_users;
    unsigned FirstDayOfWeek;
    char Query[1024];
-   unsigned NumUsrs[Lay_NUM_LAYOUTS];
+   unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK]);
@@ -7911,142 +7906,6 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
-
-   Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/********* Get and show number of users who have chosen a layout *************/
-/*****************************************************************************/
-
-static void Sta_GetAndShowNumUsrsPerLayout (void)
-  {
-   extern const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS];
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
-   extern const char *Txt_Layout;
-   extern const char *Txt_No_of_users;
-   extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS];
-   Lay_Layout_t Layout;
-   char Query[1024];
-   unsigned NumUsrs[Lay_NUM_LAYOUTS];
-   unsigned NumUsrsTotal = 0;
-
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_LAYOUTS]);
-
-   /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Layout,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
-
-   /***** For each layout... *****/
-   for (Layout = (Lay_Layout_t) 0;
-	Layout < Lay_NUM_LAYOUTS;
-	Layout++)
-     {
-      /***** Get number of users who have chosen this layout from database *****/
-      switch (Gbl.Scope.Current)
-        {
-         case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-        	           " WHERE Layout='%u'",
-                     (unsigned) Layout);
-            break;
-	 case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Layout='%u'",
-                     Gbl.CurrentCty.Cty.CtyCod,(unsigned) Layout);
-            break;
-	 case Sco_SCOPE_INS:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Layout='%u'",
-                     Gbl.CurrentIns.Ins.InsCod,(unsigned) Layout);
-            break;
-         case Sco_SCOPE_CTR:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Layout='%u'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Layout);
-            break;
-         case Sco_SCOPE_DEG:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Layout='%u'",
-                     Gbl.CurrentDeg.Deg.DegCod,(unsigned) Layout);
-            break;
-         case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Layout='%u'",
-                     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Layout);
-            break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
-	    break;
-        }
-      NumUsrs[Layout] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who have chosen a layout");
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Layout];
-     }
-
-   /***** Write number of users who have chosen each layout *****/
-   for (Layout = (Lay_Layout_t) 0;
-	Layout < Lay_NUM_LAYOUTS;
-	Layout++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"CENTER_MIDDLE\">"
-                         "<img src=\"%s/%s32x32.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON32x32\" />"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%5.2f%%"
-                         "</td>"
-                         "</tr>",
-               Gbl.Prefs.IconsURL,Lay_LayoutIcons[Layout],
-               Txt_LAYOUT_NAMES[Layout],
-               Txt_LAYOUT_NAMES[Layout],
-               NumUsrs[Layout],
-               NumUsrsTotal ? (float) NumUsrs[Layout] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
 
    Lay_EndRoundFrameTable ();
   }

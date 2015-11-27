@@ -15257,70 +15257,6 @@ const char *Txt_Last_BR_year =	// "Last academic year", the opposite to "First a
 	"Last<br />year";		// Necessita de tradução
 #endif
 
-const char *Txt_Layout =
-#if   L==0
-	"Disseny";
-#elif L==1
-	"Layout";
-#elif L==2
-	"Layout";
-#elif L==3
-	"Dise&ntilde;o";
-#elif L==4
-	"Disposition";
-#elif L==5
-	"Ta'&atilde;ngahai";
-#elif L==6
-	"Layout";
-#elif L==7
-	"Uk&lstrok;ad";
-#elif L==8
-	"Layout";
-#endif
-
-const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS] =
-   {
-#if   L==0
-	 "Pantalla grande"	// Necessita traduccio
-#elif L==1
-	 "Desktop"		// Need Übersetzung
-#elif L==2
-	 "Desktop"
-#elif L==3
-	 "Pantalla grande"
-#elif L==4
-	 "Desktop"		// Besoin de traduction
-#elif L==5
-	 "Pantalla grande"	// Okoteve traducción
-#elif L==6
-	 "Desktop"
-#elif L==7
-	 "Pulpit"
-#elif L==8
-	 "Desktop"		// Necessita de tradução
-#endif
-	 ,
-#if   L==0
-	 "M&oacute;vil"		// Necessita traduccio
-#elif L==1
-	 "Mobile"		// Need Übersetzung
-#elif L==2
-	 "Mobile"
-#elif L==3
-	 "M&oacute;vil"
-#elif L==4
-	 "Mobile"		// Besoin de traduction
-#elif L==5
-	 "M&oacute;vil"		// Okoteve traducción
-#elif L==6
-	 "Cellulare"
-#elif L==7
-	 "Komorka"
-#elif L==8
-	 "Mobile"		// Necessita de tradução
-#endif
-	};
-
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
    {
 #if   L==0
@@ -36733,26 +36669,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Kalendarz"
 #elif L==8
 	"Calend&aacute;rio"
-#endif
-	 ,
-#if   L==0				// Sta_LAYOUTS
-	 "Disseny"
-#elif L==1
-	 "layout"
-#elif L==2
-	 "Layout"
-#elif L==3
-	 "Dise&ntilde;o"
-#elif L==4
-	 "Disposition"
-#elif L==5
-	 "Ta'&atilde;ngahai"
-#elif L==6
-	 "Layout"
-#elif L==7
-	 "Uk&lstrok;ad"
-#elif L==8
-	 "Layout"
 #endif
 	 ,
 #if   L==0				// Sta_THEMES

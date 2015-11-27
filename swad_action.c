@@ -1270,7 +1270,6 @@ Profile:
        1075. ActReqEdiMyNet		Request the edition of my social networks
        1076. ActChgMyNet		Change my web and social networks
 
-       1077. ActChgLay			Change layout
        1078. ActChgThe			Change theme
        1079. ActReqChgLan		Ask if change language
        1080. ActChgLan			Change language
@@ -2753,7 +2752,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqEdiMyNet	*/{1172,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_ShowFormMyWebsAndSocialNets,NULL},
    /* ActChgMyNet	*/{1173,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_UpdateMyWebsAndSocialNets	,NULL},
 
-   /* ActChgLay		*/{ 672,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Lay_ChangeLayout		,Pre_EditPrefs			,NULL},
    /* ActChgThe		*/{ 841,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,The_ChangeTheme		,Pre_EditPrefs			,NULL},
    /* ActReqChgLan	*/{ 992,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_AskChangeLanguage		,NULL},
    /* ActChgLan		*/{ 654,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
@@ -3467,7 +3465,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActHidRgtCol,		// #669
 	ActShoLftCol,		// #670
 	ActShoRgtCol,		// #671
-	ActChgLay,		// #672
+	-1,			// #672 (obsolete action)
 	ActEdiPrf,		// #673
 	ActChgCol,		// #674
 	ActSeeDpt,		// #675

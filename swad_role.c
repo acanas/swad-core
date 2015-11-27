@@ -286,18 +286,12 @@ unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr)
 void Rol_PutFormToChangeMyRole (bool FormInHead)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
-     {
-      130,        // Lay_LAYOUT_DESKTOP
-      200,        // Lay_LAYOUT_MOBILE
-     };
    Rol_Role_t Role;
 
    Act_FormStart (ActChgMyRol);
    fprintf (Gbl.F.Out,"<select name=\"UsrTyp\"");
    if (FormInHead)
-      fprintf (Gbl.F.Out," style=\"width:%upx;\"",
-               SelectorWidth[Gbl.Prefs.Layout]);
+      fprintf (Gbl.F.Out," style=\"width:130px;\"");
    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
    for (Role = Rol__GUEST_;

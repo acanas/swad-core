@@ -84,26 +84,20 @@ void Pre_EditPrefs (void)
                       "</tr>"
 	              "</table>");
 
-   /***** Layout, side columns, theme, icon set & menu *****/
+   /***** Menu, side columns, theme, icon set *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_PutIconsToSelectLayout ();		// 3. Layout
-   fprintf (Gbl.F.Out,"</td>");
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-     {
-      fprintf (Gbl.F.Out,"<td>");
-      Mnu_PutIconsToSelectMenu ();		// 4. Menu
-      fprintf (Gbl.F.Out,"</td>"
-                         "<td>");
-      Pre_PutIconsToSelectSideCols ();		// 5. Side columns
-      fprintf (Gbl.F.Out,"</td>");
-     }
-   fprintf (Gbl.F.Out,"<td>");
-   The_PutIconsToSelectTheme ();		// 6. Theme
+   Mnu_PutIconsToSelectMenu ();			// 3. Menu
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td>");
+   Pre_PutIconsToSelectSideCols ();		// 4. Side columns
    fprintf (Gbl.F.Out,"</td>"
                       "<td>");
-   Ico_PutIconsToSelectIconSet ();		// 7. Icon set
+   The_PutIconsToSelectTheme ();		// 5. Theme
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td>");
+   Ico_PutIconsToSelectIconSet ();		// 6. Icon set
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
 	              "</table>");
@@ -135,7 +129,7 @@ void Pre_GetPrefsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      sprintf (Query,"SELECT FirstDayOfWeek,Layout,Theme,IconSet,Menu,SideCols"
+      sprintf (Query,"SELECT FirstDayOfWeek,Theme,IconSet,Menu,SideCols"
 		     " FROM IP_prefs WHERE IP='%s'",
 	       Gbl.IP);
       if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get preferences")))
@@ -152,26 +146,20 @@ void Pre_GetPrefsFromIP (void)
 	    if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
 	       Gbl.Prefs.FirstDayOfWeek = UnsignedNum;
 
-	 /* Get layout (row[1]) */
-	 Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;
-	 if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Lay_NUM_LAYOUTS)
-	       Gbl.Prefs.Layout = (Lay_Layout_t) UnsignedNum;
+	 /* Get theme (row[1]) */
+	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[1]);
 
-	 /* Get theme (row[2]) */
-	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
+	 /* Get icon set (row[2]) */
+	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[2]);
 
-	 /* Get icon set (row[3]) */
-	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
-
-	 /* Get menu (row[4]) */
+	 /* Get menu (row[3]) */
 	 Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;
-	 if (sscanf (row[4],"%u",&UnsignedNum) == 1)
+	 if (sscanf (row[3],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Mnu_NUM_MENUS)
-	       Gbl.Prefs.Menu = (Lay_Layout_t) UnsignedNum;
+	       Gbl.Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
 
-	 /* Get if user wants to show side columns (row[5]) */
-	 if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
+	 /* Get if user wants to show side columns (row[4]) */
+	 if (sscanf (row[4],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
 	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -193,11 +181,10 @@ void Pre_SetPrefsFromIP (void)
    char Query[512];
 
    /***** Update preferences from current IP in database *****/
-   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,FirstDayOfWeek,Layout,Theme,IconSet,Menu,SideCols)"
-                  " VALUES ('%s','%ld',NOW(),'%u','%u','%s','%s','%u','%u')",
+   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,FirstDayOfWeek,Theme,IconSet,Menu,SideCols)"
+                  " VALUES ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Prefs.FirstDayOfWeek,
-            (unsigned) Gbl.Prefs.Layout,
             The_ThemeId[Gbl.Prefs.Theme],
             Ico_IconSetId[Gbl.Prefs.IconSet],
             (unsigned) Gbl.Prefs.Menu,
@@ -207,10 +194,9 @@ void Pre_SetPrefsFromIP (void)
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek='%u',Layout='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
+      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
                      " WHERE UsrCod='%ld'",
                Gbl.Prefs.FirstDayOfWeek,
-               (unsigned) Gbl.Prefs.Layout,
                The_ThemeId[Gbl.Prefs.Theme],
                Ico_IconSetId[Gbl.Prefs.IconSet],
                (unsigned) Gbl.Prefs.Menu,
@@ -244,17 +230,12 @@ void Pre_PutSelectorToSelectLanguage (void)
   {
    extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
    Txt_Language_t Lan;
-   static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
-     {
-      112,	// Lay_LAYOUT_DESKTOP
-      150,	// Lay_LAYOUT_MOBILE
-     };
 
    Act_FormStart (ActReqChgLan);
    fprintf (Gbl.F.Out,"<select name=\"Lan\""
-	              " style=\"width:%upx; margin:0;\""
+	              " style=\"width:112px; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
-            SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
+            Gbl.FormId);
    for (Lan = (Txt_Language_t) 0;
 	Lan < Txt_NUM_LANGUAGES;
 	Lan++)
@@ -375,70 +356,6 @@ static void Pre_PutIconsToSelectSideCols (void)
      }
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/**************** Put left icon to hide/show side columns ********************/
-/*****************************************************************************/
-
-void Pre_PutLeftIconToHideShowCols (void)
-  {
-   extern const char *Txt_Hide_left_column;
-   extern const char *Txt_Show_left_column;
-
-   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)
-     {
-      Act_FormStart (ActHidLftCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON8x800\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Hide_left_column,
-               Txt_Hide_left_column);
-     }
-   else
-     {
-      Act_FormStart (ActShoLftCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON8x800\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Show_left_column,
-               Txt_Show_left_column);
-     }
-   Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/**************** Put right icon to hide/show side columns *******************/
-/*****************************************************************************/
-
-void Pre_PutRigthIconToHideShowCols (void)
-  {
-   extern const char *Txt_Hide_right_column;
-   extern const char *Txt_Show_right_column;
-
-   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)
-     {
-      Act_FormStart (ActHidRgtCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/central_right_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON8x800\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Hide_right_column,
-               Txt_Hide_right_column);
-     }
-   else
-     {
-      Act_FormStart (ActShoRgtCol);
-      fprintf (Gbl.F.Out,"<input type=\"image\""
-	                 " src=\"%s/central_left_8x800.gif\" alt=\"%s\""
-	                 " title=\"%s\" class=\"ICON8x800\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Show_right_column,
-               Txt_Show_right_column);
-     }
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/

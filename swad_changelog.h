@@ -115,11 +115,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.46.1 (2015/11/27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.47 (2015/11/27)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.47:    Nov 27, 2015	Mobile layout is removed (only 1.45% of users used it and now it is replaced by responsive design). (187426 lines)
+					3 changes necessary in database:
+ALTER TABLE IP_prefs DROP COLUMN Layout;
+ALTER TABLE usr_data DROP COLUMN Layout;
+UPDATE actions SET Obsolete='Y' WHERE ActCod='672';
+
         Version 15.46.1:  Nov 27, 2015	Responsive design in search box (top of the page). (188094 lines)
         Version 15.46:    Nov 27, 2015	First version with responsive design: both side columns are hidden when screen size is small. (188078 lines)
         Version 15.45.15: Nov 25, 2015	Some CSS styles related to layout are moved to CSS file. (188021 lines)

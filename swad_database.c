@@ -95,20 +95,18 @@ mysql> DESCRIBE IP_prefs;
 | UsrCod         | int(11)    | NO   | MUL | -1      |       |
 | LastChange     | datetime   | NO   | MUL | NULL    |       |
 | FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
-| Layout         | tinyint(4) | NO   |     | 0       |       |
 | Theme          | char(16)   | NO   |     | NULL    |       |
 | IconSet        | char(16)   | NO   |     | NULL    |       |
 | Menu           | tinyint(4) | NO   |     | 0       |       |
 | SideCols       | tinyint(4) | NO   |     | NULL    |       |
 +----------------+------------+------+-----+---------+-------+
-9 rows in set (0.01 sec)
+8 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
                    "IP CHAR(15) NOT NULL,"
                    "UsrCod INT NOT NULL DEFAULT -1,"
                    "LastChange DATETIME NOT NULL,"
 		   "FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-                   "Layout TINYINT NOT NULL DEFAULT 0,"
                    "Theme CHAR(16) NOT NULL,"
                    "IconSet CHAR(16) NOT NULL,"
                    "Menu TINYINT NOT NULL DEFAULT 0,"
@@ -2275,7 +2273,6 @@ mysql> DESCRIBE usr_data;
 | Surname2          | varchar(32)                            | NO   |     | NULL    |                |
 | FirstName         | varchar(32)                            | NO   |     | NULL    |                |
 | Sex               | enum('unknown','female','male')        | NO   |     | unknown |                |
-| Layout            | tinyint(4)                             | NO   | MUL | 0       |                |
 | Theme             | char(16)                               | NO   | MUL | NULL    |                |
 | IconSet           | char(16)                               | NO   | MUL | NULL    |                |
 | Language          | char(2)                                | NO   | MUL | NULL    |                |
@@ -2302,7 +2299,7 @@ mysql> DESCRIBE usr_data;
 | NotifNtfEvents    | int(11)                                | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                | NO   |     | 0       |                |
 +-------------------+----------------------------------------+------+-----+---------+----------------+
-33 rows in set (0.00 sec)
+32 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2312,7 +2309,6 @@ mysql> DESCRIBE usr_data;
                    "Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "Sex ENUM ('unknown','female','male') NOT NULL DEFAULT 'unknown',"
-                   "Layout TINYINT NOT NULL DEFAULT 0,"
                    "Theme CHAR(16) NOT NULL,"
                    "IconSet CHAR(16) NOT NULL,"
                    "Language CHAR(2) NOT NULL,"
@@ -2338,7 +2334,7 @@ mysql> DESCRIBE usr_data;
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
                    "NotifNtfEvents INT NOT NULL DEFAULT 0,"
                    "EmailNtfEvents INT NOT NULL DEFAULT 0,"
-                   "PRIMARY KEY(UsrCod),UNIQUE INDEX(EncryptedUsrCod),INDEX(Layout),INDEX(Theme),INDEX(IconSet),INDEX(Language),INDEX(FirstDayOfWeek),INDEX(CtyCod),INDEX(InsCtyCod),INDEX(InsCod),INDEX(DptCod),INDEX(CtrCod),INDEX(Menu),INDEX(SideCols))");
+                   "PRIMARY KEY(UsrCod),UNIQUE INDEX(EncryptedUsrCod),INDEX(Theme),INDEX(IconSet),INDEX(Language),INDEX(FirstDayOfWeek),INDEX(CtyCod),INDEX(InsCtyCod),INDEX(InsCod),INDEX(DptCod),INDEX(CtrCod),INDEX(Menu),INDEX(SideCols))");
 
    /***** Table usr_emails *****/
    /*

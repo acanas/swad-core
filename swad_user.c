@@ -274,7 +274,6 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
 
    UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
-   UsrDat->Prefs.Layout = Lay_LAYOUT_DEFAULT;
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
    UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
@@ -403,7 +402,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-                  "Layout,Theme,IconSet,Language,FirstDayOfWeek,Photo,PhotoVisibility,ProfileVisibility,"
+                  "Theme,IconSet,Language,FirstDayOfWeek,Photo,PhotoVisibility,ProfileVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
@@ -445,18 +444,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Get sex */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
 
-   /* Get layout */
-   UsrDat->Prefs.Layout = Lay_LAYOUT_DEFAULT;
-   if (sscanf (row[6],"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Lay_NUM_LAYOUTS)
-         UsrDat->Prefs.Layout = (Lay_Layout_t) UnsignedNum;
-
    /* Get theme */
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
    for (Theme = (The_Theme_t) 0;
         Theme < The_NUM_THEMES;
         Theme++)
-      if (!strcasecmp (row[7],The_ThemeId[Theme]))
+      if (!strcasecmp (row[6],The_ThemeId[Theme]))
         {
          UsrDat->Prefs.Theme = Theme;
          break;
@@ -467,7 +460,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    for (IconSet = (Ico_IconSet_t) 0;
         IconSet < Ico_NUM_ICON_SETS;
         IconSet++)
-      if (!strcasecmp (row[8],Ico_IconSetId[IconSet]))
+      if (!strcasecmp (row[7],Ico_IconSetId[IconSet]))
         {
          UsrDat->Prefs.IconSet = IconSet;
          break;
@@ -478,7 +471,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    for (Lan = (Txt_Language_t) 0;
         Lan < Txt_NUM_LANGUAGES;
         Lan++)
-      if (!strcasecmp (row[9],Txt_STR_LANG_ID[Lan]))
+      if (!strcasecmp (row[8],Txt_STR_LANG_ID[Lan]))
         {
          UsrDat->Prefs.Language = Lan;
          break;
@@ -486,51 +479,51 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get first day of week */
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
-   if (sscanf (row[10],"%u",&UnsignedNum) == 1)
+   if (sscanf (row[9],"%u",&UnsignedNum) == 1)
       if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
          UsrDat->Prefs.FirstDayOfWeek = UnsignedNum;
 
    /* Get rest of data */
-   strncpy (UsrDat->Photo,row[11],sizeof (UsrDat->Photo) - 1);
+   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
    UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[12]);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[13]);
-   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[14]);
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[15]);
-   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[16]);
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
+   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
 
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[17]);
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[18]);
-   strncpy (UsrDat->Tch.Office     ,row[19],sizeof (UsrDat->Tch.Office     ) - 1);
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
+   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     ) - 1);
    UsrDat->Tch.Office     [sizeof (UsrDat->Tch.Office     ) - 1] = '\0';
-   strncpy (UsrDat->Tch.OfficePhone,row[20],sizeof (UsrDat->Tch.OfficePhone) - 1);
+   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone) - 1);
    UsrDat->Tch.OfficePhone[sizeof (UsrDat->Tch.OfficePhone) - 1] = '\0';
 
-   strncpy (UsrDat->LocalAddress ,row[21],sizeof (UsrDat->LocalAddress ) - 1);
+   strncpy (UsrDat->LocalAddress ,row[20],sizeof (UsrDat->LocalAddress ) - 1);
    UsrDat->LocalAddress [sizeof (UsrDat->LocalAddress ) - 1] = '\0';
-   strncpy (UsrDat->LocalPhone   ,row[22],sizeof (UsrDat->LocalPhone   ) - 1);
+   strncpy (UsrDat->LocalPhone   ,row[21],sizeof (UsrDat->LocalPhone   ) - 1);
    UsrDat->LocalPhone   [sizeof (UsrDat->LocalPhone   ) - 1] = '\0';
-   strncpy (UsrDat->FamilyAddress,row[23],sizeof (UsrDat->FamilyAddress) - 1);
+   strncpy (UsrDat->FamilyAddress,row[22],sizeof (UsrDat->FamilyAddress) - 1);
    UsrDat->FamilyAddress[sizeof (UsrDat->FamilyAddress) - 1] = '\0';
-   strncpy (UsrDat->FamilyPhone  ,row[24],sizeof (UsrDat->FamilyPhone  ) - 1);
+   strncpy (UsrDat->FamilyPhone  ,row[23],sizeof (UsrDat->FamilyPhone  ) - 1);
    UsrDat->FamilyPhone  [sizeof (UsrDat->FamilyPhone  ) - 1] = '\0';
-   strncpy (UsrDat->OriginPlace  ,row[25],sizeof (UsrDat->OriginPlace  ) - 1);
+   strncpy (UsrDat->OriginPlace  ,row[24],sizeof (UsrDat->OriginPlace  ) - 1);
    UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  ) - 1] = '\0';
    strcpy (StrBirthday,
-           row[26] ? row[26] :
+           row[25] ? row[25] :
 	             "0000-00-00");
-   Usr_GetUsrCommentsFromString (row[27] ? row[27] :
+   Usr_GetUsrCommentsFromString (row[26] ? row[26] :
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
 
    /* Get menu */
    UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
-   if (sscanf (row[28],"%u",&UnsignedNum) == 1)
+   if (sscanf (row[27],"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Mnu_NUM_MENUS)
          UsrDat->Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
 
    /* Get if user wants to show side columns */
-   if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
+   if (sscanf (row[28],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
          UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -539,11 +532,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified inside the platform */
-   if (sscanf (row[30],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
    /* Get on which events I want to be notified by e-mail */
-   if (sscanf (row[31],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
@@ -1633,11 +1626,6 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *The_ClassHead[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const unsigned NumCharsName[Lay_NUM_LAYOUTS] =
-     {
-      12,        // Lay_LAYOUT_DESKTOP
-      10,        // Lay_LAYOUT_MOBILE
-     };
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    char UsrName[Usr_MAX_BYTES_NAME+1];
@@ -1668,7 +1656,7 @@ void Usr_WriteLoggedUsrHead (void)
    if (Gbl.Usrs.Me.UsrDat.FullName[0])
      {
       strcpy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName);
-      Str_LimitLengthHTMLStr (UsrName,NumCharsName[Gbl.Prefs.Layout]);
+      Str_LimitLengthHTMLStr (UsrName,12);
       fprintf (Gbl.F.Out,"%s",UsrName);
      }
 
@@ -1984,8 +1972,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 Act_AdjustActionWhenNoUsrLogged ();
 
       /***** When I change to another tab, go to the first option allowed *****/
-      if (Gbl.CurrentAct == ActMnu &&
-	  Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+      if (Gbl.CurrentAct == ActMnu)
 	{
 	 if (Gbl.Usrs.Me.Logged)
 	   {
@@ -2375,11 +2362,8 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Set preferences from my preferences *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
-   Gbl.Prefs.Layout = Gbl.Usrs.Me.UsrDat.Prefs.Layout;
-   // TODO: Should layout depend on session instead of user prefs?
-   // (for example, one user with two sessions with different layouts)
-   Gbl.Prefs.Menu = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
-   Gbl.Prefs.SideCols = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
+   Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
+   Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",

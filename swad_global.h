@@ -132,7 +132,6 @@ struct Globals
      {
       Txt_Language_t Language;
       unsigned FirstDayOfWeek;
-      Lay_Layout_t Layout;
       Mnu_Menu_t Menu;
       unsigned SideCols;
       The_Theme_t Theme;

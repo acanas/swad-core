@@ -1130,11 +1130,6 @@ void Crs_FreeListCoursesInDegree (struct Degree *Deg)
 void Crs_WriteSelectorMyCourses (void)
   {
    extern const char *Txt_No_COURSE_SELECTED;
-   static const unsigned SelectorWidth[Lay_NUM_LAYOUTS] =
-     {
-      175,	// Lay_LAYOUT_DESKTOP
-      300,	// Lay_LAYOUT_MOBILE
-     };
    unsigned NumMyCrs;
    bool IBelongToCurrentCrs = false;
    long CrsCod;
@@ -1153,9 +1148,9 @@ void Crs_WriteSelectorMyCourses (void)
 
    /***** Start of selector of courses *****/
    fprintf (Gbl.F.Out,"<select name=\"CrsCod\""
-	              " style=\"width:%upx; margin:1px;\""
+	              " style=\"width:175px; margin:1px;\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            SelectorWidth[Gbl.Prefs.Layout],Gbl.FormId);
+            Gbl.FormId);
 
    if (Gbl.Usrs.Me.MyCourses.Num)
      {

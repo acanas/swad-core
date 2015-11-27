@@ -56,16 +56,6 @@ typedef enum
    Lay_ERROR   = 3,
   } Lay_AlertType_t;
 
-#define Lay_NUM_LAYOUTS 2
-typedef enum
-  {
-   Lay_LAYOUT_DESKTOP = 0,
-   Lay_LAYOUT_MOBILE  = 1,
-   Lay_LAYOUT_UNKNOWN = 2,
-  } Lay_Layout_t;	// Stored in database. Don't change numbers!
-
-#define Lay_LAYOUT_DEFAULT Lay_LAYOUT_DESKTOP
-
 typedef enum
   {
    Lay_NO_BUTTON,
@@ -114,11 +104,6 @@ void Lay_WritePageFooter (void);
 
 void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod);
-
-void Lay_PutIconsToSelectLayout (void);
-void Lay_ChangeLayout (void);
-Lay_Layout_t Lay_GetParamLayout (void);
-Lay_Layout_t Lay_GetLayoutFromStr (const char *Str);
 
 void Lay_AdvertisementMobile (void);
 

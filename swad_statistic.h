@@ -97,7 +97,7 @@ typedef enum
    Sta_CLICKS_GBL_PER_COURSE			= 23,
   } Sta_ClicksGroupedBy_t;
 
-#define Sta_NUM_FIGURES 22
+#define Sta_NUM_FIGURES 21
 typedef enum
   {
    Sta_USERS,			// Number of users
@@ -117,7 +117,6 @@ typedef enum
    Sta_PRIVACY,			// Number of users per privacity
    Sta_LANGUAGES,		// Number of users per language
    Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
-   Sta_LAYOUTS,			// Number of users per layout
    Sta_THEMES,			// Number of users per theme
    Sta_ICON_SETS,		// Number of users per icon set
    Sta_MENUS,			// Number of users per menu

@@ -127,7 +127,6 @@ void Par_GetMainParameters (void)
    long OtherUsrCod;
    char LongStr[1+10+1];
    char YearStr[2+1];
-   Lay_Layout_t LayoutFromForm;
 
    /***** Reset codes of country, institution, centre, degree and course *****/
    Gbl.CurrentCty.Cty.CtyCod =
@@ -227,8 +226,6 @@ void Par_GetMainParameters (void)
 
    /***** Try to get preferences changed from current IP *****/
    Pre_GetPrefsFromIP ();
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_UNKNOWN)
-      Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;
 
    if (!Gbl.Session.IsOpen)	// When no session open (no logged user)...
      {
@@ -236,20 +233,11 @@ void Par_GetMainParameters (void)
       if (Gbl.Prefs.Theme == The_THEME_UNKNOWN)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
-      /***** Try to get parameter layout (sent via GET method) *****/
-      if ((LayoutFromForm = Lay_GetParamLayout ()) != Lay_LAYOUT_UNKNOWN)
-        {
-         /* Parameter is correct, so set layout */
-         Gbl.Prefs.Layout = LayoutFromForm;
-
-         /* Update preferences from current IP */
-         Pre_SetPrefsFromIP ();
-        }
-
       /***** Set path of theme *****/
       sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
-      /***** Set path of theme *****/
+
+      /***** Set path of icon set *****/
       sprintf (Gbl.Prefs.PathIconSet,"%s/%s/%s",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[Gbl.Prefs.IconSet]);
@@ -446,7 +434,6 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                 strcmp (ParamName,"act") &&	// To execute directly an action (allowed only for fully public actions)
                 strcmp (ParamName,"ses") &&	// To use an open session when redirecting from one language to another
                 strcmp (ParamName,"key"))	// To verify an email address
-                // strcmp (ParamName,"Layout") && // To change the layout of the page (wide or narrow)
 	       return 0;	// Return no-parameters-found when method is GET and parameter name is not one of these
            }
          PtrSrc = Gbl.QueryString;

@@ -42,7 +42,6 @@
 /*****************************************************************************/
 
 void Tab_DrawTabsDeskTop (void);
-void Tab_DrawTabsMobile (void);
 void Tab_DrawBreadcrumb (void);
 
 void Tab_SetCurrentTab (void);

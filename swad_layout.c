@@ -57,12 +57,6 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Lay_LayoutIcons[Lay_NUM_LAYOUTS] =
-  {
-   "desktop",
-   "mobile",
-  };
-
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -89,8 +83,7 @@ static void Lay_WriteScriptInit (void);
 static void Lay_WriteScriptConnectedUsrs (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
-static void Lay_WritePageTopHeadingDesktop (void);
-static void Lay_WritePageTopHeadingMobile (void);
+static void Lay_WritePageTopHeading (void);
 
 static void Lay_WriteTitleAction (void);
 
@@ -127,8 +120,7 @@ void Lay_WriteStartOfPage (void)
 
    /***** Compute connected users *****/
    if (Gbl.CurrentAct == ActLstCon ||
-       (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-        (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
+       ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
         Gbl.CurrentCrs.Crs.CrsCod > 0))
       // Right column visible && There is a course selected
       Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
@@ -196,10 +188,8 @@ void Lay_WriteStartOfPage (void)
 	    Gbl.Prefs.IconsURL);
 
    /* Style sheet for SWAD */
-   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,
-            (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP) ? "swad_desktop.css" :
-        	                                       "swad_mobile.css");
+   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/swad_desktop.css\" type=\"text/css\" />\n",
+            Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
    // The public directory dropzone must hold:
@@ -265,38 +255,26 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<div id=\"%s\">",IdWholePage[Gbl.Prefs.Theme]);
 
    /***** Header of layout *****/
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-         Lay_WritePageTopHeadingDesktop ();
-	 break;
-      case Lay_LAYOUT_MOBILE:
-         Lay_WritePageTopHeadingMobile ();
-         break;
-      default:
-      	 break;
-     }
+   Lay_WritePageTopHeading ();
 
    /***** 4th row: main zone *****/
    fprintf (Gbl.F.Out,"<div id=\"main_zone\">");
 
    /* Left column */
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-      if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"LEFT_COL\">");
-	 Lay_ShowLeftColumn ();
-	 fprintf (Gbl.F.Out,"</div>");
-	}
+   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
+     {
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_COL\">");
+      Lay_ShowLeftColumn ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /* Right column */
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-      if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"RIGHT_COL\">");
-	 Lay_ShowRightColumn ();
-	 fprintf (Gbl.F.Out,"</div>");
-	}
+   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
+     {
+      fprintf (Gbl.F.Out,"<div class=\"RIGHT_COL\">");
+      Lay_ShowRightColumn ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /* Central (main) part */
    switch (Gbl.Prefs.SideCols)
@@ -317,46 +295,21 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">"
 		      "<div id=\"main_zone_central_content\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
-   switch (Gbl.Prefs.Layout)
+
+   if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
      {
-      case Lay_LAYOUT_DESKTOP:
-         /* Left bar used to expand-contract central zone */
-	 /*
-         fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_EXPAND\">");
-         Pre_PutLeftIconToHideShowCols ();
-         fprintf (Gbl.F.Out,"</div>");
-         */
-
-         if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
-           {
-	    /* Vertical menu (left) */
-	    fprintf (Gbl.F.Out,"<div id=\"main_zone_menu_vertical\">");
-	    Mnu_WriteVerticalMenuThisTabDesktop ();
-	    fprintf (Gbl.F.Out,"</div>");
-           }
-
-	 /* Start of main zone for actions output */
-	 fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
-
-	 if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
-	    /* Horizontal menu */
-	    Mnu_WriteHorizontalMenuThisTabDesktop ();
-         break;
-      case Lay_LAYOUT_MOBILE:
-	 /* Start of main zone for actions output */
-         fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
-         Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
-         if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu < 0)	// Write vertical menu
-           {
-            if (Gbl.CurrentAct == ActMnu)
-               Mnu_WriteMenuThisTabMobile ();
-            else
-               Tab_DrawTabsMobile ();
-           }
-         break;
-      default:
-      	 break;
+      /* Vertical menu (left) */
+      fprintf (Gbl.F.Out,"<div id=\"main_zone_menu_vertical\">");
+      Mnu_WriteVerticalMenuThisTabDesktop ();
+      fprintf (Gbl.F.Out,"</div>");
      }
+
+   /* Start of main zone for actions output */
+   fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
+
+   if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
+      /* Horizontal menu */
+      Mnu_WriteHorizontalMenuThisTabDesktop ();
 
    /* Write warning when degree type does not allow direct login */
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
@@ -366,8 +319,7 @@ void Lay_WriteStartOfPage (void)
       Inf_WriteMsgYouMustReadInfo ();
 
    /* Write title of the current action */
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-       Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
+   if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
       Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
       Lay_WriteTitleAction ();
 
@@ -399,26 +351,13 @@ static void Lay_WriteEndOfPage (void)
   {
    if (!Gbl.Layout.TablEndWritten)
      {
-      Gbl.Layout.TablEndWritten = true;
-      fprintf (Gbl.F.Out,"</div>");	// main_zone_canvas
-
-      /*
-      if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-	{
-	 // Right bar used to expand-contract central zone
-	 fprintf (Gbl.F.Out,"<div id=\"MAIN_ZONE_EXPAND\">");
-	 Pre_PutRigthIconToHideShowCols ();
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-      */
-
-      fprintf (Gbl.F.Out,"</div>"	// main_zone_central_content
+      fprintf (Gbl.F.Out,"</div>"	// main_zone_canvas
+                         "</div>"	// main_zone_central_content
 			 "</div>"	// main_zone_central_container
 			 "</div>"	// main_zone_central
-			 "</div>");	// main_zone
-
-      /***** End of box that contains the whole page except the foot *****/
-      fprintf (Gbl.F.Out,"</div>\n");	// whole_page_*
+			 "</div>"	// main_zone
+                         "</div>\n");	// whole_page_* (box that contains the whole page except the foot)
+      Gbl.Layout.TablEndWritten = true;
      }
   }
 
@@ -514,8 +453,7 @@ static void Lay_WriteScripts (void)
      }
 
    /***** Prepare script to draw months *****/
-   if ((Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-        (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)) ||		// Left column visible
+   if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||		// Left column visible
        Gbl.CurrentAct == ActSeeCal ||
        Gbl.CurrentAct == ActPrnCal)
      {
@@ -651,13 +589,11 @@ static void Lay_WriteScriptInit (void)
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-      Dat_WriteScriptMonths ();
+   Dat_WriteScriptMonths ();
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
-   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-       (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
+   if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
       Con_WriteScriptClockConnected ();
 
    // Put the focus on login form
@@ -720,7 +656,7 @@ static void Lay_WriteScriptCustomDropzone (void)
 /************************ Write top heading of the page **********************/
 /*****************************************************************************/
 
-static void Lay_WritePageTopHeadingDesktop (void)
+static void Lay_WritePageTopHeading (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
    const char *IdHeadRow1[The_NUM_THEMES] =
@@ -814,71 +750,6 @@ static void Lay_WritePageTopHeadingDesktop (void)
    /***** 3rd. row (tabs) *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
    Tab_DrawTabsDeskTop ();
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-static void Lay_WritePageTopHeadingMobile (void)
-  {
-   extern const char *The_ClassHead[The_NUM_THEMES];
-   const char *IdHeadRow1[The_NUM_THEMES] =
-     {
-      "head_row_1_white",	// The_THEME_WHITE
-      "head_row_1_grey",	// The_THEME_GREY
-      "head_row_1_blue",	// The_THEME_BLUE
-      "head_row_1_yellow",	// The_THEME_YELLOW
-      };
-
-   /***** 1st. row *****/
-   /* Start of 1st. row */
-   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdHeadRow1[Gbl.Prefs.Theme]);
-
-   /* 1st. row, 1st. column: logo */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo\" style=\"width:%upx;\">"
-                      "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"CENTER_MIDDLE\""
-	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>"
-                      "</div>",
-            Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
-            Cfg_HTTPS_URL_SWAD_CGI,
-            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_MOBILE_FILE,
-            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_LOGO_MOBILE_WIDTH,
-            Cfg_PLATFORM_LOGO_MOBILE_HEIGHT);
-
-   /* 1st. row, 2nd. column:
-      logged user / language selection */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_usr_lang\" class=\"%s\">",
-            The_ClassHead[Gbl.Prefs.Theme]);
-   if (Gbl.Usrs.Me.Logged)
-      Usr_WriteLoggedUsrHead ();
-   else
-      Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* 1st. row, 3rd. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_session\" class=\"%s\">",
-            The_ClassHead[Gbl.Prefs.Theme]);
-   if (Gbl.Usrs.Me.Logged)
-      Usr_PutFormLogOut ();
-   else
-      Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* End of 1st. row */
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** 2nd. row *****/
-   fprintf (Gbl.F.Out,"<div id=\"head_row_2\">");
-   Deg_WriteCtyInsCtrDeg ();
-   Crs_WriteSelectorMyCourses ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** 3rd. row (breadcrumb) *****/
-   fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
-   Tab_DrawBreadcrumb ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1357,7 +1228,8 @@ void Lay_ShowErrorAndExit (const char *Message)
       /***** End the output *****/
       if (!Gbl.Layout.HTMLEndWritten)
         {
-         fprintf (Gbl.F.Out,"</body>\n</html>\n");
+         fprintf (Gbl.F.Out,"</body>\n"
+                            "</html>\n");
          Gbl.Layout.HTMLEndWritten = true;
         }
      }
@@ -1408,9 +1280,8 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
 void Lay_RefreshNotifsAndConnected (void)
   {
    unsigned NumUsr;
-   bool ShowConnected = (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP &&
-                         (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                         Gbl.CurrentCrs.Crs.CrsCod > 0);	// Right column visible && There is a course selected
+   bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
+                        Gbl.CurrentCrs.Crs.CrsCod > 0;	// Right column visible && There is a course selected
 
    // Sometimes, someone must do this work, so who best than processes that refresh via AJAX?
    if (!(Gbl.PID % 11))		// Do this only one of   11 times (  11 is prime)
@@ -1473,51 +1344,43 @@ void Lay_WritePageFooter (void)
    extern const char *Txt_About_X;
    extern const char *Txt_Questions_and_problems;
 
-   switch (Gbl.Prefs.Layout)
-     {
-      case Lay_LAYOUT_DESKTOP:
-	 Lay_WriteFootFromHTMLFile ();
+   Lay_WriteFootFromHTMLFile ();
 
-         fprintf (Gbl.F.Out,"<div class=\"FOOT CENTER_MIDDLE\""
-                            " style=\"padding-bottom:12px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"FOOT CENTER_MIDDLE\""
+		      " style=\"padding-bottom:12px;\">");
 
-         /***** Institution and centre hosting the platform *****/
-         fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
-                            "<img src=\"%s/%s\""
-                            " alt=\"%s\" title=\"%s\""
-                            " style=\"width:%upx; height:%upx;\" />"
-                            "<div>%s</div>"
-                            "</a>",
-                  Cfg_ABOUT_URL,
-                  Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
-                  Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
-                  Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
-                  Cfg_ABOUT_NAME);
+   /***** Institution and centre hosting the platform *****/
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
+		      "<img src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " style=\"width:%upx; height:%upx;\" />"
+		      "<div>%s</div>"
+		      "</a>",
+	    Cfg_ABOUT_URL,
+	    Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
+	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
+	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
+	    Cfg_ABOUT_NAME);
 
-         fprintf (Gbl.F.Out,"<div>"
-                            "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">%s:</a> "
-                            "<a href=\"mailto:%s\" class=\"FOOT\" target=\"_blank\">%s</a>"
-                            "</div>",
-                  Cfg_HELP_WEB,Txt_Questions_and_problems,
-                  Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
+   fprintf (Gbl.F.Out,"<div>"
+		      "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">%s:</a> "
+		      "<a href=\"mailto:%s\" class=\"FOOT\" target=\"_blank\">%s</a>"
+		      "</div>",
+	    Cfg_HELP_WEB,Txt_Questions_and_problems,
+	    Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
 
-         /***** About *****/
-         fprintf (Gbl.F.Out,"<div>"
-                            "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">",
-                  Cfg_ABOUT_SWAD_URL);
-         fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
-         fprintf (Gbl.F.Out,"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+   /***** About *****/
+   fprintf (Gbl.F.Out,"<div>"
+		      "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">",
+	    Cfg_ABOUT_SWAD_URL);
+   fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
+   fprintf (Gbl.F.Out,"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 
-         /***** Write time to generate and send page *****/
-         Sta_WriteTimeToGenerateAndSendPage ();
+   /***** Write time to generate and send page *****/
+   Sta_WriteTimeToGenerateAndSendPage ();
 
-         fprintf (Gbl.F.Out,"</div>"
-                            "</div>");
-         break;
-      case Lay_LAYOUT_MOBILE:
-      default:
-      	 break;
-     }
+   fprintf (Gbl.F.Out,"</div>"
+		      "</div>");
   }
 
 /*****************************************************************************/
@@ -1635,81 +1498,6 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
 	              "</table>"
 	              "</td>"
 	              "</tr>");
-  }
-
-/*****************************************************************************/
-/************************ Put icons to select a layout ***********************/
-/*****************************************************************************/
-
-void Lay_PutIconsToSelectLayout (void)
-  {
-   extern const char *Txt_Layout;
-   extern const char *Txt_LAYOUT_NAMES[Lay_NUM_LAYOUTS];
-   Lay_Layout_t Layout;
-
-   Lay_StartRoundFrameTable (NULL,2,Txt_Layout);
-   fprintf (Gbl.F.Out,"<tr>");
-   for (Layout = (Lay_Layout_t) 0;
-	Layout < Lay_NUM_LAYOUTS;
-	Layout++)
-     {
-      fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
-               Layout == Gbl.Prefs.Layout ? "PREF_ON" :
-        	                            "PREF_OFF");
-      Act_FormStart (ActChgLay);
-      Par_PutHiddenParamUnsigned ("Layout",(unsigned) Layout);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32B\""
-	                 " style=\"margin:0 auto;\" />",
-               Gbl.Prefs.IconsURL,
-               Lay_LayoutIcons[Layout],
-               Txt_LAYOUT_NAMES[Layout],
-               Txt_LAYOUT_NAMES[Layout]);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
-     }
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTableWithButton (Lay_NO_BUTTON,NULL);
-  }
-
-/*****************************************************************************/
-/******************************** Change layout ******************************/
-/*****************************************************************************/
-
-void Lay_ChangeLayout (void)
-  {
-   char Query[512];
-
-   /***** Get param layout *****/
-   Gbl.Prefs.Layout = Lay_GetParamLayout ();
-
-   /***** Store layout in database *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      sprintf (Query,"UPDATE usr_data SET Layout='%u' WHERE UsrCod='%ld'",
-               (unsigned) Gbl.Prefs.Layout,Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your preference about layout");
-     }
-
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
-  }
-
-/*****************************************************************************/
-/**************************** Get parameter layout ***************************/
-/*****************************************************************************/
-
-Lay_Layout_t Lay_GetParamLayout (void)
-  {
-   char UnsignedStr[1+10+1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Layout",UnsignedStr,1+10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Lay_NUM_LAYOUTS)
-         return (Lay_Layout_t) UnsignedNum;
-
-   return Lay_LAYOUT_UNKNOWN;
   }
 
 /*****************************************************************************/

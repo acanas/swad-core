@@ -51,7 +51,6 @@ typedef enum
 
 void Mnu_WriteVerticalMenuThisTabDesktop (void);
 void Mnu_WriteHorizontalMenuThisTabDesktop (void);
-void Mnu_WriteMenuThisTabMobile (void);
 
 void Mnu_PutIconsToSelectMenu (void);
 void Mnu_ChangeMenu (void);

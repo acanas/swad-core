@@ -50,8 +50,6 @@ void Pre_AskChangeLanguage (void);
 void Pre_ChangeLanguage (void);
 Txt_Language_t Pre_GetParamLanguage (void);
 
-void Pre_PutLeftIconToHideShowCols (void);
-void Pre_PutRigthIconToHideShowCols (void);
 void Pre_ChangeSideCols (void);
 void Pre_HideLeftCol (void);
 void Pre_HideRightCol (void);

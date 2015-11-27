@@ -309,9 +309,6 @@
 /* Courses */
 #define Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST     500	// If the number of courses in a list is greater than this, ask me for confirmation before showing the list
 
-/* Layout */
-#define Cfg_LAYOUT_MOBILE_NUM_COLUMNS 3
-
 /* Notifications */
 #define Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD	 50
 #define Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE	100

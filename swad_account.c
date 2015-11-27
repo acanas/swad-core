@@ -434,12 +434,12 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
    /***** Insert new user in database *****/
    /* Insert user's data */
    sprintf (Query,"INSERT INTO usr_data (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-		  "Layout,Theme,IconSet,Language,FirstDayOfWeek,PhotoVisibility,ProfileVisibility,"
+		  "Theme,IconSet,Language,FirstDayOfWeek,PhotoVisibility,ProfileVisibility,"
 		  "CtyCod,"
 		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
 		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 		  " VALUES ('%s','%s','%s','%s','%s','%s',"
-		  "'%u','%s','%s','%s','%u','%s','%s',"
+		  "'%s','%s','%s','%u','%s','%s',"
 		  "'%ld',"
 		  "'%s','%s','%s','%s','%s','%04u-%02u-%02u','%s',"
 		  "'%u','%u','-1','0')",
@@ -447,7 +447,6 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	    Usr_StringsSexDB[UsrDat->Sex],
-	    (unsigned) UsrDat->Prefs.Layout,
 	    The_ThemeId[UsrDat->Prefs.Theme],
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],

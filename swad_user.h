@@ -152,7 +152,6 @@ struct UsrData
      {
       Txt_Language_t Language;
       unsigned FirstDayOfWeek;
-      Lay_Layout_t Layout;
       The_Theme_t Theme;
       Ico_IconSet_t IconSet;
       Mnu_Menu_t Menu;
