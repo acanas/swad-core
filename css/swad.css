@@ -141,12 +141,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		display:none;
     		}
 }
-@media only screen and (min-width: 1280px) {	/* For desktop */
-	#head_search_text
-		{
-		display:initial;
-		}
-}
+
 #head_row_1_usr_lang
 	{
 	display:table-cell;
@@ -194,7 +189,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		display:none;
     		}
 }
-@media only screen and (max-width: 1279px) {	/* For tablets */
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {	/* For tablets */
 	#current_date
 		{
 		display:none;
@@ -222,6 +217,27 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	padding-top:10px;
 	}
+@media only screen and (max-width: 1023px) {	/* For mobile phones */
+	#notif_all
+		{
+		display:none;
+    		}
+	#notif_new
+		{
+		display:none;
+    		}
+}
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {	/* For tablets */
+	#notif_all
+		{
+		display:none;
+    		}
+}
+.WHITE_NOTIF		{color:#707070; font-size:12pt; white-space:nowrap;}
+.GREY_NOTIF		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
+.BLUE_NOTIF		{color:white;   font-size:12pt; white-space:nowrap;}
+.YELLOW_NOTIF		{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
+
 
 /******************* Layout (third heading row with tabs) ********************/
 #head_row_3
@@ -1063,11 +1079,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GREY_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5; font-size:25pt; white-space:nowrap;}
 .BLUE_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
 .YELLOW_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
-
-.WHITE_NOTIF		{color:#707070; font-size:12pt; white-space:nowrap;}
-.GREY_NOTIF		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
-.BLUE_NOTIF		{color:white;   font-size:12pt; white-space:nowrap;}
-.YELLOW_NOTIF		{color:#B3B0B3; font-size:12pt; white-space:nowrap;}
 
 .WHITE_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 .GREY_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}

@@ -1808,43 +1808,32 @@ void Ntf_WriteNumberOfNewNtfs (void)
    unsigned NumNewNtfs = 0;
 
    /***** Get my number of unseen notifications *****/
-   if ((NumUnseenNtfs = Ntf_GetNumberOfAllMyUnseenNtfs ()) != 0)
+   if ((NumUnseenNtfs = Ntf_GetNumberOfAllMyUnseenNtfs ()))
       NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
 
    /***** Start form *****/
    Act_FormStartId (ActSeeNewNtf,"form_ntf");
    Act_LinkFormSubmitId (Txt_See_notifications,
-                         The_ClassNotif[Gbl.Prefs.Theme],"form_ntf");
+			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf");
 
    /***** Number of unseen notifications *****/
-   if (NumUnseenNtfs == 1)
-      fprintf (Gbl.F.Out,"1 %s",
-               Txt_notification);
-   else
-      fprintf (Gbl.F.Out,"%u %s",
-               NumUnseenNtfs,
-               Txt_notifications);
+   fprintf (Gbl.F.Out,"<span id=\"notif_all\">%u&nbsp;%s<br /></span>",
+	    NumUnseenNtfs,
+	    NumUnseenNtfs == 1 ? Txt_notification :
+				 Txt_notifications);
 
+   /***** Icon and number of new notifications *****/
    if (NumNewNtfs)
-     {
-      /***** Icon *****/
-      fprintf (Gbl.F.Out,"<br />"
-	                 "<img src=\"%s/bell16x16.png\""
-	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON16x16\" /> ",
-               Gbl.Prefs.PathTheme,
-               Txt_Notifications,
-               Txt_Notifications);
-
-      /***** Number of new notifications *****/
-      if (NumNewNtfs == 1)
-         fprintf (Gbl.F.Out,"1 %s",
-                  Txt_NOTIF_new_SINGULAR);
-      else
-         fprintf (Gbl.F.Out,"%u %s",
-                  NumNewNtfs,
-                  Txt_NOTIF_new_PLURAL);
-     }
+      fprintf (Gbl.F.Out,"<img src=\"%s/bell16x16.png\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON16x16\" />"
+			 "&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
+	       Gbl.Prefs.PathTheme,
+	       Txt_Notifications,
+	       Txt_Notifications,
+	       NumNewNtfs,
+	       NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+				 Txt_NOTIF_new_PLURAL);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</a>");
