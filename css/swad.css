@@ -180,6 +180,27 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	vertical-align:top;
 	}
+.WHITE_CUR_TIME		{color:#808080; font-size:14pt; font-weight:bold;}
+.GREY_CUR_TIME		{color:#E0E0E0; font-size:14pt; font-weight:bold;}
+.BLUE_CUR_TIME		{color:#BAD2DA; font-size:14pt; font-weight:bold;}
+.YELLOW_CUR_TIME	{color:#B3B0B3; font-size:14pt; font-weight:bold;}
+@media only screen and (max-width: 1023px) {	/* For mobile phones */
+	#current_date
+		{
+		display:none;
+    		}
+	#current_time
+		{
+		display:none;
+    		}
+}
+@media only screen and (max-width: 1279px) {	/* For tablets */
+	#current_date
+		{
+		display:none;
+    		}
+}
+
 #head_row_2_hierarchy
 	{
 	display:table-cell;
@@ -1033,20 +1054,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-repeat:no-repeat;
 	}
 
-.WHITE_DEGREE		{color:#707070; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.GREY_DEGREE		{color:#FFB42E; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.BLUE_DEGREE		{color:#FFE880; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_DEGREE		{color:#FFC040; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.WHITE_DEGREE		{color:#707070; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.GREY_DEGREE		{color:#FFB42E; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.BLUE_DEGREE		{color:#FFE880; font-size:14pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_DEGREE		{color:#FFC040; font-size:14pt; font-weight:bold; white-space:nowrap;}
 
 .WHITE_COURSE		{color:#4D88A1; font-size:25pt; white-space:nowrap;}
 .GREY_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5; font-size:25pt; white-space:nowrap;}
 .BLUE_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
 .YELLOW_COURSE		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white; font-size:25pt; white-space:nowrap;}
-
-.WHITE_CUR_TIME		{color:#808080; font-size:15pt; font-weight:bold;}
-.GREY_CUR_TIME		{color:#E0E0E0; font-size:15pt; font-weight:bold;}
-.BLUE_CUR_TIME		{color:#BAD2DA; font-size:15pt; font-weight:bold;}
-.YELLOW_CUR_TIME	{color:#B3B0B3; font-size:15pt; font-weight:bold;}
 
 .WHITE_NOTIF		{color:#707070; font-size:12pt; white-space:nowrap;}
 .GREY_NOTIF		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}

@@ -258,20 +258,24 @@ function writeLocalClock() {
 	Hou = d.getHours();
 	Min = d.getMinutes();
 	StrMin = ((Min < 10) ? '0' : '') + Min;
-	document.getElementById('hm').innerHTML = Months[Mon] + ' ' + Day + ', ' + Hou + ':' + StrMin;
+	document.getElementById('hm').innerHTML =	'<span id="current_date">' +
+												Months[Mon] + ' ' + Day + ', ' +
+												'</span><span id="current_time">' +
+												Hou + ':' + StrMin +
+												'</span>';
 }
       
 function writeClockConnected() {
-        var BoxClock;
+	var BoxClock;
 	var H;
 	var M;
 	var S;
 	var StrM;
 	var StrS;
-        var PrintableClock;
+	var PrintableClock;
 
-        countClockConnected++;
-        countClockConnected %= 10;
+	countClockConnected++;
+	countClockConnected %= 10;
 	for (var i=0; i<NumUsrsCon; i++) {
 		BoxClock = document.getElementById('hm'+i);
 		if (BoxClock) {
