@@ -177,6 +177,10 @@ void Lay_WriteStartOfPage (void)
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Cfg_PLATFORM_SHORT_NAME);
 
+   /* Viewport (used for responsive design) */
+   fprintf (Gbl.F.Out,"<meta name=\"viewport\""
+	              " content=\"width=device-width, initial-scale=1.0\">\n");
+
    /* Title */
    Lay_WritePageTitle ();
 
@@ -257,16 +261,6 @@ void Lay_WriteStartOfPage (void)
       return;
      }
 
-   if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
-      fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">"
-                         "<img id=\"zoomImg\" src=\"%s/_.gif\""
-                         " alt=\"\" title=\"\""
-                         " class=\"IMG_USR\" />"
-                         "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
-                         "</div>"
-                         "</div>",
-	       Gbl.Prefs.IconsURL);
-
    /***** Start of box that contains the whole page except the foot *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\">",IdWholePage[Gbl.Prefs.Theme]);
 
@@ -290,23 +284,48 @@ void Lay_WriteStartOfPage (void)
    if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
       if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_COL\">");
+	 fprintf (Gbl.F.Out,"<div class=\"LEFT_COL\">");
 	 Lay_ShowLeftColumn ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
+   /* Right column */
+   if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
+      if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"RIGHT_COL\">");
+	 Lay_ShowRightColumn ();
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+
    /* Central (main) part */
-   fprintf (Gbl.F.Out,"<div id=\"main_zone_central\">"
-		      "<div id=\"main_zone_central_container\" class=\"%s\">"
+   switch (Gbl.Prefs.SideCols)
+     {
+      case 0:
+         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_none\">");
+	 break;
+      case Lay_SHOW_LEFT_COLUMN:
+         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_left\">");
+	 break;
+      case Lay_SHOW_RIGHT_COLUMN:
+         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_right\">");
+	 break;
+      case (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN):
+         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_both\">");
+         break;
+     }
+   fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">"
 		      "<div id=\"main_zone_central_content\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
    switch (Gbl.Prefs.Layout)
      {
       case Lay_LAYOUT_DESKTOP:
          /* Left bar used to expand-contract central zone */
+	 /*
          fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_EXPAND\">");
          Pre_PutLeftIconToHideShowCols ();
          fprintf (Gbl.F.Out,"</div>");
+         */
 
          if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
            {
@@ -381,31 +400,25 @@ static void Lay_WriteEndOfPage (void)
    if (!Gbl.Layout.TablEndWritten)
      {
       Gbl.Layout.TablEndWritten = true;
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</div>");	// main_zone_canvas
 
+      /*
       if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
 	{
-	 /* Right bar used to expand-contract central zone */
+	 // Right bar used to expand-contract central zone
 	 fprintf (Gbl.F.Out,"<div id=\"MAIN_ZONE_EXPAND\">");
 	 Pre_PutRigthIconToHideShowCols ();
 	 fprintf (Gbl.F.Out,"</div>");
 	}
+      */
 
-      fprintf (Gbl.F.Out,"</div>"
-			 "</div>"
-			 "</div>");
-
-      /* Right column */
-      if (Gbl.Prefs.Layout == Lay_LAYOUT_DESKTOP)
-	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
-	   {
-	    fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_COL\">");
-	    Lay_ShowRightColumn ();
-	    fprintf (Gbl.F.Out,"</div>");
-	   }
+      fprintf (Gbl.F.Out,"</div>"	// main_zone_central_content
+			 "</div>"	// main_zone_central_container
+			 "</div>"	// main_zone_central
+			 "</div>");	// main_zone
 
       /***** End of box that contains the whole page except the foot *****/
-      fprintf (Gbl.F.Out,"</div>\n");
+      fprintf (Gbl.F.Out,"</div>\n");	// whole_page_*
      }
   }
 
@@ -769,7 +782,7 @@ static void Lay_WritePageTopHeadingDesktop (void)
       Usr_PutFormLogIn ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /* Start of 1st. row */
+   /* End of 1st. row */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** 2nd. row *****/

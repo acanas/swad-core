@@ -130,7 +130,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.Layout = Lay_LAYOUT_DEFAULT;	// Default layout
    Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;		// Default menu
-   Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;	// Show both side columns, left and right
    Gbl.Prefs.Theme = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet = Ico_ICON_SET_DEFAULT;	// Default icon set
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
