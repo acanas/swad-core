@@ -51,7 +51,7 @@ extern struct Globals Gbl;
 
 const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
   {
-   125,	// Not_LIST_BRIEF_NOTICES
+   148,	// Not_LIST_BRIEF_NOTICES
    500,	// Not_LIST_FULL_NOTICES
   };
 

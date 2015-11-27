@@ -1107,10 +1107,10 @@ void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char
 void Lay_StartRoundFrame (const char *Width,const char *Title)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"width:100%%;\">"
+	              " style=\"box-sizing:border-box; width:100%%;\">"
 	              "<div class=\"FRAME10\"");
    if (Width)
-       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
+       fprintf (Gbl.F.Out," style=\"box-sizing:border-box; width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
    if (Title)

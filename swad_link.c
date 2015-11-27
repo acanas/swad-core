@@ -351,7 +351,7 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName,
                Gbl.FormId);
@@ -363,7 +363,7 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName,
                Gbl.FormId);
@@ -375,7 +375,7 @@ static void Lnk_ListLinksForEdition (void)
       Act_FormStart (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Lnk->WWW,
                Gbl.FormId);
@@ -634,21 +634,21 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Link short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName);
 
    /***** Link full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName);
 
    /***** Link WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Lnk->WWW);

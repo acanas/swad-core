@@ -5613,7 +5613,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
-      	                    " size=\"40\" maxlength=\"40\" value=\"%s\""
+      	                    " size=\"30\" maxlength=\"40\" value=\"%s\""
                             " class=\"%s %s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
 		  FileName,Gbl.FileBrowser.InputStyle,

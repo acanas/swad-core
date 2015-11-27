@@ -351,7 +351,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
 
    /***** Write total number of sessions *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
                       "%u %s"
                       "</div>",
             Gbl.Session.NumSessions,
@@ -359,7 +359,7 @@ void Con_ShowGlobalConnectedUsrs (void)
         	                             Txt_sessions);
 
    /***** Write total number of users *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
                       "%u %s:"
                       "</div>",
             UsrsTotal,
@@ -367,7 +367,7 @@ void Con_ShowGlobalConnectedUsrs (void)
         	               Txt_users);
 
    /***** Write total number of students *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
                       "%u %s"
                       "</div>",
             StdsTotal,
@@ -375,7 +375,7 @@ void Con_ShowGlobalConnectedUsrs (void)
                                Txt_ROLES_PLURAL_abc  [Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of teachers *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
                       "%u %s"
                       "</div>",
             TchsTotal,
@@ -384,7 +384,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Write total number of users who do not belong to any course *****/
    if (WithoutCoursesTotal)
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
                          "%u %s"
                          "</div>",
                WithoutCoursesTotal,
