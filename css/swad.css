@@ -21,7 +21,6 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not,see <http://www.gnu.org/licenses/>.
 */
-
 a:link			{text-decoration:none;}
 a:visited		{text-decoration:none;}
 a:active		{text-decoration:none;}
@@ -469,7 +468,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	min-width:900px;
 	min-height:900px;
 	margin:-8px 0 0 0;
-	padding:16px 0;
+	padding:8px 0;
 	border-radius:6px;
 	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
 	text-align:center;
@@ -482,41 +481,43 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	{
 	box-sizing:border-box;
 	width:100%;
-	margin:0 auto;
 	}
 #menu_horizontal .MENU_BOX
 	{
 	box-sizing:border-box;
 	width:100%;
+	height:64px;
+	padding:8px 16px;
+	margin:0 auto;
 	}
-#menu_vertical .CANVAS	/* Where content for each action is written */
+#menu_horizontal .MAIN_ZONE_CANVAS	/* Where content for each action is written */
 	{
 	box-sizing:border-box;
 	width:100%;
-	padding:0 16px;
+	padding:8px 16px;
 	text-align:left;
 	vertical-align:top;
 	}
-#menu_horizontal ul
+#menu_horizontal .MENU_LIST
 	{
 	display:table;
 	list-style-type:none;
 	margin:0 auto;
 	padding:0;
 	}
-#menu_horizontal a:hover
+#menu_horizontal .MENU_LIST_ITEM
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	width:138px;
+	}
+.MENU_LIST_ITEM a:hover
 	{
 	text-decoration:none;
-	}
-#menu_horizontal li
-	{
-	display:inline-block;
 	}
 #menu_horizontal .OPTION
 	{
 	box-sizing:border-box;
-	width:100px;
-	height:64px;
 	text-align:center;
 	margin:0 auto;
 	padding:32px 2px 2px 2px;
@@ -543,6 +544,10 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	width:100%;
 	margin:0 auto;
 	}
+a:hover #menu_vertical.MENU_LIST_ITEM
+	{
+	text-decoration:none;
+	}
 #menu_vertical .MENU_BOX
 	{
 	display:table-cell;
@@ -553,26 +558,22 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	overflow:hidden;
 	}
-#menu_vertical .CANVAS	/* Where content for each action is written */
+#menu_vertical .MAIN_ZONE_CANVAS	/* Where content for each action is written */
 	{
 	display:table-cell;
 	box-sizing:border-box;
-	padding:0 16px;
+	padding:8px 16px;
 	text-align:left;
 	vertical-align:top;
 	}
-#menu_vertical ul
+#menu_vertical .MENU_LIST
 	{
 	display:table;
 	list-style-type:none;
 	margin:0;
 	padding:0;
 	}
-#menu_vertical a:hover
-	{
-	text-decoration:none;
-	}
-#menu_vertical li
+#menu_vertical MENU_LIST_ITEM
 	{
 	display:block;
 	}
@@ -615,14 +616,15 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 #action_title
 	{
 	box-sizing:border-box;
-	width:480px;
-	min-height:68px;
+	width:400px;
+	min-height:70px;
 	clear:both;
 	margin:0 auto;
 	text-align:left;
+	background-size:64px 64px;
+	background-position:0 0;
 	background-repeat:no-repeat;
-	background-position:12px 0;
-	padding:12px 12px 12px 105px;
+	padding:4px 12px 12px 70px;
 	overflow:hidden;
 	}
 
@@ -1219,23 +1221,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:1;
 	}
-/*
-.ICON_SCALING
-	{
-	display:inline-block;
-	}
-.ICON_SCALING:hover
-	{
-	opacity:1;
-	transform:scale(1.15,1.15);
-	}
-.ICON_SCALED
-	{
-	display:inline-block;
-	opacity:1;
-	transform:scale(1.15,1.15);
-	}
-*/
+
 /********************************* Form fonts ********************************/
 .WHITE_FORM		{color:#4D88A1; font-size:13pt;}
 .GREY_FORM		{color:#4D88A1; font-size:13pt;}
@@ -1325,7 +1311,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	list-style-type:none;
 	padding:0;
-	margin:0;
+	margin:0 auto;
 	text-align:center;
 	vertical-align:middle;
 	}

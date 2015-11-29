@@ -70,7 +70,7 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 /******************* Write horizontal menu of current tab ********************/
 /*****************************************************************************/
 
-void Mnu_WriteHorizontalMenuThisTab (void)
+void Mnu_WriteMenuThisTab (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
@@ -80,6 +80,10 @@ void Mnu_WriteHorizontalMenuThisTab (void)
    Act_Action_t NumAct;
    const char *Title;
    bool IsTheSelectedAction;
+
+   /***** Menu start *****/
+   fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
+		      "<ul class=\"MENU_LIST\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -96,7 +100,7 @@ void Mnu_WriteHorizontalMenuThisTab (void)
          Title = Act_GetSubtitleAction (NumAct);
 
          /***** Start of element *****/
-	 fprintf (Gbl.F.Out,"<li>");
+	 fprintf (Gbl.F.Out,"<li class=\"MENU_LIST_ITEM\">");
 
          /***** Start of container used to highlight this option *****/
          fprintf (Gbl.F.Out,"<div class=\"%s\">",
@@ -133,6 +137,10 @@ void Mnu_WriteHorizontalMenuThisTab (void)
          fprintf (Gbl.F.Out,"</li>");
         }
      }
+
+   /***** Menu end *****/
+   fprintf (Gbl.F.Out,"</ul>"
+		      "</div>");
   }
 
 /*****************************************************************************/

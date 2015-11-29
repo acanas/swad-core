@@ -298,28 +298,15 @@ void Lay_WriteStartOfPage (void)
      }
    fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"%s\">",
+	    Gbl.Prefs.Menu == Mnu_MENU_VERTICAL ? "menu_vertical" :
+						  "menu_horizontal");
 
-   if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
-     {
-      fprintf (Gbl.F.Out,"<div id=\"menu_vertical\">");
-      fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
-			 "<ul>");
-      Mnu_WriteVerticalMenuThisTab ();
-      fprintf (Gbl.F.Out,"</ul>"
-			 "</div>");
-     }
-   else
-     {
-      fprintf (Gbl.F.Out,"<div id=\"menu_horizontal\">");
-      fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
-			 "<ul>");
-      Mnu_WriteHorizontalMenuThisTab ();
-      fprintf (Gbl.F.Out,"</ul>"
-			 "</div>");
-     }
+   /* Menu */
+   Mnu_WriteMenuThisTab ();
 
    /* Start of main zone for actions output */
-   fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
+   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
    /* Write warning when degree type does not allow direct login */
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
@@ -783,8 +770,7 @@ static void Lay_WriteTitleAction (void)
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
-	              " style=\"background-image:url('%s/%s/%s64x64.gif');"
-	              " background-size:80px 80px;\">",
+	              " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 	    Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].Icon);
 

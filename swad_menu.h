@@ -49,7 +49,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mnu_WriteHorizontalMenuThisTab (void);
+void Mnu_WriteMenuThisTab (void);
 void Mnu_WriteVerticalMenuThisTab (void);
 
 void Mnu_PutIconsToSelectMenu (void);

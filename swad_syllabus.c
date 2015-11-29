@@ -137,7 +137,7 @@ void Syl_PutFormWhichSyllabus (void)
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
    Act_FormStart (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
+   fprintf (Gbl.F.Out,"<div style=\"margin:12px auto;\">"
                       "<ul class=\"LIST_CENTER\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
