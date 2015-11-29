@@ -296,24 +296,30 @@ void Lay_WriteStartOfPage (void)
          fprintf (Gbl.F.Out,"<div id=\"main_zone_central_both\">");
          break;
      }
-   fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">"
-		      "<div id=\"main_zone_central_content\">",
+   fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
 
    if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL)
      {
-      /* Vertical menu (left) */
-      fprintf (Gbl.F.Out,"<div id=\"main_zone_menu_vertical\">");
+      fprintf (Gbl.F.Out,"<div id=\"menu_vertical\">");
+      fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
+			 "<ul>");
       Mnu_WriteVerticalMenuThisTab ();
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</ul>"
+			 "</div>");
+     }
+   else
+     {
+      fprintf (Gbl.F.Out,"<div id=\"menu_horizontal\">");
+      fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
+			 "<ul>");
+      Mnu_WriteHorizontalMenuThisTab ();
+      fprintf (Gbl.F.Out,"</ul>"
+			 "</div>");
      }
 
    /* Start of main zone for actions output */
    fprintf (Gbl.F.Out,"<div id=\"main_zone_canvas\">");
-
-   if (Gbl.Prefs.Menu == Mnu_MENU_HORIZONTAL)
-      /* Horizontal menu */
-      Mnu_WriteHorizontalMenuThisTab ();
 
    /* Write warning when degree type does not allow direct login */
    Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
@@ -357,7 +363,7 @@ static void Lay_WriteEndOfPage (void)
      {
       /***** End of central part of main zone *****/
       fprintf (Gbl.F.Out,"</div>"	// main_zone_canvas
-                         "</div>"	// main_zone_central_content
+                         "</div>"	// menu_horizontal or menu_vertical
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/

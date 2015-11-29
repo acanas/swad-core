@@ -476,14 +476,74 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	position:relative;
 	}
-#main_zone_central_content
+
+/***************************** Horizontal menu *******************************/
+#menu_horizontal
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:0 auto;
+	}
+#menu_horizontal .MENU_BOX
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
+#menu_vertical .CANVAS	/* Where content for each action is written */
+	{
+	box-sizing:border-box;
+	width:100%;
+	padding:0 16px;
+	text-align:left;
+	vertical-align:top;
+	}
+#menu_horizontal ul
+	{
+	display:table;
+	list-style-type:none;
+	margin:0 auto;
+	padding:0;
+	}
+#menu_horizontal a:hover
+	{
+	text-decoration:none;
+	}
+#menu_horizontal li
+	{
+	display:inline-block;
+	}
+#menu_horizontal .OPTION
+	{
+	box-sizing:border-box;
+	width:100px;
+	height:64px;
+	text-align:center;
+	margin:0 auto;
+	padding:32px 2px 2px 2px;
+	background-size:32px 32px;
+	background-repeat:no-repeat;
+	background-position:center top;
+	overflow:hidden;
+	}
+#menu_horizontal .OPTION_NOT_SELECTED
+	{
+	opacity:0.67;
+	}
+#menu_horizontal .OPTION_NOT_SELECTED:hover, #menu_horizontal .OPTION_SELECTED
+	{
+	opacity:1;
+	transform:scale(1.2,1.2);
+	}
+
+/******************************* Vertical menu *******************************/
+#menu_vertical
 	{
 	display:table;
 	box-sizing:border-box;
 	width:100%;
 	margin:0 auto;
 	}
-#main_zone_menu_vertical
+#menu_vertical .MENU_BOX
 	{
 	display:table-cell;
 	box-sizing:border-box;
@@ -493,7 +553,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	overflow:hidden;
 	}
-#main_zone_canvas	/* Where content for each action is written */
+#menu_vertical .CANVAS	/* Where content for each action is written */
 	{
 	display:table-cell;
 	box-sizing:border-box;
@@ -501,70 +561,20 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:left;
 	vertical-align:top;
 	}
-
-/***************************** Horizontal menu *******************************/
-#menu_horizontal ul
+#menu_vertical ul
 	{
 	display:table;
 	list-style-type:none;
-	border:0;
-	margin:0 auto;
-	padding:0 0 4px 0;
-	// background:red;
-	}
-#menu_horizontal li
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	width:100px;
-	height:64px;
-	border:0;
 	margin:0;
 	padding:0;
-	text-align:center;
-	vertical-align:middle;
-	}
-#menu_horizontal a:hover
-	{
-	text-decoration:none;
-	}
-#menu_horizontal .OPTION
-	{
-	margin:0 auto;
-	background-size:32px 32px;
-	background-repeat:no-repeat;
-	background-position:center top;
-	padding:32px 2px 2px 2px;
-	overflow:hidden;
-	}
-#menu_horizontal .OPTION_NOT_SELECTED
-	{
-	opacity:0.67;
-	display:inline-block;
-	}
-#menu_horizontal .OPTION_NOT_SELECTED:hover
-	{
-	opacity:1;
-	transform:scale(1.15,1.15);
-	}
-#menu_horizontal .OPTION_SELECTED
-	{
-	display:inline-block;
-	opacity:1;
-	transform:scale(1.15,1.15);
-	}
-
-/******************************* Vertical menu *******************************/
-#menu_vertical ul
-	{
-	list-style-type:none;
-	padding:0;
-	margin:0;
-	// background:red;
 	}
 #menu_vertical a:hover
 	{
 	text-decoration:none;
+	}
+#menu_vertical li
+	{
+	display:block;
 	}
 #menu_vertical .OPTION
 	{
@@ -573,23 +583,19 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	height:40px;
 	clear:both;
 	margin:0 auto;
+	padding:2px 2px 2px 50px;
 	text-align:left;
 	vertical-align:middle;
 	background-size:40px 40px;
 	background-repeat:no-repeat;
 	background-position:2px 2px;
-	padding:2px 2px 2px 50px;
 	overflow:hidden;
 	}
 #menu_vertical .OPTION_NOT_SELECTED
 	{
 	opacity:0.67;
 	}
-#menu_vertical .OPTION_NOT_SELECTED:hover
-	{
-	opacity:1;
-	}
-#menu_vertical .OPTION_SELECTED
+#menu_vertical .OPTION_NOT_SELECTED:hover, #menu_vertical .OPTION_SELECTED
 	{
 	opacity:1;
 	}
@@ -613,6 +619,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	min-height:68px;
 	clear:both;
 	margin:0 auto;
+	text-align:left;
 	background-repeat:no-repeat;
 	background-position:12px 0;
 	padding:12px 12px 12px 105px;

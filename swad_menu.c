@@ -81,10 +81,6 @@ void Mnu_WriteHorizontalMenuThisTab (void)
    const char *Title;
    bool IsTheSelectedAction;
 
-   /***** List start *****/
-   fprintf (Gbl.F.Out,"<div id=\"menu_horizontal\">"
-                      "<ul>");
-
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
         NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
@@ -110,10 +106,7 @@ void Mnu_WriteHorizontalMenuThisTab (void)
          /***** Start of form and link *****/
          Act_FormStart (NumAct);
          Act_LinkFormSubmit (Title,NULL);
-/*
-         Act_LinkFormSubmit (Title,IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
-                                                         The_ClassMenuOff[Gbl.Prefs.Theme]);
-*/
+
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"OPTION\""
 			    " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
@@ -140,10 +133,6 @@ void Mnu_WriteHorizontalMenuThisTab (void)
          fprintf (Gbl.F.Out,"</li>");
         }
      }
-
-   /***** List end *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
   }
 
 /*****************************************************************************/
@@ -154,19 +143,15 @@ void Mnu_WriteVerticalMenuThisTab (void)
   {
    extern const char *The_ClassMenuOn[The_NUM_THEMES];
    extern const char *The_ClassMenuOff[The_NUM_THEMES];
-   extern const char *The_ClassSeparator[The_NUM_THEMES];
+   // extern const char *The_ClassSeparator[The_NUM_THEMES];
    extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
    const char *Title;
    bool IsTheSelectedAction;
-   bool SeparationBetweenPreviousAndCurrentOption = false;
-   bool PreviousVisibleOptions = false;
-
-   /***** List start *****/
-   fprintf (Gbl.F.Out,"<div id=\"menu_vertical\">"
-                      "<ul>");
+   // bool SeparationBetweenPreviousAndCurrentOption = false;
+   // bool PreviousVisibleOptions = false;
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -182,7 +167,7 @@ void Mnu_WriteVerticalMenuThisTab (void)
          IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
 
          Title = Act_GetSubtitleAction (NumAct);
-
+/*
          if (SeparationBetweenPreviousAndCurrentOption)
            {
             if (PreviousVisibleOptions)
@@ -192,7 +177,7 @@ void Mnu_WriteVerticalMenuThisTab (void)
                         The_ClassSeparator[Gbl.Prefs.Theme]);
             SeparationBetweenPreviousAndCurrentOption = false;
            }
-
+*/
          /***** Start of element *****/
          fprintf (Gbl.F.Out,"<li>");
 
@@ -229,16 +214,12 @@ void Mnu_WriteVerticalMenuThisTab (void)
          /***** End of element *****/
          fprintf (Gbl.F.Out,"</li>");
 
-         PreviousVisibleOptions = true;
+         // PreviousVisibleOptions = true;
         }
 
-      if (!SeparationBetweenPreviousAndCurrentOption)
-         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
+//      if (!SeparationBetweenPreviousAndCurrentOption)
+//         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
      }
-
-   /***** List end *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
   }
 
 /*****************************************************************************/

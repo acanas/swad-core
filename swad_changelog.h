@@ -117,11 +117,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.49.2 (2015/11/29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.49.3 (2015/11/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.49.3:  Nov 29, 2015	Changes in layout of menus. (186502 lines)
         Version 15.49.2:  Nov 29, 2015	Changes in layout of menus. (186501 lines)
         Version 15.49.1:  Nov 27, 2015	Length of country names limited in listing. of countries. (186460 lines)
         Version 15.49:    Nov 27, 2015	Fixed width in edition of institutional links.
