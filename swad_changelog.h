@@ -110,16 +110,19 @@
 // TODO: Edition of courses: Rename "Optativas/libre conf." to "Optativas varios cursos"
 // TODO: Edition of courses: Rename "Curso" to "Año / semestre / cuatrimestre"
 // TODO: Listing of courses: Put "Optativas" year at the end
+// TODO: Timetable: Sunday can be the first day of the week
+// TODO: Timetable: Day can start at 6 am
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.49.1 (2015/11/27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.49.2 (2015/11/29)"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.49.2:  Nov 29, 2015	Changes in layout of menus. (186501 lines)
         Version 15.49.1:  Nov 27, 2015	Length of country names limited in listing. of countries. (186460 lines)
         Version 15.49:    Nov 27, 2015	Fixed width in edition of institutional links.
 					Lot of fixing in CSS related to sizes. (186455 lines)

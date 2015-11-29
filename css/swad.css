@@ -285,6 +285,10 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:middle;
 	overflow:hidden;
 	}
+.TAB_OFF a:hover
+	{
+	text-decoration:none;
+	}
 .TAB_ON
 	{
 	display:inline-block;
@@ -299,6 +303,10 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	vertical-align:middle;
 	overflow:hidden;
+	}
+.TAB_ON a:hover
+	{
+	text-decoration:none;
 	}
 .WHITE_TAB_OFF
 	{
@@ -461,7 +469,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	min-width:900px;
 	min-height:900px;
 	margin:-8px 0 0 0;
-	padding:10px 20px;
+	padding:16px 0;
 	border-radius:6px;
 	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
 	text-align:center;
@@ -472,39 +480,43 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	{
 	display:table;
 	box-sizing:border-box;
+	width:100%;
 	margin:0 auto;
 	}
 #main_zone_menu_vertical
 	{
 	display:table-cell;
 	box-sizing:border-box;
-	width:175px;
+	width:180px;
+	padding-left:8px;
 	text-align:left;
 	vertical-align:top;
+	overflow:hidden;
 	}
 #main_zone_canvas	/* Where content for each action is written */
 	{
 	display:table-cell;
 	box-sizing:border-box;
+	padding:0 16px;
 	text-align:left;
 	vertical-align:top;
-	// padding:0 12px 12px 12px;
 	}
 
 /***************************** Horizontal menu *******************************/
-#horizontal_menu ul
+#menu_horizontal ul
 	{
 	display:table;
 	list-style-type:none;
 	border:0;
 	margin:0 auto;
 	padding:0 0 4px 0;
+	// background:red;
 	}
-#horizontal_menu li
+#menu_horizontal li
 	{
-	display:table-cell;
+	display:inline-block;
 	box-sizing:border-box;
-	width:138px;
+	width:100px;
 	height:64px;
 	border:0;
 	margin:0;
@@ -512,53 +524,74 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:center;
 	vertical-align:middle;
 	}
-.MENU_OFF
+#menu_horizontal a:hover
 	{
-	display:inline-block;
-	box-sizing:border-box;
-	width:138px;
-	height:64px;
-	margin:0;
-	padding:0 2px;
-	text-align:center;
-	vertical-align:middle;
+	text-decoration:none;
 	}
-.MENU_ON
+#menu_horizontal .OPTION
+	{
+	margin:0 auto;
+	background-size:32px 32px;
+	background-repeat:no-repeat;
+	background-position:center top;
+	padding:32px 2px 2px 2px;
+	overflow:hidden;
+	}
+#menu_horizontal .OPTION_NOT_SELECTED
+	{
+	opacity:0.67;
+	display:inline-block;
+	}
+#menu_horizontal .OPTION_NOT_SELECTED:hover
+	{
+	opacity:1;
+	transform:scale(1.15,1.15);
+	}
+#menu_horizontal .OPTION_SELECTED
 	{
 	display:inline-block;
-	box-sizing:border-box;
-	width:138px;
-	height:64px;
-	margin:0;
-	padding:0;
-	text-align:center;
-	vertical-align:middle;
+	opacity:1;
+	transform:scale(1.15,1.15);
 	}
 
 /******************************* Vertical menu *******************************/
-#vertical_menu
+#menu_vertical ul
 	{
 	list-style-type:none;
 	padding:0;
 	margin:0;
+	// background:red;
 	}
-.MENU_OPTION
+#menu_vertical a:hover
 	{
+	text-decoration:none;
+	}
+#menu_vertical .OPTION
+	{
+	display:table-cell;
+	vertical-align:middle;
 	height:40px;
 	clear:both;
 	margin:0 auto;
 	text-align:left;
 	vertical-align:middle;
+	background-size:40px 40px;
 	background-repeat:no-repeat;
 	background-position:2px 2px;
 	padding:2px 2px 2px 50px;
 	overflow:hidden;
 	}
-.MENU_TEXT
+#menu_vertical .OPTION_NOT_SELECTED
 	{
-	display:table-cell;
-	height:40px;
-	vertical-align:middle;
+	opacity:0.67;
+	}
+#menu_vertical .OPTION_NOT_SELECTED:hover
+	{
+	opacity:1;
+	}
+#menu_vertical .OPTION_SELECTED
+	{
+	opacity:1;
 	}
 
 /********************************* Menu fonts ********************************/
@@ -576,7 +609,7 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 #action_title
 	{
 	box-sizing:border-box;
-	width:375px;
+	width:480px;
 	min-height:68px;
 	clear:both;
 	margin:0 auto;
@@ -1179,6 +1212,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:1;
 	}
+/*
 .ICON_SCALING
 	{
 	display:inline-block;
@@ -1186,15 +1220,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ICON_SCALING:hover
 	{
 	opacity:1;
-	transform:scale(1.2,1.2);
+	transform:scale(1.15,1.15);
 	}
 .ICON_SCALED
 	{
 	display:inline-block;
 	opacity:1;
-	transform:scale(1.2,1.2);
+	transform:scale(1.15,1.15);
 	}
-
+*/
 /********************************* Form fonts ********************************/
 .WHITE_FORM		{color:#4D88A1; font-size:13pt;}
 .GREY_FORM		{color:#4D88A1; font-size:13pt;}
