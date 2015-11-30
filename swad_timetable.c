@@ -730,9 +730,14 @@ static void TT_ModifTimeTable (void)
 static void TT_DrawTimeTable (void)
   {
    bool Editing = false;
-   unsigned Day;
-   unsigned Hour,H;
-   unsigned Column,ColumnsToDraw,ColumnsToDrawIncludingExtraColumn,ContinuousFreeMinicolumns;
+   unsigned DayColumn;	// Column from left (0) to right (6)
+   unsigned Day;	// Day of week
+   unsigned Hour;
+   unsigned H;
+   unsigned Column;
+   unsigned ColumnsToDraw;
+   unsigned ColumnsToDrawIncludingExtraColumn;
+   unsigned ContinuousFreeMinicolumns;
 
    switch (Gbl.CurrentAct)
      {
@@ -795,10 +800,15 @@ static void TT_DrawTimeTable (void)
       TT_DrawCellAlignTimeTable ();
 
       /* Row for this hour */
-      for (Day = 0;
-	   Day < TT_DAYS;
-	   Day++)
+      for (DayColumn = 0;
+	   DayColumn < TT_DAYS;
+	   DayColumn++)
         {
+	 /* Day == 0 ==> monday,
+	            ...
+	    Day == 6 ==> sunday */
+	 Day = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
+
          /* Check how many colums are needed.
             For each item (class) in this hour from left to right, we must check the maximum of columns */
          for (H = 0;
@@ -909,17 +919,24 @@ static void TT_TimeTableDrawAdjustRow (void)
 static void TT_TimeTableDrawDaysCells (void)
   {
    extern const char *Txt_DAYS_CAPS[7];
+   unsigned DayColumn;
    unsigned Day;
 
-   for (Day = 0;
-	Day < TT_DAYS;
-	Day++)
-      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TT_TXT CENTER_MIDDLE\""
+   for (DayColumn = 0;
+	DayColumn < TT_DAYS;
+	DayColumn++)
+     {
+      Day = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
+      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"%s CENTER_MIDDLE\""
 	                 " style=\"width:%u%%;\">"
 	                 "%s"
 	                 "</td>",
-               TT_NUM_MINICOLUMNS_PER_DAY,TT_PERCENT_WIDTH_OF_A_DAY,
+               TT_NUM_MINICOLUMNS_PER_DAY,
+               Day == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
+        	          "TT_DAY",	// Monday to Saturday
+               TT_PERCENT_WIDTH_OF_A_DAY,
                Txt_DAYS_CAPS[Day]);
+     }
   }
 
 /*****************************************************************************/
@@ -928,7 +945,11 @@ static void TT_TimeTableDrawDaysCells (void)
 
 static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour)
   {
-   unsigned ColumnsToDraw,Column,H,FirstHour,Cols;
+   unsigned ColumnsToDraw;
+   unsigned Column;
+   unsigned H;
+   unsigned FirstHour;
+   unsigned Cols;
 
    ColumnsToDraw = TimeTable[Day][Hour].NumColumns;
 

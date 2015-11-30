@@ -883,7 +883,7 @@ a:hover			{text-decoration:underline;}
 	}
 .DAY_NO_WRK_HEAD
 	{
-	color:#FF0000;
+	color:red;
 	font-size:9pt;
 	text-align:center;
 	}
@@ -901,7 +901,7 @@ a:hover			{text-decoration:underline;}
 	}
 .DAY_HLD
 	{
-	color:#FF0000;
+	color:red;
 	font-size:9pt;
 	text-align:center;
 	}
@@ -1514,7 +1514,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_SMALL_NOBR_N	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 
 .DAT_SMALL_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
-.DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:12pt;}
+.DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:12pt;}
 .DAT_SMALL_GREEN	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#008000; font-size:12pt;}
 .DAT_SMALL_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
 .DAT_SMALL_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
@@ -1539,21 +1539,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ASG_GRP_LIGHT		{color:#AFC4CC; font-size:12pt;}
 .DATE_GREEN		{color:#008000; font-size:13pt;}
 .DATE_GREEN_LIGHT	{color:#89BE87; font-size:13pt;}
-.DATE_RED		{color:#FF0000; font-size:13pt;}
+.DATE_RED		{color:red;     font-size:13pt;}
 .DATE_RED_LIGHT		{color:#F98A8A; font-size:13pt;}
 
 .ASG_LST_DATE_GREEN	{color:#008000; font-size:11pt; white-space:nowrap;}
-.ASG_LST_DATE_RED	{color:#FF0000; font-size:11pt; white-space:nowrap;}
+.ASG_LST_DATE_RED	{color:red;     font-size:11pt; white-space:nowrap;}
 
 .STATUS_GREEN		{color:#008000; font-size:12pt;}
 .STATUS_GREEN_LIGHT	{color:#89BE87; font-size:12pt;}
-.STATUS_RED		{color:#FF0000; font-size:12pt;}
+.STATUS_RED		{color:red;     font-size:12pt;}
 .STATUS_RED_LIGHT	{color:#F98A8A; font-size:12pt;}
 
 /********************************** Tests ************************************/
 .ANS			{color:#404040; font-size:13pt; font-weight:bold;}
 .ANS_OK			{color:#008000; font-size:13pt; font-weight:bold;}
-.ANS_BAD		{color:#FF0000; font-size:13pt; font-weight:bold;}
+.ANS_BAD		{color:red;     font-size:13pt; font-weight:bold;}
 .TEST			{color:#404040; font-size:12pt;}
 .TEST_EXA		{color:#404040; font-size:12pt;}
 .TEST_EXA_LIGHT		{color:#A0A0A0; font-size:12pt;}
@@ -1572,6 +1572,20 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#345C6C;
 	font-size:10pt;
 	line-height:110%;
+	letter-spacing:0;
+	}
+.TT_DAY
+	{
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	color:#404040;
+	font-size:10pt;
+	letter-spacing:0;
+	}
+.TT_SUNDAY
+	{
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	color:red;
+	font-size:10pt;
 	letter-spacing:0;
 	}
 .FREE0	{height:20px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
@@ -1603,7 +1617,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 .LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
-.LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#FF0000; font-size:11pt;}
+.LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 .MSG_TXT		{font-family:"Courier New","DejaVu LGC Sans Mono","Bitstream Vera Sans Mono",monospace; color:#404040; font-size:12pt;}
 

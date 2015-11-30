@@ -110,20 +110,28 @@
 // TODO: Edition of courses: Rename "Optativas/libre conf." to "Optativas varios cursos"
 // TODO: Edition of courses: Rename "Curso" to "Año / semestre / cuatrimestre"
 // TODO: Listing of courses: Put "Optativas" year at the end
-// TODO: Timetable: Sunday can be the first day of the week
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.52 (2015/11/30)"
-#define CSS_FILE		"swad15.52.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.53 (2015/11/30)"
+#define CSS_FILE		"swad15.53.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.53:    Nov 30, 2015	Sunday can be the first day of the week in timetable, depending on user's preferences. (186689 lines)
         Version 15.52:    Nov 30, 2015	Timetable now starts at 6 a.m. instead of 7 a.m.
-					Changes in layout of timetable. (186648 lines)
+					Changes in layout of timetable. (186656 lines)
+					6 changes necessary in database:
+CREATE TABLE timetable_crs_backup LIKE timetable_crs;
+INSERT INTO timetable_crs_backup SELECT * FROM timetable_crs;
+CREATE TABLE timetable_tut_backup LIKE timetable_tut;
+INSERT INTO timetable_tut_backup SELECT * FROM timetable_tut;
+UPDATE timetable_crs SET Hour=Hour+2;
+UPDATE timetable_tut SET Hour=Hour+2;
+
         Version 15.51.4:  Nov 30, 2015	Calendar is now distributed in rows with 3 months instead of 4.
 					Changes in layout. (186644 lines)
         Version 15.51.3:  Nov 30, 2015	Responsive design in login-logout. (186641 lines)
