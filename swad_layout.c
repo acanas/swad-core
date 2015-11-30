@@ -193,8 +193,8 @@ void Lay_WriteStartOfPage (void)
 	    Gbl.Prefs.IconsURL);
 
    /* Style sheet for SWAD */
-   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/swad.css\" type=\"text/css\" />\n",
-            Cfg_HTTPS_URL_SWAD_PUBLIC);
+   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
+            Cfg_HTTPS_URL_SWAD_PUBLIC,CSS_FILE);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
    // The public directory dropzone must hold:

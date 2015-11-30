@@ -735,13 +735,15 @@ void Deg_WriteCtyInsCtrDeg (void)
 /**************** Write course full name in the top of the page **************/
 /*****************************************************************************/
 
-#define Deg_MAX_LENGTH_FULL_NAME		255	// Maximum length of full name
-#define Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD	 55	// Maximum lenght on screen. Set this value depending on the size of the style used
+#define Deg_MAX_LENGTH_ORIGINAL_NAME		255	// Maximum length of full name
+#define Deg_MAX_LENGTH_SHORT_NAME_ON_PAGE_HEAD	 32	// Maximum lenght on screen
+#define Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD	 55	// Maximum lenght on screen
 
 void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
-   char FullName[Deg_MAX_LENGTH_FULL_NAME+1];	// Full name of course / degree
+   char ShortName[Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Short name of country, institution, centre, degree or course
+   char FullName [Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Full  name of country, institution, centre, degree or course
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0 ||
        Gbl.CurrentIns.Ins.InsCod > 0 ||
@@ -749,16 +751,29 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
        Gbl.CurrentDeg.Deg.DegCod > 0 ||
        Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
+      /* Limit length of short name */
+      strncpy (ShortName,
+	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
+	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
+	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
+	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
+	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
+	       Deg_MAX_LENGTH_ORIGINAL_NAME);
+      ShortName[Deg_MAX_LENGTH_ORIGINAL_NAME] = '\0';
+      Str_LimitLengthHTMLStr (ShortName,Deg_MAX_LENGTH_SHORT_NAME_ON_PAGE_HEAD);
+
+      /* Limit length of full name */
       strncpy (FullName,
 	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
 	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
 	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
 	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
 	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-	       Deg_MAX_LENGTH_FULL_NAME);
-      FullName[Deg_MAX_LENGTH_FULL_NAME] = '\0';
-      Str_LimitLengthHTMLStr (FullName,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       Deg_MAX_LENGTH_ORIGINAL_NAME);
+      FullName[Deg_MAX_LENGTH_ORIGINAL_NAME] = '\0';
+      Str_LimitLengthHTMLStr (FullName ,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
+
+      fprintf (Gbl.F.Out,"<div id=\"big_name\" class=\"%s\">",
 	       The_ClassCourse[Gbl.Prefs.Theme]);
       if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
 	{
@@ -774,9 +789,10 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 	}
-      fprintf (Gbl.F.Out,"%s"
+      fprintf (Gbl.F.Out,"<h1 id=\"big_full_name\">%s</h1>"
+	                 "<abbr id=\"big_short_name\">%s</abbr>"
 	                 "</div>",
-	       FullName);
+	       FullName,ShortName);
      }
   }
 

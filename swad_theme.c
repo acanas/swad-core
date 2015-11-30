@@ -232,7 +232,7 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Theme_SKIN);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Theme_SKIN);
    fprintf (Gbl.F.Out,"<tr>");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;

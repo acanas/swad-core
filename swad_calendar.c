@@ -72,7 +72,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
   {
    extern const char *Txt_Calendar;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Calendar);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Calendar);
    Cal_ShowFormToSelectFirstDayOfWeek (ActChg1stDay,"ICON32x32");
    Lay_EndRoundFrameTable ();
   }

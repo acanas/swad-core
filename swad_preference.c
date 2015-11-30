@@ -68,12 +68,12 @@ void Pre_EditPrefs (void)
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
    char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   /***** Language and first day of week *****/
+   /***** Language, first day of week *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
    Lay_StartRoundFrame (NULL,Txt_Language);
-   fprintf (Gbl.F.Out,"<div style=\"height:46px;\">");
+   fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
@@ -84,20 +84,26 @@ void Pre_EditPrefs (void)
                       "</tr>"
 	              "</table>");
 
-   /***** Menu, side columns, theme, icon set *****/
+   /***** Icon set, theme *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Mnu_PutIconsToSelectMenu ();			// 3. Menu
+   Ico_PutIconsToSelectIconSet ();		// 3. Icon set
    fprintf (Gbl.F.Out,"</td>"
 		      "<td>");
-   Pre_PutIconsToSelectSideCols ();		// 4. Side columns
+   The_PutIconsToSelectTheme ();		// 4. Theme
    fprintf (Gbl.F.Out,"</td>"
+                      "</tr>"
+	              "</table>");
+
+   /***** Menu, side columns *****/
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
+                      "<tr>"
                       "<td>");
-   The_PutIconsToSelectTheme ();		// 5. Theme
+   Mnu_PutIconsToSelectMenu ();			// 5. Menu
    fprintf (Gbl.F.Out,"</td>"
-                      "<td>");
-   Ico_PutIconsToSelectIconSet ();		// 6. Icon set
+		      "<td>");
+   Pre_PutIconsToSelectSideCols ();		// 6. Side columns
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
 	              "</table>");
@@ -332,7 +338,7 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Columns);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Columns);
    fprintf (Gbl.F.Out,"<tr>");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;

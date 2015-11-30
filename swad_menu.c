@@ -153,7 +153,7 @@ void Mnu_PutIconsToSelectMenu (void)
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Menu);
+   Lay_StartRoundFrameTable (NULL,0,Txt_Menu);
    fprintf (Gbl.F.Out,"<tr>");
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;

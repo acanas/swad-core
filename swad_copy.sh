@@ -19,8 +19,8 @@ cp -af $CGI/swad_pt $CGI/swad_pt.old
 
 cp -f $CORE/swad_ca $CORE/swad_de $CORE/swad_en $CORE/swad_es $CORE/swad_fr $CORE/swad_gn $CORE/swad_it $CORE/swad_pl $CORE/swad_pt $CGI
 cp -f $CORE/js/swad.js $PUBLIC_HTML
-cp -f $CORE/css/swad.css $PUBLIC_HTML
+cp -f $CORE/css/swad*.css $PUBLIC_HTML
 
 chown -R $APACHE_USER:$APACHE_GROUP $CGI
 chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.js
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.css
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css
