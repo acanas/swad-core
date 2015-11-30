@@ -80,8 +80,8 @@ static void Tab_WriteBreadcrumbAction (void);
 
 void Tab_DrawTabs (void)
   {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
-   extern const char *The_ClassTabOff[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOff[The_NUM_THEMES];
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_TabOffBgColors[The_NUM_THEMES];
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
@@ -123,8 +123,8 @@ void Tab_DrawTabs (void)
 	    Act_FormStart (ActMnu);
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
-				NumTab == Gbl.CurrentTab ? The_ClassTabOn[Gbl.Prefs.Theme] :
-							   The_ClassTabOff[Gbl.Prefs.Theme]);
+				NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+							   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
@@ -147,7 +147,7 @@ void Tab_DrawTabs (void)
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
-		     The_ClassTabOff[Gbl.Prefs.Theme],
+		     The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		     Txt_TABS_SHORT_TXT[NumTab]);
 
 	 fprintf (Gbl.F.Out,"</div>"
@@ -198,7 +198,7 @@ static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab)
 void Tab_DrawBreadcrumb (void)
   {
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<div id=\"breadcrumb_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
@@ -211,14 +211,14 @@ void Tab_DrawBreadcrumb (void)
      {
       /***** Tab *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-               The_ClassTabOn[Gbl.Prefs.Theme]);
+               The_ClassTxtTabOn[Gbl.Prefs.Theme]);
       Tab_WriteBreadcrumbTab ();
 
       if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
         {
          /***** Menu *****/
          fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-                  The_ClassTabOn[Gbl.Prefs.Theme]);
+                  The_ClassTxtTabOn[Gbl.Prefs.Theme]);
          Tab_WriteBreadcrumbAction ();
         }
      }
@@ -232,11 +232,11 @@ void Tab_DrawBreadcrumb (void)
 
 static void Tab_WriteBreadcrumbHome (void)
   {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    extern const char *Txt_Home_PAGE;
 
    Act_FormStart (ActHom);
-   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s</a>",
 	    Txt_Home_PAGE);
    Act_FormEnd ();
@@ -248,13 +248,13 @@ static void Tab_WriteBreadcrumbHome (void)
 
 static void Tab_WriteBreadcrumbTab (void)
   {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
 
    /***** Start form *****/
    Act_FormStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.CurrentTab);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.CurrentTab],The_ClassTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.CurrentTab],The_ClassTxtTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
    fprintf (Gbl.F.Out,"%s</a>",
@@ -268,12 +268,12 @@ static void Tab_WriteBreadcrumbTab (void)
 
 static void Tab_WriteBreadcrumbAction (void)
   {
-   extern const char *The_ClassTabOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    const char *Title = Act_GetTitleAction (Gbl.CurrentAct);
 
    /***** Start form *****/
    Act_FormStart (Act_Actions[Gbl.CurrentAct].SuperAction);
-   Act_LinkFormSubmit (Title,The_ClassTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
    fprintf (Gbl.F.Out,"%s</a>",

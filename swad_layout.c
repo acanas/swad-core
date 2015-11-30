@@ -110,7 +110,12 @@ void Lay_WriteStartOfPage (void)
       "whole_page_grey",	// The_THEME_GREY
       "whole_page_blue",	// The_THEME_BLUE
       "whole_page_yellow",	// The_THEME_YELLOW
-      };
+     };
+   const char *LayoutMainZone[Mnu_NUM_MENUS] =
+     {
+      "main_horizontal",	// Mnu_MENU_HORIZONTAL
+      "main_vertical",		// Mnu_MENU_VERTICAL
+     };
 
    /***** If, when this function is called, the head is being written
           or the head is already written ==> don't do anything *****/
@@ -298,14 +303,14 @@ void Lay_WriteStartOfPage (void)
      }
    fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">",
 	    The_TabOnBgColors[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<div id=\"%s\">",
-	    Gbl.Prefs.Menu == Mnu_MENU_VERTICAL ? "menu_vertical" :
-						  "menu_horizontal");
+
+   /* Layout with horizontal or vertical menu */
+   fprintf (Gbl.F.Out,"<div id=\"%s\">",LayoutMainZone[Gbl.Prefs.Menu]);
 
    /* Menu */
    Mnu_WriteMenuThisTab ();
 
-   /* Start of main zone for actions output */
+   /* Start of canvas: main zone for actions output */
    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
    /* Write warning when degree type does not allow direct login */
@@ -349,8 +354,8 @@ static void Lay_WriteEndOfPage (void)
    if (!Gbl.Layout.DivsEndWritten)
      {
       /***** End of central part of main zone *****/
-      fprintf (Gbl.F.Out,"</div>"	// main_zone_canvas
-                         "</div>"	// menu_horizontal or menu_vertical
+      fprintf (Gbl.F.Out,"</div>"	// Canvas (main zone to output content of the current action)
+                         "</div>"	// Layout with horizontal or vertical menu
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/

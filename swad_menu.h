@@ -37,11 +37,11 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Mnu_NUM_MENUS 2
 typedef enum
   {
    Mnu_MENU_HORIZONTAL = 0,
    Mnu_MENU_VERTICAL   = 1,
-   Mnu_MENU_UNKNOWN    = 2,
    } Mnu_Menu_t;	// Stored in database. Don't change numbers!
 #define Mnu_MENU_DEFAULT Mnu_MENU_HORIZONTAL
 
@@ -50,7 +50,6 @@ typedef enum
 /*****************************************************************************/
 
 void Mnu_WriteMenuThisTab (void);
-void Mnu_WriteVerticalMenuThisTab (void);
 
 void Mnu_PutIconsToSelectMenu (void);
 void Mnu_ChangeMenu (void);

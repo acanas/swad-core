@@ -143,7 +143,7 @@ const char *The_ClassConnected[The_NUM_THEMES] =
    "YELLOW_CONNECTED",
   };
 
-const char *The_ClassMenuOff[The_NUM_THEMES] =
+const char *The_ClassTxtMenuOff[The_NUM_THEMES] =
   {
    "WHITE_MENU_OFF",
    "GREY_MENU_OFF",
@@ -151,7 +151,7 @@ const char *The_ClassMenuOff[The_NUM_THEMES] =
    "YELLOW_MENU_OFF",
   };
 
-const char *The_ClassMenuOn[The_NUM_THEMES] =
+const char *The_ClassTxtMenuOn[The_NUM_THEMES] =
   {
    "WHITE_MENU_ON",
    "GREY_MENU_ON",
@@ -159,7 +159,7 @@ const char *The_ClassMenuOn[The_NUM_THEMES] =
    "YELLOW_MENU_ON",
   };
 
-const char *The_ClassTabOff[The_NUM_THEMES] =
+const char *The_ClassTxtTabOff[The_NUM_THEMES] =
   {
    "WHITE_TAB_OFF",
    "GREY_TAB_OFF",
@@ -167,7 +167,7 @@ const char *The_ClassTabOff[The_NUM_THEMES] =
    "YELLOW_TAB_OFF",
   };
 
-const char *The_ClassTabOn[The_NUM_THEMES] =
+const char *The_ClassTxtTabOn[The_NUM_THEMES] =
   {
    "WHITE_TAB_ON",
    "GREY_TAB_ON",

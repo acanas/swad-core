@@ -72,8 +72,8 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern const char *The_ClassMenuOn[The_NUM_THEMES];
-   extern const char *The_ClassMenuOff[The_NUM_THEMES];
+   extern const char *The_ClassTxtMenuOn[The_NUM_THEMES];
+   extern const char *The_ClassTxtMenuOff[The_NUM_THEMES];
    extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
@@ -82,8 +82,8 @@ void Mnu_WriteMenuThisTab (void)
    bool IsTheSelectedAction;
 
    /***** Menu start *****/
-   fprintf (Gbl.F.Out,"<div class=\"MENU_BOX\">"
-		      "<ul class=\"MENU_LIST\">");
+   fprintf (Gbl.F.Out,"<div class=\"MENU_LIST\">"
+	              "<ul>");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -104,30 +104,30 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Start of container used to highlight this option *****/
          fprintf (Gbl.F.Out,"<div class=\"%s\">",
-                  IsTheSelectedAction ? "OPTION_SELECTED" :
-                	                "OPTION_NOT_SELECTED");
+                  IsTheSelectedAction ? "MENU_OPT_ON" :
+                	                "MENU_OPT_OFF");
 
          /***** Start of form and link *****/
          Act_FormStart (NumAct);
          Act_LinkFormSubmit (Title,NULL);
 
          /***** Icon *****/
-	 fprintf (Gbl.F.Out,"<div class=\"OPTION\""
+	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICON\""
 			    " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[NumAct].Icon);
 
          /***** Text *****/
-	 fprintf (Gbl.F.Out,"<div class=\"%s\">%s",
-		  IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
-                                        The_ClassMenuOff[Gbl.Prefs.Theme],
+	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"
+	                    "%s"
+	                    "</div>",
+		  IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
+                                        The_ClassTxtMenuOff[Gbl.Prefs.Theme],
 		  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
 
          /***** End of link and form *****/
          fprintf (Gbl.F.Out,"</div>"
-	                    "</div>"
 	                    "</a>");
-
 	 Act_FormEnd ();
 
          /***** End of container used to highlight this option *****/
@@ -140,94 +140,7 @@ void Mnu_WriteMenuThisTab (void)
 
    /***** Menu end *****/
    fprintf (Gbl.F.Out,"</ul>"
-		      "</div>");
-  }
-
-/*****************************************************************************/
-/******************* Write vertical menu of current tab **********************/
-/*****************************************************************************/
-
-void Mnu_WriteVerticalMenuThisTab (void)
-  {
-   extern const char *The_ClassMenuOn[The_NUM_THEMES];
-   extern const char *The_ClassMenuOff[The_NUM_THEMES];
-   // extern const char *The_ClassSeparator[The_NUM_THEMES];
-   extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   unsigned NumOptInMenu;
-   Act_Action_t NumAct;
-   const char *Title;
-   bool IsTheSelectedAction;
-   // bool SeparationBetweenPreviousAndCurrentOption = false;
-   // bool PreviousVisibleOptions = false;
-
-   /***** Loop to write all options in menu. Each row holds an option *****/
-   for (NumOptInMenu = 0;
-        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
-        NumOptInMenu++)
-     {
-      NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
-      if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
-         break;
-
-      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
-        {
-         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
-
-         Title = Act_GetSubtitleAction (NumAct);
-/*
-         if (SeparationBetweenPreviousAndCurrentOption)
-           {
-            if (PreviousVisibleOptions)
-               fprintf (Gbl.F.Out,"<li>"
-        	                  "<hr class=\"%s\" />"
-        	                  "</li>",
-                        The_ClassSeparator[Gbl.Prefs.Theme]);
-            SeparationBetweenPreviousAndCurrentOption = false;
-           }
-*/
-         /***** Start of element *****/
-         fprintf (Gbl.F.Out,"<li>");
-
-         /***** Start of container used to highlight this option *****/
-         fprintf (Gbl.F.Out,"<div class=\"%s\">",
-                  IsTheSelectedAction ? "OPTION_SELECTED" :
-                	                "OPTION_NOT_SELECTED");
-
-         /***** Start of form and link *****/
-         Act_FormStart (NumAct);
-         Act_LinkFormSubmit (Title,NULL);
-
-         /***** Icon *****/
-	 fprintf (Gbl.F.Out,"<div class=\"OPTION\""
-			    " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
-	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-                  Act_Actions[NumAct].Icon);
-
-         /***** Text *****/
-	 fprintf (Gbl.F.Out,"<div class=\"%s\">%s",
-		  IsTheSelectedAction ? The_ClassMenuOn[Gbl.Prefs.Theme] :
-                                        The_ClassMenuOff[Gbl.Prefs.Theme],
-		  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
-
-         /***** End of link and form *****/
-         fprintf (Gbl.F.Out,"</div>"
-	                    "</div>"
-	                    "</a>");
-         Act_FormEnd ();
-
-         /***** End of container used to highlight this option *****/
-	 fprintf (Gbl.F.Out,"</div>");
-
-         /***** End of element *****/
-         fprintf (Gbl.F.Out,"</li>");
-
-         // PreviousVisibleOptions = true;
-        }
-
-//      if (!SeparationBetweenPreviousAndCurrentOption)
-//         SeparationBetweenPreviousAndCurrentOption = Act_Menu[Gbl.CurrentTab][NumOptInMenu].SubsequentSeparation;
-     }
+	              "</div>");
   }
 
 /*****************************************************************************/
@@ -302,5 +215,5 @@ Mnu_Menu_t Mnu_GetParamMenu (void)
       if (UnsignedNum < Mnu_NUM_MENUS)
          return (Mnu_Menu_t) UnsignedNum;
 
-   return Mnu_MENU_UNKNOWN;
+   return Mnu_MENU_DEFAULT;
   }

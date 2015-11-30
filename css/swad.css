@@ -21,11 +21,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not,see <http://www.gnu.org/licenses/>.
 */
-a:link			{text-decoration:none;}
-a:visited		{text-decoration:none;}
-a:active		{text-decoration:none;}
-a:hover			{text-decoration:underline;}
 
+/********************************* Body **************************************/
 body
 	{
 	margin:0;
@@ -33,9 +30,19 @@ body
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size:1em;
 	}
-input			{font-size:12pt; vertical-align:middle;}
-select			{font-size:12pt;}
-textarea		{font-size:12pt;}
+input	
+	{
+	font-size:12pt;
+	vertical-align:middle;
+	}
+select
+	{
+	font-size:12pt;
+	}
+textarea
+	{
+	font-size:12pt;
+	}
 table
 	{
 	box-sizing:border-box;
@@ -70,6 +77,13 @@ hr.WHITE_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
+
+/*********************** Text decoration of links ****************************/
+a:link			{text-decoration:none;}
+a:visited		{text-decoration:none;}
+a:active		{text-decoration:none;}
+a:hover			{text-decoration:underline;}
+.MENU_LIST_ITEM a:hover	{text-decoration:none;}
 
 /****************** Layout (the whole page with a background) ****************/
 #whole_page_white
@@ -153,12 +167,13 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	text-align:left;
 	vertical-align:middle;
 	}
-@media only screen and (max-width: 1279px) {	/* For mobile phones and tablets */
+@media only screen and (max-width: 1279px)
+	{	/* For mobile phones and tablets */
 	#head_search_text
 		{
 		display:none;
     		}
-}
+	}
 
 #head_row_1_usr_lang
 	{
@@ -200,7 +215,8 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 .GREY_CUR_TIME		{color:#E0E0E0; font-size:14pt; font-weight:bold;}
 .BLUE_CUR_TIME		{color:#BAD2DA; font-size:14pt; font-weight:bold;}
 .YELLOW_CUR_TIME	{color:#B3B0B3; font-size:14pt; font-weight:bold;}
-@media only screen and (max-width: 1023px) {	/* For mobile phones */
+@media only screen and (max-width: 1023px)
+	{	/* For mobile phones */
 	#current_date
 		{
 		display:none;
@@ -209,13 +225,14 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		{
 		display:none;
     		}
-}
-@media only screen and (min-width: 1024px) and (max-width: 1279px) {	/* For tablets */
+	}
+@media only screen and (min-width: 1024px) and (max-width: 1279px)
+	{	/* For tablets */
 	#current_date
 		{
 		display:none;
     		}
-}
+	}
 
 #head_row_2_hierarchy
 	{
@@ -239,7 +256,8 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	vertical-align:top;
 	padding-top:10px;
 	}
-@media only screen and (max-width: 1023px) {	/* For mobile phones */
+@media only screen and (max-width: 1023px)
+	{	/* For mobile phones */
 	#notif_all
 		{
 		display:none;
@@ -248,13 +266,14 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		{
 		display:none;
     		}
-}
-@media only screen and (min-width: 1024px) and (max-width: 1279px) {	/* For tablets */
+	}
+@media only screen and (min-width: 1024px) and (max-width: 1279px)
+	{	/* For tablets */
 	#notif_all
 		{
 		display:none;
     		}
-}
+	}
 .WHITE_NOTIF		{color:#707070; font-size:12pt; white-space:nowrap;}
 .GREY_NOTIF		{color:#E0E0E0; font-size:12pt; white-space:nowrap;}
 .BLUE_NOTIF		{color:white;   font-size:12pt; white-space:nowrap;}
@@ -399,7 +418,8 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 	width:148px;
 	}
 
-@media only screen and (max-width: 1279px) {	/* For mobile phones and tablets */
+@media only screen and (max-width: 1279px)
+	{	/* For mobile phones and tablets */
 	#main_zone_central_none, #main_zone_central_left, #main_zone_central_right, #main_zone_central_both
 		{
 		display:table-cell;
@@ -414,8 +434,9 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		{
 		display:none;
 		}
-}
-@media only screen and (min-width: 1280px) {	/* For desktop */
+	}
+@media only screen and (min-width: 1280px)
+	{	/* For desktop */
 	#main_zone_central_none /* Hide left and right columns */
 		{
 		display:table-cell;
@@ -460,174 +481,255 @@ hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 		position:absolute;
 		right:0;
 		}
-}
-
-#main_zone_central_container
-	{
-	box-sizing:border-box;
-	min-width:900px;
-	min-height:900px;
-	margin:-8px 0 0 0;
-	padding:8px 0;
-	border-radius:6px;
-	box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
-	text-align:center;
-	vertical-align:top;
-	position:relative;
 	}
 
-/***************************** Horizontal menu *******************************/
-#menu_horizontal
+@media only screen and (max-width: 1023px)
+	{	/* For mobile-phones */
+	#main_zone_central_container
+		{
+		box-sizing:border-box;
+		margin:-8px 0 0 0;
+		padding:8px 0;
+		border-radius:6px;
+		box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+		text-align:center;
+		vertical-align:top;
+		position:relative;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For tablets and desktop */
+	#main_zone_central_container
+		{
+		box-sizing:border-box;
+		min-width:900px;
+		min-height:900px;
+		margin:-8px 0 0 0;
+		padding:8px 0;
+		border-radius:6px;
+		box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
+		text-align:center;
+		vertical-align:top;
+		position:relative;
+		}
+	}
+
+/************* Main central zone with horizontal menu and canvas *************/
+#main_horizontal
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-#menu_horizontal .MENU_BOX
+#main_horizontal .MENU_LIST
 	{
-	box-sizing:border-box;
 	width:100%;
-	height:64px;
-	padding:8px 16px;
-	margin:0 auto;
 	}
-#menu_horizontal .MAIN_ZONE_CANVAS	/* Where content for each action is written */
-	{
-	box-sizing:border-box;
-	width:100%;
-	padding:8px 16px;
-	text-align:left;
-	vertical-align:top;
-	}
-#menu_horizontal .MENU_LIST
+#main_horizontal ul
 	{
 	display:table;
-	list-style-type:none;
+	box-sizing:border-box;
+	height:76px;
 	margin:0 auto;
-	padding:0;
+	padding:8px 16px;
+	list-style-type:none;
 	}
-#menu_horizontal .MENU_LIST_ITEM
+#main_horizontal .MENU_LIST_ITEM
 	{
 	display:table-cell;
-	box-sizing:border-box;
-	width:138px;
-	}
-.MENU_LIST_ITEM a:hover
-	{
-	text-decoration:none;
-	}
-#menu_horizontal .OPTION
-	{
-	box-sizing:border-box;
-	text-align:center;
+	width:120px;
+	height:60px;
 	margin:0 auto;
-	padding:32px 2px 2px 2px;
-	background-size:32px 32px;
-	background-repeat:no-repeat;
-	background-position:center top;
-	overflow:hidden;
+	text-align:center;
+	vertical-align:middle;
 	}
-#menu_horizontal .OPTION_NOT_SELECTED
+#main_horizontal .MENU_OPT_OFF
 	{
 	opacity:0.67;
 	}
-#menu_horizontal .OPTION_NOT_SELECTED:hover, #menu_horizontal .OPTION_SELECTED
+#main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{
 	opacity:1;
 	transform:scale(1.2,1.2);
 	}
-
-/******************************* Vertical menu *******************************/
-#menu_vertical
+#main_horizontal .MENU_ICON
 	{
-	display:table;
+	box-sizing:border-box;
+	padding:32px 0 0 0;
+	background-size:32px 32px;
+	background-repeat:no-repeat;
+	background-position:center top;
+	}
+#main_horizontal .MAIN_ZONE_CANVAS	/* Where content for each action is written */
+	{
 	box-sizing:border-box;
 	width:100%;
-	margin:0 auto;
-	}
-a:hover #menu_vertical.MENU_LIST_ITEM
-	{
-	text-decoration:none;
-	}
-#menu_vertical .MENU_BOX
-	{
-	display:table-cell;
-	box-sizing:border-box;
-	width:180px;
-	padding-left:8px;
-	text-align:left;
-	vertical-align:top;
-	overflow:hidden;
-	}
-#menu_vertical .MAIN_ZONE_CANVAS	/* Where content for each action is written */
-	{
-	display:table-cell;
-	box-sizing:border-box;
 	padding:8px 16px;
+	margin:0 auto;
 	text-align:left;
 	vertical-align:top;
 	}
-#menu_vertical .MENU_LIST
-	{
-	display:table;
-	list-style-type:none;
-	margin:0;
-	padding:0;
+
+/************** Main central zone with vertical menu and canvas **************/
+@media only screen and (max-width: 1023px)
+	{	/* For mobile phones */
+	/* Mobile phone will display menu always in horizontal
+	   so the CSS must draw menu really in horizontal */
+	#main_vertical
+		{
+		box-sizing:border-box;
+		width:100%;
+		}
+	#main_vertical .MENU_LIST
+		{
+		width:100%;
+		}
+	#main_vertical ul
+		{
+		display:table;
+		box-sizing:border-box;
+		height:76px;
+		margin:0 auto;
+		padding:8px 16px;
+		list-style-type:none;
+		}
+	#main_vertical .MENU_LIST_ITEM
+		{
+		display:table-cell;
+		width:120px;
+		height:60px;
+		margin:0 auto;
+		text-align:center;
+		vertical-align:middle;
+		}
+	#main_vertical .MENU_OPT_OFF
+		{
+		opacity:0.67;
+		}
+	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
+		{
+		opacity:1;
+		transform:scale(1.2,1.2);
+		}
+	#main_vertical .MENU_ICON
+		{
+		box-sizing:border-box;
+		padding:32px 0 0 0;
+		background-size:32px 32px;
+		background-repeat:no-repeat;
+		background-position:center top;
+		}
+	#main_vertical .MAIN_ZONE_CANVAS	/* Where content for each action is written */
+		{
+		box-sizing:border-box;
+		width:100%;
+		padding:8px 16px;
+		margin:0 auto;
+		text-align:left;
+		vertical-align:top;
+		}
+	#action_title	/* Do not display action title */
+		{
+		display:none;
+		}
 	}
-#menu_vertical MENU_LIST_ITEM
-	{
-	display:block;
-	}
-#menu_vertical .OPTION
-	{
-	display:table-cell;
-	vertical-align:middle;
-	height:40px;
-	clear:both;
-	margin:0 auto;
-	padding:2px 2px 2px 50px;
-	text-align:left;
-	vertical-align:middle;
-	background-size:40px 40px;
-	background-repeat:no-repeat;
-	background-position:2px 2px;
-	overflow:hidden;
-	}
-#menu_vertical .OPTION_NOT_SELECTED
-	{
-	opacity:0.67;
-	}
-#menu_vertical .OPTION_NOT_SELECTED:hover, #menu_vertical .OPTION_SELECTED
-	{
-	opacity:1;
+
+@media only screen and (min-width: 1024px)
+	{	/* For tablets and desktop */
+	#main_vertical
+		{
+		display:table;
+		box-sizing:border-box;
+		width:100%;
+		}
+	#main_vertical .MENU_LIST
+		{
+		display:table-cell;
+		box-sizing:border-box;
+		width:180px;
+		}
+	#main_vertical ul
+		{
+		display:table;
+		margin:0;
+		padding-left:8px;
+		list-style-type:none;
+		}
+	#main_vertical .MENU_LIST_ITEM
+		{
+		text-align:left;
+		}
+	#main_vertical .MENU_OPT_OFF
+		{
+		opacity:0.67;
+		}
+	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
+		{
+		opacity:1;
+		}
+	#main_vertical .MENU_ICON
+		{
+		display:table-cell;
+		height:42px;
+		vertical-align:middle;
+		padding:2px 2px 2px 50px;
+		background-size:40px 40px;
+		background-repeat:no-repeat;
+		background-position:2px 2px;
+		}
+	#main_vertical .MAIN_ZONE_CANVAS	/* Where content for each action is written */
+		{
+		display:table-cell;
+		box-sizing:border-box;
+		padding:8px 16px;
+		margin:0 auto;
+		text-align:left;
+		vertical-align:top;
+		}
+	#action_title
+		{
+		box-sizing:border-box;
+		width:400px;
+		min-height:70px;
+		clear:both;
+		margin:0 auto;
+		text-align:left;
+		background-size:64px 64px;
+		background-position:0 0;
+		background-repeat:no-repeat;
+		padding:4px 12px 12px 70px;
+		overflow:hidden;
+		}
 	}
 
 /********************************* Menu fonts ********************************/
-.WHITE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_OFF		{color:#707070; font-size:12pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_OFF		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_OFF	{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
-
-.WHITE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.GREY_MENU_ON		{color:#606060; font-size:12pt; font-weight:bold; line-height:110%;}
-.BLUE_MENU_ON		{color:#4D88A1; font-size:12pt; font-weight:bold; line-height:110%;}
-.YELLOW_MENU_ON		{color:#BD4815; font-size:12pt; font-weight:bold; line-height:110%;}
-
-/****************** Title of current action in main block ********************/
-#action_title
-	{
-	box-sizing:border-box;
-	width:400px;
-	min-height:70px;
-	clear:both;
-	margin:0 auto;
-	text-align:left;
-	background-size:64px 64px;
-	background-position:0 0;
-	background-repeat:no-repeat;
-	padding:4px 12px 12px 70px;
-	overflow:hidden;
+@media only screen and (max-width: 799px)
+	{	/* For mobile-phones */
+	.MENU_TEXT
+		{
+		display:none;
+		}
+	}
+@media only screen and (min-width: 800px)
+	{	/* For tablets and desktop */
+	.MENU_TEXT
+		{
+		font-size:12pt;
+		font-weight:bold;
+		line-height:110%;
+		}
 	}
 
+.WHITE_MENU_OFF		{color:#4D88A1;}
+.GREY_MENU_OFF		{color:#707070;}
+.BLUE_MENU_OFF		{color:#4D88A1;}
+.YELLOW_MENU_OFF	{color:#BD4815;}
+
+.WHITE_MENU_ON		{color:#4D88A1;}
+.GREY_MENU_ON		{color:#606060;}
+.BLUE_MENU_ON		{color:#4D88A1;}
+.YELLOW_MENU_ON		{color:#BD4815;}
+
+/****************** Title of current action in main block ********************/
 .WHITE_TITLE_ACTION	{color:#606060; font-size:20pt;}
 .GREY_TITLE_ACTION	{color:#606060; font-size:20pt;}
 .BLUE_TITLE_ACTION	{color:#4D88A1; font-size:20pt;}
