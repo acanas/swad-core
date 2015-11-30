@@ -644,7 +644,7 @@ static void Deg_WriteSelectorOfDegree (void)
 
 void Deg_WriteCtyInsCtrDeg (void)
   {
-   extern const char *The_ClassDegree[The_NUM_THEMES];
+   extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
    extern const char *Txt_System;
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
 
@@ -652,7 +652,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
-	               The_ClassDegree[Gbl.Prefs.Theme]);
+	               The_ClassBreadcrumb[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s</a>",Txt_System);
    Act_FormEnd ();
 
@@ -660,13 +660,13 @@ void Deg_WriteCtyInsCtrDeg (void)
      {
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassDegree[Gbl.Prefs.Theme]);
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
       /***** Form to go to the country *****/
       Act_FormGoToStart (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
       Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
-	                  The_ClassDegree[Gbl.Prefs.Theme]);
+	                  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s</a>",
                Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       Act_FormEnd ();
@@ -675,13 +675,13 @@ void Deg_WriteCtyInsCtrDeg (void)
         {
          /***** Separator *****/
          fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                  The_ClassDegree[Gbl.Prefs.Theme]);
+                  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
          /***** Form to go to the institution *****/
          Act_FormGoToStart (ActSeeCtr);
          Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
          Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
-                             The_ClassDegree[Gbl.Prefs.Theme]);
+                             The_ClassBreadcrumb[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s</a>",
                   Gbl.CurrentIns.Ins.ShortName);
          Act_FormEnd ();
@@ -690,13 +690,13 @@ void Deg_WriteCtyInsCtrDeg (void)
            {
             /***** Separator *****/
             fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                     The_ClassDegree[Gbl.Prefs.Theme]);
+                     The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
             /***** Form to go to the centre *****/
             Act_FormGoToStart (ActSeeDeg);
             Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
             Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
-        	                The_ClassDegree[Gbl.Prefs.Theme]);
+        	                The_ClassBreadcrumb[Gbl.Prefs.Theme]);
             fprintf (Gbl.F.Out,"%s</a>",
                      Gbl.CurrentCtr.Ctr.ShortName);
             Act_FormEnd ();
@@ -705,13 +705,13 @@ void Deg_WriteCtyInsCtrDeg (void)
               {
                /***** Separator *****/
                fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                        The_ClassDegree[Gbl.Prefs.Theme]);
+                        The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
                /***** Form to go to the degree *****/
                Act_FormGoToStart (ActSeeCrs);
                Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
                Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
-        	                   The_ClassDegree[Gbl.Prefs.Theme]);
+        	                   The_ClassBreadcrumb[Gbl.Prefs.Theme]);
                strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
                Str_LimitLengthHTMLStr (DegreeShortName,
         	                       Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
@@ -725,7 +725,7 @@ void Deg_WriteCtyInsCtrDeg (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\"> / ",
-	    The_ClassDegree[Gbl.Prefs.Theme]);
+	    The_ClassBreadcrumb[Gbl.Prefs.Theme]);
    if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// No degree selected...
        fprintf (Gbl.F.Out,"... ");
    fprintf (Gbl.F.Out,"</span>");

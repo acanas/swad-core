@@ -684,20 +684,30 @@ static void Lay_WritePageTopHeading (void)
             ClassHeadRow1[Gbl.Prefs.Theme]);
 
    /* 1st. row, 1st. column: logo */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo\" style=\"width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\" style=\"width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
+	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
                       "</div>",
-	    Cfg_PLATFORM_LOGO_WIDTH,
+	    Cfg_PLATFORM_LOGO_SMALL_WIDTH,
             Cfg_HTTPS_URL_SWAD_CGI,
-            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_FILE,
+            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_LOGO_WIDTH,
-            Cfg_PLATFORM_LOGO_HEIGHT);
+            Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\" style=\"width:%upx;\">"
+                      "<a href=\"%s\" target=\"_blank\">"
+	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+                      " class=\"CENTER_MIDDLE\""
+	              " style=\"width:%upx; height:%upx;\" />"
+                      "</a>"
+                      "</div>",
+	    Cfg_PLATFORM_LOGO_BIG_WIDTH,
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_BIG_FILENAME,
+            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
+            Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
 
    /* 1st. row, 2nd. column: search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
@@ -745,8 +755,10 @@ static void Lay_WritePageTopHeading (void)
 
    /* 2nd. row, 2nd. column: degree and course */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
+   fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
    Deg_WriteCtyInsCtrDeg ();
    Crs_WriteSelectorMyCourses ();
+   fprintf (Gbl.F.Out,"</div>");
    Deg_WriteBigNameCtyInsCtrDegCrs ();
    fprintf (Gbl.F.Out,"</div>");
 

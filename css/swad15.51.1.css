@@ -140,11 +140,29 @@ a:hover			{text-decoration:underline;}
 	background-color:#201420;
 	}
 
-#head_row_1_logo
-	{
-	display:table-cell;
-	text-align:center;
-	vertical-align:middle;
+@media only screen and (max-width: 899px)
+	{	/* For mobile-phones */
+	#head_row_1_logo_small
+		{
+		display:table-cell;
+		vertical-align:middle;
+		}
+	#head_row_1_logo_big
+		{
+		display:none;
+		}
+	}
+@media only screen and (min-width: 900px)
+	{	/* For tablets and desktop */
+	#head_row_1_logo_small
+		{
+		display:none;
+		}
+	#head_row_1_logo_big
+		{
+		display:table-cell;
+		vertical-align:middle;
+		}
 	}
 #head_row_1_search
 	{
@@ -188,6 +206,8 @@ a:hover			{text-decoration:underline;}
 	height:80px;
 	vertical-align:top;
 	}
+
+/******************************* Current time ********************************/
 #head_row_2_time
 	{
 	display:table-cell;
@@ -215,6 +235,7 @@ a:hover			{text-decoration:underline;}
     		}
 	}
 
+/****** Breadcrumb (platform/country/institution/centre/degree/course) *******/
 #head_row_2_hierarchy
 	{
 	display:table-cell;
@@ -228,6 +249,73 @@ a:hover			{text-decoration:underline;}
 	text-align:left;
 	vertical-align:top !important;
 	}
+@media only screen and (max-width: 899px)
+	{	/* For mobile-phones */
+	#breadcrumb
+		{
+		font-size:10pt;
+		font-weight:bold;
+		white-space:nowrap;
+		}
+	}
+@media only screen and (min-width: 900px) and (max-width: 1023px)
+	{	/* For tablets */
+	#breadcrumb
+		{
+		font-size:12pt;
+		font-weight:bold;
+		white-space:nowrap;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For desktop */
+	#breadcrumb
+		{
+		font-size:14pt;
+		font-weight:bold;
+		white-space:nowrap;
+		}
+	}
+.BREADCRUMB_WHITE	{color:#707070;}
+.BREADCRUMB_GREY	{color:#FFB42E;}
+.BREADCRUMB_BLUE	{color:#FFE880;}
+.BREADCRUMB_YELLOW	{color:#FFC040;}
+
+/******** Big name of country, institution, centre, degree or course *********/
+#big_name h1,#big_name abbr
+	{
+	margin:0;
+	padding:0;
+	font-size:25pt;
+	font-weight:normal;
+	white-space:nowrap;
+	}
+@media only screen and (max-width: 1023px)
+	{	/* For mobile-phones */
+	#big_short_name
+		{
+		}
+	#big_full_name
+		{
+		display:none;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For tablets and desktop */
+	#big_short_name
+		{
+		display:none;
+		}
+	#big_full_name
+		{
+		}
+	}
+.WHITE_COURSE	{color:#4D88A1;}
+.GREY_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5;}
+.BLUE_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white;}
+.YELLOW_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white;}
+
+/***************************** Notifications *********************************/
 #msg	/* Notifications, used for AJAX based refresh */
 	{
 	display:table-cell;
@@ -1261,45 +1349,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
 	}
-
-.WHITE_DEGREE		{color:#707070; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.GREY_DEGREE		{color:#FFB42E; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.BLUE_DEGREE		{color:#FFE880; font-size:14pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_DEGREE		{color:#FFC040; font-size:14pt; font-weight:bold; white-space:nowrap;}
-
-/******** Big name of country, institution, centre, degree or course *********/
-#big_name h1,#big_name abbr
-	{
-	margin:0;
-	padding:0;
-	font-size:25pt;
-	font-weight:normal;
-	white-space:nowrap;
-	}
-@media only screen and (max-width: 1023px)
-	{	/* For mobile-phones */
-	#big_short_name
-		{
-		}
-	#big_full_name
-		{
-		display:none;
-		}
-	}
-@media only screen and (min-width: 1024px)
-	{	/* For tablets and desktop */
-	#big_short_name
-		{
-		display:none;
-		}
-	#big_full_name
-		{
-		}
-	}
-.WHITE_COURSE	{color:#4D88A1;}
-.GREY_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#F7F6F5;}
-.BLUE_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white;}
-.YELLOW_COURSE	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:white;}
 
 /*****************************************************************************/
 .WHITE_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}

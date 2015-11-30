@@ -119,12 +119,12 @@ const char *The_ClassUsr[The_NUM_THEMES] =
    "YELLOW_USR",
   };
 
-const char *The_ClassDegree[The_NUM_THEMES] =
+const char *The_ClassBreadcrumb[The_NUM_THEMES] =
   {
-   "WHITE_DEGREE",
-   "GREY_DEGREE",
-   "BLUE_DEGREE",
-   "YELLOW_DEGREE",
+   "BREADCRUMB_WHITE",
+   "BREADCRUMB_GREY",
+   "BREADCRUMB_BLUE",
+   "BREADCRUMB_YELLOW",
   };
 
 const char *The_ClassCourse[The_NUM_THEMES] =
