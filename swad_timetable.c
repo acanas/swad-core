@@ -29,6 +29,7 @@
 #include <stdio.h>		// For fprintf, etc.
 #include <string.h>		// For string functions
 
+#include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
@@ -114,16 +115,19 @@ bool TimeTableHoursChecked[TT_HOURS_PER_DAY*2];
 
 static void TT_ShowTimeTableGrpsSelected (void);
 static void TT_GetParamsTimeTable (void);
+static void TT_ShowSelectorWhichGrps (Act_Action_t Action);
+
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod);
 static void TT_WriteTutTimeTableIntoDB (long UsrCod);
 static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCod);
 static void TT_ModifTimeTable (void);
-static void TT_DrawTimeTable (void);
+static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType);
 static void TT_TimeTableDrawAdjustRow (void);
 static void TT_TimeTableDrawDaysCells (void);
 static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour);
 static void TT_DrawCellAlignTimeTable (void);
-static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
+static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
+                                  unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place);
 
 /*****************************************************************************/
@@ -221,45 +225,54 @@ void TT_ShowClassTimeTable (void)
    extern const char *Txt_Edit_office_hours;
    extern const char *Txt_Print;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-   TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;
-   bool PutEditButton = (Gbl.CurrentAct == ActSeeCrsTimTbl &&
-                         Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
-   bool PutEditOfficeHours = (Gbl.CurrentAct == ActSeeMyTimTbl &&
-                              (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
-   bool PrintView = (Gbl.CurrentAct == ActPrnCrsTimTbl ||
-	             Gbl.CurrentAct == ActPrnMyTimTbl);
+   TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;	// Initialized to avoid warning
+   bool PrintView;
+   bool PutEditCrsTT;
+   bool PutEditOfficeHours;
+
+   /***** Initializations *****/
+   switch (Gbl.CurrentAct)
+     {
+      case ActSeeCrsTT:
+      case ActPrnCrsTT:
+      case ActChgCrsTT1stDay:
+         TimeTableType = TT_COURSE_TIMETABLE;
+	 break;
+      case ActSeeMyTT:
+      case ActPrnMyTT:
+      case ActChgMyTT1stDay:
+         TimeTableType = TT_MY_TIMETABLE;
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong action.");
+     }
+   PrintView = (Gbl.CurrentAct == ActPrnCrsTT ||
+	        Gbl.CurrentAct == ActPrnMyTT);
+   PutEditCrsTT = (TimeTableType == TT_COURSE_TIMETABLE &&
+	           !PrintView &&
+                   Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+   PutEditOfficeHours = (TimeTableType == TT_MY_TIMETABLE &&
+	                 !PrintView &&
+                         (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
 
-   /***** Start of frame and title *****/
-   switch (Gbl.CurrentAct)
-     {
-      case ActSeeCrsTimTbl:
-      case ActPrnCrsTimTbl:
-         TimeTableType = TT_COURSE_TIMETABLE;
-	 break;
-      case ActSeeMyTimTbl:
-      case ActPrnMyTimTbl:
-         TimeTableType = TT_MY_TIMETABLE;
-         break;
-     }
-
    /***** Put buttons *****/
-   if (PutEditButton || PutEditOfficeHours || !PrintView)
+   if (PutEditCrsTT || PutEditOfficeHours || !PrintView)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      if (PutEditButton)
-         Act_PutContextualLink (ActEdiCrsTimTbl,Grp_PutParamWhichGrps,
+      if (PutEditCrsTT)
+         Act_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
                                 "edit",Txt_Edit);
 
       if (PutEditOfficeHours)
          Act_PutContextualLink (ActEdiTut,NULL,"edit",Txt_Edit_office_hours);
 
       if (!PrintView)
-         Act_PutContextualLink (Gbl.CurrentAct == ActSeeCrsTimTbl ? ActPrnCrsTimTbl :
-                                                                    ActPrnMyTimTbl,
+         Act_PutContextualLink (TimeTableType == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+                                                                       ActPrnMyTT,
                                 Grp_PutParamWhichGrps,"print",Txt_Print);
 
       fprintf (Gbl.F.Out,"</div>");
@@ -278,12 +291,17 @@ void TT_ShowClassTimeTable (void)
       TT_ShowTimeTableGrpsSelected ();
    else
      {
-      /***** Select whether show only my groups or all groups *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td>");
-      Act_FormStart (Gbl.CurrentAct);
-      Grp_ShowSelectorWhichGrps ();
-      Act_FormEnd ();
+
+      /***** Select whether show only my groups or all groups *****/
+      TT_ShowSelectorWhichGrps (TimeTableType == TT_COURSE_TIMETABLE ? ActSeeCrsTT :
+	                                                               ActSeeMyTT);
+
+      /***** Show form to change first day of week *****/
+      Cal_ShowIntegratedFormToSelFirstDayOfWeek (TimeTableType == TT_COURSE_TIMETABLE ? ActChgCrsTT1stDay :
+	                                                                                ActChgMyTT1stDay);
+
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -300,6 +318,17 @@ void TT_ShowClassTimeTable (void)
   }
 
 /*****************************************************************************/
+/************* Select whether show only my groups or all groups **************/
+/*****************************************************************************/
+
+static void TT_ShowSelectorWhichGrps (Act_Action_t Action)
+  {
+   Act_FormStart (Action);
+   Grp_ShowSelectorWhichGrps ();
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /********************** Show course timetable for edition ********************/
 /*****************************************************************************/
 
@@ -310,7 +339,7 @@ void TT_EditCrsTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActSeeCrsTimTbl,NULL,"clock",Txt_Show_timetable);
+   Act_PutContextualLink (ActSeeCrsTT,NULL,"clock",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Editable time table *****/
@@ -330,7 +359,7 @@ void TT_ShowMyTutTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActSeeMyTimTbl,NULL,"clock",Txt_Show_timetable);
+   Act_PutContextualLink (ActSeeMyTT,NULL,"clock",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
@@ -349,7 +378,7 @@ void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
    TT_CreatTimeTableFromDB (TimeTableType,UsrCod);
 
    /***** If timetable must be modified... *****/
-   if (Gbl.CurrentAct == ActChgCrsTimTbl ||
+   if (Gbl.CurrentAct == ActChgCrsTT ||
        Gbl.CurrentAct == ActChgTut)
      {
       /* Get parameters for time table editing */
@@ -376,7 +405,7 @@ void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
      }
 
    /***** Draw timetable *****/
-   TT_DrawTimeTable ();
+   TT_DrawTimeTable (TimeTableType);
   }
 
 /*****************************************************************************/
@@ -537,8 +566,8 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
 	 break;
       case TT_COURSE_TIMETABLE:
          if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS ||
-             Gbl.CurrentAct == ActEdiCrsTimTbl ||
-             Gbl.CurrentAct == ActChgCrsTimTbl)	// If we are editing, all groups are shown
+             Gbl.CurrentAct == ActEdiCrsTT ||
+             Gbl.CurrentAct == ActChgCrsTT)	// If we are editing, all groups are shown
             sprintf (Query,"SELECT Day,Hour,Duration,Place,ClassType,GroupName,GrpCod"
         	           " FROM timetable_crs"
                            " WHERE CrsCod='%ld'"
@@ -727,7 +756,7 @@ static void TT_ModifTimeTable (void)
 /********************* Draw timetable using internal table *******************/
 /*****************************************************************************/
 
-static void TT_DrawTimeTable (void)
+static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
   {
    bool Editing = false;
    unsigned DayColumn;	// Column from left (0) to right (6)
@@ -741,12 +770,12 @@ static void TT_DrawTimeTable (void)
 
    switch (Gbl.CurrentAct)
      {
-      case ActSeeCrsTimTbl:	case ActPrnCrsTimTbl:
-      case ActSeeMyTimTbl:	case ActPrnMyTimTbl:
+      case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
+      case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
       case ActSeeRecOneTch:	case ActSeeRecSevTch:
          Editing = false;
          break;
-      case ActEdiCrsTimTbl:	case ActChgCrsTimTbl:
+      case ActEdiCrsTT:		case ActChgCrsTT:
       case ActEdiTut:		case ActChgTut:
 	 // If editing and there's place for more columns, a potential new column is added at the end of each day
          Editing = true;
@@ -777,8 +806,8 @@ static void TT_DrawTimeTable (void)
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR);
 
    /***** Get list of groups types and groups in this course *****/
-   if (Gbl.CurrentAct == ActEdiCrsTimTbl ||
-       Gbl.CurrentAct == ActChgCrsTimTbl)
+   if (Gbl.CurrentAct == ActEdiCrsTT ||
+       Gbl.CurrentAct == ActChgCrsTT)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Write the table row by row *****/
@@ -832,10 +861,13 @@ static void TT_DrawTimeTable (void)
               {
                if (ContinuousFreeMinicolumns)
                  {
-                  TT_TimeTableDrawCell (Day,Hour,Column-1,ContinuousFreeMinicolumns,-1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1,NULL);
+                  TT_TimeTableDrawCell (TimeTableType,
+                                        Day,Hour,Column-1,ContinuousFreeMinicolumns,
+                                        -1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1,NULL);
                   ContinuousFreeMinicolumns = 0;
                  }
-               TT_TimeTableDrawCell (Day,Hour,Column,TT_NUM_MINICOLUMNS_PER_DAY/ColumnsToDrawIncludingExtraColumn,
+               TT_TimeTableDrawCell (TimeTableType,
+                                     Day,Hour,Column,TT_NUM_MINICOLUMNS_PER_DAY/ColumnsToDrawIncludingExtraColumn,
 	                             TimeTable[Day][Hour].Columns[Column].CrsCod,
 				     TimeTable[Day][Hour].Columns[Column].HourType,
 	                             TimeTable[Day][Hour].Columns[Column].ClassType,
@@ -845,7 +877,9 @@ static void TT_DrawTimeTable (void)
                                      TimeTable[Day][Hour].Columns[Column].Place);
               }
          if (ContinuousFreeMinicolumns)
-            TT_TimeTableDrawCell (Day,Hour,Column-1,ContinuousFreeMinicolumns,-1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1L,NULL);
+            TT_TimeTableDrawCell (TimeTableType,
+                                  Day,Hour,Column-1,ContinuousFreeMinicolumns,
+                                  -1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1L,NULL);
         }
 
       /* Empty column used to adjust height */
@@ -863,7 +897,8 @@ static void TT_DrawTimeTable (void)
      }
 
    /***** Free list of groups types and groups in this course *****/
-   if (Gbl.CurrentAct == ActEdiCrsTimTbl || Gbl.CurrentAct == ActChgCrsTimTbl)
+   if (Gbl.CurrentAct == ActEdiCrsTT ||
+       Gbl.CurrentAct == ActChgCrsTT)
       Grp_FreeListGrpTypesAndGrps ();
 
    /***** Row with day names *****/
@@ -891,6 +926,7 @@ static void TT_TimeTableDrawAdjustRow (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TT_TXT LEFT_MIDDLE\" style=\"width:%u%%;\">"
+                      "&nbsp;"
                       "</td>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    TT_DrawCellAlignTimeTable ();
@@ -902,11 +938,13 @@ static void TT_TimeTableDrawAdjustRow (void)
 	   Minicolumn++)
          fprintf (Gbl.F.Out,"<td class=\"TT_TXT LEFT_MIDDLE\""
                             " style=\"width:%u%%;\">"
+			    "&nbsp;"
                             "</td>",
                   TT_PERCENT_WIDTH_OF_A_MINICOLUMN);
    TT_DrawCellAlignTimeTable ();
    fprintf (Gbl.F.Out,"<td class=\"TT_TXT LEFT_MIDDLE\""
 	              " style=\"width:%u%%;\">"
+                      "&nbsp;"
 	              "</td>"
 	              "</tr>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
@@ -1005,6 +1043,7 @@ static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour)
 static void TT_DrawCellAlignTimeTable (void)
   {
    fprintf (Gbl.F.Out,"<td class=\"TT_TXT LEFT_MIDDLE\" style=\"width:%u%%;\">"
+                      "&nbsp;"
 	              "</td>",
             TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN);
   }
@@ -1013,7 +1052,8 @@ static void TT_DrawCellAlignTimeTable (void)
 /*************************** Write a timetable cell **************************/
 /*****************************************************************************/
 
-static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
+static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
+                                  unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place)
   {
    extern const char *Txt_unknown_course;
@@ -1066,11 +1106,11 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
    /***** Set type of view depending on current action *****/
    switch (Gbl.CurrentAct)
      {
-      case ActSeeCrsTimTbl:	case ActPrnCrsTimTbl:
-      case ActSeeMyTimTbl:	case ActPrnMyTimTbl:
+      case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
+      case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
 	 TimeTableView = TT_CRS_SHOW;
 	 break;
-      case ActEdiCrsTimTbl:	case ActChgCrsTimTbl:
+      case ActEdiCrsTT:		case ActChgCrsTT:
 	 TimeTableView = TT_CRS_EDIT;
 	 break;
       case ActSeeRecOneTch:	case ActSeeRecSevTch:
@@ -1101,7 +1141,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 
    /***** Form to modify this cell *****/
    if (TimeTableView == TT_CRS_EDIT)
-      Act_FormStart (ActChgCrsTimTbl);
+      Act_FormStart (ActChgCrsTT);
    else if (TimeTableView == TT_TUT_EDIT)
       Act_FormStart (ActChgTut);
 
@@ -1113,8 +1153,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	 if (HourType != TT_FREE_HOUR) // If cell is not empty...
 	   {
 	    fprintf (Gbl.F.Out,"<span class=\"TT_TXT\">");
-	    if (Gbl.CurrentAct == ActSeeMyTimTbl ||
-                Gbl.CurrentAct == ActPrnMyTimTbl)
+	    if (TimeTableType == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
                Crs_GetDataOfCourseByCod (&Crs);

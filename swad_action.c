@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1122 actions in one CGI:
+1124 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -439,7 +439,7 @@ Course:
 	310. ActSeeSylPra		Show the syllabus of practicals
 	311. ActSeeAdmDocCrs		Documents zone of the course (see or admin)
 	312. ActAdmCom			Request the administration of the files of the common zone of the course or of a group
-	313. ActSeeCrsTimTbl		Show the timetable
+	313. ActSeeCrsTT		Show the timetable
 	314. ActSeeBib			Show the bibliography
 	315. ActSeeFAQ			Show the FAQ
 	316. ActSeeCrsLnk		Show links related to the course
@@ -450,9 +450,10 @@ Course:
 	319. ActChgCrsLog		Change log in method for this course
 	320. ActEdiCrsInf		Edit general information about the course
 	321. ActEdiTchGui		Edit teaching guide of the course
-	322. ActPrnCrsTimTbl		Show print view of the timetable
-	323. ActEdiCrsTimTbl		Edit the timetable
-	324. ActChgCrsTimTbl		Modify the timetable of the course
+	322. ActPrnCrsTT		Show print view of the timetable
+	323. ActEdiCrsTT		Edit the timetable
+	324. ActChgCrsTT		Modify the timetable of the course
+New!   1123. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
 	325. ActEdiSylLec		Edit the syllabus of lectures
 	326. ActEdiSylPra		Edit the syllabus of practicals
 	327. ActDelItmSylLec		Remove a item from syllabus of lectures
@@ -1218,7 +1219,7 @@ Statistics:
 Profile:
        1044. ActFrmLogIn		Show form to log in
        1045. ActMyCrs			Select one of my courses
-       1046. ActSeeMyTimTbl		Show the timetable of all courses of the logged user
+       1046. ActSeeMyTT			Show the timetable of all courses of the logged user
        1047. ActFrmUsrAcc		Show form to the creation or change of user's account
        1048. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
        1049. ActEdiPrf			Show forms to edit preferences
@@ -1236,12 +1237,12 @@ Profile:
        1059. ActChgMyRol		Change type of logged user
 
        1060. ActCreUsrAcc		Create new user account
-       1061. ActRemID_Me			Remove one of my user's IDs
+       1061. ActRemID_Me		Remove one of my user's IDs
        1062. ActNewIDMe			Create a new user's ID for me
        1063. ActRemOldNic		Remove one of my old nicknames
        1064. ActChgNic			Change my nickname
        1065. ActRemMaiMe		Remove one of my old e-mails
-       1066. ActNewMaiMe			Change my e-mail address
+       1066. ActNewMaiMe		Change my e-mail address
        1067. ActCnfMai			Confirm e-mail address
        1068. ActFrmChgMyPwd		Show form to the change of the password
        1069. ActChgPwd			Change the password
@@ -1283,9 +1284,12 @@ Profile:
        1099. ActChgMnu			Change menu
        1100. ActChgNtfPrf		Change whether to notify by e-mail new messages
        1101. ActPrnUsrQR		Show my QR code ready to print
-       1102. ActPrnMyTimTbl		Show the timetable listo to impresión of all my courses
+
+       1102. ActPrnMyTT			Show the timetable listo to impresión of all my courses
        1103. ActEdiTut			Edit the timetable of tutorías
        1104. ActChgTut			Modify the timetable of tutorías
+New!   1124. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+
        1105. ActReqRemFilBrf		Request removal of a file of the briefcase
        1106. ActRemFilBrf		Remove a file of the briefcase
        1107. ActRemFolBrf		Remove a folder empty of the briefcase
@@ -1381,7 +1385,7 @@ const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		{ActSeeAdmDocCrs	,false},
 		{ActAdmCom		,true },
 
-		{ActSeeCrsTimTbl	,false},
+		{ActSeeCrsTT		,false},
 		{ActSeeBib		,false},
 		{ActSeeFAQ		,false},
 		{ActSeeCrsLnk		,true },
@@ -1446,7 +1450,7 @@ const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		{ActFrmLogIn		,true },
 
 		{ActMyCrs		,false},
-		{ActSeeMyTimTbl		,true },
+		{ActSeeMyTT		,true },
 
 		{ActFrmUsrAcc		,false},
 		{ActReqEdiRecCom	,false},
@@ -1841,7 +1845,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"presentation"		},
    /* ActSeeAdmDocCrs	*/{   0, 4,TabCrs,ActSeeAdmDocCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder"		},
    /* ActAdmCom		*/{ 461, 5,TabCrs,ActAdmCom		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers"		},
-   /* ActSeeCrsTimTbl	*/{  25, 6,TabCrs,ActSeeCrsTimTbl	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock"		},
+   /* ActSeeCrsTT	*/{  25, 6,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock"		},
    /* ActSeeBib		*/{  32, 7,TabCrs,ActSeeBib		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"books"		},
    /* ActSeeFAQ		*/{  54, 8,TabCrs,ActSeeFAQ		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"faq"			},
    /* ActSeeCrsLnk	*/{   9, 9,TabCrs,ActSeeCrsLnk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"link"			},
@@ -1853,9 +1857,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCrsLog	*/{1024,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCourseConfig		,NULL},
    /* ActEdiCrsInf	*/{ 848,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
    /* ActEdiTchGui	*/{ 785,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActPrnCrsTimTbl	*/{ 152,-1,TabCrs,ActSeeCrsTimTbl	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiCrsTimTbl	*/{  45,-1,TabCrs,ActSeeCrsTimTbl	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
-   /* ActChgCrsTimTbl	*/{  53,-1,TabCrs,ActSeeCrsTimTbl	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
+
+   /* ActPrnCrsTT	*/{ 152,-1,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
+   /* ActEdiCrsTT	*/{  45,-1,TabCrs,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT	*/{  53,-1,TabCrs,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT1stDay	*/{1486,-1,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
+
    /* ActSeeSylLec	*/{  28,-1,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,NULL},
    /* ActSeeSylPra	*/{  20,-1,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,NULL},
    /* ActEdiSylLec	*/{  44,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
@@ -2694,7 +2701,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    /* ActFrmLogIn	*/{ 843, 0,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLoginLogout	,"keyuser"		},
    /* ActMyCrs		*/{ 987, 1,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups"		},
-   /* ActSeeMyTimTbl	*/{ 408, 2,TabPrf,ActSeeMyTimTbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock"		},
+   /* ActSeeMyTT	*/{ 408, 2,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock"		},
    /* ActFrmUsrAcc	*/{  36, 3,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba"		},
    /* ActReqEdiRecCom	*/{ 285, 4,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card"			},
    /* ActEdiPrf		*/{ 673, 5,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart"		},
@@ -2767,9 +2774,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode		,NULL},
 
-   /* ActPrnMyTimTbl	*/{ 409,-1,TabPrf,ActSeeMyTimTbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiTut		*/{  65,-1,TabPrf,ActSeeMyTimTbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
-   /* ActChgTut		*/{  48,-1,TabPrf,ActSeeMyTimTbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
+   /* ActPrnMyTT	*/{ 409,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
+   /* ActEdiTut		*/{  65,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
+   /* ActChgTut		*/{  48,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
+   /* ActChgMyTT1stDay	*/{1487,-1,TabPrf,ActSeeMyTT		,0x1FF,0x1FF,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
    /* ActReqRemFilBrf	*/{ 286,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
    /* ActRemFilBrf	*/{ 155,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
@@ -2818,7 +2826,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeRecSevTch,	// #22
 	ActAdmBrf,		// #23
 	-1,			// #24 (obsolete action)
-	ActSeeCrsTimTbl,	// #25
+	ActSeeCrsTT,		// #25
 	ActReqMsgUsr,		// #26
 	ActRcvMsgUsr,		// #27
 	ActSeeSylLec,		// #28
@@ -2838,7 +2846,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLstStdAll,		// #42
 	-1,			// #43 (obsolete action)
 	ActEdiSylLec,		// #44
-	ActEdiCrsTimTbl,	// #45
+	ActEdiCrsTT,	// #45
 	-1,			// #46 (obsolete action)
 	-1,			// #47 (obsolete action)
 	ActChgTut,		// #48
@@ -2846,7 +2854,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #50 (obsolete action)
 	ActSeeChtRms,		// #51
 	ActCht,			// #52
-	ActChgCrsTimTbl,	// #53
+	ActChgCrsTT,	// #53
 	ActSeeFAQ,		// #54
 	-1,			// #55 (obsolete action)
 	-1,			// #56 (obsolete action)
@@ -2945,7 +2953,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #149 (obsolete action)
 	ActFrmCreWrkUsr,	// #150
 	-1,			// #151 (obsolete action)
-	ActPrnCrsTimTbl,	// #152
+	ActPrnCrsTT,	// #152
 	ActRcvFilBrfCla,	// #153
 	-1,			// #154 (obsolete action)
 	ActRemFilBrf,		// #155
@@ -3201,8 +3209,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActPlaTxtEdiFAQ,	// #405
 	ActRcvPlaTxtFAQ,	// #406
 	-1,			// #407 (obsolete action)
-	ActSeeMyTimTbl,		// #408
-	ActPrnMyTimTbl,		// #409
+	ActSeeMyTT,		// #408
+	ActPrnMyTT,		// #409
 	ActExpBrf,		// #410
 	ActConBrf,		// #411
 	-1,			// #412 (obsolete action)
@@ -4282,6 +4290,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActNewMaiTch,		// #1483
 	ActChg1stDay,		// #1484
 	ActChgCal1stDay,	// #1485
+	ActChgCrsTT1stDay,	// #1486
+	ActChgMyTT1stDay,	// #1487
 	};
 
 /*****************************************************************************/
@@ -4717,10 +4727,12 @@ void Act_AdjustCurrentAction (void)
                case ActReqEdiMyIns:
                case ActReqSelGrp:
                case ActReqMdfOneStd:	// A student use this action to remove him/herself from current course
-               case ActSeeCrsTimTbl:
-               case ActPrnCrsTimTbl:
-               case ActSeeMyTimTbl:
-               case ActPrnMyTimTbl:
+               case ActSeeCrsTT:
+               case ActPrnCrsTT:
+               case ActChgCrsTT1stDay:
+               // case ActSeeMyTT:	// TODO: Remove these 3 actions from here?
+               // case ActPrnMyTT:
+               // case ActChgMyTT1stDay:
                   // These last actions are allowed in order to students could see/print timetable before register in groups
                   break;
                default:

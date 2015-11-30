@@ -17274,7 +17274,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Compartilhados"
 #endif
 	,
-	// ActSeeCrsTimTbl
+	// ActSeeCrsTT
 #if   L==0
 	"Horari"
 #elif L==1
@@ -18124,7 +18124,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	// ActSeeMyTimTbl
+	// ActSeeMyTT
 #if   L==0
 	"Horari"
 #elif L==1
@@ -19168,7 +19168,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Arquivos compartilhados"
 #endif
 	,
-	// ActSeeCrsTimTbl
+	// ActSeeCrsTT
 #if   L==0
 	"Horari de classes de l'assignatura"
 #elif L==1
@@ -20055,7 +20055,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas a que perten&ccedil;o"
 #endif
 	,
-	// ActSeeMyTimTbl
+	// ActSeeMyTT
 #if   L==0
 	"Horari conjunt de totes les meves assignatures a la plataforma"
 #elif L==1

@@ -589,11 +589,11 @@ a:hover			{text-decoration:underline;}
 	box-sizing:border-box;
 	width:100%;
 	}
-#main_horizontal .MENU_LIST
+#main_horizontal .MENU_LIST_CONTAINER
 	{
 	width:100%;
 	}
-#main_horizontal ul
+#main_horizontal .MENU_LIST
 	{
 	display:table;
 	box-sizing:border-box;
@@ -648,11 +648,11 @@ a:hover			{text-decoration:underline;}
 		box-sizing:border-box;
 		width:100%;
 		}
-	#main_vertical .MENU_LIST
+	#main_vertical .MENU_LIST_CONTAINER
 		{
 		width:100%;
 		}
-	#main_vertical ul
+	#main_vertical .MENU_LIST
 		{
 		display:table;
 		box-sizing:border-box;
@@ -710,13 +710,13 @@ a:hover			{text-decoration:underline;}
 		box-sizing:border-box;
 		width:100%;
 		}
-	#main_vertical .MENU_LIST
+	#main_vertical .MENU_LIST_CONTAINER
 		{
 		display:table-cell;
 		box-sizing:border-box;
 		width:180px;
 		}
-	#main_vertical ul
+	#main_vertical .MENU_LIST
 		{
 		display:table;
 		margin:0;

@@ -82,8 +82,8 @@ void Mnu_WriteMenuThisTab (void)
    bool IsTheSelectedAction;
 
    /***** Menu start *****/
-   fprintf (Gbl.F.Out,"<div class=\"MENU_LIST\">"
-	              "<ul>");
+   fprintf (Gbl.F.Out,"<div class=\"MENU_LIST_CONTAINER\">"
+	              "<ul class=\"MENU_LIST\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;

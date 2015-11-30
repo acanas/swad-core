@@ -4181,7 +4181,7 @@ void Grp_ShowSelectorWhichGrps (void)
                Gbl.FormId,Txt_Show_WHICH_groups[WhichGrps]);
      }
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+                      "</div>");
   }
 
 /*****************************************************************************/
@@ -4211,19 +4211,21 @@ void Grp_GetParamWhichGrps (void)
       else	// This parameter does not exist ==> set default value
          switch (Gbl.CurrentAct)
            {
-            case ActSeeCrsTimTbl:
-            case ActPrnCrsTimTbl:
+            case ActSeeCrsTT:
+            case ActPrnCrsTT:
+            case ActChgCrsTT1stDay:
             case ActSeeAsg:
             case ActSeeAtt:
             case ActSeeAllSvy:
                Gbl.CurrentCrs.Grps.WhichGrps = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_ONLY_MY_GROUPS :	// If I belong to this course ==> see only my groups
                                                                                  Grp_ALL_GROUPS;	// If I don't belong to this course ==> see all groups
 	       break;
-            case ActSeeMyTimTbl:
-            case ActPrnMyTimTbl:
+            case ActSeeMyTT:
+            case ActPrnMyTT:
+            case ActChgMyTT1stDay:
                Gbl.CurrentCrs.Grps.WhichGrps = Grp_ONLY_MY_GROUPS;	// By default, see only my groups
 	       break;
-            default:	// Control never must enter here
+            default:	// Control never should enter here
                Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
                break;
            }
