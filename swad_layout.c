@@ -104,12 +104,12 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
-   const char *IdWholePage[The_NUM_THEMES] =
+   const char *ClassWholePage[The_NUM_THEMES] =
      {
-      "whole_page_white",	// The_THEME_WHITE
-      "whole_page_grey",	// The_THEME_GREY
-      "whole_page_blue",	// The_THEME_BLUE
-      "whole_page_yellow",	// The_THEME_YELLOW
+      "WHOLE_PAGE_WHITE",	// The_THEME_WHITE
+      "WHOLE_PAGE_GREY",	// The_THEME_GREY
+      "WHOLE_PAGE_BLUE",	// The_THEME_BLUE
+      "WHOLE_PAGE_YELLOW",	// The_THEME_YELLOW
      };
    const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
@@ -257,7 +257,8 @@ void Lay_WriteStartOfPage (void)
      }
 
    /***** Start of box that contains the whole page except the foot *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdWholePage[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"whole_page\" class=\"%s\">",
+            ClassWholePage[Gbl.Prefs.Theme]);
 
    /***** Header of layout *****/
    Lay_WritePageTopHeading ();
@@ -669,19 +670,20 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeading (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   const char *IdHeadRow1[The_NUM_THEMES] =
+   const char *ClassHeadRow1[The_NUM_THEMES] =
      {
-      "head_row_1_white",	// The_THEME_WHITE
-      "head_row_1_grey",	// The_THEME_GREY
-      "head_row_1_blue",	// The_THEME_BLUE
-      "head_row_1_yellow",	// The_THEME_YELLOW
+      "HEAD_ROW_1_WHITE",	// The_THEME_WHITE
+      "HEAD_ROW_1_GREY",	// The_THEME_GREY
+      "HEAD_ROW_1_BLUE",	// The_THEME_BLUE
+      "HEAD_ROW_1_YELLOW",	// The_THEME_YELLOW
       };
 
    /***** 1st. row *****/
    /* Start of 1st. row */
-   fprintf (Gbl.F.Out,"<div id=\"%s\">",IdHeadRow1[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1\" class=\"%s\">",
+            ClassHeadRow1[Gbl.Prefs.Theme]);
 
-   /* 1st. row, 2nd. column: logo */
+   /* 1st. row, 1st. column: logo */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo\" style=\"width:%upx;\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\""
@@ -697,7 +699,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_LOGO_WIDTH,
             Cfg_PLATFORM_LOGO_HEIGHT);
 
-   /* 1st. row, 1st. column: search */
+   /* 1st. row, 2nd. column: search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :

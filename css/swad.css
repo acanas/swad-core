@@ -86,72 +86,57 @@ a:hover			{text-decoration:underline;}
 .MENU_LIST_ITEM a:hover	{text-decoration:none;}
 
 /****************** Layout (the whole page with a background) ****************/
-#whole_page_white
+#whole_page
 	{
 	display:table;
 	box-sizing:border-box;
 	width:100%;
-	background-image:linear-gradient(black 0,black 40px,white 40px,#cfcfce 40px,white 80px,white 100%);
+	}
+.WHOLE_PAGE_WHITE
+	{
+	background-image:linear-gradient(black 0,black 40px,#cfcfce 40px,white 80px,white 100%);
 	background-repeat:no-repeat;
 	}
-#whole_page_grey
+.WHOLE_PAGE_GREY
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	background-image:linear-gradient(#383838 0,#404040 26px,#404040 185px,white 185px,white 100%);
+	background-image:linear-gradient(#383838 0,#404040 26px,#404040 184px,white 184px,white 100%);
 	background-repeat:no-repeat;
 	}
-#whole_page_blue
+.WHOLE_PAGE_BLUE
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 185px,white 185px,white 100%);
+	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 184px,white 184px,white 100%);
 	background-repeat:no-repeat;
 	}
-#whole_page_yellow
+.WHOLE_PAGE_YELLOW
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	background-image:linear-gradient(#201420 0,#201420 185px,white 185px,white 100%);
+	background-image:linear-gradient(#201420 0,#201420 184px,white 184px,white 100%);
 	background-repeat:no-repeat;
 	}
 
 /************************* Layout (first heading row) ************************/
-#head_row_1_white
+#head_row_1
 	{
 	display:table;
 	box-sizing:border-box;
 	width:100%;
 	height:40px;
+	}
+.HEAD_ROW_1_WHITE
+	{
 	background-color:black;
 	}
-#head_row_1_grey
+.HEAD_ROW_1_GREY
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	height:40px;
 	background-image:linear-gradient(#383838 0,#383838 26px,#404040 100%);
 	background-repeat:no-repeat;
 	}
-#head_row_1_blue
+.HEAD_ROW_1_BLUE
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	height:40px;
 	background-image:linear-gradient(#5fa5df 0,#4f90c8 26px,#4f90c8 100%);
 	background-repeat:no-repeat;
 	}
-#head_row_1_yellow
+.HEAD_ROW_1_YELLOW
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	height:40px;
 	background-color:#201420;
 	}
 
@@ -217,11 +202,7 @@ a:hover			{text-decoration:underline;}
 .YELLOW_CUR_TIME	{color:#B3B0B3; font-size:14pt; font-weight:bold;}
 @media only screen and (max-width: 1023px)
 	{	/* For mobile phones */
-	#current_date
-		{
-		display:none;
-    		}
-	#current_time
+	#head_row_2_time
 		{
 		display:none;
     		}
@@ -258,11 +239,7 @@ a:hover			{text-decoration:underline;}
 	}
 @media only screen and (max-width: 1023px)
 	{	/* For mobile phones */
-	#notif_all
-		{
-		display:none;
-    		}
-	#notif_new
+	#msg
 		{
 		display:none;
     		}
