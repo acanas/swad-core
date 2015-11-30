@@ -117,12 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.51.3 (2015/11/30)"
-#define CSS_FILE		"swad15.51.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.51.4 (2015/11/30)"
+#define CSS_FILE		"swad15.51.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.51.4:  Nov 30, 2015	Calendar is now distributed in rows with 3 months instead of 4.
+					Changes in layout. (186644 lines)
         Version 15.51.3:  Nov 30, 2015	Responsive design in login-logout. (186641 lines)
         Version 15.51.2:  Nov 30, 2015	Responsive design in tabs. (186688 lines)
         Version 15.51.1:  Nov 30, 2015	Responsive design in logo.

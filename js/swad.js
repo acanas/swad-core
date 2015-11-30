@@ -626,18 +626,18 @@ function disableDetailedClicks() {
 function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var StartingMonth = [	// Calendar starts one row before current month
-		9,	// January   --> September
-		9,	// February  --> September
-		9,	// Mars      --> September
-		9,	// April     --> September
-		1,	// May       --> January
-		1,	// June      --> January
-		1,	// July      --> January
-		1,	// August    --> January
-		5,	// September --> May
-		5,	// October   --> May
-		5,	// November  --> May
-		5	// December  --> May
+	   10,	// January   --> October
+	   10,	// February  --> October
+	   10,	// Mars      --> October
+	    1,	// April     --> January
+	    1,	// May       --> January
+	    1,	// June      --> January
+		4,	// July      --> April
+		4,	// August    --> April
+		4,	// September --> April
+		7,	// October   --> July
+		7,	// November  --> July
+		7	// December  --> July
 	];
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
@@ -656,11 +656,11 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 	Gbl_HTMLContent += '<table style="margin:0 auto; border-spacing:6px;">';
 
 	for (Row = 0;
-		 Row < 4;
+		 Row < 5;
 		 Row++) {
 		Gbl_HTMLContent += '<tr>';
 		for (Col = 0;
-			 Col < 4;
+			 Col < 3;
 			 Col++) {
 			MonthIdNum++;
 			MonthId = id + '_month_' + MonthIdNum;

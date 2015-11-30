@@ -683,33 +683,32 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1\" class=\"%s\">",
             ClassHeadRow1[Gbl.Prefs.Theme]);
 
-   /* 1st. row, 1st. column: logo */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\" style=\"width:%upx;\">"
+   /* 1st. row, 1st. column: logo and search */
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
+
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
-                      "</div>",
-	    Cfg_PLATFORM_LOGO_SMALL_WIDTH,
+                      "</div>",	// head_row_1_logo_small
             Cfg_HTTPS_URL_SWAD_CGI,
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\" style=\"width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\">"
                       "<a href=\"%s\" target=\"_blank\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>"
-                      "</div>",
-	    Cfg_PLATFORM_LOGO_BIG_WIDTH,
+                      "</div>",	// head_row_1_logo_big
             Cfg_HTTPS_URL_SWAD_CGI,
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
 
-   /* 1st. row, 2nd. column: search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
 		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
@@ -720,7 +719,9 @@ static void Lay_WritePageTopHeading (void)
    Sco_PutParamScope (Sco_SCOPE_SYS);
    Sch_PutFormToSearch (Gbl.Prefs.PathTheme,"head_search_text");
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
+
+   fprintf (Gbl.F.Out,"</div>");	// head_row_1_left
 
    /* 1st. row, 3rd. column: logged user or language selection,
       and link to open/close session */
@@ -1427,8 +1428,6 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    struct Institution Ins;
    struct Degree Deg;
    struct Course Crs;
-   unsigned Size = (PrintView ? 64 :
-	                        32);
 
    /***** Get data of institution *****/
    Ins.InsCod = InsCod;
@@ -1456,7 +1455,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-                    Size,NULL,true);
+                    32,NULL,true);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
@@ -1504,7 +1503,8 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,Size,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
+                    32,NULL,true);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }

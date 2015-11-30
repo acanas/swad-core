@@ -140,12 +140,17 @@ a:hover			{text-decoration:underline;}
 	background-color:#201420;
 	}
 
+#head_row_1_left
+	{
+	display:table-cell;
+	text-align:left;
+	vertical-align:middle;
+	}
 @media only screen and (max-width: 899px)
 	{	/* For mobile-phones */
 	#head_row_1_logo_small
 		{
-		display:table-cell;
-		vertical-align:middle;
+		display:inline-block;
 		}
 	#head_row_1_logo_big
 		{
@@ -160,15 +165,13 @@ a:hover			{text-decoration:underline;}
 		}
 	#head_row_1_logo_big
 		{
-		display:table-cell;
-		vertical-align:middle;
+		display:inline-block;
 		}
 	}
 #head_row_1_search
 	{
-	display:table-cell;
-	text-align:left;
-	vertical-align:middle;
+	display:inline-block;
+	padding:0 20px;
 	}
 @media only screen and (max-width: 1279px)
 	{	/* For mobile phones and tablets */
@@ -355,7 +358,7 @@ a:hover			{text-decoration:underline;}
 		display:table;
 		box-sizing:border-box;
 		width:492px;	/* 82 px * 6 visible tabs */
-		height:68px;
+		height:70px;
 		margin:0 auto;
 		border-spacing:1px;
 		}
@@ -364,7 +367,7 @@ a:hover			{text-decoration:underline;}
 		display:table-cell;
 		box-sizing:border-box;
 		width:80px;
-		height:66px;
+		height:68px;
 		margin:0;
 		padding:0;
 		border-radius:6px 6px 0 0;
@@ -378,7 +381,7 @@ a:hover			{text-decoration:underline;}
 		display:table-cell;
 		box-sizing:border-box;
 		width:80px;
-		height:66px;
+		height:68px;
 		margin:0;
 		padding:0;
 		border-radius:6px 6px 0 0;
@@ -399,7 +402,7 @@ a:hover			{text-decoration:underline;}
 		display:table;
 		box-sizing:border-box;
 		width:660px;	/* 110 px * 6 visible tabs */
-		height:68px;
+		height:70px;
 		margin:0 auto;
 		border-spacing:1px;
 		}
@@ -408,7 +411,7 @@ a:hover			{text-decoration:underline;}
 		display:table-cell;
 		box-sizing:border-box;
 		width:108px;
-		height:66px;
+		height:68px;
 		margin:0;
 		padding:0;
 		border-radius:6px 6px 0 0;
@@ -422,7 +425,7 @@ a:hover			{text-decoration:underline;}
 		display:table-cell;
 		box-sizing:border-box;
 		width:108px;
-		height:66px;
+		height:68px;
 		margin:0;
 		padding:0;
 		border-radius:6px 6px 0 0;
@@ -570,7 +573,7 @@ a:hover			{text-decoration:underline;}
 		box-sizing:border-box;
 		min-width:900px;
 		min-height:900px;
-		margin:-6px 0 0 0;
+		margin:-8px 0 0 0;
 		padding:8px 0;
 		border-radius:6px;
 		box-shadow:inset -2px -2px 1px 0 rgba(50,50,50,0.2);
@@ -594,9 +597,9 @@ a:hover			{text-decoration:underline;}
 	{
 	display:table;
 	box-sizing:border-box;
-	height:76px;
+	height:60px;
 	margin:0 auto;
-	padding:8px 16px;
+	padding:0 8px;
 	list-style-type:none;
 	}
 #main_horizontal .MENU_LIST_ITEM
@@ -653,9 +656,9 @@ a:hover			{text-decoration:underline;}
 		{
 		display:table;
 		box-sizing:border-box;
-		height:76px;
+		height:60px;
 		margin:0 auto;
-		padding:8px 16px;
+		padding:0 8px;
 		list-style-type:none;
 		}
 	#main_vertical .MENU_LIST_ITEM
@@ -869,55 +872,55 @@ a:hover			{text-decoration:underline;}
 .MONTH
 	{
 	color:#4D88A1;
-	font-size:10pt;
+	font-size:9pt;
 	white-space:nowrap;
 	}
 .DAY_WRK_HEAD
 	{
 	color:#4D88A1;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_NO_WRK_HEAD
 	{
 	color:#FF0000;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_WRK
 	{
 	color:#202020;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_NO_WORK
 	{
 	color:#C04080;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_HLD
 	{
 	color:#FF0000;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_WRK_LIGHT
 	{
 	color:#E0E0E0;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_NO_WORK_LIGHT
 	{
 	color:#FFE0FF;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_HLD_LIGHT
 	{
 	color:#FFE0E0;
-	font-size:10pt;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY
