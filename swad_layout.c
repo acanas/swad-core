@@ -722,26 +722,25 @@ static void Lay_WritePageTopHeading (void)
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /* 1st. row, 3rd. column: logged user or language selection */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_usr_lang\" class=\"%s\">",
+   /* 1st. row, 3rd. column: logged user or language selection,
+      and link to open/close session */
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_right\" class=\"%s\">",
             The_ClassHead[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
       Pre_PutSelectorToSelectLanguage ();
-   fprintf (Gbl.F.Out,"</div>");
 
-   /* 1st. row, 4th. column: link to open/close session */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_session\" class=\"%s\">",
-            The_ClassHead[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<span id=\"login_box\">");
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</span>"		// login_box
+	              "</div>");	// head_row_1_right
 
    /* End of 1st. row */
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</div>");	// head_row_1
 
    /***** 2nd. row *****/
    /* Start of second row */

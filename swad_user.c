@@ -1609,7 +1609,8 @@ void Usr_PutFormLogIn (void)
    fprintf (Gbl.F.Out,"<img src=\"%s/login16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
-                      " %s</a>",
+                      "<span id=\"login_txt\">&nbsp;%s</span>"
+                      "</a>",
             Gbl.Prefs.PathTheme,
             Txt_Log_in,
             Txt_Log_in,
@@ -1677,7 +1678,8 @@ void Usr_PutFormLogOut (void)
    fprintf (Gbl.F.Out,"<img src=\"%s/logout16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
-                      " %s</a>",
+                      "<span id=\"login_txt\">&nbsp;%s</span>"
+                      "</a>",
             Gbl.Prefs.PathTheme,
             Txt_Log_out,
             Txt_Log_out,

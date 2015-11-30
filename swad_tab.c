@@ -122,18 +122,18 @@ void Tab_DrawTabs (void)
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
-				NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-							   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],NULL);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
-			       "<div>%s</div>"
+			       "<div class=\"TAB_TXT %s\">%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
+		     NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+			                        The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		     Txt_TABS_SHORT_TXT[NumTab]);
 	    Act_FormEnd ();
 	   }
@@ -142,7 +142,7 @@ void Tab_DrawTabs (void)
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
-			       "<div class=\"%s\">%s</div>",
+			       "<div class=\"TAB_TXT %s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
