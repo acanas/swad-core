@@ -1560,14 +1560,27 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EDI		{color:#404040; font-size:12pt;}
 .TEST_EDI_LIGHT		{color:#A0A0A0; font-size:12pt;}
 
-.HOR			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#345C6C; font-size:10pt; line-height:110%; letter-spacing:0;}
-.FREE0			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
-.FREE1			{background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
-.FREE2			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
-.FREE3			{background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
-.THEO			{background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
-.PRAC			{background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
-.TUTO			{background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
+/******************************* Time table **********************************/
+#timetable
+	{
+	width:100%;
+	margin:0 auto;
+	}
+.TT_TXT
+	{
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	color:#345C6C;
+	font-size:10pt;
+	line-height:110%;
+	letter-spacing:0;
+	}
+.FREE0	{height:20px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
+.FREE1	{height:20px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
+.FREE2	{height:20px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
+.FREE3	{height:20px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
+.THEO	{height:20px; background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
+.PRAC	{height:20px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
+.TUTO	{height:20px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
 .PREF_OFF
 	{
@@ -1756,7 +1769,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	min-width:312px;
 	}
-	              
+
 /********************************** Page foot ********************************/
 @media only screen and (max-width: 899px)
 	{	/* For mobile-phones */

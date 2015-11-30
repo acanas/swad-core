@@ -11166,3 +11166,17 @@ SELECT * FROM expanded_folders WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'1
 
 -----
 SELECT UsrCod,'Y',Sex FROM usr_data WHERE UsrCod IN (SELECT DISTINCT UsrCod FROM admin WHERE Scope='Sys' UNION SELECT DISTINCT admin.UsrCod FROM admin,institutions WHERE admin.Scope='Ins' AND admin.Cod=institutions.InsCod AND institutions.CtyCod='724') AS admin_codes ORDER BY Surname1,Surname2,FirstName,UsrCod;
+
+
+
+-----------------------
+
+CREATE TABLE timetable_crs_backup LIKE timetable_crs;
+INSERT INTO timetable_crs_backup SELECT * FROM timetable_crs;
+
+CREATE TABLE timetable_tut_backup LIKE timetable_tut;
+INSERT INTO timetable_tut_backup SELECT * FROM timetable_tut;
+
+UPDATE timetable_crs SET Hour=Hour+2;
+UPDATE timetable_tut SET Hour=Hour+2;
+
