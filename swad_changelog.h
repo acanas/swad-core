@@ -110,18 +110,20 @@
 // TODO: Edition of courses: Rename "Optativas/libre conf." to "Optativas varios cursos"
 // TODO: Edition of courses: Rename "Curso" to "Año / semestre / cuatrimestre"
 // TODO: Listing of courses: Put "Optativas" year at the end
+// TODO: Go to degree in table of degrees (statistic)
 // TODO: Heading in Chrome!!!
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.54.5 (2015/12/01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.54.6 (2015/12/01)"
 #define CSS_FILE		"swad15.54.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.54.6:  Dec 01, 2015	Change in layout of file browser. (186768 lines)
         Version 15.54.5:  Dec 01, 2015	Fixed bug in file browser, reported by Jacinto Domínguez Rull. (186763 lines)
         Version 15.54.4:  Dec 01, 2015	Fixed bug in title (country, institution, centre, degree, course). (186761 lines)
         Version 15.54.3:  Dec 01, 2015	Minor changes in tabs, menus and CSS. (186758 lines)
