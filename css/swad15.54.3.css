@@ -79,14 +79,17 @@ hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /*********************** Text decoration of links ****************************/
-a:link			{text-decoration:none;}
-a:visited		{text-decoration:none;}
-a:active		{text-decoration:none;}
-a:hover			{text-decoration:underline;}	/* Default ==> underlined */
-.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a		/* Tabs and menus are the exceptions */
+a:link, a:visited, a:active
 	{
 	text-decoration:none;
-	outline:0;	/* Do not outline the box with dotted line. Another feedback is provided */
+	}
+a:hover						/* Default ==> underlined */
+	{
+	text-decoration:underline;
+	}	
+.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a	/* Tabs and menus are the exceptions */
+	{
+	text-decoration:none;
 	}
 
 /****************** Layout (the whole page with a background) ****************/

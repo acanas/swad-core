@@ -109,7 +109,9 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Start of form and link *****/
          Act_FormStart (NumAct);
-         Act_LinkFormSubmit (Title,NULL);
+         Act_LinkFormSubmit (Title,
+                             IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
+                                                   The_ClassTxtMenuOff[Gbl.Prefs.Theme]);
 
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICON\""

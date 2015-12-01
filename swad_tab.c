@@ -122,7 +122,9 @@ void Tab_DrawTabs (void)
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],NULL);
+	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
+	                        NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
