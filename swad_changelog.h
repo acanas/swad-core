@@ -115,12 +115,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.54.3 (2015/12/01)"
-#define CSS_FILE		"swad15.54.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.54.4 (2015/12/01)"
+#define CSS_FILE		"swad15.54.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.54.4:  Dec 01, 2015	Fixed bug in title (country, institution, centre, degree, course). (186761 lines)
         Version 15.54.3:  Dec 01, 2015	Minor changes in tabs, menus and CSS. (186758 lines)
         Version 15.54.2:  Dec 01, 2015	Minor changes in CSS. (186751 lines)
         Version 15.54.1:  Dec 01, 2015	Some settings related with timetables. (186746 lines)

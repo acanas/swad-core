@@ -295,7 +295,7 @@ a:hover						/* Default ==> underlined */
 .BREADCRUMB_YELLOW	{color:#FFC040;}
 
 /******** Big name of country, institution, centre, degree or course *********/
-#big_name h1,#big_name abbr
+#big_name
 	{
 	margin:0;
 	padding:0;
@@ -321,6 +321,7 @@ a:hover						/* Default ==> underlined */
 		}
 	#big_full_name
 		{
+		display:inline;
 		}
 	}
 .WHITE_COURSE	{color:#4D88A1;}
@@ -612,7 +613,7 @@ a:hover						/* Default ==> underlined */
 #main_horizontal .MENU_LIST_ITEM
 	{
 	display:table-cell;
-	width:120px;
+	width:128px;
 	height:60px;
 	margin:0 auto;
 	text-align:center;
@@ -671,7 +672,7 @@ a:hover						/* Default ==> underlined */
 	#main_vertical .MENU_LIST_ITEM
 		{
 		display:table-cell;
-		width:120px;
+		width:128px;
 		height:60px;
 		margin:0 auto;
 		text-align:center;
