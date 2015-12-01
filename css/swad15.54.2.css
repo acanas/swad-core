@@ -83,7 +83,7 @@ a:link			{text-decoration:none;}
 a:visited		{text-decoration:none;}
 a:active		{text-decoration:none;}
 a:hover			{text-decoration:underline;}	/* Default ==> underlined */
-.TAB_OFF a, .TAB_ON a., MENU_LIST_ITEM a		/* Tabs and menus are the exceptions */
+.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a		/* Tabs and menus are the exceptions */
 	{
 	text-decoration:none;
 	outline:0;	/* Do not outline the box with dotted line. Another feedback is provided */
