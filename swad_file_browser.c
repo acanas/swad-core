@@ -2971,7 +2971,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable ("97%",0,Txt_Assignments_and_other_works);
+      Lay_StartRoundFrameTable ("100%",0,Txt_Assignments_and_other_works);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
@@ -3318,7 +3318,7 @@ static void Brw_ShowFileBrowser (void)
    /***** Start frame *****/
    Gbl.FileBrowser.Id++;
    fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
-   Lay_StartRoundFrameTable ("97%",0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
+   Lay_StartRoundFrameTable ("100%",0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<tr>"
