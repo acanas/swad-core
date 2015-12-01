@@ -115,14 +115,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.54.1 (2015/12/01)"
-#define CSS_FILE		"swad15.54.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.54.2 (2015/12/01)"
+#define CSS_FILE		"swad15.54.2.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.54.1:  Dec 01, 2015	Some settings related with timetables. (186743 lines)
-        Version 15.54:    Dec 01, 2015	Selection of the first day of the week in timetables. (186736 lines)
+        Version 15.54.2:  Dec 01, 2015	Minor changes in CSS. (186751 lines)
+        Version 15.54.1:  Dec 01, 2015	Some settings related with timetables. (186746 lines)
+        Version 15.54:    Dec 01, 2015	Selection of the first day of the week in timetables. (186740 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1486','es','N','Cambiar primer d&iacute;a semana en horario asig.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1487','es','N','Cambiar primer d&iacute;a semana en mi horario');
+
         Version 15.53:    Nov 30, 2015	Sunday can be the first day of the week in timetable, depending on user's preferences. (186689 lines)
         Version 15.52:    Nov 30, 2015	Timetable now starts at 6 a.m. instead of 7 a.m.
 					Changes in layout of timetable. (186656 lines)
