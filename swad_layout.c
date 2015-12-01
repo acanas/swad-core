@@ -104,13 +104,6 @@ void Lay_WriteStartOfPage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
-   const char *ClassWholePage[The_NUM_THEMES] =
-     {
-      "WHOLE_PAGE_WHITE",	// The_THEME_WHITE
-      "WHOLE_PAGE_GREY",	// The_THEME_GREY
-      "WHOLE_PAGE_BLUE",	// The_THEME_BLUE
-      "WHOLE_PAGE_YELLOW",	// The_THEME_YELLOW
-     };
    const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       "main_horizontal",	// Mnu_MENU_HORIZONTAL
@@ -257,8 +250,7 @@ void Lay_WriteStartOfPage (void)
      }
 
    /***** Start of box that contains the whole page except the foot *****/
-   fprintf (Gbl.F.Out,"<div id=\"whole_page\" class=\"%s\">",
-            ClassWholePage[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div id=\"whole_page\">");
 
    /***** Header of layout *****/
    Lay_WritePageTopHeading ();
@@ -677,6 +669,20 @@ static void Lay_WritePageTopHeading (void)
       "HEAD_ROW_1_BLUE",	// The_THEME_BLUE
       "HEAD_ROW_1_YELLOW",	// The_THEME_YELLOW
       };
+   const char *ClassHeadRow2[The_NUM_THEMES] =
+     {
+      "HEAD_ROW_2_WHITE",	// The_THEME_WHITE
+      "HEAD_ROW_2_GREY",	// The_THEME_GREY
+      "HEAD_ROW_2_BLUE",	// The_THEME_BLUE
+      "HEAD_ROW_2_YELLOW",	// The_THEME_YELLOW
+      };
+   const char *ClassHeadRow3[The_NUM_THEMES] =
+     {
+      "HEAD_ROW_3_WHITE",	// The_THEME_WHITE
+      "HEAD_ROW_3_GREY",	// The_THEME_GREY
+      "HEAD_ROW_3_BLUE",	// The_THEME_BLUE
+      "HEAD_ROW_3_YELLOW",	// The_THEME_YELLOW
+      };
 
    /***** 1st. row *****/
    /* Start of 1st. row */
@@ -745,7 +751,8 @@ static void Lay_WritePageTopHeading (void)
 
    /***** 2nd. row *****/
    /* Start of second row */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_2\">");
+   fprintf (Gbl.F.Out,"<div id=\"head_row_2\" class=\"%s\">",
+            ClassHeadRow2[Gbl.Prefs.Theme]);
 
    /* 2nd. row, 1st. column
       Clock with hour:minute (server hour is shown) */
@@ -772,7 +779,8 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** 3rd. row (tabs) *****/
-   fprintf (Gbl.F.Out,"<div id=\"head_row_3\">");
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+            ClassHeadRow3[Gbl.Prefs.Theme]);
    Tab_DrawTabs ();
    fprintf (Gbl.F.Out,"</div>");
   }

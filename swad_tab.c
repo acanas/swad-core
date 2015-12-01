@@ -90,7 +90,8 @@ void Tab_DrawTabs (void)
    bool ICanViewTab;
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_CENTER\">");
+   fprintf (Gbl.F.Out,"<div id=\"tabs\">"
+	              "<ul class=\"LIST_CENTER\">");
 
    /***** Draw the tabs *****/
    for (NumTab = (Act_Tab_t) 1;
@@ -158,7 +159,8 @@ void Tab_DrawTabs (void)
      }
 
    /***** End of the table *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
   }
 
 /*****************************************************************************/

@@ -745,11 +745,10 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
    char ShortName[Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Short name of country, institution, centre, degree or course
    char FullName [Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Full  name of country, institution, centre, degree or course
 
-   if (Gbl.CurrentCty.Cty.CtyCod > 0 ||
-       Gbl.CurrentIns.Ins.InsCod > 0 ||
-       Gbl.CurrentCtr.Ctr.CtrCod > 0 ||
-       Gbl.CurrentDeg.Deg.DegCod > 0 ||
-       Gbl.CurrentCrs.Crs.CrsCod > 0)
+   fprintf (Gbl.F.Out,"<h1 id=\"big_name\" class=\"%s\">",
+	    The_ClassCourse[Gbl.Prefs.Theme]);
+
+   if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
      {
       /* Limit length of short name */
       strncpy (ShortName,
@@ -773,8 +772,6 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
       FullName[Deg_MAX_LENGTH_ORIGINAL_NAME] = '\0';
       Str_LimitLengthHTMLStr (FullName ,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
 
-      fprintf (Gbl.F.Out,"<h1 id=\"big_name\" class=\"%s\">",
-	       The_ClassCourse[Gbl.Prefs.Theme]);
       if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -789,11 +786,25 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 	}
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">%s</div>"
-	                 "<abbr id=\"big_short_name\">%s</abbr>"
-	                 "</h1>",
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+	                 "%s"
+	                 "</div>"
+	                 "<abbr id=\"big_short_name\">"
+	                 "%s"
+	                 "</abbr>",
 	       FullName,ShortName);
      }
+   else	// No country selected
+      /* This main title takes up space but it is invisible */
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\" class=\"INVISIBLE\">"
+	                 "%s"
+	                 "</div>"
+	                 "<abbr id=\"big_short_name\" class=\"INVISIBLE\">"
+	                 "%s"
+	                 "</abbr>",
+	       Cfg_PLATFORM_FULL_NAME,Cfg_PLATFORM_SHORT_NAME);
+
+   fprintf (Gbl.F.Out,"</h1>");
   }
 
 /*****************************************************************************/

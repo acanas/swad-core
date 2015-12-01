@@ -117,12 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.54.6 (2015/12/01)"
-#define CSS_FILE		"swad15.54.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.55 (2015/12/01)"
+#define CSS_FILE		"swad15.55.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.55:    Dec 01, 2015	Change in layout background. (186805 lines)
+        Version 15.54.7:  Dec 01, 2015	Change in title (country, institution, centre, degree, course). (186783 lines)
         Version 15.54.6:  Dec 01, 2015	Change in layout of file browser. (186768 lines)
         Version 15.54.5:  Dec 01, 2015	Fixed bug in file browser, reported by Jacinto Domínguez Rull. (186763 lines)
         Version 15.54.4:  Dec 01, 2015	Fixed bug in title (country, institution, centre, degree, course). (186761 lines)
