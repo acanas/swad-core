@@ -1153,6 +1153,10 @@ void Rec_GetUsrAndShowRecordOneTchCrs (void)
 static void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
+   char Width[10+2+1];
+
+   /***** Width for office hours *****/
+   sprintf (Width,"%upx",Rec_RECORD_WIDTH_WIDE);
 
    /***** Get if teacher has accepted enrollment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
@@ -1185,7 +1189,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /* Office hours */
-   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
 
@@ -1206,6 +1210,10 @@ void Rec_ListRecordsTchs (void)
                                                                            Rec_RECORD_PRINT;
    struct UsrData UsrDat;
    bool ShowOfficeHours;
+   char Width[10+2+1];
+
+   /***** Width for office hours *****/
+   sprintf (Width,"%upx",Rec_RECORD_WIDTH_WIDE);
 
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1281,7 +1289,7 @@ void Rec_ListRecordsTchs (void)
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);
 	       Lay_EndRoundFrame ();
               }

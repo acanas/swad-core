@@ -343,7 +343,7 @@ void TT_EditCrsTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Editable time table *****/
-   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE]);
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE]);
    TT_ShowTimeTable (TT_COURSE_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
@@ -363,7 +363,7 @@ void TT_ShowMyTutTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
-   Lay_StartRoundFrame (NULL,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
