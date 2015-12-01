@@ -1806,7 +1806,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 /********************************** Page foot ********************************/
 @media only screen and (max-width: 899px)
 	{	/* For mobile-phones */
-	#foot_zone
+	#foot_zone, #about_zone
 		{
 		display:none;
 		}
@@ -1817,11 +1817,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 		{
 		padding:20px;
 		}
-	}
-.FOOT
-	{
-	color:#A0A0A0;
-	font-size:12pt;
+	#about_zone
+		{
+		padding:20px;
+		text-align:center;
+		}
 	}
 .FOOT_LIST_CONTAINER
 	{
@@ -1851,6 +1851,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .FOOT_LINK
 	{
 	color:#2C90C9;
+	}
+.ABOUT
+	{
+	color:#A0A0A0;
+	font-size:12pt;
 	}
 
 /************ Something that takes up space but which is invisible ***********/

@@ -100,7 +100,6 @@ void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);
-void Lay_WritePageFooter (void);
 
 void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod);

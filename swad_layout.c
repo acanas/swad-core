@@ -90,6 +90,7 @@ static void Lay_WriteTitleAction (void);
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
 
+static void Lay_WriteAboutZone (void);
 static void Lay_WriteFootFromHTMLFile (void);
 
 static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const char *Equation);
@@ -353,7 +354,7 @@ static void Lay_WriteEndOfPage (void)
 
       /***** Write page footer *****/
       if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
-         Lay_WritePageFooter ();
+         Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
       fprintf (Gbl.F.Out,"</div>"	// main_zone_central
@@ -1224,18 +1225,11 @@ void Lay_ShowErrorAndExit (const char *Message)
    /***** Free memory and close all the open files *****/
    Gbl_Cleanup ();
 
-   /***** Page is generated (except </body> and </html>). Compute time to generate page *****/
+   /***** Page is generated (except </body> and </html>).
+          Compute time to generate page *****/
    if (Gbl.CurrentAct != ActRefCon &&	// Refreshing connected users
        Gbl.CurrentAct != ActRefLstClk)	// Refreshing last clics
       Sta_ComputeTimeToGeneratePage ();
-
-   /***** Send page. The HTML output is now in Gbl.F.Out file ==> copy it to standard output *****/
-   if (!Gbl.WebService.IsWebService)
-     {
-      rewind (Gbl.F.Out);
-      Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
-      Fil_CloseAndRemoveFileForHTMLOutput ();
-     }
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
      {
@@ -1243,22 +1237,35 @@ void Lay_ShowErrorAndExit (const char *Message)
       Gbl.TimeSendInMicroseconds = 0L;
       Sta_LogAccess (Message);
      }
-   else if (Gbl.CurrentAct != ActRefCon &&	// Refreshing connected users
-            Gbl.CurrentAct != ActRefLstClk)	// Refreshing last clicks
+   else
      {
-      /***** Compute time to send page *****/
-      Sta_ComputeTimeToSendPage ();
+      /***** Send page.
+             The HTML output is now in Gbl.F.Out file ==>
+             ==> copy it to standard output *****/
+      rewind (Gbl.F.Out);
+      Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
+      Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      /***** Log access *****/
-      Sta_LogAccess (Message);
+      if (Gbl.CurrentAct != ActRefCon &&	// Refreshing connected users
+          Gbl.CurrentAct != ActRefLstClk)	// Refreshing last clicks
+	{
+	 /***** Compute time to send page *****/
+	 Sta_ComputeTimeToSendPage ();
 
-      /***** End the output *****/
-      if (!Gbl.Layout.HTMLEndWritten)
-        {
-         fprintf (Gbl.F.Out,"</body>\n"
-                            "</html>\n");
-         Gbl.Layout.HTMLEndWritten = true;
-        }
+	 /***** Log access *****/
+	 Sta_LogAccess (Message);
+
+	 /***** End the output *****/
+	 if (!Gbl.Layout.HTMLEndWritten)
+	   {
+	    // Here Gbl.F.Out is stdout
+	    Lay_WriteAboutZone ();
+
+	    fprintf (Gbl.F.Out,"</body>\n"
+			       "</html>\n");
+	    Gbl.Layout.HTMLEndWritten = true;
+	   }
+	}
      }
 
    /***** Close database connection *****/
@@ -1298,6 +1305,58 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
 			 "</div>",
 	       Gbl.Prefs.IconsURL,MsgIcons[MsgType],
 	       Message);
+  }
+
+/*****************************************************************************/
+/***************** Write about zone at the end of the page *******************/
+/*****************************************************************************/
+
+static void Lay_WriteAboutZone (void)
+  {
+   extern const char *Txt_About_X;
+   extern const char *Txt_Questions_and_problems;
+
+   /***** About zone start *****/
+   fprintf (Gbl.F.Out,"<div id=\"about_zone\" class=\"ABOUT\">");
+
+   /***** Institution and centre hosting the platform *****/
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">"
+		      "<img src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\""
+		      " style=\"width:%upx; height:%upx;\" />"
+		      "<div>%s</div>"
+		      "</a>",
+	    Cfg_ABOUT_URL,
+	    Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
+	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
+	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
+	    Cfg_ABOUT_NAME);
+
+   /***** Questions and problems *****/
+   fprintf (Gbl.F.Out,"<div>"
+		      "<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">%s:</a> "
+		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>"
+		      "</div>",
+	    Cfg_HELP_WEB,Txt_Questions_and_problems,
+	    Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
+
+   /***** About and time to generate and send page *****/
+   fprintf (Gbl.F.Out,"<div>");
+
+   /* About */
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",
+	    Cfg_ABOUT_SWAD_URL);
+   fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
+   fprintf (Gbl.F.Out,"</a>"
+	              "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+   /* Time to generate and send page */
+   Sta_WriteTimeToGenerateAndSendPage ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** About zone end *****/
+   fprintf (Gbl.F.Out,"</div>");	// about_zone
   }
 
 /*****************************************************************************/
@@ -1363,53 +1422,6 @@ void Lay_RefreshLastClicks (void)
   }
 
 /*****************************************************************************/
-/*************************** Write footer of page ****************************/
-/*****************************************************************************/
-
-void Lay_WritePageFooter (void)
-  {
-   extern const char *Txt_About_X;
-   extern const char *Txt_Questions_and_problems;
-
-   fprintf (Gbl.F.Out,"<div id=\"foot_zone\" class=\"FOOT\">");
-
-   Lay_WriteFootFromHTMLFile ();
-
-   /***** Institution and centre hosting the platform *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FOOT\" target=\"_blank\">"
-		      "<img src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " style=\"width:%upx; height:%upx;\" />"
-		      "<div>%s</div>"
-		      "</a>",
-	    Cfg_ABOUT_URL,
-	    Gbl.Prefs.IconsURL,Cfg_ABOUT_LOGO,
-	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
-	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
-	    Cfg_ABOUT_NAME);
-
-   fprintf (Gbl.F.Out,"<div>"
-		      "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">%s:</a> "
-		      "<a href=\"mailto:%s\" class=\"FOOT\" target=\"_blank\">%s</a>"
-		      "</div>",
-	    Cfg_HELP_WEB,Txt_Questions_and_problems,
-	    Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
-
-   /***** About *****/
-   fprintf (Gbl.F.Out,"<div>"
-		      "<a href=\"%s\" class=\"FOOT\" target=\"_blank\">",
-	    Cfg_ABOUT_SWAD_URL);
-   fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
-   fprintf (Gbl.F.Out,"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-
-   /***** Write time to generate and send page *****/
-   Sta_WriteTimeToGenerateAndSendPage ();
-
-   fprintf (Gbl.F.Out,"</div>"
-		      "</div>");
-  }
-
-/*****************************************************************************/
 /************************ Write the end of the page **************************/
 /*****************************************************************************/
 
@@ -1420,9 +1432,13 @@ static void Lay_WriteFootFromHTMLFile (void)
    /***** Open file with the HTML page for the chat *****/
    if ((FileHTML = fopen (Cfg_PATH_AND_FILE_REL_HTML_PRIVATE,"rb")))
      {
+      fprintf (Gbl.F.Out,"<div id=\"foot_zone\">");
+
       /***** Copy HTML to output file *****/
       Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
       fclose (FileHTML);
+
+      fprintf (Gbl.F.Out,"</div>");
      }
   }
 
