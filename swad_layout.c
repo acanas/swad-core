@@ -739,12 +739,12 @@ static void Lay_WritePageTopHeading (void)
    else
       Pre_PutSelectorToSelectLanguage ();
 
-   fprintf (Gbl.F.Out,"<span id=\"login_box\">");
+   fprintf (Gbl.F.Out,"<div id=\"login_box\">");
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</span>"		// login_box
+   fprintf (Gbl.F.Out,"</div>"		// login_box
 	              "</div>");	// head_row_1_right
 
    /* End of 1st. row */
@@ -1259,7 +1259,8 @@ void Lay_ShowErrorAndExit (const char *Message)
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
 	    // Here Gbl.F.Out is stdout
-	    Lay_WriteAboutZone ();
+	    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+	       Lay_WriteAboutZone ();
 
 	    fprintf (Gbl.F.Out,"</body>\n"
 			       "</html>\n");

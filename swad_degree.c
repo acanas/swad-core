@@ -786,9 +786,12 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 	}
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+      fprintf (Gbl.F.Out,"<span id=\"big_full_name\">"
 	                 "%s"
-	                 "</div>"
+	                 "</span>"
+			 "<span class=\"NOT_SHOWN\">"
+			 " / "	// To separate
+			 "</span>"
 	                 "<abbr id=\"big_short_name\">"
 	                 "%s"
 	                 "</abbr>",
@@ -796,10 +799,13 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
      }
    else	// No country selected
       /* This main title takes up space but it is invisible */
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\" class=\"INVISIBLE\">"
+      fprintf (Gbl.F.Out,"<span id=\"big_full_name\" class=\"HIDDEN\">"
 	                 "%s"
-	                 "</div>"
-	                 "<abbr id=\"big_short_name\" class=\"INVISIBLE\">"
+	                 "</span>"
+			 "<span class=\"NOT_SHOWN\">"
+			 " / "	// To separate
+			 "</span>"
+	                 "<abbr id=\"big_short_name\" class=\"HIDDEN\">"
 	                 "%s"
 	                 "</abbr>",
 	       Cfg_PLATFORM_FULL_NAME,Cfg_PLATFORM_SHORT_NAME);

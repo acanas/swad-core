@@ -117,13 +117,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.56 (2015/12/02)"
-#define CSS_FILE		"swad15.56.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.56.1 (2015/12/02)"
+#define CSS_FILE		"swad15.56.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.56:    Dec 02, 2015	Fixed bug and changes in layout related to time to generate and send page. (188597 lines)
+        Version 15.56.1:  Dec 02, 2015	Changes in HTML and CSS to validate HTML5 in W3C validator.
+					Removed about zone in versions of the page to be printed. (186837 lines)
+        Version 15.56:    Dec 02, 2015	Fixed bug and changes in layout related to time to generate and send page. (186805 lines)
         Version 15.55:    Dec 01, 2015	Change in layout background. (186805 lines)
         Version 15.54.7:  Dec 01, 2015	Change in title (country, institution, centre, degree, course). (186783 lines)
         Version 15.54.6:  Dec 01, 2015	Change in layout of file browser. (186768 lines)
