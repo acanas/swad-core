@@ -1427,7 +1427,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Put icon to remove degree */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Deg->NumCourses ||	// Degree has courses ==>  deletion forbidden
+      if (Deg->NumCourses ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
          Lay_PutIconRemovalNotAllowed ();
       else
@@ -1446,8 +1446,7 @@ static void Deg_ListDegreesForEdition (void)
                Deg->DegCod);
 
       /* Degree logo */
-      fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\""
-	                 " style=\"width:25px;>",
+      fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
                Deg->FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,16,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
