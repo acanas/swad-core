@@ -2856,7 +2856,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
 /*****************************************************************************/
 // Input: UsrDat must hold user's data
 
-void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsigned MaxCharsInName,
+void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
+                         unsigned WidthOfNameColumn,unsigned MaxCharsInName,
                          const char *Style,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;

@@ -1440,7 +1440,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
 	                 "%ld"
 	                 "</td>",
                Deg->DegCod);
@@ -1482,7 +1482,8 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1498,7 +1499,8 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                    " size=\"20\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1622,7 +1624,8 @@ static void Deg_ListDegreesForEdition (void)
 	 Act_FormStart (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                    " size=\"5\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1647,13 +1650,13 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1672,10 +1675,10 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,100,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -1836,8 +1839,7 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Degree code *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
@@ -1859,14 +1861,16 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Degree short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName);
 
    /***** Degree full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName);
 
@@ -1924,7 +1928,8 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Degree WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"5\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_WWW\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Deg->WWW);
 
@@ -1934,16 +1939,16 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>");
 
    /***** Degree status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
 	              "%s"
 	              "</td>",
             Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
 
    /***** Degree requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,6,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -2022,7 +2027,7 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
 static void Deg_PutHeadDegreesForSeeing (void)
   {
    extern const char *Txt_Degree;
-   extern const char *Txt_Type_of_BR_degree;
+   extern const char *Txt_Type;
    extern const char *Txt_First_BR_year;
    extern const char *Txt_Last_BR_year;
    extern const char *Txt_Opt_BR_year;
@@ -2055,7 +2060,7 @@ static void Deg_PutHeadDegreesForSeeing (void)
                       "</th>"
                       "</tr>",
             Txt_Degree,
-            Txt_Type_of_BR_degree,
+            Txt_Type,
             Txt_First_BR_year,
             Txt_Last_BR_year,
             Txt_Opt_BR_year,
@@ -2073,7 +2078,7 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Short_BR_Name;
    extern const char *Txt_Full_BR_Name;
-   extern const char *Txt_Type_of_BR_degree;
+   extern const char *Txt_Type;
    extern const char *Txt_First_BR_year;
    extern const char *Txt_Last_BR_year;
    extern const char *Txt_Opt_BR_year;
@@ -2087,7 +2092,7 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:25px;\"></th>"
+                      "<th></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2126,7 +2131,7 @@ static void Deg_PutHeadDegreesForEdition (void)
             Txt_Centre,
             Txt_Short_BR_Name,
             Txt_Full_BR_Name,
-            Txt_Type_of_BR_degree,
+            Txt_Type,
             Txt_First_BR_year,
             Txt_Last_BR_year,
             Txt_Opt_BR_year,

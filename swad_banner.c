@@ -355,7 +355,8 @@ static void Ban_ListBannersForEdition (void)
       Act_FormStart (ActRenBanSho);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName,Gbl.FormId);
       Act_FormEnd ();
@@ -366,7 +367,8 @@ static void Ban_ListBannersForEdition (void)
       Act_FormStart (ActRenBanFul);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " size=\"24\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_LENGTH_FULL_NAME,Ban->FullName,Gbl.FormId);
       Act_FormEnd ();
@@ -388,7 +390,8 @@ static void Ban_ListBannersForEdition (void)
       Act_FormStart (ActChgBanWWW);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                 " size=\"24\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Ban->WWW,Gbl.FormId);
       Act_FormEnd ();
@@ -749,14 +752,16 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Banner short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"12\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName);
 
    /***** Banner full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"24\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             Ban_MAX_LENGTH_FULL_NAME,Ban->FullName);
 
@@ -770,7 +775,8 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Banner WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"24\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_WWW\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Ban->WWW);

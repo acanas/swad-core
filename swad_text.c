@@ -5466,23 +5466,23 @@ const char *Txt_Courses =
 
 const char *Txt_Courses_ABBREVIATION =
 #if   L==0
-	"Assignat.";
+	"Assig.";
 #elif L==1
-	"Veranst.";
+	"Veran.";
 #elif L==2
-	"Courses";
+	"Cours.";
 #elif L==3
-	"Asignat.";
+	"Asig.";
 #elif L==4
-	"Mati&egrave;.";
+	"Mat.";
 #elif L==5
-	"Asignat.";	// Okoteve traducción
+	"Asig.";	// Okoteve traducción
 #elif L==6
 	"Corsi";
 #elif L==7
-	"Kurs&oacute;w";
+	"Kurs.";
 #elif L==8
-	"Discip.";
+	"Disc.";
 #endif
 
 const char *Txt_courses =
@@ -45976,27 +45976,6 @@ const char *Txt_Type_of_BR_answers =		// Answers of a test
 	"Typu<br />odpowiedzi";
 #elif L==8
 	"Tipo de<br />respostas";
-#endif
-
-const char *Txt_Type_of_degree =
-#if   L==0
-	"Tipus de titulaci&oacute;";
-#elif L==1
-	"Abschlussart";
-#elif L==2
-	"Type of degree";
-#elif L==3
-	"Tipo de titulaci&oacute;n";
-#elif L==4
-	"Type d'&eacute;tude";
-#elif L==5
-	"Arandur&atilde; l&aacute;ja";
-#elif L==6
-	"Tipo di laurea";
-#elif L==7
-	"Type of degree";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"Tipo de titula&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Type_of_BR_degree =

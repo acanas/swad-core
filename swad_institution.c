@@ -1149,7 +1149,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
 	                 "%ld"
 	                 "</td>",
                Ins->InsCod);
@@ -1168,7 +1168,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActChgInsCty);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:100px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:40px;\""
 			    " onchange=\"document.getElementById('%s').submit();\" />"
 			    "<option value=\"0\"",
 		  Gbl.FormId);
@@ -1199,7 +1199,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName,
 		  Gbl.FormId);
@@ -1216,7 +1217,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                    " size=\"30\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName,
 		  Gbl.FormId);
@@ -1233,7 +1235,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Act_FormStart (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ins->WWW,
 		  Gbl.FormId);
@@ -1264,15 +1267,15 @@ static void Ins_ListInstitutionsForEdition (void)
 	                 "</td>",
                Ins->NumCtrs);
 
-      /* Degree status */
+      /* Institution status */
       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
       if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1288,13 +1291,13 @@ static void Ins_ListInstitutionsForEdition (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Degree requester */
+      /* Institution requester */
       UsrDat.UsrCod = Ins->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,100,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -1790,7 +1793,7 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution code *****/
-   fprintf (Gbl.F.Out,"<td></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
@@ -1798,9 +1801,9 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"OthCtyCod\""
-                      " style=\"width:100px;\" disabled=\"disabled\">"
+                      " style=\"width:40px;\" disabled=\"disabled\">"
                       "<option value=\"%ld\" selected=\"selected\">"
                       "%s"
                       "</option>"
@@ -1810,23 +1813,26 @@ static void Ins_PutFormToCreateInstitution (void)
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
 
    /***** Institution short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName);
 
    /***** Institution full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName);
 
    /***** Institution WWW *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_WWW\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ins->WWW);
 
@@ -1840,17 +1846,17 @@ static void Ins_PutFormToCreateInstitution (void)
 	              "0"
 	              "</td>");
 
-   /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+   /***** Institution status *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
 	              "%s"
 	              "</td>",
             Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
 
-   /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+   /***** Institution requester *****/
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,6,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -1884,7 +1890,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:25px;\"></th>"
+                      "<th></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

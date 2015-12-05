@@ -448,7 +448,8 @@ static void Plc_ListPlacesForEdition (void)
       Act_FormStart (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.FormId);
       Act_FormEnd ();
@@ -459,7 +460,8 @@ static void Plc_ListPlacesForEdition (void)
       Act_FormStart (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.FormId);
       Act_FormEnd ();
@@ -696,14 +698,16 @@ static void Plc_PutFormToCreatePlace (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName);
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>"
                       "<td></td>"
                       "</tr>",

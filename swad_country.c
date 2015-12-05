@@ -1329,7 +1329,8 @@ static void Cty_ListCountriesForEdition (void)
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-                            " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                            " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_LENGTH_COUNTRY_WWW,
                   Cty->WWW[Lan],Gbl.FormId);
@@ -1683,7 +1684,8 @@ static void Cty_PutFormToCreateCountry (void)
       /* WWW */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"text\" name=\"WWW_%s\""
-                         " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                         " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_WWW\" />"
 			 "</td>"
 			 "</tr>",
 	       Txt_STR_LANG_ID[Lan],Cty_MAX_LENGTH_COUNTRY_WWW,Cty->WWW[Lan]);

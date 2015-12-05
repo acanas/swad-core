@@ -99,7 +99,8 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject);
 void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,unsigned MaxChars,bool GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
-void Msg_WriteMsgAuthor (struct UsrData *UsrDat,unsigned WidthOfNameColumn,unsigned MaxCharsInName,
+void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
+                         unsigned WidthOfNameColumn,unsigned MaxCharsInName,
                          const char *Style,bool Enabled,const char *BgColor);
 bool Msg_WriteCrsOrgMsg (long CrsCod);
 void Msg_WriteListUsrsDstMsg (long MsgCod);

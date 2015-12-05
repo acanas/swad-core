@@ -551,7 +551,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       Act_FormStart (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.FormId);
       Act_FormEnd ();
@@ -562,7 +563,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       Act_FormStart (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.FormId);
       Act_FormEnd ();
@@ -573,7 +575,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       Act_FormStart (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
+	                 " maxlength=\"%u\" value=\"%s\""
+                         " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.FormId);
       Act_FormEnd ();
@@ -917,21 +920,24 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Department short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName);
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_WWW\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Dpt->WWW);

@@ -1197,8 +1197,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld&nbsp;"
+      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
+	                 "%ld"
 	                 "</td>",
                Ctr->CtrCod);
 
@@ -1272,7 +1272,8 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1289,7 +1290,8 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                    " size=\"30\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1306,7 +1308,8 @@ static void Ctr_ListCentresForEdition (void)
 	 Act_FormStart (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
-	                    " size=\"10\" maxlength=\"%u\" value=\"%s\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.FormId);
 	 Act_FormEnd ();
@@ -1337,13 +1340,13 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
 	 Act_FormStart (ActChgCtrSta);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"Status\" style=\"width:100px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
 			    " onchange=\"document.getElementById('%s').submit();\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
@@ -1362,10 +1365,10 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-			 "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,100,10,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -2001,7 +2004,7 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre code *****/
-   fprintf (Gbl.F.Out,"<td></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
@@ -2041,21 +2044,24 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Centre short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName);
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_WWW\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ctr->WWW);
 
@@ -2070,30 +2076,23 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>");
 
    /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
 	              "%s"
 	              "</td>",
             Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,6,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
 		      "</tr>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"12\" class=\"CENTER_MIDDLE\">");
-   Lay_PutCreateButton (Txt_Create_centre);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   /***** End of frame *****/
-   Lay_EndRoundFrameTable ();
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -2174,7 +2173,7 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th style=\"width:25px;\"></th>"
+                      "<th></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

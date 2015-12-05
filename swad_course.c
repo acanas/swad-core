@@ -1440,7 +1440,7 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Course code */
-            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+            fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
         	               "%ld"
         	               "</td>",
                      Crs->CrsCod);
@@ -1452,9 +1452,9 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActChgInsCrsCod);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
-        	                  " size=\"%u\" maxlength=\"%u\" value=\"%s\""
+        	                  " maxlength=\"%u\" value=\"%s\""
+                                  " class=\"INPUT_INS_CODE\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
-                        Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                         Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                         Crs->InstitutionalCrsCod,
                         Gbl.FormId);
@@ -1465,13 +1465,13 @@ static void Crs_ListCoursesForEdition (void)
             fprintf (Gbl.F.Out,"</td>");
 
             /* Degree */
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
             if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
               {
                Act_FormStart (ActChgCrsDeg);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-        	                  " style=\"width:100px;\""
+        	                  " class=\"INPUT_DEGREE\""
         	                  " onchange=\"document.getElementById('%s').submit();\">",
                         Gbl.FormId);
                for (NumDeg = 0;
@@ -1547,7 +1547,8 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActRenCrsSho);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-        	                  " size=\"10\" maxlength=\"%u\" value=\"%s\""
+        	                  " maxlength=\"%u\" value=\"%s\""
+                                  " class=\"INPUT_SHORT_NAME\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
                         Gbl.FormId);
@@ -1564,7 +1565,8 @@ static void Crs_ListCoursesForEdition (void)
                Act_FormStart (ActRenCrsFul);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
                fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-        	                  " size=\"20\" maxlength=\"%u\" value=\"%s\""
+        	                  " maxlength=\"%u\" value=\"%s\""
+                                  " class=\"INPUT_FULL_NAME\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName,
                         Gbl.FormId);
@@ -1588,14 +1590,13 @@ static void Crs_ListCoursesForEdition (void)
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+            fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
             if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
         	StatusTxt == Crs_STATUS_PENDING)
               {
                Act_FormStart (ActChgCrsSta);
                Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"Status\""
-        	                  " style=\"width:100px;\""
+               fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
         	                  " onchange=\"document.getElementById('%s').submit();\">"
                                   "<option value=\"%u\" selected=\"selected\">%s</option>"
                                   "<option value=\"%u\">%s</option>"
@@ -1614,12 +1615,10 @@ static void Crs_ListCoursesForEdition (void)
             /* Course requester */
             UsrDat.UsrCod = Crs->RequesterUsrCod;
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\""
-        	               " style=\"width:125px;\">"
-                               "<table class=\"CELLS_PAD_2\""
-                               " style=\"width:125px;\">"
+            fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+                               "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
                                "<tr>");
-            Msg_WriteMsgAuthor (&UsrDat,100,10,"DAT",true,NULL);
+            Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
             fprintf (Gbl.F.Out,"</tr>"
         	               "</table>"
         	               "</td>"
@@ -1726,22 +1725,22 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Course code *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Institutional code of the course *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"InsCrsCod\""
-                      " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_INS_CODE\" />"
                       "</td>",
-            Crs_LENGTH_INSTITUTIONAL_CRS_COD,
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
             Crs->InstitutionalCrsCod);
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthDegCod\""
-                      " style=\"width:100px;\" disabled=\"disabled\">"
+                      " class=\"INPUT_DEGREE\""
+                      " disabled=\"disabled\">"
                       "<option value=\"%ld\">%s</option>"
                       "</select>"
                       "</td>",
@@ -1780,14 +1779,16 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
-                      " size=\"10\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      " maxlength=\"%u\" value=\"%s\""
+                      " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
 
@@ -1802,16 +1803,16 @@ static void Crs_PutFormToCreateCourse (void)
 	              "</td>");
 
    /***** Course status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
 	              "%s"
 	              "</td>",
             Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
 
    /***** Course requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:125px;\">"
-		      "<table class=\"CELLS_PAD_2\" style=\"width:125px;\">"
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,10,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,6,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"
@@ -1898,7 +1899,7 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s (%s)"
                       "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
+                      "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
