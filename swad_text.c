@@ -33906,7 +33906,7 @@ const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_fro
 #elif L==8
 	"Select the groups of students you want to register in / remove from this course.";		// Necessita de tradução
 #endif
-
+/*
 const char *Txt_Semester =
 #if   L==0
 	"Quadrimestre / Semestre";
@@ -34011,7 +34011,7 @@ const char *Txt_SEMESTER_OF_YEAR[1 + 2] =
 	 "2nd"		// Necessita de tradução
 #endif
 	};
-
+*/
 const char *Txt_Send =
 #if   L==0
 	"Enviar";
@@ -48525,45 +48525,45 @@ const char *Txt_XML_file_content =
 
 const char *Txt_Year_OF_A_DEGREE =		// 1, 2, 3..., not 1984, 2011...
 #if   L==0
-	"Curs";
+	"Curs o semestre";
 #elif L==1
-	"Jahr";
+	"Jahr oder Semester";
 #elif L==2
-	"Year";
+	"Year or semester";
 #elif L==3
-	"Curso";
+	"Curso o semestre";
 #elif L==4
-	"Ann&eacute;e";
+	"Ann&eacute;e ou semestre";
 #elif L==5
-	"Curso";	// Okoteve traducción
+	"Curso o semestre";	// Okoteve traducción
 #elif L==6
-	"Anno";
+	"Anno o semestre";
 #elif L==7
-	"Year";		// Potrzebujesz tlumaczenie
+	"Rok lub semestr";
 #elif L==8
-	"Ano";
+	"Ano ou semestre";
 #endif
 
 const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
    {
 #if   L==0
-	 "Opt./Libre conf."		// Necessita traduccio
+	 "N.A."
 #elif L==1
-	 "Opt./Free choice"		// Need Übersetzung
+	 "N.A."
 #elif L==2
-	 "Opt./Free choice"
+	 "N.A."
 #elif L==3
-	 "Opt./Libre conf."
+	 "N.A."
 #elif L==4
-	 "Opt./Free choice"		// Besoin de traduction
+	 "N.A."
 #elif L==5
-	 "Opt./Libre conf."		// Okoteve traducción
+	 "N.A."		// Okoteve traducción
 #elif L==6
-	 "Opz./Scelta libera"
+	 "N.A."
 #elif L==7
-	 "Opt./Free choice"		// Potrzebujesz tlumaczenie
+	 "N.D."
 #elif L==8
-	 "Opt./Free choice"		// Necessita de tradução
+	 "N.A."
 #endif
 	 ,
 #if   L==0

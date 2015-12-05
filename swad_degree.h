@@ -115,7 +115,7 @@ void Deg_ReqEditDegreeTypes (void);
 void Deg_ShowDegsOfCurrentCtr (void);
 
 unsigned Deg_ConvStrToYear (const char *StrYear);
-unsigned Deg_ConvStrToSemester (const char *StrSemester);
+// unsigned Deg_ConvStrToSemester (const char *StrSemester);
 
 void Deg_EditDegrees (void);
 

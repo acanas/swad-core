@@ -116,12 +116,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.57 (2015/12/05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.58 (2015/12/06)"
 #define CSS_FILE		"swad15.57.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.58:    Dec 06, 2015	Year and semester are fusioned to one number: year/semester. (186960 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='562';
+
         Version 15.57:    Dec 05, 2015	Lot of changes in forms to edit institutions, centres, degrees, courses, etc. (186903 lines)
         Version 15.56.6:  Dec 05, 2015	Fixed minor bug in edition of degrees. (186843 lines)
         Version 15.56.5:  Dec 05, 2015	Go to degree in table of degrees (statistic). (186843 lines)

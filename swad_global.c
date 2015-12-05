@@ -314,7 +314,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingCrs.CrsCod = -1L;
    Gbl.Degs.EditingCrs.DegCod = -1L;
    Gbl.Degs.EditingCrs.Year = 0;
-   Gbl.Degs.EditingCrs.Semester = 0;
+   // Gbl.Degs.EditingCrs.Semester = 0;
    Gbl.Degs.EditingCrs.ShortName[0] = '\0';
    Gbl.Degs.EditingCrs.FullName[0] = '\0';
 

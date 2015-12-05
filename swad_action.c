@@ -372,7 +372,7 @@ Degree:
 	251. ActChgInsCrsCod		Request change of institutional code of a course
 	252. ActChgCrsDeg		Request change of degree of a course
 	253. ActChgCrsYea		Request change of year of a course inside of its degree
-	254. ActChgCrsSem		Request change of semester of a course
+REMOVE->	254. ActChgCrsSem		Request change of semester of a course
 	255. ActRenCrsSho		Request change of short name of a course
 	256. ActRenCrsFul		Request change of full name of a course
 	257. ActChgCrsSta		Request change of status of a course
@@ -1779,7 +1779,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgInsCrsCod	*/{1025,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeInsCrsCod		,NULL},
    /* ActChgCrsDeg	*/{ 565,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsDegree		,NULL},
    /* ActChgCrsYea	*/{ 561,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsYear		,NULL},
-   /* ActChgCrsSem	*/{ 562,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsSemester		,NULL},
+   /* ActChgCrsSem	*//*{ 562,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsSemester		,NULL},*/
    /* ActRenCrsSho	*/{ 563,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseShort	,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRenCrsFul	*/{ 564,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseFull	,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgCrsSta	*/{1055,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ChangeCrsStatus		,NULL},
@@ -3363,7 +3363,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #559 (obsolete action)
 	ActRemCrs,		// #560
 	ActChgCrsYea,		// #561
-	ActChgCrsSem,		// #562
+	// ActChgCrsSem,		// #562
+	-1,			// #562
 	ActRenCrsSho,		// #563
 	ActRenCrsFul,		// #564
 	ActChgCrsDeg,		// #565

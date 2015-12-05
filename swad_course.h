@@ -78,7 +78,7 @@ struct Course
    char InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];	// Institutional code of the course
    long DegCod;
    unsigned Year;					// Year: 0 (optatives), 1, 2, 3...
-   unsigned Semester;					// Semester: 0 (full year), 1 or 2
+   // unsigned Semester;					// Semester: 0 (full year), 1 or 2
    bool AllowDirectLogIn;				// Students may enter directly, or must enter via external plugin?
    Crs_Status_t Status;					// Course status
    long RequesterUsrCod;				// User code of the person who requested the creation of this course
@@ -121,7 +121,7 @@ void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsDegree (void);
 void Crs_ChangeCrsYear (void);
-void Crs_ChangeCrsSemester (void);
+// void Crs_ChangeCrsSemester (void);
 void Crs_UpdateCurrentInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);

@@ -2161,7 +2161,7 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 /*****************************************************************************/
 /*********************** Convert string to semester **************************/
 /*****************************************************************************/
-
+/*
 unsigned Deg_ConvStrToSemester (const char *StrSemester)
   {
    int Semester;
@@ -2174,7 +2174,7 @@ unsigned Deg_ConvStrToSemester (const char *StrSemester)
       return 0;
    return (unsigned) Semester;
   }
-
+*/
 /*****************************************************************************/
 /************************** Create a new degree type *************************/
 /*****************************************************************************/

@@ -558,6 +558,7 @@ mysql> DESCRIBE courses;
 +------------------+---------------+------+-----+---------+----------------+
 10 rows in set (0.01 sec)
 */
+   /*
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
                    "CrsCod INT NOT NULL AUTO_INCREMENT,"
                    "DegCod INT NOT NULL DEFAULT -1,"
@@ -570,6 +571,18 @@ mysql> DESCRIBE courses;
                    "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
                    "UNIQUE INDEX(CrsCod),INDEX(DegCod,Year,Semester),INDEX(Status))");
+   */
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
+                   "CrsCod INT NOT NULL AUTO_INCREMENT,"
+                   "DegCod INT NOT NULL DEFAULT -1,"
+                   "Year TINYINT NOT NULL DEFAULT 0,"
+                   "InsCrsCod CHAR(7) NOT NULL,"
+                   "AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',"
+                   "Status TINYINT NOT NULL DEFAULT 0,"
+                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
+                   "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
+                   "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
+                   "UNIQUE INDEX(CrsCod),INDEX(DegCod,Year),INDEX(Status))");
 
    /***** Table crs_grp *****/
 /*
