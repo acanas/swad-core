@@ -776,7 +776,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      The_ClassForm[Gbl.Prefs.Theme]);
-		  fprintf (Gbl.F.Out,"<img src=\"%s/dot16x16.gif\""
+		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON16x16\" />",
 		           Gbl.Prefs.IconsURL,

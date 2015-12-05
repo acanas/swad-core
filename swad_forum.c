@@ -1803,7 +1803,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
    Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/forum16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/forum64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
                       "&nbsp;%s"
@@ -2007,7 +2007,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
-         sprintf (Icon,"<img src=\"%s/forum16x16.gif\""
+         sprintf (Icon,"<img src=\"%s/forum64x64.gif\""
                        " alt=\"%s\" title=\"%s\""
                        " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
@@ -2015,7 +2015,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
          break;
       case For_FORUM_SWAD_USRS:
       case For_FORUM_SWAD_TCHS:
-         sprintf (Icon,"<img src=\"%s/swad16x16.gif\""
+         sprintf (Icon,"<img src=\"%s/swad64x64.gif\""
                        " alt=\"%s\" title=\"%s\""
                        " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,
@@ -2030,7 +2030,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         sprintf (Icon,"<img src=\"%s/dot16x16.gif\""
+         sprintf (Icon,"<img src=\"%s/dot64x64.png\""
                        " alt=\"%s\" title=\"%s\""
                        " class=\"ICON16x16\" />",
                   Gbl.Prefs.IconsURL,

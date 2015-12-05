@@ -118,13 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.56.3 (2015/12/05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.56.4 (2015/12/05)"
 #define CSS_FILE		"swad15.56.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.56.3:  Dec 05, 2015	Changed icons ins tatistics about forums. (186843 lines)
+        Version 15.56.4:  Dec 05, 2015	Changed icons in forums and chat. (186844 lines)
+        Version 15.56.3:  Dec 05, 2015	Changed icons in statistics about forums. (186843 lines)
         Version 15.56.2:  Dec 05, 2015	Fixed bug in statistics about OERs. (186842 lines)
         Version 15.56.1:  Dec 02, 2015	Changes in HTML and CSS to validate HTML5 in W3C validator.
 					Removed about zone in versions of the page to be printed. (186837 lines)
