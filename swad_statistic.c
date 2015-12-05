@@ -6254,10 +6254,13 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT Public,COUNT(*)"
                         " FROM files"
-                        " WHERE CrsCod='%ld'"
+                        " WHERE Cod='%ld'"
+	                " AND FileBrowser IN ('%u','%u')"
                         " AND License='%u'"
                         " GROUP BY Public",
                   Gbl.CurrentCrs.Crs.CrsCod,
+                  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_SHARE_CRS,
                   (unsigned) License);
          break;
       default:
@@ -7074,7 +7077,7 @@ static void Sta_GetAndShowForumStats (void)
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_TOP\" style=\"width:20px;\">"
-                      "<img src=\"%s/forum16x16.gif\""
+                      "<img src=\"%s/forum64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "</th>"
@@ -7200,62 +7203,62 @@ static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
      {
       case For_FORUM_COURSE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "coursesdegree16x16.gif",StatsForum,
+                                      "crs64x64.gif",StatsForum,
                                       Txt_Courses,"");
          break;
       case For_FORUM_COURSE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "coursesdegree16x16.gif",StatsForum,
+                                      "crs64x64.gif",StatsForum,
                                       Txt_Courses,Txt_only_teachers);
          break;
       case For_FORUM_DEGREE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "grouptypes16x16.gif",StatsForum,
+                                      "deg64x64.gif",StatsForum,
                                       Txt_Degrees,"");
          break;
       case For_FORUM_DEGREE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "grouptypes16x16.gif",StatsForum,
+                                      "deg64x64.gif",StatsForum,
                                       Txt_Degrees,Txt_only_teachers);
          break;
       case For_FORUM_CENTRE_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "house16x16.gif",StatsForum,
+                                      "ctr64x64.gif",StatsForum,
                                       Txt_Centres,"");
          break;
       case For_FORUM_CENTRE_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "house16x16.gif",StatsForum,
+                                      "ctr64x64.gif",StatsForum,
                                       Txt_Centres,Txt_only_teachers);
          break;
       case For_FORUM_INSTITUTION_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "institution16x16.gif",StatsForum,
+                                      "ins64x64.gif",StatsForum,
                                       Txt_Institutions,"");
          break;
       case For_FORUM_INSTITUTION_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "institution16x16.gif",StatsForum,
+                                      "ins64x64.gif",StatsForum,
                                       Txt_Institutions,Txt_only_teachers);
          break;
       case For_FORUM_GLOBAL_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ballon16x16.gif",StatsForum,
+                                      "forum64x64.gif",StatsForum,
                                       Txt_General,"");
          break;
       case For_FORUM_GLOBAL_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "ballon16x16.gif",StatsForum,
+                                      "forum64x64.gif",StatsForum,
                                       Txt_General,Txt_only_teachers);
          break;
       case For_FORUM_SWAD_USRS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad16x16.gif",StatsForum,
+                                      "swad64x64.gif",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,"");
          break;
       case For_FORUM_SWAD_TCHS:
          Sta_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad16x16.gif",StatsForum,
+                                      "swad64x64.gif",StatsForum,
                                       Cfg_PLATFORM_SHORT_NAME,Txt_only_teachers);
          break;
      }

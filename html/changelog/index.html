@@ -58,13 +58,707 @@
 
 	<tr>
 	<td align="center">
-		Last update: October 20, 2015
+		Last update: Decembter 02, 2015
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.56.1:  Dec 02, 2015</dt>
+							<dd>
+							Changes in HTML and CSS to validate HTML5 in W3C validator.<br />
+							Removed about zone in versions of the page to be printed. (186837 lines)
+							</dd>
+		<dt>Version 15.56:    Dec 02, 2015</dt>
+							<dd>
+							Fixed bug and changes in layout related to time to generate and send page. (186805 lines)
+							</dd>
+		<dt>Version 15.55:    Dec 01, 2015</dt>
+							<dd>
+							Change in layout background. (186805 lines)
+							</dd>
+		<dt>Version 15.54.7:  Dec 01, 2015</dt>
+							<dd>
+							Change in title (country, institution, centre, degree, course). (186783 lines)
+							</dd>
+		<dt>Version 15.54.6:  Dec 01, 2015</dt>
+							<dd>
+							Change in layout of file browser. (186768 lines)
+							</dd>
+		<dt>Version 15.54.5:  Dec 01, 2015</dt>
+							<dd>
+							Fixed bug in file browser, reported by Jacinto Dom&iacute;nguez Rull. (186763 lines)
+							</dd>
+		<dt>Version 15.54.4:  Dec 01, 2015</dt>
+							<dd>
+							Fixed bug in title (country, institution, centre, degree, course). (186761 lines)
+							</dd>
+		<dt>Version 15.54.3:  Dec 01, 2015</dt>
+							<dd>
+							Minor changes in tabs, menus and CSS. (186758 lines)
+							</dd>
+		<dt>Version 15.54.2:  Dec 01, 2015</dt>
+							<dd>
+							Minor changes in CSS. (186751 lines)
+							</dd>
+		<dt>Version 15.54.1:  Dec 01, 2015</dt>
+							<dd>
+							Some settings related with timetables. (186746 lines)
+							</dd>
+		<dt>Version 15.54:    Dec 01, 2015</dt>
+							<dd>
+							Selection of the first day of the week in timetables. (186740 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1486','es','N','Cambiar primer d&iacute;a semana en horario asig.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1487','es','N','Cambiar primer d&iacute;a semana en mi horario');
+							</code></small>
+							</dd>
+		<dt>Version 15.53:    Nov 30, 2015</dt>
+							<dd>
+							Sunday can be the first day of the week in timetable, depending on user's preferences. (186689 lines)
+							</dd>
+		<dt>Version 15.52:    Nov 30, 2015</dt>
+							<dd>
+							Timetable now starts at 6 a.m. instead of 7 a.m.<br />
+							Changes in layout of timetable. (186656 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE timetable_crs_backup LIKE timetable_crs;<br />
+INSERT INTO timetable_crs_backup SELECT * FROM timetable_crs;<br />
+CREATE TABLE timetable_tut_backup LIKE timetable_tut;<br />
+INSERT INTO timetable_tut_backup SELECT * FROM timetable_tut;<br />
+UPDATE timetable_crs SET Hour=Hour+2;<br />
+UPDATE timetable_tut SET Hour=Hour+2;
+							</code></small>
+							</dd>
+		<dt>Version 15.51.4:  Nov 30, 2015</dt>
+							<dd>
+							Calendar is now distributed in rows with 3 months instead of 4.<br />
+							Changes in layout. (186644 lines)
+							</dd>
+		<dt>Version 15.51.3:  Nov 30, 2015</dt>
+							<dd>
+							Responsive design in login-logout. (186641 lines)
+							</dd>
+		<dt>Version 15.51.2:  Nov 30, 2015</dt>
+							<dd>
+							Responsive design in tabs. (186688 lines)
+							</dd>
+		<dt>Version 15.51.1:  Nov 30, 2015</dt>
+							<dd>
+							Responsive design in logo.<br />
+							Responsive design in breadcrumb. (186638 lines)
+							</dd>
+		<dt>Version 15.51:    Nov 30, 2015</dt>
+							<dd>
+							Responsive design in title (country, institution, centre, degree, course).<br />
+							CSS file is renamed after changes in order to invalidate browser cache. (186564 lines)
+							</dd>
+		<dt>Version 15.50.2:  Nov 30, 2015</dt>
+							<dd>
+							Changes in layout of preferences. (186517 lines)
+							</dd>
+		<dt>Version 15.50.1:  Nov 30, 2015</dt>
+							<dd>
+							Changes in layout of heading. (186494 lines)
+							</dd>
+		<dt>Version 15.50:    Nov 30, 2015</dt>
+							<dd>
+							Changes in layout of menus.<br />
+							Responsive design in menu: when screen is small, horizontal menu is drawn. (186514 lines)
+							</dd>
+		<dt>Version 15.49.4:  Nov 29, 2015</dt>
+							<dd>
+							Changes in layout of menus. (186481 lines)
+							</dd>
+		<dt>Version 15.49.3:  Nov 29, 2015</dt>
+							<dd>
+							Changes in layout of menus. (186502 lines)
+							</dd>
+		<dt>Version 15.49.2:  Nov 29, 2015</dt>
+							<dd>
+							Changes in layout of menus. (186501 lines)
+							</dd>
+		<dt>Version 15.49.1:  Nov 27, 2015</dt>
+							<dd>
+							Length of country names limited in listing. of countries. (186460 lines)
+							</dd>
+		<dt>Version 15.49:    Nov 27, 2015</dt>
+							<dd>
+							Fixed width in edition of institutional links.<br />
+							Lot of fixing in CSS related to sizes. (186455 lines)
+							</dd>
+		<dt>Version 15.48:    Nov 27, 2015</dt>
+							<dd>
+							Fixed problems in layout. (186384 lines)
+							</dd>
+		<dt>Version 15.47.4:  Nov 27, 2015</dt>
+							<dd>
+							Fixed CSS problem in layout. (186374 lines)
+							</dd>
+		<dt>Version 15.47.3:  Nov 27, 2015</dt>
+							<dd>
+							Responsive design in notifications. (186365 lines)
+							</dd>
+		<dt>Version 15.47.2:  Nov 27, 2015</dt>
+							<dd>
+							Responsive design in current local date and time. (? lines)
+							</dd>
+		<dt>Version 15.47.1:  Nov 27, 2015</dt>
+							<dd>
+							swad_desktop.css is renamed to swad.css.<br />
+							swad_mobile.css is removed. (186343 lines)
+							</dd>
+		<dt>Version 15.47:    Nov 27, 2015</dt>
+							<dd>
+							Mobile layout is removed (only 1.45% of users used it and now it is replaced by responsive design). (187426 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE IP_prefs DROP COLUMN Layout;<br />
+ALTER TABLE usr_data DROP COLUMN Layout;<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='672';
+							</code></small>
+
+							</dd>
+		<dt>Version 15.46.1:  Nov 27, 2015</dt>
+							<dd>
+							Responsive design in search box (top of the page). (188094 lines)
+							</dd>
+		<dt>Version 15.46:    Nov 27, 2015</dt>
+							<dd>
+							First version with responsive design: both side columns are hidden when screen size is small. (188078 lines)
+							</dd>
+		<dt>Version 15.45.15: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188021 lines)
+							</dd>
+		<dt>Version 15.45.14: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188037 lines)
+							</dd>
+		<dt>Version 15.45.13: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188059 lines)
+							</dd>
+		<dt>Version 15.45.12: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188047 lines)
+							</dd>
+		<dt>Version 15.45.11: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188017 lines)
+							</dd>
+		<dt>Version 15.45.10: Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (187992 lines)
+							</dd>
+		<dt>Version 15.45.9:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188020 lines)
+							</dd>
+		<dt>Version 15.45.8:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188018 lines)
+							</dd>
+		<dt>Version 15.45.7:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188015 lines)
+							</dd>
+		<dt>Version 15.45.6:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (188007 lines)
+							</dd>
+		<dt>Version 15.45.5:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (187992 lines)
+							</dd>
+		<dt>Version 15.45.4:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (187979 lines)
+							</dd>
+		<dt>Version 15.45.3:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (187963 lines)
+							</dd>
+		<dt>Version 15.45.2:  Nov 25, 2015</dt>
+							<dd>
+							Some CSS styles related to layout are moved to CSS file. (187929 lines)
+							</dd>
+		<dt>Version 15.45.1:  Nov 25, 2015</dt>
+							<dd>
+							Changes in layout of page (some tables used with layout purposes are replaced by CSS). (187884 lines)
+							</dd>
+		<dt>Version 15.45:    Nov 25, 2015</dt>
+							<dd>
+							Changes in layout of page (some tables used with layout purposes are replaced by CSS). (187877 lines)
+							</dd>
+		<dt>Version 15.44.8:  Nov 24, 2015</dt>
+							<dd>
+							Code refactoring in layout. (187895 lines)
+							</dd>
+		<dt>Version 15.44.7:  Nov 24, 2015</dt>
+							<dd>
+							Code refactoring in layout. (187901 lines)
+							</dd>
+		<dt>Version 15.44.6:  Nov 24, 2015</dt>
+							<dd>
+							Code refactoring in layout. (187893 lines)
+							</dd>
+		<dt>Version 15.44.5:  Nov 24, 2015</dt>
+							<dd>
+							Code refactoring in layout. (187894 lines)
+							</dd>
+		<dt>Version 15.44.4:  Nov 24, 2015</dt>
+							<dd>
+							Code refactoring in layout. (187893 lines)
+							</dd>
+		<dt>Version 15.44.3:  Nov 23, 2015</dt>
+							<dd>
+							Improvement of speed in list of administrators. (187841 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE admin ADD INDEX (Scope,Cod);
+							</code></small>
+							</dd>
+		<dt>Version 15.44.2:  Nov 23, 2015</dt>
+							<dd>
+							Improvement of speed in list of administrators. (187819 lines)
+							</dd>
+		<dt>Version 15.44.1:  Nov 23, 2015</dt>
+							<dd>
+							Fixed bug in list of administrators. (187809 lines)
+							</dd>
+		<dt>Version 15.44:    Nov 23, 2015</dt>
+							<dd>
+							Changes in list of institution, centre and degree administrators. (187788 lines)
+							</dd>
+		<dt>Version 15.43.2:  Nov 22, 2015</dt>
+							<dd>
+							Minor changes in CSS. (187719 lines)
+							</dd>
+		<dt>Version 15.43.1:  Nov 22, 2015</dt>
+							<dd>
+							New figure (statistic) about first day of week. (187722 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1485','es','N','Cambiar primer d&iacute;a semana en calendario');
+							</code></small>
+							</dd>
+		<dt>Version 15.43:    Nov 21, 2015</dt>
+							<dd>
+							Form in calendar to select first day of week. (187693 lines)
+							</dd>
+		<dt>Version 15.42.4:  Nov 21, 2015</dt>
+							<dd>
+							Fixed bug when getting first day of week from IP preferences. (187535 lines)
+							</dd>
+		<dt>Version 15.42.3:  Nov 21, 2015</dt>
+							<dd>
+							Stats of hits distributed by week depend on user's preference about first day of the week. (187528 lines)
+							</dd>
+		<dt>Version 15.42.2:  Nov 21, 2015</dt>
+							<dd>
+							Fixed bug in JavaScript code to draw months. (187524 lines)
+							</dd>
+		<dt>Version 15.42.1:  Nov 21, 2015</dt>
+							<dd>
+							Calendar is drawn depending on user's preference about first day of the week. (187523 lines)
+							</dd>
+		<dt>Version 15.42:    Nov 21, 2015</dt>
+							<dd>
+							New option in preferences to select first day of the week. (187520 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE IP_prefs ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER LastChange;<br />
+ALTER TABLE usr_data ADD COLUMN FirstDayOfWeek TINYINT NOT NULL DEFAULT 0 AFTER Language,ADD INDEX (FirstDayOfWeek);<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1484','es','N','Cambiar primer d&iacute;a de semana');
+							</code></small>
+							</dd>
+		<dt>Version 15.41:    Nov 21, 2015</dt>
+							<dd>
+							JavaScript code to draw a month with sunday as the first day of a week. (187316 lines)
+							</dd>
+		<dt>Version 15.40.8:  Nov 20, 2015</dt>
+							<dd>
+							Password is requested only one time when creating a new account. (187309 lines)
+							</dd>
+		<dt>Version 15.40.7:  Nov 20, 2015</dt>
+							<dd>
+							New help button to register students in courses without them. (187319 lines)
+							</dd>
+		<dt>Version 15.40.6:  Nov 20, 2015</dt>
+							<dd>
+							New button to register students in courses without them.<br />
+							New buttons to create institution, centre, degree and course. (187285 lines)
+							</dd>
+		<dt>Version 15.40.5:  Nov 19, 2015</dt>
+							<dd>
+							Code refactoring in degrees. (187274 lines)
+							</dd>
+		<dt>Version 15.40.4:  Nov 19, 2015</dt>
+							<dd>
+							Code refactoring in centres. (187279 lines)
+							</dd>
+		<dt>Version 15.40.3:  Nov 19, 2015</dt>
+							<dd>
+							Code refactoring in institutions. (187281 lines)
+							</dd>
+		<dt>Version 15.40.2:  Nov 19, 2015</dt>
+							<dd>
+							Some links to countries, institutions, centres and degrees removed. (187281 lines)
+							</dd>
+		<dt>Version 15.40.1:  Nov 19, 2015</dt>
+							<dd>
+							Changes in behaviour of links to countries, institutions, centres and degrees. (187288 lines)
+							</dd>
+		<dt>Version 15.40:    Nov 17, 2015</dt>
+							<dd>
+							Changes in statistics of number of users.<br />
+							Changes in listing of countries. (187275 lines)
+							</dd>
+		<dt>Version 15.39.1:  Nov 16, 2015</dt>
+							<dd>
+							User' e-mail can be removed even if it is the unique. (187236 lines)
+							</dd>
+		<dt>Version 15.39:    Nov 16, 2015</dt>
+							<dd>
+							Administrators can edit another user' e-mails. (187268 lines)<br />
+							9 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1475','es','N','Solicitar edici&oacute;n dir. correo invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1476','es','N','Solicitar edici&oacute;n dir. correo estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1477','es','N','Solicitar edici&oacute;n dir. correo profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1478','es','N','Eliminar dir. correo invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1479','es','N','Eliminar dir. correo estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1480','es','N','Eliminar dir. correo profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1481','es','N','Cambiar dir. correo invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1482','es','N','Cambiar dir. correo estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1483','es','N','Cambiar dir. correo profesor');
+							</code></small>
+							</dd>
+		<dt>Version 15.38.3:  Nov 15, 2015</dt>
+							<dd>
+							Changes in listing of places. (187073 lines)
+							</dd>
+		<dt>Version 15.38.2:  Nov 15, 2015</dt>
+							<dd>
+							Fixed bug in user's privacy preferences. (187071 lines)
+							</dd>
+		<dt>Version 15.38.1:  Nov 14, 2015</dt>
+							<dd>
+							Changes in permission to query the whole range of dates in stats, suggested by Francisco Oca&ntilde;a Lara. (187073 lines)
+							</dd>
+		<dt>Version 15.38:    Nov 13, 2015</dt>
+							<dd>
+							New option for students: list of my attendance. (187063 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1473','es','N','Listar mi asistencia a varios eventos');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1474','es','N','Imprimir mi asistencia a varios eventos');
+							</code></small>
+							</dd>
+		<dt>Version 15.37.6:  Nov 12, 2015</dt>
+							<dd>
+							Changes in degree logo.<br />
+							Changes in layout of hits stats. (186910 lines)
+							</dd>
+		<dt>Version 15.37.5:  Nov 12, 2015</dt>
+							<dd>
+							Changes in centre logo. (186886 lines)
+							</dd>
+		<dt>Version 15.37.4:  Nov 12, 2015</dt>
+							<dd>
+							Changes in institution logo. (186891 lines)
+							</dd>
+		<dt>Version 15.37.3:  Nov 11, 2015</dt>
+							<dd>
+							Changes in country map image. (186898 lines)
+							</dd>
+		<dt>Version 15.37.2:  Nov 11, 2015</dt>
+							<dd>
+							Change in layout (background). (186912 lines)
+							</dd>
+		<dt>Version 15.37.1:  Nov 11, 2015</dt>
+							<dd>
+							Minor changes in sessions. (186912 lines)
+							</dd>
+		<dt>Version 15.37:    Nov 11, 2015</dt>
+							<dd>
+							Changes to speed up queries related to time.<br />
+							Time to next test printed in user's local time.<br />
+							Table table IP_last removed. (186909 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+DROP TABLE IF EXISTS IP_last;
+							</code></small>
+							</dd>
+		<dt>Version 15.36:    Nov 10, 2015</dt>
+							<dd>
+							Fixed bug in assignments, reported by Javier Fern&aacute;ndez Baldomero.<br />
+							Changes in automatic creation of assignment folders. (186985 lines)
+							</dd>
+		<dt>Version 15.35.5:  Nov 09, 2015</dt>
+							<dd>
+							Fixed bug in swad.sql, reported by Florent H. Carr&eacute;.<br />
+							Fixed bug in groups, reported by Francisco Oca&ntilde;a Lara. (186977 lines)
+							</dd>
+		<dt>Version 15.35.4:  Nov 09, 2015</dt>
+							<dd>
+							Fixed bug in test exams. (186975 lines)
+							</dd>
+		<dt>Version 15.35.3:  Nov 09, 2015</dt>
+							<dd>
+							Fixed bug in test exams, reported by Antonio Arcos Cebri&aacute;n.<br />
+							Fixed bug in marks, reported by Javier Fern&aacute;ndez Baldomero. (186973 lines)
+							</dd>
+		<dt>Version 15.35.2:  Nov 04, 2015</dt>
+							<dd>
+							Fixed bug in edition of degrees. (186963 lines)
+							</dd>
+		<dt>Version 15.35.1:  Nov 03, 2015</dt>
+							<dd>
+							Confirmation message after removing a notice. (186979 lines)
+							</dd>
+		<dt>Version 15.35:    Nov 03, 2015</dt>
+							<dd>
+							Request confirmation on notice removal. (186944 lines)<br />
+							1 change necessary in database:
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1472','es','N','Solicitar elim. aviso');
+							</code></small>
+							</dd>
+		<dt>Version 15.34.4:  Nov 03, 2015</dt>
+							<dd>
+							Fixed bug in account creation, reported by H&eacute;ctor Garc&iacute;a Marcos. (186881 lines)
+							</dd>
+		<dt>Version 15.34.3:  Nov 03, 2015</dt>
+							<dd>
+							Fixed bug in photo uploading, reported by Fernando Rojas Ruiz. (186879 lines)
+							</dd>
+		<dt>Version 15.34.2:  Nov 02, 2015</dt>
+							<dd>
+							Fixed bugs in date forms. (186878 lines)
+							</dd>
+		<dt>Version 15.34.1:  Nov 01, 2015</dt>
+							<dd>
+							Global announcements can be seen by all. (186938 lines)
+							</dd>
+		<dt>Version 15.34:    Nov 01, 2015</dt>
+							<dd>
+							Global announcements can be hidden. (186896 lines)<br />
+							3 changes necessary in database:
+							<small><code>
+ALTER TABLE announcements ADD COLUMN Status TINYINT NOT NULL DEFAULT 0 AFTER AnnCod,ADD INDEX (Status);<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1470','es','N','Ocultar anuncio global');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1471','es','N','Mostrar anuncio global');
+							</code></small>
+							</dd>
+		<dt>Version 15.33.1:  Nov 01, 2015</dt>
+							<dd>
+							New layout of global announcements. (186755 lines)
+							</dd>
+		<dt>Version 15.33:    Nov 01, 2015</dt>
+							<dd>
+							New layout of notices. (186708 lines)
+							</dd>
+		<dt>Version 15.32.2:  Oct 31, 2015</dt>
+							<dd>
+							Fixed bug in form submit. (186618 lines)
+							</dd>
+		<dt>Version 15.32.1:  Oct 31, 2015</dt>
+							<dd>
+							Dates in holidays are shown in big-endian.<br />
+							All dates are now shown in ISO 8601 format (YYYY-MM-DD). (186627 lines)
+							</dd>
+		<dt>Version 15.32:    Oct 30, 2015</dt>
+							<dd>
+							Code refactoring and cleaning related to calendar. (186617 lines)
+							</dd>
+		<dt>Version 15.31:    Oct 30, 2015</dt>
+							<dd>
+							Calendar is drawn in browser using JavaScript. (186902 lines)
+							</dd>
+		<dt>Version 15.30:    Oct 30, 2015</dt>
+							<dd>
+							Current month is drawn in browser using JavaScript. (186795 lines)
+							</dd>
+		<dt>Version 15.29.4:  Oct 29, 2015</dt>
+							<dd>
+							Writing JavaScript function to draw a month in browser. Not finished. (186729 lines)
+							</dd>
+		<dt>Version 15.29.3:  Oct 29, 2015</dt>
+							<dd>
+							Writing JavaScript function to draw a month in browser. Not finished. (186703 lines)
+							</dd>
+		<dt>Version 15.29.2:  Oct 29, 2015</dt>
+							<dd>
+							Writing JavaScript function to draw a month in browser. Not finished. (186694 lines)
+							</dd>
+		<dt>Version 15.29.1:  Oct 29, 2015</dt>
+							<dd>
+							Writing JavaScript function to draw a month in browser. Not finished. (186694 lines)
+							</dd>
+		<dt>Version 15.29:    Oct 29, 2015</dt>
+							<dd>
+							Writing JavaScript function to draw a month in browser. Not finished. (186684 lines)
+							</dd>
+		<dt>Version 15.28.1:  Oct 28, 2015</dt>
+							<dd>
+							Fixed bug in the calculation of some statistics. (186416 lines)
+							</dd>
+		<dt>Version 15.28:    Oct 28, 2015</dt>
+							<dd>
+							IANA zone names are used in the calculation of some statistics. (186407 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+Populate the Time Zone Tables by following the instructions in http://dev.mysql.com/doc/refman/5.1/en/time-zone-support.html:<br />
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql<br />
+							</code></small>
+							1 script necessary:<br />
+							<small><code>
+Download JavaScript jstz script, available in:<br />
+        https://bitbucket.org/pellepim/jstimezonedetect/<br />
+        http://pellepim.bitbucket.org/jstz/<br />
+Create new directory jstz in public HTML directory.<br />
+Copy script jstz.js from https://bitbucket.org/pellepim/jstimezonedetect/ > Download repository > pellepim-jstimezonedetect-3a00f59861bd.zip > dist > jstz.js to /var/www/html/swad/jstz/jstz.js
+							</code></small>
+							</dd>
+		<dt>Version 15.27:    Oct 28, 2015</dt>
+							<dd>
+							Fixed bug in dates. (186302 lines)
+							</dd>
+		<dt>Version 15.26.1:  Oct 27, 2015</dt>
+							<dd>
+							Fixed bug in statistics. (186282 lines)
+							</dd>
+		<dt>Version 15.26:    Oct 27, 2015</dt>
+							<dd>
+							Statistics are computed properly for clients with time-zones different to that of the server. (186278 lines)
+							</dd>
+		<dt>Version 15.25.4:  Oct 27, 2015</dt>
+							<dd>
+							Day and month are displayed in clock. (186251 lines)
+							</dd>
+		<dt>Version 15.25.3:  Oct 27, 2015</dt>
+							<dd>
+							Statistics computed using time UTC. (186225 lines)
+							</dd>
+		<dt>Version 15.25.2:  Oct 26, 2015</dt>
+							<dd>
+							Changes related to date-times. (186247 lines)
+							</dd>
+		<dt>Version 15.25.1:  Oct 26, 2015</dt>
+							<dd>
+							Warning about stats computed in server time instead of user's local time. (186263 lines)
+							</dd>
+		<dt>Version 15.25:    Oct 26, 2015</dt>
+							<dd>
+							Clicks in real time are displayed as time ago. (186211 lines)
+							</dd>
+		<dt>Version 15.24.2:  Oct 26, 2015</dt>
+							<dd>
+							Change in function that write clock. (186219 lines)
+							</dd>
+		<dt>Version 15.24.1:  Oct 26, 2015</dt>
+							<dd>
+							Remove unused code related to date-times. (186217 lines)
+							</dd>
+		<dt>Version 15.24:    Oct 26, 2015</dt>
+							<dd>
+							Lot of changes in swad.js related to date-times. (186336 lines)
+							</dd>
+		<dt>Version 15.23:    Oct 26, 2015</dt>
+							<dd>
+							Date-times to open groups are displayed in client local date-time. (186259 lines)
+							</dd>
+		<dt>Version 15.22.1:  Oct 26, 2015</dt>
+							<dd>
+							Date-times in notices are displayed in client local date-time. (186344 lines)
+							</dd>
+		<dt>Version 15.22:    Oct 26, 2015</dt>
+							<dd>
+							First click time in users' profiles is displayed in client local date-time. (186328 lines)
+							</dd>
+		<dt>Version 15.21.3:  Oct 26, 2015</dt>
+							<dd>
+							Changes in date-times of test exams. (186325 lines)
+							</dd>
+		<dt>Version 15.21.2:  Oct 26, 2015</dt>
+							<dd>
+							Date-times in tests are displayed in client local date-time. (186315 lines)
+							</dd>
+		<dt>Version 15.21.1:  Oct 26, 2015</dt>
+							<dd>
+							New forms to enter range of date-times in statistic and test. (186313 lines)
+							</dd>
+		<dt>Version 15.21:    Oct 25, 2015</dt>
+							<dd>
+							New forms to enter range of date-times in statistic and test. Not finished. (186549 lines)
+							</dd>
+		<dt>Version 15.20.2:  Oct 24, 2015</dt>
+							<dd>
+							Code refactoring related to date-times forms. (186294 lines)
+							</dd>
+		<dt>Version 15.20.1:  Oct 24, 2015</dt>
+							<dd>
+							Detailed clics are displayed in client local date-time. (186333 lines)
+							</dd>
+		<dt>Version 15.20:    Oct 24, 2015</dt>
+							<dd>
+							Date-times in notifications, messages and forums are displayed in client local date-time. (186334 lines)
+							</dd>
+		<dt>Version 15.19:    Oct 23, 2015</dt>
+							<dd>
+							Surveys date-times are displayed in client local date-time. (186309 lines)
+							</dd>
+		<dt>Version 15.18:    Oct 23, 2015</dt>
+							<dd>
+							Attendance date-times are displayed in client local date-time.<br />
+				      			Changes in JavaScript functions related to date-time. (186403 lines)
+							</dd>
+		<dt>Version 15.17.3:  Oct 23, 2015</dt>
+							<dd>
+							Changes in JavaScript functions related to date-time. (186477 lines)
+							</dd>
+		<dt>Version 15.17.2:  Oct 23, 2015</dt>
+							<dd>
+							Code refactoring related to forms. (186472 lines)
+							</dd>
+		<dt>Version 15.17.1:  Oct 23, 2015</dt>
+							<dd>
+							Code refactoring related to dates and JavaScript. (186407 lines)
+							</dd>
+		<dt>Version 15.17:    Oct 22, 2015</dt>
+							<dd>
+							Code refactoring related to dates and JavaScript.<br />
+                                        		Fixed bug in internal editor of syllabus. (186379 lines)
+							</dd>
+		<dt>Version 15.16.2:  Oct 22, 2015</dt>
+							<dd>
+							Assignment date-times are displayed in client local date-time. Not finished. (186479 lines)
+							</dd>
+		<dt>Version 15.16.1:  Oct 22, 2015</dt>
+							<dd>
+							Assignment date-times are displayed in client local date-time. Not finished. (186468 lines)
+							</dd>
+		<dt>Version 15.16:    Oct 22, 2015</dt>
+							<dd>
+							Assignment date-times are displayed in client local date-time. Not finished. (186436 lines)
+							</dd>
+		<dt>Version 15.15.3:  Oct 21, 2015</dt>
+							<dd>
+							File date-time is displayed in client local date-time. (186264 lines)
+							</dd>
+		<dt>Version 15.15.2:  Oct 21, 2015</dt>
+							<dd>
+							Fixed bug in client local date-time. (186254 lines)
+							</dd>
+		<dt>Version 15.15.1:  Oct 21, 2015</dt>
+							<dd>
+							Top-left date-time is now displayed in local time. (186249 lines)
+							</dd>
 		<dt>Version 15.15:    Oct 19, 2015</dt>
 							<dd>
 							Statistic figure about institutions can be displayed as a class photo or as a list. (186251 lines)
@@ -1677,7 +2371,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1402','es','N','Ver 
 							</dd>
 		<dt>Version 14.76.5:  Mar 03, 2015</dt>
 							<dd>
-							Added new social networks, suggested by Marta Gómez Macías. (178293 lines)<br />
+							Added new social networks, suggested by Marta G&oacute;mez Mac&iacute;as. (178293 lines)<br />
 							1 change necessary in database:<br />
 							<small><code>
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'googleplus', 'googlescholar', 'instagram', 'linkedin', 'paperli', 'pinterest', 'researchgate', 'scoopit', 'slideshare', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;<br />
@@ -1707,7 +2401,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantar
 							</dd>
 		<dt>Version 14.75.1:  Mar 02, 2015</dt>
 							<dd>
-							Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178175 lines)
+							Fixed bug in file browser, reported by Germ&aacute;n Luz&oacute;n Gonz&aacute;lez and Javier Fern&aacute;ndez Baldomero. (178175 lines)
 							</dd>
 		<dt>Version 14.75:    Feb 27, 2015</dt>
 							<dd>
@@ -1715,7 +2409,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantar
 							</dd>
 		<dt>Version 14.74.12: Feb 23, 2015</dt>
 							<dd>
-							Fixed bug in file browser, reported by Germán Luzón González and Javier Fernández Baldomero. (178119 lines)
+							Fixed bug in file browser, reported by Germ&aacute;n Luz&oacute;n Gonz&aacute;lez and Javier Fern&aacute;ndez Baldomero. (178119 lines)
 							</dd>
 		<dt>Version 14.74.11: Feb 10, 2015</dt>
 							<dd>
@@ -2040,11 +2734,11 @@ ALTER TABLE usr_last DROP COLUMN LastAccBriefcase;<br />
 							</dd>
 		<dt>Version 14.63.4:  Jan 21, 2015</dt>
 							<dd>
-							Fixed bug in listing of degree administrators, reported by Antonio Fernández Ares. (175548 lines)
+							Fixed bug in listing of degree administrators, reported by Antonio Fern&aacute;ndez Ares. (175548 lines)
 							</dd>
 		<dt>Version 14.63.3:  Jan 21, 2015</dt>
 							<dd>
-							Fixed bug when expanding folders, reported by Nadir Román Guerrero and others. (175545 lines)
+							Fixed bug when expanding folders, reported by Nadir Rom&aacute;n Guerrero and others. (175545 lines)
 							</dd>
 		<dt>Version 14.63.2:  Jan 21, 2015</dt>
 							<dd>
@@ -2703,7 +3397,7 @@ Add swad_config.o to list of object files<br />
 		<dt>Version 14.28.2:  Nov 28, 2014</dt>
 							<dd>
 							Fixed bug in web service function sendAttendanceUsers.<br />
-							New MIME type for file uploading, problem reported by Marta Gómez Macías. (170380 lines)
+							New MIME type for file uploading, problem reported by Marta G&oacute;mez Mac&iacute;as. (170380 lines)
 							</dd>
 		<dt>Version 14.28.1:  Nov 28, 2014</dt>
 							<dd>
@@ -2773,7 +3467,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1235','es','N','Ver 
 							</dd>
 		<dt>Version 14.24.3:  Nov 19, 2014</dt>
 							<dd>
-							Fixed bug in web service functions getTestQuestions, reported by Marta Muñoz López. (169804 lines)
+							Fixed bug in web service functions getTestQuestions, reported by Marta Mu&ntilde;oz L&oacute;pez. (169804 lines)
 							</dd>
 		<dt>Version 14.24.2:  Nov 19, 2014</dt>
 							<dd>
@@ -3013,7 +3707,7 @@ ALTER TABLE usr_data DROP COLUMN SecureIcons;<br />
 							</dd>
 		<dt>Version 14.8.3:   Oct 20, 2014</dt>
 							<dd>
-							Fixed bug in Internet Explorer reported by Francisco A. Ocaña Lara: event onchange does not work on input radio, replaced by onclick. (167631 lines)
+							Fixed bug in Internet Explorer reported by Francisco A. Oca&ntilde;a Lara: event onchange does not work on input radio, replaced by onclick. (167631 lines)
 							</dd>
 		<dt>Version 14.8.2:   Oct 20, 2014</dt>
 							<dd>
@@ -3586,7 +4280,7 @@ mv /var/www/html/swad/cty /var/www/html/swad/icon/country<br />
 							</dd>
 		<dt>Version 13.62.3:  May 03, 2014</dt>
 							<dd>
-							Fixed bug in list of departments, reported by Francisco A. Ocaña Lara. (163116 lines)
+							Fixed bug in list of departments, reported by Francisco A. Oca&ntilde;a Lara. (163116 lines)
 							</dd>
 		<dt>Version 13.62.2:  May 03, 2014</dt>
 							<dd>
@@ -3822,7 +4516,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Most
 							</dd>
 		<dt>Version 13.55.7:  Mar 25, 2014</dt>
 							<dd>
-							Fixed bugs in web service function getCourseInfo reported by José Antonio Guerrero Avilés. (162486 lines)
+							Fixed bugs in web service function getCourseInfo reported by Jos&eacute; Antonio Guerrero Avil&eacute;s. (162486 lines)
 							</dd>
 		<dt>Version 13.55.6:  Mar 24, 2014</dt>
 							<dd>
@@ -3918,7 +4612,7 @@ Add swad_password.o to list of object files in Makefile<br />
 							</dd>
 		<dt>Version 13.49.4:  Feb 21, 2014</dt>
 							<dd>
-							Fixed problem in tabs layout with MSIE 9, reported by María Rosa Moreno-Torres Herrera. (161395 lines)
+							Fixed problem in tabs layout with MSIE 9, reported by Mar&iacute;a Rosa Moreno-Torres Herrera. (161395 lines)
 							</dd>
 		<dt>Version 13.49.3:  Feb 18, 2014</dt>
 							<dd>
@@ -4977,40 +5671,40 @@ ALTER TABLE crs_info_src DROP COLUMN InfoSrc;<br />
 ALTER TABLE crs_info_src CHANGE COLUMN InfoSrc2 InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL;<br />
 <br />
 UPDATE actions SET Txt='Editor de texto plano de info. asg.'   WHERE ActCod='850' AND Language='es';<br />
-UPDATE actions SET Txt='Editor de texto plano de guía docente' WHERE ActCod='787' AND Language='es';<br />
-UPDATE actions SET Txt='Editor de texto plano de teoría'       WHERE ActCod='379' AND Language='es';<br />
-UPDATE actions SET Txt='Editor de texto plano de prácticas'    WHERE ActCod='389' AND Language='es';<br />
-UPDATE actions SET Txt='Editor de texto plano de bibliografía' WHERE ActCod='377' AND Language='es';<br />
+UPDATE actions SET Txt='Editor de texto plano de gu&iacute;a docente' WHERE ActCod='787' AND Language='es';<br />
+UPDATE actions SET Txt='Editor de texto plano de teor&iacute;a'       WHERE ActCod='379' AND Language='es';<br />
+UPDATE actions SET Txt='Editor de texto plano de pr&aacute;cticas'    WHERE ActCod='389' AND Language='es';<br />
+UPDATE actions SET Txt='Editor de texto plano de bibliograf&iacute;a' WHERE ActCod='377' AND Language='es';<br />
 UPDATE actions SET Txt='Editor de texto plano de FAQ'          WHERE ActCod='405' AND Language='es';<br />
 UPDATE actions SET Txt='Editor de texto plano de enlaces'      WHERE ActCod='400' AND Language='es';<br />
-UPDATE actions SET Txt='Editor de texto plano de evaluación'   WHERE ActCod='387' AND Language='es';<br />
+UPDATE actions SET Txt='Editor de texto plano de evaluaci&oacute;n'   WHERE ActCod='387' AND Language='es';<br />
 <br />
 UPDATE actions SET Txt='Enviar texto plano de info. asg.'   WHERE ActCod='851' AND Language='es';<br />
-UPDATE actions SET Txt='Enviar texto plano de guía docente' WHERE ActCod='790' AND Language='es';<br />
-UPDATE actions SET Txt='Enviar texto plano de teoría'       WHERE ActCod='394' AND Language='es';<br />
-UPDATE actions SET Txt='Enviar texto plano de prácticas'    WHERE ActCod='396' AND Language='es';<br />
-UPDATE actions SET Txt='Enviar texto plano de bibliografía' WHERE ActCod='398' AND Language='es';<br />
+UPDATE actions SET Txt='Enviar texto plano de gu&iacute;a docente' WHERE ActCod='790' AND Language='es';<br />
+UPDATE actions SET Txt='Enviar texto plano de teor&iacute;a'       WHERE ActCod='394' AND Language='es';<br />
+UPDATE actions SET Txt='Enviar texto plano de pr&aacute;cticas'    WHERE ActCod='396' AND Language='es';<br />
+UPDATE actions SET Txt='Enviar texto plano de bibliograf&iacute;a' WHERE ActCod='398' AND Language='es';<br />
 UPDATE actions SET Txt='Enviar texto plano de FAQ'          WHERE ActCod='406' AND Language='es';<br />
 UPDATE actions SET Txt='Enviar texto plano de enlaces'      WHERE ActCod='401' AND Language='es';<br />
-UPDATE actions SET Txt='Enviar texto plano de evaluación'   WHERE ActCod='397' AND Language='es';<br />
+UPDATE actions SET Txt='Enviar texto plano de evaluaci&oacute;n'   WHERE ActCod='397' AND Language='es';<br />
 <br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1093','es','N','Editor de texto enriq. de info. asg.');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1094','es','N','Editor de texto enriq. de guía docente');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1095','es','N','Editor de texto enriq. de teoría');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1096','es','N','Editor de texto enriq. de prácticas');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1097','es','N','Editor de texto enriq. de bibliografía');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1094','es','N','Editor de texto enriq. de gu&iacute;a docente');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1095','es','N','Editor de texto enriq. de teor&iacute;a');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1096','es','N','Editor de texto enriq. de pr&aacute;cticas');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1097','es','N','Editor de texto enriq. de bibliograf&iacute;a');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1098','es','N','Editor de texto enriq. de FAQ');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1099','es','N','Editor de texto enriq. de enlaces');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1100','es','N','Editor de texto enriq. de evaluación');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1100','es','N','Editor de texto enriq. de evaluaci&oacute;n');<br />
 <br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1101','es','N','Enviar texto enriq. de info. asg.');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1102','es','N','Enviar texto enriq. de guía docente');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1103','es','N','Enviar texto enriq. de teoría');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1104','es','N','Enviar texto enriq. de prácticas');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1105','es','N','Enviar texto enriq. de bibliografía');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1102','es','N','Enviar texto enriq. de gu&iacute;a docente');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1103','es','N','Enviar texto enriq. de teor&iacute;a');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1104','es','N','Enviar texto enriq. de pr&aacute;cticas');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1105','es','N','Enviar texto enriq. de bibliograf&iacute;a');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1106','es','N','Enviar texto enriq. de FAQ');<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1107','es','N','Enviar texto enriq. de enlaces');<br />
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1108','es','N','Enviar texto enriq. de evaluación');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1108','es','N','Enviar texto enriq. de evaluaci&oacute;n');<br />
 							</code></small>
 							</dd>
 		<dt>Version 12.69:    Sep 22, 2013</dt>
@@ -5031,7 +5725,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1108','es','N','Envi
 							</dd>
 		<dt>Version 12.68.2:  Sep 19, 2013</dt>
 							<dd>
-							Fixed bug in notifications about enrollment requests, reported by Antonio Martínez López. (153491 lines)
+							Fixed bug in notifications about enrollment requests, reported by Antonio Mart&iacute;nez L&oacute;pez. (153491 lines)
 							</dd>
 		<dt>Version 12.68.1:  Sep 18, 2013</dt>
 							<dd>
@@ -5160,7 +5854,7 @@ UPDATE log,usr_data SET log.UsrCod=usr_data.UsrCod WHERE log.UsrCod='-1' AND log
 							<dd>
 							Users can login with e-mail.<br />
 							Messages can be sent with e-mail.<br />
-							Fixed bug when changing the e-mail, reported by Francisco A. Ocaña Lara. (152361 lines)
+							Fixed bug when changing the e-mail, reported by Francisco A. Oca&ntilde;a Lara. (152361 lines)
 							</dd>
 		<dt>Version 12.63.12:Jun 10, 2013</dt>
 							<dd>
@@ -5267,7 +5961,7 @@ INSERT IGNORE INTO usr_emails (UsrCod,E_mail,CreatTime) SELECT UsrCod,E_mail,NOW
 							</dd>
 		<dt>Version 12.62.3: May 10, 2013</dt>
 							<dd>
-							Fixed bug in number of questions in tests, reported by Antonio Manuel Fernández Pérez. (151151 lines)
+							Fixed bug in number of questions in tests, reported by Antonio Manuel Fern&aacute;ndez P&eacute;rez. (151151 lines)
 							</dd>
 		<dt>Version 12.62.2: May 10, 2013</dt>
 							<dd>
@@ -5392,7 +6086,7 @@ DROP TABLE IF EXISTS hidden_downloads;<br />
 		<dt>Version 12.57:   Apr 16, 2013</dt>
 							<dd>
 							Changes in search of documents.<br />
-							Fixed bug when deleting a course, reported by María Dolores Ruiz López. (149941 lines)
+							Fixed bug when deleting a course, reported by Mar&iacute;a Dolores Ruiz L&oacute;pez. (149941 lines)
 							</dd>
 		<dt>Version 12.56:   Apr 16, 2013</dt>
 							<dd>
@@ -5425,7 +6119,7 @@ DROP TABLE IF EXISTS hidden_downloads;<br />
 							</dd>
 		<dt>Version 12.52.1: Apr 04, 2013</dt>
 							<dd>
-							Fixed bug when seeing marks, reported by José Samos Jiménez.<br />
+							Fixed bug when seeing marks, reported by Jos&eacute; Samos Jim&eacute;nez.<br />
 							Changed border style when downloading a file. (149396 lines)
 							</dd>
 		<dt>Version 12.52:   Apr 04, 2013</dt>
@@ -5455,7 +6149,7 @@ RENAME TABLE files_copy TO files;<br />
 							</dd>
 		<dt>Version 12.51.1: Apr 03, 2013</dt>
 							<dd>
-							Fixed bug in test importation, reported by Amalia Morales Hernández. (149335 lines)
+							Fixed bug in test importation, reported by Amalia Morales Hern&aacute;ndez. (149335 lines)
 							</dd>
 		<dt>Version 12.51:   Apr 02, 2013</dt>
 							<dd>
@@ -6031,7 +6725,7 @@ ALTER TABLE att_usr CHANGE CommentTch CommentTch TEXT NOT NULL;<br />
 							</dd>
 		<dt>Version 12.24.1: Nov 27, 2012</dt>
 							<dd>
-							Fixed bug in attendance events, reported by José Miguel Colella Carbonara. (142521 lines)
+							Fixed bug in attendance events, reported by Jos&eacute; Miguel Colella Carbonara. (142521 lines)
 							</dd>
 		<dt>Version 12.24:   Nov 26, 2012</dt>
 							<dd>
@@ -6512,7 +7206,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1060','es','Y','Titu
 							</dd>
 		<dt>Version 11.79.2: Sep 23, 2012</dt>
 							<dd>
-							Fixed bug in mail domains, reported by Francisco Ocaña Lara. (135977 lines)
+							Fixed bug in mail domains, reported by Francisco Oca&ntilde;a Lara. (135977 lines)
 							</dd>
 		<dt>Version 11.79.1: Sep 23, 2012</dt>
 							<dd>
@@ -6524,7 +7218,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1060','es','Y','Titu
 							Confirmation of rejection of a request for inscription. (135961 lines)<br />
 							2 changes necessary in database:<br />
 							<small><code>
-UPDATE actions SET Txt='Preguntar si rechazar solicitud inscripción' WHERE ActCod='1058';<br />
+UPDATE actions SET Txt='Preguntar si rechazar solicitud inscripci&oacute;n' WHERE ActCod='1058';<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1059','es','Y','Rechazar solicitud inscripci&oacute;n');<br />
 							</code></small>
 							</dd>
@@ -6581,7 +7275,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1057','es','Y','List
 							New option to confirm application for registrarion. (135687 lines)<br />
 							2 changes necessary in database:<br />
 							<small><code>
-UPDATE actions SET Txt='Formulario solicitud inscripción' WHERE ActCod='1054';<br />
+UPDATE actions SET Txt='Formulario solicitud inscripci&oacute;n' WHERE ActCod='1054';<br />
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1056','es','Y','Solicitar inscripci&oacute;n');<br />
 							</code></small>
 							</dd>
@@ -6641,7 +7335,7 @@ CREATE INDEX Status ON courses (Status);<br />
 							</dd>
 		<dt>Version 11.75.1: Jul 31, 2012</dt>
 							<dd>
-							Fixed wrong path of script, reported by Justa Gómez Navajas. (134667 lines)
+							Fixed wrong path of script, reported by Justa G&oacute;mez Navajas. (134667 lines)
 							</dd>
 		<dt>Version 11.75:   Jul 30, 2012</dt>
 							<dd>
@@ -6910,7 +7604,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 11.59.5: Apr 26, 2012</dt>
 							<dd>
-							Fixed bug in file browsers, reported by Francisco Miguel Reyes Rodríguez. (133010 lines)
+							Fixed bug in file browsers, reported by Francisco Miguel Reyes Rodr&iacute;guez. (133010 lines)
 							</dd>
 		<dt>Version 11.59.4: Apr 26, 2012</dt>
 							<dd>
@@ -7038,7 +7732,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 11.53.1: Apr 04, 2012</dt>
 							<dd>
 							Changes in selection of countries and institutions.<br />
-							Fixed bug in web service function getCourses, reported by Helena Rodríguez Gijón. (132247 lines)
+							Fixed bug in web service function getCourses, reported by Helena Rodr&iacute;guez Gij&oacute;n. (132247 lines)
 							</dd>
 		<dt>Version 11.53:   Apr 03, 2012</dt>
 							<dd>
