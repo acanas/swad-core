@@ -236,7 +236,6 @@ CREATE TABLE IF NOT EXISTS courses (
 	CrsCod INT NOT NULL AUTO_INCREMENT,
 	DegCod INT NOT NULL DEFAULT -1,
 	Year TINYINT NOT NULL DEFAULT 0,
-	Semester TINYINT NOT NULL DEFAULT 0,
 	InsCrsCod CHAR(7) NOT NULL,
 	AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',
         Status TINYINT NOT NULL DEFAULT 0,
@@ -244,7 +243,7 @@ CREATE TABLE IF NOT EXISTS courses (
 	ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,
 	FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,
 	UNIQUE INDEX(CrsCod),
-	INDEX(DegCod,Year,Semester),
+	INDEX(DegCod,Year),
 	INDEX(Status));
 --
 -- Table crs_grp: stores the groups in courses

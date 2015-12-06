@@ -698,7 +698,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 	{
 	 /***** Query database and list courses found *****/
 	 sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-			"courses.Year,courses.Semester,courses.FullName,centres.ShortName"
+			"courses.Year,courses.FullName,centres.ShortName"
 			" FROM courses,degrees,centres,institutions,countries"
 			" WHERE %s"
 			" AND courses.DegCod=degrees.DegCod"
@@ -706,7 +706,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
 			" AND centres.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
 			"%s"
-			" ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year,courses.Semester",
+			" ORDER BY courses.FullName,institutions.FullName,degrees.FullName,courses.Year",
 		  SearchQuery,RangeQuery);
 	 return Crs_ListCrssFound (Query);
 	}

@@ -151,8 +151,6 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   // extern const char *Txt_Semester;
-   // extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
    extern const char *Txt_Shortcut;
@@ -164,7 +162,6 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Save;
    Act_Action_t Superaction;
    unsigned Year;
-   // unsigned Semester;
    struct Ind_IndicatorsCrs Indicators;
    bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
@@ -280,34 +277,6 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year]);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-
-   /***** Course semester *****/
-   /*
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Semester);
-   if (IsForm)
-     {
-      fprintf (Gbl.F.Out,"<select name=\"OthCrsSem\">");
-      for (Semester = 0;
-	   Semester <= 2;
-	   Semester++)
-         fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-                  Semester,
-                  Semester == Gbl.CurrentCrs.Crs.Semester ? " selected=\"selected\"" :
-                	                                    "",
-                  Txt_SEMESTER_OF_YEAR[Semester]);
-      fprintf (Gbl.F.Out,"</select>");
-     }
-   else
-      fprintf (Gbl.F.Out,"%s",Txt_SEMESTER_OF_YEAR[Gbl.CurrentCrs.Crs.Semester]);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   */
 
    if (!PrintView)
      {
@@ -495,7 +464,6 @@ void Crs_ChangeCourseConfig (void)
    char Query[512];
    char YearStr[2+1];
    char YN[1+1];
-   // char SemesterStr[1+1];
 
    /***** Get parameters from form *****/
    /* Get institutional code */
@@ -505,27 +473,11 @@ void Crs_ChangeCourseConfig (void)
    Par_GetParToText ("OthCrsYear",YearStr,2);
    Gbl.CurrentCrs.Crs.Year = Deg_ConvStrToYear (YearStr);
 
-   /* Get semester */
-   /*
-   Par_GetParToText ("OthCrsSem",SemesterStr,1);
-   Gbl.CurrentCrs.Crs.Semester = Deg_ConvStrToSemester (SemesterStr);
-   */
-
    /* Get whether this course allows direct log in or not */
    Par_GetParToText ("AllowDirectLogIn",YN,1);
    Gbl.CurrentCrs.Crs.AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /***** Update table of degree types *****/
-   /*
-   sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u',Semester='%u',AllowDirectLogIn='%c'"
-                  " WHERE CrsCod='%ld'",
-            Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
-            Gbl.CurrentCrs.Crs.Year,
-            Gbl.CurrentCrs.Crs.Semester,
-            Gbl.CurrentCrs.Crs.AllowDirectLogIn ? 'Y' :
-        	                                  'N',
-            Gbl.CurrentCrs.Crs.CrsCod);
-   */
    sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u',AllowDirectLogIn='%c'"
                   " WHERE CrsCod='%ld'",
             Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
@@ -1076,13 +1028,13 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    switch (WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,Semester,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
                         " FROM courses WHERE DegCod='%ld' AND Status=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,Semester,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
                         " FROM courses WHERE DegCod='%ld' AND (Status & %u)=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -1276,7 +1228,6 @@ static void Crs_ListCoursesForSeeing (void)
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   // extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_Go_to_X;
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    struct Course *Crs;
@@ -1348,15 +1299,6 @@ static void Crs_ListCoursesForSeeing (void)
                      TxtClassNormal,BgColor,
                      Txt_YEAR_OF_DEGREE[Crs->Year]);
 
-            /* Course semester */
-            /*
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
-        	               "%s"
-        	               "</td>",
-                     TxtClassNormal,BgColor,
-                     Txt_SEMESTER_OF_YEAR[Crs->Semester]);
-            */
-
             /* Course full name */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
                      TxtClassStrong,BgColor);
@@ -1405,12 +1347,10 @@ static void Crs_ListCoursesForEdition (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   // extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    struct Course *Crs;
    unsigned Year;
    unsigned YearAux;
-   // unsigned Semester;
    unsigned NumDeg;
    unsigned NumCrs;
    struct UsrData UsrDat;
@@ -1528,34 +1468,6 @@ static void Crs_ListCoursesForEdition (void)
             else
                fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
             fprintf (Gbl.F.Out,"</td>");
-
-            /* Course semester */
-            /*
-            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
-            if (ICanEdit)
-              {
-               Act_FormStart (ActChgCrsSem);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"OthCrsSem\""
-                                  " onchange=\"document.getElementById('%s').submit();\">",
-                        Gbl.FormId);
-               for (Semester = 0;
-        	    Semester <= 2;
-        	    Semester++)
-                 {
-                  fprintf (Gbl.F.Out,"<option value=\"%u\"",Semester);
-                  if (Semester == Crs->Semester)
-                     fprintf (Gbl.F.Out," selected=\"selected\"");
-                  fprintf (Gbl.F.Out,">%s</option>",
-                           Txt_SEMESTER_OF_YEAR[Semester]);
-                 }
-               fprintf (Gbl.F.Out,"</select>");
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Txt_SEMESTER_OF_YEAR[Crs->Semester]);
-            fprintf (Gbl.F.Out,"</td>");
-            */
 
             /* Course short name */
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -1711,12 +1623,10 @@ static void Crs_PutFormToCreateCourse (void)
   {
    extern const char *Txt_New_course_of_DEGREE_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   // extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    extern const char *Txt_Create_course;
    struct Course *Crs;
    unsigned Year;
-   // unsigned Semester;
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
@@ -1779,22 +1689,6 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
-   /***** Semester *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-	              "<select name=\"OthCrsSem\">");
-   for (Semester = 0;
-	Semester <= 2;
-	Semester++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-               Semester,
-               Semester == Crs->Semester ? " selected=\"selected\"" :
-        	                           "",
-               Txt_SEMESTER_OF_YEAR[Semester]);
-   fprintf (Gbl.F.Out,"</select>"
-                      "</td>");
-   */
-
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
@@ -1852,7 +1746,6 @@ static void Crs_PutHeadCoursesForSeeing (void)
   {
    extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Year_OF_A_DEGREE;
-   // extern const char *Txt_Semester_ABBREVIATION;
    extern const char *Txt_Course;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
@@ -1866,9 +1759,6 @@ static void Crs_PutHeadCoursesForSeeing (void)
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      // "<th class=\"CENTER_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1884,7 +1774,6 @@ static void Crs_PutHeadCoursesForSeeing (void)
                       "</tr>",
             Txt_Institutional_BR_code,
             Txt_Year_OF_A_DEGREE,
-            // Txt_Semester_ABBREVIATION,
             Txt_Course,
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
@@ -1902,7 +1791,6 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_optional;
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
-   // extern const char *Txt_Semester_ABBREVIATION;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_Students_ABBREVIATION;
@@ -1921,9 +1809,6 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
-                      // "<th class=\"CENTER_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1950,7 +1835,6 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Institutional_code,Txt_optional,
             Txt_Degree,
             Txt_Year_OF_A_DEGREE,
-            // Txt_Semester_ABBREVIATION,
             Txt_Short_name,
             Txt_Full_name,
             Txt_Students_ABBREVIATION,
@@ -2046,7 +1930,6 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 static void Crs_GetParamsNewCourse (struct Course *Crs)
   {
    char YearStr[2+1];
-   // char SemesterStr[1+1];
 
    /***** Get parameters of the course from form *****/
    /* Get institutional code */
@@ -2055,12 +1938,6 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
    /* Get year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
    Crs->Year = Deg_ConvStrToYear (YearStr);
-
-   /* Get semester */
-   /*
-   Par_GetParToText ("OthCrsSem",SemesterStr,1);
-   Crs->Semester = Deg_ConvStrToSemester (SemesterStr);
-   */
 
    /* Get course short name */
    Par_GetParToText ("ShortName",Crs->ShortName,Crs_MAX_LENGTH_COURSE_SHORT_NAME);
@@ -2095,16 +1972,6 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
    char Query[2048];
 
    /***** Insert new course into pending requests *****/
-   /*
-   sprintf (Query,"INSERT INTO courses (DegCod,Year,Semester,InsCrsCod,"
-                  "AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName)"
-                  " VALUES ('%ld','%u','%u','%s','N','%u','%ld','%s','%s')",
-            Crs->DegCod,Crs->Year,Crs->Semester,
-            Crs->InstitutionalCrsCod,
-            Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Crs->ShortName,Crs->FullName);
-   */
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
                   "AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName)"
                   " VALUES ('%ld','%u','%s','N','%u','%ld','%s','%s')",
@@ -2182,7 +2049,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      // Crs->Semester = 0;
       Crs->AllowDirectLogIn = false;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
@@ -2195,7 +2061,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
      }
 
    /***** Get data of a course from database *****/
-   sprintf (Query,"SELECT CrsCod,DegCod,Year,Semester,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+   sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
                   " FROM courses WHERE CrsCod='%ld'",
             Crs->CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a course");
@@ -2213,7 +2079,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      // Crs->Semester = 0;
       Crs->AllowDirectLogIn = false;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
@@ -2248,29 +2113,26 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    /***** Get year (row[2]) *****/
    Crs->Year = Deg_ConvStrToYear (row[2]);
 
-   /***** Get semester (row[3]) *****/
-   // Crs->Semester = Deg_ConvStrToSemester (row[3]);
-
-   /***** Get institutional course code (row[4]) *****/
-   strncpy (Crs->InstitutionalCrsCod,row[4],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+   /***** Get institutional course code (row[3]) *****/
+   strncpy (Crs->InstitutionalCrsCod,row[3],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
    Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
 
-   /***** Get whether this course allows direct log in or not (row[5]) *****/
-   Crs->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
+   /***** Get whether this course allows direct log in or not (row[4]) *****/
+   Crs->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
 
-   /***** Get course status (row[6]) *****/
-   if (sscanf (row[6],"%u",&(Crs->Status)) != 1)
+   /***** Get course status (row[5]) *****/
+   if (sscanf (row[5],"%u",&(Crs->Status)) != 1)
       Lay_ShowErrorAndExit ("Wrong course status.");
 
-   /***** Get requester user'code (row[7]) *****/
-   Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[7]);
+   /***** Get requester user'code (row[6]) *****/
+   Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[6]);
 
-   /***** Get the short name of the course (row[8]) *****/
-   strncpy (Crs->ShortName,row[8],Crs_MAX_LENGTH_COURSE_SHORT_NAME);
+   /***** Get the short name of the course (row[7]) *****/
+   strncpy (Crs->ShortName,row[7],Crs_MAX_LENGTH_COURSE_SHORT_NAME);
    Crs->ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME] = '\0';
 
-   /***** Get the full name of the course (row[9]) *****/
-   strncpy (Crs->FullName,row[9],Crs_MAX_LENGTH_COURSE_FULL_NAME);
+   /***** Get the full name of the course (row[8]) *****/
+   strncpy (Crs->FullName,row[8],Crs_MAX_LENGTH_COURSE_FULL_NAME);
    Crs->FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
 
    /***** Get number of students *****/
@@ -2745,58 +2607,6 @@ void Crs_ChangeCrsYear (void)
   }
 
 /*****************************************************************************/
-/********************** Change the semester of a course **********************/
-/*****************************************************************************/
-/*
-void Crs_ChangeCrsSemester (void)
-  {
-   extern const char *Txt_The_semester_of_the_course_X_has_changed;
-   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   struct Course *Crs;
-   char Query[512];
-   char SemesterStr[1+1];
-   unsigned NewSemester;
-
-   Crs = &Gbl.Degs.EditingCrs;
-
-   ***** Get parameters from form *****
-   * Get course code *
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
-
-   * Get parameter with semester *
-   Par_GetParToText ("OthCrsSem",SemesterStr,1);
-   NewSemester = Deg_ConvStrToSemester (SemesterStr);
-
-   ***** Get data of course *****
-   Crs_GetDataOfCourseByCod (Crs);
-
-   if (Crs_CheckIfICanEdit (Crs))
-     {
-      ***** Update semester in table of courses *****
-      sprintf (Query,"UPDATE courses SET Semester='%u' WHERE CrsCod='%ld'",
-               NewSemester,Crs->CrsCod);
-      DB_QueryUPDATE (Query,"can not update the semester of a course");
-
-      Crs->Semester = NewSemester;
-
-      ***** Write message to show the change made *****
-      sprintf (Gbl.Message,Txt_The_semester_of_the_course_X_has_changed,
-               Crs->ShortName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-      ***** Put link to go to course changed *****
-      if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-         Crs_PutLinkToGoToCrs (Crs);
-     }
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
-
-   ***** Show the form again *****
-   Crs_ReqEditCourses ();
-  }
-*/
-/*****************************************************************************/
 /******** Change the institutional course code of the current course *********/
 /*****************************************************************************/
 
@@ -3128,7 +2938,6 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
   {
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
-   // extern const char *Txt_Semester_ABBREVIATION;
    extern const char *Txt_Course;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
@@ -3140,14 +2949,14 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
 
    /***** Get courses of a user from database *****/
    sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-                  "courses.Year,courses.Semester,courses.FullName,centres.ShortName,crs_usr.Accepted"
+                  "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
                   " FROM crs_usr,courses,degrees,centres"
                   " WHERE crs_usr.UsrCod='%ld'"
                   " AND crs_usr.Role='%u'"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
-                  " ORDER BY degrees.FullName,courses.Year,courses.Semester,courses.FullName",
+                  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
             UsrCod,(unsigned) Role);
 
    /***** List the courses (one row per course) *****/
@@ -3163,9 +2972,6 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
                          "<th class=\"CENTER_MIDDLE\">"
                          "%s"
                          "</th>"
-                         // "<th class=\"CENTER_MIDDLE\">"
-                         // "%s"
-                         // "</th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -3178,7 +2984,6 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
                          "</tr>",
                Txt_Degree,
                Txt_Year_OF_A_DEGREE,
-               // Txt_Semester_ABBREVIATION,
                Txt_Course,
                Txt_Students_ABBREVIATION,
                Txt_Teachers_ABBREVIATION);
@@ -3212,7 +3017,6 @@ unsigned Crs_ListCrssFound (const char *Query)
    extern const char *Txt_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
-   // extern const char *Txt_Semester_ABBREVIATION;
    extern const char *Txt_Course;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
@@ -3249,9 +3053,6 @@ unsigned Crs_ListCrssFound (const char *Query)
 			 "<th class=\"CENTER_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 // "<th class=\"CENTER_MIDDLE\">"
-			 // "%s"
-			 // "</th>"
 			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
@@ -3264,7 +3065,6 @@ unsigned Crs_ListCrssFound (const char *Query)
 			 "</tr>",
 	       Txt_Degree,
 	       Txt_Year_OF_A_DEGREE,
-	       // Txt_Semester_ABBREVIATION,
 	       Txt_Course,
 	       Txt_Students_ABBREVIATION,
 	       Txt_Teachers_ABBREVIATION);
@@ -3301,7 +3101,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_Enrollment_not_confirmed;
    extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   // extern const char *Txt_SEMESTER_OF_YEAR[1+2];
    struct Degree Deg;
    long CrsCod;
    unsigned NumStds;
@@ -3317,9 +3116,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
           degrees.ShortName,	2
           degrees.FullName,	3
           courses.Year,		4
-          courses.Semester,	5
-          courses.FullName,	6
-          centres.ShortName	7
+          courses.FullName,	5
+          centres.ShortName	6
    */
 
    /***** Get degree code (row[0]) *****/
@@ -3377,7 +3175,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
             StyleNoBR,BgColor,NumCrs);
 
    /***** Write degree logo, degree short name (row[2])
-          and centre short name (row[7]) *****/
+          and centre short name (row[6]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             StyleNoBR,BgColor);
    Act_FormGoToStart (ActSeeDegInf);
@@ -3388,7 +3186,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                  16,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
-            row[2],row[7]);
+            row[2],row[6]);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
@@ -3398,22 +3196,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	              "</td>",
             Style,BgColor,Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
 
-   /***** Write semester (row[5]) *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP %s\">"
-	              "%s"
-	              "</td>",
-            Style,BgColor,Txt_SEMESTER_OF_YEAR[Deg_ConvStrToSemester (row[5])]);
-   */
-
-   /***** Write course full name (row[6]) *****/
+   /***** Write course full name (row[5]) *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
             Style,BgColor);
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
    Act_LinkFormSubmit (Gbl.Title,Style);
-   fprintf (Gbl.F.Out,"%s</a>",row[6]);
+   fprintf (Gbl.F.Out,"%s</a>",row[5]);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 

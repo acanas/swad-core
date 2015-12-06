@@ -33906,112 +33906,7 @@ const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_fro
 #elif L==8
 	"Select the groups of students you want to register in / remove from this course.";		// Necessita de tradução
 #endif
-/*
-const char *Txt_Semester =
-#if   L==0
-	"Quadrimestre / Semestre";
-#elif L==1
-	"Semester";
-#elif L==2
-	"Semester";
-#elif L==3
-	"Cuatrimestre / Semestre";
-#elif L==4
-	"Semestre";
-#elif L==5
-	"Cuatrimestre / Semestre";	// Okoteve traducción
-#elif L==6
-	"Semestre";
-#elif L==7
-	"Semestr";
-#elif L==8
-	"Semestre";
-#endif
 
-const char *Txt_Semester_ABBREVIATION =
-#if   L==0
-	"Quadr./<br />Semes.";
-#elif L==1
-	"Semester";
-#elif L==2
-	"Semester";
-#elif L==3
-	"Cuatr./<br/>Semes.";
-#elif L==4
-	"Semestre";
-#elif L==5
-	"Cuatr./<br/>Semes.";	// Okoteve traducción
-#elif L==6
-	"Semestre";
-#elif L==7
-	"Semestr";
-#elif L==8
-	"Semestre";
-#endif
-
-const char *Txt_SEMESTER_OF_YEAR[1 + 2] =
-   {
-#if   L==0
-	 "Anual"	// Necessita traduccio
-#elif L==1
-	 "Yearlong"	// Need Übersetzung
-#elif L==2
-	 "Yearlong"
-#elif L==3
-	 "Anual"
-#elif L==4
-	 "Yearlong"	// Besoin de traduction
-#elif L==5
-	 "Anual"	// Okoteve traducción
-#elif L==6
-	 "Annuale"
-#elif L==7
-	 "Yearlong"	// Potrzebujesz tlumaczenie
-#elif L==8
-	 "Yearlong"	// Necessita de tradução
-#endif
-	 ,
-#if   L==0
-	 "1&ordm;"	// Necessita traduccio
-#elif L==1
-	 "1st"		// Need Übersetzung
-#elif L==2
-	 "1st"
-#elif L==3
-	 "1&ordm;"
-#elif L==4
-	 "1st"		// Besoin de traduction
-#elif L==5
-	 "1&ordm;"	// Okoteve traducción
-#elif L==6
-	 "Primo"
-#elif L==7
-	 "1st"		// Potrzebujesz tlumaczenie
-#elif L==8
-	 "1st"		// Necessita de tradução
-#endif
-	 ,
-#if   L==0
-	 "2&ordm;"	// Necessita traduccio
-#elif L==1
-	 "2nd"		// Need Übersetzung
-#elif L==2
-	 "2nd"
-#elif L==3
-	 "2&ordm;"
-#elif L==4
-	 "2nd"		// Besoin de traduction
-#elif L==5
-	 "2&ordm;"	// Okoteve traducción
-#elif L==6
-	 "Secondo"
-#elif L==7
-	 "2nd"		// Potrzebujesz tlumaczenie
-#elif L==8
-	 "2nd"		// Necessita de tradução
-#endif
-	};
-*/
 const char *Txt_Send =
 #if   L==0
 	"Enviar";
@@ -42037,27 +41932,6 @@ const char *Txt_The_search_term_must_be_longer =
 	"The search term must be longer.";			// Potrzebujesz tlumaczenie
 #elif L==8
 	"The search term must be longer.";			// Necessita de tradução
-#endif
-
-const char *Txt_The_semester_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==0
-	"El cuatrimestre/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Necessita traduccio
-#elif L==1
-	"The semester of the couse <strong>%s</strong> has changed.";			// Need Übersetzung
-#elif L==2
-	"The semester of the couse <strong>%s</strong> has changed.";
-#elif L==3
-	"El cuatrimestre/semestre de la asignatura <strong>%s</strong> ha cambiado.";
-#elif L==4
-	"The semester of the couse <strong>%s</strong> has changed.";			// Besoin de traduction
-#elif L==5
-	"El cuatrimestre/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Okoteve traducción
-#elif L==6
-	"Il semestre del corso <strong>%s</strong> &egrave; cambiato.";
-#elif L==7
-	"The semester of the couse <strong>%s</strong> has changed.";			// Potrzebujesz tlumaczenie
-#elif L==8
-	"The semester of the couse <strong>%s</strong> has changed.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_session_has_been_closed =	// Closed by user

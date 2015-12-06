@@ -384,7 +384,6 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActChgInsCrsCod		(ActDowComCtr+ 15)
 #define ActChgCrsDeg		(ActDowComCtr+ 16)
 #define ActChgCrsYea		(ActDowComCtr+ 17)
-// #define ActChgCrsSem		(ActDowComCtr+ 18)
 #define ActRenCrsSho		(ActDowComCtr+ 18)
 #define ActRenCrsFul		(ActDowComCtr+ 19)
 #define ActChgCrsSta		(ActDowComCtr+ 20)

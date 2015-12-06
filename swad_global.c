@@ -298,25 +298,25 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.AllDegs.Num = 0;
    Gbl.Degs.AllDegs.Lst = NULL;
 
-   Gbl.Degs.EditingDegTyp.DegTypCod = -1L;
-   Gbl.Degs.EditingDegTyp.DegTypName[0] = '\0';
+   Gbl.Degs.EditingDegTyp.DegTypCod        = -1L;
+   Gbl.Degs.EditingDegTyp.DegTypName[0]    = '\0';
    Gbl.Degs.EditingDegTyp.AllowDirectLogIn = true;
 
-   Gbl.Degs.EditingDeg.DegCod = -1L;
+   Gbl.Degs.EditingDeg.DegCod       = -1L;
    Gbl.Degs.EditingDeg.ShortName[0] = '\0';
-   Gbl.Degs.EditingDeg.FullName[0] = '\0';
-   Gbl.Degs.EditingDeg.FirstYear = Gbl.Degs.EditingDeg.LastYear = 0;
-   Gbl.Degs.EditingDeg.OptYear = false;
-   Gbl.Degs.EditingDeg.WWW[0] = '\0';
-   Gbl.Degs.EditingDeg.NumCourses = 0;
-   Gbl.Degs.EditingDeg.LstCrss = NULL;
+   Gbl.Degs.EditingDeg.FullName[0]  = '\0';
+   Gbl.Degs.EditingDeg.FirstYear    =
+   Gbl.Degs.EditingDeg.LastYear     = 0;
+   Gbl.Degs.EditingDeg.OptYear      = false;
+   Gbl.Degs.EditingDeg.WWW[0]       = '\0';
+   Gbl.Degs.EditingDeg.NumCourses   = 0;
+   Gbl.Degs.EditingDeg.LstCrss      = NULL;
 
-   Gbl.Degs.EditingCrs.CrsCod = -1L;
-   Gbl.Degs.EditingCrs.DegCod = -1L;
-   Gbl.Degs.EditingCrs.Year = 0;
-   // Gbl.Degs.EditingCrs.Semester = 0;
+   Gbl.Degs.EditingCrs.CrsCod       = -1L;
+   Gbl.Degs.EditingCrs.DegCod       = -1L;
+   Gbl.Degs.EditingCrs.Year         = 0;
    Gbl.Degs.EditingCrs.ShortName[0] = '\0';
-   Gbl.Degs.EditingCrs.FullName[0] = '\0';
+   Gbl.Degs.EditingCrs.FullName[0]  = '\0';
 
    Gbl.CurrentCrs.Grps.NumGrps = 0;
    Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;

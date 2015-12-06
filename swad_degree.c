@@ -2159,23 +2159,6 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
   }
 
 /*****************************************************************************/
-/*********************** Convert string to semester **************************/
-/*****************************************************************************/
-/*
-unsigned Deg_ConvStrToSemester (const char *StrSemester)
-  {
-   int Semester;
-
-   if (sscanf (StrSemester,"%d",&Semester) != 1)
-      return 0;
-   if (Semester < 0)
-      return 0;
-   if (Semester > 2)
-      return 0;
-   return (unsigned) Semester;
-  }
-*/
-/*****************************************************************************/
 /************************** Create a new degree type *************************/
 /*****************************************************************************/
 

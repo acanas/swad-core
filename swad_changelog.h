@@ -106,22 +106,23 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
-// TODO: Edition of courses: Remove semester
-// TODO: Edition of courses: Rename "Optativas/libre conf." to "Optativas varios cursos"
-// TODO: Edition of courses: Rename "Curso" to "Año / semestre / cuatrimestre"
-// TODO: Listing of courses: Put "Optativas" year at the end
+// TODO: Listing of courses: Put "N.A." year at the end?
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.58 (2015/12/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.58.1 (2015/12/06)"
 #define CSS_FILE		"swad15.57.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.58.1:  Dec 06, 2015	Removed unused code related to semester. (186960 lines)
+					1 change necessary in database:
+ALTER TABLE courses DROP COLUMN Semester;
+
         Version 15.58:    Dec 06, 2015	Year and semester are fusioned to one number: year/semester. (186960 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='562';
