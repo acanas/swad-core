@@ -105,19 +105,19 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
-// TODO: Listing of courses: Put "N.A." year at the end?
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.59.1 (2015/12/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.59.2 (2015/12/06)"
 #define CSS_FILE		"swad15.57.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.59.2:  Dec 06, 2015	Courses with year not applicable are listed at the end. (186439 lines)
         Version 15.59.1:  Dec 06, 2015	Removed unused code related to year for optional courses. (186405 lines)
 					1 change necessary in database:
 ALTER TABLE degrees DROP COLUMN OptYear;

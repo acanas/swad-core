@@ -82,6 +82,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
 static void Crs_ListCoursesForSeeing (void);
+static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 static void Crs_ListCoursesForEdition (void);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
 static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status);
@@ -121,8 +122,7 @@ void Crs_ShowIntroduction (void)
    Inf_ShowInfo ();
 
    /***** Show help to enroll me *****/
-   // if (!Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to this course
-      Hlp_ShowHelpWhatWouldYouLikeToDo ();
+   Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/
@@ -151,6 +151,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_Not_applicable;
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
    extern const char *Txt_Shortcut;
@@ -274,7 +275,9 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</select>");
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year]);
+      fprintf (Gbl.F.Out,"%s",
+               Gbl.CurrentCrs.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year] :
+	                                 Txt_Not_applicable);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -1219,24 +1222,13 @@ static void Crs_EditCourses (void)
   }
 
 /*****************************************************************************/
-/********************* List current courses for edition **********************/
+/********************** List current courses for seeing **********************/
 /*****************************************************************************/
 
 static void Crs_ListCoursesForSeeing (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
-   extern const char *Txt_COURSE_With_users;
-   extern const char *Txt_COURSE_Without_users;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_Go_to_X;
-   extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
-   struct Course *Crs;
    unsigned Year;
-   unsigned NumCrs;
-   const char *TxtClassNormal;
-   const char *TxtClassStrong;
-   const char *BgColor;
-   Crs_StatusTxt_t StatusTxt;
 
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
@@ -1245,98 +1237,124 @@ static void Crs_ListCoursesForSeeing (void)
    Crs_PutHeadCoursesForSeeing ();
 
    /***** List the courses *****/
-   for (Year = 0;
+   for (Year = 1;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
 	Year++)
-     {
-      for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.Deg.NumCourses;
-	   NumCrs++)
-        {
-         Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
-         if (Crs->Year == Year)
-           {
-            if (Crs->Status & Crs_STATUS_BIT_PENDING)
-              {
-               TxtClassNormal = "DAT_LIGHT";
-               TxtClassStrong = "DAT_LIGHT";
-              }
-            else
-              {
-               TxtClassNormal = "DAT";
-               TxtClassStrong = "DAT_N";
-              }
-            BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
-                                                                   Gbl.ColorRows[Gbl.RowEvenOdd];
-
-            /* Put green tip if course has users */
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"CENTER_MIDDLE %s\">"
-                               "<img src=\"%s/%s16x16.gif\""
-                               " alt=\"%s\" title=\"%s\""
-                               " class=\"ICON16x16\" />"
-                               "</td>",
-                     BgColor,
-                     Gbl.Prefs.IconsURL,
-                     Crs->NumUsrs ? "ok_green" :
-                	            "tr",
-                     Crs->NumUsrs ? Txt_COURSE_With_users :
-                                    Txt_COURSE_Without_users,
-                     Crs->NumUsrs ? Txt_COURSE_With_users :
-                                    Txt_COURSE_Without_users);
-
-            /* Institutional code of the course */
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
-        	               "%s"
-        	               "</td>",
-                     TxtClassNormal,BgColor,
-                     Crs->InstitutionalCrsCod);
-
-            /* Course year */
-            fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
-        	               "%s"
-        	               "</td>",
-                     TxtClassNormal,BgColor,
-                     Txt_YEAR_OF_DEGREE[Crs->Year]);
-
-            /* Course full name */
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-                     TxtClassStrong,BgColor);
-            Act_FormGoToStart (ActSeeCrsInf);
-            Crs_PutParamCrsCod (Crs->CrsCod);
-            sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
-            Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
-            fprintf (Gbl.F.Out,"%s</a>",
-        	     Crs->FullName);
-            Act_FormEnd ();
-            fprintf (Gbl.F.Out,"</td>");
-
-            /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-        	               "%u"
-        	               "</td>",
-                     TxtClassNormal,BgColor,Crs->NumStds);
-
-            /* Current number of teachers in this course */
-            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-        	               "%u"
-        	               "</td>",
-                     TxtClassNormal,BgColor,Crs->NumTchs);
-
-            /* Course status */
-            StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-        	               "%s"
-        	               "</td>"
-                               "</tr>",
-                     TxtClassNormal,BgColor,Txt_COURSE_STATUS[StatusTxt]);
-           }
-        }
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-     }
+      if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
+	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;		// ==> change color for the next year
+   Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
 
    /***** Table end *****/
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/********************* List courses of a year for seeing *********************/
+/*****************************************************************************/
+// Return true if this year has courses
+
+static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
+  {
+   extern const char *Txt_COURSE_With_users;
+   extern const char *Txt_COURSE_Without_users;
+   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_Go_to_X;
+   extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
+   unsigned NumCrs;
+   struct Course *Crs;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
+   const char *BgColor;
+   Crs_StatusTxt_t StatusTxt;
+   bool ThisYearHasCourses = false;
+
+   /***** Write all the courses of this year *****/
+   for (NumCrs = 0;
+	NumCrs < Gbl.CurrentDeg.Deg.NumCourses;
+	NumCrs++)
+     {
+      Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
+      if (Crs->Year == Year)	// The year of the course is this?
+	{
+	 ThisYearHasCourses = true;
+	 if (Crs->Status & Crs_STATUS_BIT_PENDING)
+	   {
+	    TxtClassNormal = "DAT_LIGHT";
+	    TxtClassStrong = "DAT_LIGHT";
+	   }
+	 else
+	   {
+	    TxtClassNormal = "DAT";
+	    TxtClassStrong = "DAT_N";
+	   }
+	 BgColor = (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
+								Gbl.ColorRows[Gbl.RowEvenOdd];
+
+	 /* Put green tip if course has users */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"CENTER_MIDDLE %s\">"
+			    "<img src=\"%s/%s16x16.gif\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON16x16\" />"
+			    "</td>",
+		  BgColor,
+		  Gbl.Prefs.IconsURL,
+		  Crs->NumUsrs ? "ok_green" :
+				 "tr",
+		  Crs->NumUsrs ? Txt_COURSE_With_users :
+				 Txt_COURSE_Without_users,
+		  Crs->NumUsrs ? Txt_COURSE_With_users :
+				 Txt_COURSE_Without_users);
+
+	 /* Institutional code of the course */
+	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
+			    "%s"
+			    "</td>",
+		  TxtClassNormal,BgColor,
+		  Crs->InstitutionalCrsCod);
+
+	 /* Course year */
+	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
+			    "%s"
+			    "</td>",
+		  TxtClassNormal,BgColor,
+		  Txt_YEAR_OF_DEGREE[Crs->Year]);
+
+	 /* Course full name */
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
+		  TxtClassStrong,BgColor);
+	 Act_FormGoToStart (ActSeeCrsInf);
+	 Crs_PutParamCrsCod (Crs->CrsCod);
+	 sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
+	 Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
+	 fprintf (Gbl.F.Out,"%s</a>",
+		  Crs->FullName);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 /* Current number of students in this course */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+			    "%u"
+			    "</td>",
+		  TxtClassNormal,BgColor,Crs->NumStds);
+
+	 /* Current number of teachers in this course */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+			    "%u"
+			    "</td>",
+		  TxtClassNormal,BgColor,Crs->NumTchs);
+
+	 /* Course status */
+	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
+			    "%s"
+			    "</td>"
+			    "</tr>",
+		  TxtClassNormal,BgColor,Txt_COURSE_STATUS[StatusTxt]);
+	}
+     }
+
+   return ThisYearHasCourses;
   }
 
 /*****************************************************************************/

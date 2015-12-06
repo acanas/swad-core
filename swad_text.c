@@ -24124,6 +24124,27 @@ const char *Txt_Non_blank_BR_questions =
 	"Quest&otilde;es<br />respondidas";
 #endif
 
+const char *Txt_Not_applicable =
+#if   L==0
+	"No aplicable";
+#elif L==1
+	"Nicht anwendbar";
+#elif L==2
+	"Not applicable";
+#elif L==3
+	"No aplicable";
+#elif L==4
+	"Non applicable";
+#elif L==5
+	"No aplicable";		// Okoteve traducción
+#elif L==6
+	"Non applicabile";
+#elif L==7
+	"Nie dotyczy";
+#elif L==8
+	"N&atilde;o aplic&aacute;vel";
+#endif
+
 const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 #if   L==0
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
