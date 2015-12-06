@@ -414,27 +414,34 @@ function readLastClicksData() {
 }
 
 // Zoom a user's photograph
-function zoom(imagen,urlPhoto,shortName) {
-	var xPos = imagen.offsetLeft;
-	var yPos = imagen.offsetTop;
-	var tempEl = imagen.offsetParent;
+function zoom(img,urlPhoto,shortName) {
+	var zoomImgWidth  = 186;	// big photo
+	var zoomImgHeight = 248;	// big photo
+	var padding = 7;			// padding around big photo including border
+	var xPos = img.offsetLeft;
+	var yPos = img.offsetTop;
+	var tempEl = img.offsetParent;
+
 	while (tempEl != null) {
 		xPos += tempEl.offsetLeft;
 		yPos += tempEl.offsetTop;
 		tempEl = tempEl.offsetParent;
 	}
-        xPos -= (187+15);
-        yPos -= ((250+15)/2);
-        if (yPos < 0)
-           yPos = 0;
+	if (xPos - (zoomImgWidth + padding*2) >= 0)
+	   xPos -= (zoomImgWidth + padding*2);	// zoom at left of the photo
+	else
+	   xPos += img.width + 1;				// zoom at right of the photo
+	yPos = yPos + img.height - zoomImgHeight - padding;
+	if (yPos < 0)
+	   yPos = 0;
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
-	document.getElementById('zoomLyr').style.top = yPos + 'px';
+	document.getElementById('zoomLyr').style.top  = yPos + 'px';
 	document.getElementById('zoomImg').src = urlPhoto;
 	document.getElementById('zoomTxt').innerHTML = '<span class="ZOOM_TXT">' + shortName + '</span>';
 }
 
 // Exit from zooming a user's photograph
-function noZoom(imagen) {
+function noZoom() {
 	var xPos = -(187+15);
 	var yPos = -(250+15+110);
 	document.getElementById('zoomTxt').innerHTML = '';

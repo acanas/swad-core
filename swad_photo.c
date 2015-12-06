@@ -1079,7 +1079,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Str_ReplaceSpecialCharByCodes (SpecialSurnames,2*Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
       strcat (SpecialShortName,"<br />");
       strcat (SpecialShortName,SpecialSurnames);
-      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom(this);\"",
+      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom();\"",
                PhotoURL,SpecialShortName);
      }
 
@@ -2256,7 +2256,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
                      NumStdsWithPhoto,Txt_photos,
                      NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
                 	           0);
-            fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom(this);\"",
+            fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s')\" onmouseout=\"noZoom();\"",
                      PhotoURL,PhotoCaption);
            }
         }
