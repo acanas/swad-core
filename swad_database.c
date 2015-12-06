@@ -830,37 +830,21 @@ mysql> DESCRIBE deg_types;
    /***** Table degrees *****/
 /*
 mysql> DESCRIBE degrees;
-+-----------------+---------------+------+-----+---------+----------------+
-| Field           | Type          | Null | Key | Default | Extra          |
-+-----------------+---------------+------+-----+---------+----------------+
-| DegCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CtrCod          | int(11)       | NO   | MUL | NULL    |                |
-| DegTypCod       | int(11)       | NO   | MUL | NULL    |                |
-| Status          | tinyint(4)    | NO   | MUL | 0       |                |
-| RequesterUsrCod | int(11)       | NO   |     | -1      |                |
-| ShortName       | varchar(32)   | NO   |     | NULL    |                |
-| FullName        | varchar(127)  | NO   |     | NULL    |                |
-| FirstYear       | tinyint(4)    | NO   |     | 0       |                |
-| LastYear        | tinyint(4)    | NO   |     | 0       |                |
-| OptYear         | enum('N','Y') | NO   |     | N       |                |
-| WWW             | varchar(255)  | NO   |     | NULL    |                |
-+-----------------+---------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
-*/
-/*
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
-                   "DegCod INT NOT NULL AUTO_INCREMENT,"
-                   "CtrCod INT NOT NULL,"
-                   "DegTypCod INT NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "FirstYear TINYINT NOT NULL DEFAULT 0,"
-                   "LastYear TINYINT NOT NULL DEFAULT 0,"
-                   "OptYear ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(DegCod),INDEX(CtrCod),INDEX(DegTypCod),INDEX(Status))");
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| DegCod          | int(11)      | NO   | PRI | NULL    | auto_increment |
+| CtrCod          | int(11)      | NO   | MUL | NULL    |                |
+| DegTypCod       | int(11)      | NO   | MUL | NULL    |                |
+| Status          | tinyint(4)   | NO   | MUL | 0       |                |
+| RequesterUsrCod | int(11)      | NO   |     | -1      |                |
+| ShortName       | varchar(32)  | NO   |     | NULL    |                |
+| FullName        | varchar(127) | NO   |     | NULL    |                |
+| FirstYear       | tinyint(4)   | NO   |     | 0       |                |
+| LastYear        | tinyint(4)   | NO   |     | 0       |                |
+| WWW             | varchar(255) | NO   |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
                    "DegCod INT NOT NULL AUTO_INCREMENT,"

@@ -463,7 +463,7 @@ struct Globals
      {
       long CrsCod;
       char CrsFullName[Cns_MAX_BYTES_STRING+1];
-      unsigned Year; // Number of year (0 (Optional), 1, 2, 3, 4, 5, 6) in the degree
+      unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
       char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
       struct Date CallDate;
       struct Date ExamDate;

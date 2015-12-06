@@ -101,7 +101,6 @@
 // TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
-// TODO: Remove columns "first year, last year, optional, status" when listing degrees?
 // TODO: Show message indicating that mail could be in SPAM folder?
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Show nicknames of users in lists?
@@ -113,12 +112,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.59 (2015/12/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.59.1 (2015/12/06)"
 #define CSS_FILE		"swad15.57.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.59.1:  Dec 06, 2015	Removed unused code related to year for optional courses. (186405 lines)
+					1 change necessary in database:
+ALTER TABLE degrees DROP COLUMN OptYear;
+
         Version 15.59:    Dec 06, 2015	Year for optional courses is now always present. (186692 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='552';

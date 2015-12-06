@@ -373,13 +373,6 @@ CREATE TABLE IF NOT EXISTS debug (
 	Txt TEXT NOT NULL,
 	INDEX(DebugTime));
 --
--- Table deg_admin: stores administrators of degrees
---
-CREATE TABLE IF NOT EXISTS deg_admin (
-	UsrCod INT NOT NULL,
-	DegCod INT NOT NULL,
-	UNIQUE INDEX(UsrCod,DegCod));
---
 -- Table deg_types: stores the types of degree
 --
 CREATE TABLE IF NOT EXISTS deg_types (
@@ -400,7 +393,6 @@ CREATE TABLE IF NOT EXISTS degrees (
 	FullName VARCHAR(127) NOT NULL,
 	FirstYear TINYINT NOT NULL DEFAULT 0,
 	LastYear TINYINT NOT NULL DEFAULT 0,
-	OptYear ENUM('N','Y') NOT NULL DEFAULT 'N',
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(DegCod),
 	INDEX(CtrCod),

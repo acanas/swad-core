@@ -871,7 +871,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
-   /***** Year (optional, 1º, 2º, 3º, 4º, 5º...) *****/
+   /***** Year (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
    fprintf (Gbl.F.Out,"<tr>" \
                       "<td class=\"%s RIGHT_TOP\">"
                       "%s:"

@@ -7302,28 +7302,7 @@ const char *Txt_DEGREE_With_courses =
 #elif L==8
 	"Com disciplinas";
 #endif
-/*
-const char *Txt_DEGREE_With_year_for_optional_courses =
-#if   L==0
-	"Con curso de optativas.";			// Necessita traduccio
-#elif L==1
-	"With year for optional courses.";		// Need Übersetzung
-#elif L==2
-	"With year for optional courses.";
-#elif L==3
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";
-#elif L==4
-	"With year for optional courses.";		// Besoin de traduction
-#elif L==5
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";	// Okoteve traducción
-#elif L==6
-	"Con anno per corsi opzionali.";
-#elif L==7
-	"With year for optional courses.";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"With year for optional courses.";		// Necessita de tradução
-#endif
-*/
+
 const char *Txt_DEGREE_Without_courses =
 #if   L==0
 	"Sense assignatures";
@@ -7344,28 +7323,7 @@ const char *Txt_DEGREE_Without_courses =
 #elif L==8
 	"Sem disciplinas";
 #endif
-/*
-const char *Txt_DEGREE_Without_year_for_optional_courses =
-#if   L==0
-	"Sin curso de optativas.";					// Necessita traduccio
-#elif L==1
-	"Without year for optional courses.";				// Need Übersetzung
-#elif L==2
-	"Without year for optional courses.";
-#elif L==3
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";
-#elif L==4
-	"Without year for optional courses.";				// Besoin de traduction
-#elif L==5
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";	// Okoteve traducción
-#elif L==6
-	"Senza anno per corsi opzionali.";
-#elif L==7
-	"Without year for optional courses.";				// Potrzebujesz tlumaczenie
-#elif L==8
-	"Without year for optional courses.";				// Necessita de tradução
-#endif
-*/
+
 const char *Txt_Degree_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Titulaci&oacute;n <strong>%s</strong> eliminada.";	// Necessita traduccio
@@ -25808,28 +25766,7 @@ const char *Txt_Opening_of_groups =
 #elif L==8
 	"Opening of groups";		// Necessita de tradução
 #endif
-/*
-const char *Txt_Opt_BR_year =		// Year for optional courses
-#if   L==0
-	"&iquest;Cur.<br />opt.?";	// Necessita traduccio
-#elif L==1
-	"Opt.<br />year?";		// Need Übersetzung
-#elif L==2
-	"Opt.<br />year?";
-#elif L==3
-	"&iquest;Cur.<br />opt.?";
-#elif L==4
-	"Opt.<br />year?";		// Besoin de traduction
-#elif L==5
-	"&iquest;Cur.<br />opt.?";	// Okoteve traducción
-#elif L==6
-	"Opz.<br />anno?";
-#elif L==7
-	"Opt.<br />rok?";
-#elif L==8
-	"Opt.<br />year?";		// Necessita de tradução
-#endif
-*/
+
 const char *Txt_Option_a_Import_students_from_the_official_lists =
 #if   L==0
 	"Opci&oacute;n a): Obtenga estudiantes de las listas oficiales";	// Necessita traduccio
@@ -39294,48 +39231,6 @@ const char *Txt_The_degree_X_already_exists =	// Warning: it is very important t
 	"The degree <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==8
 	"The degree <strong>%s</strong> already exists.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_degree_has_no_longer_a_year_for_optional_courses =
-#if   L==0
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";	// Necessita traduccio
-#elif L==1
-	"The degree has no longer a year for optional courses.";	// Need Übersetzung
-#elif L==2
-	"The degree has no longer a year for optional courses.";
-#elif L==3
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";
-#elif L==4
-	"The degree has no longer a year for optional courses.";	// Besoin de traduction
-#elif L==5
-	"La titulaci&oacute;n ya no tiene un curso de optativas.";	// Okoteve traducción
-#elif L==6
-	"La laurea non ha un anno pi&ugrave; lungo per corsi opzionali.";
-#elif L==7
-	"The degree has no longer a year for optional courses.";	// Potrzebujesz tlumaczenie
-#elif L==8
-	"The degree has no longer a year for optional courses.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_degree_now_has_a_year_for_optional_courses =
-#if   L==0
-	"La titulaci&oacute;n ahora tiene un curso de optativas.";	// Necessita traduccio
-#elif L==1
-	"The degree now has a year for optional courses.";		// Need Übersetzung
-#elif L==2
-	"The degree now has a year for optional courses.";
-#elif L==3
-	"La titulaci&oacute;n ahora tiene un curso de optativas.";
-#elif L==4
-	"The degree now has a year for optional courses.";		// Besoin de traduction
-#elif L==5
-	"La titulaci&oacute;n ahora tiene un curso de optativas.";	// Okoteve traducción
-#elif L==6
-	"La laurea ora ha un anno per corsi opzionali.";
-#elif L==7
-	"The degree now has a year for optional courses.";		// Potrzebujesz tlumaczenie
-#elif L==8
-	"The degree now has a year for optional courses.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences

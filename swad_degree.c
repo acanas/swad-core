@@ -1277,8 +1277,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
-   // extern const char *Txt_DEGREE_With_year_for_optional_courses;
-   // extern const char *Txt_DEGREE_Without_year_for_optional_courses;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    struct DegreeType DegTyp;
    const char *TxtClassNormal;
@@ -1351,23 +1349,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	              "</td>",
 	    TxtClassNormal,BgColor,Deg->LastYear);
 
-   /***** Degree optional year *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
-		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON16x16\" />"
-		      "</td>",
-	    BgColor,
-	    Gbl.Prefs.IconsURL,
-	    Deg->OptYear ? "ok_on" :
-		           "tr",
-	    Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
-			   Txt_DEGREE_Without_year_for_optional_courses,
-	    Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
-			   Txt_DEGREE_Without_year_for_optional_courses);
-   */
-
    /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
@@ -1394,8 +1375,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 static void Deg_ListDegreesForEdition (void)
   {
    extern const char *Txt_Degrees_of_CENTRE_X;
-   // extern const char *Txt_DEGREE_With_year_for_optional_courses;
-   // extern const char *Txt_DEGREE_Without_year_for_optional_courses;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
@@ -1591,36 +1570,6 @@ static void Deg_ListDegreesForEdition (void)
          fprintf (Gbl.F.Out,"%u",Deg->LastYear);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Degree optional year */
-      /*
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      if (ICanEdit)
-	{
-	 Act_FormStart (ActChgDegOptYea);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"OptYear\" value=\"Y\"%s"
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg->OptYear ? " checked=\"checked\"" :
-			         "",
-	          Gbl.FormId);
-	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</td>");
-	}
-      else
-	 * Degree optional year *
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16\" />",
-		  Gbl.Prefs.IconsURL,
-		  Deg->OptYear ? "ok_on" :
-			         "tr",
-		  Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
-				 Txt_DEGREE_Without_year_for_optional_courses,
-		  Deg->OptYear ? Txt_DEGREE_With_year_for_optional_courses :
-				 Txt_DEGREE_Without_year_for_optional_courses);
-      fprintf (Gbl.F.Out,"</td>");
-      */
-
       /* Degree WWW */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (ICanEdit)
@@ -1638,7 +1587,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
          strncpy (WWW,Deg->WWW,Deg_MAX_LENGTH_WWW_ON_SCREEN);
          WWW[Deg_MAX_LENGTH_WWW_ON_SCREEN] = '\0';
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\">%s",
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+                            " class=\"DAT\" title=\"%s\">%s",
                   Deg->WWW,Deg->WWW,WWW);
          if (strlen (Deg->WWW) > Deg_MAX_LENGTH_WWW_ON_SCREEN)
             fprintf (Gbl.F.Out,"...");
@@ -1923,14 +1873,6 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
-   /***** Degree optional year *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"checkbox\" name=\"OptYear\" value=\"Y\"%s /></td>",
-            Deg->OptYear ? " checked=\"checked\"" :
-        	           "");
-   */
-
    /***** Degree WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
@@ -2197,20 +2139,6 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
    char Query[1024];
 
    /***** Create a new degree *****/
-   /*
-   sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW)"
-                  " VALUES ('%ld','%ld','%u','%ld',"
-                  "'%s','%s','%u','%u','%c','%s')",
-            Deg->CtrCod,Deg->DegTypCod,
-            Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Deg->ShortName,Deg->FullName,
-            Deg->FirstYear,Deg->LastYear,
-            Deg->OptYear ? 'Y' :
-        	           'N',
-            Deg->WWW);
-   */
    sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,FirstYear,LastYear,WWW)"
                   " VALUES ('%ld','%ld','%u','%ld',"
@@ -2388,11 +2316,6 @@ void Deg_GetListAllDegs (void)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   /*
-   sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
-                  " FROM degrees ORDER BY FullName");
-   */
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,FirstYear,LastYear,WWW"
                   " FROM degrees ORDER BY FullName");
@@ -2448,12 +2371,6 @@ static void Deg_GetListDegsOfCurrentCtr (void)
    unsigned NumDeg;
 
    /***** Get degrees of the current centre from database *****/
-   /*
-   sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
-                  " FROM degrees WHERE CtrCod='%ld' ORDER BY FullName",
-            Gbl.CurrentCtr.Ctr.CtrCod);
-   */
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,FirstYear,LastYear,WWW"
                   " FROM degrees WHERE CtrCod='%ld' ORDER BY FullName",
@@ -2527,24 +2444,6 @@ void Deg_GetListDegsAdminByMe (void)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                     "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
-                     " FROM degrees"
-                     " WHERE CtrCod='%ld'"
-                     " ORDER BY ShortName",
-               Gbl.CurrentCtr.Ctr.CtrCod);
-   // TODO: put an if to select all degrees for admins of all degrees !!!!!!!!!!!!!
-   else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM
-      sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-                     "degrees.ShortName,degrees.FullName,degrees.FirstYear,degrees.LastYear,degrees.OptYear,degrees.WWW"
-                     " FROM admin,degrees"
-                     " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
-                     " AND admin.Cod=degrees.DegCod"
-                     " ORDER BY degrees.ShortName",
-               Gbl.Usrs.Me.UsrDat.UsrCod);
-   */
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                      "ShortName,FullName,FirstYear,LastYear,WWW"
@@ -2698,12 +2597,6 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
    /* Get last year */
    Par_GetParToText ("LastYear",YearStr,2);
    Deg->LastYear = Deg_ConvStrToYear (YearStr);
-
-   /* Get optional year */
-   /*
-   Par_GetParToText ("OptYear",YN,1);
-   Deg->OptYear = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-   */
 
    /* Get degree WWW */
    Par_GetParToText ("WWW",Deg->WWW,Cns_MAX_LENGTH_WWW);
@@ -2981,7 +2874,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FullName[0] = '\0';
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
-      // Deg->OptYear = false;
       Deg->WWW[0] = '\0';
       Deg->NumCourses = 0;
       Deg->LstCrss = NULL;
@@ -2989,12 +2881,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
      }
 
    /***** Get data of a degree from database *****/
-   /*
-   sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,FirstYear,LastYear,OptYear,WWW"
-                  " FROM degrees WHERE DegCod ='%ld'",
-            Deg->DegCod);
-   */
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,FirstYear,LastYear,WWW"
                   " FROM degrees WHERE DegCod ='%ld'",
@@ -3020,7 +2906,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FullName[0] = '\0';
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
-      // Deg->OptYear = false;
       Deg->WWW[0] = '\0';
       Deg->NumCourses = 0;
       Deg->LstCrss = NULL;
@@ -3069,11 +2954,6 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
    /***** Get last year (row[8]) *****/
    Deg->LastYear = Deg_ConvStrToYear (row[8]);
-
-   /***** Get optional year (row[9]) *****/
-   /*
-   Deg->OptYear = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
-   */
 
    /***** Get WWW (row[9]) *****/
    strcpy (Deg->WWW,row[9]);
@@ -3704,46 +3584,6 @@ static void Deg_ChangeDegYear (struct Degree *Deg,Deg_FirstOrLastYear_t FirstOrL
   }
 
 /*****************************************************************************/
-/******************** Change the optional year of a degree *******************/
-/*****************************************************************************/
-/*
-void Deg_ChangeDegOptYear (void)
-  {
-   extern const char *Txt_The_degree_now_has_a_year_for_optional_courses;
-   extern const char *Txt_The_degree_has_no_longer_a_year_for_optional_courses;
-   struct Degree *Deg;
-   char Query[512];
-   char YN[1+1];
-
-   Deg = &Gbl.Degs.EditingDeg;
-
-   ***** Get parameters from form *****
-   * Get degree code *
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
-
-   * Get parameter with optional year *
-   Par_GetParToText ("OptYear",YN,1);
-   Deg->OptYear = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-
-   ***** Update optional year in table of degrees *****
-   sprintf (Query,"UPDATE degrees SET OptYear='%c' WHERE DegCod='%ld'",
-            Deg->OptYear ? 'Y' :
-        	           'N',
-            Deg->DegCod);
-   DB_QueryUPDATE (Query,"can not update the optional year of a degree");
-
-   ***** Write message to show the change made *****
-   sprintf (Gbl.Message,"%s",
-            Deg->OptYear ? Txt_The_degree_now_has_a_year_for_optional_courses :
-                           Txt_The_degree_has_no_longer_a_year_for_optional_courses);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   ***** Show the form again *****
-   Deg_EditDegrees ();
-  }
-*/
-/*****************************************************************************/
 /************************* Change the WWW of a degree ************************/
 /*****************************************************************************/
 
@@ -3967,10 +3807,6 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 
 bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg)
   {
-   /*
-   return (Year == 0 && Deg->OptYear) ||
-	  (Year != 0 && Year >= Deg->FirstYear && Year <= Deg->LastYear);
-   */
    return (Year == 0) ||
 	  (Year != 0 && Year >= Deg->FirstYear && Year <= Deg->LastYear);
   }
