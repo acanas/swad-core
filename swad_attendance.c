@@ -467,7 +467,7 @@ static void Att_PutFormToListMyAttendance (void)
    extern const char *Txt_Attendance_list;
 
    Act_PutContextualLink (ActSeeLstMyAtt,NULL,
-                          "list",Txt_Attendance_list);
+                          "list16x16.gif",Txt_Attendance_list);
   }
 
 /*****************************************************************************/
@@ -479,7 +479,7 @@ static void Att_PutFormToListStdsAttendance (void)
    extern const char *Txt_Attendance_list;
 
    Act_PutContextualLink (ActReqLstStdAtt,Att_PutFormToListStdsParams,
-                          "list",Txt_Attendance_list);
+                          "list16x16.gif",Txt_Attendance_list);
   }
 
 static void Att_PutFormToListStdsParams (void)
@@ -499,7 +499,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
 
    /***** Put form to create a new attendance event *****/
    Act_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
-                          "new",Txt_New_event);
+                          "new16x16.gif",Txt_New_event);
   }
 
 static void Att_PutFormToCreateNewAttEventParams (void)
@@ -2861,7 +2861,7 @@ static void Att_PutFormToPrintMyList (void)
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
-                          "print",Txt_Print);
+                          "print16x16.gif",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2884,7 +2884,7 @@ static void Att_PutFormToPrintStdsList (void)
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActPrnLstStdAtt,Att_PutFormToPrintStdsListParams,
-                          "print",Txt_Print);
+                          "print16x16.gif",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 

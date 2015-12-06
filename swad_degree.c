@@ -318,7 +318,7 @@ static void Deg_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	  /* Link to print view */
-         Act_PutContextualLink (ActPrnDegInf,NULL,"print",Txt_Print);
+         Act_PutContextualLink (ActPrnDegInf,NULL,"print16x16.gif",Txt_Print);
 
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)

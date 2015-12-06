@@ -4302,11 +4302,11 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
      {
       case Brw_SHOW:
          Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "visible_on",Txt_View);
+                                "visible_on16x16.gif",Txt_View);
 	 break;
       case Brw_ADMIN:
          Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "edit",Txt_Edit);
+                                "edit16x16.gif",Txt_Edit);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");

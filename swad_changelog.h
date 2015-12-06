@@ -94,7 +94,6 @@
         ----------Otros
         ....Etc.....
 */
-// TODO: Change link to Degree in Statistics > Visits > By degree to internal Degree
 // TODO: Link to user's country in public profile
 // TODO: Show guests in connected users.
 // TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
@@ -110,12 +109,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.59.3 (2015/12/06)"
-#define CSS_FILE		"swad15.57.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.59.4 (2015/12/06)"
+#define CSS_FILE		"swad15.59.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.59.4:  Dec 06, 2015	Changes in some small icons. (186462 lines)
         Version 15.59.3:  Dec 06, 2015	If photo zoom is out of the screen at left, it is shown at right of the photo. (186445 lines)
         Version 15.59.2:  Dec 06, 2015	Courses with year not applicable are listed at the end. (186439 lines)
         Version 15.59.1:  Dec 06, 2015	Removed unused code related to year for optional courses. (186405 lines)

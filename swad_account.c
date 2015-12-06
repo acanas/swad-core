@@ -127,7 +127,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Link to log in *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActFrmLogIn,NULL,"login",Txt_Log_in);
+   Act_PutContextualLink (ActFrmLogIn,NULL,"login16x16.gif",Txt_Log_in);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
@@ -243,7 +243,7 @@ static void Acc_PutLinkToRemoveMyAccount (void)
    extern const char *Txt_Remove_account;
 
    Act_PutContextualLink (ActReqRemMyAcc,Acc_PutLinkToRemoveMyAccountParams,
-                          "delon",Txt_Remove_account);
+                          "delon16x16.gif",Txt_Remove_account);
   }
 
 static void Acc_PutLinkToRemoveMyAccountParams (void)

@@ -1427,7 +1427,7 @@ void Usr_WriteFormLogin (void)
 
    /* Link to create a new account */
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba",Gbl.Title);
+   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba16x16.gif",Gbl.Title);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1438,7 +1438,9 @@ void Usr_WriteFormLogin (void)
                The_ClassFormBold[Gbl.Prefs.Theme]);
       sprintf (Gbl.Title,Txt_Enter_from_X,
                Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
-      Lay_PutIconWithText ("login",Gbl.Title,Gbl.Title);
+      Lay_PutIconWithText ("login16x16.gif",
+                           Gbl.Title,
+                           Gbl.Title);
      }
 
    /* Link to send a new password */
@@ -2567,7 +2569,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActLogOut,NULL,"logout",Txt_Log_out);
+   Act_PutContextualLink (ActLogOut,NULL,"logout16x16.gif",Txt_Log_out);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
@@ -6456,7 +6458,7 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_See_administrators;
 
    /***** Put form to list admins *****/
-   Act_PutContextualLink (ActLstOth,NULL,"adm",Txt_See_administrators);
+   Act_PutContextualLink (ActLstOth,NULL,"adm16x16.gif",Txt_See_administrators);
   }
 
 /*****************************************************************************/
@@ -6468,7 +6470,7 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_See_guests;
 
    /***** Put form to list guests *****/
-   Act_PutContextualLink (ActLstGst,NULL,"usrs",Txt_See_guests);
+   Act_PutContextualLink (ActLstGst,NULL,"usrs16x16.gif",Txt_See_guests);
   }
 
 /*****************************************************************************/
@@ -6545,12 +6547,12 @@ void Usr_SeeGuests (void)
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
                Act_PutContextualLink (ActPrnGstPho,Usr_PutLinkToShowGuestsAllDataParams,
-                                      "print",Txt_Print);
+                                      "print16x16.gif",Txt_Print);
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
                Act_PutContextualLink (ActLstGstAll,Usr_PutLinkToShowGuestsAllDataParams,
-                                      "table",Txt_Show_all_data);
+                                      "table16x16.gif",Txt_Show_all_data);
 	       break;
            }
 	 fprintf (Gbl.F.Out,"</div>");
@@ -6730,7 +6732,7 @@ void Usr_SeeStudents (void)
                 /***** Link to print view *****/
 	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                Act_PutContextualLink (ActPrnStdPho,Usr_PutLinkToShowStdsAllDataParams,
-                                      "print",Txt_Print);
+                                      "print16x16.gif",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
@@ -6739,7 +6741,7 @@ void Usr_SeeStudents (void)
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                   Act_PutContextualLink (ActLstStdAll,Usr_PutLinkToShowStdsAllDataParams,
-                                         "table",Txt_Show_all_data);
+                                         "table16x16.gif",Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
 	       break;
@@ -6897,7 +6899,7 @@ void Usr_SeeTeachers (void)
             case Usr_CLASS_PHOTO:
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                Act_PutContextualLink (ActPrnTchPho,Usr_PutLinkToShowTchsAllDataParams,
-                                      "print",Txt_Print);
+                                      "print16x16.gif",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
             case Usr_LIST:
@@ -6906,7 +6908,7 @@ void Usr_SeeTeachers (void)
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                   Act_PutContextualLink (ActLstTchAll,Usr_PutLinkToShowTchsAllDataParams,
-                                         "table",Txt_Show_all_data);
+                                         "table16x16.gif",Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
                break;
@@ -6994,7 +6996,7 @@ static void Usr_PutLinkToListOfficialStudents (void)
        Gbl.Imported.ExternalRole == Rol_TEACHER)	// ...as a teacher
       /***** Link to list official students *****/
       Act_PutContextualLink (ActGetExtLstStd,NULL,
-                             "list",Txt_Official_students);
+                             "list16x16.gif",Txt_Official_students);
   }
 
 /*****************************************************************************/

@@ -703,7 +703,7 @@ static void Svy_PutFormToCreateNewSvy (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
-                          "new",Txt_New_survey);
+                          "new16x16.gif",Txt_New_survey);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2929,7 +2929,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutIconWithText ("new",Txt_New_question,Txt_New_question);
+      Lay_PutIconWithText ("new16x16.gif",
+                           Txt_New_question,
+                           Txt_New_question);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

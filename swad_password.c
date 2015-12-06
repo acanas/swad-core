@@ -218,7 +218,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
    extern const char *Txt_I_forgot_my_password;
 
    Act_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
-                          "key",Txt_I_forgot_my_password);
+                          "key16x16.gif",Txt_I_forgot_my_password);
   }
 
 static void Pwd_PutLinkToSendNewPasswdParams (void)
@@ -842,7 +842,7 @@ void Pwd_PutLinkToChangeMyPassword (void)
    extern const char *Txt_Change_password;
 
    /***** Link for changing the password *****/
-   Act_PutContextualLink (ActFrmChgMyPwd,NULL,"key",Txt_Change_password);
+   Act_PutContextualLink (ActFrmChgMyPwd,NULL,"key16x16.gif",Txt_Change_password);
   }
 
 /*****************************************************************************/
@@ -861,7 +861,7 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
 	                	                                                        ActFrmPwdOth),
                              Usr_PutParamOtherUsrCodEncrypted,
-                             "key",Txt_Change_password);
+                             "key16x16.gif",Txt_Change_password);
   }
 
 /*****************************************************************************/

@@ -142,7 +142,7 @@ void Con_PutLinkToLastClicks (void)
    extern const char *Txt_Last_clicks;
 
    Act_PutContextualLink (ActLstClk,NULL,
-                          "click",Txt_Last_clicks);
+                          "click16x16.gif",Txt_Last_clicks);
   }
 
 /*****************************************************************************/

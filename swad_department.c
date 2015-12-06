@@ -212,7 +212,7 @@ static void Dpt_PutFormToEditDpts (void)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActEdiDpt,NULL,"edit",Txt_Edit);
+   Act_PutContextualLink (ActEdiDpt,NULL,"edit16x16.gif",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

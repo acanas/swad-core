@@ -1634,7 +1634,7 @@ static void Ntf_PutLinkToChangePrefs (void)
   {
    extern const char *Txt_Change_preferences;
 
-   Act_PutContextualLink (ActEdiPrf,NULL,"heart",Txt_Change_preferences);
+   Act_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",Txt_Change_preferences);
   }
 
 /*****************************************************************************/
@@ -1648,7 +1648,9 @@ static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
 
    Act_FormStart (ActMrkNtfSee);
    Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("visible_on",Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
+   Lay_PutIconWithText ("visible_on16x16.gif",
+                        Txt_Mark_all_notifications_as_read,
+                        Txt_Mark_all_notifications_as_read);
    Act_FormEnd ();
   }
 

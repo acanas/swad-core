@@ -213,7 +213,7 @@ void Not_ListFullNotices (void)
    if (ICanEditNotices)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_PutContextualLink (ActWriNot,NULL,"new",Txt_New_notice);
+      Act_PutContextualLink (ActWriNot,NULL,"new16x16.gif",Txt_New_notice);
       fprintf (Gbl.F.Out,"</div>");
      }
 

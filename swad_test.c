@@ -320,7 +320,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
 
    Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
 	                                                               ActReqSeeUsrTstExa,
-	                  NULL,"file",Txt_Results_tests);
+	                  NULL,"file16x16.gif",Txt_Results_tests);
   }
 
 /*****************************************************************************/
@@ -331,7 +331,7 @@ static void Tst_PutFormToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   Act_PutContextualLink (ActEdiTstQst,NULL,"edit",Txt_Edit);
+   Act_PutContextualLink (ActEdiTstQst,NULL,"edit16x16.gif",Txt_Edit);
   }
 
 /*****************************************************************************/
@@ -342,7 +342,7 @@ static void Tst_PutFormToConfigure (void)
   {
    extern const char *Txt_Configure;
 
-   Act_PutContextualLink (ActCfgTst,NULL,"configtest",Txt_Configure);
+   Act_PutContextualLink (ActCfgTst,NULL,"configtest16x16.gif",Txt_Configure);
   }
 
 /*****************************************************************************/
@@ -1172,7 +1172,9 @@ static void Tst_PutFormToCreateNewTstQst (void)
    /***** Put form to create a new test question *****/
    Act_FormStart (ActEdiOneTstQst);
    Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("new",Txt_New_question,Txt_New_question);
+   Lay_PutIconWithText ("new16x16.gif",
+                        Txt_New_question,
+                        Txt_New_question);
    Act_FormEnd ();
   }
 

@@ -225,7 +225,7 @@ void Msg_ListEMails (void)
 	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
                   Txt_Create_e_mail_message,
                   The_ClassFormBold[Gbl.Prefs.Theme]);
-         Lay_PutIconWithText ("editnewmsg",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
+         Lay_PutIconWithText ("editnewmsg16x16.gif",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
          fprintf (Gbl.F.Out,"</div>");
         }
      }
@@ -1697,7 +1697,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Act_PutContextualLink (ActLstBanUsr,NULL,"stop",Txt_Banned_users);
+   Act_PutContextualLink (ActLstBanUsr,NULL,"stop16x16.gif",Txt_Banned_users);
   }
 
 /*****************************************************************************/
@@ -2227,7 +2227,7 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    Act_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
 	                                                              ActReqDelAllSntMsg,
 	                  Msg_PutHiddenParamsMsgsFilters,
-	                  "delon",Gbl.Title);
+	                  "delon16x16.gif",Gbl.Title);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3004,10 +3004,10 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
 		       The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("reply",Replied ? Txt_Reply_again :
-				      Txt_Reply,
-			    Replied ? Txt_Reply_again :
-				      Txt_Reply);
+   Lay_PutIconWithText ("reply16x16.gif",Replied ? Txt_Reply_again :
+				                   Txt_Reply,
+			                 Replied ? Txt_Reply_again :
+				                   Txt_Reply);
    Act_FormEnd ();
   }
 

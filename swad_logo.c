@@ -192,19 +192,19 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 	 Action = ActReqInsLog;
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
-	 Icon = "ins";
+	 Icon = "ins16x16.gif";
 	 break;
       case Sco_SCOPE_CTR:
 	 Action = ActReqCtrLog;
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
-	 Icon = "ctr";
+	 Icon = "ctr16x16.gif";
 	 break;
       case Sco_SCOPE_DEG:
 	 Action = ActReqDegLog;
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
-	 Icon = "deg";
+	 Icon = "deg16x16.gif";
 	 break;
       default:
 	 return;	// Nothing to do
@@ -319,7 +319,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
    /***** Link for removing the photo *****/
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("delon",Txt_Remove_logo,Txt_Remove_logo);
+   Lay_PutIconWithText ("delon16x16.gif",Txt_Remove_logo,Txt_Remove_logo);
    Act_FormEnd ();
   }
 

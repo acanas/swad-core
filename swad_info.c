@@ -342,7 +342,7 @@ void Inf_ShowInfo (void)
      {
       case Inf_INFO_SRC_NONE:
 	 if (InfoType != Inf_INTRODUCTION)
-	    Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+	    Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
          break;
       case Inf_INFO_SRC_EDITOR:
          switch (InfoType)
@@ -373,7 +373,7 @@ void Inf_ShowInfo (void)
             case Inf_FAQ:
             case Inf_LINKS:
             case Inf_ASSESSMENT:
-	       Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+	       Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
 	       break;
            }
          break;
@@ -417,7 +417,7 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit",Txt_Edit);
+   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit16x16.gif",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -745,7 +745,7 @@ static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
 	 Inf_ShowPage (InfoType,URL);
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
      }
   }
 
@@ -837,10 +837,10 @@ static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType)
       if (Gbl.CurrentCrs.Info.URL[0])
 	 Inf_ShowPage (InfoType,Gbl.CurrentCrs.Info.URL);
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
   }
 
 /*****************************************************************************/
@@ -881,7 +881,7 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
 	    URL,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("fullscreen",
+   Lay_PutIconWithText ("fullscreen16x16.gif",
 		        Txt_View_in_a_new_window,
 		        Txt_View_in_a_new_window);
 
@@ -922,7 +922,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Put link to view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
-			  "visible_on",Txt_View);
+			  "visible_on16x16.gif",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get info source from database *****/
@@ -1597,7 +1597,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
       Lay_EndRoundFrameTable ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
   }
 
 /*****************************************************************************/
@@ -1701,7 +1701,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       Lay_EndRoundFrameTable ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
   }
 
 /*****************************************************************************/

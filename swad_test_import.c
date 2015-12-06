@@ -97,7 +97,9 @@ void TsI_PutFormToExportQuestions (void)
 
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("export",Txt_Export_questions_to_XML_file,Txt_Export_questions);
+   Lay_PutIconWithText ("export16x16.gif",
+                        Txt_Export_questions_to_XML_file,
+                        Txt_Export_questions);
    Act_FormEnd ();
   }
 
@@ -116,7 +118,9 @@ void TsI_PutFormToImportQuestions (void)
 
    /***** Put a link to create a file with questions *****/
    Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("import",Txt_Import_questions_from_XML_file,Txt_Import_questions);
+   Lay_PutIconWithText ("import16x16.gif",
+                        Txt_Import_questions_from_XML_file,
+                        Txt_Import_questions);
    Act_FormEnd ();
   }
 
@@ -265,7 +269,9 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
             The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("file",Txt_XML_file,Txt_XML_file);
+   Lay_PutIconWithText ("file16x16.gif",
+                        Txt_XML_file,
+                        Txt_XML_file);
   }
 
 /*****************************************************************************/

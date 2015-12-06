@@ -394,7 +394,9 @@ static void Sta_PutFormToRequestAccessesCrs (void)
 
    Act_FormStart (ActReqAccCrs);
    Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("stats",Txt_Visits_to_course,Txt_Visits_to_course);
+   Lay_PutIconWithText ("stats16x16.gif",
+                        Txt_Visits_to_course,
+                        Txt_Visits_to_course);
    Act_FormEnd ();
   }
 

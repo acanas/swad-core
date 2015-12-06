@@ -222,7 +222,7 @@ static void Cty_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to print view */
-	 Act_PutContextualLink (ActPrnCtyInf,NULL,"print",Txt_Print);
+	 Act_PutContextualLink (ActPrnCtyInf,NULL,"print16x16.gif",Txt_Print);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
