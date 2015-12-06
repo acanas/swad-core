@@ -78,7 +78,7 @@ struct Degree
    char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
    unsigned FirstYear;
    unsigned LastYear;
-   bool OptYear;
+   // bool OptYear;
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumCourses;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
@@ -148,7 +148,7 @@ void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegreeCtr (void);
 void Deg_ChangeDegFirstYear (void);
 void Deg_ChangeDegLastYear (void);
-void Deg_ChangeDegOptYear (void);
+// void Deg_ChangeDegOptYear (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_RequestLogo (void);

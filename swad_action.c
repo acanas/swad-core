@@ -294,7 +294,7 @@ Centre:
 	184. ActChgDegCtr		Request change of the centre of a degree
 	185. ActChgDegFstYea		Request change of the first year of a degree
 	186. ActChgDegLstYea		Request change of the last year of a degree
-	187. ActChgDegOptYea		Request change of the year of optativas of a degree
+REMOVE --->	187. ActChgDegOptYea		Request change of the year of optativas of a degree
 	188. ActChgDegWWW		Request change of the web of a degree
 	189. ActChgDegSta		Request change of status of a degree
 
@@ -1698,7 +1698,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDegCtr	*/{1049,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegreeCtr		,NULL},
    /* ActChgDegFstYea	*/{ 550,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegFirstYear		,NULL},
    /* ActChgDegLstYea	*/{ 551,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegLastYear		,NULL},
-   /* ActChgDegOptYea	*/{ 552,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegOptYear		,NULL},
+   /* ActChgDegOptYea	*//*{ 552,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegOptYear		,NULL},*/
    /* ActChgDegWWW	*/{ 554,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegStatus		,NULL},
 
@@ -3351,7 +3351,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #549 (obsolete action)
 	ActChgDegFstYea,	// #550
 	ActChgDegLstYea,	// #551
-	ActChgDegOptYea,	// #552
+	// ActChgDegOptYea,	// #552
+	-1,			// #552
 	ActRecDegLog,		// #553
 	ActChgDegWWW,		// #554
 	ActEdiCrs,		// #555

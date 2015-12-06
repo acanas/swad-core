@@ -847,6 +847,7 @@ mysql> DESCRIBE degrees;
 +-----------------+---------------+------+-----+---------+----------------+
 11 rows in set (0.00 sec)
 */
+/*
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
                    "DegCod INT NOT NULL AUTO_INCREMENT,"
                    "CtrCod INT NOT NULL,"
@@ -858,6 +859,19 @@ mysql> DESCRIBE degrees;
                    "FirstYear TINYINT NOT NULL DEFAULT 0,"
                    "LastYear TINYINT NOT NULL DEFAULT 0,"
                    "OptYear ENUM('N','Y') NOT NULL DEFAULT 'N',"
+                   "WWW VARCHAR(255) NOT NULL,"
+                   "UNIQUE INDEX(DegCod),INDEX(CtrCod),INDEX(DegTypCod),INDEX(Status))");
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
+                   "DegCod INT NOT NULL AUTO_INCREMENT,"
+                   "CtrCod INT NOT NULL,"
+                   "DegTypCod INT NOT NULL,"
+                   "Status TINYINT NOT NULL DEFAULT 0,"
+                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
+                   "ShortName VARCHAR(32) NOT NULL,"
+                   "FullName VARCHAR(127) NOT NULL,"
+                   "FirstYear TINYINT NOT NULL DEFAULT 0,"
+                   "LastYear TINYINT NOT NULL DEFAULT 0,"
                    "WWW VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(DegCod),INDEX(CtrCod),INDEX(DegTypCod),INDEX(Status))");
 

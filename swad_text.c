@@ -7302,7 +7302,7 @@ const char *Txt_DEGREE_With_courses =
 #elif L==8
 	"Com disciplinas";
 #endif
-
+/*
 const char *Txt_DEGREE_With_year_for_optional_courses =
 #if   L==0
 	"Con curso de optativas.";			// Necessita traduccio
@@ -7323,7 +7323,7 @@ const char *Txt_DEGREE_With_year_for_optional_courses =
 #elif L==8
 	"With year for optional courses.";		// Necessita de tradução
 #endif
-
+*/
 const char *Txt_DEGREE_Without_courses =
 #if   L==0
 	"Sense assignatures";
@@ -7344,7 +7344,7 @@ const char *Txt_DEGREE_Without_courses =
 #elif L==8
 	"Sem disciplinas";
 #endif
-
+/*
 const char *Txt_DEGREE_Without_year_for_optional_courses =
 #if   L==0
 	"Sin curso de optativas.";					// Necessita traduccio
@@ -7365,7 +7365,7 @@ const char *Txt_DEGREE_Without_year_for_optional_courses =
 #elif L==8
 	"Without year for optional courses.";				// Necessita de tradução
 #endif
-
+*/
 const char *Txt_Degree_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==0
 	"Titulaci&oacute;n <strong>%s</strong> eliminada.";	// Necessita traduccio
@@ -25808,7 +25808,7 @@ const char *Txt_Opening_of_groups =
 #elif L==8
 	"Opening of groups";		// Necessita de tradução
 #endif
-
+/*
 const char *Txt_Opt_BR_year =		// Year for optional courses
 #if   L==0
 	"&iquest;Cur.<br />opt.?";	// Necessita traduccio
@@ -25829,7 +25829,7 @@ const char *Txt_Opt_BR_year =		// Year for optional courses
 #elif L==8
 	"Opt.<br />year?";		// Necessita de tradução
 #endif
-
+*/
 const char *Txt_Option_a_Import_students_from_the_official_lists =
 #if   L==0
 	"Opci&oacute;n a): Obtenga estudiantes de las listas oficiales";	// Necessita traduccio
