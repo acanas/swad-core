@@ -155,7 +155,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
@@ -328,9 +328,11 @@ static void Crs_Configuration (bool PrintView)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Shortcut,
-            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod,
-            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod);
 
    if (PrintView)

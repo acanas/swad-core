@@ -7648,13 +7648,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    Txt_Language_t Lan;
    char Query[1024];
-   unsigned NumUsrs[Txt_NUM_LANGUAGES];
+   unsigned NumUsrs[1+Txt_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES]);
@@ -7676,8 +7676,8 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
             Txt_PERCENT_of_users);
 
    /***** For each language... *****/
-   for (Lan = (Txt_Language_t) 0;
-	Lan < Txt_NUM_LANGUAGES;
+   for (Lan = (Txt_Language_t) 1;
+	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
      {
       /***** Get the number of users who have chosen this language from database *****/
@@ -7754,8 +7754,8 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
      }
 
    /***** Write number of users who have chosen each language *****/
-   for (Lan = (Txt_Language_t) 0;
-	Lan < Txt_NUM_LANGUAGES;
+   for (Lan = (Txt_Language_t) 1;
+	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT LEFT_MIDDLE\">"

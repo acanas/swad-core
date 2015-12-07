@@ -107,11 +107,12 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName);
 
 char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
    sprintf (URL,"%s/%s?usr=@%s",
-	    Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	    Cfg_HTTPS_URL_SWAD_CGI,
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	    NicknameWithoutArroba);
 
    return URL;

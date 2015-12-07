@@ -1538,8 +1538,8 @@ void Mai_CreateFileNameMail (void)
 
 void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
   {
-   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][Txt_NUM_LANGUAGES];
-   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][Txt_NUM_LANGUAGES];
+   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s %s:\n",
             Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
@@ -1553,7 +1553,7 @@ void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
 
 void Mai_WriteFootNoteEMail (Txt_Language_t Language)
   {
-   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1+Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s\n"
                              "%s\n"

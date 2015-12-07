@@ -234,7 +234,7 @@ void Pre_RemoveOldPrefsFromIP (void)
 
 void Pre_PutSelectorToSelectLanguage (void)
   {
-   extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
    Txt_Language_t Lan;
 
    Act_FormStart (ActReqChgLan);
@@ -242,8 +242,8 @@ void Pre_PutSelectorToSelectLanguage (void)
 	              " style=\"width:112px; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
-   for (Lan = (Txt_Language_t) 0;
-	Lan < Txt_NUM_LANGUAGES;
+   for (Lan = (Txt_Language_t) 1;
+	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Lan);
@@ -261,9 +261,9 @@ void Pre_PutSelectorToSelectLanguage (void)
 
 void Pre_AskChangeLanguage (void)
   {
-   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Switch_to_LANGUAGE[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switch_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
    Txt_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
@@ -290,24 +290,42 @@ void Pre_AskChangeLanguage (void)
 
 void Pre_ChangeLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_NAME[Txt_NUM_LANGUAGES];
-   char Query[512];
-
    /***** Get param language *****/
    Gbl.Prefs.Language = Pre_GetParamLanguage ();
 
    /***** Store language in database *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
-     {
-      sprintf (Query,"UPDATE usr_data SET Language='%s'"
-	             " WHERE UsrCod='%ld'",
-               Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.Usrs.Me.UsrDat.UsrCod);
-      DB_QueryUPDATE (Query,"can not update your language");
-     }
+   /*
+   sprintf (Gbl.Message,"Txt_STR_LANG_ID[Gbl.Prefs.Language] = %s",Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   sprintf (Gbl.Message,"Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language] = %s",Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   */
+
+   if (Gbl.Usrs.Me.Logged &&
+       Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
+     Pre_UpdateMyLanguageToCurrentLanguage ();
 
    /***** Set preferences from current IP *****/
    Pre_SetPrefsFromIP ();
+  }
+
+/*****************************************************************************/
+/**************** Update my language to the current language *****************/
+/*****************************************************************************/
+
+void Pre_UpdateMyLanguageToCurrentLanguage (void)
+  {
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   char Query[128];
+
+   /***** Set my language to the current language *****/
+   Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
+
+   /***** Update my language in database *****/
+   sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod='%ld'",
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not update your language");
   }
 
 /*****************************************************************************/
@@ -322,7 +340,8 @@ Txt_Language_t Pre_GetParamLanguage (void)
 
    Par_GetParToText ("Lan",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Txt_NUM_LANGUAGES)
+      if (UnsignedNum >= 1 &&
+	  UnsignedNum <= Txt_NUM_LANGUAGES)
          return (Txt_Language_t) UnsignedNum;
 
    return Txt_Current_CGI_SWAD_Language;

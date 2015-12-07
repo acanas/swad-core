@@ -246,7 +246,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
@@ -356,8 +356,12 @@ static void Ins_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentIns.Ins.InsCod);
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentIns.Ins.InsCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentIns.Ins.InsCod);
 
       if (PrintView)
 	{

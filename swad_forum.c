@@ -2054,9 +2054,9 @@ void For_SetForumName (For_ForumType_t ForumType,
                        char *ForumName,Txt_Language_t Language,bool UseHTMLEntities)
   {
    extern const char *Txt_General;
-   extern const char *Txt_General_NO_HTML[Txt_NUM_LANGUAGES];
+   extern const char *Txt_General_NO_HTML[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_only_teachers;
-   extern const char *Txt_only_teachers_NO_HTML[Txt_NUM_LANGUAGES];
+   extern const char *Txt_only_teachers_NO_HTML[1+Txt_NUM_LANGUAGES];
 
    switch (ForumType)
      {

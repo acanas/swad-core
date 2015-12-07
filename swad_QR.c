@@ -130,14 +130,15 @@ static void QR_ImageQRCode (const char *QRString)
 void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
   {
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    /***** Show QR code with direct link to the current centre *****/
    fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:%upx; height:%upx;\" />",
             Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
+            Cfg_HTTPS_URL_SWAD_CGI,
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
             Txt_Shortcut,
             Txt_Shortcut,
             Size,Size);

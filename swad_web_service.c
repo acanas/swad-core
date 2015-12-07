@@ -184,7 +184,7 @@ static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
 
 static void Svc_GetListGrpsInAttendanceEvent (long AttCod,char **ListGroups);
 
-static int Svc_GetLanguageFromUsrCod (long UsrCod);
+static int Svc_GetMyLanguage (void);
 
 static int Svc_sendMessageToUsr (long RepliedMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
@@ -2533,8 +2533,8 @@ int swad__getNotifications (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
-   /***** Get language from database *****/
-   if ((ReturnCode = Svc_GetLanguageFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod)) != SOAP_OK)
+   /***** Get my language from database *****/
+   if ((ReturnCode = Svc_GetMyLanguage ()) != SOAP_OK)
       return ReturnCode;
 
    if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
@@ -2708,13 +2708,12 @@ int swad__getNotifications (struct soap *soap,
   }
 
 /*****************************************************************************/
-/************ Get language from database giving a user's code ****************/
+/********************* Get my language from database *************************/
 /*****************************************************************************/
-// UsrCod must contain an existing user's code
 
-static int Svc_GetLanguageFromUsrCod (long UsrCod)
+static int Svc_GetMyLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2723,7 +2722,7 @@ static int Svc_GetLanguageFromUsrCod (long UsrCod)
    /***** Get user's language *****/
    sprintf (Query,"SELECT Language FROM usr_data"
 	          " WHERE UsrCod='%ld'",
-	    UsrCod);
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get user's language") != 1)
       return soap_receiver_fault (Gbl.soap,
 	                          "Can not get user's language from database",
@@ -2733,15 +2732,17 @@ static int Svc_GetLanguageFromUsrCod (long UsrCod)
    row = mysql_fetch_row (mysql_res);
 
    /* Get language (row[0]) */
-   Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;	// Set default language
-   for (Lan=(Txt_Language_t) 0;
-	Lan < Txt_NUM_LANGUAGES;
+   Gbl.Prefs.Language = Txt_LANGUAGE_UNKNOWN;	// Language unknown
+   for (Lan = (Txt_Language_t) 1;
+	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
       if (!strcasecmp (row[0],Txt_STR_LANG_ID[Lan]))
         {
 	 Gbl.Prefs.Language = Lan;
          break;
         }
+   if (Gbl.Prefs.Language == Txt_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
+      Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3345,15 +3346,17 @@ int swad__getTests (struct soap *soap,
 
 static int Svc_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
 
    /***** Get available tags from database *****/
-   sprintf (Query,"SELECT TagCod,TagTxt FROM tst_tags"
-                  " WHERE CrsCod='%ld' AND TagHidden='N' ORDER BY TagTxt",
+   sprintf (Query,"SELECT TagCod,TagTxt"
+	          " FROM tst_tags"
+                  " WHERE CrsCod='%ld' AND TagHidden='N'"
+                  " ORDER BY TagTxt",
             CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get test tags");
 

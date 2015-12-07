@@ -103,8 +103,6 @@ int main (int argc, char *argv[])
 
    /***** Initialize global variables *****/
    Gbl_InitializeGlobals ();
-
-   /***** Get database password and SMTP password from config file *****/
    Cfg_GetConfigFromFile ();
 
    /***** Open database connection *****/

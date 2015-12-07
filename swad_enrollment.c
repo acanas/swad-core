@@ -432,7 +432,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char Query[2048];
 
@@ -447,9 +447,13 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek='%u',PhotoVisibility='%s',ProfileVisibility='%s',"
+		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek='%u',"
+		  "PhotoVisibility='%s',ProfileVisibility='%s',"
 		  "CtyCod='%ld',"
-		  "LocalAddress='%s',LocalPhone='%s',FamilyAddress='%s',FamilyPhone='%s',OriginPlace='%s',Birthday='%04u-%02u-%02u',Comments='%s'"
+		  "LocalAddress='%s',LocalPhone='%s',"
+		  "FamilyAddress='%s',FamilyPhone='%s',"
+		  "OriginPlace='%s',Birthday='%04u-%02u-%02u',"
+		  "Comments='%s'"
 		  " WHERE UsrCod='%ld'",
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
@@ -462,7 +466,8 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
             Pri_VisibilityDB[UsrDat->ProfileVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress,UsrDat->LocalPhone,
-	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,
+	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,
+	    UsrDat->OriginPlace,
 	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
@@ -2986,7 +2991,9 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
       if (NewUsrIDValid)
 	{
 	 /* Initialize some data of this new user */
-	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_STUDENT;
+	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
+	    (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Rol_STUDENT :	// Course selected
+					      Rol_UNKNOWN;	// No course selected
 	 Gbl.Usrs.Other.UsrDat.Roles = (1 << Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB);
 
 	 /***** Show form to enter the data of a new user *****/

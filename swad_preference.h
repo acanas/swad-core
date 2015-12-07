@@ -48,6 +48,7 @@ void Pre_RemoveOldPrefsFromIP (void);
 void Pre_PutSelectorToSelectLanguage (void);
 void Pre_AskChangeLanguage (void);
 void Pre_ChangeLanguage (void);
+void Pre_UpdateMyLanguageToCurrentLanguage (void);
 Txt_Language_t Pre_GetParamLanguage (void);
 
 void Pre_ChangeSideCols (void);

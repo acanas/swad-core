@@ -1331,21 +1331,23 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
   {
-   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][Txt_NUM_LANGUAGES];
-   extern const char *Txt_Course_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Forum_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_MSG_From_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Go_to_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_TAB_Messages_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_Notifications_NO_HTML[Txt_NUM_LANGUAGES];
-   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Course_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Forum_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_MSG_From_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Go_to_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_TAB_Messages_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
    char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
+   Txt_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Institution Ins;
@@ -1375,16 +1377,21 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
       if (NumRows) // Events found
 	{
+	 /***** If user has no language, set it to current language *****/
+	 ToUsrLanguage = ToUsrDat->Prefs.Language;
+	 if (ToUsrLanguage == Txt_LANGUAGE_UNKNOWN)
+	    ToUsrLanguage = Gbl.Prefs.Language;
+
 	 /***** Create temporary file for mail content *****/
 	 Mai_CreateFileNameMail ();
 
 	 /***** Welcome note *****/
 	 Mai_WriteWelcomeNoteEMail (ToUsrDat);
 	 if (NumRows == 1)
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrDat->Prefs.Language],
+	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
 	 else
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrDat->Prefs.Language],
+	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrLanguage],
 		     (unsigned) NumRows,Cfg_PLATFORM_SHORT_NAME);
 	 fprintf (Gbl.Msg.FileMail,": \n");
 
@@ -1431,7 +1438,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       ForumType = For_GetForumTypeOfAPost (Cod);
 
 	    /* Information about the type of this event */
-	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrDat->Prefs.Language],
+	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
 	    fprintf (Gbl.Msg.FileMail,"\n");
 
@@ -1454,7 +1461,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_SURVEY:
 		  if (Crs.CrsCod > 0)
 		     fprintf (Gbl.Msg.FileMail,"%s: %s\n",
-			      Txt_Course_NO_HTML[ToUsrDat->Prefs.Language],
+			      Txt_Course_NO_HTML[ToUsrLanguage],
 			      Crs.FullName);
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
@@ -1464,15 +1471,15 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 				    &Ctr,
 				    &Deg,
 				    &Crs,
-				    ForumName,ToUsrDat->Prefs.Language,false);	// Set forum name in recipient's language
+				    ForumName,ToUsrLanguage,false);	// Set forum name in recipient's language
 		  fprintf (Gbl.Msg.FileMail,"%s: %s\n",
-			   Txt_Forum_NO_HTML[ToUsrDat->Prefs.Language],
+			   Txt_Forum_NO_HTML[ToUsrLanguage],
 			   ForumName);
 		  break;
 	      }
 	    /* From: */
 	    fprintf (Gbl.Msg.FileMail,"%s: %s\n",
-		     Txt_MSG_From_NO_HTML[ToUsrDat->Prefs.Language],
+		     Txt_MSG_From_NO_HTML[ToUsrLanguage],
 		     FromUsrDat.FullName);
 	   }
 
@@ -1481,17 +1488,17 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /* Go to: */
 	 fprintf (Gbl.Msg.FileMail,"%s: %s/ > %s > %s\n",
-		  Txt_Go_to_NO_HTML[ToUsrDat->Prefs.Language],
+		  Txt_Go_to_NO_HTML[ToUsrLanguage],
 		  Cfg_HTTPS_URL_SWAD_CGI,
-		  Txt_TAB_Messages_NO_HTML[ToUsrDat->Prefs.Language],
-		  Txt_Notifications_NO_HTML[ToUsrDat->Prefs.Language]);
+		  Txt_TAB_Messages_NO_HTML[ToUsrLanguage],
+		  Txt_Notifications_NO_HTML[ToUsrLanguage]);
 
 	 /* Disclaimer */
 	 fprintf (Gbl.Msg.FileMail,"\n%s\n",
-		  Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[ToUsrDat->Prefs.Language]);
+		  Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[ToUsrLanguage]);
 
 	 /* Footer note */
-	 Mai_WriteFootNoteEMail (ToUsrDat->Prefs.Language);
+	 Mai_WriteFootNoteEMail (ToUsrLanguage);
 
 	 fclose (Gbl.Msg.FileMail);
 
@@ -1503,7 +1510,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		  Cfg_AUTOMATIC_EMAIL_FROM,
                   Gbl.Config.SMTPPassword,
 		  ToUsrDat->Email,
-		  Cfg_PLATFORM_SHORT_NAME,Txt_Notifications_NO_HTML[ToUsrDat->Prefs.Language],
+		  Cfg_PLATFORM_SHORT_NAME,
+		  Txt_Notifications_NO_HTML[ToUsrLanguage],
 		  Gbl.Msg.FileNameMail);
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)

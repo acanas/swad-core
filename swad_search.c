@@ -587,7 +587,7 @@ static void Sch_SearchInDB (void)
 
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
    char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
 

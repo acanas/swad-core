@@ -272,7 +272,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Tch.Office[0] = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
 
-   UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
+   UsrDat->Prefs.Language = Txt_LANGUAGE_UNKNOWN;			// Language unknown
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    UsrDat->Prefs.Theme = The_THEME_DEFAULT;
    UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
@@ -387,7 +387,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char Query[1024];
@@ -467,9 +467,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
         }
 
    /* Get language */
-   UsrDat->Prefs.Language = Cfg_DEFAULT_LANGUAGE_FOR_NEW_USERS;
-   for (Lan = (Txt_Language_t) 0;
-        Lan < Txt_NUM_LANGUAGES;
+   UsrDat->Prefs.Language = Txt_LANGUAGE_UNKNOWN;	// Language unknown
+   for (Lan = (Txt_Language_t) 1;
+        Lan <= Txt_NUM_LANGUAGES;
         Lan++)
       if (!strcasecmp (row[8],Txt_STR_LANG_ID[Lan]))
         {
@@ -1219,7 +1219,7 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
 
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Query[512];
 
    /***** Get the institutions a user belongs to from database *****/
@@ -1515,7 +1515,7 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
-   extern const char *Txt_Switching_to_LANGUAGE[Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
    bool CongratulateMyBirthday;
 
    if (Gbl.Usrs.Me.Logged)
@@ -2363,6 +2363,10 @@ static void Usr_SetUsrRoleAndPrefs (void)
    bool ICanBeDegAdm = false;
 
    // In this point I am logged
+
+   /***** Set my language if unknown *****/
+   if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_LANGUAGE_UNKNOWN)		// I have not chosen language
+      Pre_UpdateMyLanguageToCurrentLanguage ();	// Update my language in database
 
    /***** Set preferences from my preferences *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;

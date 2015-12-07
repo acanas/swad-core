@@ -250,8 +250,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.Ctys.Lst = NULL;
    Gbl.Ctys.SelectedOrderType = Cty_DEFAULT_ORDER_TYPE;
    Gbl.Ctys.EditingCty.CtyCod = -1L;
-   for (Lan = (Txt_Language_t) 0;
-	Lan < Txt_NUM_LANGUAGES;
+   for (Lan = (Txt_Language_t) 1;
+	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)
       Gbl.Ctys.EditingCty.Name[Lan][0] = '\0';
 

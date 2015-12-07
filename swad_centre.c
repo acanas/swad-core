@@ -255,7 +255,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -431,8 +431,12 @@ static void Ctr_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,Txt_STR_LANG_ID[Gbl.Prefs.Language],Gbl.CurrentCtr.Ctr.CtrCod);
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentCtr.Ctr.CtrCod,
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.CurrentCtr.Ctr.CtrCod);
 
       if (PrintView)
 	{

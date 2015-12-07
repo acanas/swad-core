@@ -101,7 +101,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_WriteStartOfPage (void)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
@@ -395,7 +395,7 @@ static void Lay_WritePageTitle (void)
 
 static void Lay_WriteRedirectionToMyLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
@@ -589,7 +589,7 @@ static void Lay_WriteScripts (void)
 
 static void Lay_WriteScriptInit (void)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 

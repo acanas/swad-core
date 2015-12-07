@@ -156,7 +156,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
-void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 
 void Rec_ShowFormMyInsCtrDpt (void);
 void Rec_ChgCountryOfMyInstitution (void);

@@ -31,7 +31,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Txt_NUM_LANGUAGES 9
+#define Txt_NUM_LANGUAGES 9	// From 1 to 9. 0 is reserved to unknown language
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -39,15 +39,16 @@
 
 typedef enum
   {
-   Txt_LANGUAGE_CA = 0,
-   Txt_LANGUAGE_DE = 1,
-   Txt_LANGUAGE_EN = 2,
-   Txt_LANGUAGE_ES = 3,
-   Txt_LANGUAGE_FR = 4,
-   Txt_LANGUAGE_GN = 5,
-   Txt_LANGUAGE_IT = 6,
-   Txt_LANGUAGE_PL = 7,
-   Txt_LANGUAGE_PT = 8,
+   Txt_LANGUAGE_UNKNOWN = 0,
+   Txt_LANGUAGE_CA = 1,
+   Txt_LANGUAGE_DE = 2,
+   Txt_LANGUAGE_EN = 3,
+   Txt_LANGUAGE_ES = 4,
+   Txt_LANGUAGE_FR = 5,
+   Txt_LANGUAGE_GN = 6,
+   Txt_LANGUAGE_IT = 7,
+   Txt_LANGUAGE_PL = 8,
+   Txt_LANGUAGE_PT = 9,
   } Txt_Language_t; // ISO 639-1 language codes
 
 /*****************************************************************************/

@@ -4361,7 +4361,7 @@ void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *Breadcru
 
 char *Act_GetActionTextFromDB (long ActCod,char *Txt)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4420,7 +4420,7 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id)
 // Id can not be NULL
 static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
    if (!Gbl.InsideForm)

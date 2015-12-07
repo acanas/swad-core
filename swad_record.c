@@ -81,6 +81,7 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
 static void Rec_ShowMyCrsRecordUpdated (void);
 static void Rec_WriteLinkToDataProtectionClause (void);
 
+static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
 static void Rec_PutLinkToChangeMyInsCtrDpt (void);
 static void Rec_PutLinkToChangeMySocialNetworks (void);
@@ -1966,7 +1967,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
    extern const char *Txt_View_public_profile;
-   extern const char *Txt_Country;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2006,12 +2006,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_TEACHER));	// He/she already is a teacher in any course
    bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
 	                         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
-   bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
-                       TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR);
-   bool RoleForm = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-	            (TypeOfView == Rec_FORM_SIGN_UP ||
-                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
-                     TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR));
+   bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD);
+   bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
+                    TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
+                    TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR);
    bool SexForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD);
    bool DataForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
@@ -3274,7 +3272,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
    Usr_BuildFullName (UsrDat);
   }
 
-void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
+static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
   {
    char UnsignedStr[10+1];
    char LongStr[1+10+1];

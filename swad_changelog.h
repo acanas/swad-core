@@ -104,17 +104,22 @@
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
+// TODO: Replace "Curso o semestre" by "A&ntilde;o o semestre"
+// TODO: Reply to one user, suggested by Francisco Ocaña Lara
+// TODO: Reply to all
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.59.4 (2015/12/06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.60 (2015/12/07)"
 #define CSS_FILE		"swad15.59.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.60:    Dec 07, 2015	By default, the language of a new user is unknown.
+					Fixed bugs when registering a new user. (? lines)
         Version 15.59.4:  Dec 06, 2015	Changes in some small icons. (186462 lines)
         Version 15.59.3:  Dec 06, 2015	If photo zoom is out of the screen at left, it is shown at right of the photo. (186445 lines)
         Version 15.59.2:  Dec 06, 2015	Courses with year not applicable are listed at the end. (186439 lines)

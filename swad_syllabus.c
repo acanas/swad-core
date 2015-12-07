@@ -801,7 +801,7 @@ int Syl_WriteSyllabusIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 
 static void Syl_WriteSyllabusIntoHTMLTmpFile (Inf_InfoType_t InfoType,FILE *FileHTMLTmp)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    unsigned NumItem;
    int i;

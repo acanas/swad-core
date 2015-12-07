@@ -1711,7 +1711,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
 
 int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
   {
-   extern const char *Txt_STR_LANG_ID[Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    char FileNameHTMLTmp[PATH_MAX+1];
@@ -1740,7 +1740,8 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
       fprintf (FileHTMLTmp,"<!DOCTYPE html>\n"
 			    "<html lang=\"%s\">\n"
 			    "<head>\n"
-			    "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
+			    "<meta http-equiv=\"Content-Type\""
+			    " content=\"text/html;charset=windows-1252\" />\n"
 			    "<title>%s</title>\n"
 			    "</head>\n"
 			    "<body>\n",
