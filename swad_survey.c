@@ -734,7 +734,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("delon",Txt_Remove);
+   Act_PutIconLink ("delon16x16.gif",Txt_Remove);
 
    /***** Put form to reset survey *****/
    Act_FormStart (ActReqRstSvy);
@@ -742,7 +742,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("reset",Txt_Reset);
+   Act_PutIconLink ("reset16x16.gif",Txt_Reset);
 
    /***** Put form to hide/show survey *****/
    Act_FormStart (Visible ? ActHidSvy :
@@ -752,9 +752,9 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Visible)
-      Act_PutIconLink ("visible_on",Txt_Hide);
+      Act_PutIconLink ("visible_on16x16.gif",Txt_Hide);
    else
-      Act_PutIconLink ("hidden_on",Txt_Show);
+      Act_PutIconLink ("hidden_on16x16.gif",Txt_Show);
 
    /***** Put form to edit survey *****/
    Act_FormStart (ActEdiOneSvy);
@@ -762,7 +762,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit",Txt_Edit);
+   Act_PutIconLink ("edit16x16.gif",Txt_Edit);
 
    fprintf (Gbl.F.Out,"</div>");
   }

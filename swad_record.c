@@ -2257,7 +2257,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_FormEnd ();
 	}
 
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// A course is selected
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// A course is selected
 	  UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
 	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
 	{
@@ -2307,12 +2307,20 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_FormEnd ();
 
 	 /***** Button to view user's attendance *****/
-	 // TODO: A student should see her/his attendance
-	 if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
+	 if (IAmLoggedAsStudent ||
+	     IAmLoggedAsTeacher ||
+	     IAmLoggedAsSysAdm)
 	   {
-	    Act_FormStart (ActSeeLstStdAtt);
-	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	    Grp_PutParamAllGroups ();
+	    if (IAmLoggedAsStudent)
+	       // As student, I can see my attendance
+	       Act_FormStart (ActSeeLstMyAtt);
+	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
+	      {
+	       // As teacher, I can see attendance of the student
+	       Act_FormStart (ActSeeLstStdAtt);
+	       Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
+	       Grp_PutParamAllGroups ();
+	      }
 	    Act_LinkFormSubmit (Txt_Attendance,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
@@ -2823,9 +2831,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	       fprintf (Gbl.F.Out,">%s</option>",
 			Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 	      }
-	    fprintf (Gbl.F.Out,"</select>");
-
-	    fprintf (Gbl.F.Out,"</td>"
+	    fprintf (Gbl.F.Out,"</select>"
+	                       "</td>"
 			       "</tr>");
 	   }
 	}
