@@ -2065,7 +2065,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    Rol_Role_t Role;
    Rol_Role_t DefaultRoleInCurrentCrs;
    bool ShowPhoto;
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    unsigned NumCty;
    struct Institution Ins;
    struct Centre Ctr;
@@ -2444,10 +2443,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		      "<td class=\"%s LEFT_TOP\" style=\"width:%upx;\">",
 	    ClassData,TopC2Width);
    if (ShowData && UsrDat->CtyCod > 0)
-     {
-      Cty_GetCountryName (UsrDat->CtyCod,CtyName);
-      fprintf (Gbl.F.Out,"%s",CtyName);
-     }
+      /* Link to see country information */
+      Cty_WriteCountryName (UsrDat->CtyCod,ClassData);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's web and social networks *****/

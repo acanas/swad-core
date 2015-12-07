@@ -46,6 +46,7 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
+extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -1016,6 +1017,27 @@ void Cty_WriteSelectorOfCountry (void)
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/**************************** Get country full name **************************/
+/*****************************************************************************/
+
+void Cty_WriteCountryName (long CtyCod,const char *Class)
+  {
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+
+   /***** Get country name *****/
+   Cty_GetCountryName (CtyCod,CtyName);
+
+   /***** Link to country information *****/
+   Act_FormStart (ActSeeCtyInf);
+   Cty_PutParamCtyCod (CtyCod);
+   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
+		       Class);
+   fprintf (Gbl.F.Out,"%s</a>",CtyName);
    Act_FormEnd ();
   }
 

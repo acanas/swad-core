@@ -271,15 +271,15 @@ void Con_GetAndShowLastClicks (void)
       if (sscanf (row[2],"%ld",&TimeDiff) != 1)
          TimeDiff = (time_t) 0;
 
-      /* Get degree code (row[4]) */
+      /* Get country code (row[4]) */
       Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
       Cty_GetCountryName (Cty.CtyCod,Cty.Name[Gbl.Prefs.Language]);
 
-      /* Get degree code (row[5]) */
+      /* Get institution code (row[5]) */
       Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
       Ins_GetShortNameOfInstitutionByCod (&Ins);
 
-      /* Get degree code (row[6]) */
+      /* Get centre code (row[6]) */
       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
       Ctr_GetShortNameOfCentreByCod (&Ctr);
 

@@ -94,7 +94,6 @@
         ----------Otros
         ....Etc.....
 */
-// TODO: Link to user's country in public profile
 // TODO: Show guests in connected users.
 // TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
@@ -112,14 +111,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.60.1 (2015/12/07)"
+#define Log_PLATFORM_VERSION	"SWAD 15.60.2 (2015/12/08)"
 #define CSS_FILE		"swad15.59.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.60.2:  Dec 08, 2015	Link to user's country in public profile. (186592 lines)
         Version 15.60.1:  Dec 07, 2015	Fixed names of some small icons.
-					New link in student's record card to see her/his attendance. (? lines)
+					New link in student's record card to see her/his attendance. (186576 lines)
         Version 15.60:    Dec 07, 2015	By default, the language of a new user is unknown.
 					Fixed bugs when registering a new user. (? lines)
         Version 15.59.4:  Dec 06, 2015	Changes in some small icons. (186462 lines)
