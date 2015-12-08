@@ -1426,7 +1426,7 @@ void Usr_WriteFormLogin (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Link to create a new account */
-   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba16x16.gif",Txt_Create_account);
+   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba64x64.gif",Txt_Create_account);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1437,7 +1437,7 @@ void Usr_WriteFormLogin (void)
                The_ClassFormBold[Gbl.Prefs.Theme]);
       sprintf (Gbl.Title,Txt_Enter_from_X,
                Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
-      Lay_PutIconWithText ("login16x16.gif",
+      Lay_PutIconWithText ("login64x64.png",
                            Gbl.Title,
                            Gbl.Title);
      }
@@ -1455,7 +1455,7 @@ void Usr_WriteFormLogin (void)
    /***** User's ID/nickname and password *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/user16x16.gif\""
+                      "<img src=\"%s/user64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
                       "</td>"
@@ -1467,7 +1467,7 @@ void Usr_WriteFormLogin (void)
 		      "</tr>"
 		      "<tr>"
 		      "<td class=\"BM\">"
-                      "<img src=\"%s/key16x16.gif\""
+                      "<img src=\"%s/key64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />"
 		      "</td>"
@@ -1607,12 +1607,12 @@ void Usr_PutFormLogIn (void)
    /***** Link to log in form *****/
    Act_FormStart (ActFrmLogIn);
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/login16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
-            Gbl.Prefs.PathTheme,
+            Gbl.Prefs.IconsURL,
             Txt_Log_in,
             Txt_Log_in,
             Txt_Log_in);
@@ -1676,12 +1676,12 @@ void Usr_PutFormLogOut (void)
 
    Act_FormStart (ActLogOut);
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/logout16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
-            Gbl.Prefs.PathTheme,
+            Gbl.Prefs.IconsURL,
             Txt_Log_out,
             Txt_Log_out,
             Txt_Log_out);
@@ -2572,7 +2572,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActLogOut,NULL,"logout16x16.gif",Txt_Log_out);
+   Act_PutContextualLink (ActLogOut,NULL,"logout64x64.png",Txt_Log_out);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/

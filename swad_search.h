@@ -63,7 +63,7 @@ void Sch_ReqInsSearch (void);
 void Sch_ReqCtrSearch (void);
 void Sch_ReqDegSearch (void);
 void Sch_ReqCrsSearch (void);
-void Sch_PutFormToSearch (const char *IconURL,const char *IdInputText);
+void Sch_PutFormToSearch (const char *Icon,const char *IdInputText);
 void Sch_GetParamWhatToSearch (void);
 void Sch_GetParamsSearch (void);
 void Sch_SysSearch (void);

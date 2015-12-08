@@ -724,7 +724,7 @@ static void Lay_WritePageTopHeading (void)
 		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
 						   ActSysSch)))));
    Sco_PutParamScope (Sco_SCOPE_SYS);
-   Sch_PutFormToSearch (Gbl.Prefs.PathTheme,"head_search_text");
+   Sch_PutFormToSearch ("search-white64x64.png","head_search_text");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
 

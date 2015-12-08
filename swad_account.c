@@ -127,7 +127,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Link to log in *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActFrmLogIn,NULL,"login16x16.gif",Txt_Log_in);
+   Act_PutContextualLink (ActFrmLogIn,NULL,"login64x64.png",Txt_Log_in);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/

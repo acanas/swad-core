@@ -266,7 +266,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"</select>");
 
    /***** String to find *****/
-   Sch_PutFormToSearch (Gbl.Prefs.IconsURL,NULL);
+   Sch_PutFormToSearch ("search64x64.png",NULL);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Search);
@@ -304,7 +304,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
 /*********** Put form to search courses, teachers, documents... **************/
 /*****************************************************************************/
 
-void Sch_PutFormToSearch (const char *IconURL,const char *IdInputText)
+void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
   {
    extern const char *Txt_Search;
 
@@ -322,10 +322,11 @@ void Sch_PutFormToSearch (const char *IconURL,const char *IdInputText)
    fprintf (Gbl.F.Out," style=\"margin:0;\" />");
 
    /***** Send button *****/
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/search16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16\" />",
-            IconURL,
+            Gbl.Prefs.IconsURL,
+	    Icon,
             Txt_Search,
             Txt_Search);
   }

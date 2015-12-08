@@ -2898,7 +2898,7 @@ static void Crs_PutLinkToSearchCourses (void)
                           (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
                                                            ActSysReqSch)))),
                           Crs_PutLinkToSearchCoursesParams,
-			  "search16x16.gif",Txt_Search_courses);
+			  "search64x64.gif",Txt_Search_courses);
   }
 
 static void Crs_PutLinkToSearchCoursesParams (void)
