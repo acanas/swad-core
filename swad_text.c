@@ -9884,27 +9884,6 @@ const char *Txt_Email_X_has_already_been_confirmed_before =	// Warning: it is ve
 	" has already been confirmed before.";			// Necessita de tradução
 #endif
 
-const char *Txt_Email_new_password =
-#if   L==1
-	"Enviarme una nueva contrase&ntilde;a";	// Necessita traduccio
-#elif L==2
-	"Neues Passwort beantragen";
-#elif L==3
-	"E-mail new password";
-#elif L==4
-	"Enviarme una nueva contrase&ntilde;a";
-#elif L==5
-	"Envoyez-moi un nouveau mot de passe";
-#elif L==6
-	"Enviarme una nueva contrase&ntilde;a";	// Okoteve traducción
-#elif L==7
-	"Invia una nuova password";
-#elif L==8
-	"E-mail nowe has&lstrok;o";
-#elif L==9
-	"Enviar uma nova senha";
-#endif
-
 const char *Txt_Email_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Correu <strong>%s</strong> eliminat.";
@@ -12026,6 +12005,27 @@ const char *Txt_Force_students_to_read_this_information =
 	"For&ccedil;ar os estudantes a ler esta informa&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Forgotten_password =
+#if   L==1
+	"Contrasenya oblidada?";
+#elif L==2
+	"Passwort vergessen?";
+#elif L==3
+	"Forgotten password?";
+#elif L==4
+	"&iquest;Contraseña olvidada?";
+#elif L==5
+	"Mot de passe oubli&eacute;?";
+#elif L==6
+	"&iquest;Contraseña olvidada?";		// Okoteve traducción
+#elif L==7
+	"Password dimenticata?";
+#elif L==8
+	"Zapomniane has&lstrok;o?";
+#elif L==9
+	"Senha esquecida?";
+#endif
+
 const char *Txt_Forum =
 #if   L==1
 	"Foro";		// Necessita traduccio
@@ -12573,6 +12573,27 @@ const char *Txt_Generate_exam =
 	"Wygeneruj egzamin";
 #elif L==9
 	"Gerar teste";
+#endif
+
+const char *Txt_Get_a_new_password =
+#if   L==1
+	"Rebre una nova contrasenya";
+#elif L==2
+	"Neues Passwort beantragen";
+#elif L==3
+	"Get a new password";
+#elif L==4
+	"Recibir una nueva contrase&ntilde;a";
+#elif L==5
+	"Recevoir un nouveau mot de passe";
+#elif L==6
+	"Recibir una nueva contrase&ntilde;a";	// Okoteve traducción
+#elif L==7
+	"Ottenere una nuova password";
+#elif L==8
+	"Uzyskaj nowe has&lstrok;o";
+#elif L==9
+	"Obter uma nova senha";
 #endif
 
 const char *Txt_Go_back =
@@ -13437,27 +13458,6 @@ const char *Txt_hours_ABBREVIATION =	// Abbreviation of "hours"
 	"g";
 #elif L==9
 	"h";
-#endif
-
-const char *Txt_I_forgot_my_password =
-#if   L==1
-	"He oblidat la meva contrasenya";
-#elif L==2
-	"Ich habe mein Passwort vergessen";
-#elif L==3
-	"I forgot my password";
-#elif L==4
-	"He olvidado mi contrase&ntilde;a";
-#elif L==5
-	"J'ai oubli&eacute; mon mot de passe";
-#elif L==6
-	"He olvidado mi contrase&ntilde;a";	// Okoteve traducción
-#elif L==7
-	"Ho dimenticato la mia password";
-#elif L==8
-	"Nie pami&eogon;tam has&lstrok;a";
-#elif L==9
-	"Esqueci minha senha";
 #endif
 
 const char *Txt_I_have_read_this_information =

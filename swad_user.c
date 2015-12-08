@@ -1414,7 +1414,7 @@ void Usr_Logout (void)
 void Usr_WriteFormLogin (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_New_on_PLATFORM_Sign_up;
+   extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
    extern const char *Txt_Log_in;
    extern const char *Txt_User;
@@ -1426,8 +1426,7 @@ void Usr_WriteFormLogin (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Link to create a new account */
-   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba16x16.gif",Gbl.Title);
+   Act_PutContextualLink (ActFrmUsrAcc,NULL,"arroba16x16.gif",Txt_Create_account);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&

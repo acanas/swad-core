@@ -110,12 +110,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.60.4 (2015/12/08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.60.5 (2015/12/08)"
 #define CSS_FILE		"swad15.59.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.60.5:  Dec 08, 2015	Changed some messages related to login. (186589 lines)
         Version 15.60.4:  Dec 08, 2015	Change in text about first / last year of a degree. (186589 lines)
         Version 15.60.3:  Dec 08, 2015	Fixed bug in country.
 					Code refactoring in menu. (186588 lines)

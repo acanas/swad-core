@@ -215,10 +215,10 @@ void Pwd_ActChgMyPwd2 (void)
 
 void Pwd_PutLinkToSendNewPasswd (void)
   {
-   extern const char *Txt_I_forgot_my_password;
+   extern const char *Txt_Forgotten_password;
 
    Act_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
-                          "key16x16.gif",Txt_I_forgot_my_password);
+                          "key16x16.gif",Txt_Forgotten_password);
   }
 
 static void Pwd_PutLinkToSendNewPasswdParams (void)
@@ -234,15 +234,15 @@ void Pwd_ShowFormSendNewPwd (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
-   extern const char *Txt_Password;
+   extern const char *Txt_Forgotten_password;
    extern const char *Txt_nick_email_or_ID;
-   extern const char *Txt_Email_new_password;
+   extern const char *Txt_Get_a_new_password;
 
    /***** Start of form *****/
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Password);
+   Lay_StartRoundFrame (NULL,Txt_Forgotten_password);
 
    /***** Help text *****/
    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
@@ -257,7 +257,7 @@ void Pwd_ShowFormSendNewPwd (void)
             Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end table *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Email_new_password);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
    Act_FormEnd ();
