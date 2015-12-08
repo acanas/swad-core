@@ -4302,11 +4302,11 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
      {
       case Brw_SHOW:
          Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "visible_on16x16.gif",Txt_View);
+                                "eye-on64x64.png",Txt_View);
 	 break;
       case Brw_ADMIN:
          Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "edit16x16.gif",Txt_Edit);
+                                "edit64x64.png",Txt_Edit);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -5036,7 +5036,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
         }
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
@@ -5080,7 +5080,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
         }
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16B\" />",
                Gbl.Prefs.IconsURL,
@@ -5339,7 +5339,7 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
      }
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/hidden_%s16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,
@@ -5373,7 +5373,7 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
      }
    Brw_ParamListFiles (FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/visible_%s16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON16x16B\" />",
             Gbl.Prefs.IconsURL,

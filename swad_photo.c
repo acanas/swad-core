@@ -214,7 +214,7 @@ static void Pho_PutLinkToRemoveMyPhoto (void)
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Act_PutContextualLink (ActRemMyPho,NULL,"delon16x16.gif",Txt_Remove_photo);
+   Act_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -230,7 +230,7 @@ static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
 	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
 	                                                               ActRemOthPho),	// Guest, visitor or admin
                           Usr_PutParamOtherUsrCodEncrypted,
-                          "delon16x16.gif",Txt_Remove_photo);
+                          "remove-on64x64.png",Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -1750,7 +1750,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStats (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
-                          "print16x16.gif",Txt_Print);
+                          "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 

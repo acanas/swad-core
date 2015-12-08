@@ -859,7 +859,7 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Act_PutContextualLink (ActEdiRecFie,NULL,"edit16x16.gif",Txt_Edit_record_fields);
+   Act_PutContextualLink (ActEdiRecFie,NULL,"edit64x64.png",Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -1320,7 +1320,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("print16x16.gif",Txt_Print,Txt_Print);
+   Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
@@ -2194,7 +2194,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_Edit_my_personal_data,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/edit16x16.gif\""
+			    "<img src=\"%s/edit64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"

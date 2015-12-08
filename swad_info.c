@@ -417,7 +417,7 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit16x16.gif",Txt_Edit);
+   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -922,7 +922,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Put link to view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
-			  "visible_on16x16.gif",Txt_View);
+			  "eye-on64x64.png",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get info source from database *****/

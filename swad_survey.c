@@ -703,7 +703,7 @@ static void Svy_PutFormToCreateNewSvy (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
-                          "new16x16.gif",Txt_New_survey);
+                          "plus64x64.png",Txt_New_survey);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -734,7 +734,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("delon16x16.gif",Txt_Remove);
+   Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
 
    /***** Put form to reset survey *****/
    Act_FormStart (ActReqRstSvy);
@@ -752,9 +752,9 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Visible)
-      Act_PutIconLink ("visible_on16x16.gif",Txt_Hide);
+      Act_PutIconLink ("eye-on64x64.png",Txt_Hide);
    else
-      Act_PutIconLink ("hidden_on16x16.gif",Txt_Show);
+      Act_PutIconLink ("eye-slash-on64x64.png",Txt_Show);
 
    /***** Put form to edit survey *****/
    Act_FormStart (ActEdiOneSvy);
@@ -762,7 +762,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit16x16.gif",Txt_Edit);
+   Act_PutIconLink ("edit64x64.png",Txt_Edit);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2863,7 +2863,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Act_FormStart (ActEdiOneSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit16x16.gif\""
+            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICON16x16\" />",
                      Gbl.Prefs.IconsURL,
@@ -2929,7 +2929,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Grp_PutParamWhichGrps ();
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutIconWithText ("new16x16.gif",
+      Lay_PutIconWithText ("plus64x64.png",
                            Txt_New_question,
                            Txt_New_question);
       Act_FormEnd ();

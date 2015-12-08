@@ -319,7 +319,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
    /***** Link for removing the photo *****/
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("delon16x16.gif",Txt_Remove_logo,Txt_Remove_logo);
+   Lay_PutIconWithText ("remove-on64x64.png",Txt_Remove_logo,Txt_Remove_logo);
    Act_FormEnd ();
   }
 

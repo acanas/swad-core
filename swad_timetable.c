@@ -265,15 +265,15 @@ void TT_ShowClassTimeTable (void)
 
       if (PutEditCrsTT)
          Act_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
-                                "edit16x16.gif",Txt_Edit);
+                                "edit64x64.png",Txt_Edit);
 
       if (PutEditOfficeHours)
-         Act_PutContextualLink (ActEdiTut,NULL,"edit16x16.gif",Txt_Edit_office_hours);
+         Act_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",Txt_Edit_office_hours);
 
       if (!PrintView)
          Act_PutContextualLink (TimeTableType == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
                                                                        ActPrnMyTT,
-                                Grp_PutParamWhichGrps,"print16x16.gif",Txt_Print);
+                                Grp_PutParamWhichGrps,"print64x64.png",Txt_Print);
 
       fprintf (Gbl.F.Out,"</div>");
      }

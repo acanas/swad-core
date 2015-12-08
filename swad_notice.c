@@ -213,7 +213,7 @@ void Not_ListFullNotices (void)
    if (ICanEditNotices)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_PutContextualLink (ActWriNot,NULL,"new16x16.gif",Txt_New_notice);
+      Act_PutContextualLink (ActWriNot,NULL,"plus64x64.png",Txt_New_notice);
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -585,7 +585,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 Not_PutHiddenParamNotCod (NotCod);
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
         	            "<input type=\"image\""
-	                    " src=\"%s/delon16x16.gif\""
+	                    " src=\"%s/remove-on64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICON16x16\" />"
         	            "</div>",
@@ -602,7 +602,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
         	                  "<input type=\"image\""
-        	                  " src=\"%s/visible_on16x16.gif\""
+        	                  " src=\"%s/eye-on64x64.png\""
         	                  " alt=%s\" title=\"%s\""
         	                  " class=\"ICON16x16\" />"
         	                  "</div>",
@@ -615,7 +615,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                Not_PutHiddenParamNotCod (NotCod);
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
         	                  "<input type=\"image\""
-        	                  " src=\"%s/hidden_on16x16.gif\""
+        	                  " src=\"%s/eye-slash-on64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICON16x16\" />"
         	                  "</div>",
@@ -632,7 +632,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
            {
             case Not_ACTIVE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/visible_off16x16.gif\""
+                                  "<img src=\"%s/eye-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
                                   " class=\"ICON16x16\" />"
                                   "</span>",
@@ -643,7 +643,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                break;
             case Not_OBSOLETE_NOTICE:
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/hidden_off16x16.gif\""
+                                  "<img src=\"%s/eye-slash-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
                                   " class=\"ICON16x16\" />"
                                   "</span>",

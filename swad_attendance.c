@@ -499,7 +499,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
 
    /***** Put form to create a new attendance event *****/
    Act_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
-                          "new16x16.gif",Txt_New_event);
+                          "plus64x64.png",Txt_New_event);
   }
 
 static void Att_PutFormToCreateNewAttEventParams (void)
@@ -528,7 +528,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("delon16x16.gif",Txt_Remove);
+   Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
 
    /***** Put form to hide/show attendance event *****/
    Act_FormStart (Hidden ? ActShoAtt :
@@ -538,9 +538,9 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      Act_PutIconLink ("hidden_on16x16.gif",Txt_Show);
+      Act_PutIconLink ("eye-slash-on64x64.png",Txt_Show);
    else
-      Act_PutIconLink ("visible_on16x16.gif",Txt_Hide);
+      Act_PutIconLink ("eye-on64x64.png",Txt_Hide);
 
    /***** Put form to edit attendance event *****/
    Act_FormStart (ActEdiOneAtt);
@@ -548,7 +548,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit16x16.gif",Txt_Edit);
+   Act_PutIconLink ("edit64x64.png",Txt_Edit);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2861,7 +2861,7 @@ static void Att_PutFormToPrintMyList (void)
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
-                          "print16x16.gif",Txt_Print);
+                          "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2884,7 +2884,7 @@ static void Att_PutFormToPrintStdsList (void)
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActPrnLstStdAtt,Att_PutFormToPrintStdsListParams,
-                          "print16x16.gif",Txt_Print);
+                          "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 

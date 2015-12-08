@@ -281,7 +281,7 @@ static void Ctr_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
          /* Link to print view */
-         Act_PutContextualLink (ActPrnCtrInf,NULL,"print16x16.gif",Txt_Print);
+         Act_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print);
 
 	 /* Links to upload logo and photo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)

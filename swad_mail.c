@@ -176,7 +176,7 @@ static void Mai_PutFormToEditMailDomains (void)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActEdiMai,NULL,"edit16x16.gif",Txt_Edit);
+   Act_PutContextualLink (ActEdiMai,NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

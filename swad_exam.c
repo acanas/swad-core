@@ -444,7 +444,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
       case Rol_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Act_PutContextualLink (ActEdiExaAnn,NULL,
-                                "new16x16.gif",Txt_New_announcement_OF_EXAM);
+                                "plus64x64.png",Txt_New_announcement_OF_EXAM);
          fprintf (Gbl.F.Out,"</div>");
          break;
       default:
@@ -775,18 +775,18 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	 /***** Link to remove this exam announcement *****/
 	 Act_FormStart (ActRemExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_PutIconLink ("delon16x16.gif",Txt_Remove);
+	 Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
 
 	 /***** Link to edit this exam announcement *****/
 	 Act_FormStart (ActEdiExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_PutIconLink ("edit16x16.gif",Txt_Edit);
+	 Act_PutIconLink ("edit64x64.png",Txt_Edit);
 	}
 
       /***** Link to print view *****/
       Act_FormStart (ActPrnExaAnn);
       Par_PutHiddenParamLong ("ExaCod",ExaCod);
-      Act_PutIconLink ("print16x16.gif",Txt_Print);
+      Act_PutIconLink ("print64x64.png",Txt_Print);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

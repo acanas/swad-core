@@ -2227,7 +2227,7 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    Act_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
 	                                                              ActReqDelAllSntMsg,
 	                  Msg_PutHiddenParamsMsgsFilters,
-	                  "delon16x16.gif",Gbl.Title);
+	                  "remove-on64x64.png",Gbl.Title);
    fprintf (Gbl.F.Out,"</div>");
   }
 

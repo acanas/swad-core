@@ -1656,7 +1656,7 @@ static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
 
    Act_FormStart (ActMrkNtfSee);
    Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("visible_on16x16.gif",
+   Lay_PutIconWithText ("eye-on64x64.png",
                         Txt_Mark_all_notifications_as_read,
                         Txt_Mark_all_notifications_as_read);
    Act_FormEnd ();

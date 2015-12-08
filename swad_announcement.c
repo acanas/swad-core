@@ -93,7 +93,7 @@ void Ann_ShowAllAnnouncements (void)
    if (ICanEditAnnouncements)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_PutContextualLink (ActWriAnn,NULL,"new16x16.gif",Txt_New_announcement);
+      Act_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",Txt_New_announcement);
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -281,7 +281,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       Ann_PutHiddenParamAnnCod (AnnCod);
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
         	         "<input type=\"image\""
-	                 " src=\"%s/delon16x16.gif\""
+	                 " src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON16x16\" />"
 			 "</div>",
@@ -298,7 +298,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    Ann_PutHiddenParamAnnCod (AnnCod);
 	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 			       "<input type=\"image\""
-			       " src=\"%s/visible_on16x16.gif\""
+			       " src=\"%s/eye-on64x64.png\""
 			       " alt=%s\" title=\"%s\""
 			       " class=\"ICON16x16\" />"
 			       "</div>",
@@ -311,7 +311,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    Ann_PutHiddenParamAnnCod (AnnCod);
 	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 			       "<input type=\"image\""
-			       " src=\"%s/hidden_on16x16.gif\""
+			       " src=\"%s/eye-slash-on64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON16x16\" />"
 			       "</div>",
@@ -357,7 +357,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       Act_FormStart (ActAnnSee);
       Ann_PutHiddenParamAnnCod (AnnCod);
       Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/delon16x16.gif\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON16x16\" />"
 			 " %s</a>",

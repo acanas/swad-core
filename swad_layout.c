@@ -922,7 +922,7 @@ void Lay_PutFormToView (Act_Action_t Action)
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Action,NULL,"visible_on16x16.gif",Txt_View);
+   Act_PutContextualLink (Action,NULL,"eye-on64x64.png",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -935,7 +935,7 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Action,NULL,"edit16x16.gif",Txt_Edit);
+   Act_PutContextualLink (Action,NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -991,7 +991,7 @@ void Lay_PutIconRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" />",
 	    Gbl.Prefs.IconsURL,
@@ -1003,7 +1003,7 @@ void Lay_PutIconBRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   fprintf (Gbl.F.Out,"<img src=\"%s/deloff16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16B\" />",
 	    Gbl.Prefs.IconsURL,
@@ -1019,7 +1019,7 @@ void Lay_PutIconRemove (void)
   {
    extern const char *Txt_Remove;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" />",
 	    Gbl.Prefs.IconsURL,
@@ -1031,7 +1031,7 @@ void Lay_PutIconBRemove (void)
   {
    extern const char *Txt_Remove;
 
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/delon16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16B\" />",
 	    Gbl.Prefs.IconsURL,

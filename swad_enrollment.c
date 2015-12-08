@@ -357,7 +357,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    /***** Send button to refuse register in the current course *****/
    Act_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
 	                                                                         ActRemMe_Tch,
-                          NULL,"delon16x16.gif",Txt_Remove_me_from_this_course);
+                          NULL,"remove-on64x64.png",Txt_Remove_me_from_this_course);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -682,7 +682,7 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Act_PutContextualLink (ActReqRemOldUsr,NULL,"delon16x16.gif",Txt_Eliminate_old_users);
+   Act_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",Txt_Eliminate_old_users);
   }
 
 /*****************************************************************************/
@@ -1773,7 +1773,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 
    /***** Put form to remove all the students in the current course *****/
    Act_PutContextualLink (ActReqRemAllStdCrs,NULL,
-                          "delon16x16.gif",Txt_Remove_all_students);
+                          "remove-on64x64.png",Txt_Remove_all_students);
   }
 
 /*****************************************************************************/

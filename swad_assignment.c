@@ -470,7 +470,7 @@ static void Asg_PutFormToCreateNewAsg (void)
    /***** Put form to create a new assignment *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_PutContextualLink (ActFrmNewAsg,Asg_PutFormToCreateNewAsgParams,
-                          "new16x16.gif",Txt_New_assignment);
+                          "plus64x64.png",Txt_New_assignment);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -500,7 +500,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("delon16x16.gif",Txt_Remove);
+   Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
 
    /***** Put form to hide/show assignment *****/
    Act_FormStart (Hidden ? ActShoAsg :
@@ -510,9 +510,9 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      Act_PutIconLink ("hidden_on16x16.gif",Txt_Show);
+      Act_PutIconLink ("eye-slash-on64x64.png",Txt_Show);
    else
-      Act_PutIconLink ("visible_on16x16.gif",Txt_Hide);
+      Act_PutIconLink ("eye-on64x64.png",Txt_Hide);
 
    /***** Put form to edit assignment *****/
    Act_FormStart (ActEdiOneAsg);
@@ -520,7 +520,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit16x16.gif",Txt_Edit);
+   Act_PutIconLink ("edit64x64.png",Txt_Edit);
 
    fprintf (Gbl.F.Out,"</div>");
   }

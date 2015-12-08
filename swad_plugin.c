@@ -155,7 +155,7 @@ static void Plg_PutFormToEditPlugins (void)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActEdiPlg,NULL,"edit16x16.gif",Txt_Edit);
+   Act_PutContextualLink (ActEdiPlg,NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

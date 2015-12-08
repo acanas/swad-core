@@ -6550,7 +6550,7 @@ void Usr_SeeGuests (void)
             case Usr_CLASS_PHOTO:
                 /***** Link to print view *****/
                Act_PutContextualLink (ActPrnGstPho,Usr_PutLinkToShowGuestsAllDataParams,
-                                      "print16x16.gif",Txt_Print);
+                                      "print64x64.png",Txt_Print);
 	       break;
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
@@ -6735,7 +6735,7 @@ void Usr_SeeStudents (void)
                 /***** Link to print view *****/
 	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                Act_PutContextualLink (ActPrnStdPho,Usr_PutLinkToShowStdsAllDataParams,
-                                      "print16x16.gif",Txt_Print);
+                                      "print64x64.png",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
 	    case Usr_LIST:
@@ -6902,7 +6902,7 @@ void Usr_SeeTeachers (void)
             case Usr_CLASS_PHOTO:
                fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                Act_PutContextualLink (ActPrnTchPho,Usr_PutLinkToShowTchsAllDataParams,
-                                      "print16x16.gif",Txt_Print);
+                                      "print64x64.png",Txt_Print);
 	       fprintf (Gbl.F.Out,"</div>");
 	       break;
             case Usr_LIST:

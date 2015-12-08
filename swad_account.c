@@ -243,7 +243,7 @@ static void Acc_PutLinkToRemoveMyAccount (void)
    extern const char *Txt_Remove_account;
 
    Act_PutContextualLink (ActReqRemMyAcc,Acc_PutLinkToRemoveMyAccountParams,
-                          "delon16x16.gif",Txt_Remove_account);
+                          "remove-on64x64.png",Txt_Remove_account);
   }
 
 static void Acc_PutLinkToRemoveMyAccountParams (void)
