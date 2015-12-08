@@ -49,6 +49,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void);
 void Mnu_WriteMenuThisTab (void);
 
 void Mnu_PutIconsToSelectMenu (void);

@@ -66,6 +66,149 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
    "vertical",
   };
 
+// Actions not initialized are 0 by default
+const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+	{
+		// TabUnk **********
+		{
+		},
+		// TabSys **********
+		{
+		ActSysReqSch,
+		ActSeeCty,
+		ActSeePen,
+		ActReqRemOldCrs,
+		ActSeeDegTyp,
+		ActSeeMai,
+		ActSeeBan,
+		ActSeeLnk,
+		ActLstPlg,
+		ActSetUp,
+		},
+		// TabCty **********
+		{
+		ActCtyReqSch,
+		ActSeeCtyInf,
+		ActSeeIns,
+		},
+		// TabIns **********
+		{
+		ActInsReqSch,
+		ActSeeInsInf,
+		ActSeeCtr,
+		ActSeeDpt,
+		ActSeePlc,
+		ActSeeHld,
+		ActSeeAdmDocIns,
+		ActAdmComIns,
+		},
+		// TabCtr **********
+		{
+		ActCtrReqSch,
+		ActSeeCtrInf,
+		ActSeeDeg,
+		ActSeeAdmDocCtr,
+		ActAdmComCtr,
+		},
+		// TabDeg **********
+		{
+		ActDegReqSch,
+		ActSeeDegInf,
+		ActSeeCrs,
+		ActSeeAdmDocDeg,
+		ActAdmComDeg,
+		},
+		// TabCrs **********
+		{
+		ActCrsReqSch,
+		ActSeeCrsInf,
+		ActSeeTchGui,
+		ActSeeSyl,
+		ActSeeAdmDocCrs,
+		ActAdmCom,
+		ActSeeCrsTT,
+		ActSeeBib,
+		ActSeeFAQ,
+		ActSeeCrsLnk,
+		},
+		// TabAss **********
+		{
+		ActSeeAss,
+		ActSeeAsg,
+		ActAdmAsgWrkUsr,
+		ActReqAsgWrkCrs,
+		ActReqTst,
+		ActSeeCal,
+		ActSeeExaAnn,
+		ActSeeAdmMrk,
+		},
+		// TabUsr **********
+		{
+		ActReqSelGrp,
+		ActLstStd,
+		ActLstTch,
+		ActLstOth,
+		ActSeeAtt,
+		ActReqSignUp,
+		ActSeeSignUpReq,
+		ActLstCon,
+		ActReqPubPrf,
+		},
+		// TabMsg **********
+		{
+		ActSeeNtf,
+		ActSeeAnn,
+		ActSeeNot,
+		ActSeeFor,
+		ActSeeChtRms,
+		ActReqMsgUsr,
+		ActSeeRcvMsg,
+		ActSeeSntMsg,
+		ActMaiStd,
+		},
+		// TabSta **********
+		{
+		ActSeeAllSvy,
+		ActReqUseGbl,
+		ActSeePhoDeg,
+		ActReqStaCrs,
+		ActReqAccGbl,
+		},
+		// TabPrf **********
+		{
+		ActFrmLogIn,
+		ActMyCrs,
+		ActSeeMyTT,
+		ActFrmUsrAcc,
+		ActReqEdiRecCom,
+		ActEdiPrf,
+		ActAdmBrf,
+		ActMFUAct,
+		},
+	};
+
+/*****************************************************************************/
+/******* When I change to another tab, go to the first option allowed ********/
+/*****************************************************************************/
+
+Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
+  {
+   unsigned NumOptInMenu;
+   Act_Action_t Action;
+
+   /* Change current action to the first allowed action in current tab */
+   for (NumOptInMenu = 0;
+        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+        NumOptInMenu++)
+     {
+      if ((Action = Mnu_MenuActions[Gbl.CurrentTab][NumOptInMenu]) == 0)
+         return ActUnk;
+      if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+         return Action;
+     }
+   return ActUnk;
+  }
+
 /*****************************************************************************/
 /******************* Write horizontal menu of current tab ********************/
 /*****************************************************************************/
@@ -74,7 +217,6 @@ void Mnu_WriteMenuThisTab (void)
   {
    extern const char *The_ClassTxtMenuOn[The_NUM_THEMES];
    extern const char *The_ClassTxtMenuOff[The_NUM_THEMES];
-   extern const struct Act_Menu Act_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
@@ -90,7 +232,7 @@ void Mnu_WriteMenuThisTab (void)
         NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
         NumOptInMenu++)
      {
-      NumAct = Act_Menu[Gbl.CurrentTab][NumOptInMenu].Action;
+      NumAct = Mnu_MenuActions[Gbl.CurrentTab][NumOptInMenu];
       if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
          break;
       if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))

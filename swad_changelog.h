@@ -103,7 +103,6 @@
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
-// TODO: Replace "Curso o semestre" by "A&ntilde;o o semestre"
 // TODO: Reply to one user, suggested by Francisco Ocaña Lara
 // TODO: Reply to all
 
@@ -111,12 +110,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.60.2 (2015/12/08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.60.4 (2015/12/08)"
 #define CSS_FILE		"swad15.59.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.60.4:  Dec 08, 2015	Change in text about first / last year of a degree. (186589 lines)
+        Version 15.60.3:  Dec 08, 2015	Fixed bug in country.
+					Code refactoring in menu. (186588 lines)
         Version 15.60.2:  Dec 08, 2015	Link to user's country in public profile. (186592 lines)
         Version 15.60.1:  Dec 07, 2015	Fixed names of some small icons.
 					New link in student's record card to see her/his attendance. (186576 lines)

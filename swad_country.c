@@ -1138,12 +1138,12 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty)
 	   Lan <= Txt_NUM_LANGUAGES;
 	   Lan++)
 	{
-         strcpy (Cty->Name[Lan],row[1+Lan]);
-         strcpy (Cty->WWW[Lan],row[1+Txt_NUM_LANGUAGES+Lan]);
+         strcpy (Cty->Name[Lan],row[Lan]);
+         strcpy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES+Lan]);
 	}
 
       /* Get number of institutions in this country */
-      if (sscanf (row[1+Txt_NUM_LANGUAGES*2],"%u",&(Cty->NumInss)) != 1)
+      if (sscanf (row[Txt_NUM_LANGUAGES*2+1],"%u",&(Cty->NumInss)) != 1)
          Cty->NumInss = 0;
      }
    else

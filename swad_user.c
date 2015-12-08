@@ -1981,10 +1981,10 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 if (Gbl.Usrs.Me.Logged)
 	   {
 	    if ((Action = Act_GetMyLastActionInCurrentTab ()) == ActUnk)
-	       Action = Act_GetFirstActionAvailableInCurrentTab ();
+	       Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 	   }
 	 else
-	    Action = Act_GetFirstActionAvailableInCurrentTab ();
+	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 	 if (Action != ActUnk)
 	    Gbl.CurrentAct = Action;
 	}

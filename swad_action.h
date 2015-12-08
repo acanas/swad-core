@@ -1360,11 +1360,7 @@ struct Act_Tabs
   {
    char *Icon;
   };
-struct Act_Menu
-  {
-   Act_Action_t Action;
-   bool SubsequentSeparation;
-  };
+
 struct Act_Actions
   {
    long ActCod;	// Unique, time-persistent numerical code for the action
@@ -1413,7 +1409,6 @@ void Act_PutIconLink (const char *Icon,const char *Title);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
-Act_Action_t Act_GetFirstActionAvailableInCurrentTab (void);
 
 void Act_AllocateMFUActions (struct Act_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
 void Act_FreeMFUActions (struct Act_ListMFUActions *ListMFUActions);

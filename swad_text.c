@@ -11713,23 +11713,23 @@ const char *Txt_First_name =
 
 const char *Txt_First_BR_year =	// "First academic year", the opposite to "Last academic year"
 #if   L==1
-	"Prim.<br />curso";		// Necessita traduccio
+	"Primer<br />a&ntilde;o/sem.";	// Necessita traduccio
 #elif L==2
-	"First<br />year";		// Need Übersetzung
+	"First<br />year/sem.";		// Need Übersetzung
 #elif L==3
-	"First<br />year";
+	"First<br />year/sem.";
 #elif L==4
-	"Prim.<br />curso";
+	"Primer<br />a&ntilde;o/sem.";
 #elif L==5
-	"First<br />year";		// Besoin de traduction
+	"First<br />year/sem.";		// Besoin de traduction
 #elif L==6
-	"Prim.<br />curso";		// Okoteve traducción
+	"Primer<br />a&ntilde;o/sem.";	// Okoteve traducción
 #elif L==7
-	"Primo<br />anno";
+	"Primo<br />anno/sem.";
 #elif L==8
-	"Pierwszy<br />rok";
+	"Pierwszy<br />rok/sem.";
 #elif L==9
-	"First<br />year";		// Necessita de tradução
+	"First<br />year/sem.";		// Necessita de tradução
 #endif
 
 const char *Txt_Folder =
@@ -15238,23 +15238,23 @@ const char *Txt_Last_clicks_in_real_time =
 
 const char *Txt_Last_BR_year =	// "Last academic year", the opposite to "First academic year"
 #if   L==1
-	"&Uacute;ltimo<br />curso";	// Necessita traduccio
+	"&Uacute;ltimo<br />a&ntilde;o/sem.";	// Necessita traduccio
 #elif L==2
-	"Last<br />year";		// Need Übersetzung
+	"Last<br />year/sem.";		// Need Übersetzung
 #elif L==3
-	"Last<br />year";
+	"Last<br />year/sem.";
 #elif L==4
-	"&Uacute;ltimo<br />curso";
+	"&Uacute;ltimo<br />a&ntilde;o/sem.";
 #elif L==5
-	"Last<br />year";		// Besoin de traduction
+	"Last<br />year/sem.";		// Besoin de traduction
 #elif L==6
-	"&Uacute;ltimo<br />curso";	// Okoteve traducción
+	"&Uacute;ltimo<br />a&ntilde;o/sem.";	// Okoteve traducción
 #elif L==7
-	"Ultimo<br />anno";
+	"Last<br />anno/sem.";
 #elif L==8
-	"Ostatni<br />rok";
+	"Ostatni<br />rok/sem.";
 #elif L==9
-	"Last<br />year";		// Necessita de tradução
+	"Last<br />year/sem.";		// Necessita de tradução
 #endif
 
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
@@ -48355,19 +48355,19 @@ const char *Txt_XML_file_content =
 	"Conte&uacute;do do arquivo XML";
 #endif
 
-const char *Txt_Year_OF_A_DEGREE =		// 1, 2, 3..., not 1984, 2011...
+const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...
 #if   L==1
-	"Curs o semestre";
+	"Any o semestre";
 #elif L==2
 	"Jahr oder Semester";
 #elif L==3
 	"Year or semester";
 #elif L==4
-	"Curso o semestre";
+	"A&ntilde;o o semestre";
 #elif L==5
 	"Ann&eacute;e ou semestre";
 #elif L==6
-	"Curso o semestre";	// Okoteve traducción
+	"A&ntilde;o o semestre";	// Okoteve traducción
 #elif L==7
 	"Anno o semestre";
 #elif L==8
