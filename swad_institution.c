@@ -70,7 +70,6 @@ static void Ins_ListInstitutionsForSeeing (void);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
-static unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
@@ -807,16 +806,11 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
    switch (GetExtraData)
      {
       case Ins_GET_BASIC_DATA:
-         if (CtyCod <= 0)	// Get all the institutions, belonging to any country
-            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
-                           " FROM institutions"
-                           " ORDER BY FullName");
-         else			// Get only the institutions belonging to the country specified by CtyCod
-            sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
-                           " FROM institutions"
-                           " WHERE CtyCod='%ld'"
-                           " ORDER BY FullName",
-                     CtyCod);
+	 sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+			" FROM institutions"
+			" WHERE CtyCod='%ld'"
+			" ORDER BY FullName",
+		  CtyCod);
          break;
       case Ins_GET_EXTRA_DATA:
          switch (Gbl.Inss.SelectedOrderType)
@@ -828,39 +822,23 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
                break;
            }
-         if (CtyCod <= 0)	// Get all the institutions, belonging to any country
-            sprintf (Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
-                           "institutions.Status,institutions.RequesterUsrCod,"
-                           "institutions.ShortName,institutions.FullName,"
-                           "institutions.WWW,COUNT(*) AS NumUsrs"
-                           " FROM institutions,usr_data"
-                           " WHERE institutions.InsCod=usr_data.InsCod"
-                           " GROUP BY institutions.InsCod)"
-                           " UNION "
-                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
-                           " FROM institutions"
-                           " WHERE InsCod NOT IN"
-                           " (SELECT DISTINCT InsCod FROM usr_data))"
-                           " ORDER BY %s",
-                  OrderBySubQuery);
-         else			// Get only the institutions belonging to the country specified by CtyCod
-            sprintf (Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
-                           "institutions.Status,institutions.RequesterUsrCod,"
-                           "institutions.ShortName,institutions.FullName,"
-                           "institutions.WWW,COUNT(*) AS NumUsrs"
-                           " FROM institutions,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=usr_data.InsCod"
-                           " GROUP BY institutions.InsCod)"
-                           " UNION "
-                           "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
-                           " FROM institutions"
-                           " WHERE CtyCod='%ld'"
-                           " AND InsCod NOT IN"
-                           " (SELECT DISTINCT InsCod FROM usr_data))"
-                           " ORDER BY %s",
-                  CtyCod,CtyCod,
-                  OrderBySubQuery);
+	 sprintf (Query,"(SELECT institutions.InsCod,institutions.CtyCod,"
+			"institutions.Status,institutions.RequesterUsrCod,"
+			"institutions.ShortName,institutions.FullName,"
+			"institutions.WWW,COUNT(*) AS NumUsrs"
+			" FROM institutions,usr_data"
+			" WHERE institutions.CtyCod='%ld'"
+			" AND institutions.InsCod=usr_data.InsCod"
+			" GROUP BY institutions.InsCod)"
+			" UNION "
+			"(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
+			" FROM institutions"
+			" WHERE CtyCod='%ld'"
+			" AND InsCod NOT IN"
+			" (SELECT DISTINCT InsCod FROM usr_data))"
+			" ORDER BY %s",
+	       CtyCod,CtyCod,
+	       OrderBySubQuery);
          break;
      }
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get institutions");
@@ -1011,11 +989,6 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
       /* Get extra data */
       if (GetExtraData == Ins_GET_EXTRA_DATA)
 	{
-	 /* Get number of users in courses of this institution */
-	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	 Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
-	 Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
-
 	 /* Get number of centres in this institution */
 	 Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
@@ -1024,6 +997,11 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
 
 	 /* Get number of degrees in this institution */
 	 Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
+
+	 /* Get number of users in courses of this institution */
+	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	 Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
+	 Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
 	}
      }
    else
@@ -1065,21 +1043,6 @@ void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
-  }
-
-/*****************************************************************************/
-/****************** Get number of users in an institution ********************/
-/*****************************************************************************/
-
-static unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
-  {
-   char Query[256];
-
-   /***** Get number of users in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-	          " WHERE InsCod='%ld'",
-            InsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not check number of users in an institution");
   }
 
 /*****************************************************************************/
@@ -1207,6 +1170,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Ins->NumCtrs ||
+	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
           !ICanEdit)
          Lay_PutIconRemovalNotAllowed ();
@@ -1485,11 +1449,14 @@ void Ins_RemoveInstitution (void)
       Lay_ShowErrorAndExit ("Code of institution is missing.");
 
    /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_EXTRA_DATA);
 
    /***** Check if this institution has users *****/
-   if (Ctr_GetNumCtrsInIns (Ins.InsCod) ||
-       Ins_GetNumUsrsWhoClaimToBelongToIns (Ins.InsCod))	// Institution has centres or users ==> don't remove
+   if (!Ins_CheckIfICanEdit (&Ins))
+      Lay_ShowErrorAndExit ("You don't have permission to remove institution.");
+   else if (Ins.NumCtrs ||
+            Ins.NumUsrsWhoClaimToBelongToIns ||
+            Ins.NumUsrs)	// Institution has centres or users ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {

@@ -2764,20 +2764,6 @@ long Deg_GetParamOtherDegCod (void)
   }
 
 /*****************************************************************************/
-/****************** Count number of degrees in a centre *********************/
-/*****************************************************************************/
-
-unsigned Deg_CountNumDegsInCtr (long CtrCod)
-  {
-   char Query[512];
-
-   /***** Get number of degrees of a type from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE CtrCod='%ld'",
-            CtrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of degrees in a centre");
-  }
-
-/*****************************************************************************/
 /**************** Count number of degrees in a degree type ******************/
 /*****************************************************************************/
 
@@ -3819,7 +3805,6 @@ bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg)
 
 void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_all_degrees;
    char Query[1024];
    MYSQL_RES *mysql_res;

@@ -4099,23 +4099,23 @@ const char *Txt_CENTRES_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Prof."
+	 "Usuaris del centre"
 #elif L==2
-	 "Lehrkr&auml;fte"
+	 "Benutzer der Lehrinstitut"
 #elif L==3
-	 "Teachers"
+	 "Users of the centre"
 #elif L==4
-	 "Prof."
+	 "Usuarios del centro"
 #elif L==5
-	 "Enseign."
+	 "Utilisateurs du centre"
 #elif L==6
-	 "Prof."	// Okoteve traducción
+	 "Usuarios del centro"	// Okoteve traducción
 #elif L==7
-	 "Prof."
+	 "Utenti del centro"
 #elif L==8
-	 "Nauczycieli"
+	 "U&zdot;ytkownicy centrum"
 #elif L==9
-	 "Prof."
+	 "Utilizadores do centro"
 #endif
 	};
 
@@ -47149,6 +47149,27 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 	"%u users have been removed.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"%u users have been removed.";		// Necessita de tradução
+#endif
+
+const char *Txt_Users_of_the_centre =
+#if   L==1
+	 "Usuaris del centre";
+#elif L==2
+	 "Benutzer der Lehrinstitut";
+#elif L==3
+	 "Users of the centre";
+#elif L==4
+	 "Usuarios del centro";
+#elif L==5
+	 "Utilisateurs du centre";
+#elif L==6
+	 "Usuarios del centro";	// Okoteve traducción
+#elif L==7
+	 "Utenti del centro";
+#elif L==8
+	 "U&zdot;ytkownicy centrum";
+#elif L==9
+	 "Utilizadores do centro";
 #endif
 
 const char *Txt_Users_of_the_country =

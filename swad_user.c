@@ -3390,19 +3390,28 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 /*****************************************************************************/
 /************ Count how many users with a role belong to a centre ************/
 /*****************************************************************************/
+// Here Rol_UNKNOWN means students or teachers
 
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {
    char Query[512];
 
    /***** Get the number of users in courses of a centre from database ******/
-   sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM degrees,courses,crs_usr"
-                  " WHERE degrees.CtrCod='%ld'"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
-            CtrCod,(unsigned) Role);
+   if (Role == Rol_UNKNOWN)	// Any user
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM degrees,courses,crs_usr"
+		     " WHERE degrees.CtrCod='%ld'"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod",
+	       CtrCod);
+   else
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM degrees,courses,crs_usr"
+		     " WHERE degrees.CtrCod='%ld'"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role='%u'",
+	       CtrCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a centre");
   }
 
@@ -3415,7 +3424,7 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
   {
    char Query[512];
 
-   /***** Get the number of users in a courses of an institution from database ******/
+   /***** Get the number of users in courses of an institution from database ******/
    if (Role == Rol_UNKNOWN)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM centres,degrees,courses,crs_usr"
@@ -3576,6 +3585,22 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
                   " WHERE usr_data.InsCod='%ld'",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in an institution");
+  }
+
+/*****************************************************************************/
+/*********** Get number of users who claim to belong to a centre *************/
+/*****************************************************************************/
+
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
+  {
+   char Query[128];
+
+   /***** Get the number of users in a centre from database *****/
+   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+	          " FROM usr_data"
+                  " WHERE usr_data.CtrCod='%ld'",
+            CtrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a centre");
   }
 
 /*****************************************************************************/

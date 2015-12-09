@@ -132,7 +132,6 @@ void Deg_RemoveDegree (void);
 void Deg_PutParamDegCod (long DegCod);
 long Deg_GetParamOtherDegTypCod (void);
 long Deg_GetParamOtherDegCod (void);
-unsigned Deg_CountNumDegsInCtr (long CtrCod);
 
 bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);

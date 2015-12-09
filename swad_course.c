@@ -824,7 +824,7 @@ unsigned Crs_GetNumCrssTotal (void)
 
 unsigned Crs_GetNumCrssInCty (long CtyCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get number of courses in a country from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions,centres,degrees,courses"
@@ -842,7 +842,7 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 
 unsigned Crs_GetNumCrssInIns (long InsCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres,degrees,courses"
@@ -859,11 +859,12 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 
 unsigned Crs_GetNumCrssInCtr (long CtrCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees,courses"
-	          " WHERE degrees.CtrCod='%ld' AND degrees.DegCod=courses.DegCod",
+	          " WHERE degrees.CtrCod='%ld'"
+	          " AND degrees.DegCod=courses.DegCod",
 	    CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a centre");
   }
@@ -874,7 +875,7 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 
 unsigned Crs_GetNumCrssInDeg (long DegCod)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM courses"

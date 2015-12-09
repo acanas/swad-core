@@ -67,8 +67,12 @@ struct Centre
    char ShortName[Ctr_MAX_LENGTH_CENTRE_SHORT_NAME+1];
    char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
+   unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
    unsigned NumDegs;		// Number of degrees in this centre
-   unsigned NumTchs;		// Number of teachers in this centre
+   unsigned NumCrss;		// Number of courses in this centre
+   unsigned NumUsrs;		// Number of users in courses of this centre
+   unsigned NumTchs;		// Number of teachers in courses of this centre
+   unsigned NumStds;		// Number of students in courses of this centre
   };
 
 typedef enum

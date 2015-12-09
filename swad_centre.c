@@ -249,7 +249,6 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Degrees;
    extern const char *Txt_Print;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
@@ -257,8 +256,12 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
+   extern const char *Txt_Users_of_the_centre;
+   extern const char *Txt_Place;
+   extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   struct Place Plc;
    char PathPhoto[PATH_MAX+1];
    bool PhotoExists;
    char *PhotoAttribution = NULL;
@@ -454,6 +457,34 @@ static void Ctr_Configuration (bool PrintView)
 	}
       else
 	{
+	 /***** Place *****/
+	 Plc.PlcCod = Gbl.CurrentCtr.Ctr.PlcCod;
+         Plc_GetDataOfPlaceByCod (&Plc);
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%s"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Place,
+		  Plc.FullName);
+
+	 /***** Number of users who claim to belong to this centre *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Users_of_the_centre,
+		  Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod));
+
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
@@ -480,7 +511,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Txt_Courses,
 		  Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
-	 /***** Number of teachers *****/
+	 /***** Number of teachers in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -493,7 +524,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Gbl.CurrentCtr.Ctr.CtrCod));
 
-	 /***** Number of students *****/
+	 /***** Number of students in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -505,6 +536,20 @@ static void Ctr_Configuration (bool PrintView)
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
+
+	 /***** Number of users in courses of this centre *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s + %s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
 
       /***** End frame *****/
@@ -596,8 +641,6 @@ static void Ctr_ListCentresForSeeing (void)
 
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
   {
-   extern const char *Txt_Another_place;
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    struct Place Plc;
    const char *TxtClassNormal;
@@ -636,12 +679,19 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
                                       TxtClassStrong,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Number of teachers *****/
+   /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
 		      "</td>",
 	    TxtClassNormal,BgColor,
-	    Ctr->NumTchs);
+	    Ctr->NumUsrsWhoClaimToBelongToCtr);
+
+   /***** Place *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
+		      "%s"
+		      "</td>",
+	    TxtClassNormal,BgColor,
+	    Plc.ShortName);
 
    /***** Number of degrees *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -650,13 +700,33 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    TxtClassNormal,BgColor,
 	    Ctr->NumDegs);
 
-   /***** Place *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-		      "%s"
+   /***** Number of courses *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+		      "%u"
 		      "</td>",
 	    TxtClassNormal,BgColor,
-	    Plc.PlcCod > 0 ? Plc.ShortName :
-			     Txt_Another_place);
+	    Ctr->NumCrss);
+
+   /***** Number of teachers in courses of this centre *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>",
+	    TxtClassNormal,BgColor,
+	    Ctr->NumTchs);
+
+   /***** Number of students in courses of this centre *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>",
+	    TxtClassNormal,BgColor,
+	    Ctr->NumStds);
+
+   /***** Number of users in courses of this centre *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>",
+	    TxtClassNormal,BgColor,
+	    Ctr->NumUsrs);
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
@@ -755,53 +825,28 @@ void Ctr_GetListCentres (long InsCod)
          sprintf (OrderBySubQuery,"FullName");
          break;
       case Ctr_ORDER_BY_NUM_TCHS:
-         sprintf (OrderBySubQuery,"NumTchs DESC,FullName");
+         sprintf (OrderBySubQuery,"NumUsrs DESC,FullName");
          break;
      }
-   if (InsCod > 0)	// Only the centres of the specified institution
-      sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
-                     "centres.Status,centres.RequesterUsrCod,"
-		     "centres.ShortName,centres.FullName,centres.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-		     " FROM centres,usr_data,crs_usr"
-		     " WHERE centres.InsCod='%ld' AND crs_usr.Role='%u'"
-		     " AND crs_usr.UsrCod=usr_data.UsrCod AND usr_data.CtrCod=centres.CtrCod"
-		     " GROUP BY centres.CtrCod)"
-		     " UNION "
-		     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		     "ShortName,FullName,WWW,0 AS NumTchs"
-		     " FROM centres"
-		     " WHERE centres.InsCod='%ld' AND CtrCod NOT IN"
-		     " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
-		     " WHERE centres.InsCod='%ld' AND crs_usr.Role='%u'"
-		     " AND crs_usr.UsrCod=usr_data.UsrCod))"
-		     " ORDER BY %s",
-	       InsCod,
-	       (unsigned) Rol_TEACHER,
-	       InsCod,InsCod,
-	       (unsigned) Rol_TEACHER,
-	       OrderBySubQuery);
-   else			// InsCod <= 0 ==> all the centres
-      sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
-                     "centres.Status,centres.RequesterUsrCod,"
-		     "centres.ShortName,centres.FullName,centres.WWW,"
-		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-		     " FROM centres,usr_data,crs_usr"
-		     " WHERE crs_usr.Role='%u'"
-		     " AND crs_usr.UsrCod=usr_data.UsrCod AND usr_data.CtrCod=centres.CtrCod"
-		     " GROUP BY centres.CtrCod)"
-		     " UNION "
-		     "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
-		     "ShortName,FullName,WWW,0 AS NumTchs"
-		     " FROM centres"
-		     " WHERE CtrCod NOT IN"
-		     " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role='%u'"
-		     " AND crs_usr.UsrCod=usr_data.UsrCod))"
-		     " ORDER BY %s",
-	       (unsigned) Rol_TEACHER,
-	       (unsigned) Rol_TEACHER,
-	       OrderBySubQuery);
+   sprintf (Query,"(SELECT centres.CtrCod,centres.InsCod,centres.PlcCod,"
+		  "centres.Status,centres.RequesterUsrCod,"
+		  "centres.ShortName,centres.FullName,centres.WWW,"
+		  "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+		  " FROM centres,usr_data"
+		  " WHERE centres.InsCod='%ld'"
+		  " AND centres.CtrCod=usr_data.CtrCod"
+		  " GROUP BY centres.CtrCod)"
+		  " UNION "
+		  "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
+		  "ShortName,FullName,WWW,0 AS NumUsrs"
+		  " FROM centres"
+		  " WHERE centres.InsCod='%ld'"
+		  " AND CtrCod NOT IN"
+		  " (SELECT DISTINCT CtrCod FROM usr_data))"
+		  " ORDER BY %s",
+	    InsCod,
+	    InsCod,
+	    OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get centres");
 
    if (NumRows) // Centres found...
@@ -849,12 +894,20 @@ void Ctr_GetListCentres (long InsCod)
          /* Get the URL of the centre (row[7]) */
          strcpy (Ctr->WWW,row[7]);
 
-         /* Get number of teachers in this centre (row[8]) */
-         if (sscanf (row[8],"%u",&Ctr->NumTchs) != 1)
-            Ctr->NumTchs = 0;
+         /* Get number of users who claim to belong to this centre (row[8]) */
+         if (sscanf (row[8],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
+            Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
 
-         /* Count number of degrees in this centre */
-         Ctr->NumDegs = Deg_CountNumDegsInCtr (Ctr->CtrCod);
+         /* Get number of degrees in this centre */
+         Ctr->NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+
+         /* Get number of courses in this centre */
+         Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
+
+	 /* Get number of users in courses of this centre */
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	 Ctr->NumTchs = Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Ctr->CtrCod);
+	 Ctr->NumStds = Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Ctr->CtrCod);
         }
      }
    else
@@ -883,30 +936,36 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->ShortName[0] = '\0';
    Ctr->FullName[0]  = '\0';
    Ctr->WWW[0]       = '\0';
+   Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
    Ctr->NumDegs = 0;
+   Ctr->NumCrss = 0;
+   Ctr->NumUsrs = 0;
    Ctr->NumTchs = 0;
+   Ctr->NumStds = 0;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a centre from database *****/
-      sprintf (Query,"(SELECT centres.InsCod,centres.PlcCod,centres.Status,centres.RequesterUsrCod,centres.ShortName,centres.FullName,"
-                     "centres.WWW,COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
-                     " FROM centres,usr_data,crs_usr"
+      sprintf (Query,"(SELECT centres.InsCod,centres.PlcCod,"
+	             "centres.Status,centres.RequesterUsrCod,"
+	             "centres.ShortName,centres.FullName,centres.WWW,"
+	             "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
+                     " FROM centres,usr_data"
                      " WHERE centres.CtrCod='%ld'"
-                     " AND centres.CtrCod=usr_data.CtrCod AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'"
+                     " AND centres.CtrCod=usr_data.CtrCod"
                      " GROUP BY centres.CtrCod)"
                      " UNION "
-                     "(SELECT InsCod,PlcCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumTchs"
+                     "(SELECT InsCod,PlcCod,"
+                     "Status,RequesterUsrCod,"
+                     "ShortName,FullName,WWW,"
+                     "0 AS NumUsrs"
                      " FROM centres"
-                     " WHERE CtrCod='%ld' AND CtrCod NOT IN"
-                     " (SELECT DISTINCT usr_data.CtrCod FROM usr_data,crs_usr"
-                     " WHERE crs_usr.Role='%u'"
-                     " AND crs_usr.UsrCod=usr_data.UsrCod))",
+                     " WHERE CtrCod='%ld'"
+                     " AND CtrCod NOT IN"
+                     " (SELECT DISTINCT CtrCod FROM usr_data))",
                Ctr->CtrCod,
-               (unsigned) Rol_TEACHER,
-               Ctr->CtrCod,
-               (unsigned) Rol_TEACHER);
+               Ctr->CtrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a centre")) // Centre found...
         {
          /* Get row */
@@ -934,12 +993,20 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
          /* Get the URL of the centre (row[6]) */
          strcpy (Ctr->WWW,row[6]);
 
-         /* Get number of teachers in this centre (row[7]) */
-         if (sscanf (row[7],"%u",&Ctr->NumTchs) != 1)
-            Ctr->NumTchs = 0;
+         /* Get number of users who claim to belong to this centre (row[7]) */
+         if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
+            Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
 
-         /* Count number of degrees in this centre */
-         Ctr->NumDegs = Deg_CountNumDegsInCtr (Ctr->CtrCod);
+         /* Get number of degrees in this centre */
+         Ctr->NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+
+         /* Get number of courses in this centre */
+         Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
+
+	 /* Get number of users in courses of this centre */
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	 Ctr->NumTchs = Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Ctr->CtrCod);
+	 Ctr->NumStds = Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Ctr->CtrCod);
 
          /* Set return value */
          CtrFound = true;
@@ -1188,7 +1255,8 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       if (Ctr->NumDegs ||
-	  Ctr->NumTchs ||	// Centre has degrees or teachers ==> deletion forbidden
+	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
+	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
           !ICanEdit)
 	 Lay_PutIconRemovalNotAllowed ();
       else
@@ -2108,10 +2176,13 @@ static void Ctr_PutFormToCreateCentre (void)
 
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
   {
-   extern const char *Txt_Place;
    extern const char *Txt_CENTRES_HELP_ORDER[2];
    extern const char *Txt_CENTRES_ORDER[2];
+   extern const char *Txt_Place;
    extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Courses_ABBREVIATION;
+   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
    tCtrsOrderType Order;
 
@@ -2121,7 +2192,9 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"%s\">",
+               Order == Ctr_ORDER_BY_CENTRE ? "LEFT_MIDDLE" :
+        	                              "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeCtr);
@@ -2140,7 +2213,10 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	}
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -2149,9 +2225,23 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-	              "</tr>",
-	    Txt_Degrees_ABBREVIATION,
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s+<br />%s"
+                      "</th>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
             Txt_Place,
+	    Txt_Degrees_ABBREVIATION,
+	    Txt_Courses_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
 	    Txt_Status);
   }
 

@@ -114,12 +114,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.61 (2015/12/09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.62 (2015/12/09)"
 #define CSS_FILE		"swad15.60.7.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.62:    Dec 09, 2015	Changes in data of centres. (186949 lines)
         Version 15.61:    Dec 09, 2015	Bug fixing and lot of changes in data of countries and institutions. (186852 lines)
         Version 15.60.6:  Dec 08, 2015	Changed icons in login. (186592 lines)
         Version 15.60.5:  Dec 08, 2015	Changed some messages related to login. (186589 lines)
