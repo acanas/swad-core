@@ -11180,3 +11180,5 @@ INSERT INTO timetable_tut_backup SELECT * FROM timetable_tut;
 UPDATE timetable_crs SET Hour=Hour+2;
 UPDATE timetable_tut SET Hour=Hour+2;
 
+
+SELECT COUNT(DISTINCT crs_usr.UsrCod) FROM institutions,centres,degrees,courses,crs_usr WHERE institutions.CtyCod='724' AND institutions.InsCod=centres.InsCod AND centres.CtrCod=degrees.CtrCod AND degrees.DegCod=courses.DegCod AND courses.CrsCod=crs_usr.CrsCod;

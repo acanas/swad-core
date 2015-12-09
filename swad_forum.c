@@ -1870,7 +1870,7 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastIte
 
       /***** Get data of this institution *****/
       Gbl.Forum.Ins.InsCod = InsCod;
-      if (!Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_MINIMAL_DATA))
+      if (!Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA))
          Lay_ShowErrorAndExit ("Institution not found.");
 
       /***** Link to the forum of users from this institution *****/
@@ -3579,7 +3579,7 @@ void For_GetParamsForum (void)
    /***** Get parameter with code of institution *****/
    Par_GetParToText ("ForInsCod",LongStr,1+10);
    Gbl.Forum.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
-   Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
 
    /***** Get parameter with code of institution *****/
    Par_GetParToText ("ForCtrCod",LongStr,1+10);

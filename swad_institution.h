@@ -64,12 +64,14 @@ struct Institution
    char ShortName[Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME+1];
    char FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
-   unsigned NumStds;
-   unsigned NumTchs;
-   unsigned NumUsrs;
+   unsigned NumUsrsWhoClaimToBelongToIns;
    unsigned NumCtrs;
-   unsigned NumDpts;
    unsigned NumDegs;
+   unsigned NumCrss;
+   unsigned NumDpts;
+   unsigned NumUsrs;
+   unsigned NumTchs;
+   unsigned NumStds;
   };
 
 typedef enum
@@ -82,7 +84,7 @@ typedef enum
 
 typedef enum
   {
-   Ins_GET_MINIMAL_DATA,
+   Ins_GET_BASIC_DATA,
    Ins_GET_EXTRA_DATA,
   } Ins_GetExtraData_t;
 

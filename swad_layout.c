@@ -1456,7 +1456,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
 
    /***** Get data of institution *****/
    Ins.InsCod = InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
    /***** Get data of degree *****/
    Deg.DegCod = DegCod;

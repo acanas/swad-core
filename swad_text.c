@@ -1613,7 +1613,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_inst
 #elif L==4
 	"accesible para lectura y escritura por administradores de la instituci&oacute;n";
 #elif L==5
-	"accessible en lecture et en &eacute;criture par les administrateurs de l'&eacute;tablissement";
+	"accessible en lecture et en &eacute;criture par les administrateurs du &eacute;tablissement";
 #elif L==6
 	"accesible para lectura y escritura por administradores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7
@@ -1697,7 +1697,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #elif L==4
 	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";
 #elif L==5
-	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants du &eacute;tablissement";
 #elif L==6
 	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7
@@ -1865,7 +1865,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_inst
 #elif L==4
 	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";
 #elif L==5
-	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du &eacute;tablissement";
 #elif L==6
 	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7
@@ -3972,23 +3972,23 @@ const char *Txt_Centres =
 
 const char *Txt_Centres_ABBREVIATION =
 #if   L==1
-	"Centres";
+	"Cent.";
 #elif L==2
-	"Lehrinst.";
+	"Lehrin.";
 #elif L==3
-	"Centres";
+	"Cent.";
 #elif L==4
-	"Centros";
+	"Cent.";
 #elif L==5
-	"Centres";
+	"Cent.";
 #elif L==6
 	"Mbo'ehao";
 #elif L==7
-	"Centri";
+	"Cent.";
 #elif L==8
-	"Centra";
+	"Cent.";
 #elif L==9
-	"Centros";
+	"Cent.";
 #endif
 
 const char *Txt_centres =
@@ -5193,23 +5193,23 @@ const char *Txt_COUNTRIES_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Usuaris d'aquesta nacionalitat"
+	 "Usuaris del pa&iacute;s"
 #elif L==2
-	 "Benutzer dieser Staatsangeh&ouml;rigkeit"
+	 "Benutzer des Landes"
 #elif L==3
-	 "Users of that nationality"
+	 "Users of the country"
 #elif L==4
-	 "Usuarios de esa nacionalidad"
+	 "Usuarios del pa&iacute;s"
 #elif L==5
-	 "Utilisateurs de cette nationalité"
+	 "Utilisateurs du pays"
 #elif L==6
-	 "Usuarios de esa nacionalidad"	// Okoteve traducción
+	 "Usuarios del pa&iacute;s"	// Okoteve traducción
 #elif L==7
-	 "Utenti di questa nazionalit&agrave;"
+	 "Utenti del paese"
 #elif L==8
-	 "U&zdot;ytkownicy tej narodowo&sacute;ci"
+	 "U&zdot;ytkownicy kraju"
 #elif L==9
-	 "Utilizadores dessa nacionalidade"
+	 "Utilizadores do pa&iacute;s"
 #endif
 	};
 
@@ -5234,25 +5234,25 @@ const char *Txt_Country =
 	"Pa&iacute;s";
 #endif
 
-const char *Txt_Country_of_institution =
+const char *Txt_Country_of_the_institution =
 #if   L==1
 	"Pa&iacute;s de la instituci&oacute;";
 #elif L==2
 	"Land der Hochschule";
 #elif L==3
-	"Country of institution";
+	"Country of the institution";
 #elif L==4
 	"Pa&iacute;s de la instituci&oacute;n";
 #elif L==5
-	"Pays de l'&eacute;tablissement";
+	"Pays du &eacute;tablissement";
 #elif L==6
 	"Tet&atilde; mbo'ehao";
 #elif L==7
-	"Paese di istituzione";
+	"Paese della istituzione";
 #elif L==8
 	"Kraj instytucji";
 #elif L==9
-	"Pa&iacute;s de institu&ccedil;&atilde;o";
+	"Pa&iacute;s da institu&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Country_unspecified =
@@ -14814,6 +14814,27 @@ const char *Txt_Institutions =
 	"Institu&ccedil;&otilde;es";
 #endif
 
+const char *Txt_Institutions_ABBREVIATION =
+#if   L==1
+	"Instit.";
+#elif L==2
+	"Hochsc.";
+#elif L==3
+	"Instit.";
+#elif L==4
+	"Instit.";
+#elif L==5
+	"&Eacute;tabl.";
+#elif L==6
+	"Mbo'ehao";
+#elif L==7
+	"Istit.";
+#elif L==8
+	"Instyt.";
+#elif L==9
+	"Instit.";
+#endif
+
 const char *Txt_institutions =
 #if   L==1
 	"institucions";
@@ -15027,23 +15048,23 @@ const char *Txt_INSTITUTIONS_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Usuaris"
+	 "Usuaris de la instituci&oacute;"
 #elif L==2
-	 "Benutzer"
+	 "Benutzer der Hochschule"
 #elif L==3
-	 "Users"
+	 "Users of the institution"
 #elif L==4
-	 "Usuarios"
+	 "Usuarios de la instituci&oacute;n"
 #elif L==5
-	 "Utilisateurs"
+	 "Utilisateurs du &eacute;tablissement"
 #elif L==6
-	 "Puruh&aacute;ra"
+	 "Usuarios de la instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	 "Utenti"
+	 "Utenti della istituzione"
 #elif L==8
-	 "U&zdot;ytkownicy"
+	 "U&zdot;ytkownicy instytucji"
 #elif L==9
-	 "Utilizadores"
+	 "Utilizadores da institu&ccedil;&atilde;o"
 #endif
 	};
 
@@ -39110,7 +39131,7 @@ const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very imp
 	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_country_of_the_institution_X_has_changed_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"El pa&iacute;s de la instituci&oacute;n <strong>%s</strong>"
 	" ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
@@ -47130,25 +47151,46 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 	"%u users have been removed.";		// Necessita de tradução
 #endif
 
-const char *Txt_Users_in_courses =
+const char *Txt_Users_of_the_country =
 #if   L==1
-	"Usuaris en assignatures";
+	 "Usuaris del pa&iacute;s";
 #elif L==2
-	"Benutzer in Kurse";
+	 "Benutzer des Landes";
 #elif L==3
-	"Users in courses";
+	 "Users of the country";
 #elif L==4
-	"Usuarios en asignaturas";
+	 "Usuarios del pa&iacute;s";
 #elif L==5
-	"Utilisateurs dans mati&egrave;res";
+	 "Utilisateurs du pays";
 #elif L==6
-	"Usuarios en asignaturas";	// Okoteve traducción
+	 "Usuarios del pa&iacute;s";	// Okoteve traducción
 #elif L==7
-	"Utenti in corsi";
+	 "Utenti del paese";
 #elif L==8
-	"U&zdot;ytkownik&oacute;w w kurs&otilde;w";
+	 "U&zdot;ytkownicy kraju";
 #elif L==9
-	"Usu&aacute;rios em disciplinas";
+	 "Utilizadores do pa&iacute;s";
+#endif
+
+const char *Txt_Users_of_the_institution =
+#if   L==1
+	 "Usuaris de la instituci&oacute;";
+#elif L==2
+	 "Benutzer der Hochschule";
+#elif L==3
+	 "Users of the institution";
+#elif L==4
+	 "Usuarios de la instituci&oacute;n";
+#elif L==5
+	 "Utilisateurs du &eacute;tablissement";
+#elif L==6
+	 "Usuarios de la instituci&oacute;n";	// Okoteve traducción
+#elif L==7
+	 "Utenti della istituzione";
+#elif L==8
+	 "U&zdot;ytkownicy instytucji";
+#elif L==9
+	 "Utilizadores da institu&ccedil;&atilde;o";
 #endif
 
 const char *Txt_usr =		// Abbreviation of user (three characters + dot)

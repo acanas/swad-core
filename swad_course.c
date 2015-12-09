@@ -577,7 +577,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
       /***** Get data of this institution *****/
       Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (!Cty_GetDataOfCountryByCod (&Cty))
+      if (!Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA))
 	 Lay_ShowErrorAndExit ("Country not found.");
 
       /***** Write link to country *****/
@@ -620,7 +620,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	 /***** Get data of this institution *****/
 	 Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA))
+	 if (!Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA))
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/

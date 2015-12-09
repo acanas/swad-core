@@ -2719,7 +2719,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
                                     UsrDat->Email[0]  ? MailLink :
                                 	                NULL,
@@ -2821,7 +2821,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowEmail,
                                     UsrDat->Email[0]  ? MailLink :
                                 	                NULL,
@@ -2870,7 +2870,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
                                     NULL,Ins.ShortName,NULL);
 
@@ -2974,7 +2974,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the student *****/
@@ -3133,7 +3133,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowEmail,
                                     UsrDat->Email[0] ? MailLink :
                                 	               NULL,
@@ -3185,7 +3185,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
 
    /***** Write the rest of teacher's data *****/
@@ -3266,7 +3266,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
                                     UsrDat->Email[0] ? MailLink :
                                 	               NULL,
@@ -3377,7 +3377,7 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
   {
    char Query[512];
 
-   /***** Get the number of users in a degree from database ******/
+   /***** Get the number of users in courses of a degree from database ******/
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM courses,crs_usr"
                   " WHERE courses.DegCod='%ld'"
@@ -3395,7 +3395,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {
    char Query[512];
 
-   /***** Get the number of users in a degree from database ******/
+   /***** Get the number of users in courses of a centre from database ******/
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM degrees,courses,crs_usr"
                   " WHERE degrees.CtrCod='%ld'"
@@ -3409,20 +3409,30 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 /*****************************************************************************/
 /********* Count how many users with a role belong to an institution *********/
 /*****************************************************************************/
+// Here Rol_UNKNOWN means students or teachers
 
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
   {
    char Query[512];
 
-   /***** Get the number of users in a degree from database ******/
-   sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM centres,degrees,courses,crs_usr"
-                  " WHERE centres.InsCod='%ld'"
-                  " AND centres.CtrCod=degrees.CtrCod"
-                  " AND degrees.DegCod=courses.DegCod"
-                  " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
-            InsCod,(unsigned) Role);
+   /***** Get the number of users in a courses of an institution from database ******/
+   if (Role == Rol_UNKNOWN)	// Any user
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM centres,degrees,courses,crs_usr"
+		     " WHERE centres.InsCod='%ld'"
+		     " AND centres.CtrCod=degrees.CtrCod"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod",
+	       InsCod);
+   else
+      sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+		     " FROM centres,degrees,courses,crs_usr"
+		     " WHERE centres.InsCod='%ld'"
+		     " AND centres.CtrCod=degrees.CtrCod"
+		     " AND degrees.DegCod=courses.DegCod"
+		     " AND courses.CrsCod=crs_usr.CrsCod"
+		     " AND crs_usr.Role='%u'",
+	       InsCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of an institution");
   }
 
@@ -3430,11 +3440,12 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 /****** Count how many users with a role belong to courses of a country ******/
 /*****************************************************************************/
 // Here Rol_UNKNOWN means students or teachers
+
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
   {
    char Query[512];
 
-   /***** Get the number of users in a degree from database ******/
+   /***** Get the number of users in courses of a country from database ******/
    if (Role == Rol_UNKNOWN)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM institutions,centres,degrees,courses,crs_usr"
@@ -3536,20 +3547,34 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
   }
 
 /*****************************************************************************/
-/******************* Get number of users in a institution ********************/
+/*********** Get number of users who claim to belong to a country ************/
 /*****************************************************************************/
 
-unsigned Usr_GetNumberOfUsersInInstitution (long InsCod,Rol_Role_t Role)
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
   {
-   char Query[256];
+   char Query[128];
+
+   /***** Get the number of users in a country from database *****/
+   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+	          " FROM usr_data"
+                  " WHERE usr_data.CtyCod='%ld'",
+            CtyCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a country");
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to an institution **********/
+/*****************************************************************************/
+
+unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
+  {
+   char Query[128];
 
    /***** Get the number of users in an institution from database *****/
-   // The following query is very slow, so call this function as minimum as possible
-   sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-	          " FROM usr_data,crs_usr"
-                  " WHERE usr_data.InsCod='%ld'"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'",
-            InsCod,(unsigned) Role);
+   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+	          " FROM usr_data"
+                  " WHERE usr_data.InsCod='%ld'",
+            InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in an institution");
   }
 

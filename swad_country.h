@@ -47,10 +47,14 @@ struct Country
    char Alpha2[2+1];
    char Name[1+Txt_NUM_LANGUAGES][Cty_MAX_BYTES_COUNTRY_NAME+1];
    char WWW [1+Txt_NUM_LANGUAGES][Cty_MAX_LENGTH_COUNTRY_WWW+1];
-   unsigned NumUsrs;
-   unsigned NumStds;
-   unsigned NumTchs;
+   unsigned NumUsrsWhoClaimToBelongToCty;
    unsigned NumInss;
+   unsigned NumCtrs;
+   unsigned NumDegs;
+   unsigned NumCrss;
+   unsigned NumUsrs;	// Number of users in courses of the institution
+   unsigned NumStds;	// Number of students in courses of the institution
+   unsigned NumTchs;	// Number of teachers in courses of the institution
   };
 
 typedef enum
@@ -63,7 +67,7 @@ typedef enum
 
 typedef enum
   {
-   Cty_GET_ONLY_COUNTRIES,
+   Cty_GET_BASIC_DATA,
    Cty_GET_EXTRA_DATA,
   } Cty_GetExtraData_t;
 
@@ -92,7 +96,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod,const char *Class);
-bool Cty_GetDataOfCountryByCod (struct Country *Cty);
+bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData);
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1]);
 void Cty_PutParamCtyCod (long CtyCod);
 long Cty_GetParamOtherCtyCod (void);

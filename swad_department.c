@@ -230,7 +230,7 @@ void Dpt_EditDepartments (void)
       Lay_ShowErrorAndExit ("No institution selected.");		// This should not happen
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_MINIMAL_DATA);
+   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
    if (!Gbl.Inss.Num)
       Lay_ShowErrorAndExit ("There is no list of institutions.");	// This should not happen
 
@@ -501,7 +501,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Get data of institution of this department */
       Ins.InsCod = Dpt->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       /* Put icon to remove department */
       fprintf (Gbl.F.Out,"<tr>"

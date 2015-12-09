@@ -283,7 +283,8 @@ long Usr_GetRamdomStdFromCrs (long CrsCod);
 long Usr_GetRamdomStdFromGrp (long GrpCod);
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
-unsigned Usr_GetNumberOfUsersInInstitution (long InsCod,Rol_Role_t Role);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long InsCod);
+unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
 void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t ListUsrsRange,const char *TchQuery,bool Search);

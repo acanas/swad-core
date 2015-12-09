@@ -696,7 +696,7 @@ void Ctr_EditCentres (void)
    extern const char *Txt_You_must_create_at_least_one_institution_before_creating_centres;
 
    /***** Get list of institutions of the current country *****/
-   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_MINIMAL_DATA);
+   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
    if (Gbl.Inss.Num)
      {
       /***** Get list of places *****/
@@ -1180,7 +1180,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Get data of institution of this centre */
       Ins.InsCod = Ctr->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       ICanEdit = Ctr_CheckIfICanEdit (Ctr);
 

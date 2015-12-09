@@ -745,7 +745,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Get data of institution of this degree *****/
    Ins.InsCod = Gbl.CurrentIns.Ins.InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
    switch (TypeViewExamAnnouncement)
      {
@@ -1295,7 +1295,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
 
    /***** Get data of institution *****/
    Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
    Dat_ConvDateToDateStr (&Gbl.ExamAnnouncement.ExamDate,StrExamDate);
 

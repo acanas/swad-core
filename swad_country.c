@@ -88,7 +88,7 @@ void Cty_SeeCtyWithPendingInss (void)
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
-   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_ABBREVIATION;
    extern const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -129,7 +129,7 @@ void Cty_SeeCtyWithPendingInss (void)
                          "</th>"
                          "</tr>",
                Txt_Country,
-               Txt_Institutions);
+               Txt_Institutions_ABBREVIATION);
 
       /***** List the countries *****/
       for (NumCty = 0;
@@ -145,7 +145,7 @@ void Cty_SeeCtyWithPendingInss (void)
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of country */
-         Cty_GetDataOfCountryByCod (&Cty);
+         Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
 
          /* Country map */
          fprintf (Gbl.F.Out,"<tr>"
@@ -211,6 +211,7 @@ static void Cty_Configuration (bool PrintView)
    extern const char *Txt_Centres;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
+   extern const char *Txt_Users_of_the_country;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *MapAttribution = NULL;
    bool PutLink = !PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0];
@@ -345,6 +346,19 @@ static void Cty_Configuration (bool PrintView)
 	}
       else
 	{
+	 /***** Number of users who claim to belong to this country *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Users_of_the_country,
+		  Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.CurrentCty.Cty.CtyCod));
+
 	 /***** Number of institutions *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
@@ -397,7 +411,7 @@ static void Cty_Configuration (bool PrintView)
 		  Txt_Courses,
 		  Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod));
 
-	 /***** Number of teachers *****/
+	 /***** Number of teachers in courses of this country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -410,7 +424,7 @@ static void Cty_Configuration (bool PrintView)
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Gbl.CurrentCty.Cty.CtyCod));
 
-	 /***** Number of students *****/
+	 /***** Number of students in courses of this country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -422,6 +436,20 @@ static void Cty_Configuration (bool PrintView)
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
+
+	 /***** Number of users in courses of this country *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s + %s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Gbl.CurrentCty.Cty.CtyCod));
 	}
 
       /***** End frame *****/
@@ -457,9 +485,12 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Countries;
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
-   extern const char *Txt_Users_in_courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_ABBREVIATION;
+   extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Courses_ABBREVIATION;
+   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    Cty_CtysOrderType_t Order;
@@ -499,16 +530,29 @@ void Cty_ListCountries2 (void)
 	              "%s"
 	              "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s+<br />%s"
+                      "</th>"
                       "</tr>",
-            Txt_Users_in_courses,
-            Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-            Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-            Txt_Institutions);
+            Txt_Institutions_ABBREVIATION,
+            Txt_Centres_ABBREVIATION,
+            Txt_Degrees_ABBREVIATION,
+            Txt_Courses_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION);
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;
@@ -542,12 +586,24 @@ void Cty_ListCountries2 (void)
                          "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                         "%u"
+                         "</td>"
 			 "</tr>",
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrs,
-	       BgColor,Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Gbl.Ctys.Lst[NumCty].CtyCod),
-	       BgColor,Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Gbl.Ctys.Lst[NumCty].CtyCod),
-	       BgColor,Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Gbl.Ctys.Lst[NumCty].CtyCod),
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumInss);
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumInss,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumCtrs,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumDegs,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumCrss,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumTchs,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumStds,
+	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrs);
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
@@ -578,13 +634,25 @@ void Cty_ListCountries2 (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Txt_Other_countries,
             Cty_GetNumUsrsWhoClaimToBelongToCty (0),
-            Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,0),	// Here Rol_ROLE_UNKNOWN means "all users",
+            Ins_GetNumInssInCty (0),
+            Ctr_GetNumCtrsInCty (0),
+            Deg_GetNumDegsInCty (0),
+            Crs_GetNumCrssInCty (0),
+            Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,0),
             Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,0),
-            Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,0),
-            Ins_GetNumInssInCty (0));
+            Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,0));
 
    /***** Write users and institutions with unknown country *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -595,21 +663,33 @@ void Cty_ListCountries2 (void)
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0"
+                      "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "0"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "0"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "0"
+                      "</td>"
                       "</tr>",
             Txt_Country_unspecified,
             Cty_GetNumUsrsWhoClaimToBelongToCty (-1L),
-            Ins_GetNumInssInCty (-1L));
+            Ins_GetNumInssInCty (-1L),
+            Ctr_GetNumCtrsInCty (-1L),
+            Deg_GetNumDegsInCty (-1L),
+            Crs_GetNumCrssInCty (-1L));
 
    /***** Table end *****/
    Lay_EndRoundFrameTable ();
@@ -745,14 +825,14 @@ void Cty_WriteScriptGoogleGeochart (void)
    for (NumCty = 0;
 	NumCty < Gbl.Ctys.Num;
 	NumCty++)
-      if (Gbl.Ctys.Lst[NumCty].NumUsrs)
+      if (Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty)
         {
          /* Write data of this country */
          fprintf (Gbl.F.Out,"	['%s', %u, %u],\n",
                   Gbl.Ctys.Lst[NumCty].Alpha2,
-                  Gbl.Ctys.Lst[NumCty].NumUsrs,
+                  Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
                   Gbl.Ctys.Lst[NumCty].NumInss);
-         NumUsrsWithCountry += Gbl.Ctys.Lst[NumCty].NumUsrs;
+         NumUsrsWithCountry += Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
          NumCtysWithUsrs++;
         }
 
@@ -843,7 +923,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
    /***** Get countries from database *****/
    switch (GetExtraData)
      {
-      case Cty_GET_ONLY_COUNTRIES:
+      case Cty_GET_BASIC_DATA:
          sprintf (Query,"SELECT CtyCod,Alpha2,Name_%s"
                         " FROM countries ORDER BY Name_%s",
                   Txt_STR_LANG_ID[Gbl.Prefs.Language],
@@ -891,7 +971,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                         " UNION "
                         "(SELECT CtyCod,Alpha2,%s%s0 AS NumUsrs"
                         " FROM countries"
-                        " WHERE CtyCod NOT IN (SELECT DISTINCT CtyCod FROM usr_data))"
+                        " WHERE CtyCod NOT IN"
+                        " (SELECT DISTINCT CtyCod FROM usr_data))"
                         " ORDER BY %s",
                   SubQueryNam1,SubQueryWWW1,
                   SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
@@ -928,7 +1009,18 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
          switch (GetExtraData)
            {
-            case Cty_GET_ONLY_COUNTRIES:
+            case Cty_GET_BASIC_DATA:
+               for (Lan = (Txt_Language_t) 1;
+        	    Lan <= Txt_NUM_LANGUAGES;
+        	    Lan++)
+        	 {
+                  Cty->Name[Lan][0] = '\0';
+                  Cty->WWW[Lan][0] = '\0';
+        	 }
+               Cty->NumUsrsWhoClaimToBelongToCty = 0;
+               Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
+               Cty->NumUsrs = Cty->NumTchs = Cty->NumStds = 0;
+
                /* Get the name of the country in current language */
                strcpy (Cty->Name[Gbl.Prefs.Language],row[2]);
                break;
@@ -942,12 +1034,26 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                   strcpy (Cty->WWW[Lan],row[1+Txt_NUM_LANGUAGES+Lan]);
         	 }
 
-               /* Get number of users in this country */
-               if (sscanf (row[1+Txt_NUM_LANGUAGES*2+1],"%u",&Cty->NumUsrs) != 1)
-                  Cty->NumUsrs = 0;
+               /* Get number of users who claim to belong to this country */
+               if (sscanf (row[1+Txt_NUM_LANGUAGES*2+1],"%u",&Cty->NumUsrsWhoClaimToBelongToCty) != 1)
+                  Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
                /* Get number of institutions in this country */
                Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+
+               /* Get number of centres in this country */
+               Cty->NumCtrs = Ctr_GetNumCtrsInCty (Cty->CtyCod);
+
+               /* Get number of degrees in this country */
+               Cty->NumDegs = Deg_GetNumDegsInCty (Cty->CtyCod);
+
+               /* Get number of courses in this country */
+               Cty->NumCrss = Crs_GetNumCrssInCty (Cty->CtyCod);
+
+               /* Get number of users in courses of this country */
+               Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	       Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
+	       Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
                break;
            }
         }
@@ -1042,10 +1148,10 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
   }
 
 /*****************************************************************************/
-/**************************** Get country full name **************************/
+/***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetDataOfCountryByCod (struct Country *Cty)
+bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData)
   {
    extern const char *Txt_Another_country;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
@@ -1072,7 +1178,10 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty)
       Cty->Name[Lan][0] = '\0';
       Cty->WWW[Lan][0] = '\0';
      }
+   Cty->NumUsrsWhoClaimToBelongToCty = 0;
    Cty->NumUsrs = 0;
+   Cty->NumStds = 0;
+   Cty->NumTchs = 0;
    Cty->NumInss = 0;
 
    /***** Check if country code is correct *****/
@@ -1088,37 +1197,52 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty)
       return false;
      }
 
-   // Cty->CtyCod > 0
-   /***** Get data of a country from database *****/
-   SubQueryNam1[0] = '\0';
-   SubQueryNam2[0] = '\0';
-   SubQueryWWW1[0] = '\0';
-   SubQueryWWW2[0] = '\0';
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
-	Lan++)
-     {
-      sprintf (StrField,"countries.Name_%s,",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryNam1,StrField);
-      sprintf (StrField,"Name_%s,",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryNam2,StrField);
+   // Here Cty->CtyCod > 0
 
-      sprintf (StrField,"countries.WWW_%s,",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryWWW1,StrField);
-      sprintf (StrField,"WWW_%s,",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryWWW2,StrField);
+   /***** Get data of a country from database *****/
+   switch (GetExtraData)
+     {
+      case Cty_GET_BASIC_DATA:
+         sprintf (Query,"SELECT Alpha2,Name_%s"
+                        " FROM countries"
+			" WHERE CtyCod='%03ld'",
+                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
+                  Cty->CtyCod);
+         break;
+      case Cty_GET_EXTRA_DATA:
+	 SubQueryNam1[0] = '\0';
+	 SubQueryNam2[0] = '\0';
+	 SubQueryWWW1[0] = '\0';
+	 SubQueryWWW2[0] = '\0';
+	 for (Lan = (Txt_Language_t) 1;
+	      Lan <= Txt_NUM_LANGUAGES;
+	      Lan++)
+	   {
+	    sprintf (StrField,"countries.Name_%s,",Txt_STR_LANG_ID[Lan]);
+	    strcat (SubQueryNam1,StrField);
+	    sprintf (StrField,"Name_%s,",Txt_STR_LANG_ID[Lan]);
+	    strcat (SubQueryNam2,StrField);
+
+	    sprintf (StrField,"countries.WWW_%s,",Txt_STR_LANG_ID[Lan]);
+	    strcat (SubQueryWWW1,StrField);
+	    sprintf (StrField,"WWW_%s,",Txt_STR_LANG_ID[Lan]);
+	    strcat (SubQueryWWW2,StrField);
+	   }
+	 sprintf (Query,"(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
+			" FROM countries,usr_data"
+			" WHERE countries.CtyCod='%03ld'"
+			" AND countries.CtyCod=usr_data.CtyCod)"
+			" UNION "
+			"(SELECT Alpha2,%s%s0 AS NumUsrs"
+			" FROM countries"
+			" WHERE CtyCod='%03ld'"
+			" AND CtyCod NOT IN"
+			" (SELECT DISTINCT CtyCod FROM usr_data))",
+		  SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
+		  SubQueryNam2,SubQueryWWW2,Cty->CtyCod);
+	 break;
      }
-   sprintf (Query,"(SELECT Alpha2,%s%sCOUNT(*)"
-                  " FROM countries,institutions"
-                  " WHERE countries.CtyCod='%03ld' AND countries.CtyCod=institutions.CtyCod"
-                  " GROUP BY countries.CtyCod)"
-                  " UNION "
-                  "(SELECT Alpha2,%s%s0"
-                  " FROM countries"
-                  " WHERE CtyCod='%03ld'"
-                  " AND CtyCod NOT IN (SELECT DISTINCT CtyCod FROM institutions))",
-            SubQueryNam1,SubQueryWWW1,Cty->CtyCod,
-            SubQueryNam2,SubQueryWWW2,Cty->CtyCod);
+
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a country");
 
    /***** Count number of rows in result *****/
@@ -1133,18 +1257,36 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty)
       strncpy (Cty->Alpha2,row[0],2);
       Cty->Alpha2[2] = '\0';
 
-      /* Get the name of the country in several languages */
-      for (Lan = (Txt_Language_t) 1;
-	   Lan <= Txt_NUM_LANGUAGES;
-	   Lan++)
+      switch (GetExtraData)
 	{
-         strcpy (Cty->Name[Lan],row[Lan]);
-         strcpy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES+Lan]);
-	}
+	 case Cty_GET_BASIC_DATA:
+	    /* Get the name of the country in current language */
+	    strcpy (Cty->Name[Gbl.Prefs.Language],row[1]);
+	    break;
+	 case Cty_GET_EXTRA_DATA:
+	    /* Get the name of the country in several languages */
+	    for (Lan = (Txt_Language_t) 1;
+		 Lan <= Txt_NUM_LANGUAGES;
+		 Lan++)
+	      {
+	       strcpy (Cty->Name[Lan],row[Lan]);
+	       strcpy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES+Lan]);
+	      }
 
-      /* Get number of institutions in this country */
-      if (sscanf (row[Txt_NUM_LANGUAGES*2+1],"%u",&(Cty->NumInss)) != 1)
-         Cty->NumInss = 0;
+	    /* Get number of users who claim to belong to this country */
+	    if (sscanf (row[Txt_NUM_LANGUAGES*2+1],"%u",&Cty->NumUsrsWhoClaimToBelongToCty) != 1)
+	       Cty->NumUsrsWhoClaimToBelongToCty = 0;
+
+	    /* Get number of user in courses of this institution */
+	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	    Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
+	    Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
+
+	    /* Get number of institutions in this country */
+	    Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+
+	    break;
+	}
      }
    else
       CtyFound = false;
@@ -1282,6 +1424,7 @@ static void Cty_ListCountriesForEdition (void)
 	                 "<td rowspan=\"%u\" class=\"BT\">",
 	       1 + Txt_NUM_LANGUAGES);
       if (Cty->NumInss ||
+	  Cty->NumUsrsWhoClaimToBelongToCty ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
 	 Lay_PutIconRemovalNotAllowed ();
       else
@@ -1313,7 +1456,7 @@ static void Cty_ListCountriesForEdition (void)
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	                 "%u"
 	                 "</td>",
-               1 + Txt_NUM_LANGUAGES,Cty->NumUsrs);
+               1 + Txt_NUM_LANGUAGES,Cty->NumUsrsWhoClaimToBelongToCty);
 
       /* Number of institutions */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
@@ -1414,10 +1557,12 @@ void Cty_RemoveCountry (void)
       Lay_ShowErrorAndExit ("Code of country is missing.");
 
    /***** Get data of the country from database *****/
-   Cty_GetDataOfCountryByCod (&Cty);
+   Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
 
    /***** Check if this country has users *****/
-   if (Cty.NumInss || Cty.NumUsrs)	// Country has institutions or users ==> don't remove
+   if (Cty.NumInss ||
+       Cty.NumUsrsWhoClaimToBelongToCty ||
+       Cty.NumUsrs)	// Country has institutions or users ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
      {
@@ -1466,7 +1611,7 @@ void Cty_RenameCountry (void)
    Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_COUNTRY_NAME);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty);
+   Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
 
    /***** Check if new name is empty *****/
    if (!NewCtyName[0])
@@ -1585,7 +1730,7 @@ void Cty_ChangeCtyWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cty_MAX_BYTES_COUNTRY_NAME);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty);
+   Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
 
    /***** Update the table changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE countries SET WWW_%s='%s'"
@@ -1738,7 +1883,7 @@ static void Cty_PutHeadCountries (void)
    extern const char *Txt_Name;
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
-   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_ABBREVIATION;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1767,7 +1912,7 @@ static void Cty_PutHeadCountries (void)
             Txt_Name,
             Txt_WWW,
             Txt_Users,
-            Txt_Institutions);
+            Txt_Institutions_ABBREVIATION);
   }
 
 /*****************************************************************************/

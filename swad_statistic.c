@@ -3293,11 +3293,11 @@ static void Sta_WriteCountry (long CtyCod)
      {
       /***** Get data of country *****/
       Cty.CtyCod = CtyCod;
-      Cty_GetDataOfCountryByCod (&Cty);
+      Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
 
       /***** Form to go to country *****/
       Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
-                                             "LOG","COUNTRY_MAP_TINY");
+                                         "LOG","COUNTRY_MAP_TINY");
      }
    else			// Hit with no country selected
       /***** No country selected *****/
@@ -3384,7 +3384,7 @@ static void Sta_WriteInstitution (long InsCod)
      {
       /***** Get data of institution *****/
       Ins.InsCod = InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       /***** Title in cell *****/
       fprintf (Gbl.F.Out,"title=\"%s\">",
@@ -5147,7 +5147,7 @@ static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res)
 
    /***** Get data of this institution (row[0]) *****/
    Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
-   if (!Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_MINIMAL_DATA))
+   if (!Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA))
       Lay_ShowErrorAndExit ("Institution not found.");
 
    /***** Get statistic (row[1]) *****/

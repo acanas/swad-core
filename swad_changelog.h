@@ -103,6 +103,10 @@
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
+// TODO: When error ("Ya existía un evento con el título") creating a new event, the data f the event is empty
+// TODO: When teacher clicks in attendance of a student (button in her/his record),
+//	 only (the groups he/she should have attend) union (the groups he/she really attended)
+//	 should be shown.
 // TODO: Reply to one user, suggested by Francisco Ocaña Lara
 // TODO: Reply to all
 
@@ -110,13 +114,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.60.7 (2015/12/08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.61 (2015/12/09)"
 #define CSS_FILE		"swad15.60.7.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.60.7:  Dec 08, 2015	Changed some small icons. (186591 lines)
+        Version 15.61:    Dec 09, 2015	Bug fixing and lot of changes in data of countries and institutions. (186852 lines)
         Version 15.60.6:  Dec 08, 2015	Changed icons in login. (186592 lines)
         Version 15.60.5:  Dec 08, 2015	Changed some messages related to login. (186589 lines)
         Version 15.60.4:  Dec 08, 2015	Change in text about first / last year of a degree. (186589 lines)

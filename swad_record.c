@@ -2127,7 +2127,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    if (UsrDat->InsCod > 0)
      {
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       /* Form to go to the institution */
       if (PutFormLinks)
@@ -2792,7 +2792,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    if (!Gbl.Ctys.Num)
 	      {
 	       Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-	       Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+	       Cty_GetListCountries (Cty_GET_BASIC_DATA);
 	      }
 
 	    fprintf (Gbl.F.Out,"<tr>"
@@ -3366,7 +3366,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
-   extern const char *Txt_Country_of_institution;
+   extern const char *Txt_Country_of_the_institution;
    extern const char *Txt_Another_institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Another_centre;
@@ -3401,14 +3401,14 @@ void Rec_ShowFormMyInsCtrDpt (void)
 		      "%s:"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-            ClassForm,Txt_Country_of_institution,
+            ClassForm,Txt_Country_of_the_institution,
             COL2_WIDTH);
 
    /* If list of countries is empty, try to get it */
    if (!Gbl.Ctys.Num)
      {
       Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-      Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+      Cty_GetListCountries (Cty_GET_BASIC_DATA);
      }
 
    /* Start form to select the country of my institution */
@@ -3448,7 +3448,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /* Get list of institutions in this country */
    Ins_FreeListInstitutions ();
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-      Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_MINIMAL_DATA);
+      Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
 
    /* Start form to select institution */
    Act_FormGoToStart (ActChgMyIns);
@@ -3653,7 +3653,7 @@ void Rec_UpdateMyInstitution (void)
    /* Get country of institution */
    if (Ins.InsCod > 0)
      {
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
      }

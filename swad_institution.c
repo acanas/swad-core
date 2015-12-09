@@ -155,7 +155,7 @@ void Ins_SeeInsWithPendingCtrs (void)
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of institution */
-         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
          /* Institution logo and name */
          fprintf (Gbl.F.Out,"<tr>"
@@ -251,6 +251,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_Departments;
+   extern const char *Txt_Users_of_the_institution;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool PutLink = !PrintView && Gbl.CurrentIns.Ins.WWW[0];
 
@@ -379,6 +380,19 @@ static void Ins_Configuration (bool PrintView)
 	}
       else
 	{
+	 /***** Number of users who claim to belong to this institution *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Users_of_the_institution,
+		  Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.CurrentIns.Ins.InsCod));
+
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
@@ -431,7 +445,7 @@ static void Ins_Configuration (bool PrintView)
 		  Txt_Departments,
 		  Dpt_GetNumDepartmentsInInstitution (Gbl.CurrentIns.Ins.InsCod));
 
-	 /***** Number of teachers *****/
+	 /***** Number of teachers in courses of this institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -444,7 +458,7 @@ static void Ins_Configuration (bool PrintView)
 		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Gbl.CurrentIns.Ins.InsCod));
 
-	 /***** Number of students *****/
+	 /***** Number of students in courses of this institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
@@ -456,6 +470,20 @@ static void Ins_Configuration (bool PrintView)
 		  The_ClassForm[Gbl.Prefs.Theme],
 		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Gbl.CurrentIns.Ins.InsCod));
+
+	 /***** Number of users in courses of this institution *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s + %s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Gbl.CurrentIns.Ins.InsCod));
 	}
 
       /***** End of the frame *****/
@@ -581,30 +609,53 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Stats *****/
+   /* Number of users who claim to belong to this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumUsrs);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumStds);
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumTchs);
+	    TxtClassNormal,BgColor,Ins->NumUsrsWhoClaimToBelongToIns);
+
+   /* Number of centres in this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumCtrs);
+
+   /* Number of degrees in this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumDegs);
+
+   /* Number of courses in this institution */
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+	              "%u"
+	              "</td>",
+	    TxtClassNormal,BgColor,Ins->NumCrss);
+
+   /* Number of departments in this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumDpts);
+
+   /* Number of teachers in courses of this institution */
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+	              "%u"
+	              "</td>",
+	    TxtClassNormal,BgColor,Ins->NumTchs);
+
+   /* Number of students in courses of this institution */
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+	              "%u"
+	              "</td>",
+	    TxtClassNormal,BgColor,Ins->NumStds);
+
+   /* Number of users in courses of this institution */
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+	              "%u"
+	              "</td>",
+	    TxtClassNormal,BgColor,Ins->NumUsrs);
 
    /***** Institution status *****/
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
@@ -625,10 +676,11 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
   {
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
-   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Centres;
+   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Departments_ABBREVIATION;
    extern const char *Txt_Status;
    Ins_InssOrderType_t Order;
@@ -639,7 +691,9 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<th class=\"%s\">",
+               Order == Ins_ORDER_BY_INSTITUTION ? "LEFT_MIDDLE" :
+        	                                   "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Act_FormStart (ActSeeIns);
@@ -659,9 +713,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -672,16 +723,28 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s+<br />%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
+            Txt_Centres_ABBREVIATION,
+            Txt_Degrees_ABBREVIATION,
+            Txt_Courses_ABBREVIATION,
+            Txt_Departments_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
-            Txt_Centres,
-            Txt_Degrees_ABBREVIATION,
-            Txt_Departments_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
             Txt_Status);
    }
 
@@ -743,7 +806,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
    /***** Get institutions from database *****/
    switch (GetExtraData)
      {
-      case Ins_GET_MINIMAL_DATA:
+      case Ins_GET_BASIC_DATA:
          if (CtyCod <= 0)	// Get all the institutions, belonging to any country
             sprintf (Query,"SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
                            " FROM institutions"
@@ -776,7 +839,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                            " UNION "
                            "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
                            " FROM institutions"
-                           " WHERE InsCod NOT IN (SELECT DISTINCT InsCod FROM usr_data))"
+                           " WHERE InsCod NOT IN"
+                           " (SELECT DISTINCT InsCod FROM usr_data))"
                            " ORDER BY %s",
                   OrderBySubQuery);
          else			// Get only the institutions belonging to the country specified by CtyCod
@@ -785,12 +849,15 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                            "institutions.ShortName,institutions.FullName,"
                            "institutions.WWW,COUNT(*) AS NumUsrs"
                            " FROM institutions,usr_data"
-                           " WHERE institutions.CtyCod='%ld' AND institutions.InsCod=usr_data.InsCod"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=usr_data.InsCod"
                            " GROUP BY institutions.InsCod)"
                            " UNION "
                            "(SELECT InsCod,CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW,0 AS NumUsrs"
                            " FROM institutions"
-                           " WHERE CtyCod='%ld' AND InsCod NOT IN (SELECT DISTINCT InsCod FROM usr_data))"
+                           " WHERE CtyCod='%ld'"
+                           " AND InsCod NOT IN"
+                           " (SELECT DISTINCT InsCod FROM usr_data))"
                            " ORDER BY %s",
                   CtyCod,CtyCod,
                   OrderBySubQuery);
@@ -844,32 +911,32 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
          /* Get extra data */
          switch (GetExtraData)
            {
-            case Ins_GET_MINIMAL_DATA:
-               Ins->NumStds = Ins->NumTchs = Ins->NumUsrs =
-               Ins->NumCtrs = Ins->NumDpts = Ins->NumDegs = 0;
+            case Ins_GET_BASIC_DATA:
+               Ins->NumUsrsWhoClaimToBelongToIns = 0;
+               Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+               Ins->NumUsrs = Ins->NumTchs = Ins->NumStds = 0;
                break;
             case Ins_GET_EXTRA_DATA:
-               /* Get number of users in this institution (row[7]) */
-               if (sscanf (row[7],"%u",&Ins->NumUsrs) == 1)
-                 {
-                  if (Ins->NumUsrs)
-                    {
-                     Ins->NumStds = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_STUDENT);	// Slow query
-                     Ins->NumTchs = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_TEACHER);	// Slow query
-                     Ins->NumUsrs = Ins->NumStds + Ins->NumTchs;
-                    }
-                 }
-               else
-                  Ins->NumStds = Ins->NumTchs = Ins->NumUsrs = 0;
+               /* Get number of users who claim to belong to this institution (row[7]) */
+               if (sscanf (row[7],"%u",&Ins->NumUsrsWhoClaimToBelongToIns) != 1)
+        	  Ins->NumUsrsWhoClaimToBelongToIns = 0;
 
                /* Get number of centres in this institution */
                Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
+               /* Get number of degrees in this institution */
+               Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
+
+               /* Get number of degrees in this institution */
+               Ins->NumCrss = Crs_GetNumCrssInIns (Ins->InsCod);
+
                /* Get number of departments in this institution */
                Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
 
-               /* Get number of degrees in this institution */
-               Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
+               /* Get number of users in courses */
+	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	       Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
+	       Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
                break;
            }
         }
@@ -944,10 +1011,10 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
       /* Get extra data */
       if (GetExtraData == Ins_GET_EXTRA_DATA)
 	{
-	 /* Get number of users in this institution */
-	 Ins->NumStds = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_STUDENT);	// Slow query
-	 Ins->NumTchs = Usr_GetNumberOfUsersInInstitution (Ins->InsCod,Rol_TEACHER);	// Slow query
-	 Ins->NumUsrs = Ins->NumStds + Ins->NumTchs;
+	 /* Get number of users in courses of this institution */
+	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
+	 Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
+	 Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
 
 	 /* Get number of centres in this institution */
 	 Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
@@ -1119,7 +1186,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-   Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+   Cty_GetListCountries (Cty_GET_BASIC_DATA);
 
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
@@ -1418,7 +1485,7 @@ void Ins_RemoveInstitution (void)
       Lay_ShowErrorAndExit ("Code of institution is missing.");
 
    /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
    /***** Check if this institution has users *****/
    if (Ctr_GetNumCtrsInIns (Ins.InsCod) ||
@@ -1513,7 +1580,7 @@ static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName)
    Par_GetParToText (ParamName,NewInsName,MaxLength);
 
    /***** Get from the database the old names of the institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
 
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
@@ -1582,7 +1649,7 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 void Ins_ChangeInsCountry (void)
   {
    extern const char *Txt_The_institution_X_already_exists;
-   extern const char *Txt_The_country_of_the_institution_X_has_changed_Y;
+   extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Institution *Ins;
    struct Country NewCty;
    char Query[256];
@@ -1599,10 +1666,10 @@ void Ins_ChangeInsCountry (void)
       Lay_ShowErrorAndExit ("Code of country is missing.");
 
    /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
 
    /***** Get data of the country from database *****/
-   Cty_GetDataOfCountryByCod (&NewCty);
+   Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
 
    /***** Check if country has changed *****/
    if (NewCty.CtyCod != Ins->CtyCod)
@@ -1629,8 +1696,8 @@ void Ins_ChangeInsCountry (void)
 	 DB_QueryUPDATE (Query,"can not update the country of an institution");
 
 	 /***** Write message to show the change made *****/
-	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_Y,
-		  Ins->FullName,NewCty.Name);
+	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
+		  Ins->FullName,NewCty.Name[Gbl.Prefs.Language]);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
          Ins->CtyCod = NewCty.CtyCod;
@@ -1712,7 +1779,7 @@ void Ins_ChangeInsStatus (void)
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_MINIMAL_DATA);
+   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
 
    /***** Update status in table of institutions *****/
    sprintf (Query,"UPDATE institutions SET Status='%u' WHERE InsCod='%ld'",
@@ -1772,7 +1839,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-   Cty_GetListCountries (Cty_GET_ONLY_COUNTRIES);
+   Cty_GetListCountries (Cty_GET_BASIC_DATA);
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)

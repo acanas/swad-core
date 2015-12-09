@@ -890,7 +890,7 @@ void Deg_InitCurrentCourse (void)
    /***** If numerical institution code is available, get institution data *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      if (Ins_GetDataOfInstitutionByCod (&Gbl.CurrentIns.Ins,Ins_GET_MINIMAL_DATA))	// Institution found
+      if (Ins_GetDataOfInstitutionByCod (&Gbl.CurrentIns.Ins,Ins_GET_BASIC_DATA))	// Institution found
 	 Gbl.CurrentCty.Cty.CtyCod = Gbl.CurrentIns.Ins.CtyCod;
       else
         {
@@ -906,7 +906,7 @@ void Deg_InitCurrentCourse (void)
    /***** If numerical country code is available, get country data *****/
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      if (!Cty_GetDataOfCountryByCod (&Gbl.CurrentCty.Cty))	// Country not found
+      if (!Cty_GetDataOfCountryByCod (&Gbl.CurrentCty.Cty,Cty_GET_BASIC_DATA))	// Country not found
         {
          Gbl.YearOK = false;
          Gbl.CurrentCty.Cty.CtyCod =
@@ -3901,7 +3901,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       if (Ins.InsCod > 0)
 		 {
 		  /* Get data of institution */
-		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_MINIMAL_DATA);
+		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
 		  /* Write institution logo and name */
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
