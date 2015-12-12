@@ -920,13 +920,13 @@ void Mai_PutLinkToChangeOtherUsrEmail (void)
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Act_PutContextualLink (ActFrmUsrAcc,NULL,
-			     "msg16x16.gif",Txt_Change_email);
+			     "msg64x64.gif",Txt_Change_email);
    else									// Not me
       Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmMaiStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmMaiTch :
 	                	                                                        ActFrmMaiOth),
                              Usr_PutParamOtherUsrCodEncrypted,
-                             "msg16x16.gif",Txt_Change_email);
+                             "msg64x64.gif",Txt_Change_email);
   }
 
 /*****************************************************************************/

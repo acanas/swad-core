@@ -107,6 +107,9 @@
 // TODO: When teacher clicks in attendance of a student (button in her/his record),
 //	 only (the groups he/she should have attend) union (the groups he/she really attended)
 //	 should be shown.
+// TODO: By default, profile and photo should be visible by users who share course
+// TODO: When page is refreshed in course works, prevent users to be duplicated
+// TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to one user, suggested by Francisco Ocaña Lara
 // TODO: Reply to all
 
@@ -114,12 +117,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.62 (2015/12/09)"
-#define CSS_FILE		"swad15.60.7.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.63 (2015/12/12)"
+#define CSS_FILE		"swad15.63.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.63:    Dec 12, 2015	New layout for user's public profile.
+                                        Fixed bug when removing user's account. (186932 lines)
+					2 changes necessary in database:
+DELETE FROM usr_follow WHERE FollowerCod NOT IN (SELECT UsrCod FROM usr_data);
+DELETE FROM usr_follow WHERE FollowedCod NOT IN (SELECT UsrCod FROM usr_data);
+
         Version 15.62:    Dec 09, 2015	Changes in data of centres. (186949 lines)
         Version 15.61:    Dec 09, 2015	Bug fixing and lot of changes in data of countries and institutions. (186852 lines)
         Version 15.60.6:  Dec 08, 2015	Changed icons in login. (186592 lines)

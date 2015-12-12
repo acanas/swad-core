@@ -55,4 +55,6 @@ void Fol_GetAndShowRankingFollowers (void);
 
 void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr);
 
+void Fol_RemoveUsrFromUsrFollow (long UsrCod);
+
 #endif

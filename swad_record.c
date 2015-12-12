@@ -2345,7 +2345,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       Act_LinkFormSubmit (Txt_Write_a_message,ClassData);
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                 " style=\"display:inline;\" >"
-			 "<img src=\"%s/msg16x16.gif\""
+			 "<img src=\"%s/msg64x64.gif\""
 			 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON16x16\" />"
 			 "</div>"

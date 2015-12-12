@@ -32,6 +32,7 @@
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_enrollment.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_notification.h"
@@ -783,6 +784,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user's figures *****/
    Prf_RemoveUsrFigures (UsrDat->UsrCod);
+
+   /***** Remove user from table of followers *****/
+   Fol_RemoveUsrFromUsrFollow (UsrDat->UsrCod);
 
    /***** Remove the user from the list of users without photo *****/
    Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);

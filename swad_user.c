@@ -7795,7 +7795,7 @@ bool Usr_CheckIfUsrBanned (long UsrCod)
   }
 
 /*****************************************************************************/
-/****************** Check if a user is banned in ranking *********************/
+/**************** Remove user from banned users in ranking *******************/
 /*****************************************************************************/
 
 void Usr_RemoveUsrFromUsrBanned (long UsrCod)
@@ -7806,4 +7806,3 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user from users banned");
   }
-

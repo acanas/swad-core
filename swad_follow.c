@@ -70,7 +70,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   const char *Title);
 static unsigned Fol_GetNumFollowing (long UsrCod);
 static unsigned Fol_GetNumFollowers (long UsrCod);
-static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat);
+static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /*************** Check if a user is a follower of another user ***************/
@@ -100,7 +100,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    extern const char *Txt_Followers;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto 5px auto;\">"
+   fprintf (Gbl.F.Out,"<section id=\"follow\">"
+                      "<table style=\"margin:0 auto;\">"
 	              "<tr>");
 
    /***** Followed users *****/
@@ -115,7 +116,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+	              "</table>"
+	              "</section>");
   }
 
 /*****************************************************************************/
@@ -139,8 +141,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
         	                         "FOLLOW");
    if (NumUsrs)
      {
-      /* Form to list followed users */
-      Act_FormStart (Action);
+      /* Form to list users */
+      Act_FormStartAnchor (Action,"follow");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
@@ -160,8 +162,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
         	                         The_ClassForm[Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
-      /* Form to list followed users */
-      Act_FormStart (Action);
+      /* Form to list users */
+      Act_FormStartAnchor (Action,"follow");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
@@ -212,7 +214,6 @@ static unsigned Fol_GetNumFollowers (long UsrCod)
 void Fol_ListFollowing (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   extern const char *Txt_Following;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -244,17 +245,17 @@ void Fol_ListFollowing (void)
 		 NumUsr < NumUsrs;
 		 NumUsr++)
 	      {
-	       /***** Get user and number of clicks *****/
+	       /***** Get user *****/
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get user's code (row[0]) */
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
 	       /***** Show user *****/
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 		  fprintf (Gbl.F.Out,"<tr>");
-	       Fol_ShowFollowedOrFollowed (&UsrDat);
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+		  Fol_ShowFollowedOrFollower (&UsrDat);
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		   NumUsr == NumUsrs - 1)
 		  fprintf (Gbl.F.Out,"</tr>");
@@ -284,7 +285,6 @@ void Fol_ListFollowing (void)
 void Fol_ListFollowers (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   extern const char *Txt_Followers;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -326,12 +326,12 @@ void Fol_ListFollowers (void)
 
 	       /* Get user's code (row[0]) */
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
 	       /***** Show user *****/
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 		  fprintf (Gbl.F.Out,"<tr>");
-	       Fol_ShowFollowedOrFollowed (&UsrDat);
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	          Fol_ShowFollowedOrFollower (&UsrDat);
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		   NumUsr == NumUsrs - 1)
 		  fprintf (Gbl.F.Out,"</tr>");
@@ -360,10 +360,10 @@ void Fol_ListFollowers (void)
   }
 
 /*****************************************************************************/
-/************** Show user's photo and nickname in ranking list ***************/
+/************************* Show followed or follower *************************/
 /*****************************************************************************/
 
-static void Fol_ShowFollowedOrFollowed (const struct UsrData *UsrDat)
+static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
    extern const char *Txt_Unfollow;
@@ -618,4 +618,18 @@ void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr)
 
    if ((*ContentStr = (char *) malloc (1)))
       strcpy (*ContentStr,"");
+  }
+
+/*****************************************************************************/
+/*********************** Remove user from user follow ************************/
+/*****************************************************************************/
+
+void Fol_RemoveUsrFromUsrFollow (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"DELETE FROM usr_follow"
+	          " WHERE FollowerCod='%ld' OR FollowedCod='%ld'",
+	    UsrCod,UsrCod);
+   DB_QueryDELETE (Query,"can not remove user from followers and followed");
   }
