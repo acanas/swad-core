@@ -2219,7 +2219,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/card16x16.gif\""
+			    "<img src=\"%s/card64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"
@@ -2245,7 +2245,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/config16x16.gif\""
+			    "<img src=\"%s/config64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"
@@ -2273,7 +2273,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_View_works,ClassData);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/folder16x16.gif\""
+			    "<img src=\"%s/folder64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"
@@ -2295,7 +2295,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_LinkFormSubmit (Txt_See_exams,ClassData);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/file16x16.gif\""
+			    "<img src=\"%s/file64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"
@@ -2323,7 +2323,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_LinkFormSubmit (Txt_Attendance,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/rollcall16x16.gif\""
+			       "<img src=\"%s/rollcall64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 	                       " class=\"ICON16x16\" />"
 			       "</div>"
@@ -2366,7 +2366,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_LinkFormSubmit (Txt_Unfollow,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/unfollow16x16.gif\""
+			       "<img src=\"%s/unfollow64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 	                       " class=\"ICON16x16\" />"
 			       "</div>"
@@ -2383,7 +2383,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_LinkFormSubmit (Txt_Follow,ClassData);
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/follow16x16.gif\""
+			       "<img src=\"%s/follow64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 	                       " class=\"ICON16x16\" />"
 			       "</div>"

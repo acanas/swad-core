@@ -1749,11 +1749,25 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /***************************** Public user's profile *************************/
-#prf_fig_container
+#prf_fig_left_container
 	{
-	text-align:center;
+	display:inline-block;
+	box-sizing:border-box;
+	width:50%;
+	padding-right:10px;
+	text-align:right;
+	vertical-align:top;
 	}
-#prf_fig_list
+#prf_fig_right_container
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	width:50%;
+	padding-left:10px;
+	text-align:left;
+	vertical-align:top;
+	}
+.PRF_FIG_LIST
 	{
 	display:inline-block;
 	list-style-type:none;
@@ -1771,14 +1785,37 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	opacity:0.33;
 	}
+
+#num_following
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	width:50%;
+	padding-right:10px;
+	text-align:right;
+	}
+#num_followers
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	width:50%;
+	padding-left:10px;
+	text-align:left;
+	}
 .FOLLOW
+	{
+	display:inline-block;
+	min-width:125px;
+	text-align:center;
+	}
+.FOLLOW_NUM
 	{
 	color:#404040;
 	font-size:30pt;
 	font-weight:bold;
 	opacity:0.5;
 	}
-.FOLLOW_B
+.FOLLOW_NUM_B
 	{
 	color:#404040;
 	font-size:30pt;

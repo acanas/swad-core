@@ -36901,15 +36901,15 @@ const char *Txt_Student_comment =
 
 const char *Txt_Students_ABBREVIATION =	// Abbreviation of "Students"
 #if   L==1
-	"Estud.";
+	"Estu.";
 #elif L==2
 	"Stud.";
 #elif L==3
 	"Stud.";
 #elif L==4
-	"Estud.";
+	"Estu.";
 #elif L==5
-	"&Eacute;tud.";
+	"&Eacute;tu.";
 #elif L==6
 	"Temi.";
 #elif L==7
@@ -36922,15 +36922,15 @@ const char *Txt_Students_ABBREVIATION =	// Abbreviation of "Students"
 
 const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 #if   L==1
-	"estud.";
+	"estu.";
 #elif L==2
 	"Stud.";
 #elif L==3
 	"stud.";
 #elif L==4
-	"estud.";
+	"estu.";
 #elif L==5
-	"&eacute;tud.";
+	"&eacute;tu.";
 #elif L==6
 	"Temi.";
 #elif L==7
@@ -38261,17 +38261,17 @@ const char *Txt_Teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #elif L==2
 	"Lehr.";
 #elif L==3
-	"Teach.";
+	"Teac.";
 #elif L==4
 	"Prof.";
 #elif L==5
-	"Enseig.";
+	"Ense.";
 #elif L==6
 	"Prof.";	// Okoteve traducción
 #elif L==7
 	"Prof.";
 #elif L==8
-	"Naucz.";
+	"Nauc.";
 #elif L==9
 	"Prof.";
 #endif
@@ -38282,17 +38282,17 @@ const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #elif L==2
 	"Lehr.";
 #elif L==3
-	"teach.";
+	"teac.";
 #elif L==4
 	"prof.";
 #elif L==5
-	"enseig.";
+	"ense.";
 #elif L==6
 	"prof.";	// Okoteve traducción
 #elif L==7
 	"prof.";
 #elif L==8
-	"naucz.";
+	"nauc.";
 #elif L==9
 	"prof.";
 #endif

@@ -3872,7 +3872,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	   {
 	    case Sco_SCOPE_SYS:	// System
-	       fprintf (Gbl.F.Out,"<img src=\"%s/swad16x16.gif\""
+	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
         	                  " alt=\"%s\" title=\"%s\""
                                   " class=\"ICON16x16\" />"
                                   "&nbsp;%s",

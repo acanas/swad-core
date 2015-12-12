@@ -320,7 +320,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
 
    Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
 	                                                               ActReqSeeUsrTstExa,
-	                  NULL,"file16x16.gif",Txt_Results_tests);
+	                  NULL,"file64x64.gif",Txt_Results_tests);
   }
 
 /*****************************************************************************/
@@ -6348,7 +6348,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Act_FormStart (Gbl.CurrentAct == ActSeeMyTstExa ? ActSeeOneTstExaMe :
 						              ActSeeOneTstExaOth);
 	    Tst_PutParamTstCod (TstCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file16x16.gif\""
+	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON16x16B\" />",
 		     Gbl.Prefs.IconsURL,

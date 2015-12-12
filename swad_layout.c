@@ -968,7 +968,7 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	              " style=\"margin:0 6px; display:inline;\">"
+	              " style=\"margin:0 6px 0 0; display:inline;\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON16x16\" />"

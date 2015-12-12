@@ -44,7 +44,7 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Fol_NUM_COLUMNS_FOLLOW 5
+#define Fol_NUM_COLUMNS_FOLLOW 3
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -99,25 +99,25 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
 
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<section id=\"follow\">"
-                      "<table style=\"margin:0 auto;\">"
-	              "<tr>");
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"follow_section\">");
 
    /***** Followed users *****/
+   fprintf (Gbl.F.Out,"<div id=\"num_following\">");
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
                                          Fol_GetNumFollowing (UsrDat->UsrCod),
                                          ActSeeFlg,Txt_Following);
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Followers *****/
+   fprintf (Gbl.F.Out,"<div id=\"num_followers\">");
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
                                          Fol_GetNumFollowers (UsrDat->UsrCod),
                                          ActSeeFlr,Txt_Followers);
+   fprintf (Gbl.F.Out,"</div>");
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-	              "</section>");
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
@@ -132,21 +132,21 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"FOLLOW\">");
 
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\""
-	              " style=\"min-width:125px;\">");
-   /* Number */
+   /***** Number *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
-        	                         "FOLLOW");
+            (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
+        	                         "FOLLOW_NUM");
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,"follow");
+      Act_FormStartAnchor (Action,"follow_section");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
-                          (Gbl.CurrentAct == Action) ? "FOLLOW_B" :
-        	                                       "FOLLOW");
+                          (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
+        	                                       "FOLLOW_NUM");
      }
    fprintf (Gbl.F.Out,"%u",NumUsrs);
    if (NumUsrs)
@@ -156,14 +156,14 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
      }
    fprintf (Gbl.F.Out,"</div>");
 
-   /* Text */
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
+   /***** Text *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
         	                         The_ClassForm[Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,"follow");
+      Act_FormStartAnchor (Action,"follow_section");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
@@ -175,8 +175,10 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -385,7 +387,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/unfollow16x16.gif\""
+			    "<img src=\"%s/unfollow64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"
@@ -400,7 +402,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/follow16x16.gif\""
+			    "<img src=\"%s/follow64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON16x16\" />"
 			    "</div>"

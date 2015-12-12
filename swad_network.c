@@ -110,7 +110,40 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "youtube",		// Net_YOUTUBE
   };
 
-const char *Net_TitleWebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
+const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
+  {
+   "www16x16.gif",		// Net_WWW
+   "500px16x16.gif",		// Net_500PX
+   "delicious16x16.gif",	// Net_DELICIOUS
+   "deviantart16x16.gif",	// Net_DEVIANTART
+   "diaspora16x16.gif",		// Net_DIASPORA
+   "edmodo16x16.gif",		// Net_EDMODO
+   "facebook16x16.gif",		// Net_FACEBOOK
+   "flickr16x16.gif",		// Net_FLICKR
+   "foursquare16x16.gif",	// Net_FOURSQUAREhub
+   "github16x16.gif",		// Net_GITHUB
+   "gnusocial16x16.gif",	// Net_GNU_SOCIAL
+   "googleplus16x16.gif",	// Net_GOOGLE_PLUS
+   "googlescholar16x16.gif",	// Net_GOOGLE_SCHOLAR
+   "identica16x16.gif",		// Net_IDENTICA
+   "instagram16x16.gif",	// Net_INSTAGRAM
+   "linkedin16x16.gif",		// Net_LINKEDIN
+   "orcid16x16.gif",		// Net_ORCID
+   "paperli16x16.gif",		// Net_PAPERLI
+   "pinterest16x16.gif",	// Net_PINTEREST
+   "quitter16x16.gif",		// Net_QUITTER
+   "researchgate16x16.gif",	// Net_RESEARCH_GATE
+   "researcherid16x16.gif",	// Net_RESEARCHERID
+   "scoopit16x16.gif",		// Net_SCOOPIT
+   "slideshare16x16.gif",	// Net_SLIDESHARE
+   "storify16x16.gif",		// Net_STORIFY
+   "tumblr16x16.gif",		// Net_TUMBLR
+   "twitter16x16.gif",		// Net_TWITTER
+   "wikipedia16x16.gif",	// Net_WIKIPEDIA
+   "youtube16x16.gif",		// Net_YOUTUBE
+  };
+
+const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    "WWW",		// Net_WWW
    "500px",		// Net_500PX
@@ -168,7 +201,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 
    /***** Show link to public profile *****/
    Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
-                            "swad",Cfg_PLATFORM_PAGE_TITLE);
+                            "swad64x64.gif",Cfg_PLATFORM_PAGE_TITLE);
 
    /***** Show the rest of webs / social networks *****/
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
@@ -190,8 +223,8 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
-	                          Net_WebsAndSocialNetworksDB[NumURL],
-	                          Net_TitleWebsAndSocialNetworks[NumURL]);
+	                          Net_WebsAndSocialNetworksIcons[NumURL],
+	                          Net_WebsAndSocialNetworksTitle[NumURL]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -213,7 +246,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		      " style=\"display:inline;\">"
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
-		      "<img src=\"%s/%s16x16.gif\""
+		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
                       " class=\"ICON16x16\" />"
 		      "</a>"
@@ -271,17 +304,17 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s LEFT_MIDDLE\">"
-			 "<img src=\"%s/%s16x16.gif\""
+			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
                          " class=\"ICON16x16\""
 			 " style=\"margin-right:12px;\" />"
 			 "%s:</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
-	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[NumURL],
-	       Net_TitleWebsAndSocialNetworks[NumURL],
-	       Net_TitleWebsAndSocialNetworks[NumURL],
-	       Net_TitleWebsAndSocialNetworks[NumURL],
+	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[NumURL],
+	       Net_WebsAndSocialNetworksTitle[NumURL],
+	       Net_WebsAndSocialNetworksTitle[NumURL],
+	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_COL2_WIDTH);
       Act_FormStart (ActChgMyNet);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
@@ -489,7 +522,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "<img src=\"%s/%s16x16.gif\""
+			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"ICON16x16\""
 			    " style=\"margin-right:12px;\" />"
@@ -501,10 +534,10 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "%.2f%%"
 			    "</td>"
 			    "</tr>",
-		  Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksDB[Web],
-		  Net_TitleWebsAndSocialNetworks[Web],
-		  Net_TitleWebsAndSocialNetworks[Web],
-		  Net_TitleWebsAndSocialNetworks[Web],
+		  Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[Web],
+		  Net_WebsAndSocialNetworksTitle[Web],
+		  Net_WebsAndSocialNetworksTitle[Web],
+		  Net_WebsAndSocialNetworksTitle[Web],
 		  NumUsrs,
 		  NumUsrsTotalInPlatform ? 100.0 * (float) NumUsrs / (float) NumUsrsTotalInPlatform :
 			                   0.0);
