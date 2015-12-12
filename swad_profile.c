@@ -310,23 +310,20 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div id=\"prf_fig_left_container\">"
-	              "<ul class=\"PRF_FIG_LIST DAT\">");
+	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /***** Number of courses in which the user is teacher *****/
    NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER);
-   fprintf (Gbl.F.Out,"<li>"
-		      "<img src=\"%s/tch64x64.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"PRF_ICON\" />"
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/tch64x64.gif');\" />"
 		      "%u&nbsp;%s&nbsp;",
+	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
-	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
-	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
 	    NumCrssUsrIsTeacher,
 	    (NumCrssUsrIsTeacher == 1) ? Txt_course :
 					 Txt_courses);
    if (NumCrssUsrIsTeacher)
-      fprintf (Gbl.F.Out,"(%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s)",
+      fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_STUDENT),
@@ -335,19 +332,16 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Number of courses in which the user is student *****/
    NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STUDENT);
-   fprintf (Gbl.F.Out,"<li>"
-		      "<img src=\"%s/std64x64.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"PRF_ICON\" />"
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/std64x64.gif');\" />"
 		      "%u&nbsp;%s&nbsp;",
+	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
-	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
-	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
 	    NumCrssUsrIsStudent,
 	    (NumCrssUsrIsStudent == 1) ? Txt_course :
 					 Txt_courses);
    if (NumCrssUsrIsStudent)
-      fprintf (Gbl.F.Out,"(%u&nbsp;%s&nbsp;+&nbsp;%u&nbsp;%s)",
+      fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_STUDENT),
@@ -359,15 +353,12 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
    else
       NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<li>"
-                      "<img src=\"%s/file64x64.gif\""
-                      " alt=\"%s\" title=\"%s\""
-	              " class=\"PRF_ICON\" />"
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/file64x64.gif');\" />"
 		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</li>",
+	    Txt_Files,
             Gbl.Prefs.IconsURL,
-	    Txt_Files,
-	    Txt_Files,
 	    NumFiles,
 	    (NumFiles == 1) ? Txt_file :
 		              Txt_files,
@@ -377,13 +368,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
    /* First click time */
-   fprintf (Gbl.F.Out,"<li>"
-                      "<img src=\"%s/clock64x64.gif\""
-                      " alt=\"%s\" title=\"%s\""
-	              " class=\"PRF_ICON\" />",
-            Gbl.Prefs.IconsURL,
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/clock64x64.gif');\" />",
 	    Txt_From_TIME,
-	    Txt_From_TIME);
+            Gbl.Prefs.IconsURL);
    if (UsrFigures.FirstClickTimeUTC)
      {
       fprintf (Gbl.F.Out,"<span id=\"first_click_date\"></span>");
@@ -414,19 +402,16 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div id=\"prf_fig_right_container\">"
-	              "<ul class=\"PRF_FIG_LIST DAT\">");
+	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)
      {
       /* Number of clicks */
-      fprintf (Gbl.F.Out,"<li>"
-                         "<img src=\"%s/click64x64.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"PRF_ICON\" />",
-	       Gbl.Prefs.IconsURL,
+      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	                 " style=\"background-image:url('%s/click64x64.gif');\" />",
 	       Txt_Clicks,
-	       Txt_Clicks);
+	       Gbl.Prefs.IconsURL);
 
       if (UsrFigures.NumClicks >= 0)
 	{
@@ -457,13 +442,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of file views *****/
-      fprintf (Gbl.F.Out,"<li>"
-                         "<img src=\"%s/download64x64.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"PRF_ICON\" />",
-	       Gbl.Prefs.IconsURL,
+      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	                 " style=\"background-image:url('%s/download64x64.gif');\" />",
 	       Txt_Downloads,
-	       Txt_Downloads);
+	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumFileViews >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
@@ -492,13 +474,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of posts in forums *****/
-      fprintf (Gbl.F.Out,"<li>"
-                         "<img src=\"%s/forum64x64.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"PRF_ICON\" />",
-	       Gbl.Prefs.IconsURL,
+      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	                 " style=\"background-image:url('%s/forum64x64.gif');\" />",
 	       Txt_Forums,
-	       Txt_Forums);
+	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumForPst >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
@@ -527,13 +506,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of messages sent *****/
-      fprintf (Gbl.F.Out,"<li>"
-                         "<img src=\"%s/msg64x64.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"PRF_ICON\" />",
-	       Gbl.Prefs.IconsURL,
+      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	                 " style=\"background-image:url('%s/msg64x64.gif');\" />",
 	       Txt_Messages,
-	       Txt_Messages);
+	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumMsgSnt >= 0)
 	{
 	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",

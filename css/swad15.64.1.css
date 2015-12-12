@@ -1517,13 +1517,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_GREEN		{color:#008000; font-size:13pt;}
 .DAT_LIGHT		{color:#A0A0A0; font-size:13pt;}
 .DAT_NOBR		{color:#707070; font-size:13pt; white-space:nowrap;}
-.DAT_N			{color:#404040; font-size:13pt;}
-.DAT_NOBR_N		{color:#404040; font-size:13pt; white-space:nowrap;}
+.DAT_N			{color:black; font-size:13pt;}
+.DAT_NOBR_N		{color:black; font-size:13pt; white-space:nowrap;}
 
 /*********************** Line in top part of a table row *********************/
 .DAT_N_LINE_TOP
 	{
-	color:#404040;
+	color:black;
 	font-size:13pt;
 	border-style:solid none none none;
 	border-width:1px;
@@ -1532,8 +1532,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_SMALL		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 .DAT_SMALL_LIGHT	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
 .DAT_SMALL_NOBR		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
-.DAT_SMALL_NOBR_N	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black; font-size:12pt;}
+.DAT_SMALL_NOBR_N	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black; font-size:12pt; white-space:nowrap;}
 
 .DAT_SMALL_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 .DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:12pt;}
@@ -1767,7 +1767,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:top;
 	}
-.PRF_FIG_LIST
+.PRF_FIG_UL
 	{
 	display:inline-block;
 	list-style-type:none;
@@ -1776,14 +1776,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-.PRF_ICON
+.PRF_FIG_LI
 	{
-	box-sizing:border-box;
-	margin-right:4px;
-	width:20px;
-	height:20px;
-	vertical-align:middle;
-	opacity:0.33;
+	padding:0 0 0 24px;
+	background-size:20px 20px;
+	background-repeat:no-repeat;
+	background-position:center middle;
+	opacity:0.67;
 	}
 
 #num_following
@@ -1813,7 +1812,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#404040;
 	font-size:30pt;
 	font-weight:bold;
-	opacity:0.5;
+	opacity:0.67;
 	}
 .FOLLOW_NUM_B
 	{
