@@ -2177,18 +2177,15 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
      {
       case For_FORUM_INSTITUTION_USRS:
       case For_FORUM_INSTITUTION_TCHS:
-         Log_DrawLogo (Sco_SCOPE_INS,Gbl.Forum.Ins.InsCod,ForumName,
-                       16,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_INS,Gbl.Forum.Ins.InsCod,ForumName,20,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_CTR,Gbl.Forum.Ctr.CtrCod,ForumName,
-                       16,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_CTR,Gbl.Forum.Ctr.CtrCod,ForumName,20,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_DEG,Gbl.Forum.Deg.DegCod,ForumName,
-                       16,NULL,true);
+         Log_DrawLogo (Sco_SCOPE_DEG,Gbl.Forum.Deg.DegCod,ForumName,20,NULL,true);
          break;
       default:
          fprintf (Gbl.F.Out,"%s",Icon);

@@ -34,17 +34,16 @@
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-#define Rec_RECORD_WIDTH_WIDE	700
-#define Rec_C1_TOP_WIDE		 65
-#define Rec_C2_TOP_WIDE		442
+#define Rec_RECORD_WIDTH_WIDE	560
+#define Rec_C1_TOP_WIDE		 68
+#define Rec_C2_TOP_WIDE		300
 #define Rec_C3_TOP_WIDE		192
-#define Rec_C1_BOTTOM_WIDE	(200-2)
-#define Rec_C2_BOTTOM_WIDE	(500-2)
+#define Rec_C1_BOTTOM_WIDE	(190-2)
+#define Rec_C2_BOTTOM_WIDE	(370-2)
 
-#define Rec_RECORD_WIDTH_NARROW	575
-#define Rec_C1_TOP_NARROW	 65
-#define Rec_C2_TOP_NARROW	317
+#define Rec_RECORD_WIDTH_NARROW	560
+#define Rec_C1_TOP_NARROW	 68
+#define Rec_C2_TOP_NARROW	300
 #define Rec_C3_TOP_NARROW	192
 
 #define Rec_MAX_LENGTH_NAME_FIELD	255

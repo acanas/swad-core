@@ -11043,8 +11043,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (InsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,InsShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,
-                       16,"CENTER_TOP",true);
+         Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
 	 Act_FormEnd ();
 	}
@@ -11059,8 +11058,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (CtrCod);
          sprintf (Gbl.Title,Txt_Go_to_X,CtrShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,
-                       16,"CENTER_TOP",true);
+         Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
 	 Act_FormEnd ();
 	}
@@ -11075,8 +11073,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Deg_PutParamDegCod (DegCod);
          sprintf (Gbl.Title,Txt_Go_to_X,DegShortName);
          Act_LinkFormSubmit (Gbl.Title,"DAT");
-         Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,
-                       16,"CENTER_TOP",true);
+         Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
 	 Act_FormEnd ();
 	}

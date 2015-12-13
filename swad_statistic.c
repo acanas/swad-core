@@ -5048,7 +5048,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       Ins_PutParamInsCod (Ins.InsCod);
 	       Act_LinkFormSubmit (Ins.FullName,The_ClassForm[Gbl.Prefs.Theme]);
 	       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,
-			     32,NULL,true);
+			     40,NULL,true);
 	       fprintf (Gbl.F.Out,"<br />%u</a>",NumberThisRow);
 	       Act_FormEnd ();
 
@@ -5108,7 +5108,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
 		  Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-				32,NULL,true);
+				40,NULL,true);
 	          fprintf (Gbl.F.Out,"&nbsp;");
 		 }
 	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);

@@ -631,8 +631,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     The_ClassForm[Gbl.Prefs.Theme]);
-	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-	               16,NULL,true);
+	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,20,NULL,true);
 	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
 	 if (Highlight)
@@ -669,8 +668,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        The_ClassForm[Gbl.Prefs.Theme]);
-	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,
-	                  16,NULL,true);
+	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,20,NULL,true);
 	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
 	    if (Highlight)
@@ -707,8 +705,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           The_ClassForm[Gbl.Prefs.Theme]);
-	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-	                     16,NULL,true);
+	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,NULL,true);
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
 	       if (Highlight)
@@ -3203,8 +3200,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,
-                 16,"CENTER_TOP",true);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
             row[2],row[6]);

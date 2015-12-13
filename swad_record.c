@@ -57,8 +57,8 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Rec_INSTITUTION_LOGO_SIZE	72
-#define Rec_DEGREE_LOGO_SIZE		72
+#define Rec_INSTITUTION_LOGO_SIZE	64
+#define Rec_DEGREE_LOGO_SIZE		64
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
 
 /*****************************************************************************/
@@ -1491,8 +1491,8 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
    bool ICanEdit;
    char Text[Cns_MAX_BYTES_TEXT+1];
 
-   ClassHead = "HEAD_REC";
-   ClassData = "DAT_REC";
+   ClassHead = "REC_HEAD";
+   ClassData = "REC_DAT";
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
      {
@@ -1531,13 +1531,13 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
                break;
               }
 	 FrameWidth = 10;
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassData = "DAT_REC";
+	 ClassHead = "REC_HEAD_SMALL";
+	 ClassData = "REC_DAT";
 	 break;
       case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
 	 FrameWidth = 10;
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassData = "DAT_REC_SMALL_BOLD";
+	 ClassHead = "REC_HEAD_SMALL";
+	 ClassData = "REC_DAT_SMALL_BOLD";
          break;
       case Rec_RECORD_LIST:
          DataForm = true;
@@ -1545,13 +1545,13 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
 	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 FrameWidth = 10;
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassData = "DAT_REC_SMALL_BOLD";
+	 ClassHead = "REC_HEAD_SMALL";
+	 ClassData = "REC_DAT_SMALL_BOLD";
 	 break;
       case Rec_RECORD_PRINT:
 	 FrameWidth = 1;
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassData = "DAT_REC_SMALL_BOLD";
+	 ClassHead = "REC_HEAD_SMALL";
+	 ClassData = "REC_DAT_SMALL_BOLD";
          break;
       default:
          break;
@@ -1605,7 +1605,7 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
                             " style=\"width:%upx;\">"
                             "%s:",
                   ICanEdit ? The_ClassForm[Gbl.Prefs.Theme] :
-                	     "DAT_REC_SMALL",
+                	     "REC_DAT_SMALL",
                   Gbl.RowEvenOdd,Col1Width,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_RECORD_LIST)
@@ -1998,6 +1998,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    const char *ClassHead;
    const char *ClassForm;
    const char *ClassData;
+   char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
@@ -2070,9 +2071,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    struct Centre Ctr;
    struct Department Dpt;
 
-   ClassHead = "HEAD_REC";
+   ClassHead = "REC_HEAD";
    ClassForm = The_ClassForm[Gbl.Prefs.Theme];
-   ClassData = "DAT_REC";
+   ClassData = "REC_DAT";
    switch (TypeOfView)
      {
       case Rec_FORM_SIGN_UP:
@@ -2080,9 +2081,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_FORM_MY_COURSE_RECORD_AS_STUDENT:
       case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
       case Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR:
-	 ClassHead = "HEAD_REC";
+	 ClassHead = "REC_HEAD";
          ClassForm = The_ClassForm[Gbl.Prefs.Theme];
-	 ClassData = "DAT_REC";
+	 ClassData = "REC_DAT";
 	 break;
       case Rec_MY_COMMON_RECORD_CHECK:
       case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
@@ -2090,9 +2091,9 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       case Rec_RECORD_LIST:
       case Rec_RECORD_PUBLIC:
       case Rec_RECORD_PRINT:
-	 ClassHead = "HEAD_REC_SMALL";
-	 ClassForm = "DAT_REC_SMALL";
-	 ClassData = "DAT_REC_SMALL_BOLD";
+	 ClassHead = "REC_HEAD_SMALL";
+	 ClassForm = "REC_DAT_SMALL";
+	 ClassData = "REC_DAT_SMALL_BOLD";
          break;
      }
 
@@ -2185,7 +2186,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div style=\"width:25px; margin:8px auto;\">");
+      fprintf (Gbl.F.Out,"<div class=\"REC_SHORTCUTS\">");
 
       /***** Button to edit my record card *****/
       if (ItsMe)
@@ -2401,14 +2402,29 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Full name *****/
    fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_TOP\""
-	              " style=\"width:%upx;\">"
-	              "%s<br />%s<br />%s"
-	              "</td>"
-	              "</tr>",
-	    TopC2Width,
-	    UsrDat->FirstName ,
-	    UsrDat->Surname1,
-	    UsrDat->Surname2);
+	              " style=\"width:%upx;\">",
+	    TopC2Width);
+
+   /* First name */
+   strncpy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s<br />",Name);
+
+   /* Surname 1 */
+   strncpy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s<br />",Name);
+
+   /* Surname 2 */
+   strncpy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s",Name);
+
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** User's nickname *****/
    fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_BOTTOM\""
@@ -2731,7 +2747,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->Surname1,
-		     Rec_C2_BOTTOM_WIDE - 90);
+		     Rec_C2_BOTTOM_WIDE - 20);
 	 else if (UsrDat->Surname1[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2754,7 +2770,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->Surname2,
-		     Rec_C2_BOTTOM_WIDE - 90);
+		     Rec_C2_BOTTOM_WIDE - 20);
 	 else if (UsrDat->Surname2[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",
 		     UsrDat->Surname2);
@@ -2779,7 +2795,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			       " style=\"width:%upx;\" />",
 		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 		     UsrDat->FirstName,
-		     Rec_C2_BOTTOM_WIDE - 90);
+		     Rec_C2_BOTTOM_WIDE - 20);
 	 else if (UsrDat->FirstName[0])
 	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -2812,7 +2828,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"width:%upx;\">"
 			       "<option value=\"-1\">%s</option>"
 			       "<option value=\"0\"",
-		     Rec_C2_BOTTOM_WIDE - 90,
+		     Rec_C2_BOTTOM_WIDE - 20,
 		     Txt_Country);
 	    if (UsrDat->CtyCod == 0)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2854,7 +2870,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->OriginPlace,
-			Rec_C2_BOTTOM_WIDE - 90);
+			Rec_C2_BOTTOM_WIDE - 20);
 	    else if (UsrDat->OriginPlace[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
 	   }
@@ -2903,7 +2919,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->LocalAddress,
-			Rec_C2_BOTTOM_WIDE - 90);
+			Rec_C2_BOTTOM_WIDE - 20);
 	    else if (UsrDat->LocalAddress[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
 	   }
@@ -2928,7 +2944,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
 			UsrDat->LocalPhone,
-			Rec_C2_BOTTOM_WIDE - 90);
+			Rec_C2_BOTTOM_WIDE - 20);
 	    else if (UsrDat->LocalPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
 	   }
@@ -2953,7 +2969,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				  " style=\"width:%upx;\" />",
 			Cns_MAX_LENGTH_STRING,
 			UsrDat->FamilyAddress,
-			Rec_C2_BOTTOM_WIDE - 90);
+			Rec_C2_BOTTOM_WIDE - 20);
 	    else if (UsrDat->FamilyAddress[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
 	   }
@@ -2978,7 +2994,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 				  " style=\"width:%upx;\" />",
 			Usr_MAX_LENGTH_PHONE,
 			UsrDat->FamilyPhone,
-			Rec_C2_BOTTOM_WIDE - 90);
+			Rec_C2_BOTTOM_WIDE - 20);
 	    else if (UsrDat->FamilyPhone[0])
 	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
 	   }
@@ -2997,11 +3013,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 if (ShowData)
 	   {
 	    if (DataForm)
-	       fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"3\""
+	       fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"4\""
 				  " style=\"width:%upx;\">"
 				  "%s"
 				  "</textarea>",
-			Rec_C2_BOTTOM_WIDE - 90,
+			Rec_C2_BOTTOM_WIDE - 20,
 			UsrDat->Comments);
 	    else if (UsrDat->Comments[0])
 	      {

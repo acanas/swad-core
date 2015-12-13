@@ -201,8 +201,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_
    Act_LinkFormSubmit (Gbl.Title,ClassLink);
 
    /***** Draw institution logo *****/
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
-		 16,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
@@ -1193,8 +1192,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ins->FullName);
-      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
-                    16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Country */
@@ -1835,7 +1833,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
-   Log_DrawLogo (Sco_SCOPE_INS,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_INS,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Country *****/

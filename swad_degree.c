@@ -261,8 +261,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    Act_LinkFormSubmit (Gbl.Title,ClassLink);
 
    /***** Draw degree logo *****/
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,
-		 16,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
@@ -778,13 +777,13 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	{
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-	                  Gbl.CurrentDeg.Deg.ShortName,32,"TOP_LOGO",false);
+	                  Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
 	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-	                  Gbl.CurrentCtr.Ctr.ShortName,32,"TOP_LOGO",false);
+	                  Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
 	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
 	    Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-	                  Gbl.CurrentIns.Ins.ShortName,32,"TOP_LOGO",false);
+	                  Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
 	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
             Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 	}
@@ -1431,7 +1430,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree logo */
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
                Deg->FullName);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre */
@@ -1799,7 +1798,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Centre *****/

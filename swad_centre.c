@@ -211,8 +211,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    Act_LinkFormSubmit (Gbl.Title,ClassLink);
 
    /***** Draw centre logo *****/
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,
-		 16,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
@@ -1278,7 +1277,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ctr->FullName);
-      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,16,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution */
@@ -2080,7 +2079,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
-   Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",16,NULL,true);
+   Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution *****/
