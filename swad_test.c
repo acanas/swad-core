@@ -1169,17 +1169,11 @@ void Tst_ShowFormAskEditTsts (void)
 
 static void Tst_PutFormToCreateNewTstQst (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_New_question;
 
    /***** Put form to create a new test question *****/
-   Act_FormStart (ActEdiOneTstQst);
-   Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("plus64x64.png",
-                        Txt_New_question,
-                        Txt_New_question);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
+                          Txt_New_question,Txt_New_question);
   }
 
 /*****************************************************************************/
