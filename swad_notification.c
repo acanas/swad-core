@@ -232,8 +232,6 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
 static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     unsigned NumEvents,unsigned NumMails);
-static void Ntf_PutLinkToChangePrefs (void);
-static void Ntf_PutLinkToMarkAllNotifAsSeen (void);
 static void Ntf_GetParamsNotifyEvents (void);
 static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void);
 static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
@@ -244,6 +242,8 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
 
 void Ntf_ShowMyNotifications (void)
   {
+   extern const char *Txt_Change_preferences;
+   extern const char *Txt_Mark_all_notifications_as_read;
    extern const char *Txt_Notifications;
    extern const char *Txt_Date;
    extern const char *Txt_Event;
@@ -301,9 +301,13 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Buttons to change preferences and to mark all notifications as seen *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Ntf_PutLinkToChangePrefs ();			// Put form to change notification preferences
+   // Put form to change notification preferences
+   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",
+			  Txt_Change_preferences,Txt_Change_preferences);
    if (NumNotifications)
-      Ntf_PutLinkToMarkAllNotifAsSeen ();	// Put form to change notification preferences
+      // Put form to change notification preferences
+      Lay_PutContextualLink (ActMrkNtfSee,NULL,"eye-on64x64.png",
+			     Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write form to show all notifications *****/
@@ -1632,36 +1636,6 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
             CurrentNumEvents + NumEvents,
             CurrentNumMails + NumMails);
    DB_QueryREPLACE (Query,"can not update the number of sent notifications");
-  }
-
-/*****************************************************************************/
-/********* Put a link (form) to edit preferences about notifications *********/
-/*****************************************************************************/
-
-static void Ntf_PutLinkToChangePrefs (void)
-  {
-   extern const char *Txt_Change_preferences;
-
-   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",
-                          Txt_Change_preferences,Txt_Change_preferences);
-  }
-
-/*****************************************************************************/
-/*********** Put a link (form) to mark all my notifications as seen **********/
-/*****************************************************************************/
-
-static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
-  {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Mark_all_notifications_as_read;
-
-   Act_FormStart (ActMrkNtfSee);
-   Act_LinkFormSubmit (Txt_Mark_all_notifications_as_read,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("eye-on64x64.png",
-                        Txt_Mark_all_notifications_as_read,
-                        Txt_Mark_all_notifications_as_read);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/

@@ -951,6 +951,9 @@ void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
+   //if (Text)
+   //   fprintf (Gbl.F.Out,"<div class=>");
+
    Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();

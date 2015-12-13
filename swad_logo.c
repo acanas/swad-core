@@ -58,8 +58,6 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Log_PutLinkToRemoveLogo (Act_Action_t Action);
-
 /*****************************************************************************/
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
@@ -233,6 +231,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 void Log_RequestLogo (Sco_Scope_t Scope)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Remove_logo;
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
@@ -278,7 +277,8 @@ void Log_RequestLogo (Sco_Scope_t Scope)
      {
       /***** Form to remove photo *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Log_PutLinkToRemoveLogo (ActionRem);
+      Lay_PutContextualLink (ActionRem,NULL,"remove-on64x64.png",
+                             Txt_Remove_logo,Txt_Remove_logo);
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -307,23 +307,6 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Upload_logo);
 
    /***** End form *****/
-   Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/************************ Put a link to remove logo **************************/
-/*****************************************************************************/
-
-static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
-  {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Remove_logo;
-
-   /***** Link for removing the photo *****/
-   Act_FormStart (Action);
-   Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("remove-on64x64.png",Txt_Remove_logo,Txt_Remove_logo);
-   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 
