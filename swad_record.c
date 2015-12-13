@@ -2466,7 +2466,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    /***** User's web and social networks *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",
 	    TopC3Width);
-   Net_ShowWebsAndSocialNets (UsrDat);
+   if (TypeOfView != Rec_RECORD_PRINT)
+      Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 

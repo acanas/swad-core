@@ -1549,6 +1549,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .REC_HEAD_SMALL		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:11pt;}
 .REC_NAME		{color:#808080; font-size:20pt; font-weight:bold;}
 .REC_NICK		{color:#808080; font-size:15pt; font-weight:bold;}
+.REC_WEBS
+	{
+	width:180px;
+	margin:0 auto;
+	}
 .REC_DAT		{color:#404040; font-size:11pt; line-height:110%;}
 .REC_DAT_SMALL		{color:#808080; font-size:11pt; line-height:110%;}
 .REC_DAT_SMALL_BOLD	{color:black;   font-size:11pt; line-height:110%;}

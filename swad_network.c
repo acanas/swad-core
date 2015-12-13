@@ -197,7 +197,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div style=\"width:180px; margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<div class=\"REC_WEBS\">");
 
    /***** Show link to public profile *****/
    Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
