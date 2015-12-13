@@ -137,7 +137,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
 static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst);
 static void Svy_WriteQstStem (const char *Stem);
-static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst);
+static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -761,7 +761,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
 static void Svy_PutParams (void)
   {
-   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
+   if (Gbl.Svys.SvyCodToEdit > 0)
+      Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -1196,17 +1197,15 @@ void Svy_AskRemSurvey (void)
    if (!Svy.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
-   /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemSvy);
-   Svy_PutParamSvyCod (Svy.SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+
+   /***** Button of confirmation of removing *****/
+   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Act_FormStart (ActRemSvy);
+   Svy_PutParams ();
    Lay_PutRemoveButton (Txt_Remove_survey);
    Act_FormEnd ();
 
@@ -1296,17 +1295,15 @@ void Svy_AskResetSurvey (void)
    if (!Svy.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
-   /***** Button of confirmation of reset *****/
-   Act_FormStart (ActRstSvy);
-   Svy_PutParamSvyCod (Svy.SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-
    /***** Ask for confirmation of reset *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_reset_the_survey_X,
             Svy.Title);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+
+   /***** Button of confirmation of reset *****/
+   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Act_FormStart (ActRstSvy);
+   Svy_PutParams ();
    Lay_PutConfirmButton (Txt_Reset_survey);
    Act_FormEnd ();
 
@@ -1501,16 +1498,11 @@ void Svy_RequestCreatOrEditSvy (void)
      }
 
    /***** Start form *****/
-   if (ItsANewSurvey)
-      Act_FormStart (ActNewSvy);
-   else
-     {
-      Act_FormStart (ActChgSvy);
-      Svy_PutParamSvyCod (Svy.SvyCod);
-     }
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Gbl.Svys.SvyCodToEdit = ItsANewSurvey ? -1L :
+	                                   Svy.SvyCod;
+   Act_FormStart (ItsANewSurvey ? ActNewSvy :
+	                          ActChgSvy);
+   Svy_PutParams ();
 
    /***** Start frame *****/
    Lay_StartRoundFrameTable (NULL,2,
@@ -2774,7 +2766,6 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -2792,7 +2783,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    bool Editing = (Gbl.CurrentAct == ActEdiOneSvy ||
 	           Gbl.CurrentAct == ActEdiOneSvyQst ||
 	           Gbl.CurrentAct == ActRcvSvyQst);
-   bool FormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
+   bool PutFormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
@@ -2800,7 +2791,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
-   if (FormAnswerSurvey)
+   if (PutFormAnswerSurvey)
      {
       /***** Start form to send answers to survey *****/
       Act_FormStart (ActAnsSvy);
@@ -2893,7 +2884,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP COLOR%u\">",
 	          Gbl.RowEvenOdd);
          Svy_WriteQstStem (row[3]);
-         Svy_WriteAnswersOfAQst (Svy,SvyQst);
+         Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
@@ -2909,7 +2900,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (FormAnswerSurvey)
+   if (PutFormAnswerSurvey)
      {
       /***** Button to create/modify survey *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2923,17 +2914,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       /***** Put form to add a new question in this survey *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"5\">");
-      Act_FormStart (ActEdiOneSvyQst);
-      Svy_PutParamSvyCod (Svy->SvyCod);
-      Svy_PutHiddenParamSvyOrderType ();
-      Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-      Act_LinkFormSubmit (Txt_New_question,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutIconWithText ("plus64x64.png",
-                           Txt_New_question,
-                           Txt_New_question);
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
+      Lay_PutContextualLink (ActEdiOneSvyQst,Svy_PutParams,"plus64x64.png",
+                             Txt_New_question,Txt_New_question);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -2941,7 +2924,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    /***** Table end *****/
    Lay_EndRoundFrameTable ();
 
-   if (FormAnswerSurvey)
+   if (PutFormAnswerSurvey)
       /***** End form *****/
       Act_FormEnd ();
   }
@@ -2986,7 +2969,7 @@ static void Svy_WriteQstStem (const char *Stem)
 /************** Get and write the answers of a survey question ***************/
 /*****************************************************************************/
 
-static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst)
+static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey)
   {
    unsigned NumAns,NumAnswers;
    MYSQL_RES *mysql_res;
@@ -3020,17 +3003,19 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
       /* Selectors and label with the letter of the answer */
       fprintf (Gbl.F.Out,"<tr>");
 
-      if (Svy->Status.ICanAnswer)
+      if (PutFormAnswerSurvey)
         {
          /* Write selector to choice this answer */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
-         fprintf (Gbl.F.Out,"<input type=\"");
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+                            "<input type=\"");
          if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-            fprintf (Gbl.F.Out,"radio\" onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+            fprintf (Gbl.F.Out,"radio\""
+        	               " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
                      (unsigned) SvyQst->QstCod,NumAnswers);
          else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
             fprintf (Gbl.F.Out,"checkbox\"");
-         fprintf (Gbl.F.Out," name=\"Ans%010u\" value=\"%u\" /></td>",
+         fprintf (Gbl.F.Out," name=\"Ans%010u\" value=\"%u\" />"
+                            "</td>",
                   (unsigned) SvyQst->QstCod,NumAns);
         }
 
