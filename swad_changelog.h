@@ -117,12 +117,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.64.4 (2015/12/13)"
-#define CSS_FILE		"swad15.64.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.64.5 (2015/12/13)"
+#define CSS_FILE		"swad15.64.5.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.64.5:  Dec 13, 2015	Code refactoring in record card. (186944 lines)
         Version 15.64.4:  Dec 13, 2015	Links to web / social networks are not displayed when printing record card. (186986 lines)
         Version 15.64.3:  Dec 13, 2015	Changes in layout of records. (186979 lines)
         Version 15.64.2:  Dec 13, 2015	Changes in some CSS names. (186975 lines)
