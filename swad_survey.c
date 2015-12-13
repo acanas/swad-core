@@ -737,13 +737,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
                           Txt_Remove,NULL);
 
    /***** Put form to reset survey *****/
-   Act_FormStart (ActReqRstSvy);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("reset16x16.gif",Txt_Reset,NULL,NULL);
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActReqRstSvy,Svy_PutParams,"reset16x16.gif",
+                          Txt_Reset,NULL);
 
    /***** Put form to hide/show survey *****/
    if (Visible)
@@ -766,7 +761,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
 static void Svy_PutParams (void)
   {
-   Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
+   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
