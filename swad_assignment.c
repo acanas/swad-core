@@ -73,6 +73,7 @@ static void Asg_PutFormToCreateNewAsg (void);
 static void Asg_PutFormToCreateNewAsgParams (void);
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
+static void Asg_PutParams (void);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt);
 static void Asg_PutParamAsgCod (long AsgCod);
@@ -495,38 +496,41 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
    fprintf (Gbl.F.Out,"<div>");
 
+   Gbl.Asgs.AsgCod = AsgCod;	// Used as parameters in contextual links
+
    /***** Put form to remove assignment *****/
-   Act_FormStart (ActReqRemAsg);
-   Asg_PutParamAsgCod (AsgCod);
-   Asg_PutHiddenParamAsgOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActReqRemAsg,Asg_PutParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL);
 
    /***** Put form to hide/show assignment *****/
-   Act_FormStart (Hidden ? ActShoAsg :
-	                   ActHidAsg);
-   Asg_PutParamAsgCod (AsgCod);
-   Asg_PutHiddenParamAsgOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      Lay_PutIconLink ("eye-slash-on64x64.png",Txt_Show,NULL,NULL);
+      Lay_PutContextualLink (ActShoAsg,Asg_PutParams,
+			     "eye-slash-on64x64.png",
+			     Txt_Show,NULL);
    else
-      Lay_PutIconLink ("eye-on64x64.png",Txt_Hide,NULL,NULL);
-   Act_FormEnd ();
+      Lay_PutContextualLink (ActHidAsg,Asg_PutParams,
+			     "eye-on64x64.png",
+			     Txt_Hide,NULL);
 
    /***** Put form to edit assignment *****/
-   Act_FormStart (ActEdiOneAsg);
-   Asg_PutParamAsgCod (AsgCod);
+   Lay_PutContextualLink (ActEdiOneAsg,Asg_PutParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL);
+
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************** Params related to an assignment **********************/
+/*****************************************************************************/
+
+static void Asg_PutParams (void)
+  {
+   Asg_PutParamAsgCod (Gbl.Asgs.AsgCod);
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
-   Act_FormEnd ();
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

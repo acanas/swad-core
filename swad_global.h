@@ -540,6 +540,7 @@ struct Globals
       unsigned Num;	// Number of assignments
       long *LstAsgCods;	// List of assigment codes
       tAsgsOrderType SelectedOrderType;
+      long AsgCod;	// Used as parameter in contextual links
      } Asgs;
    struct
      {
