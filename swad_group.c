@@ -1210,7 +1210,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON16x16\" />"
+                         " class=\"ICON20x20\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
                Gbl.Prefs.IconsURL,
@@ -1336,7 +1336,7 @@ static void Grp_ListGroupsForEdition (void)
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" />",
+                            " class=\"ICON20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->Open ? "open" :
                 	      "closed",
@@ -1356,7 +1356,7 @@ static void Grp_ListGroupsForEdition (void)
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" />",
+                            " class=\"ICON20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->FileZones ? "folder-yes" :
                 	           "folder-no",
@@ -1978,7 +1978,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"\" style=\"width:15px;\">"
 	              "<img src=\"%s/%s_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             Grp->Open ? "open" :
@@ -2107,7 +2107,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
             Gbl.Prefs.IconsURL,
@@ -2168,12 +2168,12 @@ static void Grp_PutFormToCreateGroup (void)
                       "<td class=\"BM\">"
                       "<img src=\"%s/closed_off16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/folder-no_off16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Txt_Group_closed,

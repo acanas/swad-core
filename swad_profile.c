@@ -1435,7 +1435,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO24x32",Pho_ZOOM);
+			"PHOTO30x40",Pho_ZOOM);
      }
 
    fprintf (Gbl.F.Out,"</td>"

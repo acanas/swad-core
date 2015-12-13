@@ -1127,7 +1127,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
                          "<td class=\"%s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON16x16\" />"
+                         " class=\"ICON20x20\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
@@ -1148,7 +1148,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON16x16\" />"
+                         " class=\"ICON20x20\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,
@@ -1309,7 +1309,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON16x16\" />"
+		      " class=\"ICON20x20\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
@@ -3854,7 +3854,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
                             "<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"ICON20x20\" />"
+                            " class=\"ICON25x25\" />"
                             "</td>",
                   Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :
@@ -3874,7 +3874,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	    case Sco_SCOPE_SYS:	// System
 	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON16x16\" />"
+                                  " class=\"ICON20x20\" />"
                                   "&nbsp;%s",
                      Gbl.Prefs.IconsURL,
                      Txt_all_degrees,

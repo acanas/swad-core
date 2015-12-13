@@ -567,7 +567,7 @@ static void Svy_WriteAuthor (struct Survey *Svy)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO12x16",Pho_ZOOM);
+                     "PHOTO15x20",Pho_ZOOM);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -2865,7 +2865,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy_PutParamQstCod (SvyQst->QstCod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
+        	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Edit_question,
                      Txt_Edit_question);
@@ -2997,7 +2997,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"width:100%%;\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"width:100%%;\">");
    for (NumAns = 0;
 	NumAns < NumAnswers;
 	NumAns++)

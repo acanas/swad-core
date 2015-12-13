@@ -582,7 +582,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
                      StrItemCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/up_on16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -591,7 +591,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/up_off16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Movement_not_allowed,
                      Txt_Movement_not_allowed);
@@ -612,7 +612,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/down_on16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -621,7 +621,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/down_off16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Movement_not_allowed,
                      Txt_Movement_not_allowed);
@@ -639,7 +639,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/left_on16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -648,7 +648,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/left_off16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Movement_not_allowed,
                      Txt_Movement_not_allowed);
@@ -667,7 +667,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	    fprintf (Gbl.F.Out,"<input type=\"image\""
 		               " src=\"%s/right_on16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Gbl.Title,
                      Gbl.Title);
@@ -676,7 +676,7 @@ static void Syl_ShowRowSyllabus (Inf_InfoType_t InfoType,unsigned NumItem,
 	 else
 	    fprintf (Gbl.F.Out,"<img src=\"%s/right_off16x16.gif\""
 		               " alt=\"%s\" title=\"%s\""
-		               " class=\"ICON16x16\" />",
+		               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Movement_not_allowed,
                      Txt_Movement_not_allowed);

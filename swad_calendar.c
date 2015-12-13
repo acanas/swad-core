@@ -72,7 +72,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Txt_Calendar;
 
    Lay_StartRoundFrameTable (NULL,0,Txt_Calendar);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON32x32");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40");
    Lay_EndRoundFrameTable ();
   }
 
@@ -83,7 +83,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 void Cal_ShowIntegratedFormToSelFirstDayOfWeek (Act_Action_t Action)
   {
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
-   Cal_ShowFormToSelFirstDayOfWeek (Action,"ICON20x20");
+   Cal_ShowFormToSelFirstDayOfWeek (Action,"ICON25x25");
    fprintf (Gbl.F.Out,"</table>");
   }
 

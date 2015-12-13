@@ -283,7 +283,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
         	         "<input type=\"image\""
 	                 " src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON16x16\" />"
+			 " class=\"ICON20x20\" />"
 			 "</div>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Remove,
@@ -300,7 +300,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 			       "<input type=\"image\""
 			       " src=\"%s/eye-on64x64.png\""
 			       " alt=%s\" title=\"%s\""
-			       " class=\"ICON16x16\" />"
+			       " class=\"ICON20x20\" />"
 			       "</div>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_NOTICE_Active_Mark_as_obsolete,
@@ -313,7 +313,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 			       "<input type=\"image\""
 			       " src=\"%s/eye-slash-on64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON16x16\" />"
+			       " class=\"ICON20x20\" />"
 			       "</div>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_NOTICE_Obsolete_Mark_as_active,
@@ -359,7 +359,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON16x16\" />"
+			 " class=\"ICON20x20\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Do_not_show_again,

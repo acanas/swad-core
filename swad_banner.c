@@ -331,7 +331,7 @@ static void Ban_ListBannersForEdition (void)
 	                             ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
                Gbl.Prefs.IconsURL,
                Ban->IsHidden ? "hidden" :
         	               "visible",

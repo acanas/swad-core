@@ -1054,7 +1054,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 sprintf (Gbl.Title,Txt_Email_X_confirmed,row[0]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16\" />",
+			    " class=\"ICON20x20\" />",
 		  Gbl.Prefs.IconsURL,
 		  Gbl.Title,Gbl.Title);
 	}

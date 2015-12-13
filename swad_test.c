@@ -1449,7 +1449,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
             fprintf (Gbl.F.Out,"eye-off64x64.png\" alt=\"%s\" title=\"%s",
                      Txt_Tag_allowed,
                      Txt_Tag_allowed);
-         fprintf (Gbl.F.Out,"\" class=\"ICON16x16\" />"
+         fprintf (Gbl.F.Out,"\" class=\"ICON20x20\" />"
                             "</td>");
         }
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
@@ -1553,7 +1553,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    sprintf (Gbl.Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />",
+	              " class=\"ICON20x20\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -1575,7 +1575,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    sprintf (Gbl.Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />",
+	              " class=\"ICON20x20\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -2525,7 +2525,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Par_PutHiddenParamLong ("QstCod",QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON16x16\" />",
+	                 " class=\"ICON20x20\" />",
                Gbl.Prefs.IconsURL,
                Txt_Edit_question,
                Txt_Edit_question);
@@ -2784,7 +2784,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             if (Str_ConvertToUpperLetter (row[2][0]) == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />",
+        	                  " class=\"ICON20x20\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_TEST_Correct_answer,
                         Txt_TEST_Correct_answer);
@@ -3206,7 +3206,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" />",
+                            " class=\"ICON20x20\" />",
                   Gbl.Prefs.IconsURL,
                   (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
@@ -3225,7 +3225,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
             fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
+        	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_TEST_Correct_answer,
                      Txt_TEST_Correct_answer);
@@ -6350,7 +6350,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON16x16B\" />",
+			       " class=\"ICON20x20B\" />",
 		     Gbl.Prefs.IconsURL,
 		     Txt_See_exam,
 		     Txt_See_exam);
@@ -6459,7 +6459,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO36x48",Pho_ZOOM);
+                     "PHOTO45x60",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to go to user's record card *****/
@@ -6594,7 +6594,7 @@ void Tst_ShowOneTestExam (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
                 	                                NULL,
-                     "PHOTO36x48",Pho_ZOOM);
+                     "PHOTO45x60",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

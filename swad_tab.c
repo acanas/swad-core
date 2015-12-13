@@ -128,7 +128,7 @@ void Tab_DrawTabs (void)
 			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
+			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
@@ -144,7 +144,7 @@ void Tab_DrawTabs (void)
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
 			       "<img src=\"%s/%s/%s64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON32x32\" style=\"margin:3px;\" />"
+			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],

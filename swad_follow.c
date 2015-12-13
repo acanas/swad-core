@@ -389,7 +389,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/unfollow64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -404,7 +404,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/follow64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -423,7 +423,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO36x48",Pho_ZOOM);
+			"PHOTO45x60",Pho_ZOOM);
      }
    fprintf (Gbl.F.Out,"</td>");
 

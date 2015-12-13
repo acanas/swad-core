@@ -2647,7 +2647,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 	              "<td class=\"%s CENTER_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />",
+                      " class=\"ICON20x20\" />",
             TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
         	                                              "BG_MSG_GREEN") :
                                                       "BG_MSG_BLUE",
@@ -2882,7 +2882,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO24x32",Pho_ZOOM);
+                        "PHOTO30x40",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
@@ -2898,7 +2898,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
      {
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"PHOTO24x32\" />"
+	                 " class=\"PHOTO30x40\" />"
 	                 "</td>"
                          "<td class=\"%s LEFT_MIDDLE",
                Gbl.Prefs.IconsURL,
@@ -3029,7 +3029,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Deleted ? "msg-fwd-del" :
@@ -3044,7 +3044,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO18x24",Pho_ZOOM);
+                     "PHOTO21x28",Pho_ZOOM);
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -3175,7 +3175,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                             "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                             "<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\" />"
+                            " class=\"ICON20x20\" />"
                             "</td>",
                   Gbl.Prefs.IconsURL,
                   OpenByDst ? (Deleted ? "msg-open-del"   :
@@ -3190,7 +3190,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           "PHOTO18x24",Pho_ZOOM);
+                           "PHOTO21x28",Pho_ZOOM);
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
@@ -3348,7 +3348,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/open_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" style=\"margin-left:12px;\" />",
+	              " class=\"ICON20x20\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
@@ -3370,7 +3370,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />",
+	              " class=\"ICON20x20\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
@@ -3549,7 +3549,7 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"<input type=\"image\""
         	               " src=\"%s/closed_on16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
+        	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);
@@ -3562,7 +3562,7 @@ void Msg_ListBannedUsrs (void)
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
-                              "PHOTO18x24",Pho_ZOOM);
+                              "PHOTO21x28",Pho_ZOOM);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write user's full name */

@@ -123,7 +123,7 @@ void Plg_ListPlugins (void)
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON32x32\" />"
+                         " class=\"ICON40x40\" />"
                          "</a>"
                          "</td>"
                          "<td class=\"DAT LEFT_MIDDLE\">"
@@ -386,7 +386,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:45px;\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON32x32\" />"
+                         " class=\"ICON40x40\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,
                Gbl.Plugins.Lst[NumPlg].Logo,

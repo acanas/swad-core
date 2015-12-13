@@ -332,7 +332,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/download16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16B\" />"
+	              " class=\"ICON20x20B\" />"
 		      "</a>",
 	 Gbl.Prefs.IconsURL,
 	 Txt_Create_ZIP_file,
@@ -575,11 +575,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                       "<a href=\"%s\" class=\"FILENAME\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON32x32\" />"
+                      " class=\"ICON40x40\" />"
                       "&nbsp;%s&nbsp;"
 		      "<img src=\"%s/down32x32.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON32x32\" />"
+		      " class=\"ICON40x40\" />"
 		      "</a>"
 		      "</td>"
 		      "</tr>",

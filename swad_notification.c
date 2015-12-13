@@ -435,7 +435,7 @@ void Ntf_ShowMyNotifications (void)
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
+        	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
@@ -445,7 +445,7 @@ void Ntf_ShowMyNotifications (void)
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON16x16\" />",
+        	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Ntf_Icons[NotifyEvent],
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
@@ -1836,7 +1836,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if (NumNewNtfs)
       fprintf (Gbl.F.Out,"<img src=\"%s/bell16x16.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON16x16\" />"
+			 " class=\"ICON20x20\" />"
 			 "&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
 	       Gbl.Prefs.PathTheme,
 	       Txt_Notifications,

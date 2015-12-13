@@ -417,7 +417,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 			    "<img src=\"%s/rss16x16.gif\""
 			    " alt=\"RSS\" title=\"RSS\""
-			    " class=\"ICON16x16\" />"
+			    " class=\"ICON20x20\" />"
 			    "</a>"
 			    "</div>",
 	          Gbl.Prefs.IconsURL);
@@ -587,7 +587,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
         	            "<input type=\"image\""
 	                    " src=\"%s/remove-on64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON16x16\" />"
+			    " class=\"ICON20x20\" />"
         	            "</div>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Remove,
@@ -604,7 +604,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
         	                  "<input type=\"image\""
         	                  " src=\"%s/eye-on64x64.png\""
         	                  " alt=%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />"
+        	                  " class=\"ICON20x20\" />"
         	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
@@ -617,7 +617,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
         	                  "<input type=\"image\""
         	                  " src=\"%s/eye-slash-on64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON16x16\" />"
+        	                  " class=\"ICON20x20\" />"
         	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,
@@ -634,7 +634,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/eye-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON16x16\" />"
+                                  " class=\"ICON20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
                         Gbl.Prefs.IconsURL,
@@ -645,7 +645,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/eye-slash-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON16x16\" />"
+                                  " class=\"ICON20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Gbl.Prefs.IconsURL,
@@ -692,7 +692,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON32x32\" />"
+	                 " class=\"ICON40x40\" />"
 	                 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_See_full_notice,

@@ -412,7 +412,7 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO12x16",Pho_ZOOM);
+                     "PHOTO15x20",Pho_ZOOM);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -1927,7 +1927,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	              "<td class=\"BT%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             Present ? "check" :
@@ -1966,7 +1966,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO36x48",Pho_ZOOM);
+                        "PHOTO45x60",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3175,7 +3175,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3211,7 +3211,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-	                    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+	                    " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Gbl.Prefs.IconsURL,
@@ -3312,7 +3312,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 				        NULL,
-		     "PHOTO18x24",Pho_ZOOM);
+		     "PHOTO21x28",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write user's ID ******/
@@ -3365,7 +3365,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON16x16\" />"
+			    " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;');"

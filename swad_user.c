@@ -1457,7 +1457,7 @@ void Usr_WriteFormLogin (void)
                       "<td class=\"BM\">"
                       "<img src=\"%s/user64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
@@ -1469,7 +1469,7 @@ void Usr_WriteFormLogin (void)
 		      "<td class=\"BM\">"
                       "<img src=\"%s/key64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
 		      "<input type=\"password\" name=\"UsrPwd\""
@@ -1535,7 +1535,7 @@ void Usr_WelcomeUsr (void)
                   Usr_InsertMyBirthday ();
                   fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
                 	             " alt=\"%s\" title=\"%s\""
-                                     " class=\"ICON128x128\" />",
+                                     " class=\"ICON160x160\" />",
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
@@ -1609,7 +1609,7 @@ void Usr_PutFormLogIn (void)
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -1648,7 +1648,7 @@ void Usr_WriteLoggedUsrHead (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,
-                     "PHOTO15x20",Pho_ZOOM);
+                     "PHOTO18x24",Pho_ZOOM);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
@@ -1678,7 +1678,7 @@ void Usr_PutFormLogOut (void)
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -2683,7 +2683,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/tr16x16.gif\""
 	              " alt=\"\" title=\"\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
 	              "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL);
@@ -2702,7 +2702,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2778,7 +2778,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
@@ -2804,7 +2804,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2858,7 +2858,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2960,7 +2960,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3092,7 +3092,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />"
+	              " class=\"ICON20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
@@ -3115,7 +3115,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3171,7 +3171,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3249,7 +3249,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO18x24",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -4931,7 +4931,7 @@ void Usr_FreeListOtherRecipients (void)
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
    /***** Select Usr_CLASS_PHOTO *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_4\" style=\"margin:4px auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"margin:4px auto;\">"
 	              "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">",
             Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "PREF_ON" :
@@ -4983,7 +4983,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormNoWrap[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       " %s</a>",
             Gbl.Prefs.IconsURL,
             Usr_IconsClassPhotoOrList[ListType],
@@ -7209,7 +7209,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool ShowPhoto;
    bool ShowData;
    bool UsrIsTheMsgSender;
-   const char *ClassPhoto = "PHOTO18x24";	// Default photo size
+   const char *ClassPhoto = "PHOTO21x28";	// Default photo size
    int LengthUsrData = 10;	// Maximum number of characters of user data
    char PhotoURL[PATH_MAX+1];
    struct UsrData UsrDat;
@@ -7232,16 +7232,16 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    switch (ClassPhotoType)
      {
       case Usr_CLASS_PHOTO_SEL:
-	 ClassPhoto = "PHOTO18x24";
+	 ClassPhoto = "PHOTO21x28";
          LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_SEL_SEE:
       case Usr_CLASS_PHOTO_SEE:
-	 ClassPhoto = "PHOTO36x48";
+	 ClassPhoto = "PHOTO45x60";
          LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_PRN:
-	 ClassPhoto = "PHOTO36x48";
+	 ClassPhoto = "PHOTO45x60";
          LengthUsrData = 15;
          break;
      }

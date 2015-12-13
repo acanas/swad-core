@@ -693,7 +693,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
       Sco_PutParamScope (Sco_SCOPE_CRS);
       Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON32x32\" />"
+	                 " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"
 	                 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Connected_users,Txt_Connected_users);
@@ -1059,7 +1059,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO18x24",Pho_ZOOM);
+                     "PHOTO21x28",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -1234,7 +1234,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           "PHOTO18x24",Pho_ZOOM);
+                           "PHOTO21x28",Pho_ZOOM);
          fprintf (Gbl.F.Out,"</td>");
 
          /***** Write full name and link *****/

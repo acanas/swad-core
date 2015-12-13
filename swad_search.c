@@ -324,7 +324,7 @@ void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON16x16\" />",
+	              " class=\"ICON20x20\" />",
             Gbl.Prefs.IconsURL,
 	    Icon,
             Txt_Search,

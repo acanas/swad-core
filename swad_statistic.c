@@ -1823,7 +1823,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO12x16",Pho_ZOOM);
+                        "PHOTO15x20",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
@@ -4228,7 +4228,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/cty16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4353,7 +4353,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/ins16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4468,7 +4468,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/ctr16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4573,7 +4573,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/deg16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4668,7 +4668,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
                       "<img src=\"%s/crs16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -7081,7 +7081,7 @@ static void Sta_GetAndShowForumStats (void)
                       "<th class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/forum64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
@@ -7307,7 +7307,7 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "<td class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "</td>"
                       "<td class=\"DAT LEFT_TOP\">"
                       "%s%s"
@@ -7895,7 +7895,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			    "<td class=\"CENTER_MIDDLE\">"
 			    "<img src=\"%s/first-day-of-week-%u-64x64.png\""
 			    " alt=\"%s\" title=\"%s: %s\""
-			    " class=\"ICON32x32\" />"
+			    " class=\"ICON40x40\" />"
 			    "</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
@@ -8167,7 +8167,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<img src=\"%s/%s/%s/%s/heart64x64.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON32x32\" />"
+                         " class=\"ICON40x40\" />"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
@@ -8306,7 +8306,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
                          "<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s32x32.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON32x32\" />"
+                         " class=\"ICON40x40\" />"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"

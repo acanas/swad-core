@@ -248,7 +248,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
 		      "</a>"
 		      "</div>",
 	    URL,Title,
@@ -306,7 +306,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<td class=\"%s LEFT_MIDDLE\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON16x16\""
+                         " class=\"ICON20x20\""
 			 " style=\"margin-right:12px;\" />"
 			 "%s:</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
@@ -524,7 +524,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON16x16\""
+                            " class=\"ICON20x20\""
 			    " style=\"margin-right:12px;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"

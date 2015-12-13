@@ -1375,7 +1375,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
 	              " onclick=\"document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON16x16\" />"
+                      " class=\"ICON20x20\" />"
                       "<span class=\"%s\">&nbsp;%s</span>"
                       "</div>",
             Gbl.FormId,
@@ -2173,7 +2173,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    TopC3Width);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-		     "PHOTO150x200",Pho_NO_ZOOM);
+		     "PHOTO186x248",Pho_NO_ZOOM);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -2196,7 +2196,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/edit64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2221,7 +2221,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/card64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2247,7 +2247,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/config64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2275,7 +2275,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/folder64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2297,7 +2297,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                    " style=\"display:inline;\" >"
 			    "<img src=\"%s/file64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON16x16\" />"
+	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -2325,7 +2325,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/rollcall64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON16x16\" />"
+	                       " class=\"ICON20x20\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2347,7 +2347,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	                 " style=\"display:inline;\" >"
 			 "<img src=\"%s/msg64x64.gif\""
 			 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON16x16\" />"
+	                 " class=\"ICON20x20\" />"
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
@@ -2368,7 +2368,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/unfollow64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON16x16\" />"
+	                       " class=\"ICON20x20\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2385,7 +2385,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 		               " style=\"display:inline;\" >"
 			       "<img src=\"%s/follow64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON16x16\" />"
+	                       " class=\"ICON20x20\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
@@ -2684,7 +2684,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	       fprintf (Gbl.F.Out," />"
 				  "<img src=\"%s/%s16x16.gif\""
 				  " alt=\"%s\" title=\"%s\""
-				  " class=\"ICON16x16\" />"
+				  " class=\"ICON20x20\" />"
 				  "%s",
 			Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
 			Txt_SEX_SINGULAR_Abc[Sex],
