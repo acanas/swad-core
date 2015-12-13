@@ -135,8 +135,6 @@ struct Sta_Hits
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Sta_PutFormToRequestAccessesCrs (void);
-
 static void Sta_WriteSelectorCountType (void);
 static void Sta_WriteSelectorAction (void);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
@@ -384,24 +382,6 @@ void Sta_RemoveOldEntriesRecentLog (void)
   }
 
 /*****************************************************************************/
-/*************** Write a form to go to result of users' tests ****************/
-/*****************************************************************************/
-
-static void Sta_PutFormToRequestAccessesCrs (void)
-  {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Visits_to_course;
-
-   Act_FormStart (ActReqAccCrs);
-   Act_LinkFormSubmit (Txt_Visits_to_course,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("stats64x64.gif",
-                        Txt_Visits_to_course,
-                        Txt_Visits_to_course);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
-  }
-
-/*****************************************************************************/
 /******************** Show a form to make a query of clicks ******************/
 /*****************************************************************************/
 
@@ -581,6 +561,7 @@ void Sta_AskShowCrsHits (void)
 void Sta_AskShowGblHits (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Visits_to_course;
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
@@ -600,7 +581,9 @@ void Sta_AskShowGblHits (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-      Sta_PutFormToRequestAccessesCrs ();
+      Lay_PutContextualLink (ActReqAccCrs,NULL,
+			     "stats64x64.gif",
+			     Txt_Visits_to_course,Txt_Visits_to_course);
 
    /* Link to show last clicks in real time */
    Con_PutLinkToLastClicks ();
