@@ -117,12 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.64.16 (2015/12/13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.64.17 (2015/12/13)"
 #define CSS_FILE		"swad15.64.5.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.64.17: Dec 13, 2015	Code refactoring in contextual links.
+					Fixed minor bug in tests. (187009 lines)
         Version 15.64.16: Dec 13, 2015	Code refactoring in contextual links.
 					Fixed minor bug in surveys. (187012 lines)
         Version 15.64.15: Dec 13, 2015	Code refactoring in contextual links. (187025 lines)

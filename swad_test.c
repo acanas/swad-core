@@ -1121,7 +1121,7 @@ void Tst_ShowFormAskEditTsts (void)
    unsigned long NumRows;
 
    /***** Buttons for edition *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
    Tst_PutFormToConfigure ();		// Put form to go to test configuration
@@ -2082,7 +2082,7 @@ void Tst_ListQuestionsToEdit (void)
       if ((NumRows = Tst_GetQuestionsForEdit (&mysql_res)) != 0)		// Query database
         {
 	 /***** Buttons for edition *****/
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
 	 if (Gbl.Test.XML.CreateXML)
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file for exporting questions and put a link to download it

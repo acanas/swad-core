@@ -62,6 +62,8 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void TsI_PutParamsExportQsts (void);
+
 static void TsI_GetAndWriteTagsXML (long QstCod);
 static void TsI_WriteAnswersOfAQstXML (long QstCod);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
@@ -81,27 +83,26 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
 void TsI_PutFormToExportQuestions (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Export_questions_to_XML_file;
    extern const char *Txt_Export_questions;
 
-   /***** Start form *****/
-   Act_FormStart (ActLstTstQst);
+   /***** Put a link to create a file with questions *****/
+   Lay_PutContextualLink (ActLstTstQst,TsI_PutParamsExportQsts,
+		          "export16x16.gif",
+		          Txt_Export_questions_to_XML_file,Txt_Export_questions);
+  }
 
-   /***** Parameters of the form *****/
+/*****************************************************************************/
+/****************** Put params to export test questions **********************/
+/*****************************************************************************/
+
+static void TsI_PutParamsExportQsts (void)
+  {
    Sta_WriteParamsDatesSeeAccesses ();
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrderType);
    Par_PutHiddenParamChar ("CreateXML",'Y');
-
-   /***** Put a link to create a file with questions *****/
-   Act_LinkFormSubmit (Txt_Export_questions_to_XML_file,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("export16x16.gif",
-                        Txt_Export_questions_to_XML_file,
-                        Txt_Export_questions);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -110,20 +111,14 @@ void TsI_PutFormToExportQuestions (void)
 
 void TsI_PutFormToImportQuestions (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Import_questions_from_XML_file;
    extern const char *Txt_Import_questions;
 
-   /***** Start form *****/
-   Act_FormStart (ActReqImpTstQst);
-
    /***** Put a link to create a file with questions *****/
-   Act_LinkFormSubmit (Txt_Import_questions_from_XML_file,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("import16x16.gif",
-                        Txt_Import_questions_from_XML_file,
-                        Txt_Import_questions);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActReqImpTstQst,NULL,
+		          "import16x16.gif",
+		          Txt_Import_questions_from_XML_file,
+                          Txt_Import_questions);
   }
 
 /*****************************************************************************/
