@@ -2406,7 +2406,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Act_FormEnd ();
 
          /* Link to QR code */
-	 QR_PutLinkToPrintQRCode (UsrDat,false);
+	 QR_PutLinkToPrintQRCode (UsrDat->Nickname,false);
 	}
      }
    fprintf (Gbl.F.Out,"</div>"

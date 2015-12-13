@@ -163,7 +163,7 @@ void Att_SeeAttEvents (void)
 
    /* Put link to my QR code */
    if (Gbl.Usrs.Me.UsrDat.Nickname[0])
-      QR_PutLinkToPrintQRCode (&Gbl.Usrs.Me.UsrDat,true);
+      QR_PutLinkToPrintQRCode (Gbl.Usrs.Me.UsrDat.Nickname,true);
 
    fprintf (Gbl.F.Out,"</div>");
 

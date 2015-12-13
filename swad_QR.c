@@ -63,27 +63,35 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void QR_PutParamQRString (void);
+
 static void QR_ImageQRCode (const char *QRString);
 
 /*****************************************************************************/
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
+void QR_PutLinkToPrintQRCode (const char *Nickname,bool PrintText)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_QR_code;
+
+   /***** Link to print QR *****/
+   Gbl.Usrs.NicknameForQR = Nickname;
+   Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,"qr64x64.gif",
+                          Txt_QR_code,PrintText ? Txt_QR_code :
+	                                          NULL);
+  }
+
+/*****************************************************************************/
+/************************* Put parameter QR string ***************************/
+/*****************************************************************************/
+
+static void QR_PutParamQRString (void)
+  {
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
-   /***** Link to print view *****/
-   Act_FormStart (ActPrnUsrQR);
-   sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
+   sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.NicknameForQR);
    Par_PutHiddenParamString ("QRString",NicknameWithArroba);
-   Act_LinkFormSubmit (Txt_QR_code,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutIconWithText ("qr64x64.gif",Txt_QR_code,PrintText ? Txt_QR_code :
-	                                                      NULL);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/

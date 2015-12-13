@@ -381,6 +381,7 @@ struct Globals
         } Connected;
       char FileNamePhoto[NAME_MAX+1];	// File name (with no path and no .jpg) of the temporary file with the selected face
       bool Error;	// To signal that an error has happened
+      const char *NicknameForQR;	// Used as parameter in contextual links
      } Usrs;
    struct
      {
