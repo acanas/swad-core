@@ -83,6 +83,7 @@ static void Att_PutFormToCreateNewAttEvent (void);
 static void Att_PutFormToCreateNewAttEventParams (void);
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
+static void Att_PutParams (void);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
 static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt);
@@ -525,38 +526,37 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 
    fprintf (Gbl.F.Out,"<div>");
 
+   Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
+
    /***** Put form to remove attendance event *****/
-   Act_FormStart (ActReqRemAtt);
-   Att_PutParamAttCod (AttCod);
-   Att_PutHiddenParamAttOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActReqRemAtt,Att_PutParams,"remove-on64x64.png",
+                          Txt_Remove,NULL);
 
    /***** Put form to hide/show attendance event *****/
-   Act_FormStart (Hidden ? ActShoAtt :
-	                   ActHidAtt);
-   Att_PutParamAttCod (AttCod);
-   Att_PutHiddenParamAttOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      Lay_PutIconLink ("eye-slash-on64x64.png",Txt_Show,NULL,NULL);
+      Lay_PutContextualLink (ActShoAtt,Att_PutParams,"eye-slash-on64x64.png",
+			     Txt_Show,NULL);
    else
-      Lay_PutIconLink ("eye-on64x64.png",Txt_Hide,NULL,NULL);
-   Act_FormEnd ();
+      Lay_PutContextualLink (ActHidAtt,Att_PutParams,"eye-on64x64.png",
+			     Txt_Hide,NULL);
 
    /***** Put form to edit attendance event *****/
-   Act_FormStart (ActEdiOneAtt);
-   Att_PutParamAttCod (AttCod);
+   Lay_PutContextualLink (ActEdiOneAtt,Att_PutParams,"edit64x64.png",
+                          Txt_Edit,NULL);
+
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/***************** Params used to edit an attendance event *******************/
+/*****************************************************************************/
+
+static void Att_PutParams (void)
+  {
+   Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
-   Act_FormEnd ();
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

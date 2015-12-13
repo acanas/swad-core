@@ -540,7 +540,7 @@ struct Globals
       unsigned Num;	// Number of assignments
       long *LstAsgCods;	// List of assigment codes
       tAsgsOrderType SelectedOrderType;
-      long AsgCod;	// Used as parameter in contextual links
+      long AsgCodToEdit;	// Used as parameter in contextual links
      } Asgs;
    struct
      {
@@ -551,6 +551,7 @@ struct Globals
       long AttCod;
       bool ShowDetails;
       char *StrAttCodsSelected;
+      long AttCodToEdit;	// Used as parameter in contextual links
      } AttEvents;
    struct
      {
@@ -653,6 +654,7 @@ struct Globals
       unsigned Num;	// Number of surveys
       long *LstSvyCods;	// List of survey codes
       tSvysOrderType SelectedOrderType;
+      long SvyCodToEdit;	// Used as parameter in contextual links
      } Svys;
    struct
      {

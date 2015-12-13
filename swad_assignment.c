@@ -496,38 +496,34 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
    fprintf (Gbl.F.Out,"<div>");
 
-   Gbl.Asgs.AsgCod = AsgCod;	// Used as parameters in contextual links
+   Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
    /***** Put form to remove assignment *****/
-   Lay_PutContextualLink (ActReqRemAsg,Asg_PutParams,
-                          "remove-on64x64.png",
+   Lay_PutContextualLink (ActReqRemAsg,Asg_PutParams,"remove-on64x64.png",
                           Txt_Remove,NULL);
 
    /***** Put form to hide/show assignment *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAsg,Asg_PutParams,
-			     "eye-slash-on64x64.png",
+      Lay_PutContextualLink (ActShoAsg,Asg_PutParams,"eye-slash-on64x64.png",
 			     Txt_Show,NULL);
    else
-      Lay_PutContextualLink (ActHidAsg,Asg_PutParams,
-			     "eye-on64x64.png",
+      Lay_PutContextualLink (ActHidAsg,Asg_PutParams,"eye-on64x64.png",
 			     Txt_Hide,NULL);
 
    /***** Put form to edit assignment *****/
-   Lay_PutContextualLink (ActEdiOneAsg,Asg_PutParams,
-                          "edit64x64.png",
+   Lay_PutContextualLink (ActEdiOneAsg,Asg_PutParams,"edit64x64.png",
                           Txt_Edit,NULL);
 
    fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
-/********************** Params related to an assignment **********************/
+/******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
 static void Asg_PutParams (void)
   {
-   Asg_PutParamAsgCod (Gbl.Asgs.AsgCod);
+   Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
    Asg_PutHiddenParamAsgOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);

@@ -102,6 +102,7 @@ static void Svy_PutFormToCreateNewSvy (void);
 static void Svy_PutFormToCreateNewSvyParams (void);
 
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
+static void Svy_PutParams (void);
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt);
 static void Svy_PutParamSvyCod (long SvyCod);
 static long Svy_GetParamSvyCod (void);
@@ -729,14 +730,11 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    fprintf (Gbl.F.Out,"<div>");
 
+   Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
+
    /***** Put form to remove survey *****/
-   Act_FormStart (ActReqRemSvy);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActReqRemSvy,Svy_PutParams,"remove-on64x64.png",
+                          Txt_Remove,NULL);
 
    /***** Put form to reset survey *****/
    Act_FormStart (ActReqRstSvy);
@@ -748,28 +746,30 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Act_FormEnd ();
 
    /***** Put form to hide/show survey *****/
-   Act_FormStart (Visible ? ActHidSvy :
-	                    ActShoSvy);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Visible)
-      Lay_PutIconLink ("eye-on64x64.png",Txt_Hide,NULL,NULL);
+      Lay_PutContextualLink (ActHidSvy,Svy_PutParams,"eye-on64x64.png",
+			     Txt_Hide,NULL);
    else
-      Lay_PutIconLink ("eye-slash-on64x64.png",Txt_Show,NULL,NULL);
-   Act_FormEnd ();
+      Lay_PutContextualLink (ActShoSvy,Svy_PutParams,"eye-slash-on64x64.png",
+			     Txt_Show,NULL);
 
    /***** Put form to edit survey *****/
-   Act_FormStart (ActEdiOneSvy);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
-   Act_FormEnd ();
+   Lay_PutContextualLink (ActEdiOneSvy,Svy_PutParams,"edit64x64.png",
+                          Txt_Edit,NULL);
 
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************** Params used to edit a survey *************************/
+/*****************************************************************************/
+
+static void Svy_PutParams (void)
+  {
+   Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
+   Att_PutHiddenParamAttOrderType ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
