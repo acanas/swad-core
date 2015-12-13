@@ -481,6 +481,7 @@ struct Globals
      {
       struct Date *Lst;		// List of dates of announcements of exams
       unsigned NumExamAnnounc;	// Number of announcements of exam in the list
+      long ExaCodToEdit;	// Used as parameter in contextual links
      } LstExamAnnouncements;
    struct
      {

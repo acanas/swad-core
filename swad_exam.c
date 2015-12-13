@@ -77,6 +77,8 @@ static long Exa_AddExamAnnouncementToDB (void);
 static void Exa_ModifyExamAnnouncementInDB (long ExaCod);
 static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void Exa_PutParamExaCod (void);
+
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
 
 /*****************************************************************************/
@@ -767,6 +769,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
      {
+      Gbl.LstExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameters in contextual links
+
       fprintf (Gbl.F.Out,"<tr>" \
 	                 "<td class=\"LEFT_MIDDLE\">");
 
@@ -774,23 +778,17 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
 	 /***** Link to remove this exam announcement *****/
-	 Act_FormStart (ActRemExaAnn);
-	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
-         Act_FormEnd ();
+	 Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCod,"remove-on64x64.png",
+                                Txt_Remove,NULL);
 
 	 /***** Link to edit this exam announcement *****/
-	 Act_FormStart (ActEdiExaAnn);
-	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
-         Act_FormEnd ();
+	 Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCod,"edit64x64.png",
+                                Txt_Edit,NULL);
 	}
 
       /***** Link to print view *****/
-      Act_FormStart (ActPrnExaAnn);
-      Par_PutHiddenParamLong ("ExaCod",ExaCod);
-      Lay_PutIconLink ("print64x64.png",Txt_Print,NULL,NULL);
-      Act_FormEnd ();
+      Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCod,"print64x64.png",
+			     Txt_Print,NULL);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -1215,6 +1213,15 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();
+  }
+
+/*****************************************************************************/
+/***************** Params used to edit an attendance event *******************/
+/*****************************************************************************/
+
+static void Exa_PutParamExaCod (void)
+  {
+   Par_PutHiddenParamLong ("ExaCod",Gbl.LstExamAnnouncements.ExaCodToEdit);
   }
 
 /*****************************************************************************/
