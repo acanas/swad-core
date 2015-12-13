@@ -951,8 +951,9 @@ void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
-   //if (Text)
-   //   fprintf (Gbl.F.Out,"<div class=>");
+   if (Text)
+      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
 
    Act_FormStart (NextAction);
    if (FuncParams)
@@ -961,6 +962,10 @@ void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
                     Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
                 	   NULL);
    Act_FormEnd ();
+
+   if (Text)
+      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
   }
 
 /*****************************************************************************/

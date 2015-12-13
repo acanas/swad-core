@@ -1171,7 +1171,7 @@ a:hover						/* Default ==> underlined */
 /****** Contextual links with small icons and text to go to some action ******/
 .CONTEXT_MENU
 	{
-	margin:6px 0 8px 0;
+	margin:6px auto 8px auto;
 	text-align:center;
 	}
 .CONTEXT_OPT
