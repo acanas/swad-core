@@ -93,7 +93,8 @@ void Ann_ShowAllAnnouncements (void)
    if (ICanEditAnnouncements)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Lay_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",Txt_New_announcement);
+      Lay_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",
+                             Txt_New_announcement,Txt_New_announcement);
       fprintf (Gbl.F.Out,"</div>");
      }
 

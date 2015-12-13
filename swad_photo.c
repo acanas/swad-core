@@ -175,6 +175,8 @@ void Pho_PutLinkToChangeMyPhoto (void)
    /***** Link for changing / uploading the photo *****/
    Lay_PutContextualLink (ActReqMyPho,NULL,"photo64x64.gif",
                           Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
+		                                      Txt_Upload_photo,
+                          Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 		                                      Txt_Upload_photo);
   }
 
@@ -200,8 +202,11 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
 	                                                                                   ActReqOthPho),	// Guest, visitor or admin
 	                        Usr_PutParamOtherUsrCodEncrypted,
-				"photo64x64.gif",PhotoExists ? Txt_Change_photo :
-						               Txt_Upload_photo);
+	                        "photo64x64.gif",
+				PhotoExists ? Txt_Change_photo :
+					      Txt_Upload_photo,
+				PhotoExists ? Txt_Change_photo :
+					      Txt_Upload_photo);
 	}
   }
 
@@ -214,7 +219,8 @@ static void Pho_PutLinkToRemoveMyPhoto (void)
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Lay_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",Txt_Remove_photo);
+   Lay_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",
+                          Txt_Remove_photo,Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -230,7 +236,8 @@ static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
 	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
 	                                                               ActRemOthPho),	// Guest, visitor or admin
                           Usr_PutParamOtherUsrCodEncrypted,
-                          "remove-on64x64.png",Txt_Remove_photo);
+                          "remove-on64x64.png",
+                          Txt_Remove_photo,Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -1750,7 +1757,8 @@ static void Pho_PutLinkToPrintViewOfDegreeStats (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
-                          "print64x64.png",Txt_Print);
+                          "print64x64.png",
+                          Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
 

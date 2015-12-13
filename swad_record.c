@@ -859,7 +859,8 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Lay_PutContextualLink (ActEdiRecFie,NULL,"edit64x64.png",Txt_Edit_record_fields);
+   Lay_PutContextualLink (ActEdiRecFie,NULL,"edit64x64.png",
+                          Txt_Edit_record_fields,Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -3315,8 +3316,8 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
-   Lay_PutContextualLink (ActReqEdiMyIns,NULL,
-                          "ins64x64.gif",Txt_Edit_my_institution);
+   Lay_PutContextualLink (ActReqEdiMyIns,NULL,"ins64x64.gif",
+                          Txt_Edit_my_institution,Txt_Edit_my_institution);
   }
 
 /*****************************************************************************/
@@ -3328,8 +3329,8 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    extern const char *Txt_Edit_my_webs_networks;
 
    /***** Link to edit my social networks *****/
-   Lay_PutContextualLink (ActReqEdiMyNet,NULL,
-                          "earth64x64.gif",Txt_Edit_my_webs_networks);
+   Lay_PutContextualLink (ActReqEdiMyNet,NULL,"earth64x64.gif",
+                          Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
   }
 
 /*****************************************************************************/

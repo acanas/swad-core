@@ -1642,7 +1642,8 @@ static void Ntf_PutLinkToChangePrefs (void)
   {
    extern const char *Txt_Change_preferences;
 
-   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",Txt_Change_preferences);
+   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",
+                          Txt_Change_preferences,Txt_Change_preferences);
   }
 
 /*****************************************************************************/

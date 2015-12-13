@@ -152,7 +152,8 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLink (ActReqSignUp,NULL,"signup16x16.gif",Txt_Sign_up);
+   Lay_PutContextualLink (ActReqSignUp,NULL,"signup16x16.gif",
+                          Txt_Sign_up,Txt_Sign_up);
   }
 
 /*****************************************************************************/
@@ -352,12 +353,14 @@ void Enr_ReqAcceptRegisterInCrs (void)
    /***** Send button to accept register in the current course *****/
    Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
 	                                                                         ActAccEnrTch,
-	                  NULL,"ok_green16x16.gif",Txt_Confirm_my_enrollment);
+	                  NULL,"ok_green16x16.gif",
+	                  Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
 
    /***** Send button to refuse register in the current course *****/
    Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
 	                                                                         ActRemMe_Tch,
-                          NULL,"remove-on64x64.png",Txt_Remove_me_from_this_course);
+                          NULL,"remove-on64x64.png",
+                          Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -682,7 +685,8 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",Txt_Eliminate_old_users);
+   Lay_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",
+                          Txt_Eliminate_old_users,Txt_Eliminate_old_users);
   }
 
 /*****************************************************************************/
@@ -1773,7 +1777,8 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 
    /***** Put form to remove all the students in the current course *****/
    Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,
-                          "remove-on64x64.png",Txt_Remove_all_students);
+                          "remove-on64x64.png",
+                          Txt_Remove_all_students,Txt_Remove_all_students);
   }
 
 /*****************************************************************************/
@@ -2751,6 +2756,8 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
    Lay_PutContextualLink (NextAction,NULL,"configtest16x16.gif",
                           Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
+                        	                             Txt_Admin_me,
+                          Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
                         	                             Txt_Admin_me);
   }
 
@@ -2766,6 +2773,8 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
 	                  NULL,"configtest16x16.gif",
+	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
+	                	                Txt_Admin_several_teachers,
 	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
 	                	                Txt_Admin_several_teachers);
   }

@@ -922,7 +922,8 @@ void Lay_PutFormToView (Act_Action_t Action)
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,"eye-on64x64.png",Txt_View);
+   Lay_PutContextualLink (Action,NULL,"eye-on64x64.png",
+                          Txt_View,Txt_View);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -935,7 +936,8 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,"edit64x64.png",Txt_Edit);
+   Lay_PutContextualLink (Action,NULL,"edit64x64.png",
+                          Txt_Edit,Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -944,27 +946,26 @@ void Lay_PutFormToEdit (Act_Action_t Action)
 /*****************************************************************************/
 
 void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
-                            const char *Icon,const char *Title)
+                            const char *Icon,
+                            const char *Title,const char *Text)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-
-   // fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPTION\">");
 
    Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();
-   Lay_PutIconLink (Icon,Title,The_ClassFormBold[Gbl.Prefs.Theme],Title);
+   Lay_PutIconLink (Icon,Title,Text,
+                    Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
+                	   NULL);
    Act_FormEnd ();
-
-   // fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
 /****************** Show an icon with a link (without text) ******************/
 /*****************************************************************************/
 
-void Lay_PutIconLink (const char *Icon,const char *Title,
-                      const char *LinkStyle,const char *Text)
+void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
+                      const char *LinkStyle)
   {
    Act_LinkFormSubmit (Title,LinkStyle);
    Lay_PutIconWithText (Icon,Title,Text);

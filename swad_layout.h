@@ -74,9 +74,10 @@ void Lay_WriteTitle (const char *Title);
 void Lay_PutFormToView (Act_Action_t Action);
 void Lay_PutFormToEdit (Act_Action_t Action);
 void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
-                            const char *Icon,const char *Title);
-void Lay_PutIconLink (const char *Icon,const char *Title,
-                      const char *LinkStyle,const char *Text);
+                            const char *Icon,
+                            const char *Title,const char *Text);
+void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
+                      const char *LinkStyle);
 void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
 

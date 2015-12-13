@@ -1698,7 +1698,8 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Lay_PutContextualLink (ActLstBanUsr,NULL,"stop16x16.gif",Txt_Banned_users);
+   Lay_PutContextualLink (ActLstBanUsr,NULL,"stop16x16.gif",
+                          Txt_Banned_users,Txt_Banned_users);
   }
 
 /*****************************************************************************/
@@ -2228,7 +2229,8 @@ void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned 
    Lay_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
 	                                                              ActReqDelAllSntMsg,
 	                  Msg_PutHiddenParamsMsgsFilters,
-	                  "remove-on64x64.png",Gbl.Title);
+	                  "remove-on64x64.png",
+	                  Gbl.Title,Gbl.Title);
    fprintf (Gbl.F.Out,"</div>");
   }
 

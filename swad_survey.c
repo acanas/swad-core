@@ -703,7 +703,8 @@ static void Svy_PutFormToCreateNewSvy (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
-                          "plus64x64.png",Txt_New_survey);
+                          "plus64x64.png",
+                          Txt_New_survey,Txt_New_survey);
    fprintf (Gbl.F.Out,"</div>");
   }
 

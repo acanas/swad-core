@@ -192,7 +192,8 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to print view */
-      Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",Txt_Print);
+      Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",
+                             Txt_Print,Txt_Print);
 
       /* Link to request enrollment in the current course */
       if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
@@ -2896,7 +2897,8 @@ static void Crs_PutLinkToSearchCourses (void)
                           (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
                                                            ActSysReqSch)))),
                           Crs_PutLinkToSearchCoursesParams,
-			  "search64x64.gif",Txt_Search_courses);
+			  "search64x64.gif",
+			  Txt_Search_courses,Txt_Search_courses);
   }
 
 static void Crs_PutLinkToSearchCoursesParams (void)
@@ -2914,7 +2916,8 @@ void Crs_PutFormToSelectMyCourses (void)
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLink (ActMyCrs,NULL,"hierarchy64x64.gif",Txt_My_courses);
+   Lay_PutContextualLink (ActMyCrs,NULL,"hierarchy64x64.gif",
+                          Txt_My_courses,Txt_My_courses);
   }
 
 /*****************************************************************************/

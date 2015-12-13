@@ -444,7 +444,8 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
       case Rol_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Lay_PutContextualLink (ActEdiExaAnn,NULL,
-                                "plus64x64.png",Txt_New_announcement_OF_EXAM);
+                                "plus64x64.png",
+                                Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
          fprintf (Gbl.F.Out,"</div>");
          break;
       default:

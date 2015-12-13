@@ -261,7 +261,8 @@ static void Ins_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Link to print view */
-         Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",Txt_Print);
+         Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",
+                                Txt_Print,Txt_Print);
 
 	 /* Link to upload logo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)

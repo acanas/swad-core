@@ -4302,11 +4302,13 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
      {
       case Brw_SHOW:
          Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "eye-on64x64.png",Txt_View);
+                                "eye-on64x64.png",
+                                Txt_View,Txt_View);
 	 break;
       case Brw_ADMIN:
          Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
-                                "edit64x64.png",Txt_Edit);
+                                "edit64x64.png",
+                                Txt_Edit,Txt_Edit);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");

@@ -470,7 +470,8 @@ static void Asg_PutFormToCreateNewAsg (void)
    /***** Put form to create a new assignment *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActFrmNewAsg,Asg_PutFormToCreateNewAsgParams,
-                          "plus64x64.png",Txt_New_assignment);
+                          "plus64x64.png",
+                          Txt_New_assignment,Txt_New_assignment);
    fprintf (Gbl.F.Out,"</div>");
   }
 

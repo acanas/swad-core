@@ -283,7 +283,8 @@ static void Ctr_Configuration (bool PrintView)
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
          /* Link to print view */
-         Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print);
+         Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",
+                                Txt_Print,Txt_Print);
 
 	 /* Links to upload logo and photo */
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
@@ -1905,8 +1906,11 @@ static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
 
    /***** Link for changing / uploading the photo *****/
    Lay_PutContextualLink (ActReqCtrPho,NULL,
-                          "photo64x64.gif",PhotoExists ? Txt_Change_photo :
-		                                         Txt_Upload_photo);
+                          "photo64x64.gif",
+                          PhotoExists ? Txt_Change_photo :
+		                        Txt_Upload_photo,
+                          PhotoExists ? Txt_Change_photo :
+		                        Txt_Upload_photo);
   }
 
 /*****************************************************************************/

@@ -251,7 +251,8 @@ void Cal_DrawCalendar (void)
      {
       /* Link to print view */
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Lay_PutContextualLink (ActPrnCal,NULL,"print64x64.png",Txt_Print);
+      Lay_PutContextualLink (ActPrnCal,NULL,"print64x64.png",
+                             Txt_Print,Txt_Print);
       fprintf (Gbl.F.Out,"</div>");
      }
    Lay_StartRoundFrameTable (NULL,0,NULL);

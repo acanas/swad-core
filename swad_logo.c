@@ -219,8 +219,11 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Lay_PutContextualLink (Action,NULL,Icon,LogoExists ? Txt_Change_logo :
-		                                        Txt_Upload_logo);
+   Lay_PutContextualLink (Action,NULL,Icon,
+                          LogoExists ? Txt_Change_logo :
+		                       Txt_Upload_logo,
+                          LogoExists ? Txt_Change_logo :
+		                       Txt_Upload_logo);
   }
 
 /*****************************************************************************/

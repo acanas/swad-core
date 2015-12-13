@@ -378,13 +378,15 @@ void ID_PutLinkToChangeUsrIDs (void)
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Lay_PutContextualLink (ActFrmUsrAcc,NULL,
-			     "arroba64x64.gif",Txt_Change_IDs);
+			     "arroba64x64.gif",
+			     Txt_Change_IDs,Txt_Change_IDs);
    else									// Not me
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmIDsStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmIDsTch :
 	                	                                                        ActFrmIDsOth),	// Guest, visitor or admin
                              Usr_PutParamOtherUsrCodEncrypted,
-			     "arroba64x64.gif",Txt_Change_IDs);
+			     "arroba64x64.gif",
+			     Txt_Change_IDs,Txt_Change_IDs);
   }
 
 /*****************************************************************************/
