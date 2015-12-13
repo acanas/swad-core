@@ -397,6 +397,7 @@ static void Sta_PutFormToRequestAccessesCrs (void)
    Lay_PutIconWithText ("stats64x64.gif",
                         Txt_Visits_to_course,
                         Txt_Visits_to_course);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 

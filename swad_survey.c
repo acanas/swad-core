@@ -702,7 +702,7 @@ static void Svy_PutFormToCreateNewSvy (void)
    extern const char *Txt_New_survey;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
+   Lay_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
                           "plus64x64.png",Txt_New_survey);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -734,7 +734,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
+   Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
+   Act_FormEnd ();
 
    /***** Put form to reset survey *****/
    Act_FormStart (ActReqRstSvy);
@@ -742,7 +743,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("reset16x16.gif",Txt_Reset);
+   Lay_PutIconLink ("reset16x16.gif",Txt_Reset,NULL,NULL);
+   Act_FormEnd ();
 
    /***** Put form to hide/show survey *****/
    Act_FormStart (Visible ? ActHidSvy :
@@ -752,9 +754,10 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Visible)
-      Act_PutIconLink ("eye-on64x64.png",Txt_Hide);
+      Lay_PutIconLink ("eye-on64x64.png",Txt_Hide,NULL,NULL);
    else
-      Act_PutIconLink ("eye-slash-on64x64.png",Txt_Show);
+      Lay_PutIconLink ("eye-slash-on64x64.png",Txt_Show,NULL,NULL);
+   Act_FormEnd ();
 
    /***** Put form to edit survey *****/
    Act_FormStart (ActEdiOneSvy);
@@ -762,7 +765,8 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Svy_PutHiddenParamSvyOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit64x64.png",Txt_Edit);
+   Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
+   Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2932,6 +2936,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       Lay_PutIconWithText ("plus64x64.png",
                            Txt_New_question,
                            Txt_New_question);
+      fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

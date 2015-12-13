@@ -217,7 +217,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
   {
    extern const char *Txt_Forgotten_password;
 
-   Act_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
+   Lay_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
                           "key64x64.gif",Txt_Forgotten_password);
   }
 
@@ -842,7 +842,7 @@ void Pwd_PutLinkToChangeMyPassword (void)
    extern const char *Txt_Change_password;
 
    /***** Link for changing the password *****/
-   Act_PutContextualLink (ActFrmChgMyPwd,NULL,"key64x64.gif",Txt_Change_password);
+   Lay_PutContextualLink (ActFrmChgMyPwd,NULL,"key64x64.gif",Txt_Change_password);
   }
 
 /*****************************************************************************/
@@ -857,7 +857,7 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
-      Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
 	                	                                                        ActFrmPwdOth),
                              Usr_PutParamOtherUsrCodEncrypted,

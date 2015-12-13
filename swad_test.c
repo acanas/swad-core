@@ -318,7 +318,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
   {
    extern const char *Txt_Results_tests;
 
-   Act_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
+   Lay_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
 	                                                               ActReqSeeUsrTstExa,
 	                  NULL,"file64x64.gif",Txt_Results_tests);
   }
@@ -331,7 +331,7 @@ static void Tst_PutFormToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   Act_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",Txt_Edit);
+   Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",Txt_Edit);
   }
 
 /*****************************************************************************/
@@ -342,7 +342,7 @@ static void Tst_PutFormToConfigure (void)
   {
    extern const char *Txt_Configure;
 
-   Act_PutContextualLink (ActCfgTst,NULL,"configtest16x16.gif",Txt_Configure);
+   Lay_PutContextualLink (ActCfgTst,NULL,"configtest16x16.gif",Txt_Configure);
   }
 
 /*****************************************************************************/
@@ -1175,6 +1175,7 @@ static void Tst_PutFormToCreateNewTstQst (void)
    Lay_PutIconWithText ("plus64x64.png",
                         Txt_New_question,
                         Txt_New_question);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 

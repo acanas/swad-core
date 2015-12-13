@@ -100,6 +100,7 @@ void TsI_PutFormToExportQuestions (void)
    Lay_PutIconWithText ("export16x16.gif",
                         Txt_Export_questions_to_XML_file,
                         Txt_Export_questions);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 
@@ -121,6 +122,7 @@ void TsI_PutFormToImportQuestions (void)
    Lay_PutIconWithText ("import16x16.gif",
                         Txt_Import_questions_from_XML_file,
                         Txt_Import_questions);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 
@@ -272,6 +274,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    Lay_PutIconWithText ("file64x64.gif",
                         Txt_XML_file,
                         Txt_XML_file);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/

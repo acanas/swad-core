@@ -159,7 +159,7 @@ static void Lnk_PutFormToEditLinks (void)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActEdiLnk,NULL,"edit64x64.png",Txt_Edit);
+   Lay_PutContextualLink (ActEdiLnk,NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 

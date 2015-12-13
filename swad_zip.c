@@ -117,7 +117,7 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    extern const char *Txt_Create_ZIP_file;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
+   Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
                           "download16x16.gif",Txt_Create_ZIP_file);
    fprintf (Gbl.F.Out,"</div>");
   }

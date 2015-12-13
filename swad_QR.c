@@ -82,6 +82,7 @@ void QR_PutLinkToPrintQRCode (struct UsrData *UsrDat,bool PrintText)
    Act_LinkFormSubmit (Txt_QR_code,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("qr64x64.gif",Txt_QR_code,PrintText ? Txt_QR_code :
 	                                                      NULL);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 

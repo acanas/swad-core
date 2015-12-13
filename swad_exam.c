@@ -443,7 +443,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
       case Rol_TEACHER:
       case Rol_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-         Act_PutContextualLink (ActEdiExaAnn,NULL,
+         Lay_PutContextualLink (ActEdiExaAnn,NULL,
                                 "plus64x64.png",Txt_New_announcement_OF_EXAM);
          fprintf (Gbl.F.Out,"</div>");
          break;
@@ -775,18 +775,21 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	 /***** Link to remove this exam announcement *****/
 	 Act_FormStart (ActRemExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
+	 Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
+         Act_FormEnd ();
 
 	 /***** Link to edit this exam announcement *****/
 	 Act_FormStart (ActEdiExaAnn);
 	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
-	 Act_PutIconLink ("edit64x64.png",Txt_Edit);
+	 Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
+         Act_FormEnd ();
 	}
 
       /***** Link to print view *****/
       Act_FormStart (ActPrnExaAnn);
       Par_PutHiddenParamLong ("ExaCod",ExaCod);
-      Act_PutIconLink ("print64x64.png",Txt_Print);
+      Lay_PutIconLink ("print64x64.png",Txt_Print,NULL,NULL);
+      Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

@@ -152,7 +152,7 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Act_PutContextualLink (ActReqSignUp,NULL,"signup16x16.gif",Txt_Sign_up);
+   Lay_PutContextualLink (ActReqSignUp,NULL,"signup16x16.gif",Txt_Sign_up);
   }
 
 /*****************************************************************************/
@@ -350,12 +350,12 @@ void Enr_ReqAcceptRegisterInCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /***** Send button to accept register in the current course *****/
-   Act_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
+   Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
 	                                                                         ActAccEnrTch,
 	                  NULL,"ok_green16x16.gif",Txt_Confirm_my_enrollment);
 
    /***** Send button to refuse register in the current course *****/
-   Act_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
+   Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
 	                                                                         ActRemMe_Tch,
                           NULL,"remove-on64x64.png",Txt_Remove_me_from_this_course);
 
@@ -682,7 +682,7 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Act_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",Txt_Eliminate_old_users);
+   Lay_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",Txt_Eliminate_old_users);
   }
 
 /*****************************************************************************/
@@ -1772,7 +1772,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
-   Act_PutContextualLink (ActReqRemAllStdCrs,NULL,
+   Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,
                           "remove-on64x64.png",Txt_Remove_all_students);
   }
 
@@ -2749,7 +2749,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    extern const char *Txt_Admin_me;
    extern const char *Txt_Admin_one_user;
 
-   Act_PutContextualLink (NextAction,NULL,"configtest16x16.gif",
+   Lay_PutContextualLink (NextAction,NULL,"configtest16x16.gif",
                           Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
                         	                             Txt_Admin_me);
   }
@@ -2763,7 +2763,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Admin_several_students;
    extern const char *Txt_Admin_several_teachers;
 
-   Act_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
+   Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
 	                  NULL,"configtest16x16.gif",
 	                  Role == Rol_STUDENT ? Txt_Admin_several_students :

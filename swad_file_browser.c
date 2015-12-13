@@ -4301,11 +4301,11 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
    switch (ShowOrAdmin)
      {
       case Brw_SHOW:
-         Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+         Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
                                 "eye-on64x64.png",Txt_View);
 	 break;
       case Brw_ADMIN:
-         Act_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+         Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
                                 "edit64x64.png",Txt_Edit);
 	 break;
      }

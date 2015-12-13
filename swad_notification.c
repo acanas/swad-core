@@ -1642,7 +1642,7 @@ static void Ntf_PutLinkToChangePrefs (void)
   {
    extern const char *Txt_Change_preferences;
 
-   Act_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",Txt_Change_preferences);
+   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",Txt_Change_preferences);
   }
 
 /*****************************************************************************/
@@ -1659,6 +1659,7 @@ static void Ntf_PutLinkToMarkAllNotifAsSeen (void)
    Lay_PutIconWithText ("eye-on64x64.png",
                         Txt_Mark_all_notifications_as_read,
                         Txt_Mark_all_notifications_as_read);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 

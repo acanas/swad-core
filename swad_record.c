@@ -859,7 +859,7 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Act_PutContextualLink (ActEdiRecFie,NULL,"edit64x64.png",Txt_Edit_record_fields);
+   Lay_PutContextualLink (ActEdiRecFie,NULL,"edit64x64.png",Txt_Edit_record_fields);
   }
 
 /*****************************************************************************/
@@ -1321,7 +1321,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
    Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"<span class=\"%s\">(</span>"
+   fprintf (Gbl.F.Out,"</a>"
+                      "<span class=\"%s\">(</span>"
 	              "<select name=\"RecsPerPag\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
 
@@ -3314,7 +3315,7 @@ static void Rec_PutLinkToChangeMyInsCtrDpt (void)
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
-   Act_PutContextualLink (ActReqEdiMyIns,NULL,
+   Lay_PutContextualLink (ActReqEdiMyIns,NULL,
                           "ins64x64.gif",Txt_Edit_my_institution);
   }
 
@@ -3327,7 +3328,7 @@ static void Rec_PutLinkToChangeMySocialNetworks (void)
    extern const char *Txt_Edit_my_webs_networks;
 
    /***** Link to edit my social networks *****/
-   Act_PutContextualLink (ActReqEdiMyNet,NULL,
+   Lay_PutContextualLink (ActReqEdiMyNet,NULL,
                           "earth64x64.gif",Txt_Edit_my_webs_networks);
   }
 

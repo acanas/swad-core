@@ -264,14 +264,14 @@ void TT_ShowClassTimeTable (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (PutEditCrsTT)
-         Act_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
+         Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
                                 "edit64x64.png",Txt_Edit);
 
       if (PutEditOfficeHours)
-         Act_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",Txt_Edit_office_hours);
+         Lay_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",Txt_Edit_office_hours);
 
       if (!PrintView)
-         Act_PutContextualLink (TimeTableType == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+         Lay_PutContextualLink (TimeTableType == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
                                                                        ActPrnMyTT,
                                 Grp_PutParamWhichGrps,"print64x64.png",Txt_Print);
 
@@ -339,7 +339,7 @@ void TT_EditCrsTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActSeeCrsTT,NULL,"clock16x16.gif",Txt_Show_timetable);
+   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock16x16.gif",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Editable time table *****/
@@ -359,7 +359,7 @@ void TT_ShowMyTutTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActSeeMyTT,NULL,"clock16x16.gif",Txt_Show_timetable);
+   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock16x16.gif",Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/

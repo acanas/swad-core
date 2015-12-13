@@ -417,7 +417,7 @@ static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit64x64.png",Txt_Edit);
+   Lay_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -884,6 +884,7 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    Lay_PutIconWithText ("fullscreen16x16.gif",
 		        Txt_View_in_a_new_window,
 		        Txt_View_in_a_new_window);
+   fprintf (Gbl.F.Out,"</a>");
 
    /***** End of frame *****/
    Lay_EndRoundFrame ();
@@ -921,7 +922,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Put link to view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
+   Lay_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
 			  "eye-on64x64.png",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
 

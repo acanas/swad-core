@@ -466,7 +466,7 @@ static void Att_PutFormToListMyAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Act_PutContextualLink (ActSeeLstMyAtt,NULL,
+   Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
                           "list16x16.gif",Txt_Attendance_list);
   }
 
@@ -478,7 +478,7 @@ static void Att_PutFormToListStdsAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Act_PutContextualLink (ActReqLstStdAtt,Att_PutFormToListStdsParams,
+   Lay_PutContextualLink (ActReqLstStdAtt,Att_PutFormToListStdsParams,
                           "list16x16.gif",Txt_Attendance_list);
   }
 
@@ -498,7 +498,7 @@ static void Att_PutFormToCreateNewAttEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put form to create a new attendance event *****/
-   Act_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
+   Lay_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
                           "plus64x64.png",Txt_New_event);
   }
 
@@ -528,7 +528,8 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("remove-on64x64.png",Txt_Remove);
+   Lay_PutIconLink ("remove-on64x64.png",Txt_Remove,NULL,NULL);
+   Act_FormEnd ();
 
    /***** Put form to hide/show attendance event *****/
    Act_FormStart (Hidden ? ActShoAtt :
@@ -538,9 +539,10 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    if (Hidden)
-      Act_PutIconLink ("eye-slash-on64x64.png",Txt_Show);
+      Lay_PutIconLink ("eye-slash-on64x64.png",Txt_Show,NULL,NULL);
    else
-      Act_PutIconLink ("eye-on64x64.png",Txt_Hide);
+      Lay_PutIconLink ("eye-on64x64.png",Txt_Hide,NULL,NULL);
+   Act_FormEnd ();
 
    /***** Put form to edit attendance event *****/
    Act_FormStart (ActEdiOneAtt);
@@ -548,7 +550,8 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Att_PutHiddenParamAttOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Act_PutIconLink ("edit64x64.png",Txt_Edit);
+   Lay_PutIconLink ("edit64x64.png",Txt_Edit,NULL,NULL);
+   Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2860,7 +2863,7 @@ static void Att_PutFormToPrintMyList (void)
 
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
+   Lay_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
                           "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2883,7 +2886,7 @@ static void Att_PutFormToPrintStdsList (void)
 
    /***** Link to print view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActPrnLstStdAtt,Att_PutFormToPrintStdsListParams,
+   Lay_PutContextualLink (ActPrnLstStdAtt,Att_PutFormToPrintStdsListParams,
                           "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }

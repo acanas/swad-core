@@ -173,7 +173,7 @@ void Pho_PutLinkToChangeMyPhoto (void)
    extern const char *Txt_Upload_photo;
 
    /***** Link for changing / uploading the photo *****/
-   Act_PutContextualLink (ActReqMyPho,NULL,"photo64x64.gif",
+   Lay_PutContextualLink (ActReqMyPho,NULL,"photo64x64.gif",
                           Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 		                                      Txt_Upload_photo);
   }
@@ -196,7 +196,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
       if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
-	 Act_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
+	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
 	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
 	                                                                                   ActReqOthPho),	// Guest, visitor or admin
 	                        Usr_PutParamOtherUsrCodEncrypted,
@@ -214,7 +214,7 @@ static void Pho_PutLinkToRemoveMyPhoto (void)
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Act_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",Txt_Remove_photo);
+   Lay_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",Txt_Remove_photo);
   }
 
 /*****************************************************************************/
@@ -226,7 +226,7 @@ static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Act_PutContextualLink ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+   Lay_PutContextualLink ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
 	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
 	                                                               ActRemOthPho),	// Guest, visitor or admin
                           Usr_PutParamOtherUsrCodEncrypted,
@@ -1749,7 +1749,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStats (void)
    extern const char *Txt_Print;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
+   Lay_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
                           "print64x64.png",Txt_Print);
    fprintf (Gbl.F.Out,"</div>");
   }

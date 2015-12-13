@@ -219,7 +219,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Act_PutContextualLink (Action,NULL,Icon,LogoExists ? Txt_Change_logo :
+   Lay_PutContextualLink (Action,NULL,Icon,LogoExists ? Txt_Change_logo :
 		                                        Txt_Upload_logo);
   }
 
@@ -320,6 +320,7 @@ static void Log_PutLinkToRemoveLogo (Act_Action_t Action)
    Act_FormStart (Action);
    Act_LinkFormSubmit (Txt_Remove_logo,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("remove-on64x64.png",Txt_Remove_logo,Txt_Remove_logo);
+   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
   }
 

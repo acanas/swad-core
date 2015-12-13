@@ -200,7 +200,7 @@ void Syl_EditSyllabus (void)
 	{
 	 /***** Put link to view *****/
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Act_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
+	 Lay_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
 				"eye-on64x64.png",Txt_View);
 	 fprintf (Gbl.F.Out,"</div>");
 	}

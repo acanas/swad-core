@@ -922,7 +922,7 @@ void Lay_PutFormToView (Act_Action_t Action)
    extern const char *Txt_View;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Action,NULL,"eye-on64x64.png",Txt_View);
+   Lay_PutContextualLink (Action,NULL,"eye-on64x64.png",Txt_View);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -935,8 +935,40 @@ void Lay_PutFormToEdit (Act_Action_t Action)
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_PutContextualLink (Action,NULL,"edit64x64.png",Txt_Edit);
+   Lay_PutContextualLink (Action,NULL,"edit64x64.png",Txt_Edit);
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/***************** Show an icon with a link in contextual menu ***************/
+/*****************************************************************************/
+
+void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
+                            const char *Icon,const char *Title)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+
+   // fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPTION\">");
+
+   Act_FormStart (NextAction);
+   if (FuncParams)
+      FuncParams ();
+   Lay_PutIconLink (Icon,Title,The_ClassFormBold[Gbl.Prefs.Theme],Title);
+   Act_FormEnd ();
+
+   // fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/****************** Show an icon with a link (without text) ******************/
+/*****************************************************************************/
+
+void Lay_PutIconLink (const char *Icon,const char *Title,
+                      const char *LinkStyle,const char *Text)
+  {
+   Act_LinkFormSubmit (Title,LinkStyle);
+   Lay_PutIconWithText (Icon,Title,Text);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -956,8 +988,7 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
       if (Text[0])
 	 fprintf (Gbl.F.Out,"&nbsp;%s",
 		  Text);
-   fprintf (Gbl.F.Out,"</div>"
-	              "</a>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
