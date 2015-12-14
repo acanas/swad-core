@@ -1377,6 +1377,24 @@ static void Ctr_ListCentresForEdition (void)
 	}
       fprintf (Gbl.F.Out,"</td>");
 
+      /* Number of users who claim to belong to this centre */
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u"
+			 "</td>",
+	       Ctr->NumUsrsWhoClaimToBelongToCtr);
+
+      /* Number of degrees */
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%u"
+	                 "</td>",
+               Ctr->NumDegs);
+
+      /* Number of users in courses of this centre */
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%u"
+	                 "</td>",
+               Ctr->NumUsrs);
+
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
       fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
@@ -2108,12 +2126,17 @@ static void Ctr_PutFormToCreateCentre (void)
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ctr->WWW);
 
-   /***** Number of teachers *****/
+   /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
    /***** Number of degrees *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	              "0"
+	              "</td>");
+
+   /***** Number of users in courses of this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
@@ -2203,8 +2226,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
             Txt_Place,
 	    Txt_Degrees_ABBREVIATION,
 	    Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
 	    Txt_Status);
   }
 
@@ -2220,8 +2242,10 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Users;
    extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
@@ -2252,6 +2276,9 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s+<br />%s"
+                      "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2265,8 +2292,9 @@ static void Ctr_PutHeadCentresForEdition (void)
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW,
-            Txt_Teachers_ABBREVIATION,
+            Txt_Users,
             Txt_Degrees_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
             Txt_Status,
             Txt_Requester);
   }

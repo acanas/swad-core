@@ -550,10 +550,7 @@ void Cty_ListCountries2 (void)
             Txt_Centres_ABBREVIATION,
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
-            // Txt_Teachers_ABBREVIATION,
-            // Txt_Students_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION);
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;

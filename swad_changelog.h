@@ -120,12 +120,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.66.1 (2015/12/14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.66.2 (2015/12/14)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.66.2:  Dec 14, 2015	Changes in edition of institutions, centres and degrees. (186994 lines)
         Version 15.66.1:  Dec 14, 2015	Removed unused code related to list of countries, institutions and centres by reasons of speed. (186966 lines)
         Version 15.66:    Dec 14, 2015	Number of teachers and number of students removed from list of countries, institutions and centres by reasons of speed. (187057 lines)
         Version 15.65.1:  Dec 14, 2015	Changes in layout of profile. (187031 lines)

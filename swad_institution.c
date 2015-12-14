@@ -711,12 +711,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      // "<th class=\"RIGHT_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
-                      // "<th class=\"RIGHT_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s+<br />%s"
                       "</th>"
@@ -728,10 +722,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
             Txt_Departments_ABBREVIATION,
-            // Txt_Teachers_ABBREVIATION,
-            // Txt_Students_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
             Txt_Status);
    }
 
@@ -1274,17 +1265,23 @@ static void Ins_ListInstitutionsForEdition (void)
 	}
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Number of users */
+      /* Number of users who claim to belong to this institution */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
-               Ins->NumUsrs);
+               Ins->NumUsrsWhoClaimToBelongToIns);
 
       /* Number of centres */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
                Ins->NumCtrs);
+
+      /* Number of users in courses of this institution */
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                 "%u"
+	                 "</td>",
+               Ins->NumUsrs);
 
       /* Institution status */
       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
@@ -1858,12 +1855,17 @@ static void Ins_PutFormToCreateInstitution (void)
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ins->WWW);
 
-   /***** Number of users ****/
+   /***** Number of users who claim to belong to this institution ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
    /***** Number of centres *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	              "0"
+	              "</td>");
+
+   /***** Number of users in courses of this institution ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
@@ -1904,6 +1906,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
@@ -1931,6 +1935,9 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s+<br />%s"
+                      "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1945,6 +1952,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
             Txt_WWW,
             Txt_Users,
             Txt_Centres_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
             Txt_Status,
             Txt_Requester);
   }

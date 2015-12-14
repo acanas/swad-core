@@ -83,9 +83,9 @@ struct Course
    long RequesterUsrCod;				// User code of the person who requested the creation of this course
    char ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];	// Short name of course
    char FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];	// Full name of course
-   unsigned NumStds;					// Number of students
-   unsigned NumTchs;					// Number of teachers
    unsigned NumUsrs;					// Number of users (students + teachers)
+   unsigned NumTchs;					// Number of teachers
+   unsigned NumStds;					// Number of students
   };
 
 /*****************************************************************************/

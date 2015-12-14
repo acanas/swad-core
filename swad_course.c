@@ -1333,17 +1333,17 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 
-	 /* Current number of students in this course */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-			    "%u"
-			    "</td>",
-		  TxtClassNormal,BgColor,Crs->NumStds);
-
 	 /* Current number of teachers in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 			    "%u"
 			    "</td>",
 		  TxtClassNormal,BgColor,Crs->NumTchs);
+
+	 /* Current number of students in this course */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+			    "%u"
+			    "</td>",
+		  TxtClassNormal,BgColor,Crs->NumStds);
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1794,8 +1794,8 @@ static void Crs_PutHeadCoursesForSeeing (void)
             Txt_Institutional_BR_code,
             Txt_Year_OF_A_DEGREE,
             Txt_Course,
-            Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
             Txt_Status);
   }
 
