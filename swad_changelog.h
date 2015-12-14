@@ -112,17 +112,20 @@
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to one user, suggested by Francisco Ocaña Lara
 // TODO: Reply to all
+// TODO: Reply icons should appear without text
+// TODO: Link to remove messages is too wide. For example: "Remove these X messages".
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.65 (2015/12/13)"
-#define CSS_FILE		"swad15.65.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.65.1 (2015/12/14)"
+#define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.65.1:  Dec 14, 2015	Changes in layout of profile. (187031 lines)
         Version 15.65:    Dec 13, 2015	Change in layout of contextual links. (187009 lines)
         Version 15.64.18: Dec 13, 2015	Code refactoring in contextual links. (187004 lines)
         Version 15.64.17: Dec 13, 2015	Code refactoring in contextual links.

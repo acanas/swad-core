@@ -5548,6 +5548,27 @@ const char *Txt_courses =
 	"disciplinas";
 #endif
 
+const char *Txt_courses_ABBREVIATION =
+#if   L==1
+	"assig.";
+#elif L==2
+	"Veran.";
+#elif L==3
+	"cours.";
+#elif L==4
+	"asig.";
+#elif L==5
+	"mat.";
+#elif L==6
+	"asig.";	// Okoteve traducción
+#elif L==7
+	"corsi";
+#elif L==8
+	"kurs.";
+#elif L==9
+	"disc.";
+#endif
+
 const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Se ha(n) eliminado %u asignatura(s).";		// Necessita traduccio

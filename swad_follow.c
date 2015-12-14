@@ -136,9 +136,6 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW\">");
 
    /***** Number *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
-        	                         "FOLLOW_NUM");
    if (NumUsrs)
      {
       /* Form to list users */
@@ -148,13 +145,18 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                           (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
         	                                       "FOLLOW_NUM");
      }
+   else
+      fprintf (Gbl.F.Out,"<span class=\"%s\">",
+	       (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
+					    "FOLLOW_NUM");
    fprintf (Gbl.F.Out,"%u",NumUsrs);
    if (NumUsrs)
      {
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
-   fprintf (Gbl.F.Out,"</div>");
+   else
+      fprintf (Gbl.F.Out,"</span>");
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",

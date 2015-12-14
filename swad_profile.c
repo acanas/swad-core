@@ -280,8 +280,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
-   extern const char *Txt_course;
-   extern const char *Txt_courses;
+   extern const char *Txt_courses_ABBREVIATION;
    extern const char *Txt_Files;
    extern const char *Txt_file;
    extern const char *Txt_files;
@@ -320,8 +319,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsTeacher,
-	    (NumCrssUsrIsTeacher == 1) ? Txt_course :
-					 Txt_courses);
+	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsTeacher)
       fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_TEACHER),
@@ -338,8 +336,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsStudent,
-	    (NumCrssUsrIsStudent == 1) ? Txt_course :
-					 Txt_courses);
+	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsStudent)
       fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_TEACHER),
@@ -424,7 +421,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"&nbsp;(");
 	    Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s&nbsp;",Txt_day);
+	    fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
 	    Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
 			     Prf_GetNumUsrsWithNumClicksPerDay ());
 	    fprintf (Gbl.F.Out,")");
@@ -459,7 +456,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"&nbsp;(");
 	    Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
 			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
 	}
       else	// Number of file views is unknown
@@ -491,7 +488,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"&nbsp;(");
 	    Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
 	}
       else	// Number of forum posts is unknown
@@ -523,7 +520,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"&nbsp;(");
 	    Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"&nbsp;/&nbsp;%s)",Txt_day);
+	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
 	}
       else	// Number of clicks is unknown
