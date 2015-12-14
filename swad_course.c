@@ -1051,8 +1051,8 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
 
    if (NumRows) // Courses found...
      {
-      // NumRows should be equal to Deg->NumCourses
-      Gbl.CurrentDeg.Deg.NumCourses = (unsigned) NumRows;
+      // NumRows should be equal to Deg->NumCrss
+      Gbl.CurrentDeg.Deg.NumCrss = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
       if ((Gbl.CurrentDeg.Deg.LstCrss = (struct Course *) calloc (NumRows,sizeof (struct Course))) == NULL)
@@ -1060,7 +1060,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
 
       /***** Get the courses in degree *****/
       for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.Deg.NumCourses;
+	   NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
 	   NumCrs++)
         {
          Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
@@ -1071,7 +1071,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
         }
      }
    else
-      Gbl.CurrentDeg.Deg.NumCourses = 0;
+      Gbl.CurrentDeg.Deg.NumCrss = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1088,7 +1088,7 @@ void Crs_FreeListCoursesInDegree (struct Degree *Deg)
       /***** Free memory used by the list of courses in degree *****/
       free ((void *) Deg->LstCrss);
       Deg->LstCrss = NULL;
-      Deg->NumCourses = 0;
+      Deg->NumCrss = 0;
      }
   }
 
@@ -1186,7 +1186,7 @@ static void Crs_ListCourses (void)
    extern const char *Txt_Create_course;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.CurrentDeg.Deg.NumCourses)	// There are courses in the current degree
+   if (Gbl.CurrentDeg.Deg.NumCrss)	// There are courses in the current degree
      {
       if (ICanEdit)
 	 Lay_PutFormToEdit (ActEdiCrs);
@@ -1210,7 +1210,7 @@ static void Crs_ListCourses (void)
 
 static void Crs_EditCourses (void)
   {
-   if (Gbl.CurrentDeg.Deg.NumCourses)
+   if (Gbl.CurrentDeg.Deg.NumCrss)
       /***** Put link (form) to view courses *****/
       Lay_PutFormToView (ActSeeCrs);
 
@@ -1218,7 +1218,7 @@ static void Crs_EditCourses (void)
    Crs_PutFormToCreateCourse ();
 
    /***** Forms to edit current courses *****/
-   if (Gbl.CurrentDeg.Deg.NumCourses)
+   if (Gbl.CurrentDeg.Deg.NumCrss)
       Crs_ListCoursesForEdition ();
   }
 
@@ -1271,7 +1271,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
    /***** Write all the courses of this year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.CurrentDeg.Deg.NumCourses;
+	NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
 	NumCrs++)
      {
       Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
@@ -1390,7 +1390,7 @@ static void Crs_ListCoursesForEdition (void)
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
 	Year++)
       for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.Deg.NumCourses;
+	   NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
 	   NumCrs++)
         {
          Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);

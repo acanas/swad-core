@@ -79,7 +79,7 @@ struct Degree
    unsigned FirstYear;
    unsigned LastYear;
    char WWW[Cns_MAX_LENGTH_WWW+1];
-   unsigned NumCourses;					// Number of courses in the degree
+   unsigned NumCrss;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
   };
 struct DegreeType

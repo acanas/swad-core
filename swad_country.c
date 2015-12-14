@@ -587,12 +587,6 @@ void Cty_ListCountries2 (void)
                          "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
-                         // "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         // "%u"
-                         // "</td>"
-                         // "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         // "%u"
-                         // "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
@@ -602,8 +596,6 @@ void Cty_ListCountries2 (void)
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumCtrs,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumDegs,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumCrss,
-	       // BgColor,Gbl.Ctys.Lst[NumCty].NumTchs,
-	       // BgColor,Gbl.Ctys.Lst[NumCty].NumStds,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrs);
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
@@ -675,12 +667,6 @@ void Cty_ListCountries2 (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      // "<td class=\"DAT RIGHT_MIDDLE\">"
-                      // "0"
-                      // "</td>"
-                      // "<td class=\"DAT RIGHT_MIDDLE\">"
-                      // "0"
-                      // "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "0"
                       "</td>"
@@ -1020,7 +1006,6 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	 }
                Cty->NumUsrsWhoClaimToBelongToCty = 0;
                Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
-               // Cty->NumUsrs = Cty->NumTchs = Cty->NumStds = 0;
                Cty->NumUsrs = 0;
 
                /* Get the name of the country in current language */
@@ -1053,9 +1038,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                Cty->NumCrss = Crs_GetNumCrssInCty (Cty->CtyCod);
 
                /* Get number of users in courses of this country */
-               Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	       // Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
-	       // Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
+               Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users"
                break;
            }
         }
@@ -1181,10 +1164,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       Cty->WWW[Lan][0] = '\0';
      }
    Cty->NumUsrsWhoClaimToBelongToCty = 0;
+   Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
    Cty->NumUsrs = 0;
-   // Cty->NumStds = 0;
-   // Cty->NumTchs = 0;
-   Cty->NumInss = 0;
 
    /***** Check if country code is correct *****/
    if (Cty->CtyCod == 0)
@@ -1280,9 +1261,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	       Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
 	    /* Get number of user in courses of this institution */
-	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	    // Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
-	    // Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
+	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users"
 
 	    /* Get number of institutions in this country */
 	    Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);

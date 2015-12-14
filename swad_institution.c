@@ -638,22 +638,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumDpts);
 
-   /* Number of teachers in courses of this institution */
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumTchs);
-   */
-
-   /* Number of students in courses of this institution */
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumStds);
-   */
-
    /* Number of users in courses of this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
@@ -897,7 +881,6 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                Ins->NumUsrsWhoClaimToBelongToIns = 0;
                Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
                Ins->NumUsrs = 0;
-               // Ins->NumUsrs = Ins->NumTchs = Ins->NumStds = 0;
                break;
             case Ins_GET_EXTRA_DATA:
                /* Get number of users who claim to belong to this institution (row[7]) */
@@ -917,9 +900,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
 
                /* Get number of users in courses */
-	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	       // Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
-	       // Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
+	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
                break;
            }
         }
@@ -948,11 +929,11 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
    Ins->Status = (Ins_Status_t) 0;
    Ins->RequesterUsrCod = -1L;
    Ins->ShortName[0] =
-   Ins->FullName[0]  =
-   Ins->WWW[0]       = '\0';
-   // Ins->NumStds = Ins->NumTchs = Ins->NumUsrs =
-   Ins->NumUsrs =
-   Ins->NumCtrs = Ins->NumDpts = Ins->NumDegs = 0;
+   Ins->FullName[0] =
+   Ins->WWW[0] = '\0';
+   Ins->NumUsrsWhoClaimToBelongToIns = 0;
+   Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+   Ins->NumUsrs = 0;
 
    /***** Check if institution code is correct *****/
    if (Ins->InsCod <= 0)
@@ -1005,9 +986,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
 	 Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
 
 	 /* Get number of users in courses of this institution */
-	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	 // Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
-	 // Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
+	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
 	}
      }
    else

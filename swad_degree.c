@@ -447,7 +447,7 @@ static void Deg_Configuration (bool PrintView)
 	                    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Courses,Gbl.CurrentDeg.Deg.NumCourses);
+		  Txt_Courses,Gbl.CurrentDeg.Deg.NumCrss);
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -1313,11 +1313,11 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
-	    Deg->NumCourses ? "ok_green" :
+	    Deg->NumCrss ? "ok_green" :
 		              "tr",
-	    Deg->NumCourses ? Txt_DEGREE_With_courses :
+	    Deg->NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses,
-	    Deg->NumCourses ? Txt_DEGREE_With_courses :
+	    Deg->NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
 
    /***** Number of degree in this list *****/
@@ -1355,7 +1355,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClassNormal,BgColor,Deg->NumCourses);
+	    TxtClassNormal,BgColor,Deg->NumCrss);
 
    /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -1410,7 +1410,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Put icon to remove degree */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Deg->NumCourses ||	// Degree has courses ==> deletion forbidden
+      if (Deg->NumCrss ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
          Lay_PutIconRemovalNotAllowed ();
       else
@@ -1602,7 +1602,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
-               Deg->NumCourses);
+               Deg->NumCrss);
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -2693,7 +2693,7 @@ void Deg_RemoveDegree (void)
    Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Check if this degree has courses *****/
-   if (Deg.NumCourses)	// Degree has courses ==> don't remove
+   if (Deg.NumCrss)	// Degree has courses ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
@@ -2863,7 +2863,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
       Deg->WWW[0] = '\0';
-      Deg->NumCourses = 0;
+      Deg->NumCrss = 0;
       Deg->LstCrss = NULL;
       return false;
      }
@@ -2895,7 +2895,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->FirstYear = 0;
       Deg->LastYear = 0;
       Deg->WWW[0] = '\0';
-      Deg->NumCourses = 0;
+      Deg->NumCrss = 0;
       Deg->LstCrss = NULL;
       return false;
      }
@@ -2947,7 +2947,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    strcpy (Deg->WWW,row[9]);
 
    /***** Get number of courses *****/
-   Deg->NumCourses = Crs_GetNumCrssInDeg (Deg->DegCod);
+   Deg->NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
   }
 
 /*****************************************************************************/

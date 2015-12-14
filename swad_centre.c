@@ -707,24 +707,6 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    TxtClassNormal,BgColor,
 	    Ctr->NumCrss);
 
-   /***** Number of teachers in courses of this centre *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
-	    TxtClassNormal,BgColor,
-	    Ctr->NumTchs);
-   */
-
-   /***** Number of students in courses of this centre *****/
-   /*
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
-	    TxtClassNormal,BgColor,
-	    Ctr->NumStds);
-   */
-
    /***** Number of users in courses of this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 		      "%u"
@@ -909,9 +891,7 @@ void Ctr_GetListCentres (long InsCod)
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
 
 	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	 // Ctr->NumTchs = Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Ctr->CtrCod);
-	 // Ctr->NumStds = Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Ctr->CtrCod);
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users"
         }
      }
    else
@@ -941,11 +921,8 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->FullName[0]  = '\0';
    Ctr->WWW[0]       = '\0';
    Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
-   Ctr->NumDegs = 0;
-   Ctr->NumCrss = 0;
+   Ctr->NumDegs = Ctr->NumCrss = 0;
    Ctr->NumUsrs = 0;
-   // Ctr->NumTchs = 0;
-   // Ctr->NumStds = 0;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -1008,9 +985,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
 
 	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	 // Ctr->NumTchs = Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Ctr->CtrCod);
-	 // Ctr->NumStds = Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Ctr->CtrCod);
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users"
 
          /* Set return value */
          CtrFound = true;
@@ -1401,22 +1376,6 @@ static void Ctr_ListCentresForEdition (void)
          fprintf (Gbl.F.Out,"</a>");
 	}
       fprintf (Gbl.F.Out,"</td>");
-
-      /* Number of teachers */
-      /*
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
-               Ctr->NumTchs);
-      */
-
-      /* Number of degrees */
-      /*
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
-               Ctr->NumDegs);
-      */
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
@@ -2234,12 +2193,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      // "<th class=\"LEFT_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
-                      // "<th class=\"LEFT_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s+<br />%s"
                       "</th>"
@@ -2250,8 +2203,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
             Txt_Place,
 	    Txt_Degrees_ABBREVIATION,
 	    Txt_Courses_ABBREVIATION,
-            // Txt_Teachers_ABBREVIATION,
-            // Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
             Txt_Students_ABBREVIATION,
 	    Txt_Status);

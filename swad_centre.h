@@ -71,8 +71,6 @@ struct Centre
    unsigned NumDegs;		// Number of degrees in this centre
    unsigned NumCrss;		// Number of courses in this centre
    unsigned NumUsrs;		// Number of users in courses of this centre
-   // unsigned NumTchs;		// Number of teachers in courses of this centre
-   // unsigned NumStds;		// Number of students in courses of this centre
   };
 
 typedef enum

@@ -53,8 +53,6 @@ struct Country
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumUsrs;	// Number of users in courses of the institution
-   // unsigned NumStds;	// Number of students in courses of the institution
-   // unsigned NumTchs;	// Number of teachers in courses of the institution
   };
 
 typedef enum

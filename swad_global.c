@@ -244,7 +244,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Inss.EditingIns.ShortName[0] = '\0';
    Gbl.Inss.EditingIns.FullName[0] = '\0';
    Gbl.Inss.EditingIns.WWW[0] = '\0';
-   // Gbl.Inss.EditingIns.NumStds = Gbl.Inss.EditingIns.NumTchs = Gbl.Inss.EditingIns.NumUsrs =
    Gbl.Inss.EditingIns.NumCtrs = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
    Gbl.Inss.EditingIns.NumUsrs = 0;
 
@@ -310,7 +309,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingDeg.FirstYear    =
    Gbl.Degs.EditingDeg.LastYear     = 0;
    Gbl.Degs.EditingDeg.WWW[0]       = '\0';
-   Gbl.Degs.EditingDeg.NumCourses   = 0;
+   Gbl.Degs.EditingDeg.NumCrss      = 0;
    Gbl.Degs.EditingDeg.LstCrss      = NULL;
 
    Gbl.Degs.EditingCrs.CrsCod       = -1L;
