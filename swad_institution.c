@@ -639,16 +639,20 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 	    TxtClassNormal,BgColor,Ins->NumDpts);
 
    /* Number of teachers in courses of this institution */
+   /*
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumTchs);
+   */
 
    /* Number of students in courses of this institution */
+   /*
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
 	    TxtClassNormal,BgColor,Ins->NumStds);
+   */
 
    /* Number of users in courses of this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -723,12 +727,12 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
+                      // "<th class=\"RIGHT_MIDDLE\">"
+                      // "%s"
+                      // "</th>"
+                      // "<th class=\"RIGHT_MIDDLE\">"
+                      // "%s"
+                      // "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s+<br />%s"
                       "</th>"
@@ -740,8 +744,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
             Txt_Departments_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
+            // Txt_Teachers_ABBREVIATION,
+            // Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
             Txt_Students_ABBREVIATION,
             Txt_Status);
@@ -892,7 +896,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
             case Ins_GET_BASIC_DATA:
                Ins->NumUsrsWhoClaimToBelongToIns = 0;
                Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
-               Ins->NumUsrs = Ins->NumTchs = Ins->NumStds = 0;
+               Ins->NumUsrs = 0;
+               // Ins->NumUsrs = Ins->NumTchs = Ins->NumStds = 0;
                break;
             case Ins_GET_EXTRA_DATA:
                /* Get number of users who claim to belong to this institution (row[7]) */
@@ -913,8 +918,8 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
                /* Get number of users in courses */
 	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	       Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
-	       Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
+	       // Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
+	       // Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
                break;
            }
         }
@@ -945,7 +950,8 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
    Ins->ShortName[0] =
    Ins->FullName[0]  =
    Ins->WWW[0]       = '\0';
-   Ins->NumStds = Ins->NumTchs = Ins->NumUsrs =
+   // Ins->NumStds = Ins->NumTchs = Ins->NumUsrs =
+   Ins->NumUsrs =
    Ins->NumCtrs = Ins->NumDpts = Ins->NumDegs = 0;
 
    /***** Check if institution code is correct *****/
@@ -1000,8 +1006,8 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
 
 	 /* Get number of users in courses of this institution */
 	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	 Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
-	 Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
+	 // Ins->NumStds = Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Ins->InsCod);
+	 // Ins->NumTchs = Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Ins->InsCod);
 	}
      }
    else
@@ -2186,7 +2192,7 @@ unsigned Ins_ListInssFound (const char *Query)
 
       /* Number of institutions found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"10\" class=\"CENTER_MIDDLE\">");
+			 "<th colspan=\"9\" class=\"CENTER_MIDDLE\">");
       if (NumInss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_institution);
       else

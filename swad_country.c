@@ -536,12 +536,12 @@ void Cty_ListCountries2 (void)
                       "<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
+                      // "<th class=\"RIGHT_MIDDLE\">"
+	              // "%s"
+	              // "</th>"
+                      // "<th class=\"RIGHT_MIDDLE\">"
+                      // "%s"
+                      // "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s+<br />%s"
                       "</th>"
@@ -550,8 +550,8 @@ void Cty_ListCountries2 (void)
             Txt_Centres_ABBREVIATION,
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
+            // Txt_Teachers_ABBREVIATION,
+            // Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
             Txt_Students_ABBREVIATION);
 
@@ -587,12 +587,12 @@ void Cty_ListCountries2 (void)
                          "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
+                         // "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                         // "%u"
+                         // "</td>"
+                         // "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                         // "%u"
+                         // "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE %s\">"
                          "%u"
                          "</td>"
@@ -602,8 +602,8 @@ void Cty_ListCountries2 (void)
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumCtrs,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumDegs,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumCrss,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumTchs,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumStds,
+	       // BgColor,Gbl.Ctys.Lst[NumCty].NumTchs,
+	       // BgColor,Gbl.Ctys.Lst[NumCty].NumStds,
 	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrs);
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
@@ -635,12 +635,12 @@ void Cty_ListCountries2 (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
+                      // "<td class=\"DAT RIGHT_MIDDLE\">"
+                      // "%u"
+                      // "</td>"
+                      // "<td class=\"DAT RIGHT_MIDDLE\">"
+                      // "%u"
+                      // "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
@@ -651,8 +651,8 @@ void Cty_ListCountries2 (void)
             Ctr_GetNumCtrsInCty (0),
             Deg_GetNumDegsInCty (0),
             Crs_GetNumCrssInCty (0),
-            Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,0),
-            Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,0),
+            // Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,0),
+            // Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,0),
             Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,0));
 
    /***** Write users and institutions with unknown country *****/
@@ -675,12 +675,12 @@ void Cty_ListCountries2 (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0"
-                      "</td>"
+                      // "<td class=\"DAT RIGHT_MIDDLE\">"
+                      // "0"
+                      // "</td>"
+                      // "<td class=\"DAT RIGHT_MIDDLE\">"
+                      // "0"
+                      // "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "0"
                       "</td>"
@@ -1020,7 +1020,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	 }
                Cty->NumUsrsWhoClaimToBelongToCty = 0;
                Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
-               Cty->NumUsrs = Cty->NumTchs = Cty->NumStds = 0;
+               // Cty->NumUsrs = Cty->NumTchs = Cty->NumStds = 0;
+               Cty->NumUsrs = 0;
 
                /* Get the name of the country in current language */
                strcpy (Cty->Name[Gbl.Prefs.Language],row[2]);
@@ -1053,8 +1054,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
                /* Get number of users in courses of this country */
                Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	       Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
-	       Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
+	       // Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
+	       // Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
                break;
            }
         }
@@ -1181,8 +1182,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
      }
    Cty->NumUsrsWhoClaimToBelongToCty = 0;
    Cty->NumUsrs = 0;
-   Cty->NumStds = 0;
-   Cty->NumTchs = 0;
+   // Cty->NumStds = 0;
+   // Cty->NumTchs = 0;
    Cty->NumInss = 0;
 
    /***** Check if country code is correct *****/
@@ -1280,8 +1281,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 
 	    /* Get number of user in courses of this institution */
 	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users", NumUsrs <= NumStds + NumTchs
-	    Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
-	    Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
+	    // Cty->NumStds = Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Cty->CtyCod);
+	    // Cty->NumTchs = Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Cty->CtyCod);
 
 	    /* Get number of institutions in this country */
 	    Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);

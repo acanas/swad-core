@@ -214,8 +214,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentIns.Ins.ShortName[0] = '\0';
    Gbl.CurrentIns.Ins.FullName[0] = '\0';
    Gbl.CurrentIns.Ins.WWW[0] = '\0';
-   Gbl.CurrentIns.Ins.NumStds = Gbl.CurrentIns.Ins.NumTchs = Gbl.CurrentIns.Ins.NumUsrs =
+   // Gbl.CurrentIns.Ins.NumStds = Gbl.CurrentIns.Ins.NumTchs = Gbl.CurrentIns.Ins.NumUsrs =
    Gbl.CurrentIns.Ins.NumCtrs = Gbl.CurrentIns.Ins.NumDpts = Gbl.CurrentIns.Ins.NumDegs = 0;
+   Gbl.CurrentIns.Ins.NumUsrs = 0;
 
    Gbl.CurrentCtr.Ctr.CtrCod = -1L;
    Gbl.CurrentCtr.Ctr.InsCod = -1L;
@@ -243,8 +244,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Inss.EditingIns.ShortName[0] = '\0';
    Gbl.Inss.EditingIns.FullName[0] = '\0';
    Gbl.Inss.EditingIns.WWW[0] = '\0';
-   Gbl.Inss.EditingIns.NumStds = Gbl.Inss.EditingIns.NumTchs = Gbl.Inss.EditingIns.NumUsrs =
+   // Gbl.Inss.EditingIns.NumStds = Gbl.Inss.EditingIns.NumTchs = Gbl.Inss.EditingIns.NumUsrs =
    Gbl.Inss.EditingIns.NumCtrs = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
+   Gbl.Inss.EditingIns.NumUsrs = 0;
 
    Gbl.Ctys.Num = 0;
    Gbl.Ctys.Lst = NULL;

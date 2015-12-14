@@ -69,9 +69,9 @@ struct Institution
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumDpts;
-   unsigned NumUsrs;
-   unsigned NumTchs;
-   unsigned NumStds;
+   unsigned NumUsrs;		// Number of users in courses of this institution
+   // unsigned NumTchs;		// Number of teachers in courses of this institution
+   // unsigned NumStds;		// Number of students in courses of this institution
   };
 
 typedef enum

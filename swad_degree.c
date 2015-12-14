@@ -3953,7 +3953,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 
       /* Number of degrees found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"10\" class=\"CENTER_MIDDLE\"\">");
+			 "<td colspan=\"8\" class=\"CENTER_MIDDLE\"\">");
       if (NumDegs == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_degree);
       else

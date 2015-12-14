@@ -3408,6 +3408,8 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 		     " AND courses.CrsCod=crs_usr.CrsCod",
 	       CtrCod);
    else
+      // This query is very slow.
+      // It's a bad idea to get number of teachers or students for a big list of centres
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM degrees,courses,crs_usr"
 		     " WHERE degrees.CtrCod='%ld'"
@@ -3437,6 +3439,8 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 		     " AND courses.CrsCod=crs_usr.CrsCod",
 	       InsCod);
    else
+      // This query is very slow.
+      // It's a bad idea to get number of teachers or students for a big list of institutions
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM centres,degrees,courses,crs_usr"
 		     " WHERE centres.InsCod='%ld'"
@@ -3468,6 +3472,8 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
 		     " AND courses.CrsCod=crs_usr.CrsCod",
 	       CtyCod);
    else
+      // This query is very slow.
+      // It's a bad idea to get number of teachers or students for a big list of countries
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM institutions,centres,degrees,courses,crs_usr"
 		     " WHERE institutions.CtyCod='%ld'"

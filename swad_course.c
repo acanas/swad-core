@@ -3057,7 +3057,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 
       /* Number of courses found */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
+			 "<th colspan=\"6\" class=\"CENTER_MIDDLE\">");
       if (NumCrss == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_course);
       else
