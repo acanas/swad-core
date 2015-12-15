@@ -120,12 +120,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.66.2 (2015/12/14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.66.3 (2015/12/15)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.66.3:  Dec 15, 2015	Changes in some small icons.
+					Fixed bug in record card. (187004 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Ver informaci&oacute;n pa&iacute;s' WHERE ActCod='1155' AND Language='es';
+UPDATE actions SET Txt='Imprimir informaci&oacute;n pa&iacute;s' WHERE ActCod='1156' AND Language='es';
+
         Version 15.66.2:  Dec 14, 2015	Changes in edition of institutions, centres and degrees. (186994 lines)
         Version 15.66.1:  Dec 14, 2015	Removed unused code related to list of countries, institutions and centres by reasons of speed. (186966 lines)
         Version 15.66:    Dec 14, 2015	Number of teachers and number of students removed from list of countries, institutions and centres by reasons of speed. (187057 lines)
@@ -2237,8 +2243,8 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1151','es','N','Ver 
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1152','es','N','Imprimir informaci&oacute;n centro');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1153','es','N','Ver informaci&oacute;n instituci&oacute;n');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1154','es','N','Imprimir informaci&oacute;n instituci&oacute;n');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1155','es','N','Ver informaci&oacute;n instituci&oacute;n');
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1156','es','N','Imprimir informaci&oacute;n instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1155','es','N','Ver informaci&oacute;n pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1156','es','N','Imprimir informaci&oacute;n pa&iacute;s');
 
 	Version 13.20:    Dec 12, 2013	Course configuration is integrated with course introduction.
 					New option to view degree configuration. (159558 lines)

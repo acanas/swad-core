@@ -152,7 +152,7 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLink (ActReqSignUp,NULL,"signup16x16.gif",
+   Lay_PutContextualLink (ActReqSignUp,NULL,"enrollmentrequest64x64.gif",
                           Txt_Sign_up,Txt_Sign_up);
   }
 

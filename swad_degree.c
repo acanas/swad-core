@@ -1314,7 +1314,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
 	    Deg->NumCrss ? "ok_green" :
-		              "tr",
+		           "tr",
 	    Deg->NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses,
 	    Deg->NumCrss ? Txt_DEGREE_With_courses :

@@ -1120,13 +1120,19 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);
 
-   /***** Link to country information *****/
-   Act_FormStart (ActSeeCtyInf);
-   Cty_PutParamCtyCod (CtyCod);
-   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
-		       Class);
-   fprintf (Gbl.F.Out,"%s</a>",CtyName);
-   Act_FormEnd ();
+   if (Gbl.InsideForm)	// If we are writing another form
+      /***** Write country name without link *****/
+      fprintf (Gbl.F.Out,"%s",CtyName);
+   else
+     {
+      /***** Write country name with link to country information *****/
+      Act_FormStart (ActSeeCtyInf);
+      Cty_PutParamCtyCod (CtyCod);
+      Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
+		          Class);
+      fprintf (Gbl.F.Out,"%s</a>",CtyName);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/

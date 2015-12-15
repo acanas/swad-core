@@ -331,11 +331,11 @@ static void Ban_ListBannersForEdition (void)
       Act_FormStart (Ban->IsHidden ? ActShoBan :
 	                             ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
                Gbl.Prefs.IconsURL,
-               Ban->IsHidden ? "hidden" :
-        	               "visible",
+               Ban->IsHidden ? "eye-slash-on64x64.png" :
+        	               "eye-on64x64.png",
                Ban->IsHidden ? Txt_Show :
         	               Txt_Hide,
                Ban->IsHidden ? Txt_Show :

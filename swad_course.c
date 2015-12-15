@@ -506,7 +506,7 @@ void Crs_ChangeCourseConfig (void)
 /************************ Write menu with my courses *************************/
 /*****************************************************************************/
 
-#define Crs_MAX_BYTES_TXT_LINK 60
+#define Crs_MAX_BYTES_TXT_LINK 40
 
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
@@ -551,7 +551,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
                        The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sys16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/sys64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />",
 	    Gbl.Prefs.IconsURL,
@@ -742,8 +742,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Act_FormStart (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
-		  Act_LinkFormSubmit (Gbl.Title,
-		                      The_ClassForm[Gbl.Prefs.Theme]);
+		  Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme]);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON20x20\" />",
