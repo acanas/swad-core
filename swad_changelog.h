@@ -120,12 +120,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.66.3 (2015/12/15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.67 (2015/12/15)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.67:    Dec 15, 2015	Fixed bugs in queries of enrollment requests. (187140 lines)
         Version 15.66.3:  Dec 15, 2015	Changes in some small icons.
 					Fixed bug in record card. (187004 lines)
 					2 changes necessary in database:
