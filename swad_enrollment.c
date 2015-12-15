@@ -855,18 +855,18 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_the_course_X;
-   extern const char *Txt_Register_user_in_the_course_X;
-   extern const char *Txt_Register_user_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Register_user_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Register_user_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Register_USER_in_the_course_X;
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_me_from_the_course_X;
-   extern const char *Txt_Remove_user_from_the_course_X;
+   extern const char *Txt_Remove_USER_from_the_course_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Remove_user_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Remove_user_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X;
    extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Remove_user_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Eliminate_my_user_account;
    extern const char *Txt_Eliminate_user_account;
    unsigned NumOptionsShown = 0;
@@ -917,7 +917,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       sprintf (Gbl.Message,UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
 		                                      Txt_Modify_user_in_the_course_X) :
 	                                     (ItsMe ? Txt_Register_me_in_the_course_X :
-		                                      Txt_Register_user_in_the_course_X),
+		                                      Txt_Register_USER_in_the_course_X),
 	       Gbl.CurrentCrs.Crs.ShortName);
       fprintf (Gbl.F.Out,"<li>"
 			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -941,7 +941,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    if (!UsrIsDegAdmin &&
 		Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	      {
-	       sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_degree_X,
+	       sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_degree_X,
 			Gbl.CurrentDeg.Deg.ShortName);
 	       fprintf (Gbl.F.Out,"<li>"
 				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -960,7 +960,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 if (!UsrIsCtrAdmin &&
 	     Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	   {
-	    sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_centre_X,
+	    sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_centre_X,
 		     Gbl.CurrentCtr.Ctr.ShortName);
 	    fprintf (Gbl.F.Out,"<li>"
 			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -980,7 +980,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       if (!UsrIsInsAdmin &&
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
-	 sprintf (Gbl.Message,Txt_Register_user_as_an_administrator_of_the_institution_X,
+	 sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_institution_X,
 		  Gbl.CurrentIns.Ins.ShortName);
 	 fprintf (Gbl.F.Out,"<li>"
 			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -1001,7 +1001,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      {
       sprintf (Gbl.Message,
 	       ItsMe ? Txt_Remove_me_from_the_course_X :
-		       Txt_Remove_user_from_the_course_X,
+		       Txt_Remove_USER_from_the_course_X,
 	       Gbl.CurrentCrs.Crs.ShortName);
       fprintf (Gbl.F.Out,"<li>"
 			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -1027,7 +1027,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	      {
 	       sprintf (Gbl.Message,
 			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-				Txt_Remove_user_as_an_administrator_of_the_degree_X,
+				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
 			Gbl.CurrentDeg.Deg.ShortName);
 	       fprintf (Gbl.F.Out,"<li>"
 				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -1048,7 +1048,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	   {
 	    sprintf (Gbl.Message,
 		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
-			     Txt_Remove_user_as_an_administrator_of_the_centre_X,
+			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
 		     Gbl.CurrentCtr.Ctr.ShortName);
 	    fprintf (Gbl.F.Out,"<li>"
 			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -1070,7 +1070,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	{
 	 sprintf (Gbl.Message,
 		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-			  Txt_Remove_user_as_an_administrator_of_the_institution_X,
+			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
 		  Gbl.CurrentIns.Ins.ShortName);
 	 fprintf (Gbl.F.Out,"<li>"
 			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -3843,7 +3843,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
    extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Remove_me_as_an_administrator;
-   extern const char *Txt_Remove_user_as_an_administrator;
+   extern const char *Txt_Remove_USER_as_an_administrator;
    static const Act_Action_t Enr_ActRemAdm[Sco_NUM_SCOPES] =
      {
       ActUnk,		// Sco_SCOPE_UNK
@@ -3868,7 +3868,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       Act_FormStart (Enr_ActRemAdm[Scope]);
       Usr_PutParamOtherUsrCodEncrypted ();
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_as_an_administrator :
-                                   Txt_Remove_user_as_an_administrator);
+                                   Txt_Remove_USER_as_an_administrator);
       Act_FormEnd ();
      }
    else

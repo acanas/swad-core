@@ -28452,114 +28452,114 @@ const char *Txt_Register_me_in_the_course_X =	// Warning: it is very important t
 	"Registrar me na disciplina <strong>%s</strong>";
 #endif
 
-const char *Txt_Register_user_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriure usuari en l'assignatura <strong>%s</strong>";
+	"Inscriure en l'assignatura <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Benutzer im Kurs <strong>%s</strong>";
+	"Anmeldung im Kurs <strong>%s</strong>";
 #elif L==3
-	"Register user in the course <strong>%s</strong>";
+	"Register in the course <strong>%s</strong>";
 #elif L==4
-	"Inscribir usuario en la asignatura <strong>%s</strong>";
+	"Inscribir en la asignatura <strong>%s</strong>";
 #elif L==5
-	"Inscrire utilisateur dans la mati&egrave;re <strong>%s</strong>";
+	"Inscrire dans la mati&egrave;re <strong>%s</strong>";
 #elif L==6
-	"Inscribir usuario en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Inscribir en la asignatura <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrare utente nel corso <strong>%s</strong>";
+	"Registrare nel corso <strong>%s</strong>";
 #elif L==8
-	"Rejestracja u&zdot;ytkownika w kurs <strong>%s</strong>";
+	"Rejestracja w kurs <strong>%s</strong>";
 #elif L==9
-	"Registrar utilizador na disciplina <strong>%s</strong>";
+	"Registrar na disciplina <strong>%s</strong>";
 #endif
 
-const char *Txt_Register_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_USER_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriure usuari com a administrador"
+	"Inscriure com a administrador"
 	" del centre <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Benutzer als Administrator"
+	"Anmeldung als Administrator"
 	" des Lehrinstitut <strong>%s</strong>";
 #elif L==3
-	"Register user as an administrator"
+	"Register as an administrator"
 	" of the centre <strong>%s</strong>";
 #elif L==4
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" del centro <strong>%s</strong>";
 #elif L==5
-	"Inscrire utilisateur en tant qu'administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du centre <strong>%s</strong>";
 #elif L==6
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" del centro <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrare utente come amministratore"
+	"Registrare come amministratore"
 	" del centro <strong>%s</strong>";
 #elif L==8
-	"Rejestracja u&zdot;ytkownika jako administrator"
+	"Rejestracja jako administrator"
 	" centrum <strong>%s</strong>";
 #elif L==9
-	"Registrar utilizador como administrador"
+	"Registrar como administrador"
 	" do centro <strong>%s</strong>";
 #endif
 
-const char *Txt_Register_user_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriure usuari com a administrador"
+	"Inscriure com a administrador"
 	" de la titulaci&oacute; <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Benutzer als Administrator"
+	"Anmeldung als Administrator"
 	" des Studiengang <strong>%s</strong>";
 #elif L==3
-	"Register user as an administrator"
+	"Register as an administrator"
 	" of the degree <strong>%s</strong>";
 #elif L==4
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" de la titulaci&oacute;n <strong>%s</strong>";
 #elif L==5
-	"Inscrire utilisateur en tant qu'administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du &eacute;tude <strong>%s</strong>";
 #elif L==6
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrare utente come amministratore"
+	"Registrare come amministratore"
 	" della laurea <strong>%s</strong>";
 #elif L==8
-	"Rejestracja u&zdot;ytkownika jako administrator"
+	"Rejestracja jako administrator"
 	" stopnia <strong>%s</strong>";
 #elif L==9
-	"Registrar utilizador como administrador"
+	"Registrar como administrador"
 	" da titula&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Register_user_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriure usuari com a administrador"
+	"Inscriure com a administrador"
 	" de la instituci&oacute; <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Benutzer als Administrator"
+	"Anmeldung als Administrator"
 	" des Hochschule <strong>%s</strong>";
 #elif L==3
-	"Register user as an administrator"
+	"Register as an administrator"
 	" of the institution <strong>%s</strong>";
 #elif L==4
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5
-	"Inscrire utilisateur en tant qu'administrateur"
+	"Inscrire en tant qu'administrateur"
 	" du &eacute;tablissement <strong>%s</strong>";
 #elif L==6
-	"Inscribir usuario como administrador"
+	"Inscribir como administrador"
 	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrare utente come amministratore"
+	"Registrare come amministratore"
 	" della istituzione <strong>%s</strong>";
 #elif L==8
-	"Rejestracja u&zdot;ytkownika jako administrator"
+	"Rejestracja jako administrator"
 	" instytucje <strong>%s</strong>";
 #elif L==9
-	"Registrar utilizador como administrador"
+	"Registrar como administrador"
 	" da institui&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
@@ -29262,136 +29262,136 @@ const char *Txt_Remove_user_from_this_course =
 	"Tirar utilizador desta disciplina";
 #endif
 
-const char *Txt_Remove_user_as_an_administrator =
+const char *Txt_Remove_USER_as_an_administrator =
 #if   L==1
-	"Eliminar usuari com a administrador";
+	"Eliminar com a administrador";
 #elif L==2
-	"Entfernen Benutzer als Administrator";
+	"Entfernen als Administrator";
 #elif L==3
-	"Remove user as an administrator";
+	"Remove as an administrator";
 #elif L==4
-	"Eliminar usuario como administrador";
+	"Eliminar como administrador";
 #elif L==5
-	"Enlever utilisateur en tant qu'administrateur";
+	"Enlever en tant qu'administrateur";
 #elif L==6
-	"Eliminar usuario como administrador";	// Okoteve traducción
+	"Eliminar como administrador";	// Okoteve traducción
 #elif L==7
-	"Rimuovi utente come amministratore";
+	"Rimuovi come amministratore";
 #elif L==8
-	"Usu&nacute; u&zdot;ytkownika jako administrator";
+	"Usu&nacute; jako administrator";
 #elif L==9
-	"Tirar utilizador como administrador";
+	"Tirar como administrador";
 #endif
 
-const char *Txt_Remove_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminar usuari com a administrador"
+	"Eliminar com a administrador"
 	" del centre <strong>%s</strong>";
 #elif L==2
-	"Entfernen Benutzer als Administrator"
+	"Entfernen als Administrator"
 	" des Lehrinstitute <strong>%s</strong>";
 #elif L==3
-	"Remove user as an administrator"
+	"Remove as an administrator"
 	" of the centre <strong>%s</strong>";
 #elif L==4
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" del centro <strong>%s</strong>";
 #elif L==5
-	"Enlever utilisateur en tant qu'administrateur"
+	"Enlever en tant qu'administrateur"
 	" du centre <strong>%s</strong>";
 #elif L==6
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" del centro <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovi utente come amministratore"
+	"Rimuovi come amministratore"
 	" del centro <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; u&zdot;ytkownika jako administrator"
+	"Usu&nacute; jako administrator"
 	" centrum <strong>%s</strong>";
 #elif L==9
-	"Tirar utilizador como administrador"
+	"Tirar como administrador"
 	" do centro <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_user_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminar usuari com a administrador"
+	"Eliminar com a administrador"
 	" de la titulaci&oacute; <strong>%s</strong>";
 #elif L==2
-	"Entfernen Benutzer als Administrator"
+	"Entfernen als Administrator"
 	" des Studiengang <strong>%s</strong>";
 #elif L==3
-	"Remove user as an administrator"
+	"Remove as an administrator"
 	" of the degree <strong>%s</strong>";
 #elif L==4
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" de la titulaci&oacute;n <strong>%s</strong>";
 #elif L==5
-	"Enlever utilisateur en tant qu'administrateur"
+	"Enlever en tant qu'administrateur"
 	" du &eacute;tude <strong>%s</strong>";
 #elif L==6
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovi utente come amministratore"
+	"Rimuovi come amministratore"
 	" della laurea <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; u&zdot;ytkownika jako administrator"
+	"Usu&nacute; jako administrator"
 	" stopnia <strong>%s</strong>";
 #elif L==9
-	"Tirar utilizador como administrador"
+	"Tirar como administrador"
 	" da titula&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_user_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminar usuari com a administrador"
+	"Eliminar com a administrador"
 	" de la instituci&oacute; <strong>%s</strong>";
 #elif L==2
-	"Entfernen Benutzer als Administrator"
+	"Entfernen als Administrator"
 	" des Hochschule <strong>%s</strong>";
 #elif L==3
-	"Remove user as an administrator"
+	"Remove as an administrator"
 	" of the institution <strong>%s</strong>";
 #elif L==4
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5
-	"Enlever utilisateur en tant qu'administrateur"
+	"Enlever en tant qu'administrateur"
 	" du &eacute;tablissement <strong>%s</strong>";
 #elif L==6
-	"Eliminar usuario como administrador"
+	"Eliminar como administrador"
 	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovi utente come amministratore"
+	"Rimuovi come amministratore"
 	" della istituzione <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; u&zdot;ytkownika jako administrator"
+	"Usu&nacute; jako administrator"
 	" instytucji <strong>%s</strong>";
 #elif L==9
-	"Tirar utilizador como administrador"
+	"Tirar como administrador"
 	" da institu&ccedil;&atilde;o <strong>%s</strong>";
 #endif
 
-const char *Txt_Remove_user_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Remove_USER_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Eliminar usuari de l'assignatura <strong>%s</strong>";
+	"Eliminar de l'assignatura <strong>%s</strong>";
 #elif L==2
-	"Entfernen Benutzer aus dem Kurs <strong>%s</strong>";
+	"Entfernen aus dem Kurs <strong>%s</strong>";
 #elif L==3
-	"Remove user from the course <strong>%s</strong>";
+	"Remove from the course <strong>%s</strong>";
 #elif L==4
-	"Eliminar usuario de la asignatura <strong>%s</strong>";
+	"Eliminar de la asignatura <strong>%s</strong>";
 #elif L==5
-	"Enlever utilisateur de la mati&egrave;re <strong>%s</strong>";
+	"Enlever de la mati&egrave;re <strong>%s</strong>";
 #elif L==6
-	"Eliminar usuario de la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Eliminar de la asignatura <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Rimuovi utente dal corso <strong>%s</strong>";
+	"Rimuovi dal corso <strong>%s</strong>";
 #elif L==8
-	"Usu&nacute; u&zdot;ytkownika w kurs <strong>%s</strong>";
+	"Usu&nacute; w kurs <strong>%s</strong>";
 #elif L==9
-	"Tirar utilizador da disciplina <strong>%s</strong>";
+	"Tirar da disciplina <strong>%s</strong>";
 #endif
 
 const char *Txt_Reply =

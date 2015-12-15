@@ -1979,7 +1979,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Register;
    extern const char *Txt_Confirm;
    char StrRecordWidth[10+1];
-   const char *ClassForm;
+   const char *ClassForm = "REC_DAT";
    char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
    char PhotoURL[PATH_MAX+1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
