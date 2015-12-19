@@ -94,7 +94,6 @@
         ----------Otros
         ....Etc.....
 */
-// TODO: Show guests in connected users.
 // TODO: A teacher should may confirm a student ID? In what conditions? (Necessary in order to a student can view his/her marks)
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
@@ -120,12 +119,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.67.1 (2015/12/15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.68 (2015/12/19)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.68:    Dec 19, 2015	Show guests in connected users.
+					Optimization in queries about connected users. (187158 lines)
         Version 15.67.1:  Dec 15, 2015	Changed some messages. (187141 lines)
         Version 15.67:    Dec 15, 2015	Fixed bugs in queries of enrollment requests. (187140 lines)
         Version 15.66.3:  Dec 15, 2015	Changes in some small icons.

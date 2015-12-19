@@ -95,11 +95,10 @@ void Con_ShowConnectedUsrs (void)
             Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
-   Lay_StartRoundFrameTable (NULL,0,Gbl.Title);
+   Lay_StartRoundFrame (NULL,Gbl.Title);
 
    /***** Put form to update connected users *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\""
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
                       " style=\"padding-bottom:12px;\">");
    Act_FormStart (ActLstCon);
    Gbl.Scope.Current = Sco_SCOPE_CRS;
@@ -114,11 +113,7 @@ void Con_ShowConnectedUsrs (void)
       Sco_PutSelectorScope (true);
      }
    Act_FormEnd ();
-
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"</div>");
 
    /* Number of connected users in the whole platform */
    Con_ShowGlobalConnectedUsrs ();
@@ -126,11 +121,8 @@ void Con_ShowConnectedUsrs (void)
    /* Show connected users in the current course */
    Con_ShowConnectedUsrsBelongingToScope ();
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -510,6 +502,8 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
       case Con_SHOW_ON_MAIN_ZONE:
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TEACHER);
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STUDENT);
+         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+            Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol__GUEST_);
          break;
       case Con_SHOW_ON_RIGHT_COLUMN:
          Gbl.Usrs.Connected.NumUsr        = 0;
@@ -517,6 +511,8 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
          Gbl.Usrs.Connected.NumUsrsToList = 0;
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_TEACHER);
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_STUDENT);
+         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+            Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol__GUEST_);
          break;
      }
 
@@ -1119,86 +1115,103 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	                   Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get connected users who belong to current location from database *****/
-   switch (Gbl.Scope.Current)
+   switch (Role)
      {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM connected,crs_usr,usr_data"
-                        " WHERE connected.UsrCod=crs_usr.UsrCod"
-                        " AND crs_usr.Role='%u'"
-                        " AND connected.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  Gbl.CurrentIns.Ins.InsCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM degrees,courses,crs_usr,connected,usr_data"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM courses,crs_usr,connected,usr_data"
-                        " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.Role='%u'"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  (unsigned) Role);
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
-                        "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                        " FROM crs_usr,connected,usr_data"
-                        " WHERE crs_usr.CrsCod='%ld'"
-                        " AND crs_usr.Role='%u'"
-                        " AND crs_usr.UsrCod=connected.UsrCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  (unsigned) Role);
-         break;
+      case Rol__GUEST_:
+	 sprintf (Query,"SELECT UsrCod,LastCrsCod,"
+			"UNIX_TIMESTAMP()-UNIX_TIMESTAMP(LastTime) AS Dif"
+			" FROM connected"
+			" WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			" ORDER BY Dif");
+	 break;
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM connected,crs_usr"
+			      " WHERE connected.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.Role='%u'"
+			      " ORDER BY Dif",
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected"
+			      " WHERE institutions.CtyCod='%ld'"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			Gbl.CurrentCty.Cty.CtyCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM centres,degrees,courses,crs_usr,connected"
+			      " WHERE centres.InsCod='%ld'"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			Gbl.CurrentIns.Ins.InsCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM degrees,courses,crs_usr,connected"
+			      " WHERE degrees.CtrCod='%ld'"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			Gbl.CurrentCtr.Ctr.CtrCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM courses,crs_usr,connected"
+			      " WHERE courses.DegCod='%ld'"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			Gbl.CurrentDeg.Deg.DegCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	       sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
+			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
+			      " FROM crs_usr,connected"
+			      " WHERE crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " ORDER BY Dif",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			(unsigned) Role);
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
+
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get list of connected users who belong to this location");
 
    if (NumUsrs)
@@ -1215,56 +1228,57 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
          /* Get user's data */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         Usr_GetAllUsrDataFromUsrCod (&UsrDat);
-
-         /* Get course code (row[1]) */
-         ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
-         Font = (ThisCrs ? "CON_CRS" :
-                           "CON");
-
-         /* Compute time from last access */
-         if (sscanf (row[2],"%ld",&TimeDiff) != 1)
-            TimeDiff = (time_t) 0;
-
-         /***** Show photo *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LEFT_MIDDLE COLOR%u\""
-                            " style=\"width:22px;\">",
-                  Gbl.RowEvenOdd);
-         ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	               NULL,
-                           "PHOTO21x28",Pho_ZOOM);
-         fprintf (Gbl.F.Out,"</td>");
-
-         /***** Write full name and link *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
-                            " style=\"width:320px;\">",
-                  Font,Gbl.RowEvenOdd);
-         if (PutLinkToRecord)
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // Existing user
            {
-	    Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
-							ActSeeRecOneTch);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Act_LinkFormSubmit (UsrDat.FullName,Font);
-           }
-         Usr_RestrictLengthAndWriteName (&UsrDat,40);
-         if (PutLinkToRecord)
-           {
-	    fprintf (Gbl.F.Out,"</a>");
-            Act_FormEnd ();
-           }
-         fprintf (Gbl.F.Out,"</td>");
+	    /* Get course code (row[1]) */
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
+	    Font = (ThisCrs ? "CON_CRS" :
+			      "CON");
 
-         /***** Write time from last access *****/
-         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
-                            " style=\"width:48px;\">",
-                  Font,Gbl.RowEvenOdd);
-         Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+	    /* Compute time from last access */
+	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)
+	       TimeDiff = (time_t) 0;
 
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	    /***** Show photo *****/
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"LEFT_MIDDLE COLOR%u\""
+			       " style=\"width:22px;\">",
+		     Gbl.RowEvenOdd);
+	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+						  NULL,
+			      "PHOTO21x28",Pho_ZOOM);
+	    fprintf (Gbl.F.Out,"</td>");
+
+	    /***** Write full name and link *****/
+	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
+			       " style=\"width:320px;\">",
+		     Font,Gbl.RowEvenOdd);
+	    if (PutLinkToRecord)
+	      {
+	       Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
+							   ActSeeRecOneTch);
+	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	       Act_LinkFormSubmit (UsrDat.FullName,Font);
+	      }
+	    Usr_RestrictLengthAndWriteName (&UsrDat,40);
+	    if (PutLinkToRecord)
+	      {
+	       fprintf (Gbl.F.Out,"</a>");
+	       Act_FormEnd ();
+	      }
+	    fprintf (Gbl.F.Out,"</td>");
+
+	    /***** Write time from last access *****/
+	    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
+			       " style=\"width:48px;\">",
+		     Font,Gbl.RowEvenOdd);
+	    Con_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+
+	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	   }
         }
 
       /***** Free memory used for user's data *****/
