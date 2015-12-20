@@ -475,7 +475,7 @@ static int Svc_RemoveOldWSKeys (void)
       or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
    sprintf (Query,"DELETE LOW_PRIORITY FROM ws_keys WHERE"
                   " LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_Svc_KEY);
+            Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY);
    if (mysql_query (&Gbl.mysql,Query))
       return soap_receiver_fault (Gbl.soap,
 	                          "Can not remove old web service keys from database",

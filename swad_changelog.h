@@ -113,18 +113,19 @@
 // TODO: Reply to all
 // TODO: Reply icons should appear without text
 // TODO: Link to remove messages is too wide. For example: "Remove these X messages".
-// TODO: Remove old files in briefcase!!!!! Disk almost full!!!!!
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.68.1 (2015/12/20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.70 (2015/12/21)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.70:    Dec 21, 2015	New action to remove old files in briefcase. Not finished. (187352 lines)
+        Version 15.69:    Dec 20, 2015	New option in briefcase to ask for removing old files. (187270 lines)
         Version 15.68.1:  Dec 20, 2015	Fixed bugs in connected users. (187171 lines)
         Version 15.68:    Dec 19, 2015	Show guests in connected users.
 					Optimization in queries about connected users. (187158 lines)

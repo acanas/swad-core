@@ -1335,7 +1335,7 @@ static void Brw_InitHiddenLevels (void);
 static void Brw_ShowSizeOfFileTree (void);
 static void Brw_StoreSizeOfFileTreeInDB (void);
 
-static void Brw_PutFormToShowOrAdminParams (void);
+static void Brw_PutParamsContextualLink (void);
 static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
                                       Act_Action_t Action);
 
@@ -1452,6 +1452,10 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
+
+static void Brw_PutFormToAskRemOldFiles (void);
+static void Brw_RemoveOldFilesInBrowser (void);
+static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path);
 
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
@@ -1998,6 +2002,8 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatBrf:
       case ActChgDatBrf:
       case ActDowBrf:
+      case ActAskRemOldBrf:	// Ask for removing old files in briefcase
+      case ActRemOldBrf:	// Remove old files in briefcase
          Gbl.FileBrowser.Type = Brw_ADMI_BRIEF_USR;
          break;
       default:
@@ -3278,7 +3284,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Marks_management_area;
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
-   extern const char *Txt_Private_storage_area;
+   extern const char *Txt_Temporary_private_storage_area;
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
 
    /***** Set title of file browser *****/
@@ -3291,7 +3297,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_WORKS_USR] = Txt_Works_area;			// Brw_ADMI_WORKS_USR
    Brw_TitleOfFileBrowser[Brw_ADMI_WORKS_CRS] = Txt_Works_area;			// Brw_ADMI_WORKS_CRS
    Brw_TitleOfFileBrowser[Brw_ADMI_MARKS_CRS] = Txt_Marks_management_area;	// Brw_ADMI_MARKS_CRS
-   Brw_TitleOfFileBrowser[Brw_ADMI_BRIEF_USR] = Txt_Private_storage_area;	// Brw_ADMI_BRIEF_USR
+   Brw_TitleOfFileBrowser[Brw_ADMI_BRIEF_USR] = Txt_Temporary_private_storage_area;	// Brw_ADMI_BRIEF_USR
    Brw_TitleOfFileBrowser[Brw_SHOW_DOCUM_GRP] = Txt_Documents_area;		// Brw_SHOW_DOCUM_GRP
    Brw_TitleOfFileBrowser[Brw_ADMI_DOCUM_GRP] = Txt_Documents_management_area;	// Brw_ADMI_DOCUM_GRP
    Brw_TitleOfFileBrowser[Brw_SHOW_MARKS_GRP] = Txt_Marks_area;			// Brw_SHOW_MARKS_GRP
@@ -3351,13 +3357,14 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_WriteTopBeforeShowingFileBrowser (void)
   {
-   bool IAmTeacher   = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER  );
-   bool IAmSuperuser = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
 
-   /***** Write form to edit documents *****/
+   /***** Write contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
@@ -3385,40 +3392,46 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocDeg);
 	 break;
       case Brw_SHOW_DOCUM_CRS:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCrs);
 	 break;
       case Brw_ADMI_DOCUM_CRS:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCrs);
 	 break;
       case Brw_SHOW_DOCUM_GRP:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocGrp);
 	 break;
       case Brw_ADMI_DOCUM_GRP:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocGrp);
 	 break;
       case Brw_SHOW_MARKS_CRS:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkCrs);
 	 break;
       case Brw_ADMI_MARKS_CRS:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkCrs);
 	 break;
       case Brw_SHOW_MARKS_GRP:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkGrp);
 	 break;
       case Brw_ADMI_MARKS_GRP:
-	 if (IAmTeacher || IAmSuperuser)
+	 if (IAmTeacherOrSysAdm)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkGrp);
+	 break;
+      case Brw_ADMI_BRIEF_USR:
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// TODO: Remove this line when stable
+	    if (Gbl.CurrentAct != ActAskRemOldBrf)
+	       Brw_PutFormToAskRemOldFiles ();
 	 break;
       default:
 	 break;
      }
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
@@ -4288,7 +4301,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
   }
 
 /*****************************************************************************/
-/******************* Write a form to go to show documents ********************/
+/*********** Write a form (link) to go to show or admin documents ************/
 /*****************************************************************************/
 
 static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
@@ -4297,24 +4310,26 @@ static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
    extern const char *Txt_View;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    switch (ShowOrAdmin)
      {
       case Brw_SHOW:
-         Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+         Lay_PutContextualLink (Action,Brw_PutParamsContextualLink,
                                 "eye-on64x64.png",
                                 Txt_View,Txt_View);
 	 break;
       case Brw_ADMIN:
-         Lay_PutContextualLink (Action,Brw_PutFormToShowOrAdminParams,
+         Lay_PutContextualLink (Action,Brw_PutParamsContextualLink,
                                 "edit64x64.png",
                                 Txt_Edit,Txt_Edit);
 	 break;
      }
-   fprintf (Gbl.F.Out,"</div>");
   }
 
-static void Brw_PutFormToShowOrAdminParams (void)
+/*****************************************************************************/
+/************** Put parameters necessary in a contextual link ****************/
+/*****************************************************************************/
+
+static void Brw_PutParamsContextualLink (void)
   {
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
@@ -4672,7 +4687,7 @@ static void Brw_ListDir (unsigned Level,const char *Path,const char *PathInTree)
                ExpandTree = Brw_EXPAND_TREE_NOTHING;
             else
               {
-               /***** Check if this subdirectory have files or folders in it *****/
+               /***** Check if this subdirectory has files or folders in it *****/
                if ((NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) <= 2)
                   ExpandTree = Brw_EXPAND_TREE_NOTHING;
                else
@@ -6274,7 +6289,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_assignments_area;
    extern const char *Txt_works_area;
    extern const char *Txt_marks_management_area;
-   extern const char *Txt_private_storage_area;
+   extern const char *Txt_temporary_private_storage_area;
    extern const char *Txt_institution;
    extern const char *Txt_centre;
    extern const char *Txt_degree;
@@ -6436,7 +6451,7 @@ static void Brw_WriteCurrentClipboard (void)
          break;
       case Brw_ADMI_BRIEF_USR:
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
-                  Txt_private_storage_area,
+                  Txt_temporary_private_storage_area,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       default:
@@ -10968,7 +10983,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
    extern const char *Txt_Marks_area;
-   extern const char *Txt_Private_storage_area;
+   extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Go_to_X;
    extern const char *Txt_Folder;
    struct FileMetadata FileMetadata;
@@ -11123,7 +11138,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    Title = Txt_Marks_area;
 	    break;
 	 case Brw_ADMI_BRIEF_USR:
-	    Title = Txt_Private_storage_area;
+	    Title = Txt_Temporary_private_storage_area;
 	    break;
 	 default:
 	    Title = "";
@@ -11180,4 +11195,141 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
+  }
+
+/*****************************************************************************/
+/***************** Write a form (link) to remove old files *******************/
+/*****************************************************************************/
+
+static void Brw_PutFormToAskRemOldFiles (void)
+  {
+   extern const char *Txt_Remove_old_files;
+
+   Lay_PutContextualLink (ActAskRemOldBrf,Brw_PutParamsContextualLink,
+			  "remove-on64x64.png",
+			  Txt_Remove_old_files,Txt_Remove_old_files);
+  }
+
+/*****************************************************************************/
+/************** Write a form fo confirm removing of old files ****************/
+/*****************************************************************************/
+
+void Brw_ConfirmRemoveOldFiles (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_files_older_than_X_months;
+   extern const char *Txt_Remove;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Form to ask for confirmation to remove old files *****/
+   Act_FormStart (ActRemOldBrf);
+   Brw_PutParamsContextualLink ();
+
+   /* Show question */
+   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_files_older_than_X_months,
+            Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+
+   Lay_PutRemoveButton (Txt_Remove);
+
+   Act_FormEnd ();
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+/*****************************************************************************/
+/******************************* Remove old files ****************************/
+/*****************************************************************************/
+
+void Brw_RemoveOldFiles (void)
+  {
+   extern const char *Txt_Remove;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Remove old files *****/
+   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
+      Brw_RemoveOldFilesInBrowser ();
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+/*****************************************************************************/
+/******************************* Remove old files ****************************/
+/*****************************************************************************/
+
+static void Brw_RemoveOldFilesInBrowser (void)
+  {
+   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder);
+  }
+
+/*****************************************************************************/
+/************* Scan a directory recursively removing old files ***************/
+/*****************************************************************************/
+
+#define Brw_TIME_TO_DELETE_BROWSER_OLD_FILES ((time_t)(Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES*30UL*24UL*60UL*60UL))
+
+static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
+  {
+   struct dirent **DirFileList;
+   struct dirent **SubdirFileList;
+   int NumFileInThisDir;
+   int NumFilesInThisDir;
+   int NumFilesInThisSubdir;
+   char PathFileRel[PATH_MAX+1];
+   struct stat FileStatus;
+   time_t TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
+		                 Brw_TIME_TO_DELETE_BROWSER_OLD_FILES;
+
+   /***** Scan directory *****/
+   NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
+
+   /***** Check file by file removing old files *****/
+   for (NumFileInThisDir = 0;
+	NumFileInThisDir < NumFilesInThisDir;
+	NumFileInThisDir++)
+      if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
+          strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
+        {
+	 sprintf (PathFileRel,"%s/%s",Path,DirFileList[NumFileInThisDir]->d_name);
+
+	 lstat (PathFileRel,&FileStatus);
+
+         /***** Construct the full path of the file or folder *****/
+	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+	   {
+	    /***** Check if this subdirectory has files or folders in it *****/
+	    NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
+
+	    if (NumFilesInThisSubdir > 2)	// Not empty directory
+	      {
+	       /* Scan subtree starting at this this directory recursively */
+	       Brw_ScanDirRemovingOlfFiles (Level+1,PathFileRel);
+
+	       /* Check again number of files after deletion */
+	       NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
+	      }
+
+	    if (NumFilesInThisSubdir <= 2)	// Empty directory
+	      {
+	       /* Remove folder if old */
+	       if (FileStatus.st_mtime < TimeRemoveFilesOlder)
+	          Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
+	       else
+		  Lay_ShowAlert (Lay_INFO,PathFileRel);
+	      }
+	   }
+	 else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+	   {
+	    /* Remove file if old */
+	    if (FileStatus.st_mtime < TimeRemoveFilesOlder)
+	       Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
+	    else
+	       Lay_ShowAlert (Lay_INFO,PathFileRel);
+	   }
+	}
   }

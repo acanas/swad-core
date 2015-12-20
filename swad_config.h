@@ -496,7 +496,7 @@
 #define Cfg_TIME_TO_CHANGE_BANNER			((time_t)(               5UL*60UL))	// After these seconds, change banner
 #define Cfg_NUMBER_OF_BANNERS				1					// Number of banners to show simultaneously
 
-#define Cfg_TIME_TO_DELETE_Svc_KEY			((time_t)(     7UL*24UL*60UL*60UL))	// After these seconds, a web service key is removed
+#define Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY		((time_t)(     7UL*24UL*60UL*60UL))	// After these seconds, a web service key is removed
 
 #define Cfg_TIME_TO_DELETE_HTML_OUTPUT			((time_t)(              30UL*60UL))	// Remove the HTML output files older than these seconds
 
@@ -506,6 +506,8 @@
 #define Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS	((time_t)(     7UL*24UL*60UL*60UL))	// Past these seconds, remove expired expanded folders
 #define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL*60UL))	// Paths older than these seconds are removed from clipboard
 #define Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary zip files are deleted after these seconds
+
+#define Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES	24	// Months to remove old files in briefcase
 
 #define Cfg_TIME_TO_DELETE_MARKS_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files with students' marks are deleted after these seconds
 

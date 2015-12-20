@@ -70,11 +70,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-// #define Act_NUM_ACTIONS	(7+52+15+90+73+68+205+183+154+171+27+80)
-// #define Act_NUM_ACTIONS	(7+52+15+90+73+67+205+183+154+171+27+80)
-#define Act_NUM_ACTIONS	(7+52+15+90+72+67+205+183+154+171+27+80)
+#define Act_NUM_ACTIONS	(7+52+15+90+72+67+205+183+154+171+27+82)
 
-#define Act_MAX_ACTION_COD 1487
+#define Act_MAX_ACTION_COD 1489
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1351,6 +1349,9 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActReqDatBrf		(ActSeeAllStaCrs+78)
 #define ActChgDatBrf		(ActSeeAllStaCrs+79)
 #define ActDowBrf		(ActSeeAllStaCrs+80)
+
+#define ActAskRemOldBrf		(ActSeeAllStaCrs+81)
+#define ActRemOldBrf		(ActSeeAllStaCrs+82)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

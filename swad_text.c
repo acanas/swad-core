@@ -8358,6 +8358,36 @@ const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warnin
 	" in the course <strong>%s</strong>?";			// Necessita de tradução
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_files_older_than_X_months =	// Warning: it is very important to include %u in the following sentences
+#if   L==1
+	"De veres voleu eliminar els arxius"
+	" amb m&eacute;s de %u mesos d'antiguitat?";
+#elif L==2
+	"Wollen Sie wirklich, um Dateien,"
+	" die &auml;lter als %u Monate l&ouml;schen?";
+#elif L==3
+	"Do you really want to remove files"
+	" older than %u months?";
+#elif L==4
+	"&iquest;Realmente desea eliminar los archivos"
+	" con m&aacute;s de %u meses de antig&uuml;edad?";
+#elif L==5
+	"Voulez-vous vraiment supprimer les fichiers"
+	" de plus de %u mois?";
+#elif L==6
+	"&iquest;Realmente desea eliminar los archivos"
+	" con m&aacute;s de %u meses de antig&uuml;edad?";		// Okoteve traducción
+#elif L==7
+	"Vuoi davvero rimuovere i file"
+	" pi&ugrave; vecchi di %u mesi?";
+#elif L==8
+	"Czy na pewno chcesz usun&aogon;&cacute; pliki"
+	" starsze ni&zdot; %u miesi&eogon;cy?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover arquivos"
+	" com mais de %u meses?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =	// Warning: it is very important to include %u and %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
@@ -27576,48 +27606,6 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
-const char *Txt_Private_storage_area =
-#if   L==1
-	"Zona d'emmagatzematge privada";
-#elif L==2
-	"Privater Speicherbereich";
-#elif L==3
-	"Private storage area";
-#elif L==4
-	"Zona de almacenamiento privada";
-#elif L==5
-	"Zone de stockage priv&eacute;e";
-#elif L==6
-	"Zona de almacenamiento privada";	// Okoteve traducción
-#elif L==7
-	"Area di archiviazione privata";
-#elif L==8
-	"Prywatny magazyn";
-#elif L==9
-	"Zona privada de armazenamento";
-#endif
-
-const char *Txt_private_storage_area =
-#if   L==1
-	"zona de almacenamiento privada";	// Necessita traduccio
-#elif L==2
-	"privater Speicherbereich";
-#elif L==3
-	"private storage area";
-#elif L==4
-	"zona de almacenamiento privada";
-#elif L==5
-	"zone de stockage priv&eacute;e";
-#elif L==6
-	"zona de almacenamiento privada";	// Okoteve traducción
-#elif L==7
-	"area di archiviazione privata";
-#elif L==8
-	"obszar prywatnego przechowywania";
-#elif L==9
-	"zona privada de armazenamento";
-#endif
-
 const char *Txt_post =
 #if   L==1
 	"missatge";
@@ -29029,6 +29017,27 @@ const char *Txt_Remove_me_from_the_course_X =	// Warning: it is very important t
 	"Usu&nacute; mnie w kurs <strong>%s</strong>";
 #elif L==9
 	"Tirar me da disciplina <strong>%s</strong>";
+#endif
+
+const char *Txt_Remove_old_files =
+#if   L==1
+	"Eliminar arxius antics";
+#elif L==2
+	"Entfernen Sie alte Dateien";
+#elif L==3
+	"Remove old files";
+#elif L==4
+	"Eliminar archivos antiguos";
+#elif L==5
+	"Supprimer anciens fichiers";
+#elif L==6
+	"Eliminar archivos antiguos";	// Okoteve traducción
+#elif L==7
+	"Rimuovere vecchi file";
+#elif L==8
+	"Usu&nacute; stare pliki";
+#elif L==9
+	"Remover arquivos antigos";
 #endif
 
 const char *Txt_Remove_photo =
@@ -38316,6 +38325,48 @@ const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 	"nauc.";
 #elif L==9
 	"prof.";
+#endif
+
+const char *Txt_Temporary_private_storage_area =
+#if   L==1
+	"Zona d'emmagatzematge privada";
+#elif L==2
+	"Privater Speicherbereich";
+#elif L==3
+	"Temporary private storage area";
+#elif L==4
+	"Zona de almacenamiento privada temporal";
+#elif L==5
+	"Zone de stockage priv&eacute;e";
+#elif L==6
+	"Zona de almacenamiento privada temporal";	// Okoteve traducción
+#elif L==7
+	"Area di archiviazione privata";
+#elif L==8
+	"Prywatny magazyn";
+#elif L==9
+	"Zona privada de armazenamento";
+#endif
+
+const char *Txt_temporary_private_storage_area =
+#if   L==1
+	"zona d'emmagatzematge privada";
+#elif L==2
+	"privater Speicherbereich";
+#elif L==3
+	"temporary private storage area";
+#elif L==4
+	"zona de almacenamiento privada temporal";
+#elif L==5
+	"zone de stockage priv&eacute;e";
+#elif L==6
+	"zona de almacenamiento privada temporal";	// Okoteve traducción
+#elif L==7
+	"area di archiviazione privata";
+#elif L==8
+	"obszar prywatnego przechowywania";
+#elif L==9
+	"zona privada de armazenamento";
 #endif
 
 const char *Txt_Test =
