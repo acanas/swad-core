@@ -52,13 +52,14 @@ extern struct Globals Gbl;
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
-static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role);
+static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
+
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_Role_t Role);
 static unsigned Con_GetConnectedGuestsTotal (void);
 static unsigned Con_GetConnectedStdsTotal (void);
 static unsigned Con_GetConnectedTchsTotal (void);
-static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,Usr_Sex_t *UsrSex);
+static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs);
 static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
@@ -118,8 +119,8 @@ void Con_ShowConnectedUsrs (void)
    /* Number of connected users in the whole platform */
    Con_ShowGlobalConnectedUsrs ();
 
-   /* Show connected users in the current course */
-   Con_ShowConnectedUsrsBelongingToScope ();
+   /* Show connected users in the current location */
+   Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -393,26 +394,46 @@ void Con_ShowGlobalConnectedUsrs (void)
 
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
-   Gbl.Usrs.Connected.NumUsrs       = 0;
-   Gbl.Usrs.Connected.NumUsrsToList = 0;
+   if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
+       Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// There is a course selected
+       (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
+        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+     {
+      Gbl.Usrs.Connected.NumUsrs       = 0;
+      Gbl.Usrs.Connected.NumUsrsToList = 0;
+      Gbl.Scope.Current = Sco_SCOPE_CRS;
 
-   /***** Number of teachers *****/
-   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_TEACHER);
+      /***** Number of teachers *****/
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TEACHER);
 
-   /***** Number of students *****/
-   Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_STUDENT);
+      /***** Number of students *****/
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STUDENT);
+     }
   }
 
 /*****************************************************************************/
-/******** Show number of connected users who belong to current course ********/
+/** Compute number of connected users of a type who belong to current course */
 /*****************************************************************************/
 
-void Con_ShowConnectedUsrsBelongingToScope (void)
+static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role)
+  {
+   /***** Get number of connected users who belong to current course *****/
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.Usrs[Role]);
+
+   /***** Get list connected users belonging to this course *****/
+   Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
+  }
+
+/*****************************************************************************/
+/****** Show number of connected users who belong to current location ********/
+/*****************************************************************************/
+
+void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
    extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_from;
    char LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR+1];
-   Usr_Sex_t UsrSex;
+   struct ConnectedUsrs Usrs;
 
    switch (Gbl.Scope.Current)
      {
@@ -443,7 +464,7 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
 	 break;
      }
 
-   /***** Number of connected users who belong to current course *****/
+   /***** Number of connected users who belong to scope *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
@@ -478,9 +499,10 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
          Str_ReplaceSpecialCharByCodes (LocationName,Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
      }
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%u %s %s</span>",
             The_ClassConnected[Gbl.Prefs.Theme],
-            Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&UsrSex),
+            Usrs.NumUsrs,
             Txt_from,
             LocationName);
 
@@ -511,41 +533,12 @@ void Con_ShowConnectedUsrsBelongingToScope (void)
          Gbl.Usrs.Connected.NumUsrsToList = 0;
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_TEACHER);
          Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_STUDENT);
-         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-            Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol__GUEST_);
          break;
      }
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>"
 		      "</div>");
-  }
-
-/*****************************************************************************/
-/** Compute number of connected users of a type who belong to current course */
-/*****************************************************************************/
-
-static void Con_ComputeConnectedUsrsOfTypeBelongingToCurrentCrs (Rol_Role_t Role)
-  {
-   Gbl.Scope.Current = Sco_SCOPE_CRS;
-
-   /***** Get number of connected users who belong to current course *****/
-   switch (Role)
-     {
-      case Rol_TEACHER:
-         Gbl.Usrs.Connected.NumTchs = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.SexTchs);
-         break;
-      case Rol_STUDENT:
-         Gbl.Usrs.Connected.NumStds = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.SexStds);
-         break;
-      default:
-         return;
-     }
-
-   /***** List connected users belonging to this course *****/
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
   }
 
 /*****************************************************************************/
@@ -556,19 +549,18 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumUsrsThisRole;
-   Usr_Sex_t UsrSex;
+   struct ConnectedUsrs Usrs;
 
    /***** Write number of connected users who belong to current course *****/
-   NumUsrsThisRole = Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&UsrSex);
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Usrs);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"3\" class=\"CENTER_TOP\">"
                       "%u %s"
                       "</td>"
                       "</tr>",
-            NumUsrsThisRole,
-            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-                                     Txt_ROLES_PLURAL_abc  [Role][UsrSex]);
+            Usrs.NumUsrs,
+            (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+                                  Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
 
    /***** List connected users belonging to this location *****/
    switch (Gbl.Scope.Current)
@@ -613,27 +605,15 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Connected_users;
-   unsigned NumUsrsThisRole;
-   Usr_Sex_t UsrSex;
+   unsigned NumUsrsThisRole = Gbl.Usrs.Connected.Usrs[Role].NumUsrs;
+   Usr_Sex_t UsrSex = Gbl.Usrs.Connected.Usrs[Role].Sex;
 
    /***** Write number of connected users who belong to current course *****/
-   switch (Role)
-     {
-      case Rol_TEACHER:
-         NumUsrsThisRole = Gbl.Usrs.Connected.NumTchs;
-         UsrSex = Gbl.Usrs.Connected.SexTchs;
-         break;
-      case Rol_STUDENT:
-         NumUsrsThisRole = Gbl.Usrs.Connected.NumStds;
-         UsrSex = Gbl.Usrs.Connected.SexStds;
-         break;
-      default:
-         return;
-     }
    Gbl.Usrs.Connected.NumUsrs       += NumUsrsThisRole;
    Gbl.Usrs.Connected.NumUsrsToList += NumUsrsThisRole;
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
       Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
+
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"3\" class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
                       "%u %s"
@@ -641,7 +621,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
                       "</tr>",
             NumUsrsThisRole,
             (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-                                     Txt_ROLES_PLURAL_abc  [Role][UsrSex]);
+                                     Txt_ROLES_PLURAL_abc[Role][UsrSex]);
 
    /***** List connected users belonging to this location *****/
    switch (Gbl.Scope.Current)
@@ -791,174 +771,207 @@ static unsigned Con_GetConnectedTchsTotal (void)
 /*****************************************************************************/
 // Return user's sex in UsrSex
 
-static unsigned Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,Usr_Sex_t *UsrSex)
+static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
    unsigned NumSexs;
    Usr_Sex_t Sex;
 
    /***** Get number of connected users who belong to current course from database *****/
-   switch (Gbl.Scope.Current)
+   switch (Role)
      {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM connected,usr_data"
-                           " WHERE connected.UsrCod=usr_data.UsrCod");
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM connected,crs_usr,usr_data"
-                           " WHERE connected.UsrCod=crs_usr.UsrCod"
-                           " AND crs_usr.Role='%u'"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCty.Cty.CtyCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCty.Cty.CtyCod,
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentIns.Ins.InsCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentIns.Ins.InsCod,
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM degrees,courses,crs_usr,connected,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod,
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM courses,crs_usr,connected,usr_data"
-                           " WHERE courses.DegCod='%ld'"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentDeg.Deg.DegCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM courses,crs_usr,connected,usr_data"
-                           " WHERE courses.DegCod='%ld'"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentDeg.Deg.DegCod,
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (Role == Rol_UNKNOWN)	// Here Rol_ROLE_UNKNOWN means "any role"
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM crs_usr,connected,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCrs.Crs.CrsCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
-                           " FROM crs_usr,connected,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.Role='%u'"
-                           " AND crs_usr.UsrCod=connected.UsrCod"
-                           " AND connected.UsrCod=usr_data.UsrCod",
-                     Gbl.CurrentCrs.Crs.CrsCod,
-                     (unsigned) Role);
-         break;
+      case Rol_UNKNOWN:	// Here Rol_ROLE_UNKNOWN means "any role"
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM connected,usr_data"
+			      " WHERE connected.UsrCod=usr_data.UsrCod");
+	       break;
+	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE institutions.CtyCod='%ld'"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCty.Cty.CtyCod);
+	       break;
+	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE centres.InsCod='%ld'"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentIns.Ins.InsCod);
+	       break;
+	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE degrees.CtrCod='%ld'"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCtr.Ctr.CtrCod);
+	       break;
+	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM courses,crs_usr,connected,usr_data"
+			      " WHERE courses.DegCod='%ld'"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentDeg.Deg.DegCod);
+	       break;
+	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM crs_usr,connected,usr_data"
+			      " WHERE crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCrs.Crs.CrsCod);
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+	 break;
+      case Rol__GUEST_:
+	 sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+	                "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			" FROM connected,usr_data"
+			" WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			" AND connected.UsrCod=usr_data.UsrCod");
+	 break;
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM connected,crs_usr,usr_data"
+			      " WHERE connected.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE institutions.CtyCod='%ld'"
+			      " AND institutions.InsCod=centres.InsCod"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCty.Cty.CtyCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE centres.InsCod='%ld'"
+			      " AND centres.CtrCod=degrees.CtrCod"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentIns.Ins.InsCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM degrees,courses,crs_usr,connected,usr_data"
+			      " WHERE degrees.CtrCod='%ld'"
+			      " AND degrees.DegCod=courses.DegCod"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCtr.Ctr.CtrCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM courses,crs_usr,connected,usr_data"
+			      " WHERE courses.DegCod='%ld'"
+			      " AND courses.CrsCod=crs_usr.CrsCod"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentDeg.Deg.DegCod,
+			(unsigned) Role);
+	       break;
+	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
+		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
+			      " FROM crs_usr,connected,usr_data"
+			      " WHERE crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.UsrCod=connected.UsrCod"
+			      " AND connected.UsrCod=usr_data.UsrCod",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			(unsigned) Role);
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of connected users who belong to this course");
+   DB_QuerySELECT (Query,&mysql_res,"can not get number of connected users who belong to this location");
 
    row = mysql_fetch_row (mysql_res);
 
    /***** Get number of users (row[0]) *****/
-   if (sscanf (row[0],"%u",&NumUsrs) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of connected users who belong to this course.");
+   if (sscanf (row[0],"%u",&(Usrs->NumUsrs)) != 1)
+      Lay_ShowErrorAndExit ("Error when getting number of connected users who belong to this location.");
 
    /***** Get number of distinct sexs (row[1]) *****/
    if (sscanf (row[1],"%u",&NumSexs) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this course.");
+      Lay_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this location.");
 
    /***** Get users' sex (row[2]) *****/
-   *UsrSex = Usr_SEX_UNKNOWN;
+   Usrs->Sex = Usr_SEX_UNKNOWN;
    if (NumSexs == 1)
       for (Sex = (Usr_Sex_t) 0;
 	   Sex < Usr_NUM_SEXS;
 	   Sex++)
          if (!strcasecmp (row[2],Usr_StringsSexDB[Sex]))
            {
-            *UsrSex = Sex;
+            Usrs->Sex = Sex;
             break;
            }
 
    /***** Free structure that stores the query result *****/
    mysql_free_result (mysql_res);
-
-   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -976,11 +989,12 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
    /***** Get connected users who belong to current course from database *****/
    sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
                   "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
-                  " FROM connected,crs_usr,usr_data"
+                  " FROM connected,crs_usr"
                   " WHERE crs_usr.CrsCod='%ld' AND crs_usr.Role='%u'"
                   " AND crs_usr.UsrCod=connected.UsrCod"
-                  " AND crs_usr.UsrCod=usr_data.UsrCod ORDER BY Dif",
-            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
+                  " ORDER BY Dif",
+            Gbl.CurrentCrs.Crs.CrsCod,
+            (unsigned) Role);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get list of connected users who belong to this course");
    Gbl.Usrs.Connected.NumUsrs       += (unsigned) NumRows;
    Gbl.Usrs.Connected.NumUsrsToList += (unsigned) NumRows;

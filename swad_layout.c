@@ -117,12 +117,8 @@ void Lay_WriteStartOfPage (void)
        Gbl.Layout.HTMLStartWritten)
       return;
 
-   /***** Compute connected users *****/
-   if (Gbl.CurrentAct == ActLstCon ||
-       ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-        Gbl.CurrentCrs.Crs.CrsCod > 0))
-      // Right column visible && There is a course selected
-      Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
+   /***** Compute connected users to be displayed in right columns *****/
+   Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
    if (Gbl.CurrentAct == ActRefCon ||
@@ -888,7 +884,7 @@ static void Lay_ShowRightColumn (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// There is a course selected
      {
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToScope ();
+      Con_ShowConnectedUsrsBelongingToLocation ();
      }
    fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
 
@@ -1432,7 +1428,7 @@ void Lay_RefreshNotifsAndConnected (void)
    if (ShowConnected)
      {
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToScope ();
+      Con_ShowConnectedUsrsBelongingToLocation ();
      }
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)

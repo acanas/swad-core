@@ -365,13 +365,10 @@ struct Globals
         {
          Con_WhereToShow_t WhereToShow;
          unsigned long TimeToRefreshInMs;
-         unsigned NumTchs;
-         unsigned NumStds;
-         unsigned SexTchs;
-         unsigned SexStds;
          unsigned NumUsr;
          unsigned NumUsrs;
          unsigned NumUsrsToList;
+         struct ConnectedUsrs Usrs[Rol_NUM_ROLES];
          struct
            {
             long UsrCod;
