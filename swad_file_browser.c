@@ -3431,9 +3431,8 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkGrp);
 	 break;
       case Brw_ADMI_BRIEF_USR:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// TODO: Remove this line when stable
-	    if (Gbl.CurrentAct != ActAskRemOldBrf)
-	       Brw_PutFormToAskRemOldFiles ();
+	 if (Gbl.CurrentAct != ActAskRemOldBrf)
+	    Brw_PutFormToAskRemOldFiles ();
 	 break;
       default:
 	 break;
@@ -11276,7 +11275,7 @@ static void Brw_PutFormToAskRemOldFiles (void)
 /************** Write a form fo confirm removing of old files ****************/
 /*****************************************************************************/
 
-#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      2	//  2 months
+#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      6	//  6 months
 #define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     12	//  1 year
 #define Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES (10*12)	// 10 years
 
@@ -11469,8 +11468,8 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)
 	   {
 	    /* Remove folder */
-	    // if (rmdir (Path))
-	    //    Lay_ShowErrorAndExit ("Can not remove folder.");
+	    if (rmdir (Path))
+	       Lay_ShowErrorAndExit ("Can not remove folder.");
 	    (Removed->NumFolds)++;
 	   }
 	}
