@@ -700,7 +700,6 @@ void Enr_AskRemoveOldUsrs (void)
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2;
    extern const char *Txt_Eliminate;
-   unsigned MonthsWithoutAccess = Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
    unsigned Months;
 
    /***** Start form *****/
@@ -719,7 +718,7 @@ void Enr_AskRemoveOldUsrs (void)
         Months++)
      {
       fprintf (Gbl.F.Out,"<option");
-      if (Months == MonthsWithoutAccess)
+      if (Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
@@ -747,7 +746,7 @@ void Enr_RemoveOldUsrs (void)
    extern const char *Txt_X_users_have_been_eliminated;
    char UnsignedStr[10+1];
    unsigned MonthsWithoutAccess;
-   unsigned long SecondsWithoutAccess;
+   time_t SecondsWithoutAccess;
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -759,11 +758,11 @@ void Enr_RemoveOldUsrs (void)
    /***** Get parameter with number of months without access *****/
    Par_GetParToText ("Months",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&MonthsWithoutAccess) != 1)
-      Lay_ShowErrorAndExit ("Number of months without clicks is missing.");
+      Lay_ShowErrorAndExit ("Number of months is missing.");
    if (MonthsWithoutAccess < Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS ||
        MonthsWithoutAccess > Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS)
-      Lay_ShowErrorAndExit ("Wrong number of months without clicks.");
-   SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
+      Lay_ShowErrorAndExit ("Wrong number of months.");
+   SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old users from database *****/
    sprintf (Query,"SELECT UsrCod FROM"
@@ -775,7 +774,7 @@ void Enr_RemoveOldUsrs (void)
                   " UsrCod NOT IN (SELECT UsrCod FROM usr_last)"
                   ") AS candidate_usrs"
                   " WHERE UsrCod NOT IN (SELECT DISTINCT UsrCod FROM crs_usr)",
-            SecondsWithoutAccess);
+            (unsigned long) SecondsWithoutAccess);
    if ((NumUsrs = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
      {
       sprintf (Gbl.Message,Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,

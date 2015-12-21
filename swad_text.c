@@ -8358,36 +8358,6 @@ const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warnin
 	" in the course <strong>%s</strong>?";			// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_files_older_than_X_months =	// Warning: it is very important to include %u in the following sentences
-#if   L==1
-	"De veres voleu eliminar els arxius"
-	" amb m&eacute;s de %u mesos d'antiguitat?";
-#elif L==2
-	"Wollen Sie wirklich, um Dateien,"
-	" die &auml;lter als %u Monate l&ouml;schen?";
-#elif L==3
-	"Do you really want to remove files"
-	" older than %u months?";
-#elif L==4
-	"&iquest;Realmente desea eliminar los archivos"
-	" con m&aacute;s de %u meses de antig&uuml;edad?";
-#elif L==5
-	"Voulez-vous vraiment supprimer les fichiers"
-	" de plus de %u mois?";
-#elif L==6
-	"&iquest;Realmente desea eliminar los archivos"
-	" con m&aacute;s de %u meses de antig&uuml;edad?";		// Okoteve traducción
-#elif L==7
-	"Vuoi davvero rimuovere i file"
-	" pi&ugrave; vecchi di %u mesi?";
-#elif L==8
-	"Czy na pewno chcesz usun&aogon;&cacute; pliki"
-	" starsze ni&zdot; %u miesi&eogon;cy?";
-#elif L==9
-	"Voc&ecirc; realmente deseja remover arquivos"
-	" com mais de %u meses?";
-#endif
-
 const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =	// Warning: it is very important to include %u and %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
@@ -9650,23 +9620,41 @@ const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2 =
 
 const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2 =
 #if   L==1
-	"Eliminar todos los usuarios que no est&eacute;n inscritos en ninguna asignatura y que lleven m&aacute;s de";	// Necessita traduccio
+	"Eliminar todos los usuarios"
+	" que no est&eacute;n inscritos en ninguna asignatura"
+	" y que lleven m&aacute;s de";				// Necessita traduccio
 #elif L==2
-	"Eliminate all users who are not enrolled on any courses and with more than";					// Need Übersetzung
+	"Eliminate all users"
+	" who are not enrolled on any courses"
+	" and with more than";					// Need Übersetzung
 #elif L==3
-	"Eliminate all users who are not enrolled on any courses and with more than";
+	"Eliminate all users"
+	" who are not enrolled on any courses"
+	" and with more than";
 #elif L==4
-	"Eliminar todos los usuarios que no est&eacute;n inscritos en ninguna asignatura y que lleven m&aacute;s de";
+	"Eliminar todos los usuarios"
+	" que no est&eacute;n inscritos en ninguna asignatura"
+	" y que lleven m&aacute;s de";
 #elif L==5
-	"Eliminate all users who are not enrolled on any courses and with more than";					// Besoin de traduction
+	"Eliminate all users"
+	" who are not enrolled on any courses"
+	" and with more than";					// Besoin de traduction
 #elif L==6
-	"Eliminar todos los usuarios que no est&eacute;n inscritos en ninguna asignatura y que lleven m&aacute;s de";	// Okoteve traducción
+	"Eliminar todos los usuarios"
+	" que no est&eacute;n inscritos en ninguna asignatura"
+	" y que lleven m&aacute;s de";				// Okoteve traducción
 #elif L==7
-	"Rimuovere tutti gli utenti che non sono registrati ad alcun corso e con pi&ugrave; di";
+	"Rimuovere tutti gli utenti"
+	" che non sono registrati ad alcun corso"
+	" e con pi&ugrave; di";
 #elif L==8
-	"Wyeliminuj wszystkich uzytkownik&oacute;w, kt&oacute;rzy nie sa zarejestrowani na kazdym z kurs&oacute;w";
+	"Wyeliminuj wszystkich uzytkownik&oacute;w,"
+	" kt&oacute;rzy nie sa zarejestrowani"
+	" na kazdym z kurs&oacute;w";
 #elif L==9
-	"Eliminate all users who are not enrolled on any courses and with more than";					// Necessita de tradução
+	"Eliminate all users"
+	" who are not enrolled on any courses"
+	" and with more than";					// Necessita de tradução
 #endif
 
 const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2 =	// Warning: it is very important to include %s in the following sentences
@@ -28780,6 +28768,48 @@ const char *Txt_Remove_FILE_OR_LINK_X =	// Warning: it is very important to incl
 	"Usu&nacute; %s";
 #elif L==9
 	"Remover %s";
+#endif
+
+const char *Txt_Remove_files_older_than_PART_1_OF_2 =
+#if   L==1
+	"Eliminar els arxius amb m&eacute;s de";
+#elif L==2
+	"Dateien zu entfernen, die &auml;lter als";
+#elif L==3
+	"Remove files older than";
+#elif L==4
+	"Eliminar los archivos con m&aacute;s de";
+#elif L==5
+	"Supprimer les fichiers de plus de";
+#elif L==6
+	"Eliminar los archivos con m&aacute;s de";	// Okoteve traducción
+#elif L==7
+	"Rimuovere i file pi&ugrave; vecchi di";
+#elif L==8
+	"Remove files older than";			// Potrzebujesz tlumaczenie
+#elif L==9
+	"Remover arquivos com mais de";
+#endif
+
+const char *Txt_Remove_files_older_than_PART_2_OF_2 =
+#if   L==1
+	"mesos d'antiguitat.";
+#elif L==2
+	"Monate.";
+#elif L==3
+	"months.";
+#elif L==4
+	"meses de antig&uuml;edad.";
+#elif L==5
+	"mois.";
+#elif L==6
+	"meses de antig&uuml;edad.";	// Okoteve traducción
+#elif L==7
+	"mesi.";
+#elif L==8
+	"months.";			// Potrzebujesz tlumaczenie
+#elif L==9
+	"meses.";
 #endif
 
 const char *Txt_Remove_folder =

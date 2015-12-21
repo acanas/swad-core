@@ -507,8 +507,6 @@
 #define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL*60UL))	// Paths older than these seconds are removed from clipboard
 #define Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary zip files are deleted after these seconds
 
-#define Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES	24	// Months to remove old files in briefcase
-
 #define Cfg_TIME_TO_DELETE_MARKS_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files with students' marks are deleted after these seconds
 
 #define Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS		((time_t)(              15UL*60UL))  	// Temporary files with params to commands are deleted after these seconds

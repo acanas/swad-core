@@ -218,7 +218,7 @@ void Brw_GetNotifDocOrSharedFile (char *SummaryStr,char **ContentStr,
 
 unsigned Brw_ListDocsFound (const char *Query,const char *Title);
 
-void Brw_ConfirmRemoveOldFiles (void);
+void Brw_AskRemoveOldFiles (void);
 void Brw_RemoveOldFiles (void);
 
 #endif

@@ -1454,8 +1454,9 @@ static bool Brw_CheckIfIHavePermissionFileOrFolderCommon (void);
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 static void Brw_PutFormToAskRemOldFiles (void);
-static void Brw_RemoveOldFilesInBrowser (void);
-static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path);
+static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder);
+static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+                                         time_t TimeRemoveFilesOlder);
 
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
@@ -11215,25 +11216,54 @@ static void Brw_PutFormToAskRemOldFiles (void)
 /************** Write a form fo confirm removing of old files ****************/
 /*****************************************************************************/
 
-void Brw_ConfirmRemoveOldFiles (void)
+#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      2	//  2 months
+#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     12	//  1 year
+#define Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES (10*12)	// 10 years
+
+void Brw_AskRemoveOldFiles (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_files_older_than_X_months;
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Remove_old_files;
+   extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
+   extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
    extern const char *Txt_Remove;
+   unsigned Months;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Form to ask for confirmation to remove old files *****/
+   /***** Start form *****/
    Act_FormStart (ActRemOldBrf);
    Brw_PutParamsContextualLink ();
 
-   /* Show question */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_files_older_than_X_months,
-            Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Remove_old_files);
 
-   Lay_PutRemoveButton (Txt_Remove);
+   /***** Form to request number of months (to remove files older) *****/
+   fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Remove_files_older_than_PART_1_OF_2);
+   fprintf (Gbl.F.Out,"<select name=\"Months\">");
+   for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
+        Months <= Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES;
+        Months++)
+     {
+      fprintf (Gbl.F.Out,"<option");
+      if (Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES)
+         fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%u</option>",Months);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+                      "<span class=\"%s\"> ",
+            The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
+            Cfg_PLATFORM_SHORT_NAME);
+   fprintf (Gbl.F.Out,"</span>");
 
+   /***** End frame *****/
+   Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Remove);
+
+   /***** End form *****/
    Act_FormEnd ();
 
    /***** Show again the file browser *****/
@@ -11246,14 +11276,26 @@ void Brw_ConfirmRemoveOldFiles (void)
 
 void Brw_RemoveOldFiles (void)
   {
-   extern const char *Txt_Remove;
+   char UnsignedStr[10+1];
+   unsigned Months;
+   time_t TimeRemoveFilesOlder;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
+   /***** Get parameter with number of months without access *****/
+   Par_GetParToText ("Months",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&Months) != 1)
+      Lay_ShowErrorAndExit ("Number of months is missing.");
+   if (Months < Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES ||
+       Months > Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES)
+      Lay_ShowErrorAndExit ("Wrong number of months.");
+   TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
+	                  (time_t) Months * Dat_SECONDS_IN_ONE_MONTH;
+
    /***** Remove old files *****/
    if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
-      Brw_RemoveOldFilesInBrowser ();
+      Brw_RemoveOldFilesInBrowser (TimeRemoveFilesOlder);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -11263,7 +11305,7 @@ void Brw_RemoveOldFiles (void)
 /******************************* Remove old files ****************************/
 /*****************************************************************************/
 
-static void Brw_RemoveOldFilesInBrowser (void)
+static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
   {
    extern const char *Txt_Folders_removed;
    extern const char *Txt_Files_removed;
@@ -11271,7 +11313,7 @@ static void Brw_RemoveOldFilesInBrowser (void)
    /***** Remove old files recursively *****/
    Gbl.FileBrowser.Removed.NumFiles   =
    Gbl.FileBrowser.Removed.NumFolders = 0;
-   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder);
+   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,TimeRemoveFilesOlder);
 
    /***** Success message *****/
    sprintf (Gbl.Message,"%s: %u. %s: %u.",
@@ -11284,9 +11326,8 @@ static void Brw_RemoveOldFilesInBrowser (void)
 /************* Scan a directory recursively removing old files ***************/
 /*****************************************************************************/
 
-#define Brw_TIME_TO_DELETE_BROWSER_OLD_FILES ((time_t)(Cfg_MONTHS_TO_DELETE_OLD_BRIEFCASE_FILES*30UL*24UL*60UL*60UL))
-
-static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
+static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+                                         time_t TimeRemoveFilesOlder)
   {
    struct dirent **DirFileList;
    struct dirent **SubdirFileList;
@@ -11295,8 +11336,6 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
    int NumFilesInThisSubdir;
    char PathFileRel[PATH_MAX+1];
    struct stat FileStatus;
-   time_t TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
-		                 Brw_TIME_TO_DELETE_BROWSER_OLD_FILES;
 
    /***** Scan directory *****/
    NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
@@ -11322,7 +11361,7 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
 	    if (NumFilesInThisSubdir > 2)	// Not empty directory
 	      {
 	       /* Scan subtree starting at this this directory recursively */
-	       Brw_ScanDirRemovingOlfFiles (Level+1,PathFileRel);
+	       Brw_ScanDirRemovingOlfFiles (Level+1,PathFileRel,TimeRemoveFilesOlder);
 
 	       /* Check again number of files after deletion */
 	       NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
