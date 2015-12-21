@@ -11428,9 +11428,9 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	       else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
 			FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 		 {
-		  /* Remove file */
-		  // if (unlink (PathFileRel))
-                  //    Lay_ShowErrorAndExit ("Can not remove file / link.");
+		  /* Remove file / link */
+		  if (unlink (PathFileRel))
+                     Lay_ShowErrorAndExit ("Can not remove file / link.");
 
 		  if (Str_FileIs (PathFileRel,"url"))
 		     (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
@@ -11447,14 +11447,17 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	 if (Level > 1)
 	   {
 	    /* Count number of files in folder */
-	    NumFiles = scandir (Path,&FileList,NULL,alphasort);
-
-	    /* Free list of files */
-	    for (NumFile = 0;
-		 NumFile < NumFiles;
-		 NumFile++)
-	       free ((void *) FileList[NumFile]);
-	    free ((void *) FileList);
+	    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+              {
+	       /* Free list of files */
+	       for (NumFile = 0;
+		    NumFile < NumFiles;
+		    NumFile++)
+		  free ((void *) FileList[NumFile]);
+	       free ((void *) FileList);
+              }
+	    else
+	       Lay_ShowErrorAndExit ("Error while scanning directory.");
 	   }
 	}
 

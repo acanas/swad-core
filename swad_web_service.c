@@ -91,7 +91,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 /*****************************************************************************/
 // In Eclipse, add to include path /usr/include, /usr/local/include, /usr/include/i386-linux-gnu
 
-#include <dirent.h>		// For dirent
+#include <dirent.h>		// For scandir, etc.
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <locale.h>		// For setlocale, LC_NUMERIC...

@@ -470,9 +470,9 @@ static void ZIP_CompressFolderIntoZIP (void)
 
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree)
   {
-   struct dirent **DirFileList;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
+   struct dirent **FileList;
+   int NumFile;
+   int NumFiles;
    char PathFile[PATH_MAX+1];
    char PathFileClone[PATH_MAX+1];
    char PathFileInTree[PATH_MAX+1];
@@ -489,60 +489,64 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/
-   NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
+   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+     {
+      /***** List files *****/
+      for (NumFile = 0;
+	   NumFile < NumFiles;
+	   NumFile++)
+	 if (strcmp (FileList[NumFile]->d_name,".") &&
+	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	   {
+	    sprintf (PathFileInTree,"%s/%s",
+	             PathInTree,FileList[NumFile]->d_name);
+	    sprintf (PathFile,"%s/%s",
+		     Path,FileList[NumFile]->d_name);
+	    sprintf (PathFileClone,"%s/%s",
+		     PathClone,FileList[NumFile]->d_name);
 
-   /***** List files *****/
-   for (NumFileInThisDir = 0;
-	NumFileInThisDir < NumFilesInThisDir;
-	NumFileInThisDir++)
-      if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
-          strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
-        {
-	 sprintf (PathFileInTree,"%s/%s",PathInTree,DirFileList[NumFileInThisDir]->d_name);
-	 sprintf (PathFile,"%s/%s",
-		  Path,DirFileList[NumFileInThisDir]->d_name);
-	 sprintf (PathFileClone,"%s/%s",
-		  PathClone,DirFileList[NumFileInThisDir]->d_name);
+	    lstat (PathFile,&FileStatus);
+	    if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	       FileType = Brw_IS_FOLDER;
+	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
+									 Brw_IS_FILE;	// It's a file
+	    else
+	       FileType = Brw_IS_UNKNOWN;
 
-	 lstat (PathFile,&FileStatus);
-	 if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	    FileType = Brw_IS_FOLDER;
-	 else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	    FileType = Str_FileIs (DirFileList[NumFileInThisDir]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-							                          Brw_IS_FILE;	// It's a file
-	 else
-	    FileType = Brw_IS_UNKNOWN;
+	    Hidden = (SeeDocsZone || SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,PathFileInTree) :
+						 false;
 
-	 Hidden = (SeeDocsZone || SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,PathFileInTree) :
-	                                      false;
-
-         if (!Hidden)	// If file/folder is not hidden
-           {
-	    if (FileType == Brw_IS_FOLDER)	// It's a directory
+	    if (!Hidden)	// If file/folder is not hidden
 	      {
-	       FullSize += (unsigned long long) FileStatus.st_size;
+	       if (FileType == Brw_IS_FOLDER)	// It's a directory
+		 {
+		  FullSize += (unsigned long long) FileStatus.st_size;
 
-	       /***** Create clone of subdirectory *****/
-	       if (mkdir (PathFileClone,(mode_t) 0xFFF))
-		  Lay_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
+		  /***** Create clone of subdirectory *****/
+		  if (mkdir (PathFileClone,(mode_t) 0xFFF))
+		     Lay_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
-	       /***** Clone subtree starting at this this directory *****/
-	       FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);
+		  /***** Clone subtree starting at this this directory *****/
+		  FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);
+		 }
+	       else if (FileType == Brw_IS_FILE ||
+			FileType == Brw_IS_LINK)	// It's a regular file
+		 {
+		  FullSize += (unsigned long long) FileStatus.st_size;
+
+		  /***** Create a symbolic link (clone) to original file *****/
+		  if (symlink (PathFile,PathFileClone) != 0)
+		     Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
+
+		  /***** Update number of my views of this file *****/
+		  Brw_UpdateMyFileViews (Brw_GetFilCodByPath (PathFileInTree));
+		 }
 	      }
-	    else if (FileType == Brw_IS_FILE ||
-		     FileType == Brw_IS_LINK)	// It's a regular file
-	      {
-	       FullSize += (unsigned long long) FileStatus.st_size;
-
-	       /***** Create a symbolic link (clone) to original file *****/
-	       if (symlink (PathFile,PathFileClone) != 0)
-		  Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
-
-	       /***** Update number of my views of this file *****/
-	       Brw_UpdateMyFileViews (Brw_GetFilCodByPath (PathFileInTree));
-	      }
-           }
-	}
+	   }
+     }
+   else
+      Lay_ShowErrorAndExit ("Error while scanning directory.");
 
    return FullSize;
   }
