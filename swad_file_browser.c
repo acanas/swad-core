@@ -11408,81 +11408,81 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
    int NumFiles;
    char PathFileRel[PATH_MAX+1];
    char PathFileInExplTree[PATH_MAX+1];
+   struct stat FolderStatus;
    struct stat FileStatus;
+
+   /***** Save folder status *****/
+   // Folder st_mtime must be saved before remove files inside it
+   // because st_mtime is updated by the deletion
+   lstat (Path,&FolderStatus);
 
    /***** Scan directory *****/
    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
-      if (NumFiles > 2)
+      /***** Check file by file removing old files *****/
+      for (NumFile = 0;
+	   NumFile < NumFiles;
+	   NumFile++)
 	{
-	 /***** Check file by file removing old files *****/
-	 for (NumFile = 0;
-	      NumFile < NumFiles;
-	      NumFile++)
+	 if (strcmp (FileList[NumFile]->d_name,".") &&
+	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    if (strcmp (FileList[NumFile]->d_name,".") &&
-		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	    /***** Construct the full path of the file or folder *****/
+	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
+	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
+
+	    /***** Get file or folder status *****/
+	    lstat (PathFileRel,&FileStatus);
+	    if (S_ISDIR (FileStatus.st_mode))				// It's a folder
+	       /* Scan subtree starting at this this directory recursively */
+	       Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,
+					    PathFileInExplTree,
+					    TimeRemoveFilesOlder,Removed);
+	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
+		     FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 	      {
-	       /***** Construct the full path of the file or folder *****/
-	       sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
-	       sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
+	       /* Remove file/link from disk and database */
+		Brw_RemoveFileFromDiskAndDB (PathFileRel,
+					     PathFileInExplTree);
 
-	       /***** Get file or folder status *****/
-	       lstat (PathFileRel,&FileStatus);
-	       if (S_ISDIR (FileStatus.st_mode))			// It's a folder
-		  /* Scan subtree starting at this this directory recursively */
-		  Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,
-		                               PathFileInExplTree,
-		                               TimeRemoveFilesOlder,Removed);
-	       else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
-	                FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
-		 {
-		  /* Remove file/link from disk and database */
-		   Brw_RemoveFileFromDiskAndDB (PathFileRel,
-		                                PathFileInExplTree);
-
-		  /* Update number of files/links removed */
-		  if (Str_FileIs (PathFileRel,"url"))
-		     (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
-		  else
-	             (Removed->NumFiles)++;	// It's a file
-		 }
+	       /* Update number of files/links removed */
+	       if (Str_FileIs (PathFileRel,"url"))
+		  (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
+	       else
+		  (Removed->NumFiles)++;	// It's a file
 	      }
-	    free ((void *) FileList[NumFile]);
 	   }
-	 free ((void *) FileList);
+	 free ((void *) FileList[NumFile]);
+	}
+      free ((void *) FileList);
 
-	 /***** Rescan folder in order to see
-		if it's now empty after deletion *****/
-	 if (Level > 1)
+      if (Level > 1)	// If not root folder
+	{
+	 if (NumFiles > 2)
 	   {
-	    /* Count number of files in folder */
+	    /***** Rescan folder in order to count
+	           the new number of files after deletion *****/
 	    if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
-              {
+	      {
 	       /* Free list of files */
 	       for (NumFile = 0;
 		    NumFile < NumFiles;
 		    NumFile++)
 		  free ((void *) FileList[NumFile]);
 	       free ((void *) FileList);
-              }
+	      }
 	    else
 	       Lay_ShowErrorAndExit ("Error while scanning directory.");
 	   }
-	}
 
-      if (Level > 1 && NumFiles <= 2)	// It's an empty folder, but not root folder
-	{
-	 /***** Get folder status *****/
-	 lstat (Path,&FileStatus);
-
-	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)	// Old folder
+	 if (NumFiles <= 2 &&					// It's an empty folder
+	     FolderStatus.st_mtime < TimeRemoveFilesOlder)	//  ..and it was old before deletion
 	   {
 	    /* Remove folder from disk and database */
 	    if (Brw_RemoveFolderFromDiskAndDB (Path,PathInTree))
 	       Lay_ShowErrorAndExit ("Can not remove folder.");
 
-            /* Update number of files/links removed */
+	    /* Update number of files/links removed */
 	    (Removed->NumFolds)++;
 	   }
 	}
