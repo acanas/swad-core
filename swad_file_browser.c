@@ -73,6 +73,13 @@ typedef enum
    Brw_ADMIN,
   } Brw_ShowOrAdmin_t;
 
+struct Brw_NumObjects
+  {
+   unsigned NumFiles;
+   unsigned NumFolds;
+   unsigned NumLinks;
+  };
+
 /*****************************************************************************/
 /**************************** Internal constants *****************************/
 /*****************************************************************************/
@@ -1411,9 +1418,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char *Path);
 static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
-                                     unsigned *NumFilesPasted,
-                                     unsigned *NumFoldsPasted,
-                                     unsigned *NumLinksPasted,
+                                     struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod);
 static void Brw_PutFormToCreateAFolder (const char *FileNameToShow);
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow);
@@ -1456,7 +1461,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 static void Brw_PutFormToAskRemOldFiles (void);
 static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder);
 static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
-                                         time_t TimeRemoveFilesOlder);
+                                         time_t TimeRemoveFilesOlder,
+                                         struct Brw_NumObjects *Removed);
 
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
@@ -7267,8 +7273,8 @@ static void Brw_PasteClipboard (void)
   {
    extern const char *Txt_The_copy_has_been_successful;
    extern const char *Txt_Files_copied;
-   extern const char *Txt_Folders_copied;
    extern const char *Txt_Links_copied;
+   extern const char *Txt_Folders_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
    struct Institution Ins;
    struct Centre Ctr;
@@ -7276,12 +7282,14 @@ static void Brw_PasteClipboard (void)
    struct Course Crs;
    struct GroupData GrpDat;
    char PathOrg[PATH_MAX+1];
-   unsigned NumFilesPasted = 0;
-   unsigned NumFoldsPasted = 0;
-   unsigned NumLinksPasted = 0;
+   struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
    struct FileMetadata FileMetadata;
    unsigned NumUsrsToBeNotifiedByEMail;
+
+   Pasted.NumFiles =
+   Pasted.NumLinks =
+   Pasted.NumFolds = 0;
 
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
    if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level))
@@ -7388,7 +7396,7 @@ static void Brw_PasteClipboard (void)
       Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
       Brw_SetMaxQuota ();
       if (Brw_PasteTreeIntoFolder (PathOrg,Gbl.FileBrowser.Priv.FullPathInTree,
-	                           &NumFilesPasted,&NumFoldsPasted,&NumLinksPasted,
+	                           &Pasted,
 	                           &FirstFilCod))
         {
          /***** Write message of success *****/
@@ -7397,14 +7405,14 @@ static void Brw_PasteClipboard (void)
                               "%s: %u<br />"
                               "%s: %u",
                   Txt_The_copy_has_been_successful,
-                  Txt_Files_copied  ,NumFilesPasted,
-                  Txt_Folders_copied,NumFoldsPasted,
-                  Txt_Links_copied  ,NumLinksPasted);
+                  Txt_Files_copied  ,Pasted.NumFiles,
+                  Txt_Links_copied  ,Pasted.NumLinks,
+                  Txt_Folders_copied,Pasted.NumFolds);
          Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
          /***** Notify new files *****/
-	 if (NumFilesPasted ||
-	     NumLinksPasted)
+	 if (Pasted.NumFiles ||
+	     Pasted.NumLinks)
 	   {
 	    FileMetadata.FilCod = FirstFilCod;
             Brw_GetFileMetadataByCod (&FileMetadata);
@@ -7462,9 +7470,7 @@ static unsigned Brw_NumLevelsInPath (const char *Path)
 // Return true if the copy has been made successfully, and false if not
 
 static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
-                                     unsigned *NumFilesPasted,
-                                     unsigned *NumFoldsPasted,
-                                     unsigned *NumLinksPasted,
+                                     struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod)
   {
    extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota;
@@ -7611,9 +7617,9 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
 		     Mrk_AddMarksToDB (FilCod,&Marks);
 
 		  if (FileType == Brw_IS_FILE)
-		     (*NumFilesPasted)++;
+		     (Pasted->NumFiles)++;
 		  else // FileType == Brw_IS_LINK
-		     (*NumLinksPasted)++;
+		     (Pasted->NumLinks)++;
 		 }
               }
 	   }
@@ -7660,7 +7666,7 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
 		 {
 		  sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFile]->d_name);
 		  if (!Brw_PasteTreeIntoFolder (PathInFolderOrg,PathDstInTreeWithFile,
-						NumFilesPasted,NumFoldsPasted,NumLinksPasted,
+						Pasted,
 						FirstFilCod))
 		     CopyIsGoingSuccessful = false;
 		 }
@@ -7672,7 +7678,7 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
 	    Lay_ShowErrorAndExit ("Error while scanning directory.");
 
 	 if (CopyIsGoingSuccessful)
-	    (*NumFoldsPasted)++;
+	    (Pasted->NumFolds)++;
 	}
      }
 
@@ -11362,18 +11368,23 @@ void Brw_RemoveOldFiles (void)
 static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
   {
    extern const char *Txt_Files_removed;
+   extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
+   struct Brw_NumObjects Removed;
 
    /***** Remove old files recursively *****/
-   Gbl.FileBrowser.Removed.NumFiles   =
-   Gbl.FileBrowser.Removed.NumFolders = 0;
-   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,TimeRemoveFilesOlder);
+   Removed.NumFiles =
+   Removed.NumLinks =
+   Removed.NumFolds = 0;
+   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,TimeRemoveFilesOlder,&Removed);
 
    /***** Success message *****/
-   sprintf (Gbl.Message,"%s: %u.<br />"
-	                "%s: %u.",
-            Txt_Files_removed  ,Gbl.FileBrowser.Removed.NumFiles,
-            Txt_Folders_removed,Gbl.FileBrowser.Removed.NumFolders);
+   sprintf (Gbl.Message,"%s: %u<br />"
+                        "%s: %u<br />"
+	                "%s: %u",
+            Txt_Files_removed  ,Removed.NumFiles,
+            Txt_Links_removed  ,Removed.NumLinks,
+            Txt_Folders_removed,Removed.NumFolds);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
@@ -11382,7 +11393,8 @@ static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
 /*****************************************************************************/
 
 static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
-                                         time_t TimeRemoveFilesOlder)
+                                         time_t TimeRemoveFilesOlder,
+                                         struct Brw_NumObjects *Removed)
   {
    struct dirent **FileList;
    int NumFile;
@@ -11411,13 +11423,19 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 
 	       if (S_ISDIR (FileStatus.st_mode))				// It's a directory
 		  /* Scan subtree starting at this this directory recursively */
-		  Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,TimeRemoveFilesOlder);
+		  Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,
+		                               TimeRemoveFilesOlder,Removed);
 	       else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
 			FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 		 {
 		  /* Remove file */
-		  Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-		  Gbl.FileBrowser.Removed.NumFiles++;
+		  // if (unlink (PathFileRel))
+                  //    Lay_ShowErrorAndExit ("Can not remove file / link.");
+
+		  if (Str_FileIs (PathFileRel,"url"))
+		     (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
+		  else
+	             (Removed->NumFiles)++;	// It's a file
 		 }
 	      }
 	    free ((void *) FileList[NumFile]);
@@ -11448,8 +11466,9 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)
 	   {
 	    /* Remove folder */
-	    Lay_ShowAlert (Lay_SUCCESS,Path);
-	    Gbl.FileBrowser.Removed.NumFolders++;
+	    // if (rmdir (Path))
+	    //    Lay_ShowErrorAndExit ("Can not remove folder.");
+	    (Removed->NumFolds)++;
 	   }
 	}
      }

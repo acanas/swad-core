@@ -15846,7 +15846,7 @@ const char *Txt_Links_copied =
 #elif L==4
 	"Enlaces copiados";
 #elif L==5
-	"Fichiers copi&eacute;s";
+	"Liens copi&eacute;s";
 #elif L==6
 	"Enlaces copiados";	// Okoteve traducción
 #elif L==7
@@ -15857,6 +15857,26 @@ const char *Txt_Links_copied =
 	"Liga&ccedil;&otilde;es copiadas";
 #endif
 
+const char *Txt_Links_removed =
+#if   L==1
+	"Enlla&ccedil;os eliminats";
+#elif L==2
+	"Links entfernt";
+#elif L==3
+	"Links removed";
+#elif L==4
+	"Enlaces eliminados";
+#elif L==5
+	"Liens supprim&eacute;s";
+#elif L==6
+	"Enlaces eliminados";	// Okoteve traducción
+#elif L==7
+	"Link rimossi";
+#elif L==8
+	"Linki usuni&eogon;te";
+#elif L==9
+	"Liga&ccedil;&otilde;es removidas";
+#endif
 
 const char *Txt_Local_address =
 #if   L==1

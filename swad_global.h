@@ -532,11 +532,6 @@ struct Globals
 	 bool CreateZIP;
          char TmpDir[NAME_MAX+1];
         } ZIP;
-      struct
-        {
-         unsigned NumFiles;
-         unsigned NumFolders;
-        } Removed;	// Number of old folders and files removed
      } FileBrowser;	// Struct used for a file browser
    struct
      {
