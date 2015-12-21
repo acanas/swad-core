@@ -3425,7 +3425,8 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	 break;
       case Brw_ADMI_BRIEF_USR:
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// TODO: Remove this line when stable
-	    if (Gbl.CurrentAct != ActAskRemOldBrf)
+	    if (Gbl.CurrentAct != ActAskRemOldBrf &&
+		Gbl.CurrentAct != ActRemOldBrf)
 	       Brw_PutFormToAskRemOldFiles ();
 	 break;
       default:
@@ -11264,7 +11265,19 @@ void Brw_RemoveOldFiles (void)
 
 static void Brw_RemoveOldFilesInBrowser (void)
   {
+   extern const char *Txt_Folders_removed;
+   extern const char *Txt_Files_removed;
+
+   /***** Remove old files recursively *****/
+   Gbl.FileBrowser.Removed.NumFiles   =
+   Gbl.FileBrowser.Removed.NumFolders = 0;
    Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder);
+
+   /***** Success message *****/
+   sprintf (Gbl.Message,"%s: %u. %s: %u.",
+            Txt_Folders_removed,Gbl.FileBrowser.Removed.NumFolders,
+            Txt_Files_removed  ,Gbl.FileBrowser.Removed.NumFiles);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -11295,11 +11308,12 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
       if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
           strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
         {
+         /***** Construct the full path of the file or folder *****/
 	 sprintf (PathFileRel,"%s/%s",Path,DirFileList[NumFileInThisDir]->d_name);
 
+         /***** Get file or folder status *****/
 	 lstat (PathFileRel,&FileStatus);
 
-         /***** Construct the full path of the file or folder *****/
 	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	   {
 	    /***** Check if this subdirectory has files or folders in it *****/
@@ -11314,22 +11328,20 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path)
 	       NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
 	      }
 
-	    if (NumFilesInThisSubdir <= 2)	// Empty directory
+	    if (NumFilesInThisSubdir <= 2 &&			// It's an empty folder
+	        FileStatus.st_mtime < TimeRemoveFilesOlder)	// ..and it's old
 	      {
-	       /* Remove folder if old */
-	       if (FileStatus.st_mtime < TimeRemoveFilesOlder)
-	          Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-	       else
-		  Lay_ShowAlert (Lay_INFO,PathFileRel);
+	       /* Remove folder */
+	       Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
+	       Gbl.FileBrowser.Removed.NumFolders++;
 	      }
 	   }
-	 else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+	 else if (S_ISREG (FileStatus.st_mode) &&		// It's a regular file
+	          FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 	   {
-	    /* Remove file if old */
-	    if (FileStatus.st_mtime < TimeRemoveFilesOlder)
-	       Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-	    else
-	       Lay_ShowAlert (Lay_INFO,PathFileRel);
+	    /* Remove file */
+	    Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
+	    Gbl.FileBrowser.Removed.NumFiles++;
 	   }
 	}
   }

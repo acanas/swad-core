@@ -11657,6 +11657,27 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" and footer rows.";				// Necessita de tradução
 #endif
 
+const char *Txt_Files_removed =
+#if   L==1
+	"Arxius eliminats";
+#elif L==2
+	"Dateien entfernt";
+#elif L==3
+	"Files removed";
+#elif L==4
+	"Archivos eliminados";
+#elif L==5
+	"Fichiers supprim&eacute;s";
+#elif L==6
+	"Archivos eliminados";	// Okoteve traducción
+#elif L==7
+	"File rimossi";
+#elif L==8
+	"Pliki usuni&eogon;te";
+#elif L==9
+	"Arquivos removidos";
+#endif
+
 const char *Txt_Files_works =
 #if   L==1
 	"Archivos trabajos";	// Necessita traduccio
@@ -11928,6 +11949,27 @@ const char *Txt_Folders_renamed =
 	"Foldery zmienione";
 #elif L==9
 	"Diret&oacute;rios renomeados";
+#endif
+
+const char *Txt_Folders_removed =
+#if   L==1
+	"Carpetes eliminades";
+#elif L==2
+	"Verzeichnisse entfernt";
+#elif L==3
+	"Folders removed";
+#elif L==4
+	"Carpetas eliminadas";
+#elif L==5
+	"R&eacute;pertoires supprim&eacute;s";
+#elif L==6
+	"Carpetas eliminadas";	// Okoteve traducción
+#elif L==7
+	"Cartelle rimossi";
+#elif L==8
+	"Foldery usuni&eogon;te";
+#elif L==9
+	"Diret&oacute;rios removidos";
 #endif
 
 const char *Txt_Folders_not_renamed =
