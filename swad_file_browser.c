@@ -1461,8 +1461,14 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 static void Brw_PutFormToAskRemOldFiles (void);
 static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder);
 static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+                                         const char *PathInTree,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed);
+
+static void Brw_RemoveFileFromDiskAndDB (const char *Path,
+                                         const char *FullPathInTree);
+static int Brw_RemoveFolderFromDiskAndDB (const char *Path,
+                                          const char *FullPathInTree);
 
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
@@ -4688,14 +4694,13 @@ static void Brw_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
+	    /***** Construct the full path of the file or folder *****/
 	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
 	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
-
-	    lstat (PathFileRel,&FileStatus);
-
-	    /***** Construct the full path of the file or folder *****/
 	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
 
+	    /***** Get file or folder status *****/
+	    lstat (PathFileRel,&FileStatus);
 	    if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       if (Gbl.FileBrowser.FullTree)
@@ -6024,20 +6029,19 @@ void Brw_RemFileFromTree (void)
       lstat (Path,&FileStatus);
       if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
         {
-	 /***** Name of the file/link to be shown *****/
+	 /* Name of the file/link to be shown */
 	 Brw_LimitLengthFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnkName,"url") ? Brw_IS_LINK :
 											   Brw_IS_FILE,
 					Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 
-	 if (unlink (Path))
-            Lay_ShowErrorAndExit ("Can not remove file / link.");
+	 /* Remove file/link from disk and database */
+	 Brw_RemoveFileFromDiskAndDB (Path,
+	                              Gbl.FileBrowser.Priv.FullPathInTree);
 
-         /* If a file is removed,
-            it is necessary to remove it from the database */
-         Brw_RemoveOneFileOrFolderFromDB (Gbl.FileBrowser.Priv.FullPathInTree);
-
-         /* Remove affected clipboards */
-         Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 /* Remove affected clipboards */
+	 Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Message of confirmation of removing */
 	 sprintf (Gbl.Message,Txt_FILE_X_removed,FileNameToShow);
@@ -6074,7 +6078,8 @@ void Brw_RemFolderFromTree (void)
       /***** Check if it's a file or a folder *****/
       lstat (Path,&FileStatus);
       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-         if (rmdir (Path))
+	 if (Brw_RemoveFolderFromDiskAndDB (Path,
+                                            Gbl.FileBrowser.Priv.FullPathInTree))
            {
 	    if (errno == ENOTEMPTY)	// The directory is not empty
 	      {
@@ -6086,15 +6091,10 @@ void Brw_RemFolderFromTree (void)
            }
          else
            {
-            /* If a folder is removed,
-               it is necessary to remove it from the database */
-            Brw_RemoveOneFileOrFolderFromDB (Gbl.FileBrowser.Priv.FullPathInTree);
-
             /* Remove affected clipboards */
-            Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
-
-            /* Remove affected expanded folders */
-            Brw_RemoveAffectedExpandedFolders (Gbl.FileBrowser.Priv.FullPathInTree);
+            Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+                                          Gbl.Usrs.Me.UsrDat.UsrCod,
+                                          Gbl.Usrs.Other.UsrDat.UsrCod);
 
             /* Message of confirmation of successfull removing */
 	    sprintf (Gbl.Message,Txt_Folder_X_removed,
@@ -11276,7 +11276,7 @@ static void Brw_PutFormToAskRemOldFiles (void)
 /*****************************************************************************/
 
 #define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      6	//  6 months
-#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     12	//  1 year
+#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     24	//  2 years
 #define Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES (10*12)	// 10 years
 
 void Brw_AskRemoveOldFiles (void)
@@ -11375,7 +11375,14 @@ static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
    Removed.NumFiles =
    Removed.NumLinks =
    Removed.NumFolds = 0;
-   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,TimeRemoveFilesOlder,&Removed);
+   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,
+                                Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+                                TimeRemoveFilesOlder,&Removed);
+
+   /***** Remove affected clipboards *****/
+   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				 Gbl.Usrs.Me.UsrDat.UsrCod,
+				 Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Success message *****/
    sprintf (Gbl.Message,"%s: %u<br />"
@@ -11392,6 +11399,7 @@ static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
 /*****************************************************************************/
 
 static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+                                         const char *PathInTree,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed)
   {
@@ -11399,6 +11407,7 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
    int NumFile;
    int NumFiles;
    char PathFileRel[PATH_MAX+1];
+   char PathFileInExplTree[PATH_MAX+1];
    struct stat FileStatus;
 
    /***** Scan directory *****/
@@ -11415,22 +11424,24 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+	       sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
+	       sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
 
 	       /***** Get file or folder status *****/
 	       lstat (PathFileRel,&FileStatus);
-
-	       if (S_ISDIR (FileStatus.st_mode))				// It's a directory
+	       if (S_ISDIR (FileStatus.st_mode))			// It's a folder
 		  /* Scan subtree starting at this this directory recursively */
 		  Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,
+		                               PathFileInExplTree,
 		                               TimeRemoveFilesOlder,Removed);
 	       else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
-			FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
+	                FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 		 {
-		  /* Remove file / link */
-		  if (unlink (PathFileRel))
-                     Lay_ShowErrorAndExit ("Can not remove file / link.");
+		  /* Remove file/link from disk and database */
+		   Brw_RemoveFileFromDiskAndDB (PathFileRel,
+		                                PathFileInExplTree);
 
+		  /* Update number of files/links removed */
 		  if (Str_FileIs (PathFileRel,"url"))
 		     (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
 		  else
@@ -11460,20 +11471,65 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	   }
 	}
 
-      if (Level > 1 && NumFiles <= 2)	// It's an empty folder inside root folder
+      if (Level > 1 && NumFiles <= 2)	// It's an empty folder, but not root folder
 	{
 	 /***** Get folder status *****/
 	 lstat (Path,&FileStatus);
 
-	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)
+	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)	// Old folder
 	   {
-	    /* Remove folder */
-	    if (rmdir (Path))
+	    /* Remove folder from disk and database */
+	    if (Brw_RemoveFolderFromDiskAndDB (Path,PathInTree))
 	       Lay_ShowErrorAndExit ("Can not remove folder.");
+
+            /* Update number of files/links removed */
 	    (Removed->NumFolds)++;
 	   }
 	}
      }
    else
       Lay_ShowErrorAndExit ("Error while scanning directory.");
+  }
+
+/*****************************************************************************/
+/******************* Remove file/link from disk and database *****************/
+/*****************************************************************************/
+
+static void Brw_RemoveFileFromDiskAndDB (const char *Path,
+                                         const char *FullPathInTree)
+  {
+   /***** Remove file from disk *****/
+   if (unlink (Path))
+      Lay_ShowErrorAndExit ("Can not remove file / link.");
+
+   /***** If a file is removed,
+          it is necessary to remove it from the database *****/
+   Brw_RemoveOneFileOrFolderFromDB (FullPathInTree);
+  }
+
+
+/*****************************************************************************/
+/******************** Remove folder from disk and database *******************/
+/*****************************************************************************/
+// Return the returned value of rmdir
+
+static int Brw_RemoveFolderFromDiskAndDB (const char *Path,
+                                          const char *FullPathInTree)
+  {
+   int Result;
+
+   /***** Remove folder from disk *****/
+   Result = rmdir (Path);	// On success, zero is returned.
+				// On error, -1 is returned, and errno is set appropriately.
+   if (!Result)	// Success
+     {
+      /***** If a folder is removed,
+	     it is necessary to remove it from the database *****/
+      Brw_RemoveOneFileOrFolderFromDB (FullPathInTree);
+
+      /***** Remove affected expanded folders *****/
+      Brw_RemoveAffectedExpandedFolders (FullPathInTree);
+     }
+
+   return Result;
   }
