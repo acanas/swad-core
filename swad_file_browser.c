@@ -4612,44 +4612,47 @@ void Brw_CalcSizeOfDir (char *Path)
 static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
   {
    struct dirent **FileList;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
+   int NumFile;
+   int NumFiles;
    char PathFileRel[PATH_MAX+1];
    struct stat FileStatus;
 
    /***** Scan the directory *****/
-   NumFilesInThisDir = scandir (Path,&FileList,NULL,NULL);
-
-   /***** Compute recursively the total number and size of the files and folders *****/
-   for (NumFileInThisDir = 0;
-	NumFileInThisDir < NumFilesInThisDir;
-	NumFileInThisDir++)
+   if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
      {
-      if (strcmp (FileList[NumFileInThisDir]->d_name,".") &&
-          strcmp (FileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
+      /***** Compute recursively the total number and size of the files and folders *****/
+      for (NumFile = 0;
+	   NumFile < NumFiles;
+	   NumFile++)
 	{
-         /* There are files in this directory ==> update level */
-         if (Level > Gbl.FileBrowser.Size.NumLevls)
-            Gbl.FileBrowser.Size.NumLevls++;
+	 if (strcmp (FileList[NumFile]->d_name,".") &&
+	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	   {
+	    /* There are files in this directory ==> update level */
+	    if (Level > Gbl.FileBrowser.Size.NumLevls)
+	       Gbl.FileBrowser.Size.NumLevls++;
 
-         /* Update counters depending on whether it's a directory or a regular file */
-	 sprintf (PathFileRel,"%s/%s",Path,FileList[NumFileInThisDir]->d_name);
-	 lstat (PathFileRel,&FileStatus);
-	 if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	   {
-	    Gbl.FileBrowser.Size.NumFolds++;
-	    Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	    Brw_CalcSizeOfDirRecursive (Level+1,PathFileRel);
+	    /* Update counters depending on whether it's a directory or a regular file */
+	    sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+	    lstat (PathFileRel,&FileStatus);
+	    if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	      {
+	       Gbl.FileBrowser.Size.NumFolds++;
+	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
+	       Brw_CalcSizeOfDirRecursive (Level + 1,PathFileRel);
+	      }
+	    else if (S_ISREG (FileStatus.st_mode))		// It's a regular file
+	      {
+	       Gbl.FileBrowser.Size.NumFiles++;
+	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
+	      }
 	   }
-	 else if (S_ISREG (FileStatus.st_mode))		// It's a regular file
-	   {
-	    Gbl.FileBrowser.Size.NumFiles++;
-	    Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	   }
+	 free ((void *) FileList[NumFile]);
 	}
-      free (FileList[NumFileInThisDir]);
+      free ((void *) FileList);
      }
-   free (FileList);
+   else
+      Lay_ShowErrorAndExit ("Error while scanning directory.");
   }
 
 /*****************************************************************************/
@@ -4658,63 +4661,81 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 
 static void Brw_ListDir (unsigned Level,const char *Path,const char *PathInTree)
   {
-   struct dirent **DirFileList;
+   struct dirent **FileList;
    struct dirent **SubdirFileList;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
-   int NumFilesInThisSubdir;
+   int NumFile;
+   int NumFiles;
+   int NumFileInSubdir;
+   int NumFilesInSubdir;
    char PathFileRel[PATH_MAX+1];
    char PathFileInExplTree[PATH_MAX+1];
    struct stat FileStatus;
-   Brw_ExpandTree_t ExpandTree;
+   Brw_ExpandTree_t ExpandTree = Brw_EXPAND_TREE_NOTHING;	// Initialized to avoid warning
 
    /***** Scan directory *****/
-   NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
-
-   /***** List files *****/
-   for (NumFileInThisDir = 0;
-	NumFileInThisDir < NumFilesInThisDir;
-	NumFileInThisDir++)
-      if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
-          strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
-        {
-	 sprintf (PathFileRel       ,"%s/%s",Path      ,DirFileList[NumFileInThisDir]->d_name);
-	 sprintf (PathFileInExplTree,"%s/%s",PathInTree,DirFileList[NumFileInThisDir]->d_name);
-
-	 lstat (PathFileRel,&FileStatus);
-
-         /***** Construct the full path of the file or folder *****/
-         Brw_SetFullPathInTree (PathInTree,DirFileList[NumFileInThisDir]->d_name);
-
-	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+     {
+      /***** List files *****/
+      for (NumFile = 0;
+	   NumFile < NumFiles;
+	   NumFile++)
+	{
+	 if (strcmp (FileList[NumFile]->d_name,".") &&
+	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-            if (Gbl.FileBrowser.FullTree)
-               ExpandTree = Brw_EXPAND_TREE_NOTHING;
-            else
-              {
-               /***** Check if this subdirectory has files or folders in it *****/
-               if ((NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) <= 2)
-                  ExpandTree = Brw_EXPAND_TREE_NOTHING;
-               else
-                  /***** Check if the tree starting at this subdirectory must be expanded *****/
-                  ExpandTree = Brw_GetIfExpandedTree (Gbl.FileBrowser.Priv.FullPathInTree) ? Brw_EXPAND_TREE_MINUS :
-                	                                                                     Brw_EXPAND_TREE_PLUS;
-              }
+	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
+	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
 
-            /***** Write a row for the subdirectory *****/
-	    if (Brw_WriteRowFileBrowser (Level,Brw_IS_FOLDER,ExpandTree,PathInTree,DirFileList[NumFileInThisDir]->d_name))
-               if (ExpandTree == Brw_EXPAND_TREE_MINUS ||
-                   ExpandTree == Brw_EXPAND_TREE_NOTHING)
-                  if (Level < Brw_MAX_DIR_LEVELS)
-                     /* List subtree starting at this this directory */
-                     Brw_ListDir (Level+1,PathFileRel,PathFileInExplTree);
+	    lstat (PathFileRel,&FileStatus);
+
+	    /***** Construct the full path of the file or folder *****/
+	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
+
+	    if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+	      {
+	       if (Gbl.FileBrowser.FullTree)
+		  ExpandTree = Brw_EXPAND_TREE_NOTHING;
+	       else
+		 {
+		  /***** Check if this subdirectory has files or folders in it *****/
+		  if ((NumFilesInSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL)) >= 0)	// No error
+		    {
+		     if (NumFilesInSubdir <= 2)
+			ExpandTree = Brw_EXPAND_TREE_NOTHING;
+		     else
+			/***** Check if the tree starting at this subdirectory must be expanded *****/
+			ExpandTree = Brw_GetIfExpandedTree (Gbl.FileBrowser.Priv.FullPathInTree) ? Brw_EXPAND_TREE_MINUS :
+												   Brw_EXPAND_TREE_PLUS;
+		     for (NumFileInSubdir = 0;
+			  NumFileInSubdir < NumFilesInSubdir;
+			  NumFileInSubdir++)
+			free ((void *) SubdirFileList[NumFileInSubdir]);
+		     free ((void *) SubdirFileList);
+		    }
+		  else
+		     Lay_ShowErrorAndExit ("Error while scanning directory.");
+		 }
+
+	       /***** Write a row for the subdirectory *****/
+	       if (Brw_WriteRowFileBrowser (Level,Brw_IS_FOLDER,ExpandTree,PathInTree,FileList[NumFile]->d_name))
+		  if (ExpandTree == Brw_EXPAND_TREE_MINUS ||
+		      ExpandTree == Brw_EXPAND_TREE_NOTHING)
+		     if (Level < Brw_MAX_DIR_LEVELS)
+			/* List subtree starting at this this directory */
+			Brw_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+	      }
+	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+	       Brw_WriteRowFileBrowser (Level,
+					Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+					                                               Brw_IS_FILE,
+					Brw_EXPAND_TREE_NOTHING,PathInTree,FileList[NumFile]->d_name);
 	   }
-	 else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	    Brw_WriteRowFileBrowser (Level,
-	                             Str_FileIs (DirFileList[NumFileInThisDir]->d_name,"url") ? Brw_IS_LINK :
-		                                                                                Brw_IS_FILE,
-		                     Brw_EXPAND_TREE_NOTHING,PathInTree,DirFileList[NumFileInThisDir]->d_name);
+	 free ((void *) FileList[NumFile]);
 	}
+      free ((void *) FileList);
+     }
+   else
+      Lay_ShowErrorAndExit ("Error while scanning directory.");
   }
 
 /*****************************************************************************/
@@ -6184,18 +6205,25 @@ void Brw_RemoveTree (const char *Path)
 	      {
 	       /***** Remove each directory and file under this directory *****/
 	       /* Scan the directory */
-	       NumFiles = scandir (Path,&FileList,NULL,NULL);
-
-	       /* Remove recursively all the directories and files */
-	       for (NumFile = 0;
-		    NumFile < NumFiles;
-		    NumFile++)
-		  if (strcmp (FileList[NumFile]->d_name,".") &&
-                      strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
+		 {
+		  /* Remove recursively all the directories and files */
+		  for (NumFile = 0;
+		       NumFile < NumFiles;
+		       NumFile++)
 		    {
-		     sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
-		     Brw_RemoveTree (PathFileRel);
+		     if (strcmp (FileList[NumFile]->d_name,".") &&
+			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		       {
+			sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+			Brw_RemoveTree (PathFileRel);
+		       }
+		     free ((void *) FileList[NumFile]);
 		    }
+		  free ((void *) FileList);
+		 }
+	       else
+		  Lay_ShowErrorAndExit ("Error while scanning directory.");
 
 	       /***** Remove of new the directory, now empty *****/
 	       if (rmdir (Path))
@@ -7462,10 +7490,11 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
    struct dirent **FileList;
    bool AdminMarks;
    struct MarksProperties Marks;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
+   int NumFile;
+   int NumFiles;
    unsigned NumLevls;
    long FilCod;	// File code of the file pasted
+   bool CopyIsGoingSuccessful = true;
 
    /***** Get the name (only the name) of the origin file or folder *****/
    Str_SplitFullPathIntoPathAndFileName (PathOrg,
@@ -7516,116 +7545,138 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
             Lay_ShowErrorAndExit ("Can not paste unknown file type.");
         }
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      return false;
+      CopyIsGoingSuccessful = false;
      }
-
-   /***** Copy file or folder *****/
-   if (FileType == Brw_IS_FILE ||
-       FileType == Brw_IS_LINK)	// It's a regular file
+   else	// Quota not exceeded
      {
-      /***** Check if exists the destination file */
-      if (Fil_CheckIfPathExists (PathDstWithFile))
-        {
-         sprintf (Gbl.Message,
-                  FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name :
-                	                    Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name,
-                  FileNameToShow);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         return false;
-        }
-
-      /***** If the target file browser is that of marks, only HTML files are allowed *****/
-      AdminMarks = Gbl.FileBrowser.Type == Brw_ADMI_MARKS_CRS ||
-                   Gbl.FileBrowser.Type == Brw_ADMI_MARKS_GRP;
-      if (AdminMarks)
+      /***** Copy file or folder *****/
+      if (FileType == Brw_IS_FILE ||
+	  FileType == Brw_IS_LINK)	// It's a regular file
 	{
-         /* Check extension of the file */
-         if (Str_FileIsHTML (FileNameOrg))
-            Mrk_CheckFileOfMarks (PathOrg,&Marks);	// Gbl.Message contains feedback text
-         else
-           {
-            sprintf (Gbl.Message,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
-                     FileNameToShow);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-            return false;
-           }
-	}
-
-      /***** Update and check the quota before copying the file *****/
-      Gbl.FileBrowser.Size.NumFiles++;
-      Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-      if (Brw_CheckIfQuotaExceded ())
-        {
-         sprintf (Gbl.Message,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
-                                                        Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota,
-                  FileNameToShow);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         return false;
-        }
-
-      /***** Quota will not be exceeded ==> copy the origin file to the destination file *****/
-      Fil_FastCopyOfFiles (PathOrg,PathDstWithFile);
-
-      /***** Add entry to the table of files/folders *****/
-      FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-                                PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
-      if (*FirstFilCod <= 0)
-	 *FirstFilCod = FilCod;
-
-      /* Add a new entry of marks into database */
-      if (AdminMarks)
-	 Mrk_AddMarksToDB (FilCod,&Marks);
-
-      if (FileType == Brw_IS_FILE)
-	 (*NumFilesPasted)++;
-      else // FileType == Brw_IS_LINK
-	 (*NumLinksPasted)++;
-     }
-   else if (FileType == Brw_IS_FOLDER)	// It's a directory
-     {
-      /***** Scan the source directory *****/
-      NumFilesInThisDir = scandir (PathOrg,&FileList,NULL,alphasort);
-
-      /***** Create the folder in the destination *****/
-      if (!Fil_CheckIfPathExists (PathDstWithFile))	// If already exists, don't overwrite
-        {
-	 /* The directory does not exist ==> create it.
-            First, update and check the quota */
-	 Gbl.FileBrowser.Size.NumFolds++;
-	 Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-         if (Brw_CheckIfQuotaExceded ())
-           {
-            sprintf (Gbl.Message,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
-                     FileNameToShow);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-            return false;
-           }
-	 /* The quota will not be exceded ==> create the directory */
-         if (mkdir (PathDstWithFile,(mode_t) 0xFFF) != 0)
-            Lay_ShowErrorAndExit ("Can not create folder.");
-
-         /* Add entry to the table of files/folders */
-         Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-                          PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
-        }
-
-      /***** Copy each of the files and folders from the origin to the destination *****/
-      for (NumFileInThisDir = 0;
-	   NumFileInThisDir < NumFilesInThisDir;
-	   NumFileInThisDir++)
-         if (strcmp (FileList[NumFileInThisDir]->d_name,".") &&
-             strcmp (FileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
+	 /***** Check if exists the destination file */
+	 if (Fil_CheckIfPathExists (PathDstWithFile))
 	   {
-	    sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFileInThisDir]->d_name);
-            if (!Brw_PasteTreeIntoFolder (PathInFolderOrg,PathDstInTreeWithFile,
-        	                          NumFilesPasted,NumFoldsPasted,NumLinksPasted,
-        	                          FirstFilCod))
-               return false;
+	    sprintf (Gbl.Message,
+		     FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name :
+					       Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name,
+		     FileNameToShow);
+	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	    CopyIsGoingSuccessful = false;
 	   }
+	 else	// Destination file does not exist
+	   {
+	    /***** If the target file browser is that of marks, only HTML files are allowed *****/
+	    AdminMarks = Gbl.FileBrowser.Type == Brw_ADMI_MARKS_CRS ||
+			 Gbl.FileBrowser.Type == Brw_ADMI_MARKS_GRP;
+	    if (AdminMarks)
+	      {
+	       /* Check extension of the file */
+	       if (Str_FileIsHTML (FileNameOrg))
+		  Mrk_CheckFileOfMarks (PathOrg,&Marks);	// Gbl.Message contains feedback text
+	       else
+		 {
+		  sprintf (Gbl.Message,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
+			   FileNameToShow);
+		  Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	          CopyIsGoingSuccessful = false;
+		 }
+	      }
 
-      (*NumFoldsPasted)++;
+            if (CopyIsGoingSuccessful)
+              {
+	       /***** Update and check the quota before copying the file *****/
+	       Gbl.FileBrowser.Size.NumFiles++;
+	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
+	       if (Brw_CheckIfQuotaExceded ())
+		 {
+		  sprintf (Gbl.Message,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
+								 Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota,
+			   FileNameToShow);
+		  Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+		  CopyIsGoingSuccessful = false;
+		 }
+	       else	// Quota not exceeded
+		 {
+		  /***** Quota will not be exceeded ==> copy the origin file to the destination file *****/
+		  Fil_FastCopyOfFiles (PathOrg,PathDstWithFile);
+
+		  /***** Add entry to the table of files/folders *****/
+		  FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
+					    PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+		  if (*FirstFilCod <= 0)
+		     *FirstFilCod = FilCod;
+
+		  /* Add a new entry of marks into database */
+		  if (AdminMarks)
+		     Mrk_AddMarksToDB (FilCod,&Marks);
+
+		  if (FileType == Brw_IS_FILE)
+		     (*NumFilesPasted)++;
+		  else // FileType == Brw_IS_LINK
+		     (*NumLinksPasted)++;
+		 }
+              }
+	   }
+	}
+      else if (FileType == Brw_IS_FOLDER)	// It's a directory
+	{
+	 /***** Scan the source directory *****/
+	 if ((NumFiles = scandir (PathOrg,&FileList,NULL,alphasort)) >= 0)	// No error
+	   {
+	    /***** Create the folder in the destination *****/
+	    if (!Fil_CheckIfPathExists (PathDstWithFile))	// If already exists, don't overwrite
+	      {
+	       /* The directory does not exist ==> create it.
+		  First, update and check the quota */
+	       Gbl.FileBrowser.Size.NumFolds++;
+	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
+	       if (Brw_CheckIfQuotaExceded ())
+		 {
+		  sprintf (Gbl.Message,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
+			   FileNameToShow);
+		  Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+		  CopyIsGoingSuccessful = false;
+		 }
+	       else	// Quota not exceded
+		 {
+		  /* Create directory */
+		  if (mkdir (PathDstWithFile,(mode_t) 0xFFF) != 0)
+		     Lay_ShowErrorAndExit ("Can not create folder.");
+
+		  /* Add entry to the table of files/folders */
+		  Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
+				   PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+		 }
+	      }
+
+	    /***** Copy each of the files and folders from the origin to the destination *****/
+	    for (NumFile = 0;
+		 NumFile < NumFiles;
+		 NumFile++)
+	      {
+	       if (CopyIsGoingSuccessful &&
+		   strcmp (FileList[NumFile]->d_name,".") &&
+		   strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		 {
+		  sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFile]->d_name);
+		  if (!Brw_PasteTreeIntoFolder (PathInFolderOrg,PathDstInTreeWithFile,
+						NumFilesPasted,NumFoldsPasted,NumLinksPasted,
+						FirstFilCod))
+		     CopyIsGoingSuccessful = false;
+		 }
+	       free ((void *) FileList[NumFile]);
+	      }
+	    free ((void *) FileList);
+	   }
+	 else
+	    Lay_ShowErrorAndExit ("Error while scanning directory.");
+
+	 if (CopyIsGoingSuccessful)
+	    (*NumFoldsPasted)++;
+	}
      }
-   return true;
+
+   return CopyIsGoingSuccessful;
   }
 
 /*****************************************************************************/
@@ -11310,8 +11361,8 @@ void Brw_RemoveOldFiles (void)
 
 static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
   {
-   extern const char *Txt_Folders_removed;
    extern const char *Txt_Files_removed;
+   extern const char *Txt_Folders_removed;
 
    /***** Remove old files recursively *****/
    Gbl.FileBrowser.Removed.NumFiles   =
@@ -11319,9 +11370,10 @@ static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
    Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,TimeRemoveFilesOlder);
 
    /***** Success message *****/
-   sprintf (Gbl.Message,"%s: %u. %s: %u.",
-            Txt_Folders_removed,Gbl.FileBrowser.Removed.NumFolders,
-            Txt_Files_removed  ,Gbl.FileBrowser.Removed.NumFiles);
+   sprintf (Gbl.Message,"%s: %u.<br />"
+	                "%s: %u.",
+            Txt_Files_removed  ,Gbl.FileBrowser.Removed.NumFiles,
+            Txt_Folders_removed,Gbl.FileBrowser.Removed.NumFolders);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
@@ -11333,71 +11385,74 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
                                          time_t TimeRemoveFilesOlder)
   {
    struct dirent **FileList;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
+   int NumFile;
+   int NumFiles;
    char PathFileRel[PATH_MAX+1];
    struct stat FileStatus;
 
    /***** Scan directory *****/
-   NumFilesInThisDir = scandir (Path,&FileList,NULL,alphasort);
-
-   if (NumFilesInThisDir > 2)
+   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
-      /***** Check file by file removing old files *****/
-      for (NumFileInThisDir = 0;
-	   NumFileInThisDir < NumFilesInThisDir;
-	   NumFileInThisDir++)
+      if (NumFiles > 2)
 	{
-	 if (strcmp (FileList[NumFileInThisDir]->d_name,".") &&
-	     strcmp (FileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
+	 /***** Check file by file removing old files *****/
+	 for (NumFile = 0;
+	      NumFile < NumFiles;
+	      NumFile++)
 	   {
-	    /***** Construct the full path of the file or folder *****/
-	    sprintf (PathFileRel,"%s/%s",Path,FileList[NumFileInThisDir]->d_name);
-
-	    /***** Get file or folder status *****/
-	    lstat (PathFileRel,&FileStatus);
-
-	    if (S_ISDIR (FileStatus.st_mode))				// It's a directory
-	       /* Scan subtree starting at this this directory recursively */
-	       Brw_ScanDirRemovingOlfFiles (Level+1,PathFileRel,TimeRemoveFilesOlder);
-	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
-		     FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
+	    if (strcmp (FileList[NumFile]->d_name,".") &&
+		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	      {
-	       /* Remove file */
-	       Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-	       Gbl.FileBrowser.Removed.NumFiles++;
+	       /***** Construct the full path of the file or folder *****/
+	       sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+
+	       /***** Get file or folder status *****/
+	       lstat (PathFileRel,&FileStatus);
+
+	       if (S_ISDIR (FileStatus.st_mode))				// It's a directory
+		  /* Scan subtree starting at this this directory recursively */
+		  Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,TimeRemoveFilesOlder);
+	       else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
+			FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
+		 {
+		  /* Remove file */
+		  Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
+		  Gbl.FileBrowser.Removed.NumFiles++;
+		 }
 	      }
+	    free ((void *) FileList[NumFile]);
 	   }
-	 free (FileList[NumFileInThisDir]);
+	 free ((void *) FileList);
+
+	 /***** Rescan folder in order to see
+		if it's now empty after deletion *****/
+	 if (Level > 1)
+	   {
+	    /* Count number of files in folder */
+	    NumFiles = scandir (Path,&FileList,NULL,alphasort);
+
+	    /* Free list of files */
+	    for (NumFile = 0;
+		 NumFile < NumFiles;
+		 NumFile++)
+	       free ((void *) FileList[NumFile]);
+	    free ((void *) FileList);
+	   }
 	}
-      free (FileList);
 
-      /***** Rescan folder in order to see
-             if it's now empty after deletion *****/
-      if (Level > 1)
+      if (Level > 1 && NumFiles <= 2)	// It's an empty folder inside root folder
 	{
-	 /* Count number of files in folder */
-         NumFilesInThisDir = scandir (Path,&FileList,NULL,alphasort);
+	 /***** Get folder status *****/
+	 lstat (Path,&FileStatus);
 
-         /* Free list of files */
-	 for (NumFileInThisDir = 0;
-	      NumFileInThisDir < NumFilesInThisDir;
-	      NumFileInThisDir++)
-	    free (FileList[NumFileInThisDir]);
-	 free (FileList);
+	 if (FileStatus.st_mtime < TimeRemoveFilesOlder)
+	   {
+	    /* Remove folder */
+	    Lay_ShowAlert (Lay_SUCCESS,Path);
+	    Gbl.FileBrowser.Removed.NumFolders++;
+	   }
 	}
      }
-
-   if (Level > 1 && NumFilesInThisDir <= 2)	// It's an empty folder inside root folder
-     {
-      /***** Get folder status *****/
-      lstat (Path,&FileStatus);
-
-      if (FileStatus.st_mtime < TimeRemoveFilesOlder)
-	{
-	 /* Remove folder */
-	 Lay_ShowAlert (Lay_SUCCESS,Path);
-	 Gbl.FileBrowser.Removed.NumFolders++;
-	}
-     }
+   else
+      Lay_ShowErrorAndExit ("Error while scanning directory.");
   }

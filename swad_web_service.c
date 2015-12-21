@@ -4034,50 +4034,56 @@ int swad__getDirectoryTree (struct soap *soap,
 static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
   {
    extern const char *Txt_NEW_LINE;
-   struct dirent **DirFileList;
-   int NumFileInThisDir;
-   int NumFilesInThisDir;
+   struct dirent **FileList;
+   int NumFile;
+   int NumFiles;
    char PathFileRel[PATH_MAX+1];
    char PathFileInExplTree[PATH_MAX+1];
    struct stat FileStatus;
 
    /***** Scan directory *****/
-   NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
-
-   /***** List files *****/
-   for (NumFileInThisDir = 0;
-	NumFileInThisDir < NumFilesInThisDir;
-	NumFileInThisDir++)
-      if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
-          strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
-        {
-	 sprintf (PathFileRel       ,"%s/%s",Path      ,DirFileList[NumFileInThisDir]->d_name);
-	 sprintf (PathFileInExplTree,"%s/%s",PathInTree,DirFileList[NumFileInThisDir]->d_name);
-
-	 lstat (PathFileRel,&FileStatus);
-
-         /***** Construct the full path of the file or folder *****/
-         Brw_SetFullPathInTree (PathInTree,DirFileList[NumFileInThisDir]->d_name);
-
-	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+     {
+      /***** List files *****/
+      for (NumFile = 0;
+	   NumFile < NumFiles;
+	   NumFile++)
+	{
+	 if (strcmp (FileList[NumFile]->d_name,".") &&
+	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-            /***** Write a row for the subdirectory *****/
-	    if (Svc_WriteRowFileBrowser (Level,Brw_IS_FOLDER,DirFileList[NumFileInThisDir]->d_name))
-	      {
-               /* List subtree starting at this this directory */
-               Svc_ListDir (Level+1,PathFileRel,PathFileInExplTree);
+	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
+	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
 
-               /* Indent and end dir */
-               Svc_IndentXMLLine (Level);
-	       fprintf (Gbl.F.XML,"</dir>%s",Txt_NEW_LINE);
+	    lstat (PathFileRel,&FileStatus);
+
+	    /***** Construct the full path of the file or folder *****/
+	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
+
+	    if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+	      {
+	       /***** Write a row for the subdirectory *****/
+	       if (Svc_WriteRowFileBrowser (Level,Brw_IS_FOLDER,FileList[NumFile]->d_name))
+		 {
+		  /* List subtree starting at this this directory */
+		  Svc_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+
+		  /* Indent and end dir */
+		  Svc_IndentXMLLine (Level);
+		  fprintf (Gbl.F.XML,"</dir>%s",Txt_NEW_LINE);
+		 }
 	      }
+	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+	       Svc_WriteRowFileBrowser (Level,
+					Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+										       Brw_IS_FILE,
+					FileList[NumFile]->d_name);
 	   }
-	 else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	    Svc_WriteRowFileBrowser (Level,
-	                             Str_FileIs (DirFileList[NumFileInThisDir]->d_name,"url") ? Brw_IS_LINK :
-		                                                                                Brw_IS_FILE,
-		                     DirFileList[NumFileInThisDir]->d_name);
+
+	 free ((void *) FileList[NumFile]);
 	}
+      free ((void *) FileList);
+     }
   }
 
 /*****************************************************************************/

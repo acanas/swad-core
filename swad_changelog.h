@@ -118,12 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.70.3 (2015/12/21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.70.5 (2015/12/21)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.70.5:  Dec 21, 2015	Code refactoring in file browser. (187569 lines)
+        Version 15.70.4:  Dec 21, 2015	Code refactoring in file browser. (187527 lines)
         Version 15.70.3:  Dec 21, 2015	Code refactoring in file browser. (187490 lines)
         Version 15.70.2:  Dec 21, 2015	Users can selected number of months in form to remove old files in briefcase. Not finished. (187473 lines)
         Version 15.70.1:  Dec 21, 2015	Removing old files in briefcase. Not finished. (187408 lines)

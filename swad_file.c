@@ -415,7 +415,8 @@ void Fil_CreateDirIfNotExists (const char *Path)
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory)
   {
    struct dirent **FileList;
-   int NumFile,NumFilesInsideDir;
+   int NumFile;
+   int NumFiles;
    char Path2[PATH_MAX+1];
    struct stat FileStatus;
 
@@ -423,25 +424,33 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
    if (S_ISDIR (FileStatus.st_mode))		// It's a directory
      {
       /***** Scan the directory *****/
-      NumFilesInsideDir = scandir (Path,&FileList,NULL,NULL);
-
-      /* Loop over files */
-      for (NumFile = 0;
-	   NumFile < NumFilesInsideDir;
-	   NumFile++)
-	 if (strcmp (FileList[NumFile]->d_name,".") &&
-             strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+      if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
+	{
+	 /* Loop over files */
+	 for (NumFile = 0;
+	      NumFile < NumFiles;
+	      NumFile++)
 	   {
-	    sprintf (Path2,"%s/%s",Path,FileList[NumFile]->d_name);
-	    Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
+	    if (strcmp (FileList[NumFile]->d_name,".") &&
+		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	      {
+	       sprintf (Path2,"%s/%s",Path,FileList[NumFile]->d_name);
+	       Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
+	      }
+	    free ((void *) FileList[NumFile]);
 	   }
-      if (RemoveDirectory)
-	 /* Remove the directory itself */
-	 if (Gbl.StartExecutionTimeUTC - FileStatus.st_mtime > TimeToRemove)
-	    rmdir (Path);
+	 free ((void *) FileList);
+
+	 if (RemoveDirectory)
+	    /* Remove the directory itself */
+	    if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+	       rmdir (Path);
+	}
+      else
+	 Lay_ShowErrorAndExit ("Error while scanning directory.");
      }
    else
-      if (Gbl.StartExecutionTimeUTC - FileStatus.st_mtime > TimeToRemove)
+      if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
 	 unlink (Path);
   }
 
