@@ -3426,8 +3426,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	 break;
       case Brw_ADMI_BRIEF_USR:
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// TODO: Remove this line when stable
-	    if (Gbl.CurrentAct != ActAskRemOldBrf &&
-		Gbl.CurrentAct != ActRemOldBrf)
+	    if (Gbl.CurrentAct != ActAskRemOldBrf)
 	       Brw_PutFormToAskRemOldFiles ();
 	 break;
       default:
@@ -4625,6 +4624,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
    for (NumFileInThisDir = 0;
 	NumFileInThisDir < NumFilesInThisDir;
 	NumFileInThisDir++)
+     {
       if (strcmp (FileList[NumFileInThisDir]->d_name,".") &&
           strcmp (FileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
 	{
@@ -4647,6 +4647,9 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 	    Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
 	   }
 	}
+      free (FileList[NumFileInThisDir]);
+     }
+   free (FileList);
   }
 
 /*****************************************************************************/
@@ -11329,58 +11332,72 @@ static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
 static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
                                          time_t TimeRemoveFilesOlder)
   {
-   struct dirent **DirFileList;
-   struct dirent **SubdirFileList;
+   struct dirent **FileList;
    int NumFileInThisDir;
    int NumFilesInThisDir;
-   int NumFilesInThisSubdir;
    char PathFileRel[PATH_MAX+1];
    struct stat FileStatus;
 
    /***** Scan directory *****/
-   NumFilesInThisDir = scandir (Path,&DirFileList,NULL,alphasort);
+   NumFilesInThisDir = scandir (Path,&FileList,NULL,alphasort);
 
-   /***** Check file by file removing old files *****/
-   for (NumFileInThisDir = 0;
-	NumFileInThisDir < NumFilesInThisDir;
-	NumFileInThisDir++)
-      if (strcmp (DirFileList[NumFileInThisDir]->d_name,".") &&
-          strcmp (DirFileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
-        {
-         /***** Construct the full path of the file or folder *****/
-	 sprintf (PathFileRel,"%s/%s",Path,DirFileList[NumFileInThisDir]->d_name);
-
-         /***** Get file or folder status *****/
-	 lstat (PathFileRel,&FileStatus);
-
-	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+   if (NumFilesInThisDir > 2)
+     {
+      /***** Check file by file removing old files *****/
+      for (NumFileInThisDir = 0;
+	   NumFileInThisDir < NumFilesInThisDir;
+	   NumFileInThisDir++)
+	{
+	 if (strcmp (FileList[NumFileInThisDir]->d_name,".") &&
+	     strcmp (FileList[NumFileInThisDir]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    /***** Check if this subdirectory has files or folders in it *****/
-	    NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
+	    /***** Construct the full path of the file or folder *****/
+	    sprintf (PathFileRel,"%s/%s",Path,FileList[NumFileInThisDir]->d_name);
 
-	    if (NumFilesInThisSubdir > 2)	// Not empty directory
-	      {
+	    /***** Get file or folder status *****/
+	    lstat (PathFileRel,&FileStatus);
+
+	    if (S_ISDIR (FileStatus.st_mode))				// It's a directory
 	       /* Scan subtree starting at this this directory recursively */
 	       Brw_ScanDirRemovingOlfFiles (Level+1,PathFileRel,TimeRemoveFilesOlder);
-
-	       /* Check again number of files after deletion */
-	       NumFilesInThisSubdir = scandir (PathFileRel,&SubdirFileList,NULL,NULL);
-	      }
-
-	    if (NumFilesInThisSubdir <= 2 &&			// It's an empty folder
-	        FileStatus.st_mtime < TimeRemoveFilesOlder)	// ..and it's old
+	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
+		     FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 	      {
-	       /* Remove folder */
+	       /* Remove file */
 	       Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-	       Gbl.FileBrowser.Removed.NumFolders++;
+	       Gbl.FileBrowser.Removed.NumFiles++;
 	      }
 	   }
-	 else if (S_ISREG (FileStatus.st_mode) &&		// It's a regular file
-	          FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
-	   {
-	    /* Remove file */
-	    Lay_ShowAlert (Lay_SUCCESS,PathFileRel);
-	    Gbl.FileBrowser.Removed.NumFiles++;
-	   }
+	 free (FileList[NumFileInThisDir]);
 	}
+      free (FileList);
+
+      /***** Rescan folder in order to see
+             if it's now empty after deletion *****/
+      if (Level > 1)
+	{
+	 /* Count number of files in folder */
+         NumFilesInThisDir = scandir (Path,&FileList,NULL,alphasort);
+
+         /* Free list of files */
+	 for (NumFileInThisDir = 0;
+	      NumFileInThisDir < NumFilesInThisDir;
+	      NumFileInThisDir++)
+	    free (FileList[NumFileInThisDir]);
+	 free (FileList);
+	}
+     }
+
+   if (Level > 1 && NumFilesInThisDir <= 2)	// It's an empty folder inside root folder
+     {
+      /***** Get folder status *****/
+      lstat (Path,&FileStatus);
+
+      if (FileStatus.st_mtime < TimeRemoveFilesOlder)
+	{
+	 /* Remove folder */
+	 Lay_ShowAlert (Lay_SUCCESS,Path);
+	 Gbl.FileBrowser.Removed.NumFolders++;
+	}
+     }
   }
