@@ -272,19 +272,19 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    /***** Get parameter that indicates if the message is a reply to another message *****/
    Par_GetParToText ("IsReply",YN,1);
    if ((Gbl.Msg.Reply.IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
-     {
       /* Get original message code */
       Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ();
 
-      /* Get who to show as potential recipients:
-         - the sender of the original message and other users
-         - only the sender of the original message (default) */
-      Par_GetParToText ("ShowOtherRecipients",YN,1);
-      Gbl.Msg.Reply.ShowOtherRecipients = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-     }
-
    /***** Get user's code of possible preselected recipient *****/
    Usr_GetParamOtherUsrCodEncrypted ();
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// There is a preselected recipient
+     {
+      /* Get who to show as potential recipients:
+         - only the selected recipient
+         - any user (default) */
+      Par_GetParToText ("ShowOnlyOneRecipient",YN,1);
+      Gbl.Msg.ShowOnlyOneRecipient = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+     }
 
    /***** Get list of users' IDs or nicknames written explicitely *****/
    Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
@@ -328,29 +328,46 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       if (Gbl.Msg.Reply.IsReply)
         {
          Par_PutHiddenParamChar ("IsReply",'Y');
-         // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
          Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
          Usr_PutParamOtherUsrCodEncrypted ();
+         Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
         }
 
-      /***** Draw lists of users with the recipients *****/
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	                 "<tr>"
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+
+      /***** To (recipients) *****/
+      fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">"
-                         "<table>",
+                         "<table style=\"width:100%%;\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
+      if (Gbl.Msg.ShowOnlyOneRecipient)
+	{
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td>");
 
-      /* Teachers */
-      Usr_ListUsersToSelect (Rol_TEACHER);
+	 /***** Show only one user as recipient *****/
+         sprintf (Gbl.Message,"Gbl.Usrs.Other.UsrDat.UsrCod = %ld",Gbl.Usrs.Other.UsrDat.UsrCod);
+         Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-      /* Students */
-      Usr_ListUsersToSelect (Rol_STUDENT);
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+	}
+      else
+	{
+	 /***** Show potential recipients *****/
+	 /* Teachers */
+	 Usr_ListUsersToSelect (Rol_TEACHER);
 
-      /* Other users (nicknames) */
-      Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
+	 /* Students */
+	 Usr_ListUsersToSelect (Rol_STUDENT);
+
+	 /* Other users (nicknames) */
+	 Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
+	}
 
       /* End of table */
       fprintf (Gbl.F.Out,"</table>"
@@ -365,8 +382,10 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 			 "<td colspan=\"2\">");
       Lay_HelpPlainEditor ();
       fprintf (Gbl.F.Out,"</td>"
-			 "</tr>"
-			 "</table>");
+			 "</tr>");
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -3007,9 +3026,9 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
      }
    Grp_PutParamAllGroups ();
    Par_PutHiddenParamChar ("IsReply",'Y');
-   // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
    Msg_PutHiddenParamMsgCod (MsgCod);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+   Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Subject\""
 	              " value=\"Re: %s\" />",
             Subject);

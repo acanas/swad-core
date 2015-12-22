@@ -584,9 +584,9 @@ struct Globals
       struct
         {
          bool IsReply;			// Is the message I am editing a reply?
-         bool ShowOtherRecipients;	// Shown other recipients or only the sender of the original message?
          long OriginalMsgCod;		// Original message code when I am editing a reply
         } Reply;
+      bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
       char FileNameMail[PATH_MAX+1];
       FILE *FileMail;
      } Msg;

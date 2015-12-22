@@ -5025,9 +5025,9 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
          if (Gbl.Msg.Reply.IsReply)
            {
             Par_PutHiddenParamChar ("IsReply",'Y');
-            // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
             Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
             Usr_PutParamOtherUsrCodEncrypted ();
+            Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
            }
          break;
       case ActSeeUseGbl:

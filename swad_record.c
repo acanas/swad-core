@@ -2306,6 +2306,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       else
 	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
+      Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
       Act_LinkFormSubmit (Txt_Write_a_message,"REC_DAT_BOLD");
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 	                 " style=\"display:inline;\" >"

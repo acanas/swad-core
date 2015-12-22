@@ -117,12 +117,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.72 (2015-12-22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.72.1 (2015-12-22)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.72.1:  Dec 22, 2015	Write message only to one recipient. Not finished. (187724 lines)
         Version 15.72:    Dec 22, 2015	Reply message only to sender, suggested by Francisco Ocaña Lara. Not finished. (187705 lines)
         Version 15.71.3:  Dec 22, 2015	Changes in birthday range of years. (187669 lines)
         Version 15.71.2:  Dec 21, 2015	Fixed bugs in removing old files in briefcase. (187666 lines)
