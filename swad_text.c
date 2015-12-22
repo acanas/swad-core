@@ -22598,7 +22598,7 @@ const char *Txt_New_mail_domain =
 
 const char *Txt_New_message =
 #if   L==1
-	"Nuevo mensaje";	// Necessita traduccio
+	"Nou missatge";
 #elif L==2
 	"Neue Nachricht";
 #elif L==3
@@ -29497,7 +29497,7 @@ const char *Txt_Remove_USER_from_the_course_X =	// Warning: it is very important
 
 const char *Txt_Reply =
 #if   L==1
-	"Responder";	// Necessita traduccio
+	"Respondre";
 #elif L==2
 	"Antworten";
 #elif L==3
@@ -29518,7 +29518,7 @@ const char *Txt_Reply =
 
 const char *Txt_Reply_again =
 #if   L==1
-	"Responder otra vez";		// Necessita traduccio
+	"Respondre de nou";
 #elif L==2
 	"Antworten wieder";
 #elif L==3
@@ -29535,6 +29535,27 @@ const char *Txt_Reply_again =
 	"Odpowiedz ponownie";
 #elif L==9
 	"Responder novamente";
+#endif
+
+const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
+#if   L==1
+	"Missatge de resposta";
+#elif L==2
+	"Antwortnachricht";
+#elif L==3
+	"Reply message";
+#elif L==4
+	"Mensaje de respuesta";
+#elif L==5
+	"Message de r&eacute;ponse";
+#elif L==6
+	"Mensaje de respuesta";	// Okoteve traducción
+#elif L==7
+	"Messaggio di risposta";
+#elif L==8
+	"Wiadomo&sacute;&cacute; odpowiedz";
+#elif L==9
+	"Mensagem de resposta";
 #endif
 
 const char *Txt_Requester =
@@ -29560,7 +29581,7 @@ const char *Txt_Requester =
 
 const char *Txt_Reset =
 #if   L==1
-	"Poner a cero";	// Necessita traduccio
+	"Posar a zero";
 #elif L==2
 	"Reset";
 #elif L==3
@@ -29581,7 +29602,7 @@ const char *Txt_Reset =
 
 const char *Txt_Reset_survey =
 #if   L==1
-	"Poner encuesta a cero";	// Necessita traduccio
+	"Posar enquesta a zero";
 #elif L==2
 	"Reset Umfrage";
 #elif L==3
@@ -29602,15 +29623,15 @@ const char *Txt_Reset_survey =
 
 const char *Txt_results_per_page =
 #if   L==1
-	"resultados por p&aacute;gina";	// Necessita traduccio
+	"resultats per p&agrave;gina";
 #elif L==2
-	"results per page";		// Need Übersetzung
+	"Ergebnisse pro Seite";
 #elif L==3
 	"results per page";
 #elif L==4
 	"resultados por p&aacute;gina";
 #elif L==5
-	"results per page";		// Besoin de traduction
+	"r&eacute;sultats par page";
 #elif L==6
 	"resultados por p&aacute;gina";	// Okoteve traducción
 #elif L==7
@@ -29618,7 +29639,7 @@ const char *Txt_results_per_page =
 #elif L==8
 	"wynik&oacute;w na stronie";
 #elif L==9
-	"results per page";		// Necessita de tradução
+	"resultados por p&aacute;gina";
 #endif
 
 const char *Txt_Results_tests =

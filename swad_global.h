@@ -580,9 +580,13 @@ struct Globals
       char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3+1];	// Show only messages from/to these users
       char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT+1];		// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
-      bool IsReply;		// Is the message I am editing a reply to a received message?
-      long RepliedMsgCod;	// Original message code when I am editing a reply to a received message
       long ExpandedMsgCod;	// The current expanded message code
+      struct
+        {
+         bool IsReply;			// Is the message I am editing a reply?
+         bool ShowOtherRecipients;	// Shown other recipients or only the sender of the original message?
+         long OriginalMsgCod;		// Original message code when I am editing a reply
+        } Reply;
       char FileNameMail[PATH_MAX+1];
       FILE *FileMail;
      } Msg;

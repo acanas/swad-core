@@ -80,6 +80,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded);
 static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
@@ -259,6 +260,7 @@ void Msg_FormMsgUsrs (void)
 static void Msg_PutFormMsgUsrs (const char *Content)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
@@ -269,9 +271,17 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
    Par_GetParToText ("IsReply",YN,1);
-   if ((Gbl.Msg.IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+   if ((Gbl.Msg.Reply.IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+     {
       /* Get original message code */
-      Gbl.Msg.RepliedMsgCod = Msg_GetParamMsgCod ();
+      Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ();
+
+      /* Get who to show as potential recipients:
+         - the sender of the original message and other users
+         - only the sender of the original message (default) */
+      Par_GetParToText ("ShowOtherRecipients",YN,1);
+      Gbl.Msg.Reply.ShowOtherRecipients = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+     }
 
    /***** Get user's code of possible preselected recipient *****/
    Usr_GetParamOtherUsrCodEncrypted ();
@@ -305,7 +315,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                     Gbl.Usrs.LstStds.NumUsrs))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_New_message);
+      Lay_StartRoundFrame (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
+	                                                Txt_New_message);
 
       /***** Form to select type of list used for select several users *****/
       if (Gbl.Usrs.LstTchs.NumUsrs ||
@@ -314,10 +325,11 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
-      if (Gbl.Msg.IsReply)
+      if (Gbl.Msg.Reply.IsReply)
         {
          Par_PutHiddenParamChar ("IsReply",'Y');
-         Msg_PutHiddenParamMsgCod (Gbl.Msg.RepliedMsgCod);
+         // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
+         Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
          Usr_PutParamOtherUsrCodEncrypted ();
         }
 
@@ -338,7 +350,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Usr_ListUsersToSelect (Rol_STUDENT);
 
       /* Other users (nicknames) */
-      Msg_WriteFormUsrsIDsOrNicksOtherRecipients (Gbl.Msg.IsReply);
+      Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
 
       /* End of table */
       fprintf (Gbl.F.Out,"</table>"
@@ -384,7 +396,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 /************** Nicknames of recipients of a message to users ****************/
 /*****************************************************************************/
 
-void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
   {
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
@@ -415,9 +427,9 @@ void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool IsReply)
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
-   else if (IsReply)	// If this is a reply message
-                        // and there's no list of explicit recipients,
-                        // write @nickname of original sender
+   else if (Gbl.Msg.Reply.IsReply)	// If this is a reply message
+					// and there's no list of explicit recipients,
+					// write @nickname of original sender
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
          fprintf (Gbl.F.Out,"@%s",Nickname);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -560,14 +572,14 @@ void Msg_RecMsgFromUsr (void)
    bool IsReply;
    bool RecipientHasBannedMe;
    bool Replied = false;
-   long RepliedMsgCod = -1;	// Initialized to avoid warning
+   long OriginalMsgCod = -1L;	// Initialized to avoid warning
    const char *Ptr;
    unsigned NumRecipients;
    unsigned NumRecipientsToBeNotifiedByEMail = 0;
    struct UsrData UsrDstData;
    int NumErrors = 0;
    char *ListUsrsDst;
-   long NewMsgCod = -1;		// Initiliazed to avoid warning
+   long NewMsgCod = -1L;	// Initiliazed to avoid warning
    bool MsgAlreadyInserted = false;
    bool CreateNotif;
    bool NotifyByEmail;
@@ -586,7 +598,7 @@ void Msg_RecMsgFromUsr (void)
    Par_GetParToText ("IsReply",YN,1);
    if ((IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
       /* Get original message code */
-      RepliedMsgCod = Msg_GetParamMsgCod ();
+      OriginalMsgCod = Msg_GetParamMsgCod ();
 
    /* Get user's code of possible preselected recipient */
    Usr_GetParamOtherUsrCodEncrypted ();
@@ -667,7 +679,8 @@ void Msg_RecMsgFromUsr (void)
               }
 
             /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
-            Replied = (IsReply && UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+            Replied = (IsReply &&
+        	       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
             /***** This received message must be notified by e-mail? *****/
             CreateNotif = (UsrDstData.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_MESSAGE));
@@ -718,7 +731,7 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)
-      Msg_SetReceivedMsgAsReplied (RepliedMsgCod);
+      Msg_SetReceivedMsgAsReplied (OriginalMsgCod);
 
    /***** Write final message *****/
    if (NumRecipients)
@@ -2994,9 +3007,9 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
      }
    Grp_PutParamAllGroups ();
    Par_PutHiddenParamChar ("IsReply",'Y');
+   // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
    Msg_PutHiddenParamMsgCod (MsgCod);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   // Par_PutHiddenParamString ("UsrCodAll",EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Subject\""
 	              " value=\"Re: %s\" />",
             Subject);

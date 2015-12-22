@@ -186,7 +186,7 @@ static void Svc_GetListGrpsInAttendanceEvent (long AttCod,char **ListGroups);
 
 static int Svc_GetMyLanguage (void);
 
-static int Svc_sendMessageToUsr (long RepliedMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
+static int Svc_sendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
 static int Svc_GetTstConfig (long CrsCod);
 static int Svc_GetNumTestQuestionsInCrs (long CrsCod);
@@ -3007,7 +3007,7 @@ int swad__sendMessage (struct soap *soap,
 /************************* Send a message to one user ************************/
 /*****************************************************************************/
 
-static int Svc_sendMessageToUsr (long RepliedMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content)
+static int Svc_sendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content)
   {
    static bool MsgAlreadyInserted = false;
    static long NewMsgCod;
@@ -3058,7 +3058,7 @@ static int Svc_sendMessageToUsr (long RepliedMsgCod,long SenderUsrCod,long Reply
      {
       /***** ...then update received message setting Replied field to true *****/
       sprintf (Query,"UPDATE msg_rcv SET Replied='Y' WHERE MsgCod='%ld' AND UsrCod='%ld'",
-               RepliedMsgCod,SenderUsrCod);
+               OriginalMsgCod,SenderUsrCod);
       DB_QueryUPDATE (Query,"can not update a received message");
      }
 

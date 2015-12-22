@@ -5022,10 +5022,11 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
       case ActReqMsgUsr:
          Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select.All);
          Msg_PutHiddenParamOtherRecipients ();
-         if (Gbl.Msg.IsReply)
+         if (Gbl.Msg.Reply.IsReply)
            {
             Par_PutHiddenParamChar ("IsReply",'Y');
-            Msg_PutHiddenParamMsgCod (Gbl.Msg.RepliedMsgCod);
+            // Par_PutHiddenParamChar ("ShowOtherRecipients",'N');
+            Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
             Usr_PutParamOtherUsrCodEncrypted ();
            }
          break;
