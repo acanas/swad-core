@@ -59,6 +59,10 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 #define Rec_INSTITUTION_LOGO_SIZE	64
 #define Rec_DEGREE_LOGO_SIZE		64
+
+#define Rec_USR_MIN_AGE  12	// years old
+#define Rec_USR_MAX_AGE 120	// years old
+
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
 
 /*****************************************************************************/
@@ -2850,8 +2854,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 if (ShowData)
 	   {
 	    if (DataForm)
-	       Dat_WriteFormDate (Gbl.Now.Date.Year - 99,
-				  Gbl.Now.Date.Year - 16,
+	       Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
+				  Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
 				  "Birth",
 				  &(UsrDat->Birthday),
 				  false,false);

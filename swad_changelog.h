@@ -118,12 +118,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.71.2 (2015/12/21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.71.3 (2015-12-22)"
 #define CSS_FILE		"swad15.65.1.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.71.3:  Dec 22, 2015	Changes in birthday range of years. (187669 lines)
         Version 15.71.2:  Dec 21, 2015	Fixed bugs in removing old files in briefcase. (187666 lines)
         Version 15.71.1:  Dec 21, 2015	Fixed bugs in removing old files in briefcase. (187665 lines)
         Version 15.71:    Dec 21, 2015	Removing old files in briefcase. Finished. (187614 lines)
