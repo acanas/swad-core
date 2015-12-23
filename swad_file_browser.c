@@ -3201,7 +3201,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,
-                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
+                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeUsrID (UsrDat) :
                                                                     (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
 
    /***** Show user's name *****/

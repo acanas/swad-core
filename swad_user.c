@@ -1847,7 +1847,7 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
       return true;
 
-   Lay_ShowAlert (Lay_ERROR,"User does not exist.");
+   // Lay_ShowAlert (Lay_ERROR,"User does not exist.");
    return false;
   }
 
@@ -3130,7 +3130,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
-   ID_WriteUsrIDs (UsrDat,ID_ICanSeeTeacherID (UsrDat));
+   ID_WriteUsrIDs (UsrDat,ID_ICanSeeUsrID (UsrDat));
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,"</td>");
 
@@ -3183,7 +3183,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,ID_ICanSeeTeacherID (UsrDat));
+   ID_WriteUsrIDs (UsrDat,ID_ICanSeeUsrID (UsrDat));
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main teacher's data *****/

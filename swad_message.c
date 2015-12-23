@@ -38,6 +38,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_ID.h"
 #include "swad_message.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -80,7 +81,9 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded);
 static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
+static void Msg_PutLinkToShowMorePotentialRecipients (void);
 static void Msg_PutParamsShowMorePotentialRecipients (void);
+static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
@@ -263,7 +266,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
-   extern const char *Txt_Show_more_recipients;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
@@ -278,8 +280,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ();
 
    /***** Get user's code of possible preselected recipient *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// There is a preselected recipient
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
      {
       /* Get who to show as potential recipients:
          - only the selected recipient
@@ -328,13 +329,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Form to show several potential recipients *****/
       if (Gbl.Msg.ShowOnlyOneRecipient)
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
-	                        "usrs64x64.gif",
-				Txt_Show_more_recipients,Txt_Show_more_recipients);
-         fprintf (Gbl.F.Out,"</div>");
-	}
+	 Msg_PutLinkToShowMorePotentialRecipients ();
 
       /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
@@ -349,7 +344,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
-      /***** To (recipients) *****/
+      /***** "To:" section (recipients) *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
@@ -359,13 +354,10 @@ static void Msg_PutFormMsgUsrs (const char *Content)
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
       if (Gbl.Msg.ShowOnlyOneRecipient)
 	{
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td>");
-
 	 /***** Show only one user as recipient *****/
-         sprintf (Gbl.Message,"Gbl.Usrs.Other.UsrDat.UsrCod = %ld",Gbl.Usrs.Other.UsrDat.UsrCod);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"LEFT_TOP\">");
+         Msg_ShowOneUniqueRecipient ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 	}
@@ -387,7 +379,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
                          "</td>"
 	                 "</tr>");
 
-      /***** Subject and content *****/
+      /***** Subject and content sections *****/
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
       /***** Help for text editor and send button *****/
@@ -425,6 +417,21 @@ static void Msg_PutFormMsgUsrs (const char *Content)
   }
 
 /*****************************************************************************/
+/********** Put contextual link to show more potential recipients ************/
+/*****************************************************************************/
+
+static void Msg_PutLinkToShowMorePotentialRecipients (void)
+  {
+   extern const char *Txt_Show_more_recipients;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
+			  "usrs64x64.gif",
+			  Txt_Show_more_recipients,Txt_Show_more_recipients);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /************ Put parameters to show more potential recipients ***************/
 /*****************************************************************************/
 
@@ -436,6 +443,36 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
       Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
       Usr_PutParamOtherUsrCodEncrypted ();
      }
+  }
+
+/*****************************************************************************/
+/************ Put parameters to show more potential recipients ***************/
+/*****************************************************************************/
+
+static void Msg_ShowOneUniqueRecipient (void)
+  {
+   char PhotoURL[PATH_MAX+1];
+   bool ShowPhoto;
+
+   /***** Show user's photo *****/
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+					                NULL,
+		     "PHOTO21x28",Pho_ZOOM);
+
+   /****** Write user's IDs ******/
+   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
+            Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
+        	                             "DAT_SMALL_NOBR");
+   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,
+                   ID_ICanSeeUsrID (&Gbl.Usrs.Other.UsrDat));
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Write user's name *****/
+   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">%s</div>",
+            Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
+        	                             "DAT_SMALL_NOBR",
+            Gbl.Usrs.Other.UsrDat.FullName);
   }
 
 /*****************************************************************************/

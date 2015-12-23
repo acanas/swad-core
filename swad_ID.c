@@ -819,15 +819,18 @@ void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
   }
 
 /*****************************************************************************/
-/*************** Check if I can see the user's ID of a teacher ***************/
+/***************** Check if I can see another user's ID **********************/
 /*****************************************************************************/
 
-bool ID_ICanSeeTeacherID (struct UsrData *UsrDat)
+bool ID_ICanSeeUsrID (struct UsrData *UsrDat)
   {
-   /* Check if I have permission to see the user's ID of a teacher
-      Only teachers who have accepted registration in courses are counted */
+   /* Check if I have permission to see another user's ID */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
+      case Rol_TEACHER:
+	 /* If I am a teacher of current course,
+	    I only can see the user's ID of students from current course */
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's ID of users from current degree */

@@ -6473,7 +6473,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat,
-                   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeTeacherID (UsrDat) :
+                   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeUsrID (UsrDat) :
                                                                      (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)));
 
    /***** Show user's name *****/
