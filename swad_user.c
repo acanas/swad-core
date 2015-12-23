@@ -6534,7 +6534,7 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_See_guests;
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLink (ActLstGst,NULL,"usrs16x16.gif",
+   Lay_PutContextualLink (ActLstGst,NULL,"usrs64x64.gif",
                           Txt_See_guests,Txt_See_guests);
   }
 

@@ -344,7 +344,7 @@ static void Tst_PutFormToConfigure (void)
   {
    extern const char *Txt_Configure;
 
-   Lay_PutContextualLink (ActCfgTst,NULL,"configtest16x16.gif",
+   Lay_PutContextualLink (ActCfgTst,NULL,"config64x64.gif",
                           Txt_Configure,Txt_Configure);
   }
 

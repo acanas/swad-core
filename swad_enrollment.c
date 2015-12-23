@@ -2888,7 +2888,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    extern const char *Txt_Admin_me;
    extern const char *Txt_Admin_one_user;
 
-   Lay_PutContextualLink (NextAction,NULL,"configtest16x16.gif",
+   Lay_PutContextualLink (NextAction,NULL,"config64x64.gif",
                           Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
                         	                             Txt_Admin_me,
                           Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
@@ -2906,7 +2906,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 
    Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
-	                  NULL,"configtest16x16.gif",
+	                  NULL,"config64x64.gif",
 	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
 	                	                Txt_Admin_several_teachers,
 	                  Role == Rol_STUDENT ? Txt_Admin_several_students :

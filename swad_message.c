@@ -80,6 +80,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
 static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded);
 static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
+static void Msg_PutParamsShowMorePotentialRecipients (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
@@ -290,8 +291,9 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 
    /***** Get list of users belonging to the current course *****/
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (!Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
+       (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
      {
       /***** Get and update type of list,
 	     number of columns in class photo
@@ -322,6 +324,16 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       if (Gbl.Usrs.LstTchs.NumUsrs ||
           Gbl.Usrs.LstStds.NumUsrs)
 	 Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+
+      /***** Form to show several potential recipients *****/
+      if (Gbl.Msg.ShowOnlyOneRecipient)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
+	                        "usrs64x64.gif",
+				"Ver m&aacute;s destinatarios","Ver m&aacute;s destinatarios");	// Need translation!!!!
+         fprintf (Gbl.F.Out,"</div>");
+	}
 
       /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
@@ -409,6 +421,20 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/************ Put parameters to show more potential recipients ***************/
+/*****************************************************************************/
+
+static void Msg_PutParamsShowMorePotentialRecipients (void)
+  {
+   if (Gbl.Msg.Reply.IsReply)
+     {
+      Par_PutHiddenParamChar ("IsReply",'Y');
+      Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
   }
 
 /*****************************************************************************/
