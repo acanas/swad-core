@@ -34824,27 +34824,6 @@ const char *Txt_Show_hits =	// hits = visits, clicks, page views...
 	"Mostrar visitas";
 #endif
 
-const char *Txt_Show_left_column =
-#if   L==1
-	"Mostrar columna izquierda";	// Necessita traduccio
-#elif L==2
-	"Links Spalte anzeigen";
-#elif L==3
-	"Show left column";
-#elif L==4
-	"Mostrar columna izquierda";
-#elif L==5
-	"Afficher la colonne de gauche";
-#elif L==6
-	"Mostrar columna izquierda";	// Okoteve traducción
-#elif L==7
-	"Mostra colonna di sinistra";
-#elif L==8
-	"Show left column";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Mostrar coluna da esquerda";
-#endif
-
 const char *Txt_Show_list =
 #if   L==1
 	"Mostra la llista";
@@ -34864,69 +34843,6 @@ const char *Txt_Show_list =
 	"Poka&zdot; list&eogon;";
 #elif L==9
 	"Mostrar lista";
-#endif
-
-const char *Txt_Show_office_hours =
-#if   L==1
-	"Mostra horaris tutories";
-#elif L==2
-	"Gesch&auml;ftszeiten anzeigen";
-#elif L==3
-	"Show office hours";
-#elif L==4
-	"Ver horarios tutor&iacute;as";
-#elif L==5
-	"Voir horaires tuteur";
-#elif L==6
-	"Ver horarios tutor&iacute;as";	// Okoteve traducción
-#elif L==7
-	"Mostra orari tutoraggi";
-#elif L==8
-	"Poka&zdot; godzin pracy biura";
-#elif L==9
-	"Mostrar hor&aacute;rios tutor";
-#endif
-
-const char *Txt_Show_only_unread_messages =
-#if   L==1
-	"Mostrar nom&eacute;s els missatges no llegits";
-#elif L==2
-	"Zeige nur ungelesene Nachrichten";
-#elif L==3
-	"Show only unread messages";
-#elif L==4
-	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";
-#elif L==5
-	"Afficher uniquement les messages non lus";
-#elif L==6
-	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";	// Okoteve traducción
-#elif L==7
-	"Mostra solo i messaggi non letti";
-#elif L==8
-	"Show only unread messages";					// Potrzebujesz tlumaczenie
-#elif L==9
-	"Mostrar apenas mensagens n&atilde;o lidas";
-#endif
-
-const char *Txt_Show_right_column =
-#if   L==1
-	"Mostrar columna derecha";		// Necessita traduccio
-#elif L==2
-	"Rechte Spalte anzeigen";
-#elif L==3
-	"Show right column";
-#elif L==4
-	"Mostrar columna derecha";
-#elif L==5
-	"Afficher la colonne de droite";
-#elif L==6
-	"Mostrar columna derecha";		// Okoteve traducción
-#elif L==7
-	"Mostra colonna di destra";
-#elif L==8
-	"Show right column";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"Mostrar coluna da direita";
 #endif
 
 const char *Txt_Show_WHICH_groups[2] =
@@ -34993,6 +34909,27 @@ const char *Txt_Show_more_details =
 	"Mostrar mais detalhes";
 #endif
 
+const char *Txt_Show_more_recipients =
+#if   L==1
+	"Veure m&eacute;s recipients";
+#elif L==2
+	"Mehrere Empf&auml;nger anzeigen";
+#elif L==3
+	"Show more recipients";
+#elif L==4
+	"Ver m&aacute;s destinatarios";
+#elif L==5
+	"Montrer plus de destinataires";
+#elif L==6
+	"Ver m&aacute;s destinatarios";	// Okoteve traducción
+#elif L==7
+	"Mostra pi&ugrave; destinatari";
+#elif L==8
+	"Poka&zdot; wi&eogon;cej odbiorc&oacute;w";
+#elif L==9
+	"Ver mais destinat&aacute;rios";
+#endif
+
 const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include %lu in the following sentences
 #if   L==1
 	"Mostrar %lu clics posteriores";	// Necessita traduccio
@@ -35012,6 +34949,48 @@ const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include
 	"Show next %lu clicks";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Show next %lu clicks";			// Necessita de tradução
+#endif
+
+const char *Txt_Show_office_hours =
+#if   L==1
+	"Mostra horaris tutories";
+#elif L==2
+	"Gesch&auml;ftszeiten anzeigen";
+#elif L==3
+	"Show office hours";
+#elif L==4
+	"Ver horarios tutor&iacute;as";
+#elif L==5
+	"Voir horaires tuteur";
+#elif L==6
+	"Ver horarios tutor&iacute;as";	// Okoteve traducción
+#elif L==7
+	"Mostra orari tutoraggi";
+#elif L==8
+	"Poka&zdot; godzin pracy biura";
+#elif L==9
+	"Mostrar hor&aacute;rios tutor";
+#endif
+
+const char *Txt_Show_only_unread_messages =
+#if   L==1
+	"Mostrar nom&eacute;s els missatges no llegits";
+#elif L==2
+	"Zeige nur ungelesene Nachrichten";
+#elif L==3
+	"Show only unread messages";
+#elif L==4
+	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";
+#elif L==5
+	"Afficher uniquement les messages non lus";
+#elif L==6
+	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";	// Okoteve traducción
+#elif L==7
+	"Mostra solo i messaggi non letti";
+#elif L==8
+	"Show only unread messages";					// Potrzebujesz tlumaczenie
+#elif L==9
+	"Mostrar apenas mensagens n&atilde;o lidas";
 #endif
 
 const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %lu in the following sentences

@@ -263,6 +263,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
+   extern const char *Txt_Show_more_recipients;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
@@ -331,7 +332,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
 	                        "usrs64x64.gif",
-				"Ver m&aacute;s destinatarios","Ver m&aacute;s destinatarios");	// Need translation!!!!
+				Txt_Show_more_recipients,Txt_Show_more_recipients);
          fprintf (Gbl.F.Out,"</div>");
 	}
 
