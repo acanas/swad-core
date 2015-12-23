@@ -118,12 +118,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.72.4 (2015-12-23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.72.5 (2015-12-24)"
 #define CSS_FILE		"swad15.72.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.72.5:  Dec 24, 2015	Fixed bugs while sending a message to a unique recipient. (187794 lines)
         Version 15.72.4:  Dec 23, 2015	Show recipient when writing message to only one recipient. (187775 lines)
         Version 15.72.3:  Dec 23, 2015	Message translated. (187733 lines)
         Version 15.72.2:  Dec 23, 2015	Write message only to one recipient. Not finished.

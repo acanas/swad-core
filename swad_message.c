@@ -115,7 +115,7 @@ static void Msg_GetMsgContent (long MsgCod,char *Content);
 static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod,const char *Subject,bool Open,bool Expanded);
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
                                   bool ThisCrs,bool Replied,
-                                  const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
+                                  const struct UsrData *UsrDat);
 static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted);
 static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod);
 
@@ -292,6 +292,16 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    /***** Get list of users' IDs or nicknames written explicitely *****/
    Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 
+   sprintf (Gbl.Message,"Gbl.Usrs.ListOtherRecipients = '%s'",
+            Gbl.Usrs.ListOtherRecipients);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+   /***** Get who to show as potential recipients:
+          - only the selected recipient
+          - any user (default) *****/
+   Par_GetParToText ("ShowOnlyOneRecipient",YN,1);
+   Gbl.Msg.ShowOnlyOneRecipient = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+
    /***** Get list of users belonging to the current course *****/
    if (!Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
@@ -334,12 +344,14 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Start form to select recipients and write the message *****/
       Act_FormStart (ActRcvMsgUsr);
       if (Gbl.Msg.Reply.IsReply)
-        {
-         Par_PutHiddenParamChar ("IsReply",'Y');
-         Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-        }
+	{
+	 Par_PutHiddenParamChar ("IsReply",'Y');
+	 Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
+	}
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	 Usr_PutParamOtherUsrCodEncrypted ();
+      if (Gbl.Msg.ShowOnlyOneRecipient)
+	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
@@ -441,8 +453,9 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
      {
       Par_PutHiddenParamChar ("IsReply",'Y');
       Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
-      Usr_PutParamOtherUsrCodEncrypted ();
      }
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Usr_PutParamOtherUsrCodEncrypted ();
   }
 
 /*****************************************************************************/
@@ -473,6 +486,9 @@ static void Msg_ShowOneUniqueRecipient (void)
             Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
         	                             "DAT_SMALL_NOBR",
             Gbl.Usrs.Other.UsrDat.FullName);
+
+   /***** Hidden parameter with user's nickname *****/
+   Msg_PutHiddenParamAnotherRecipient (&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/
@@ -485,13 +501,19 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];	// old version because is a nickname retrieved from database. TODO: change in 2013
-   unsigned Colspan = Usr_GetColumnsForSelectUsrs ();
+   bool PutColspan;
+   unsigned Colspan;
+
+   PutColspan = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
+                (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
+                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   if (PutColspan)
+      Colspan = Usr_GetColumnsForSelectUsrs ();
 
    /***** Textarea with users' @nicknames, e-mails or IDs *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<th class=\"LEFT_MIDDLE LIGHT_BLUE\"");
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (PutColspan)
       fprintf (Gbl.F.Out," colspan=\"%u\">%s:",
 	       Colspan,Txt_Other_recipients);
    else
@@ -503,16 +525,16 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
                       "<tr>"
                       "<td",
             Txt_nicks_emails_or_IDs_separated_by_commas);
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (PutColspan)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
 	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
-   else if (Gbl.Msg.Reply.IsReply)	// If this is a reply message
-					// and there's no list of explicit recipients,
-					// write @nickname of original sender
+//   else if (Gbl.Msg.Reply.IsReply)	// If this is a reply message
+   else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
+						// and there's no list of explicit recipients,
+						// write @nickname of original sender
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
          fprintf (Gbl.F.Out,"@%s",Nickname);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -692,7 +714,7 @@ void Msg_RecMsgFromUsr (void)
    /* Get list of users' IDs or nicknames written explicitely */
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
-   /***** If there are no recipients... *****/
+   /***** Check number of recipients *****/
    if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedUsrs ()))
      {
       if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
@@ -2801,8 +2823,9 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
       if (TypeOfMessages == Msg_MESSAGES_RECEIVED &&
 	  Gbl.Usrs.Me.LoggedRole >= Rol_VISITOR)
 	 // Guests (users without courses) can read messages but not reply them
-         Msg_WriteFormToReply (MsgCod,CrsCod,Subject,FromThisCrs,Replied,
-                               UsrDat.EncryptedUsrCod);
+         Msg_WriteFormToReply (MsgCod,CrsCod,Subject,
+                               FromThisCrs,Replied,
+                               &UsrDat);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>"
@@ -3072,7 +3095,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
 
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
                                   bool FromThisCrs,bool Replied,
-                                  const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+                                  const struct UsrData *UsrDat)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Reply;
@@ -3091,7 +3114,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
    Grp_PutParamAllGroups ();
    Par_PutHiddenParamChar ("IsReply",'Y');
    Msg_PutHiddenParamMsgCod (MsgCod);
-   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Subject\""
 	              " value=\"Re: %s\" />",

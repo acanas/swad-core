@@ -2302,10 +2302,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /***** Button to send a message *****/
       Act_FormStart (ActReqMsgUsr);
       Grp_PutParamAllGroups ();
-      if (HeBelongsToCurrentCrs)
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      else
-	 Msg_PutHiddenParamAnotherRecipient (UsrDat);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
       Act_LinkFormSubmit (Txt_Write_a_message,"REC_DAT_BOLD");
       fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""

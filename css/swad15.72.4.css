@@ -1651,7 +1651,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /*********************************** Messages ********************************/
-.MSG_TO_ONE_RCP	// ID and name of only one selected recipient
+.MSG_TO_ONE_RCP
 	{
 	display:inline-block;
 	padding-left:4px;
