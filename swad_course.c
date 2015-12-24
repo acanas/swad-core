@@ -141,10 +141,6 @@ void Crs_PrintConfiguration (void)
 static void Crs_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
-   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   extern const char *Txt_Show_more_details;
-   extern const char *Txt_NO;
    extern const char *Txt_Print;
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
