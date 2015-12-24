@@ -292,10 +292,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    /***** Get list of users' IDs or nicknames written explicitely *****/
    Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 
-   sprintf (Gbl.Message,"Gbl.Usrs.ListOtherRecipients = '%s'",
-            Gbl.Usrs.ListOtherRecipients);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
    /***** Get who to show as potential recipients:
           - only the selected recipient
           - any user (default) *****/
@@ -349,9 +345,11 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	 Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
 	}
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
 	 Usr_PutParamOtherUsrCodEncrypted ();
-      if (Gbl.Msg.ShowOnlyOneRecipient)
-	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+         if (Gbl.Msg.ShowOnlyOneRecipient)
+	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+	}
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");

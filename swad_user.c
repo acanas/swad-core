@@ -5028,9 +5028,11 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
             Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
            }
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+           {
             Usr_PutParamOtherUsrCodEncrypted ();
-         if (Gbl.Msg.ShowOnlyOneRecipient)
-            Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+            if (Gbl.Msg.ShowOnlyOneRecipient)
+               Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+           }
          break;
       case ActSeeUseGbl:
          Pho_PutHiddenParamFigureType ();
