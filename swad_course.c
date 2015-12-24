@@ -141,7 +141,6 @@ void Crs_PrintConfiguration (void)
 static void Crs_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_This_course_fulfills_X_out_of_Y_indicators_;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Show_more_details;
@@ -161,7 +160,6 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_Save;
-   Act_Action_t Superaction;
    unsigned Year;
    struct Ind_IndicatorsCrs Indicators;
    bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
@@ -170,24 +168,6 @@ static void Crs_Configuration (bool PrintView)
    /***** Messages and links above the frame *****/
    if (!PrintView)
      {
-      /* Get indicators and show warning */
-      Ind_GetIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,&Indicators);
-      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
-	  Indicators.CountIndicators < Ind_NUM_INDICATORS)
-	{
-	 /* Warning alert */
-	 Superaction = Act_Actions[ActSeeAllStaCrs].SuperAction;
-	 sprintf (Gbl.Message,Txt_This_course_fulfills_X_out_of_Y_indicators_,
-		  Indicators.CountIndicators,Ind_NUM_INDICATORS,
-		  Ind_NUM_INDICATORS,
-		  Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeAllStaCrs].ActCod,
-		  Txt_TABS_FULL_TXT[Act_Actions[Superaction].Tab],
-		  Txt_MENU_TITLE[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu],
-		  Txt_Show_more_details,
-		  Txt_NO);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-	}
-
       /***** Links to print view and request enrollment *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -259,7 +239,7 @@ static void Crs_Configuration (bool PrintView)
                       "%s:"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-           The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassForm[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
    if (IsForm)
      {
@@ -381,6 +361,7 @@ static void Crs_Configuration (bool PrintView)
                Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
 
       /***** Indicators *****/
+      Ind_GetIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,&Indicators);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"

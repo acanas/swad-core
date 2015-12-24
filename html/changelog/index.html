@@ -58,13 +58,341 @@
 
 	<tr>
 	<td align="center">
-		Last update: Decembter 02, 2015
+		Last update: December 24, 2015
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.72.6:  Dec 24, 2015</dt>
+							<dd>
+							Debug message removed. (187796 lines)
+							</dd>
+		<dt>Version 15.72.5:  Dec 24, 2015</dt>
+							<dd>
+							Fixed bugs while sending a message to a unique recipient. (187794 lines)
+							</dd>
+		<dt>Version 15.72.4:  Dec 23, 2015</dt>
+							<dd>
+							Show recipient when writing message to only one recipient. (187775 lines)
+							</dd>
+		<dt>Version 15.72.3:  Dec 23, 2015</dt>
+							<dd>
+							Message translated. (187733 lines)
+							</dd>
+		<dt>Version 15.72.2:  Dec 23, 2015</dt>
+							<dd>
+							Write message only to one recipient. Not finished.<br />
+							Some small icons changed. (187750 lines)
+							</dd>
+		<dt>Version 15.72.1:  Dec 22, 2015</dt>
+							<dd>
+							Write message only to one recipient. Not finished. (187724 lines)
+							</dd>
+		<dt>Version 15.72:    Dec 22, 2015</dt>
+							<dd>
+							Reply message only to sender, suggested by Francisco Oca&ntilde;a Lara. Not finished. (187705 lines)
+							</dd>
+		<dt>Version 15.71.3:  Dec 22, 2015</dt>
+							<dd>
+							Changes in birthday range of years. (187669 lines)
+							</dd>
+		<dt>Version 15.71.2:  Dec 21, 2015</dt>
+							<dd>
+							Fixed bugs in removing old files in briefcase. (187666 lines)
+							</dd>
+		<dt>Version 15.71.1:  Dec 21, 2015</dt>
+							<dd>
+							Fixed bugs in removing old files in briefcase. (187665 lines)
+							</dd>
+		<dt>Version 15.71:    Dec 21, 2015</dt>
+							<dd>
+							Removing old files in briefcase. Finished. (187614 lines)
+							</dd>
+		<dt>Version 15.70.7:  Dec 21, 2015</dt>
+							<dd>
+							Code refactoring in file browser. (187614 lines)
+							</dd>
+		<dt>Version 15.70.6:  Dec 21, 2015</dt>
+							<dd>
+							Removing old files in briefcase. Not finished. (187604 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1488','es','N','Solicitar eliminar archivos antiguos malet&iacute;n');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1489','es','N','Eliminar archivos antiguos malet&iacute;n');
+							</code></small>
+							</dd>
+		<dt>Version 15.70.5:  Dec 21, 2015</dt>
+							<dd>
+							Code refactoring in file browser. (187569 lines)
+							</dd>
+		<dt>Version 15.70.4:  Dec 21, 2015</dt>
+							<dd>
+							</dd>
+		<dt>Version 15.70.3:  Dec 21, 2015</dt>
+							<dd>
+							Code refactoring in file browser. (187490 lines)
+							</dd>
+		<dt>Version 15.70.2:  Dec 21, 2015</dt>
+							<dd>
+							Users can selected number of months in form to remove old files in briefcase. Not finished. (187473 lines)
+							</dd>
+		<dt>Version 15.70.1:  Dec 21, 2015</dt>
+							<dd>
+							Removing old files in briefcase. Not finished. (187408 lines)
+							</dd>
+		<dt>Version 15.70:    Dec 21, 2015</dt>
+							<dd>
+							New action to remove old files in briefcase. Not finished. (187352 lines)
+							</dd>
+		<dt>Version 15.69:    Dec 20, 2015</dt>
+							<dd>
+							New option in briefcase to ask for removing old files. (187270 lines)
+							</dd>
+		<dt>Version 15.68.1:  Dec 20, 2015</dt>
+							<dd>
+							Fixed bugs in connected users. (187171 lines)
+							</dd>
+		<dt>Version 15.68:    Dec 19, 2015</dt>
+							<dd>
+							Show guests in connected users.<br />
+							Optimization in queries about connected users. (187158 lines)
+							</dd>
+		<dt>Version 15.67.1:  Dec 15, 2015</dt>
+							<dd>
+							Changed some messages. (187141 lines)
+							</dd>
+		<dt>Version 15.67:    Dec 15, 2015</dt>
+							<dd>
+							Fixed bugs in queries of enrollment requests. (187140 lines)
+							</dd>
+		<dt>Version 15.66.3:  Dec 15, 2015</dt>
+							<dd>
+							Changes in some small icons.<br />
+							Fixed bug in record card. (187004 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Ver informaci&oacute;n pa&iacute;s' WHERE ActCod='1155' AND Language='es';<br />
+UPDATE actions SET Txt='Imprimir informaci&oacute;n pa&iacute;s' WHERE ActCod='1156' AND Language='es';
+							</code></small>
+							</dd>
+		<dt>Version 15.66.2:  Dec 14, 2015</dt>
+							<dd>
+							Changes in edition of institutions, centres and degrees. (186994 lines)
+							</dd>
+		<dt>Version 15.66.1:  Dec 14, 2015</dt>
+							<dd>
+							Removed unused code related to list of countries, institutions and centres by reasons of speed. (186966 lines)
+							</dd>
+		<dt>Version 15.66:    Dec 14, 2015</dt>
+							<dd>
+							Number of teachers and number of students removed from list of countries, institutions and centres by reasons of speed. (187057 lines)
+							</dd>
+		<dt>Version 15.65.1:  Dec 14, 2015</dt>
+							<dd>
+							Changes in layout of profile. (187031 lines)
+							</dd>
+		<dt>Version 15.65:    Dec 13, 2015</dt>
+							<dd>
+							Change in layout of contextual links. (187009 lines)
+							</dd>
+		<dt>Version 15.64.18: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187004 lines)
+							</dd>
+		<dt>Version 15.64.17: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links.<br />
+							Fixed minor bug in tests. (187009 lines)
+							</dd>
+		<dt>Version 15.64.16: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links.<br />
+							Fixed minor bug in surveys. (187012 lines)
+							</dd>
+		<dt>Version 15.64.15: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187025 lines)
+							</dd>
+		<dt>Version 15.64.14: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187037 lines)
+							</dd>
+		<dt>Version 15.64.13: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187031 lines)
+							</dd>
+		<dt>Version 15.64.12: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187061 lines)
+							</dd>
+		<dt>Version 15.64.11: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187056 lines)
+							</dd>
+		<dt>Version 15.64.10: Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187060 lines)
+							</dd>
+		<dt>Version 15.64.9:  Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187061 lines)
+							</dd>
+		<dt>Version 15.64.8:  Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187066 lines)
+							</dd>
+		<dt>Version 15.64.7:  Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (187063 lines)
+							</dd>
+		<dt>Version 15.64.6:  Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in contextual links. (186974 lines)
+							</dd>
+		<dt>Version 15.64.5:  Dec 13, 2015</dt>
+							<dd>
+							Code refactoring in record card. (186944 lines)
+							</dd>
+		<dt>Version 15.64.4:  Dec 13, 2015</dt>
+							<dd>
+							Links to web / social networks are not displayed when printing record card. (186986 lines)
+							</dd>
+		<dt>Version 15.64.3:  Dec 13, 2015</dt>
+							<dd>
+							Changes in layout of records. (186979 lines)
+							</dd>
+		<dt>Version 15.64.2:  Dec 13, 2015</dt>
+							<dd>
+							Changes in some CSS names. (186975 lines)
+							</dd>
+		<dt>Version 15.64.1:  Dec 12, 2015</dt>
+							<dd>
+							Changes in layout of user's public profile. (186980 lines)
+							</dd>
+		<dt>Version 15.64:    Dec 12, 2015</dt>
+							<dd>
+							Changes in layout of user's public profile.<br />
+							Changes in some small icons. (187004 lines)
+							</dd>
+		<dt>Version 15.63:    Dec 12, 2015</dt>
+							<dd>
+							New layout for user's public profile.<br />
+                                     			Fixed bug when removing user's account. (186932 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DELETE FROM usr_follow WHERE FollowerCod NOT IN (SELECT UsrCod FROM usr_data);<br />
+DELETE FROM usr_follow WHERE FollowedCod NOT IN (SELECT UsrCod FROM usr_data);
+							</code></small>
+							</dd>
+		<dt>Version 15.62:    Dec 09, 2015</dt>
+							<dd>
+							Changes in data of centres. (186949 lines)
+							</dd>
+		<dt>Version 15.61:    Dec 09, 2015</dt>
+							<dd>
+							Bug fixing and lot of changes in data of countries and institutions. (186852 lines)
+							</dd>
+		<dt>Version 15.60.6:  Dec 08, 2015</dt>
+							<dd>
+							Changed icons in login. (186592 lines)
+							</dd>
+		<dt>Version 15.60.5:  Dec 08, 2015</dt>
+							<dd>
+							Changed some messages related to login. (186589 lines)
+							</dd>
+		<dt>Version 15.60.4:  Dec 08, 2015</dt>
+							<dd>
+							Change in text about first / last year of a degree. (186589 lines)
+							</dd>
+		<dt>Version 15.60.3:  Dec 08, 2015</dt>
+							<dd>
+							Fixed bug in country.<br />
+							Code refactoring in menu. (186588 lines)
+							</dd>
+		<dt>Version 15.60.2:  Dec 08, 2015</dt>
+							<dd>
+							Link to user's country in public profile. (186592 lines)
+							</dd>
+		<dt>Version 15.60.1:  Dec 07, 2015</dt>
+							<dd>
+							Fixed names of some small icons.<br />
+							New link in student's record card to see her/his attendance. (186576 lines)
+							</dd>
+		<dt>Version 15.60:    Dec 07, 2015</dt>
+							<dd>
+							By default, the language of a new user is unknown.<br />
+							Fixed bugs when registering a new user. (? lines)
+							</dd>
+		<dt>Version 15.59.4:  Dec 06, 2015</dt>
+							<dd>
+							Changes in some small icons. (186462 lines)
+							</dd>
+		<dt>Version 15.59.3:  Dec 06, 2015</dt>
+							<dd>
+							If photo zoom is out of the screen at left, it is shown at right of the photo. (186445 lines)
+							</dd>
+		<dt>Version 15.59.2:  Dec 06, 2015</dt>
+							<dd>
+							Courses with year not applicable are listed at the end. (186439 lines)
+							</dd>
+		<dt>Version 15.59.1:  Dec 06, 2015</dt>
+							<dd>
+							Removed unused code related to year for optional courses. (186405 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE degrees DROP COLUMN OptYear;
+							</code></small>
+							</dd>
+		<dt>Version 15.59:    Dec 06, 2015</dt>
+							<dd>
+							Year for optional courses is now always present. (186692 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='552';
+							</code></small>
+							</dd>
+		<dt>Version 15.58.1:  Dec 06, 2015</dt>
+							<dd>
+							Removed unused code related to semester. (186604 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE courses DROP COLUMN Semester;
+							</code></small>
+							</dd>
+		<dt>Version 15.58:    Dec 06, 2015</dt>
+							<dd>
+							Year and semester are fusioned to one number: year/semester. (186960 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod='562';
+							</code></small>
+							</dd>
+		<dt>Version 15.57:    Dec 05, 2015</dt>
+							<dd>
+							Lot of changes in forms to edit institutions, centres, degrees, courses, etc. (186903 lines)
+							</dd>
+		<dt>Version 15.56.6:  Dec 05, 2015</dt>
+							<dd>
+							Fixed minor bug in edition of degrees. (186843 lines)
+							</dd>
+		<dt>Version 15.56.5:  Dec 05, 2015</dt>
+							<dd>
+							Go to degree in table of degrees (statistic). (186843 lines)
+							</dd>
+		<dt>Version 15.56.4:  Dec 05, 2015</dt>
+							<dd>
+							Changed icons in forums and chat. (186844 lines)
+							</dd>
+		<dt>Version 15.56.3:  Dec 05, 2015</dt>
+							<dd>
+							Changed icons in statistics about forums. (186843 lines)
+							</dd>
+		<dt>Version 15.56.2:  Dec 05, 2015</dt>
+							<dd>
+							Fixed bug in statistics about OERs. (186842 lines)
+							</dd>
 		<dt>Version 15.56.1:  Dec 02, 2015</dt>
 							<dd>
 							Changes in HTML and CSS to validate HTML5 in W3C validator.<br />
@@ -11102,7 +11430,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 8.31:   16/mar/2009</dt>
 						<dd>
-						Incorporada la nueva Versi&oacute;n del chat en pruebas, programada por Daniel Jes&uacute;s Calandria Hern&aacute;ndez. (69672 l&iacute;neas)
+						Incorporada la nueva versi&oacute;n del chat en pruebas, programada por Daniel Jes&uacute;s Calandria Hern&aacute;ndez. (69672 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.30.4: 16/mar/2009</dt>
 						<dd>
@@ -11506,16 +11834,16 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 8.10:   21/nov/2008</dt>
 						<dd>
-						La nueva Versi&oacute;n del programa de procesamiento de fotograf&iacute;as se pone a disposici&oacute;n de todos los usuarios y se elimina la Versi&oacute;n anterior.<br />
+						La nueva versi&oacute;n del programa de procesamiento de fotograf&iacute;as se pone a disposici&oacute;n de todos los usuarios y se elimina la versi&oacute;n anterior.<br />
 						Optimizaciones en la eliminaci&oacute;n de fotograf&iacute;as. (59705 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.9.1:  20/nov/2008</dt>
 						<dd>
-						Nueva Versi&oacute;n en pruebas del programa de procesamiento de fotograf&iacute;as. (59868 l&iacute;neas)
+						Nueva versi&oacute;n en pruebas del programa de procesamiento de fotograf&iacute;as. (59868 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.9:    20/nov/2008</dt>
 						<dd>
-						Nueva Versi&oacute;n en pruebas del programa de procesamiento de fotograf&iacute;as, que permite seleccionar un rostro entre varios detectados. (59840 l&iacute;neas)
+						Nueva versi&oacute;n en pruebas del programa de procesamiento de fotograf&iacute;as, que permite seleccionar un rostro entre varios detectados. (59840 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.8:    20/nov/2008</dt>
 						<dd>
@@ -13238,7 +13566,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 6.31.16:10/may/2007</dt>
 						<dd>
-						Nueva Versi&oacute;n del programa de procesamiento de fotograf&iacute;as (realizado por Daniel Calandria), que mejora el reconocimiento y muestra las fotograf&iacute;as originales con las caras reconocidas destacadas. (41793 l&iacute;neas)
+						Nueva versi&oacute;n del programa de procesamiento de fotograf&iacute;as (realizado por Daniel Calandria), que mejora el reconocimiento y muestra las fotograf&iacute;as originales con las caras reconocidas destacadas. (41793 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 6.31.15:08/may/2007</dt>
 						<dd>
@@ -13247,7 +13575,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 6.31.14:05/may/2007</dt>
 						<dd>
 						Corregido bug en la recepci&oacute;n de mensajes internos.<br />
-						Nueva Versi&oacute;n del programa de procesamiento de fotograf&iacute;as (realizado por Daniel Calandria), que corrige bugs y mejora la velocidad y el uso de memoria. (41757 l&iacute;neas)
+						Nueva versi&oacute;n del programa de procesamiento de fotograf&iacute;as (realizado por Daniel Calandria), que corrige bugs y mejora la velocidad y el uso de memoria. (41757 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 6.31.13:04/may/2007</dt>
 						<dd>
@@ -13302,7 +13630,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 6.31.1: 17/abr/2007</dt>
 						<dd>
-						Nueva Versi&oacute;n del programa de procesamiento de fotograf&iacute;as realizada por Daniel Calandria que implementa la detecci&oacute;n de rostros. (40860 l&iacute;neas)
+						Nueva versi&oacute;n del programa de procesamiento de fotograf&iacute;as realizada por Daniel Calandria que implementa la detecci&oacute;n de rostros. (40860 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 6.31:   17/abr/2007</dt>
 						<dd>
@@ -13861,7 +14189,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 6.6.7:  30/oct/2006</dt>
 						<dd>
-						Nueva Versi&oacute;n del programa de procesamiento de fotograf&iacute;as, realizada por Daniel Calandria. Esta Versi&oacute;n realiza el histograma para la mejora de contraste teniendo en cuenta s&oacute;lo los p&iacute;xeles de piel. (35937 l&iacute;neas)
+						Nueva versi&oacute;n del programa de procesamiento de fotograf&iacute;as, realizada por Daniel Calandria. Esta versi&oacute;n realiza el histograma para la mejora de contraste teniendo en cuenta s&oacute;lo los p&iacute;xeles de piel. (35937 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 6.6.6:  27/oct/2006</dt>
 						<dd>
@@ -14343,12 +14671,12 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 5.28.1: 18/abr/2006</dt>
 						<dd>
 						Termina la implementaci&oacute;n de listado de profesores de SWAD (s&oacute;lo para administradores).<br />
-						Nueva Versi&oacute;n del programa de retoque fotogr&aacute;fico. Ahora se presenta tambi&eacute;n la foto original.<br />
+						Nueva versi&oacute;n del programa de retoque fotogr&aacute;fico. Ahora se presenta tambi&eacute;n la foto original.<br />
 						Ligeras mejoras est&aacute;ticas en marcos. (32444 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.28:   17/abr/2006</dt>
 						<dd>
-						Nueva Versi&oacute;n del programa de retoque fotogr&aacute;fico, totalmente reprogramada en C++ por Daniel Calandria.<br />
+						Nueva versi&oacute;n del programa de retoque fotogr&aacute;fico, totalmente reprogramada en C++ por Daniel Calandria.<br />
 						Comienza la implementaci&oacute;n de listado de profesores de SWAD (s&oacute;lo para administradores). (32206 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 5.27.2: 17/abr/2006</dt>
@@ -15501,7 +15829,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.77.9: 26/ene/2005</dt>
 						<dd>
-						Actualizado MySQL de Versi&oacute;n 3.23.58 a Versi&oacute;n 4.1.9 (el comportamiento de TIMESTAMP es diferente en los SELECT) (18194 l&iacute;neas)
+						Actualizado MySQL de versi&oacute;n 3.23.58 a versi&oacute;n 4.1.9 (el comportamiento de TIMESTAMP es diferente en los SELECT) (18194 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.77.8: 25/ene/2005</dt>
 						<dd>
@@ -15757,7 +16085,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.61:   27/oct/2004</dt>
 						<dd>
-						Primera Versi&oacute;n en http://swad.ugr.es/ (15591 l&iacute;neas)
+						Primera versi&oacute;n en http://swad.ugr.es/ (15591 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.60.2: 24/oct/2004</dt>
 						<dd>
@@ -15843,7 +16171,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.54.2: 04/oct/2004</dt>
 						<dd>
-						Cambios en llamada al chat. Se deja funcionando una Versi&oacute;n del chat con errores m&iacute;nimos. (14604 l&iacute;neas)
+						Cambios en llamada al chat. Se deja funcionando una versi&oacute;n del chat con errores m&iacute;nimos. (14604 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.54.1: 04/oct/2004</dt>
 						<dd>
@@ -15888,7 +16216,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.51:   28/sep/2004</dt>
 						<dd>
-						Incorporando la primera Versi&oacute;n buena del chat realizada por Ra&uacute;l Jim&eacute;nez Ben&iacute;tez. (14518 l&iacute;neas)
+						Incorporando la primera versi&oacute;n buena del chat realizada por Ra&uacute;l Jim&eacute;nez Ben&iacute;tez. (14518 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.50.1: 28/sep/2004</dt>
 						<dd>
@@ -16031,7 +16359,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.44.3: 23/jul/2004</dt>
 						<dd>
-						Las contrase&ntilde;as se almacenan cifradas a partir de esta Versi&oacute;n. (13553 l&iacute;neas)
+						Las contrase&ntilde;as se almacenan cifradas a partir de esta versi&oacute;n. (13553 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 4.44.2: 22/jul/2004</dt>
 						<dd>
@@ -16352,7 +16680,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 4.22.1: 10/feb/2004</dt>
 						<dd>
-						Cambios en los men&uacute;s. Versi&oacute;n enviada a Jenui 2004.
+						Cambios en los men&uacute;s. versi&oacute;n enviada a Jenui 2004.
 						</dd>
 		<dt>Versi&oacute;n 4.22:   09/feb/2004</dt>
 						<dd>
@@ -16676,7 +17004,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Versi&oacute;n 3.1:   10/ene/2003</dt>
 						<dd>
 						He protegido mediante .htaccess y .htpasswd la carpeta de descarga.<br />
-						Esta Versi&oacute;n evita que se listen los archivos .*
+						Esta versi&oacute;n evita que se listen los archivos .*
 						</dd>
 		<dt>Versi&oacute;n 3.0:   06/nov/2002</dt>
 						<dd>
@@ -16738,7 +17066,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 2.0:   14/mar/2002</dt>
 						<dd>
-						Segunda Versi&oacute;n, mandada a Jenui 2002, que inclu&iacute;a
+						Segunda versi&oacute;n, mandada a Jenui 2002, que inclu&iacute;a
 						foros de discusi&oacute;n y test de autoevaluaci&oacute;n.
 						</dd>
 		<dt>Versi&oacute;n 1.1:   2000-2001</dt>
@@ -16747,7 +17075,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 1.0:   1999-2000</dt>
 						<dd>
-						Primera Versi&oacute;n, que s&oacute;lo inclu&iacute;a las fichas,
+						Primera versi&oacute;n, que s&oacute;lo inclu&iacute;a las fichas,
 						las calificaciones y la descarga de documentos.
 						</dd>
 		<dt>Versi&oacute;n 0.9:   21/sep/1999</dt>
