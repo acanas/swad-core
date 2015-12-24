@@ -27551,7 +27551,6 @@ const char *Txt_Privacy =
 	"Privacidade";
 #endif
 
-
 const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
    {		// Pri_VISIBILITY_USER
 #if   L==1

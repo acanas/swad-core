@@ -254,7 +254,7 @@ void Prf_ChangeProfileVisibility (void)
    char Query[128];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ();
+   Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ("VisPrf");
 
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET ProfileVisibility='%s'"

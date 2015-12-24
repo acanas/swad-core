@@ -117,12 +117,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.72.7 (2015-12-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.73 (2015-12-24)"
 #define CSS_FILE		"swad15.72.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.73:    Dec 24, 2015	Fixed bug in privacy form.
+					Privacy is moved to preferences.
+					Default privacy is changed from "user" to "system". (187704 lines)
         Version 15.72.7:  Dec 24, 2015	Remove message to teachers to verify indicators. (187695 lines)
         Version 15.72.6:  Dec 24, 2015	Debug message removed. (187796 lines)
         Version 15.72.5:  Dec 24, 2015	Fixed bugs while sending a message to a unique recipient. (187794 lines)

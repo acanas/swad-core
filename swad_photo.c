@@ -1112,7 +1112,7 @@ void Pho_ChangePhotoVisibility (void)
    char Query[128];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ();
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho");
 
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"

@@ -108,9 +108,12 @@ void Pre_EditPrefs (void)
                       "</tr>"
 	              "</table>");
 
-   /***** Automatic e-mail to notify of new events *****/
    if (Gbl.Usrs.Me.Logged)
      {
+      /***** Form to set my preferences on privacy *****/
+      Pri_EditMyPrivacy ();
+
+      /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
 
       Str_GetMailBox (Gbl.Usrs.Me.UsrDat.Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);

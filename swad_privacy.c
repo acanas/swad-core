@@ -60,7 +60,8 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pri_PutFormVisibility (const char *TxtLabel,Act_Action_t Action,
+static void Pri_PutFormVisibility (const char *TxtLabel,
+                                   Act_Action_t Action,const char *ParamName,
                                    Pri_Visibility_t CurrentVisibilityInDB);
 
 /*****************************************************************************/
@@ -90,11 +91,13 @@ void Pri_EditMyPrivacy (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_Privacy);
 
    /***** Edit photo visibility *****/
-   Pri_PutFormVisibility (Txt_Photo,ActChgPriPho,
+   Pri_PutFormVisibility (Txt_Photo,
+                          ActChgPriPho,"VisPho",
                           Gbl.Usrs.Me.UsrDat.PhotoVisibility);
 
    /***** Edit public profile visibility *****/
-   Pri_PutFormVisibility (Txt_Public_profile,ActChgPriPrf,
+   Pri_PutFormVisibility (Txt_Public_profile,
+                          ActChgPriPrf,"VisPrf",
                           Gbl.Usrs.Me.UsrDat.ProfileVisibility);
 
    /***** End table *****/
@@ -105,8 +108,9 @@ void Pri_EditMyPrivacy (void)
 /************************** Select photo visibility **************************/
 /*****************************************************************************/
 
-void Pri_PutFormVisibility (const char *TxtLabel,Act_Action_t Action,
-                            Pri_Visibility_t CurrentVisibilityInDB)
+static void Pri_PutFormVisibility (const char *TxtLabel,
+                                   Act_Action_t Action,const char *ParamName,
+                                   Pri_Visibility_t CurrentVisibilityInDB)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
@@ -128,8 +132,8 @@ void Pri_PutFormVisibility (const char *TxtLabel,Act_Action_t Action,
 	Visibility++)
      {
       fprintf (Gbl.F.Out,"<li class=\"DAT\">"
-                         "<input type=\"radio\" name=\"Visibility\" value=\"%u\"",
-               (unsigned) Visibility);
+                         "<input type=\"radio\" name=\"%s\" value=\"%u\"",
+               ParamName,(unsigned) Visibility);
       if (Visibility == CurrentVisibilityInDB)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
@@ -166,12 +170,12 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 /**************** Get parameter with visibility from form ********************/
 /*****************************************************************************/
 
-bool Pri_GetParamVisibility (void)
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
-   Par_GetParToText ("Visibility",UnsignedStr,10);
+   Par_GetParToText (ParamName,UnsignedStr,10);
    if (UnsignedStr[0])
      {
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
@@ -180,6 +184,7 @@ bool Pri_GetParamVisibility (void)
          Lay_ShowErrorAndExit ("Visibility is missing.");
       return (Pri_Visibility_t) UnsignedNum;
      }
+
    return Pri_VISIBILITY_DEFAULT;
   }
 

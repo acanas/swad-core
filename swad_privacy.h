@@ -42,7 +42,7 @@ typedef enum
    Pri_VISIBILITY_WORLD  = 3,	// Public, visible by all the people, even unlogged visitors
   } Pri_Visibility_t;
 
-#define Pri_VISIBILITY_DEFAULT Pri_VISIBILITY_USER
+#define Pri_VISIBILITY_DEFAULT Pri_VISIBILITY_SYSTEM
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -52,7 +52,7 @@ void Pri_PutLinkToChangeMyPrivacy (void);
 void Pri_EditMyPrivacy (void);
 
 Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
-bool Pri_GetParamVisibility (void);
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName);
 
 bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod);
 
