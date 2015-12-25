@@ -117,13 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.73.1 (2015-12-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.73.2 (2015-12-25)"
 #define CSS_FILE		"swad15.72.4.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.73.1:  Dec 25, 2015	Background of selected privacy options in light blue. (? lines)
+        Version 15.73.2:  Dec 25, 2015	Background of selected course in light blue. (187698 lines)
+        Version 15.73.1:  Dec 25, 2015	Background of selected privacy options in light blue. (187704 lines)
         Version 15.73:    Dec 24, 2015	Fixed bug in privacy form.
 					Privacy is moved to preferences.
 					Default privacy is changed from "user" to "system". (187700 lines)

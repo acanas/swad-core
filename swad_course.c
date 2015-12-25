@@ -488,6 +488,7 @@ void Crs_ChangeCourseConfig (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
@@ -515,6 +516,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumCrs,NumCrss;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    char PathRelRSSFile[PATH_MAX+1];
+   char ClassNormal[64];
+   char ClassHighlight[64];
+
+   strcpy (ClassNormal,The_ClassForm[Gbl.Prefs.Theme]);
+   sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormBold[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses);
@@ -523,24 +529,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                       "<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
-   fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+   Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
+   fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	    Highlight ? ClassHighlight :
+			ClassNormal);
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Act_LinkFormSubmit (Txt_System,
-                       The_ClassForm[Gbl.Prefs.Theme]);
+                       Highlight ? ClassHighlight :
+        	                   ClassNormal);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />",
+                      " class=\"ICON20x20\" />&nbsp;%s</a>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_System,
+	    Txt_System,
 	    Txt_System);
-   Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
-   if (Highlight)
-      fprintf (Gbl.F.Out,"<strong>");
-   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_System);
-   if (Highlight)
-      fprintf (Gbl.F.Out,"</strong>");
-   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</li>");
 
@@ -559,30 +563,28 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_ShowErrorAndExit ("Country not found.");
 
       /***** Write link to country *****/
-      fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+      Highlight = (Gbl.CurrentIns.Ins.InsCod <= 0 &&
+	           Gbl.CurrentCty.Cty.CtyCod == Cty.CtyCod);
+      fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+               Highlight ? ClassHighlight :
+        	           ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Act_FormStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Cty.CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
-			  The_ClassForm[Gbl.Prefs.Theme]);
+			  Highlight ? ClassHighlight :
+        	                      ClassNormal);
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\" />",
+                         " class=\"ICON20x20\" />&nbsp;%s</a>",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
-	       Cty.Name[Gbl.Prefs.Language]);
-      Highlight = (Gbl.CurrentIns.Ins.InsCod <= 0 &&
-	           Gbl.CurrentCty.Cty.CtyCod == Cty.CtyCod);
-      if (Highlight)
-         fprintf (Gbl.F.Out,"<strong>");
-      fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
-      if (Highlight)
-         fprintf (Gbl.F.Out,"</strong>");
-      fprintf (Gbl.F.Out,"</a>");
+	       Cty.Name[Gbl.Prefs.Language],
+               Cty.Name[Gbl.Prefs.Language]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</li>");
 
@@ -602,24 +604,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/
-	 fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
+	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
+	 fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	          Highlight ? ClassHighlight :
+			      ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	 Act_FormStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
-	                     The_ClassForm[Gbl.Prefs.Theme]);
+	                     Highlight ? ClassHighlight :
+        	                         ClassNormal);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,20,NULL,true);
-	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
-	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
-	 if (Highlight)
-	    fprintf (Gbl.F.Out,"<strong>");
 	 strcpy (InsFullName,Ins.FullName);
          Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
-	 fprintf (Gbl.F.Out,"&nbsp;%s",InsFullName);
-	 if (Highlight)
-	    fprintf (Gbl.F.Out,"</strong>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsFullName);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</li>");
 
@@ -639,24 +639,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/
-	    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
+			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
+	    fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	             Highlight ? ClassHighlight :
+			         ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 	    Act_FormStart (ActSeeCtrInf);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
-	                        The_ClassForm[Gbl.Prefs.Theme]);
+	                        Highlight ? ClassHighlight :
+        	                            ClassNormal);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,20,NULL,true);
-	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
-			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
-	    if (Highlight)
-	       fprintf (Gbl.F.Out,"<strong>");
 	    strcpy (CtrFullName,Ctr.FullName);
             Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
-	    fprintf (Gbl.F.Out,"&nbsp;%s",CtrFullName);
-	    if (Highlight)
-	       fprintf (Gbl.F.Out,"</strong>");
-	    fprintf (Gbl.F.Out,"</a>");
+	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrFullName);
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</li>");
 
@@ -676,24 +674,22 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
-	       fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
+			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
+	       fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	                Highlight ? ClassHighlight :
+			            ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 	       Act_FormStart (ActSeeDegInf);
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
-	                           The_ClassForm[Gbl.Prefs.Theme]);
+	                           Highlight ? ClassHighlight :
+        	                               ClassNormal);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,NULL,true);
-	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
-			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
-	       if (Highlight)
-		  fprintf (Gbl.F.Out,"<strong>");
 	       strcpy (DegFullName,Deg.FullName);
                Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
-	       fprintf (Gbl.F.Out,"&nbsp;%s",DegFullName);
-	       if (Highlight)
-		  fprintf (Gbl.F.Out,"</strong>");
-	       fprintf (Gbl.F.Out,"</a>");
+	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegFullName);
 	       Act_FormEnd ();
 	       fprintf (Gbl.F.Out,"</li>");
 
@@ -713,28 +709,27 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
-		  fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
+		  fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	                   Highlight ? ClassHighlight :
+			               ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 		  Act_FormStart (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
-		  Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme]);
+		  Act_LinkFormSubmit (Gbl.Title,
+		                      Highlight ? ClassHighlight :
+        	                                  ClassNormal);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON20x20\" />",
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShortName,
 		           Crs.FullName);
-		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
-		  if (Highlight)
-		     fprintf (Gbl.F.Out,"<strong>");
 	          strcpy (CrsFullName,Crs.FullName);
                   Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
-		  fprintf (Gbl.F.Out,"&nbsp;%s",CrsFullName);
-		  if (Highlight)
-		     fprintf (Gbl.F.Out,"</strong>");
-		  fprintf (Gbl.F.Out,"</a>");
+		  fprintf (Gbl.F.Out,"&nbsp;%s</a>",CrsFullName);
 		  Act_FormEnd ();
 
 		  /***** Write link to RSS file *****/

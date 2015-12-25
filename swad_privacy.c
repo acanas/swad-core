@@ -131,11 +131,10 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT");
-      if (Visibility == CurrentVisibilityInDB)
-         fprintf (Gbl.F.Out," LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"\">"
+      fprintf (Gbl.F.Out,"<li class=\"%s\">"
                          "<input type=\"radio\" name=\"%s\" value=\"%u\"",
+               (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
+        	                                       "DAT",
                ParamName,(unsigned) Visibility);
       if (Visibility == CurrentVisibilityInDB)
          fprintf (Gbl.F.Out," checked=\"checked\"");
