@@ -207,6 +207,14 @@ const char *The_ClassForm[The_NUM_THEMES] =
    "YELLOW_FORM",
   };
 
+const char *The_ClassFormDark[The_NUM_THEMES] =
+  {
+   "WHITE_FORM_DARK",
+   "GREY_FORM_DARK",
+   "BLUE_FORM_DARK",
+   "YELLOW_FORM_DARK",
+  };
+
 const char *The_ClassFormNoWrap[The_NUM_THEMES] =
   {
    "WHITE_FORM_NOWRAP",

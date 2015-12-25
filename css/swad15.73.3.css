@@ -483,7 +483,7 @@ a:hover						/* Default ==> underlined */
 .WHITE_TAB_OFF	{color:#707070;}
 .GREY_TAB_OFF	{color:#505050;}
 .BLUE_TAB_OFF	{color:#365E6E;}
-.YELLOW_TAB_OFF	{color:#7C4D2A;}
+.YELLOW_TAB_OFF	{color:#4A2E19;}
 
 .WHITE_TAB_ON	{color:#4D88A1;}
 .GREY_TAB_ON	{color:#606060;}
@@ -1409,6 +1409,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GREY_FORM		{color:#4D88A1; font-size:13pt;}
 .BLUE_FORM		{color:#4D88A1; font-size:13pt;}
 .YELLOW_FORM		{color:#7C4D2A; font-size:13pt;}
+
+.WHITE_FORM_DARK	{color:#365E6E; font-size:13pt;}
+.GREY_FORM_DARK		{color:#365E6E; font-size:13pt;}
+.BLUE_FORM_DARK		{color:#365E6E; font-size:13pt;}
+.YELLOW_FORM_DARK	{color:#4A2E19; font-size:13pt;}
 
 .WHITE_FORM_NOWRAP	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
 .GREY_FORM_NOWRAP	{color:#4D88A1; font-size:13pt; white-space:nowrap;}

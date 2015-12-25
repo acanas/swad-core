@@ -488,7 +488,7 @@ void Crs_ChangeCourseConfig (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormDark[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
@@ -520,7 +520,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    strcpy (ClassNormal,The_ClassForm[Gbl.Prefs.Theme]);
-   sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormBold[Gbl.Prefs.Theme]);
+   sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses);
@@ -533,8 +533,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
 	    Highlight ? ClassHighlight :
 			ClassNormal);
-   Act_FormGoToStart (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
+   Act_FormStart (ActMyCrs);
+   Cty_PutParamCtyCod (-1L);
    Act_LinkFormSubmit (Txt_System,
                        Highlight ? ClassHighlight :
         	                   ClassNormal);
@@ -570,7 +570,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	           ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
-      Act_FormStart (ActSeeCtyInf);
+      Act_FormStart (ActMyCrs);
       Cty_PutParamCtyCod (Cty.CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
 			  Highlight ? ClassHighlight :
@@ -611,7 +611,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			      ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
-	 Act_FormStart (ActSeeInsInf);
+         Act_FormStart (ActMyCrs);
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     Highlight ? ClassHighlight :
@@ -646,7 +646,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			         ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
-	    Act_FormStart (ActSeeCtrInf);
+            Act_FormStart (ActMyCrs);
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        Highlight ? ClassHighlight :
@@ -681,7 +681,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			            ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
-	       Act_FormStart (ActSeeDegInf);
+               Act_FormStart (ActMyCrs);
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           Highlight ? ClassHighlight :
@@ -715,7 +715,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			               ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
-		  Act_FormStart (ActSeeCrsInf);
+                  Act_FormStart (ActMyCrs);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
 		  Act_LinkFormSubmit (Gbl.Title,
