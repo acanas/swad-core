@@ -117,12 +117,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.73.4 (2015-12-26)"
-#define CSS_FILE		"swad15.73.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.74 (2015-12-26)"
+#define CSS_FILE		"swad15.74.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.74:    Dec 26, 2015	New layout of breadcrumb. (187750 lines)
         Version 15.73.4:  Dec 26, 2015	Code refactoring in breadcrumb. (187719 lines)
         Version 15.73.3:  Dec 25, 2015	Select one of my courses goes to the current action. (187710 lines)
         Version 15.73.2:  Dec 25, 2015	Background of selected course in light blue. (187698 lines)

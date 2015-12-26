@@ -648,6 +648,10 @@ void Deg_WriteCtyInsCtrDeg (void)
   {
    extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
    extern const char *Txt_System;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Degree;
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
 
    /***** Form to go to the system *****/
@@ -672,65 +676,87 @@ void Deg_WriteCtyInsCtrDeg (void)
       fprintf (Gbl.F.Out,"%s</a>",
                Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       Act_FormEnd ();
-
-      if (Gbl.CurrentIns.Ins.InsCod > 0)	// If institution selected...
-        {
-         /***** Separator *****/
-         fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-
-         /***** Form to go to the institution *****/
-         Act_FormGoToStart (ActSeeCtr);
-         Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-         Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
-                             The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"%s</a>",
-                  Gbl.CurrentIns.Ins.ShortName);
-         Act_FormEnd ();
-
-         if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// If centre selected...
-           {
-            /***** Separator *****/
-            fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                     The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-
-            /***** Form to go to the centre *****/
-            Act_FormGoToStart (ActSeeDeg);
-            Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-            Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
-        	                The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-            fprintf (Gbl.F.Out,"%s</a>",
-                     Gbl.CurrentCtr.Ctr.ShortName);
-            Act_FormEnd ();
-
-            if (Gbl.CurrentDeg.Deg.DegCod > 0)	// If degree selected...
-              {
-               /***** Separator *****/
-               fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-                        The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-
-               /***** Form to go to the degree *****/
-               Act_FormGoToStart (ActSeeCrs);
-               Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-               Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
-        	                   The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-               strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
-               Str_LimitLengthHTMLStr (DegreeShortName,
-        	                       Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
-               fprintf (Gbl.F.Out,"%s</a>",
-                        DegreeShortName);
-               Act_FormEnd ();
-              }
-           }
-        }
      }
+   else
+      /***** Separator and hidden country *****/
+      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
+	       Txt_Country);
 
-   /***** Separator *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\"> / ",
-	    The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-   if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// No degree selected...
-       fprintf (Gbl.F.Out,"... ");
-   fprintf (Gbl.F.Out,"</span>");
+   if (Gbl.CurrentIns.Ins.InsCod > 0)	// If institution selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+
+      /***** Form to go to the institution *****/
+      Act_FormGoToStart (ActSeeCtr);
+      Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
+      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
+			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s</a>",
+	       Gbl.CurrentIns.Ins.ShortName);
+      Act_FormEnd ();
+     }
+   else
+      /***** Separator and hidden institution *****/
+      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
+	       Txt_Institution);
+
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// If centre selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+
+      /***** Form to go to the centre *****/
+      Act_FormGoToStart (ActSeeDeg);
+      Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
+      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
+			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s</a>",
+	       Gbl.CurrentCtr.Ctr.ShortName);
+      Act_FormEnd ();
+     }
+   else
+      /***** Separator and hidden centre *****/
+      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
+	       Txt_Centre);
+
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)	// If degree selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+
+      /***** Form to go to the degree *****/
+      Act_FormGoToStart (ActSeeCrs);
+      Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
+      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
+			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
+      Str_LimitLengthHTMLStr (DegreeShortName,
+			      Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
+      fprintf (Gbl.F.Out,"%s</a>",
+	       DegreeShortName);
+      Act_FormEnd ();
+     }
+   else
+      /***** Separator and hidden degree *****/
+      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
+	       Txt_Degree);
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// If course selected...
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+   else
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / </span>",
+	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
