@@ -536,12 +536,6 @@ void Cty_ListCountries2 (void)
                       "<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
 	              "</th>"
-                      // "<th class=\"RIGHT_MIDDLE\">"
-	              // "%s"
-	              // "</th>"
-                      // "<th class=\"RIGHT_MIDDLE\">"
-                      // "%s"
-                      // "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s+<br />%s"
                       "</th>"
@@ -565,7 +559,7 @@ void Cty_ListCountries2 (void)
 			 "<td class=\"LEFT_MIDDLE %s\">",
 	       BgColor);
       Cty_DrawCountryMapAndNameWithLink (&Gbl.Ctys.Lst[NumCty],ActSeeIns,
-                                             "DAT_NOBR_N","COUNTRY_MAP_SMALL");
+                                         "DAT_N","COUNTRY_MAP_SMALL");
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write stats of this country */
@@ -624,12 +618,6 @@ void Cty_ListCountries2 (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      // "<td class=\"DAT RIGHT_MIDDLE\">"
-                      // "%u"
-                      // "</td>"
-                      // "<td class=\"DAT RIGHT_MIDDLE\">"
-                      // "%u"
-                      // "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
@@ -640,8 +628,6 @@ void Cty_ListCountries2 (void)
             Ctr_GetNumCtrsInCty (0),
             Deg_GetNumDegsInCty (0),
             Crs_GetNumCrssInCty (0),
-            // Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,0),
-            // Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,0),
             Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,0));
 
    /***** Write users and institutions with unknown country *****/
