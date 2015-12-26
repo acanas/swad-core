@@ -287,9 +287,13 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
-.BC_OFF
+.BC_SEMIOFF
 	{
 	opacity:0.33;
+	}
+.BC_OFF
+	{
+	opacity:0.25;
 	}
 
 .BC_WHITE	{color:#707070;}
@@ -1333,6 +1337,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PHOTO15x20	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px;}
 .PHOTO15x20B	{width: 15px; height: 20px; vertical-align:middle; border-radius:2px; display:block; margin:0 auto;}
 .PHOTO18x24	{width: 18px; height: 24px; vertical-align:middle; border-radius:2px;}
+.PHOTO18x24T	{width: 18px; height: 24px; vertical-align:top;    border-radius:2px;}
 .PHOTO21x28	{width: 21px; height: 28px; vertical-align:middle; border-radius:2px;}
 .PHOTO30x40	{width: 30px; height: 40px; vertical-align:middle; border-radius:2px;}
 .PHOTO45x60	{width: 45px; height: 60px; vertical-align:middle; border-radius:3px;}

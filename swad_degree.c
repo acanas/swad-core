@@ -654,10 +654,12 @@ void Deg_WriteCtyInsCtrDeg (void)
    extern const char *Txt_Degree;
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
    char ClassOn[64];
+   char ClassSemiOff[64];
    char ClassOff[64];
 
    /***** CSS classes *****/
    strcpy (ClassOn,The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+   sprintf (ClassSemiOff,"BC_SEMIOFF %s",The_ClassBreadcrumb[Gbl.Prefs.Theme]);
    sprintf (ClassOff,"BC_OFF %s",The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
    /***** Form to go to the system *****/
@@ -683,11 +685,11 @@ void Deg_WriteCtyInsCtrDeg (void)
    else
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
 
       /***** Form to go to select countries *****/
       Act_FormGoToStart (ActSeeCty);
-      Act_LinkFormSubmit (Txt_Country,ClassOff);
+      Act_LinkFormSubmit (Txt_Country,ClassSemiOff);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
       Act_FormEnd ();
      }
@@ -708,11 +710,11 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
 
       /***** Form to go to select institutions *****/
       Act_FormGoToStart (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institution,ClassOff);
+      Act_LinkFormSubmit (Txt_Institution,ClassSemiOff);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
       Act_FormEnd ();
      }
@@ -737,11 +739,11 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
 
       /***** Form to go to select centres *****/
       Act_FormGoToStart (ActSeeCtr);
-      Act_LinkFormSubmit (Txt_Centre,ClassOff);
+      Act_LinkFormSubmit (Txt_Centre,ClassSemiOff);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
       Act_FormEnd ();
      }
@@ -769,11 +771,11 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
 
       /***** Form to go to select degrees *****/
       Act_FormGoToStart (ActSeeDeg);
-      Act_LinkFormSubmit (Txt_Degree,ClassOff);
+      Act_LinkFormSubmit (Txt_Degree,ClassSemiOff);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
       Act_FormEnd ();
      }
@@ -784,8 +786,9 @@ void Deg_WriteCtyInsCtrDeg (void)
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	    (Gbl.CurrentCrs.Crs.CrsCod > 0) ? ClassOn :
-		                              ClassOff);
+	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? ClassOn :
+            ((Gbl.CurrentDeg.Deg.DegCod > 0) ? ClassSemiOff :
+		                               ClassOff));
   }
 
 /*****************************************************************************/

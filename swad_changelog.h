@@ -117,12 +117,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.74.2 (2015-12-26)"
-#define CSS_FILE		"swad15.74.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.74.3 (2015-12-26)"
+#define CSS_FILE		"swad15.74.3.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.74.3:  Dec 26, 2015	Changes in layout of breadcrumb. (187770 lines)
         Version 15.74.2:  Dec 26, 2015	Changes in list of countries. (187761 lines)
         Version 15.74.1:  Dec 26, 2015	Changes in layout of breadcrumb. (187775 lines)
         Version 15.74:    Dec 26, 2015	New layout of breadcrumb. (187750 lines)
