@@ -23100,27 +23100,6 @@ const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
 	"no course of origin";		// Necessita de tradução
 #endif
 
-const char *Txt_No_COURSE_SELECTED =
-#if   L==1
-	"Cap assignatura";
-#elif L==2
-	"Keine Kurs";
-#elif L==3
-	"No course";
-#elif L==4
-	"Ninguna asignatura";
-#elif L==5
-	"Aucune mati&egrave;re";
-#elif L==6
-	"Ninguna asignatura";	// Okoteve traducción
-#elif L==7
-	"Nessun corso";
-#elif L==8
-	"No oczywiscie";
-#elif L==9
-	"Nenhuma disciplina";
-#endif
-
 const char *Txt_No_centres_have_been_created_in_this_institution =
 #if   L==1
 	"No se han creado centros en esta instituci&oacute;n.";	// Necessita traduccio

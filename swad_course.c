@@ -1069,7 +1069,7 @@ void Crs_FreeListCoursesInDegree (struct Degree *Deg)
 
 void Crs_WriteSelectorMyCourses (void)
   {
-   extern const char *Txt_No_COURSE_SELECTED;
+   extern const char *Txt_Course;
    unsigned NumMyCrs;
    bool IBelongToCurrentCrs = false;
    long CrsCod;
@@ -1088,7 +1088,7 @@ void Crs_WriteSelectorMyCourses (void)
 
    /***** Start of selector of courses *****/
    fprintf (Gbl.F.Out,"<select name=\"CrsCod\""
-	              " style=\"width:175px; margin:1px;\""
+	              " style=\"width:130px; margin:1px;\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
 
@@ -1106,7 +1106,9 @@ void Crs_WriteSelectorMyCourses (void)
 
 	 if (DegCod != LastDegCod)
 	   {
-	    fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">--- %s ---</option>",
+	    fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">"
+		               "--- %s ---"
+		               "</option>",
 		     DegShortName);
 	    LastDegCod = DegCod;
 	   }
@@ -1129,7 +1131,9 @@ void Crs_WriteSelectorMyCourses (void)
 	{
          /***** Blank option to separate *****/
 	 if (Gbl.Usrs.Me.MyCourses.Num)
-            fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">------------</option>");
+            fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">"
+        	               "------------"
+        	               "</option>");
 
          /***** Write an option with the current course *****/
          fprintf (Gbl.F.Out,"<option value=\"%ld\" selected=\"selected\">%s</option>",
@@ -1139,8 +1143,11 @@ void Crs_WriteSelectorMyCourses (void)
      }
    else
       /***** Write an option with no course selected *****/
-      fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\" selected=\"selected\">%s</option>",
-               Txt_No_COURSE_SELECTED);
+      fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\""
+	                 " selected=\"selected\">"
+	                 "%s"
+	                 "</option>",
+               Txt_Course);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
