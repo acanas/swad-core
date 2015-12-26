@@ -12404,27 +12404,6 @@ const char *Txt_from =
 	"de";
 #endif
 
-const char *Txt_from_A_COURSE =
-#if   L==1
-	"desde";	// Necessita traduccio
-#elif L==2
-	"von";
-#elif L==3
-	"from";
-#elif L==4
-	"desde";
-#elif L==5
-	"de";
-#elif L==6
-	"desde";	// Okoteve traducción
-#elif L==7
-	"da";
-#elif L==8
-	"od";
-#elif L==9
-	"de";
-#endif
-
 const char *Txt_From_TIME =
 #if   L==1
 	"Des de";
@@ -20376,48 +20355,6 @@ const char *Txt_message_not_sent_to_X =	// Warning: it is very important to incl
 	"Mensagem n&atilde;o enviada para %s.";
 #endif
 
-const char *Txt_message_received_from_A_USER =
-#if   L==1
-	"mensaje recibido de";		// Necessita traduccio
-#elif L==2
-	"empfangene Nachricht aus";
-#elif L==3
-	"message received from";
-#elif L==4
-	"mensaje recibido de";
-#elif L==5
-	"message re&ccedil;u de";
-#elif L==6
-	"mensaje recibido de";		// Okoteve traducción
-#elif L==7
-	"messaggio ricevuto da";
-#elif L==8
-	"wiadomosci otrzymane od";
-#elif L==9
-	"mensagem recebida de";
-#endif
-
-const char *Txt_message_sent_to =
-#if   L==1
-	"mensaje enviado a";	// Necessita traduccio
-#elif L==2
-	"Nachricht gesendet an";
-#elif L==3
-	"message sent to";
-#elif L==4
-	"mensaje enviado a";
-#elif L==5
-	"message envoy&eacute; &agrave;";
-#elif L==6
-	"mensaje enviado a";	// Okoteve traducción
-#elif L==7
-	"messaggio inviato a";
-#elif L==8
-	"Wiadomo&sacute;&cacute; wyslana do";
-#elif L==9
-	"mensagem enviada para";
-#endif
-
 const char *Txt_message_sent_to_X_not_notified_by_e_mail =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Mensaje enviado a %s (no notificado por e-mail).";	// Necessita traduccio
@@ -20586,27 +20523,6 @@ const char *Txt_Messages_received_from_A_COURSE =
 	"Mensagens recebidas de";
 #endif
 
-const char *Txt_messages_received_from_A_USER =
-#if   L==1
-	"mensajes recibidos de";	// Necessita traduccio
-#elif L==2
-	"empfangene Nachrichten aus";
-#elif L==3
-	"messages received from";
-#elif L==4
-	"mensajes recibidos de";
-#elif L==5
-	"messages re&ccedil;us de";
-#elif L==6
-	"mensajes recibidos de";	// Okoteve traducción
-#elif L==7
-	"messaggi ricevuti da";
-#elif L==8
-	"wiadomosci odebrane";
-#elif L==9
-	"mensagens recebidas de";
-#endif
-
 const char *Txt_Messages_sent =
 #if   L==1
 	"Missatges enviats";
@@ -20668,27 +20584,6 @@ const char *Txt_Messages_sent_from_A_COURSE =
 	"Wiadomo&sacute;ci wyslane z";
 #elif L==9
 	"Mensagens enviadas de";
-#endif
-
-const char *Txt_messages_sent_to_A_USER =
-#if   L==1
-	"mensajes enviados a";	// Necessita traduccio
-#elif L==2
-	"gesendete Nachrichten an";
-#elif L==3
-	"messages sent to";
-#elif L==4
-	"mensajes enviados a";
-#elif L==5
-	"messages envoy&eacute;s &agrave;";
-#elif L==6
-	"mensajes enviados a";	// Okoteve traducción
-#elif L==7
-	"messaggi inviati a";
-#elif L==8
-	"wiadomosci wysylanych do";
-#elif L==9
-	"mensagens enviadas para";
 #endif
 
 const char *Txt_minimum =
@@ -21693,27 +21588,6 @@ const char *Txt_Movement_not_allowed =
 	"Movimento n&atilde;o permitido";
 #endif
 
-const char *Txt_MSG_containing_the_text =
-#if   L==1
-	"que contenga el texto";	// Necessita traduccio
-#elif L==2
-	"mit dem Text";
-#elif L==3
-	"containing the text";
-#elif L==4
-	"que contenga el texto";
-#elif L==5
-	"contenant le texte";
-#elif L==6
-	"que contenga el texto";	// Okoteve traducción
-#elif L==7
-	"contenente il testo";
-#elif L==8
-	"zawierajacy tekst";
-#elif L==9
-	"contendo o texto";
-#endif
-
 const char *Txt_MSG_Deleted_without_opening =
 #if   L==1
 	"Eliminado sin abrir";		// Necessita traduccio
@@ -22006,27 +21880,6 @@ const char *Txt_MSG_Unopened =
 	"Otwarte";
 #elif L==9
 	"Fechada";
-#endif
-
-const char *Txt_MSGS_containing_the_text =
-#if   L==1
-	"que contengan el texto";	// Necessita traduccio
-#elif L==2
-	"mit dem Text";
-#elif L==3
-	"containing the text";
-#elif L==4
-	"que contengan el texto";
-#elif L==5
-	"contenant le texte";
-#elif L==6
-	"que contengan el texto";	// Okoteve traducción
-#elif L==7
-	"contenenti il testo";
-#elif L==8
-	"zawierajacy tekst";
-#elif L==9
-	"contendo o texto";
 #endif
 
 const char *Txt_MSGS_Deleted =
@@ -29194,25 +29047,25 @@ const char *Txt_Remove_survey =
 	"Remover inqu&eacute;rito";
 #endif
 
-const char *Txt_Remove_the_MESSAGE =
+const char *Txt_Remove_this_message =
 #if   L==1
-	"Eliminar el";	// Necessita traduccio
+	"Eliminar aquest missatge";
 #elif L==2
-	"Entfernen Sie die";
+	"Diese Nachricht entfernen";
 #elif L==3
-	"Remove the";
+	"Remove this message";
 #elif L==4
-	"Eliminar el";
+	"Eliminar este mensaje";
 #elif L==5
-	"Supprimer le";
+	"Supprimer ce message";
 #elif L==6
-	"Eliminar el";	// Okoteve traducción
+	"Eliminar este mensaje";	// Okoteve traducción
 #elif L==7
-	"Rimuovere il";
+	"Rimuovere questo messaggio";
 #elif L==8
-	"Usu&nacute;";
+	"Usu&nacute; t&eogon; wiadomo&sacute;&cacute;";
 #elif L==9
-	"Remover a";
+	"Remover esta mensagem";
 #endif
 
 const char *Txt_Remove_thread =
@@ -29234,27 +29087,6 @@ const char *Txt_Remove_thread =
 	"Usu&nacute; watkek";
 #elif L==9
 	"Remover thread";
-#endif
-
-const char *Txt_Remove_type_of_group =
-#if   L==1
-	"Eliminar tipo de grupo";	// Necessita traduccio
-#elif L==2
-	"Entfernen Art der Gruppe";
-#elif L==3
-	"Remove type of group";
-#elif L==4
-	"Eliminar tipo de grupo";
-#elif L==5
-	"Supprimer type de groupe";
-#elif L==6
-	"Eliminar tipo de grupo";	// Okoteve traducción
-#elif L==7
-	"Rimuovere tipo di gruppo";
-#elif L==8
-	"Usu&nacute; typ grupy";
-#elif L==9
-	"Remover tipo de grupo";
 #endif
 
 const char *Txt_Remove_the_users_not_indicated_in_step_1 =
@@ -29299,25 +29131,46 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 	"Tirar os utilizadores que est&atilde;o na lista";
 #endif
 
-const char *Txt_Remove_the_X_MESSAGES =
+const char *Txt_Remove_these_X_messages =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Eliminar los";	// Necessita traduccio
+	"Eliminar aquests %u missatges";
 #elif L==2
-	"Entfernen Sie die";
+	"Diese %u Nachrichten entfernen";
 #elif L==3
-	"Remove the";
+	"Remove these %u messages";
 #elif L==4
-	"Eliminar los";
+	"Eliminar estos %u mensajes";
 #elif L==5
-	"Supprimer les";
+	"Supprimer ces %u messages";
 #elif L==6
-	"Eliminar los";	// Okoteve traducción
+	"Eliminar estos %u mensajes";	// Okoteve traducción
 #elif L==7
-	"Rimuovere il";
+	"Rimuovere questi %u messaggi";
 #elif L==8
-	"Usu&nacute;";
+	"Usu&nacute; te %u wiadomo&sacute;ci";
 #elif L==9
-	"Remover as";
+	"Remover estas %u mensagens";
+#endif
+
+const char *Txt_Remove_type_of_group =
+#if   L==1
+	"Eliminar tipo de grupo";	// Necessita traduccio
+#elif L==2
+	"Entfernen Art der Gruppe";
+#elif L==3
+	"Remove type of group";
+#elif L==4
+	"Eliminar tipo de grupo";
+#elif L==5
+	"Supprimer type de groupe";
+#elif L==6
+	"Eliminar tipo de grupo";	// Okoteve traducción
+#elif L==7
+	"Rimuovere tipo di gruppo";
+#elif L==8
+	"Usu&nacute; typ grupy";
+#elif L==9
+	"Remover tipo de grupo";
 #endif
 
 const char *Txt_Remove_user_from_this_course =
@@ -46392,27 +46245,6 @@ const char *Txt_Unread_BR_msgs =
 	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"N&atilde;o<br />lidas";
-#endif
-
-const char *Txt_unread_messages_received_from =
-#if   L==1
-	"mensajes no le&iacute;dos recibidos desde";	// Necessita traduccio
-#elif L==2
-	"ungelesene empfangene Nachrichten aus";
-#elif L==3
-	"unread messages received from";
-#elif L==4
-	"mensajes no le&iacute;dos recibidos desde";
-#elif L==5
-	"messages non lus re&ccedil;us de";
-#elif L==6
-	"mensajes no le&iacute;dos recibidos desde";	// Okoteve traducción
-#elif L==7
-	"messaggi non letti ricevuti da";
-#elif L==8
-	"unread messages received from";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"mensagens n&atilde;o lidas recebidas de";
 #endif
 
 const char *Txt_Update =

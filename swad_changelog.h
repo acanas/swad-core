@@ -111,18 +111,19 @@
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
 // TODO: Reply icons should appear without text
-// TODO: Link to remove messages is too wide. For example: "Remove these X messages".
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.74.4 (2015-12-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.74.5 (2015-12-26)"
 #define CSS_FILE		"swad15.74.3.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.74.5:  Dec 26, 2015	Text in link to remove messages is now shorter.
+					Fixed bug in messages. (187563 lines)
         Version 15.74.4:  Dec 26, 2015	Change in text when no course is selected. (187757 lines)
         Version 15.74.3:  Dec 26, 2015	Changes in layout of breadcrumb. (187770 lines)
         Version 15.74.2:  Dec 26, 2015	Changes in list of countries. (187761 lines)

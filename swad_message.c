@@ -941,13 +941,13 @@ void Msg_ReqDelAllSntMsgs (void)
    /***** Request confirmation to remove messages *****/
    if (Gbl.Msg.FilterContent[0])
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-                  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                    Txt_any_user,
-               Gbl.Msg.FilterCrsShortName);
+	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+					 Txt_any_user,
+               Gbl.Msg.FilterCrsShortName,Gbl.Msg.FilterContent);
    else
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
-                  Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-                	                    Txt_any_user,
+	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
+					 Txt_any_user,
                Gbl.Msg.FilterCrsShortName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
@@ -2298,50 +2298,15 @@ void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs)
 
 void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned NumMsgs)
   {
-   extern const char *Txt_MSG_containing_the_text;
-   extern const char *Txt_MSGS_containing_the_text;
-   extern const char *Txt_Remove_the_MESSAGE;
-   extern const char *Txt_message_received_from_A_USER;
-   extern const char *Txt_message_sent_to;
-   extern const char *Txt_any_user;
-   extern const char *Txt_Remove_the_X_MESSAGES;
-   extern const char *Txt_unread_messages_received_from;
-   extern const char *Txt_messages_received_from_A_USER;
-   extern const char *Txt_messages_sent_to_A_USER;
-   extern const char *Txt_from_A_COURSE;
-   char StrFilterContent[256+Msg_MAX_LENGTH_FILTER_CONTENT+1];
+   extern const char *Txt_Remove_this_message;
+   extern const char *Txt_Remove_these_X_messages;
 
    /***** Put link to request deletion of all sent or received messages *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   if (Gbl.Msg.FilterContent[0])
-      sprintf (StrFilterContent,", %s <strong>%s</strong>",
-               NumMsgs == 1 ? Txt_MSG_containing_the_text :
-                              Txt_MSGS_containing_the_text,
-               Gbl.Msg.FilterContent);
-   else
-      StrFilterContent[0] = '\0';
    if (NumMsgs == 1)
-      sprintf (Gbl.Title,"%s %s %s, %s %s%s",
-               Txt_Remove_the_MESSAGE,
-               TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_message_received_from_A_USER :
-                                                         Txt_message_sent_to,
-               Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-        	                         Txt_any_user,
-               Txt_from_A_COURSE,
-               Gbl.Msg.FilterCrsShortName,
-               StrFilterContent);
+      strcpy (Gbl.Title,Txt_Remove_this_message);
    else
-      sprintf (Gbl.Title,"%s %u %s %s, %s %s%s",
-               Txt_Remove_the_X_MESSAGES,
-               NumMsgs,
-               TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Gbl.Msg.ShowOnlyUnreadMsgs ? Txt_unread_messages_received_from :
-                                                                                       Txt_messages_received_from_A_USER) :
-                                                         Txt_messages_sent_to_A_USER,
-               Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
-        	                         Txt_any_user,
-               Txt_from_A_COURSE,
-               Gbl.Msg.FilterCrsShortName,
-               StrFilterContent);
+      sprintf (Gbl.Title,Txt_Remove_these_X_messages,NumMsgs);
    Lay_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
 	                                                              ActReqDelAllSntMsg,
 	                  Msg_PutHiddenParamsMsgsFilters,
