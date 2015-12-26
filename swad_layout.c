@@ -84,6 +84,7 @@ static void Lay_WriteScriptConnectedUsrs (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
 static void Lay_WritePageTopHeading (void);
+static void Lay_WriteBreadcrumb (void);
 
 static void Lay_WriteTitleAction (void);
 
@@ -759,10 +760,7 @@ static void Lay_WritePageTopHeading (void)
 
    /* 2nd. row, 2nd. column: degree and course */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
-   fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
-   Deg_WriteCtyInsCtrDeg ();
-   Crs_WriteSelectorMyCourses ();
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_WriteBreadcrumb ();
    Deg_WriteBigNameCtyInsCtrDegCrs ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -779,6 +777,18 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
             ClassHeadRow3[Gbl.Prefs.Theme]);
    Tab_DrawTabs ();
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*********** Write breadcrumb with the path to the current location **********/
+/*****************************************************************************/
+
+static void Lay_WriteBreadcrumb (void)
+  {
+   fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
+   Deg_WriteCtyInsCtrDeg ();
+   Crs_WriteSelectorMyCourses ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
