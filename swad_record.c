@@ -1379,7 +1379,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\""
 	              " onclick=\"document.getElementById('%s').submit();\" />"
-                      "<img src=\"%s/clock16x16.gif\""
+                      "<img src=\"%s/clock64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "<span class=\"%s\">&nbsp;%s</span>"

@@ -1440,7 +1440,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
                             "<img src=\"%s/",
                   Gbl.Prefs.IconsURL);
          if (TagHidden)
-            fprintf (Gbl.F.Out,"eye-slash-off16x16.gif\" alt=\"%s\" title=\"%s",
+            fprintf (Gbl.F.Out,"eye-slash-off64x64.png\" alt=\"%s\" title=\"%s",
                      Txt_Tag_not_allowed,
                      Txt_Tag_not_allowed);
          else

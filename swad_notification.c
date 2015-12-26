@@ -187,33 +187,33 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 // Icons for notification events
 static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "faq",			// Ntf_EVENT_UNKNOWN
+   "faq16x16.gif",			// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "folder",			// Ntf_EVENT_DOCUMENT_FILE	// TODO: Change icon to "file"
-   "folderusers",		// Ntf_EVENT_SHARED_FILE	// TODO: Change icon to "file"
+   "file64x64.gif",			// Ntf_EVENT_DOCUMENT_FILE
+   "file64x64.gif",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "desk",			// Ntf_EVENT_ASSIGNMENT
-   "announce",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "grades",			// Ntf_EVENT_MARKS_FILE
+   "desk16x16.gif",			// Ntf_EVENT_ASSIGNMENT
+   "announce16x16.gif",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
    /* Enrollment tab */
-   "adduser",			// Ntf_EVENT_ENROLLMENT_STUDENT
-   "adduser",			// Ntf_EVENT_ENROLLMENT_TEACHER
-   "enrollmentrequest",		// Ntf_EVENT_ENROLLMENT_REQUEST
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_STUDENT
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_TEACHER
+   "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Messages tab */
-   "note",			// Ntf_EVENT_NOTICE
-   "forum",			// Ntf_EVENT_FORUM_POST_COURSE
-   "forum",			// Ntf_EVENT_FORUM_REPLY
-   "recmsg",			// Ntf_EVENT_MESSAGE
+   "note16x16.gif",			// Ntf_EVENT_NOTICE
+   "forum16x16.gif",			// Ntf_EVENT_FORUM_POST_COURSE
+   "forum16x16.gif",			// Ntf_EVENT_FORUM_REPLY
+   "msg64x64.gif",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "survey",			// Ntf_EVENT_SURVEY
+   "survey16x16.gif",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "follow",			// Ntf_EVENT_FOLLOWER
+   "follow64x64.gif",			// Ntf_EVENT_FOLLOWER
   };
 
 /*****************************************************************************/
@@ -302,7 +302,7 @@ void Ntf_ShowMyNotifications (void)
    /***** Buttons to change preferences and to mark all notifications as seen *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    // Put form to change notification preferences
-   Lay_PutContextualLink (ActEdiPrf,NULL,"heart16x16.gif",
+   Lay_PutContextualLink (ActEdiPrf,NULL,"heart64x64.gif",
 			  Txt_Change_preferences,Txt_Change_preferences);
    if (NumNotifications)
       // Put form to change notification preferences
@@ -437,7 +437,7 @@ void Ntf_ShowMyNotifications (void)
          if (PutLink)
            {
             Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
+            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,
@@ -447,7 +447,7 @@ void Ntf_ShowMyNotifications (void)
             Act_FormEnd ();
            }
          else
-            fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+            fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICON20x20\" />",
                      Gbl.Prefs.IconsURL,

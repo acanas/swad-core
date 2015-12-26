@@ -4210,7 +4210,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    /***** Write number of countries *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/cty16x16.gif\""
+                      "<img src=\"%s/cty64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
@@ -4335,7 +4335,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    /***** Write number of institutions *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/ins16x16.gif\""
+                      "<img src=\"%s/ins64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
@@ -4450,7 +4450,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    /***** Write number of centres *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/ctr16x16.gif\""
+                      "<img src=\"%s/ctr64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
@@ -4555,7 +4555,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    /***** Write number of degrees *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/deg16x16.gif\""
+                      "<img src=\"%s/deg64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "&nbsp;%s:"
@@ -4650,7 +4650,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    /***** Write number of courses *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"TIT_TBL LEFT_MIDDLE\">"
-                      "<img src=\"%s/crs16x16.gif\""
+                      "<img src=\"%s/crs64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       "&nbsp;%s:"

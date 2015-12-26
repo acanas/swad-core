@@ -190,19 +190,19 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 	 Action = ActReqInsLog;
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
-	 Icon = "ins16x16.gif";
+	 Icon = "ins64x64.gif";
 	 break;
       case Sco_SCOPE_CTR:
 	 Action = ActReqCtrLog;
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
-	 Icon = "ctr16x16.gif";
+	 Icon = "ctr64x64.gif";
 	 break;
       case Sco_SCOPE_DEG:
 	 Action = ActReqDegLog;
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
-	 Icon = "deg16x16.gif";
+	 Icon = "deg64x64.gif";
 	 break;
       default:
 	 return;	// Nothing to do

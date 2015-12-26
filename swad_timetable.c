@@ -342,7 +342,7 @@ void TT_EditCrsTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock16x16.gif",
+   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock64x64.gif",
                           Txt_Show_timetable,Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -363,7 +363,7 @@ void TT_ShowMyTutTimeTable (void)
 
    /***** Link (form) to see my timetable *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock16x16.gif",
+   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock64x64.gif",
                           Txt_Show_timetable,Txt_Show_timetable);
    fprintf (Gbl.F.Out,"</div>");
 

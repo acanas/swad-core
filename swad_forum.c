@@ -1161,12 +1161,12 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
          sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
                                       Txt_Post_X_banned_Click_to_unban_it,
                   PstNum);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON20x20\" />",
                   Gbl.Prefs.IconsURL,
-                  Enabled ? "visible" :
-                	    "hidden",
+                  Enabled ? "eye" :
+                	    "eye-slash",
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
@@ -1177,14 +1177,14 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                                       Txt_Post_X_banned,
                   PstNum);
          fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                            "<img src=\"%s/%s_off16x16.gif\""
+                            "<img src=\"%s/%s-off64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON20x20\" />"
                             "</span>",
                   Gbl.Title,
                   Gbl.Prefs.IconsURL,
-                  Enabled ? "visible" :
-                	    "hidden",
+                  Enabled ? "eye" :
+                	    "eye-slash",
                   Gbl.Title,
                   Gbl.Title);
         }

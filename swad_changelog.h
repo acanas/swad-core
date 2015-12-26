@@ -102,26 +102,26 @@
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
-// TODO: When error ("Ya existía un evento con el título") creating a new event, the data f the event is empty
+// TODO: When error ("Ya existía un evento con el título") creating a new event, the data of the event is empty
 // TODO: When teacher clicks in attendance of a student (button in her/his record),
 //	 only (the groups he/she should have attend) union (the groups he/she really attended)
 //	 should be shown.
-// TODO: By default, profile and photo should be visible by users who share course
 // TODO: When page is refreshed in course works, prevent users to be duplicated
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
-// TODO: Reply icons should appear without text
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.74.5 (2015-12-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.74.7 (2015-12-26)"
 #define CSS_FILE		"swad15.74.3.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.74.7:  Dec 26, 2015	Changes in small icons. (187563 lines)
+        Version 15.74.6:  Dec 26, 2015	Reply icon is shown without text. (187562 lines)
         Version 15.74.5:  Dec 26, 2015	Text in link to remove messages is now shorter.
 					Fixed bug in messages. (187563 lines)
         Version 15.74.4:  Dec 26, 2015	Change in text when no course is selected. (187757 lines)

@@ -1154,8 +1154,9 @@ a:hover						/* Default ==> underlined */
 	max-width:90%;
 	margin:8px auto 0 auto;
 	background-color:#FFF9E0;
-	background-repeat:no-repeat;
 	background-position:12px 12px;
+	background-size:20px 20px;
+	background-repeat:no-repeat;
 	padding:12px 12px 12px 45px;
 	border-radius:4px;
 	box-shadow:1px 1px 3px #CCC7B4;

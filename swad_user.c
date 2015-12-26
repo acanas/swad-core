@@ -78,8 +78,8 @@ const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
   };
 const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
-   "classphoto",
-   "list"
+   "classphoto16x16.gif",
+   "list64x64.gif"
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_USR	 9
@@ -4990,7 +4990,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Usr_PutParamUsrListType (ListType);
    Usr_PutExtraParamsUsrList (NextAction);
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormNoWrap[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
                       " %s</a>",
@@ -6622,7 +6622,7 @@ void Usr_SeeGuests (void)
 	    case Usr_LIST:
 	       /****** Link to show all the data ******/
                Lay_PutContextualLink (ActLstGstAll,Usr_PutLinkToShowGuestsAllDataParams,
-                                      "table16x16.gif",
+                                      "table64x64.gif",
                                       Txt_Show_all_data,Txt_Show_all_data);
 	       break;
            }
@@ -6813,7 +6813,7 @@ void Usr_SeeStudents (void)
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                   Lay_PutContextualLink (ActLstStdAll,Usr_PutLinkToShowStdsAllDataParams,
-                                         "table16x16.gif",
+                                         "table64x64.gif",
                                          Txt_Show_all_data,Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
@@ -6982,7 +6982,7 @@ void Usr_SeeTeachers (void)
 		  /****** Link to show all the data ******/
 		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
                   Lay_PutContextualLink (ActLstTchAll,Usr_PutLinkToShowTchsAllDataParams,
-                                         "table16x16.gif",
+                                         "table64x64.gif",
                                          Txt_Show_all_data,Txt_Show_all_data);
 		  fprintf (Gbl.F.Out,"</div>");
 		 }
@@ -7070,7 +7070,7 @@ static void Usr_PutLinkToListOfficialStudents (void)
        Gbl.Imported.ExternalSesId[0] &&
        Gbl.Imported.ExternalRole == Rol_TEACHER)	// ...as a teacher
       /***** Link to list official students *****/
-      Lay_PutContextualLink (ActGetExtLstStd,NULL,"list16x16.gif",
+      Lay_PutContextualLink (ActGetExtLstStd,NULL,"list64x64.gif",
                              Txt_Official_students,Txt_Official_students);
   }
 

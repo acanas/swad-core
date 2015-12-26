@@ -1374,9 +1374,9 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 	    Deg->NumCrss ? "ok_green" :
 		           "tr",
 	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			      Txt_DEGREE_Without_courses,
+			   Txt_DEGREE_Without_courses,
 	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			      Txt_DEGREE_Without_courses);
+			   Txt_DEGREE_Without_courses);
 
    /***** Number of degree in this list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"

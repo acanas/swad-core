@@ -1345,8 +1345,7 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
    if (Message)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	                 "<div class=\"ALERT\""
-	                 " style=\"background-image:url('%s/%s16x16.gif');"
-	                 " background-size:20px 20px;\">"
+	                 " style=\"background-image:url('%s/%s16x16.gif');\">"
                          "%s"
 			 "</div>"
 			 "</div>",
