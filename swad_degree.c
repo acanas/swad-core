@@ -653,89 +653,112 @@ void Deg_WriteCtyInsCtrDeg (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
+   char ClassOn[64];
+   char ClassOff[64];
+
+   /***** CSS classes *****/
+   strcpy (ClassOn,The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+   sprintf (ClassOff,"BC_OFF %s",The_ClassBreadcrumb[Gbl.Prefs.Theme]);
 
    /***** Form to go to the system *****/
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_System,
-	               The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_System,ClassOn);
    fprintf (Gbl.F.Out,"%s</a>",Txt_System);
    Act_FormEnd ();
 
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If country selected...
+   if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
 
-      /***** Form to go to the country *****/
-      Act_FormGoToStart (ActSeeIns);
+      /***** Form to go to select institutions *****/
+      Act_FormGoToStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
-	                  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
                Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       Act_FormEnd ();
      }
    else
-      /***** Separator and hidden country *****/
-      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
-	       Txt_Country);
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)	// If institution selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
 
-      /***** Form to go to the institution *****/
-      Act_FormGoToStart (ActSeeCtr);
+      /***** Form to go to select countries *****/
+      Act_FormGoToStart (ActSeeCty);
+      Act_LinkFormSubmit (Txt_Country,ClassOff);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
+      Act_FormEnd ();
+     }
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
+
+      /***** Form to go to select centres *****/
+      Act_FormGoToStart (ActSeeInsInf);
       Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,
-			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
 	       Gbl.CurrentIns.Ins.ShortName);
       Act_FormEnd ();
      }
-   else
-      /***** Separator and hidden institution *****/
-      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
-	       Txt_Institution);
-
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// If centre selected...
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+
+      /***** Form to go to select institutions *****/
+      Act_FormGoToStart (ActSeeIns);
+      Act_LinkFormSubmit (Txt_Institution,ClassOff);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
+      Act_FormEnd ();
+     }
+   else
+      /***** Separator and hidden institution *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+	       ClassOff,Txt_Institution);
+
+   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
 
       /***** Form to go to the centre *****/
-      Act_FormGoToStart (ActSeeDeg);
+      Act_FormGoToStart (ActSeeCtrInf);
       Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,
-			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
 	       Gbl.CurrentCtr.Ctr.ShortName);
       Act_FormEnd ();
      }
-   else
-      /***** Separator and hidden centre *****/
-      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
-	       Txt_Centre);
-
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)	// If degree selected...
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+
+      /***** Form to go to select centres *****/
+      Act_FormGoToStart (ActSeeCtr);
+      Act_LinkFormSubmit (Txt_Centre,ClassOff);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
+      Act_FormEnd ();
+     }
+   else
+      /***** Separator and hidden centre *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+	       ClassOff,Txt_Centre);
+
+   if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected...
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
 
       /***** Form to go to the degree *****/
-      Act_FormGoToStart (ActSeeCrs);
+      Act_FormGoToStart (ActSeeDegInf);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,
-			  The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn);
       strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
       Str_LimitLengthHTMLStr (DegreeShortName,
 			      Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
@@ -743,20 +766,26 @@ void Deg_WriteCtyInsCtrDeg (void)
 	       DegreeShortName);
       Act_FormEnd ();
      }
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      /***** Separator *****/
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOff);
+
+      /***** Form to go to select degrees *****/
+      Act_FormGoToStart (ActSeeDeg);
+      Act_LinkFormSubmit (Txt_Degree,ClassOff);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
+      Act_FormEnd ();
+     }
    else
       /***** Separator and hidden degree *****/
-      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / %s</span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme],
-	       Txt_Degree);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+	       ClassOff,Txt_Degree);
 
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// If course selected...
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-   else
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"BC_OFF %s\"> / </span>",
-	       The_ClassBreadcrumb[Gbl.Prefs.Theme]);
+   /***** Separator *****/
+   fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+	    (Gbl.CurrentCrs.Crs.CrsCod > 0) ? ClassOn :
+		                              ClassOff);
   }
 
 /*****************************************************************************/
