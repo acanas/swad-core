@@ -152,7 +152,11 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActReqSignUp,
 		ActSeeSignUpReq,
 		ActLstCon,
+		},
+		// TabSoc **********
+		{
 		ActReqPubPrf,
+		ActSeeChtRms,
 		},
 		// TabMsg **********
 		{
@@ -160,7 +164,6 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeAnn,
 		ActSeeNot,
 		ActSeeFor,
-		ActSeeChtRms,
 		ActReqMsgUsr,
 		ActSeeRcvMsg,
 		ActSeeSntMsg,

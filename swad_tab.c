@@ -43,17 +43,18 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 const char *Tab_TabIcons[Tab_NUM_TABS] =
   {
    /* TabUnk */	NULL,
-   /* TabSys */	"sys",
-   /* TabCty */	"cty",
-   /* TabIns */	"ins",
-   /* TabCtr */	"ctr",
-   /* TabDeg */	"deg",
-   /* TabCrs */	"crs",
-   /* TabAss */	"ass",
-   /* TabUsr */	"usr",
-   /* TabMsg */	"msg",
-   /* TabSta */	"sta",
-   /* TabPrf */	"prf",
+   /* TabSys */	"sys64x64.gif",
+   /* TabCty */	"cty64x64.gif",
+   /* TabIns */	"ins64x64.gif",
+   /* TabCtr */	"ctr64x64.gif",
+   /* TabDeg */	"deg64x64.gif",
+   /* TabCrs */	"crs64x64.gif",
+   /* TabAss */	"ass64x64.gif",
+   /* TabUsr */	"usr64x64.gif",
+   /* TabSoc */ "soc64x64.png",
+   /* TabMsg */	"msg64x64.gif",
+   /* TabSta */	"sta64x64.gif",
+   /* TabPrf */	"prf64x64.gif",
   };
 
 /*****************************************************************************/
@@ -126,7 +127,7 @@ void Tab_DrawTabs (void)
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
 	                        NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s64x64.gif\""
+	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>"
@@ -142,7 +143,7 @@ void Tab_DrawTabs (void)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
-			       "<img src=\"%s/%s/%s64x64.gif\""
+			       "<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>",

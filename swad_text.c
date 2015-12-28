@@ -17822,7 +17822,22 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
-	 // ActReqPubPrf
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	},
+	{
+	// TabSoc *****************************************************
+	// ActReqPubPrf
 #if   L==1
 	 "Perfils"
 #elif L==2
@@ -17843,6 +17858,34 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	// ActSeeChtRms
+#if   L==1
+	"Xat"
+#elif L==2
+	"Chat"
+#elif L==3
+	"Chat"
+#elif L==4
+	"Chat"
+#elif L==5
+	"Chat"
+#elif L==6
+	"&Ntilde;omongeta"
+#elif L==7
+	"Chat"
+#elif L==8
+	"Chat"
+#elif L==9
+	"Chat"
+#endif
+	,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -17941,27 +17984,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	// ActSeeChtRms
-#if   L==1
-	"Xat"
-#elif L==2
-	"Chat"
-#elif L==3
-	"Chat"
-#elif L==4
-	"Chat"
-#elif L==5
-	"Chat"
-#elif L==6
-	"&Ntilde;omongeta"
-#elif L==7
-	"Chat"
-#elif L==8
-	"Chat"
-#elif L==9
-	"Chat"
-#endif
-	,
 	// ActReqMsgUsr
 #if   L==1
 	"Redactar"
@@ -18046,6 +18068,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19735,27 +19758,68 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conectados"
 #endif
 	,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	},
+	{
+	// TabSoc *****************************************************
 	 // ActReqPubPrf
 #if   L==1
-	 "Perfils"
+	 "Perfils p&uacute;blics"
 #elif L==2
-	 "Profiles"
+	 "&Ouml;ffentliche Profile"
 #elif L==3
-	 "Public profiles of users"
+	 "Public profiles"
 #elif L==4
 	 "Perfiles p&uacute;blicos de usuarios"
 #elif L==5
-	 "Profils"
+	 "Profils publics"
 #elif L==6
-	 "Che"
+	 "Perfiles p&uacute;blicos de usuarios"	// Okoteve traducción
 #elif L==7
-	 "Profili"
+	 "Profili pubblici"
 #elif L==8
-	 "Profile"
+	 "Profile publiczne"
 #elif L==9
-	 "Perfiles"
+	 "Perfis p&uacute;blicos"
 #endif
 	,
+	// ActSeeChtRms
+#if   L==1
+	"Conversa en temps real amb altres usuaris"
+#elif L==2
+	"Chat"
+#elif L==3
+	"Chat"
+#elif L==4
+	"Conversaci&oacute;n en tiempo real con otros usuarios"
+#elif L==5
+	"Chat"
+#elif L==6
+	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
+#elif L==7
+	"Chat"
+#elif L==8
+	"Chat"
+#elif L==9
+	"Chat"
+#endif
+	,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19860,27 +19924,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	// ActSeeChtRms
-#if   L==1
-	"Conversa en temps real amb altres usuaris"
-#elif L==2
-	"Chat"
-#elif L==3
-	"Chat"
-#elif L==4
-	"Conversaci&oacute;n en tiempo real con otros usuarios"
-#elif L==5
-	"Chat"
-#elif L==6
-	"Conversaci&oacute;n en tiempo real con otros usuarios"	// Okoteve traducción
-#elif L==7
-	"Chat"
-#elif L==8
-	"Chat"
-#elif L==9
-	"Chat"
-#endif
-	,
 	// ActReqMsgUsr
 #if   L==1
 	"Enviament d'un nou missatge privat a altres usuaris"
@@ -19971,6 +20014,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -37803,6 +37847,27 @@ const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS] =
 	 "Utilizadores"
 #endif
 	 ,
+	 // TabSoc
+#if   L==1
+	 "Social"
+#elif L==2
+	 "Soziales"
+#elif L==3
+	 "Social"
+#elif L==4
+	 "Social"
+#elif L==5
+	 "Social"
+#elif L==6
+	 "Social"	// Okoteve traducción
+#elif L==7
+	 "Social"
+#elif L==8
+	 "Spo&lstrok;eczna"
+#elif L==9
+	 "Social"
+#endif
+	 ,
 	 // TabMsg
 #if   L==1
 	 "Missatges"
@@ -38037,6 +38102,27 @@ const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS] =	// Must be visible in 1024x768 wi
 	   "U&Zdot;YTKOWNICY"
 #elif L==9
 	   "UTILIZADORES"
+#endif
+	   ,
+	 // TabSoc
+#if   L==1
+	 "SOCIAL"
+#elif L==2
+	 "SOZIALES"
+#elif L==3
+	 "SOCIAL"
+#elif L==4
+	 "SOCIAL"
+#elif L==5
+	 "SOCIAL"
+#elif L==6
+	 "SOCIAL"	// Okoteve traducción
+#elif L==7
+	 "SOCIAL"
+#elif L==8
+	 "SPO&Lstrok;ECZNA"
+#elif L==9
+	 "SOCIAL"
 #endif
 	   ,
 	   // TabMsg

@@ -161,7 +161,6 @@ Country:
 	 71. ActRenInsFul		Change full name of institution
 	 72. ActChgInsWWW		Change web of institution
 	 73. ActChgInsSta		Request change of status of an institution
-
 Institution:
 	 74. ActInsReqSch		Request search in institution tab
 
@@ -265,7 +264,6 @@ Institution:
 	161. ActReqDatComIns		Ask for metadata of a file of the common zone of the institution
 	162. ActChgDatComIns		Change metadata of a file of the common zone of the institution
 	163. ActDowComIns		Download a file of the common zone of the institution
-
 Centre:
 	164. ActCtrReqSch		Request search in centre tab
 
@@ -348,7 +346,6 @@ Centre:
 	233. ActReqDatComCtr		Ask for metadata of a file of the common zone of the centre
 	234. ActChgDatComCtr		Change metadata of a file of the common zone of the centre
 	235. ActDowComCtr		Download a file of the common zone of the centre
-
 Degree:
 	236. ActDegReqSch		Request search in degree tab
 
@@ -426,7 +423,6 @@ Degree:
 	300. ActReqDatComDeg		Ask for metadata of a file of the common zone of the degree
 	301. ActChgDatComDeg		Change metadata of a file of the common zone of the degree
 	302. ActDowComDeg		Download a file of the common zone of the degree
-
 Course:
 	303. ActCrsReqSch		Request search in course tab
 
@@ -848,7 +844,6 @@ Users:
 	696. ActReqSignUp		Apply for my enrollment
 	697. ActSeeSignUpReq		Show pending requests for inscription in the current course
 	698. ActLstCon			List connected users
-	699. ActReqPubPrf		Request @nickname to show a public user's profile
 
 	700. ActChgGrp			Change my groups
 	701. ActReqEdiGrp		Request the edition of groups
@@ -1000,7 +995,8 @@ Users:
 	833. ActRemOldUsr		Eliminate completely old users
 
         834. ActLstClk			List last clicks in real time
-
+Social:
+	699. ActReqPubPrf		Request @nickname to show a public user's profile
 	835. ActSeePubPrf		Show a public user's profile
 	836. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	837. ActCalNumClk		Calculate number of clicks from log and store into user's figures
@@ -1013,12 +1009,12 @@ Users:
 	843. ActSeeFlg			Show following
 	844. ActSeeFlr			Show followers
 
+	845. ActSeeChtRms		Show the chat rooms
 Messages:
-	845. ActSeeNtf			Show my recent notifications
-	846. ActSeeAnn			Show global announcements
-	847. ActSeeNot			Show notices
-	848. ActSeeFor			Show the level superior of the forums
-	849. ActSeeChtRms		Show the chat rooms
+	846. ActSeeNtf			Show my recent notifications
+	847. ActSeeAnn			Show global announcements
+	848. ActSeeNot			Show notices
+	849. ActSeeFor			Show the level superior of the forums
 	850. ActReqMsgUsr		Write message a varios users
 	851. ActSeeRcvMsg		Show the messages received from other users (link in menu)
 	852. ActSeeSntMsg		Show the messages sent to other users
@@ -2132,7 +2128,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqSignUp	*/{1054, 5,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqSignUpInCrs		,"enrollmentrequest"	},
    /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowEnrollmentRequests	,"enrollmentrequest"	},
    /* ActLstCon		*/{ 995, 7,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowConnectedUsrs		,"userplugged"		},
-   /* ActReqPubPrf	*/{1401, 8,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf"			},
 
    // Actions not in menu:
    /* ActChgGrp		*/{ 118,-1,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMyGrpsAndShowChanges	,NULL},
@@ -2180,7 +2175,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnRecSevTch	*/{ 127,-1,TabUsr,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rec_ListRecordsTchs		,NULL},
 
    /* ActRcvRecOthUsr	*/{ 300,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowOtherCrsRecord,NULL},
-   /* ActEdiRecFie	*/{ 292, 3,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReqEditRecordFields	,NULL},
+   /* ActEdiRecFie	*/{ 292,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReqEditRecordFields	,NULL},
    /* ActNewFie		*/{ 293,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReceiveFormField		,NULL},
    /* ActReqRemFie	*/{ 294,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReqRemField		,NULL},
    /* ActRemFie		*/{ 295,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_RemoveField		,NULL},
@@ -2304,17 +2299,23 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+   // TabSoc ******************************************************************
+   /* ActReqPubPrf	*/{1401, 0,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"usr"			},
+   /* ActSeeChtRms	*/{  51, 1,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat"			},
 
-   /* ActFolUsr		*/{1410,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabUsr,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
-   /* ActSeeFlg		*/{1412,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
-   /* ActSeeFlr		*/{1413,-1,TabUsr,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
+   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+
+   /* ActFolUsr		*/{1410,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
+
+   /* ActCht		*/{  52,-1,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_NEW_WINDOW ,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -2322,7 +2323,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note"			},
    /* ActSeeNot		*/{ 762, 2,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note"			},
    /* ActSeeFor		*/{  95, 3,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum"		},
-   /* ActSeeChtRms	*/{  51, 4,TabMsg,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat"			},
    /* ActReqMsgUsr	*/{  26, 5,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg"		},
    /* ActSeeRcvMsg	*/{   3, 6,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg"		},
    /* ActSeeSntMsg	*/{  70, 7,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg"		},
@@ -2505,8 +2505,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActBanUsrMsg	*/{1015,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_BanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrMsg	*/{1016,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrLst	*/{1018,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenListingUsrs	,NULL},
-
-   /* ActCht		*/{  52,-1,TabMsg,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_NEW_WINDOW ,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabSta ******************************************************************
    // Actions in menu:

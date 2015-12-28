@@ -621,7 +621,8 @@ static void Usr_GetMyLastData (void)
       /* Get last tab */
       Gbl.Usrs.Me.UsrLast.LastTab = TabPrf;        // By default, set last tab to the profile tab
       if (sscanf (row[2],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum >= 1 || UnsignedNum <= Tab_NUM_TABS)
+         if (UnsignedNum >= 1 ||
+             UnsignedNum <= Tab_NUM_TABS)
             Gbl.Usrs.Me.UsrLast.LastTab = (Act_Tab_t) UnsignedNum;
 
       /* Get last access to notifications */
