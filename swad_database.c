@@ -111,7 +111,9 @@ mysql> DESCRIBE IP_prefs;
                    "IconSet CHAR(16) NOT NULL,"
                    "Menu TINYINT NOT NULL DEFAULT 0,"
                    "SideCols TINYINT NOT NULL,"
-                   "PRIMARY KEY (IP),INDEX(UsrCod),INDEX(LastChange))");
+                   "PRIMARY KEY (IP),"
+                   "INDEX(UsrCod),"
+                   "INDEX(LastChange))");
 
    /***** Table actions *****/
 /*
@@ -131,7 +133,8 @@ mysql> DESCRIBE actions;
                    "Language CHAR(2) NOT NULL,"
                    "Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Txt VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(ActCod,Language),INDEX(Txt))");
+                   "UNIQUE INDEX(ActCod,Language),"
+                   "INDEX(Txt))");
 
    /***** Table actions_MFU *****/
 /*
@@ -169,7 +172,8 @@ mysql> DESCRIBE admin;
 	           "UsrCod INT NOT NULL,"
 	           "Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
 	           "Cod INT NOT NULL,"
-	           "UNIQUE INDEX(UsrCod,Scope,Cod),INDEX (Scope,Cod))");
+	           "UNIQUE INDEX(UsrCod,Scope,Cod),"
+	           "INDEX (Scope,Cod))");
 
    /***** Table ann_seen *****/
 /*
@@ -207,7 +211,8 @@ mysql> DESCRIBE announcements;
                    "Roles INT NOT NULL DEFAULT 0,"
                    "Subject TEXT NOT NULL,"
                    "Content TEXT NOT NULL,"
-                   "UNIQUE INDEX(AnnCod),INDEX(Status))");
+                   "UNIQUE INDEX(AnnCod),"
+                   "INDEX(Status))");
 
    /***** Table asg_grp *****/
 /*
@@ -255,7 +260,8 @@ mysql> DESCRIBE assignments;
                    "Title VARCHAR(255) NOT NULL,"
                    "Folder VARBINARY(32) NOT NULL,"
                    "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(AsgCod),INDEX(CrsCod,Hidden))");
+                   "UNIQUE INDEX(AsgCod),"
+                   "INDEX(CrsCod,Hidden))");
 
    /***** Table att_events *****/
 /*
@@ -285,7 +291,8 @@ mysql> DESCRIBE att_events;
                    "CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Title VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(AttCod),INDEX(CrsCod,Hidden))");
+                   "UNIQUE INDEX(AttCod),"
+                   "INDEX(CrsCod,Hidden))");
 
    /***** Table att_grp *****/
 /*
@@ -366,7 +373,8 @@ mysql> DESCRIBE birthdays_today;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS birthdays_today ("
                    "UsrCod INT NOT NULL,"
                    "Today DATE NOT NULL,"
-                   "UNIQUE INDEX(UsrCod),INDEX(Today))");
+                   "UNIQUE INDEX(UsrCod),"
+                   "INDEX(Today))");
 
    /***** Table centres *****/
 /*
@@ -396,7 +404,10 @@ mysql> DESCRIBE centres;
                    "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
                    "PhotoAttribution TEXT NOT NULL,"
-                   "UNIQUE INDEX(CtrCod),INDEX(InsCod),INDEX(PlcCod),INDEX(Status))");
+                   "UNIQUE INDEX(CtrCod),"
+                   "INDEX(InsCod),"
+                   "INDEX(PlcCod),"
+                   "INDEX(Status))");
 
    /***** Table chat *****/
 /*
@@ -454,7 +465,9 @@ mysql> DESCRIBE clipboard;
                    "FileType TINYINT NOT NULL DEFAULT 0,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "CopyTime TIMESTAMP,"
-                   "UNIQUE INDEX(UsrCod),INDEX(FileBrowser,Cod),INDEX(WorksUsrCod))");
+                   "UNIQUE INDEX(UsrCod),"
+                   "INDEX(FileBrowser,Cod),"
+                   "INDEX(WorksUsrCod))");
 
    /***** Table connected *****/
 /*
@@ -474,7 +487,8 @@ mysql> DESCRIBE connected;
                    "RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
                    "LastCrsCod INT NOT NULL DEFAULT -1,"
                    "LastTime DATETIME,"
-                   "UNIQUE INDEX(UsrCod),INDEX(LastCrsCod))");
+                   "UNIQUE INDEX(UsrCod),"
+                   "INDEX(LastCrsCod))");
 
    /***** Table countries *****/
 /*
@@ -567,7 +581,9 @@ mysql> DESCRIBE courses;
                    "RequesterUsrCod INT NOT NULL DEFAULT -1,"
                    "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
-                   "UNIQUE INDEX(CrsCod),INDEX(DegCod,Year),INDEX(Status))");
+                   "UNIQUE INDEX(CrsCod),"
+                   "INDEX(DegCod,Year),"
+                   "INDEX(Status))");
 
    /***** Table crs_grp *****/
 /*
@@ -591,7 +607,8 @@ mysql> DESCRIBE crs_grp;
                    "MaxStudents INT NOT NULL,"
                    "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(GrpCod),INDEX(GrpTypCod))");
+                   "UNIQUE INDEX(GrpCod),"
+                   "INDEX(GrpTypCod))");
 
    /***** Table crs_grp_types *****/
 /*
@@ -617,7 +634,8 @@ mysql> DESCRIBE crs_grp_types;
                    "Multiple ENUM('N','Y') NOT NULL,"
                    "MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "OpenTime DATETIME NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(GrpTypCod),INDEX(CrsCod))");
+                   "UNIQUE INDEX(GrpTypCod),"
+                   "INDEX(CrsCod))");
 
    /***** Table crs_grp_usr *****/
 /*
@@ -633,7 +651,9 @@ mysql> DESCRIBE crs_grp_usr;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_usr ("
                    "GrpCod INT NOT NULL,"
                    "UsrCod INT NOT NULL,"
-                   "UNIQUE INDEX(GrpCod,UsrCod),INDEX(GrpCod),INDEX(UsrCod))");
+                   "UNIQUE INDEX(GrpCod,UsrCod),"
+                   "INDEX(GrpCod),"
+                   "INDEX(UsrCod))");
 
    /***** Table crs_info_read *****/
 /*
@@ -707,7 +727,8 @@ mysql> DESCRIBE crs_last;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_last ("
                    "CrsCod INT NOT NULL,"
                    "LastTime DATETIME NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(CrsCod),INDEX(LastTime))");
+                   "UNIQUE INDEX(CrsCod),"
+                   "INDEX(LastTime))");
 
    /***** Table crs_record_fields *****/
 /*
@@ -729,7 +750,8 @@ mysql> DESCRIBE crs_record_fields;
                    "FieldName VARCHAR(255) NOT NULL,"
                    "NumLines INT NOT NULL,"
                    "Visibility TINYINT NOT NULL,"
-                   "UNIQUE INDEX(FieldCod),INDEX(CrsCod))");
+                   "UNIQUE INDEX(FieldCod),"
+                   "INDEX(CrsCod))");
 
    /***** Table crs_records *****/
 /*
@@ -785,7 +807,10 @@ mysql> DESCRIBE crs_usr;
                    "UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
                    "ColsClassPhoto TINYINT NOT NULL,"
                    "ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
-                   "UNIQUE INDEX(CrsCod,UsrCod,Role),UNIQUE INDEX(UsrCod,CrsCod,Role),INDEX(CrsCod,Role),INDEX(UsrCod,Role))");
+                   "UNIQUE INDEX(CrsCod,UsrCod,Role),"
+                   "UNIQUE INDEX(UsrCod,CrsCod,Role),"
+                   "INDEX(CrsCod,Role),"
+                   "INDEX(UsrCod,Role))");
 
    /***** Table crs_usr_requests *****/
 /*
@@ -807,7 +832,9 @@ mysql> DESCRIBE crs_usr_requests;
 	           "UsrCod INT NOT NULL,"
 	           "Role TINYINT NOT NULL DEFAULT 0,"
 	           "RequestTime DATETIME NOT NULL,"
-	           "UNIQUE INDEX(ReqCod),UNIQUE INDEX(CrsCod,UsrCod),INDEX(UsrCod))");
+	           "UNIQUE INDEX(ReqCod),"
+	           "UNIQUE INDEX(CrsCod,UsrCod),"
+	           "INDEX(UsrCod))");
 
    /***** Table deg_types *****/
 /*
@@ -857,7 +884,10 @@ mysql> DESCRIBE degrees;
                    "FirstYear TINYINT NOT NULL DEFAULT 0,"
                    "LastYear TINYINT NOT NULL DEFAULT 0,"
                    "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(DegCod),INDEX(CtrCod),INDEX(DegTypCod),INDEX(Status))");
+                   "UNIQUE INDEX(DegCod),"
+                   "INDEX(CtrCod),"
+                   "INDEX(DegTypCod),"
+                   "INDEX(Status))");
 
    /***** Table departments *****/
 /*
@@ -879,7 +909,8 @@ mysql> DESCRIBE departments;
                    "ShortName VARCHAR(32) NOT NULL,"
                    "FullName VARCHAR(127) NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(DptCod),INDEX(InsCod))");
+                   "UNIQUE INDEX(DptCod),"
+                   "INDEX(InsCod))");
 
    /***** Table exam_announcements *****/
 /*
@@ -925,7 +956,9 @@ mysql> DESCRIBE exam_announcements;
                    "MatRequired TEXT NOT NULL,"
                    "MatAllowed TEXT NOT NULL,"
                    "OtherInfo TEXT NOT NULL,"
-                   "UNIQUE INDEX(ExaCod),INDEX(CrsCod,Status),INDEX(Status))");
+                   "UNIQUE INDEX(ExaCod),"
+                   "INDEX(CrsCod,Status),"
+                   "INDEX(Status))");
 
    /***** Table expanded_folders *****/
 /*
@@ -949,7 +982,9 @@ mysql> DESCRIBE expanded_folders;
                    "WorksUsrCod INT NOT NULL,"
                    "Path TEXT COLLATE latin1_bin NOT NULL,"
                    "ClickTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod,FileBrowser,Cod),INDEX(FileBrowser,Cod),INDEX(WorksUsrCod))");
+                   "INDEX(UsrCod,FileBrowser,Cod),"
+                   "INDEX(FileBrowser,Cod),"
+                   "INDEX(WorksUsrCod))");
 
    /***** Table file_browser_last *****/
 /*
@@ -1014,7 +1049,8 @@ mysql> DESCRIBE file_view;
 		   "FilCod INT NOT NULL,"
 		   "UsrCod INT NOT NULL,"
 		   "NumViews INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(FilCod,UsrCod),INDEX(UsrCod))");
+		   "UNIQUE INDEX(FilCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table files *****/
 /*
@@ -1095,7 +1131,11 @@ mysql> DESCRIBE forum_post;
                    "NumNotif INT NOT NULL DEFAULT 0,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(PstCod),INDEX(ThrCod),INDEX(UsrCod),INDEX(CreatTime),INDEX(ModifTime))");
+                   "UNIQUE INDEX(PstCod),"
+                   "INDEX(ThrCod),"
+                   "INDEX(UsrCod),"
+                   "INDEX(CreatTime),"
+                   "INDEX(ModifTime))");
 
    /***** Table forum_thr_clip *****/
 /*
@@ -1113,7 +1153,8 @@ mysql> DESCRIBE forum_thr_clip;
                    "ThrCod INT NOT NULL,"
                    "UsrCod INT NOT NULL,"
                    "TimeInsert TIMESTAMP NOT NULL,"
-                   "UNIQUE INDEX(ThrCod),UNIQUE INDEX(UsrCod))");
+                   "UNIQUE INDEX(ThrCod),"
+                   "UNIQUE INDEX(UsrCod))");
 
    /***** Table forum_thr_read *****/
 /*
@@ -1153,7 +1194,11 @@ mysql> DESCRIBE forum_thread;
                    "Location INT NOT NULL DEFAULT -1,"
                    "FirstPstCod INT NOT NULL,"
                    "LastPstCod INT NOT NULL,"
-                   "UNIQUE INDEX(ThrCod),INDEX(ForumType),INDEX(Location),UNIQUE INDEX(FirstPstCod),UNIQUE INDEX(LastPstCod))");
+                   "UNIQUE INDEX(ThrCod),"
+                   "INDEX(ForumType),"
+                   "INDEX(Location),"
+                   "UNIQUE INDEX(FirstPstCod),"
+                   "UNIQUE INDEX(LastPstCod))");
 
    /***** Table hidden_params *****/
 /*
@@ -1199,7 +1244,9 @@ mysql> DESCRIBE holidays;
                    "StartDate DATE NOT NULL,"
                    "EndDate DATE NOT NULL,"
                    "Name VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX (HldCod),INDEX(InsCod),INDEX(PlcCod))");
+                   "UNIQUE INDEX (HldCod),"
+                   "INDEX(InsCod),"
+                   "INDEX(PlcCod))");
 
    /***** Table imported_groups *****/
 /*
@@ -1225,7 +1272,8 @@ mysql> DESCRIBE imported_groups;
                    "CrsName VARCHAR(127) NOT NULL,"
                    "GrpName VARCHAR(255) NOT NULL,"
                    "GrpType VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(GrpCod),INDEX(SessionId))");
+                   "UNIQUE INDEX(GrpCod),"
+                   "INDEX(SessionId))");
 
    /***** Table imported_sessions *****/
 /*
@@ -1299,7 +1347,9 @@ mysql> DESCRIBE institutions;
                    "ShortName VARCHAR(32) NOT NULL,"
                    "FullName TEXT NOT NULL,"
                    "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(InsCod),INDEX(CtyCod),INDEX(Status))");
+                   "UNIQUE INDEX(InsCod),"
+                   "INDEX(CtyCod),"
+                   "INDEX(Status))");
 
    /***** Table links *****/
 /*
@@ -1358,9 +1408,15 @@ mysql> DESCRIBE log;
                    "TimeToGenerate INT NOT NULL,"
                    "TimeToSend INT NOT NULL,"
                    "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(ActCod),"
-                   "INDEX(CtyCod),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod),"
-                   "INDEX(UsrCod),INDEX(ClickTime,Role))");
+                   "UNIQUE INDEX(LogCod),"
+                   "INDEX(ActCod),"
+                   "INDEX(CtyCod),"
+                   "INDEX(InsCod),"
+                   "INDEX(CtrCod),"
+                   "INDEX(DegCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(UsrCod),"
+                   "INDEX(ClickTime,Role))");
 
    /***** Table log_banners *****/
 /*
@@ -1377,7 +1433,8 @@ mysql> DESCRIBE log_banners;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_banners ("
                    "LogCod INT NOT NULL,"
                    "BanCod INT NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(BanCod))");
+                   "UNIQUE INDEX(LogCod),"
+                   "INDEX(BanCod))");
 
    /***** Table log_comments *****/
 /*
@@ -1433,9 +1490,15 @@ mysql> DESCRIBE log_recent;
                    "TimeToGenerate INT NOT NULL,"
                    "TimeToSend INT NOT NULL,"
                    "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(ActCod),"
-                   "INDEX(CtyCod),INDEX(InsCod),INDEX(CtrCod),INDEX(DegCod),INDEX(CrsCod),"
-                   "INDEX(UsrCod),INDEX(ClickTime,Role))");
+                   "UNIQUE INDEX(LogCod),"
+                   "INDEX(ActCod),"
+                   "INDEX(CtyCod),"
+                   "INDEX(InsCod),"
+                   "INDEX(CtrCod),"
+                   "INDEX(DegCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(UsrCod),"
+                   "INDEX(ClickTime,Role))");
 
    /***** Table log_ws *****/
 /*
@@ -1454,7 +1517,9 @@ mysql> DESCRIBE log_ws;
                    "LogCod INT NOT NULL,"
                    "PlgCod INT NOT NULL,"
                    "FunCod INT NOT NULL,"
-                   "UNIQUE INDEX(LogCod),INDEX(PlgCod),INDEX(FunCod))");
+                   "UNIQUE INDEX(LogCod),"
+                   "INDEX(PlgCod),"
+                   "INDEX(FunCod))");
 
    /***** Table mail_domains *****/
 /*
@@ -1472,7 +1537,9 @@ mysql> DESCRIBE mail_domains;
                    "MaiCod INT NOT NULL AUTO_INCREMENT,"
                    "Domain VARCHAR(127) NOT NULL,"
                    "Info VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX(MaiCod),UNIQUE INDEX(Domain),INDEX(Info))");
+                   "UNIQUE INDEX(MaiCod),"
+                   "UNIQUE INDEX(Domain),"
+                   "INDEX(Info))");
 
    /***** Table marks_properties *****/
 /*
@@ -1524,7 +1591,8 @@ mysql> DESCRIBE msg_content;
                    "MsgCod INT NOT NULL AUTO_INCREMENT,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
+                   "UNIQUE INDEX(MsgCod),"
+                   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_content_deleted *****/
 /*
@@ -1542,7 +1610,8 @@ mysql> DESCRIBE msg_content_deleted;
                    "MsgCod INT NOT NULL,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
+                   "UNIQUE INDEX(MsgCod),"
+                   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_rcv *****/
 /*
@@ -1566,7 +1635,9 @@ mysql> DESCRIBE msg_rcv;
                    "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX (UsrCod,MsgCod),INDEX(MsgCod),INDEX(Notified))");
+                   "UNIQUE INDEX (UsrCod,MsgCod),"
+                   "INDEX(MsgCod),"
+                   "INDEX(Notified))");
 
    /***** Table msg_rcv_deleted *****/
 /*
@@ -1588,7 +1659,9 @@ mysql> DESCRIBE msg_rcv_deleted;
                    "Notified ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,MsgCod),INDEX(MsgCod),INDEX(Notified))");
+                   "UNIQUE INDEX(UsrCod,MsgCod),"
+                   "INDEX(MsgCod),"
+                   "INDEX(Notified))");
 
    /***** Table msg_snt *****/
 /*
@@ -1610,7 +1683,9 @@ mysql> DESCRIBE msg_snt;
                    "UsrCod INT NOT NULL,"
                    "Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),INDEX(CrsCod),INDEX(UsrCod))");
+                   "UNIQUE INDEX(MsgCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(UsrCod))");
 
    /***** Table msg_snt_deleted *****/
 /*
@@ -1630,7 +1705,9 @@ mysql> DESCRIBE msg_snt_deleted;
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "UsrCod INT NOT NULL,"
                    "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),INDEX(CrsCod),INDEX(UsrCod))");
+                   "UNIQUE INDEX(MsgCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(UsrCod))");
 
    /***** Table notices *****/
 /*
@@ -1656,7 +1733,11 @@ mysql> DESCRIBE notices;
                    "Content TEXT NOT NULL,"
                    "Status TINYINT NOT NULL DEFAULT 0,"
                    "NumNotif INT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NotCod),INDEX(CrsCod,Status),INDEX(UsrCod),INDEX(CreatTime),INDEX(Status))");
+                   "UNIQUE INDEX(NotCod),"
+                   "INDEX(CrsCod,Status),"
+                   "INDEX(UsrCod),"
+                   "INDEX(CreatTime),"
+                   "INDEX(Status))");
 
    /***** Table notices_deleted *****/
 /*
@@ -1680,7 +1761,10 @@ mysql> DESCRIBE notices_deleted;
                    "CreatTime DATETIME NOT NULL,"
                    "Content TEXT NOT NULL,"
                    "NumNotif INT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NotCod),INDEX(CrsCod),INDEX(UsrCod),INDEX(CreatTime))");
+                   "UNIQUE INDEX(NotCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(UsrCod),"
+                   "INDEX(CreatTime))");
 
    /***** Table notif *****/
 /*
@@ -1715,7 +1799,11 @@ mysql> DESCRIBE notif;
                    "Cod INT NOT NULL DEFAULT -1,"
                    "TimeNotif DATETIME NOT NULL,"
                    "Status TINYINT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NtfCod),INDEX(NotifyEvent),INDEX(ToUsrCod),INDEX(CrsCod),INDEX(TimeNotif))");
+                   "UNIQUE INDEX(NtfCod),"
+                   "INDEX(NotifyEvent),"
+                   "INDEX(ToUsrCod),"
+                   "INDEX(CrsCod),"
+                   "INDEX(TimeNotif))");
 
    /***** Table pending_emails *****/
 /*
@@ -1735,7 +1823,8 @@ MariaDB [swad]> DESCRIBE pending_emails;
                    "E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL,"
                    "MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"
                    "DateAndTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod),UNIQUE INDEX(MailKey))");
+                   "INDEX(UsrCod),"
+                   "UNIQUE INDEX(MailKey))");
 
    /***** Table pending_passwd *****/
 /*
@@ -1773,7 +1862,8 @@ mysql> DESCRIBE places;
                    "InsCod INT NOT NULL,"
                    "ShortName VARCHAR(32) NOT NULL,"
                    "FullName VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX(PlcCod),INDEX(InsCod))");
+                   "UNIQUE INDEX(PlcCod),"
+                   "INDEX(InsCod))");
 
    /***** Table plugins *****/
 /*
@@ -1842,7 +1932,8 @@ mysql> DESCRIBE sessions;
                    "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
                    "SearchString VARCHAR(255) NOT NULL,"
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
-                   "UNIQUE INDEX(SessionId),INDEX(UsrCod))");
+                   "UNIQUE INDEX(SessionId),"
+                   "INDEX(UsrCod))");
 
    /***** Table sta_degrees *****/
 /*
@@ -1922,7 +2013,8 @@ mysql> DESCRIBE surveys;
                    "EndTime DATETIME NOT NULL,"
                    "Title VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(SvyCod),INDEX(DegCod,CrsCod,Hidden))");
+                   "UNIQUE INDEX(SvyCod),"
+                   "INDEX(DegCod,CrsCod,Hidden))");
 
    /***** Table svy_answers *****/
 /*
@@ -1980,7 +2072,8 @@ mysql> DESCRIBE svy_questions;
                    "QstInd INT NOT NULL DEFAULT 0,"
                    "AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
                    "Stem TEXT NOT NULL,"
-                   "UNIQUE INDEX(QstCod),INDEX(SvyCod))");
+                   "UNIQUE INDEX(QstCod),"
+                   "INDEX(SvyCod))");
 
    /***** Table svy_users *****/
 /*
@@ -2146,7 +2239,8 @@ mysql> DESCRIBE tst_exams;
                    "NumQsts INT NOT NULL DEFAULT 0,"
                    "NumQstsNotBlank INT NOT NULL DEFAULT 0,"
                    "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(TstCod),INDEX(CrsCod,UsrCod))");
+                   "UNIQUE INDEX(TstCod),"
+                   "INDEX(CrsCod,UsrCod))");
 
    /***** Table tst_question_tags *****/
 /*
@@ -2196,7 +2290,8 @@ mysql> DESCRIBE tst_questions;
                    "NumHits INT NOT NULL DEFAULT 0,"
                    "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
                    "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(QstCod),INDEX(CrsCod,EditTime))");
+                   "UNIQUE INDEX(QstCod),"
+                   "INDEX(CrsCod,EditTime))");
 
    /***** Table tst_status *****/
 /*
@@ -2239,7 +2334,9 @@ mysql> DESCRIBE tst_tags;
                    "ChangeTime DATETIME NOT NULL,"
                    "TagTxt VARCHAR(255) NOT NULL,"
                    "TagHidden ENUM('N','Y') NOT NULL,"
-                   "UNIQUE INDEX(TagCod),INDEX(CrsCod,ChangeTime),INDEX(TagTxt))");
+                   "UNIQUE INDEX(TagCod),"
+                   "INDEX(CrsCod,ChangeTime),"
+                   "INDEX(TagTxt))");
 
    /***** Table usr_banned *****/
 /*
@@ -2330,7 +2427,19 @@ mysql> DESCRIBE usr_data;
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
                    "NotifNtfEvents INT NOT NULL DEFAULT 0,"
                    "EmailNtfEvents INT NOT NULL DEFAULT 0,"
-                   "PRIMARY KEY(UsrCod),UNIQUE INDEX(EncryptedUsrCod),INDEX(Theme),INDEX(IconSet),INDEX(Language),INDEX(FirstDayOfWeek),INDEX(CtyCod),INDEX(InsCtyCod),INDEX(InsCod),INDEX(DptCod),INDEX(CtrCod),INDEX(Menu),INDEX(SideCols))");
+                   "PRIMARY KEY(UsrCod),"
+                   "UNIQUE INDEX(EncryptedUsrCod),"
+                   "INDEX(Theme),"
+                   "INDEX(IconSet),"
+                   "INDEX(Language),"
+                   "INDEX(FirstDayOfWeek),"
+                   "INDEX(CtyCod),"
+                   "INDEX(InsCtyCod),"
+                   "INDEX(InsCod),"
+                   "INDEX(DptCod),"
+                   "INDEX(CtrCod),"
+                   "INDEX(Menu),"
+                   "INDEX(SideCols))");
 
    /***** Table usr_emails *****/
    /*
@@ -2350,7 +2459,8 @@ mysql> DESCRIBE usr_emails;
                    "E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL,"
                    "CreatTime DATETIME NOT NULL,"
                    "Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,E_mail),UNIQUE INDEX(E_mail))");
+                   "UNIQUE INDEX(UsrCod,E_mail),"
+                   "UNIQUE INDEX(E_mail))");
 
    /***** Table usr_figures *****/
    /*
@@ -2374,7 +2484,9 @@ mysql> DESCRIBE usr_figures;
 	           "NumFileViews INT NOT NULL DEFAULT -1,"
 	           "NumForPst INT NOT NULL DEFAULT -1,"
 	           "NumMsgSnt INT NOT NULL DEFAULT -1,"
-	           "PRIMARY KEY(UsrCod),INDEX(FirstClickTime),INDEX(NumClicks))");
+	           "PRIMARY KEY(UsrCod),"
+	           "INDEX(FirstClickTime),"
+	           "INDEX(NumClicks))");
 
    /***** Table usr_follow *****/
    /*
@@ -2414,7 +2526,8 @@ mysql> DESCRIBE usr_IDs;
                    "UsrID CHAR(16) NOT NULL,"
                    "CreatTime DATETIME NOT NULL,"
                    "Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,UsrID),INDEX(UsrID))");
+                   "UNIQUE INDEX(UsrCod,UsrID),"
+                   "INDEX(UsrID))");
 
    /***** Table usr_last *****/
 /*
@@ -2438,7 +2551,8 @@ mysql> DESCRIBE usr_last;
                    "LastTab TINYINT NOT NULL,"
                    "LastTime DATETIME NOT NULL DEFAULT 0,"
                    "LastAccNotif DATETIME NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(UsrCod),INDEX(LastTime))");
+                   "UNIQUE INDEX(UsrCod),"
+                   "INDEX(LastTime))");
 
 /***** Table usr_nicknames *****/
 /*
@@ -2456,7 +2570,8 @@ mysql> DESCRIBE usr_nicknames;
                    "UsrCod INT NOT NULL,"
                    "Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"
                    "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,Nickname),UNIQUE INDEX(Nickname))");
+                   "UNIQUE INDEX(UsrCod,Nickname),"
+                   "UNIQUE INDEX(Nickname))");
 
 /***** Table usr_webs *****/
 /*
@@ -2510,7 +2625,10 @@ mysql> DESCRIBE ws_keys;
                     "UsrCod INT NOT NULL,"
                     "PlgCod INT NOT NULL,"
                     "LastTime DATETIME NOT NULL,"
-                    "UNIQUE INDEX(WSKey),INDEX(UsrCod),INDEX(PlgCod),INDEX(LastTime))");
+                    "UNIQUE INDEX(WSKey),"
+                    "INDEX(UsrCod),"
+                    "INDEX(PlgCod),"
+                    "INDEX(LastTime))");
 
    /***** Show success message *****/
    fprintf (Gbl.F.Out,"</ol>");
