@@ -347,20 +347,14 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
       case Soc_EVENT_UNKNOWN:
           break;
       case Soc_EVENT_INS_DOC_PUB_FILE:
-         break;
       case Soc_EVENT_INS_SHA_PUB_FILE:
-         break;
       case Soc_EVENT_CTR_DOC_PUB_FILE:
-         break;
       case Soc_EVENT_CTR_SHA_PUB_FILE:
-         break;
       case Soc_EVENT_DEG_DOC_PUB_FILE:
-         break;
       case Soc_EVENT_DEG_SHA_PUB_FILE:
-         break;
       case Soc_EVENT_CRS_DOC_PUB_FILE:
-         break;
       case Soc_EVENT_CRS_SHA_PUB_FILE:
+	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,Cod,MaxChars,false);
          break;
       case Soc_EVENT_EXAM_ANNOUNCEMENT:
          break;

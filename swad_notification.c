@@ -736,7 +736,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
          break;
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_SHARED_FILE:
-	 Brw_GetNotifDocOrSharedFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_ASSIGNMENT:
          Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,MaxChars,GetContent);

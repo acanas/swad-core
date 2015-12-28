@@ -47,6 +47,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
+#include "swad_social.h"
 #include "swad_string.h"
 #include "swad_zip.h"
 
@@ -9613,7 +9614,8 @@ void Brw_ChgFileMetadata (void)
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
    extern const char *Txt_You_dont_have_permission_to_change_the_properties_of_file_X;
    struct FileMetadata FileMetadata;
-   bool PublicFile;
+   bool PublicFileBeforeEdition;
+   bool PublicFileAfterEdition;
    Brw_License_t License;
 
    /***** Get parameters related to file browser *****/
@@ -9626,6 +9628,9 @@ void Brw_ChgFileMetadata (void)
    /***** Check if I can change file metadata *****/
    if (Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod))
      {
+      /* Check if the file was public before the edition */
+      PublicFileBeforeEdition = FileMetadata.IsPublic;
+
       /***** Get the new file privacy and license from form *****/
       switch (Gbl.FileBrowser.Type)
         {
@@ -9637,7 +9642,7 @@ void Brw_ChgFileMetadata (void)
          case Brw_ADMI_SHARE_DEG:
          case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
-            PublicFile = Brw_GetParamPublicFile ();
+            PublicFileAfterEdition = Brw_GetParamPublicFile ();
             License = Brw_GetParLicense ();
             break;
          case Brw_ADMI_DOCUM_GRP:
@@ -9647,11 +9652,11 @@ void Brw_ChgFileMetadata (void)
          case Brw_ADMI_WORKS_USR:
          case Brw_ADMI_WORKS_CRS:
          case Brw_ADMI_BRIEF_USR:
-            PublicFile = false;	// Files in these zones can not be public
+            PublicFileAfterEdition = false;	// Files in these zones can not be public
             License = Brw_GetParLicense ();
             break;
          default:
-            PublicFile = false;	// Files in other zones can not be public
+            PublicFileAfterEdition = false;	// Files in other zones can not be public
             License = Brw_LICENSE_DEFAULT;
             break;
         }
@@ -9660,16 +9665,49 @@ void Brw_ChgFileMetadata (void)
       if (FileMetadata.FilCod > 0)	// Entry exists in database
          Brw_ChangeFilePublicInDB (Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Gbl.FileBrowser.Priv.FullPathInTree,
-                                   PublicFile,License);
+                                   PublicFileAfterEdition,License);
       else				// No entry in database
-         Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileMetadata.FileType,
-                          Gbl.FileBrowser.Priv.FullPathInTree,
-                          PublicFile,License);
+         FileMetadata.FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileMetadata.FileType,
+                                                Gbl.FileBrowser.Priv.FullPathInTree,
+                                                PublicFileAfterEdition,License);
 
       /***** Remove the affected clipboards *****/
       Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
 	                            Gbl.Usrs.Me.UsrDat.UsrCod,
 	                            Gbl.Usrs.Other.UsrDat.UsrCod);
+
+      /***** Insert file into public social activity *****/
+      if (!PublicFileBeforeEdition &&
+	   PublicFileAfterEdition)	// Only if file has changed from private to public
+	 switch (Gbl.FileBrowser.Type)
+	   {
+	    case Brw_ADMI_DOCUM_INS:
+	       Soc_StoreSocialEvent (Soc_EVENT_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHARE_INS:
+	       Soc_StoreSocialEvent (Soc_EVENT_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOCUM_CTR:
+	       Soc_StoreSocialEvent (Soc_EVENT_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHARE_CTR:
+	       Soc_StoreSocialEvent (Soc_EVENT_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOCUM_DEG:
+	       Soc_StoreSocialEvent (Soc_EVENT_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHARE_DEG:
+	       Soc_StoreSocialEvent (Soc_EVENT_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOCUM_CRS:
+	       Soc_StoreSocialEvent (Soc_EVENT_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHARE_CRS:
+	       Soc_StoreSocialEvent (Soc_EVENT_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    default:
+	       break;
+	   }
 
       /***** Write message of confirmation *****/
       sprintf (Gbl.Message,Txt_The_properties_of_file_X_have_been_saved,
@@ -10881,23 +10919,25 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
   }
 
 /*****************************************************************************/
-/*********** Put a document or a shared file into a notification *************/
+/********** Get summary and content of a document or a shared file ***********/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Brw_GetNotifDocOrSharedFile (char *SummaryStr,char **ContentStr,
-                                  long FilCod,unsigned MaxChars,bool GetContent)
+void Brw_GetSummaryAndContentOrSharedFile (char *SummaryStr,char **ContentStr,
+                                           long FilCod,unsigned MaxChars,bool GetContent)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char FullPathInTreeFromDB[PATH_MAX+1];
    char PathUntilFileName[PATH_MAX+1];
+   char FileName[NAME_MAX+1];
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Path FROM files WHERE FilCod='%ld'",FilCod);
+   sprintf (Query,"SELECT Path FROM files WHERE FilCod='%ld'",
+            FilCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
         {
@@ -10912,7 +10952,8 @@ void Brw_GetNotifDocOrSharedFile (char *SummaryStr,char **ContentStr,
             FullPathInTreeFromDB[PATH_MAX] = '\0';
             Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDB,
         	                                  PathUntilFileName,
-        	                                  SummaryStr);
+        	                                  FileName);
+            strcpy (SummaryStr,FileName);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
