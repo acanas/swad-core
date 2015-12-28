@@ -1092,6 +1092,14 @@ void Crs_WriteSelectorMyCourses (void)
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.FormId);
 
+   /***** Write an option when no course selected *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\""
+	                 " selected=\"selected\">"
+	                 "%s"
+	                 "</option>",
+               Txt_Course);
+
    if (Gbl.Usrs.Me.MyCourses.Num)
      {
       /***** Write an option for each of my courses *****/
@@ -1141,13 +1149,6 @@ void Crs_WriteSelectorMyCourses (void)
                   Gbl.CurrentCrs.Crs.ShortName);
 	}
      }
-   else
-      /***** Write an option with no course selected *****/
-      fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\""
-	                 " selected=\"selected\">"
-	                 "%s"
-	                 "</option>",
-               Txt_Course);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");

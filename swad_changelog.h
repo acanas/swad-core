@@ -114,12 +114,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.74.7 (2015-12-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.74.8 (2015-12-28)"
 #define CSS_FILE		"swad15.74.3.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.74.8:  Dec 26, 2015	"Course" is moved to the top of the menu used to go directly to my courses. (187564 lines)
         Version 15.74.7:  Dec 26, 2015	Changes in small icons. (187563 lines)
         Version 15.74.6:  Dec 26, 2015	Reply icon is shown without text. (187562 lines)
         Version 15.74.5:  Dec 26, 2015	Text in link to remove messages is now shorter.
