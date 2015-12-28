@@ -41,6 +41,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_social.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -3827,6 +3828,17 @@ void For_RecForumPst (void)
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
          For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+     }
+
+   /***** Insert post into public social activity *****/
+   switch (Gbl.Forum.ForumType)	// Only if forum is public for any logged user
+     {
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_SWAD_USRS:
+         Soc_StoreSocialEvent (Soc_EVENT_FORUM_POST,PstCod);
+         break;
+      default:
+	 break;
      }
 
    /***** Show again the posts of this thread of the forum *****/

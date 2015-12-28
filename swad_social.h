@@ -84,4 +84,6 @@ typedef enum
 
 void Soc_ShowSocialActivity (void);
 
+void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod);
+
 #endif

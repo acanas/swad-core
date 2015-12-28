@@ -1951,9 +1951,8 @@ mysql> DESCRIBE social;
 | CrsCod      | int(11)    | NO   |     | -1      |                |
 | Cod         | int(11)    | NO   |     | -1      |                |
 | TimeEvent   | datetime   | NO   | MUL | NULL    |                |
-| Status      | tinyint(4) | NO   |     | 0       |                |
 +-------------+------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social ("
 	           "SocCod BIGINT NOT NULL AUTO_INCREMENT,"
@@ -1966,7 +1965,6 @@ mysql> DESCRIBE social;
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "Cod INT NOT NULL DEFAULT -1,"
                    "TimeEvent DATETIME NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
                    "UNIQUE INDEX(SocCod),"
                    "INDEX(SocialEvent),"
                    "INDEX(UsrCod),"

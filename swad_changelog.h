@@ -114,15 +114,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.77 (2015-12-28)"
+#define Log_PLATFORM_VERSION	"SWAD 15.77.1 (2015-12-28)"
 #define CSS_FILE		"swad15.75.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.77.1:  Dec 28, 2015	Insert social event when posting in a global forum. (188342 lines)
         Version 15.77:    Dec 28, 2015	New table in database for social activity. (188287 lines)
 					2 changes necessary in database:
-CREATE TABLE IF NOT EXISTS social (SocCod BIGINT NOT NULL AUTO_INCREMENT,SocialEvent TINYINT NOT NULL,UsrCod INT NOT NULL,CtyCod INT NOT NULL DEFAULT -1,InsCod INT NOT NULL DEFAULT -1,CtrCod INT NOT NULL DEFAULT -1,DegCod INT NOT NULL DEFAULT -1,CrsCod INT NOT NULL DEFAULT -1,Cod INT NOT NULL DEFAULT -1,TimeEvent DATETIME NOT NULL,Status TINYINT NOT NULL DEFAULT 0,UNIQUE INDEX(SocCod),INDEX(SocialEvent),INDEX(UsrCod),INDEX(TimeEvent));
+CREATE TABLE IF NOT EXISTS social (SocCod BIGINT NOT NULL AUTO_INCREMENT,SocialEvent TINYINT NOT NULL,UsrCod INT NOT NULL,CtyCod INT NOT NULL DEFAULT -1,InsCod INT NOT NULL DEFAULT -1,CtrCod INT NOT NULL DEFAULT -1,DegCod INT NOT NULL DEFAULT -1,CrsCod INT NOT NULL DEFAULT -1,Cod INT NOT NULL DEFAULT -1,TimeEvent DATETIME NOT NULL,UNIQUE INDEX(SocCod),INDEX(SocialEvent),INDEX(UsrCod),INDEX(TimeEvent));
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1490','es','N','Ver actividad social (timeline)');
 
         Version 15.76.1:  Dec 28, 2015	Refactoring in swad_database. (187926 lines)

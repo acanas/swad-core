@@ -25,25 +25,15 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <linux/stddef.h>	// For NULL
 #include <linux/limits.h>	// For PATH_MAX
+#include <stdlib.h>		// For malloc and free
 #include <sys/types.h>		// For time_t
 
 #include "swad_constant.h"
-// #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_layout.h"
-// #include "swad_nickname.h"
-// #include "swad_parameter.h"
-// #include "swad_privacy.h"
-// #include "swad_profile.h"
-// #include "swad_role.h"
 #include "swad_social.h"
-// #include "swad_text.h"
-// #include "swad_theme.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -108,7 +98,7 @@ void Soc_ShowSocialActivity (void)
    time_t DateTimeUTC;	// Date-time of the event
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char SummaryStr[Soc_MAX_BYTES_SUMMARY+1];
+   char *SummaryStr;
 
    /***** Get my timeline from database *****/
    sprintf (Query,"SELECT SocialEvent,UsrCod,"
@@ -124,12 +114,16 @@ void Soc_ShowSocialActivity (void)
    /***** List my timeline *****/
    if (NumEvents)	// Events found
      {
+      /***** Allocate memory for the summary of the notification *****/
+      if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+         Lay_ShowErrorAndExit ("Not enough memory to store the summary of the notification.");
+
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List start *****/
       Lay_StartRoundFrame (NULL,Txt_Public_activity);
-      fprintf (Gbl.F.Out,"<ul>");
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
       /***** List events one by one *****/
       for (NumEvent = 0;
@@ -192,20 +186,27 @@ void Soc_ShowSocialActivity (void)
          fprintf (Gbl.F.Out,"<li>");
 
 	 /* Write author of the event */
+         fprintf (Gbl.F.Out,"<div style=\"display:inline-block; vertical-align:top; width:64px; height:90px;\">");
 	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					       NULL,
-			   "PHOTO30x40",Pho_ZOOM);
+			   "PHOTO60x80",Pho_ZOOM);
+         fprintf (Gbl.F.Out,"</div>");
 
-         fprintf (Gbl.F.Out,"<span class=\"DAT\">%s</span>",
-                  UsrDat.FullName);
+         fprintf (Gbl.F.Out,"<div style=\"display:inline-block;\">");
 
-         /* Write event type */
-         fprintf (Gbl.F.Out,"<span class=\"DAT\">%u</span>",
+         fprintf (Gbl.F.Out,"<div class=\"DAT LEFT_TOP\""
+                            " style=\"display:inline-block; width:300px;\">"
+                            "<strong>%s</strong> @%s</div>",
+                  UsrDat.FullName,UsrDat.Nickname);
+
+         /* Write date and time */
+         Soc_WriteEventDate (DateTimeUTC);
+
+         /* Write event type and location */
+         fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"display:block;\">%u: ",
                   (unsigned) SocialEvent);
 
-         /* Write location */
-         fprintf (Gbl.F.Out,"<span class=\"DAT\">");
          if (SocialEvent == Soc_EVENT_FORUM_POST)
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
          else if (Crs.CrsCod > 0)
@@ -218,15 +219,14 @@ void Soc_ShowSocialActivity (void)
             fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShortName);
          else if (Cty.CtyCod > 0)
             fprintf (Gbl.F.Out,"%s: %s",Txt_Country,Cty.Name[Gbl.Prefs.Language]);
-         fprintf (Gbl.F.Out,"</span>");
-
-         /* Write date and time */
-         Soc_WriteEventDate (DateTimeUTC);
+         fprintf (Gbl.F.Out,"</div>");
 
          /***** Write content of the event *****/
 	 Soc_GetEventSummary (SocialEvent,Cod,
 	                      SummaryStr,Soc_MAX_BYTES_SUMMARY);
-	 fprintf (Gbl.F.Out,"<span class=\"DAT\">%s</span>",SummaryStr);
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+
+         fprintf (Gbl.F.Out,"</div>");
         }
 
       /***** List end *****/
@@ -235,6 +235,9 @@ void Soc_ShowSocialActivity (void)
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
+
+      /***** Free summary *****/
+      free ((void *) SummaryStr);
      }
    else
       Lay_ShowAlert (Lay_INFO,"No events.");	// Need translation!!!!
@@ -270,7 +273,8 @@ static void Soc_WriteEventDate (time_t TimeUTC)
    UniqueId++;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<span id=\"date_%u\" class=\"DAT\">",
+   fprintf (Gbl.F.Out,"<div id=\"date_%u\" class=\"DAT_LIGHT RIGHT_TOP\""
+	              " style=\"display:inline-block;\">",
             UniqueId);
 
    /***** Write date and time *****/
@@ -280,7 +284,7 @@ static void Soc_WriteEventDate (time_t TimeUTC)
             UniqueId,(long) TimeUTC);
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</span>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -364,4 +368,52 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,Cod,MaxChars,false);
          break;
      }
+  }
+
+/*****************************************************************************/
+/********************* Store a social event into database ********************/
+/*****************************************************************************/
+
+void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
+  {
+   char Query[512];
+   long CtyCod;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
+   long CrsCod;
+
+   if (SocialEvent == Soc_EVENT_FORUM_POST)
+     {
+      // CtyCod = Gbl.Forum.Cty.CtyCod;
+      // InsCod = Gbl.Forum.Ins.InsCod;
+      // CtrCod = Gbl.Forum.Ctr.CtrCod;
+      // DegCod = Gbl.Forum.Deg.DegCod;
+      // CrsCod = Gbl.Forum.Crs.CrsCod;
+      CtyCod = -1L;
+      InsCod = -1L;
+      CtrCod = -1L;
+      DegCod = -1L;
+      CrsCod = -1L;
+    }
+   else
+     {
+      CtyCod = Gbl.CurrentCty.Cty.CtyCod;
+      InsCod = Gbl.CurrentIns.Ins.InsCod;
+      CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
+      DegCod = Gbl.CurrentDeg.Deg.DegCod;
+      CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+     }
+
+   /***** Store notify event *****/
+   sprintf (Query,"INSERT INTO social (SocialEvent,UsrCod,"
+	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+	          "Cod,TimeEvent)"
+                  " VALUES ('%u','%ld',"
+                  "'%ld','%ld','%ld','%ld','%ld',"
+                  "'%ld',NOW())",
+            (unsigned) SocialEvent,Gbl.Usrs.Me.UsrDat.UsrCod,
+            CtyCod,InsCod,CtrCod,DegCod,CrsCod,
+            Cod);
+   DB_QueryINSERT (Query,"can not create new social event");
   }
