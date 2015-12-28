@@ -114,12 +114,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.77.1 (2015-12-28)"
-#define CSS_FILE		"swad15.75.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.77.2 (2015-12-28)"
+#define CSS_FILE		"swad15.77.2.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.77.2:  Dec 28, 2015	Changes in CSS related to social activity. (188368 lines)
         Version 15.77.1:  Dec 28, 2015	Insert social event when posting in a global forum. (188342 lines)
         Version 15.77:    Dec 28, 2015	New table in database for social activity. (188287 lines)
 					2 changes necessary in database:

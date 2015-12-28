@@ -185,26 +185,28 @@ void Soc_ShowSocialActivity (void)
          /***** Write row for this notification *****/
          fprintf (Gbl.F.Out,"<li>");
 
-	 /* Write author of the event */
-         fprintf (Gbl.F.Out,"<div style=\"display:inline-block; vertical-align:top; width:64px; height:90px;\">");
+	 /* Left: write author's photo */
+         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
 	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					       NULL,
 			   "PHOTO60x80",Pho_ZOOM);
          fprintf (Gbl.F.Out,"</div>");
 
-         fprintf (Gbl.F.Out,"<div style=\"display:inline-block;\">");
+         /* Right: author's name, time and summary */
+         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
-         fprintf (Gbl.F.Out,"<div class=\"DAT LEFT_TOP\""
-                            " style=\"display:inline-block; width:300px;\">"
-                            "<strong>%s</strong> @%s</div>",
+	 /* Write author's full name and nickname */
+         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR DAT\">"
+                            "<strong>%s</strong> @%s"
+                            "</div>",
                   UsrDat.FullName,UsrDat.Nickname);
 
          /* Write date and time */
          Soc_WriteEventDate (DateTimeUTC);
 
          /* Write event type and location */
-         fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"display:block;\">%u: ",
+         fprintf (Gbl.F.Out,"<div class=\"DAT\">%u: ",
                   (unsigned) SocialEvent);
 
          if (SocialEvent == Soc_EVENT_FORUM_POST)
@@ -221,12 +223,16 @@ void Soc_ShowSocialActivity (void)
             fprintf (Gbl.F.Out,"%s: %s",Txt_Country,Cty.Name[Gbl.Prefs.Language]);
          fprintf (Gbl.F.Out,"</div>");
 
-         /***** Write content of the event *****/
+         /* Write content of the event */
 	 Soc_GetEventSummary (SocialEvent,Cod,
 	                      SummaryStr,Soc_MAX_BYTES_SUMMARY);
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 
+         /* End of right part */
          fprintf (Gbl.F.Out,"</div>");
+
+         /* End of list element */
+         fprintf (Gbl.F.Out,"</li>");
         }
 
       /***** List end *****/

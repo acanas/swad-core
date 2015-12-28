@@ -1666,6 +1666,27 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
+/******************************** Social activity ****************************/
+.SOCIAL_LEFT_PHOTO
+	{
+	display:inline-block;
+	text-align:left;
+	vertical-align:top;
+	width:64px;
+	height:90px;
+	}
+.SOCIAL_RIGHT_CONTAINER
+	{
+	display:inline-block;
+	}
+.SOCIAL_RIGHT_AUTHOR
+	{
+        display:inline-block;
+        width:300px;
+	text-align:left;
+	vertical-align:top;
+        }
+
 /*********************************** Messages ********************************/
 .MSG_TO_ONE_RCP
 	{
