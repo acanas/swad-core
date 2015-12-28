@@ -1935,6 +1935,43 @@ mysql> DESCRIBE sessions;
                    "UNIQUE INDEX(SessionId),"
                    "INDEX(UsrCod))");
 
+   /***** Table social *****/
+/*
+mysql> DESCRIBE social;
++-------------+------------+------+-----+---------+----------------+
+| Field       | Type       | Null | Key | Default | Extra          |
++-------------+------------+------+-----+---------+----------------+
+| SocCod      | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| SocialEvent | tinyint(4) | NO   | MUL | NULL    |                |
+| UsrCod      | int(11)    | NO   | MUL | NULL    |                |
+| CtyCod      | int(11)    | NO   |     | -1      |                |
+| InsCod      | int(11)    | NO   |     | -1      |                |
+| CtrCod      | int(11)    | NO   |     | -1      |                |
+| DegCod      | int(11)    | NO   |     | -1      |                |
+| CrsCod      | int(11)    | NO   |     | -1      |                |
+| Cod         | int(11)    | NO   |     | -1      |                |
+| TimeEvent   | datetime   | NO   | MUL | NULL    |                |
+| Status      | tinyint(4) | NO   |     | 0       |                |
++-------------+------------+------+-----+---------+----------------+
+11 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social ("
+	           "SocCod BIGINT NOT NULL AUTO_INCREMENT,"
+                   "SocialEvent TINYINT NOT NULL,"
+                   "UsrCod INT NOT NULL,"
+                   "CtyCod INT NOT NULL DEFAULT -1,"
+                   "InsCod INT NOT NULL DEFAULT -1,"
+                   "CtrCod INT NOT NULL DEFAULT -1,"
+                   "DegCod INT NOT NULL DEFAULT -1,"
+                   "CrsCod INT NOT NULL DEFAULT -1,"
+                   "Cod INT NOT NULL DEFAULT -1,"
+                   "TimeEvent DATETIME NOT NULL,"
+                   "Status TINYINT NOT NULL DEFAULT 0,"
+                   "UNIQUE INDEX(SocCod),"
+                   "INDEX(SocialEvent),"
+                   "INDEX(UsrCod),"
+                   "INDEX(TimeEvent))");
+
    /***** Table sta_degrees *****/
 /*
 mysql> DESCRIBE sta_degrees;

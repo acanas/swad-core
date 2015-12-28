@@ -11182,3 +11182,10 @@ UPDATE timetable_tut SET Hour=Hour+2;
 
 
 SELECT COUNT(DISTINCT crs_usr.UsrCod) FROM institutions,centres,degrees,courses,crs_usr WHERE institutions.CtyCod='724' AND institutions.InsCod=centres.InsCod AND centres.CtrCod=degrees.CtrCod AND degrees.DegCod=courses.DegCod AND courses.CrsCod=crs_usr.CrsCod;
+
+
+
+----- SWAD 15.77 (2015/12/28) -----
+
+CREATE TABLE IF NOT EXISTS social (SocCod BIGINT NOT NULL AUTO_INCREMENT,SocialEvent TINYINT NOT NULL,UsrCod INT NOT NULL,CtyCod INT NOT NULL DEFAULT -1,InsCod INT NOT NULL DEFAULT -1,CtrCod INT NOT NULL DEFAULT -1,DegCod INT NOT NULL DEFAULT -1,CrsCod INT NOT NULL DEFAULT -1,Cod INT NOT NULL DEFAULT -1,TimeEvent DATETIME NOT NULL,Status TINYINT NOT NULL DEFAULT 0,UNIQUE INDEX(SocCod),INDEX(SocialEvent),INDEX(UsrCod),INDEX(TimeEvent));
+

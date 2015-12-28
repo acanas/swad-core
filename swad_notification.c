@@ -535,7 +535,7 @@ void Ntf_ShowMyNotifications (void)
             fprintf (Gbl.F.Out,"-");
          fprintf (Gbl.F.Out,"</td>");
 
-         /* Write date and time (DateTime holds date and time in YYYYMMDDHHMMSS format) */
+         /* Write date and time */
          Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
@@ -722,7 +722,7 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
   }
 
 /*****************************************************************************/
-/********************* Mark possible notification as seen ********************/
+/******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
 void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_NotifyEvent_t NotifyEvent,
@@ -759,7 +759,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
          break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-         For_GetNotifForumPst (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         For_GetSummaryAndContentForumPst (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_MESSAGE:
          Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
@@ -774,10 +774,6 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
          Fol_GetNotifFollower (SummaryStr,ContentStr);
          break;
      }
-
-   //if (Gbl.WebService.IsWebService)
-      /* Set the notification as seen, because I can see it in an extern application */
-   //   Ntf_SetNotifAsSeen (NotifyEvent,Cod,UsrCod);
   }
 
 /*****************************************************************************/

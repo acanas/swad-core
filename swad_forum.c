@@ -1273,11 +1273,13 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
   }
 
 /*****************************************************************************/
-/********************* Show brief subject of a forum post ********************/
+/***************** Get summary and content for a forum post ******************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void For_GetNotifForumPst (char *SummaryStr,char **ContentStr,long PstCod,unsigned MaxChars,bool GetContent)
+void For_GetSummaryAndContentForumPst (char *SummaryStr,char **ContentStr,
+                                       long PstCod,
+                                       unsigned MaxChars,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;

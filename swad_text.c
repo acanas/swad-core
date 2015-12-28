@@ -27613,6 +27613,27 @@ const char *Txt_posts =
 	"posts";
 #endif
 
+const char *Txt_Public_activity =
+#if   L==1
+	 "Activitat p&uacute;blica";
+#elif L==2
+	 "&Ouml;ffentliche Aktivit&auml;t";
+#elif L==3
+	 "Public activity";
+#elif L==4
+	 "Actividad p&uacute;blica";
+#elif L==5
+	 "Activit&eacute; public";
+#elif L==6
+	 "Actividad p&uacute;blica";	// Okoteve traducción
+#elif L==7
+	 "Attivit&agrave; pubblica";
+#elif L==8
+	 "Aktywno&sacute;&cacute; publiczne";
+#elif L==9
+	 "Atividade p&uacute;blica";
+#endif
+
 const char *Txt_public_FILES =
 #if   L==1
 	"p&uacute;blics";

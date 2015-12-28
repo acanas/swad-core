@@ -913,6 +913,25 @@ CREATE TABLE IF NOT EXISTS sessions (
 	UNIQUE INDEX(SessionId),
 	INDEX(UsrCod));
 --
+-- Table social: stores social events (timeline)
+--
+CREATE TABLE IF NOT EXISTS social (
+	SocCod BIGINT NOT NULL AUTO_INCREMENT,
+	SocialEvent TINYINT NOT NULL,
+	UsrCod INT NOT NULL,
+	CtyCod INT NOT NULL DEFAULT -1,
+	InsCod INT NOT NULL DEFAULT -1,
+	CtrCod INT NOT NULL DEFAULT -1,
+	DegCod INT NOT NULL DEFAULT -1,
+	CrsCod INT NOT NULL DEFAULT -1,
+	Cod INT NOT NULL DEFAULT -1,
+	TimeEvent DATETIME NOT NULL,
+	Status TINYINT NOT NULL DEFAULT 0,
+	UNIQUE INDEX(SocCod),
+	INDEX(SocialEvent),
+	INDEX(UsrCod),
+	INDEX(TimeEvent));
+--
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (
