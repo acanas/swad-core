@@ -42,7 +42,7 @@ OBJS = swad_account.o swad_action.o swad_announcement.o swad_assignment.o swad_a
        swad_place.o swad_plugin.o swad_preference.o swad_profile.o swad_privacy.o \
        swad_QR.o \
        swad_record.o swad_role.o swad_RSS.o \
-       swad_scope.o swad_search.o swad_session.o swad_setup.o swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
+       swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_tab.o swad_test.o swad_test_import.o swad_theme.o swad_timetable.o \
        swad_user.o \
        swad_web_service.o \

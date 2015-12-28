@@ -17837,6 +17837,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
+	// ActSeeSocAct
+#if   L==1
+	 "Activitat"
+#elif L==2
+	 "Aktivit&auml;t"
+#elif L==3
+	 "Activity"
+#elif L==4
+	 "Actividad"
+#elif L==5
+	 "Activit&eacute;"
+#elif L==6
+	 "Actividad"	// Okoteve traducción
+#elif L==7
+	 "Attivit&agrave;"
+#elif L==8
+	 "Aktywno&sacute;&cacute;"
+#elif L==9
+	 "Atividade"
+#endif
+	,
 	// ActReqPubPrf
 #if   L==1
 	 "Perfils"
@@ -17879,7 +17900,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19773,6 +19793,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
+	 // ActSeeSocAct
+#if   L==1
+	 "Activitat social (l&iacute;nia de temps)"
+#elif L==2
+	 "Soziale Aktivit&auml;t (Timeline)"
+#elif L==3
+	 "Social activity (timeline)"
+#elif L==4
+	 "Actividad social (l&iacute;nea de tiempo)"
+#elif L==5
+	 "Activit&eacute; sociale (timeline)"
+#elif L==6
+	 "Actividad social (l&iacute;nea de tiempo)"	// Okoteve traducción
+#elif L==7
+	 "Attivit&agrave; sociale (timeline)"
+#elif L==8
+	 "Aktywno&sacute;&cacute; spo&lstrok;eczna (o&sacute; czasu)"
+#elif L==9
+	 "Atividade social (timeline)"
+#endif
+	,
 	 // ActReqPubPrf
 #if   L==1
 	 "Perfils p&uacute;blics"
@@ -19815,7 +19856,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,

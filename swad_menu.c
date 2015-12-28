@@ -155,6 +155,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabSoc **********
 		{
+		ActSeeSocAct,
 		ActReqPubPrf,
 		ActSeeChtRms,
 		},
@@ -260,7 +261,7 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Icon *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICON\""
-			    " style=\"background-image:url('%s/%s/%s64x64.gif');\">",
+			    " style=\"background-image:url('%s/%s/%s');\">",
 	          Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[NumAct].Icon);
 
