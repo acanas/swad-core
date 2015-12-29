@@ -116,13 +116,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.82.1 (2015-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.82.2 (2015-12-30)"
 #define CSS_FILE		"swad15.80.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.82.2:  Dec 30, 2015	Current timeline is displayed below the form to write a new social post. (189183 lines)
         Version 15.82.1:  Dec 29, 2015	Public social posts are displayed in timeline. (189176 lines)
         Version 15.82:    Dec 29, 2015	Public social post is received and stored in a new database table. (189136 lines)
 					1 change necessary in database:

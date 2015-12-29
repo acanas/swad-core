@@ -116,7 +116,6 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
 
-
 /*****************************************************************************/
 /****************** Form to write a new public comment ***********************/
 /*****************************************************************************/
@@ -126,24 +125,28 @@ void Soc_FormSocialPost (void)
    extern const char *Txt_New_comment;
    extern const char *Txt_Send_comment;
 
-   /***** Start frame *****/
+   /***** Form to write a new public comment *****/
+   /* Start frame */
    Lay_StartRoundFrame ("560px",Txt_New_comment);
 
-   /***** Start form to write the post *****/
+   /* Start form to write the post */
    Act_FormStart (ActRcvSocPst);
 
-   /***** Content of new post *****/
+   /* Content of new post */
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"10\">"
 		      "</textarea>");
 
-   /***** Send button *****/
+   /* Send button */
    Lay_PutCreateButton (Txt_Send_comment);
 
-   /***** End form *****/
+   /* End form */
    Act_FormEnd ();
 
-   /***** End frame *****/
+   /* End frame */
    Lay_EndRoundFrame ();
+
+   /***** Write current timeline *****/
+   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
@@ -156,17 +159,21 @@ void Soc_ReceiveSocialPost (void)
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    long PstCod;
 
-   /***** Get the content of the post *****/
+   /***** Get and store new post *****/
+   /* Get the content of the post */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,false);
 
-   /***** Insert post content in the database *****/
+   /* Insert post content in the database */
    sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",
             Content);
    PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
-   /***** Insert post in social events *****/
+   /* Insert post in social events */
    Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
+
+   /***** Write current timeline *****/
+   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
