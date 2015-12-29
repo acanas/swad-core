@@ -60,7 +60,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 #define Rec_INSTITUTION_LOGO_SIZE	64
 #define Rec_DEGREE_LOGO_SIZE		64
 
-#define Rec_USR_MIN_AGE  12	// years old
+#define Rec_USR_MIN_AGE  16	// years old
 #define Rec_USR_MAX_AGE 120	// years old
 
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true

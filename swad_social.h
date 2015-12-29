@@ -82,6 +82,7 @@ typedef enum
 /*****************************************************************************/
 
 void Soc_FormSocialPost (void);
+void Soc_ReceiveSocialPost (void);
 
 void Soc_ShowUsrTimeline (long UsrCod);
 void Soc_ShowFollowingTimeline (void);

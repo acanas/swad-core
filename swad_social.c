@@ -119,6 +119,31 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
 
 void Soc_FormSocialPost (void)
   {
+   extern const char *Txt_New_comment;
+   extern const char *Txt_Send_comment;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("560px",Txt_New_comment);
+
+   /***** Start form to write the comment *****/
+   Act_FormStart (ActRcvSocPst);
+
+   /***** Send button *****/
+   Lay_PutCreateButton (Txt_Send_comment);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/****************** Receive and store a new public comment *******************/
+/*****************************************************************************/
+
+void Soc_ReceiveSocialPost (void)
+  {
    Lay_ShowAlert (Lay_INFO,"Not implemented...");
   }
 

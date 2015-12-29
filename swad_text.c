@@ -22366,6 +22366,27 @@ const char *Txt_New_centre_of_INSTITUTION_X =	// Warning: it is very important t
 	"Novo centro de %s";
 #endif
 
+const char *Txt_New_comment =
+#if   L==1
+	"Nou comentari";
+#elif L==2
+	"Neue Kommentar";
+#elif L==3
+	"New comment";
+#elif L==4
+	"Nuevo comentario";
+#elif L==5
+	"Nouvelle commentaire";
+#elif L==6
+	"Nuevo comentario";	// Okoteve traducción
+#elif L==7
+	"Nuovo commento";
+#elif L==8
+	"Nowy komentarz";
+#elif L==9
+	"Novo coment&aacute;rio";
+#endif
+
 const char *Txt_New_country =
 #if   L==1
 	"Nuevo pa&iacute;s";	// Necessita traduccio
@@ -27801,6 +27822,27 @@ const char *Txt_Public_views =
 	"Publiczne ods&lstrok;on";
 #elif L==9
 	"Acessos p&uacute;blicos";
+#endif
+
+const char *Txt_Publish_announcement_OF_EXAM =
+#if   L==1
+	"Publicar convocat&ograve;ria";
+#elif L==2
+	"Ver&ouml;ffentlichen Aufruf";
+#elif L==3
+	"Publish announcement";
+#elif L==4
+	"Publicar convocatoria";
+#elif L==5
+	"Publier convocation";
+#elif L==6
+	"Publicar convocatoria";	// Okoteve traducción
+#elif L==7
+	"Pubblicare sessione";
+#elif L==8
+	"Publikuje zaproszenie";
+#elif L==9
+	"Publicar chamada";
 #endif
 
 const char *Txt_QR_code =
@@ -34134,30 +34176,30 @@ const char *Txt_Set_password =
 	"Definir senha";
 #endif
 
-const char *Txt_Publish_announcement_OF_EXAM =
+const char *Txt_Send_comment =
 #if   L==1
-	"Publicar convocat&ograve;ria";
+	"Enviar comentari";
 #elif L==2
-	"Ver&ouml;ffentlichen Aufruf";
+	"Senden Kommentar";
 #elif L==3
-	"Publish announcement";
+	"Send comment";
 #elif L==4
-	"Publicar convocatoria";
+	"Enviar comentario";
 #elif L==5
-	"Publier convocation";
+	"Envoyer commentaire";
 #elif L==6
-	"Publicar convocatoria";	// Okoteve traducción
+	"Enviar comentario";	// Okoteve traducción
 #elif L==7
-	"Pubblicare sessione";
+	"Invia commento";
 #elif L==8
-	"Publikuje zaproszenie";
+	"Wy&sacute;lij komentarz";
 #elif L==9
-	"Publicar chamada";
+	"Enviar coment&aacute;rio";
 #endif
 
 const char *Txt_Send_message =
 #if   L==1
-	"Enviar mensaje";	// Necessita traduccio
+	"Enviar missatge";
 #elif L==2
 	"Senden Nachricht";
 #elif L==3
@@ -34171,7 +34213,7 @@ const char *Txt_Send_message =
 #elif L==7
 	"Invia messaggio";
 #elif L==8
-	"Send message";		// Potrzebujesz tlumaczenie
+	"Wy&sacute;lij wiadomo&sacute;&cacute;";
 #elif L==9
 	"Enviar mensagem";
 #endif

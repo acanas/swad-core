@@ -116,13 +116,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.81 (2015-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.81.1 (2015-12-29)"
 #define CSS_FILE		"swad15.80.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.81.1:  Dec 29, 2015	Form to write a public social post. Not finished. (189094 lines)
         Version 15.81:    Dec 29, 2015	New option to write a public social post. Not finished. (189030 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1491','es','N','Redactar comentario social');
