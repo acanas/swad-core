@@ -3016,8 +3016,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
-      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,Txt_Update_attendance);
+      Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,
+                                  The_ClassFormBold[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,
+                                    Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }

@@ -169,6 +169,7 @@ void Soc_ShowFollowingTimeline (void)
 
 static unsigned long Soc_ShowTimeline (const char *Query)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Public_activity;
    extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
    extern const char *Txt_Forum;
@@ -297,9 +298,10 @@ static unsigned long Soc_ShowTimeline (const char *Query)
          /* Write event type and location */
          if (SocialEvent != Soc_EVENT_SOCIAL_POST)
            {
-	    fprintf (Gbl.F.Out,"<div class=\"DAT_N\">");
+	    fprintf (Gbl.F.Out,"<div>");
 	    Soc_StartFormGoToAction (SocialEvent,Crs.CrsCod,Cod);
-	    Act_LinkFormSubmit (Txt_SOCIAL_EVENT[SocialEvent],"DAT_N");
+	    Act_LinkFormSubmit (Txt_SOCIAL_EVENT[SocialEvent],
+	                        The_ClassForm[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"%s</a>",
 		     Txt_SOCIAL_EVENT[SocialEvent]);
 	    Act_FormEnd ();
