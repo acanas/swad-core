@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
+#include "swad_social.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -303,6 +304,9 @@ void Exa_ReceiveExamAnnouncement (void)
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod)))
       Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (ExaCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+
+   /***** Create a new social event about the new exam announcement *****/
+   Soc_StoreSocialEvent (Soc_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Show exam announcement *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -1225,12 +1229,13 @@ static void Exa_PutParamExaCod (void)
   }
 
 /*****************************************************************************/
-/*********** Get data for notification about an exam announcement ************/
+/************ Get summary and content about an exam announcement *************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
-// NumChars must be > 3+Cns_MAX_LENGTH_DATE+9
+// MaxChars must be > 3+(2+Cns_MAX_LENGTH_DATE+6)
 
-void Exa_GetNotifExamAnnouncement (char *SummaryStr,char **ContentStr,long ExaCod,unsigned MaxChars,bool GetContent)
+void Exa_GetSummaryAndContentExamAnnouncement (char *SummaryStr,char **ContentStr,
+                                               long ExaCod,unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
 
@@ -1249,7 +1254,8 @@ void Exa_GetNotifExamAnnouncement (char *SummaryStr,char **ContentStr,long ExaCo
    /***** Summary *****/
    /* Name of the course */
    if (MaxChars)
-      Str_LimitLengthHTMLStr (Gbl.ExamAnnouncement.CrsFullName,MaxChars-(Cns_MAX_LENGTH_DATE+9));
+      Str_LimitLengthHTMLStr (Gbl.ExamAnnouncement.CrsFullName,
+                              MaxChars-(2+Cns_MAX_LENGTH_DATE+6));
 
    /* Date of exam */
    sprintf (SummaryStr,"%s, %04u-%02u-%02u %2u:%02u",

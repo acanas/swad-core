@@ -1678,14 +1678,24 @@ a:hover img.CENTRE_PHOTO_SHOW
 .SOCIAL_RIGHT_CONTAINER
 	{
 	display:inline-block;
+	box-sizing:border-box;
 	padding:0 0 10px 10px;
-	width:400px;
+	width:500px;
 	}
 .SOCIAL_RIGHT_AUTHOR
 	{
         display:inline-block;
+	box-sizing:border-box;
         width:300px;
 	text-align:left;
+	vertical-align:top;
+        }
+.SOCIAL_RIGHT_TIME
+	{
+        display:inline-block;
+	box-sizing:border-box;
+        width:190px;
+	text-align:right;
 	vertical-align:top;
         }
 

@@ -31,6 +31,7 @@
 
 #include "swad_constant.h"
 #include "swad_database.h"
+#include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notice.h"
@@ -280,7 +281,7 @@ static void Soc_WriteEventDate (time_t TimeUTC)
    UniqueId++;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<div id=\"date_%u\" class=\"DAT_LIGHT RIGHT_TOP\""
+   fprintf (Gbl.F.Out,"<div id=\"date_%u\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
 	              " style=\"display:inline-block;\">",
             UniqueId);
 
@@ -305,46 +306,6 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
 
    switch (SocialEvent)
      {
-/*
-      case Ntf_EVENT_UNKNOWN:
-         break;
-      case Ntf_EVENT_DOCUMENT_FILE:
-      case Ntf_EVENT_SHARED_FILE:
-	 Brw_GetNotifDocOrSharedFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_ASSIGNMENT:
-         Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_EXAM_ANNOUNCEMENT:
-         Exa_GetNotifExamAnnouncement (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_MARKS_FILE:
-         Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_ENROLLMENT_STUDENT:
-      case Ntf_EVENT_ENROLLMENT_TEACHER:
-	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod,MaxChars);
-         break;
-      case Ntf_EVENT_ENROLLMENT_REQUEST:
-	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_NOTICE:
-         Not_GetNotifNotice (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_FORUM_POST_COURSE:
-      case Ntf_EVENT_FORUM_REPLY:
-         For_GetNotifForumPst (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_MESSAGE:
-         Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_SURVEY:
-         Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_FOLLOWER:
-         Fol_GetNotifFollower (SummaryStr,ContentStr);
-         break;
-*/
       case Soc_EVENT_UNKNOWN:
           break;
       case Soc_EVENT_INS_DOC_PUB_FILE:
@@ -358,8 +319,10 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
 	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,Cod,MaxChars,false);
          break;
       case Soc_EVENT_EXAM_ANNOUNCEMENT:
+         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,Cod,MaxChars,false);
          break;
       case Soc_EVENT_SOCIAL_POST:
+	 // TODO: Implement social posts
          break;
       case Soc_EVENT_NOTICE:
          Not_GetSummaryAndContentNotice (SummaryStr,NULL,Cod,MaxChars,false);

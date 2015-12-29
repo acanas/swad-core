@@ -109,17 +109,20 @@
 // TODO: When page is refreshed in course works, prevent users to be duplicated
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
+// TODO: Hour in exam announcement should start at six a.m.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.77.4 (2015-12-29)"
-#define CSS_FILE		"swad15.77.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.77.5 (2015-12-29)"
+#define CSS_FILE		"swad15.77.5.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.77.5:  Dec 29, 2015	Insert social event when publishing an exam announcement.
+                                        Changes in CSS related to social activity. (188392 lines)
         Version 15.77.4:  Dec 29, 2015	Insert social event when publishing a new notice.
                                         Changes in CSS related to social activity. (188410 lines)
         Version 15.77.3:  Dec 28, 2015	Insert social event when changing file from private to public. (188402 lines)

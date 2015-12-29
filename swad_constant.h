@@ -39,7 +39,7 @@
 
 #define Cns_MAX_LENGTH_IP	 15	// Max. bytes of an IP address
 
-#define Cns_MAX_LENGTH_DATE	 (2+1+2+1+4)
+#define Cns_MAX_LENGTH_DATE	 (4+1+2+1+2)
 #define Cns_MAX_BYTES_DATE		19	// Examples: "20030614143857", "14/06/2003 14:38:57"
 
 #define Cns_MAX_LENGTH_SUBJECT	255
