@@ -206,6 +206,9 @@ static void Prf_GetUsrDatAndShowUserProfile (void)
       /***** Request nickname again *****/
       Prf_RequestUserProfileWithDefaultNickname ("");
      }
+   else
+      /***** Show social activity (timeline) of this user *****/
+      Soc_ShowUsrTimeline (Gbl.Usrs.Other.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -244,9 +247,6 @@ bool Prf_ShowUserProfile (void)
       NumFollowers = Fol_GetNumFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
       Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat,
                                      NumFollowing,NumFollowers);
-
-      /***** Show social activity (timeline) of a selected user *****/
-      Soc_ShowUsrTimeline (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       return true;
      }
