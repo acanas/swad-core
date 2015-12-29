@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_layout.h"
+#include "swad_notice.h"
 #include "swad_social.h"
 
 /*****************************************************************************/
@@ -43,7 +44,7 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_MAX_BYTES_SUMMARY 200
+#define Soc_MAX_BYTES_SUMMARY 100
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -358,11 +359,10 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
          break;
       case Soc_EVENT_EXAM_ANNOUNCEMENT:
          break;
-      case Soc_EVENT_MARKS_FILE:
-         break;
       case Soc_EVENT_SOCIAL_POST:
          break;
       case Soc_EVENT_NOTICE:
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Cod,MaxChars,false);
          break;
       case Soc_EVENT_FORUM_POST:
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,Cod,MaxChars,false);

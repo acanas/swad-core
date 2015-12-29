@@ -35,7 +35,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Soc_NUM_SOCIAL_EVENTS	14
+#define Soc_NUM_SOCIAL_EVENTS	13
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table social
 
@@ -61,16 +61,15 @@ typedef enum
 
    /* Assessment tab */
    Soc_EVENT_EXAM_ANNOUNCEMENT		=  9,
-   Soc_EVENT_MARKS_FILE			= 10,
 
    /* Enrollment tab */
 
    /* Social tab */
-   Soc_EVENT_SOCIAL_POST		= 11,
+   Soc_EVENT_SOCIAL_POST		= 10,
 
    /* Messages tab */
-   Soc_EVENT_NOTICE			= 12,
-   Soc_EVENT_FORUM_POST			= 13,
+   Soc_EVENT_NOTICE			= 11,
+   Soc_EVENT_FORUM_POST			= 12,
 
    /* Statistics tab */
 

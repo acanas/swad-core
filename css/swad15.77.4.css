@@ -1672,12 +1672,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:inline-block;
 	text-align:left;
 	vertical-align:top;
-	width:64px;
+	width:60px;
 	height:90px;
 	}
 .SOCIAL_RIGHT_CONTAINER
 	{
 	display:inline-block;
+	padding:0 0 10px 10px;
+	width:400px;
 	}
 .SOCIAL_RIGHT_AUTHOR
 	{

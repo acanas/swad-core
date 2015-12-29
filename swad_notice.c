@@ -36,6 +36,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_RSS.h"
+#include "swad_social.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -153,6 +154,9 @@ void Not_ReceiveNotice (void)
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+
+   /***** Create a new social event about the new notice *****/
+   Soc_StoreSocialEvent (Soc_EVENT_NOTICE,NotCod);
   }
 
 /*****************************************************************************/
@@ -719,11 +723,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
   }
 
 /*****************************************************************************/
-/********************* Write first characters of a notice  *******************/
+/******************* Get summary and content for a notice ********************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Not_GetNotifNotice (char *SummaryStr,char **ContentStr,long NotCod,unsigned MaxChars,bool GetContent)
+void Not_GetSummaryAndContentNotice (char *SummaryStr,char **ContentStr,
+                                     long NotCod,unsigned MaxChars,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
