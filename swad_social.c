@@ -74,7 +74,7 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
    /* Users tab */
 
    /* Social tab */
-   ActUnk,		// Soc_EVENT_SOCIAL_POST
+   ActSeeSocAct,	// Soc_EVENT_SOCIAL_POST (action not used)
 
    /* Messages tab */
    ActShoNot,		// Soc_EVENT_NOTICE
@@ -111,6 +111,16 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
                                      long CrsCod,long Cod);
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
+
+
+/*****************************************************************************/
+/****************** Form to write a new public comment ***********************/
+/*****************************************************************************/
+
+void Soc_FormSocialPost (void)
+  {
+   Lay_ShowAlert (Lay_INFO,"Not implemented...");
+  }
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/

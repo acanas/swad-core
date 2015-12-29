@@ -71,9 +71,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(7+52+15+90+72+67+205+183+143+14+169+27+82)
+#define Act_NUM_ACTIONS	(7+52+15+90+72+67+205+183+143+15+169+27+82)
 
-#define Act_MAX_ACTION_COD 1490
+#define Act_MAX_ACTION_COD 1491
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1036,23 +1036,24 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 /******************************** Social tab *********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActSeeSocAct		(ActLstClk+  1)
-#define ActReqPubPrf		(ActLstClk+  2)
-#define ActSeeChtRms		(ActLstClk+  3)
+#define ActReqSocPst		(ActLstClk+  1)
+#define ActSeeSocAct		(ActLstClk+  2)
+#define ActReqPubPrf		(ActLstClk+  3)
+#define ActSeeChtRms		(ActLstClk+  4)
 // Secondary actions
-#define ActSeePubPrf		(ActLstClk+  4)
-#define ActCal1stClkTim		(ActLstClk+  5)
-#define ActCalNumClk		(ActLstClk+  6)
-#define ActCalNumFilVie		(ActLstClk+  7)
-#define ActCalNumForPst		(ActLstClk+  8)
-#define ActCalNumMsgSnt		(ActLstClk+  9)
+#define ActSeePubPrf		(ActLstClk+  5)
+#define ActCal1stClkTim		(ActLstClk+  6)
+#define ActCalNumClk		(ActLstClk+  7)
+#define ActCalNumFilVie		(ActLstClk+  8)
+#define ActCalNumForPst		(ActLstClk+  9)
+#define ActCalNumMsgSnt		(ActLstClk+ 10)
 
-#define ActFolUsr		(ActLstClk+ 10)
-#define ActUnfUsr		(ActLstClk+ 11)
-#define ActSeeFlg		(ActLstClk+ 12)
-#define ActSeeFlr		(ActLstClk+ 13)
+#define ActFolUsr		(ActLstClk+ 11)
+#define ActUnfUsr		(ActLstClk+ 12)
+#define ActSeeFlg		(ActLstClk+ 13)
+#define ActSeeFlr		(ActLstClk+ 14)
 
-#define ActCht			(ActLstClk+ 14)
+#define ActCht			(ActLstClk+ 15)
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/

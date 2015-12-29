@@ -997,8 +997,11 @@ Users:
 
         834. ActLstClk			List last clicks in real time
 Social:
-        xxx. ActSeeSocAct		Show social activity (timeline).
+	xxx. ActReqSocPst		Write a public social post to be displayed in the timeline
+        xxx. ActSeeSocAct		Show social activity (timeline)
 	699. ActReqPubPrf		Request @nickname to show a public user's profile
+	845. ActSeeChtRms		Show the chat rooms
+
 	835. ActSeePubPrf		Show a public user's profile
 	836. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	837. ActCalNumClk		Calculate number of clicks from log and store into user's figures
@@ -1011,13 +1014,13 @@ Social:
 	843. ActSeeFlg			Show following
 	844. ActSeeFlr			Show followers
 
-	845. ActSeeChtRms		Show the chat rooms
+       1015. ActCht			Enter in a chat room to chat
 Messages:
 	846. ActSeeNtf			Show my recent notifications
 	847. ActSeeAnn			Show global announcements
 	848. ActSeeNot			Show notices
 	849. ActSeeFor			Show the level superior of the forums
-	850. ActReqMsgUsr		Write message a varios users
+	850. ActReqMsgUsr		Write message to several users
 	851. ActSeeRcvMsg		Show the messages received from other users (link in menu)
 	852. ActSeeSntMsg		Show the messages sent to other users
 	853. ActMaiStd			Send an e-mail to students
@@ -1182,7 +1185,6 @@ Messages:
        1012. ActBanUsrMsg		Ban the sender of a message when showing received messages
        1013. ActUnbUsrMsg		Unban the sender of a message when showing received messages
        1014. ActUnbUsrLst		Unban a user when listing banned users
-       1015. ActCht			Enter in a chat room to chat
 Statistics:
        1016. ActSeeAllSvy		List all surveys in pages
        1017. ActReqUseGbl		Request showing use of the platform
@@ -2302,9 +2304,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
    // TabSoc ******************************************************************
-   /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline		,"soc64x64.png"		},
-   /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
-   /* ActSeeChtRms	*/{  51, 2,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
+   /* ActReqSocPst	*/{1491, 0,TabSoc,ActReqSocPst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,"editnewmsg64x64.gif"	},
+   /* ActSeeSocAct	*/{1490, 1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline	,"soc64x64.png"		},
+   /* ActReqPubPrf	*/{1401, 2,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
+   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
@@ -2326,10 +2329,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
    /* ActSeeNot		*/{ 762, 2,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note64x64.gif"	},
    /* ActSeeFor		*/{  95, 3,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
-   /* ActReqMsgUsr	*/{  26, 5,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
-   /* ActSeeRcvMsg	*/{   3, 6,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
-   /* ActSeeSntMsg	*/{  70, 7,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
-   /* ActMaiStd		*/{ 100, 8,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListEMails			,"email64x64.gif"	},
+   /* ActReqMsgUsr	*/{  26, 4,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
+   /* ActSeeRcvMsg	*/{   3, 5,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
+   /* ActSeeSntMsg	*/{  70, 6,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
+   /* ActMaiStd		*/{ 100, 7,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListEMails			,"email64x64.gif"	},
 
    // Actions not in menu:
    /* ActWriAnn		*/{1237,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowFormAnnouncement	,NULL},
@@ -4144,6 +4147,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActAskRemOldBrf,	// #1488
 	ActRemOldBrf,		// #1489
 	ActSeeSocAct,		// #1490
+	ActReqSocPst,		// #1491
 	};
 
 /*****************************************************************************/
