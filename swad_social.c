@@ -27,6 +27,7 @@
 
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdlib.h>		// For malloc and free
+#include <string.h>		// For string functions
 #include <sys/types.h>		// For time_t
 
 #include "swad_constant.h"
@@ -105,6 +106,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Soc_GetAndWriteSocialPost (long PstCod);
+
 static unsigned long Soc_ShowTimeline (const char *Query);
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
 static void Soc_WriteEventDate (time_t TimeUTC);
@@ -164,6 +167,43 @@ void Soc_ReceiveSocialPost (void)
 
    /***** Insert post in social events *****/
    Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
+  }
+
+/*****************************************************************************/
+/***************** Get from database and write public post *******************/
+/*****************************************************************************/
+
+static void Soc_GetAndWriteSocialPost (long PstCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get social post from database *****/
+   sprintf (Query,"SELECT Content FROM social_post WHERE PstCod='%ld'",
+            PstCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
+
+   /***** Result should have a unique row *****/
+   if (NumRows == 1)
+     {
+      /***** Get number of rows *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /****** Get content (row[0]) *****/
+      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+     }
+   else
+      Content[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Write content *****/
+   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
   }
 
 /*****************************************************************************/
@@ -248,7 +288,7 @@ static unsigned long Soc_ShowTimeline (const char *Query)
    time_t DateTimeUTC;	// Date-time of the event
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char *SummaryStr;
+   char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get timeline from database *****/
    NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
@@ -256,10 +296,6 @@ static unsigned long Soc_ShowTimeline (const char *Query)
    /***** List my timeline *****/
    if (NumEvents)	// Events found
      {
-      /***** Allocate memory for the summary of the notification *****/
-      if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store the summary of the notification.");
-
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
@@ -349,9 +385,15 @@ static unsigned long Soc_ShowTimeline (const char *Query)
          /* Write date and time */
          Soc_WriteEventDate (DateTimeUTC);
 
-         /* Write event type and location */
-         if (SocialEvent != Soc_EVENT_SOCIAL_POST)
+         if (SocialEvent == Soc_EVENT_SOCIAL_POST)
            {
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+	    Soc_GetAndWriteSocialPost (Cod);
+	    fprintf (Gbl.F.Out,"</div>");
+           }
+         else
+           {
+            /* Write event type and location */
 	    fprintf (Gbl.F.Out,"<div>");
 	    Soc_StartFormGoToAction (SocialEvent,Crs.CrsCod,Cod);
 	    Act_LinkFormSubmit (Txt_SOCIAL_EVENT[SocialEvent],
@@ -379,12 +421,12 @@ static unsigned long Soc_ShowTimeline (const char *Query)
 	    else if (Cty.CtyCod > 0)
 	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 	                Txt_Country,Cty.Name[Gbl.Prefs.Language]);
-           }
 
-         /* Write content of the event */
-	 Soc_GetEventSummary (SocialEvent,Cod,
-	                      SummaryStr,Soc_MAX_BYTES_SUMMARY);
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+	    /* Write content of the event */
+	    Soc_GetEventSummary (SocialEvent,Cod,
+				 SummaryStr,Soc_MAX_BYTES_SUMMARY);
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+           }
 
          /* End of right part */
          fprintf (Gbl.F.Out,"</div>");
@@ -399,9 +441,6 @@ static unsigned long Soc_ShowTimeline (const char *Query)
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
-
-      /***** Free summary *****/
-      free ((void *) SummaryStr);
      }
 
    /***** Free structure that stores the query result *****/

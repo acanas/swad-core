@@ -2347,14 +2347,19 @@ void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages)
    switch (TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
-         sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName FROM msg_rcv,msg_snt,courses"
-                        " WHERE msg_rcv.UsrCod='%ld' AND msg_rcv.MsgCod=msg_snt.MsgCod AND msg_snt.CrsCod=courses.CrsCod"
+         sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName"
+                        " FROM msg_rcv,msg_snt,courses"
+                        " WHERE msg_rcv.UsrCod='%ld'"
+                        " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+                        " AND msg_snt.CrsCod=courses.CrsCod"
                         " ORDER BY courses.ShortName",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Msg_MESSAGES_SENT:
-         sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName FROM msg_snt,courses"
-                        " WHERE msg_snt.UsrCod='%ld' AND msg_snt.CrsCod=courses.CrsCod"
+         sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName"
+                        " FROM msg_snt,courses"
+                        " WHERE msg_snt.UsrCod='%ld'"
+                        " AND msg_snt.CrsCod=courses.CrsCod"
                         " ORDER BY courses.ShortName",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -2588,13 +2593,14 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
 
 static void Msg_GetMsgContent (long MsgCod,char *Content)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get content of message from database *****/
-   sprintf (Query,"SELECT Content FROM msg_content WHERE MsgCod='%ld'",MsgCod);
+   sprintf (Query,"SELECT Content FROM msg_content WHERE MsgCod='%ld'",
+            MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a message");
 
    /***** Result should have a unique row *****/
@@ -2604,7 +2610,7 @@ static void Msg_GetMsgContent (long MsgCod,char *Content)
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
 
-   /****** Get location (row[0]) *****/
+   /****** Get content (row[0]) *****/
    strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
