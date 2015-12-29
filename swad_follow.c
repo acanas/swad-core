@@ -121,27 +121,89 @@ unsigned Fol_GetNumFollowers (long UsrCod)
 /*****************************************************************************/
 
 void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
-                                    unsigned NumFollowing,unsigned NumFollowers)
+                                    unsigned NumFollowing,unsigned NumFollowers,
+                                    bool UsrFollowsMe,bool IFollowUsr)
   {
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
+   extern const char *Txt_Following_unfollow;
+   extern const char *Txt_Unfollow;
+   extern const char *Txt_Follow;
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"follow_section\">");
 
    /***** Followed users *****/
-   fprintf (Gbl.F.Out,"<div id=\"num_following\">");
+   fprintf (Gbl.F.Out,"<div id=\"following_side\">"
+                      "<div class=\"FOLLOW_SIDE\">");
+
+   /* User follows me? */
+   fprintf (Gbl.F.Out,"<div id=\"follows_me\" class=\"DAT_LIGHT\">");
+   if (UsrFollowsMe)
+      fprintf (Gbl.F.Out,"TE SIGUE");	// Need translation!!!!
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Number of followed */
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
                                          NumFollowing,
                                          ActSeeFlg,Txt_Following);
-   fprintf (Gbl.F.Out,"</div>");
+
+   /* End following side */
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
 
    /***** Followers *****/
-   fprintf (Gbl.F.Out,"<div id=\"num_followers\">");
+   fprintf (Gbl.F.Out,"<div id=\"followers_side\">"
+                      "<div class=\"FOLLOW_SIDE\">");
+
+   /* Number of followers */
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
                                          NumFollowers,
                                          ActSeeFlr,Txt_Followers);
+
+   /* I follow user? */
+   fprintf (Gbl.F.Out,"<div id=\"follow_usr\">");
+   if (!ItsMe)
+     {
+      if (IFollowUsr)
+	{
+	 Act_FormStart (ActUnfUsr);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD");
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+			    " style=\"display:inline;\" >"
+			    "<img src=\"%s/following64x64.png\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON40x40\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Unfollow,Txt_Following_unfollow);
+	 Act_FormEnd ();
+	}
+      else	// I do not follow user
+	{
+	 Act_FormStart (ActFolUsr);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD");
+	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+			    " style=\"display:inline;\" >"
+			    "<img src=\"%s/follow64x64.png\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON40x40\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Follow,Txt_Follow);
+	 Act_FormEnd ();
+	}
+     }
    fprintf (Gbl.F.Out,"</div>");
+
+   /* End followers side */
+   fprintf (Gbl.F.Out,"</div>"
+	              "</div>");
 
    /***** End section *****/
    fprintf (Gbl.F.Out,"</section>");
@@ -160,7 +222,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW\">");
+   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_BOX\">");
 
    /***** Number *****/
    if (NumUsrs)
@@ -369,6 +431,7 @@ void Fol_ListFollowers (void)
 static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
+   extern const char *Txt_Following_unfollow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
    bool ShowPhoto;
@@ -382,28 +445,28 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
        Gbl.Usrs.Me.Logged &&
        Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat->UsrCod)
      {
-      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
+      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
 	{
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Unfollow,NULL);
+	 Act_LinkFormSubmit (Txt_Following_unfollow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/unfollow64x64.gif\""
+			    "<img src=\"%s/following64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON20x20\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_Unfollow,Txt_Unfollow);
+		  Txt_Unfollow,Txt_Following_unfollow);
 	 Act_FormEnd ();
 	}
-      else
+      else	// I do not follow this user
 	{
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/follow64x64.gif\""
+			    "<img src=\"%s/follow64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
 	                    " class=\"ICON20x20\" />"
 			    "</div>"

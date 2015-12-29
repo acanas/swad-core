@@ -1359,7 +1359,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	left:-300px;
 	top:-400px;
 	padding:6px;
-	background-color:rgba(255,255,255,0.8);
+	background-color:rgba(255,255,255,0.95);
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
@@ -1855,27 +1855,49 @@ a:hover img.CENTRE_PHOTO_SHOW
 	opacity:0.67;
 	}
 
-#num_following
+#following_side
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	width:50%;
 	padding-right:10px;
-	text-align:right;
 	}
-#num_followers
+#followers_side
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	width:50%;
 	padding-left:10px;
-	text-align:left;
 	}
-.FOLLOW
+.FOLLOW_SIDE
 	{
-	display:inline-block;
-	min-width:125px;
+	display:table;
+	box-sizing:border-box;
+	width:100%;
+	}
+#follows_me
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	padding-right:20px;
+	text-align:right;
+	vertical-align:middle;
+	}
+#follow_usr
+	{
+	display:table-cell;
+	height:60px;
+	box-sizing:border-box;
+	padding-left:20px;
+	text-align:left;
+	vertical-align:middle;
+	}
+.FOLLOW_BOX
+	{
+	display:table-cell;
+	width:140px;
 	text-align:center;
+	vertical-align:middle;
 	}
 .FOLLOW_NUM
 	{

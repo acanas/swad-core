@@ -1956,6 +1956,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_View_works;
    extern const char *Txt_See_exams;
    extern const char *Txt_Attendance;
+   extern const char *Txt_Following_unfollow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
    extern const char *Txt_View_public_profile;
@@ -2164,8 +2165,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_Edit,
-		  Txt_Edit);
+		  Txt_Edit,Txt_Edit);
 	 Act_FormEnd ();
         }
 
@@ -2215,8 +2215,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_Admin_user,
-		  Txt_Admin_user);
+		  Txt_Admin_user,Txt_Admin_user);
 	 Act_FormEnd ();
 	}
 
@@ -2243,8 +2242,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_View_works,
-		  Txt_View_works);
+		  Txt_View_works,Txt_View_works);
 	 Act_FormEnd ();
 
 	 /***** Button to view user's test exams *****/
@@ -2265,8 +2263,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
-		  Txt_See_exams,
-		  Txt_See_exams);
+		  Txt_See_exams,Txt_See_exams);
 	 Act_FormEnd ();
 
 	 /***** Button to view user's attendance *****/
@@ -2293,8 +2290,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
-		     Txt_Attendance,
-		     Txt_Attendance);
+		     Txt_Attendance,Txt_Attendance);
 	    Act_FormEnd ();
 	   }
 	}
@@ -2313,46 +2309,43 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</div>"
 			 "</a>",
 	       Gbl.Prefs.IconsURL,
-	       Txt_Write_a_message,
-	       Txt_Write_a_message);
+	       Txt_Write_a_message,Txt_Write_a_message);
       Act_FormEnd ();
 
       /***** Button to follow / unfollow *****/
       if (TypeOfView == Rec_RECORD_PUBLIC &&
 	  !ItsMe)
 	{
-	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
 	   {
 	    Act_FormStart (ActUnfUsr);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_Unfollow,"REC_DAT_BOLD");
+	    Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD");
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/unfollow64x64.gif\""
+			       "<img src=\"%s/following64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 	                       " class=\"ICON20x20\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
-		     Txt_Unfollow,
-		     Txt_Unfollow);
+		     Txt_Unfollow,Txt_Following_unfollow);
 	    Act_FormEnd ();
 	   }
-	 else
+	 else	// I do not follow user
 	   {
 	    Act_FormStart (ActFolUsr);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD");
 	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/follow64x64.gif\""
+			       "<img src=\"%s/follow64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 	                       " class=\"ICON20x20\" />"
 			       "</div>"
 			       "</a>",
 		     Gbl.Prefs.IconsURL,
-		     Txt_Follow,
-		     Txt_Follow);
+		     Txt_Follow,Txt_Follow);
 	    Act_FormEnd ();
 	   }
 	}

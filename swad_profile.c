@@ -220,6 +220,8 @@ bool Prf_ShowUserProfile (void)
   {
    unsigned NumFollowing;
    unsigned NumFollowers;
+   bool UsrFollowsMe;
+   bool IFollowUsr;
 
    /***** Check if I can see the public profile *****/
    if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
@@ -242,11 +244,22 @@ bool Prf_ShowUserProfile (void)
       /***** Show details of user's profile *****/
       Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Show following and followers *****/
+      /***** Count following and followers *****/
       NumFollowing = Fol_GetNumFollowing (Gbl.Usrs.Other.UsrDat.UsrCod);
       NumFollowers = Fol_GetNumFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
+      UsrFollowsMe = false;
+      if (NumFollowing)
+         UsrFollowsMe = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                                  Gbl.Usrs.Me.UsrDat.UsrCod);
+      IFollowUsr   = false;
+      if (NumFollowers)
+         IFollowUsr   = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                  Gbl.Usrs.Other.UsrDat.UsrCod);
+
+      /***** Show following and followers *****/
       Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat,
-                                     NumFollowing,NumFollowers);
+                                     NumFollowing,NumFollowers,
+                                     UsrFollowsMe,IFollowUsr);
 
       return true;
      }

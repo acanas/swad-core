@@ -47,7 +47,8 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 unsigned Fol_GetNumFollowing (long UsrCod);
 unsigned Fol_GetNumFollowers (long UsrCod);
 void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
-                                    unsigned NumFollowing,unsigned NumFollowers);
+                                    unsigned NumFollowing,unsigned NumFollowers,
+                                    bool UsrFollowsMe,bool IFollowUsr);
 void Fol_ListFollowing (void);
 void Fol_ListFollowers (void);
 

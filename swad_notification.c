@@ -213,7 +213,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "survey16x16.gif",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "follow64x64.gif",			// Ntf_EVENT_FOLLOWER
+   "follow64x64.png",			// Ntf_EVENT_FOLLOWER
   };
 
 /*****************************************************************************/
