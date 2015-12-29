@@ -115,13 +115,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.79.1 (2015-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.79.2 (2015-12-29)"
 #define CSS_FILE		"swad15.79.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.79.2:  Dec 29, 2015	Include my public activity in timeline. (188838 lines)
         Version 15.79.1:  Dec 29, 2015	Changes in layout of user's profile. (188836 lines)
         Version 15.79:    Dec 29, 2015	Show timeline of a selected user.
                                         Changes in CSS related to social activity. (188834 lines)

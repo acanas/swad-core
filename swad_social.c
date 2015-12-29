@@ -141,24 +141,26 @@ void Soc_ShowFollowingTimeline (void)
   {
    char Query[512];
 
-   if (Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))	// I follow people
-     {
-      /***** Build query to show timeline including the users I am following *****/
-      sprintf (Query,"SELECT SocialEvent,UsrCod,"
-		     "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-		     "Cod,UNIX_TIMESTAMP(TimeEvent)"
-		     " FROM social,usr_follow"
-		     " WHERE usr_follow.FollowerCod='%ld'"
-		     " AND usr_follow.FollowedCod=social.UsrCod"
-		     " ORDER BY SocCod DESC LIMIT 10",
-	       Gbl.Usrs.Me.UsrDat.UsrCod);
-
-      /***** Show timeline *****/
-      if (!Soc_ShowTimeline (Query))
-	 Lay_ShowAlert (Lay_INFO,"No hay actividad p&uacute;blica de los usuarios a los que sigue.");	// Need translation!!!
-     }
-   else	// I do not follow people
+   /***** Show warning if I do not follow anyone *****/
+   if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
+
+   /***** Build query to show timeline including the users I am following *****/
+   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+		  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+		  "Cod,UNIX_TIMESTAMP(TimeEvent)"
+		  " FROM social"
+		  " WHERE UsrCod IN"
+		  " (SELECT '%ld'"
+		  " UNION"
+		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+		  " ORDER BY SocCod DESC LIMIT 10",
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Show timeline *****/
+   if (!Soc_ShowTimeline (Query))
+      Lay_ShowAlert (Lay_INFO,"No hay actividad p&uacute;blica.");	// Need translation!!!
   }
 
 /*****************************************************************************/
