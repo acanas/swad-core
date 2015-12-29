@@ -110,18 +110,20 @@
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
+// TODO: When a file, notice, etc. is removed, it should be removed from social events?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.80 (2015-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.80.1 (2015-12-29)"
 #define CSS_FILE		"swad15.80.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.80.1:  Dec 29, 2015	Message translated. (188967 lines)
         Version 15.80:    Dec 29, 2015	Changes in layout of user's profile. (188944 lines)
         Version 15.79.2:  Dec 29, 2015	Include my public activity in timeline. (188838 lines)
         Version 15.79.1:  Dec 29, 2015	Changes in layout of user's profile. (188836 lines)

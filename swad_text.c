@@ -12066,6 +12066,27 @@ const char *Txt_Following_unfollow =
 	"Seguinte, deixar de seguir";
 #endif
 
+const char *Txt_FOLLOWS_YOU =
+#if   L==1
+	"ET SEGUEIX";
+#elif L==2
+	"FOLGT DIR";
+#elif L==3
+	"FOLLOWS YOU";
+#elif L==4
+	"TE SIGUE";
+#elif L==5
+	"VOUS SUIT";
+#elif L==6
+	"TE SIGUE";	// Okoteve traducción
+#elif L==7
+	"TI SEGUE";
+#elif L==8
+	"OBSERWUJE CI&Eogon;";
+#elif L==9
+	"SEGUE VOC&Ecirc;";
+#endif
+
 const char *Txt_For_security_enter_your_password =
 #if   L==1
 	"Per a m&eacute;s seguretat, introdueixi la seva contrasenya";

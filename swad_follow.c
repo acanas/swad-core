@@ -124,6 +124,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr)
   {
+   extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
    extern const char *Txt_Following_unfollow;
@@ -141,7 +142,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    /* User follows me? */
    fprintf (Gbl.F.Out,"<div id=\"follows_me\" class=\"DAT_LIGHT\">");
    if (UsrFollowsMe)
-      fprintf (Gbl.F.Out,"TE SIGUE");	// Need translation!!!!
+      fprintf (Gbl.F.Out,"%s",Txt_FOLLOWS_YOU);
    fprintf (Gbl.F.Out,"</div>");
 
    /* Number of followed */
