@@ -106,6 +106,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Soc_PutLinkToWriteANewPost (void);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 
 static unsigned long Soc_ShowTimeline (const char *Query);
@@ -115,6 +116,20 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
                                      long CrsCod,long Cod);
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
+
+/*****************************************************************************/
+/*********************** Show social activity (timeline) *********************/
+/*****************************************************************************/
+
+static void Soc_PutLinkToWriteANewPost (void)
+  {
+   extern const char *Txt_New_comment;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActReqSocPst,NULL,"write64x64.gif",
+			  Txt_New_comment,Txt_New_comment);
+   fprintf (Gbl.F.Out,"</div>");
+  }
 
 /*****************************************************************************/
 /****************** Form to write a new public comment ***********************/
@@ -241,6 +256,10 @@ void Soc_ShowUsrTimeline (long UsrCod)
 void Soc_ShowFollowingTimeline (void)
   {
    char Query[512];
+
+   /***** Link to write a new social post *****/
+   if (Gbl.CurrentAct != ActReqSocPst)
+      Soc_PutLinkToWriteANewPost ();
 
    /***** Show warning if I do not follow anyone *****/
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
