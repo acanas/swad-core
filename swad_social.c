@@ -200,6 +200,7 @@ void Soc_ShowSocialActivity (void)
          fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
 	 /* Write author's full name and nickname */
+         Str_LimitLengthHTMLStr (UsrDat.FullName,20);
          fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
                             "<span class=\"DAT_N_BOLD\">%s</span>"
                             "<span class=\"DAT_LIGHT\"> @%s</span>"

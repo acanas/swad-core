@@ -122,7 +122,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.77.7:  Dec 29, 2015	Whan a date-time is written in local time, and the date is today, 'Today' is displayed instead of date. (188660 lines)
+        Version 15.77.8:  Dec 29, 2015	Author's name length is limited in social events. (188662 lines)
+        Version 15.77.7:  Dec 29, 2015	When a date-time is written in local time, and the date is today, 'Today' is displayed instead of date. (188660 lines)
 					1 change necessary:
 Edit file swad_copy.sh changing swad.js to swad*.js
 
