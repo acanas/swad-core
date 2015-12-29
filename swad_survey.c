@@ -321,6 +321,7 @@ void Svy_SeeOneSurvey (void)
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool ShowOnlyThisSvyComplete)
   {
    extern const char *Txt_Survey;
+   extern const char *Txt_Today;
    extern const char *Txt_View_survey;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
@@ -358,10 +359,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('svy_date_start_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('svy_date_start_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
-            UniqueId,Svy.TimeUTC[Svy_START_TIME]);
+            UniqueId,Svy.TimeUTC[Svy_START_TIME],Txt_Today);
 
    /***** End date/time *****/
    fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
@@ -374,10 +375,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('svy_date_end_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('svy_date_end_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
-            UniqueId,Svy.TimeUTC[Svy_END_TIME]);
+            UniqueId,Svy.TimeUTC[Svy_END_TIME],Txt_Today);
 
    /***** Survey title *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");

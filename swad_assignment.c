@@ -227,6 +227,7 @@ static void Asg_PutFormToSelectWhichGroupsToShow (void)
 
 static void Asg_ShowOneAssignment (long AsgCod)
   {
+   extern const char *Txt_Today;
    extern const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -244,7 +245,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('asg_date_start_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('asg_date_start_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -253,13 +254,13 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Asg_START_TIME]);
+            UniqueId,Asg.TimeUTC[Asg_START_TIME],Txt_Today);
 
    /* End date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('asg_date_end_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('asg_date_end_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -268,7 +269,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Asg_END_TIME]);
+            UniqueId,Asg.TimeUTC[Asg_END_TIME],Txt_Today);
 
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"

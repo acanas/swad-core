@@ -60,7 +60,11 @@ function writeLocalDateFromUTC(id,TimeUTC) {
 // TimeUTC is the date-time to write in UTC UNIX time format
 // separator is HTML code to write between date and time
 
-function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
+function writeLocalDateTimeFromUTC(id,TimeUTC,separator,StrToday) {
+	var today = new (Date);
+	var todayYea = today.getFullYear();
+	var todayMon = today.getMonth()+1;
+	var todayDay = today.getDate();
 	var d = new Date;
 	var Yea;
 	var Mon;
@@ -86,9 +90,15 @@ function writeLocalDateTimeFromUTC(id,TimeUTC,separator) {
 	StrHou = ((Hou < 10) ? '0' : '') + Hou;
 	StrMin = ((Min < 10) ? '0' : '') + Min;
 	StrSec = ((Sec < 10) ? '0' : '') + Sec;
-	document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
-											separator +
-											StrHou + ':' + StrMin + ':' + StrSec;
+	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
+		StrToday.length)
+		document.getElementById(id).innerHTML = StrToday +
+												separator +
+												StrHou + ':' + StrMin + ':' + StrSec;
+	else
+		document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
+												separator +
+												StrHou + ':' + StrMin + ':' + StrSec;
 }
 
 // Set local date-time form fields from UTC time

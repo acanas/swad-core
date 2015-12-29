@@ -35142,163 +35142,163 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_INS_DOC_PUB_FILE
-	 "Document"
+	 "Document p&uacute;blic"
 #elif L==2
-	 "Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei"
 #elif L==3
-	 "Document file"
+	 "Public document file"
 #elif L==4
-	 "Documento"
+	 "Documento p&uacute;blico"
 #elif L==5
-	 "Fichier de document"
+	 "Fichier de document public"
 #elif L==6
-	 "Documento"	// Okoteve traducción
+	 "Documento p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "Documento"
+	 "Documento pubblico"
 #elif L==8
-	 "Plik dokumentu"
+	 "Plik dokumentu publiczne"
 #elif L==9
-	 "Arquivo de documento"
+	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_INS_SHA_PUB_FILE
-	 "Arxiu compartit"
+	 "Arxiu compartit p&uacute;blic"
 #elif L==2
-	 "Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei"
 #elif L==3
-	 "Shared file"
+	 "Public shared file"
 #elif L==4
-	 "Archivo compartido"
+	 "Archivo compartido p&uacute;blico"
 #elif L==5
-	 "Fichier partag&eacute;"
+	 "Fichier partag&eacute; public"
 #elif L==6
-	 "Archivo compartido"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "File condiviso"
+	 "File condiviso pubblico"
 #elif L==8
-	 "Udost&eogon;pniony plik"
+	 "Udost&eogon;pniony plik publiczne"
 #elif L==9
-	 "Arquivo compartilhado"
+	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_CTR_DOC_PUB_FILE
-	 "Document"
+	 "Document p&uacute;blic"
 #elif L==2
-	 "Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei"
 #elif L==3
-	 "Document file"
+	 "Public document file"
 #elif L==4
-	 "Documento"
+	 "Documento p&uacute;blico"
 #elif L==5
-	 "Fichier de document"
+	 "Fichier de document public"
 #elif L==6
-	 "Documento"	// Okoteve traducción
+	 "Documento p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "Documento"
+	 "Documento pubblico"
 #elif L==8
-	 "Plik dokumentu"
+	 "Plik dokumentu publiczne"
 #elif L==9
-	 "Arquivo de documento"
+	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_CTR_SHA_PUB_FILE
-	 "Arxiu compartit"
+	 "Arxiu compartit p&uacute;blic"
 #elif L==2
-	 "Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei"
 #elif L==3
-	 "Shared file"
+	 "Public shared file"
 #elif L==4
-	 "Archivo compartido"
+	 "Archivo compartido p&uacute;blico"
 #elif L==5
-	 "Fichier partag&eacute;"
+	 "Fichier partag&eacute; public"
 #elif L==6
-	 "Archivo compartido"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "File condiviso"
+	 "File condiviso pubblico"
 #elif L==8
-	 "Udost&eogon;pniony plik"
+	 "Udost&eogon;pniony plik publiczne"
 #elif L==9
-	 "Arquivo compartilhado"
+	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_DEG_DOC_PUB_FILE
-	 "Document"
+	 "Document p&uacute;blic"
 #elif L==2
-	 "Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei"
 #elif L==3
-	 "Document file"
+	 "Public document file"
 #elif L==4
-	 "Documento"
+	 "Documento p&uacute;blico"
 #elif L==5
-	 "Fichier de document"
+	 "Fichier de document public"
 #elif L==6
-	 "Documento"	// Okoteve traducción
+	 "Documento p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "Documento"
+	 "Documento pubblico"
 #elif L==8
-	 "Plik dokumentu"
+	 "Plik dokumentu publiczne"
 #elif L==9
-	 "Arquivo de documento"
+	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_DEG_SHA_PUB_FILE
-	 "Arxiu compartit"
+	 "Arxiu compartit p&uacute;blic"
 #elif L==2
-	 "Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei"
 #elif L==3
-	 "Shared file"
+	 "Public shared file"
 #elif L==4
-	 "Archivo compartido"
+	 "Archivo compartido p&uacute;blico"
 #elif L==5
-	 "Fichier partag&eacute;"
+	 "Fichier partag&eacute; public"
 #elif L==6
-	 "Archivo compartido"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "File condiviso"
+	 "File condiviso pubblico"
 #elif L==8
-	 "Udost&eogon;pniony plik"
+	 "Udost&eogon;pniony plik publiczne"
 #elif L==9
-	 "Arquivo compartilhado"
+	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_CRS_DOC_PUB_FILE
-	 "Document"
+	 "Document p&uacute;blic"
 #elif L==2
-	 "Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei"
 #elif L==3
-	 "Document file"
+	 "Public document file"
 #elif L==4
-	 "Documento"
+	 "Documento p&uacute;blico"
 #elif L==5
-	 "Fichier de document"
+	 "Fichier de document public"
 #elif L==6
-	 "Documento"	// Okoteve traducción
+	 "Documento p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "Documento"
+	 "Documento pubblico"
 #elif L==8
-	 "Plik dokumentu"
+	 "Plik dokumentu publiczne"
 #elif L==9
-	 "Arquivo de documento"
+	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_CRS_SHA_PUB_FILE
-	 "Arxiu compartit"
+	 "Arxiu compartit p&uacute;blic"
 #elif L==2
-	 "Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei"
 #elif L==3
-	 "Shared file"
+	 "Public shared file"
 #elif L==4
-	 "Archivo compartido"
+	 "Archivo compartido p&uacute;blico"
 #elif L==5
-	 "Fichier partag&eacute;"
+	 "Fichier partag&eacute; public"
 #elif L==6
-	 "Archivo compartido"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
 #elif L==7
-	 "File condiviso"
+	 "File condiviso pubblico"
 #elif L==8
-	 "Udost&eogon;pniony plik"
+	 "Udost&eogon;pniony plik publiczne"
 #elif L==9
-	 "Arquivo compartilhado"
+	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_EXAM_ANNOUNCEMENT
@@ -45440,30 +45440,9 @@ const char *Txt_Today =
 #elif L==7
 	"Oggi";
 #elif L==8
-	"Today";	// Potrzebujesz tlumaczenie
+	"Dzisiaj";
 #elif L==9
 	"Hoje";
-#endif
-
-const char *Txt_Too_fast =
-#if   L==1
-	"Massa r&agrave;pid!";
-#elif L==2
-	"Zu schnell!";
-#elif L==3
-	"Too fast!";
-#elif L==4
-	"&iexcl;Demasiado r&aacute;pido!";
-#elif L==5
-	"Trop vite!";
-#elif L==6
-	"&iexcl;Demasiado r&aacute;pido!";	// Okoteve traducción
-#elif L==7
-	"Troppo veloce!";
-#elif L==8
-	"Za szybko!";
-#elif L==9
-	"Muito r&aacute;pido!";
 #endif
 
 const char *Txt_Total =

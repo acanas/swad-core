@@ -417,9 +417,9 @@ static void Lay_WriteScripts (void)
    unsigned NumExamAnnouncement;	// Number of exam announcement
 
    /***** General scripts for swad *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/swad.js\">"
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/%s\">"
                       "</script>\n",
-	    Cfg_HTTPS_URL_SWAD_PUBLIC);
+	    Cfg_HTTPS_URL_SWAD_PUBLIC,JS_FILE);
 
    /***** Script for MathJax *****/
    // MathJax configuration

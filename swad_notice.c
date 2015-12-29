@@ -550,6 +550,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_NOTICE_Obsolete_SINGULAR;
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
+   extern const char *Txt_Today;
    extern const char *Txt_Remove;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
@@ -679,10 +680,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('notice_date_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('notice_date_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</div>",
-	    UniqueId,(long) TimeUTC);
+	    UniqueId,(long) TimeUTC,Txt_Today);
 
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)

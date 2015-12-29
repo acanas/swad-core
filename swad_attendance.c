@@ -280,6 +280,7 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
 
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete)
   {
+   extern const char *Txt_Today;
    extern const char *Txt_View_event;
    static unsigned UniqueId = 0;
    char Txt[Cns_MAX_BYTES_TEXT+1];
@@ -301,10 +302,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
-            UniqueId,Att->TimeUTC[Att_START_TIME]);
+            UniqueId,Att->TimeUTC[Att_START_TIME],Txt_Today);
 
    /***** End date/time *****/
    fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
@@ -317,10 +318,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('att_date_end_%u',%ld,'<br />');"
+                      "writeLocalDateTimeFromUTC('att_date_end_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
-            UniqueId,Att->TimeUTC[Att_END_TIME]);
+            UniqueId,Att->TimeUTC[Att_END_TIME],Txt_Today);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -2937,6 +2938,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Today;
    extern const char *Txt_Update_attendance_according_to_selected_events;
    extern const char *Txt_Update_attendance;
    unsigned UniqueId;
@@ -2991,7 +2993,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
                          "<span id=\"att_date_start_%u\"></span> %s"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;','%s');"
 			 "</script>"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
@@ -3004,6 +3006,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	       UniqueId,
 	       Gbl.AttEvents.Lst[NumAttEvent].Title,
                UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+               Txt_Today,
 	       Gbl.RowEvenOdd,
 	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
      }
@@ -3289,6 +3292,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
 
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
   {
+   extern const char *Txt_Today;
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
@@ -3376,7 +3380,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;');"
+			    "writeLocalDateTimeFromUTC('att_date_start_%u',%ld,'&nbsp;','%s');"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",
@@ -3393,7 +3397,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    Txt_Absent,
 	          UniqueId,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title,
-                  UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME]);
+                  UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+                  Txt_Today);
 
 	 /***** Write comments for this student *****/
 	 if (ShowCommentStd || ShowCommentTch)

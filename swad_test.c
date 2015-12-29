@@ -566,6 +566,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
   {
    extern const char *Txt_Test;
    extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until;
+   extern const char *Txt_Today;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -618,11 +619,11 @@ static bool Tst_CheckIfNextTstAllowed (void)
 	                 "<span id=\"date_next_test\">"
 	                 "</span>"
                          "<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('date_next_test',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('date_next_test',%ld,'&nbsp;','%s');"
 			 "</script>"
 			 "</td>"
 			 "</tr>",
-	       (long) TimeNextTestUTC);
+	       (long) TimeNextTestUTC,Txt_Today);
 
       /***** End frame *****/
       Lay_EndRoundFrameTable ();
@@ -2417,6 +2418,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
    extern const char *Txt_Edit_question;
+   extern const char *Txt_Today;
    Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
    MYSQL_ROW row;
@@ -2547,11 +2549,11 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td id=\"tst_date_%u\""
 	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'<br />');"
+                         "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'<br />','%s');"
                          "</script>"
                          "</td>",
                UniqueId,Gbl.RowEvenOdd,
-               UniqueId,(long) TimeUTC);
+               UniqueId,(long) TimeUTC,Txt_Today);
 
       /* Write the question tags */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -6193,6 +6195,7 @@ void Tst_ShowMyTestResults (void)
 
 static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
   {
+   extern const char *Txt_Today;
    extern const char *Txt_Visible_exams;
    extern const char *Txt_See_exam;
    char Query[512];
@@ -6264,11 +6267,11 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
          UniqueId++;
 	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'&nbsp;');"
+			    "writeLocalDateTimeFromUTC('tst_date_%u',%ld,'&nbsp;','%s');"
 			    "</script>"
 			    "</td>",
 	          UniqueId,ClassDat,Gbl.RowEvenOdd,
-	          UniqueId,(long) TimeUTC);
+	          UniqueId,(long) TimeUTC,Txt_Today);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisExam) == 1)
@@ -6518,6 +6521,7 @@ void Tst_ShowOneTestExam (void)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
+   extern const char *Txt_Today;
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
@@ -6604,11 +6608,11 @@ void Tst_ShowOneTestExam (void)
                       "</td>"
 	              "<td id=\"exam\" class=\"DAT LEFT_TOP\">"
 		      "<script type=\"text/javascript\">"
-		      "writeLocalDateTimeFromUTC('exam',%ld,'&nbsp;');"
+		      "writeLocalDateTimeFromUTC('exam',%ld,'&nbsp;','%s');"
 		      "</script>"
                       "</td>"
 	              "</tr>",
-            Txt_Date,TstTimeUTC);
+            Txt_Date,TstTimeUTC,Txt_Today);
 
    /* Number of questions */
    fprintf (Gbl.F.Out,"<tr>"

@@ -286,6 +286,7 @@ static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str)
 
 static void Soc_WriteEventDate (time_t TimeUTC)
   {
+   extern const char *Txt_Today;
    static unsigned UniqueId = 0;
 
    UniqueId++;
@@ -297,9 +298,9 @@ static void Soc_WriteEventDate (time_t TimeUTC)
 
    /***** Write date and time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
+                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
                       "</script>",
-            UniqueId,(long) TimeUTC);
+            UniqueId,(long) TimeUTC,Txt_Today);
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</div>");

@@ -3343,6 +3343,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
 
 void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
   {
+   extern const char *Txt_Today;
    static unsigned UniqueId = 0;
 
    UniqueId++;
@@ -3354,9 +3355,9 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    /***** Write date and time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
+                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
                       "</script>",
-            UniqueId,(long) TimeUTC);
+            UniqueId,(long) TimeUTC,Txt_Today);
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");

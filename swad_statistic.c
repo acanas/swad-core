@@ -1474,6 +1474,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_Action;
    extern const char *Txt_LOG_More_info;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Today;
    unsigned long NumRow;
    unsigned long FirstRow;	// First row to show
    unsigned long LastRow;	// Last rows to show
@@ -1674,11 +1675,11 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the date-time (row[3]) */
       fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
 			 "</script>"
 			 "</td>",
                UniqueId,Gbl.RowEvenOdd,
-               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]));
+               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),Txt_Today);
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)

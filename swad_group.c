@@ -1910,6 +1910,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
   {
    extern const char *Txt_Opening_of_groups;
+   extern const char *Txt_Today;
    extern const char *Txt_Group;
    extern const char *Txt_Max_BR_students;
    extern const char *Txt_Students_ABBREVIATION;
@@ -1927,11 +1928,11 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       fprintf (Gbl.F.Out,"<br />%s: "
                          "<span id=\"open_time_%u\"></span>"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateTimeFromUTC('open_time_%u',%ld,'&nbsp;');"
+                         "writeLocalDateTimeFromUTC('open_time_%u',%ld,'&nbsp;','%s');"
                          "</script>",
                Txt_Opening_of_groups,
                UniqueId,
-               UniqueId,(long) GrpTyp->OpenTimeUTC);
+               UniqueId,(long) GrpTyp->OpenTimeUTC,Txt_Today);
      }
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");

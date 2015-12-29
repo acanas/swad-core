@@ -5816,6 +5816,7 @@ void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const ch
 
 static void Brw_WriteDatesAssignment (void)
   {
+   extern const char *Txt_Today;
    extern const char *Txt_unknown_assignment;
    static unsigned UniqueId = 0;
 
@@ -5835,10 +5836,10 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_start_date_%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('asg_start_date_%u',%ld,'&nbsp;','%s');"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME]);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME],Txt_Today);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Arrow *****/
@@ -5857,10 +5858,10 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('asg_end_date_%u',%ld,'&nbsp;');"
+			 "writeLocalDateTimeFromUTC('asg_end_date_%u',%ld,'&nbsp;','%s');"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME]);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME],Txt_Today);
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>"
 	                 "</table>");
@@ -8836,6 +8837,7 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date_of_creation;
+   extern const char *Txt_Today;
    extern const char *Txt_Availability;
    extern const char *Txt_Private_available_to_certain_users_identified;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
@@ -9063,9 +9065,9 @@ void Brw_ShowFileMetadata (void)
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
 
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		            "writeLocalDateTimeFromUTC('filedate',%ld,'&nbsp;');"
+		            "writeLocalDateTimeFromUTC('filedate',%ld,'&nbsp;','%s');"
 		            "</script>",
-	          (long) FileMetadata.Time);
+	          (long) FileMetadata.Time,Txt_Today);
 
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
