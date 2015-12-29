@@ -77,6 +77,7 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
 void Soc_ShowSocialActivity (void)
   {
    extern const char *Txt_Public_activity;
+   extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
@@ -88,7 +89,7 @@ void Soc_ShowSocialActivity (void)
    MYSQL_ROW row;
    unsigned long NumEvents;
    unsigned long NumEvent;
-   Soc_SocialEvent_t SocialEvent = (Soc_SocialEvent_t) 0;	// Initialized to avoid warning
+   Soc_SocialEvent_t SocialEvent;
    struct UsrData UsrDat;
    struct Country Cty;
    struct Institution Ins;
@@ -132,7 +133,7 @@ void Soc_ShowSocialActivity (void)
 	   NumEvent < NumEvents;
 	   NumEvent++)
 	{
-         /***** Get next notification *****/
+         /***** Get next social event *****/
          row = mysql_fetch_row (mysql_res);
 
          /* Get event type (row[0]) */
@@ -184,7 +185,7 @@ void Soc_ShowSocialActivity (void)
          /* Get time of the event (row[8]) */
          DateTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
 
-         /***** Write row for this notification *****/
+         /***** Write row for this social event *****/
          fprintf (Gbl.F.Out,"<li>");
 
 	 /* Left: write author's photo */
@@ -199,8 +200,9 @@ void Soc_ShowSocialActivity (void)
          fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
 	 /* Write author's full name and nickname */
-         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR DAT\">"
-                            "<strong>%s</strong> @%s"
+         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+                            "<span class=\"DAT_N_BOLD\">%s</span>"
+                            "<span class=\"DAT_LIGHT\"> @%s</span>"
                             "</div>",
                   UsrDat.FullName,UsrDat.Nickname);
 
@@ -208,22 +210,30 @@ void Soc_ShowSocialActivity (void)
          Soc_WriteEventDate (DateTimeUTC);
 
          /* Write event type and location */
-         fprintf (Gbl.F.Out,"<div class=\"DAT\">%u: ",
-                  (unsigned) SocialEvent);
+         if (SocialEvent != Soc_EVENT_SOCIAL_POST)
+           {
+	    fprintf (Gbl.F.Out,"<div class=\"DAT_N\">%s</div>",
+		     Txt_SOCIAL_EVENT[SocialEvent]);
 
-         if (SocialEvent == Soc_EVENT_FORUM_POST)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
-         else if (Crs.CrsCod > 0)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
-         else if (Deg.DegCod > 0)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShortName);
-         else if (Ctr.CtrCod > 0)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShortName);
-         else if (Ins.InsCod > 0)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShortName);
-         else if (Cty.CtyCod > 0)
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Country,Cty.Name[Gbl.Prefs.Language]);
-         fprintf (Gbl.F.Out,"</div>");
+	    if (SocialEvent == Soc_EVENT_FORUM_POST)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Forum,ForumName);
+	    else if (Crs.CrsCod > 0)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Course,Crs.ShortName);
+	    else if (Deg.DegCod > 0)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Degree,Deg.ShortName);
+	    else if (Ctr.CtrCod > 0)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Centre,Ctr.ShortName);
+	    else if (Ins.InsCod > 0)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Institution,Ins.ShortName);
+	    else if (Cty.CtyCod > 0)
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+	                Txt_Country,Cty.Name[Gbl.Prefs.Language]);
+           }
 
          /* Write content of the event */
 	 Soc_GetEventSummary (SocialEvent,Cod,

@@ -1533,6 +1533,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_NOBR		{color:#707070; font-size:13pt; white-space:nowrap;}
 .DAT_N			{color:black;   font-size:13pt;}
 .DAT_NOBR_N		{color:black;   font-size:13pt; white-space:nowrap;}
+.DAT_N_BOLD		{color:black;   font-size:13pt; font-weight:bold;}
 
 /*********************** Line in top part of a table row *********************/
 .DAT_N_LINE_TOP
@@ -1680,13 +1681,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:inline-block;
 	box-sizing:border-box;
 	padding:0 0 10px 10px;
-	width:500px;
+	width:450px;
 	}
 .SOCIAL_RIGHT_AUTHOR
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:300px;
+        width:270px;
 	text-align:left;
 	vertical-align:top;
         }
@@ -1694,7 +1695,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:190px;
+        width:170px;
 	text-align:right;
 	vertical-align:top;
         }

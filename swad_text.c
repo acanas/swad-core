@@ -80,6 +80,7 @@
 #include "swad_photo.h"
 #include "swad_QR.h"
 #include "swad_record.h"
+#include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
@@ -35118,26 +35119,268 @@ const char *Txt_Size_of_photos =
 	"Tamanho das fotos";
 #endif
 
-const char *Txt_Skype =
-#if   L==1
-	"Skype&trade;";
+const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
+	{
+#if   L==1	// Soc_EVENT_UNKNOWN
+	 "Esdeveniment desconegut"
 #elif L==2
-	"Skype&trade;";
+	 "Unbekannt Ereignis"
 #elif L==3
-	"Skype&trade;";
+	 "Unknown event"
 #elif L==4
-	"Skype&trade;";
+	 "Evento desconocido"
 #elif L==5
-	"Skype&trade;";
+	 "&Eacute;v&eacute;nement inconnu"
 #elif L==6
-	"Skype&trade;";	// Okoteve traducción
+	 "Evento desconocido"	// Okoteve traducción
 #elif L==7
-	"Skype&trade;";
+	 "Evento sconosciuto"
 #elif L==8
-	"Skype&trade;";
+	 "Nieznane zdarzenia"
 #elif L==9
-	"Skype&trade;";
+	 "Evento desconhecido"
 #endif
+	 ,
+#if   L==1	// Soc_EVENT_INS_DOC_PUB_FILE
+	 "Document"
+#elif L==2
+	 "Dokumentdatei"
+#elif L==3
+	 "Document file"
+#elif L==4
+	 "Documento"
+#elif L==5
+	 "Fichier de document"
+#elif L==6
+	 "Documento"	// Okoteve traducción
+#elif L==7
+	 "Documento"
+#elif L==8
+	 "Plik dokumentu"
+#elif L==9
+	 "Arquivo de documento"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_INS_SHA_PUB_FILE
+	 "Arxiu compartit"
+#elif L==2
+	 "Freigegebene Datei"
+#elif L==3
+	 "Shared file"
+#elif L==4
+	 "Archivo compartido"
+#elif L==5
+	 "Fichier partag&eacute;"
+#elif L==6
+	 "Archivo compartido"	// Okoteve traducción
+#elif L==7
+	 "File condiviso"
+#elif L==8
+	 "Udost&eogon;pniony plik"
+#elif L==9
+	 "Arquivo compartilhado"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_CTR_DOC_PUB_FILE
+	 "Document"
+#elif L==2
+	 "Dokumentdatei"
+#elif L==3
+	 "Document file"
+#elif L==4
+	 "Documento"
+#elif L==5
+	 "Fichier de document"
+#elif L==6
+	 "Documento"	// Okoteve traducción
+#elif L==7
+	 "Documento"
+#elif L==8
+	 "Plik dokumentu"
+#elif L==9
+	 "Arquivo de documento"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_CTR_SHA_PUB_FILE
+	 "Arxiu compartit"
+#elif L==2
+	 "Freigegebene Datei"
+#elif L==3
+	 "Shared file"
+#elif L==4
+	 "Archivo compartido"
+#elif L==5
+	 "Fichier partag&eacute;"
+#elif L==6
+	 "Archivo compartido"	// Okoteve traducción
+#elif L==7
+	 "File condiviso"
+#elif L==8
+	 "Udost&eogon;pniony plik"
+#elif L==9
+	 "Arquivo compartilhado"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_DEG_DOC_PUB_FILE
+	 "Document"
+#elif L==2
+	 "Dokumentdatei"
+#elif L==3
+	 "Document file"
+#elif L==4
+	 "Documento"
+#elif L==5
+	 "Fichier de document"
+#elif L==6
+	 "Documento"	// Okoteve traducción
+#elif L==7
+	 "Documento"
+#elif L==8
+	 "Plik dokumentu"
+#elif L==9
+	 "Arquivo de documento"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_DEG_SHA_PUB_FILE
+	 "Arxiu compartit"
+#elif L==2
+	 "Freigegebene Datei"
+#elif L==3
+	 "Shared file"
+#elif L==4
+	 "Archivo compartido"
+#elif L==5
+	 "Fichier partag&eacute;"
+#elif L==6
+	 "Archivo compartido"	// Okoteve traducción
+#elif L==7
+	 "File condiviso"
+#elif L==8
+	 "Udost&eogon;pniony plik"
+#elif L==9
+	 "Arquivo compartilhado"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_CRS_DOC_PUB_FILE
+	 "Document"
+#elif L==2
+	 "Dokumentdatei"
+#elif L==3
+	 "Document file"
+#elif L==4
+	 "Documento"
+#elif L==5
+	 "Fichier de document"
+#elif L==6
+	 "Documento"	// Okoteve traducción
+#elif L==7
+	 "Documento"
+#elif L==8
+	 "Plik dokumentu"
+#elif L==9
+	 "Arquivo de documento"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_CRS_SHA_PUB_FILE
+	 "Arxiu compartit"
+#elif L==2
+	 "Freigegebene Datei"
+#elif L==3
+	 "Shared file"
+#elif L==4
+	 "Archivo compartido"
+#elif L==5
+	 "Fichier partag&eacute;"
+#elif L==6
+	 "Archivo compartido"	// Okoteve traducción
+#elif L==7
+	 "File condiviso"
+#elif L==8
+	 "Udost&eogon;pniony plik"
+#elif L==9
+	 "Arquivo compartilhado"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_EXAM_ANNOUNCEMENT
+	 "Convocat&ograve;ria d'examen"
+#elif L==2
+	 "Aufrufe für Pr&uuml;fung"
+#elif L==3
+	 "Announcement of exam"
+#elif L==4
+	 "Convocatoria de examen"
+#elif L==5
+	 "Convocation &agrave; un examen"
+#elif L==6
+	 "Convocatoria de examen"	// Okoteve traducción
+#elif L==7
+	 "Sessione d'esame"
+#elif L==8
+	 "Ogloszenie egzamin"
+#elif L==9
+	 "Chamada para exame"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_SOCIAL_POST
+	 "Missatge"
+#elif L==2
+	 "Beitr&auml;ge"
+#elif L==3
+	 "Post"
+#elif L==4
+	 "Mensaje"
+#elif L==5
+	 "Message"
+#elif L==6
+	 "Mensaje"	// Okoteve traducción
+#elif L==7
+	 "Post"
+#elif L==8
+	 "Post"
+#elif L==9
+	 "Post"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_NOTICE
+	 "Av&iacute;s"
+#elif L==2
+	 "Ank&uuml;ndigungen"
+#elif L==3
+	 "Notice"
+#elif L==4
+	 "Aviso"
+#elif L==5
+	 "Avis"
+#elif L==6
+	 "Marandu"
+#elif L==7
+	 "Avviso"
+#elif L==8
+	 "Informacja"
+#elif L==9
+	 "An&uacute;ncio"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_FORUM_POST
+	 "Missatge en un f&ograve;rum"
+#elif L==2
+	 "Beitr&auml;ge in einem Forum"
+#elif L==3
+	 "Post in a forum"
+#elif L==4
+	 "Mensaje en un foro"
+#elif L==5
+	 "Message dans un forum"
+#elif L==6
+	 "Mensaje en un foro"	// Okoteve traducción
+#elif L==7
+	 "Post in un forum"
+#elif L==8
+	 "Post na forum"
+#elif L==9
+	 "Post em um f&oacute;rum"
+#endif
+	};
 
 const char *Txt_Sort_degrees_by =
 #if   L==1

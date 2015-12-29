@@ -41,35 +41,35 @@
 
 typedef enum
   {
-   Soc_EVENT_UNKNOWN			=  0,
+   Soc_EVENT_UNKNOWN		=  0,
 
    /* Institution tab */
-   Soc_EVENT_INS_DOC_PUB_FILE		=  1,
-   Soc_EVENT_INS_SHA_PUB_FILE		=  2,
+   Soc_EVENT_INS_DOC_PUB_FILE	=  1,
+   Soc_EVENT_INS_SHA_PUB_FILE	=  2,
 
    /* Centre tab */
-   Soc_EVENT_CTR_DOC_PUB_FILE		=  3,
-   Soc_EVENT_CTR_SHA_PUB_FILE		=  4,
+   Soc_EVENT_CTR_DOC_PUB_FILE	=  3,
+   Soc_EVENT_CTR_SHA_PUB_FILE	=  4,
 
    /* Degree tab */
-   Soc_EVENT_DEG_DOC_PUB_FILE		=  5,
-   Soc_EVENT_DEG_SHA_PUB_FILE		=  6,
+   Soc_EVENT_DEG_DOC_PUB_FILE	=  5,
+   Soc_EVENT_DEG_SHA_PUB_FILE	=  6,
 
    /* Course tab */
-   Soc_EVENT_CRS_DOC_PUB_FILE		=  7,
-   Soc_EVENT_CRS_SHA_PUB_FILE		=  8,
+   Soc_EVENT_CRS_DOC_PUB_FILE	=  7,
+   Soc_EVENT_CRS_SHA_PUB_FILE	=  8,
 
    /* Assessment tab */
-   Soc_EVENT_EXAM_ANNOUNCEMENT		=  9,
+   Soc_EVENT_EXAM_ANNOUNCEMENT	=  9,
 
-   /* Enrollment tab */
+   /* Users tab */
 
    /* Social tab */
-   Soc_EVENT_SOCIAL_POST		= 10,
+   Soc_EVENT_SOCIAL_POST	= 10,
 
    /* Messages tab */
-   Soc_EVENT_NOTICE			= 11,
-   Soc_EVENT_FORUM_POST			= 12,
+   Soc_EVENT_NOTICE		= 11,
+   Soc_EVENT_FORUM_POST		= 12,
 
    /* Statistics tab */
 

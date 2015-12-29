@@ -115,12 +115,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.77.5 (2015-12-29)"
-#define CSS_FILE		"swad15.77.5.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.77.6 (2015-12-29)"
+#define CSS_FILE		"swad15.77.6.css"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.77.6:  Dec 29, 2015	Show type of event on social events (timeline). (188647 lines)
         Version 15.77.5:  Dec 29, 2015	Insert social event when publishing an exam announcement.
                                         Changes in CSS related to social activity. (188392 lines)
         Version 15.77.4:  Dec 29, 2015	Insert social event when publishing a new notice.

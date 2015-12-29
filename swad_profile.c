@@ -309,7 +309,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div id=\"prf_fig_left_container\">"
-	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+	              "<ul class=\"PRF_FIG_UL DAT_N_NOBR\">");
 
    /***** Number of courses in which the user is teacher *****/
    NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER);
@@ -399,7 +399,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div id=\"prf_fig_right_container\">"
-	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+	              "<ul class=\"PRF_FIG_UL DAT_N_NOBR\">");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)

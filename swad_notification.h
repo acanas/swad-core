@@ -42,33 +42,33 @@
 // it is necessary to change old numbers to new ones in database tables notif and sta_notif
 typedef enum
   {
-   Ntf_EVENT_UNKNOWN			=  0,	// old  0
+   Ntf_EVENT_UNKNOWN		=  0,
 
    /* Course tab */
-   Ntf_EVENT_DOCUMENT_FILE		=  1,	// old  1
-   Ntf_EVENT_SHARED_FILE		=  2,	// old  2
+   Ntf_EVENT_DOCUMENT_FILE	=  1,
+   Ntf_EVENT_SHARED_FILE	=  2,
 
    /* Assessment tab */
-   Ntf_EVENT_ASSIGNMENT			=  3,	// old  3
-   Ntf_EVENT_EXAM_ANNOUNCEMENT		=  4,	// old  4
-   Ntf_EVENT_MARKS_FILE			=  5,	// old  5
+   Ntf_EVENT_ASSIGNMENT		=  3,
+   Ntf_EVENT_EXAM_ANNOUNCEMENT	=  4,
+   Ntf_EVENT_MARKS_FILE		=  5,
 
-   /* Enrollment tab */
-   Ntf_EVENT_ENROLLMENT_STUDENT		=  6,	// old  6
-   Ntf_EVENT_ENROLLMENT_TEACHER		=  7,
-   Ntf_EVENT_ENROLLMENT_REQUEST		=  8,	// old  7
+   /* Users tab */
+   Ntf_EVENT_ENROLLMENT_STUDENT	=  6,
+   Ntf_EVENT_ENROLLMENT_TEACHER	=  7,
+   Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
 
    /* Messages tab */
-   Ntf_EVENT_NOTICE			=  9,	// old  8
-   Ntf_EVENT_FORUM_POST_COURSE		= 10,	// old  9
-   Ntf_EVENT_FORUM_REPLY		= 11,	// old 10
-   Ntf_EVENT_MESSAGE			= 12,	// old 11
+   Ntf_EVENT_NOTICE		=  9,
+   Ntf_EVENT_FORUM_POST_COURSE	= 10,
+   Ntf_EVENT_FORUM_REPLY	= 11,
+   Ntf_EVENT_MESSAGE		= 12,
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY			= 13,	// old 12
+   Ntf_EVENT_SURVEY		= 13,
 
-   /* Profile tab */
-   Ntf_EVENT_FOLLOWER			= 14,	// old 13
+   /* Social tab */
+   Ntf_EVENT_FOLLOWER		= 14,	// TODO: Move up, between users tab and messages tab
 
   } Ntf_NotifyEvent_t;
 

@@ -3136,7 +3136,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    if (NumStds + NumTchs)
      {
       Style = "DAT_N";
-      StyleNoBR = "DAT_NOBR_N";
+      StyleNoBR = "DAT_N_NOBR";
      }
    else
      {
