@@ -73,4 +73,6 @@ void Not_GetSummaryAndContentNotice (char *SummaryStr,char **ContentStr,
 unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif);
 
+void Not_PutHiddenParamNotCod (long NotCod);
+
 #endif

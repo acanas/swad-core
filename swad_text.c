@@ -17334,7 +17334,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeAdmDocCrs
+	// ActSeeAdmDocCrsGrp
 #if   L==1
 	"Documents"
 #elif L==2
@@ -17355,7 +17355,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmCom
+	// ActAdmShaCrsGrp
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -19267,7 +19267,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeAdmDocCrs
+	// ActSeeAdmDocCrsGrp
 #if   L==1
 	"Documents de l'assignatura o d'un grup enviats per professors"
 #elif L==2
@@ -19288,7 +19288,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmCom
+	// ActAdmShaCrsGrp
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de l'assignatura o d'un grup"

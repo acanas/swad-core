@@ -76,7 +76,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              bool ICanEditNotices);
 static long Not_InsertNoticeInDB (const char *Content);
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
-static void Not_PutHiddenParamNotCod (long NotCod);
 static long Not_GetParamNotCod (void);
 
 /*****************************************************************************/
@@ -954,7 +953,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
 /*************** Put parameter with the code of a notice *********************/
 /*****************************************************************************/
 
-static void Not_PutHiddenParamNotCod (long NotCod)
+void Not_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong ("NotCod",NotCod);
   }

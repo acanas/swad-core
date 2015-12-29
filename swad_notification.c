@@ -90,8 +90,8 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActUnk,		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   ActSeeAdmDocCrs,	// Ntf_EVENT_DOCUMENT_FILE
-   ActAdmCom,		// Ntf_EVENT_SHARED_FILE
+   ActSeeAdmDocCrsGrp,	// Ntf_EVENT_DOCUMENT_FILE
+   ActAdmShaCrsGrp,	// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
    ActSeeAsg,		// Ntf_EVENT_ASSIGNMENT
@@ -104,7 +104,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Messages tab */
-   ActSeeNot,		// Ntf_EVENT_NOTICE
+   ActShoNot,		// Ntf_EVENT_NOTICE
    ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE
    ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
@@ -625,7 +625,7 @@ static bool Ntf_GetAllNotificationsFromForm (void)
   }
 
 /*****************************************************************************/
-/********* Pur parameters to go to an action depending on the event **********/
+/*********** Put form to go to an action depending on the event **************/
 /*****************************************************************************/
 
 static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
@@ -662,10 +662,10 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		                	            ActSeeDocCrs);
 	       break;
 	    case Ntf_EVENT_SHARED_FILE:
-	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatComGrp :
-		                                    ActReqDatComCrs) :
-		                    ((GrpCod > 0) ? ActAdmComGrp :
-		                	            ActAdmComCrs);
+	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
+		                                    ActReqDatShaCrs) :
+		                    ((GrpCod > 0) ? ActAdmShaGrp :
+		                	            ActAdmShaCrs);
 	       break;
 	    case Ntf_EVENT_MARKS_FILE:
 	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatSeeMrkGrp :
@@ -681,6 +681,10 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	                                  -1L);
 	 if (Cod > 0)	// File code
 	    Brw_PutParamsPathAndFile (Brw_IS_UNKNOWN,PathUntilFileName,FileName);	// TODO: Brw_IS_UNKNOWN should be changed to Brw_IS_FILE or Brw_IS_LINK
+	 break;
+      case Ntf_EVENT_NOTICE:
+         Act_FormStart (Ntf_DefaultActions[NotifyEvent]);
+	 Not_PutHiddenParamNotCod (Cod);
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:

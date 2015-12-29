@@ -194,15 +194,15 @@ void Lay_WriteStartOfPage (void)
    // images/spritemap@2x.png
    // images/spritemap.png
    if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
-       Gbl.CurrentAct == ActFrmCreComIns ||	// Brw_ADMI_SHARE_INS
+       Gbl.CurrentAct == ActFrmCreShaIns ||	// Brw_ADMI_SHARE_INS
        Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
-       Gbl.CurrentAct == ActFrmCreComCtr ||	// Brw_ADMI_SHARE_CTR
+       Gbl.CurrentAct == ActFrmCreShaCtr ||	// Brw_ADMI_SHARE_CTR
        Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
-       Gbl.CurrentAct == ActFrmCreComDeg ||	// Brw_ADMI_SHARE_DEG
+       Gbl.CurrentAct == ActFrmCreShaDeg ||	// Brw_ADMI_SHARE_DEG
        Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
        Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
-       Gbl.CurrentAct == ActFrmCreComCrs ||	// Brw_ADMI_SHARE_CRS
-       Gbl.CurrentAct == ActFrmCreComGrp ||	// Brw_ADMI_SHARE_GRP
+       Gbl.CurrentAct == ActFrmCreShaCrs ||	// Brw_ADMI_SHARE_CRS
+       Gbl.CurrentAct == ActFrmCreShaGrp ||	// Brw_ADMI_SHARE_GRP
        Gbl.CurrentAct == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
        Gbl.CurrentAct == ActFrmCreAsgCrs ||	// Brw_ADMI_ASSIG_CRS
        Gbl.CurrentAct == ActFrmCreWrkUsr ||	// Brw_ADMI_WORKS_USR
@@ -533,15 +533,15 @@ static void Lay_WriteScripts (void)
       // images/spritemap@2x.png
       // images/spritemap.png
       case ActFrmCreDocIns:	// Brw_ADMI_DOCUM_INS
-      case ActFrmCreComIns:	// Brw_ADMI_SHARE_INS
+      case ActFrmCreShaIns:	// Brw_ADMI_SHARE_INS
       case ActFrmCreDocCtr:	// Brw_ADMI_DOCUM_CTR
-      case ActFrmCreComCtr:	// Brw_ADMI_SHARE_CTR
+      case ActFrmCreShaCtr:	// Brw_ADMI_SHARE_CTR
       case ActFrmCreDocDeg:	// Brw_ADMI_DOCUM_DEG
-      case ActFrmCreComDeg:	// Brw_ADMI_SHARE_DEG
+      case ActFrmCreShaDeg:	// Brw_ADMI_SHARE_DEG
       case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
       case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
-      case ActFrmCreComCrs:	// Brw_ADMI_SHARE_CRS
-      case ActFrmCreComGrp:	// Brw_ADMI_SHARE_GRP
+      case ActFrmCreShaCrs:	// Brw_ADMI_SHARE_CRS
+      case ActFrmCreShaGrp:	// Brw_ADMI_SHARE_GRP
       case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR
       case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
       case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR

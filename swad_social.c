@@ -47,6 +47,44 @@
 
 #define Soc_MAX_BYTES_SUMMARY 100
 
+static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
+  {
+   ActUnk,		// Soc_EVENT_UNKNOWN
+
+   /* Institution tab */
+   ActSeeDocIns,	// Soc_EVENT_INS_DOC_PUB_FILE
+   ActAdmComIns,	// Soc_EVENT_INS_SHA_PUB_FILE
+
+   /* Centre tab */
+   ActSeeDocCtr,	// Soc_EVENT_CTR_DOC_PUB_FILE
+   ActAdmComCtr,	// Soc_EVENT_CTR_SHA_PUB_FILE
+
+   /* Degree tab */
+   ActSeeDocDeg,	// Soc_EVENT_DEG_DOC_PUB_FILE
+   ActAdmComDeg,	// Soc_EVENT_DEG_SHA_PUB_FILE
+
+   /* Course tab */
+   ActSeeDocCrs,	// Soc_EVENT_CRS_DOC_PUB_FILE
+   ActAdmShaCrs,	// Soc_EVENT_CRS_SHA_PUB_FILE
+
+   /* Assessment tab */
+   ActSeeExaAnn,	// Soc_EVENT_EXAM_ANNOUNCEMENT
+
+   /* Users tab */
+
+   /* Social tab */
+   ActUnk,		// Soc_EVENT_SOCIAL_POST
+
+   /* Messages tab */
+   ActShoNot,		// Soc_EVENT_NOTICE
+   ActSeeFor,		// Soc_EVENT_FORUM_POST
+
+   /* Statistics tab */
+
+   /* Profile tab */
+
+  };
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -67,6 +105,8 @@ extern struct Globals Gbl;
 
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
 static void Soc_WriteEventDate (time_t TimeUTC);
+static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
+                                     long CrsCod,long Cod);
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
 
@@ -213,8 +253,13 @@ void Soc_ShowSocialActivity (void)
          /* Write event type and location */
          if (SocialEvent != Soc_EVENT_SOCIAL_POST)
            {
-	    fprintf (Gbl.F.Out,"<div class=\"DAT_N\">%s</div>",
+	    fprintf (Gbl.F.Out,"<div class=\"DAT_N\">");
+	    Soc_StartFormGoToAction (SocialEvent,Crs.CrsCod,Cod);
+	    Act_LinkFormSubmit (Txt_SOCIAL_EVENT[SocialEvent],"DAT_N");
+	    fprintf (Gbl.F.Out,"%s</a>",
 		     Txt_SOCIAL_EVENT[SocialEvent]);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</div>");
 
 	    if (SocialEvent == Soc_EVENT_FORUM_POST)
 	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
@@ -305,6 +350,94 @@ static void Soc_WriteEventDate (time_t TimeUTC)
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+
+/*****************************************************************************/
+/*********** Put form to go to an action depending on the event **************/
+/*****************************************************************************/
+
+static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
+                                     long CrsCod,long Cod)
+  {
+   extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+   struct FileMetadata FileMetadata;
+   long GrpCod = -1L;
+   char PathUntilFileName[PATH_MAX+1];
+   char FileName[NAME_MAX+1];
+   Act_Action_t Action = ActUnk;				// Initialized to avoid warning
+
+   /***** Parameters depending on the type of event *****/
+   switch (SocialEvent)
+     {
+      case Soc_EVENT_INS_DOC_PUB_FILE:
+      case Soc_EVENT_INS_SHA_PUB_FILE:
+      case Soc_EVENT_CTR_DOC_PUB_FILE:
+      case Soc_EVENT_CTR_SHA_PUB_FILE:
+      case Soc_EVENT_DEG_DOC_PUB_FILE:
+      case Soc_EVENT_DEG_SHA_PUB_FILE:
+      case Soc_EVENT_CRS_DOC_PUB_FILE:
+      case Soc_EVENT_CRS_SHA_PUB_FILE:
+	 if (Cod > 0)	// File code
+	   {
+	    FileMetadata.FilCod = Cod;
+            Brw_GetFileMetadataByCod (&FileMetadata);
+            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
+	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
+						  PathUntilFileName,
+						  FileName);
+	   }
+	 switch (SocialEvent)
+	   {
+	    case Soc_EVENT_INS_DOC_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatSeeDocIns : ActSeeDocIns;
+	       break;
+	    case Soc_EVENT_INS_SHA_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatShaIns : ActAdmComIns;
+	       break;
+	    case Soc_EVENT_CTR_DOC_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatSeeDocCtr : ActSeeDocCtr;
+	       break;
+	    case Soc_EVENT_CTR_SHA_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatShaCtr : ActAdmComCtr;
+	       break;
+	    case Soc_EVENT_DEG_DOC_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatSeeDocDeg : ActSeeDocDeg;
+	       break;
+	    case Soc_EVENT_DEG_SHA_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatShaDeg : ActAdmComDeg;
+	       break;
+	    case Soc_EVENT_CRS_DOC_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatSeeDocCrs : ActSeeDocCrs;
+	       break;
+	    case Soc_EVENT_CRS_SHA_PUB_FILE:
+	       Action = (Cod > 0) ? ActReqDatShaCrs : ActAdmShaCrs;
+	       break;
+	    default:	// Not aplicable here
+	       break;
+	   }
+         Act_FormStart (Action);
+	 Grp_PutParamGrpCod (-1L);
+	 if (Cod > 0)	// File code
+	    Brw_PutParamsPathAndFile (Brw_IS_FILE,PathUntilFileName,FileName);
+	 break;
+      case Soc_EVENT_NOTICE:
+         Act_FormStart (Soc_DefaultActions[SocialEvent]);
+	 Not_PutHiddenParamNotCod (Cod);
+	 break;
+      case Soc_EVENT_FORUM_POST:
+	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+	 For_PutAllHiddenParamsForum ();
+	 break;
+      default:
+         Act_FormStart (Soc_DefaultActions[SocialEvent]);
+	 break;
+     }
+
+   /***** Parameter to go to another course *****/
+   if (CrsCod > 0 &&				// Course specified
+       CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+      Crs_PutParamCrsCod (CrsCod);		// Go to another course
   }
 
 /*****************************************************************************/

@@ -115,13 +115,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.77.7 (2015-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.78.1 (2015-12-29)"
 #define CSS_FILE		"swad15.77.6.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.78.1:  Dec 29, 2015	Go directly to notice in notifications and social events. (188785 lines)
+        Version 15.78:    Dec 29, 2015	Links in social events.
+					Actions related to shared files renamed. (188776 lines)
         Version 15.77.8:  Dec 29, 2015	Author's name length is limited in social events. (188662 lines)
         Version 15.77.7:  Dec 29, 2015	When a date-time is written in local time, and the date is today, 'Today' is displayed instead of date. (188660 lines)
 					1 change necessary:

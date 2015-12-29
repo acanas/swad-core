@@ -59,8 +59,8 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActZIPAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActZIPComCrs,	// Brw_ADMI_SHARE_CRS
-   ActZIPComGrp,	// Brw_ADMI_SHARE_GRP
+   ActZIPShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActZIPShaGrp,	// Brw_ADMI_SHARE_GRP
    ActZIPWrkUsr,	// Brw_ADMI_WORKS_USR
    ActZIPWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActZIPAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -77,9 +77,9 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActZIPAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActZIPSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActZIPAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActZIPComDeg,	// Brw_ADMI_SHARE_DEG
-   ActZIPComCtr,	// Brw_ADMI_SHARE_CTR
-   ActZIPComIns,	// Brw_ADMI_SHARE_INS
+   ActZIPShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActZIPShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActZIPShaIns,	// Brw_ADMI_SHARE_INS
   };
 
 /*****************************************************************************/

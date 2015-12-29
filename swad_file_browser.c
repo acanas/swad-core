@@ -316,8 +316,8 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActSeeMrkCrs,	// Brw_SHOW_MARKS_CRS
    ActAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActAdmComCrs,	// Brw_ADMI_SHARE_CRS
-   ActAdmComGrp,	// Brw_ADMI_SHARE_GRP
+   ActAdmShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActAdmShaGrp,	// Brw_ADMI_SHARE_GRP
    ActAdmAsgWrkUsr,	// Brw_ADMI_WORKS_USR
    ActAdmAsgWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -344,8 +344,8 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgToSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActChgToSeeMrk,	// Brw_SHOW_MARKS_CRS
    ActChgToAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActChgToAdmCom,	// Brw_ADMI_SHARE_CRS
-   ActChgToAdmCom,	// Brw_ADMI_SHARE_GRP
+   ActChgToAdmSha,	// Brw_ADMI_SHARE_CRS
+   ActChgToAdmSha,	// Brw_ADMI_SHARE_GRP
    ActUnk,		// Brw_ADMI_WORKS_USR
    ActUnk,		// Brw_ADMI_WORKS_CRS
    ActChgToAdmMrk,	// Brw_ADMI_MARKS_CRS
@@ -428,8 +428,8 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqDatSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActReqDatSeeMrkCrs,	// Brw_SHOW_MARKS_CRS
    ActReqDatAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActReqDatComCrs,	// Brw_ADMI_SHARE_CRS
-   ActReqDatComGrp,	// Brw_ADMI_SHARE_GRP
+   ActReqDatShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActReqDatShaGrp,	// Brw_ADMI_SHARE_GRP
    ActReqDatWrkUsr,	// Brw_ADMI_WORKS_USR
    ActReqDatWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActReqDatAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -446,9 +446,9 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqDatAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActReqDatSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActReqDatAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActReqDatComDeg,	// Brw_ADMI_SHARE_DEG
-   ActReqDatComCtr,	// Brw_ADMI_SHARE_CTR
-   ActReqDatComIns,	// Brw_ADMI_SHARE_INS
+   ActReqDatShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActReqDatShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActReqDatShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -456,8 +456,8 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActDowSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActSeeMyMrkCrs,	// Brw_SHOW_MARKS_CRS
    ActDowAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActDowComCrs,	// Brw_ADMI_SHARE_CRS
-   ActDowComGrp,	// Brw_ADMI_SHARE_GRP
+   ActDowShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActDowShaGrp,	// Brw_ADMI_SHARE_GRP
    ActDowWrkUsr,	// Brw_ADMI_WORKS_USR
    ActDowWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActDowAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -474,9 +474,9 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActDowAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActDowSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActDowAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActDowComDeg,	// Brw_ADMI_SHARE_DEG
-   ActDowComCtr,	// Brw_ADMI_SHARE_CTR
-   ActDowComIns,	// Brw_ADMI_SHARE_INS
+   ActDowShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActDowShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActDowShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -484,8 +484,8 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActReqRemFilDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActReqRemFilComCrs,	// Brw_ADMI_SHARE_CRS
-   ActReqRemFilComGrp,	// Brw_ADMI_SHARE_GRP
+   ActReqRemFilShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActReqRemFilShaGrp,	// Brw_ADMI_SHARE_GRP
    ActReqRemFilWrkUsr,	// Brw_ADMI_WORKS_USR
    ActReqRemFilWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActReqRemFilMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -502,9 +502,9 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActReqRemFilDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActReqRemFilDocIns,	// Brw_ADMI_DOCUM_INS
-   ActReqRemFilComDeg,	// Brw_ADMI_SHARE_DEG
-   ActReqRemFilComCtr,	// Brw_ADMI_SHARE_CTR
-   ActReqRemFilComIns,	// Brw_ADMI_SHARE_INS
+   ActReqRemFilShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActReqRemFilShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActReqRemFilShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -512,8 +512,8 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRemFilDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActRemFilComCrs,	// Brw_ADMI_SHARE_CRS
-   ActRemFilComGrp,	// Brw_ADMI_SHARE_GRP
+   ActRemFilShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActRemFilShaGrp,	// Brw_ADMI_SHARE_GRP
    ActRemFilWrkUsr,	// Brw_ADMI_WORKS_USR
    ActRemFilWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActRemFilMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -530,9 +530,9 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFilDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemFilDocIns,	// Brw_ADMI_DOCUM_INS
-   ActRemFilComDeg,	// Brw_ADMI_SHARE_DEG
-   ActRemFilComCtr,	// Brw_ADMI_SHARE_CTR
-   ActRemFilComIns,	// Brw_ADMI_SHARE_INS
+   ActRemFilShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemFilShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemFilShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -540,8 +540,8 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRemFolDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActRemFolComCrs,	// Brw_ADMI_SHARE_CRS
-   ActRemFolComGrp,	// Brw_ADMI_SHARE_GRP
+   ActRemFolShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActRemFolShaGrp,	// Brw_ADMI_SHARE_GRP
    ActRemFolWrkUsr,	// Brw_ADMI_WORKS_USR
    ActRemFolWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActRemFolMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -558,9 +558,9 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRemFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemFolDocIns,	// Brw_ADMI_DOCUM_INS
-   ActRemFolComDeg,	// Brw_ADMI_SHARE_DEG
-   ActRemFolComCtr,	// Brw_ADMI_SHARE_CTR
-   ActRemFolComIns,	// Brw_ADMI_SHARE_INS
+   ActRemFolShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemFolShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemFolShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -568,8 +568,8 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRemTreDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActRemTreComCrs,	// Brw_ADMI_SHARE_CRS
-   ActRemTreComGrp,	// Brw_ADMI_SHARE_GRP
+   ActRemTreShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActRemTreShaGrp,	// Brw_ADMI_SHARE_GRP
    ActRemTreWrkUsr,	// Brw_ADMI_WORKS_USR
    ActRemTreWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActRemTreMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -586,9 +586,9 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    ActRemTreDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRemTreDocIns,	// Brw_ADMI_DOCUM_INS
-   ActRemTreComDeg,	// Brw_ADMI_SHARE_DEG
-   ActRemTreComCtr,	// Brw_ADMI_SHARE_CTR
-   ActRemTreComIns,	// Brw_ADMI_SHARE_INS
+   ActRemTreShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActRemTreShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActRemTreShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -596,8 +596,8 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActCopDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActCopComCrs,	// Brw_ADMI_SHARE_CRS
-   ActCopComGrp,	// Brw_ADMI_SHARE_GRP
+   ActCopShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActCopShaGrp,	// Brw_ADMI_SHARE_GRP
    ActCopWrkUsr,	// Brw_ADMI_WORKS_USR
    ActCopWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActCopMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -614,9 +614,9 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCopDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCopDocIns,	// Brw_ADMI_DOCUM_INS
-   ActCopComDeg,	// Brw_ADMI_SHARE_DEG
-   ActCopComCtr,	// Brw_ADMI_SHARE_CTR
-   ActCopComIns,	// Brw_ADMI_SHARE_INS
+   ActCopShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActCopShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActCopShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -624,8 +624,8 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActPasDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActPasComCrs,	// Brw_ADMI_SHARE_CRS
-   ActPasComGrp,	// Brw_ADMI_SHARE_GRP
+   ActPasShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActPasShaGrp,	// Brw_ADMI_SHARE_GRP
    ActPasWrkUsr,	// Brw_ADMI_WORKS_USR
    ActPasWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActPasMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -642,9 +642,9 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    ActPasDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActPasDocIns,	// Brw_ADMI_DOCUM_INS
-   ActPasComDeg,	// Brw_ADMI_SHARE_DEG
-   ActPasComCtr,	// Brw_ADMI_SHARE_CTR
-   ActPasComIns,	// Brw_ADMI_SHARE_INS
+   ActPasShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActPasShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActPasShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -652,8 +652,8 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActFrmCreDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActFrmCreComCrs,	// Brw_ADMI_SHARE_CRS
-   ActFrmCreComGrp,	// Brw_ADMI_SHARE_GRP
+   ActFrmCreShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActFrmCreShaGrp,	// Brw_ADMI_SHARE_GRP
    ActFrmCreWrkUsr,	// Brw_ADMI_WORKS_USR
    ActFrmCreWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActFrmCreMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -670,9 +670,9 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    ActFrmCreDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActFrmCreDocIns,	// Brw_ADMI_DOCUM_INS
-   ActFrmCreComDeg,	// Brw_ADMI_SHARE_DEG
-   ActFrmCreComCtr,	// Brw_ADMI_SHARE_CTR
-   ActFrmCreComIns,	// Brw_ADMI_SHARE_INS
+   ActFrmCreShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActFrmCreShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActFrmCreShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -680,8 +680,8 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActCreFolDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActCreFolComCrs,	// Brw_ADMI_SHARE_CRS
-   ActCreFolComGrp,	// Brw_ADMI_SHARE_GRP
+   ActCreFolShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActCreFolShaGrp,	// Brw_ADMI_SHARE_GRP
    ActCreFolWrkUsr,	// Brw_ADMI_WORKS_USR
    ActCreFolWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActCreFolMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -698,9 +698,9 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCreFolDocIns,	// Brw_ADMI_DOCUM_INS
-   ActCreFolComDeg,	// Brw_ADMI_SHARE_DEG
-   ActCreFolComCtr,	// Brw_ADMI_SHARE_CTR
-   ActCreFolComIns,	// Brw_ADMI_SHARE_INS
+   ActCreFolShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActCreFolShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActCreFolShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -708,8 +708,8 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActCreLnkDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActCreLnkComCrs,	// Brw_ADMI_SHARE_CRS
-   ActCreLnkComGrp,	// Brw_ADMI_SHARE_GRP
+   ActCreLnkShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActCreLnkShaGrp,	// Brw_ADMI_SHARE_GRP
    ActCreLnkWrkUsr,	// Brw_ADMI_WORKS_USR
    ActCreLnkWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActUnk,		// Brw_ADMI_MARKS_CRS
@@ -726,9 +726,9 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    ActCreLnkDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActCreLnkDocIns,	// Brw_ADMI_DOCUM_INS
-   ActCreLnkComDeg,	// Brw_ADMI_SHARE_DEG
-   ActCreLnkComCtr,	// Brw_ADMI_SHARE_CTR
-   ActCreLnkComIns,	// Brw_ADMI_SHARE_INS
+   ActCreLnkShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActCreLnkShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActCreLnkShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -736,8 +736,8 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRenFolDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActRenFolComCrs,	// Brw_ADMI_SHARE_CRS
-   ActRenFolComGrp,	// Brw_ADMI_SHARE_GRP
+   ActRenFolShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActRenFolShaGrp,	// Brw_ADMI_SHARE_GRP
    ActRenFolWrkUsr,	// Brw_ADMI_WORKS_USR
    ActRenFolWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActRenFolMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -754,9 +754,9 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRenFolDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRenFolDocIns,	// Brw_ADMI_DOCUM_INS
-   ActRenFolComDeg,	// Brw_ADMI_SHARE_DEG
-   ActRenFolComCtr,	// Brw_ADMI_SHARE_CTR
-   ActRenFolComIns,	// Brw_ADMI_SHARE_INS
+   ActRenFolShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActRenFolShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActRenFolShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -764,8 +764,8 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRcvFilDocCrsDZ,	// Brw_ADMI_DOCUM_CRS
-   ActRcvFilComCrsDZ,	// Brw_ADMI_SHARE_CRS
-   ActRcvFilComGrpDZ,	// Brw_ADMI_SHARE_GRP
+   ActRcvFilShaCrsDZ,	// Brw_ADMI_SHARE_CRS
+   ActRcvFilShaGrpDZ,	// Brw_ADMI_SHARE_GRP
    ActRcvFilWrkUsrDZ,	// Brw_ADMI_WORKS_USR
    ActRcvFilWrkCrsDZ,	// Brw_ADMI_WORKS_CRS
    ActRcvFilMrkCrsDZ,	// Brw_ADMI_MARKS_CRS
@@ -782,9 +782,9 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    ActRcvFilDocCtrDZ,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRcvFilDocInsDZ,	// Brw_ADMI_DOCUM_INS
-   ActRcvFilComDegDZ,	// Brw_ADMI_SHARE_DEG
-   ActRcvFilComCtrDZ,	// Brw_ADMI_SHARE_CTR
-   ActRcvFilComInsDZ,	// Brw_ADMI_SHARE_INS
+   ActRcvFilShaDegDZ,	// Brw_ADMI_SHARE_DEG
+   ActRcvFilShaCtrDZ,	// Brw_ADMI_SHARE_CTR
+   ActRcvFilShaInsDZ,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -792,8 +792,8 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActRcvFilDocCrsCla,	// Brw_ADMI_DOCUM_CRS
-   ActRcvFilComCrsCla,	// Brw_ADMI_SHARE_CRS
-   ActRcvFilComGrpCla,	// Brw_ADMI_SHARE_GRP
+   ActRcvFilShaCrsCla,	// Brw_ADMI_SHARE_CRS
+   ActRcvFilShaGrpCla,	// Brw_ADMI_SHARE_GRP
    ActRcvFilWrkUsrCla,	// Brw_ADMI_WORKS_USR
    ActRcvFilWrkCrsCla,	// Brw_ADMI_WORKS_CRS
    ActRcvFilMrkCrsCla,	// Brw_ADMI_MARKS_CRS
@@ -810,9 +810,9 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    ActRcvFilDocCtrCla,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActRcvFilDocInsCla,	// Brw_ADMI_DOCUM_INS
-   ActRcvFilComDegCla,	// Brw_ADMI_SHARE_DEG
-   ActRcvFilComCtrCla,	// Brw_ADMI_SHARE_CTR
-   ActRcvFilComInsCla,	// Brw_ADMI_SHARE_INS
+   ActRcvFilShaDegCla,	// Brw_ADMI_SHARE_DEG
+   ActRcvFilShaCtrCla,	// Brw_ADMI_SHARE_CTR
+   ActRcvFilShaInsCla,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -820,8 +820,8 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActAdmComCrs,	// Brw_ADMI_SHARE_CRS
-   ActAdmComGrp,	// Brw_ADMI_SHARE_GRP
+   ActAdmShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActAdmShaGrp,	// Brw_ADMI_SHARE_GRP
    ActAdmAsgWrkUsr,	// Brw_ADMI_WORKS_USR
    ActAdmAsgWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -848,8 +848,8 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActExpSeeMrkCrs,	// Brw_SHOW_MARKS_CRS
    ActExpAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActExpComCrs,	// Brw_ADMI_SHARE_CRS
-   ActExpComGrp,	// Brw_ADMI_SHARE_GRP
+   ActExpShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActExpShaGrp,	// Brw_ADMI_SHARE_GRP
    ActExpWrkUsr,	// Brw_ADMI_WORKS_USR
    ActExpWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActExpAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -866,9 +866,9 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActExpAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActExpSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActExpAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActExpComDeg,	// Brw_ADMI_SHARE_DEG
-   ActExpComCtr,	// Brw_ADMI_SHARE_CTR
-   ActExpComIns,	// Brw_ADMI_SHARE_INS
+   ActExpShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActExpShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActExpShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -876,8 +876,8 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConSeeDocCrs,	// Brw_SHOW_DOCUM_CRS
    ActConSeeMrkCrs,	// Brw_SHOW_MARKS_CRS
    ActConAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActConComCrs,	// Brw_ADMI_SHARE_CRS
-   ActConComGrp,	// Brw_ADMI_SHARE_GRP
+   ActConShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActConShaGrp,	// Brw_ADMI_SHARE_GRP
    ActConWrkUsr,	// Brw_ADMI_WORKS_USR
    ActConWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActConAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -894,9 +894,9 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    ActConAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActConSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActConAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActConComDeg,	// Brw_ADMI_SHARE_DEG
-   ActConComCtr,	// Brw_ADMI_SHARE_CTR
-   ActConComIns,	// Brw_ADMI_SHARE_INS
+   ActConShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActConShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActConShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -904,8 +904,8 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActUnk,		// Brw_SHOW_DOCUM_CRS
    ActUnk,		// Brw_SHOW_MARKS_CRS
    ActChgDatAdmDocCrs,	// Brw_ADMI_DOCUM_CRS
-   ActChgDatComCrs,	// Brw_ADMI_SHARE_CRS
-   ActChgDatComGrp,	// Brw_ADMI_SHARE_GRP
+   ActChgDatShaCrs,	// Brw_ADMI_SHARE_CRS
+   ActChgDatShaGrp,	// Brw_ADMI_SHARE_GRP
    ActChgDatWrkUsr,	// Brw_ADMI_WORKS_USR
    ActChgDatWrkCrs,	// Brw_ADMI_WORKS_CRS
    ActChgDatAdmMrkCrs,	// Brw_ADMI_MARKS_CRS
@@ -922,9 +922,9 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActChgDatAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActChgDatComDeg,	// Brw_ADMI_SHARE_DEG
-   ActChgDatComCtr,	// Brw_ADMI_SHARE_CTR
-   ActChgDatComIns,	// Brw_ADMI_SHARE_INS
+   ActChgDatShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActChgDatShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActChgDatShaIns,	// Brw_ADMI_SHARE_INS
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
@@ -1529,24 +1529,24 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Shared files of institution *****/
       case ActAdmComIns:
-      case ActReqRemFilComIns:
-      case ActRemFilComIns:
-      case ActRemFolComIns:
-      case ActCopComIns:
-      case ActPasComIns:
-      case ActRemTreComIns:
-      case ActFrmCreComIns:
-      case ActCreFolComIns:
-      case ActCreLnkComIns:
-      case ActRenFolComIns:
-      case ActRcvFilComInsDZ:
-      case ActRcvFilComInsCla:
-      case ActExpComIns:
-      case ActConComIns:
-      case ActZIPComIns:
-      case ActReqDatComIns:
-      case ActChgDatComIns:
-      case ActDowComIns:
+      case ActReqRemFilShaIns:
+      case ActRemFilShaIns:
+      case ActRemFolShaIns:
+      case ActCopShaIns:
+      case ActPasShaIns:
+      case ActRemTreShaIns:
+      case ActFrmCreShaIns:
+      case ActCreFolShaIns:
+      case ActCreLnkShaIns:
+      case ActRenFolShaIns:
+      case ActRcvFilShaInsDZ:
+      case ActRcvFilShaInsCla:
+      case ActExpShaIns:
+      case ActConShaIns:
+      case ActZIPShaIns:
+      case ActReqDatShaIns:
+      case ActChgDatShaIns:
+      case ActDowShaIns:
          Gbl.FileBrowser.Type = Brw_ADMI_SHARE_INS;
          break;
 
@@ -1595,24 +1595,24 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Shared files of centre *****/
       case ActAdmComCtr:
-      case ActReqRemFilComCtr:
-      case ActRemFilComCtr:
-      case ActRemFolComCtr:
-      case ActCopComCtr:
-      case ActPasComCtr:
-      case ActRemTreComCtr:
-      case ActFrmCreComCtr:
-      case ActCreFolComCtr:
-      case ActCreLnkComCtr:
-      case ActRenFolComCtr:
-      case ActRcvFilComCtrDZ:
-      case ActRcvFilComCtrCla:
-      case ActExpComCtr:
-      case ActConComCtr:
-      case ActZIPComCtr:
-      case ActReqDatComCtr:
-      case ActChgDatComCtr:
-      case ActDowComCtr:
+      case ActReqRemFilShaCtr:
+      case ActRemFilShaCtr:
+      case ActRemFolShaCtr:
+      case ActCopShaCtr:
+      case ActPasShaCtr:
+      case ActRemTreShaCtr:
+      case ActFrmCreShaCtr:
+      case ActCreFolShaCtr:
+      case ActCreLnkShaCtr:
+      case ActRenFolShaCtr:
+      case ActRcvFilShaCtrDZ:
+      case ActRcvFilShaCtrCla:
+      case ActExpShaCtr:
+      case ActConShaCtr:
+      case ActZIPShaCtr:
+      case ActReqDatShaCtr:
+      case ActChgDatShaCtr:
+      case ActDowShaCtr:
          Gbl.FileBrowser.Type = Brw_ADMI_SHARE_CTR;
          break;
 
@@ -1661,29 +1661,29 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Shared files of degree *****/
       case ActAdmComDeg:
-      case ActReqRemFilComDeg:
-      case ActRemFilComDeg:
-      case ActRemFolComDeg:
-      case ActCopComDeg:
-      case ActPasComDeg:
-      case ActRemTreComDeg:
-      case ActFrmCreComDeg:
-      case ActCreFolComDeg:
-      case ActCreLnkComDeg:
-      case ActRenFolComDeg:
-      case ActRcvFilComDegDZ:
-      case ActRcvFilComDegCla:
-      case ActExpComDeg:
-      case ActConComDeg:
-      case ActZIPComDeg:
-      case ActReqDatComDeg:
-      case ActChgDatComDeg:
-      case ActDowComDeg:
+      case ActReqRemFilShaDeg:
+      case ActRemFilShaDeg:
+      case ActRemFolShaDeg:
+      case ActCopShaDeg:
+      case ActPasShaDeg:
+      case ActRemTreShaDeg:
+      case ActFrmCreShaDeg:
+      case ActCreFolShaDeg:
+      case ActCreLnkShaDeg:
+      case ActRenFolShaDeg:
+      case ActRcvFilShaDegDZ:
+      case ActRcvFilShaDegCla:
+      case ActExpShaDeg:
+      case ActConShaDeg:
+      case ActZIPShaDeg:
+      case ActReqDatShaDeg:
+      case ActChgDatShaDeg:
+      case ActDowShaDeg:
          Gbl.FileBrowser.Type = Brw_ADMI_SHARE_DEG;
          break;
 
       /***** Documents of course/group *****/
-      case ActSeeAdmDocCrs:	// Access to a documents zone from menu
+      case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
          /* Set file browser type acording to last group accessed */
 	 switch (Gbl.Usrs.Me.LoggedRole)
 	   {
@@ -1774,52 +1774,52 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Shared files of course/group *****/
-      case ActAdmCom:
-      case ActChgToAdmCom:	// Access to a shared zone from menu
+      case ActAdmShaCrsGrp:
+      case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_ADMI_SHARE_GRP :
                                                                    Brw_ADMI_SHARE_CRS;
          break;
-      case ActAdmComCrs:
-      case ActReqRemFilComCrs:
-      case ActRemFilComCrs:
-      case ActRemFolComCrs:
-      case ActCopComCrs:
-      case ActPasComCrs:
-      case ActRemTreComCrs:
-      case ActFrmCreComCrs:
-      case ActCreFolComCrs:
-      case ActCreLnkComCrs:
-      case ActRenFolComCrs:
-      case ActRcvFilComCrsDZ:
-      case ActRcvFilComCrsCla:
-      case ActExpComCrs:
-      case ActConComCrs:
-      case ActZIPComCrs:
-      case ActReqDatComCrs:
-      case ActChgDatComCrs:
-      case ActDowComCrs:
+      case ActAdmShaCrs:
+      case ActReqRemFilShaCrs:
+      case ActRemFilShaCrs:
+      case ActRemFolShaCrs:
+      case ActCopShaCrs:
+      case ActPasShaCrs:
+      case ActRemTreShaCrs:
+      case ActFrmCreShaCrs:
+      case ActCreFolShaCrs:
+      case ActCreLnkShaCrs:
+      case ActRenFolShaCrs:
+      case ActRcvFilShaCrsDZ:
+      case ActRcvFilShaCrsCla:
+      case ActExpShaCrs:
+      case ActConShaCrs:
+      case ActZIPShaCrs:
+      case ActReqDatShaCrs:
+      case ActChgDatShaCrs:
+      case ActDowShaCrs:
          Gbl.FileBrowser.Type = Brw_ADMI_SHARE_CRS;
          break;
-      case ActAdmComGrp:
-      case ActReqRemFilComGrp:
-      case ActRemFilComGrp:
-      case ActRemFolComGrp:
-      case ActCopComGrp:
-      case ActPasComGrp:
-      case ActRemTreComGrp:
-      case ActFrmCreComGrp:
-      case ActCreFolComGrp:
-      case ActCreLnkComGrp:
-      case ActRenFolComGrp:
-      case ActRcvFilComGrpDZ:
-      case ActRcvFilComGrpCla:
-      case ActExpComGrp:
-      case ActConComGrp:
-      case ActZIPComGrp:
-      case ActReqDatComGrp:
-      case ActChgDatComGrp:
-      case ActDowComGrp:
+      case ActAdmShaGrp:
+      case ActReqRemFilShaGrp:
+      case ActRemFilShaGrp:
+      case ActRemFolShaGrp:
+      case ActCopShaGrp:
+      case ActPasShaGrp:
+      case ActRemTreShaGrp:
+      case ActFrmCreShaGrp:
+      case ActCreFolShaGrp:
+      case ActCreLnkShaGrp:
+      case ActRenFolShaGrp:
+      case ActRcvFilShaGrpDZ:
+      case ActRcvFilShaGrpCla:
+      case ActExpShaGrp:
+      case ActConShaGrp:
+      case ActZIPShaGrp:
+      case ActReqDatShaGrp:
+      case ActChgDatShaGrp:
+      case ActDowShaGrp:
          Gbl.FileBrowser.Type = Brw_ADMI_SHARE_GRP;
          break;
 
@@ -2048,19 +2048,19 @@ void Brw_GetParAndInitFileBrowser (void)
    switch (Gbl.CurrentAct)
      {
       case ActCreFolDocIns:	case ActRenFolDocIns:
-      case ActCreFolComIns:	case ActRenFolComIns:
+      case ActCreFolShaIns:	case ActRenFolShaIns:
 
       case ActCreFolDocCtr:	case ActRenFolDocCtr:
-      case ActCreFolComCtr:	case ActRenFolComCtr:
+      case ActCreFolShaCtr:	case ActRenFolShaCtr:
 
       case ActCreFolDocDeg:	case ActRenFolDocDeg:
-      case ActCreFolComDeg:	case ActRenFolComDeg:
+      case ActCreFolShaDeg:	case ActRenFolShaDeg:
 
       case ActCreFolDocCrs:	case ActRenFolDocCrs:
       case ActCreFolDocGrp:	case ActRenFolDocGrp:
 
-      case ActCreFolComCrs:	case ActRenFolComCrs:
-      case ActCreFolComGrp:	case ActRenFolComGrp:
+      case ActCreFolShaCrs:	case ActRenFolShaCrs:
+      case ActCreFolShaGrp:	case ActRenFolShaGrp:
 
       case ActCreFolMrkCrs:	case ActRenFolMrkCrs:
       case ActCreFolMrkGrp:	case ActRenFolMrkGrp:
@@ -2075,15 +2075,15 @@ void Brw_GetParAndInitFileBrowser (void)
 	 Par_GetParToText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
       case ActCreLnkDocIns:
-      case ActCreLnkComIns:
+      case ActCreLnkShaIns:
       case ActCreLnkDocCtr:
-      case ActCreLnkComCtr:
+      case ActCreLnkShaCtr:
       case ActCreLnkDocDeg:
-      case ActCreLnkComDeg:
+      case ActCreLnkShaDeg:
       case ActCreLnkDocCrs:
       case ActCreLnkDocGrp:
-      case ActCreLnkComCrs:
-      case ActCreLnkComGrp:
+      case ActCreLnkShaCrs:
+      case ActCreLnkShaGrp:
       case ActCreLnkAsgCrs:
       case ActCreLnkWrkCrs:
       case ActCreLnkAsgUsr:
@@ -2153,12 +2153,12 @@ static long Brw_GetGrpSettings (void)
       /***** Try to get group code from database *****/
       switch (Gbl.CurrentAct)
 	{
-	 case ActSeeAdmDocCrs:
+	 case ActSeeAdmDocCrsGrp:
 	 case ActSeeDocGrp:
 	 case ActAdmDocGrp:	// Access to a documents zone from menu
 	    return Brw_GetGrpLastAccZone ("LastDowGrpCod");
-	 case ActAdmCom:
-	 case ActAdmComGrp:	// Access to a shared documents zone from menu
+	 case ActAdmShaCrsGrp:
+	 case ActAdmShaGrp:	// Access to a shared documents zone from menu
 	    return Brw_GetGrpLastAccZone ("LastComGrpCod");
 	 case ActSeeAdmMrk:
 	 case ActSeeMrkGrp:
@@ -2184,15 +2184,15 @@ static void Brw_GetDataCurrentGrp (void)
 
       switch (Gbl.CurrentAct)
 	{
-	 case ActSeeAdmDocCrs:	// Access to see/admin a documents zone from menu
+	 case ActSeeAdmDocCrsGrp:// Access to see/admin a documents zone from menu
 	 case ActChgToSeeDocCrs:// Access to see a documents zone
 	 case ActSeeDocGrp:	// Access to see a documents zone
 
 	 case ActChgToAdmDocCrs:// Access to admin a documents zone
 	 case ActAdmDocGrp:	// Access to admin a documents zone
 
-	 case ActChgToAdmCom:	// Access to admin a common zone
-	 case ActAdmComGrp:	// Access to admin a common zone
+	 case ActChgToAdmSha:	// Access to admin a common zone
+	 case ActAdmShaGrp:	// Access to admin a common zone
 
 	 case ActSeeAdmMrk:	// Access to see/admin a marks zone from menu
 	 case ActChgToSeeMrk:	// Access to see a marks zone
@@ -3500,11 +3500,11 @@ static void Brw_UpdateLastAccess (void)
             Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_ADMI_SHARE_CRS:
-         if (Gbl.CurrentAct == ActChgToAdmCom) 	// Update group of last access to a shared files zone only when user changes zone
+         if (Gbl.CurrentAct == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastComGrpCod",-1L);
 	 break;
       case Brw_ADMI_SHARE_GRP:
-         if (Gbl.CurrentAct == ActChgToAdmCom) 	// Update group of last access to a shared files zone only when user changes zone
+         if (Gbl.CurrentAct == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
             Brw_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.CurrentCrs.Grps.GrpCod);
 	 break;
       case Brw_SHOW_MARKS_CRS:
@@ -9407,18 +9407,18 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
    switch (Gbl.CurrentAct)	// Only in actions where edition is allowed
      {
       case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
-      case ActReqDatComIns:		case ActChgDatComIns:
+      case ActReqDatShaIns:		case ActChgDatShaIns:
 
       case ActReqDatAdmDocCtr:		case ActChgDatAdmDocCtr:
-      case ActReqDatComCtr:		case ActChgDatComCtr:
+      case ActReqDatShaCtr:		case ActChgDatShaCtr:
 
       case ActReqDatAdmDocDeg:		case ActChgDatAdmDocDeg:
-      case ActReqDatComDeg:		case ActChgDatComDeg:
+      case ActReqDatShaDeg:		case ActChgDatShaDeg:
 
       case ActReqDatAdmDocCrs:		case ActChgDatAdmDocCrs:
       case ActReqDatAdmDocGrp:		case ActChgDatAdmDocGrp:
-      case ActReqDatComCrs:		case ActChgDatComCrs:
-      case ActReqDatComGrp:		case ActChgDatComGrp:
+      case ActReqDatShaCrs:		case ActChgDatShaCrs:
+      case ActReqDatShaGrp:		case ActChgDatShaGrp:
 
       case ActReqDatAsgUsr:		case ActChgDatAsgUsr:
       case ActReqDatAsgCrs:		case ActChgDatAsgCrs:
