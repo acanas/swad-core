@@ -1671,23 +1671,24 @@ a:hover img.CENTRE_PHOTO_SHOW
 .SOCIAL_LEFT_PHOTO
 	{
 	display:inline-block;
-	text-align:left;
-	vertical-align:top;
+	box-sizing:border-box;
 	width:60px;
 	height:90px;
+	text-align:left;
+	vertical-align:top;
 	}
 .SOCIAL_RIGHT_CONTAINER
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	padding:0 0 10px 10px;
-	width:450px;
+	width:470px;
 	}
 .SOCIAL_RIGHT_AUTHOR
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:270px;
+        width:280px;
 	text-align:left;
 	vertical-align:top;
         }
@@ -1695,7 +1696,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:170px;
+        width:180px;
 	text-align:right;
 	vertical-align:top;
         }

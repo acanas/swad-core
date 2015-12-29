@@ -32,6 +32,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notice.h"
@@ -103,6 +104,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static unsigned long Soc_ShowTimeline (const char *Query);
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
 static void Soc_WriteEventDate (time_t TimeUTC);
 static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
@@ -111,10 +113,59 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
 
 /*****************************************************************************/
+/*********** Show social activity (timeline) of a selected user **************/
+/*****************************************************************************/
+
+void Soc_ShowUsrTimeline (long UsrCod)
+  {
+   char Query[512];
+
+   /***** Build query to show timeline including the users I am following *****/
+   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
+                  " FROM social"
+                  " WHERE UsrCod='%ld'"
+                  " ORDER BY SocCod DESC LIMIT 10",
+            UsrCod);
+
+   /***** Show timeline *****/
+   Soc_ShowTimeline (Query);
+  }
+
+/*****************************************************************************/
+/***** Show social activity (timeline) including all the users I follow ******/
+/*****************************************************************************/
+
+void Soc_ShowFollowingTimeline (void)
+  {
+   char Query[512];
+
+   if (Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))	// I follow people
+     {
+      /***** Build query to show timeline including the users I am following *****/
+      sprintf (Query,"SELECT SocialEvent,UsrCod,"
+		     "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+		     "Cod,UNIX_TIMESTAMP(TimeEvent)"
+		     " FROM social,usr_follow"
+		     " WHERE usr_follow.FollowerCod='%ld'"
+		     " AND usr_follow.FollowedCod=social.UsrCod"
+		     " ORDER BY SocCod DESC LIMIT 10",
+	       Gbl.Usrs.Me.UsrDat.UsrCod);
+
+      /***** Show timeline *****/
+      if (!Soc_ShowTimeline (Query))
+	 Lay_ShowAlert (Lay_INFO,"No hay actividad p&uacute;blica de los usuarios a los que sigue.");	// Need translation!!!
+     }
+   else	// I do not follow people
+      Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
+  }
+
+/*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
 
-void Soc_ShowSocialActivity (void)
+static unsigned long Soc_ShowTimeline (const char *Query)
   {
    extern const char *Txt_Public_activity;
    extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
@@ -124,7 +175,6 @@ void Soc_ShowSocialActivity (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumEvents;
@@ -143,15 +193,7 @@ void Soc_ShowSocialActivity (void)
    char PhotoURL[PATH_MAX+1];
    char *SummaryStr;
 
-   /***** Get my timeline from database *****/
-   sprintf (Query,"SELECT SocialEvent,UsrCod,"
-	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
-                  " FROM social,usr_follow"
-                  " WHERE usr_follow.FollowerCod='%ld'"
-                  " AND usr_follow.FollowedCod=social.UsrCod"
-                  " ORDER BY SocCod DESC LIMIT 10",
-            Gbl.Usrs.Me.UsrDat.UsrCod);
+   /***** Get timeline from database *****/
    NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
 
    /***** List my timeline *****/
@@ -165,7 +207,7 @@ void Soc_ShowSocialActivity (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List start *****/
-      Lay_StartRoundFrame (NULL,Txt_Public_activity);
+      Lay_StartRoundFrame ("560px",Txt_Public_activity);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
       /***** List events one by one *****/
@@ -303,11 +345,11 @@ void Soc_ShowSocialActivity (void)
       /***** Free summary *****/
       free ((void *) SummaryStr);
      }
-   else
-      Lay_ShowAlert (Lay_INFO,"No events.");	// Need translation!!!!
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return NumEvents;
   }
 
 /*****************************************************************************/

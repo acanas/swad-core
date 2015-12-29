@@ -2302,7 +2302,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
    // TabSoc ******************************************************************
-   /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowSocialActivity		,"soc64x64.png"		},
+   /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline		,"soc64x64.png"		},
    /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
    /* ActSeeChtRms	*/{  51, 2,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 

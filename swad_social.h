@@ -81,7 +81,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Soc_ShowSocialActivity (void);
+void Soc_ShowUsrTimeline (long UsrCod);
+void Soc_ShowFollowingTimeline (void);
 
 void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod);
 

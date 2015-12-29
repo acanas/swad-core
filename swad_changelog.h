@@ -115,13 +115,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.78.1 (2015-12-29)"
-#define CSS_FILE		"swad15.77.6.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.79 (2015-12-29)"
+#define CSS_FILE		"swad15.79.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.79:    Dec 29, 2015	Show timeline of a selected user.
+                                        Changes in CSS related to social activity. (188834 lines)
         Version 15.78.1:  Dec 29, 2015	Go directly to notice in notifications and social events. (188785 lines)
         Version 15.78:    Dec 29, 2015	Links in social events.
 					Actions related to shared files renamed. (188776 lines)

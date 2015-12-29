@@ -36,6 +36,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
+#include "swad_social.h"
 #include "swad_text.h"
 #include "swad_theme.h"
 #include "swad_user.h"
@@ -214,6 +215,9 @@ static void Prf_GetUsrDatAndShowUserProfile (void)
 
 bool Prf_ShowUserProfile (void)
   {
+   unsigned NumFollowing;
+   unsigned NumFollowers;
+
    /***** Check if I can see the public profile *****/
    if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
                           Gbl.Usrs.Other.UsrDat.UsrCod))
@@ -236,7 +240,13 @@ bool Prf_ShowUserProfile (void)
       Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show following and followers *****/
-      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat);
+      NumFollowing = Fol_GetNumFollowing (Gbl.Usrs.Other.UsrDat.UsrCod);
+      NumFollowers = Fol_GetNumFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
+      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat,
+                                     NumFollowing,NumFollowers);
+
+      /***** Show social activity (timeline) of a selected user *****/
+      Soc_ShowUsrTimeline (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       return true;
      }

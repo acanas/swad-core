@@ -68,8 +68,6 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   unsigned NumUsrs,
                                                   Act_Action_t Action,
                                                   const char *Title);
-static unsigned Fol_GetNumFollowing (long UsrCod);
-static unsigned Fol_GetNumFollowers (long UsrCod);
 static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
@@ -91,10 +89,39 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
   }
 
 /*****************************************************************************/
+/*************************** Get number of followed **************************/
+/*****************************************************************************/
+
+unsigned Fol_GetNumFollowing (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Check if a user is a follower of another user *****/
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod='%ld'",
+            UsrCod);
+   return DB_QueryCOUNT (Query,"can not get number of followed");
+  }
+
+/*****************************************************************************/
+/************************** Get number of followers **************************/
+/*****************************************************************************/
+
+unsigned Fol_GetNumFollowers (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Check if a user is a follower of another user *****/
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod='%ld'",
+            UsrCod);
+   return DB_QueryCOUNT (Query,"can not get number of followers");
+  }
+
+/*****************************************************************************/
 /**************** Show following and followers of a user *********************/
 /*****************************************************************************/
 
-void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
+void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
+                                    unsigned NumFollowing,unsigned NumFollowers)
   {
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
@@ -105,14 +132,14 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat)
    /***** Followed users *****/
    fprintf (Gbl.F.Out,"<div id=\"num_following\">");
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
-                                         Fol_GetNumFollowing (UsrDat->UsrCod),
+                                         NumFollowing,
                                          ActSeeFlg,Txt_Following);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Followers *****/
    fprintf (Gbl.F.Out,"<div id=\"num_followers\">");
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
-                                         Fol_GetNumFollowers (UsrDat->UsrCod),
+                                         NumFollowers,
                                          ActSeeFlr,Txt_Followers);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -181,34 +208,6 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/*************************** Get number of followed **************************/
-/*****************************************************************************/
-
-static unsigned Fol_GetNumFollowing (long UsrCod)
-  {
-   char Query[128];
-
-   /***** Check if a user is a follower of another user *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod='%ld'",
-            UsrCod);
-   return DB_QueryCOUNT (Query,"can not get number of followed");
-  }
-
-/*****************************************************************************/
-/************************** Get number of followers **************************/
-/*****************************************************************************/
-
-static unsigned Fol_GetNumFollowers (long UsrCod)
-  {
-   char Query[128];
-
-   /***** Check if a user is a follower of another user *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod='%ld'",
-            UsrCod);
-   return DB_QueryCOUNT (Query,"can not get number of followers");
   }
 
 /*****************************************************************************/

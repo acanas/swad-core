@@ -334,6 +334,8 @@ struct Globals
             struct Degree *Lst;
            } MyAdminDegs;	// List of degrees administrated by me
 	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
+	 unsigned NumFollowers;	// Number of users who follow me
+	 unsigned NumFollowing;	// Number of users I follow
 	} Me;		// The user logged
       struct
 	{
