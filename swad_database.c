@@ -1970,6 +1970,23 @@ mysql> DESCRIBE social;
                    "INDEX(UsrCod),"
                    "INDEX(TimeEvent))");
 
+   /***** Table social_post *****/
+/*
+mysql> DESCRIBE social_post;
++---------+----------+------+-----+---------+----------------+
+| Field   | Type     | Null | Key | Default | Extra          |
++---------+----------+------+-----+---------+----------------+
+| PstCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
+| Content | longtext | NO   | MUL | NULL    |                |
++---------+----------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_post ("
+                   "PstCod INT NOT NULL AUTO_INCREMENT,"
+                   "Content LONGTEXT NOT NULL,"
+                   "UNIQUE INDEX(PstCod),"
+                   "FULLTEXT(Content)) ENGINE = MYISAM;");
+
    /***** Table sta_degrees *****/
 /*
 mysql> DESCRIBE sta_degrees;

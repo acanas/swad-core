@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notice.h"
+#include "swad_parameter.h"
 #include "swad_social.h"
 
 /*****************************************************************************/
@@ -125,8 +126,12 @@ void Soc_FormSocialPost (void)
    /***** Start frame *****/
    Lay_StartRoundFrame ("560px",Txt_New_comment);
 
-   /***** Start form to write the comment *****/
+   /***** Start form to write the post *****/
    Act_FormStart (ActRcvSocPst);
+
+   /***** Content of new post *****/
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"10\">"
+		      "</textarea>");
 
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_comment);
@@ -139,12 +144,26 @@ void Soc_FormSocialPost (void)
   }
 
 /*****************************************************************************/
-/****************** Receive and store a new public comment *******************/
+/******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
 void Soc_ReceiveSocialPost (void)
   {
-   Lay_ShowAlert (Lay_INFO,"Not implemented...");
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   long PstCod;
+
+   /***** Get the content of the post *****/
+   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+                              Str_TO_RIGOROUS_HTML,false);
+
+   /***** Insert post content in the database *****/
+   sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",
+            Content);
+   PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
+
+   /***** Insert post in social events *****/
+   Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
   }
 
 /*****************************************************************************/

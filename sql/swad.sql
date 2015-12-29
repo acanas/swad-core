@@ -931,6 +931,14 @@ CREATE TABLE IF NOT EXISTS social (
 	INDEX(UsrCod),
 	INDEX(TimeEvent));
 --
+-- Table social_post: stores social posts
+--
+CREATE TABLE IF NOT EXISTS social_post (
+	PstCod INT NOT NULL AUTO_INCREMENT,
+	Content LONGTEXT NOT NULL,
+	UNIQUE INDEX(PstCod),
+	FULLTEXT(Content)) ENGINE = MYISAM;
+--
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (
