@@ -81,6 +81,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
 
 static void Prf_GetUsrDatAndShowUserProfile (void);
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
+static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
 
 static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
@@ -299,7 +300,6 @@ void Prf_ChangeProfileVisibility (void)
 
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -311,7 +311,6 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_From_TIME;
    extern const char *Txt_day;
    extern const char *Txt_days;
-   extern const char *Txt_Calculate;
    extern const char *Txt_Clicks;
    extern const char *Txt_clicks;
    extern const char *Txt_Downloads;
@@ -406,14 +405,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
                (long) UsrFigures.FirstClickTimeUTC);
      }
    else	// First click time is unknown or user never logged
-     {
       /***** Button to fetch and store first click time *****/
-      Act_FormStart (ActCal1stClkTim);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-      Act_FormEnd ();
-     }
+      Prf_PutLinkToUpdateAction (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"</li>");
 
    /***** End of right list *****/
@@ -451,14 +444,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of clicks is unknown
-	{
 	 /***** Button to fetch and store number of clicks *****/
-	 Act_FormStart (ActCalNumClk);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-	 Act_FormEnd ();
-	}
+         Prf_PutLinkToUpdateAction (ActCalNumClk,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of file views *****/
@@ -483,14 +470,8 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of file views is unknown
-	{
 	 /***** Button to fetch and store number of file views *****/
-	 Act_FormStart (ActCalNumFilVie);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-	 Act_FormEnd ();
-	}
+         Prf_PutLinkToUpdateAction (ActCalNumFilVie,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of posts in forums *****/
@@ -515,14 +496,9 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of forum posts is unknown
-	{
 	 /***** Button to fetch and store number of forum posts *****/
-	 Act_FormStart (ActCalNumForPst);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-	 Act_FormEnd ();
-	}
+         Prf_PutLinkToUpdateAction (ActCalNumForPst,UsrDat->EncryptedUsrCod);
+
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of messages sent *****/
@@ -547,20 +523,30 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of clicks is unknown
-	{
 	 /***** Button to fetch and store number of messages sent *****/
-	 Act_FormStart (ActCalNumMsgSnt);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
-	 Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
-	 Act_FormEnd ();
-	}
+         Prf_PutLinkToUpdateAction (ActCalNumMsgSnt,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
      }
 
    /***** End of right list *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
+  }
+
+/*****************************************************************************/
+/******** Put contextual link with animated icon to update an action *********/
+/*****************************************************************************/
+
+static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Calculate;
+
+   Act_FormStart (Action);
+   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+   Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

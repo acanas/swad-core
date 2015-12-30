@@ -4423,7 +4423,7 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
   }
 
 /*****************************************************************************/
-/***************** Adjust current action when no user's logged ***************/
+/******** Put contextual link with animated icon to update an action *********/
 /*****************************************************************************/
 
 void Act_PutLinkToUpdateAction (Act_Action_t Action)
