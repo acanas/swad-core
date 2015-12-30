@@ -99,6 +99,9 @@ void Con_ShowConnectedUsrs (void)
    Lay_StartRoundFrame (NULL,Gbl.Title);
 
    /***** Put form to update connected users *****/
+   Act_PutLinkToUpdateAction (ActLstCon);
+
+   /***** Put form to change scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
                       " style=\"padding-bottom:12px;\">");
    Act_FormStart (ActLstCon);
