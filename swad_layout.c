@@ -1683,9 +1683,9 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">"
 	              "<code>"
 	              "%s: %s"
-                      "&nbsp;&nbsp;&nbsp;"
+                      "&nbsp;&nbsp;"
                       "%s: %s"
-                      "&nbsp;&nbsp;&nbsp;"
+                      "&nbsp;&nbsp;"
                       "%s: %s"
                       "</code>"
                       "</div>",

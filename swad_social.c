@@ -646,6 +646,7 @@ void Soc_FormSocialPost (void)
    /* Content of new post */
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
 		      "</textarea>");
+   Lay_HelpPlainEditor ();
 
    /* Send button */
    Lay_PutCreateButton (Txt_Send_comment);

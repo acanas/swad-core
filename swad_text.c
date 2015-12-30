@@ -14709,23 +14709,23 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 
 const char *Txt_Inline_math =
 #if   L==1
-	"F&oacute;rmula en par&agrave;graf";
+	"F&oacute;rmula";
 #elif L==2
 	"Inline Mathematik";
 #elif L==3
 	"Inline math";
 #elif L==4
-	"F&oacute;rmula en p&aacute;rrafo";
+	"F&oacute;rmula";
 #elif L==5
-	"Formule au paragraphe";
+	"Formule";
 #elif L==6
-	"F&oacute;rmula en p&aacute;rrafo";	// Okoteve traducción
+	"F&oacute;rmula";	// Okoteve traducción
 #elif L==7
 	"Matematica inline";
 #elif L==8
 	"Jazda matematyki";
 #elif L==9
-	"Fórmula em par&aacute;grafo";
+	"F&oacute;rmula";
 #endif
 
 const char *Txt_Institution =
@@ -38938,17 +38938,17 @@ const char *Txt_Text =
 
 const char *Txt_TEXT_plain =
 #if   L==1
-	 "sense format";
+	 "pla";
 #elif L==2
 	 "Plain";
 #elif L==3
 	 "plain";
 #elif L==4
-	 "sin formato";
+	 "plano";
 #elif L==5
 	 "plain";
 #elif L==6
-	 "sin formato";	// Okoteve traducción
+	 "plano";	// Okoteve traducción
 #elif L==7
 	 "normale";
 #elif L==8
