@@ -103,17 +103,22 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActReqAccEnrTch,	// Ntf_EVENT_ENROLLMENT_TEACHER
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
 
+   /* Social tab */
+			// Ntf_EVENT_FOLLOWER
+			// Ntf_EVENT_FORUM_POST_COURSE
+			// Ntf_EVENT_FORUM_REPLY
+
    /* Messages tab */
    ActShoNot,		// Ntf_EVENT_NOTICE
-   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE
-   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
+   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE	TODO: Move to social tab
+   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY	TODO: Move to social tab
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
    ActSeeAllSvy,	// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   ActSeeFlr,		// Ntf_EVENT_FOLLOWER
+   ActSeeFlr,		// Ntf_EVENT_FOLLOWER		TODO: Move to social tab
   };
 
 /*****************************************************************************/

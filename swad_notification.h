@@ -58,17 +58,22 @@ typedef enum
    Ntf_EVENT_ENROLLMENT_TEACHER	=  7,
    Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
 
+   /* Social tab */
+   // Ntf_EVENT_FOLLOWER
+   // Ntf_EVENT_FORUM_POST_COURSE
+   // Ntf_EVENT_FORUM_REPLY
+
    /* Messages tab */
    Ntf_EVENT_NOTICE		=  9,
-   Ntf_EVENT_FORUM_POST_COURSE	= 10,
-   Ntf_EVENT_FORUM_REPLY	= 11,
+   Ntf_EVENT_FORUM_POST_COURSE	= 10,	// TODO: Move to social tab
+   Ntf_EVENT_FORUM_REPLY	= 11,	// TODO: Move to social tab
    Ntf_EVENT_MESSAGE		= 12,
 
    /* Statistics tab */
    Ntf_EVENT_SURVEY		= 13,
 
-   /* Social tab */
-   Ntf_EVENT_FOLLOWER		= 14,	// TODO: Move up, between users tab and messages tab
+   /* Profile tab */
+   Ntf_EVENT_FOLLOWER		= 14,	// TODO: Move to social tab
 
   } Ntf_NotifyEvent_t;
 

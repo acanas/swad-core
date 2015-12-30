@@ -66,10 +66,10 @@ typedef enum
 
    /* Social tab */
    Soc_EVENT_SOCIAL_POST	= 10,
+   Soc_EVENT_FORUM_POST		= 11,
 
    /* Messages tab */
-   Soc_EVENT_NOTICE		= 11,
-   Soc_EVENT_FORUM_POST		= 12,
+   Soc_EVENT_NOTICE		= 12,
 
    /* Statistics tab */
 

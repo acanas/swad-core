@@ -77,10 +77,10 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
 
    /* Social tab */
    ActSeeSocAct,	// Soc_EVENT_SOCIAL_POST (action not used)
+   ActSeeFor,		// Soc_EVENT_FORUM_POST
 
    /* Messages tab */
    ActShoNot,		// Soc_EVENT_NOTICE
-   ActSeeFor,		// Soc_EVENT_FORUM_POST
 
    /* Statistics tab */
 
@@ -565,11 +565,11 @@ static void Soc_GetEventSummary (const struct SocialEvent *Soc,
       case Soc_EVENT_SOCIAL_POST:
 	 // Not applicable
          break;
-      case Soc_EVENT_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Soc->Cod,MaxChars,false);
-         break;
       case Soc_EVENT_FORUM_POST:
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,Soc->Cod,MaxChars,false);
+         break;
+      case Soc_EVENT_NOTICE:
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
      }
   }

@@ -116,14 +116,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.84.5 (2015-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.85 (2015-12-30)"
 #define CSS_FILE		"swad15.84.2.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.84.5:  Dec 30, 2015	Form to update connected users. (? lines)
+        Version 15.85:    Dec 30, 2015	Forums option is moved to social tab. (189439 lines)
+        Version 15.84.5:  Dec 30, 2015	Form to update connected users. (189430 lines)
         Version 15.84.4:  Dec 30, 2015	Code refactoring in profile. (189427 lines)
         Version 15.84.3:  Dec 30, 2015	Form to update timeline. (189444 lines)
         Version 15.84.2:  Dec 30, 2015	Help about editor in new social post. (189422 lines)

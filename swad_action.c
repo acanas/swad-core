@@ -76,7 +76,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1124 actions in one CGI:
+1130 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -997,320 +997,321 @@ Users:
 
         834. ActLstClk			List last clicks in real time
 Social:
-        xxx. ActSeeSocAct		Show social activity (timeline)
-	699. ActReqPubPrf		Request @nickname to show a public user's profile
-	845. ActSeeChtRms		Show the chat rooms
+        835. ActSeeSocAct		Show social activity (timeline)
+	836. ActReqPubPrf		Request @nickname to show a public user's profile
+	837. ActSeeFor			Show the level superior of the forums
+	838. ActSeeChtRms		Show the chat rooms
 
-	xxx. ActReqSocPst		Write a public social post to be displayed in the timeline
-	xxx. ActRcvSocPst		Receive a public social post to be displayed in the timeline
-	xxx. ActReqRemSocEvn		Request the removal of a social event
-	xxx. ActRemSocEvn		Remove a social event
-	835. ActSeePubPrf		Show a public user's profile
-	836. ActCal1stClkTim		Calculate first click time from log and store into user's figures
-	837. ActCalNumClk		Calculate number of clicks from log and store into user's figures
-	838. ActCalNumFileViews		Calculate number of file views and store into user's figures
-	839. ActCalNumForPst		Calculate number of forum posts and store into user's figures
-	840. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+	839. ActReqSocPst		Write a public social post to be displayed in the timeline
+	840. ActRcvSocPst		Receive a public social post to be displayed in the timeline
+	841. ActReqRemSocEvn		Request the removal of a social event
+	842. ActRemSocEvn		Remove a social event
+	843. ActSeePubPrf		Show a public user's profile
+	844. ActCal1stClkTim		Calculate first click time from log and store into user's figures
+	845. ActCalNumClk		Calculate number of clicks from log and store into user's figures
+	846. ActCalNumFileViews		Calculate number of file views and store into user's figures
+	847. ActCalNumForPst		Calculate number of forum posts and store into user's figures
+	848. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 
-	841. ActFolUsr			Follow another user
-	842. ActUnfUsr			Unfollow another user
-	843. ActSeeFlg			Show following
-	844. ActSeeFlr			Show followers
+	849. ActFolUsr			Follow another user
+	850. ActUnfUsr			Unfollow another user
+	851. ActSeeFlg			Show following
+	852. ActSeeFlr			Show followers
 
-       1015. ActCht			Enter in a chat room to chat
+	853. ActSeeForCrsUsr		Show top level of forum of users of the course
+	854. ActSeeForCrsTch		Show top level of forum of teachers of the course
+	855. ActSeeForDegUsr		Show top level of forum of users of the degree
+	856. ActSeeForDegTch		Show top level of forum of teachers of the degree
+	857. ActSeeForCtrUsr		Show top level of forum of users of the centre
+	858. ActSeeForCtrTch		Show top level of forum of teachers of the centre
+	859. ActSeeForInsUsr		Show top level of forum of users of the institution
+	860. ActSeeForInsTch		Show top level of forum of teachers of the institution
+	861. ActSeeForGenUsr		Show top level of forum of users general
+	862. ActSeeForGenTch		Show top level of forum of teachers general
+	863. ActSeeForSWAUsr		Show top level of forum of users of the platform
+	864. ActSeeForSWATch		Show top level of forum of teachers of the platform
+	865. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
+	866. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
+	867. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
+	868. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
+	869. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
+	870. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
+	871. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
+	872. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
+	873. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
+	874. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
+	875. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
+	876. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
+	877. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
+	878. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
+	879. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
+	880. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
+	881. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
+	882. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
+	883. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
+	884. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
+	885. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
+	886. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
+	887. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
+	888. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
+	889. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
+	890. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
+	891. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
+	892. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
+	893. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
+	894. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
+	895. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
+	896. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
+	897. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
+	898. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
+	899. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
+	900. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
+	901. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
+	902. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
+	903. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
+	904. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
+	905. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
+	906. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
+	907. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
+	908. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
+	909. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
+	910. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
+	911. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
+	912. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
+	913. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
+	914. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
+	915. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
+	916. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
+	917. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
+	918. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
+	919. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
+	920. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
+	921. ActDelThrForGenUsr		Remove a thread of forum of users general
+	922. ActDelThrForGenTch		Remove a thread of forum of teachers general
+	923. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
+	924. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
+	925. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
+	926. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
+	927. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
+	928. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
+	929. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
+	930. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
+	931. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
+	932. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
+	933. ActCutThrForGenUsr		Cut a thread of forum of users general
+	934. ActCutThrForGenTch		Cut a thread of forum of teachers general
+	935. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+	936. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+	937. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+	938. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+	939. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+	940. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+	941. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+	942. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+	943. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+	944. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
+	945. ActPasThrForGenUsr		Paste a thread of forum of users general
+	946. ActPasThrForGenTch		Paste a thread of forum of teachers general
+	947. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
+	948. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
+	949. ActDelPstForCrsUsr		Remove a message of forum of users of the course
+	950. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
+	951. ActDelPstForDegUsr		Remove a message of forum of users of the degree
+	952. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
+	953. ActDelPstForCtrUsr		Remove a message of forum of users of centre
+	954. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
+	955. ActDelPstForInsUsr		Remove a message of forum of users of the institution
+	956. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
+	957. ActDelPstForGenUsr		Remove a message of forum of users general
+	958. ActDelPstForGenTch		Remove a message of forum of teachers general
+	959. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
+	960. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
+	961. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
+	962. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
+	963. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
+	964. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
+	965. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
+	966. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
+	967. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
+	968. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
+	969. ActEnbPstForGenUsr		Enable a message of forum of users general
+	970. ActEnbPstForGenTch		Enable a message of forum of teachers general
+	971. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
+	972. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
+	973. ActDisPstForCrsUsr		Disable a message of forum of users of the course
+	974. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
+	975. ActDisPstForDegUsr		Disable a message of forum of users of the degree
+	976. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
+	977. ActDisPstForCtrUsr		Disable a message of forum of users of centre
+	978. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
+	979. ActDisPstForInsUsr		Disable a message of forum of users of the institution
+	980. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
+	981. ActDisPstForGenUsr		Disable a message of forum of users general
+	982. ActDisPstForGenTch		Disable a message of forum of teachers general
+	983. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
+        984. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
+
+        985. ActCht			Enter in a chat room to chat
 Messages:
-	846. ActSeeNtf			Show my recent notifications
-	847. ActSeeAnn			Show global announcements
-	848. ActSeeNot			Show notices
-	849. ActSeeFor			Show the level superior of the forums
-	850. ActReqMsgUsr		Write message to several users
-	851. ActSeeRcvMsg		Show the messages received from other users (link in menu)
-	852. ActSeeSntMsg		Show the messages sent to other users
-	853. ActMaiStd			Send an e-mail to students
-	854. ActWriAnn			Show form to create a new global announcement
-	855. ActRcvAnn			Receive and create a new global announcement
-	856. ActHidAnn			Hide a global announcement that was active
-	857. ActRevAnn			Reveal a global announcement that was hidden
-	858. ActRemAnn			Remove global announcement
-	859. ActShoNot			Show (expand) a notice
-	860. ActWriNot			Write a new notice
-	861. ActRcvNot			Receive and create a new notice
-	862. ActHidNot			Hide a notice that was active
-	863. ActRevNot			Reveal a notice that was hidden
-	864. ActReqRemNot		Request removal of a notice
-	865. ActRemNot			Remove a notice
-	866. ActSeeNewNtf		Show my recent notifications (link in top heading)
-        867. ActMrkNtfSee		Mark all my notifications as seen
-	868. ActSeeForCrsUsr		Show top level of forum of users of the course
-	869. ActSeeForCrsTch		Show top level of forum of teachers of the course
-	870. ActSeeForDegUsr		Show top level of forum of users of the degree
-	871. ActSeeForDegTch		Show top level of forum of teachers of the degree
-	872. ActSeeForCtrUsr		Show top level of forum of users of the centre
-	873. ActSeeForCtrTch		Show top level of forum of teachers of the centre
-	874. ActSeeForInsUsr		Show top level of forum of users of the institution
-	875. ActSeeForInsTch		Show top level of forum of teachers of the institution
-	876. ActSeeForGenUsr		Show top level of forum of users general
-	877. ActSeeForGenTch		Show top level of forum of teachers general
-	878. ActSeeForSWAUsr		Show top level of forum of users of the platform
-	879. ActSeeForSWATch		Show top level of forum of teachers of the platform
-	880. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
-	881. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
-	882. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
-	883. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
-	884. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
-	885. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
-	886. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
-	887. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
-	888. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
-	889. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
-	890. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
-	891. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
-	892. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
-	893. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
-	894. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
-	895. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
-	896. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
-	897. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
-	898. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
-	899. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
-	900. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
-	901. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
-	902. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
-	903. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
-	904. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
-	905. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
-	906. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
-	907. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
-	908. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
-	909. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
-	910. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
-	911. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
-	912. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
-	913. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
-	914. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
-	915. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
-	916. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
-	917. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
-	918. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
-	919. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
-	920. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
-	921. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
-	922. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
-	923. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
-	924. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
-	925. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
-	926. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
-	927. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
-	928. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
-	929. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
-	930. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
-	931. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
-	932. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
-	933. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
-	934. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
-	935. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
-	936. ActDelThrForGenUsr		Remove a thread of forum of users general
-	937. ActDelThrForGenTch		Remove a thread of forum of teachers general
-	938. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
-	939. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
-	940. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
-	941. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
-	942. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
-	943. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
-	944. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
-	945. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
-	946. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
-	947. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
-	948. ActCutThrForGenUsr		Cut a thread of forum of users general
-	949. ActCutThrForGenTch		Cut a thread of forum of teachers general
-	950. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-	951. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-	952. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-	953. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-	954. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-	955. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-	956. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-	957. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-	958. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
-	959. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
-	960. ActPasThrForGenUsr		Paste a thread of forum of users general
-	961. ActPasThrForGenTch		Paste a thread of forum of teachers general
-	962. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
-	963. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
-	964. ActDelPstForCrsUsr		Remove a message of forum of users of the course
-	965. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
-	966. ActDelPstForDegUsr		Remove a message of forum of users of the degree
-	967. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
-	968. ActDelPstForCtrUsr		Remove a message of forum of users of centre
-	969. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
-	970. ActDelPstForInsUsr		Remove a message of forum of users of the institution
-	971. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
-	972. ActDelPstForGenUsr		Remove a message of forum of users general
-	973. ActDelPstForGenTch		Remove a message of forum of teachers general
-	974. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
-	975. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
-	976. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
-	977. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
-	978. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
-	979. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
-	980. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
-	981. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
-	982. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
-	983. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
-	984. ActEnbPstForGenUsr		Enable a message of forum of users general
-	985. ActEnbPstForGenTch		Enable a message of forum of teachers general
-	986. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
-	987. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
-	988. ActDisPstForCrsUsr		Disable a message of forum of users of the course
-	989. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
-	990. ActDisPstForDegUsr		Disable a message of forum of users of the degree
-	991. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
-	992. ActDisPstForCtrUsr		Disable a message of forum of users of centre
-	993. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
-	994. ActDisPstForInsUsr		Disable a message of forum of users of the institution
-	995. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
-	996. ActDisPstForGenUsr		Disable a message of forum of users general
-	997. ActDisPstForGenTch		Disable a message of forum of teachers general
-	998. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
-        999. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
-       1000. ActRcvMsgUsr		Sent/Receive a message of a user
-       1001. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
-       1002. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
-       1003. ActDelAllSntMsg		Remove todos the messages sent to other users
-       1004. ActDelAllRcvMsg		Remove todos the messages received from other users
-       1005. ActDelSntMsg		Remove a message sent to other users
-       1006. ActDelRcvMsg		Remove a message received from other user
-       1007. ActExpSntMsg		See (expand) sent message
-       1008. ActExpRcvMsg		See (expand) received message
-       1009. ActConSntMsg		Hide (contract) sent message
-       1010. ActConRcvMsg		Hide (contract) received message
-       1011. ActLstBanUsr		List banned users
-       1012. ActBanUsrMsg		Ban the sender of a message when showing received messages
-       1013. ActUnbUsrMsg		Unban the sender of a message when showing received messages
-       1014. ActUnbUsrLst		Unban a user when listing banned users
+	986. ActSeeNtf			Show my recent notifications
+	987. ActSeeAnn			Show global announcements
+	988. ActSeeNot			Show notices
+	989. ActReqMsgUsr		Write message to several users
+	990. ActSeeRcvMsg		Show the messages received from other users (link in menu)
+	991. ActSeeSntMsg		Show the messages sent to other users
+	992. ActMaiStd			Send an e-mail to students
+	993. ActWriAnn			Show form to create a new global announcement
+	994. ActRcvAnn			Receive and create a new global announcement
+	995. ActHidAnn			Hide a global announcement that was active
+	996. ActRevAnn			Reveal a global announcement that was hidden
+	997. ActRemAnn			Remove global announcement
+	998. ActShoNot			Show (expand) a notice
+	999. ActWriNot			Write a new notice
+       1000. ActRcvNot			Receive and create a new notice
+       1001. ActHidNot			Hide a notice that was active
+       1002. ActRevNot			Reveal a notice that was hidden
+       1003. ActReqRemNot		Request removal of a notice
+       1004. ActRemNot			Remove a notice
+       1005. ActSeeNewNtf		Show my recent notifications (link in top heading)
+       1006. ActMrkNtfSee		Mark all my notifications as seen
+       1007. ActRcvMsgUsr		Sent/Receive a message of a user
+       1008. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
+       1009. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
+       1010. ActDelAllSntMsg		Remove todos the messages sent to other users
+       1011. ActDelAllRcvMsg		Remove todos the messages received from other users
+       1012. ActDelSntMsg		Remove a message sent to other users
+       1013. ActDelRcvMsg		Remove a message received from other user
+       1014. ActExpSntMsg		See (expand) sent message
+       1015. ActExpRcvMsg		See (expand) received message
+       1016. ActConSntMsg		Hide (contract) sent message
+       1017. ActConRcvMsg		Hide (contract) received message
+       1018. ActLstBanUsr		List banned users
+       1019. ActBanUsrMsg		Ban the sender of a message when showing received messages
+       1020. ActUnbUsrMsg		Unban the sender of a message when showing received messages
+       1021. ActUnbUsrLst		Unban a user when listing banned users
 Statistics:
-       1016. ActSeeAllSvy		List all surveys in pages
-       1017. ActReqUseGbl		Request showing use of the platform
-       1018. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
-       1019. ActReqStaCrs		Request statistics of courses
-       1020. ActReqAccGbl		Request query of clicks to the complete platform
+       1022. ActSeeAllSvy		List all surveys in pages
+       1023. ActReqUseGbl		Request showing use of the platform
+       1024. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
+       1025. ActReqStaCrs		Request statistics of courses
+       1026. ActReqAccGbl		Request query of clicks to the complete platform
 
-       1021. ActSeeOneSvy		Show one survey
-       1022. ActAnsSvy			Answer a survey
-       1023. ActFrmNewSvy		Form to create a new survey
-       1024. ActEdiOneSvy		Edit one survey
-       1025. ActNewSvy			Create new survey
-       1026. ActChgSvy			Modify data of an existing survey
-       1027. ActReqRemSvy		Request the removal of a survey
-       1028. ActRemSvy			Remove survey
-       1029. ActReqRstSvy		Request the reset of answers of a survey
-       1030. ActRstSvy			Reset answers of survey
-       1031. ActHidSvy			Hide survey
-       1032. ActShoSvy			Show survey
-       1033. ActEdiOneSvyQst		Edit a new question for a survey
-       1034. ActRcvSvyQst		Receive a question of a survey
-       1035. ActRemSvyQst		Remove a question of a survey
-       1036. ActSeeUseGbl		Show use of the platform
-       1037. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1038. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1039. ActSeeAccGbl		Query clicks to the complete platform
-       1040. ActReqAccCrs		Request query of clicks in the course
-       1041. ActSeeAccCrs		Query clicks to current course
-       1042. ActSeeAllStaCrs		Show statistics of courses
+       1027. ActSeeOneSvy		Show one survey
+       1028. ActAnsSvy			Answer a survey
+       1029. ActFrmNewSvy		Form to create a new survey
+       1030. ActEdiOneSvy		Edit one survey
+       1031. ActNewSvy			Create new survey
+       1032. ActChgSvy			Modify data of an existing survey
+       1033. ActReqRemSvy		Request the removal of a survey
+       1034. ActRemSvy			Remove survey
+       1035. ActReqRstSvy		Request the reset of answers of a survey
+       1036. ActRstSvy			Reset answers of survey
+       1037. ActHidSvy			Hide survey
+       1038. ActShoSvy			Show survey
+       1039. ActEdiOneSvyQst		Edit a new question for a survey
+       1040. ActRcvSvyQst		Receive a question of a survey
+       1041. ActRemSvyQst		Remove a question of a survey
+       1042. ActSeeUseGbl		Show use of the platform
+       1043. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1044. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1045. ActSeeAccGbl		Query clicks to the complete platform
+       1046. ActReqAccCrs		Request query of clicks in the course
+       1047. ActSeeAccCrs		Query clicks to current course
+       1048. ActSeeAllStaCrs		Show statistics of courses
 Profile:
-       1043. ActFrmLogIn		Show form to log in
-       1044. ActMyCrs			Select one of my courses
-       1045. ActSeeMyTT			Show the timetable of all courses of the logged user
-       1046. ActFrmUsrAcc		Show form to the creation or change of user's account
-       1047. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1048. ActEdiPrf			Show forms to edit preferences
-       1049. ActAdmBrf			Show the briefcase of private archives
-       1050. ActMFUAct			Show most frequently used actions
+       1049. ActFrmLogIn		Show form to log in
+       1050. ActMyCrs			Select one of my courses
+       1051. ActSeeMyTT			Show the timetable of all courses of the logged user
+       1052. ActFrmUsrAcc		Show form to the creation or change of user's account
+       1053. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1054. ActEdiPrf			Show forms to edit preferences
+       1055. ActAdmBrf			Show the briefcase of private archives
+       1056. ActMFUAct			Show most frequently used actions
 
-       1051. ActAutUsrInt		Authentify user internally (directly from the platform)
-       1052. ActAutUsrExt		Authentify user externally (remotely from an external site)
-       1053. ActAutUsrChgLan		Change language to my language just after authentication
-       1054. ActLogOut			Close session
-       1055. ActAnnSee			Mark announcement as seen
+       1057. ActAutUsrInt		Authentify user internally (directly from the platform)
+       1058. ActAutUsrExt		Authentify user externally (remotely from an external site)
+       1059. ActAutUsrChgLan		Change language to my language just after authentication
+       1060. ActLogOut			Close session
+       1061. ActAnnSee			Mark announcement as seen
 
-       1056. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1057. ActSndNewPwd		Send a new password via e-mail
-       1058. ActChgMyRol		Change type of logged user
+       1062. ActReqSndNewPwd		Show form to send a new password via e-mail
+       1063. ActSndNewPwd		Send a new password via e-mail
+       1064. ActChgMyRol		Change type of logged user
 
-       1059. ActCreUsrAcc		Create new user account
-       1060. ActRemID_Me		Remove one of my user's IDs
-       1061. ActNewIDMe			Create a new user's ID for me
-       1062. ActRemOldNic		Remove one of my old nicknames
-       1063. ActChgNic			Change my nickname
-       1064. ActRemMaiMe		Remove one of my old e-mails
-       1065. ActNewMaiMe		Change my e-mail address
-       1066. ActCnfMai			Confirm e-mail address
-       1067. ActFrmChgMyPwd		Show form to the change of the password
-       1068. ActChgPwd			Change the password
-       1069. ActReqRemMyAcc		Request the removal of my account
-       1070. ActRemMyAcc		Remove my account
+       1065. ActCreUsrAcc		Create new user account
+       1066. ActRemID_Me		Remove one of my user's IDs
+       1067. ActNewIDMe			Create a new user's ID for me
+       1068. ActRemOldNic		Remove one of my old nicknames
+       1069. ActChgNic			Change my nickname
+       1070. ActRemMaiMe		Remove one of my old e-mails
+       1071. ActNewMaiMe		Change my e-mail address
+       1072. ActCnfMai			Confirm e-mail address
+       1073. ActFrmChgMyPwd		Show form to the change of the password
+       1074. ActChgPwd			Change the password
+       1075. ActReqRemMyAcc		Request the removal of my account
+       1076. ActRemMyAcc		Remove my account
 
-       1071. ActChgMyData		Update my personal data
+       1077. ActChgMyData		Update my personal data
 
-       1072. ActReqMyPho		Show form to send my photo
-       1073. ActDetMyPho		Receive my photo and detect faces on it
-       1074. ActUpdMyPho		Update my photo
-       1075. ActRemMyPho		Remove my photo
+       1078. ActReqMyPho		Show form to send my photo
+       1079. ActDetMyPho		Receive my photo and detect faces on it
+       1080. ActUpdMyPho		Update my photo
+       1081. ActRemMyPho		Remove my photo
 
-       1076. ActEdiPri			Edit my privacy
-       1077. ActChgPriPho		Change privacy of my photo
-       1078. ActChgPriPrf		Change privacy of my public profile
+       1082. ActEdiPri			Edit my privacy
+       1083. ActChgPriPho		Change privacy of my photo
+       1084. ActChgPriPrf		Change privacy of my public profile
 
-       1079. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1080. ActChgCtyMyIns		Change the country of my institution
-       1081. ActChgMyIns		Change my institution
-       1082. ActChgMyCtr		Change my centre
-       1083. ActChgMyDpt		Change my department
-       1084. ActChgMyOff		Change my office
-       1085. ActChgMyOffPho		Change my office phone
+       1085. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1086. ActChgCtyMyIns		Change the country of my institution
+       1087. ActChgMyIns		Change my institution
+       1088. ActChgMyCtr		Change my centre
+       1089. ActChgMyDpt		Change my department
+       1090. ActChgMyOff		Change my office
+       1091. ActChgMyOffPho		Change my office phone
 
-       1086. ActReqEdiMyNet		Request the edition of my social networks
-       1087. ActChgMyNet		Change my web and social networks
+       1092. ActReqEdiMyNet		Request the edition of my social networks
+       1093. ActChgMyNet		Change my web and social networks
 
-       1088. ActChgThe			Change theme
-       1089. ActReqChgLan		Ask if change language
-       1090. ActChgLan			Change language
-       1091. ActChg1stDay		Change first day of the week
-       1092. ActChgCol			Change side columns
-       1093. ActHidLftCol		Hide left side column
-       1094. ActHidRgtCol		Hide right side column
-       1095. ActShoLftCol		Show left side column
-       1096. ActShoRgtCol		Show right side column
-       1097. ActChgIco			Change icon set
-       1098. ActChgMnu			Change menu
-       1099. ActChgNtfPrf		Change whether to notify by e-mail new messages
-       1100. ActPrnUsrQR		Show my QR code ready to print
+       1094. ActChgThe			Change theme
+       1095. ActReqChgLan		Ask if change language
+       1096. ActChgLan			Change language
+       1097. ActChg1stDay		Change first day of the week
+       1098. ActChgCol			Change side columns
+       1099. ActHidLftCol		Hide left side column
+       1100. ActHidRgtCol		Hide right side column
+       1101. ActShoLftCol		Show left side column
+       1102. ActShoRgtCol		Show right side column
+       1103. ActChgIco			Change icon set
+       1104. ActChgMnu			Change menu
+       1105. ActChgNtfPrf		Change whether to notify by e-mail new messages
+       1106. ActPrnUsrQR		Show my QR code ready to print
 
-       1101. ActPrnMyTT			Show the timetable listo to impresión of all my courses
-       1102. ActEdiTut			Edit the timetable of tutorías
-       1103. ActChgTut			Modify the timetable of tutorías
-       1104. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+       1107. ActPrnMyTT			Show the timetable listo to impresión of all my courses
+       1108. ActEdiTut			Edit the timetable of tutorías
+       1109. ActChgTut			Modify the timetable of tutorías
+       1110. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 
-       1105. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1106. ActRemFilBrf		Remove a file of the briefcase
-       1107. ActRemFolBrf		Remove a folder empty of the briefcase
-       1108. ActCopBrf			Set source of copy in the briefcase
-       1109. ActPasBrf			Paste a folder or file in the briefcase
-       1110. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1111. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1112. ActCreFolBrf		Create a new folder in the briefcase
-       1113. ActCreLnkBrf		Create a new link in the briefcase
-       1114. ActRenFolBrf		Rename a folder of the briefcase
-       1115. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1116. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1117. ActExpBrf			Expand a folder in briefcase
-       1118. ActConBrf			Contract a folder in briefcase
-       1119. ActZIPBrf			Compress a folder in briefcase
-       1120. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1121. ActChgDatBrf		Change metadata of a file in the briefcase
-       1122. ActDowBrf			Download a file in the briefcase
-       1123. ActAskRemOldBrf		Ask for removing old files in the briefcase
-       1124. ActRemOldBrf		Remove old files in the briefcase
+       1111. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1112. ActRemFilBrf		Remove a file of the briefcase
+       1113. ActRemFolBrf		Remove a folder empty of the briefcase
+       1114. ActCopBrf			Set source of copy in the briefcase
+       1115. ActPasBrf			Paste a folder or file in the briefcase
+       1116. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1117. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1118. ActCreFolBrf		Create a new folder in the briefcase
+       1119. ActCreLnkBrf		Create a new link in the briefcase
+       1120. ActRenFolBrf		Rename a folder of the briefcase
+       1121. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1122. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1123. ActExpBrf			Expand a folder in briefcase
+       1124. ActConBrf			Contract a folder in briefcase
+       1125. ActZIPBrf			Compress a folder in briefcase
+       1126. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1127. ActChgDatBrf		Change metadata of a file in the briefcase
+       1128. ActDowBrf			Download a file in the briefcase
+       1129. ActAskRemOldBrf		Ask for removing old files in the briefcase
+       1130. ActRemOldBrf		Remove old files in the briefcase
 */
 
 struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
@@ -2309,7 +2310,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabSoc ******************************************************************
    /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline	,"soc64x64.png"		},
    /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
-   /* ActSeeChtRms	*/{  51, 2,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
+   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
+   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
    /* ActReqSocPst	*/{1491,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,NULL},
    /* ActRcvSocPst	*/{1492,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
@@ -2328,6 +2330,149 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFlg		*/{1412,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
    /* ActSeeFlr		*/{1413,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
 
+   /* ActSeeForCrsUsr	*/{ 345,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForCrsTch	*/{ 431,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForDegUsr	*/{ 241,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForDegTch	*/{ 243,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForCtrUsr	*/{ 901,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForCtrTch	*/{ 430,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForInsUsr	*/{ 725,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForInsTch	*/{ 724,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForGenUsr	*/{ 726,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForGenTch	*/{ 723,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForSWAUsr	*/{ 242,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForSWATch	*/{ 245,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+
+   /* ActSeePstForCrsUsr*/{ 346,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCrsTch*/{ 347,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForDegUsr*/{ 255,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForDegTch*/{ 291,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCtrUsr*/{ 348,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCtrTch*/{ 902,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForInsUsr*/{ 730,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForInsTch*/{ 746,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForGenUsr*/{ 727,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForGenTch*/{ 731,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForSWAUsr*/{ 244,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForSWATch*/{ 246,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+
+   /* ActRcvThrForCrsUsr*/{ 350,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForCrsTch*/{ 754,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForDegUsr*/{ 252,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForDegTch*/{ 247,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForCtrUsr*/{ 903,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForCtrTch*/{ 904,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForInsUsr*/{ 737,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForInsTch*/{ 769,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForGenUsr*/{ 736,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForGenTch*/{ 765,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForSWAUsr*/{ 258,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForSWATch*/{ 259,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+
+   /* ActRcvRepForCrsUsr*/{ 599,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForCrsTch*/{ 755,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForDegUsr*/{ 606,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForDegTch*/{ 617,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForCtrUsr*/{ 905,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForCtrTch*/{ 906,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForInsUsr*/{ 740,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForInsTch*/{ 770,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForGenUsr*/{ 747,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForGenTch*/{ 816,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForSWAUsr*/{ 603,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForSWATch*/{ 622,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+
+   /* ActReqDelThrCrsUsr*/{ 867,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCrsTch*/{ 869,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrDegUsr*/{ 907,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrDegTch*/{ 908,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCtrUsr*/{ 909,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCtrTch*/{ 910,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrInsUsr*/{ 911,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrInsTch*/{ 912,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrGenUsr*/{ 913,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrGenTch*/{ 914,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrSWAUsr*/{ 881,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrSWATch*/{ 915,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+
+   /* ActDelThrForCrsUsr*/{ 868,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForCrsTch*/{ 876,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForDegUsr*/{ 916,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForDegTch*/{ 917,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForCtrUsr*/{ 918,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForCtrTch*/{ 919,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForInsUsr*/{ 920,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForInsTch*/{ 921,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForGenUsr*/{ 922,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForGenTch*/{ 923,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForSWAUsr*/{ 882,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForSWATch*/{ 924,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+
+   /* ActCutThrForCrsUsr*/{ 926,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForCrsTch*/{ 927,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForDegUsr*/{ 928,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForDegTch*/{ 929,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForCtrUsr*/{ 930,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForCtrTch*/{ 931,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForInsUsr*/{ 932,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForInsTch*/{ 933,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForGenUsr*/{ 934,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForGenTch*/{ 935,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForSWAUsr*/{ 890,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForSWATch*/{ 936,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+
+   /* ActPasThrForCrsUsr*/{ 891,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForCrsTch*/{ 937,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForDegUsr*/{ 938,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForDegTch*/{ 939,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForCtrUsr*/{ 940,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForCtrTch*/{ 941,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForInsUsr*/{ 942,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForInsTch*/{ 943,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForGenUsr*/{ 944,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForGenTch*/{ 945,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForSWAUsr*/{ 946,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForSWATch*/{ 947,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+
+   /* ActDelPstForCrsUsr*/{ 602,-1,TabSoc,ActSeeFor		,0x11C,0x11C,0x11C,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForCrsTch*/{ 756,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForDegUsr*/{ 608,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForDegTch*/{ 680,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForCtrUsr*/{ 948,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForCtrTch*/{ 949,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForInsUsr*/{ 743,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForInsTch*/{ 772,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForGenUsr*/{ 735,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForGenTch*/{ 950,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForSWAUsr*/{ 613,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForSWATch*/{ 623,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+
+   /* ActEnbPstForCrsUsr*/{ 624,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForCrsTch*/{ 951,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForDegUsr*/{ 616,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForDegTch*/{ 619,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForCtrUsr*/{ 952,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForCtrTch*/{ 953,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForInsUsr*/{ 954,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForInsTch*/{ 955,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForGenUsr*/{ 956,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForGenTch*/{ 957,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForSWAUsr*/{ 632,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForSWATch*/{ 634,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+
+   /* ActDisPstForCrsUsr*/{ 610,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForCrsTch*/{ 958,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForDegUsr*/{ 615,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForDegTch*/{ 618,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForCtrUsr*/{ 959,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForCtrTch*/{ 960,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForInsUsr*/{ 961,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForInsTch*/{ 962,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForGenUsr*/{ 963,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForGenTch*/{ 925,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForSWAUsr*/{ 625,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForSWATch*/{ 635,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+
    /* ActCht		*/{  52,-1,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_NEW_WINDOW ,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabMsg ******************************************************************
@@ -2335,11 +2480,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,"bell64x64.gif"	},
    /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
    /* ActSeeNot		*/{ 762, 2,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note64x64.gif"	},
-   /* ActSeeFor		*/{  95, 3,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
-   /* ActReqMsgUsr	*/{  26, 4,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
-   /* ActSeeRcvMsg	*/{   3, 5,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
-   /* ActSeeSntMsg	*/{  70, 6,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
-   /* ActMaiStd		*/{ 100, 7,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListEMails			,"email64x64.gif"	},
+   /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
+   /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
+   /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
+   /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListEMails			,"email64x64.gif"	},
 
    // Actions not in menu:
    /* ActWriAnn		*/{1237,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowFormAnnouncement	,NULL},
@@ -2358,149 +2502,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeNewNtf	*/{ 991,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,NULL},
    /* ActMrkNtfSee	*/{1146,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_MarkAllNotifAsSeen		,NULL},
-
-   /* ActSeeForCrsUsr	*/{ 345,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCrsTch	*/{ 431,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForDegUsr	*/{ 241,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForDegTch	*/{ 243,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCtrUsr	*/{ 901,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCtrTch	*/{ 430,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForInsUsr	*/{ 725,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForInsTch	*/{ 724,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForGenUsr	*/{ 726,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForGenTch	*/{ 723,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForSWAUsr	*/{ 242,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForSWATch	*/{ 245,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-
-   /* ActSeePstForCrsUsr*/{ 346,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCrsTch*/{ 347,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForDegUsr*/{ 255,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForDegTch*/{ 291,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCtrUsr*/{ 348,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCtrTch*/{ 902,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForInsUsr*/{ 730,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForInsTch*/{ 746,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForGenUsr*/{ 727,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForGenTch*/{ 731,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForSWAUsr*/{ 244,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForSWATch*/{ 246,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-
-   /* ActRcvThrForCrsUsr*/{ 350,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCrsTch*/{ 754,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForDegUsr*/{ 252,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForDegTch*/{ 247,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCtrUsr*/{ 903,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCtrTch*/{ 904,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForInsUsr*/{ 737,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForInsTch*/{ 769,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForGenUsr*/{ 736,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForGenTch*/{ 765,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForSWAUsr*/{ 258,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForSWATch*/{ 259,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-
-   /* ActRcvRepForCrsUsr*/{ 599,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCrsTch*/{ 755,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForDegUsr*/{ 606,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForDegTch*/{ 617,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCtrUsr*/{ 905,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCtrTch*/{ 906,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForInsUsr*/{ 740,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForInsTch*/{ 770,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForGenUsr*/{ 747,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForGenTch*/{ 816,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForSWAUsr*/{ 603,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForSWATch*/{ 622,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-
-   /* ActReqDelThrCrsUsr*/{ 867,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCrsTch*/{ 869,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrDegUsr*/{ 907,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrDegTch*/{ 908,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCtrUsr*/{ 909,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCtrTch*/{ 910,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrInsUsr*/{ 911,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrInsTch*/{ 912,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrGenUsr*/{ 913,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrGenTch*/{ 914,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrSWAUsr*/{ 881,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrSWATch*/{ 915,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-
-   /* ActDelThrForCrsUsr*/{ 868,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCrsTch*/{ 876,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForDegUsr*/{ 916,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForDegTch*/{ 917,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCtrUsr*/{ 918,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCtrTch*/{ 919,-1,TabMsg,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForInsUsr*/{ 920,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForInsTch*/{ 921,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForGenUsr*/{ 922,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForGenTch*/{ 923,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForSWAUsr*/{ 882,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForSWATch*/{ 924,-1,TabMsg,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-
-   /* ActCutThrForCrsUsr*/{ 926,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCrsTch*/{ 927,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForDegUsr*/{ 928,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForDegTch*/{ 929,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCtrUsr*/{ 930,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCtrTch*/{ 931,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForInsUsr*/{ 932,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForInsTch*/{ 933,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForGenUsr*/{ 934,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForGenTch*/{ 935,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForSWAUsr*/{ 890,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForSWATch*/{ 936,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-
-   /* ActPasThrForCrsUsr*/{ 891,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCrsTch*/{ 937,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForDegUsr*/{ 938,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForDegTch*/{ 939,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCtrUsr*/{ 940,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCtrTch*/{ 941,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForInsUsr*/{ 942,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForInsTch*/{ 943,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForGenUsr*/{ 944,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForGenTch*/{ 945,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForSWAUsr*/{ 946,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForSWATch*/{ 947,-1,TabMsg,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-
-   /* ActDelPstForCrsUsr*/{ 602,-1,TabMsg,ActSeeFor		,0x11C,0x11C,0x11C,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCrsTch*/{ 756,-1,TabMsg,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForDegUsr*/{ 608,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForDegTch*/{ 680,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCtrUsr*/{ 948,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCtrTch*/{ 949,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForInsUsr*/{ 743,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForInsTch*/{ 772,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForGenUsr*/{ 735,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForGenTch*/{ 950,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForSWAUsr*/{ 613,-1,TabMsg,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForSWATch*/{ 623,-1,TabMsg,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-
-   /* ActEnbPstForCrsUsr*/{ 624,-1,TabMsg,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCrsTch*/{ 951,-1,TabMsg,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForDegUsr*/{ 616,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForDegTch*/{ 619,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCtrUsr*/{ 952,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCtrTch*/{ 953,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForInsUsr*/{ 954,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForInsTch*/{ 955,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForGenUsr*/{ 956,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForGenTch*/{ 957,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForSWAUsr*/{ 632,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForSWATch*/{ 634,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-
-   /* ActDisPstForCrsUsr*/{ 610,-1,TabMsg,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCrsTch*/{ 958,-1,TabMsg,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForDegUsr*/{ 615,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForDegTch*/{ 618,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCtrUsr*/{ 959,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCtrTch*/{ 960,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForInsUsr*/{ 961,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForInsTch*/{ 962,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForGenUsr*/{ 963,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForGenTch*/{ 925,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForSWAUsr*/{ 625,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForSWATch*/{ 635,-1,TabMsg,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
 
    /* ActRcvMsgUsr	*/{  27,-1,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_RecMsgFromUsr		,NULL},
    /* ActReqDelAllSntMsg*/{ 604,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ReqDelAllSntMsgs		,NULL},

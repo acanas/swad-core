@@ -17964,6 +17964,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
+	// ActSeeFor
+#if   L==1
+	"F&ograve;rums"
+#elif L==2
+	"Foren"
+#elif L==3
+	"Forums"
+#elif L==4
+	"Foros"
+#elif L==5
+	"Forums"
+#elif L==6
+	"Foros"	// Okoteve traducción
+#elif L==7
+	"Forum"
+#elif L==8
+	"Forum"
+#elif L==9
+	"F&oacute;runs"
+#endif
+	,
 	// ActSeeChtRms
 #if   L==1
 	"Xat"
@@ -17985,7 +18006,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -18066,27 +18086,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ogloszenia"
 #elif L==9
 	"Avisos"
-#endif
-	,
-	// ActSeeFor
-#if   L==1
-	"F&ograve;rums"
-#elif L==2
-	"Foren"
-#elif L==3
-	"Forums"
-#elif L==4
-	"Foros"
-#elif L==5
-	"Forums"
-#elif L==6
-	"Foros"	// Okoteve traducción
-#elif L==7
-	"Forum"
-#elif L==8
-	"Forum"
-#elif L==9
-	"F&oacute;runs"
 #endif
 	,
 	// ActReqMsgUsr
@@ -18173,6 +18172,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19920,6 +19920,30 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
+	// ActSeeFor
+#if   L==1
+	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
+	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
+#elif L==2
+	"Foren"
+#elif L==3
+	"Forums"
+#elif L==4
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
+#elif L==5
+	"Forums"
+#elif L==6
+	"Foros de discusi&oacute;n, distribuidos"
+	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
+#elif L==7
+	"Forum"
+#elif L==8
+	"Forum"
+#elif L==9
+	"F&oacute;runs"
+#endif
+	,
 	// ActSeeChtRms
 #if   L==1
 	"Conversa en temps real amb altres usuaris"
@@ -19941,7 +19965,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20025,30 +20048,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ogloszenia"
 #elif L==9
 	"Avisos"
-#endif
-	,
-	// ActSeeFor
-#if   L==1
-	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
-	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
-#elif L==2
-	"Foren"
-#elif L==3
-	"Forums"
-#elif L==4
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"
-#elif L==5
-	"Forums"
-#elif L==6
-	"Foros de discusi&oacute;n, distribuidos"
-	" seg&uacute;n la tem&aacute;tica (elija el foro adecuado)"// Okoteve traducción
-#elif L==7
-	"Forum"
-#elif L==8
-	"Forum"
-#elif L==9
-	"F&oacute;runs"
 #endif
 	,
 	// ActReqMsgUsr
@@ -20141,6 +20140,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"E-mail"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -35449,44 +35449,24 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Chamada para exame"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_SOCIAL_POST
-	 "Missatge"
+#if   L==1	// Soc_EVENT_SOCIAL_POST (not used)
+	"Comentari"
 #elif L==2
-	 "Beitr&auml;ge"
+	"Kommentar"
 #elif L==3
-	 "Post"
+	"Comment"
 #elif L==4
-	 "Mensaje"
+	"Comentario"
 #elif L==5
-	 "Message"
+	"Commentaire"
 #elif L==6
-	 "Mensaje"	// Okoteve traducción
+	"Comentario"	// Okoteve traducción
 #elif L==7
-	 "Post"
+	"Commento"
 #elif L==8
-	 "Post"
+	"Komentarz"
 #elif L==9
-	 "Post"
-#endif
-	 ,
-#if   L==1	// Soc_EVENT_NOTICE
-	 "Av&iacute;s"
-#elif L==2
-	 "Ank&uuml;ndigungen"
-#elif L==3
-	 "Notice"
-#elif L==4
-	 "Aviso"
-#elif L==5
-	 "Avis"
-#elif L==6
-	 "Marandu"
-#elif L==7
-	 "Avviso"
-#elif L==8
-	 "Informacja"
-#elif L==9
-	 "An&uacute;ncio"
+	"Coment&aacute;rio"
 #endif
 	 ,
 #if   L==1	// Soc_EVENT_FORUM_POST
@@ -35507,6 +35487,26 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Post na forum"
 #elif L==9
 	 "Post em um f&oacute;rum"
+#endif
+	 ,
+#if   L==1	// Soc_EVENT_NOTICE
+	 "Av&iacute;s"
+#elif L==2
+	 "Ank&uuml;ndigungen"
+#elif L==3
+	 "Notice"
+#elif L==4
+	 "Aviso"
+#elif L==5
+	 "Avis"
+#elif L==6
+	 "Marandu"
+#elif L==7
+	 "Avviso"
+#elif L==8
+	 "Informacja"
+#elif L==9
+	 "An&uacute;ncio"
 #endif
 	};
 
