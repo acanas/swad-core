@@ -715,10 +715,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat)) // Get from the database the data of the autor
-      Usr_RestrictLengthAndWriteName (&UsrDat,18);
+      Usr_RestrictLengthAndWriteName (&UsrDat,16);
    Usr_UsrDataDestructor (&UsrDat);
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** End yellow note *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 

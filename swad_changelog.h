@@ -116,13 +116,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.83.1 (2015-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.84 (2015-12-30)"
 #define CSS_FILE		"swad15.80.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.84:    Dec 30, 2015	Remove social post. (189316 lines)
         Version 15.83.1:  Dec 30, 2015	Fixed bug in user's public profile. (189210 lines)
         Version 15.83:    Dec 30, 2015	Form to remove a social post. (189209 lines)
         Version 15.82.4:  Dec 30, 2015	Action to write a new social post is removed form menu. (189159 lines)

@@ -92,6 +92,20 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
+struct SocialEvent
+  {
+   long SocCod;
+   Soc_SocialEvent_t SocialEvent;
+   long UsrCod;
+   long CtyCod;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
+   long CrsCod;
+   long Cod;
+   time_t DateTimeUTC;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -106,9 +120,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToWriteANewPost (void);
-static void Soc_GetAndWriteSocialPost (long PstCod);
-
 static unsigned long Soc_ShowTimeline (const char *Query);
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
 static void Soc_WriteEventDate (time_t TimeUTC);
@@ -117,119 +128,13 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
 
+static void Soc_PutLinkToWriteANewPost (void);
+static void Soc_GetAndWriteSocialPost (long PstCod);
+
 static void Soc_PutFormToRemoveSocialEvent (long SocCod);
 static void Soc_PutHiddenParamSocCod (long SocCod);
-
-/*****************************************************************************/
-/*********************** Show social activity (timeline) *********************/
-/*****************************************************************************/
-
-static void Soc_PutLinkToWriteANewPost (void)
-  {
-   extern const char *Txt_New_comment;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActReqSocPst,NULL,"write64x64.gif",
-			  Txt_New_comment,Txt_New_comment);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/****************** Form to write a new public comment ***********************/
-/*****************************************************************************/
-
-void Soc_FormSocialPost (void)
-  {
-   extern const char *Txt_New_comment;
-   extern const char *Txt_Send_comment;
-
-   /***** Form to write a new public comment *****/
-   /* Start frame */
-   Lay_StartRoundFrame ("560px",Txt_New_comment);
-
-   /* Start form to write the post */
-   Act_FormStart (ActRcvSocPst);
-
-   /* Content of new post */
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
-		      "</textarea>");
-
-   /* Send button */
-   Lay_PutCreateButton (Txt_Send_comment);
-
-   /* End form */
-   Act_FormEnd ();
-
-   /* End frame */
-   Lay_EndRoundFrame ();
-
-   /***** Write current timeline *****/
-   Soc_ShowFollowingTimeline ();
-  }
-
-/*****************************************************************************/
-/******************* Receive and store a new public post *********************/
-/*****************************************************************************/
-
-void Soc_ReceiveSocialPost (void)
-  {
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
-   long PstCod;
-
-   /***** Get and store new post *****/
-   /* Get the content of the post */
-   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,true);
-
-   /* Insert post content in the database */
-   sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",
-            Content);
-   PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
-
-   /* Insert post in social events */
-   Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
-
-   /***** Write current timeline *****/
-   Soc_ShowFollowingTimeline ();
-  }
-
-/*****************************************************************************/
-/***************** Get from database and write public post *******************/
-/*****************************************************************************/
-
-static void Soc_GetAndWriteSocialPost (long PstCod)
-  {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-
-   /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content FROM social_post WHERE PstCod='%ld'",
-            PstCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
-
-   /***** Result should have a unique row *****/
-   if (NumRows == 1)
-     {
-      /***** Get number of rows *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /****** Get content (row[0]) *****/
-      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-     }
-   else
-      Content[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Write content *****/
-   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-  }
+static long Soc_GetParamSocCod (void);
+static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -308,6 +213,7 @@ static unsigned long Soc_ShowTimeline (const char *Query)
    long SocCod;
    Soc_SocialEvent_t SocialEvent;
    struct UsrData UsrDat;
+   bool ItsMine;	// I am the author of a social event
    struct Country Cty;
    struct Institution Ins;
    struct Centre Ctr;
@@ -321,7 +227,7 @@ static unsigned long Soc_ShowTimeline (const char *Query)
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get timeline from database *****/
-   NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
+   NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get social events");
 
    /***** List my timeline *****/
    if (NumEvents)	// Events found
@@ -350,6 +256,8 @@ static unsigned long Soc_ShowTimeline (const char *Query)
          /* Get (from) user code (row[2]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);		// Get user's data from the database
+         ItsMine = (Gbl.Usrs.Me.Logged &&
+                    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
          /* Get country code (row[3]) */
          Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -426,7 +334,8 @@ static unsigned long Soc_ShowTimeline (const char *Query)
 	    fprintf (Gbl.F.Out,"</div>");
 
             /* Write form to remove this event */
-	    Soc_PutFormToRemoveSocialEvent (SocCod);
+	    if (ItsMine)
+	       Soc_PutFormToRemoveSocialEvent (SocCod);
            }
          else
            {
@@ -703,6 +612,117 @@ void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
   }
 
 /*****************************************************************************/
+/***************** Put contextual link to write a new post *******************/
+/*****************************************************************************/
+
+static void Soc_PutLinkToWriteANewPost (void)
+  {
+   extern const char *Txt_New_comment;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActReqSocPst,NULL,"write64x64.gif",
+			  Txt_New_comment,Txt_New_comment);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/****************** Form to write a new public comment ***********************/
+/*****************************************************************************/
+
+void Soc_FormSocialPost (void)
+  {
+   extern const char *Txt_New_comment;
+   extern const char *Txt_Send_comment;
+
+   /***** Form to write a new public comment *****/
+   /* Start frame */
+   Lay_StartRoundFrame ("560px",Txt_New_comment);
+
+   /* Start form to write the post */
+   Act_FormStart (ActRcvSocPst);
+
+   /* Content of new post */
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
+		      "</textarea>");
+
+   /* Send button */
+   Lay_PutCreateButton (Txt_Send_comment);
+
+   /* End form */
+   Act_FormEnd ();
+
+   /* End frame */
+   Lay_EndRoundFrame ();
+
+   /***** Write current timeline *****/
+   Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/******************* Receive and store a new public post *********************/
+/*****************************************************************************/
+
+void Soc_ReceiveSocialPost (void)
+  {
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   long PstCod;
+
+   /***** Get and store new post *****/
+   /* Get the content of the post */
+   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+                              Str_TO_RIGOROUS_HTML,true);
+
+   /* Insert post content in the database */
+   sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",
+            Content);
+   PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
+
+   /* Insert post in social events */
+   Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
+
+   /***** Write current timeline *****/
+   Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/***************** Get from database and write public post *******************/
+/*****************************************************************************/
+
+static void Soc_GetAndWriteSocialPost (long PstCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get social post from database *****/
+   sprintf (Query,"SELECT Content FROM social_post WHERE PstCod='%ld'",
+            PstCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
+
+   /***** Result should have a unique row *****/
+   if (NumRows == 1)
+     {
+      /***** Get number of rows *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /****** Get content (row[0]) *****/
+      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+     }
+   else
+      Content[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Write content *****/
+   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+  }
+
+/*****************************************************************************/
 /*********************** Form to remove social event *************************/
 /*****************************************************************************/
 
@@ -726,7 +746,7 @@ static void Soc_PutFormToRemoveSocialEvent (long SocCod)
   }
 
 /*****************************************************************************/
-/**************************** Remove social event ****************************/
+/************** Put parameter with the code of a social event ****************/
 /*****************************************************************************/
 
 static void Soc_PutHiddenParamSocCod (long SocCod)
@@ -735,13 +755,118 @@ static void Soc_PutHiddenParamSocCod (long SocCod)
   }
 
 /*****************************************************************************/
+/************** Get parameter with the code of a social event ****************/
+/*****************************************************************************/
+
+static long Soc_GetParamSocCod (void)
+  {
+   char LongStr[1+10+1];	// String that holds the social event code
+   long SocCod;
+
+   /* Get social event code */
+   Par_GetParToText ("SocCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&SocCod) != 1)
+      Lay_ShowErrorAndExit ("Wrong code of social event.");
+
+   return SocCod;
+  }
+
+/*****************************************************************************/
 /**************************** Remove social event ****************************/
 /*****************************************************************************/
 
 void Soc_RemoveSocialEvent (void)
   {
-   Lay_ShowAlert (Lay_INFO,"Not implemented...");
+   struct SocialEvent Soc;
+   bool ICanRemove;
+   char Query[128];
 
-   /***** Write current timeline *****/
+   /***** Get the code of the social event to remove *****/
+   Soc.SocCod = Soc_GetParamSocCod ();
+
+   /***** Get social event author *****/
+   Soc_GetDataOfSocialEventByCod (&Soc);
+
+   ICanRemove = (Gbl.Usrs.Me.Logged &&
+                 Soc.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 Soc.SocialEvent == Soc_EVENT_SOCIAL_POST);
+   if (ICanRemove)
+     {
+      /***** Remove social event *****/
+      sprintf (Query,"DELETE FROM social WHERE SocCod='%ld'",Soc.SocCod);
+      DB_QueryDELETE (Query,"can not remove a social event");
+
+      /***** Remove social post *****/
+      if (Soc.SocialEvent == Soc_EVENT_SOCIAL_POST)
+	{
+	 sprintf (Query,"DELETE FROM social_post WHERE PstCod='%ld'",Soc.Cod);
+	 DB_QueryDELETE (Query,"can not remove a social post");
+	}
+     }
+
+   /***** Write timeline after removing *****/
    Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/******************* Get assignment data using its code **********************/
+/*****************************************************************************/
+
+static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get data of social event from database *****/
+   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
+	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
+                  " FROM social"
+                  " WHERE SocCod='%ld'",
+            Soc->SocCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social event") == 1)
+     {
+      /***** Get social event *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get event type (row[0]) */
+      Soc->SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[0]);
+
+      /* Get (from) user code (row[1]) */
+      Soc->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+
+      /* Get country code (row[2]) */
+      Soc->CtyCod = Str_ConvertStrCodToLongCod (row[2]);
+
+      /* Get institution code (row[3]) */
+      Soc->InsCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get centre code (row[4]) */
+      Soc->CtrCod = Str_ConvertStrCodToLongCod (row[4]);
+
+      /* Get degree code (row[5]) */
+      Soc->DegCod = Str_ConvertStrCodToLongCod (row[5]);
+
+      /* Get course code (row[6]) */
+      Soc->CrsCod = Str_ConvertStrCodToLongCod (row[6]);
+
+      /* Get file/post... code (row[7]) */
+      Soc->Cod = Str_ConvertStrCodToLongCod (row[7]);
+
+      /* Get time of the event (row[8]) */
+      Soc->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+     }
+   else
+     {
+      Soc->SocialEvent = Soc_EVENT_UNKNOWN;
+      Soc->UsrCod = -1L;
+      Soc->CtyCod =
+      Soc->InsCod =
+      Soc->CtrCod =
+      Soc->DegCod =
+      Soc->CrsCod = -1L;
+      Soc->Cod    = -1L;
+      Soc->DateTimeUTC = (time_t) 0;
+     }
   }

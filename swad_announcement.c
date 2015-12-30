@@ -393,7 +393,7 @@ static long Ann_GetParamAnnCod (void)
    char LongStr[1+10+1];	// String that holds the announcement code
    long AnnCod;
 
-   /* Get notice code */
+   /* Get announcement code */
    Par_GetParToText ("AnnCod",LongStr,1+10);
    if (sscanf (LongStr,"%ld",&AnnCod) != 1)
       Lay_ShowErrorAndExit ("Wrong code of announcement.");
