@@ -122,10 +122,13 @@ extern struct Globals Gbl;
 
 static unsigned long Soc_ShowTimeline (const char *Query);
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
+static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
+                                  struct UsrData *UsrDat,
+                                  bool PutIconRemove);
 static void Soc_WriteEventDate (time_t TimeUTC);
 static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
                                      long CrsCod,long Cod);
-static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
+static void Soc_GetEventSummary (const struct SocialEvent *Soc,
                                  char *SummaryStr,unsigned MaxChars);
 
 static void Soc_PutLinkToWriteANewPost (void);
@@ -135,6 +138,7 @@ static void Soc_PutFormToRemoveSocialEvent (long SocCod);
 static void Soc_PutHiddenParamSocCod (long SocCod);
 static long Soc_GetParamSocCod (void);
 static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc);
+static void Soc_GetDataOfSocialEventFromRow (MYSQL_ROW row,struct SocialEvent *Soc);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -197,34 +201,13 @@ void Soc_ShowFollowingTimeline (void)
 
 static unsigned long Soc_ShowTimeline (const char *Query)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Public_activity;
-   extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Country;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumEvents;
    unsigned long NumEvent;
-   long SocCod;
-   Soc_SocialEvent_t SocialEvent;
+   struct SocialEvent Soc;
    struct UsrData UsrDat;
-   bool ItsMine;	// I am the author of a social event
-   struct Country Cty;
-   struct Institution Ins;
-   struct Centre Ctr;
-   struct Degree Deg;
-   struct Course Crs;
-   long Cod;
-   char ForumName[512];
-   time_t DateTimeUTC;	// Date-time of the event
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
-   char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get timeline from database *****/
    NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get social events");
@@ -244,141 +227,12 @@ static unsigned long Soc_ShowTimeline (const char *Query)
 	   NumEvent < NumEvents;
 	   NumEvent++)
 	{
-         /***** Get next social event *****/
+         /* Get next social event */
          row = mysql_fetch_row (mysql_res);
+         Soc_GetDataOfSocialEventFromRow (row,&Soc);
 
-         /* Get social code (row[0]) */
-         SocCod = Str_ConvertStrCodToLongCod (row[0]);
-
-         /* Get event type (row[1]) */
-         SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[1]);
-
-         /* Get (from) user code (row[2]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);		// Get user's data from the database
-         ItsMine = (Gbl.Usrs.Me.Logged &&
-                    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-         /* Get country code (row[3]) */
-         Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
-         Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
-
-         /* Get institution code (row[4]) */
-         Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
-          /* Get centre code (row[5]) */
-         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCentreByCod (&Ctr);
-
-         /* Get degree code (row[6]) */
-         Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDataOfDegreeByCod (&Deg);
-
-         /* Get course code (row[7]) */
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetDataOfCourseByCod (&Crs);
-
-         /* Get file/post... code (row[8]) */
-         Cod = Str_ConvertStrCodToLongCod (row[8]);
-
-         /* Get forum type of the post */
-         if (SocialEvent == Soc_EVENT_FORUM_POST)
-           {
-            Gbl.Forum.ForumType = For_GetForumTypeOfAPost (Cod);
-            For_SetForumName (Gbl.Forum.ForumType,
-        	              &Ins,
-        	              &Ctr,
-        	              &Deg,
-        	              &Crs,
-        	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-            Gbl.Forum.Ins.InsCod = Ins.InsCod;
-            Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
-            Gbl.Forum.Deg.DegCod = Deg.DegCod;
-            Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
-           }
-
-         /* Get time of the event (row[9]) */
-         DateTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
-
-         /***** Write row for this social event *****/
-         fprintf (Gbl.F.Out,"<li>");
-
-	 /* Left: write author's photo */
-         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
-	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			   "PHOTO60x80",Pho_ZOOM);
-         fprintf (Gbl.F.Out,"</div>");
-
-         /* Right: author's name, time and summary */
-         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
-
-	 /* Write author's full name and nickname */
-         Str_LimitLengthHTMLStr (UsrDat.FullName,20);
-         fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
-                            "<span class=\"DAT_N_BOLD\">%s</span>"
-                            "<span class=\"DAT_LIGHT\"> @%s</span>"
-                            "</div>",
-                  UsrDat.FullName,UsrDat.Nickname);
-
-         /* Write date and time */
-         Soc_WriteEventDate (DateTimeUTC);
-
-         if (SocialEvent == Soc_EVENT_SOCIAL_POST)
-           {
-            /* Write post content */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">");
-	    Soc_GetAndWriteSocialPost (Cod);
-	    fprintf (Gbl.F.Out,"</div>");
-
-            /* Write form to remove this event */
-	    if (ItsMine)
-	       Soc_PutFormToRemoveSocialEvent (SocCod);
-           }
-         else
-           {
-            /* Write event type and location */
-	    fprintf (Gbl.F.Out,"<div>");
-	    Soc_StartFormGoToAction (SocialEvent,Crs.CrsCod,Cod);
-	    Act_LinkFormSubmit (Txt_SOCIAL_EVENT[SocialEvent],
-	                        The_ClassForm[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"%s</a>",
-		     Txt_SOCIAL_EVENT[SocialEvent]);
-	    Act_FormEnd ();
-	    fprintf (Gbl.F.Out,"</div>");
-
-	    if (SocialEvent == Soc_EVENT_FORUM_POST)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Forum,ForumName);
-	    else if (Crs.CrsCod > 0)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Course,Crs.ShortName);
-	    else if (Deg.DegCod > 0)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Degree,Deg.ShortName);
-	    else if (Ctr.CtrCod > 0)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Centre,Ctr.ShortName);
-	    else if (Ins.InsCod > 0)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Institution,Ins.ShortName);
-	    else if (Cty.CtyCod > 0)
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-	                Txt_Country,Cty.Name[Gbl.Prefs.Language]);
-
-	    /* Write content of the event */
-	    Soc_GetEventSummary (SocialEvent,Cod,
-				 SummaryStr,Soc_MAX_BYTES_SUMMARY);
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
-           }
-
-         /* End of right part */
-         fprintf (Gbl.F.Out,"</div>");
-
-         /* End of list element */
-         fprintf (Gbl.F.Out,"</li>");
+         /* Write row for this social event */
+         Soc_WriteSocialEvent (&Soc,&UsrDat,true);
         }
 
       /***** List end *****/
@@ -408,6 +262,154 @@ static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str)
          return (Soc_SocialEvent_t) UnsignedNum;
 
    return Soc_EVENT_UNKNOWN;
+  }
+
+/*****************************************************************************/
+/**************************** Write social event *****************************/
+/*****************************************************************************/
+
+static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
+                                  struct UsrData *UsrDat,
+                                  bool PutIconRemove)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
+   extern const char *Txt_Forum;
+   extern const char *Txt_Course;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Country;
+   struct Country Cty;
+   struct Institution Ins;
+   struct Centre Ctr;
+   struct Degree Deg;
+   struct Course Crs;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX+1];
+   char ForumName[512];
+   char SummaryStr[Cns_MAX_BYTES_TEXT+1];
+
+   /***** Get details *****/
+   /* Get author data */
+   UsrDat->UsrCod = Soc->UsrCod;
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat);
+
+   /* Get country data */
+   Cty.CtyCod = Soc->CtyCod;
+   Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
+
+   /* Get institution data */
+   Ins.InsCod = Soc->InsCod;
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
+    /* Get centre data */
+   Ctr.CtrCod = Soc->CtrCod;
+   Ctr_GetDataOfCentreByCod (&Ctr);
+
+   /* Get degree data */
+   Deg.DegCod = Soc->DegCod;
+   Deg_GetDataOfDegreeByCod (&Deg);
+
+   /* Get course data */
+   Crs.CrsCod = Soc->CrsCod;
+   Crs_GetDataOfCourseByCod (&Crs);
+
+   /* Get forum type of the post */
+   if (Soc->SocialEvent == Soc_EVENT_FORUM_POST)
+     {
+      Gbl.Forum.ForumType = For_GetForumTypeOfAPost (Soc->Cod);
+      For_SetForumName (Gbl.Forum.ForumType,
+			&Ins,
+			&Ctr,
+			&Deg,
+			&Crs,
+			ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+      Gbl.Forum.Ins.InsCod = Ins.InsCod;
+      Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
+      Gbl.Forum.Deg.DegCod = Deg.DegCod;
+      Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
+     }
+
+   /***** Start list item *****/
+   fprintf (Gbl.F.Out,"<li>");
+
+   /***** Left: write author's photo *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					NULL,
+		     "PHOTO60x80",Pho_ZOOM);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Right: author's name, time and summary *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+
+   /* Write author's full name and nickname */
+   Str_LimitLengthHTMLStr (UsrDat->FullName,20);
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+		      "<span class=\"DAT_N_BOLD\">%s</span>"
+		      "<span class=\"DAT_LIGHT\"> @%s</span>"
+		      "</div>",
+	    UsrDat->FullName,UsrDat->Nickname);
+
+   /* Write date and time */
+   Soc_WriteEventDate (Soc->DateTimeUTC);
+
+   if (Soc->SocialEvent == Soc_EVENT_SOCIAL_POST)
+     {
+      /* Write post content */
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      Soc_GetAndWriteSocialPost (Soc->Cod);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /* Write form to remove this event */
+      if (PutIconRemove &&
+	  Gbl.Usrs.Me.Logged &&
+          UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
+	 Soc_PutFormToRemoveSocialEvent (Soc->SocCod);
+     }
+   else
+     {
+      /* Write event type and location */
+      fprintf (Gbl.F.Out,"<div>");
+      Soc_StartFormGoToAction (Soc->SocialEvent,Crs.CrsCod,Soc->Cod);
+      Act_LinkFormSubmit (Txt_SOCIAL_EVENT[Soc->SocialEvent],
+			  The_ClassForm[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s</a>",
+	       Txt_SOCIAL_EVENT[Soc->SocialEvent]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+
+      if (Soc->SocialEvent == Soc_EVENT_FORUM_POST)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Forum,ForumName);
+      else if (Crs.CrsCod > 0)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Course,Crs.ShortName);
+      else if (Deg.DegCod > 0)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Degree,Deg.ShortName);
+      else if (Ctr.CtrCod > 0)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Centre,Ctr.ShortName);
+      else if (Ins.InsCod > 0)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Institution,Ins.ShortName);
+      else if (Cty.CtyCod > 0)
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  Txt_Country,Cty.Name[Gbl.Prefs.Language]);
+
+      /* Write content of the event */
+      Soc_GetEventSummary (Soc,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+     }
+
+   /* End of right part */
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End list item *****/
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
@@ -529,12 +531,12 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 /******************* Get social event summary and content ********************/
 /*****************************************************************************/
 
-static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
+static void Soc_GetEventSummary (const struct SocialEvent *Soc,
                                  char *SummaryStr,unsigned MaxChars)
   {
    SummaryStr[0] = '\0';
 
-   switch (SocialEvent)
+   switch (Soc->SocialEvent)
      {
       case Soc_EVENT_UNKNOWN:
           break;
@@ -546,19 +548,19 @@ static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
       case Soc_EVENT_DEG_SHA_PUB_FILE:
       case Soc_EVENT_CRS_DOC_PUB_FILE:
       case Soc_EVENT_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,Cod,MaxChars,false);
+	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
       case Soc_EVENT_EXAM_ANNOUNCEMENT:
-         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,Cod,MaxChars,false);
+         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
       case Soc_EVENT_SOCIAL_POST:
-	 // TODO: Implement social posts
+	 // Not applicable
          break;
       case Soc_EVENT_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Cod,MaxChars,false);
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
       case Soc_EVENT_FORUM_POST:
-         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Cod,MaxChars,false);
+         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
      }
   }
@@ -731,7 +733,7 @@ static void Soc_PutFormToRemoveSocialEvent (long SocCod)
    extern const char *Txt_Remove;
 
    /***** Form to remove social post *****/
-   Act_FormStart (ActRemSocEvn);
+   Act_FormStart (ActReqRemSocEvn);
    Soc_PutHiddenParamSocCod (SocCod);
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -772,11 +774,63 @@ static long Soc_GetParamSocCod (void)
   }
 
 /*****************************************************************************/
-/**************************** Remove social event ****************************/
+/******************* Request the removal of a social event *******************/
+/*****************************************************************************/
+
+void Soc_RequestRemovalSocialEvent (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
+   extern const char *Txt_Remove;
+   struct SocialEvent Soc;
+   bool ICanRemove;
+   struct UsrData UsrDat;
+
+   /***** Get the code of the social event to remove *****/
+   Soc.SocCod = Soc_GetParamSocCod ();
+
+   /***** Get data of social event *****/
+   Soc_GetDataOfSocialEventByCod (&Soc);
+
+   ICanRemove = (Gbl.Usrs.Me.Logged &&
+                 Soc.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 Soc.SocialEvent == Soc_EVENT_SOCIAL_POST);
+   if (ICanRemove)
+     {
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Form to ask for confirmation to remove this social post *****/
+      /* Start form */
+      Act_FormStart (ActRemSocEvn);
+      Soc_PutHiddenParamSocCod (Soc.SocCod);
+      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
+
+      /* Show social event */
+      Lay_StartRoundFrame ("560px",NULL);
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      Soc_WriteSocialEvent (&Soc,&UsrDat,false);
+      fprintf (Gbl.F.Out,"</ul>");
+      Lay_EndRoundFrame ();
+
+      /* End form */
+      Lay_PutRemoveButton (Txt_Remove);
+      Act_FormEnd ();
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** Write timeline again *****/
+   Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/************************** Remove a social event ****************************/
 /*****************************************************************************/
 
 void Soc_RemoveSocialEvent (void)
   {
+   extern const char *Txt_Comment_removed;
    struct SocialEvent Soc;
    bool ICanRemove;
    char Query[128];
@@ -784,7 +838,7 @@ void Soc_RemoveSocialEvent (void)
    /***** Get the code of the social event to remove *****/
    Soc.SocCod = Soc_GetParamSocCod ();
 
-   /***** Get social event author *****/
+   /***** Get data of social event *****/
    Soc_GetDataOfSocialEventByCod (&Soc);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
@@ -802,6 +856,9 @@ void Soc_RemoveSocialEvent (void)
 	 sprintf (Query,"DELETE FROM social_post WHERE PstCod='%ld'",Soc.Cod);
 	 DB_QueryDELETE (Query,"can not remove a social post");
 	}
+
+      /***** Message of success *****/
+      Lay_ShowAlert (Lay_SUCCESS,Txt_Comment_removed);
      }
 
    /***** Write timeline after removing *****/
@@ -819,46 +876,21 @@ static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc)
    MYSQL_ROW row;
 
    /***** Get data of social event from database *****/
-   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
                   " FROM social"
                   " WHERE SocCod='%ld'",
             Soc->SocCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social event") == 1)
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social event"))
      {
       /***** Get social event *****/
       row = mysql_fetch_row (mysql_res);
-
-      /* Get event type (row[0]) */
-      Soc->SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[0]);
-
-      /* Get (from) user code (row[1]) */
-      Soc->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get country code (row[2]) */
-      Soc->CtyCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get institution code (row[3]) */
-      Soc->InsCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /* Get centre code (row[4]) */
-      Soc->CtrCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /* Get degree code (row[5]) */
-      Soc->DegCod = Str_ConvertStrCodToLongCod (row[5]);
-
-      /* Get course code (row[6]) */
-      Soc->CrsCod = Str_ConvertStrCodToLongCod (row[6]);
-
-      /* Get file/post... code (row[7]) */
-      Soc->Cod = Str_ConvertStrCodToLongCod (row[7]);
-
-      /* Get time of the event (row[8]) */
-      Soc->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+      Soc_GetDataOfSocialEventFromRow (row,Soc);
      }
    else
      {
+      /***** Reset fields of social event *****/
       Soc->SocialEvent = Soc_EVENT_UNKNOWN;
       Soc->UsrCod = -1L;
       Soc->CtyCod =
@@ -869,4 +901,41 @@ static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc)
       Soc->Cod    = -1L;
       Soc->DateTimeUTC = (time_t) 0;
      }
+  }
+
+/*****************************************************************************/
+/******************* Get assignment data using its code **********************/
+/*****************************************************************************/
+
+static void Soc_GetDataOfSocialEventFromRow (MYSQL_ROW row,struct SocialEvent *Soc)
+  {
+   /* Get social code (row[0]) */
+   Soc->SocCod = Str_ConvertStrCodToLongCod (row[0]);
+
+   /* Get event type (row[1]) */
+   Soc->SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[1]);
+
+   /* Get (from) user code (row[2]) */
+   Soc->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+   /* Get country code (row[3]) */
+   Soc->CtyCod = Str_ConvertStrCodToLongCod (row[3]);
+
+   /* Get institution code (row[4]) */
+   Soc->InsCod = Str_ConvertStrCodToLongCod (row[4]);
+
+   /* Get centre code (row[5]) */
+   Soc->CtrCod = Str_ConvertStrCodToLongCod (row[5]);
+
+   /* Get degree code (row[6]) */
+   Soc->DegCod = Str_ConvertStrCodToLongCod (row[6]);
+
+   /* Get course code (row[7]) */
+   Soc->CrsCod = Str_ConvertStrCodToLongCod (row[7]);
+
+   /* Get file/post... code (row[8]) */
+   Soc->Cod = Str_ConvertStrCodToLongCod (row[8]);
+
+   /* Get time of the event (row[9]) */
+   Soc->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
   }

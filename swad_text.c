@@ -4603,6 +4603,27 @@ const char *Txt_columns =
 	"colunas";
 #endif
 
+const char *Txt_Comment_removed =
+#if   L==1
+	"Comentari eliminat.";
+#elif L==2
+	"Kommentar entfernt.";
+#elif L==3
+	"Comment removed.";
+#elif L==4
+	"Comentario eliminado";
+#elif L==5
+	"Commentaire supprim&eacute;.";
+#elif L==6
+	"Comentario eliminado.";	// Okoteve traducción
+#elif L==7
+	"Commento rimosso.";
+#elif L==8
+	"Komentarz usuniete.";
+#elif L==9
+	"Coment&aacute;rio removido.";
+#endif
+
 const char *Txt_Comments =
 #if   L==1
 	"Comentaris";
@@ -8583,15 +8604,15 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 
 const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #if   L==1
-	"&iquest;Realmente desea eliminar el siguiente aviso?";		// Necessita traduccio
+	"De veres voleu eliminar el seg&uuml;ent av&iacute;s?";
 #elif L==2
-	"Do you really want to remove the following notice?";		// Need Übersetzung
+	"Wollen Sie wirklich, um die folgende Ank&uuml;ndigung zu entfernen?";
 #elif L==3
 	"Do you really want to remove the following notice?";
 #elif L==4
 	"&iquest;Realmente desea eliminar el siguiente aviso?";
 #elif L==5
-	"Do you really want to remove the following notice?";		// Besoin de traduction
+	"Voulez-vous vraiment supprimer l'avis suivant?";
 #elif L==6
 	"&iquest;Realmente desea eliminar el siguiente aviso?";		// Okoteve traducción
 #elif L==7
@@ -8599,7 +8620,28 @@ const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #elif L==8
 	"Czy na pewno chcesz usunac nastepujace obwieszczenie?";
 #elif L==9
-	"Do you really want to remove the following notice>?";		// Necessita de tradução
+	"Voc&ecirc; realmente deseja remover o seguinte aviso?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_following_comment =
+#if   L==1
+	"De veres voleu eliminar el seg&uuml;ent comentari?";
+#elif L==2
+	"Wollen Sie wirklich, um die folgende Kommentar zu entfernen?";
+#elif L==3
+	"Do you really want to remove the following comment?";
+#elif L==4
+	"&iquest;Realmente desea eliminar el siguiente comentario?";
+#elif L==5
+	"Voulez-vous vraiment supprimer le commentaire suivant?";
+#elif L==6
+	"&iquest;Realmente desea eliminar el siguiente comentario?";		// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il seguente commento?";
+#elif L==8
+	"Czy na pewno chcesz usunac nastepujace komentarz?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover o seguinte coment&aacute;rio?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences

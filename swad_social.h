@@ -89,6 +89,7 @@ void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod);
 void Soc_FormSocialPost (void);
 void Soc_ReceiveSocialPost (void);
 
+void Soc_RequestRemovalSocialEvent (void);
 void Soc_RemoveSocialEvent (void);
 
 #endif
