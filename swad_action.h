@@ -1036,11 +1036,11 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 /******************************** Social tab *********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActReqSocPst		(ActLstClk+  1)
-#define ActSeeSocAct		(ActLstClk+  2)
-#define ActReqPubPrf		(ActLstClk+  3)
-#define ActSeeChtRms		(ActLstClk+  4)
+#define ActSeeSocAct		(ActLstClk+  1)
+#define ActReqPubPrf		(ActLstClk+  2)
+#define ActSeeChtRms		(ActLstClk+  3)
 // Secondary actions
+#define ActReqSocPst		(ActLstClk+  4)
 #define ActRcvSocPst		(ActLstClk+  5)
 
 #define ActSeePubPrf		(ActLstClk+  6)

@@ -17880,27 +17880,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
-	// ActReqSocPst
-#if   L==1
-	"Redactar"
-#elif L==2
-	"Schreiben"
-#elif L==3
-	"Write"
-#elif L==4
-	"Redactar"
-#elif L==5
-	"Ecrire"
-#elif L==6
-	"Redactar"	// Okoteve traducción
-#elif L==7
-	"Scrivi"
-#elif L==8
-	"Napisz"
-#elif L==9
-	"Escrever"
-#endif
-	,
 	// ActSeeSocAct
 #if   L==1
 	 "Activitat"
@@ -17964,6 +17943,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19856,27 +19836,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
-	// ActReqSocPst
-#if   L==1
-	"Nou comentari p&uacute;blic"
-#elif L==2
-	"Neue &ouml;ffentlichen Kommentar"
-#elif L==3
-	"New public comment"
-#elif L==4
-	"Nuevo comentario p&uacute;blico"
-#elif L==5
-	"Nouvelle commentaire public"
-#elif L==6
-	"Nuevo comentario p&uacute;blico"	// Okoteve traducción
-#elif L==7
-	"Nuovo commento pubblico"
-#elif L==8
-	"Nowy komentarz publicznego"
-#elif L==9
-	"Novo coment&aacute;rio p&uacute;blico"
-#endif
-	,
 	// ActSeeSocAct
 #if   L==1
 	 "Activitat social (l&iacute;nia de temps)"
@@ -19940,6 +19899,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chat"
 #endif
 	,
+	NULL,
 	NULL,
 	NULL,
 	NULL,

@@ -148,7 +148,7 @@ void Soc_FormSocialPost (void)
    Act_FormStart (ActRcvSocPst);
 
    /* Content of new post */
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"10\">"
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
 		      "</textarea>");
 
    /* Send button */
@@ -177,7 +177,7 @@ void Soc_ReceiveSocialPost (void)
    /***** Get and store new post *****/
    /* Get the content of the post */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,false);
+                              Str_TO_RIGOROUS_HTML,true);
 
    /* Insert post content in the database */
    sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",

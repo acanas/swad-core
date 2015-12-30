@@ -997,11 +997,11 @@ Users:
 
         834. ActLstClk			List last clicks in real time
 Social:
-	xxx. ActReqSocPst		Write a public social post to be displayed in the timeline
         xxx. ActSeeSocAct		Show social activity (timeline)
 	699. ActReqPubPrf		Request @nickname to show a public user's profile
 	845. ActSeeChtRms		Show the chat rooms
 
+	xxx. ActReqSocPst		Write a public social post to be displayed in the timeline
 	xxx. ActRcvSocPst		Receive a public social post to be displayed in the timeline
 	835. ActSeePubPrf		Show a public user's profile
 	836. ActCal1stClkTim		Calculate first click time from log and store into user's figures
@@ -2305,12 +2305,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
    // TabSoc ******************************************************************
-   /* ActReqSocPst	*/{1491, 0,TabSoc,ActReqSocPst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,"editnewmsg64x64.gif"	},
-   /* ActSeeSocAct	*/{1490, 1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline	,"soc64x64.png"		},
-   /* ActReqPubPrf	*/{1401, 2,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
-   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
+   /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline	,"soc64x64.png"		},
+   /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
+   /* ActSeeChtRms	*/{  51, 2,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
-   /* ActRcvSocPst	*/{1492,-1,TabSoc,ActReqSocPst		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
+   /* ActReqSocPst	*/{1491,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,NULL},
+   /* ActRcvSocPst	*/{1492,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
