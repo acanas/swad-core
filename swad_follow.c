@@ -165,9 +165,9 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 
    /* I follow user? */
    fprintf (Gbl.F.Out,"<div id=\"follow_usr\">");
-   if (!ItsMe)
+   if (Gbl.Usrs.Me.Logged && !ItsMe)	// It's another logged user
      {
-      if (IFollowUsr)
+      if (IFollowUsr)	// I follow this user
 	{
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -183,7 +183,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 		  Txt_Unfollow,Txt_Following_unfollow);
 	 Act_FormEnd ();
 	}
-      else	// I do not follow user
+      else		// I do not follow this user
 	{
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
