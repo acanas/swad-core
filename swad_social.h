@@ -89,4 +89,6 @@ void Soc_ShowFollowingTimeline (void);
 
 void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod);
 
+void Soc_RemoveSocialEvent (void);
+
 #endif

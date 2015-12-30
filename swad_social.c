@@ -117,6 +117,9 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 static void Soc_GetEventSummary (Soc_SocialEvent_t SocialEvent,long Cod,
                                  char *SummaryStr,unsigned MaxChars);
 
+static void Soc_PutFormToRemoveSocialEvent (long SocCod);
+static void Soc_PutHiddenParamSocCod (long SocCod);
+
 /*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
@@ -237,7 +240,7 @@ void Soc_ShowUsrTimeline (long UsrCod)
    char Query[512];
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
                   " FROM social"
@@ -266,7 +269,7 @@ void Soc_ShowFollowingTimeline (void)
       Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocialEvent,UsrCod,"
+   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
 		  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 		  "Cod,UNIX_TIMESTAMP(TimeEvent)"
 		  " FROM social"
@@ -302,6 +305,7 @@ static unsigned long Soc_ShowTimeline (const char *Query)
    MYSQL_ROW row;
    unsigned long NumEvents;
    unsigned long NumEvent;
+   long SocCod;
    Soc_SocialEvent_t SocialEvent;
    struct UsrData UsrDat;
    struct Country Cty;
@@ -337,35 +341,38 @@ static unsigned long Soc_ShowTimeline (const char *Query)
          /***** Get next social event *****/
          row = mysql_fetch_row (mysql_res);
 
-         /* Get event type (row[0]) */
-         SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[0]);
+         /* Get social code (row[0]) */
+         SocCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         /* Get (from) user code (row[1]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+         /* Get event type (row[1]) */
+         SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[1]);
+
+         /* Get (from) user code (row[2]) */
+         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);		// Get user's data from the database
 
-         /* Get country code (row[2]) */
-         Cty.CtyCod = Str_ConvertStrCodToLongCod (row[2]);
+         /* Get country code (row[3]) */
+         Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
          Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
 
-         /* Get institution code (row[3]) */
-         Ins.InsCod = Str_ConvertStrCodToLongCod (row[3]);
+         /* Get institution code (row[4]) */
+         Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
-          /* Get centre code (row[4]) */
-         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[4]);
+          /* Get centre code (row[5]) */
+         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
          Ctr_GetDataOfCentreByCod (&Ctr);
 
-         /* Get degree code (row[5]) */
-         Deg.DegCod = Str_ConvertStrCodToLongCod (row[5]);
+         /* Get degree code (row[6]) */
+         Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
          Deg_GetDataOfDegreeByCod (&Deg);
 
-         /* Get course code (row[6]) */
-         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[6]);
+         /* Get course code (row[7]) */
+         Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
          Crs_GetDataOfCourseByCod (&Crs);
 
-         /* Get file/post... code (row[7]) */
-         Cod = Str_ConvertStrCodToLongCod (row[7]);
+         /* Get file/post... code (row[8]) */
+         Cod = Str_ConvertStrCodToLongCod (row[8]);
 
          /* Get forum type of the post */
          if (SocialEvent == Soc_EVENT_FORUM_POST)
@@ -383,8 +390,8 @@ static unsigned long Soc_ShowTimeline (const char *Query)
             Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
            }
 
-         /* Get time of the event (row[8]) */
-         DateTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+         /* Get time of the event (row[9]) */
+         DateTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
 
          /***** Write row for this social event *****/
          fprintf (Gbl.F.Out,"<li>");
@@ -413,9 +420,13 @@ static unsigned long Soc_ShowTimeline (const char *Query)
 
          if (SocialEvent == Soc_EVENT_SOCIAL_POST)
            {
+            /* Write post content */
 	    fprintf (Gbl.F.Out,"<div class=\"DAT\">");
 	    Soc_GetAndWriteSocialPost (Cod);
 	    fprintf (Gbl.F.Out,"</div>");
+
+            /* Write form to remove this event */
+	    Soc_PutFormToRemoveSocialEvent (SocCod);
            }
          else
            {
@@ -689,4 +700,48 @@ void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
             CtyCod,InsCod,CtrCod,DegCod,CrsCod,
             Cod);
    DB_QueryINSERT (Query,"can not create new social event");
+  }
+
+/*****************************************************************************/
+/*********************** Form to remove social event *************************/
+/*****************************************************************************/
+
+static void Soc_PutFormToRemoveSocialEvent (long SocCod)
+  {
+   extern const char *Txt_Remove;
+
+   /***** Form to remove social post *****/
+   Act_FormStart (ActRemSocEvn);
+   Soc_PutHiddenParamSocCod (SocCod);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/remove-on64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Remove,
+	    Txt_Remove);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/**************************** Remove social event ****************************/
+/*****************************************************************************/
+
+static void Soc_PutHiddenParamSocCod (long SocCod)
+  {
+   Par_PutHiddenParamLong ("SocCod",SocCod);
+  }
+
+/*****************************************************************************/
+/**************************** Remove social event ****************************/
+/*****************************************************************************/
+
+void Soc_RemoveSocialEvent (void)
+  {
+   Lay_ShowAlert (Lay_INFO,"Not implemented...");
+
+   /***** Write current timeline *****/
+   Soc_ShowFollowingTimeline ();
   }

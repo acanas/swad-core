@@ -1003,6 +1003,7 @@ Social:
 
 	xxx. ActReqSocPst		Write a public social post to be displayed in the timeline
 	xxx. ActRcvSocPst		Receive a public social post to be displayed in the timeline
+	xxx. ActRemSocEvn		Remove a social event
 	835. ActSeePubPrf		Show a public user's profile
 	836. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	837. ActCalNumClk		Calculate number of clicks from log and store into user's figures
@@ -2311,6 +2312,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqSocPst	*/{1491,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,NULL},
    /* ActRcvSocPst	*/{1492,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
+   /* ActRemSocEvn	*/{1493,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialEvent		,NULL},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
@@ -4152,6 +4154,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeSocAct,		// #1490
 	ActReqSocPst,		// #1491
 	ActRcvSocPst,		// #1492
+	ActRemSocEvn,		// #1493
 	};
 
 /*****************************************************************************/
