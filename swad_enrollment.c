@@ -2249,8 +2249,8 @@ void Enr_ShowEnrollmentRequests (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-   Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
+   Act_FormEnd ();
 
    /***** Build query *****/
    switch (Gbl.Scope.Current)

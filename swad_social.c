@@ -120,7 +120,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static unsigned long Soc_ShowTimeline (const char *Query);
+static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction);
 static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
 static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
                                   struct UsrData *UsrDat,
@@ -158,7 +158,7 @@ void Soc_ShowUsrTimeline (long UsrCod)
             UsrCod);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query);
+   Soc_ShowTimeline (Query,ActUnk);
   }
 
 /*****************************************************************************/
@@ -191,15 +191,16 @@ void Soc_ShowFollowingTimeline (void)
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show timeline *****/
-   if (!Soc_ShowTimeline (Query))
+   if (!Soc_ShowTimeline (Query,ActSeeSocAct))
       Lay_ShowAlert (Lay_INFO,"No hay actividad p&uacute;blica.");	// Need translation!!!
   }
 
 /*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
+// UpdateAction == ActUnk ==> no form to update is displayed
 
-static unsigned long Soc_ShowTimeline (const char *Query)
+static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
   {
    extern const char *Txt_Public_activity;
    MYSQL_RES *mysql_res;
@@ -218,8 +219,14 @@ static unsigned long Soc_ShowTimeline (const char *Query)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List start *****/
+      /***** Start frame *****/
       Lay_StartRoundFrame ("560px",Txt_Public_activity);
+
+      /***** Form to update timeline *****/
+      if (UpdateAction != ActUnk)
+	 Act_PutLinkToUpdateAction (UpdateAction);
+
+      /***** Start list *****/
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
       /***** List events one by one *****/
@@ -235,8 +242,10 @@ static unsigned long Soc_ShowTimeline (const char *Query)
          Soc_WriteSocialEvent (&Soc,&UsrDat,true);
         }
 
-      /***** List end *****/
+      /***** End list *****/
       fprintf (Gbl.F.Out,"</ul>");
+
+      /***** End frame *****/
       Lay_EndRoundFrame ();
 
       /***** Free memory used for user's data *****/

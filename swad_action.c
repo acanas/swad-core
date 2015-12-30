@@ -4426,6 +4426,23 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
 /***************** Adjust current action when no user's logged ***************/
 /*****************************************************************************/
 
+void Act_PutLinkToUpdateAction (Act_Action_t Action)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Update;
+
+   Act_FormStart (Action);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
+   fprintf (Gbl.F.Out,"</div>");
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/***************** Adjust current action when no user's logged ***************/
+/*****************************************************************************/
+
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
