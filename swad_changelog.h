@@ -117,15 +117,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.86 (2015-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.86.1 (2015-12-31)"
 #define CSS_FILE		"swad15.84.2.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.86:    Dec 30, 2015	Renamed database tables related to social events. (? lines)
-					4 changes necessary in database:
+        Version 15.86.2:  Dec 31, 2015	New database table to store users who write or share social notes. (? lines)
+					1 change necessary in database:
+
+        Version 15.86.1:  Dec 31, 2015	Change in database table with social notes. (189457 lines)
+					1 change necessary in database:
+ALTER TABLE social_notes CHANGE COLUMN SocCod NotCod BIGINT NOT NULL AUTO_INCREMENT;
+
+        Version 15.86:    Dec 30, 2015	Renamed database tables related to social events. (189451 lines)
+					7 changes necessary in database:
 RENAME TABLE social_post TO social_posts;
 RENAME TABLE social TO social_notes;
 ALTER TABLE social_notes CHANGE COLUMN SocialEvent SocialNote TINYINT NOT NULL;

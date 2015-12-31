@@ -1941,7 +1941,7 @@ mysql> DESCRIBE social_notes;
 +------------+------------+------+-----+---------+----------------+
 | Field      | Type       | Null | Key | Default | Extra          |
 +------------+------------+------+-----+---------+----------------+
-| SocCod     | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| NotCod     | bigint(20) | NO   | PRI | NULL    | auto_increment |
 | SocialNote | tinyint(4) | NO   | MUL | NULL    |                |
 | UsrCod     | int(11)    | NO   | MUL | NULL    |                |
 | CtyCod     | int(11)    | NO   |     | -1      |                |
@@ -1955,7 +1955,7 @@ mysql> DESCRIBE social_notes;
 10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
-	           "SocCod BIGINT NOT NULL AUTO_INCREMENT,"
+	           "NotCod BIGINT NOT NULL AUTO_INCREMENT,"
                    "SocialNote TINYINT NOT NULL,"
                    "UsrCod INT NOT NULL,"
                    "CtyCod INT NOT NULL DEFAULT -1,"
@@ -1965,7 +1965,7 @@ mysql> DESCRIBE social_notes;
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "Cod INT NOT NULL DEFAULT -1,"
                    "TimeNote DATETIME NOT NULL,"
-                   "UNIQUE INDEX(SocCod),"
+                   "UNIQUE INDEX(NotCod),"
                    "INDEX(SocialNote),"
                    "INDEX(UsrCod),"
                    "INDEX(TimeNote))");

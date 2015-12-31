@@ -94,7 +94,7 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
 
 struct SocialNote
   {
-   long SocCod;
+   long NotCod;
    Soc_SocialNote_t SocialNote;
    long UsrCod;
    long CtyCod;
@@ -134,9 +134,9 @@ static void Soc_GetNoteSummary (const struct SocialNote *Soc,
 static void Soc_PutLinkToWriteANewPost (void);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 
-static void Soc_PutFormToRemoveSocialNote (long SocCod);
-static void Soc_PutHiddenParamSocCod (long SocCod);
-static long Soc_GetParamSocCod (void);
+static void Soc_PutFormToRemoveSocialNote (long NotCod);
+static void Soc_PutHiddenParamNotCod (long NotCod);
+static long Soc_GetParamNotCod (void);
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *Soc);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc);
 
@@ -149,12 +149,12 @@ void Soc_ShowUsrTimeline (long UsrCod)
    char Query[512];
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
+   sprintf (Query,"SELECT NotCod,SocialNote,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "Cod,UNIX_TIMESTAMP(TimeNote)"
                   " FROM social_notes"
                   " WHERE UsrCod='%ld'"
-                  " ORDER BY SocCod DESC LIMIT 10",
+                  " ORDER BY NotCod DESC LIMIT 10",
             UsrCod);
 
    /***** Show timeline *****/
@@ -178,7 +178,7 @@ void Soc_ShowFollowingTimeline (void)
       Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
+   sprintf (Query,"SELECT NotCod,SocialNote,UsrCod,"
 		  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 		  "Cod,UNIX_TIMESTAMP(TimeNote)"
 		  " FROM social_notes"
@@ -186,7 +186,7 @@ void Soc_ShowFollowingTimeline (void)
 		  " (SELECT '%ld'"
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-		  " ORDER BY SocCod DESC LIMIT 10",
+		  " ORDER BY NotCod DESC LIMIT 10",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -259,7 +259,7 @@ static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateActi
   }
 
 /*****************************************************************************/
-/****** Get social note type from string number coming from database ********/
+/****** Get social note type from string number coming from database *********/
 /*****************************************************************************/
 
 static Soc_SocialNote_t Soc_GetSocialNoteFromDB (const char *Str)
@@ -376,7 +376,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *Soc,
       if (PutIconRemove &&
 	  Gbl.Usrs.Me.Logged &&
           UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
-	 Soc_PutFormToRemoveSocialNote (Soc->SocCod);
+	 Soc_PutFormToRemoveSocialNote (Soc->NotCod);
      }
    else
      {
@@ -422,7 +422,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *Soc,
   }
 
 /*****************************************************************************/
-/**************** Write the date of creation of a social note ***************/
+/**************** Write the date of creation of a social note ****************/
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
@@ -537,7 +537,7 @@ static void Soc_StartFormGoToAction (Soc_SocialNote_t SocialNote,
   }
 
 /*****************************************************************************/
-/******************* Get social note summary and content ********************/
+/******************* Get social note summary and content *********************/
 /*****************************************************************************/
 
 static void Soc_GetNoteSummary (const struct SocialNote *Soc,
@@ -575,7 +575,7 @@ static void Soc_GetNoteSummary (const struct SocialNote *Soc,
   }
 
 /*****************************************************************************/
-/********************* Store a social note into database ********************/
+/********************* Store a social note into database *********************/
 /*****************************************************************************/
 
 void Soc_StoreSocialNote (Soc_SocialNote_t SocialNote,long Cod)
@@ -735,16 +735,16 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
   }
 
 /*****************************************************************************/
-/*********************** Form to remove social note *************************/
+/*********************** Form to remove social note **************************/
 /*****************************************************************************/
 
-static void Soc_PutFormToRemoveSocialNote (long SocCod)
+static void Soc_PutFormToRemoveSocialNote (long NotCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove social post *****/
    Act_FormStart (ActReqRemSocNot);
-   Soc_PutHiddenParamSocCod (SocCod);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
@@ -758,33 +758,33 @@ static void Soc_PutFormToRemoveSocialNote (long SocCod)
   }
 
 /*****************************************************************************/
-/************** Put parameter with the code of a social note ****************/
+/************** Put parameter with the code of a social note *****************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenParamSocCod (long SocCod)
+static void Soc_PutHiddenParamNotCod (long NotCod)
   {
-   Par_PutHiddenParamLong ("SocCod",SocCod);
+   Par_PutHiddenParamLong ("NotCod",NotCod);
   }
 
 /*****************************************************************************/
-/************** Get parameter with the code of a social note ****************/
+/************** Get parameter with the code of a social note *****************/
 /*****************************************************************************/
 
-static long Soc_GetParamSocCod (void)
+static long Soc_GetParamNotCod (void)
   {
    char LongStr[1+10+1];	// String that holds the social note code
-   long SocCod;
+   long NotCod;
 
    /* Get social note code */
-   Par_GetParToText ("SocCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&SocCod) != 1)
+   Par_GetParToText ("NotCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&NotCod) != 1)
       Lay_ShowErrorAndExit ("Wrong code of social note.");
 
-   return SocCod;
+   return NotCod;
   }
 
 /*****************************************************************************/
-/******************* Request the removal of a social note *******************/
+/******************* Request the removal of a social note ********************/
 /*****************************************************************************/
 
 void Soc_RequestRemovalSocialNote (void)
@@ -796,7 +796,7 @@ void Soc_RequestRemovalSocialNote (void)
    struct UsrData UsrDat;
 
    /***** Get the code of the social note to remove *****/
-   Soc.SocCod = Soc_GetParamSocCod ();
+   Soc.NotCod = Soc_GetParamNotCod ();
 
    /***** Get data of social note *****/
    Soc_GetDataOfSocialNoteByCod (&Soc);
@@ -812,7 +812,7 @@ void Soc_RequestRemovalSocialNote (void)
       /***** Form to ask for confirmation to remove this social post *****/
       /* Start form */
       Act_FormStart (ActRemSocNot);
-      Soc_PutHiddenParamSocCod (Soc.SocCod);
+      Soc_PutHiddenParamNotCod (Soc.NotCod);
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
       /* Show social note */
@@ -835,7 +835,7 @@ void Soc_RequestRemovalSocialNote (void)
   }
 
 /*****************************************************************************/
-/************************** Remove a social note ****************************/
+/*************************** Remove a social note ****************************/
 /*****************************************************************************/
 
 void Soc_RemoveSocialNote (void)
@@ -846,7 +846,7 @@ void Soc_RemoveSocialNote (void)
    char Query[128];
 
    /***** Get the code of the social note to remove *****/
-   Soc.SocCod = Soc_GetParamSocCod ();
+   Soc.NotCod = Soc_GetParamNotCod ();
 
    /***** Get data of social note *****/
    Soc_GetDataOfSocialNoteByCod (&Soc);
@@ -857,8 +857,8 @@ void Soc_RemoveSocialNote (void)
    if (ICanRemove)
      {
       /***** Remove social note *****/
-      sprintf (Query,"DELETE FROM social_notes WHERE SocCod='%ld'",
-               Soc.SocCod);
+      sprintf (Query,"DELETE FROM social_notes WHERE NotCod='%ld'",
+               Soc.NotCod);
       DB_QueryDELETE (Query,"can not remove a social note");
 
       /***** Remove social post *****/
@@ -888,12 +888,12 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *Soc)
    MYSQL_ROW row;
 
    /***** Get data of social note from database *****/
-   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
+   sprintf (Query,"SELECT NotCod,SocialNote,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "Cod,UNIX_TIMESTAMP(TimeNote)"
                   " FROM social_notes"
-                  " WHERE SocCod='%ld'",
-            Soc->SocCod);
+                  " WHERE NotCod='%ld'",
+            Soc->NotCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social note"))
      {
       /***** Get social note *****/
@@ -922,7 +922,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *Soc)
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc)
   {
    /* Get social code (row[0]) */
-   Soc->SocCod = Str_ConvertStrCodToLongCod (row[0]);
+   Soc->NotCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /* Get note type (row[1]) */
    Soc->SocialNote = Soc_GetSocialNoteFromDB ((const char *) row[1]);
