@@ -111,18 +111,30 @@
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
 // TODO: When a file, notice, etc. is removed, it should be removed from social events?
+// TODO: New database table used to store users who write or share social
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.85 (2015-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.86 (2015-12-30)"
 #define CSS_FILE		"swad15.84.2.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.86:    Dec 30, 2015	Renamed database tables related to social events. (? lines)
+					4 changes necessary in database:
+RENAME TABLE social_post TO social_posts;
+RENAME TABLE social TO social_notes;
+ALTER TABLE social_notes CHANGE COLUMN SocialEvent SocialNote TINYINT NOT NULL;
+ALTER TABLE social_notes CHANGE COLUMN TimeEvent TimeNote DATETIME NOT NULL;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1492','es','N','Crear comentario social');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1493','es','N','Eliminar comentario social');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1494','es','N','Solicitar elim. comentario social');
+
+        Version 15.85.1:  Dec 30, 2015	Remove social events when a user is removed. (189439 lines)
         Version 15.85:    Dec 30, 2015	Forums option is moved to social tab. (189439 lines)
         Version 15.84.5:  Dec 30, 2015	Form to update connected users. (189430 lines)
         Version 15.84.4:  Dec 30, 2015	Code refactoring in profile. (189427 lines)

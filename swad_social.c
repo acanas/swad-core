@@ -1,4 +1,4 @@
-// swad_social.c: social networking
+// swad_social.c: social networking (timeline)
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -50,37 +50,37 @@
 
 #define Soc_MAX_BYTES_SUMMARY 100
 
-static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
+static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
-   ActUnk,		// Soc_EVENT_UNKNOWN
+   ActUnk,		// Soc_NOTE_UNKNOWN
 
    /* Institution tab */
-   ActSeeDocIns,	// Soc_EVENT_INS_DOC_PUB_FILE
-   ActAdmComIns,	// Soc_EVENT_INS_SHA_PUB_FILE
+   ActSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
+   ActAdmComIns,	// Soc_NOTE_INS_SHA_PUB_FILE
 
    /* Centre tab */
-   ActSeeDocCtr,	// Soc_EVENT_CTR_DOC_PUB_FILE
-   ActAdmComCtr,	// Soc_EVENT_CTR_SHA_PUB_FILE
+   ActSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
+   ActAdmComCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
 
    /* Degree tab */
-   ActSeeDocDeg,	// Soc_EVENT_DEG_DOC_PUB_FILE
-   ActAdmComDeg,	// Soc_EVENT_DEG_SHA_PUB_FILE
+   ActSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
+   ActAdmComDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
 
    /* Course tab */
-   ActSeeDocCrs,	// Soc_EVENT_CRS_DOC_PUB_FILE
-   ActAdmShaCrs,	// Soc_EVENT_CRS_SHA_PUB_FILE
+   ActSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
+   ActAdmShaCrs,	// Soc_NOTE_CRS_SHA_PUB_FILE
 
    /* Assessment tab */
-   ActSeeExaAnn,	// Soc_EVENT_EXAM_ANNOUNCEMENT
+   ActSeeExaAnn,	// Soc_NOTE_EXAM_ANNOUNCEMENT
 
    /* Users tab */
 
    /* Social tab */
-   ActSeeSocAct,	// Soc_EVENT_SOCIAL_POST (action not used)
-   ActSeeFor,		// Soc_EVENT_FORUM_POST
+   ActSeeSocAct,	// Soc_NOTE_SOCIAL_POST (action not used)
+   ActSeeFor,		// Soc_NOTE_FORUM_POST
 
    /* Messages tab */
-   ActShoNot,		// Soc_EVENT_NOTICE
+   ActShoNot,		// Soc_NOTE_NOTICE
 
    /* Statistics tab */
 
@@ -92,10 +92,10 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_EVENTS] =
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
-struct SocialEvent
+struct SocialNote
   {
    long SocCod;
-   Soc_SocialEvent_t SocialEvent;
+   Soc_SocialNote_t SocialNote;
    long UsrCod;
    long CtyCod;
    long InsCod;
@@ -121,24 +121,24 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction);
-static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str);
-static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
+static Soc_SocialNote_t Soc_GetSocialNoteFromDB (const char *Str);
+static void Soc_WriteSocialNote (const struct SocialNote *Soc,
                                   struct UsrData *UsrDat,
                                   bool PutIconRemove);
-static void Soc_WriteEventDate (time_t TimeUTC);
-static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
+static void Soc_WriteNoteDate (time_t TimeUTC);
+static void Soc_StartFormGoToAction (Soc_SocialNote_t SocialNote,
                                      long CrsCod,long Cod);
-static void Soc_GetEventSummary (const struct SocialEvent *Soc,
-                                 char *SummaryStr,unsigned MaxChars);
+static void Soc_GetNoteSummary (const struct SocialNote *Soc,
+                                char *SummaryStr,unsigned MaxChars);
 
 static void Soc_PutLinkToWriteANewPost (void);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 
-static void Soc_PutFormToRemoveSocialEvent (long SocCod);
+static void Soc_PutFormToRemoveSocialNote (long SocCod);
 static void Soc_PutHiddenParamSocCod (long SocCod);
 static long Soc_GetParamSocCod (void);
-static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc);
-static void Soc_GetDataOfSocialEventFromRow (MYSQL_ROW row,struct SocialEvent *Soc);
+static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *Soc);
+static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -149,10 +149,10 @@ void Soc_ShowUsrTimeline (long UsrCod)
    char Query[512];
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
+   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
-                  " FROM social"
+	          "Cod,UNIX_TIMESTAMP(TimeNote)"
+                  " FROM social_notes"
                   " WHERE UsrCod='%ld'"
                   " ORDER BY SocCod DESC LIMIT 10",
             UsrCod);
@@ -169,7 +169,7 @@ void Soc_ShowFollowingTimeline (void)
   {
    char Query[512];
 
-   /***** Link to write a new social post *****/
+   /***** Link to write a new social post (public comment) *****/
    if (Gbl.CurrentAct != ActReqSocPst)
       Soc_PutLinkToWriteANewPost ();
 
@@ -178,10 +178,10 @@ void Soc_ShowFollowingTimeline (void)
       Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
+   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
 		  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-		  "Cod,UNIX_TIMESTAMP(TimeEvent)"
-		  " FROM social"
+		  "Cod,UNIX_TIMESTAMP(TimeNote)"
+		  " FROM social_notes"
 		  " WHERE UsrCod IN"
 		  " (SELECT '%ld'"
 		  " UNION"
@@ -205,16 +205,16 @@ static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateActi
    extern const char *Txt_Public_activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumEvents;
-   unsigned long NumEvent;
-   struct SocialEvent Soc;
+   unsigned long NumNotes;
+   unsigned long NumNote;
+   struct SocialNote Soc;
    struct UsrData UsrDat;
 
    /***** Get timeline from database *****/
-   NumEvents = DB_QuerySELECT (Query,&mysql_res,"can not get social events");
+   NumNotes = DB_QuerySELECT (Query,&mysql_res,"can not get social notes");
 
    /***** List my timeline *****/
-   if (NumEvents)	// Events found
+   if (NumNotes)	// Notes found
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -229,17 +229,17 @@ static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateActi
       /***** Start list *****/
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
-      /***** List events one by one *****/
-      for (NumEvent = 0;
-	   NumEvent < NumEvents;
-	   NumEvent++)
+      /***** List notes one by one *****/
+      for (NumNote = 0;
+	   NumNote < NumNotes;
+	   NumNote++)
 	{
-         /* Get next social event */
+         /* Get next social note */
          row = mysql_fetch_row (mysql_res);
-         Soc_GetDataOfSocialEventFromRow (row,&Soc);
+         Soc_GetDataOfSocialNoteFromRow (row,&Soc);
 
-         /* Write row for this social event */
-         Soc_WriteSocialEvent (&Soc,&UsrDat,true);
+         /* Write row for this social note */
+         Soc_WriteSocialNote (&Soc,&UsrDat,true);
         }
 
       /***** End list *****/
@@ -255,34 +255,34 @@ static unsigned long Soc_ShowTimeline (const char *Query,Act_Action_t UpdateActi
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumEvents;
+   return NumNotes;
   }
 
 /*****************************************************************************/
-/****** Get social event type from string number coming from database ********/
+/****** Get social note type from string number coming from database ********/
 /*****************************************************************************/
 
-static Soc_SocialEvent_t Soc_GetSocialEventFromDB (const char *Str)
+static Soc_SocialNote_t Soc_GetSocialNoteFromDB (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Soc_NUM_SOCIAL_EVENTS)
-         return (Soc_SocialEvent_t) UnsignedNum;
+      if (UnsignedNum < Soc_NUM_SOCIAL_NOTES)
+         return (Soc_SocialNote_t) UnsignedNum;
 
-   return Soc_EVENT_UNKNOWN;
+   return Soc_NOTE_UNKNOWN;
   }
 
 /*****************************************************************************/
-/**************************** Write social event *****************************/
+/**************************** Write social note ******************************/
 /*****************************************************************************/
 
-static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
+static void Soc_WriteSocialNote (const struct SocialNote *Soc,
                                   struct UsrData *UsrDat,
                                   bool PutIconRemove)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS];
+   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
@@ -325,7 +325,7 @@ static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
    Crs_GetDataOfCourseByCod (&Crs);
 
    /* Get forum type of the post */
-   if (Soc->SocialEvent == Soc_EVENT_FORUM_POST)
+   if (Soc->SocialNote == Soc_NOTE_FORUM_POST)
      {
       Gbl.Forum.ForumType = For_GetForumTypeOfAPost (Soc->Cod);
       For_SetForumName (Gbl.Forum.ForumType,
@@ -363,34 +363,34 @@ static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
 	    UsrDat->FullName,UsrDat->Nickname);
 
    /* Write date and time */
-   Soc_WriteEventDate (Soc->DateTimeUTC);
+   Soc_WriteNoteDate (Soc->DateTimeUTC);
 
-   if (Soc->SocialEvent == Soc_EVENT_SOCIAL_POST)
+   if (Soc->SocialNote == Soc_NOTE_SOCIAL_POST)
      {
       /* Write post content */
       fprintf (Gbl.F.Out,"<div class=\"DAT\">");
       Soc_GetAndWriteSocialPost (Soc->Cod);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Write form to remove this event */
+      /* Write form to remove this note */
       if (PutIconRemove &&
 	  Gbl.Usrs.Me.Logged &&
           UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
-	 Soc_PutFormToRemoveSocialEvent (Soc->SocCod);
+	 Soc_PutFormToRemoveSocialNote (Soc->SocCod);
      }
    else
      {
-      /* Write event type and location */
+      /* Write note type and location */
       fprintf (Gbl.F.Out,"<div>");
-      Soc_StartFormGoToAction (Soc->SocialEvent,Crs.CrsCod,Soc->Cod);
-      Act_LinkFormSubmit (Txt_SOCIAL_EVENT[Soc->SocialEvent],
+      Soc_StartFormGoToAction (Soc->SocialNote,Crs.CrsCod,Soc->Cod);
+      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[Soc->SocialNote],
 			  The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s</a>",
-	       Txt_SOCIAL_EVENT[Soc->SocialEvent]);
+	       Txt_SOCIAL_NOTE[Soc->SocialNote]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      if (Soc->SocialEvent == Soc_EVENT_FORUM_POST)
+      if (Soc->SocialNote == Soc_NOTE_FORUM_POST)
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		  Txt_Forum,ForumName);
       else if (Crs.CrsCod > 0)
@@ -409,8 +409,8 @@ static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		  Txt_Country,Cty.Name[Gbl.Prefs.Language]);
 
-      /* Write content of the event */
-      Soc_GetEventSummary (Soc,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+      /* Write content of the note */
+      Soc_GetNoteSummary (Soc,SummaryStr,Soc_MAX_BYTES_SUMMARY);
       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
      }
 
@@ -422,11 +422,11 @@ static void Soc_WriteSocialEvent (const struct SocialEvent *Soc,
   }
 
 /*****************************************************************************/
-/**************** Write the date of creation of a social event ***************/
+/**************** Write the date of creation of a social note ***************/
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-static void Soc_WriteEventDate (time_t TimeUTC)
+static void Soc_WriteNoteDate (time_t TimeUTC)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
@@ -450,10 +450,10 @@ static void Soc_WriteEventDate (time_t TimeUTC)
 
 
 /*****************************************************************************/
-/*********** Put form to go to an action depending on the event **************/
+/********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
 
-static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
+static void Soc_StartFormGoToAction (Soc_SocialNote_t SocialNote,
                                      long CrsCod,long Cod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
@@ -463,17 +463,17 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
    char FileName[NAME_MAX+1];
    Act_Action_t Action = ActUnk;				// Initialized to avoid warning
 
-   /***** Parameters depending on the type of event *****/
-   switch (SocialEvent)
+   /***** Parameters depending on the type of note *****/
+   switch (SocialNote)
      {
-      case Soc_EVENT_INS_DOC_PUB_FILE:
-      case Soc_EVENT_INS_SHA_PUB_FILE:
-      case Soc_EVENT_CTR_DOC_PUB_FILE:
-      case Soc_EVENT_CTR_SHA_PUB_FILE:
-      case Soc_EVENT_DEG_DOC_PUB_FILE:
-      case Soc_EVENT_DEG_SHA_PUB_FILE:
-      case Soc_EVENT_CRS_DOC_PUB_FILE:
-      case Soc_EVENT_CRS_SHA_PUB_FILE:
+      case Soc_NOTE_INS_DOC_PUB_FILE:
+      case Soc_NOTE_INS_SHA_PUB_FILE:
+      case Soc_NOTE_CTR_DOC_PUB_FILE:
+      case Soc_NOTE_CTR_SHA_PUB_FILE:
+      case Soc_NOTE_DEG_DOC_PUB_FILE:
+      case Soc_NOTE_DEG_SHA_PUB_FILE:
+      case Soc_NOTE_CRS_DOC_PUB_FILE:
+      case Soc_NOTE_CRS_SHA_PUB_FILE:
 	 if (Cod > 0)	// File code
 	   {
 	    FileMetadata.FilCod = Cod;
@@ -483,30 +483,30 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 						  PathUntilFileName,
 						  FileName);
 	   }
-	 switch (SocialEvent)
+	 switch (SocialNote)
 	   {
-	    case Soc_EVENT_INS_DOC_PUB_FILE:
+	    case Soc_NOTE_INS_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocIns : ActSeeDocIns;
 	       break;
-	    case Soc_EVENT_INS_SHA_PUB_FILE:
+	    case Soc_NOTE_INS_SHA_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatShaIns : ActAdmComIns;
 	       break;
-	    case Soc_EVENT_CTR_DOC_PUB_FILE:
+	    case Soc_NOTE_CTR_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocCtr : ActSeeDocCtr;
 	       break;
-	    case Soc_EVENT_CTR_SHA_PUB_FILE:
+	    case Soc_NOTE_CTR_SHA_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatShaCtr : ActAdmComCtr;
 	       break;
-	    case Soc_EVENT_DEG_DOC_PUB_FILE:
+	    case Soc_NOTE_DEG_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocDeg : ActSeeDocDeg;
 	       break;
-	    case Soc_EVENT_DEG_SHA_PUB_FILE:
+	    case Soc_NOTE_DEG_SHA_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatShaDeg : ActAdmComDeg;
 	       break;
-	    case Soc_EVENT_CRS_DOC_PUB_FILE:
+	    case Soc_NOTE_CRS_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocCrs : ActSeeDocCrs;
 	       break;
-	    case Soc_EVENT_CRS_SHA_PUB_FILE:
+	    case Soc_NOTE_CRS_SHA_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatShaCrs : ActAdmShaCrs;
 	       break;
 	    default:	// Not aplicable here
@@ -517,16 +517,16 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
 	 if (Cod > 0)	// File code
 	    Brw_PutParamsPathAndFile (Brw_IS_FILE,PathUntilFileName,FileName);
 	 break;
-      case Soc_EVENT_NOTICE:
-         Act_FormStart (Soc_DefaultActions[SocialEvent]);
+      case Soc_NOTE_NOTICE:
+         Act_FormStart (Soc_DefaultActions[SocialNote]);
 	 Not_PutHiddenParamNotCod (Cod);
 	 break;
-      case Soc_EVENT_FORUM_POST:
+      case Soc_NOTE_FORUM_POST:
 	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
 	 For_PutAllHiddenParamsForum ();
 	 break;
       default:
-         Act_FormStart (Soc_DefaultActions[SocialEvent]);
+         Act_FormStart (Soc_DefaultActions[SocialNote]);
 	 break;
      }
 
@@ -537,48 +537,48 @@ static void Soc_StartFormGoToAction (Soc_SocialEvent_t SocialEvent,
   }
 
 /*****************************************************************************/
-/******************* Get social event summary and content ********************/
+/******************* Get social note summary and content ********************/
 /*****************************************************************************/
 
-static void Soc_GetEventSummary (const struct SocialEvent *Soc,
-                                 char *SummaryStr,unsigned MaxChars)
+static void Soc_GetNoteSummary (const struct SocialNote *Soc,
+                                char *SummaryStr,unsigned MaxChars)
   {
    SummaryStr[0] = '\0';
 
-   switch (Soc->SocialEvent)
+   switch (Soc->SocialNote)
      {
-      case Soc_EVENT_UNKNOWN:
+      case Soc_NOTE_UNKNOWN:
           break;
-      case Soc_EVENT_INS_DOC_PUB_FILE:
-      case Soc_EVENT_INS_SHA_PUB_FILE:
-      case Soc_EVENT_CTR_DOC_PUB_FILE:
-      case Soc_EVENT_CTR_SHA_PUB_FILE:
-      case Soc_EVENT_DEG_DOC_PUB_FILE:
-      case Soc_EVENT_DEG_SHA_PUB_FILE:
-      case Soc_EVENT_CRS_DOC_PUB_FILE:
-      case Soc_EVENT_CRS_SHA_PUB_FILE:
+      case Soc_NOTE_INS_DOC_PUB_FILE:
+      case Soc_NOTE_INS_SHA_PUB_FILE:
+      case Soc_NOTE_CTR_DOC_PUB_FILE:
+      case Soc_NOTE_CTR_SHA_PUB_FILE:
+      case Soc_NOTE_DEG_DOC_PUB_FILE:
+      case Soc_NOTE_DEG_SHA_PUB_FILE:
+      case Soc_NOTE_CRS_DOC_PUB_FILE:
+      case Soc_NOTE_CRS_SHA_PUB_FILE:
 	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
-      case Soc_EVENT_EXAM_ANNOUNCEMENT:
+      case Soc_NOTE_EXAM_ANNOUNCEMENT:
          Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
-      case Soc_EVENT_SOCIAL_POST:
+      case Soc_NOTE_SOCIAL_POST:
 	 // Not applicable
          break;
-      case Soc_EVENT_FORUM_POST:
+      case Soc_NOTE_FORUM_POST:
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
-      case Soc_EVENT_NOTICE:
+      case Soc_NOTE_NOTICE:
          Not_GetSummaryAndContentNotice (SummaryStr,NULL,Soc->Cod,MaxChars,false);
          break;
      }
   }
 
 /*****************************************************************************/
-/********************* Store a social event into database ********************/
+/********************* Store a social note into database ********************/
 /*****************************************************************************/
 
-void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
+void Soc_StoreSocialNote (Soc_SocialNote_t SocialNote,long Cod)
   {
    char Query[512];
    long CtyCod;
@@ -587,7 +587,7 @@ void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
    long DegCod;
    long CrsCod;
 
-   if (SocialEvent == Soc_EVENT_FORUM_POST)
+   if (SocialNote == Soc_NOTE_FORUM_POST)
      {
       // CtyCod = Gbl.Forum.Cty.CtyCod;
       // InsCod = Gbl.Forum.Ins.InsCod;
@@ -609,17 +609,17 @@ void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod)
       CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
      }
 
-   /***** Store notify event *****/
-   sprintf (Query,"INSERT INTO social (SocialEvent,UsrCod,"
+   /***** Store social note *****/
+   sprintf (Query,"INSERT INTO social_notes (SocialNote,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,TimeEvent)"
+	          "Cod,TimeNote)"
                   " VALUES ('%u','%ld',"
                   "'%ld','%ld','%ld','%ld','%ld',"
                   "'%ld',NOW())",
-            (unsigned) SocialEvent,Gbl.Usrs.Me.UsrDat.UsrCod,
+            (unsigned) SocialNote,Gbl.Usrs.Me.UsrDat.UsrCod,
             CtyCod,InsCod,CtrCod,DegCod,CrsCod,
             Cod);
-   DB_QueryINSERT (Query,"can not create new social event");
+   DB_QueryINSERT (Query,"can not create new social note");
   }
 
 /*****************************************************************************/
@@ -686,12 +686,12 @@ void Soc_ReceiveSocialPost (void)
                               Str_TO_RIGOROUS_HTML,true);
 
    /* Insert post content in the database */
-   sprintf (Query,"INSERT INTO social_post (Content) VALUES ('%s')",
+   sprintf (Query,"INSERT INTO social_posts (Content) VALUES ('%s')",
             Content);
    PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
-   /* Insert post in social events */
-   Soc_StoreSocialEvent (Soc_EVENT_SOCIAL_POST,PstCod);
+   /* Insert post in social notes */
+   Soc_StoreSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
 
    /***** Write current timeline *****/
    Soc_ShowFollowingTimeline ();
@@ -710,7 +710,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content FROM social_post WHERE PstCod='%ld'",
+   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
 
@@ -735,15 +735,15 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
   }
 
 /*****************************************************************************/
-/*********************** Form to remove social event *************************/
+/*********************** Form to remove social note *************************/
 /*****************************************************************************/
 
-static void Soc_PutFormToRemoveSocialEvent (long SocCod)
+static void Soc_PutFormToRemoveSocialNote (long SocCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove social post *****/
-   Act_FormStart (ActReqRemSocEvn);
+   Act_FormStart (ActReqRemSocNot);
    Soc_PutHiddenParamSocCod (SocCod);
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -758,7 +758,7 @@ static void Soc_PutFormToRemoveSocialEvent (long SocCod)
   }
 
 /*****************************************************************************/
-/************** Put parameter with the code of a social event ****************/
+/************** Put parameter with the code of a social note ****************/
 /*****************************************************************************/
 
 static void Soc_PutHiddenParamSocCod (long SocCod)
@@ -767,43 +767,43 @@ static void Soc_PutHiddenParamSocCod (long SocCod)
   }
 
 /*****************************************************************************/
-/************** Get parameter with the code of a social event ****************/
+/************** Get parameter with the code of a social note ****************/
 /*****************************************************************************/
 
 static long Soc_GetParamSocCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the social event code
+   char LongStr[1+10+1];	// String that holds the social note code
    long SocCod;
 
-   /* Get social event code */
+   /* Get social note code */
    Par_GetParToText ("SocCod",LongStr,1+10);
    if (sscanf (LongStr,"%ld",&SocCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social event.");
+      Lay_ShowErrorAndExit ("Wrong code of social note.");
 
    return SocCod;
   }
 
 /*****************************************************************************/
-/******************* Request the removal of a social event *******************/
+/******************* Request the removal of a social note *******************/
 /*****************************************************************************/
 
-void Soc_RequestRemovalSocialEvent (void)
+void Soc_RequestRemovalSocialNote (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
-   struct SocialEvent Soc;
+   struct SocialNote Soc;
    bool ICanRemove;
    struct UsrData UsrDat;
 
-   /***** Get the code of the social event to remove *****/
+   /***** Get the code of the social note to remove *****/
    Soc.SocCod = Soc_GetParamSocCod ();
 
-   /***** Get data of social event *****/
-   Soc_GetDataOfSocialEventByCod (&Soc);
+   /***** Get data of social note *****/
+   Soc_GetDataOfSocialNoteByCod (&Soc);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
                  Soc.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 Soc.SocialEvent == Soc_EVENT_SOCIAL_POST);
+                 Soc.SocialNote == Soc_NOTE_SOCIAL_POST);
    if (ICanRemove)
      {
       /***** Initialize structure with user's data *****/
@@ -811,14 +811,14 @@ void Soc_RequestRemovalSocialEvent (void)
 
       /***** Form to ask for confirmation to remove this social post *****/
       /* Start form */
-      Act_FormStart (ActRemSocEvn);
+      Act_FormStart (ActRemSocNot);
       Soc_PutHiddenParamSocCod (Soc.SocCod);
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
-      /* Show social event */
+      /* Show social note */
       Lay_StartRoundFrame ("560px",NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-      Soc_WriteSocialEvent (&Soc,&UsrDat,false);
+      Soc_WriteSocialNote (&Soc,&UsrDat,false);
       fprintf (Gbl.F.Out,"</ul>");
       Lay_EndRoundFrame ();
 
@@ -835,35 +835,37 @@ void Soc_RequestRemovalSocialEvent (void)
   }
 
 /*****************************************************************************/
-/************************** Remove a social event ****************************/
+/************************** Remove a social note ****************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialEvent (void)
+void Soc_RemoveSocialNote (void)
   {
    extern const char *Txt_Comment_removed;
-   struct SocialEvent Soc;
+   struct SocialNote Soc;
    bool ICanRemove;
    char Query[128];
 
-   /***** Get the code of the social event to remove *****/
+   /***** Get the code of the social note to remove *****/
    Soc.SocCod = Soc_GetParamSocCod ();
 
-   /***** Get data of social event *****/
-   Soc_GetDataOfSocialEventByCod (&Soc);
+   /***** Get data of social note *****/
+   Soc_GetDataOfSocialNoteByCod (&Soc);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
                  Soc.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 Soc.SocialEvent == Soc_EVENT_SOCIAL_POST);
+                 Soc.SocialNote == Soc_NOTE_SOCIAL_POST);
    if (ICanRemove)
      {
-      /***** Remove social event *****/
-      sprintf (Query,"DELETE FROM social WHERE SocCod='%ld'",Soc.SocCod);
-      DB_QueryDELETE (Query,"can not remove a social event");
+      /***** Remove social note *****/
+      sprintf (Query,"DELETE FROM social_notes WHERE SocCod='%ld'",
+               Soc.SocCod);
+      DB_QueryDELETE (Query,"can not remove a social note");
 
       /***** Remove social post *****/
-      if (Soc.SocialEvent == Soc_EVENT_SOCIAL_POST)
+      if (Soc.SocialNote == Soc_NOTE_SOCIAL_POST)
 	{
-	 sprintf (Query,"DELETE FROM social_post WHERE PstCod='%ld'",Soc.Cod);
+	 sprintf (Query,"DELETE FROM social_posts WHERE PstCod='%ld'",
+	          Soc.Cod);
 	 DB_QueryDELETE (Query,"can not remove a social post");
 	}
 
@@ -879,29 +881,29 @@ void Soc_RemoveSocialEvent (void)
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc)
+static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *Soc)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get data of social event from database *****/
-   sprintf (Query,"SELECT SocCod,SocialEvent,UsrCod,"
+   /***** Get data of social note from database *****/
+   sprintf (Query,"SELECT SocCod,SocialNote,UsrCod,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,UNIX_TIMESTAMP(TimeEvent)"
-                  " FROM social"
+	          "Cod,UNIX_TIMESTAMP(TimeNote)"
+                  " FROM social_notes"
                   " WHERE SocCod='%ld'",
             Soc->SocCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social event"))
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social note"))
      {
-      /***** Get social event *****/
+      /***** Get social note *****/
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialEventFromRow (row,Soc);
+      Soc_GetDataOfSocialNoteFromRow (row,Soc);
      }
    else
      {
-      /***** Reset fields of social event *****/
-      Soc->SocialEvent = Soc_EVENT_UNKNOWN;
+      /***** Reset fields of social note *****/
+      Soc->SocialNote = Soc_NOTE_UNKNOWN;
       Soc->UsrCod = -1L;
       Soc->CtyCod =
       Soc->InsCod =
@@ -917,13 +919,13 @@ static void Soc_GetDataOfSocialEventByCod (struct SocialEvent *Soc)
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialEventFromRow (MYSQL_ROW row,struct SocialEvent *Soc)
+static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc)
   {
    /* Get social code (row[0]) */
    Soc->SocCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /* Get event type (row[1]) */
-   Soc->SocialEvent = Soc_GetSocialEventFromDB ((const char *) row[1]);
+   /* Get note type (row[1]) */
+   Soc->SocialNote = Soc_GetSocialNoteFromDB ((const char *) row[1]);
 
    /* Get (from) user code (row[2]) */
    Soc->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -946,6 +948,6 @@ static void Soc_GetDataOfSocialEventFromRow (MYSQL_ROW row,struct SocialEvent *S
    /* Get file/post... code (row[8]) */
    Soc->Cod = Str_ConvertStrCodToLongCod (row[8]);
 
-   /* Get time of the event (row[9]) */
+   /* Get time of the note (row[9]) */
    Soc->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
   }

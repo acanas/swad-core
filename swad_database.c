@@ -1935,28 +1935,28 @@ mysql> DESCRIBE sessions;
                    "UNIQUE INDEX(SessionId),"
                    "INDEX(UsrCod))");
 
-   /***** Table social *****/
+   /***** Table social_notes *****/
 /*
-mysql> DESCRIBE social;
-+-------------+------------+------+-----+---------+----------------+
-| Field       | Type       | Null | Key | Default | Extra          |
-+-------------+------------+------+-----+---------+----------------+
-| SocCod      | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| SocialEvent | tinyint(4) | NO   | MUL | NULL    |                |
-| UsrCod      | int(11)    | NO   | MUL | NULL    |                |
-| CtyCod      | int(11)    | NO   |     | -1      |                |
-| InsCod      | int(11)    | NO   |     | -1      |                |
-| CtrCod      | int(11)    | NO   |     | -1      |                |
-| DegCod      | int(11)    | NO   |     | -1      |                |
-| CrsCod      | int(11)    | NO   |     | -1      |                |
-| Cod         | int(11)    | NO   |     | -1      |                |
-| TimeEvent   | datetime   | NO   | MUL | NULL    |                |
-+-------------+------------+------+-----+---------+----------------+
+mysql> DESCRIBE social_notes;
++------------+------------+------+-----+---------+----------------+
+| Field      | Type       | Null | Key | Default | Extra          |
++------------+------------+------+-----+---------+----------------+
+| SocCod     | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| SocialNote | tinyint(4) | NO   | MUL | NULL    |                |
+| UsrCod     | int(11)    | NO   | MUL | NULL    |                |
+| CtyCod     | int(11)    | NO   |     | -1      |                |
+| InsCod     | int(11)    | NO   |     | -1      |                |
+| CtrCod     | int(11)    | NO   |     | -1      |                |
+| DegCod     | int(11)    | NO   |     | -1      |                |
+| CrsCod     | int(11)    | NO   |     | -1      |                |
+| Cod        | int(11)    | NO   |     | -1      |                |
+| TimeNote   | datetime   | NO   | MUL | NULL    |                |
++------------+------------+------+-----+---------+----------------+
 10 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
 	           "SocCod BIGINT NOT NULL AUTO_INCREMENT,"
-                   "SocialEvent TINYINT NOT NULL,"
+                   "SocialNote TINYINT NOT NULL,"
                    "UsrCod INT NOT NULL,"
                    "CtyCod INT NOT NULL DEFAULT -1,"
                    "InsCod INT NOT NULL DEFAULT -1,"
@@ -1964,15 +1964,15 @@ mysql> DESCRIBE social;
                    "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "Cod INT NOT NULL DEFAULT -1,"
-                   "TimeEvent DATETIME NOT NULL,"
+                   "TimeNote DATETIME NOT NULL,"
                    "UNIQUE INDEX(SocCod),"
-                   "INDEX(SocialEvent),"
+                   "INDEX(SocialNote),"
                    "INDEX(UsrCod),"
-                   "INDEX(TimeEvent))");
+                   "INDEX(TimeNote))");
 
-   /***** Table social_post *****/
+   /***** Table social_posts *****/
 /*
-mysql> DESCRIBE social_post;
+mysql> DESCRIBE social_posts;
 +---------+----------+------+-----+---------+----------------+
 | Field   | Type     | Null | Key | Default | Extra          |
 +---------+----------+------+-----+---------+----------------+
@@ -1981,7 +1981,7 @@ mysql> DESCRIBE social_post;
 +---------+----------+------+-----+---------+----------------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_post ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
                    "PstCod INT NOT NULL AUTO_INCREMENT,"
                    "Content LONGTEXT NOT NULL,"
                    "UNIQUE INDEX(PstCod),"

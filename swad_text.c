@@ -35247,9 +35247,9 @@ const char *Txt_Size_of_photos =
 	"Tamanho das fotos";
 #endif
 
-const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
+const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES] =
 	{
-#if   L==1	// Soc_EVENT_UNKNOWN
+#if   L==1	// Soc_NOTE_UNKNOWN
 	 "Esdeveniment desconegut"
 #elif L==2
 	 "Unbekannt Ereignis"
@@ -35269,7 +35269,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Evento desconhecido"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_INS_DOC_PUB_FILE
+#if   L==1	// Soc_NOTE_INS_DOC_PUB_FILE
 	 "Document p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Dokumentdatei"
@@ -35289,7 +35289,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_INS_SHA_PUB_FILE
+#if   L==1	// Soc_NOTE_INS_SHA_PUB_FILE
 	 "Arxiu compartit p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Freigegebene Datei"
@@ -35309,7 +35309,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_CTR_DOC_PUB_FILE
+#if   L==1	// Soc_NOTE_CTR_DOC_PUB_FILE
 	 "Document p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Dokumentdatei"
@@ -35329,7 +35329,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_CTR_SHA_PUB_FILE
+#if   L==1	// Soc_NOTE_CTR_SHA_PUB_FILE
 	 "Arxiu compartit p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Freigegebene Datei"
@@ -35349,7 +35349,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_DEG_DOC_PUB_FILE
+#if   L==1	// Soc_NOTE_DEG_DOC_PUB_FILE
 	 "Document p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Dokumentdatei"
@@ -35369,7 +35369,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_DEG_SHA_PUB_FILE
+#if   L==1	// Soc_NOTE_DEG_SHA_PUB_FILE
 	 "Arxiu compartit p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Freigegebene Datei"
@@ -35389,7 +35389,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_CRS_DOC_PUB_FILE
+#if   L==1	// Soc_NOTE_CRS_DOC_PUB_FILE
 	 "Document p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Dokumentdatei"
@@ -35409,7 +35409,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo de documento p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_CRS_SHA_PUB_FILE
+#if   L==1	// Soc_NOTE_CRS_SHA_PUB_FILE
 	 "Arxiu compartit p&uacute;blic"
 #elif L==2
 	 "&Ouml;ffentliche Freigegebene Datei"
@@ -35429,7 +35429,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Arquivo compartilhado p&uacute;blico"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_EXAM_ANNOUNCEMENT
+#if   L==1	// Soc_NOTE_EXAM_ANNOUNCEMENT
 	 "Convocat&ograve;ria d'examen"
 #elif L==2
 	 "Aufrufe für Pr&uuml;fung"
@@ -35449,7 +35449,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Chamada para exame"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_SOCIAL_POST (not used)
+#if   L==1	// Soc_NOTE_SOCIAL_POST (not used)
 	"Comentari"
 #elif L==2
 	"Kommentar"
@@ -35469,7 +35469,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	"Coment&aacute;rio"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_FORUM_POST
+#if   L==1	// Soc_NOTE_FORUM_POST
 	 "Missatge en un f&ograve;rum"
 #elif L==2
 	 "Beitr&auml;ge in einem Forum"
@@ -35489,7 +35489,7 @@ const char *Txt_SOCIAL_EVENT[Soc_NUM_SOCIAL_EVENTS] =
 	 "Post em um f&oacute;rum"
 #endif
 	 ,
-#if   L==1	// Soc_EVENT_NOTICE
+#if   L==1	// Soc_NOTE_NOTICE
 	 "Av&iacute;s"
 #elif L==2
 	 "Ank&uuml;ndigungen"

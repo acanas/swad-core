@@ -917,7 +917,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 --
 CREATE TABLE IF NOT EXISTS social (
 	SocCod BIGINT NOT NULL AUTO_INCREMENT,
-	SocialEvent TINYINT NOT NULL,
+	SocialNote TINYINT NOT NULL,
 	UsrCod INT NOT NULL,
 	CtyCod INT NOT NULL DEFAULT -1,
 	InsCod INT NOT NULL DEFAULT -1,
@@ -925,15 +925,15 @@ CREATE TABLE IF NOT EXISTS social (
 	DegCod INT NOT NULL DEFAULT -1,
 	CrsCod INT NOT NULL DEFAULT -1,
 	Cod INT NOT NULL DEFAULT -1,
-	TimeEvent DATETIME NOT NULL,
+	TimeNote DATETIME NOT NULL,
 	UNIQUE INDEX(SocCod),
-	INDEX(SocialEvent),
+	INDEX(SocialNote),
 	INDEX(UsrCod),
-	INDEX(TimeEvent));
+	INDEX(TimeNote));
 --
--- Table social_post: stores social posts
+-- Table social_posts: stores social posts (public comments written by users)
 --
-CREATE TABLE IF NOT EXISTS social_post (
+CREATE TABLE IF NOT EXISTS social_posts (
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	Content LONGTEXT NOT NULL,
 	UNIQUE INDEX(PstCod),

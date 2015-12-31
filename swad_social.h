@@ -1,4 +1,4 @@
-// swad_social.c: social networking
+// swad_social.c: social networking (timeline)
 
 #ifndef _SWAD_SOC
 #define _SWAD_SOC
@@ -35,47 +35,47 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Soc_NUM_SOCIAL_EVENTS	13
+#define Soc_NUM_SOCIAL_NOTES	13
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database table social
+// it is necessary to change old numbers to new ones in database table social_notes
 
 typedef enum
   {
-   Soc_EVENT_UNKNOWN		=  0,
+   Soc_NOTE_UNKNOWN		=  0,
 
    /* Institution tab */
-   Soc_EVENT_INS_DOC_PUB_FILE	=  1,
-   Soc_EVENT_INS_SHA_PUB_FILE	=  2,
+   Soc_NOTE_INS_DOC_PUB_FILE	=  1,
+   Soc_NOTE_INS_SHA_PUB_FILE	=  2,
 
    /* Centre tab */
-   Soc_EVENT_CTR_DOC_PUB_FILE	=  3,
-   Soc_EVENT_CTR_SHA_PUB_FILE	=  4,
+   Soc_NOTE_CTR_DOC_PUB_FILE	=  3,
+   Soc_NOTE_CTR_SHA_PUB_FILE	=  4,
 
    /* Degree tab */
-   Soc_EVENT_DEG_DOC_PUB_FILE	=  5,
-   Soc_EVENT_DEG_SHA_PUB_FILE	=  6,
+   Soc_NOTE_DEG_DOC_PUB_FILE	=  5,
+   Soc_NOTE_DEG_SHA_PUB_FILE	=  6,
 
    /* Course tab */
-   Soc_EVENT_CRS_DOC_PUB_FILE	=  7,
-   Soc_EVENT_CRS_SHA_PUB_FILE	=  8,
+   Soc_NOTE_CRS_DOC_PUB_FILE	=  7,
+   Soc_NOTE_CRS_SHA_PUB_FILE	=  8,
 
    /* Assessment tab */
-   Soc_EVENT_EXAM_ANNOUNCEMENT	=  9,
+   Soc_NOTE_EXAM_ANNOUNCEMENT	=  9,
 
    /* Users tab */
 
    /* Social tab */
-   Soc_EVENT_SOCIAL_POST	= 10,
-   Soc_EVENT_FORUM_POST		= 11,
+   Soc_NOTE_SOCIAL_POST	= 10,
+   Soc_NOTE_FORUM_POST		= 11,
 
    /* Messages tab */
-   Soc_EVENT_NOTICE		= 12,
+   Soc_NOTE_NOTICE		= 12,
 
    /* Statistics tab */
 
    /* Profile tab */
 
-  } Soc_SocialEvent_t;
+  } Soc_SocialNote_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
@@ -84,12 +84,12 @@ typedef enum
 void Soc_ShowUsrTimeline (long UsrCod);
 void Soc_ShowFollowingTimeline (void);
 
-void Soc_StoreSocialEvent (Soc_SocialEvent_t SocialEvent,long Cod);
+void Soc_StoreSocialNote (Soc_SocialNote_t SocialNote,long Cod);
 
 void Soc_FormSocialPost (void);
 void Soc_ReceiveSocialPost (void);
 
-void Soc_RequestRemovalSocialEvent (void);
-void Soc_RemoveSocialEvent (void);
+void Soc_RequestRemovalSocialNote (void);
+void Soc_RemoveSocialNote (void);
 
 #endif

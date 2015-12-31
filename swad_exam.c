@@ -305,8 +305,8 @@ void Exa_ReceiveExamAnnouncement (void)
       Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (ExaCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
-   /***** Create a new social event about the new exam announcement *****/
-   Soc_StoreSocialEvent (Soc_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
+   /***** Create a new social note about the new exam announcement *****/
+   Soc_StoreSocialNote (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Show exam announcement *****/
    Exa_ListExamAnnouncementsEdit ();

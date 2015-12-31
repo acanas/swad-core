@@ -154,8 +154,8 @@ void Not_ReceiveNotice (void)
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
-   /***** Create a new social event about the new notice *****/
-   Soc_StoreSocialEvent (Soc_EVENT_NOTICE,NotCod);
+   /***** Create a new social note about the new notice *****/
+   Soc_StoreSocialNote (Soc_NOTE_NOTICE,NotCod);
   }
 
 /*****************************************************************************/

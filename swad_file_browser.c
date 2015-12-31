@@ -9684,28 +9684,28 @@ void Brw_ChgFileMetadata (void)
 	 switch (Gbl.FileBrowser.Type)
 	   {
 	    case Brw_ADMI_DOCUM_INS:
-	       Soc_StoreSocialEvent (Soc_EVENT_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHARE_INS:
-	       Soc_StoreSocialEvent (Soc_EVENT_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_DOCUM_CTR:
-	       Soc_StoreSocialEvent (Soc_EVENT_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHARE_CTR:
-	       Soc_StoreSocialEvent (Soc_EVENT_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_DOCUM_DEG:
-	       Soc_StoreSocialEvent (Soc_EVENT_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHARE_DEG:
-	       Soc_StoreSocialEvent (Soc_EVENT_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_DOCUM_CRS:
-	       Soc_StoreSocialEvent (Soc_EVENT_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
-	       Soc_StoreSocialEvent (Soc_EVENT_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+	       Soc_StoreSocialNote (Soc_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    default:
 	       break;

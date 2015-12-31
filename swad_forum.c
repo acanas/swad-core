@@ -3831,12 +3831,12 @@ void For_RecForumPst (void)
       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
      }
 
-   /***** Insert post into public social activity *****/
+   /***** Insert forum post into public social activity *****/
    switch (Gbl.Forum.ForumType)	// Only if forum is public for any logged user
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_SWAD_USRS:
-         Soc_StoreSocialEvent (Soc_EVENT_FORUM_POST,PstCod);
+         Soc_StoreSocialNote (Soc_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;
