@@ -75,7 +75,7 @@ typedef enum
 
    /* Profile tab */
 
-  } Soc_SocialNote_t;
+  } Soc_NoteType_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
@@ -84,12 +84,12 @@ typedef enum
 void Soc_ShowUsrTimeline (long UsrCod);
 void Soc_ShowFollowingTimeline (void);
 
-void Soc_StoreSocialNote (Soc_SocialNote_t SocialNote,long Cod);
+void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 
 void Soc_FormSocialPost (void);
 void Soc_ReceiveSocialPost (void);
 
 void Soc_RequestRemovalSocialNote (void);
-void Soc_RemoveSocialNote (void);
+void Soc_RemoveSocialPublishing (void);
 
 #endif

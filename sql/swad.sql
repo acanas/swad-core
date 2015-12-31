@@ -913,11 +913,11 @@ CREATE TABLE IF NOT EXISTS sessions (
 	UNIQUE INDEX(SessionId),
 	INDEX(UsrCod));
 --
--- Table social: stores social events (timeline)
+-- Table social: stores social notes
 --
-CREATE TABLE IF NOT EXISTS social (
+CREATE TABLE IF NOT EXISTS social_notes (
 	NotCod BIGINT NOT NULL AUTO_INCREMENT,
-	SocialNote TINYINT NOT NULL,
+	NoteType TINYINT NOT NULL,
 	UsrCod INT NOT NULL,
 	CtyCod INT NOT NULL DEFAULT -1,
 	InsCod INT NOT NULL DEFAULT -1,
@@ -938,6 +938,20 @@ CREATE TABLE IF NOT EXISTS social_posts (
 	Content LONGTEXT NOT NULL,
 	UNIQUE INDEX(PstCod),
 	FULLTEXT(Content)) ENGINE = MYISAM;
+--
+-- Table social_posts: stores social timeline
+--
+CREATE TABLE IF NOT EXISTS social_timeline (
+	PubCod BIGINT NOT NULL AUTO_INCREMENT,
+	AuthorCod INT NOT NULL,
+	PublisherCod INT NOT NULL,
+	NotCod BIGINT NOT NULL,
+	TimePublish DATETIME NOT NULL,
+	UNIQUE INDEX(PubCod),
+	INDEX(AuthorCod),
+	INDEX(PublisherCod),
+	INDEX(NotCod),
+	INDEX(TimePublish));
 --
 -- Table sta_degrees: stores statistics about degrees
 --

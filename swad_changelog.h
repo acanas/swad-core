@@ -117,15 +117,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.86.1 (2015-12-31)"
+#define Log_PLATFORM_VERSION	"SWAD 15.87 (2015-12-31)"
 #define CSS_FILE		"swad15.84.2.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.86.2:  Dec 31, 2015	New database table to store users who write or share social notes. (? lines)
-					1 change necessary in database:
+        Version 15.87:    Dec 31, 2015	New database table to store users who write or share social notes. (189594 lines)
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS social_timeline (PubCod BIGINT NOT NULL AUTO_INCREMENT,AuthorCod INT NOT NULL,PublisherCod INT NOT NULL,NotCod BIGINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(PubCod),INDEX(AuthorCod),INDEX(PublisherCod),INDEX(NotCod),INDEX(TimePublish));
+INSERT INTO social_timeline (AuthorCod,PublisherCod,NotCod,TimePublish) SELECT UsrCod,UsrCod,NotCod,TimeNote FROM social_notes ORDER BY NotCod;
+ALTER TABLE social_notes CHANGE COLUMN SocialNote NoteType TINYINT NOT NULL;
 
         Version 15.86.1:  Dec 31, 2015	Change in database table with social notes. (189457 lines)
 					1 change necessary in database:

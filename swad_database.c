@@ -1942,7 +1942,7 @@ mysql> DESCRIBE social_notes;
 | Field      | Type       | Null | Key | Default | Extra          |
 +------------+------------+------+-----+---------+----------------+
 | NotCod     | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| SocialNote | tinyint(4) | NO   | MUL | NULL    |                |
+| NoteType | tinyint(4) | NO   | MUL | NULL    |                |
 | UsrCod     | int(11)    | NO   | MUL | NULL    |                |
 | CtyCod     | int(11)    | NO   |     | -1      |                |
 | InsCod     | int(11)    | NO   |     | -1      |                |
@@ -1956,7 +1956,7 @@ mysql> DESCRIBE social_notes;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
 	           "NotCod BIGINT NOT NULL AUTO_INCREMENT,"
-                   "SocialNote TINYINT NOT NULL,"
+                   "NoteType TINYINT NOT NULL,"
                    "UsrCod INT NOT NULL,"
                    "CtyCod INT NOT NULL DEFAULT -1,"
                    "InsCod INT NOT NULL DEFAULT -1,"
@@ -1966,7 +1966,7 @@ mysql> DESCRIBE social_notes;
                    "Cod INT NOT NULL DEFAULT -1,"
                    "TimeNote DATETIME NOT NULL,"
                    "UNIQUE INDEX(NotCod),"
-                   "INDEX(SocialNote),"
+                   "INDEX(NoteType),"
                    "INDEX(UsrCod),"
                    "INDEX(TimeNote))");
 
@@ -1986,6 +1986,32 @@ mysql> DESCRIBE social_posts;
                    "Content LONGTEXT NOT NULL,"
                    "UNIQUE INDEX(PstCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
+
+   /***** Table social_timeline *****/
+/*
+mysql> DESCRIBE social_timeline;
++--------------+------------+------+-----+---------+----------------+
+| Field        | Type       | Null | Key | Default | Extra          |
++--------------+------------+------+-----+---------+----------------+
+| PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| AuthorCod    | int(11)    | NO   | MUL | NULL    |                |
+| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
+| NotCod       | bigint(20) | NO   | MUL | NULL    |                |
+| TimePublish  | datetime   | NO   | MUL | NULL    |                |
++--------------+------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timeline ("
+	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
+                   "AuthorCod INT NOT NULL,"
+                   "PublisherCod INT NOT NULL,"
+                   "NotCod BIGINT NOT NULL,"
+                   "TimePublish DATETIME NOT NULL,"
+                   "UNIQUE INDEX(PubCod),"
+                   "INDEX(AuthorCod),"
+                   "INDEX(PublisherCod),"
+                   "INDEX(NotCod),"
+                   "INDEX(TimePublish))");
 
    /***** Table sta_degrees *****/
 /*

@@ -3836,7 +3836,7 @@ void For_RecForumPst (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_SWAD_USRS:
-         Soc_StoreSocialNote (Soc_NOTE_FORUM_POST,PstCod);
+         Soc_StoreAndPublishSocialNote (Soc_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;

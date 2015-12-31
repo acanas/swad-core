@@ -11193,3 +11193,11 @@ ALTER TABLE social DROP COLUMN Status;
 ----- SWAD 15.82 (2015/12/29) -----
 
 CREATE TABLE IF NOT EXISTS social_post (PstCod INT NOT NULL AUTO_INCREMENT,Content LONGTEXT NOT NULL,UNIQUE INDEX(PstCod),FULLTEXT(Content)) ENGINE = MYISAM;
+
+----- SWAD 15.87 (2015/12/31) -----
+
+DROP TABLE IF EXISTS social_timeline;
+CREATE TABLE IF NOT EXISTS social_timeline (SocCod BIGINT NOT NULL AUTO_INCREMENT,AuthorCod INT NOT NULL,PublisherCod INT NOT NULL,NotCod BIGINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(SocCod),INDEX(AuthorCod),INDEX(PublisherCod),INDEX(NotCod),INDEX(TimePublish));
+INSERT INTO social_timeline (AuthorCod,PublisherCod,NotCod,TimePublish) SELECT UsrCod,UsrCod,NotCod,TimeNote FROM social_notes ORDER BY NotCod;
+       
+                
