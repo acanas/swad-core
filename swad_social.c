@@ -49,6 +49,7 @@
 /*****************************************************************************/
 
 #define Soc_MAX_BYTES_SUMMARY 100
+#define Soc_NUM_PUBS_IN_TIMELINE 100
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -173,8 +174,9 @@ void Soc_ShowUsrTimeline (long UsrCod)
    sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
-                  " ORDER BY PubCod DESC LIMIT 10",
-            UsrCod);
+                  " ORDER BY PubCod DESC LIMIT %u",
+            UsrCod,
+            Soc_NUM_PUBS_IN_TIMELINE);
 
    /***** Show timeline *****/
    Soc_ShowTimeline (Query,ActUnk);
@@ -209,9 +211,10 @@ void Soc_ShowFollowingTimeline (void)
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
                   " GROUP BY NotCod"
-		  " ORDER BY PubCod DESC LIMIT 10",
+		  " ORDER BY PubCod DESC LIMIT %u",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Soc_NUM_PUBS_IN_TIMELINE);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
@@ -387,7 +390,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li>");
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">");
 
    /***** Left: write author's photo *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
@@ -827,7 +830,7 @@ static void Soc_PutFormToShareSocialPublishing (long PubCod)
    /***** Form to share social publishing *****/
    Act_FormStart (ActShaSocPub);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -850,7 +853,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
    /***** Form to share social publishing *****/
    Act_FormStart (ActUnsSocPub);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/shared64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -873,7 +876,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
    /***** Form to remove social publishing *****/
    Act_FormStart (ActReqRemSocPub);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
