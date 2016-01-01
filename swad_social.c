@@ -170,6 +170,11 @@ void Soc_ShowUsrTimeline (long UsrCod)
   {
    char Query[512];
 
+   /***** Link to write a new social post (public comment) *****/
+   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// It's me
+       Gbl.CurrentAct != ActReqSocPst)		// Not writing a new post
+      Soc_PutLinkToWriteANewPost ();
+
    /***** Build query to show timeline with publishing of a unique user *****/
    sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
@@ -179,7 +184,7 @@ void Soc_ShowUsrTimeline (long UsrCod)
             Soc_NUM_PUBS_IN_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,ActUnk);
+   Soc_ShowTimeline (Query,ActSeeSocAct);
   }
 
 /*****************************************************************************/
@@ -192,7 +197,7 @@ void Soc_ShowFollowingTimeline (void)
    char Query[512];
 
    /***** Link to write a new social post (public comment) *****/
-   if (Gbl.CurrentAct != ActReqSocPst)
+   if (Gbl.CurrentAct != ActReqSocPst)	// Not writing a new post
       Soc_PutLinkToWriteANewPost ();
 
    /***** If I follow someone... *****/

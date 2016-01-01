@@ -117,13 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.88.2 (2016-01-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.88.3 (2016-01-01)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.88.3:  Jan 01, 2016	Changes in contextual options in social timeline. (189907 lines)
         Version 15.88.2:  Jan 01, 2016	Messages translated. (189902 lines)
         Version 15.88.1:  Jan 01, 2016	Changes in layout of social timeline. (189854 lines)
         Version 15.88:    Jan 01, 2016	New buttons in social timeline to share/unshare a social publishing. (189841 lines)
