@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -867,6 +867,10 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	{
 	 /***** Create temporary table with codes of files in documents and shared areas accessible by me.
 		It is necessary to speed up the second query *****/
+	 sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
+	 if (mysql_query (&Gbl.mysql,Query))
+	    DB_ExitOnMySQLError ("can not remove temporary table");
+
 	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_crs (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_usr,files"
 			" WHERE crs_usr.UsrCod='%ld'"
@@ -878,6 +882,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_MARKS_CRS);
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
+
 	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_grp (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_grp_usr,files"
 			" WHERE crs_grp_usr.UsrCod='%ld'"

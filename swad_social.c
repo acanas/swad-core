@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -140,13 +140,21 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
                                      long CrsCod,long Cod);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
+static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutLinkToWriteANewPost (void);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 
+static void Soc_PutFormToShareSocialPublishing (long PubCod);
+static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
 static void Soc_PutHiddenParamPubCod (long NotCod);
 static long Soc_GetParamPubCod (void);
+
+static void Soc_DeleteASocialPublishingFromDB (const struct SocialPublishing *SocPub,
+                                               const struct SocialNote *SocNot);
+
+static bool Soc_CheckIfNoteIsYetPublishedByMe (long NotCod);
 static unsigned long Soc_GetNumPubsOfANote (long NotCod);
 static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
@@ -162,8 +170,7 @@ void Soc_ShowUsrTimeline (long UsrCod)
    char Query[512];
 
    /***** Build query to show timeline with publishing of a unique user *****/
-   // Publisher code is set to -1 here to get only one row
-   sprintf (Query,"SELECT DISTINCTROW PubCod,AuthorCod,'-1',NotCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT 10",
@@ -189,21 +196,38 @@ void Soc_ShowFollowingTimeline (void)
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_ShowAlert (Lay_INFO,"Usted no sigue a ning&uacute;n usuario.");	// Need translation!!!
 
-   /***** Build query to show timeline including the users I am following *****/
-   // Publisher code is set to -1 here to get only one row
-   sprintf (Query,"SELECT DISTINCTROW PubCod,AuthorCod,'-1',NotCod,UNIX_TIMESTAMP(TimePublish)"
+   /***** Create temporary table with all the publishing codes *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   sprintf (Query,"CREATE TEMPORARY TABLE pub_cods (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
+	          " SELECT MIN(PubCod) AS PubCod"
 		  " FROM social_timeline"
 		  " WHERE PublisherCod IN"
 		  " (SELECT '%ld'"
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+                  " GROUP BY NotCod"
 		  " ORDER BY PubCod DESC LIMIT 10",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Build query to show timeline including the users I am following *****/
+   sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
+                  " FROM social_timeline WHERE PubCod IN "
+                  "(SELECT PubCod FROM pub_cods)"
+                  " ORDER BY PubCod DESC");
 
    /***** Show timeline *****/
    if (!Soc_ShowTimeline (Query,ActSeeSocAct))
       Lay_ShowAlert (Lay_INFO,"No hay actividad p&uacute;blica.");	// Need translation!!!
+
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
   }
 
 /*****************************************************************************/
@@ -394,11 +418,25 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       Soc_GetAndWriteSocialPost (SocNot->Cod);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Write form to remove this note */
-      if (PutIconRemove &&
-	  Gbl.Usrs.Me.Logged &&
-          UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
-	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+      /***** Put icons to share/unshare/remove *****/
+      if (Gbl.Usrs.Me.Logged)
+	{
+	 if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
+	   {
+	    if (PutIconRemove)
+	       /* Put icon to remove this publishing */
+	       Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+	   }
+	 else							// I am not the author
+	   {
+	    if (Soc_CheckIfNoteIsYetPublishedByMe (SocNot->NotCod))	// I have yet published this social note
+	       /* Put icon to unshare this publishing */
+	       Soc_PutFormToUnshareSocialPublishing (SocPub->PubCod);
+	    else							// I have not yet published this social note
+	       /* Put icon to share this publishing */
+	       Soc_PutFormToShareSocialPublishing (SocPub->PubCod);
+	   }
+	}
      }
    else
      {
@@ -469,7 +507,6 @@ static void Soc_WriteNoteDate (time_t TimeUTC)
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</div>");
   }
-
 
 /*****************************************************************************/
 /********* Put form to go to an action depending on the social note **********/
@@ -608,7 +645,7 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
    long CtrCod;
    long DegCod;
    long CrsCod;
-   long NotCod;	// Note code stored in database
+   struct SocialPublishing SocPub;
 
    if (NoteType == Soc_NOTE_FORUM_POST)
      {
@@ -642,14 +679,28 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
             (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,
             CtyCod,InsCod,CtrCod,DegCod,CrsCod,
             Cod);
-   NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
+   SocPub.NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
-   /***** Publish social note *****/
+   /***** Publish social note in timeline *****/
+   SocPub.AuthorCod    =
+   SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Soc_PublishSocialNoteInTimeline (&SocPub);
+  }
+
+/*****************************************************************************/
+/***************** Put contextual link to write a new post *******************/
+/*****************************************************************************/
+
+static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
+  {
+   char Query[256];
+
+   /***** Publish social note in timeline *****/
    sprintf (Query,"INSERT INTO social_timeline"
 	          " (AuthorCod,PublisherCod,NotCod,TimePublish)"
                   " VALUES"
                   " ('%ld','%ld','%ld',NOW())",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,NotCod);
+            SocPub->AuthorCod,SocPub->PublisherCod,SocPub->NotCod);
    DB_QueryINSERT (Query,"can not publish social note");
   }
 
@@ -766,7 +817,53 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
   }
 
 /*****************************************************************************/
-/*********************** Form to remove social note **************************/
+/********************* Form to share social publishing ***********************/
+/*****************************************************************************/
+
+static void Soc_PutFormToShareSocialPublishing (long PubCod)
+  {
+   extern const char *Txt_Share;
+
+   /***** Form to share social publishing *****/
+   Act_FormStart (ActShaSocPub);
+   Soc_PutHiddenParamPubCod (PubCod);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/share64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Share,
+	    Txt_Share);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************ Form to unshare (stop sharing) social publishing ***************/
+/*****************************************************************************/
+
+static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
+  {
+   extern const char *Txt_Shared;
+
+   /***** Form to share social publishing *****/
+   Act_FormStart (ActUnsSocPub);
+   Soc_PutHiddenParamPubCod (PubCod);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/shared64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Shared,
+	    Txt_Shared);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/******************** Form to remove social publishing ***********************/
 /*****************************************************************************/
 
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
@@ -812,6 +909,86 @@ static long Soc_GetParamPubCod (void)
       Lay_ShowErrorAndExit ("Wrong code of social publishing.");
 
    return PubCod;
+  }
+
+/*****************************************************************************/
+/************************* Share a social publishing *************************/
+/*****************************************************************************/
+
+void Soc_ShareSocialPublishing (void)
+  {
+   extern const char *Txt_Shared;
+   struct SocialPublishing SocPub;
+   bool ICanShare;
+   bool IHavePublishedThisNote;
+
+   /***** Get the code of the social publishing to share *****/
+   SocPub.PubCod = Soc_GetParamPubCod ();
+
+   /***** Get data of social publishing *****/
+   Soc_GetDataOfSocialPublishingByCod (&SocPub);
+
+   ICanShare = (Gbl.Usrs.Me.Logged &&
+                SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);		// I am not the author
+   if (ICanShare)
+     {
+      /***** Check if I have yet shared this social note *****/
+      IHavePublishedThisNote = Soc_CheckIfNoteIsYetPublishedByMe (SocPub.NotCod);
+      if (!IHavePublishedThisNote)
+	{
+	 /***** Share (publish social note in timeline) *****/
+	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 Soc_PublishSocialNoteInTimeline (&SocPub);
+
+         /***** Message of success *****/
+         Lay_ShowAlert (Lay_SUCCESS,Txt_Shared);
+	}
+     }
+
+   /***** Write timeline after removing *****/
+   Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/************** Unshare a previously shared social publishing ****************/
+/*****************************************************************************/
+
+void Soc_UnshareSocialPublishing (void)
+  {
+   extern const char *Txt_Unshared;
+   struct SocialPublishing SocPub;
+   struct SocialNote SocNot;
+   bool ICanUnshare;
+   bool IHavePublishedThisNote;
+
+   /***** Get the code of the social publishing to unshare *****/
+   SocPub.PubCod = Soc_GetParamPubCod ();
+
+   /***** Get data of social publishing *****/
+   Soc_GetDataOfSocialPublishingByCod (&SocPub);
+
+   /***** Get data of social note *****/
+   SocNot.NotCod = SocPub.NotCod;
+   Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+   ICanUnshare = (Gbl.Usrs.Me.Logged &&
+                  SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);		// I am not the author
+   if (ICanUnshare)
+     {
+      /***** Check if I have yet shared this social note *****/
+      IHavePublishedThisNote = Soc_CheckIfNoteIsYetPublishedByMe (SocPub.NotCod);
+      if (IHavePublishedThisNote)
+	{
+         /***** Delete social publishing from database *****/
+	 Soc_DeleteASocialPublishingFromDB (&SocPub,&SocNot);
+
+	 /***** Message of success *****/
+	 Lay_ShowAlert (Lay_SUCCESS,Txt_Unshared);
+	}
+     }
+
+   /***** Write timeline after unsharing *****/
+   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
@@ -879,9 +1056,7 @@ void Soc_RemoveSocialPublishing (void)
    extern const char *Txt_Comment_removed;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
-   unsigned long NumPubs;
    bool ICanRemove;
-   char Query[128];
 
    /***** Get the code of the social publishing to remove *****/
    SocPub.PubCod = Soc_GetParamPubCod ();
@@ -898,30 +1073,8 @@ void Soc_RemoveSocialPublishing (void)
                  SocNot.NoteType == Soc_NOTE_SOCIAL_POST);
    if (ICanRemove)
      {
-      /***** Remove social publishing *****/
-      sprintf (Query,"DELETE FROM social_timeline WHERE PubCod='%ld'",
-               SocPub.PubCod);
-      DB_QueryDELETE (Query,"can not remove a social publishing");
-
-      /***** Count number of times this note
-             is published in timeline after removal *****/
-      NumPubs = Soc_GetNumPubsOfANote (SocNot.NotCod);
-
-      if (NumPubs == 0)	// This was the last publishing of this note
-	{
-	 /***** Remove social note *****/
-	 sprintf (Query,"DELETE FROM social_notes WHERE NotCod='%ld'",
-		  SocNot.NotCod);
-	 DB_QueryDELETE (Query,"can not remove a social note");
-
-	 /***** Remove social post *****/
-	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
-	   {
-	    sprintf (Query,"DELETE FROM social_posts WHERE PstCod='%ld'",
-		     SocNot.Cod);
-	    DB_QueryDELETE (Query,"can not remove a social post");
-	   }
-	}
+      /***** Delete social publishing from database *****/
+      Soc_DeleteASocialPublishingFromDB (&SocPub,&SocNot);
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_Comment_removed);
@@ -929,6 +1082,56 @@ void Soc_RemoveSocialPublishing (void)
 
    /***** Write timeline after removing *****/
    Soc_ShowFollowingTimeline ();
+  }
+
+/*****************************************************************************/
+/**************** Delete a social publishing from database *******************/
+/*****************************************************************************/
+
+static void Soc_DeleteASocialPublishingFromDB (const struct SocialPublishing *SocPub,
+                                               const struct SocialNote *SocNot)
+  {
+   char Query[128];
+   unsigned long NumPubs;
+
+   /***** Remove social publishing *****/
+   sprintf (Query,"DELETE FROM social_timeline WHERE PubCod='%ld'",
+	    SocPub->PubCod);
+   DB_QueryDELETE (Query,"can not remove a social publishing");
+
+   /***** Count number of times this note
+	  is published in timeline after removal *****/
+   NumPubs = Soc_GetNumPubsOfANote (SocNot->NotCod);
+
+   if (NumPubs == 0)	// This was the last publishing of this note
+     {
+      /***** Remove social note *****/
+      sprintf (Query,"DELETE FROM social_notes WHERE NotCod='%ld'",
+	       SocNot->NotCod);
+      DB_QueryDELETE (Query,"can not remove a social note");
+
+      /***** Remove social post *****/
+      if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
+	{
+	 sprintf (Query,"DELETE FROM social_posts WHERE PstCod='%ld'",
+		  SocNot->Cod);
+	 DB_QueryDELETE (Query,"can not remove a social post");
+	}
+     }
+  }
+
+/*****************************************************************************/
+/***** Check if I have published a social note (I authored or shared it) *****/
+/*****************************************************************************/
+
+static bool Soc_CheckIfNoteIsYetPublishedByMe (long NotCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
+	          " WHERE NotCod='%ld' AND PublisherCod='%ld'",
+	    NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if you have published a social note") != 0);
   }
 
 /*****************************************************************************/

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -764,7 +764,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    // The temporary table achieves speedup from ~2s to few ms
 
    /***** Remove temporary table if exists *****/
-   sprintf (Query,"DROP TABLE IF EXISTS my_courses_tmp");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
@@ -787,7 +787,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
    /***** Remove temporary table *****/
-   sprintf (Query,"DROP TABLE IF EXISTS my_courses_tmp");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 

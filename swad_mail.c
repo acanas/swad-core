@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -229,7 +229,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // ...because a unique temporary table can not be used twice in the same query
 
    /***** Create temporary table with all the mail domains present in users' emails table *****/
-   sprintf (Query,"DROP TABLE IF EXISTS T1,T2");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
@@ -306,7 +306,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
-   sprintf (Query,"DROP TABLE IF EXISTS T1,T2");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS T1,T2");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
   }

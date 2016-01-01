@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     Català translation:
 	   Antonio Cañas Vargas
@@ -34616,6 +34616,48 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #endif
 	};
 
+const char *Txt_Share =
+#if   L==1
+	"Compartir";
+#elif L==2
+	"Teilen";
+#elif L==3
+	"Share";
+#elif L==4
+	"Compartir";
+#elif L==5
+	"Partager";
+#elif L==6
+	"Compartir";	// Okoteve traducción
+#elif L==7
+	"Condividere";
+#elif L==8
+	"Dzieli&cacute;";
+#elif L==9
+	"Compartilhar";
+#endif
+
+const char *Txt_Shared =
+#if   L==1
+	"Compartit";
+#elif L==2
+	"Geteilt";
+#elif L==3
+	"Shared";
+#elif L==4
+	"Compartido";
+#elif L==5
+	"Partag&eacute;";
+#elif L==6
+	"Compartido";	// Okoteve traducción
+#elif L==7
+	"Condiviso";
+#elif L==8
+	"Dzielone";
+#elif L==9
+	"Compartilhado";
+#endif
+
 const char *Txt_Shared_files_area =
 #if   L==1
 	"Zona d'arxius compartits";
@@ -46742,6 +46784,27 @@ const char *Txt_Unread_BR_msgs =
 	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"N&atilde;o<br />lidas";
+#endif
+
+const char *Txt_Unshared =	// No longer shared
+#if   L==1
+	"No compartit";
+#elif L==2
+	"Kein geteilt";
+#elif L==3
+	"Unshared";
+#elif L==4
+	"No compartido";
+#elif L==5
+	"Non partag&eacute;";
+#elif L==6
+	"No compartido";	// Okoteve traducción
+#elif L==7
+	"Non condiviso";
+#elif L==8
+	"Niedzielon&aogon;";
+#elif L==9
+	"N&atilde;o compartilhado";
 #endif
 
 const char *Txt_Update =

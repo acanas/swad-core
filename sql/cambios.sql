@@ -11201,3 +11201,8 @@ CREATE TABLE IF NOT EXISTS social_timeline (SocCod BIGINT NOT NULL AUTO_INCREMEN
 INSERT INTO social_timeline (AuthorCod,PublisherCod,NotCod,TimePublish) SELECT UsrCod,UsrCod,NotCod,TimeNote FROM social_notes ORDER BY NotCod;
        
                 
+SELECT MIN(PubCod) FROM social_timeline WHERE PublisherCod IN (SELECT '1' UNION SELECT FollowedCod FROM usr_follow WHERE FollowerCod='1') GROUP BY NotCod;
+		  
+		  
+		  
+		  

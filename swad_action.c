@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1004,8 +1004,10 @@ Social:
 
 	839. ActReqSocPst		Write a public social post to be displayed in the timeline
 	840. ActRcvSocPst		Receive a public social post to be displayed in the timeline
-	841. ActReqRemSocPub		Request the removal of a social note (only if it is a post)
-	842. ActRemSocPub		Remove a social note (only if it is a post)
+NEW!!!!!!!!. ActShaSocPub		Share a social publishing
+NEW!!!!!!!!. ActUnsSocPub		Unshare a previously shared social publishing
+	841. ActReqRemSocPub		Request the removal of a social publishing (only if it is a post)
+	842. ActRemSocPub		Remove a social publishing (only if it is a post)
 	843. ActSeePubPrf		Show a public user's profile
 	844. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	845. ActCalNumClk		Calculate number of clicks from log and store into user's figures
@@ -2315,8 +2317,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqSocPst	*/{1491,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,NULL},
    /* ActRcvSocPst	*/{1492,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
+   /* ActShaSocPub	*/{1495,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialPublishing	,NULL},
+   /* ActUnsSocPub	*/{1496,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPublishing	,NULL},
    /* ActReqRemSocPub	*/{1494,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemovalSocialNote	,NULL},
-   /* ActRemSocPub	*/{1493,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialPublishing		,NULL},
+   /* ActRemSocPub	*/{1493,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialPublishing	,NULL},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
@@ -4159,6 +4163,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRcvSocPst,		// #1492
 	ActRemSocPub,		// #1493
 	ActReqRemSocPub,	// #1494
+	ActShaSocPub,		// #1495
+	ActUnsSocPub,		// #1496
 	};
 
 /*****************************************************************************/

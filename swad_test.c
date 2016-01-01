@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1284,11 +1284,12 @@ void Tst_RenameTag (void)
 
             /* Step 2: If the new tag existed for a question ==> delete old tag from tst_question_tags; the new tag will remain
                        If the new tag did not exist for a question ==> change old tag to new tag in tst_question_tags */
-            sprintf (Query,"DROP TABLE IF EXISTS tst_question_tags_tmp");
+            sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not remove temporary table");
 
-            sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
+            sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY"
+        	           " SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
                      ExistingNewTagCod);
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not create temporary table");
@@ -1309,7 +1310,7 @@ void Tst_RenameTag (void)
                      OldTagCod);
             DB_QueryUPDATE (Query,"can not update a tag in some questions");
 
-            sprintf (Query,"DROP TABLE IF EXISTS tst_question_tags_tmp");
+            sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not remove temporary table");
 

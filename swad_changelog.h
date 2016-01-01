@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -117,13 +117,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.87 (2015-12-31)"
+#define Log_PLATFORM_VERSION	"SWAD 15.88 (2016-01-01)"
 #define CSS_FILE		"swad15.84.2.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.88:    Jan 01, 2016	New buttons in social timeline to share/unshare a social publishing. (189841 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1495','es','N','Compartir comentario social');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1496','es','N','Dejar de compartir comentario social');
+
         Version 15.87:    Dec 31, 2015	New database table to store users who write or share social notes. (189594 lines)
 					3 changes necessary in database:
 CREATE TABLE IF NOT EXISTS social_timeline (PubCod BIGINT NOT NULL AUTO_INCREMENT,AuthorCod INT NOT NULL,PublisherCod INT NOT NULL,NotCod BIGINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(PubCod),INDEX(AuthorCod),INDEX(PublisherCod),INDEX(NotCod),INDEX(TimePublish));
