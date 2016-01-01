@@ -23877,6 +23877,27 @@ const char *Txt_No_of_users_who_will_be_notified_by_e_mail =
 	"N&ordm; de utilizadores que ser&atilde;o notificados por e-mail";
 #endif
 
+const char *Txt_No_public_activity =
+#if   L==1
+	 "No hi ha activitat p&uacute;blica";
+#elif L==2
+	 "Keine &ouml;ffentliche Aktivit&auml;t";
+#elif L==3
+	 "No public activity";
+#elif L==4
+	 "No hay actividad p&uacute;blica";
+#elif L==5
+	 "Aucune activit&eacute; public";
+#elif L==6
+	 "No hay actividad p&uacute;blica";	// Okoteve traducción
+#elif L==7
+	 "Nessuna attivit&agrave; pubblica";
+#elif L==8
+	 "Brak aktywno&sacute;&cacute; publiczne";
+#elif L==9
+	 "Sem atividade p&uacute;blica";
+#endif
+
 const char *Txt_No_questions_found_matching_your_search_criteria =
 #if   L==1
 	"No hay preguntas con el criterio de b&uacute;squeda seleccionado.";	// Necessita traduccio
@@ -50565,6 +50586,27 @@ const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y =	/
 #elif L==9
 	"You can send a file with an image in <em>jpg</em> format"
 	" and size %u&times;%u pixels.";			// Necessita de tradução
+#endif
+
+const char *Txt_You_dont_follow_any_user =
+#if   L==1
+	"Vost&egrave; no segueix a cap usuari.";
+#elif L==2
+	"Sie haben noch keine Benutzer folgen.";
+#elif L==3
+	"You don't follow any user.";
+#elif L==4
+	"Usted no sigue a ning&uacute;n usuario.";
+#elif L==5
+	"Vous ne suivez pas aucun utilisateur.";
+#elif L==6
+	"Usted no sigue a ning&uacute;n usuario.";	// Okoteve traducción
+#elif L==7
+	"Non si seguono gli utenti.";
+#elif L==8
+	"Nie po &zdot;adnej u&zdot;ytkownika.";
+#elif L==9
+	"Voc&ecirc; n&atilde;o segue nenhum usu&aacute;rio.";
 #endif
 
 const char *Txt_You_dont_have_permission_to_access_to_this_forum =
