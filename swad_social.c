@@ -131,8 +131,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction);
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
-                                 struct UsrData *UsrDat,
-                                 bool PutIconRemove);
+                                 bool WritingTimeline,bool LastInList);
 static void Soc_WriteNoteDate (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
@@ -264,7 +263,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
-   struct UsrData UsrDat;
 
    /***** Get timeline from database *****/
    NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social notes");
@@ -272,9 +270,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
    /***** List my timeline *****/
    if (NumPublishings)	// Publishings found in timeline
      {
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** Start frame *****/
       Lay_StartRoundFrame ("560px",Txt_Public_activity);
 
@@ -307,7 +302,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
          /* Get and write social note */
          SocNot.NotCod = SocPub.NotCod;
          Soc_GetDataOfSocialNoteByCod (&SocNot);
-         Soc_WriteSocialNote (&SocPub,&SocNot,&UsrDat,true);
+         Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings);
         }
 
       /***** End list *****/
@@ -315,9 +310,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
      }
    else	// No publishing found in timeline
       Lay_ShowAlert (Lay_INFO,Txt_No_public_activity);
@@ -354,8 +346,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
 
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
-                                 struct UsrData *UsrDat,
-                                 bool PutIconRemove)
+                                 bool WritingTimeline,bool LastInList)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
@@ -364,6 +355,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    extern const char *Txt_Degree;
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
+   struct UsrData UsrDat;
    struct Institution Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -373,10 +365,13 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
    /***** Get details *****/
    /* Get author data */
-   UsrDat->UsrCod = SocNot->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat);
+   UsrDat.UsrCod = SocNot->UsrCod;
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 
    /* Get forum type of the post */
    if (SocNot->NoteType == Soc_NOTE_FORUM_POST)
@@ -395,13 +390,16 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">");
+   fprintf (Gbl.F.Out,"<li");
+   if (WritingTimeline && !LastInList)
+      fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
+   fprintf (Gbl.F.Out,">");
 
    /***** Left: write author's photo *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-					NULL,
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+		                         NULL,
 		     "PHOTO60x80",Pho_ZOOM);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -409,12 +407,12 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
    /* Write author's full name and nickname */
-   Str_LimitLengthHTMLStr (UsrDat->FullName,20);
+   Str_LimitLengthHTMLStr (UsrDat.FullName,20);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>"
 		      "</div>",
-	    UsrDat->FullName,UsrDat->Nickname);
+	    UsrDat.FullName,UsrDat.Nickname);
 
    /* Write date and time */
    Soc_WriteNoteDate (SocNot->DateTimeUTC);
@@ -500,9 +498,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    /* Put icons to share/unshare/remove */
    if (Gbl.Usrs.Me.Logged)
      {
-      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
+      if (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
 	{
-	 if (PutIconRemove)
+	 if (WritingTimeline)
 	    /* Put icon to remove this publishing */
 	    Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
 	}
@@ -524,6 +522,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
    /***** End list item *****/
    fprintf (Gbl.F.Out,"</li>");
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -1068,6 +1069,7 @@ static void Soc_ShareSocialPublishing (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
    struct SocialPublishing SocPub;
+   struct SocialNote SocNot;
    bool ICanShare;
    bool IHavePublishedThisNote;
 
@@ -1076,6 +1078,10 @@ static void Soc_ShareSocialPublishing (void)
 
    /***** Get data of social publishing *****/
    Soc_GetDataOfSocialPublishingByCod (&SocPub);
+
+   /***** Get data of social note *****/
+   SocNot.NotCod = SocPub.NotCod;
+   Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanShare = (Gbl.Usrs.Me.Logged &&
                 SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);		// I am not the author
@@ -1091,6 +1097,13 @@ static void Soc_ShareSocialPublishing (void)
 
          /***** Message of success *****/
          Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
+
+         /***** Show the social note just shared *****/
+	 Lay_StartRoundFrame ("560px",NULL);
+	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 fprintf (Gbl.F.Out,"</ul>");
+	 Lay_EndRoundFrame ();
 	}
      }
   }
@@ -1222,7 +1235,6 @@ static void Soc_RequestRemovalSocialPublishing (void)
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool ICanRemove;
-   struct UsrData UsrDat;
 
    /***** Get the code of the social publishing to remove *****/
    SocPub.PubCod = Soc_GetParamPubCod ();
@@ -1238,9 +1250,6 @@ static void Soc_RequestRemovalSocialPublishing (void)
                  SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    if (ICanRemove)
      {
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** Form to ask for confirmation to remove this social post *****/
       /* Start form */
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1256,16 +1265,13 @@ static void Soc_RequestRemovalSocialPublishing (void)
       /* Show social note */
       Lay_StartRoundFrame ("560px",NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-      Soc_WriteSocialNote (&SocPub,&SocNot,&UsrDat,false);
+      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
       fprintf (Gbl.F.Out,"</ul>");
       Lay_EndRoundFrame ();
 
       /* End form */
       Lay_PutRemoveButton (Txt_Remove);
       Act_FormEnd ();
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
      }
   }
 
