@@ -208,8 +208,16 @@ static void Prf_GetUsrDatAndShowUserProfile (void)
       Prf_RequestUserProfileWithDefaultNickname ("");
      }
    else
+     {
+      /***** Start section *****/
+      fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
       /***** Show social activity (timeline) of this user *****/
       Soc_ShowTimelineUsr ();
+
+      /***** End section *****/
+      fprintf (Gbl.F.Out,"</section>");
+     }
   }
 
 /*****************************************************************************/

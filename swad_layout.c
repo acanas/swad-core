@@ -951,9 +951,21 @@ void Lay_PutFormToEdit (Act_Action_t Action)
 /***************** Show an icon with a link in contextual menu ***************/
 /*****************************************************************************/
 
-void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
+void Lay_PutContextualLink (Act_Action_t NextAction,
+                            void (*FuncParams) (),
                             const char *Icon,
                             const char *Title,const char *Text)
+  {
+   Lay_PutContextualLinkAnchor (NextAction,NULL,
+                                FuncParams,
+                                Icon,
+                                Title,Text);
+  }
+
+void Lay_PutContextualLinkAnchor (Act_Action_t NextAction,const char *Anchor,
+                                  void (*FuncParams) (),
+                                  const char *Icon,
+                                  const char *Title,const char *Text)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
@@ -961,7 +973,10 @@ void Lay_PutContextualLink (Act_Action_t NextAction,void (*FuncParams) (),
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
-   Act_FormStart (NextAction);
+   if (Anchor)
+      Act_FormStartAnchor (NextAction,Anchor);
+   else
+      Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();
    Lay_PutIconLink (Icon,Title,Text,

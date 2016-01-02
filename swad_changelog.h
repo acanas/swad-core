@@ -117,14 +117,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.89 (2016-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.89.1 (2016-01-02)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.89.1:  Jan 02, 2016	Change in layout of user profile. (190137 lines)
         Version 15.89:    Jan 02, 2016	Social timeline can be updated from user profile. (190084 lines)
+					13 changes necessary in database:
 UPDATE actions SET Txt='Ver actividad social (global)' WHERE ActCod='1490' AND Language='es';
 UPDATE actions SET Txt='Redactar comentario social (global)' WHERE ActCod='1491' AND Language='es';
 UPDATE actions SET Txt='Crear comentario social (global)' WHERE ActCod='1492' AND Language='es';

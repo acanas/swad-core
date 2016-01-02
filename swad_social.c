@@ -770,8 +770,10 @@ static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) (
    extern const char *Txt_New_comment;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,FuncParams,"write64x64.gif",
-			  Txt_New_comment,Txt_New_comment);
+   Lay_PutContextualLinkAnchor (Action,"timeline",
+                                FuncParams,
+                                "write64x64.gif",
+			        Txt_New_comment,Txt_New_comment);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -796,11 +798,17 @@ void Soc_FormSocialPostUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Form to write a new public comment *****/
    Soc_FormSocialPost ();
 
    /***** Write current timeline (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_FormSocialPost (void)
@@ -815,7 +823,7 @@ static void Soc_FormSocialPost (void)
    /* Start form to write the post */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStart (ActRcvSocPstUsr);
+      Act_FormStartAnchor (ActRcvSocPstUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
@@ -857,11 +865,17 @@ void Soc_ReceiveSocialPostUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Receive and store social post *****/
    Soc_ReceiveSocialPost ();
 
    /***** Write updated timeline after publishing (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_ReceiveSocialPost (void)
@@ -895,7 +909,7 @@ static void Soc_PutFormToShareSocialPublishing (long PubCod)
    /***** Form to share social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStart (ActShaSocPubUsr);
+      Act_FormStartAnchor (ActShaSocPubUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
@@ -924,7 +938,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
    /***** Form to share social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStart (ActUnsSocPubUsr);
+      Act_FormStartAnchor (ActUnsSocPubUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
@@ -953,7 +967,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
    /***** Form to remove social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStart (ActReqRemSocPubUsr);
+      Act_FormStartAnchor (ActReqRemSocPubUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
@@ -1018,11 +1032,17 @@ void Soc_ShareSocialPubUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Share social publishing *****/
    Soc_ShareSocialPublishing ();
 
    /***** Write updated timeline after sharing (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_ShareSocialPublishing (void)
@@ -1077,11 +1097,17 @@ void Soc_UnshareSocialPubUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Unshare a previously shared social publishing *****/
    Soc_UnshareSocialPublishing ();
 
    /***** Write updated timeline after unsharing (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_UnshareSocialPublishing (void)
@@ -1140,11 +1166,17 @@ void Soc_RequestRemSocialPubUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Request the removal of social publishing *****/
    Soc_RequestRemovalSocialPublishing ();
 
    /***** Write timeline again (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_RequestRemovalSocialPublishing (void)
@@ -1178,7 +1210,7 @@ static void Soc_RequestRemovalSocialPublishing (void)
       /* Start form */
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	{
-	 Act_FormStart (ActRemSocPubUsr);
+         Act_FormStartAnchor (ActRemSocPubUsr,"timeline");
 	 Usr_PutParamOtherUsrCodEncrypted ();
 	}
       else
@@ -1223,11 +1255,17 @@ void Soc_RemoveSocialPubUsr (void)
    /*****  Show user's profile *****/
    Prf_ShowUserProfile ();
 
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
    /***** Remove a social publishing *****/
    Soc_RemoveSocialPublishing ();
 
    /***** Write updated timeline after removing (user) *****/
    Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 static void Soc_RemoveSocialPublishing (void)
