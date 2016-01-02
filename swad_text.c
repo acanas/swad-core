@@ -4603,27 +4603,6 @@ const char *Txt_columns =
 	"colunas";
 #endif
 
-const char *Txt_Comment_removed =
-#if   L==1
-	"Comentari eliminat.";
-#elif L==2
-	"Kommentar entfernt.";
-#elif L==3
-	"Comment removed.";
-#elif L==4
-	"Comentario eliminado";
-#elif L==5
-	"Commentaire supprim&eacute;.";
-#elif L==6
-	"Comentario eliminado.";	// Okoteve traducción
-#elif L==7
-	"Commento rimosso.";
-#elif L==8
-	"Komentarz usuniete.";
-#elif L==9
-	"Coment&aacute;rio removido.";
-#endif
-
 const char *Txt_Comments =
 #if   L==1
 	"Comentaris";
@@ -34658,27 +34637,6 @@ const char *Txt_Share =
 	"Compartilhar";
 #endif
 
-const char *Txt_Shared =
-#if   L==1
-	"Compartit";
-#elif L==2
-	"Geteilt";
-#elif L==3
-	"Shared";
-#elif L==4
-	"Compartido";
-#elif L==5
-	"Partag&eacute;";
-#elif L==6
-	"Compartido";	// Okoteve traducción
-#elif L==7
-	"Condiviso";
-#elif L==8
-	"Dzielone";
-#elif L==9
-	"Compartilhado";
-#endif
-
 const char *Txt_Shared_files_area =
 #if   L==1
 	"Zona d'arxius compartits";
@@ -35572,6 +35530,69 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES] =
 	 "An&uacute;ncio"
 #endif
 	};
+
+const char *Txt_SOCIAL_PUBLISHING_Removed =
+#if   L==1
+	"Eliminat";
+#elif L==2
+	"Entfernt";
+#elif L==3
+	"Removed";
+#elif L==4
+	"Rliminado";
+#elif L==5
+	"Supprim&eacute;";
+#elif L==6
+	"Eliminado";	// Okoteve traducción
+#elif L==7
+	"Rimosso";
+#elif L==8
+	"Usuniete";
+#elif L==9
+	"Removido";
+#endif
+
+const char *Txt_SOCIAL_PUBLISHING_Shared =
+#if   L==1
+	"Compartit";
+#elif L==2
+	"Geteilt";
+#elif L==3
+	"Shared";
+#elif L==4
+	"Compartido";
+#elif L==5
+	"Partag&eacute;";
+#elif L==6
+	"Compartido";	// Okoteve traducción
+#elif L==7
+	"Condiviso";
+#elif L==8
+	"Dzielone";
+#elif L==9
+	"Compartilhado";
+#endif
+
+const char *Txt_SOCIAL_PUBLISHING_Unshared =	// No longer shared
+#if   L==1
+	"No compartit";
+#elif L==2
+	"Kein geteilt";
+#elif L==3
+	"Unshared";
+#elif L==4
+	"No compartido";
+#elif L==5
+	"Non partag&eacute;";
+#elif L==6
+	"No compartido";	// Okoteve traducción
+#elif L==7
+	"Non condiviso";
+#elif L==8
+	"Niedzielon&aogon;";
+#elif L==9
+	"N&atilde;o compartilhado";
+#endif
 
 const char *Txt_Sort_degrees_by =
 #if   L==1
@@ -46805,27 +46826,6 @@ const char *Txt_Unread_BR_msgs =
 	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"N&atilde;o<br />lidas";
-#endif
-
-const char *Txt_Unshared =	// No longer shared
-#if   L==1
-	"No compartit";
-#elif L==2
-	"Kein geteilt";
-#elif L==3
-	"Unshared";
-#elif L==4
-	"No compartido";
-#elif L==5
-	"Non partag&eacute;";
-#elif L==6
-	"No compartido";	// Okoteve traducción
-#elif L==7
-	"Non condiviso";
-#elif L==8
-	"Niedzielon&aogon;";
-#elif L==9
-	"N&atilde;o compartilhado";
 #endif
 
 const char *Txt_Update =
