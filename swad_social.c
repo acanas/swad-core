@@ -51,7 +51,7 @@
 
 #define Soc_MAX_BYTES_SUMMARY 100
 #define Soc_NUM_PUBS_IN_TIMELINE 100
-#define Soc_WIDTH_TIMELINE Soc_WIDTH_TIMELINE
+#define Soc_WIDTH_TIMELINE "560px"
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -303,7 +303,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
          /* Get and write social note */
          SocNot.NotCod = SocPub.NotCod;
          Soc_GetDataOfSocialNoteByCod (&SocNot);
-         Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings);
+         Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings - 1);
         }
 
       /***** End list *****/
