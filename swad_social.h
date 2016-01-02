@@ -81,18 +81,24 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Soc_ShowUsrTimeline (long UsrCod);
-void Soc_ShowFollowingTimeline (void);
+void Soc_ShowTimelineUsr (void);
+void Soc_ShowTimelineGbl (void);
 
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 
-void Soc_FormSocialPost (void);
-void Soc_ReceiveSocialPost (void);
+void Soc_FormSocialPostGbl (void);
+void Soc_FormSocialPostUsr (void);
+void Soc_ReceiveSocialPostGbl (void);
+void Soc_ReceiveSocialPostUsr (void);
 
-void Soc_ShareSocialPublishing (void);
-void Soc_UnshareSocialPublishing (void);
+void Soc_ShareSocialPubGbl (void);
+void Soc_ShareSocialPubUsr (void);
+void Soc_UnshareSocialPubGbl (void);
+void Soc_UnshareSocialPubUsr (void);
 
-void Soc_RequestRemovalSocialNote (void);
-void Soc_RemoveSocialPublishing (void);
+void Soc_RequestRemSocialPubGbl (void);
+void Soc_RequestRemSocialPubUsr (void);
+void Soc_RemoveSocialPubGbl (void);
+void Soc_RemoveSocialPubUsr (void);
 
 #endif

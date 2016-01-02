@@ -38,6 +38,7 @@
 #include "swad_layout.h"
 #include "swad_notice.h"
 #include "swad_parameter.h"
+#include "swad_profile.h"
 #include "swad_social.h"
 
 /*****************************************************************************/
@@ -77,7 +78,7 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
    /* Users tab */
 
    /* Social tab */
-   ActSeeSocAct,	// Soc_NOTE_SOCIAL_POST (action not used)
+   ActSeeSocTmlGbl,	// Soc_NOTE_SOCIAL_POST (action not used)
    ActSeeFor,		// Soc_NOTE_FORUM_POST
 
    /* Messages tab */
@@ -137,20 +138,28 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  struct UsrData *UsrDat,
                                  bool PutIconRemove);
 static void Soc_WriteNoteDate (time_t TimeUTC);
+static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
                                      long CrsCod,long Cod);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
-static void Soc_PutLinkToWriteANewPost (void);
-static void Soc_GetAndWriteSocialPost (long PstCod);
+static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) ());
+static void Soc_FormSocialPost (void);
+static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutFormToShareSocialPublishing (long PubCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
 static void Soc_PutHiddenParamPubCod (long NotCod);
 static long Soc_GetParamPubCod (void);
+
+static void Soc_ShareSocialPublishing (void);
+static void Soc_UnshareSocialPublishing (void);
+
+static void Soc_RequestRemovalSocialPublishing (void);
+static void Soc_RemoveSocialPublishing (void);
 
 static void Soc_DeleteASocialPublishingFromDB (const struct SocialPublishing *SocPub,
                                                const struct SocialNote *SocNot);
@@ -166,39 +175,39 @@ static Soc_NoteType_t Soc_GetSocialNoteFromDB (const char *Str);
 /*********** Show social activity (timeline) of a selected user **************/
 /*****************************************************************************/
 
-void Soc_ShowUsrTimeline (long UsrCod)
+void Soc_ShowTimelineUsr (void)
   {
    char Query[512];
 
    /***** Link to write a new social post (public comment) *****/
-   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// It's me
-       Gbl.CurrentAct != ActReqSocPst)		// Not writing a new post
-      Soc_PutLinkToWriteANewPost ();
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// It's me
+       Gbl.CurrentAct != ActReqSocPstUsr)		// Not writing a new post
+      Soc_PutLinkToWriteANewPost (ActReqSocPstUsr,Usr_PutParamOtherUsrCodEncrypted);
 
    /***** Build query to show timeline with publishing of a unique user *****/
    sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
-            UsrCod,
+            Gbl.Usrs.Other.UsrDat.UsrCod,
             Soc_NUM_PUBS_IN_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,ActSeeSocAct);
+   Soc_ShowTimeline (Query,ActSeePubPrf);
   }
 
 /*****************************************************************************/
 /***** Show social activity (timeline) including all the users I follow ******/
 /*****************************************************************************/
 
-void Soc_ShowFollowingTimeline (void)
+void Soc_ShowTimelineGbl (void)
   {
    extern const char *Txt_You_dont_follow_any_user;
    char Query[512];
 
    /***** Link to write a new social post (public comment) *****/
-   if (Gbl.CurrentAct != ActReqSocPst)	// Not writing a new post
-      Soc_PutLinkToWriteANewPost ();
+   if (Gbl.CurrentAct != ActReqSocPstGbl)	// Not writing a new post
+      Soc_PutLinkToWriteANewPost (ActReqSocPstGbl,NULL);
 
    /***** If I follow someone... *****/
    if (Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
@@ -230,7 +239,7 @@ void Soc_ShowFollowingTimeline (void)
 		     " ORDER BY PubCod DESC");
 
       /***** Show timeline *****/
-      Soc_ShowTimeline (Query,ActSeeSocAct);
+      Soc_ShowTimeline (Query,ActSeeSocTmlGbl);
 
       /***** Drop temporary table with publishing codes *****/
       sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
@@ -245,7 +254,6 @@ void Soc_ShowFollowingTimeline (void)
 /*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
-// If UpdateAction == ActUnk ==> no form to update is displayed
 
 static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
   {
@@ -272,8 +280,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
       Lay_StartRoundFrame ("560px",Txt_Public_activity);
 
       /***** Form to update timeline *****/
-      if (UpdateAction != ActUnk)
-	 Act_PutLinkToUpdateAction (UpdateAction);
+      Act_PutLinkToUpdateAction (UpdateAction);
 
       /***** Start list *****/
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -522,6 +529,43 @@ static void Soc_WriteNoteDate (time_t TimeUTC)
   }
 
 /*****************************************************************************/
+/***************** Get from database and write public post *******************/
+/*****************************************************************************/
+
+static void Soc_GetAndWriteSocialPost (long PstCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get social post from database *****/
+   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
+            PstCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
+
+   /***** Result should have a unique row *****/
+   if (NumRows == 1)
+     {
+      /***** Get number of rows *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /****** Get content (row[0]) *****/
+      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+     }
+   else
+      Content[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Write content *****/
+   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+  }
+
+/*****************************************************************************/
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
 
@@ -721,12 +765,12 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 /***************** Put contextual link to write a new post *******************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToWriteANewPost (void)
+static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) ())
   {
    extern const char *Txt_New_comment;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActReqSocPst,NULL,"write64x64.gif",
+   Lay_PutContextualLink (Action,FuncParams,"write64x64.gif",
 			  Txt_New_comment,Txt_New_comment);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -735,7 +779,31 @@ static void Soc_PutLinkToWriteANewPost (void)
 /****************** Form to write a new public comment ***********************/
 /*****************************************************************************/
 
-void Soc_FormSocialPost (void)
+void Soc_FormSocialPostGbl (void)
+  {
+   /***** Form to write a new public comment *****/
+   Soc_FormSocialPost ();
+
+   /***** Write current timeline (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_FormSocialPostUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Form to write a new public comment *****/
+   Soc_FormSocialPost ();
+
+   /***** Write current timeline (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_FormSocialPost (void)
   {
    extern const char *Txt_New_comment;
    extern const char *Txt_Send_comment;
@@ -745,7 +813,13 @@ void Soc_FormSocialPost (void)
    Lay_StartRoundFrame ("560px",Txt_New_comment);
 
    /* Start form to write the post */
-   Act_FormStart (ActRcvSocPst);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStart (ActRcvSocPstUsr);
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActRcvSocPstGbl);
 
    /* Content of new post */
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
@@ -760,16 +834,37 @@ void Soc_FormSocialPost (void)
 
    /* End frame */
    Lay_EndRoundFrame ();
-
-   /***** Write current timeline *****/
-   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
 /******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
-void Soc_ReceiveSocialPost (void)
+void Soc_ReceiveSocialPostGbl (void)
+  {
+   /***** Receive and store social post *****/
+   Soc_ReceiveSocialPost ();
+
+   /***** Write updated timeline after publishing (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_ReceiveSocialPostUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Receive and store social post *****/
+   Soc_ReceiveSocialPost ();
+
+   /***** Write updated timeline after publishing (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_ReceiveSocialPost (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
@@ -787,46 +882,6 @@ void Soc_ReceiveSocialPost (void)
 
    /* Insert post in social notes */
    Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
-
-   /***** Write current timeline *****/
-   Soc_ShowFollowingTimeline ();
-  }
-
-/*****************************************************************************/
-/***************** Get from database and write public post *******************/
-/*****************************************************************************/
-
-static void Soc_GetAndWriteSocialPost (long PstCod)
-  {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-
-   /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
-            PstCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
-
-   /***** Result should have a unique row *****/
-   if (NumRows == 1)
-     {
-      /***** Get number of rows *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /****** Get content (row[0]) *****/
-      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-     }
-   else
-      Content[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Write content *****/
-   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
   }
 
 /*****************************************************************************/
@@ -838,7 +893,13 @@ static void Soc_PutFormToShareSocialPublishing (long PubCod)
    extern const char *Txt_Share;
 
    /***** Form to share social publishing *****/
-   Act_FormStart (ActShaSocPub);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStart (ActShaSocPubUsr);
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActShaSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -861,7 +922,13 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
    extern const char *Txt_Shared;
 
    /***** Form to share social publishing *****/
-   Act_FormStart (ActUnsSocPub);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStart (ActUnsSocPubUsr);
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActUnsSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -884,7 +951,13 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
    extern const char *Txt_Remove;
 
    /***** Form to remove social publishing *****/
-   Act_FormStart (ActReqRemSocPub);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStart (ActReqRemSocPubUsr);
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActReqRemSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -928,7 +1001,31 @@ static long Soc_GetParamPubCod (void)
 /************************* Share a social publishing *************************/
 /*****************************************************************************/
 
-void Soc_ShareSocialPublishing (void)
+void Soc_ShareSocialPubGbl (void)
+  {
+   /***** Share social publishing *****/
+   Soc_ShareSocialPublishing ();
+
+   /***** Write updated timeline after sharing (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_ShareSocialPubUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Share social publishing *****/
+   Soc_ShareSocialPublishing ();
+
+   /***** Write updated timeline after sharing (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_ShareSocialPublishing (void)
   {
    extern const char *Txt_Shared;
    struct SocialPublishing SocPub;
@@ -957,16 +1054,37 @@ void Soc_ShareSocialPublishing (void)
          Lay_ShowAlert (Lay_SUCCESS,Txt_Shared);
 	}
      }
-
-   /***** Write timeline after removing *****/
-   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
 /************** Unshare a previously shared social publishing ****************/
 /*****************************************************************************/
 
-void Soc_UnshareSocialPublishing (void)
+void Soc_UnshareSocialPubGbl (void)
+  {
+   /***** Unshare a previously shared social publishing *****/
+   Soc_UnshareSocialPublishing ();
+
+   /***** Write updated timeline after unsharing (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_UnshareSocialPubUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Unshare a previously shared social publishing *****/
+   Soc_UnshareSocialPublishing ();
+
+   /***** Write updated timeline after unsharing (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_UnshareSocialPublishing (void)
   {
    extern const char *Txt_Unshared;
    struct SocialPublishing SocPub;
@@ -999,16 +1117,37 @@ void Soc_UnshareSocialPublishing (void)
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_Unshared);
 	}
      }
-
-   /***** Write timeline after unsharing *****/
-   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
-/******************* Request the removal of a social note ********************/
+/**************** Request the removal of a social publishing *****************/
 /*****************************************************************************/
 
-void Soc_RequestRemovalSocialNote (void)
+void Soc_RequestRemSocialPubGbl (void)
+  {
+   /***** Request the removal of social publishing *****/
+   Soc_RequestRemovalSocialPublishing ();
+
+   /***** Write timeline again (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_RequestRemSocialPubUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Request the removal of social publishing *****/
+   Soc_RequestRemovalSocialPublishing ();
+
+   /***** Write timeline again (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_RequestRemovalSocialPublishing (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
@@ -1037,7 +1176,13 @@ void Soc_RequestRemovalSocialNote (void)
 
       /***** Form to ask for confirmation to remove this social post *****/
       /* Start form */
-      Act_FormStart (ActRemSocPub);
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
+	 Act_FormStart (ActRemSocPubUsr);
+	 Usr_PutParamOtherUsrCodEncrypted ();
+	}
+      else
+	 Act_FormStart (ActRemSocPubGbl);
       Soc_PutHiddenParamPubCod (SocPub.PubCod);
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
@@ -1055,16 +1200,37 @@ void Soc_RequestRemovalSocialNote (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-
-   /***** Write timeline again *****/
-   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/
 /************************ Remove a social publishing *************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialPublishing (void)
+void Soc_RemoveSocialPubGbl (void)
+  {
+   /***** Remove a social publishing *****/
+   Soc_RemoveSocialPublishing ();
+
+   /***** Write updated timeline after removing (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_RemoveSocialPubUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /*****  Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Remove a social publishing *****/
+   Soc_RemoveSocialPublishing ();
+
+   /***** Write updated timeline after removing (user) *****/
+   Soc_ShowTimelineUsr ();
+  }
+
+static void Soc_RemoveSocialPublishing (void)
   {
    extern const char *Txt_Comment_removed;
    struct SocialPublishing SocPub;
@@ -1092,9 +1258,6 @@ void Soc_RemoveSocialPublishing (void)
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_Comment_removed);
      }
-
-   /***** Write timeline after removing *****/
-   Soc_ShowFollowingTimeline ();
   }
 
 /*****************************************************************************/

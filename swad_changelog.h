@@ -117,13 +117,28 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.88.3 (2016-01-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.89 (2016-01-02)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.89:    Jan 02, 2016	Social timeline can be updated from user profile. (190084 lines)
+UPDATE actions SET Txt='Ver actividad social (global)' WHERE ActCod='1490' AND Language='es';
+UPDATE actions SET Txt='Redactar comentario social (global)' WHERE ActCod='1491' AND Language='es';
+UPDATE actions SET Txt='Crear comentario social (global)' WHERE ActCod='1492' AND Language='es';
+UPDATE actions SET Txt='Eliminar comentario social (global)' WHERE ActCod='1493' AND Language='es';
+UPDATE actions SET Txt='Solicitar elim. coment. social (global)' WHERE ActCod='1494' AND Language='es';
+UPDATE actions SET Txt='Compartir comentario social (global)' WHERE ActCod='1495' AND Language='es';
+UPDATE actions SET Txt='Dejar de compartir coment. social (global)' WHERE ActCod='1496' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1497','es','N','Redactar comentario social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1498','es','N','Crear comentario social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1502','es','N','Eliminar comentario social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1501','es','N','Solicitar elim. coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1499','es','N','Compartir comentario social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1500','es','N','Dejar de compartir coment. social (usuario)');
+
         Version 15.88.3:  Jan 01, 2016	Changes in contextual options in social timeline. (189907 lines)
         Version 15.88.2:  Jan 01, 2016	Messages translated. (189902 lines)
         Version 15.88.1:  Jan 01, 2016	Changes in layout of social timeline. (189854 lines)

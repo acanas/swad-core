@@ -209,7 +209,7 @@ static void Prf_GetUsrDatAndShowUserProfile (void)
      }
    else
       /***** Show social activity (timeline) of this user *****/
-      Soc_ShowUsrTimeline (Gbl.Usrs.Other.UsrDat.UsrCod);
+      Soc_ShowTimelineUsr ();
   }
 
 /*****************************************************************************/

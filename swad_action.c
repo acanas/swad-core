@@ -997,17 +997,25 @@ Users:
 
         834. ActLstClk			List last clicks in real time
 Social:
-        835. ActSeeSocAct		Show social activity (timeline)
+        835. ActSeeSocTmlGbl		Show social timeline (global)
 	836. ActReqPubPrf		Request @nickname to show a public user's profile
 	837. ActSeeFor			Show the level superior of the forums
 	838. ActSeeChtRms		Show the chat rooms
 
-	839. ActReqSocPst		Write a public social post to be displayed in the timeline
-	840. ActRcvSocPst		Receive a public social post to be displayed in the timeline
-NEW!!!!!!!!. ActShaSocPub		Share a social publishing
-NEW!!!!!!!!. ActUnsSocPub		Unshare a previously shared social publishing
-	841. ActReqRemSocPub		Request the removal of a social publishing (only if it is a post)
-	842. ActRemSocPub		Remove a social publishing (only if it is a post)
+	839. ActReqSocPstGbl		Write a public social post to be displayed in the timeline (global)
+	840. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
+NEW!!!!!!!!. ActShaSocPubGbl		Share a social publishing in the timeline (global)
+NEW!!!!!!!!. ActUnsSocPubGbl		Unshare a previously shared social publishing in the timeline (global)
+	841. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
+	842. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
+
+NEW!!!!!!!!. ActReqSocPstUsr		Write a public social post to be displayed in the timeline (user)
+NEW!!!!!!!!. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
+NEW!!!!!!!!. ActShaSocPubUsr		Share a social publishing in the timeline (user)
+NEW!!!!!!!!. ActUnsSocPubUsr		Unshare a previously shared social publishing in the timeline (user)
+NEW!!!!!!!!. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
+NEW!!!!!!!!. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
+
 	843. ActSeePubPrf		Show a public user's profile
 	844. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	845. ActCalNumClk		Calculate number of clicks from log and store into user's figures
@@ -2310,17 +2318,24 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
    // TabSoc ******************************************************************
-   /* ActSeeSocAct	*/{1490, 0,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowFollowingTimeline	,"soc64x64.png"		},
+   /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowTimelineGbl		,"soc64x64.png"		},
    /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
    /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
-   /* ActReqSocPst	*/{1491,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPost		,NULL},
-   /* ActRcvSocPst	*/{1492,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPost		,NULL},
-   /* ActShaSocPub	*/{1495,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialPublishing	,NULL},
-   /* ActUnsSocPub	*/{1496,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPublishing	,NULL},
-   /* ActReqRemSocPub	*/{1494,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemovalSocialNote	,NULL},
-   /* ActRemSocPub	*/{1493,-1,TabSoc,ActSeeSocAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialPublishing	,NULL},
+   /* ActReqSocPstGbl	*/{1491,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostGbl		,NULL},
+   /* ActRcvSocPstGbl	*/{1492,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostGbl	,NULL},
+   /* ActShaSocPubGbl	*/{1495,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialPubGbl		,NULL},
+   /* ActUnsSocPubGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubGbl	,NULL},
+   /* ActReqRemSocPubGbl*/{1494,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialPubGbl	,NULL},
+   /* ActRemSocPubGbl	*/{1493,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialPubGbl		,NULL},
+
+   /* ActReqSocPstUsr	*/{1497,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostUsr		,NULL},
+   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
+   /* ActShaSocPubUsr	*/{1499,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialPubUsr		,NULL},
+   /* ActUnsSocPubUsr	*/{1500,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubUsr	,NULL},
+   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialPubUsr	,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialPubUsr		,NULL},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
@@ -4158,13 +4173,19 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgMyTT1stDay,	// #1487
 	ActAskRemOldBrf,	// #1488
 	ActRemOldBrf,		// #1489
-	ActSeeSocAct,		// #1490
-	ActReqSocPst,		// #1491
-	ActRcvSocPst,		// #1492
-	ActRemSocPub,		// #1493
-	ActReqRemSocPub,	// #1494
-	ActShaSocPub,		// #1495
-	ActUnsSocPub,		// #1496
+	ActSeeSocTmlGbl,	// #1490
+	ActReqSocPstGbl,	// #1491
+	ActRcvSocPstGbl,	// #1492
+	ActRemSocPubGbl,	// #1493
+	ActReqRemSocPubGbl,	// #1494
+	ActShaSocPubGbl,	// #1495
+	ActUnsSocPubGbl,	// #1496
+	ActReqSocPstUsr,	// #1497
+	ActRcvSocPstUsr,	// #1498
+	ActShaSocPubUsr,	// #1499
+	ActUnsSocPubUsr,	// #1500
+	ActReqRemSocPubUsr,	// #1501
+	ActRemSocPubUsr,	// #1502
 	};
 
 /*****************************************************************************/
@@ -4440,6 +4461,8 @@ void Act_PutLinkToUpdateAction (Act_Action_t Action)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (Action);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod >= 0)	// This update action requieres specify user
+      Usr_PutParamOtherUsrCodEncrypted ();
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
    Act_FormEnd ();

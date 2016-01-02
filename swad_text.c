@@ -17922,7 +17922,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
-	// ActSeeSocAct
+	// ActSeeSocTmlGbl
 #if   L==1
 	 "Activitat"
 #elif L==2
@@ -19878,7 +19878,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSoc *****************************************************
-	// ActSeeSocAct
+	// ActSeeSocTmlGbl
 #if   L==1
 	 "Activitat social (l&iacute;nia de temps)"
 #elif L==2
