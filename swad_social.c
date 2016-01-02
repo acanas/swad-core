@@ -257,7 +257,9 @@ void Soc_ShowTimelineGbl (void)
 
 static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
   {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Public_activity;
+   extern const char *Txt_Update;
    extern const char *Txt_No_public_activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -280,7 +282,18 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
       Lay_StartRoundFrame ("560px",Txt_Public_activity);
 
       /***** Form to update timeline *****/
-      Act_PutLinkToUpdateAction (UpdateAction);
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
+         Act_FormStartAnchor (UpdateAction,"timeline");
+	 Usr_PutParamOtherUsrCodEncrypted ();
+	}
+      else
+         Act_FormStart (UpdateAction);
+      Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Start list *****/
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");

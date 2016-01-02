@@ -72,10 +72,12 @@ static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 
 void Con_ShowConnectedUsrs (void)
   {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Scope;
-   extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Connected_users;
+   extern const char *Txt_MONTHS_SMALL_SHORT[12];
+   extern const char *Txt_Update;
+   extern const char *Txt_Scope;
 
    /***** Link to show last clicks in real time *****/
    if (Gbl.Usrs.Me.Logged)
@@ -99,7 +101,12 @@ void Con_ShowConnectedUsrs (void)
    Lay_StartRoundFrame (NULL,Gbl.Title);
 
    /***** Put form to update connected users *****/
-   Act_PutLinkToUpdateAction (ActLstCon);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Act_FormStart (ActLstCon);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Put form to change scope *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""

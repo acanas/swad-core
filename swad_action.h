@@ -1426,7 +1426,6 @@ void Act_FormEnd (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle);
-void Act_PutLinkToUpdateAction (Act_Action_t Action);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);

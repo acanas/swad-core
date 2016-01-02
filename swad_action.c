@@ -4451,25 +4451,6 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
   }
 
 /*****************************************************************************/
-/******** Put contextual link with animated icon to update an action *********/
-/*****************************************************************************/
-
-void Act_PutLinkToUpdateAction (Act_Action_t Action)
-  {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Update;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (Action);
-   if (Gbl.Usrs.Other.UsrDat.UsrCod >= 0)	// This update action requieres specify user
-      Usr_PutParamOtherUsrCodEncrypted ();
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /***************** Adjust current action when no user's logged ***************/
 /*****************************************************************************/
 
