@@ -11202,7 +11202,14 @@ INSERT INTO social_timeline (AuthorCod,PublisherCod,NotCod,TimePublish) SELECT U
        
                 
 SELECT MIN(PubCod) FROM social_timeline WHERE PublisherCod IN (SELECT '1' UNION SELECT FollowedCod FROM usr_follow WHERE FollowerCod='1') GROUP BY NotCod;
-		  
-		  
-		  
+		  	  
+----- SWAD 15.90 (2016/01/02) -----
+
+ALTER TABLE social_notes ADD COLUMN HieCod INT NOT NULL DEFAULT -1 AFTER UsrCod;
+UPDATE social_notes SET HieCod=InsCod WHERE NoteType IN ('1','2');
+UPDATE social_notes SET HieCod=CtrCod WHERE NoteType IN ('3','4');
+UPDATE social_notes SET HieCod=DegCod WHERE NoteType IN ('5','6');
+UPDATE social_notes SET HieCod=CrsCod WHERE NoteType IN ('7','8','9','12');
+ALTER TABLE social_notes DROP COLUMN CtyCod,DROP COLUMN InsCod,DROP COLUMN CtrCod,DROP COLUMN CrsCod;
+
 		  

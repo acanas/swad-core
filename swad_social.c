@@ -108,12 +108,8 @@ struct SocialNote
    long NotCod;
    Soc_NoteType_t NoteType;
    long UsrCod;
-   long CtyCod;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
-   long Cod;
+   long HieCod;	// Hierarchy code (institution/centre/degree/course)
+   long Cod;	// Code of file, forum post, notice,...
    time_t DateTimeUTC;
   };
 
@@ -367,8 +363,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    extern const char *Txt_Degree;
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
-   extern const char *Txt_Country;
-   struct Country Cty;
    struct Institution Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -382,26 +376,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    /* Get author data */
    UsrDat->UsrCod = SocNot->UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat);
-
-   /* Get country data */
-   Cty.CtyCod = SocNot->CtyCod;
-   Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
-
-   /* Get institution data */
-   Ins.InsCod = SocNot->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
-    /* Get centre data */
-   Ctr.CtrCod = SocNot->CtrCod;
-   Ctr_GetDataOfCentreByCod (&Ctr);
-
-   /* Get degree data */
-   Deg.DegCod = SocNot->DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
-
-   /* Get course data */
-   Crs.CrsCod = SocNot->CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
 
    /* Get forum type of the post */
    if (SocNot->NoteType == Soc_NOTE_FORUM_POST)
@@ -473,7 +447,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
      }
    else
      {
-      /* Write note type and location */
+      /* Write note type and location-hierarchy */
       fprintf (Gbl.F.Out,"<div>");
       Soc_StartFormGoToAction (SocNot->NoteType,Crs.CrsCod,SocNot->Cod);
       Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
@@ -483,24 +457,53 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      if (SocNot->NoteType == Soc_NOTE_FORUM_POST)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Forum,ForumName);
-      else if (Crs.CrsCod > 0)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Course,Crs.ShortName);
-      else if (Deg.DegCod > 0)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Degree,Deg.ShortName);
-      else if (Ctr.CtrCod > 0)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Centre,Ctr.ShortName);
-      else if (Ins.InsCod > 0)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Institution,Ins.ShortName);
-      else if (Cty.CtyCod > 0)
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		  Txt_Country,Cty.Name[Gbl.Prefs.Language]);
+      switch (SocNot->NoteType)
+        {
+	 case Soc_NOTE_INS_DOC_PUB_FILE:
+	 case Soc_NOTE_INS_SHA_PUB_FILE:
+	    /* Get institution data */
+	    Ins.InsCod = SocNot->HieCod;
+	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		     Txt_Institution,Ins.ShortName);
+	    break;
+	 case Soc_NOTE_CTR_DOC_PUB_FILE:
+	 case Soc_NOTE_CTR_SHA_PUB_FILE:
+	    /* Get centre data */
+	    Ctr.CtrCod = SocNot->HieCod;
+	    Ctr_GetDataOfCentreByCod (&Ctr);
+
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		     Txt_Centre,Ctr.ShortName);
+	    break;
+	 case Soc_NOTE_DEG_DOC_PUB_FILE:
+	 case Soc_NOTE_DEG_SHA_PUB_FILE:
+	    /* Get degree data */
+	    Deg.DegCod = SocNot->HieCod;
+	    Deg_GetDataOfDegreeByCod (&Deg);
+
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		     Txt_Degree,Deg.ShortName);
+	    break;
+	 case Soc_NOTE_CRS_DOC_PUB_FILE:
+	 case Soc_NOTE_CRS_SHA_PUB_FILE:
+	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	 case Soc_NOTE_NOTICE:
+	    /* Get course data */
+	    Crs.CrsCod = SocNot->HieCod;
+	    Crs_GetDataOfCourseByCod (&Crs);
+
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		     Txt_Course,Crs.ShortName);
+	    break;
+	 case Soc_NOTE_FORUM_POST:
+	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		     Txt_Forum,ForumName);
+	    break;
+	 default:
+	    break;
+        }
 
       /* Write content of the note */
       Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
@@ -709,46 +712,40 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
   {
-   char Query[512];
-   long CtyCod;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
+   char Query[256];
+   long HieCod;	// Hierarchy code (institution/centre/degree/course)
    struct SocialPublishing SocPub;
 
-   if (NoteType == Soc_NOTE_FORUM_POST)
+   switch (NoteType)
      {
-      // CtyCod = Gbl.Forum.Cty.CtyCod;
-      // InsCod = Gbl.Forum.Ins.InsCod;
-      // CtrCod = Gbl.Forum.Ctr.CtrCod;
-      // DegCod = Gbl.Forum.Deg.DegCod;
-      // CrsCod = Gbl.Forum.Crs.CrsCod;
-      CtyCod = -1L;
-      InsCod = -1L;
-      CtrCod = -1L;
-      DegCod = -1L;
-      CrsCod = -1L;
-    }
-   else
-     {
-      CtyCod = Gbl.CurrentCty.Cty.CtyCod;
-      InsCod = Gbl.CurrentIns.Ins.InsCod;
-      CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
-      DegCod = Gbl.CurrentDeg.Deg.DegCod;
-      CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+      case Soc_NOTE_INS_DOC_PUB_FILE:
+      case Soc_NOTE_INS_SHA_PUB_FILE:
+	 HieCod = Gbl.CurrentIns.Ins.InsCod;
+	 break;
+      case Soc_NOTE_CTR_DOC_PUB_FILE:
+      case Soc_NOTE_CTR_SHA_PUB_FILE:
+	 HieCod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 break;
+      case Soc_NOTE_DEG_DOC_PUB_FILE:
+      case Soc_NOTE_DEG_SHA_PUB_FILE:
+	 HieCod = Gbl.CurrentDeg.Deg.DegCod;
+	 break;
+      case Soc_NOTE_CRS_DOC_PUB_FILE:
+      case Soc_NOTE_CRS_SHA_PUB_FILE:
+      case Soc_NOTE_EXAM_ANNOUNCEMENT:
+      case Soc_NOTE_NOTICE:
+	 HieCod = Gbl.CurrentCrs.Crs.CrsCod;
+	 break;
+      default:
+	 HieCod = -1L;
+         break;
      }
 
    /***** Store social note *****/
-   sprintf (Query,"INSERT INTO social_notes (NoteType,UsrCod,"
-	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,TimeNote)"
-                  " VALUES ('%u','%ld',"
-                  "'%ld','%ld','%ld','%ld','%ld',"
-                  "'%ld',NOW())",
-            (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,
-            CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-            Cod);
+   sprintf (Query,"INSERT INTO social_notes"
+	          " (NoteType,UsrCod,HieCod,Cod,TimeNote)"
+                  " VALUES ('%u','%ld','%ld','%ld',NOW())",
+            (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod,Cod);
    SocPub.NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
    /***** Publish social note in timeline *****/
@@ -1416,9 +1413,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
    MYSQL_ROW row;
 
    /***** Get data of social note from database *****/
-   sprintf (Query,"SELECT NotCod,NoteType,UsrCod,"
-	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,UNIX_TIMESTAMP(TimeNote)"
+   sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,UNIX_TIMESTAMP(TimeNote)"
                   " FROM social_notes"
                   " WHERE NotCod='%ld'",
             SocNot->NotCod);
@@ -1433,11 +1428,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
       /***** Reset fields of social note *****/
       SocNot->NoteType    = Soc_NOTE_UNKNOWN;
       SocNot->UsrCod      = -1L;
-      SocNot->CtyCod      = -1L;
-      SocNot->InsCod      = -1L;
-      SocNot->CtrCod      = -1L;
-      SocNot->DegCod      = -1L;
-      SocNot->CrsCod      = -1L;
+      SocNot->HieCod      = -1L;
       SocNot->Cod         = -1L;
       SocNot->DateTimeUTC = (time_t) 0;
      }
@@ -1458,26 +1449,14 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    /* Get (from) user code (row[2]) */
    SocNot->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get country code (row[3]) */
-   SocNot->CtyCod = Str_ConvertStrCodToLongCod (row[3]);
+   /* Get hierarchy code (row[3]) */
+   SocNot->HieCod = Str_ConvertStrCodToLongCod (row[3]);
 
-   /* Get institution code (row[4]) */
-   SocNot->InsCod = Str_ConvertStrCodToLongCod (row[4]);
+   /* Get file/post... code (row[4]) */
+   SocNot->Cod = Str_ConvertStrCodToLongCod (row[4]);
 
-   /* Get centre code (row[5]) */
-   SocNot->CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-
-   /* Get degree code (row[6]) */
-   SocNot->DegCod = Str_ConvertStrCodToLongCod (row[6]);
-
-   /* Get course code (row[7]) */
-   SocNot->CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-
-   /* Get file/post... code (row[8]) */
-   SocNot->Cod = Str_ConvertStrCodToLongCod (row[8]);
-
-   /* Get time of the note (row[9]) */
-   SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
+   /* Get time of the note (row[5]) */
+   SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
   }
 
 /*****************************************************************************/

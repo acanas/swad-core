@@ -65,7 +65,7 @@ typedef enum
    /* Users tab */
 
    /* Social tab */
-   Soc_NOTE_SOCIAL_POST	= 10,
+   Soc_NOTE_SOCIAL_POST		= 10,
    Soc_NOTE_FORUM_POST		= 11,
 
    /* Messages tab */
