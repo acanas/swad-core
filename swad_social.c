@@ -51,6 +51,7 @@
 
 #define Soc_MAX_BYTES_SUMMARY 100
 #define Soc_NUM_PUBS_IN_TIMELINE 100
+#define Soc_WIDTH_TIMELINE Soc_WIDTH_TIMELINE
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -271,7 +272,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
    if (NumPublishings)	// Publishings found in timeline
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Public_activity);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Txt_Public_activity);
 
       /***** Form to update timeline *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -838,7 +839,7 @@ static void Soc_FormSocialPost (void)
 
    /***** Form to write a new public comment *****/
    /* Start frame */
-   Lay_StartRoundFrame ("560px",Txt_New_comment);
+   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Txt_New_comment);
 
    /* Start form to write the post */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1099,7 +1100,7 @@ static void Soc_ShareSocialPublishing (void)
          Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
          /***** Show the social note just shared *****/
-	 Lay_StartRoundFrame ("560px",NULL);
+	 Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
 	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
 	 fprintf (Gbl.F.Out,"</ul>");
@@ -1170,7 +1171,7 @@ static void Soc_UnshareSocialPublishing (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
 
       /***** Show the social note just unshared *****/
-      Lay_StartRoundFrame ("560px",NULL);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
       Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
       fprintf (Gbl.F.Out,"</ul>");
@@ -1270,7 +1271,7 @@ static void Soc_RequestRemovalSocialPublishing (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
       /* Show social note */
-      Lay_StartRoundFrame ("560px",NULL);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
       Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
       fprintf (Gbl.F.Out,"</ul>");
@@ -1337,6 +1338,13 @@ static void Soc_RemoveSocialPublishing (void)
                  SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    if (ICanRemove)
      {
+      /***** Show the social note to be removed *****/
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+      fprintf (Gbl.F.Out,"</ul>");
+      Lay_EndRoundFrame ();
+
       /***** Delete social publishing from database *****/
       Soc_RemoveASocialPublishingFromDB (&SocPub,&SocNot);
 
