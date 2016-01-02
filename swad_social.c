@@ -1168,6 +1168,13 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
+
+      /***** Show the social note just unshared *****/
+      Lay_StartRoundFrame ("560px",NULL);
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+      fprintf (Gbl.F.Out,"</ul>");
+      Lay_EndRoundFrame ();
      }
   }
 

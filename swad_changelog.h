@@ -117,13 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.91.1 (2016-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.91.2 (2016-01-02)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.91.2:  Jan 02, 2016	After unsharing a social note, display at top the note just unshared. (190175 lines)
         Version 15.91.1:  Jan 02, 2016	After sharing a social note, display at top the note just shared. (190168 lines)
         Version 15.91:    Jan 02, 2016	Every social note can be shared.
                                         Fixed bug when unsharing a social note. (190161 lines)

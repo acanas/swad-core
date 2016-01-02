@@ -35539,7 +35539,7 @@ const char *Txt_SOCIAL_PUBLISHING_Removed =
 #elif L==3
 	"Removed";
 #elif L==4
-	"Rliminado";
+	"Eliminado";
 #elif L==5
 	"Supprim&eacute;";
 #elif L==6
