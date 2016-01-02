@@ -4221,6 +4221,9 @@ int swad__getFile (struct soap *soap,
 
    /***** Set course and group codes *****/
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+                                  &Gbl.CurrentIns.Ins.InsCod,
+                                  &Gbl.CurrentCtr.Ctr.CtrCod,
+                                  &Gbl.CurrentDeg.Deg.DegCod,
                                   &Gbl.CurrentCrs.Crs.CrsCod,
                                   &Gbl.CurrentCrs.Grps.GrpCod);
 
@@ -4358,6 +4361,9 @@ int swad__getMarks (struct soap *soap,
 
    /***** Set course and group codes *****/
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+                                  &Gbl.CurrentIns.Ins.InsCod,
+                                  &Gbl.CurrentCtr.Ctr.CtrCod,
+                                  &Gbl.CurrentDeg.Deg.DegCod,
                                   &Gbl.CurrentCrs.Crs.CrsCod,
                                   &Gbl.CurrentCrs.Grps.GrpCod);
 

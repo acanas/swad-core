@@ -17031,7 +17031,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComIns
+	// ActAdmShaIns
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -17151,7 +17151,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComCtr
+	// ActAdmShaCtr
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -17274,7 +17274,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComDeg
+	// ActAdmShaDeg
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -18952,7 +18952,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComIns
+	// ActAdmShaIns
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de l'instituci&oacute;"
@@ -19076,7 +19076,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComCtr
+	// ActAdmShaCtr
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" del centre"
@@ -19203,7 +19203,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmComDeg
+	// ActAdmShaDeg
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de la titulaci&oacute;"

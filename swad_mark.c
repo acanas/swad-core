@@ -718,6 +718,9 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
    unsigned UnsignedNum;
    Brw_FileBrowser_t FileBrowser;
    long Cod;
+   long InsCod;	// Not applicable here
+   long CtrCod;	// Not applicable here
+   long DegCod;	// Not applicable here
    long CrsCod;
    long GrpCod;
    struct MarksProperties Marks;
@@ -765,7 +768,8 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
 
             /* Course/group code (row[1]) */
             Cod = Str_ConvertStrCodToLongCod (row[1]);
-            Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,&CrsCod,&GrpCod);
+            Brw_GetCrsGrpFromFileMetadata (FileBrowser,Cod,
+                                           &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
 
             /* Path (row[2]) */
             strncpy (FullPathInTreeFromDBMarksTable,row[2],PATH_MAX);

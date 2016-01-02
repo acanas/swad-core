@@ -185,7 +185,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeePlc		(ActChgInsSta+  5)
 #define ActSeeHld		(ActChgInsSta+  6)
 #define ActSeeAdmDocIns		(ActChgInsSta+  7)
-#define ActAdmComIns		(ActChgInsSta+  8)
+#define ActAdmShaIns		(ActChgInsSta+  8)
 
 // Secondary actions
 #define ActInsSch		(ActChgInsSta+  9)
@@ -285,7 +285,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeeCtrInf		(ActDowShaIns+  2)
 #define ActSeeDeg		(ActDowShaIns+  3)
 #define ActSeeAdmDocCtr		(ActDowShaIns+  4)
-#define ActAdmComCtr		(ActDowShaIns+  5)
+#define ActAdmShaCtr		(ActDowShaIns+  5)
 
 // Secondary actions
 #define ActCtrSch		(ActDowShaIns+  6)
@@ -368,7 +368,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeeDegInf		(ActDowShaCtr+  2)
 #define ActSeeCrs		(ActDowShaCtr+  3)
 #define ActSeeAdmDocDeg		(ActDowShaCtr+  4)
-#define ActAdmComDeg		(ActDowShaCtr+  5)
+#define ActAdmShaDeg		(ActDowShaCtr+  5)
 
 // Secondary actions
 #define ActDegSch		(ActDowShaCtr+  6)

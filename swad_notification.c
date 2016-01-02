@@ -638,6 +638,9 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct FileMetadata FileMetadata;
+   long InsCod = -1L;
+   long CtrCod = -1L;
+   long DegCod = -1L;
    long GrpCod = -1L;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
@@ -653,7 +656,8 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    FileMetadata.FilCod = Cod;
             Brw_GetFileMetadataByCod (&FileMetadata);
-            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
+            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+                                           &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
 	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
 						  PathUntilFileName,
 						  FileName);
@@ -662,15 +666,31 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    case Ntf_EVENT_DOCUMENT_FILE:
 	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatSeeDocGrp :
-		                                    ActReqDatSeeDocCrs) :
-		                    ((GrpCod > 0) ? ActSeeDocGrp :
-		                	            ActSeeDocCrs);
+		                    ((CrsCod > 0) ? ActReqDatSeeDocCrs :
+		                    ((DegCod > 0) ? ActReqDatSeeDocDeg :
+		                     (CtrCod > 0) ? ActReqDatSeeDocCtr :
+		                	            ActReqDatSeeDocIns))) :
+                                    ((GrpCod > 0) ? ActSeeDocGrp :
+		                    ((CrsCod > 0) ? ActSeeDocCrs :
+		                    ((DegCod > 0) ? ActSeeDocDeg :
+		                     (CtrCod > 0) ? ActSeeDocCtr :
+		                	            ActSeeDocIns)));
 	       break;
 	    case Ntf_EVENT_SHARED_FILE:
 	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
 		                                    ActReqDatShaCrs) :
 		                    ((GrpCod > 0) ? ActAdmShaGrp :
 		                	            ActAdmShaCrs);
+	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
+		                    ((CrsCod > 0) ? ActReqDatShaCrs :
+		                    ((DegCod > 0) ? ActReqDatShaDeg :
+		                     (CtrCod > 0) ? ActReqDatShaCtr :
+		                	            ActReqDatShaIns))) :
+                                    ((GrpCod > 0) ? ActAdmShaGrp :
+		                    ((CrsCod > 0) ? ActAdmShaCrs :
+		                    ((DegCod > 0) ? ActAdmShaDeg :
+		                     (CtrCod > 0) ? ActAdmShaCtr :
+		                	            ActAdmShaIns)));
 	       break;
 	    case Ntf_EVENT_MARKS_FILE:
 	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatSeeMrkGrp :
@@ -682,8 +702,10 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	       break;
 	   }
          Act_FormStart (Action);
-	 Grp_PutParamGrpCod (GrpCod > 0 ? GrpCod :
-	                                  -1L);
+	 // Grp_PutParamGrpCod (GrpCod > 0 ? GrpCod :
+	 //                                  -1L);
+         if (GrpCod > 0)
+	    Grp_PutParamGrpCod (GrpCod);
 	 if (Cod > 0)	// File code
 	    Brw_PutParamsPathAndFile (Brw_IS_UNKNOWN,PathUntilFileName,FileName);	// TODO: Brw_IS_UNKNOWN should be changed to Brw_IS_FILE or Brw_IS_LINK
 	 break;
@@ -705,10 +727,27 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
      }
 
-   /***** Parameter to go to another course *****/
-   if (CrsCod > 0 &&				// Course specified
-       CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
-      Crs_PutParamCrsCod (CrsCod);		// Go to another course
+   /***** Parameter to go to another course/degree/centre/institution *****/
+   if (CrsCod > 0)				// Course specified
+     {
+      if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+         Crs_PutParamCrsCod (CrsCod);		// Go to another course
+     }
+   else if (DegCod > 0)				// Degree specified
+     {
+      if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+         Deg_PutParamDegCod (DegCod);		// Go to another degree
+     }
+   else if (CtrCod > 0)				// Centre specified
+     {
+      if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+         Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
+     }
+   else if (InsCod > 0)				// Institution specified
+     {
+      if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+         Ins_PutParamInsCod (InsCod);		// Go to another institution
+     }
   }
 
 /*****************************************************************************/

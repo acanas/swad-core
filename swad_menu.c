@@ -100,7 +100,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeePlc,
 		ActSeeHld,
 		ActSeeAdmDocIns,
-		ActAdmComIns,
+		ActAdmShaIns,
 		},
 		// TabCtr **********
 		{
@@ -108,7 +108,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCtrInf,
 		ActSeeDeg,
 		ActSeeAdmDocCtr,
-		ActAdmComCtr,
+		ActAdmShaCtr,
 		},
 		// TabDeg **********
 		{
@@ -116,7 +116,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeDegInf,
 		ActSeeCrs,
 		ActSeeAdmDocDeg,
-		ActAdmComDeg,
+		ActAdmShaDeg,
 		},
 		// TabCrs **********
 		{

@@ -117,13 +117,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.91.4 (2016-01-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.92 (2016-01-02)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.92:    Jan 02, 2016	Fixing bugs in file metadata of files in institution, centre and degree zones. Not finished. (190365 lines)
+					1 change necessary in database:
+ALTER TABLE social_notes DROP COLUMN DegCod;
+
         Version 15.91.4:  Jan 02, 2016	Fixed minor bugs in social timeline. (190184 lines)
         Version 15.91.3:  Jan 02, 2016	Just before to remove a social note, display at top the note to remove. (190183 lines)
         Version 15.91.2:  Jan 02, 2016	After unsharing a social note, display at top the note just unshared. (190175 lines)

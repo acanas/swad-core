@@ -334,9 +334,9 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActSeeDocIns,	// Brw_SHOW_DOCUM_INS
    ActAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActAdmComDeg,	// Brw_ADMI_SHARE_DEG
-   ActAdmComCtr,	// Brw_ADMI_SHARE_CTR
-   ActAdmComIns,	// Brw_ADMI_SHARE_INS
+   ActAdmShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActAdmShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActAdmShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -838,9 +838,9 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    ActAdmDocCtr,	// Brw_ADMI_DOCUM_CTR
    ActUnk,		// Brw_SHOW_DOCUM_INS
    ActAdmDocIns,	// Brw_ADMI_DOCUM_INS
-   ActAdmComDeg,	// Brw_ADMI_SHARE_DEG
-   ActAdmComCtr,	// Brw_ADMI_SHARE_CTR
-   ActAdmComIns,	// Brw_ADMI_SHARE_INS
+   ActAdmShaDeg,	// Brw_ADMI_SHARE_DEG
+   ActAdmShaCtr,	// Brw_ADMI_SHARE_CTR
+   ActAdmShaIns,	// Brw_ADMI_SHARE_INS
   };
 static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1528,7 +1528,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Shared files of institution *****/
-      case ActAdmComIns:
+      case ActAdmShaIns:
       case ActReqRemFilShaIns:
       case ActRemFilShaIns:
       case ActRemFolShaIns:
@@ -1594,7 +1594,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Shared files of centre *****/
-      case ActAdmComCtr:
+      case ActAdmShaCtr:
       case ActReqRemFilShaCtr:
       case ActRemFilShaCtr:
       case ActRemFolShaCtr:
@@ -1660,7 +1660,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Shared files of degree *****/
-      case ActAdmComDeg:
+      case ActAdmShaDeg:
       case ActReqRemFilShaDeg:
       case ActRemFilShaDeg:
       case ActRemFolShaDeg:
@@ -8870,6 +8870,11 @@ void Brw_ShowFileMetadata (void)
    Brw_GetFileMetadataByPath (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
+   sprintf (Gbl.Message,"Found = %s; FileMetadata.FilCod = %ld",
+            Found ? "true" : "false",
+            FileMetadata.FilCod);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
    if (Found)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
@@ -9943,12 +9948,21 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    MYSQL_ROW row;
    unsigned UnsignedNum;
 
+	    sprintf (Gbl.Message,"FileMetadata->FilCod = %ld",
+                     FileMetadata->FilCod);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
    /***** Get metadata of a file from database *****/
    sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
                   " WHERE FilCod='%ld'",
             FileMetadata->FilCod);
+
+   	    sprintf (Gbl.Message,"Query = %s",
+                     Query);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
       /* Get row */
@@ -9981,6 +9995,10 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Get path (row[6]) */
       strncpy (FileMetadata->Path,row[6],PATH_MAX);
       FileMetadata->Path[PATH_MAX] = '\0';
+
+	    sprintf (Gbl.Message,"FileMetadata->Path = %s",
+                     FileMetadata->Path);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
       /* Is a hidden file? (row[7]) */
       switch (Gbl.FileBrowser.Type)
@@ -10044,6 +10062,10 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+	    sprintf (Gbl.Message,"FileMetadata->Path = %s",
+                     FileMetadata->Path);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Fill some values with 0 (unused at this moment) *****/
    FileMetadata->Size = (off_t) 0;
@@ -10476,30 +10498,79 @@ static long Brw_GetZoneUsrCodForFiles (void)
 /*****************************************************************************/
 
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
-                                    long *CrsCod,long *GrpCod)
+                                    long *InsCod,
+                                    long *CtrCod,
+                                    long *DegCod,
+                                    long *CrsCod,
+                                    long *GrpCod)
   {
+   struct Centre Ctr;
+   struct Degree Deg;
+   struct Course Crs;
    struct GroupData GrpDat;
 
    switch (FileBrowser)
      {
+      case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
+	 *GrpCod = -1L;
+	 *CrsCod = -1L;
+	 *DegCod = -1L;
+	 *CtrCod = -1L;
+	 *InsCod = Cod;
+         break;
+      case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
+	 *GrpCod = -1L;
+	 *CrsCod = -1L;
+	 *DegCod = -1L;
+	 *CtrCod = Ctr.CtrCod = Cod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 *InsCod = Ctr.InsCod;
+         break;
+      case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
+	 *GrpCod = -1L;
+	 *CrsCod = -1L;
+	 *DegCod = Deg.DegCod = Cod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
+	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 *InsCod = Ctr.InsCod;
+         break;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_WORKS_USR:
       case Brw_ADMI_MARKS_CRS:
-	 *CrsCod = Cod;
 	 *GrpCod = -1L;
+	 *CrsCod = Crs.CrsCod = Cod;
+	 Crs_GetDataOfCourseByCod (&Crs);
+	 *DegCod = Deg.DegCod = Crs.DegCod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
+	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 *InsCod = Ctr.InsCod;
 	 break;
       case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_GRP:
 	 *GrpCod = GrpDat.GrpCod = Cod;
 	 Grp_GetDataOfGroupByCod (&GrpDat);
-	 *CrsCod = GrpDat.CrsCod;
+	 *CrsCod = Crs.CrsCod = GrpDat.CrsCod;
+	 Crs_GetDataOfCourseByCod (&Crs);
+	 *DegCod = Deg.DegCod = Crs.DegCod;
+	 Deg_GetDataOfDegreeByCod (&Deg);
+	 *CtrCod = Ctr.CtrCod = Deg.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 *InsCod = Ctr.InsCod;
 	 break;
       default:
-	 *CrsCod = -1L;
 	 *GrpCod = -1L;
+	 *CrsCod = -1L;
+	 *DegCod = -1L;
+	 *CtrCod = -1L;
+	 *InsCod = -1L;
 	 break;
      }
   }

@@ -192,7 +192,11 @@ unsigned Brw_GetNumPublicFilesUsr (long UsrCod);
 
 long Brw_GetCodForFiles (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
-                                    long *CrsCod,long *GrpCod);
+                                    long *InsCod,
+                                    long *CtrCod,
+                                    long *DegCod,
+                                    long *CrsCod,
+                                    long *GrpCod);
 
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *Path,bool IsPublic,Brw_License_t License);

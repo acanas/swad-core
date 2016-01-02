@@ -59,15 +59,15 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
 
    /* Institution tab */
    ActSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
-   ActAdmComIns,	// Soc_NOTE_INS_SHA_PUB_FILE
+   ActAdmShaIns,	// Soc_NOTE_INS_SHA_PUB_FILE
 
    /* Centre tab */
    ActSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
-   ActAdmComCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
+   ActAdmShaCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
 
    /* Degree tab */
    ActSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
-   ActAdmComDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
+   ActAdmShaDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
 
    /* Course tab */
    ActSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
@@ -303,6 +303,11 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
          /* Get and write social note */
          SocNot.NotCod = SocPub.NotCod;
          Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+         sprintf (Gbl.Message,"SocNot.Cod = %ld",
+                  SocNot.Cod);
+         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
          Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings - 1);
         }
 
@@ -366,29 +371,16 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
+   /***** Initialize location in hierarchy *****/
+   Ins.InsCod = -1L;
+   Ctr.CtrCod = -1L;
+   Deg.DegCod = -1L;
+   Crs.CrsCod = -1L;
 
-   /***** Get details *****/
-   /* Get author data */
+   /***** Get author data *****/
+   Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = SocNot->UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-
-   /* Get forum type of the post */
-   if (SocNot->NoteType == Soc_NOTE_FORUM_POST)
-     {
-      Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
-      For_SetForumName (Gbl.Forum.ForumType,
-			&Ins,
-			&Ctr,
-			&Deg,
-			&Crs,
-			ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-      Gbl.Forum.Ins.InsCod = Ins.InsCod;
-      Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
-      Gbl.Forum.Deg.DegCod = Deg.DegCod;
-      Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
-     }
 
    /***** Start list item *****/
    fprintf (Gbl.F.Out,"<li");
@@ -428,7 +420,58 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
      }
    else
      {
-      /* Write note type and location-hierarchy */
+      /* Get location in hierarchy */
+      switch (SocNot->NoteType)
+	{
+	 case Soc_NOTE_INS_DOC_PUB_FILE:
+	 case Soc_NOTE_INS_SHA_PUB_FILE:
+	    /* Get institution data */
+	    Ins.InsCod = SocNot->HieCod;
+	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
+	    sprintf (Gbl.Message,"SocNot->Cod = %ld",
+                     SocNot->Cod);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	    break;
+	 case Soc_NOTE_CTR_DOC_PUB_FILE:
+	 case Soc_NOTE_CTR_SHA_PUB_FILE:
+	    /* Get centre data */
+	    Ctr.CtrCod = SocNot->HieCod;
+	    Ctr_GetDataOfCentreByCod (&Ctr);
+	    break;
+	 case Soc_NOTE_DEG_DOC_PUB_FILE:
+	 case Soc_NOTE_DEG_SHA_PUB_FILE:
+	    /* Get degree data */
+	    Deg.DegCod = SocNot->HieCod;
+	    Deg_GetDataOfDegreeByCod (&Deg);
+	    break;
+	 case Soc_NOTE_CRS_DOC_PUB_FILE:
+	 case Soc_NOTE_CRS_SHA_PUB_FILE:
+	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	 case Soc_NOTE_NOTICE:
+	    /* Get course data */
+	    Crs.CrsCod = SocNot->HieCod;
+	    Crs_GetDataOfCourseByCod (&Crs);
+	    break;
+	 case Soc_NOTE_FORUM_POST:
+            /* Get forum type of the post */
+	    Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
+	    For_SetForumName (Gbl.Forum.ForumType,
+			      &Ins,
+			      &Ctr,
+			      &Deg,
+			      &Crs,
+			      ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	    Gbl.Forum.Ins.InsCod = Ins.InsCod;
+	    Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
+	    Gbl.Forum.Deg.DegCod = Deg.DegCod;
+	    Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
+	    break;
+	 default:
+	    break;
+	}
+
+      /* Write note type */
       fprintf (Gbl.F.Out,"<div>");
       Soc_StartFormGoToAction (SocNot->NoteType,Crs.CrsCod,SocNot->Cod);
       Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
@@ -438,34 +481,23 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
+      /* Write location in hierarchy */
       switch (SocNot->NoteType)
 	{
 	 case Soc_NOTE_INS_DOC_PUB_FILE:
 	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    /* Get institution data */
-	    Ins.InsCod = SocNot->HieCod;
-	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
 	    /* Write location (institution) in hierarchy */
 	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		     Txt_Institution,Ins.ShortName);
 	    break;
 	 case Soc_NOTE_CTR_DOC_PUB_FILE:
 	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    /* Get centre data */
-	    Ctr.CtrCod = SocNot->HieCod;
-	    Ctr_GetDataOfCentreByCod (&Ctr);
-
 	    /* Write location (centre) in hierarchy */
 	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		     Txt_Centre,Ctr.ShortName);
 	    break;
 	 case Soc_NOTE_DEG_DOC_PUB_FILE:
 	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    /* Get degree data */
-	    Deg.DegCod = SocNot->HieCod;
-	    Deg_GetDataOfDegreeByCod (&Deg);
-
 	    /* Write location (degree) in hierarchy */
 	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		     Txt_Degree,Deg.ShortName);
@@ -474,10 +506,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 case Soc_NOTE_CRS_SHA_PUB_FILE:
 	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
 	 case Soc_NOTE_NOTICE:
-	    /* Get course data */
-	    Crs.CrsCod = SocNot->HieCod;
-	    Crs_GetDataOfCourseByCod (&Crs);
-
 	    /* Write location (course) in hierarchy */
 	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 		     Txt_Course,Crs.ShortName);
@@ -596,11 +624,13 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
 
-static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
-                                     long CrsCod,long Cod)
+static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct FileMetadata FileMetadata;
+   long InsCod = -1L;
+   long CtrCod = -1L;
+   long DegCod = -1L;
    long GrpCod = -1L;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
@@ -619,12 +649,26 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
       case Soc_NOTE_CRS_SHA_PUB_FILE:
 	 if (Cod > 0)	// File code
 	   {
+	    sprintf (Gbl.Message,"Cod = %ld",
+                     Cod);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
 	    FileMetadata.FilCod = Cod;
-            Brw_GetFileMetadataByCod (&FileMetadata);
-            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,&CrsCod,&GrpCod);
-	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
-						  PathUntilFileName,
-						  FileName);
+            Brw_GetFileMetadataByCod (&FileMetadata);	// TODO: Check all calls to this function!!!!!
+            if (FileMetadata.FilCod > 0)	// Found
+              {
+	       Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+					      &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
+	       Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
+						     PathUntilFileName,
+						     FileName);
+              }
+            Cod = FileMetadata.FilCod;	// If file not found ==> FileMetadata.FilCod == -1
+
+	    sprintf (Gbl.Message,"PathUntilFileName = %s; FileName = %s; FileMetadata.FilCod = %ld",
+                     PathUntilFileName,FileName,
+                     FileMetadata.FilCod);
+            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	   }
 	 switch (NoteType)
 	   {
@@ -632,19 +676,19 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
 	       Action = (Cod > 0) ? ActReqDatSeeDocIns : ActSeeDocIns;
 	       break;
 	    case Soc_NOTE_INS_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaIns : ActAdmComIns;
+	       Action = (Cod > 0) ? ActReqDatShaIns : ActAdmShaIns;
 	       break;
 	    case Soc_NOTE_CTR_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocCtr : ActSeeDocCtr;
 	       break;
 	    case Soc_NOTE_CTR_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaCtr : ActAdmComCtr;
+	       Action = (Cod > 0) ? ActReqDatShaCtr : ActAdmShaCtr;
 	       break;
 	    case Soc_NOTE_DEG_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocDeg : ActSeeDocDeg;
 	       break;
 	    case Soc_NOTE_DEG_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaDeg : ActAdmComDeg;
+	       Action = (Cod > 0) ? ActReqDatShaDeg : ActAdmShaDeg;
 	       break;
 	    case Soc_NOTE_CRS_DOC_PUB_FILE:
 	       Action = (Cod > 0) ? ActReqDatSeeDocCrs : ActSeeDocCrs;
@@ -656,7 +700,7 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
 	       break;
 	   }
          Act_FormStart (Action);
-	 Grp_PutParamGrpCod (-1L);
+	 // Grp_PutParamGrpCod (-1L);
 	 if (Cod > 0)	// File code
 	    Brw_PutParamsPathAndFile (Brw_IS_FILE,PathUntilFileName,FileName);
 	 break;
@@ -674,9 +718,26 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
      }
 
    /***** Parameter to go to another course *****/
-   if (CrsCod > 0 &&				// Course specified
-       CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
-      Crs_PutParamCrsCod (CrsCod);		// Go to another course
+   if (CrsCod > 0)				// Course specified
+     {
+      if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+         Crs_PutParamCrsCod (CrsCod);		// Go to another course
+     }
+   else if (DegCod > 0)				// Degree specified
+     {
+      if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+         Deg_PutParamDegCod (DegCod);		// Go to another degree
+     }
+   else if (CtrCod > 0)				// Centre specified
+     {
+      if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+         Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
+     }
+   else if (InsCod > 0)				// Institution specified
+     {
+      if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+         Ins_PutParamInsCod (InsCod);		// Go to another institution
+     }
   }
 
 /*****************************************************************************/
