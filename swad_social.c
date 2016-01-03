@@ -613,6 +613,7 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
+   extern const char *Txt_not_available;
    struct FileMetadata FileMetadata;
    long InsCod = -1L;
    long CtrCod = -1L;
@@ -698,7 +699,8 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
       Act_FormEnd ();
      }
    else	// Not inside a form
-      fprintf (Gbl.F.Out,"%s",Txt_SOCIAL_NOTE[NoteType]);
+      fprintf (Gbl.F.Out,"%s (%s)",
+               Txt_SOCIAL_NOTE[NoteType],Txt_not_available);
   }
 
 /*****************************************************************************/

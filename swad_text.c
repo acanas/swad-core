@@ -24333,6 +24333,27 @@ const char *Txt_Not_applicable =
 	"N&atilde;o aplic&aacute;vel";
 #endif
 
+const char *Txt_not_available =
+#if   L==1
+	"no disponible";
+#elif L==2
+	"Nicht verf&uuml;gbar";
+#elif L==3
+	"not available";
+#elif L==4
+	"no disponible";
+#elif L==5
+	"pas disponible";
+#elif L==6
+	"no disponible";		// Okoteve traducción
+#elif L==7
+	"non disponibile";
+#elif L==8
+	"niedost&eogon;pne";
+#elif L==9
+	"n&atilde;o dispon&iacute;vel";
+#endif
+
 const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 #if   L==1
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."

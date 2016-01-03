@@ -125,6 +125,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.93.1:  Jan 03, 2016	Show text indicating document not available in social note. (190358 lines)
         Version 15.93:    Jan 03, 2016	Fixing bugs in file metadata of files in institution, centre and degree zones. (190335 lines)
         Version 15.92:    Jan 02, 2016	Fixing bugs in file metadata of files in institution, centre and degree zones. Not finished. (190365 lines)
 					1 change necessary in database:
