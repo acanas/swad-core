@@ -135,8 +135,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  bool WritingTimeline,bool LastInList);
 static void Soc_WriteNoteDate (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
-static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,
-                                   long CrsCod,long Cod);
+static void Soc_PutFormGoToAction (const struct SocialNote *SocNot,long CrsCod);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
@@ -462,7 +461,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
       /* Write note type */
       fprintf (Gbl.F.Out,"<div class=\"DAT\">");
-      Soc_PutFormGoToAction (SocNot->NoteType,Crs.CrsCod,SocNot->Cod);
+      Soc_PutFormGoToAction (SocNot,Crs.CrsCod);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Write location in hierarchy */
@@ -608,7 +607,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
 
-static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
+static void Soc_PutFormGoToAction (const struct SocialNote *SocNot,long CrsCod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -621,7 +620,7 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
    long GrpCod = -1L;
 
    /***** Parameters depending on the type of note *****/
-   switch (NoteType)
+   switch (SocNot->NoteType)
      {
       case Soc_NOTE_INS_DOC_PUB_FILE:
       case Soc_NOTE_INS_SHA_PUB_FILE:
@@ -631,7 +630,7 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
       case Soc_NOTE_DEG_SHA_PUB_FILE:
       case Soc_NOTE_CRS_DOC_PUB_FILE:
       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 FileMetadata.FilCod = Cod;
+	 FileMetadata.FilCod = SocNot->Cod;
 	 if (FileMetadata.FilCod > 0)
 	   {
             Brw_GetFileMetadataByCod (&FileMetadata);
@@ -641,20 +640,20 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
 	   }
 	 if (FileMetadata.FilCod > 0)
 	   {
-	    Act_FormStart (Soc_DefaultActions[NoteType]);
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
       case Soc_NOTE_NOTICE:
-         Act_FormStart (Soc_DefaultActions[NoteType]);
-	 Not_PutHiddenParamNotCod (Cod);
+         Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	 Not_PutHiddenParamNotCod (SocNot->Cod);
 	 break;
       case Soc_NOTE_FORUM_POST:
 	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
 	 For_PutAllHiddenParamsForum ();
 	 break;
       default:
-         Act_FormStart (Soc_DefaultActions[NoteType]);
+         Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
 	 break;
      }
 
@@ -683,14 +682,14 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
 	}
 
       /***** Link and end form *****/
-      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[NoteType],
+      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
 			  The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[NoteType]);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[SocNot->NoteType]);
       Act_FormEnd ();
      }
    else	// Not inside a form
       fprintf (Gbl.F.Out,"%s (%s)",
-               Txt_SOCIAL_NOTE[NoteType],Txt_not_available);
+               Txt_SOCIAL_NOTE[SocNot->NoteType],Txt_not_available);
   }
 
 /*****************************************************************************/
