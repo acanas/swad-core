@@ -382,6 +382,9 @@ void Exa_RemoveExamAnnouncement (void)
    /***** Mark possible notifications as removed *****/
    Ntf_SetNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
+   /***** Mark possible social note as unavailable *****/
+   Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+
    /***** Write message *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_of_exam_removed);
 

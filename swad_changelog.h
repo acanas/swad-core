@@ -118,13 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.93.5 (2016-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.93.6 (2016-01-03)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.93.6:  Jan 03, 2016	Social notes are marked as unavailable when a exam announcement is removed. (190409 lines)
         Version 15.93.5:  Jan 03, 2016	Social notes are marked as unavailable when a notice is removed. (190406 lines)
 					6 changes necessary in database:
 CREATE UNIQUE INDEX NotCod ON social_notes (NotCod);
