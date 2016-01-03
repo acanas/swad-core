@@ -58,20 +58,20 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
    ActUnk,		// Soc_NOTE_UNKNOWN
 
    /* Institution tab */
-   ActSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
-   ActAdmShaIns,	// Soc_NOTE_INS_SHA_PUB_FILE
+   ActReqDatSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
+   ActReqDatShaIns,	// Soc_NOTE_INS_SHA_PUB_FILE
 
    /* Centre tab */
-   ActSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
-   ActAdmShaCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
+   ActReqDatSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
+   ActReqDatShaCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
 
    /* Degree tab */
-   ActSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
-   ActAdmShaDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
+   ActReqDatSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
+   ActReqDatShaDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
 
    /* Course tab */
-   ActSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
-   ActAdmShaCrs,	// Soc_NOTE_CRS_SHA_PUB_FILE
+   ActReqDatSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
+   ActReqDatShaCrs,	// Soc_NOTE_CRS_SHA_PUB_FILE
 
    /* Assessment tab */
    ActSeeExaAnn,	// Soc_NOTE_EXAM_ANNOUNCEMENT
@@ -135,8 +135,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  bool WritingTimeline,bool LastInList);
 static void Soc_WriteNoteDate (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
-static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,
-                                     long CrsCod,long Cod);
+static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,
+                                   long CrsCod,long Cod);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
@@ -303,11 +303,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
          /* Get and write social note */
          SocNot.NotCod = SocPub.NotCod;
          Soc_GetDataOfSocialNoteByCod (&SocNot);
-
-         sprintf (Gbl.Message,"SocNot.Cod = %ld",
-                  SocNot.Cod);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
          Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings - 1);
         }
 
@@ -354,8 +349,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool WritingTimeline,bool LastInList)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
@@ -428,10 +421,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	    /* Get institution data */
 	    Ins.InsCod = SocNot->HieCod;
 	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
-	    sprintf (Gbl.Message,"SocNot->Cod = %ld",
-                     SocNot->Cod);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	    break;
 	 case Soc_NOTE_CTR_DOC_PUB_FILE:
 	 case Soc_NOTE_CTR_SHA_PUB_FILE:
@@ -472,13 +461,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	}
 
       /* Write note type */
-      fprintf (Gbl.F.Out,"<div>");
-      Soc_StartFormGoToAction (SocNot->NoteType,Crs.CrsCod,SocNot->Cod);
-      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
-			  The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s</a>",
-	       Txt_SOCIAL_NOTE[SocNot->NoteType]);
-      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      Soc_PutFormGoToAction (SocNot->NoteType,Crs.CrsCod,SocNot->Cod);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Write location in hierarchy */
@@ -624,9 +608,11 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
 
-static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
+static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
    struct FileMetadata FileMetadata;
    long InsCod = -1L;
    long CtrCod = -1L;
@@ -634,7 +620,6 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Co
    long GrpCod = -1L;
    char PathUntilFileName[PATH_MAX+1];
    char FileName[NAME_MAX+1];
-   Act_Action_t Action = ActUnk;				// Initialized to avoid warning
 
    /***** Parameters depending on the type of note *****/
    switch (NoteType)
@@ -647,14 +632,12 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Co
       case Soc_NOTE_DEG_SHA_PUB_FILE:
       case Soc_NOTE_CRS_DOC_PUB_FILE:
       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 if (Cod > 0)	// File code
+	 FileMetadata.FilCod = Cod;
+         PathUntilFileName[0] = '\0';
+         FileName[0] = '\0';
+	 if (FileMetadata.FilCod > 0)
 	   {
-	    sprintf (Gbl.Message,"Cod = %ld",
-                     Cod);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
-	    FileMetadata.FilCod = Cod;
-            Brw_GetFileMetadataByCod (&FileMetadata);	// TODO: Check all calls to this function!!!!!
+            Brw_GetFileMetadataByCod (&FileMetadata);
             if (FileMetadata.FilCod > 0)	// Found
               {
 	       Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
@@ -663,46 +646,13 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Co
 						     PathUntilFileName,
 						     FileName);
               }
-            Cod = FileMetadata.FilCod;	// If file not found ==> FileMetadata.FilCod == -1
-
-	    sprintf (Gbl.Message,"PathUntilFileName = %s; FileName = %s; FileMetadata.FilCod = %ld",
-                     PathUntilFileName,FileName,
-                     FileMetadata.FilCod);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	   }
-	 switch (NoteType)
+	 if (FileMetadata.FilCod > 0)
 	   {
-	    case Soc_NOTE_INS_DOC_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatSeeDocIns : ActSeeDocIns;
-	       break;
-	    case Soc_NOTE_INS_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaIns : ActAdmShaIns;
-	       break;
-	    case Soc_NOTE_CTR_DOC_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatSeeDocCtr : ActSeeDocCtr;
-	       break;
-	    case Soc_NOTE_CTR_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaCtr : ActAdmShaCtr;
-	       break;
-	    case Soc_NOTE_DEG_DOC_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatSeeDocDeg : ActSeeDocDeg;
-	       break;
-	    case Soc_NOTE_DEG_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaDeg : ActAdmShaDeg;
-	       break;
-	    case Soc_NOTE_CRS_DOC_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatSeeDocCrs : ActSeeDocCrs;
-	       break;
-	    case Soc_NOTE_CRS_SHA_PUB_FILE:
-	       Action = (Cod > 0) ? ActReqDatShaCrs : ActAdmShaCrs;
-	       break;
-	    default:	// Not aplicable here
-	       break;
+	    Act_FormStart (Soc_DefaultActions[NoteType]);
+	    // Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
+	    Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
 	   }
-         Act_FormStart (Action);
-	 // Grp_PutParamGrpCod (-1L);
-	 if (Cod > 0)	// File code
-	    Brw_PutParamsPathAndFile (Brw_IS_FILE,PathUntilFileName,FileName);
 	 break;
       case Soc_NOTE_NOTICE:
          Act_FormStart (Soc_DefaultActions[NoteType]);
@@ -717,27 +667,38 @@ static void Soc_StartFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Co
 	 break;
      }
 
-   /***** Parameter to go to another course *****/
-   if (CrsCod > 0)				// Course specified
+   if (Gbl.InsideForm)
      {
-      if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
-         Crs_PutParamCrsCod (CrsCod);		// Go to another course
+      /***** Parameter to go to another place in hierarchy *****/
+      if (CrsCod > 0)				// Course specified
+	{
+	 if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    Crs_PutParamCrsCod (CrsCod);		// Go to another course
+	}
+      else if (DegCod > 0)				// Degree specified
+	{
+	 if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	    Deg_PutParamDegCod (DegCod);		// Go to another degree
+	}
+      else if (CtrCod > 0)				// Centre specified
+	{
+	 if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	    Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
+	}
+      else if (InsCod > 0)				// Institution specified
+	{
+	 if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	    Ins_PutParamInsCod (InsCod);		// Go to another institution
+	}
+
+      /***** Link and end form *****/
+      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[NoteType],
+			  The_ClassForm[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[NoteType]);
+      Act_FormEnd ();
      }
-   else if (DegCod > 0)				// Degree specified
-     {
-      if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
-         Deg_PutParamDegCod (DegCod);		// Go to another degree
-     }
-   else if (CtrCod > 0)				// Centre specified
-     {
-      if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
-         Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
-     }
-   else if (InsCod > 0)				// Institution specified
-     {
-      if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
-         Ins_PutParamInsCod (InsCod);		// Go to another institution
-     }
+   else	// Not inside a form
+      fprintf (Gbl.F.Out,"%s",Txt_SOCIAL_NOTE[NoteType]);
   }
 
 /*****************************************************************************/

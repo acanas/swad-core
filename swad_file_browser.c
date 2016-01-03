@@ -2230,6 +2230,28 @@ static void Brw_GetDataCurrentGrp (void)
   }
 
 /*****************************************************************************/
+/**************** Write hidden parameter with code of file *******************/
+/*****************************************************************************/
+/*
+void Brw_PutHiddenParamFilCod (long FilCod)
+  {
+   Par_PutHiddenParamLong ("FilCod",FilCod);
+  }
+*/
+/*****************************************************************************/
+/********************* Get parameter with code of file ***********************/
+/*****************************************************************************/
+/*
+long Brw_GetParamFilCod (void)
+  {
+   char LongStr[1+10+1];
+
+   ***** Get parameter with code of file *****
+   Par_GetParToText ("FilCod",LongStr,1+10);
+   return Str_ConvertStrCodToLongCod (LongStr);
+  }
+*/
+/*****************************************************************************/
 /** Put hidden params. with the path in the tree and the name of file/folder */
 /*****************************************************************************/
 
@@ -8868,22 +8890,15 @@ void Brw_ShowFileMetadata (void)
 
    /***** Get file metadata *****/
    Brw_GetFileMetadataByPath (&FileMetadata);
+   // Brw_GetFileMetadataByCod (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   sprintf (Gbl.Message,"Found = %s; FileMetadata.FilCod = %ld",
-            Found ? "true" : "false",
-            FileMetadata.FilCod);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    if (Found)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
-	{
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
 	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
-	 // Brw_GetFileMetadataByCod (&FileMetadata);
-	}
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
@@ -9273,12 +9288,9 @@ void Brw_DownloadFile (void)
    if (Found)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
-	{
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
 	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
-	 // Brw_GetFileMetadataByCod (&FileMetadata);
-	}
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
@@ -9948,20 +9960,12 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    MYSQL_ROW row;
    unsigned UnsignedNum;
 
-	    sprintf (Gbl.Message,"FileMetadata->FilCod = %ld",
-                     FileMetadata->FilCod);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
    /***** Get metadata of a file from database *****/
    sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
                   " WHERE FilCod='%ld'",
             FileMetadata->FilCod);
-
-   	    sprintf (Gbl.Message,"Query = %s",
-                     Query);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
@@ -9995,10 +9999,6 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       /* Get path (row[6]) */
       strncpy (FileMetadata->Path,row[6],PATH_MAX);
       FileMetadata->Path[PATH_MAX] = '\0';
-
-	    sprintf (Gbl.Message,"FileMetadata->Path = %s",
-                     FileMetadata->Path);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
       /* Is a hidden file? (row[7]) */
       switch (Gbl.FileBrowser.Type)
@@ -10062,10 +10062,6 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-	    sprintf (Gbl.Message,"FileMetadata->Path = %s",
-                     FileMetadata->Path);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Fill some values with 0 (unused at this moment) *****/
    FileMetadata->Size = (off_t) 0;

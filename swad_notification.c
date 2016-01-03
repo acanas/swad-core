@@ -227,7 +227,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
-static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
+static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                      long CrsCod,long Cod);
 static void Ntf_UpdateMyLastAccessToNotifications (void);
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
@@ -440,16 +440,18 @@ void Ntf_ShowMyNotifications (void)
                             "<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
                   ClassBackground);
          if (PutLink)
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+
+         if (PutLink)
            {
-            Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
-            fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-        	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON20x20\" />",
-                     Gbl.Prefs.IconsURL,
-                     Ntf_Icons[NotifyEvent],
-                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-            Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICON20x20\" />",
+		     Gbl.Prefs.IconsURL,
+		     Ntf_Icons[NotifyEvent],
+		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+		     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+	    Act_FormEnd ();
            }
          else
             fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
@@ -465,8 +467,10 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
                   ClassBackground);
          if (PutLink)
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+
+         if (PutLink)
            {
-            Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
             Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
             fprintf (Gbl.F.Out,"%s</a>",
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
@@ -487,10 +491,10 @@ void Ntf_ShowMyNotifications (void)
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
             if (PutLink)
-              {
-               Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+
+            if (PutLink)
                Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
-              }
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
@@ -505,10 +509,10 @@ void Ntf_ShowMyNotifications (void)
          else if (Crs.CrsCod > 0)
            {
             if (PutLink)
-              {
-               Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+
+            if (PutLink)
                Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
-              }
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
@@ -632,8 +636,9 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 /*****************************************************************************/
 /*********** Put form to go to an action depending on the event **************/
 /*****************************************************************************/
+// Return the value of Gbl.InsideForm (true if form is started)
 
-static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
+static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                      long CrsCod,long Cod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
@@ -652,62 +657,58 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 if (Cod > 0)	// File code
+	 FileMetadata.FilCod = Cod;
+         PathUntilFileName[0] = '\0';
+         FileName[0] = '\0';
+         if (FileMetadata.FilCod > 0)
 	   {
-	    FileMetadata.FilCod = Cod;
             Brw_GetFileMetadataByCod (&FileMetadata);
-            Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-                                           &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
-	    Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
-						  PathUntilFileName,
-						  FileName);
+            if (FileMetadata.FilCod > 0)
+              {
+	       Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+					      &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
+	       Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
+						     PathUntilFileName,
+						     FileName);
+              }
 	   }
 	 switch (NotifyEvent)
 	   {
 	    case Ntf_EVENT_DOCUMENT_FILE:
-	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatSeeDocGrp :
-		                    ((CrsCod > 0) ? ActReqDatSeeDocCrs :
-		                    ((DegCod > 0) ? ActReqDatSeeDocDeg :
-		                     (CtrCod > 0) ? ActReqDatSeeDocCtr :
-		                	            ActReqDatSeeDocIns))) :
-                                    ((GrpCod > 0) ? ActSeeDocGrp :
-		                    ((CrsCod > 0) ? ActSeeDocCrs :
-		                    ((DegCod > 0) ? ActSeeDocDeg :
-		                     (CtrCod > 0) ? ActSeeDocCtr :
-		                	            ActSeeDocIns)));
+	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatSeeDocGrp :
+		                                    ((CrsCod > 0) ? ActReqDatSeeDocCrs :
+		                                    ((DegCod > 0) ? ActReqDatSeeDocDeg :
+		                                     (CtrCod > 0) ? ActReqDatSeeDocCtr :
+		                	                            ActReqDatSeeDocIns))) :
+                                                    ActUnk;
 	       break;
 	    case Ntf_EVENT_SHARED_FILE:
-	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
-		                                    ActReqDatShaCrs) :
-		                    ((GrpCod > 0) ? ActAdmShaGrp :
-		                	            ActAdmShaCrs);
-	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
-		                    ((CrsCod > 0) ? ActReqDatShaCrs :
-		                    ((DegCod > 0) ? ActReqDatShaDeg :
-		                     (CtrCod > 0) ? ActReqDatShaCtr :
-		                	            ActReqDatShaIns))) :
-                                    ((GrpCod > 0) ? ActAdmShaGrp :
-		                    ((CrsCod > 0) ? ActAdmShaCrs :
-		                    ((DegCod > 0) ? ActAdmShaDeg :
-		                     (CtrCod > 0) ? ActAdmShaCtr :
-		                	            ActAdmShaIns)));
+	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
+		                                    ((CrsCod > 0) ? ActReqDatShaCrs :
+		                                    ((DegCod > 0) ? ActReqDatShaDeg :
+		                                     (CtrCod > 0) ? ActReqDatShaCtr :
+		                	                            ActReqDatShaIns))) :
+                                                    ActUnk;
 	       break;
 	    case Ntf_EVENT_MARKS_FILE:
-	       Action = (Cod > 0) ? ((GrpCod > 0) ? ActReqDatSeeMrkGrp :
-		                                    ActReqDatSeeMrkCrs) :
-		                    ((GrpCod > 0) ? ActSeeMrkGrp :
-		                	            ActSeeMrkCrs);
+	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatSeeMrkGrp :
+		                                                    ActReqDatSeeMrkCrs) :
+		                                    ActUnk;
 	       break;
 	    default:	// Not aplicable here
 	       break;
 	   }
-         Act_FormStart (Action);
-	 // Grp_PutParamGrpCod (GrpCod > 0 ? GrpCod :
-	 //                                  -1L);
-         if (GrpCod > 0)
-	    Grp_PutParamGrpCod (GrpCod);
-	 if (Cod > 0)	// File code
-	    Brw_PutParamsPathAndFile (Brw_IS_UNKNOWN,PathUntilFileName,FileName);	// TODO: Brw_IS_UNKNOWN should be changed to Brw_IS_FILE or Brw_IS_LINK
+	 if (Action != ActUnk)
+	   {
+	    Act_FormStart (Action);
+	    if (GrpCod > 0)
+	       Grp_PutParamGrpCod (GrpCod);
+	    if (FileMetadata.FilCod > 0)
+	      {
+	       // Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
+	       Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
+	      }
+	   }
 	 break;
       case Ntf_EVENT_NOTICE:
          Act_FormStart (Ntf_DefaultActions[NotifyEvent]);
@@ -728,26 +729,31 @@ static void Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Parameter to go to another course/degree/centre/institution *****/
-   if (CrsCod > 0)				// Course specified
+   if (Gbl.InsideForm)
      {
-      if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
-         Crs_PutParamCrsCod (CrsCod);		// Go to another course
+      if (CrsCod > 0)				// Course specified
+	{
+	 if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    Crs_PutParamCrsCod (CrsCod);		// Go to another course
+	}
+      else if (DegCod > 0)				// Degree specified
+	{
+	 if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	    Deg_PutParamDegCod (DegCod);		// Go to another degree
+	}
+      else if (CtrCod > 0)				// Centre specified
+	{
+	 if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	    Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
+	}
+      else if (InsCod > 0)				// Institution specified
+	{
+	 if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	    Ins_PutParamInsCod (InsCod);		// Go to another institution
+	}
      }
-   else if (DegCod > 0)				// Degree specified
-     {
-      if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
-         Deg_PutParamDegCod (DegCod);		// Go to another degree
-     }
-   else if (CtrCod > 0)				// Centre specified
-     {
-      if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
-         Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
-     }
-   else if (InsCod > 0)				// Institution specified
-     {
-      if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
-         Ins_PutParamInsCod (InsCod);		// Go to another institution
-     }
+
+   return Gbl.InsideForm;
   }
 
 /*****************************************************************************/
