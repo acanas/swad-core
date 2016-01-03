@@ -1960,7 +1960,7 @@ mysql> DESCRIBE social_notes;
 	           "Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "TimeNote DATETIME NOT NULL,"
                    "UNIQUE INDEX(NotCod),"
-                   "INDEX(NoteType),"
+                   "UNIQUE INDEX(NoteType,Cod),"
                    "INDEX(UsrCod),"
                    "INDEX(TimeNote))");
 

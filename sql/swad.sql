@@ -924,7 +924,7 @@ CREATE TABLE IF NOT EXISTS social_notes (
 	Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',
 	TimeNote DATETIME NOT NULL,
 	UNIQUE INDEX(NotCod),
-	INDEX(SocialNote),
+	UNIQUE INDEX(NoteType,Cod),
 	INDEX(UsrCod),
 	INDEX(TimeNote));
 --

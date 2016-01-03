@@ -818,7 +818,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
 
 void Ntf_SetNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Set notification as seen by me *****/
    if (ToUsrCod > 0)	// If the user code is specified

@@ -332,6 +332,9 @@ void Not_RemoveNotice (void)
    /***** Mark possible notifications as removed *****/
    Ntf_SetNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
+   /***** Mark possible social note as unavailable *****/
+   Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_NOTICE,NotCod);
+
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
   }
