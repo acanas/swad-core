@@ -125,7 +125,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.93.4:  Jan 03, 2016	Changes in links to actions in social timeline. (190353 lines)
+        Version 15.93.4:  Jan 03, 2016	Changes in links to actions in social timeline.
+					New field Unavailable in table of social notes. (190354 lines)
 					1 change necessary in database:
 ALTER TABLE social_notes ADD COLUMN Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Cod;
 
