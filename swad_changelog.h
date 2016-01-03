@@ -118,13 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.93 (2016-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.93.2 (2016-01-03)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.93.2:  Jan 03, 2016	To show a file in social timeline, file code is passed as parameter instead of path. (190360 lines)
         Version 15.93.1:  Jan 03, 2016	Show text indicating document not available in social note. (190358 lines)
         Version 15.93:    Jan 03, 2016	Fixing bugs in file metadata of files in institution, centre and degree zones. (190335 lines)
         Version 15.92:    Jan 02, 2016	Fixing bugs in file metadata of files in institution, centre and degree zones. Not finished. (190365 lines)

@@ -2232,25 +2232,25 @@ static void Brw_GetDataCurrentGrp (void)
 /*****************************************************************************/
 /**************** Write hidden parameter with code of file *******************/
 /*****************************************************************************/
-/*
+
 void Brw_PutHiddenParamFilCod (long FilCod)
   {
    Par_PutHiddenParamLong ("FilCod",FilCod);
   }
-*/
+
 /*****************************************************************************/
 /********************* Get parameter with code of file ***********************/
 /*****************************************************************************/
-/*
+
 long Brw_GetParamFilCod (void)
   {
    char LongStr[1+10+1];
 
-   ***** Get parameter with code of file *****
+   /***** Get parameter with code of file *****/
    Par_GetParToText ("FilCod",LongStr,1+10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
-*/
+
 /*****************************************************************************/
 /** Put hidden params. with the path in the tree and the name of file/folder */
 /*****************************************************************************/
@@ -8889,8 +8889,13 @@ void Brw_ShowFileMetadata (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file metadata *****/
-   Brw_GetFileMetadataByPath (&FileMetadata);
-   // Brw_GetFileMetadataByCod (&FileMetadata);
+   // Brw_GetFileMetadataByPath (&FileMetadata);
+   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   Brw_GetFileMetadataByCod (&FileMetadata);
+   strcpy (Gbl.FileBrowser.Priv.FullPathInTree,FileMetadata.Path);
+   Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Priv.FullPathInTree,
+					 Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,
+					 Gbl.FileBrowser.FilFolLnkName);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    if (Found)
@@ -9966,7 +9971,6 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 	          " FROM files"
                   " WHERE FilCod='%ld'",
             FileMetadata->FilCod);
-
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
       /* Get row */

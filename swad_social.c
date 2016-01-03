@@ -651,8 +651,8 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
 	 if (FileMetadata.FilCod > 0)
 	   {
 	    Act_FormStart (Soc_DefaultActions[NoteType]);
-	    // Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
-	    Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
+	    Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
+	    // Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
 	   }
 	 break;
       case Soc_NOTE_NOTICE:
