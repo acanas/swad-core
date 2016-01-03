@@ -110,23 +110,23 @@
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
-// TODO: When a file, notice, etc. is removed, it should be removed from social events?
 // TODO: Change "Actividad pública" to "Actividad de Antonio" in user's profile
-// TODO: Put parameter FilCod instead of Path to go to a file in Notifications and Social?
+// TODO: Forums For_FORUM_GLOBAL_USRS and For_FORUM_SWAD_USRS should be available for guests for coherence with social timeline?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.93.6 (2016-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.93.7 (2016-01-03)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.93.6:  Jan 03, 2016	Social notes are marked as unavailable when a exam announcement is removed. (190409 lines)
-        Version 15.93.5:  Jan 03, 2016	Social notes are marked as unavailable when a notice is removed. (190406 lines)
+        Version 15.93.7:  Jan 03, 2016	Social note is marked as unavailable when a forum post is removed. (190419 lines)
+        Version 15.93.6:  Jan 03, 2016	Social note is marked as unavailable when a exam announcement is removed. (190409 lines)
+        Version 15.93.5:  Jan 03, 2016	Social note is marked as unavailable when a notice is removed. (190406 lines)
 					6 changes necessary in database:
 CREATE UNIQUE INDEX NotCod ON social_notes (NotCod);
 DROP INDEX SocCod ON social_notes;

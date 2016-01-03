@@ -3907,6 +3907,17 @@ void For_DelPst (void)
    Ntf_SetNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,PstCod);
    Ntf_SetNotifAsRemoved (Ntf_EVENT_FORUM_REPLY,PstCod);
 
+   /***** Mark possible social note as unavailable *****/
+   switch (Gbl.Forum.ForumType)	// Only if forum is public for any logged user
+     {
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_SWAD_USRS:
+         Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_FORUM_POST,PstCod);
+         break;
+      default:
+	 break;
+     }
+
    if (ThreadDeleted)
      {
       Lay_ShowAlert (Lay_SUCCESS,Txt_Post_and_thread_removed);
