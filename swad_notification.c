@@ -647,8 +647,6 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
    long CtrCod = -1L;
    long DegCod = -1L;
    long GrpCod = -1L;
-   char PathUntilFileName[PATH_MAX+1];
-   char FileName[NAME_MAX+1];
    Act_Action_t Action = ActUnk;				// Initialized to avoid warning
 
    /***** Parameters depending on the type of event *****/
@@ -657,57 +655,41 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
+         Action = ActUnk;
 	 FileMetadata.FilCod = Cod;
-         PathUntilFileName[0] = '\0';
-         FileName[0] = '\0';
          if (FileMetadata.FilCod > 0)
-	   {
             Brw_GetFileMetadataByCod (&FileMetadata);
-            if (FileMetadata.FilCod > 0)
-              {
-	       Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-					      &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
-	       Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
-						     PathUntilFileName,
-						     FileName);
-              }
-	   }
-	 switch (NotifyEvent)
+	 if (FileMetadata.FilCod > 0)
 	   {
-	    case Ntf_EVENT_DOCUMENT_FILE:
-	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatSeeDocGrp :
-		                                    ((CrsCod > 0) ? ActReqDatSeeDocCrs :
-		                                    ((DegCod > 0) ? ActReqDatSeeDocDeg :
-		                                     (CtrCod > 0) ? ActReqDatSeeDocCtr :
-		                	                            ActReqDatSeeDocIns))) :
-                                                    ActUnk;
-	       break;
-	    case Ntf_EVENT_SHARED_FILE:
-	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatShaGrp :
-		                                    ((CrsCod > 0) ? ActReqDatShaCrs :
-		                                    ((DegCod > 0) ? ActReqDatShaDeg :
-		                                     (CtrCod > 0) ? ActReqDatShaCtr :
-		                	                            ActReqDatShaIns))) :
-                                                    ActUnk;
-	       break;
-	    case Ntf_EVENT_MARKS_FILE:
-	       Action = (FileMetadata.FilCod > 0) ? ((GrpCod > 0) ? ActReqDatSeeMrkGrp :
-		                                                    ActReqDatSeeMrkCrs) :
-		                                    ActUnk;
-	       break;
-	    default:	// Not aplicable here
-	       break;
-	   }
-	 if (Action != ActUnk)
-	   {
+	    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
+					   &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
+	    switch (NotifyEvent)
+	      {
+	       case Ntf_EVENT_DOCUMENT_FILE:
+		  Action = (GrpCod > 0 ? ActReqDatSeeDocGrp :
+			   (CrsCod > 0 ? ActReqDatSeeDocCrs :
+			   (DegCod > 0 ? ActReqDatSeeDocDeg :
+			   (CtrCod > 0 ? ActReqDatSeeDocCtr :
+					 ActReqDatSeeDocIns))));
+		  break;
+	       case Ntf_EVENT_SHARED_FILE:
+		  Action = (GrpCod > 0 ? ActReqDatShaGrp :
+			   (CrsCod > 0 ? ActReqDatShaCrs :
+			   (DegCod > 0 ? ActReqDatShaDeg :
+			   (CtrCod > 0 ? ActReqDatShaCtr :
+					 ActReqDatShaIns))));
+		  break;
+	       case Ntf_EVENT_MARKS_FILE:
+		  Action = (GrpCod > 0 ? ActReqDatSeeMrkGrp :
+					 ActReqDatSeeMrkCrs);
+		  break;
+	       default:	// Not aplicable here
+		  break;
+	      }
 	    Act_FormStart (Action);
 	    if (GrpCod > 0)
 	       Grp_PutParamGrpCod (GrpCod);
-	    if (FileMetadata.FilCod > 0)
-	      {
-	       // Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
-	       Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
-	      }
+            Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_NOTICE:

@@ -104,7 +104,10 @@ struct FileMetadata
    long Cod;	// Code of institution, centre, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
-   char Path[PATH_MAX+1];
+   char FullPathInTree[PATH_MAX+1];
+   // FullPathInTree is splitted as PathInTreeUntilFilFolLnk/FilFolLnkName
+   char PathInTreeUntilFilFolLnk[PATH_MAX+1];	// Path in tree, without ending '/', until file, folder or link name
+   char FilFolLnkName[NAME_MAX+1];		// File, folder or link name
    bool IsHidden;
    bool IsPublic;
    Brw_License_t License;
@@ -201,7 +204,8 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *GrpCod);
 
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
-                      const char *Path,bool IsPublic,Brw_License_t License);
+                      const char *FullPathInTree,
+                      bool IsPublic,Brw_License_t License);
 
 void Brw_RemoveExpiredExpandedFolders (void);
 

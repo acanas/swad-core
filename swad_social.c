@@ -619,8 +619,6 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
    long CtrCod = -1L;
    long DegCod = -1L;
    long GrpCod = -1L;
-   char PathUntilFileName[PATH_MAX+1];
-   char FileName[NAME_MAX+1];
 
    /***** Parameters depending on the type of note *****/
    switch (NoteType)
@@ -634,25 +632,17 @@ static void Soc_PutFormGoToAction (Soc_NoteType_t NoteType,long CrsCod,long Cod)
       case Soc_NOTE_CRS_DOC_PUB_FILE:
       case Soc_NOTE_CRS_SHA_PUB_FILE:
 	 FileMetadata.FilCod = Cod;
-         PathUntilFileName[0] = '\0';
-         FileName[0] = '\0';
 	 if (FileMetadata.FilCod > 0)
 	   {
             Brw_GetFileMetadataByCod (&FileMetadata);
             if (FileMetadata.FilCod > 0)	// Found
-              {
 	       Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
 					      &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
-	       Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,
-						     PathUntilFileName,
-						     FileName);
-              }
 	   }
 	 if (FileMetadata.FilCod > 0)
 	   {
 	    Act_FormStart (Soc_DefaultActions[NoteType]);
 	    Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
-	    // Brw_PutParamsPathAndFile (FileMetadata.FileType,PathUntilFileName,FileName);
 	   }
 	 break;
       case Soc_NOTE_NOTICE:

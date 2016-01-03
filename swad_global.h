@@ -504,7 +504,7 @@ struct Globals
 	{
 	 char PathAboveRootFolder[PATH_MAX+1];
 	 char PathRootFolder[PATH_MAX+1];
-	 char PathInTreeExceptFileOrFolder[PATH_MAX+1];
+	 char PathInTreeUntilFilFolLnk[PATH_MAX+1];
 	 char FullPathInTree[PATH_MAX+1];
 	} Priv;
       char NewFilFolLnkName[NAME_MAX+1];

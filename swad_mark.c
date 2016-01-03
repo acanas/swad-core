@@ -611,7 +611,7 @@ void Mrk_ShowMyMarks (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get the path of the file of marks *****/
-   Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeExceptFileOrFolder,
+   Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 	                  Gbl.FileBrowser.FilFolLnkName);
    sprintf (PathPrivate,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 

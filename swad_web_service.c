@@ -4174,8 +4174,6 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct FileMetadata FileMetadata;
-   char PathUntilFileName[PATH_MAX+1];
-   char FileName[NAME_MAX+1];
    char URL[PATH_MAX+1];
    char PhotoURL[PATH_MAX+1];
 
@@ -4277,8 +4275,8 @@ int swad__getFile (struct soap *soap,
 
    /***** Set paths *****/
    Deg_InitCurrentCourse ();
-   Str_SplitFullPathIntoPathAndFileName (FileMetadata.Path,PathUntilFileName,FileName);
-   Brw_SetFullPathInTree (PathUntilFileName,FileName);
+   Brw_SetFullPathInTree (FileMetadata.PathInTreeUntilFilFolLnk,
+                          FileMetadata.FilFolLnkName);
    Brw_InitializeFileBrowser ();
 
    /***** Get file size and date *****/
@@ -4288,12 +4286,12 @@ int swad__getFile (struct soap *soap,
    Brw_GetAndUpdateFileViews (&FileMetadata);
 
    /***** Create and get link to download the file *****/
-   Brw_GetLinkToDownloadFile (PathUntilFileName,
-	                      FileName,
+   Brw_GetLinkToDownloadFile (FileMetadata.PathInTreeUntilFilFolLnk,
+                              FileMetadata.FilFolLnkName,
 	                      URL);
 
    /***** Copy data into output structure *****/
-   strncpy (getFileOut->fileName,FileName,NAME_MAX);
+   strncpy (getFileOut->fileName,FileMetadata.FilFolLnkName,NAME_MAX);
    getFileOut->fileName[NAME_MAX] = '\0';
 
    strncpy (getFileOut->URL,URL,PATH_MAX);
