@@ -125,7 +125,10 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.93.4:  Jan 03, 2016	Changes in links to actions in social timeline. (190345 lines)
+        Version 15.93.4:  Jan 03, 2016	Changes in links to actions in social timeline. (190353 lines)
+					1 change necessary in database:
+ALTER TABLE social_notes ADD COLUMN Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Cod;
+
         Version 15.93.3:  Jan 03, 2016	Code refactoring in file browser related with file metadata. (190345 lines)
         Version 15.93.2:  Jan 03, 2016	To show a file in social timeline, file code is passed as parameter instead of path. (190360 lines)
         Version 15.93.1:  Jan 03, 2016	Show text indicating document not available in social note. (190358 lines)

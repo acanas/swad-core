@@ -109,8 +109,9 @@ struct SocialNote
    long NotCod;
    Soc_NoteType_t NoteType;
    long UsrCod;
-   long HieCod;	// Hierarchy code (institution/centre/degree/course)
-   long Cod;	// Code of file, forum post, notice,...
+   long HieCod;		// Hierarchy code (institution/centre/degree/course)
+   long Cod;		// Code of file, forum post, notice,...
+   bool Unavailable;	// File, forum post, notice,... unavailable (removed)
    time_t DateTimeUTC;
   };
 
@@ -767,8 +768,8 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
 
    /***** Store social note *****/
    sprintf (Query,"INSERT INTO social_notes"
-	          " (NoteType,UsrCod,HieCod,Cod,TimeNote)"
-                  " VALUES ('%u','%ld','%ld','%ld',NOW())",
+	          " (NoteType,UsrCod,HieCod,Cod,Unavailable,TimeNote)"
+                  " VALUES ('%u','%ld','%ld','%ld','N',NOW())",
             (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod,Cod);
    SocPub.NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
@@ -1489,7 +1490,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
    MYSQL_ROW row;
 
    /***** Get data of social note from database *****/
-   sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,UNIX_TIMESTAMP(TimeNote)"
+   sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
                   " FROM social_notes"
                   " WHERE NotCod='%ld'",
             SocNot->NotCod);
@@ -1506,6 +1507,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
       SocNot->UsrCod      = -1L;
       SocNot->HieCod      = -1L;
       SocNot->Cod         = -1L;
+      SocNot->Unavailable = false;
       SocNot->DateTimeUTC = (time_t) 0;
      }
   }
@@ -1531,8 +1533,11 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    /* Get file/post... code (row[4]) */
    SocNot->Cod         = Str_ConvertStrCodToLongCod (row[4]);
 
-   /* Get time of the note (row[5]) */
-   SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
+   /* File/post... unavailable (row[5]) */
+   SocNot->Unavailable = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
+
+   /* Get time of the note (row[6]) */
+   SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
   }
 
 /*****************************************************************************/

@@ -1938,17 +1938,17 @@ mysql> DESCRIBE sessions;
    /***** Table social_notes *****/
 /*
 mysql> DESCRIBE social_notes;
-+----------+------------+------+-----+---------+----------------+
-| Field    | Type       | Null | Key | Default | Extra          |
-+----------+------------+------+-----+---------+----------------+
-| NotCod   | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| NoteType | tinyint(4) | NO   | MUL | NULL    |                |
-| UsrCod   | int(11)    | NO   | MUL | NULL    |                |
-| HieCod   | int(11)    | NO   |     | -1      |                |
-| DegCod   | int(11)    | NO   |     | -1      |                |
-| Cod      | int(11)    | NO   |     | -1      |                |
-| TimeNote | datetime   | NO   | MUL | NULL    |                |
-+----------+------------+------+-----+---------+----------------+
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
+| NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
+| UsrCod      | int(11)       | NO   | MUL | NULL    |                |
+| HieCod      | int(11)       | NO   |     | -1      |                |
+| Cod         | int(11)       | NO   |     | -1      |                |
+| Unavailable | enum('N','Y') | NO   |     | N       |                |
+| TimeNote    | datetime      | NO   | MUL | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
 7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
@@ -1957,6 +1957,7 @@ mysql> DESCRIBE social_notes;
                    "UsrCod INT NOT NULL,"
                    "HieCod INT NOT NULL DEFAULT -1,"
                    "Cod INT NOT NULL DEFAULT -1,"
+	           "Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "TimeNote DATETIME NOT NULL,"
                    "UNIQUE INDEX(NotCod),"
                    "INDEX(NoteType),"
