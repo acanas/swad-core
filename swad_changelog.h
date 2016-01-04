@@ -118,13 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.97.4 (2016-01-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.97.5 (2016-01-04)"
 #define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.97.5:  Jan 04, 2016	Button to remove a social note is not shown if author already removed the note (but it yet exists because another user shared it). (190763 lines)
         Version 15.97.4:  Jan 04, 2016	Guests can see and write in global forums. (190758 lines)
         Version 15.97.3:  Jan 04, 2016	Link to user's privacy in my public profile. (190755 lines)
         Version 15.97.2:  Jan 04, 2016	New option in user's privacy. (190743 lines)

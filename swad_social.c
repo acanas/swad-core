@@ -167,7 +167,7 @@ static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *So
                                                const struct SocialNote *SocNot);
 static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot);
 
-static bool Soc_CheckIfNoteIsYetPublishedByMe (long NotCod);
+static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
 static unsigned long Soc_GetNumPubsOfANote (long NotCod);
 static void Soc_GetNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
@@ -529,7 +529,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       Soc_PutIconShared ();
    else							// I am not the author && not unavailable
      {
-      if (Soc_CheckIfNoteIsYetPublishedByMe (SocNot->NotCod))
+      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
 	 // I have yet published this social note
 	 /* Put icon to unshare this publishing */
 	 Soc_PutFormToUnshareSocialPublishing (SocPub->PubCod);
@@ -546,8 +546,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    if (WritingTimeline &&
        Gbl.Usrs.Me.Logged &&
        UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
-      /* Put icon to remove this publishing */
-      Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,SocNot->UsrCod))
+         /* Put icon to remove this publishing */
+         Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
 
    /* End of right part */
    fprintf (Gbl.F.Out,"</div>");
@@ -1311,7 +1312,7 @@ static void Soc_ShareSocialNote (void)
    if (ICanShare)
      {
       /***** Check if I have yet shared this social note *****/
-      IHavePublishedThisNote = Soc_CheckIfNoteIsYetPublishedByMe (SocNot.NotCod);
+      IHavePublishedThisNote = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       if (!IHavePublishedThisNote)
 	{
 	 /***** Share (publish social note in timeline) *****/
@@ -1488,30 +1489,33 @@ static void Soc_RequestRemovalSocialPublishing (void)
                  SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    if (ICanRemove)
      {
-      /***** Form to ask for confirmation to remove this social post *****/
-      /* Start form */
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
 	{
-         Act_FormStartAnchor (ActRemSocPubUsr,"timeline");
-	 Usr_PutParamOtherUsrCodEncrypted ();
+	 /***** Form to ask for confirmation to remove this social post *****/
+	 /* Start form */
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	   {
+	    Act_FormStartAnchor (ActRemSocPubUsr,"timeline");
+	    Usr_PutParamOtherUsrCodEncrypted ();
+	   }
+	 else
+	    Act_FormStart (ActRemSocPubGbl);
+	 Soc_PutHiddenParamPubCod (SocPub.PubCod);
+
+	 /* Warning message */
+	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
+
+	 /* Show social note */
+	 Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 fprintf (Gbl.F.Out,"</ul>");
+	 Lay_EndRoundFrame ();
+
+	 /* End form */
+	 Lay_PutRemoveButton (Txt_Remove);
+	 Act_FormEnd ();
 	}
-      else
-	 Act_FormStart (ActRemSocPubGbl);
-      Soc_PutHiddenParamPubCod (SocPub.PubCod);
-
-      /* Warning message */
-      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
-
-      /* Show social note */
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
-      fprintf (Gbl.F.Out,"</ul>");
-      Lay_EndRoundFrame ();
-
-      /* End form */
-      Lay_PutRemoveButton (Txt_Remove);
-      Act_FormEnd ();
      }
   }
 
@@ -1640,17 +1644,17 @@ static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot
   }
 
 /*****************************************************************************/
-/***** Check if I have published a social note (I authored or shared it) *****/
+/**************** Check if a user has published a social note ****************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfNoteIsYetPublishedByMe (long NotCod)
+static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
   {
    char Query[128];
 
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
 	          " WHERE NotCod='%ld' AND PublisherCod='%ld'",
-	    NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if you have published a social note") != 0);
+	    NotCod,UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user has published a social note") != 0);
   }
 
 /*****************************************************************************/
