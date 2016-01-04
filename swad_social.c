@@ -114,7 +114,7 @@ struct SocialNote
    long Cod;		// Code of file, forum post, notice,...
    bool Unavailable;	// File, forum post, notice,... unavailable (removed)
    time_t DateTimeUTC;
-   unsigned NumShared;	// Number of times this note has been shared
+   unsigned NumShared;	// Number of times (users) this note has been shared
   };
 
 /*****************************************************************************/
@@ -1817,13 +1817,13 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
    else
      {
       /***** Reset fields of social note *****/
-      SocNot->NoteType       = Soc_NOTE_UNKNOWN;
-      SocNot->UsrCod         = -1L;
-      SocNot->HieCod         = -1L;
-      SocNot->Cod            = -1L;
-      SocNot->Unavailable    = false;
-      SocNot->DateTimeUTC    = (time_t) 0;
-      SocNot->NumShared = 0;
+      SocNot->NoteType    = Soc_NOTE_UNKNOWN;
+      SocNot->UsrCod      = -1L;
+      SocNot->HieCod      = -1L;
+      SocNot->Cod         = -1L;
+      SocNot->Unavailable = false;
+      SocNot->DateTimeUTC = (time_t) 0;
+      SocNot->NumShared   = 0;
      }
   }
 

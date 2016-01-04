@@ -207,7 +207,7 @@ static void Prf_GetUsrDatAndShowUserProfile (void)
       /***** Request nickname again *****/
       Prf_RequestUserProfileWithDefaultNickname ("");
      }
-   else
+   else if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
      {
       /***** Start section *****/
       fprintf (Gbl.F.Out,"<section id=\"timeline\">");

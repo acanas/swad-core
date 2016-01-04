@@ -23858,17 +23858,17 @@ const char *Txt_No_of_users_who_will_be_notified_by_e_mail =
 
 const char *Txt_No_public_activity =
 #if   L==1
-	 "No hi ha activitat p&uacute;blica";
+	 "Cap activitat p&uacute;blica";
 #elif L==2
 	 "Keine &ouml;ffentliche Aktivit&auml;t";
 #elif L==3
 	 "No public activity";
 #elif L==4
-	 "No hay actividad p&uacute;blica";
+	 "Ninguna actividad p&uacute;blica";
 #elif L==5
 	 "Aucune activit&eacute; public";
 #elif L==6
-	 "No hay actividad p&uacute;blica";	// Okoteve traducción
+	 "Ninguna actividad p&uacute;blica";	// Okoteve traducción
 #elif L==7
 	 "Nessuna attivit&agrave; pubblica";
 #elif L==8

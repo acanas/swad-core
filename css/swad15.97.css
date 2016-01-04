@@ -1527,10 +1527,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .USR_ID			{color:#404040; font-size:18pt; font-weight:bold;}
 
-.DAT			{color:#707070; font-size:13pt;}
+.DAT			{color:#404040; font-size:13pt;}
 .DAT_GREEN		{color:#008000; font-size:13pt;}
 .DAT_LIGHT		{color:#A0A0A0; font-size:13pt;}
-.DAT_NOBR		{color:#707070; font-size:13pt; white-space:nowrap;}
+.DAT_NOBR		{color:#404040; font-size:13pt; white-space:nowrap;}
 .DAT_N			{color:black;   font-size:13pt;}
 .DAT_NOBR_N		{color:black;   font-size:13pt; white-space:nowrap;}
 .DAT_N_BOLD		{color:black;   font-size:13pt; font-weight:bold;}
