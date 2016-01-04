@@ -540,7 +540,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 		     Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
 
 		  /***** Update number of my views of this file *****/
-		  Brw_UpdateMyFileViews (Brw_GetFilCodByPath (PathFileInTree));
+		  Brw_UpdateMyFileViews (Brw_GetFilCodByPath (PathFileInTree,false));	// Any file, public or not
 		 }
 	      }
 	   }

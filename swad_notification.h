@@ -107,8 +107,8 @@ void Ntf_SetNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_SetNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_SetNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_SetNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);
-void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
-                                   long Cod,const char *Path);
+void Ntf_SetNotifOneFileAsRemoved (const char *Path);
+void Ntf_SetSocialNoteOneFileAsRemoved (const char *Path);
 void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
                                             long Cod,const char *Path);
 void Ntf_SetNotifFilesInGroupAsRemoved (long GrpCod);

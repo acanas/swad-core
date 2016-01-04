@@ -43,6 +43,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_social.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -906,33 +907,13 @@ void Ntf_SetNotifInCrsAsRemoved (long CrsCod,long ToUsrCod)
 /************ Set possible notifications of one file as removed **************/
 /*****************************************************************************/
 
-void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
-                                   long Cod,const char *Path)
+void Ntf_SetNotifOneFileAsRemoved (const char *Path)
   {
-   char Query[512];
-   char SubQuery[256];
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   long FilCod;
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Set notify event depending on browser zone *****/
-   switch (FileBrowser)
-     {
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_GRP:
-	 NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
-	 break;
-      case Brw_ADMI_SHARE_CRS:
-      case Brw_ADMI_SHARE_GRP:
-	 NotifyEvent = Ntf_EVENT_SHARED_FILE;
-	 break;
-      case Brw_ADMI_MARKS_CRS:
-      case Brw_ADMI_MARKS_GRP:
-	 NotifyEvent = Ntf_EVENT_MARKS_FILE;
-	 break;
-      default:
-	 return;
-     }
-
-   /***** Set notification as removed *****/
    switch (FileBrowser)
      {
       case Brw_ADMI_DOCUM_CRS:
@@ -941,18 +922,101 @@ void Ntf_SetNotifOneFileAsRemoved (Brw_FileBrowser_t FileBrowser,
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
-	 sprintf (SubQuery,"SELECT FilCod FROM files"
-			   " WHERE FileBrowser='%u' AND Cod='%ld' AND Path='%s'",
-		  (unsigned) FileBrowser,Cod,Path);
+         /***** Get file code *****/
+	 FilCod = Brw_GetFilCodByPath (Path,false);	// Any file, public or not
+	 if (FilCod > 0)
+	   {
+	    /***** Set notification as removed *****/
+	    switch (FileBrowser)
+	      {
+	       case Brw_ADMI_DOCUM_CRS:
+	       case Brw_ADMI_DOCUM_GRP:
+		  NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_CRS:
+	       case Brw_ADMI_SHARE_GRP:
+		  NotifyEvent = Ntf_EVENT_SHARED_FILE;
+		  break;
+	       case Brw_ADMI_MARKS_CRS:
+	       case Brw_ADMI_MARKS_GRP:
+		  NotifyEvent = Ntf_EVENT_MARKS_FILE;
+		  break;
+	       default:
+		  NotifyEvent = Ntf_EVENT_UNKNOWN;	// Impossible
+		  break;
+	      }
+	    if (NotifyEvent != Ntf_EVENT_UNKNOWN)	// Not necessary
+	       Ntf_SetNotifAsRemoved (NotifyEvent,FilCod);
+	   }
          break;
       default:
 	 break;
      }
-   sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		  " WHERE NotifyEvent='%u' AND Cod IN (%s)",
-	    (unsigned) Ntf_STATUS_BIT_REMOVED,
-	    (unsigned) NotifyEvent,SubQuery);
-   DB_QueryUPDATE (Query,"can not set notification(s) as removed");
+  }
+
+/*****************************************************************************/
+/************ Set possible notifications of one file as removed **************/
+/*****************************************************************************/
+
+void Ntf_SetSocialNoteOneFileAsRemoved (const char *Path)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   long FilCod;
+   Soc_NoteType_t NoteType;
+
+   switch (FileBrowser)
+     {
+      case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
+      case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
+      case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_SHARE_CRS:
+         /***** Get file code *****/
+	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
+	 if (FilCod > 0)
+	   {
+	    /***** Mark possible social note as unavailable *****/
+	    switch (FileBrowser)
+	      {
+	       case Brw_ADMI_DOCUM_INS:
+		  NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_INS:
+		  NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_CTR:
+		  NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_CTR:
+		  NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_DEG:
+		  NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_DEG:
+		  NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_CRS:
+		  NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_CRS:
+		  NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
+		  break;
+	       default:
+		  NoteType = Soc_NOTE_UNKNOWN;	// Impossible
+		  break;
+	      }
+	    if (NoteType != Soc_NOTE_UNKNOWN)	// Not necessary
+	       Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (NoteType,FilCod);
+	   }
+         break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/

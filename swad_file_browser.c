@@ -9787,10 +9787,10 @@ static Brw_License_t Brw_GetParLicense (void)
 /*****************************************************************************/
 /*********************** Get file code using its path ************************/
 /*****************************************************************************/
-// Path if the full path in tree
+// Path is the full path in tree
 // Example: descarga/folder/file.pdf
 
-long Brw_GetFilCodByPath (const char *Path)
+long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
@@ -9799,13 +9799,15 @@ long Brw_GetFilCodByPath (const char *Path)
    MYSQL_ROW row;
    long FilCod;
 
-   /***** Get metadata of a file from database *****/
+   /***** Get code of a file from database *****/
    sprintf (Query,"SELECT FilCod FROM files"
                   " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
-                  " AND Path='%s'",
+                  " AND Path='%s'%s",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
-            Path);
+            Path,
+            OnlyIfPublic ? " AND Public='Y'" :
+        	             "");
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file code"))
      {
       /* Get row */
@@ -10625,8 +10627,10 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
+          Set possible social note as removed.
           Important: do this before removing from files *****/
-   Ntf_SetNotifOneFileAsRemoved (FileBrowser,Cod,Path);
+   Ntf_SetNotifOneFileAsRemoved (Path);
+   Ntf_SetSocialNoteOneFileAsRemoved (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MARKS_CRS ||
