@@ -532,7 +532,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 else
 	    // I have not yet published this social note
 	    /* Put icon to share this publishing */
-	    Soc_PutFormToShareSocialNote (SocNot->NotCod);
+	    if (!SocNot->Unavailable)			// Unavailable social notes can not be shared
+	       Soc_PutFormToShareSocialNote (SocNot->NotCod);
 	}
      }
 
