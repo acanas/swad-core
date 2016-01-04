@@ -95,8 +95,8 @@ void Soc_FormSocialPostUsr (void);
 void Soc_ReceiveSocialPostGbl (void);
 void Soc_ReceiveSocialPostUsr (void);
 
-void Soc_ShareSocialPubGbl (void);
-void Soc_ShareSocialPubUsr (void);
+void Soc_ShareSocialNoteGbl (void);
+void Soc_ShareSocialNoteUsr (void);
 void Soc_UnshareSocialPubGbl (void);
 void Soc_UnshareSocialPubUsr (void);
 

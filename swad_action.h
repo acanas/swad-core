@@ -1043,14 +1043,14 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 // Secondary actions
 #define ActReqSocPstGbl		(ActLstClk+  5)
 #define ActRcvSocPstGbl		(ActLstClk+  6)
-#define ActShaSocPubGbl		(ActLstClk+  7)
+#define ActShaSocNotGbl		(ActLstClk+  7)
 #define ActUnsSocPubGbl		(ActLstClk+  8)
 #define ActReqRemSocPubGbl	(ActLstClk+  9)
 #define ActRemSocPubGbl		(ActLstClk+ 10)
 
 #define ActReqSocPstUsr		(ActLstClk+ 11)
 #define ActRcvSocPstUsr		(ActLstClk+ 12)
-#define ActShaSocPubUsr		(ActLstClk+ 13)
+#define ActShaSocNotUsr		(ActLstClk+ 13)
 #define ActUnsSocPubUsr		(ActLstClk+ 14)
 #define ActReqRemSocPubUsr	(ActLstClk+ 15)
 #define ActRemSocPubUsr		(ActLstClk+ 16)

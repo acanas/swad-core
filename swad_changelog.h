@@ -112,18 +112,20 @@
 // TODO: Hour in exam announcement should start at six a.m.
 // TODO: Change "Actividad pública" to "Actividad de Antonio" in user's profile
 // TODO: Forums For_FORUM_GLOBAL_USRS and For_FORUM_SWAD_USRS should be available for guests for coherence with social timeline?
+// TODO: Unavailable social notes should not be shared
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.94.1 (2016-01-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.95 (2016-01-04)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.95:    Jan 04, 2016	Fixed bug in social timeline: social notes can be shared, not social publishings. (190583 lines)
         Version 15.94.1:  Jan 04, 2016	Changes when writing an unavailable social note. (190557 lines)
         Version 15.94:    Jan 04, 2016	Social notes are marked as unavailable when a folder and its children are removed. (190551 lines)
         Version 15.93.8:  Jan 04, 2016	Social note is marked as unavailable when a public file is removed. (190486 lines)

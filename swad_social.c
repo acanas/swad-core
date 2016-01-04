@@ -108,7 +108,7 @@ struct SocialNote
   {
    long NotCod;
    Soc_NoteType_t NoteType;
-   long UsrCod;
+   long UsrCod;		// TODO: Rename as AuthorCod here and in database?
    long HieCod;		// Hierarchy code (institution/centre/degree/course)
    long Cod;		// Code of file, forum post, notice,...
    bool Unavailable;	// File, forum post, notice,... unavailable (removed)
@@ -145,13 +145,15 @@ static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) (
 static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
-static void Soc_PutFormToShareSocialPublishing (long PubCod);
+static void Soc_PutFormToShareSocialNote (long NotCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
-static void Soc_PutHiddenParamPubCod (long NotCod);
+static void Soc_PutHiddenParamNotCod (long NotCod);
+static long Soc_GetParamNotCod (void);
+static void Soc_PutHiddenParamPubCod (long PubCod);
 static long Soc_GetParamPubCod (void);
 
-static void Soc_ShareSocialPublishing (void);
+static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (const struct SocialNote *SocNot);
 
@@ -530,7 +532,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 else
 	    // I have not yet published this social note
 	    /* Put icon to share this publishing */
-	    Soc_PutFormToShareSocialPublishing (SocPub->PubCod);
+	    Soc_PutFormToShareSocialNote (SocNot->NotCod);
 	}
      }
 
@@ -961,6 +963,7 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
 /*****************************************************************************/
 /***************** Put contextual link to write a new post *******************/
 /*****************************************************************************/
+// SocPub->PubCod is set
 
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
   {
@@ -972,7 +975,7 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
                   " VALUES"
                   " ('%ld','%ld','%ld',NOW())",
             SocPub->AuthorCod,SocPub->PublisherCod,SocPub->NotCod);
-   DB_QueryINSERT (Query,"can not publish social note");
+   SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
   }
 
 /*****************************************************************************/
@@ -1113,22 +1116,23 @@ static void Soc_ReceiveSocialPost (void)
   }
 
 /*****************************************************************************/
-/********************* Form to share social publishing ***********************/
+/************************* Form to share social note *************************/
 /*****************************************************************************/
+// Social notes can be shared, not social publishing
 
-static void Soc_PutFormToShareSocialPublishing (long PubCod)
+static void Soc_PutFormToShareSocialNote (long NotCod)
   {
    extern const char *Txt_Share;
 
-   /***** Form to share social publishing *****/
+   /***** Form to share social note *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActShaSocPubUsr,"timeline");
+      Act_FormStartAnchor (ActShaSocNotUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActShaSocPubGbl);
-   Soc_PutHiddenParamPubCod (PubCod);
+      Act_FormStart (ActShaSocNotGbl);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
@@ -1200,6 +1204,32 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
   }
 
 /*****************************************************************************/
+/************** Put parameter with the code of a social note *****************/
+/*****************************************************************************/
+
+static void Soc_PutHiddenParamNotCod (long NotCod)
+  {
+   Par_PutHiddenParamLong ("NotCod",NotCod);
+  }
+
+/*****************************************************************************/
+/************** Get parameter with the code of a social note *****************/
+/*****************************************************************************/
+
+static long Soc_GetParamNotCod (void)
+  {
+   char LongStr[1+10+1];	// String that holds the social note code
+   long NotCod;
+
+   /* Get social note code */
+   Par_GetParToText ("NotCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&NotCod) != 1)
+      Lay_ShowErrorAndExit ("Wrong code of social note.");
+
+   return NotCod;
+  }
+
+/*****************************************************************************/
 /*********** Put parameter with the code of a social publishing **************/
 /*****************************************************************************/
 
@@ -1214,7 +1244,7 @@ static void Soc_PutHiddenParamPubCod (long PubCod)
 
 static long Soc_GetParamPubCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the social note code
+   char LongStr[1+10+1];	// String that holds the social publishing code
    long PubCod;
 
    /* Get social note code */
@@ -1226,31 +1256,32 @@ static long Soc_GetParamPubCod (void)
   }
 
 /*****************************************************************************/
-/************************* Share a social publishing *************************/
+/**************************** Share a social note ****************************/
 /*****************************************************************************/
+// Social notes can be shared, not social publishing
 
-void Soc_ShareSocialPubGbl (void)
+void Soc_ShareSocialNoteGbl (void)
   {
-   /***** Share social publishing *****/
-   Soc_ShareSocialPublishing ();
+   /***** Share social note *****/
+   Soc_ShareSocialNote ();
 
    /***** Write updated timeline after sharing (global) *****/
    Soc_ShowTimelineGbl ();
   }
 
-void Soc_ShareSocialPubUsr (void)
+void Soc_ShareSocialNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /*****  Show user's profile *****/
+   /***** Show user's profile *****/
    Prf_ShowUserProfile ();
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Share social publishing *****/
-   Soc_ShareSocialPublishing ();
+   /***** Share social note *****/
+   Soc_ShareSocialNote ();
 
    /***** Write updated timeline after sharing (user) *****/
    Soc_ShowTimelineUsr ();
@@ -1259,35 +1290,33 @@ void Soc_ShareSocialPubUsr (void)
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_ShareSocialPublishing (void)
+static void Soc_ShareSocialNote (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
-   struct SocialPublishing SocPub;
    struct SocialNote SocNot;
+   struct SocialPublishing SocPub;
    bool ICanShare;
    bool IHavePublishedThisNote;
 
-   /***** Get the code of the social publishing to share *****/
-   SocPub.PubCod = Soc_GetParamPubCod ();
-
-   /***** Get data of social publishing *****/
-   Soc_GetDataOfSocialPublishingByCod (&SocPub);
+   /***** Get the code of the social note to share *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
 
    /***** Get data of social note *****/
-   SocNot.NotCod = SocPub.NotCod;
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanShare = (Gbl.Usrs.Me.Logged &&
-                SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);		// I am not the author
+                SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I am not the author
    if (ICanShare)
      {
       /***** Check if I have yet shared this social note *****/
-      IHavePublishedThisNote = Soc_CheckIfNoteIsYetPublishedByMe (SocPub.NotCod);
+      IHavePublishedThisNote = Soc_CheckIfNoteIsYetPublishedByMe (SocNot.NotCod);
       if (!IHavePublishedThisNote)
 	{
 	 /***** Share (publish social note in timeline) *****/
+	 SocPub.AuthorCod    = SocNot.UsrCod;
 	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 Soc_PublishSocialNoteInTimeline (&SocPub);
+	 SocPub.NotCod       = SocNot.NotCod;
+	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
          /***** Message of success *****/
          Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
