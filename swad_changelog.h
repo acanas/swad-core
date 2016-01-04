@@ -111,19 +111,19 @@
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
 // TODO: Forums For_FORUM_GLOBAL_USRS and For_FORUM_SWAD_USRS should be available for guests for coherence with social timeline?
-// TODO: Actividad pública: (*) Visible por cualquier usuario identificado
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.97.1 (2016-01-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.97.2 (2016-01-04)"
 #define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.97.2:  Jan 04, 2016	New option in user's privacy. (190743 lines)
         Version 15.97.1:  Jan 04, 2016	User's timeline below user's profile visible only by logged users. (190719 lines)
         Version 15.97:    Jan 04, 2016	Show list of some users who has shared a social note. (190718 lines)
 					3 changes necessary in database:

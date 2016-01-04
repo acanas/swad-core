@@ -62,7 +62,8 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParamName,
-                                   Pri_Visibility_t CurrentVisibilityInDB);
+                                   Pri_Visibility_t CurrentVisibilityInDB,
+                                   unsigned MaskAllowedVisibility);
 
 /*****************************************************************************/
 /*************** Put a link to the action to edit my privacy *****************/
@@ -86,6 +87,7 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
+   extern const char *Txt_Public_activity;
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Privacy);
@@ -93,12 +95,26 @@ void Pri_EditMyPrivacy (void)
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,
                           ActChgPriPho,"VisPho",
-                          Gbl.Usrs.Me.UsrDat.PhotoVisibility);
+                          Gbl.Usrs.Me.UsrDat.PhotoVisibility,
+                          (1 << Pri_VISIBILITY_USER)   |
+                          (1 << Pri_VISIBILITY_COURSE) |
+                          (1 << Pri_VISIBILITY_SYSTEM) |
+                          (1 << Pri_VISIBILITY_WORLD));
 
    /***** Edit public profile visibility *****/
    Pri_PutFormVisibility (Txt_Public_profile,
                           ActChgPriPrf,"VisPrf",
-                          Gbl.Usrs.Me.UsrDat.ProfileVisibility);
+                          Gbl.Usrs.Me.UsrDat.ProfileVisibility,
+                          (1 << Pri_VISIBILITY_USER)   |
+                          (1 << Pri_VISIBILITY_COURSE) |
+                          (1 << Pri_VISIBILITY_SYSTEM) |
+                          (1 << Pri_VISIBILITY_WORLD));
+
+   /***** Edit public activity (timeline) visibility *****/
+   Pri_PutFormVisibility (Txt_Public_activity,
+                          ActUnk,"VisTml",
+                          Pri_VISIBILITY_SYSTEM,
+                          (1 << Pri_VISIBILITY_SYSTEM));
 
    /***** End table *****/
    Lay_EndRoundFrameTable ();
@@ -110,7 +126,8 @@ void Pri_EditMyPrivacy (void)
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParamName,
-                                   Pri_Visibility_t CurrentVisibilityInDB)
+                                   Pri_Visibility_t CurrentVisibilityInDB,
+                                   unsigned MaskAllowedVisibility)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
@@ -125,28 +142,36 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	    The_ClassForm[Gbl.Prefs.Theme],TxtLabel);
 
    /***** Form with list of options *****/
-   Act_FormStart (Action);
+   if (Action != ActUnk)
+      Act_FormStart (Action);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (Visibility = (Pri_Visibility_t) 0;
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
-     {
-      fprintf (Gbl.F.Out,"<li class=\"%s\">"
-                         "<input type=\"radio\" name=\"%s\" value=\"%u\"",
-               (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
-        	                                       "DAT",
-               ParamName,(unsigned) Visibility);
-      if (Visibility == CurrentVisibilityInDB)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	                 "%s"
-                         "</li>",
-               Gbl.FormId,Txt_PRIVACY_OPTIONS[Visibility]);
-     }
+      if (MaskAllowedVisibility & 1 << Visibility)
+	{
+	 fprintf (Gbl.F.Out,"<li class=\"%s\">"
+			    "<input type=\"radio\" name=\"%s\" value=\"%u\"",
+		  (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
+							  "DAT",
+		  ParamName,(unsigned) Visibility);
+	 if (Visibility == CurrentVisibilityInDB)
+	    fprintf (Gbl.F.Out," checked=\"checked\"");
+	 if (Action == ActUnk)
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
+	 else
+	    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
+		     Gbl.FormId);
+	 fprintf (Gbl.F.Out," />"
+			    "%s"
+			    "</li>",
+		  Txt_PRIVACY_OPTIONS[Visibility]);
+	}
 
    /***** End of list and form *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Act_FormEnd ();
+   if (Action != ActUnk)
+      Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }
