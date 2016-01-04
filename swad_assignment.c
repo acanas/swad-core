@@ -347,7 +347,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
    /***** Mark possible notification as seen *****/
-   Ntf_SetNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
 	               AsgCod,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -912,7 +912,7 @@ void Asg_RemoveAssignment (void)
    DB_QueryDELETE (Query,"can not remove assignment");
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Assignment_X_removed,

@@ -537,7 +537,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 
    /***** Mark possible notification as seen *****/
    if (Svy.CrsCod > 0)	// Only course surveys are notified
-      Ntf_SetNotifAsSeen (Ntf_EVENT_SURVEY,
+      Ntf_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
 	                  SvyCod,
 	                  Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -1260,7 +1260,7 @@ void Svy_RemoveSurvey (void)
    DB_QueryDELETE (Query,"can not remove survey");
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Survey_X_removed,

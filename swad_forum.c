@@ -1029,7 +1029,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
            {
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
-               Ntf_SetNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
+               Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
            	                   PstCod,
            	                   Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
@@ -1037,7 +1037,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
                break;
            }
          if (Thr.NumMyPosts)
-            Ntf_SetNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
+            Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
         	                PstCod,
         	                Gbl.Usrs.Me.UsrDat.UsrCod);
         }
@@ -3904,8 +3904,8 @@ void For_DelPst (void)
    ThreadDeleted = For_RemoveForumPst (PstCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,PstCod);
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_FORUM_REPLY,PstCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,PstCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_REPLY,PstCod);
 
    /***** Mark possible social note as unavailable *****/
    switch (Gbl.Forum.ForumType)	// Only if forum is public for any logged user

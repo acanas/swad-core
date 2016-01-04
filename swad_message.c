@@ -1166,7 +1166,7 @@ void Msg_ExpRecMsg (void)
    Msg_ExpandReceivedMsg (Gbl.Msg.ExpandedMsgCod);
 
    /***** Mark possible notification as seen *****/
-   Ntf_SetNotifAsSeen (Ntf_EVENT_MESSAGE,
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
 	               Gbl.Msg.ExpandedMsgCod,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -1460,7 +1460,7 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
          Msg_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
   }
 
 /*****************************************************************************/

@@ -330,7 +330,7 @@ void Not_RemoveNotice (void)
    DB_QueryDELETE (Query,"can not remove notice");
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
    Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_NOTICE,NotCod);
@@ -475,7 +475,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Mark possible notification as seen *****/
-      Ntf_SetNotifAsSeen (Ntf_EVENT_NOTICE,
+      Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
 	                  -1L,
 	                  Gbl.Usrs.Me.UsrDat.UsrCod);
      }

@@ -9209,13 +9209,13 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_SHOW_DOCUM_GRP:
 	    case Brw_ADMI_DOCUM_CRS:
 	    case Brw_ADMI_DOCUM_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_SHARE_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_SHARED_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -9223,7 +9223,7 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_SHOW_MARKS_GRP:
 	    case Brw_ADMI_MARKS_CRS:
 	    case Brw_ADMI_MARKS_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_MARKS_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -9244,19 +9244,19 @@ void Brw_ShowFileMetadata (void)
 	 case Brw_SHOW_DOCUM_GRP:
 	 case Brw_ADMI_DOCUM_CRS:
 	 case Brw_ADMI_DOCUM_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHARE_CRS:
 	 case Brw_ADMI_SHARE_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MARKS_CRS:
 	 case Brw_SHOW_MARKS_GRP:
 	 case Brw_ADMI_MARKS_CRS:
 	 case Brw_ADMI_MARKS_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 default:
@@ -9348,13 +9348,13 @@ void Brw_DownloadFile (void)
 	    case Brw_SHOW_DOCUM_GRP:
 	    case Brw_ADMI_DOCUM_CRS:
 	    case Brw_ADMI_DOCUM_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_SHARE_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_SHARED_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -9362,7 +9362,7 @@ void Brw_DownloadFile (void)
 	    case Brw_SHOW_MARKS_GRP:
 	    case Brw_ADMI_MARKS_CRS:
 	    case Brw_ADMI_MARKS_GRP:
-	       Ntf_SetNotifAsSeen (Ntf_EVENT_MARKS_FILE,
+	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -9392,19 +9392,19 @@ void Brw_DownloadFile (void)
 	 case Brw_SHOW_DOCUM_GRP:
 	 case Brw_ADMI_DOCUM_CRS:
 	 case Brw_ADMI_DOCUM_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHARE_CRS:
 	 case Brw_ADMI_SHARE_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MARKS_CRS:
 	 case Brw_SHOW_MARKS_GRP:
 	 case Brw_ADMI_MARKS_CRS:
 	 case Brw_ADMI_MARKS_GRP:
-	    Ntf_SetNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 default:
@@ -10629,8 +10629,8 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
    /***** Set possible notifications as removed.
           Set possible social note as removed.
           Important: do this before removing from files *****/
-   Ntf_SetNotifOneFileAsRemoved (Path);
-   Ntf_SetSocialNoteOneFileAsRemoved (Path);
+   Ntf_MarkNotifOneFileAsRemoved (Path);
+   Soc_MarkSocialNoteOneFileAsRemoved (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MARKS_CRS ||
@@ -10672,8 +10672,10 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char *Path)
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
+          Set possible social notes as unavailable.
           Important: do this before removing from files *****/
-   Ntf_SetNotifChildrenOfFolderAsRemoved (FileBrowser,Cod,Path);
+   Ntf_MarkNotifChildrenOfFolderAsRemoved (Path);
+   Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MARKS_CRS ||
@@ -10924,7 +10926,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    char PathGrpFileZones[PATH_MAX+1];
 
    /***** Set notifications about files in this group zone as removed *****/
-   Ntf_SetNotifFilesInGroupAsRemoved (GrpCod);
+   Ntf_MarkNotifFilesInGroupAsRemoved (GrpCod);
 
    /***** Remove files in the group from database *****/
    Brw_RemoveGrpFilesFromDB (GrpCod);

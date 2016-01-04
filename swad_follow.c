@@ -415,7 +415,7 @@ void Fol_ListFollowers (void)
 
 	 /***** If it's me, mark possible notification as seen *****/
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
-	    Ntf_SetNotifAsSeen (Ntf_EVENT_FOLLOWER,-1L,
+	    Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,-1L,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
       else

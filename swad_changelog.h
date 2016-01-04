@@ -117,14 +117,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.93.8 (2016-01-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.94 (2016-01-04)"
 #define CSS_FILE		"swad15.88.1.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.93.8:  Jan 03, 2016	Social note is marked as unavailable when a public file is removed. (190486 lines)
+        Version 15.94:    Jan 04, 2016	Social notes are marked as unavailable when a folder and its children are removed. (190551 lines)
+        Version 15.93.8:  Jan 04, 2016	Social note is marked as unavailable when a public file is removed. (190486 lines)
         Version 15.93.7:  Jan 03, 2016	Social note is marked as unavailable when a public forum post is removed. (190419 lines)
         Version 15.93.6:  Jan 03, 2016	Social note is marked as unavailable when a exam announcement is removed. (190409 lines)
         Version 15.93.5:  Jan 03, 2016	Social note is marked as unavailable when a notice is removed. (190406 lines)

@@ -103,15 +103,13 @@ void Ntf_ShowMyNotifications (void);
 Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
 void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,unsigned MaxChars,bool GetContent);
-void Ntf_SetNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
-void Ntf_SetNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
-void Ntf_SetNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
-void Ntf_SetNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);
-void Ntf_SetNotifOneFileAsRemoved (const char *Path);
-void Ntf_SetSocialNoteOneFileAsRemoved (const char *Path);
-void Ntf_SetNotifChildrenOfFolderAsRemoved (Brw_FileBrowser_t FileBrowser,
-                                            long Cod,const char *Path);
-void Ntf_SetNotifFilesInGroupAsRemoved (long GrpCod);
+void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
+void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
+void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
+void Ntf_MarkNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);
+void Ntf_MarkNotifOneFileAsRemoved (const char *Path);
+void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path);
+void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     struct UsrData *UsrDat,

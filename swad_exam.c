@@ -380,7 +380,7 @@ void Exa_RemoveExamAnnouncement (void)
    DB_QueryUPDATE (Query,"can not remove an exam announcement");
 
    /***** Mark possible notifications as removed *****/
-   Ntf_SetNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
    Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
@@ -404,7 +404,7 @@ void Exa_ListExamAnnouncementsSee (void)
    Exa_ListExamAnnouncements (Exa_NORMAL_VIEW);
 
    /***** Mark possible notifications as seen *****/
-   Ntf_SetNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
 	               -1L,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }

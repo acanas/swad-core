@@ -87,6 +87,8 @@ void Soc_ShowTimelineGbl (void);
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);
+void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path);
+void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path);
 
 void Soc_FormSocialPostGbl (void);
 void Soc_FormSocialPostUsr (void);

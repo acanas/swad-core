@@ -293,8 +293,8 @@ static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole
    Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
    /***** Remove old enrollment notifications before inserting the new one ******/
-   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1,UsrDat->UsrCod);
-   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1,UsrDat->UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1,UsrDat->UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
@@ -365,7 +365,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Mark possible notification as seen *****/
-   Ntf_SetNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
+   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
 	                                                                      Ntf_EVENT_ENROLLMENT_TEACHER,
                        -1L,
                        Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2822,7 +2822,7 @@ void Enr_ShowEnrollmentRequests (void)
                                "</tr>");
 
             /***** Mark possible notification as seen *****/
-            Ntf_SetNotifAsSeen (Ntf_EVENT_ENROLLMENT_REQUEST,
+            Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLLMENT_REQUEST,
                                 ReqCod,
                                 Gbl.Usrs.Me.UsrDat.UsrCod);
            }
@@ -2867,7 +2867,7 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
       ReqCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Mark possible notifications as removed */
-      Ntf_SetNotifAsRemoved (Ntf_EVENT_ENROLLMENT_REQUEST,ReqCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLLMENT_REQUEST,ReqCod);
      }
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -3521,9 +3521,9 @@ void Enr_AcceptRegisterMeInCrs (void)
 
    /***** Mark all notifications about enrollment (as student or as teacher)
           in current course as removed *****/
-   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_SetNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
@@ -3813,7 +3813,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/
-      Ntf_SetNotifInCrsAsRemoved (Crs->CrsCod,UsrDat->UsrCod);
+      Ntf_MarkNotifInCrsAsRemoved (Crs->CrsCod,UsrDat->UsrCod);
 
       /***** Remove user from the table of courses-users *****/
       sprintf (Query,"DELETE FROM crs_usr"

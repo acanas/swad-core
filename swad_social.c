@@ -824,6 +824,136 @@ void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType
   }
 
 /*****************************************************************************/
+/*********** Mark possible notifications of one file as removed **************/
+/*****************************************************************************/
+
+void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   long FilCod;
+   Soc_NoteType_t NoteType;
+
+   switch (FileBrowser)
+     {
+      case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
+      case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
+      case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_SHARE_CRS:
+         /***** Get file code *****/
+	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
+	 if (FilCod > 0)
+	   {
+	    /***** Mark possible social note as unavailable *****/
+	    switch (FileBrowser)
+	      {
+	       case Brw_ADMI_DOCUM_INS:
+		  NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_INS:
+		  NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_CTR:
+		  NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_CTR:
+		  NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_DEG:
+		  NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_DEG:
+		  NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
+		  break;
+	       case Brw_ADMI_DOCUM_CRS:
+		  NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
+		  break;
+	       case Brw_ADMI_SHARE_CRS:
+		  NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
+		  break;
+	       default:
+		  return;
+	      }
+	    Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (NoteType,FilCod);
+	   }
+         break;
+      default:
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/** Mark possible social notes involving children of a folder as unavailable */
+/*****************************************************************************/
+
+void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   long Cod = Brw_GetCodForFiles ();
+   char Query[512];
+   Soc_NoteType_t NoteType;
+
+   switch (FileBrowser)
+     {
+      case Brw_ADMI_DOCUM_INS:
+      case Brw_ADMI_SHARE_INS:
+      case Brw_ADMI_DOCUM_CTR:
+      case Brw_ADMI_SHARE_CTR:
+      case Brw_ADMI_DOCUM_DEG:
+      case Brw_ADMI_SHARE_DEG:
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_SHARE_CRS:
+	 /***** Mark possible social note as unavailable *****/
+	 switch (FileBrowser)
+	   {
+	    case Brw_ADMI_DOCUM_INS:
+	       NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
+	       break;
+	    case Brw_ADMI_SHARE_INS:
+	       NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
+	       break;
+	    case Brw_ADMI_DOCUM_CTR:
+	       NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
+	       break;
+	    case Brw_ADMI_SHARE_CTR:
+	       NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
+	       break;
+	    case Brw_ADMI_DOCUM_DEG:
+	       NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
+	       break;
+	    case Brw_ADMI_SHARE_DEG:
+	       NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
+	       break;
+	    case Brw_ADMI_DOCUM_CRS:
+	       NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
+	       break;
+	    case Brw_ADMI_SHARE_CRS:
+	       NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
+	       break;
+	    default:
+	       return;
+	   }
+         sprintf (Query,"UPDATE social_notes SET Unavailable='Y'"
+		        " WHERE NoteType='%u' AND Cod IN"
+	                " (SELECT FilCod FROM files"
+			" WHERE FileBrowser='%u' AND Cod='%ld'"
+			" AND Path LIKE '%s/%%' AND Public='Y')",	// Only public files
+	          (unsigned) NoteType,
+	          (unsigned) FileBrowser,Cod,
+	          Path);
+         DB_QueryUPDATE (Query,"can not mark social notes as unavailable");
+         break;
+      default:
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /***************** Put contextual link to write a new post *******************/
 /*****************************************************************************/
 
