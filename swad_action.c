@@ -2320,7 +2320,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabSoc ******************************************************************
    /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShowTimelineGbl		,"soc64x64.png"		},
    /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
-   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
+   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
    /* ActReqSocPstGbl	*/{1491,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostGbl		,NULL},
@@ -2357,9 +2357,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeForCtrTch	*/{ 430,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForInsUsr	*/{ 725,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForInsTch	*/{ 724,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForGenUsr	*/{ 726,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForGenUsr	*/{ 726,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForGenTch	*/{ 723,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForSWAUsr	*/{ 242,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForSWAUsr	*/{ 242,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForSWATch	*/{ 245,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
 
    /* ActSeePstForCrsUsr*/{ 346,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
@@ -2370,9 +2370,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePstForCtrTch*/{ 902,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
    /* ActSeePstForInsUsr*/{ 730,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
    /* ActSeePstForInsTch*/{ 746,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForGenUsr*/{ 727,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForGenUsr*/{ 727,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
    /* ActSeePstForGenTch*/{ 731,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForSWAUsr*/{ 244,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForSWAUsr*/{ 244,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
    /* ActSeePstForSWATch*/{ 246,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
 
    /* ActRcvThrForCrsUsr*/{ 350,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
@@ -2383,9 +2383,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvThrForCtrTch*/{ 904,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvThrForInsUsr*/{ 737,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvThrForInsTch*/{ 769,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForGenUsr*/{ 736,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForGenUsr*/{ 736,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvThrForGenTch*/{ 765,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForSWAUsr*/{ 258,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForSWAUsr*/{ 258,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvThrForSWATch*/{ 259,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
 
    /* ActRcvRepForCrsUsr*/{ 599,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
@@ -2396,9 +2396,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvRepForCtrTch*/{ 906,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvRepForInsUsr*/{ 740,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvRepForInsTch*/{ 770,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForGenUsr*/{ 747,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForGenUsr*/{ 747,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvRepForGenTch*/{ 816,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForSWAUsr*/{ 603,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForSWAUsr*/{ 603,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
    /* ActRcvRepForSWATch*/{ 622,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
 
    /* ActReqDelThrCrsUsr*/{ 867,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
@@ -2461,9 +2461,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDelPstForCtrTch*/{ 949,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
    /* ActDelPstForInsUsr*/{ 743,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
    /* ActDelPstForInsTch*/{ 772,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForGenUsr*/{ 735,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForGenUsr*/{ 735,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
    /* ActDelPstForGenTch*/{ 950,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForSWAUsr*/{ 613,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForSWAUsr*/{ 613,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
    /* ActDelPstForSWATch*/{ 623,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
 
    /* ActEnbPstForCrsUsr*/{ 624,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
