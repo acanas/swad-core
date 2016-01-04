@@ -1705,26 +1705,32 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:right;
 	vertical-align:top;
         }
-.SOCIAL_NUM_SHARES	{color:#A0A0A0; font-size:12pt; font-weight:bold;}
-.SOCIAL_ICON_SHARE
+.SOCIAL_ICON
 	{
 	display:inline-block;
 	padding-top:10px;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_SHARE_DISABLED
+.SOCIAL_ICON_DISABLED
 	{
 	display:inline-block;
 	padding-top:10px;
 	opacity:0.2;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_REMOVE
+.SOCIAL_ICON_RIGHT
 	{
 	display:inline-block;
 	padding-top:10px;
 	vertical-align:bottom;
 	float:right;
+	}
+.SOCIAL_NUM_SHARES	{color:#A0A0A0; font-size:12pt; font-weight:bold;}
+.SOCIAL_SHARER
+	{
+	display:inline-block;
+	padding-left:4px;
+	vertical-align:bottom;
 	}
 
 /*********************************** Messages ********************************/

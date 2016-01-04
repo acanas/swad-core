@@ -1988,23 +1988,23 @@ mysql> DESCRIBE social_timeline;
 | Field        | Type       | Null | Key | Default | Extra          |
 +--------------+------------+------+-----+---------+----------------+
 | PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| AuthorCod    | int(11)    | NO   | MUL | NULL    |                |
-| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
 | NotCod       | bigint(20) | NO   | MUL | NULL    |                |
+| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
+| AuthorCod    | int(11)    | NO   | MUL | NULL    |                |
 | TimePublish  | datetime   | NO   | MUL | NULL    |                |
 +--------------+------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timeline ("
 	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
-                   "AuthorCod INT NOT NULL,"
-                   "PublisherCod INT NOT NULL,"
                    "NotCod BIGINT NOT NULL,"
+                   "PublisherCod INT NOT NULL,"
+                   "AuthorCod INT NOT NULL,"
                    "TimePublish DATETIME NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
-                   "INDEX(AuthorCod),"
+                   "UNIQUE INDEX(NotCod,PublisherCod),"
                    "INDEX(PublisherCod),"
-                   "INDEX(NotCod),"
+                   "INDEX(AuthorCod),"
                    "INDEX(TimePublish))");
 
    /***** Table sta_degrees *****/

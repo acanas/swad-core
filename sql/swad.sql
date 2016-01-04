@@ -940,14 +940,14 @@ CREATE TABLE IF NOT EXISTS social_posts (
 --
 CREATE TABLE IF NOT EXISTS social_timeline (
 	PubCod BIGINT NOT NULL AUTO_INCREMENT,
-	AuthorCod INT NOT NULL,
-	PublisherCod INT NOT NULL,
 	NotCod BIGINT NOT NULL,
+	PublisherCod INT NOT NULL,
+	AuthorCod INT NOT NULL,
 	TimePublish DATETIME NOT NULL,
 	UNIQUE INDEX(PubCod),
-	INDEX(AuthorCod),
+	UNIQUE INDEX(NotCod,PublisherCod),
 	INDEX(PublisherCod),
-	INDEX(NotCod),
+	INDEX(AuthorCod),
 	INDEX(TimePublish));
 --
 -- Table sta_degrees: stores statistics about degrees

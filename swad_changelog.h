@@ -117,13 +117,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.96 (2016-01-04)"
-#define CSS_FILE		"swad15.96.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.97 (2016-01-04)"
+#define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.97:    Jan 04, 2016	Show list of some users who has shared a social note. (190718 lines)
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS social_timeline_new (PubCod BIGINT NOT NULL AUTO_INCREMENT, NotCod BIGINT NOT NULL, PublisherCod INT NOT NULL, AuthorCod INT NOT NULL, TimePublish DATETIME NOT NULL, UNIQUE INDEX(PubCod), UNIQUE INDEX(NotCod,PublisherCod), INDEX(PublisherCod), INDEX(AuthorCod), INDEX(TimePublish)) SELECT PubCod,NotCod,PublisherCod,AuthorCod,TimePublish FROM social_timeline ORDER BY PubCod;
+DROP TABLE social_timeline;
+RENAME TABLE social_timeline_new TO social_timeline;
+
         Version 15.96.1:  Jan 04, 2016	Changes in title of user's timeline. (190641 lines)
         Version 15.96:    Jan 04, 2016	Display number of times a social note is shared. (190616 lines)
         Version 15.95.2:  Jan 04, 2016	Unavailable social notes can not be shared. (190556 lines)

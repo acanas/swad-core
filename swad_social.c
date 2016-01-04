@@ -52,6 +52,7 @@
 #define Soc_MAX_BYTES_SUMMARY 100
 #define Soc_NUM_PUBS_IN_TIMELINE 100
 #define Soc_WIDTH_TIMELINE "560px"
+#define Soc_MAX_NUM_SHARERS_SHOWN 10	// Maximum number of users shown who have share a social note
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -98,9 +99,9 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
 struct SocialPublishing
   {
    long PubCod;
-   long AuthorCod;
-   long PublisherCod;
    long NotCod;
+   long PublisherCod;
+   long AuthorCod;
    time_t DateTimeUTC;
   };
 
@@ -113,7 +114,7 @@ struct SocialNote
    long Cod;		// Code of file, forum post, notice,...
    bool Unavailable;	// File, forum post, notice,... unavailable (removed)
    time_t DateTimeUTC;
-   unsigned NumTimesShared;	// Number of times this note has been shared
+   unsigned NumShared;	// Number of times this note has been shared
   };
 
 /*****************************************************************************/
@@ -169,6 +170,7 @@ static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot
 static bool Soc_CheckIfNoteIsYetPublishedByMe (long NotCod);
 static unsigned long Soc_GetNumPubsOfANote (long NotCod);
 static void Soc_GetNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
+static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
@@ -189,7 +191,7 @@ void Soc_ShowTimelineUsr (void)
       Soc_PutLinkToWriteANewPost (ActReqSocPstUsr,Usr_PutParamOtherUsrCodEncrypted);
 
    /***** Build query to show timeline with publishing of a unique user *****/
-   sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
@@ -239,7 +241,7 @@ void Soc_ShowTimelineGbl (void)
 	 DB_ExitOnMySQLError ("can not create temporary table");
 
       /***** Build query to show timeline including the users I am following *****/
-      sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
+      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
 		     " FROM social_timeline WHERE PubCod IN "
 		     "(SELECT PubCod FROM pub_cods)"
 		     " ORDER BY PubCod DESC");
@@ -337,14 +339,14 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
    /* Get social publishing code (row[0]) */
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
-   /* Get author's code (row[1]) */
-   SocPub->AuthorCod    = Str_ConvertStrCodToLongCod (row[1]);
+   /* Get social note code (row[1]) */
+   SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
 
    /* Get publisher's code (row[2]) */
    SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get social note code (row[3]) */
-   SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[3]);
+   /* Get author's code (row[3]) */
+   SocPub->AuthorCod    = Str_ConvertStrCodToLongCod (row[3]);
 
    /* Get time of the note (row[4]) */
    SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
@@ -536,7 +538,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 /* Put icon to share this publishing */
 	 Soc_PutFormToShareSocialNote (SocNot->NotCod);
      }
-   fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES\"> %u</span>",SocNot->NumTimesShared);
+
+   /* Show who have shared this social note */
+   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
 
    /* Put icon to remove */
    if (WritingTimeline &&
@@ -950,10 +954,10 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 
    /***** Publish social note in timeline *****/
    sprintf (Query,"INSERT INTO social_timeline"
-	          " (AuthorCod,PublisherCod,NotCod,TimePublish)"
+	          " (NotCod,PublisherCod,AuthorCod,TimePublish)"
                   " VALUES"
                   " ('%ld','%ld','%ld',NOW())",
-            SocPub->AuthorCod,SocPub->PublisherCod,SocPub->NotCod);
+            SocPub->NotCod,SocPub->PublisherCod,SocPub->AuthorCod);
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
   }
 
@@ -1103,7 +1107,7 @@ static void Soc_PutIconShared (void)
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
 
    /***** Inactive icon shared *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_DISABLED\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_DISABLED\">"
 		      "<img src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />"
@@ -1131,7 +1135,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
    else
       Act_FormStart (ActShaSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1160,7 +1164,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
    else
       Act_FormStart (ActUnsSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/shared64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1189,7 +1193,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
    else
       Act_FormStart (ActReqRemSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_RIGHT ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1671,15 +1675,88 @@ static void Soc_GetNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
   {
    char Query[128];
 
-   /* TODO: Check if this check is faster
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
-	          " WHERE NotCod='%ld' AND AuthorCod<>PublisherCod",
-	    SocNot->NotCod);
-   */
+   /***** Get number of times (users) this note has been shared *****/
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
 	          " WHERE NotCod='%ld' AND PublisherCod<>'%ld'",
-	    SocNot->NotCod,SocNot->UsrCod);
-   SocNot->NumTimesShared = (unsigned) DB_QueryCOUNT (Query,"can not get number of times a note has been shared");
+	    SocNot->NotCod,
+	    SocNot->UsrCod);	// The author
+   SocNot->NumShared = (unsigned) DB_QueryCOUNT (Query,"can not get number of times a note has been shared");
+  }
+
+/*****************************************************************************/
+/**************** Show users who have shared this social note ****************/
+/*****************************************************************************/
+
+static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   unsigned NumUsrsShown = 0;
+   struct UsrData UsrDat;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
+
+   /* Show number of users who have shared this social note */
+   fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES\"> %u</span>",
+            SocNot->NumShared);
+
+   if (SocNot->NumShared)
+     {
+      /***** Get list of publishers from database (only the first) *****/
+      sprintf (Query,"SELECT PublisherCod"
+		     " FROM social_timeline"
+		     " WHERE NotCod='%ld' AND PublisherCod<>'%ld'"
+		     " ORDER BY PubCod LIMIT %u",
+	       SocNot->NotCod,SocNot->UsrCod,
+	       Soc_MAX_NUM_SHARERS_SHOWN);
+      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing");
+      if (NumUsrs)
+	{
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
+
+	 /***** List users *****/
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
+	   {
+	    /***** Get user *****/
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get user's code (row[0]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	    /***** Get user's data and show user's photo *****/
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	      {
+               fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">");
+	       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+	                                             NULL,
+	                         "PHOTO18x24",Pho_ZOOM);
+               fprintf (Gbl.F.Out,"</div>");
+
+               NumUsrsShown++;
+              }
+	   }
+
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
+	}
+
+      if (SocNot->NumShared > NumUsrsShown)
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
+	                    "<img src=\"%s/ellipsis32x32.gif\""
+			    " alt=\"%u\" title=\"%u\""
+			    " class=\"ICON20x20\" />"
+			    "</div>",
+		  Gbl.Prefs.IconsURL,
+		  SocNot->NumShared - NumUsrsShown,
+		  SocNot->NumShared - NumUsrsShown);
+     }
   }
 
 /*****************************************************************************/
@@ -1693,7 +1770,7 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
    MYSQL_ROW row;
 
    /***** Get data of social publishing from database *****/
-   sprintf (Query,"SELECT PubCod,AuthorCod,PublisherCod,NotCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PubCod='%ld'",
             SocPub->PubCod);
@@ -1706,9 +1783,9 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
    else
      {
       /***** Reset fields of social publishing *****/
-      SocPub->AuthorCod    = -1L;
-      SocPub->PublisherCod = -1L;
       SocPub->NotCod       = -1L;
+      SocPub->PublisherCod = -1L;
+      SocPub->AuthorCod    = -1L;
       SocPub->DateTimeUTC  = (time_t) 0;
      }
   }
@@ -1746,7 +1823,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
       SocNot->Cod            = -1L;
       SocNot->Unavailable    = false;
       SocNot->DateTimeUTC    = (time_t) 0;
-      SocNot->NumTimesShared = 0;
+      SocNot->NumShared = 0;
      }
   }
 
