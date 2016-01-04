@@ -87,8 +87,6 @@ static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
 static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
-static void Rec_PutLinkToChangeMyInsCtrDpt (void);
-static void Rec_PutLinkToChangeMySocialNetworks (void);
 
 /*****************************************************************************/
 /*************** Create, edit and remove fields of records *******************/
@@ -1881,10 +1879,10 @@ void Rec_ShowFormMyCommRecord (void)
 	    !Gbl.Usrs.Me.UsrDat.Surname1[0])
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
-   /***** Buttons for edition *****/
+   /***** Contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
-   Rec_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+   Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
    Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
    Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
    fprintf (Gbl.F.Out,"</div>");
@@ -3306,26 +3304,13 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
 /*** Put a link to the action to edit my institution, centre, department... **/
 /*****************************************************************************/
 
-static void Rec_PutLinkToChangeMyInsCtrDpt (void)
+void Rec_PutLinkToChangeMyInsCtrDpt (void)
   {
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
    Lay_PutContextualLink (ActReqEdiMyIns,NULL,"ins64x64.gif",
                           Txt_Edit_my_institution,Txt_Edit_my_institution);
-  }
-
-/*****************************************************************************/
-/*********** Put a link to the action to edit my social networks *************/
-/*****************************************************************************/
-
-static void Rec_PutLinkToChangeMySocialNetworks (void)
-  {
-   extern const char *Txt_Edit_my_webs_networks;
-
-   /***** Link to edit my social networks *****/
-   Lay_PutContextualLink (ActReqEdiMyNet,NULL,"earth64x64.gif",
-                          Txt_Edit_my_webs_networks,Txt_Edit_my_webs_networks);
   }
 
 /*****************************************************************************/
