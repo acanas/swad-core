@@ -136,7 +136,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  bool WritingTimeline,bool LastInList);
 static void Soc_WriteNoteDate (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
-static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod);
+static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
@@ -467,7 +467,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
       /* Write note type */
       fprintf (Gbl.F.Out,"<div>");
-      Soc_PutFormGoToAction (SocNot,Crs.CrsCod);
+      Soc_PutFormGoToAction (SocNot);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Write location in hierarchy */
@@ -613,19 +613,13 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /*****************************************************************************/
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
-// SocNot->Unavailable can be set to true inside this function
 
-static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod)
+static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
    extern const char *Txt_not_available;
-   struct FileMetadata FileMetadata;
-   long InsCod = -1L;
-   long CtrCod = -1L;
-   long DegCod = -1L;
-   long GrpCod = -1L;
 
    if (SocNot->Unavailable ||	// File/notice... pointer by this social note is unavailable
        Gbl.InsideForm)		// Inside another form
@@ -644,77 +638,53 @@ static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod)
 	{
 	 case Soc_NOTE_INS_DOC_PUB_FILE:
 	 case Soc_NOTE_INS_SHA_PUB_FILE:
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Brw_PutHiddenParamFilCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
+	    break;
 	 case Soc_NOTE_CTR_DOC_PUB_FILE:
 	 case Soc_NOTE_CTR_SHA_PUB_FILE:
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Brw_PutHiddenParamFilCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
+	    break;
 	 case Soc_NOTE_DEG_DOC_PUB_FILE:
 	 case Soc_NOTE_DEG_SHA_PUB_FILE:
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Brw_PutHiddenParamFilCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
+	    break;
 	 case Soc_NOTE_CRS_DOC_PUB_FILE:
 	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    FileMetadata.FilCod = SocNot->Cod;
-	    if (FileMetadata.FilCod > 0)
-	      {
-	       Brw_GetFileMetadataByCod (&FileMetadata);
-	       if (FileMetadata.FilCod > 0)	// Found
-		  Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-						 &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
-	      }
-	    if (FileMetadata.FilCod > 0)
-	      {
-	       Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
-	       Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
-	      }
-	    else
-	      {
-	       Soc_MarkSocialNoteAsUnavailableUsingNotCod (SocNot->NotCod);
-	       SocNot->Unavailable = true;
-	      }
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Brw_PutHiddenParamFilCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_NOTICE:
 	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_FORUM_POST:
 	    Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
 	    For_PutAllHiddenParamsForum ();
+	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 default:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	 default:	// Not applicable
 	    break;
 	}
 
-      if (SocNot->Unavailable)
-	 fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s (%s)</span>",
-		  Txt_SOCIAL_NOTE[SocNot->NoteType],Txt_not_available);
-      else
-	{
-	 /***** Parameter to go to another place in hierarchy *****/
-	 if (CrsCod > 0)				// Course specified
-	   {
-	    if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
-	       Crs_PutParamCrsCod (CrsCod);		// Go to another course
-	   }
-	 else if (DegCod > 0)				// Degree specified
-	   {
-	    if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
-	       Deg_PutParamDegCod (DegCod);		// Go to another degree
-	   }
-	 else if (CtrCod > 0)				// Centre specified
-	   {
-	    if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
-	       Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
-	   }
-	 else if (InsCod > 0)				// Institution specified
-	   {
-	    if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
-	       Ins_PutParamInsCod (InsCod);		// Go to another institution
-	   }
-
-	 /***** Link and end form *****/
-	 Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
-			     The_ClassForm[Gbl.Prefs.Theme]);
-	 fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[SocNot->NoteType]);
-	 Act_FormEnd ();
-	}
+      /***** Link and end form *****/
+      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
+			  The_ClassForm[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[SocNot->NoteType]);
+      Act_FormEnd ();
      }
   }
 
