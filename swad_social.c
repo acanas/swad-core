@@ -130,7 +130,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction);
+static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
+                              const char *Title);
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  struct SocialNote *SocNot,
@@ -179,6 +180,7 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
 
 void Soc_ShowTimelineUsr (void)
   {
+   extern const char *Txt_Public_activity_OF_A_USER;
    char Query[512];
 
    /***** Link to write a new social post (public comment) *****/
@@ -195,7 +197,8 @@ void Soc_ShowTimelineUsr (void)
             Soc_NUM_PUBS_IN_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,ActSeePubPrf);
+   sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
+   Soc_ShowTimeline (Query,ActSeePubPrf,Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -204,6 +207,7 @@ void Soc_ShowTimelineUsr (void)
 
 void Soc_ShowTimelineGbl (void)
   {
+   extern const char *Txt_Public_activity;
    extern const char *Txt_You_dont_follow_any_user;
    char Query[512];
 
@@ -241,7 +245,7 @@ void Soc_ShowTimelineGbl (void)
 		     " ORDER BY PubCod DESC");
 
       /***** Show timeline *****/
-      Soc_ShowTimeline (Query,ActSeeSocTmlGbl);
+      Soc_ShowTimeline (Query,ActSeeSocTmlGbl,Txt_Public_activity);
 
       /***** Drop temporary table with publishing codes *****/
       sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
@@ -257,10 +261,10 @@ void Soc_ShowTimelineGbl (void)
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
 
-static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
+static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
+                              const char *Title)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Public_activity;
    extern const char *Txt_Update;
    extern const char *Txt_No_public_activity;
    MYSQL_RES *mysql_res;
@@ -277,7 +281,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction)
    if (NumPublishings)	// Publishings found in timeline
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Txt_Public_activity);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
 
       /***** Form to update timeline *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");

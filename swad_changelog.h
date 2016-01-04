@@ -124,6 +124,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.96.1:  Jan 04, 2016	Changes in title of user's timeline. (190641 lines)
         Version 15.96:    Jan 04, 2016	Display number of times a social note is shared. (190616 lines)
         Version 15.95.2:  Jan 04, 2016	Unavailable social notes can not be shared. (190556 lines)
         Version 15.95.1:  Jan 04, 2016	Optimization in writing social note. (190555 lines)

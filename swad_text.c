@@ -27763,6 +27763,27 @@ const char *Txt_Public_activity =
 	 "Atividade p&uacute;blica";
 #endif
 
+const char *Txt_Public_activity_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	 "Activitat p&uacute;blica de %s";
+#elif L==2
+	 "%s &ouml;ffentliche Aktivit&auml;t";
+#elif L==3
+	 "%s public activity";
+#elif L==4
+	 "Actividad p&uacute;blica de %s";
+#elif L==5
+	 "Activit&eacute; public de %s";
+#elif L==6
+	 "Actividad p&uacute;blica de %s";	// Okoteve traducción
+#elif L==7
+	 "Attivit&agrave; pubblica di %s";
+#elif L==8
+	 "Aktywno&sacute;&cacute; publiczna %s";
+#elif L==9
+	 "Atividade p&uacute;blica de %s";
+#endif
+
 const char *Txt_public_FILES =
 #if   L==1
 	"p&uacute;blics";
