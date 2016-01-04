@@ -117,13 +117,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.95.2 (2016-01-04)"
-#define CSS_FILE		"swad15.88.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.96 (2016-01-04)"
+#define CSS_FILE		"swad15.96.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.96:    Jan 04, 2016	Display number of times a social note is shared. (190616 lines)
         Version 15.95.2:  Jan 04, 2016	Unavailable social notes can not be shared. (190556 lines)
         Version 15.95.1:  Jan 04, 2016	Optimization in writing social note. (190555 lines)
         Version 15.95:    Jan 04, 2016	Fixed bug in social timeline: social notes can be shared, not social publishings. (190583 lines)

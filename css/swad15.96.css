@@ -1705,10 +1705,26 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:right;
 	vertical-align:top;
         }
-.SOCIAL_ICON
+.SOCIAL_NUM_SHARES	{color:#A0A0A0; font-size:12pt; font-weight:bold;}
+.SOCIAL_ICON_SHARE
 	{
 	display:inline-block;
 	padding-top:10px;
+	vertical-align:bottom;
+	}
+.SOCIAL_ICON_SHARE_DISABLED
+	{
+	display:inline-block;
+	padding-top:10px;
+	opacity:0.2;
+	vertical-align:bottom;
+	}
+.SOCIAL_ICON_REMOVE
+	{
+	display:inline-block;
+	padding-top:10px;
+	vertical-align:bottom;
+	float:right;
 	}
 
 /*********************************** Messages ********************************/
