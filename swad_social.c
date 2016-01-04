@@ -416,94 +416,96 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    else
      {
       /* Get location in hierarchy */
-      switch (SocNot->NoteType)
-	{
-	 case Soc_NOTE_INS_DOC_PUB_FILE:
-	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    /* Get institution data */
-	    Ins.InsCod = SocNot->HieCod;
-	    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-	    break;
-	 case Soc_NOTE_CTR_DOC_PUB_FILE:
-	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    /* Get centre data */
-	    Ctr.CtrCod = SocNot->HieCod;
-	    Ctr_GetDataOfCentreByCod (&Ctr);
-	    break;
-	 case Soc_NOTE_DEG_DOC_PUB_FILE:
-	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    /* Get degree data */
-	    Deg.DegCod = SocNot->HieCod;
-	    Deg_GetDataOfDegreeByCod (&Deg);
-	    break;
-	 case Soc_NOTE_CRS_DOC_PUB_FILE:
-	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	 case Soc_NOTE_NOTICE:
-	    /* Get course data */
-	    Crs.CrsCod = SocNot->HieCod;
-	    Crs_GetDataOfCourseByCod (&Crs);
-	    break;
-	 case Soc_NOTE_FORUM_POST:
-            /* Get forum type of the post */
-	    Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
-	    For_SetForumName (Gbl.Forum.ForumType,
-			      &Ins,
-			      &Ctr,
-			      &Deg,
-			      &Crs,
-			      ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-	    Gbl.Forum.Ins.InsCod = Ins.InsCod;
-	    Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
-	    Gbl.Forum.Deg.DegCod = Deg.DegCod;
-	    Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
-	    break;
-	 default:
-	    break;
-	}
+      if (!SocNot->Unavailable)
+	 switch (SocNot->NoteType)
+	   {
+	    case Soc_NOTE_INS_DOC_PUB_FILE:
+	    case Soc_NOTE_INS_SHA_PUB_FILE:
+	       /* Get institution data */
+	       Ins.InsCod = SocNot->HieCod;
+	       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+	       break;
+	    case Soc_NOTE_CTR_DOC_PUB_FILE:
+	    case Soc_NOTE_CTR_SHA_PUB_FILE:
+	       /* Get centre data */
+	       Ctr.CtrCod = SocNot->HieCod;
+	       Ctr_GetDataOfCentreByCod (&Ctr);
+	       break;
+	    case Soc_NOTE_DEG_DOC_PUB_FILE:
+	    case Soc_NOTE_DEG_SHA_PUB_FILE:
+	       /* Get degree data */
+	       Deg.DegCod = SocNot->HieCod;
+	       Deg_GetDataOfDegreeByCod (&Deg);
+	       break;
+	    case Soc_NOTE_CRS_DOC_PUB_FILE:
+	    case Soc_NOTE_CRS_SHA_PUB_FILE:
+	    case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	    case Soc_NOTE_NOTICE:
+	       /* Get course data */
+	       Crs.CrsCod = SocNot->HieCod;
+	       Crs_GetDataOfCourseByCod (&Crs);
+	       break;
+	    case Soc_NOTE_FORUM_POST:
+	       /* Get forum type of the post */
+	       Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
+	       For_SetForumName (Gbl.Forum.ForumType,
+				 &Ins,
+				 &Ctr,
+				 &Deg,
+				 &Crs,
+				 ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	       Gbl.Forum.Ins.InsCod = Ins.InsCod;
+	       Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
+	       Gbl.Forum.Deg.DegCod = Deg.DegCod;
+	       Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
+	       break;
+	    default:
+	       break;
+	   }
 
       /* Write note type */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<div>");
       Soc_PutFormGoToAction (SocNot,Crs.CrsCod);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Write location in hierarchy */
-      switch (SocNot->NoteType)
-	{
-	 case Soc_NOTE_INS_DOC_PUB_FILE:
-	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    /* Write location (institution) in hierarchy */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		     Txt_Institution,Ins.ShortName);
-	    break;
-	 case Soc_NOTE_CTR_DOC_PUB_FILE:
-	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    /* Write location (centre) in hierarchy */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		     Txt_Centre,Ctr.ShortName);
-	    break;
-	 case Soc_NOTE_DEG_DOC_PUB_FILE:
-	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    /* Write location (degree) in hierarchy */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		     Txt_Degree,Deg.ShortName);
-	    break;
-	 case Soc_NOTE_CRS_DOC_PUB_FILE:
-	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	 case Soc_NOTE_NOTICE:
-	    /* Write location (course) in hierarchy */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		     Txt_Course,Crs.ShortName);
-	    break;
-	 case Soc_NOTE_FORUM_POST:
-	    /* Write forum name */
-	    fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-		     Txt_Forum,ForumName);
-	    break;
-	 default:
-	    break;
-	}
+      if (!SocNot->Unavailable)
+	 switch (SocNot->NoteType)
+	   {
+	    case Soc_NOTE_INS_DOC_PUB_FILE:
+	    case Soc_NOTE_INS_SHA_PUB_FILE:
+	       /* Write location (institution) in hierarchy */
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			Txt_Institution,Ins.ShortName);
+	       break;
+	    case Soc_NOTE_CTR_DOC_PUB_FILE:
+	    case Soc_NOTE_CTR_SHA_PUB_FILE:
+	       /* Write location (centre) in hierarchy */
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			Txt_Centre,Ctr.ShortName);
+	       break;
+	    case Soc_NOTE_DEG_DOC_PUB_FILE:
+	    case Soc_NOTE_DEG_SHA_PUB_FILE:
+	       /* Write location (degree) in hierarchy */
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			Txt_Degree,Deg.ShortName);
+	       break;
+	    case Soc_NOTE_CRS_DOC_PUB_FILE:
+	    case Soc_NOTE_CRS_SHA_PUB_FILE:
+	    case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	    case Soc_NOTE_NOTICE:
+	       /* Write location (course) in hierarchy */
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			Txt_Course,Crs.ShortName);
+	       break;
+	    case Soc_NOTE_FORUM_POST:
+	       /* Write forum name */
+	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			Txt_Forum,ForumName);
+	       break;
+	    default:
+	       break;
+	   }
 
       /* Write note summary */
       Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
@@ -609,6 +611,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /*****************************************************************************/
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
+// SocNot->Unavailable can be set to true inside this function
 
 static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod)
   {
@@ -626,9 +629,11 @@ static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod)
        Gbl.InsideForm)		// Inside another form
      {
       /***** Do not put form *****/
-      fprintf (Gbl.F.Out,"%s",Txt_SOCIAL_NOTE[SocNot->NoteType]);
+      fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s",
+               Txt_SOCIAL_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
+      fprintf (Gbl.F.Out,"</span>");
      }
    else			// Not inside another form
      {
@@ -676,7 +681,7 @@ static void Soc_PutFormGoToAction (struct SocialNote *SocNot,long CrsCod)
 	}
 
       if (SocNot->Unavailable)
-	 fprintf (Gbl.F.Out,"%s (%s)",
+	 fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s (%s)</span>",
 		  Txt_SOCIAL_NOTE[SocNot->NoteType],Txt_not_available);
       else
 	{
