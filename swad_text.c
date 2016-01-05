@@ -35575,65 +35575,107 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES] =
 
 const char *Txt_SOCIAL_PUBLISHING_Removed =
 #if   L==1
-	"Eliminat";
+	"Eliminat.";
 #elif L==2
-	"Entfernt";
+	"Entfernt.";
 #elif L==3
-	"Removed";
+	"Removed.";
 #elif L==4
-	"Eliminado";
+	"Eliminado.";
 #elif L==5
-	"Supprim&eacute;";
+	"Supprim&eacute;.";
 #elif L==6
-	"Eliminado";	// Okoteve traducción
+	"Eliminado.";	// Okoteve traducción
 #elif L==7
-	"Rimosso";
+	"Rimosso.";
 #elif L==8
-	"Usuniete";
+	"Usuniete.";
 #elif L==9
-	"Removido";
+	"Removido.";
+#endif
+
+const char *Txt_SOCIAL_PUBLISHING_Removed_but_shared_by_others =
+#if   L==1
+	"Eliminat per&ograve; encara compartit per altres.";
+#elif L==2
+	"Entfernt, sondern von anderen geteilt.";
+#elif L==3
+	"Removed but shared by others.";
+#elif L==4
+	"Eliminado pero a&uacute;n compartido por otros.";
+#elif L==5
+	"Supprim&eacute;, mais partag&eacute; par d'autres.";
+#elif L==6
+	"Eliminado pero a&uacute;n compartido por otros.";	// Okoteve traducción
+#elif L==7
+	"Rimosso ma condiviso da altri.";
+#elif L==8
+	"Usuniete ale podzielaj&aogon; inni.";
+#elif L==9
+	"Removido mas compartilhado por outros.";
 #endif
 
 const char *Txt_SOCIAL_PUBLISHING_Shared =
 #if   L==1
-	"Compartit";
+	"Compartit.";
 #elif L==2
-	"Geteilt";
+	"Geteilt.";
 #elif L==3
-	"Shared";
+	"Shared.";
 #elif L==4
-	"Compartido";
+	"Compartido.";
 #elif L==5
-	"Partag&eacute;";
+	"Partag&eacute;.";
 #elif L==6
-	"Compartido";	// Okoteve traducción
+	"Compartido.";	// Okoteve traducción
 #elif L==7
-	"Condiviso";
+	"Condiviso.";
 #elif L==8
-	"Dzielone";
+	"Dzielone.";
 #elif L==9
-	"Compartilhado";
+	"Compartilhado.";
+#endif
+
+const char *Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+#if   L==1
+	"Compartit per %u";
+#elif L==2
+	"Von %u geteilt";
+#elif L==3
+	"Shared by %u";
+#elif L==4
+	"Compartido por %u";
+#elif L==5
+	"Partag&eacute; par %u";
+#elif L==6
+	"Compartido por %u";	// Okoteve traducción
+#elif L==7
+	"Condiviso da %u";
+#elif L==8
+	"Udost&eogon;pnione przez %u";
+#elif L==9
+	"Compartilhado por %u";
 #endif
 
 const char *Txt_SOCIAL_PUBLISHING_Unshared =	// No longer shared
 #if   L==1
-	"No compartit";
+	"No compartit.";
 #elif L==2
-	"Kein geteilt";
+	"Kein geteilt.";
 #elif L==3
-	"Unshared";
+	"Unshared.";
 #elif L==4
-	"No compartido";
+	"No compartido.";
 #elif L==5
-	"Non partag&eacute;";
+	"Non partag&eacute;.";
 #elif L==6
-	"No compartido";	// Okoteve traducción
+	"No compartido.";	// Okoteve traducción
 #elif L==7
-	"Non condiviso";
+	"Non condiviso.";
 #elif L==8
-	"Niedzielon&aogon;";
+	"Niedzielon&aogon;.";
 #elif L==9
-	"N&atilde;o compartilhado";
+	"N&atilde;o compartilhado.";
 #endif
 
 const char *Txt_Sort_degrees_by =
@@ -46868,6 +46910,27 @@ const char *Txt_Unread_BR_msgs =
 	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"N&atilde;o<br />lidas";
+#endif
+
+const char *Txt_Unshare =
+#if   L==1
+	"Compartir";
+#elif L==2
+	"Teilen";
+#elif L==3
+	"Unshare";
+#elif L==4
+	"Dejar de compartir";
+#elif L==5
+	"Arr&ecirc;ter le partage";
+#elif L==6
+	"Dejar de compartir";	// Okoteve traducción
+#elif L==7
+	"Interrompere la condivisione";
+#elif L==8
+	"Zatrzymaj udost&eogon;pnianie";
+#elif L==9
+	"Descompartilhar";
 #endif
 
 const char *Txt_Update =

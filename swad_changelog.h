@@ -113,18 +113,25 @@
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline?
-
+// TODO: When a social publishing is removed, but it is shared, author should be warned about it
+// TODO: Consider the possibility of remove all the publishing of a social note when the author removes it
+/*
+Escribir social note después de compartir, descompartir o eliminar como antes, completa arriba y siempre tras el mensaje,
+excepto cuando se elimina del todo tras descompartir/eliminar, sólo en ese caso no pintar nada.
+En definitiva, se estará pintando simplemente una copia arriba de lo que hay más abajo en el timeline.
+*/
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.98 (2016-01-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.99 (2016-01-05)"
 #define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.99:    Jan 05, 2016	Changes in social timeline. (190892 lines)
         Version 15.98:    Jan 05, 2016	If a social note is unavailable and is shared, put button to unshare.
 					Several bugs in social timeline fixed. (190789 lines)
         Version 15.97.5:  Jan 04, 2016	Button to remove a social note is not shown if author already removed the note (but it yet exists because another user shared it). (190763 lines)
