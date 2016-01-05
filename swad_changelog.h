@@ -124,13 +124,14 @@ En definitiva, se estará pintando simplemente una copia arriba de lo que hay más
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.99 (2016-01-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.99.1 (2016-01-05)"
 #define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.99.1:  Jan 05, 2016	Change in message in social timeline. (? lines)
         Version 15.99:    Jan 05, 2016	Changes in social timeline. (190892 lines)
         Version 15.98:    Jan 05, 2016	If a social note is unavailable and is shared, put button to unshare.
 					Several bugs in social timeline fixed. (190789 lines)

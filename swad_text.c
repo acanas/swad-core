@@ -35678,6 +35678,27 @@ const char *Txt_SOCIAL_PUBLISHING_Unshared =	// No longer shared
 	"N&atilde;o compartilhado.";
 #endif
 
+const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone =	// No longer shared
+#if   L==1
+	"No compartit per ning&uacute;";
+#elif L==2
+	"Nicht durch Dritte freigegebenen";
+#elif L==3
+	"Not shared by anyone";
+#elif L==4
+	"No compartido por nadie";
+#elif L==5
+	"Personne n'a partag&eacute;";
+#elif L==6
+	"No compartido por nadie";	// Okoteve traducción
+#elif L==7
+	"Non condiviso da chiunque";
+#elif L==8
+	"Nie jest dzielona przez nikogo";
+#elif L==9
+	"N&atilde;o compartilhado por qualquer pessoa";
+#endif
+
 const char *Txt_Sort_degrees_by =
 #if   L==1
 	"Ordenar titulacions per";

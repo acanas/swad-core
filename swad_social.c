@@ -1146,8 +1146,12 @@ static void Soc_ReceiveSocialPost (void)
 static void Soc_PutDisabledIconShare (unsigned NumShared)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS;
+   extern const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone;
 
-   sprintf (Gbl.Title,Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS,NumShared);
+   if (NumShared)
+      sprintf (Gbl.Title,Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS,NumShared);
+   else
+      strcpy (Gbl.Title,Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone);
 
    /***** Disabled icon to share *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_DISABLED\">"
