@@ -148,24 +148,22 @@ static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) (
 static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconShared (void);
-static void Soc_PutFormToShareSocialNote (long NotCod);
+static void Soc_PutDisabledIconShare (void);
+static void Soc_PutFormToShareSocialNote (long PubCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
-static void Soc_PutHiddenParamNotCod (long NotCod);
-static long Soc_GetParamNotCod (void);
 static void Soc_PutHiddenParamPubCod (long PubCod);
 static long Soc_GetParamPubCod (void);
 
 static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
-static void Soc_UnshareASocialPublishingFromDB (const struct SocialNote *SocNot);
+static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 
 static void Soc_RequestRemovalSocialPublishing (void);
 static void Soc_RemoveSocialPublishing (void);
 static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
-                                               const struct SocialNote *SocNot);
-static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot);
+                                               struct SocialNote *SocNot);
+static void Soc_CheckAndDeleteASocialNoteFromDB (struct SocialNote *SocNot);
 
 static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
 static unsigned long Soc_GetNumPubsOfANote (long NotCod);
@@ -175,6 +173,8 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
 static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
+static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub);
+static void Soc_ResetSocialNote (struct SocialNote *SocNot);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -307,14 +307,16 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 	   NumPub < NumPublishings;
 	   NumPub++)
 	{
-         /* Get next social publishing */
+         /* Get data of social publishing */
          row = mysql_fetch_row (mysql_res);
          Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
 
-         /* Get and write social note */
-         SocNot.NotCod = SocPub.NotCod;
-         Soc_GetDataOfSocialNoteByCod (&SocNot);
-         Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings - 1);
+	 /* Get data of social note */
+	 SocNot.NotCod = SocPub.NotCod;
+	 Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+	 /* Write social note */
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,NumPub == NumPublishings - 1);
         }
 
       /***** End list *****/
@@ -368,6 +370,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
+   bool IAmTheAuthor = false;
+   bool IAmAPublisherOfThisSocNot = false;
    struct Institution Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -377,187 +381,204 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
 
-   /***** Initialize location in hierarchy *****/
-   Ins.InsCod = -1L;
-   Ctr.CtrCod = -1L;
-   Deg.DegCod = -1L;
-   Crs.CrsCod = -1L;
-
-   /***** Get author data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-   UsrDat.UsrCod = SocNot->UsrCod;
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-
    /***** Start list item *****/
    fprintf (Gbl.F.Out,"<li");
    if (WritingTimeline && !LastInList)
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
    fprintf (Gbl.F.Out,">");
 
-   /***** Left: write author's photo *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-		                         NULL,
-		     "PHOTO60x80",Pho_ZOOM);
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Right: author's name, time, summary and buttons *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
-
-   /* Write author's full name and nickname */
-   Str_LimitLengthHTMLStr (UsrDat.FullName,20);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
-		      "<span class=\"DAT_N_BOLD\">%s</span>"
-		      "<span class=\"DAT_LIGHT\"> @%s</span>"
-		      "</div>",
-	    UsrDat.FullName,UsrDat.Nickname);
-
-   /* Write date and time */
-   Soc_WriteNoteDate (SocNot->DateTimeUTC);
-
-   /* Write content of the note */
-   if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
-     {
-      /* Write post content */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
-      Soc_GetAndWriteSocialPost (SocNot->Cod);
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   if (SocPub->PubCod <= 0 ||
+       SocPub->NotCod <= 0 ||
+       SocPub->PublisherCod <= 0 ||
+       SocPub->AuthorCod <= 0 ||
+       SocNot->NoteType == Soc_NOTE_UNKNOWN ||
+       SocNot->UsrCod <= 0)
+      Lay_ShowAlert (Lay_ERROR,"Error in social note.");
    else
      {
-      /* Get location in hierarchy */
-      if (!SocNot->Unavailable)
-	 switch (SocNot->NoteType)
-	   {
-	    case Soc_NOTE_INS_DOC_PUB_FILE:
-	    case Soc_NOTE_INS_SHA_PUB_FILE:
-	       /* Get institution data */
-	       Ins.InsCod = SocNot->HieCod;
-	       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-	       break;
-	    case Soc_NOTE_CTR_DOC_PUB_FILE:
-	    case Soc_NOTE_CTR_SHA_PUB_FILE:
-	       /* Get centre data */
-	       Ctr.CtrCod = SocNot->HieCod;
-	       Ctr_GetDataOfCentreByCod (&Ctr);
-	       break;
-	    case Soc_NOTE_DEG_DOC_PUB_FILE:
-	    case Soc_NOTE_DEG_SHA_PUB_FILE:
-	       /* Get degree data */
-	       Deg.DegCod = SocNot->HieCod;
-	       Deg_GetDataOfDegreeByCod (&Deg);
-	       break;
-	    case Soc_NOTE_CRS_DOC_PUB_FILE:
-	    case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	    case Soc_NOTE_NOTICE:
-	       /* Get course data */
-	       Crs.CrsCod = SocNot->HieCod;
-	       Crs_GetDataOfCourseByCod (&Crs);
-	       break;
-	    case Soc_NOTE_FORUM_POST:
-	       /* Get forum type of the post */
-	       Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
-	       For_SetForumName (Gbl.Forum.ForumType,
-				 &Ins,
-				 &Ctr,
-				 &Deg,
-				 &Crs,
-				 ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-	       Gbl.Forum.Ins.InsCod = Ins.InsCod;
-	       Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
-	       Gbl.Forum.Deg.DegCod = Deg.DegCod;
-	       Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
-	       break;
-	    default:
-	       break;
-	   }
+      /***** Initialize location in hierarchy *****/
+      Ins.InsCod = -1L;
+      Ctr.CtrCod = -1L;
+      Deg.DegCod = -1L;
+      Crs.CrsCod = -1L;
 
-      /* Write note type */
-      fprintf (Gbl.F.Out,"<div>");
-      Soc_PutFormGoToAction (SocNot);
+      /***** Get author data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+      UsrDat.UsrCod = SocNot->UsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      if (Gbl.Usrs.Me.Logged)
+	{
+	 IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,
+										Gbl.Usrs.Me.UsrDat.UsrCod);
+	}
+
+      /***** Left: write author's photo *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					    NULL,
+			"PHOTO60x80",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Write location in hierarchy */
-      if (!SocNot->Unavailable)
-	 switch (SocNot->NoteType)
+      /***** Right: author's name, time, summary and buttons *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+
+      /* Write author's full name and nickname */
+      Str_LimitLengthHTMLStr (UsrDat.FullName,20);
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+			 "<span class=\"DAT_N_BOLD\">%s</span>"
+			 "<span class=\"DAT_LIGHT\"> @%s</span>"
+			 "</div>",
+	       UsrDat.FullName,UsrDat.Nickname);
+
+      /* Write date and time */
+      Soc_WriteNoteDate (SocNot->DateTimeUTC);
+
+      /* Write content of the note */
+      if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
+	{
+	 /* Write post content */
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+	 Soc_GetAndWriteSocialPost (SocNot->Cod);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+      else
+	{
+	 /* Get location in hierarchy */
+	 if (!SocNot->Unavailable)
+	    switch (SocNot->NoteType)
+	      {
+	       case Soc_NOTE_INS_DOC_PUB_FILE:
+	       case Soc_NOTE_INS_SHA_PUB_FILE:
+		  /* Get institution data */
+		  Ins.InsCod = SocNot->HieCod;
+		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+		  break;
+	       case Soc_NOTE_CTR_DOC_PUB_FILE:
+	       case Soc_NOTE_CTR_SHA_PUB_FILE:
+		  /* Get centre data */
+		  Ctr.CtrCod = SocNot->HieCod;
+		  Ctr_GetDataOfCentreByCod (&Ctr);
+		  break;
+	       case Soc_NOTE_DEG_DOC_PUB_FILE:
+	       case Soc_NOTE_DEG_SHA_PUB_FILE:
+		  /* Get degree data */
+		  Deg.DegCod = SocNot->HieCod;
+		  Deg_GetDataOfDegreeByCod (&Deg);
+		  break;
+	       case Soc_NOTE_CRS_DOC_PUB_FILE:
+	       case Soc_NOTE_CRS_SHA_PUB_FILE:
+	       case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	       case Soc_NOTE_NOTICE:
+		  /* Get course data */
+		  Crs.CrsCod = SocNot->HieCod;
+		  Crs_GetDataOfCourseByCod (&Crs);
+		  break;
+	       case Soc_NOTE_FORUM_POST:
+		  /* Get forum type of the post */
+		  Gbl.Forum.ForumType = For_GetForumTypeOfAPost (SocNot->Cod);
+		  For_SetForumName (Gbl.Forum.ForumType,
+				    &Ins,
+				    &Ctr,
+				    &Deg,
+				    &Crs,
+				    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+		  Gbl.Forum.Ins.InsCod = Ins.InsCod;
+		  Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
+		  Gbl.Forum.Deg.DegCod = Deg.DegCod;
+		  Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
+		  break;
+	       default:
+		  break;
+	      }
+
+	 /* Write note type */
+	 fprintf (Gbl.F.Out,"<div>");
+	 Soc_PutFormGoToAction (SocNot);
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 /* Write location in hierarchy */
+	 if (!SocNot->Unavailable)
+	    switch (SocNot->NoteType)
+	      {
+	       case Soc_NOTE_INS_DOC_PUB_FILE:
+	       case Soc_NOTE_INS_SHA_PUB_FILE:
+		  /* Write location (institution) in hierarchy */
+		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			   Txt_Institution,Ins.ShortName);
+		  break;
+	       case Soc_NOTE_CTR_DOC_PUB_FILE:
+	       case Soc_NOTE_CTR_SHA_PUB_FILE:
+		  /* Write location (centre) in hierarchy */
+		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			   Txt_Centre,Ctr.ShortName);
+		  break;
+	       case Soc_NOTE_DEG_DOC_PUB_FILE:
+	       case Soc_NOTE_DEG_SHA_PUB_FILE:
+		  /* Write location (degree) in hierarchy */
+		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			   Txt_Degree,Deg.ShortName);
+		  break;
+	       case Soc_NOTE_CRS_DOC_PUB_FILE:
+	       case Soc_NOTE_CRS_SHA_PUB_FILE:
+	       case Soc_NOTE_EXAM_ANNOUNCEMENT:
+	       case Soc_NOTE_NOTICE:
+		  /* Write location (course) in hierarchy */
+		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			   Txt_Course,Crs.ShortName);
+		  break;
+	       case Soc_NOTE_FORUM_POST:
+		  /* Write forum name */
+		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+			   Txt_Forum,ForumName);
+		  break;
+	       default:
+		  break;
+	      }
+
+	 /* Write note summary */
+	 Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+	}
+
+      if (WritingTimeline)
+	{
+	 /* Put icons to share/unshare */
+	 if (IAmTheAuthor)			// I am the author
+	    Soc_PutDisabledIconShare ();
+	 else	if (IAmAPublisherOfThisSocNot)	// I am a publisher of this social note,
+					      // but not the author ==> I have shared this social note
+	    /* Put icon to unshare this publishing */
+	    Soc_PutFormToUnshareSocialPublishing (SocPub->PubCod);
+	 else					// I am not the author and I am not a publisher
 	   {
-	    case Soc_NOTE_INS_DOC_PUB_FILE:
-	    case Soc_NOTE_INS_SHA_PUB_FILE:
-	       /* Write location (institution) in hierarchy */
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			Txt_Institution,Ins.ShortName);
-	       break;
-	    case Soc_NOTE_CTR_DOC_PUB_FILE:
-	    case Soc_NOTE_CTR_SHA_PUB_FILE:
-	       /* Write location (centre) in hierarchy */
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			Txt_Centre,Ctr.ShortName);
-	       break;
-	    case Soc_NOTE_DEG_DOC_PUB_FILE:
-	    case Soc_NOTE_DEG_SHA_PUB_FILE:
-	       /* Write location (degree) in hierarchy */
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			Txt_Degree,Deg.ShortName);
-	       break;
-	    case Soc_NOTE_CRS_DOC_PUB_FILE:
-	    case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	    case Soc_NOTE_NOTICE:
-	       /* Write location (course) in hierarchy */
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			Txt_Course,Crs.ShortName);
-	       break;
-	    case Soc_NOTE_FORUM_POST:
-	       /* Write forum name */
-	       fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			Txt_Forum,ForumName);
-	       break;
-	    default:
-	       break;
+	    if (SocNot->Unavailable)		// Unavailable social notes can not be shared
+	       Soc_PutDisabledIconShare ();
+	    else
+	       /* Put icon to share this publishing */
+	       Soc_PutFormToShareSocialNote (SocPub->PubCod);
 	   }
 
-      /* Write note summary */
-      Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+	 /* Show who have shared this social note */
+	 Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+
+	 /* Put icon to remove */
+	 if (IAmTheAuthor &&
+	     IAmAPublisherOfThisSocNot)
+	    /* Put icon to remove this publishing */
+	    Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+	}
+
+      /* End of right part */
+      fprintf (Gbl.F.Out,"</div>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
      }
-
-   /* Put icons to share/unshare */
-   if (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod ||	// I am the author
-       SocNot->Unavailable)				// Unavailable social notes can not be shared
-      Soc_PutIconShared ();
-   else							// I am not the author && not unavailable
-     {
-      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod))
-	 // I have yet published this social note
-	 /* Put icon to unshare this publishing */
-	 Soc_PutFormToUnshareSocialPublishing (SocPub->PubCod);
-      else
-	 // I have not yet published this social note
-	 /* Put icon to share this publishing */
-	 Soc_PutFormToShareSocialNote (SocNot->NotCod);
-     }
-
-   /* Show who have shared this social note */
-   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
-
-   /* Put icon to remove */
-   if (WritingTimeline &&
-       Gbl.Usrs.Me.Logged &&
-       UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author
-      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,SocNot->UsrCod))
-         /* Put icon to remove this publishing */
-         Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
-
-   /* End of right part */
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** End list item *****/
    fprintf (Gbl.F.Out,"</li>");
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -678,20 +699,28 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 case Soc_NOTE_NOTICE:
+	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
 	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
+	 case Soc_NOTE_SOCIAL_POST:	// Not applicable
+	    return;
 	 case Soc_NOTE_FORUM_POST:
 	    Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
 	    For_PutAllHiddenParamsForum ();
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 default:	// Not applicable
+	 case Soc_NOTE_NOTICE:
+	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Not_PutHiddenParamNotCod (SocNot->Cod);
+	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
+	 default:			// Not applicable
+	    return;
 	}
 
       /***** Link and end form *****/
@@ -1100,14 +1129,14 @@ static void Soc_ReceiveSocialPost (void)
   }
 
 /*****************************************************************************/
-/************************* Put inactive icon shared **************************/
+/*********************** Put disabled icon to share **************************/
 /*****************************************************************************/
 
-static void Soc_PutIconShared (void)
+static void Soc_PutDisabledIconShare (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
 
-   /***** Inactive icon shared *****/
+   /***** Disabled icon to share *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_DISABLED\">"
 		      "<img src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1121,9 +1150,8 @@ static void Soc_PutIconShared (void)
 /*****************************************************************************/
 /************************* Form to share social note *************************/
 /*****************************************************************************/
-// Social notes can be shared, not social publishing
 
-static void Soc_PutFormToShareSocialNote (long NotCod)
+static void Soc_PutFormToShareSocialNote (long PubCod)
   {
    extern const char *Txt_Share;
 
@@ -1135,7 +1163,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
      }
    else
       Act_FormStart (ActShaSocNotGbl);
-   Soc_PutHiddenParamNotCod (NotCod);
+   Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
@@ -1207,32 +1235,6 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
   }
 
 /*****************************************************************************/
-/************** Put parameter with the code of a social note *****************/
-/*****************************************************************************/
-
-static void Soc_PutHiddenParamNotCod (long NotCod)
-  {
-   Par_PutHiddenParamLong ("NotCod",NotCod);
-  }
-
-/*****************************************************************************/
-/************** Get parameter with the code of a social note *****************/
-/*****************************************************************************/
-
-static long Soc_GetParamNotCod (void)
-  {
-   char LongStr[1+10+1];	// String that holds the social note code
-   long NotCod;
-
-   /* Get social note code */
-   Par_GetParToText ("NotCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&NotCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social note.");
-
-   return NotCod;
-  }
-
-/*****************************************************************************/
 /*********** Put parameter with the code of a social publishing **************/
 /*****************************************************************************/
 
@@ -1261,7 +1263,6 @@ static long Soc_GetParamPubCod (void)
 /*****************************************************************************/
 /**************************** Share a social note ****************************/
 /*****************************************************************************/
-// Social notes can be shared, not social publishing
 
 void Soc_ShareSocialNoteGbl (void)
   {
@@ -1301,10 +1302,14 @@ static void Soc_ShareSocialNote (void)
    bool ICanShare;
    bool IHavePublishedThisNote;
 
-   /***** Get the code of the social note to share *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
+   /***** Get the code of the social publishing to unshare *****/
+   SocPub.PubCod = Soc_GetParamPubCod ();
+
+   /***** Get data of social publishing *****/
+   Soc_GetDataOfSocialPublishingByCod (&SocPub);
 
    /***** Get data of social note *****/
+   SocNot.NotCod = SocPub.NotCod;
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanShare = (Gbl.Usrs.Me.Logged &&
@@ -1315,6 +1320,13 @@ static void Soc_ShareSocialNote (void)
       IHavePublishedThisNote = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       if (!IHavePublishedThisNote)
 	{
+         /***** Show the social note to be shared *****/
+	 Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 fprintf (Gbl.F.Out,"</ul>");
+	 Lay_EndRoundFrame ();
+
 	 /***** Share (publish social note in timeline) *****/
 	 SocPub.AuthorCod    = SocNot.UsrCod;
 	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1323,16 +1335,6 @@ static void Soc_ShareSocialNote (void)
 
          /***** Message of success *****/
          Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
-
-         /***** Update number of times this note is shared *****/
-         Soc_GetNumTimesANoteHasBeenShared (&SocNot);
-
-         /***** Show the social note just shared *****/
-	 Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
-	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
-	 fprintf (Gbl.F.Out,"</ul>");
-	 Lay_EndRoundFrame ();
 	}
      }
   }
@@ -1392,21 +1394,18 @@ static void Soc_UnshareSocialPublishing (void)
                   SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I have shared the note
    if (ICanUnshare)
      {
-      /***** Delete social publishing from database *****/
-      Soc_UnshareASocialPublishingFromDB (&SocNot);
-
-      /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
-
-      /***** Update number of times this note is shared *****/
-      Soc_GetNumTimesANoteHasBeenShared (&SocNot);
-
-      /***** Show the social note just unshared *****/
+      /***** Show the social note to be unshared *****/
       Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
       Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
       fprintf (Gbl.F.Out,"</ul>");
       Lay_EndRoundFrame ();
+
+      /***** Delete social publishing from database *****/
+      Soc_UnshareASocialPublishingFromDB (&SocNot);
+
+      /***** Message of success *****/
+      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
      }
   }
 
@@ -1414,7 +1413,7 @@ static void Soc_UnshareSocialPublishing (void)
 /**************** Unshare a social publishing from database ******************/
 /*****************************************************************************/
 
-static void Soc_UnshareASocialPublishingFromDB (const struct SocialNote *SocNot)
+static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
   {
    char Query[128];
 
@@ -1594,7 +1593,7 @@ static void Soc_RemoveSocialPublishing (void)
 /*****************************************************************************/
 
 static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
-                                               const struct SocialNote *SocNot)
+                                               struct SocialNote *SocNot)
   {
    char Query[128];
 
@@ -1619,7 +1618,7 @@ static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *So
 /**** Check if deletion is possible and delete a social note from database ***/
 /*****************************************************************************/
 
-static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot)
+static void Soc_CheckAndDeleteASocialNoteFromDB (struct SocialNote *SocNot)
   {
    char Query[128];
    unsigned long NumPubs;
@@ -1633,13 +1632,24 @@ static void Soc_CheckAndDeleteASocialNoteFromDB (const struct SocialNote *SocNot
 	       SocNot->NotCod);
       DB_QueryDELETE (Query,"can not remove a social note");
 
-      /***** Remove social post *****/
       if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
 	{
+         /***** Remove social post *****/
 	 sprintf (Query,"DELETE FROM social_posts WHERE PstCod='%ld'",
 		  SocNot->Cod);
 	 DB_QueryDELETE (Query,"can not remove a social post");
 	}
+
+      /***** Repair timeline removing the publishing that not point to any note.
+             This may be due to concurrency errors *****/
+      // TODO: Check if this query is too slow for big tables. If so, make it from time to time
+      sprintf (Query,"DELETE LOW_PRIORITY FROM social_timeline"
+	             " WHERE NotCod NOT IN"
+	             " (SELECT NotCod FROM social_notes)");
+      DB_QueryDELETE (Query,"can not repair timeline");
+
+      /***** Reset social note *****/
+      Soc_ResetSocialNote (SocNot);
      }
   }
 
@@ -1785,13 +1795,8 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
       Soc_GetDataOfSocialPublishingFromRow (row,SocPub);
      }
    else
-     {
       /***** Reset fields of social publishing *****/
-      SocPub->NotCod       = -1L;
-      SocPub->PublisherCod = -1L;
-      SocPub->AuthorCod    = -1L;
-      SocPub->DateTimeUTC  = (time_t) 0;
-     }
+      Soc_ResetSocialPublishing (SocPub);
   }
 
 /*****************************************************************************/
@@ -1819,16 +1824,8 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
       Soc_GetNumTimesANoteHasBeenShared (SocNot);
      }
    else
-     {
       /***** Reset fields of social note *****/
-      SocNot->NoteType    = Soc_NOTE_UNKNOWN;
-      SocNot->UsrCod      = -1L;
-      SocNot->HieCod      = -1L;
-      SocNot->Cod         = -1L;
-      SocNot->Unavailable = false;
-      SocNot->DateTimeUTC = (time_t) 0;
-      SocNot->NumShared   = 0;
-     }
+      Soc_ResetSocialNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -1872,4 +1869,31 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
          return (Soc_NoteType_t) UnsignedNum;
 
    return Soc_NOTE_UNKNOWN;
+  }
+
+/*****************************************************************************/
+/******************** Reset fields of social publishing **********************/
+/*****************************************************************************/
+
+static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub)
+  {
+   SocPub->NotCod       = -1L;
+   SocPub->PublisherCod = -1L;
+   SocPub->AuthorCod    = -1L;
+   SocPub->DateTimeUTC  = (time_t) 0;
+  }
+
+/*****************************************************************************/
+/*********************** Reset fields of social note *************************/
+/*****************************************************************************/
+
+static void Soc_ResetSocialNote (struct SocialNote *SocNot)
+  {
+   SocNot->NoteType    = Soc_NOTE_UNKNOWN;
+   SocNot->UsrCod      = -1L;
+   SocNot->HieCod      = -1L;
+   SocNot->Cod         = -1L;
+   SocNot->Unavailable = false;
+   SocNot->DateTimeUTC = (time_t) 0;
+   SocNot->NumShared   = 0;
   }

@@ -118,13 +118,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.97.5 (2016-01-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.98 (2016-01-05)"
 #define CSS_FILE		"swad15.97.css"
 #define JS_FILE			"swad15.77.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.98:    Jan 05, 2016	If a social note is unavailable and is shared, put button to unshare.
+					Several bugs in social timeline fixed. (190789 lines)
         Version 15.97.5:  Jan 04, 2016	Button to remove a social note is not shown if author already removed the note (but it yet exists because another user shared it). (190763 lines)
         Version 15.97.4:  Jan 04, 2016	Guests can see and write in global forums. (190758 lines)
         Version 15.97.3:  Jan 04, 2016	Link to user's privacy in my public profile. (190755 lines)
