@@ -166,10 +166,8 @@ static void Soc_RequestRemovalSocialPublishing (void);
 static void Soc_RemoveSocialPublishing (void);
 static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
                                                struct SocialNote *SocNot);
-static void Soc_CheckAndDeleteASocialNoteFromDB (struct SocialNote *SocNot);
 
 static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
-static unsigned long Soc_GetNumPubsOfANote (long NotCod);
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub);
@@ -1415,7 +1413,6 @@ static void Soc_UnshareSocialPublishing (void)
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool ICanUnshare;
-   unsigned NumRemainingPubs;
 
    /***** Get the code of the social publishing to unshare *****/
    SocPub.PubCod = Soc_GetParamPubCod ();
@@ -1428,28 +1425,22 @@ static void Soc_UnshareSocialPublishing (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanUnshare = (Gbl.Usrs.Me.Logged &&
-                  SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I have shared the note
+	          SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have shared the note
+                  SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I am not the author
    if (ICanUnshare)
      {
       /***** Delete social publishing from database *****/
       Soc_UnshareASocialPublishingFromDB (&SocNot);
 
-      /***** Count number of remaining publishings *****/
-      NumRemainingPubs = Soc_GetNumPubsOfANote (SocNot.NotCod);
+      /***** Update number of times this social note is shared *****/
+      Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
 
-      /***** Show the social note corresponding to the publishing
-             just unshared if it yet exists *****/
-      if (NumRemainingPubs)
-        {
-	 /* Update number of times this social note is shared */
-         Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
-
-         /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
-        }
+      /***** Show the social note corresponding
+             to the publishing just unshared *****/
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
      }
   }
 
@@ -1470,10 +1461,6 @@ static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryDELETE (Query,"can not remove a social publishing");
-
-   /***** Check if this was the unique publishing of this note.
-          If so, remove the note *****/
-   Soc_CheckAndDeleteASocialNoteFromDB (SocNot);
   }
 
 /*****************************************************************************/
@@ -1529,7 +1516,9 @@ static void Soc_RequestRemovalSocialPublishing (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 SocPub.AuthorCod    == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);
    if (ICanRemove)
      {
       if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
@@ -1595,12 +1584,10 @@ void Soc_RemoveSocialPubUsr (void)
 
 static void Soc_RemoveSocialPublishing (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Removed_but_shared_by_others;
    extern const char *Txt_SOCIAL_PUBLISHING_Removed;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool ICanRemove;
-   unsigned NumRemainingPubs;
 
    /***** Get the code of the social publishing to remove *****/
    SocPub.PubCod = Soc_GetParamPubCod ();
@@ -1613,35 +1600,21 @@ static void Soc_RemoveSocialPublishing (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 SocPub.AuthorCod    == Gbl.Usrs.Me.UsrDat.UsrCod &&
+                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);
    if (ICanRemove)
      {
       /***** Delete social publishing from database *****/
       Soc_RemoveASocialPublishingFromDB (&SocPub,&SocNot);
 
-      /***** Count number of remaining publishings *****/
-      NumRemainingPubs = Soc_GetNumPubsOfANote (SocNot.NotCod);
-
       /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,
-                     NumRemainingPubs ? Txt_SOCIAL_PUBLISHING_Removed_but_shared_by_others :
-	                                Txt_SOCIAL_PUBLISHING_Removed);
-
-      /***** Show the social note corresponding to the publishing
-             just removed if it yet exists *****/
-      if (NumRemainingPubs)
-        {
-	 /* Update number of times this social note is shared */
-         Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
-
-         /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
-        }
+      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
      }
   }
 
 /*****************************************************************************/
-/**************** Delete a social publishing from database *******************/
+/**************** Remove a social publishing from database *******************/
 /*****************************************************************************/
 
 static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
@@ -1649,60 +1622,33 @@ static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *So
   {
    char Query[128];
 
-   /***** Remove social publishing *****/
+   /***** Remove all the social publishings of this note *****/
    sprintf (Query,"DELETE FROM social_timeline"
-	          " WHERE PubCod='%ld'"
-                  " AND NotCod='%ld'"		// Extra check: this is the note
-	          " AND PublisherCod='%ld'"	// Extra check: I have published this note
+	          " WHERE NotCod='%ld'"
 	          " AND AuthorCod='%ld'",	// Extra check: I am the author
-	    SocPub->PubCod,
 	    SocNot->NotCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryDELETE (Query,"can not remove a social publishing");
 
-   /***** Check if this was the unique publishing of this note.
-          If so, remove the note *****/
-   Soc_CheckAndDeleteASocialNoteFromDB (SocNot);
-  }
+   /***** Remove social note *****/
+   sprintf (Query,"DELETE FROM social_notes"
+	          " WHERE NotCod='%ld'"
+	          " AND UsrCod='%ld'",		// Extra check: I am the author
+	    SocNot->NotCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryDELETE (Query,"can not remove a social note");
 
-/*****************************************************************************/
-/**** Check if deletion is possible and delete a social note from database ***/
-/*****************************************************************************/
-
-static void Soc_CheckAndDeleteASocialNoteFromDB (struct SocialNote *SocNot)
-  {
-   char Query[128];
-   unsigned long NumPubs;
-
-   /***** Count number of times this note is published *****/
-   NumPubs = Soc_GetNumPubsOfANote (SocNot->NotCod);
-   if (NumPubs == 0)	// There are no publishings of this note
+   if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
      {
-      /***** Remove social note *****/
-      sprintf (Query,"DELETE FROM social_notes WHERE NotCod='%ld'",
-	       SocNot->NotCod);
-      DB_QueryDELETE (Query,"can not remove a social note");
-
-      if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
-	{
-         /***** Remove social post *****/
-	 sprintf (Query,"DELETE FROM social_posts WHERE PstCod='%ld'",
-		  SocNot->Cod);
-	 DB_QueryDELETE (Query,"can not remove a social post");
-	}
-
-      /***** Repair timeline removing the publishing that not point to any note.
-             This may be due to concurrency errors *****/
-      // TODO: Check if this query is too slow for big tables. If so, make it from time to time
-      sprintf (Query,"DELETE LOW_PRIORITY FROM social_timeline"
-	             " WHERE NotCod NOT IN"
-	             " (SELECT NotCod FROM social_notes)");
-      DB_QueryDELETE (Query,"can not repair timeline");
-
-      /***** Reset social note *****/
-      Soc_ResetSocialNote (SocNot);
+      /***** Remove social post *****/
+      sprintf (Query,"DELETE FROM social_posts"
+	             " WHERE PstCod='%ld'",
+	       SocNot->Cod);
+      DB_QueryDELETE (Query,"can not remove a social post");
      }
+
+   /***** Reset social note *****/
+   Soc_ResetSocialNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -1717,20 +1663,6 @@ static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
 	          " WHERE NotCod='%ld' AND PublisherCod='%ld'",
 	    NotCod,UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user has published a social note") != 0);
-  }
-
-/*****************************************************************************/
-/*********** Get number of publishings in timeline of a note code ************/
-/*****************************************************************************/
-
-static unsigned long Soc_GetNumPubsOfANote (long NotCod)
-  {
-   char Query[128];
-
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
-	          " WHERE NotCod='%ld'",
-	    NotCod);
-   return DB_QueryCOUNT (Query,"can not get number of publishing of a note");
   }
 
 /*****************************************************************************/

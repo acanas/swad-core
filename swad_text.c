@@ -35594,27 +35594,6 @@ const char *Txt_SOCIAL_PUBLISHING_Removed =
 	"Removido.";
 #endif
 
-const char *Txt_SOCIAL_PUBLISHING_Removed_but_shared_by_others =
-#if   L==1
-	"Eliminat per&ograve; encara compartit per altres.";
-#elif L==2
-	"Entfernt, sondern von anderen geteilt.";
-#elif L==3
-	"Removed but shared by others.";
-#elif L==4
-	"Eliminado pero a&uacute;n compartido por otros.";
-#elif L==5
-	"Supprim&eacute;, mais partag&eacute; par d'autres.";
-#elif L==6
-	"Eliminado pero a&uacute;n compartido por otros.";	// Okoteve traducción
-#elif L==7
-	"Rimosso ma condiviso da altri.";
-#elif L==8
-	"Usuniete ale podzielaj&aogon; inni.";
-#elif L==9
-	"Removido mas compartilhado por outros.";
-#endif
-
 const char *Txt_SOCIAL_PUBLISHING_Shared =
 #if   L==1
 	"Compartit.";
