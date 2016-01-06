@@ -95,6 +95,9 @@ void Soc_FormSocialPostUsr (void);
 void Soc_ReceiveSocialPostGbl (void);
 void Soc_ReceiveSocialPostUsr (void);
 
+void Soc_CommentSocialNoteGbl (void);
+void Soc_CommentSocialNoteUsr (void);
+
 void Soc_ShareSocialNoteGbl (void);
 void Soc_ShareSocialNoteUsr (void);
 void Soc_UnshareSocialPubGbl (void);
@@ -102,7 +105,7 @@ void Soc_UnshareSocialPubUsr (void);
 
 void Soc_RequestRemSocialPubGbl (void);
 void Soc_RequestRemSocialPubUsr (void);
-void Soc_RemoveSocialPubGbl (void);
-void Soc_RemoveSocialPubUsr (void);
+void Soc_RemoveSocialNotGbl (void);
+void Soc_RemoveSocialNotUsr (void);
 
 #endif

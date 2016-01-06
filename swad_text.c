@@ -4603,6 +4603,27 @@ const char *Txt_columns =
 	"colunas";
 #endif
 
+const char *Txt_Comment =	// As a verb
+#if   L==1
+	"Comentar";
+#elif L==2
+	"Kommentieren";
+#elif L==3
+	"Comment";
+#elif L==4
+	"Comentar";
+#elif L==5
+	"Commenter";
+#elif L==6
+	"Comentar";	// Okoteve traducción
+#elif L==7
+	"Commentare";
+#elif L==8
+	"Komentowa&cacute;";
+#elif L==9
+	"Comentar";
+#endif
+
 const char *Txt_Comments =
 #if   L==1
 	"Comentaris";

@@ -149,6 +149,7 @@ static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) (
 static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
+static void Soc_PutFormToCommentSocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
@@ -158,14 +159,14 @@ static void Soc_PutHiddenParamPubCod (long PubCod);
 static long Soc_GetParamNotCod (void);
 static long Soc_GetParamPubCod (void);
 
+static void Soc_CommentSocialNote (void);
 static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 
 static void Soc_RequestRemovalSocialPublishing (void);
-static void Soc_RemoveSocialPublishing (void);
-static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
-                                               struct SocialNote *SocNot);
+static void Soc_RemoveSocialNote (void);
+static void Soc_RemoveASocialPublishingFromDB (struct SocialNote *SocNot);
 
 static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
@@ -547,6 +548,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
+
+      /* Put icon to comment */
+      Soc_PutFormToCommentSocialNote (SocNot->NotCod);
 
       /* Put icons to share/unshare */
       if (IAmTheAuthor)			// I am the author
@@ -1138,6 +1142,35 @@ static void Soc_ReceiveSocialPost (void)
   }
 
 /*****************************************************************************/
+/******************* Form to comment a social publishing *********************/
+/*****************************************************************************/
+
+static void Soc_PutFormToCommentSocialNote (long NotCod)
+  {
+   extern const char *Txt_Comment;
+
+   /***** Form to comment a social note *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartAnchor (ActComSocNotUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActComSocNotGbl);
+   Soc_PutHiddenParamNotCod (NotCod);
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_COMMENT ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/write64x64.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Comment,
+	    Txt_Comment);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /*********************** Put disabled icon to share **************************/
 /*****************************************************************************/
 
@@ -1152,7 +1185,7 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
       strcpy (Gbl.Title,Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone);
 
    /***** Disabled icon to share *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_DISABLED\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_DISABLED\">"
 		      "<img src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />"
@@ -1178,7 +1211,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
    else
       Act_FormStart (ActShaSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1207,7 +1240,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
    else
       Act_FormStart (ActUnsSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/shared64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1235,7 +1268,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
    else
       Act_FormStart (ActReqRemSocPubGbl);
    Soc_PutHiddenParamPubCod (PubCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_RIGHT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -1297,6 +1330,45 @@ static long Soc_GetParamPubCod (void)
       Lay_ShowErrorAndExit ("Wrong code of social publishing.");
 
    return PubCod;
+  }
+
+/*****************************************************************************/
+/*************************** Comment a social note ***************************/
+/*****************************************************************************/
+
+void Soc_CommentSocialNoteGbl (void)
+  {
+   /***** Comment social note *****/
+   Soc_CommentSocialNote ();
+
+   /***** Write updated timeline after commenting (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_CommentSocialNoteUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+   /***** Comment social note *****/
+   Soc_CommentSocialNote ();
+
+   /***** Write updated timeline after commenting (user) *****/
+   Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
+  }
+
+static void Soc_CommentSocialNote (void)
+  {
+   Lay_ShowAlert (Lay_WARNING,"Not implemented.");
   }
 
 /*****************************************************************************/
@@ -1549,31 +1621,31 @@ static void Soc_RequestRemovalSocialPublishing (void)
   }
 
 /*****************************************************************************/
-/************************ Remove a social publishing *************************/
+/*************************** Remove a social note ****************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialPubGbl (void)
+void Soc_RemoveSocialNotGbl (void)
   {
-   /***** Remove a social publishing *****/
-   Soc_RemoveSocialPublishing ();
+   /***** Remove a social note *****/
+   Soc_RemoveSocialNote ();
 
    /***** Write updated timeline after removing (global) *****/
    Soc_ShowTimelineGbl ();
   }
 
-void Soc_RemoveSocialPubUsr (void)
+void Soc_RemoveSocialNotUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /*****  Show user's profile *****/
+   /***** Show user's profile *****/
    Prf_ShowUserProfile ();
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Remove a social publishing *****/
-   Soc_RemoveSocialPublishing ();
+   /***** Remove a social note *****/
+   Soc_RemoveSocialNote ();
 
    /***** Write updated timeline after removing (user) *****/
    Soc_ShowTimelineUsr ();
@@ -1582,7 +1654,7 @@ void Soc_RemoveSocialPubUsr (void)
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_RemoveSocialPublishing (void)
+static void Soc_RemoveSocialNote (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Removed;
    struct SocialPublishing SocPub;
@@ -1606,7 +1678,7 @@ static void Soc_RemoveSocialPublishing (void)
    if (ICanRemove)
      {
       /***** Delete social publishing from database *****/
-      Soc_RemoveASocialPublishingFromDB (&SocPub,&SocNot);
+      Soc_RemoveASocialPublishingFromDB (&SocNot);
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
@@ -1617,8 +1689,7 @@ static void Soc_RemoveSocialPublishing (void)
 /**************** Remove a social publishing from database *******************/
 /*****************************************************************************/
 
-static void Soc_RemoveASocialPublishingFromDB (const struct SocialPublishing *SocPub,
-                                               struct SocialNote *SocNot)
+static void Soc_RemoveASocialPublishingFromDB (struct SocialNote *SocNot)
   {
    char Query[128];
 
