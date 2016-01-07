@@ -150,6 +150,8 @@ static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutFormToCommentSocialNote (long NotCod);
+static void Soc_WriteCommentsInSocialNote (long NotCod);
+static void Soc_WriteCommentDate (time_t TimeUTC);
 static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
@@ -1193,7 +1195,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
    /***** Get comments of this social note from database *****/
    sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
-	          "UNIX_TIMESTAMP(social_comments.TimePublish),"
+	          "UNIX_TIMESTAMP(social_comments.TimeComment),"
 	          "social_comments_content.Content"
 		  " FROM social_comments,social_comments_content"
 		  " WHERE social_comments.NotCod='%ld'"
@@ -1224,42 +1226,40 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
 	 /* Get (from) user code (row[1]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 if (Gbl.Usrs.Me.Logged)
+	    IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
 	 /* Get time of the note (row[2]) */
 	 DateTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
 	 /* Get content (row[3]) */
-	 strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	 strncpy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
 	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
 	 fprintf (Gbl.F.Out,"<li>");
 
-	 /***** Get author data *****/
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-	 if (Gbl.Usrs.Me.Logged)
-	    IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
 	 /***** Left: write author's photo *****/
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
 	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					       NULL,
-			   "PHOTO60x80",Pho_ZOOM);
+			   "PHOTO45x60",Pho_ZOOM);
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /***** Right: author's name, time, summary and buttons *****/
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
 	 /* Write author's full name and nickname */
-	 Str_LimitLengthHTMLStr (UsrDat.FullName,20);
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
-			    "<span class=\"DAT_N_BOLD\">%s</span>"
+	 Str_LimitLengthHTMLStr (UsrDat.FullName,12);
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
+			    "<span class=\"DAT_BOLD\">%s</span>"
 			    "<span class=\"DAT_LIGHT\"> @%s</span>"
 			    "</div>",
 		  UsrDat.FullName,UsrDat.Nickname);
 
 	 /* Write date and time */
-	 Soc_WriteNoteDate (DateTimeUTC);
+	 Soc_WriteCommentDate (DateTimeUTC);
 
          /* Write content of the comment */
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">");
@@ -1278,6 +1278,33 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********* Write the date of creation of a comment to a social note **********/
+/*****************************************************************************/
+// TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
+
+static void Soc_WriteCommentDate (time_t TimeUTC)
+  {
+   extern const char *Txt_Today;
+   static unsigned UniqueId = 0;
+
+   UniqueId++;
+
+   /***** Start cell *****/
+   fprintf (Gbl.F.Out,"<div id=\"date_comment_%u\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
+	              " style=\"display:inline-block;\">",
+            UniqueId);
+
+   /***** Write date and time *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                      "writeLocalDateTimeFromUTC('date_comment_%u',%ld,'&nbsp;','%s');"
+                      "</script>",
+            UniqueId,(long) TimeUTC,Txt_Today);
+
+   /***** End cell *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

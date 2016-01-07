@@ -124,13 +124,14 @@ En definitiva, se estará pintando simplemente una copia arriba de lo que hay más
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.101.1 (2016-01-07)"
-#define CSS_FILE		"swad15.100.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.101.2 (2016-01-07)"
+#define CSS_FILE		"swad15.101.2.css"
 #define JS_FILE			"swad15.100.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.101.2: Jan 07, 2016	Show social comments in social notes. (191229 lines)
         Version 15.101.1: Jan 07, 2016	Show social comments in social notes. Not finished. (191181 lines)
         Version 15.101:   Jan 07, 2016	Store social comment in database. (191091 lines)
 					16 changes necessary in database:

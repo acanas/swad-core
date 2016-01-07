@@ -1743,6 +1743,31 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	padding-top:10px;
 	}
+.SOCIAL_COMMENT_PHOTO
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	width:50px;
+	height:80px;
+	padding:10px 0;
+	text-align:left;
+	vertical-align:top;
+	}
+.SOCIAL_COMMENT_RIGHT_CONTAINER
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	width:410px;
+	padding:10px 0;
+	}
+.SOCIAL_COMMENT_RIGHT_AUTHOR
+	{
+        display:inline-block;
+	box-sizing:border-box;
+        width:230px;
+	text-align:left;
+	vertical-align:top;
+        }
 
 /*********************************** Messages ********************************/
 .MSG_TO_ONE_RCP
