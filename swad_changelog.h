@@ -124,13 +124,32 @@ En definitiva, se estará pintando simplemente una copia arriba de lo que hay más
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.100.4 (2016-01-07)"
+#define Log_PLATFORM_VERSION	"SWAD 15.101 (2016-01-07)"
 #define CSS_FILE		"swad15.100.2.css"
 #define JS_FILE			"swad15.100.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.101:   Jan 07, 2016	Store social comment in database. (191091 lines)
+					16 changes necessary in database:
+CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,NotCod INT NOT NULL,TimeComment DATETIME NOT NULL,UNIQUE INDEX(ComCod),INDEX(UsrCod),INDEX(NotCod,TimeComment),INDEX(TimeComment));
+CREATE TABLE IF NOT EXISTS social_comments_content (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;
+UPDATE actions SET Txt='Redactar public. social (global)'            WHERE ActCod='1491' AND Language='es';
+UPDATE actions SET Txt='Crear public. social (global)'               WHERE ActCod='1492' AND Language='es';
+UPDATE actions SET Txt='Eliminar public. social (global)'            WHERE ActCod='1493' AND Language='es';
+UPDATE actions SET Txt='Solicitar elim. public. social (global)'     WHERE ActCod='1494' AND Language='es';
+UPDATE actions SET Txt='Compartir public. social (global)'           WHERE ActCod='1495' AND Language='es';
+UPDATE actions SET Txt='Dejar de compartir public. social (global)'  WHERE ActCod='1496' AND Language='es';
+UPDATE actions SET Txt='Redactar public. social (usuario)'           WHERE ActCod='1497' AND Language='es';
+UPDATE actions SET Txt='Crear public. social (usuario)'              WHERE ActCod='1498' AND Language='es';
+UPDATE actions SET Txt='Compartir public. social (usuario)'          WHERE ActCod='1499' AND Language='es';
+UPDATE actions SET Txt='Dejar de compartir public. social (usuario)' WHERE ActCod='1500' AND Language='es';
+UPDATE actions SET Txt='Solicitar elim. public. social (usuario)'    WHERE ActCod='1501' AND Language='es';
+UPDATE actions SET Txt='Eliminar public. social (usuario)'           WHERE ActCod='1502' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1503','es','N','Crear comentario social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1504','es','N','Crear comentario social (usuario)');
+
         Version 15.100.4: Jan 07, 2016	Fixed bug when sharing a social note.
 					Receive social comment. (191012 lines)
         Version 15.100.3: Jan 07, 2016	Fixed bug when sharing and unsharing a social note. (190999 lines)

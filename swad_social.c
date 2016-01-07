@@ -1408,10 +1408,10 @@ void Soc_ReceiveCommentUsr (void)
 static void Soc_ReceiveComment (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-   // char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    struct SocialNote SocNot;
    char ParamName[32];
-   // long ComCod;
+   long ComCod;
 
    /***** Get and store new comment *****/
    /* Get the code of the social note */
@@ -1422,13 +1422,17 @@ static void Soc_ReceiveComment (void)
    Par_GetParAndChangeFormat (ParamName,Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
-   /* Insert post content in the database */
-   /*
-   sprintf (Query,"INSERT INTO social_comments (SocNot,UsrCod,Content,TimeComment)"
-	          " VALUES ('%ld','%s',NOW())",
-            SocNot.NotCod,Content);
+   /* Insert comment in the database */
+   sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
+	          " VALUES ('%ld','%ld',NOW())",
+            SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
-   */
+
+   /* Insert comment content in the database */
+   sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
+	          " VALUES ('%ld','%s')",
+            ComCod,Content);
+   DB_QueryINSERT (Query,"can not store comment content");
 
    Lay_ShowAlert (Lay_INFO,Content);
   }

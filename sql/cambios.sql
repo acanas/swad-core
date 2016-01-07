@@ -11213,6 +11213,10 @@ UPDATE social_notes SET HieCod=CrsCod WHERE NoteType IN ('7','8','9','12');
 ALTER TABLE social_notes DROP COLUMN CtyCod,DROP COLUMN InsCod,DROP COLUMN CtrCod,DROP COLUMN CrsCod;
 
 
-
-
 CREATE TABLE IF NOT EXISTS social_timeline_new (PubCod BIGINT NOT NULL AUTO_INCREMENT, NotCod BIGINT NOT NULL, PublisherCod INT NOT NULL, AuthorCod INT NOT NULL, TimePublish DATETIME NOT NULL, UNIQUE INDEX(PubCod), UNIQUE INDEX(NotCod,PublisherCod), INDEX(PublisherCod), INDEX(AuthorCod), INDEX(TimePublish)) SELECT PubCod,NotCod,PublisherCod,AuthorCod,TimePublish FROM social_timeline ORDER BY PubCod;
+
+----- SWAD 15.100.5 (2016/01/07) -----
+
+CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,NotCod INT NOT NULL,TimeComment DATETIME NOT NULL,UNIQUE INDEX(ComCod),INDEX(UsrCod),INDEX(NotCod,TimeComment),INDEX(TimeComment));
+
+CREATE TABLE IF NOT EXISTS social_comments_content (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;

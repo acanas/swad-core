@@ -913,7 +913,27 @@ CREATE TABLE IF NOT EXISTS sessions (
 	UNIQUE INDEX(SessionId),
 	INDEX(UsrCod));
 --
--- Table social: stores social notes
+-- Table social_comments: stores the comments to social notes
+--
+CREATE TABLE IF NOT EXISTS social_comments (
+	ComCod BIGINT NOT NULL AUTO_INCREMENT,
+	UsrCod INT NOT NULL,
+	NotCod INT NOT NULL,
+	TimeComment DATETIME NOT NULL,
+	UNIQUE INDEX(ComCod),
+	INDEX(UsrCod),
+	INDEX(NotCod,TimeComment),
+	INDEX(TimeComment));
+--
+-- Table social_notes: stores the content of comments to social notes
+--
+CREATE TABLE IF NOT EXISTS social_comments_content (
+	ComCod BIGINT NOT NULL,
+	Content LONGTEXT NOT NULL,
+	UNIQUE INDEX(ComCod),
+	FULLTEXT(Content)) ENGINE = MYISAM;
+--
+-- Table social_notes: stores social notes
 --
 CREATE TABLE IF NOT EXISTS social_notes (
 	NotCod BIGINT NOT NULL AUTO_INCREMENT,
