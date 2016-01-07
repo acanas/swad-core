@@ -1676,7 +1676,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:70px;
+	width:56px;
 	height:100px;
 	padding:10px 0;
 	text-align:left;
@@ -1686,14 +1686,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:460px;
+	width:480px;
 	padding:10px 0;
 	}
 .SOCIAL_RIGHT_AUTHOR
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:280px;
+        width:310px;
 	text-align:left;
 	vertical-align:top;
         }
@@ -1701,7 +1701,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:180px;
+        width:170px;
 	text-align:right;
 	vertical-align:top;
         }
@@ -1747,8 +1747,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:50px;
-	height:80px;
+	width:40px;
+	height:60px;
 	padding:10px 0;
 	text-align:left;
 	vertical-align:top;
@@ -1757,14 +1757,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:410px;
+	width:440px;
 	padding:10px 0;
 	}
 .SOCIAL_COMMENT_RIGHT_AUTHOR
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:230px;
+        width:270px;
 	text-align:left;
 	vertical-align:top;
         }

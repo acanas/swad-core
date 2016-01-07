@@ -428,14 +428,14 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
-			"PHOTO60x80",Pho_ZOOM);
+			"PHOTO45x60",Pho_ZOOM);
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,20);
+      Str_LimitLengthHTMLStr (UsrDat.FullName,16);
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 			 "<span class=\"DAT_N_BOLD\">%s</span>"
 			 "<span class=\"DAT_LIGHT\"> @%s</span>"
@@ -1244,7 +1244,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					       NULL,
-			   "PHOTO45x60",Pho_ZOOM);
+			   "PHOTO30x40",Pho_ZOOM);
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /***** Right: author's name, time, summary and buttons *****/
@@ -1571,8 +1571,6 @@ static void Soc_ReceiveComment (void)
 	          " VALUES ('%ld','%s')",
             ComCod,Content);
    DB_QueryINSERT (Query,"can not store comment content");
-
-   Lay_ShowAlert (Lay_INFO,Content);
   }
 
 /*****************************************************************************/
