@@ -578,6 +578,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 /* Put icon to remove this publishing */
 	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
 
+      /* Show current comments */
+      Soc_WriteCommentsInSocialNote (SocNot->NotCod);
+
       /* Put hidden form to write comment */
       Soc_PutHiddenFormToSendCommentToASocialNote (SocNot->NotCod);
 
@@ -1167,6 +1170,114 @@ static void Soc_PutFormToCommentSocialNote (long NotCod)
 	    Txt_Comment,
 	    Txt_Comment,
 	    NotCod);
+  }
+
+/*****************************************************************************/
+/******************* Form to comment a social publishing *********************/
+/*****************************************************************************/
+
+static void Soc_WriteCommentsInSocialNote (long NotCod)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumComments;
+   unsigned long NumCom;
+   long ComCod;
+   struct UsrData UsrDat;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
+   bool IAmTheAuthor;
+   time_t DateTimeUTC;
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get comments of this social note from database *****/
+   sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
+	          "UNIX_TIMESTAMP(social_comments.TimePublish),"
+	          "social_comments_content.Content"
+		  " FROM social_comments,social_comments_content"
+		  " WHERE social_comments.NotCod='%ld'"
+		  " AND social_comments.ComCod=social_comments_content.ComCod"
+		  " ORDER BY social_comments.ComCod",
+            NotCod);
+   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+
+   /***** List comments *****/
+   if (NumComments)	// Comments to this social note found
+     {
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Start list *****/
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+
+      /***** List comments one by one *****/
+      for (NumCom = 0;
+	   NumCom < NumComments;
+	   NumCom++)
+	{
+         /* Get data of social comment */
+         row = mysql_fetch_row (mysql_res);
+
+	 /* Get social code (row[0]) */
+	 ComCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get (from) user code (row[1]) */
+	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+
+	 /* Get time of the note (row[2]) */
+	 DateTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+
+	 /* Get content (row[3]) */
+	 strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
+	 fprintf (Gbl.F.Out,"<li>");
+
+	 /***** Get author data *****/
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 if (Gbl.Usrs.Me.Logged)
+	    IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	 /***** Left: write author's photo *****/
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					       NULL,
+			   "PHOTO60x80",Pho_ZOOM);
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 /***** Right: author's name, time, summary and buttons *****/
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+
+	 /* Write author's full name and nickname */
+	 Str_LimitLengthHTMLStr (UsrDat.FullName,20);
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+			    "<span class=\"DAT_N_BOLD\">%s</span>"
+			    "<span class=\"DAT_LIGHT\"> @%s</span>"
+			    "</div>",
+		  UsrDat.FullName,UsrDat.Nickname);
+
+	 /* Write date and time */
+	 Soc_WriteNoteDate (DateTimeUTC);
+
+         /* Write content of the comment */
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+         Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 fprintf (Gbl.F.Out,"</div>");
+
+         fprintf (Gbl.F.Out,"</li>");
+        }
+
+      /***** End list *****/
+      fprintf (Gbl.F.Out,"</ul>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
