@@ -2327,7 +2327,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqSocPstGbl	*/{1491,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostGbl		,NULL},
    /* ActRcvSocPstGbl	*/{1492,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostGbl	,NULL},
-   /* ActComSocNotUsr	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_CommentSocialNoteGbl	,NULL},
+   /* ActComSocNotUsr	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentGbl	,NULL},
    /* ActShaSocNotGbl	*/{1495,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteGbl		,NULL},
    /* ActUnsSocPubGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubGbl	,NULL},
    /* ActReqRemSocPubGbl*/{1494,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialPubGbl	,NULL},
@@ -2335,7 +2335,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqSocPstUsr	*/{1497,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostUsr		,NULL},
    /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActComSocNotUsr	*/{1504,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_CommentSocialNoteUsr	,NULL},
+   /* ActComSocNotUsr	*/{1504,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr	,NULL},
    /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
    /* ActUnsSocPubUsr	*/{1500,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubUsr	,NULL},
    /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialPubUsr	,NULL},

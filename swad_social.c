@@ -160,7 +160,7 @@ static void Soc_PutHiddenParamPubCod (long PubCod);
 static long Soc_GetParamNotCod (void);
 static long Soc_GetParamPubCod (void);
 
-static void Soc_CommentSocialNote (void);
+static void Soc_ReceiveComment (void);
 static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
@@ -1153,15 +1153,7 @@ static void Soc_PutFormToCommentSocialNote (long NotCod)
   {
    extern const char *Txt_Comment;
 
-   /***** Form to comment a social note *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartAnchor (ActComSocNotUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStart (ActComSocNotGbl);
-   Soc_PutHiddenParamNotCod (NotCod);
+   /***** Link to show/hide comment form in a social note *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_COMMENT ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/write64x64.gif\""
@@ -1175,7 +1167,6 @@ static void Soc_PutFormToCommentSocialNote (long NotCod)
 	    Txt_Comment,
 	    Txt_Comment,
 	    NotCod);
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1200,6 +1191,7 @@ static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod)
      }
    else
       Act_FormStart (ActComSocNotGbl);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"44\" rows=\"5\">"
 		      "</textarea>",
 	    NotCod);
@@ -1383,16 +1375,16 @@ static long Soc_GetParamPubCod (void)
 /*************************** Comment a social note ***************************/
 /*****************************************************************************/
 
-void Soc_CommentSocialNoteGbl (void)
+void Soc_ReceiveCommentGbl (void)
   {
-   /***** Comment social note *****/
-   Soc_CommentSocialNote ();
+   /***** Receive comment in a social note *****/
+   Soc_ReceiveComment ();
 
    /***** Write updated timeline after commenting (global) *****/
    Soc_ShowTimelineGbl ();
   }
 
-void Soc_CommentSocialNoteUsr (void)
+void Soc_ReceiveCommentUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -1403,8 +1395,8 @@ void Soc_CommentSocialNoteUsr (void)
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Comment social note *****/
-   Soc_CommentSocialNote ();
+   /***** Receive comment in a social note *****/
+   Soc_ReceiveComment ();
 
    /***** Write updated timeline after commenting (user) *****/
    Soc_ShowTimelineUsr ();
@@ -1413,9 +1405,32 @@ void Soc_CommentSocialNoteUsr (void)
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_CommentSocialNote (void)
+static void Soc_ReceiveComment (void)
   {
-   Lay_ShowAlert (Lay_WARNING,"Not implemented.");
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   // char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   struct SocialNote SocNot;
+   char ParamName[32];
+   // long ComCod;
+
+   /***** Get and store new comment *****/
+   /* Get the code of the social note */
+   SocNot.NotCod = Soc_GetParamNotCod ();
+
+   /* Get the content of the comment */
+   sprintf (ParamName,"Comment%ld",SocNot.NotCod);
+   Par_GetParAndChangeFormat (ParamName,Content,Cns_MAX_BYTES_LONG_TEXT,
+                              Str_TO_RIGOROUS_HTML,true);
+
+   /* Insert post content in the database */
+   /*
+   sprintf (Query,"INSERT INTO social_comments (SocNot,UsrCod,Content,TimeComment)"
+	          " VALUES ('%ld','%s',NOW())",
+            SocNot.NotCod,Content);
+   ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
+   */
+
+   Lay_ShowAlert (Lay_INFO,Content);
   }
 
 /*****************************************************************************/
@@ -1461,8 +1476,8 @@ static void Soc_ShareSocialNote (void)
    bool IAmAPublisherOfThisSocNot;
    bool ICanShare;
 
-   /***** Get the code of the social publishing to unshare *****/
-   SocPub.NotCod = Soc_GetParamNotCod ();
+   /***** Get the code of the social note to share *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
 
    /***** Get data of social note *****/
    Soc_GetDataOfSocialNoteByCod (&SocNot);
