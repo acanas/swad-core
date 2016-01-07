@@ -1739,6 +1739,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-left:4px;
 	vertical-align:bottom;
 	}
+.SOCIAL_FORM_COMMENT
+	{
+	padding-top:10px;
+	}
 
 /*********************************** Messages ********************************/
 .MSG_TO_ONE_RCP

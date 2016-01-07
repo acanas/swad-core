@@ -463,6 +463,13 @@ function noZoom() {
 	document.getElementById('zoomLyr').style.top = yPos + 'px';
 }
 
+// Change display of a element (hidden or visible)
+function toggleDisplay(elementID) {
+	(function(style) {
+		style.display = style.display === 'none' ? '' : 'none';
+	})(document.getElementById(elementID).style);
+}
+
 // Select or unselect a radio element in a form
 function selectUnselectRadio (radio,groupRadios,numRadiosInGroup){
 	if (radio.IsChecked) radio.checked = false;

@@ -150,6 +150,7 @@ static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutFormToCommentSocialNote (long NotCod);
+static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
@@ -576,6 +577,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	  IAmAPublisherOfThisSocNot)
 	 /* Put icon to remove this publishing */
 	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+
+      /* Put hidden form to write comment */
+      Soc_PutHiddenFormToSendCommentToASocialNote (SocNot->NotCod);
 
       /* End of right part */
       fprintf (Gbl.F.Out,"</div>");
@@ -1162,12 +1166,55 @@ static void Soc_PutFormToCommentSocialNote (long NotCod)
 		      "<input type=\"image\""
 		      " src=\"%s/write64x64.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />"
+		      " class=\"ICON20x20\""
+		      " onclick=\""
+		      "toggleDisplay('div_comment_%ld');"
+		      "return false;\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Comment,
-	    Txt_Comment);
+	    Txt_Comment,
+	    NotCod);
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/******************* Form to comment a social publishing *********************/
+/*****************************************************************************/
+
+static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod)
+  {
+   extern const char *Txt_Send_comment;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"div_comment_%ld\""
+		      " class=\"SOCIAL_FORM_COMMENT\""
+		      " style=\"display:none;\">",
+	    NotCod);
+
+   /***** Start form to write the post *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartAnchor (ActComSocNotUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActComSocNotGbl);
+   fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"44\" rows=\"5\">"
+		      "</textarea>",
+	    NotCod);
+
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
+		      "%s"
+		      "</button>",
+	    Txt_Send_comment);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** En container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1410,8 +1457,9 @@ static void Soc_ShareSocialNote (void)
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
+   bool IAmTheAuthor;
+   bool IAmAPublisherOfThisSocNot;
    bool ICanShare;
-   bool IHavePublishedThisNote;
 
    /***** Get the code of the social publishing to unshare *****/
    SocPub.NotCod = Soc_GetParamNotCod ();
@@ -1419,29 +1467,31 @@ static void Soc_ShareSocialNote (void)
    /***** Get data of social note *****/
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
+   IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (IAmTheAuthor)
+      IAmAPublisherOfThisSocNot = true;
+   else
+      IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
+									     Gbl.Usrs.Me.UsrDat.UsrCod);
    ICanShare = (Gbl.Usrs.Me.Logged &&
-                SocNot.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I am not the author
+                !IAmTheAuthor &&		// I am not the author
+	        !IAmAPublisherOfThisSocNot);	// I have not shared the note
    if (ICanShare)
      {
-      /***** Check if I have yet shared this social note *****/
-      IHavePublishedThisNote = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (!IHavePublishedThisNote)
-	{
-	 /***** Share (publish social note in timeline) *****/
-	 SocPub.AuthorCod    = SocNot.UsrCod;
-	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 SocPub.NotCod       = SocNot.NotCod;
-	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+      /***** Share (publish social note in timeline) *****/
+      SocPub.AuthorCod    = SocNot.UsrCod;
+      SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      SocPub.NotCod       = SocNot.NotCod;
+      Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
-	 /* Update number of times this social note is shared */
-         Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+      /* Update number of times this social note is shared */
+      Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
-         /***** Message of success *****/
-         Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
+      /***** Message of success *****/
+      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
-         /***** Show the social note just shared *****/
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
-	}
+      /***** Show the social note just shared *****/
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
      }
   }
 
@@ -1484,6 +1534,8 @@ static void Soc_UnshareSocialPublishing (void)
    extern const char *Txt_SOCIAL_PUBLISHING_Unshared;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
+   bool IAmTheAuthor;
+   bool IAmAPublisherOfThisSocNot;
    bool ICanUnshare;
 
    /***** Get the code of the social publishing to unshare *****/
@@ -1496,9 +1548,15 @@ static void Soc_UnshareSocialPublishing (void)
    SocNot.NotCod = SocPub.NotCod;
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
+   IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (IAmTheAuthor)
+      IAmAPublisherOfThisSocNot = true;
+   else
+      IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
+									     Gbl.Usrs.Me.UsrDat.UsrCod);
    ICanUnshare = (Gbl.Usrs.Me.Logged &&
-	          SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have shared the note
-                  SocPub.AuthorCod != Gbl.Usrs.Me.UsrDat.UsrCod);	// I am not the author
+                  !IAmTheAuthor &&		// I am not the author
+	          IAmAPublisherOfThisSocNot);	// I have shared the note
    if (ICanUnshare)
      {
       /***** Delete social publishing from database *****/

@@ -124,13 +124,15 @@ En definitiva, se estará pintando simplemente una copia arriba de lo que hay más
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.100.1 (2016-01-07)"
-#define CSS_FILE		"swad15.97.css"
-#define JS_FILE			"swad15.77.7.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.100.3 (2016-01-07)"
+#define CSS_FILE		"swad15.100.2.css"
+#define JS_FILE			"swad15.100.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.100.3: Jan 07, 2016	Fixed bug when sharing and unsharing a social note. (190999 lines)
+        Version 15.100.2: Jan 07, 2016	Hidden form to reply a social note. (190983 lines)
         Version 15.100.1: Jan 07, 2016	New icon in social note to reply. (190937 lines)
         Version 15.100:   Jan 06, 2016	When an author removes a social note, all the publishings of this note are removed. (190842 lines)
         Version 15.99.1:  Jan 05, 2016	Change in message in social timeline. (190917 lines)
