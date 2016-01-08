@@ -1002,7 +1002,6 @@ Social:
 	837. ActSeeFor			Show the level superior of the forums
 	838. ActSeeChtRms		Show the chat rooms
 
-	839. ActReqSocPstGbl		Write a public social post to be displayed in the timeline (global)
 	840. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
 NEW!!!!!!!!. ActRcvSocComGbl		Comment a social note in the timeline (global)
 NEW!!!!!!!!. ActShaSocNotGbl		Share a social publishing in the timeline (global)
@@ -1012,7 +1011,6 @@ NEW!!!!!!!!. ActUnsSocPubGbl		Unshare a previously shared social publishing in t
 NEW!!!!!!!!. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
 NEW!!!!!!!!. ActRemSocComGbl		Remove of a comment in a social note (global)
 
-NEW!!!!!!!!. ActReqSocPstUsr		Write a public social post to be displayed in the timeline (user)
 NEW!!!!!!!!. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
 NEW!!!!!!!!. ActRcvSocComUsr		Comment a social note in the timeline (user)
 NEW!!!!!!!!. ActShaSocNotUsr		Share a social note in the timeline (user)
@@ -2329,23 +2327,21 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
-   /* ActReqSocPstGbl	*/{1491,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostGbl		,NULL},
    /* ActRcvSocPstGbl	*/{1492,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostGbl	,NULL},
    /* ActRcvSocComUsr	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentGbl		,NULL},
    /* ActShaSocNotGbl	*/{1495,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteGbl		,NULL},
    /* ActUnsSocPubGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubGbl	,NULL},
    /* ActReqRemSocPubGbl*/{1494,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteGbl	,NULL},
-   /* ActRemSocPubGbl	*/{1493,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteGbl		,NULL},
+   /* ActRemSocPubGbl	*/{1493,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteGbl	,NULL},
    /* ActReqRemSocComGbl*/{1505,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComGbl	,NULL},
    /* ActRemSocComGbl	*/{1507,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComGbl		,NULL},
 
-   /* ActReqSocPstUsr	*/{1497,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FormSocialPostUsr		,NULL},
    /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
    /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
    /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
    /* ActUnsSocPubUsr	*/{1500,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialPubUsr	,NULL},
    /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
-   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr		,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
    /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
    /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
 
@@ -4186,13 +4182,13 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActAskRemOldBrf,	// #1488
 	ActRemOldBrf,		// #1489
 	ActSeeSocTmlGbl,	// #1490
-	ActReqSocPstGbl,	// #1491
+	-1,			// #1491 (obsolete action)
 	ActRcvSocPstGbl,	// #1492
 	ActRemSocPubGbl,	// #1493
 	ActReqRemSocPubGbl,	// #1494
 	ActShaSocNotGbl,	// #1495
 	ActUnsSocPubGbl,	// #1496
-	ActReqSocPstUsr,	// #1497
+	-1,			// #1497 (obsolete action)
 	ActRcvSocPstUsr,	// #1498
 	ActShaSocNotUsr,	// #1499
 	ActUnsSocPubUsr,	// #1500

@@ -192,17 +192,16 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
-static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) ());
-static void Soc_FormSocialPost (void);
+static void Soc_PutHiddenFormToWriteNewPost (void);
 static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutIconToToggleCommentSocialNote (long NotCod,bool PutText);
+static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (long NotCod);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowAlone);
 static void Soc_PutFormToRemoveComment (long ComCod);
-static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
@@ -254,11 +253,6 @@ void Soc_ShowTimelineUsr (void)
    extern const char *Txt_Public_activity_OF_A_USER;
    char Query[512];
 
-   /***** Link to write a new social post (public comment) *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// It's me
-       Gbl.CurrentAct != ActReqSocPstUsr)		// Not writing a new post
-      Soc_PutLinkToWriteANewPost (ActReqSocPstUsr,Usr_PutParamOtherUsrCodEncrypted);
-
    /***** Build query to show timeline with publishing of a unique user *****/
    sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
@@ -281,10 +275,6 @@ void Soc_ShowTimelineGbl (void)
    extern const char *Txt_Public_activity;
    extern const char *Txt_You_dont_follow_any_user;
    char Query[512];
-
-   /***** Link to write a new social post (public comment) *****/
-   if (Gbl.CurrentAct != ActReqSocPstGbl)	// Not writing a new post
-      Soc_PutLinkToWriteANewPost (ActReqSocPstGbl,NULL);
 
    /***** Show warning if I do not follow anyone *****/
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
@@ -367,6 +357,11 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 
       /***** Start list *****/
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+
+      /***** Form to write a new post *****/
+      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
+	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+         Soc_PutHiddenFormToWriteNewPost ();
 
       /***** List publishings in timeline one by one *****/
       for (NumPub = 0;
@@ -626,8 +621,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
          /* Show current comments */
          Soc_WriteCommentsInSocialNote (SocNot->NotCod);
 
-      /* Put hidden form to write comment */
-      Soc_PutHiddenFormToSendCommentToASocialNote (SocNot->NotCod);
+      /* Put hidden form to write a new comment */
+      Soc_PutHiddenFormToWriteNewCommentToSocialNote (SocNot->NotCod);
 
       /* End of right part */
       fprintf (Gbl.F.Out,"</div>");
@@ -1067,63 +1062,42 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
   }
 
 /*****************************************************************************/
-/***************** Put contextual link to write a new post *******************/
+/****************** Form to write a new social publishing ********************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) ())
+static void Soc_PutHiddenFormToWriteNewPost (void)
   {
-   extern const char *Txt_New_comment;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLinkAnchor (Action,"timeline",
-                                FuncParams,
-                                "write64x64.gif",
-			        Txt_New_comment,Txt_New_comment);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/****************** Form to write a new public comment ***********************/
-/*****************************************************************************/
-
-void Soc_FormSocialPostGbl (void)
-  {
-   /***** Form to write a new public comment *****/
-   Soc_FormSocialPost ();
-
-   /***** Write current timeline (global) *****/
-   Soc_ShowTimelineGbl ();
-  }
-
-void Soc_FormSocialPostUsr (void)
-  {
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /*****  Show user's profile *****/
-   Prf_ShowUserProfile ();
-
-   /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
-
-   /***** Form to write a new public comment *****/
-   Soc_FormSocialPost ();
-
-   /***** Write current timeline (user) *****/
-   Soc_ShowTimelineUsr ();
-
-   /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
-  }
-
-static void Soc_FormSocialPost (void)
-  {
-   extern const char *Txt_New_comment;
    extern const char *Txt_Send_comment;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX+1];
+   char FullName[(Usr_MAX_BYTES_NAME+1)*3];
 
-   /***** Form to write a new public comment *****/
-   /* Start frame */
-   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Txt_New_comment);
+   /***** Start list item *****/
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">");
+
+   /***** Left: write author's photo *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
+						     NULL,
+		     "PHOTO45x60",Pho_ZOOM);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Right: author's name, time, summary and buttons *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+
+   /* Write author's full name and nickname */
+   strcpy (FullName,Gbl.Usrs.Me.UsrDat.FullName);
+   Str_LimitLengthHTMLStr (FullName,16);
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+		      "<span class=\"DAT_N_BOLD\">%s</span>"
+		      "<span class=\"DAT_LIGHT\"> @%s</span>"
+		      "</div>",
+	    FullName,Gbl.Usrs.Me.UsrDat.Nickname);
+
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_COMMENT\">");
 
    /* Start form to write the post */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1135,18 +1109,24 @@ static void Soc_FormSocialPost (void)
       Act_FormStart (ActRcvSocPstGbl);
 
    /* Content of new post */
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"50\" rows=\"5\">"
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"45\" rows=\"3\">"
 		      "</textarea>");
    Lay_HelpPlainEditor ();
 
-   /* Send button */
-   Lay_PutCreateButton (Txt_Send_comment);
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
+		      "%s"
+		      "</button>",
+	    Txt_Send_comment);
 
-   /* End form */
+   /***** End form *****/
    Act_FormEnd ();
 
-   /* End frame */
-   Lay_EndRoundFrame ();
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End list item *****/
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
@@ -1229,6 +1209,46 @@ static void Soc_PutIconToToggleCommentSocialNote (long NotCod,bool PutText)
       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Comment);
    fprintf (Gbl.F.Out,"</a>"
 		      "</div>");
+  }
+
+/*****************************************************************************/
+/******************* Form to comment a social publishing *********************/
+/*****************************************************************************/
+
+static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod)
+  {
+   extern const char *Txt_Send_comment;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"div_comment_%ld\""
+		      " class=\"SOCIAL_FORM_COMMENT\""
+		      " style=\"display:none;\">",
+	    NotCod);
+
+   /***** Start form to write the post *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartAnchor (ActRcvSocComUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActRcvSocComGbl);
+   Soc_PutHiddenParamNotCod (NotCod);
+   fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"45\" rows=\"3\">"
+		      "</textarea>",
+	    NotCod);
+
+   /***** Send button *****/
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
+		      "%s"
+		      "</button>",
+	    Txt_Send_comment);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -1420,46 +1440,6 @@ static void Soc_PutFormToRemoveComment (long ComCod)
 	    Txt_Remove,
 	    Txt_Remove);
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/******************* Form to comment a social publishing *********************/
-/*****************************************************************************/
-
-static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod)
-  {
-   extern const char *Txt_Send_comment;
-
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"div_comment_%ld\""
-		      " class=\"SOCIAL_FORM_COMMENT\""
-		      " style=\"display:none;\">",
-	    NotCod);
-
-   /***** Start form to write the post *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartAnchor (ActRcvSocComUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStart (ActRcvSocComGbl);
-   Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"47\" rows=\"5\">"
-		      "</textarea>",
-	    NotCod);
-
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
-		      "%s"
-		      "</button>",
-	    Txt_Send_comment);
-
-   /***** End form *****/
-   Act_FormEnd ();
-
-   /***** En container *****/
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

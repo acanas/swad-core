@@ -90,8 +90,6 @@ void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType
 void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path);
 void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void Soc_FormSocialPostGbl (void);
-void Soc_FormSocialPostUsr (void);
 void Soc_ReceiveSocialPostGbl (void);
 void Soc_ReceiveSocialPostUsr (void);
 
