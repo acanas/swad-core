@@ -248,46 +248,43 @@ void Soc_ShowTimelineGbl (void)
    if (Gbl.CurrentAct != ActReqSocPstGbl)	// Not writing a new post
       Soc_PutLinkToWriteANewPost (ActReqSocPstGbl,NULL);
 
-   /***** If I follow someone... *****/
-   if (Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
-     {
-      /***** Create temporary table with publishing codes *****/
-      sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
-      if (mysql_query (&Gbl.mysql,Query))
-	 DB_ExitOnMySQLError ("can not remove temporary tables");
-
-      sprintf (Query,"CREATE TEMPORARY TABLE pub_cods (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
-		     " SELECT MIN(PubCod) AS PubCod"
-		     " FROM social_timeline"
-		     " WHERE PublisherCod IN"
-		     " (SELECT '%ld'"
-		     " UNION"
-		     " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-		     " GROUP BY NotCod"
-		     " ORDER BY PubCod DESC LIMIT %u",
-	       Gbl.Usrs.Me.UsrDat.UsrCod,
-	       Gbl.Usrs.Me.UsrDat.UsrCod,
-	       Soc_NUM_PUBS_IN_TIMELINE);
-      if (mysql_query (&Gbl.mysql,Query))
-	 DB_ExitOnMySQLError ("can not create temporary table");
-
-      /***** Build query to show timeline including the users I am following *****/
-      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
-		     " FROM social_timeline WHERE PubCod IN "
-		     "(SELECT PubCod FROM pub_cods)"
-		     " ORDER BY PubCod DESC");
-
-      /***** Show timeline *****/
-      Soc_ShowTimeline (Query,ActSeeSocTmlGbl,Txt_Public_activity);
-
-      /***** Drop temporary table with publishing codes *****/
-      sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
-      if (mysql_query (&Gbl.mysql,Query))
-	 DB_ExitOnMySQLError ("can not remove temporary tables");
-     }
-   else	// I do not follow anyone
-      /***** Show warning if I do not follow anyone *****/
+   /***** Show warning if I do not follow anyone *****/
+   if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_ShowAlert (Lay_INFO,Txt_You_dont_follow_any_user);
+
+   /***** Create temporary table with publishing codes *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   sprintf (Query,"CREATE TEMPORARY TABLE pub_cods (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
+		  " SELECT MIN(PubCod) AS PubCod"
+		  " FROM social_timeline"
+		  " WHERE PublisherCod IN"
+		  " (SELECT '%ld'"
+		  " UNION"
+		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+		  " GROUP BY NotCod"
+		  " ORDER BY PubCod DESC LIMIT %u",
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Soc_NUM_PUBS_IN_TIMELINE);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Build query to show timeline including the users I am following *****/
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+		  " FROM social_timeline WHERE PubCod IN "
+		  "(SELECT PubCod FROM pub_cods)"
+		  " ORDER BY PubCod DESC");
+
+   /***** Show timeline *****/
+   Soc_ShowTimeline (Query,ActSeeSocTmlGbl,Txt_Public_activity);
+
+   /***** Drop temporary table with publishing codes *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
   }
 
 /*****************************************************************************/
