@@ -147,8 +147,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
                                  bool LastInList);
-static void Soc_WriteSocialComment (struct SocialComment *SocCom,
-                                    bool ShowAlone);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -161,7 +159,10 @@ static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutFormToCommentSocialNote (long NotCod);
+static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (long NotCod);
+static void Soc_WriteSocialComment (struct SocialComment *SocCom,
+                                    bool ShowAlone);
 static void Soc_PutFormToRemoveComment (long ComCod);
 static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
@@ -387,6 +388,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    char PhotoURL[PATH_MAX+1];
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
+   unsigned NumComments;
 
    if (ShowAlone)
      {
@@ -555,8 +557,12 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
 
-      /* Put icon to comment */
-      Soc_PutFormToCommentSocialNote (SocNot->NotCod);
+      /* Get number of comments in this social note */
+      NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
+
+      /* Put icon to add a comment */
+      if (!NumComments)
+         Soc_PutFormToCommentSocialNote (SocNot->NotCod);
 
       /* Put icons to share/unshare */
       if (IAmTheAuthor)			// I am the author
@@ -581,8 +587,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       if (IAmTheAuthor && !ShowAlone)
 	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
 
-      /* Show current comments */
-      Soc_WriteCommentsInSocialNote (SocNot->NotCod);
+      if (NumComments)
+         /* Show current comments */
+         Soc_WriteCommentsInSocialNote (SocNot->NotCod);
 
       /* Put hidden form to write comment */
       Soc_PutHiddenFormToSendCommentToASocialNote (SocNot->NotCod);
@@ -600,97 +607,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    if (ShowAlone)
      {
       fprintf (Gbl.F.Out,"</ul>");
-      Lay_EndRoundFrame ();
-     }
-  }
-
-/*****************************************************************************/
-/**************************** Write social comment ***************************/
-/*****************************************************************************/
-
-static void Soc_WriteSocialComment (struct SocialComment *SocCom,
-                                    bool ShowAlone)	// Social comment is shown alone, not in a list
-  {
-   extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Institution;
-   struct UsrData UsrDat;
-   bool IAmTheAuthor;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
-
-   if (ShowAlone)
-     {
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">"
-                         "</div>"
-                         "<div class=\"SOCIAL_RIGHT_CONTAINER\">"
-                         "<ul class=\"LIST_LEFT\">");
-     }
-
-   /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li");
-   if (!ShowAlone)
-      fprintf (Gbl.F.Out," class=\"SOCIAL_COMMENT\"");
-   fprintf (Gbl.F.Out,">");
-
-   if (SocCom->ComCod <= 0 ||
-       SocCom->NotCod <= 0 ||
-       SocCom->UsrCod <= 0)
-      Lay_ShowAlert (Lay_ERROR,"Error in social comment.");
-   else
-     {
-      /***** Get author's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-      UsrDat.UsrCod = SocCom->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
-	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-      /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					    NULL,
-			"PHOTO30x40",Pho_ZOOM);
-      fprintf (Gbl.F.Out,"</div>");
-
-      /***** Right: author's name, time, summary and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
-
-      /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,12);
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
-			 "<span class=\"DAT_BOLD\">%s</span>"
-			 "<span class=\"DAT_LIGHT\"> @%s</span>"
-			 "</div>",
-	       UsrDat.FullName,UsrDat.Nickname);
-
-      /* Write date and time */
-      Soc_WriteDateTime (SocCom->DateTimeUTC);
-
-      /* Write content of the social comment */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
-      Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-      fprintf (Gbl.F.Out,"</div>");
-
-      /* Put icon to remove this social comment */
-      if (IAmTheAuthor && !ShowAlone)
-	 Soc_PutFormToRemoveComment (SocCom->ComCod);
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-
-   /***** End list item *****/
-   fprintf (Gbl.F.Out,"</li>");
-
-   if (ShowAlone)
-     {
-      fprintf (Gbl.F.Out,"</ul>"
-                         "</div>");
       Lay_EndRoundFrame ();
      }
   }
@@ -1267,6 +1183,20 @@ static void Soc_PutFormToCommentSocialNote (long NotCod)
   }
 
 /*****************************************************************************/
+/****************** Get number of comments in a social note ******************/
+/*****************************************************************************/
+
+static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM social_comments"
+	          " WHERE NotCod='%ld'",
+	    NotCod);
+   return DB_QueryCOUNT (Query,"can not get number of comments in a social note");
+  }
+
+/*****************************************************************************/
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
 
@@ -1308,7 +1238,12 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
          /* Write social comment */
          Soc_WriteSocialComment (&SocCom,false);
-        }
+	}
+
+      /* Put icon to add a comment */
+      fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
+      Soc_PutFormToCommentSocialNote (NotCod);
+      fprintf (Gbl.F.Out,"</li>");
 
       /***** End list *****/
       fprintf (Gbl.F.Out,"</ul>");
@@ -1316,6 +1251,97 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/**************************** Write social comment ***************************/
+/*****************************************************************************/
+
+static void Soc_WriteSocialComment (struct SocialComment *SocCom,
+                                    bool ShowAlone)	// Social comment is shown alone, not in a lis
+  {
+   extern const char *Txt_Forum;
+   extern const char *Txt_Course;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Institution;
+   struct UsrData UsrDat;
+   bool IAmTheAuthor;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX+1];
+
+   if (ShowAlone)
+     {
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">"
+                         "</div>"
+                         "<div class=\"SOCIAL_RIGHT_CONTAINER\">"
+                         "<ul class=\"LIST_LEFT\">");
+     }
+
+   /***** Start list item *****/
+   fprintf (Gbl.F.Out,"<li");
+   if (!ShowAlone)
+      fprintf (Gbl.F.Out," class=\"SOCIAL_COMMENT\"");
+   fprintf (Gbl.F.Out,">");
+
+   if (SocCom->ComCod <= 0 ||
+       SocCom->NotCod <= 0 ||
+       SocCom->UsrCod <= 0)
+      Lay_ShowAlert (Lay_ERROR,"Error in social comment.");
+   else
+     {
+      /***** Get author's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+      UsrDat.UsrCod = SocCom->UsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
+	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+      /***** Left: write author's photo *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					    NULL,
+			"PHOTO30x40",Pho_ZOOM);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /***** Right: author's name, time, summary and buttons *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
+
+      /* Write author's full name and nickname */
+      Str_LimitLengthHTMLStr (UsrDat.FullName,12);
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
+			 "<span class=\"DAT_BOLD\">%s</span>"
+			 "<span class=\"DAT_LIGHT\"> @%s</span>"
+			 "</div>",
+	       UsrDat.FullName,UsrDat.Nickname);
+
+      /* Write date and time */
+      Soc_WriteDateTime (SocCom->DateTimeUTC);
+
+      /* Write content of the social comment */
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /* Put icon to remove this social comment */
+      if (IAmTheAuthor && !ShowAlone)
+	 Soc_PutFormToRemoveComment (SocCom->ComCod);
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** End list item *****/
+   fprintf (Gbl.F.Out,"</li>");
+
+   if (ShowAlone)
+     {
+      fprintf (Gbl.F.Out,"</ul>"
+                         "</div>");
+      Lay_EndRoundFrame ();
+     }
   }
 
 /*****************************************************************************/
@@ -1375,7 +1401,7 @@ static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod)
 	    NotCod);
 
    /***** Send button *****/
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 		      "%s"
 		      "</button>",
 	    Txt_Send_comment);
