@@ -113,4 +113,6 @@ void Soc_RequestRemSocialComUsr (void);
 void Soc_RemoveSocialComGbl (void);
 void Soc_RemoveSocialComUsr (void);
 
+void Soc_RemoveUsrSocialContent (long UsrCod);
+
 #endif

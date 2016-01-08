@@ -2206,6 +2206,66 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
+/******************* Remove a social note from database **********************/
+/*****************************************************************************/
+
+void Soc_RemoveUsrSocialContent (long UsrCod)
+  {
+   char Query[512];
+
+   /***** Remove social comments *****/
+   /* Remove content of all the comments in all the social notes of the user */
+   sprintf (Query,"DELETE FROM social_comments_content"
+	          " USING social_comments,social_comments_content"
+	          " WHERE social_comments.NotCod IN"
+		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
+	          " AND social_comments.ComCod=social_comments_content.ComCod",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /* Remove all the comments in all the social notes of the user */
+   sprintf (Query,"DELETE FROM social_comments"
+	          " WHERE NotCod IN"
+		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /* Remove content of all the comments of the user in any social note */
+   sprintf (Query,"DELETE FROM social_comments_content"
+	          " USING social_comments,social_comments_content"
+	          " WHERE social_comments.UsrCod='%ld'"
+	          " AND social_comments.ComCod=social_comments_content.ComCod",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /* Remove all the comments of the user in any social note */
+   sprintf (Query,"DELETE FROM social_comments"
+	          " WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /***** Remove all the social posts of the user *****/
+   sprintf (Query,"DELETE FROM social_posts"
+		  " WHERE PstCod IN"
+		  " (SELECT Cod FROM social_notes"
+	          " WHERE UsrCod='%ld' AND NoteType='%u')",
+	    UsrCod,(unsigned) Soc_NOTE_SOCIAL_POST);
+   DB_QueryDELETE (Query,"can not remove social posts");
+
+   /***** Remove all the social publishings of the user *****/
+   sprintf (Query,"DELETE FROM social_timeline"
+	          " WHERE AuthorCod='%ld' OR PublisherCod='%ld'",
+	    UsrCod,UsrCod);
+   DB_QueryDELETE (Query,"can not remove social publishings");
+
+   /***** Remove all the social notes of the user *****/
+   sprintf (Query,"DELETE FROM social_notes"
+	          " WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social notes");
+  }
+
+/*****************************************************************************/
 /**************** Check if a user has published a social note ****************/
 /*****************************************************************************/
 

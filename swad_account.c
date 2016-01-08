@@ -38,6 +38,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_social.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -783,6 +784,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    sprintf (Query,"DELETE FROM sessions WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove sessions of a user");
+
+   /***** Remove social content associated to the user *****/
+   Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
 
    /***** Remove user's figures *****/
    Prf_RemoveUsrFigures (UsrDat->UsrCod);
