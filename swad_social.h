@@ -103,9 +103,14 @@ void Soc_ShareSocialNoteUsr (void);
 void Soc_UnshareSocialPubGbl (void);
 void Soc_UnshareSocialPubUsr (void);
 
-void Soc_RequestRemSocialPubGbl (void);
-void Soc_RequestRemSocialPubUsr (void);
-void Soc_RemoveSocialNotGbl (void);
-void Soc_RemoveSocialNotUsr (void);
+void Soc_RequestRemSocialNoteGbl (void);
+void Soc_RequestRemSocialNoteUsr (void);
+void Soc_RemoveSocialNoteGbl (void);
+void Soc_RemoveSocialNoteUsr (void);
+
+void Soc_RequestRemSocialComGbl (void);
+void Soc_RequestRemSocialComUsr (void);
+void Soc_RemoveSocialComGbl (void);
+void Soc_RemoveSocialComUsr (void);
 
 #endif

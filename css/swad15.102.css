@@ -1739,6 +1739,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-left:4px;
 	vertical-align:bottom;
 	}
+.SOCIAL_COMMENTS
+	{
+	padding-top:10px;
+	}
+.SOCIAL_COMMENT
+	{
+	border-top:1px solid silver;
+	}
 .SOCIAL_FORM_COMMENT
 	{
 	padding-top:10px;

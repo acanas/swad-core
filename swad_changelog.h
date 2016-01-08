@@ -124,13 +124,20 @@ En definitiva, se estará pintando simplemente una copia arriba de lo que hay más
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.101.3 (2016-01-07)"
-#define CSS_FILE		"swad15.101.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.102 (2016-01-08)"
+#define CSS_FILE		"swad15.102.css"
 #define JS_FILE			"swad15.100.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.102:   Jan 08, 2016	Remove a comment in social timeline. (191534 lines)
+					4 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1505','es','N','Solicitar elim. coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1506','es','N','Solicitar elim. coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1507','es','N','Eliminar coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1508','es','N','Eliminar coment. social (usuario)');
+
         Version 15.101.3: Jan 07, 2016	Changes in CSS related to social timeline. (191229 lines)
         Version 15.101.2: Jan 07, 2016	Show social comments in social notes. (191229 lines)
         Version 15.101.1: Jan 07, 2016	Show social comments in social notes. Not finished. (191181 lines)

@@ -117,6 +117,15 @@ struct SocialNote
    unsigned NumShared;	// Number of times (users) this note has been shared
   };
 
+struct SocialComment
+  {
+   long ComCod;
+   long UsrCod;		// TODO: Rename as AuthorCod here and in database?
+   long NotCod;		// Note code
+   time_t DateTimeUTC;
+   char Content[Cns_MAX_BYTES_LONG_TEXT];
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -138,7 +147,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
                                  bool LastInList);
-static void Soc_WriteNoteDate (time_t TimeUTC);
+static void Soc_WriteSocialComment (struct SocialComment *SocCom,
+                                    bool ShowAlone);
+static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
@@ -151,35 +162,49 @@ static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutFormToCommentSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentDate (time_t TimeUTC);
+static void Soc_PutFormToRemoveComment (long ComCod);
 static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
 static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
 static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
+
 static void Soc_PutHiddenParamNotCod (long NotCod);
 static void Soc_PutHiddenParamPubCod (long PubCod);
+static void Soc_PutHiddenParamComCod (long ComCod);
 static long Soc_GetParamNotCod (void);
 static long Soc_GetParamPubCod (void);
+static long Soc_GetParamComCod (void);
 
 static void Soc_ReceiveComment (void);
 static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 
-static void Soc_RequestRemovalSocialPublishing (void);
+static void Soc_RequestRemovalSocialNote (void);
 static void Soc_RemoveSocialNote (void);
-static void Soc_RemoveASocialPublishingFromDB (struct SocialNote *SocNot);
+static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
+
+static void Soc_RequestRemovalSocialComment (void);
+static void Soc_RemoveSocialComment (void);
+static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
 
 static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
+
 static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
+static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom);
+
+static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
 static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
+static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom);
+
 static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub);
 static void Soc_ResetSocialNote (struct SocialNote *SocNot);
+static void Soc_ResetSocialComment (struct SocialComment *SocCom);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -338,28 +363,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
   }
 
 /*****************************************************************************/
-/************** Get data of social publishing using its code *****************/
-/*****************************************************************************/
-
-static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub)
-  {
-   /* Get social publishing code (row[0]) */
-   SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
-
-   /* Get social note code (row[1]) */
-   SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
-
-   /* Get publisher's code (row[2]) */
-   SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-
-   /* Get author's code (row[3]) */
-   SocPub->AuthorCod    = Str_ConvertStrCodToLongCod (row[3]);
-
-   /* Get time of the note (row[4]) */
-   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
-  }
-
-/*****************************************************************************/
 /***************************** Write social note *****************************/
 /*****************************************************************************/
 
@@ -443,7 +446,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	       UsrDat.FullName,UsrDat.Nickname);
 
       /* Write date and time */
-      Soc_WriteNoteDate (SocNot->DateTimeUTC);
+      Soc_WriteDateTime (SocNot->DateTimeUTC);
 
       /* Write content of the note */
       if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
@@ -574,10 +577,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       /* Show who have shared this social note */
       Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
 
-      /* Put icon to remove */
-      if (IAmTheAuthor &&
-	  IAmAPublisherOfThisSocNot)
-	 /* Put icon to remove this publishing */
+      /* Put icon to remove this publishing */
+      if (IAmTheAuthor && !ShowAlone)
 	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
 
       /* Show current comments */
@@ -604,11 +605,102 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
   }
 
 /*****************************************************************************/
+/**************************** Write social comment ***************************/
+/*****************************************************************************/
+
+static void Soc_WriteSocialComment (struct SocialComment *SocCom,
+                                    bool ShowAlone)	// Social comment is shown alone, not in a list
+  {
+   extern const char *Txt_Forum;
+   extern const char *Txt_Course;
+   extern const char *Txt_Degree;
+   extern const char *Txt_Centre;
+   extern const char *Txt_Institution;
+   struct UsrData UsrDat;
+   bool IAmTheAuthor;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX+1];
+
+   if (ShowAlone)
+     {
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">"
+                         "</div>"
+                         "<div class=\"SOCIAL_RIGHT_CONTAINER\">"
+                         "<ul class=\"LIST_LEFT\">");
+     }
+
+   /***** Start list item *****/
+   fprintf (Gbl.F.Out,"<li");
+   if (!ShowAlone)
+      fprintf (Gbl.F.Out," class=\"SOCIAL_COMMENT\"");
+   fprintf (Gbl.F.Out,">");
+
+   if (SocCom->ComCod <= 0 ||
+       SocCom->NotCod <= 0 ||
+       SocCom->UsrCod <= 0)
+      Lay_ShowAlert (Lay_ERROR,"Error in social comment.");
+   else
+     {
+      /***** Get author's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+      UsrDat.UsrCod = SocCom->UsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
+	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+      /***** Left: write author's photo *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					    NULL,
+			"PHOTO30x40",Pho_ZOOM);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /***** Right: author's name, time, summary and buttons *****/
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
+
+      /* Write author's full name and nickname */
+      Str_LimitLengthHTMLStr (UsrDat.FullName,12);
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
+			 "<span class=\"DAT_BOLD\">%s</span>"
+			 "<span class=\"DAT_LIGHT\"> @%s</span>"
+			 "</div>",
+	       UsrDat.FullName,UsrDat.Nickname);
+
+      /* Write date and time */
+      Soc_WriteDateTime (SocCom->DateTimeUTC);
+
+      /* Write content of the social comment */
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /* Put icon to remove this social comment */
+      if (IAmTheAuthor && !ShowAlone)
+	 Soc_PutFormToRemoveComment (SocCom->ComCod);
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+
+   /***** End list item *****/
+   fprintf (Gbl.F.Out,"</li>");
+
+   if (ShowAlone)
+     {
+      fprintf (Gbl.F.Out,"</ul>"
+                         "</div>");
+      Lay_EndRoundFrame ();
+     }
+  }
+
+/*****************************************************************************/
 /**************** Write the date of creation of a social note ****************/
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-static void Soc_WriteNoteDate (time_t TimeUTC)
+static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
@@ -1185,16 +1277,11 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
    MYSQL_ROW row;
    unsigned long NumComments;
    unsigned long NumCom;
-   long ComCod;
-   struct UsrData UsrDat;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
-   bool IAmTheAuthor;
-   time_t DateTimeUTC;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct SocialComment SocCom;
 
    /***** Get comments of this social note from database *****/
    sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
+                  "social_comments.NotCod,"
 	          "UNIX_TIMESTAMP(social_comments.TimeComment),"
 	          "social_comments_content.Content"
 		  " FROM social_comments,social_comments_content"
@@ -1207,11 +1294,8 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
    /***** List comments *****/
    if (NumComments)	// Comments to this social note found
      {
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** Start list *****/
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT SOCIAL_COMMENTS\">");
 
       /***** List comments one by one *****/
       for (NumCom = 0;
@@ -1220,60 +1304,14 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 	{
          /* Get data of social comment */
          row = mysql_fetch_row (mysql_res);
+         Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
 
-	 /* Get social code (row[0]) */
-	 ComCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get (from) user code (row[1]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-	 if (Gbl.Usrs.Me.Logged)
-	    IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	 /* Get time of the note (row[2]) */
-	 DateTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
-
-	 /* Get content (row[3]) */
-	 strncpy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
-	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-
-	 fprintf (Gbl.F.Out,"<li>");
-
-	 /***** Left: write author's photo *****/
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
-	 ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	 Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					       NULL,
-			   "PHOTO30x40",Pho_ZOOM);
-	 fprintf (Gbl.F.Out,"</div>");
-
-	 /***** Right: author's name, time, summary and buttons *****/
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
-
-	 /* Write author's full name and nickname */
-	 Str_LimitLengthHTMLStr (UsrDat.FullName,12);
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
-			    "<span class=\"DAT_BOLD\">%s</span>"
-			    "<span class=\"DAT_LIGHT\"> @%s</span>"
-			    "</div>",
-		  UsrDat.FullName,UsrDat.Nickname);
-
-	 /* Write date and time */
-	 Soc_WriteCommentDate (DateTimeUTC);
-
-         /* Write content of the comment */
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">");
-         Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-	 fprintf (Gbl.F.Out,"</div>");
-
-         fprintf (Gbl.F.Out,"</li>");
+         /* Write social comment */
+         Soc_WriteSocialComment (&SocCom,false);
         }
 
       /***** End list *****/
       fprintf (Gbl.F.Out,"</ul>");
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1281,30 +1319,32 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
   }
 
 /*****************************************************************************/
-/********* Write the date of creation of a comment to a social note **********/
+/********************** Form to remove social comment ************************/
 /*****************************************************************************/
-// TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-static void Soc_WriteCommentDate (time_t TimeUTC)
+static void Soc_PutFormToRemoveComment (long ComCod)
   {
-   extern const char *Txt_Today;
-   static unsigned UniqueId = 0;
+   extern const char *Txt_Remove;
 
-   UniqueId++;
-
-   /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<div id=\"date_comment_%u\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
-	              " style=\"display:inline-block;\">",
-            UniqueId);
-
-   /***** Write date and time *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('date_comment_%u',%ld,'&nbsp;','%s');"
-                      "</script>",
-            UniqueId,(long) TimeUTC,Txt_Today);
-
-   /***** End cell *****/
-   fprintf (Gbl.F.Out,"</div>");
+   /***** Form to remove social publishing *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartAnchor (ActReqRemSocComUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStart (ActReqRemSocComGbl);
+   Soc_PutHiddenParamComCod (ComCod);
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/remove-on64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Remove,
+	    Txt_Remove);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1324,13 +1364,13 @@ static void Soc_PutHiddenFormToSendCommentToASocialNote (long NotCod)
    /***** Start form to write the post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActComSocNotUsr,"timeline");
+      Act_FormStartAnchor (ActRcvSocComUsr,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActComSocNotGbl);
+      Act_FormStart (ActRcvSocComGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"44\" rows=\"5\">"
+   fprintf (Gbl.F.Out,"<textarea name=\"Comment%ld\" cols=\"47\" rows=\"5\">"
 		      "</textarea>",
 	    NotCod);
 
@@ -1476,6 +1516,15 @@ static void Soc_PutHiddenParamPubCod (long PubCod)
   }
 
 /*****************************************************************************/
+/************* Put parameter with the code of a social comment ***************/
+/*****************************************************************************/
+
+static void Soc_PutHiddenParamComCod (long ComCod)
+  {
+   Par_PutHiddenParamLong ("ComCod",ComCod);
+  }
+
+/*****************************************************************************/
 /************** Get parameter with the code of a social note *****************/
 /*****************************************************************************/
 
@@ -1501,12 +1550,29 @@ static long Soc_GetParamPubCod (void)
    char LongStr[1+10+1];	// String that holds the social publishing code
    long PubCod;
 
-   /* Get social note code */
+   /* Get social punlishing code */
    Par_GetParToText ("PubCod",LongStr,1+10);
    if (sscanf (LongStr,"%ld",&PubCod) != 1)
       Lay_ShowErrorAndExit ("Wrong code of social publishing.");
 
    return PubCod;
+  }
+
+/*****************************************************************************/
+/************* Get parameter with the code of a social comment ***************/
+/*****************************************************************************/
+
+static long Soc_GetParamComCod (void)
+  {
+   char LongStr[1+10+1];	// String that holds the social comment code
+   long ComCod;
+
+   /* Get social comment code */
+   Par_GetParToText ("ComCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&ComCod) != 1)
+      Lay_ShowErrorAndExit ("Wrong code of social comment.");
+
+   return ComCod;
   }
 
 /*****************************************************************************/
@@ -1749,31 +1815,31 @@ static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/**************** Request the removal of a social publishing *****************/
+/******************* Request the removal of a social note ********************/
 /*****************************************************************************/
 
-void Soc_RequestRemSocialPubGbl (void)
+void Soc_RequestRemSocialNoteGbl (void)
   {
-   /***** Request the removal of social publishing *****/
-   Soc_RequestRemovalSocialPublishing ();
+   /***** Request the removal of social note *****/
+   Soc_RequestRemovalSocialNote ();
 
    /***** Write timeline again (global) *****/
    Soc_ShowTimelineGbl ();
   }
 
-void Soc_RequestRemSocialPubUsr (void)
+void Soc_RequestRemSocialNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /*****  Show user's profile *****/
+   /***** Show user's profile *****/
    Prf_ShowUserProfile ();
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Request the removal of social publishing *****/
-   Soc_RequestRemovalSocialPublishing ();
+   /***** Request the removal of social note *****/
+   Soc_RequestRemovalSocialNote ();
 
    /***** Write timeline again (user) *****/
    Soc_ShowTimelineUsr ();
@@ -1782,7 +1848,7 @@ void Soc_RequestRemSocialPubUsr (void)
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_RequestRemovalSocialPublishing (void)
+static void Soc_RequestRemovalSocialNote (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
@@ -1837,7 +1903,7 @@ static void Soc_RequestRemovalSocialPublishing (void)
 /*************************** Remove a social note ****************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialNotGbl (void)
+void Soc_RemoveSocialNoteGbl (void)
   {
    /***** Remove a social note *****/
    Soc_RemoveSocialNote ();
@@ -1846,7 +1912,7 @@ void Soc_RemoveSocialNotGbl (void)
    Soc_ShowTimelineGbl ();
   }
 
-void Soc_RemoveSocialNotUsr (void)
+void Soc_RemoveSocialNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -1891,7 +1957,7 @@ static void Soc_RemoveSocialNote (void)
    if (ICanRemove)
      {
       /***** Delete social publishing from database *****/
-      Soc_RemoveASocialPublishingFromDB (&SocNot);
+      Soc_RemoveASocialNoteFromDB (&SocNot);
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
@@ -1899,12 +1965,12 @@ static void Soc_RemoveSocialNote (void)
   }
 
 /*****************************************************************************/
-/**************** Remove a social publishing from database *******************/
+/******************* Remove a social note from database **********************/
 /*****************************************************************************/
 
-static void Soc_RemoveASocialPublishingFromDB (struct SocialNote *SocNot)
+static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Remove all the social publishings of this note *****/
    sprintf (Query,"DELETE FROM social_timeline"
@@ -1931,8 +1997,186 @@ static void Soc_RemoveASocialPublishingFromDB (struct SocialNote *SocNot)
       DB_QueryDELETE (Query,"can not remove a social post");
      }
 
+   /***** Remove content of the comments of this social note *****/
+   sprintf (Query,"DELETE FROM social_comments_content"
+	          " USING social_comments,social_comments_content"
+	          " WHERE social_comments.NotCod='%ld'"
+	          " AND social_comments.ComCod=social_comments_content.ComCod",
+	    SocNot->NotCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /***** Remove comments of this social note *****/
+   sprintf (Query,"DELETE FROM social_comments"
+	          " WHERE NotCod='%ld'",
+	    SocNot->NotCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
    /***** Reset social note *****/
    Soc_ResetSocialNote (SocNot);
+  }
+
+/*****************************************************************************/
+/************* Request the removal of a comment in a social note *************/
+/*****************************************************************************/
+
+void Soc_RequestRemSocialComGbl (void)
+  {
+   /***** Request the removal of comment in social note *****/
+   Soc_RequestRemovalSocialComment ();
+
+   /***** Write timeline again (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_RequestRemSocialComUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+   /***** Request the removal of comment in social note *****/
+   Soc_RequestRemovalSocialComment ();
+
+   /***** Write timeline again (user) *****/
+   Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
+  }
+
+static void Soc_RequestRemovalSocialComment (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
+   extern const char *Txt_Remove;
+   struct SocialComment SocCom;
+   bool ICanRemove;
+
+   /***** Get the code of the social comment to remove *****/
+   SocCom.ComCod = Soc_GetParamComCod ();
+
+   /***** Get data of social comment *****/
+   Soc_GetDataOfSocialCommentByCod (&SocCom);
+
+   ICanRemove = (Gbl.Usrs.Me.Logged &&
+                 SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ICanRemove)
+     {
+      /***** Show warning and social comment *****/
+      /* Warning message */
+      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
+
+      /* Show social comment */
+      Soc_WriteSocialComment (&SocCom,true);
+
+      /***** Form to ask for confirmation to remove this social comment *****/
+      /* Start form */
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
+	 Act_FormStartAnchor (ActRemSocComUsr,"timeline");
+	 Usr_PutParamOtherUsrCodEncrypted ();
+	}
+      else
+	 Act_FormStart (ActRemSocComGbl);
+      Soc_PutHiddenParamComCod (SocCom.ComCod);
+
+      /* End form */
+      Lay_PutRemoveButton (Txt_Remove);
+      Act_FormEnd ();
+     }
+  }
+
+/*****************************************************************************/
+/************************** Remove a social comment **************************/
+/*****************************************************************************/
+
+void Soc_RemoveSocialComGbl (void)
+  {
+   /***** Remove a social comment *****/
+   Soc_RemoveSocialComment ();
+
+   /***** Write updated timeline after removing (global) *****/
+   Soc_ShowTimelineGbl ();
+  }
+
+void Soc_RemoveSocialComUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+   /***** Remove a social comment *****/
+   Soc_RemoveSocialComment ();
+
+   /***** Write updated timeline after removing (user) *****/
+   Soc_ShowTimelineUsr ();
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
+  }
+
+static void Soc_RemoveSocialComment (void)
+  {
+   extern const char *Txt_SOCIAL_PUBLISHING_Removed;
+   struct SocialComment SocCom;
+   struct SocialNote SocNot;
+   bool ICanRemove;
+
+   /***** Get the code of the social comment to remove *****/
+   SocCom.ComCod = Soc_GetParamComCod ();
+
+   /***** Get data of social comment *****/
+   Soc_GetDataOfSocialCommentByCod (&SocCom);
+
+   /***** Get data of social note *****/
+   SocNot.NotCod = SocCom.NotCod;
+   Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+   ICanRemove = (Gbl.Usrs.Me.Logged &&
+                 SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   if (ICanRemove)
+     {
+      /***** Delete social comment from database *****/
+      Soc_RemoveASocialCommentFromDB (&SocCom);
+
+      /***** Message of success *****/
+      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
+     }
+  }
+
+/*****************************************************************************/
+/****************** Remove a social comment from database ********************/
+/*****************************************************************************/
+
+static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
+  {
+   char Query[128];
+
+   /***** Remove content of this social comment *****/
+   sprintf (Query,"DELETE FROM social_comments_content"
+	          " WHERE ComCod='%ld'",
+	    SocCom->ComCod);
+   DB_QueryDELETE (Query,"can not remove a social comment");
+
+   /***** Remove this social comment *****/
+   sprintf (Query,"DELETE FROM social_comments"
+	          " WHERE ComCod='%ld'"
+	          " AND UsrCod='%ld'",	// Extra check: I am the author
+	    SocCom->ComCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryDELETE (Query,"can not remove a social comment");
+
+   /***** Reset social comment *****/
+   Soc_ResetSocialComment (SocCom);
   }
 
 /*****************************************************************************/
@@ -2097,7 +2341,59 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/*************** Get data of social note using its code **********************/
+/*************** Get data of social comment using its code *******************/
+/*****************************************************************************/
+
+static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get data of social comment from database *****/
+   sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
+                  "social_comments.NotCod,"
+	          "UNIX_TIMESTAMP(social_comments.TimeComment),"
+	          "social_comments_content.Content"
+		  " FROM social_comments,social_comments_content"
+		  " WHERE social_comments.ComCod='%ld'"
+		  " AND social_comments.ComCod=social_comments_content.ComCod",
+            SocCom->ComCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
+     {
+      /***** Get data of social comment *****/
+      row = mysql_fetch_row (mysql_res);
+      Soc_GetDataOfSocialCommentFromRow (row,SocCom);
+     }
+   else
+      /***** Reset fields of social comment *****/
+      Soc_ResetSocialComment (SocCom);
+  }
+
+/*****************************************************************************/
+/************** Get data of social publishing using its code *****************/
+/*****************************************************************************/
+
+static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub)
+  {
+   /* Get code of social publishing (row[0]) */
+   SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
+
+   /* Get social note code (row[1]) */
+   SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
+
+   /* Get publisher's code (row[2]) */
+   SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
+
+   /* Get author's code (row[3]) */
+   SocPub->AuthorCod    = Str_ConvertStrCodToLongCod (row[3]);
+
+   /* Get time of the note (row[4]) */
+   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
+  }
+
+/*****************************************************************************/
+/******************** Get data of social note from row ***********************/
 /*****************************************************************************/
 
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot)
@@ -2140,6 +2436,29 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
   }
 
 /*****************************************************************************/
+/****************** Get data of social comment from row **********************/
+/*****************************************************************************/
+
+static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom)
+  {
+   /* Get code of social comment (row[0]) */
+   SocCom->ComCod      = Str_ConvertStrCodToLongCod (row[0]);
+
+   /* Get (from) user code (row[1]) */
+   SocCom->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
+
+   /* Get code of social note (row[2]) */
+   SocCom->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
+
+   /* Get time of the note (row[3]) */
+   SocCom->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
+
+   /* Get content (row[4]) */
+   strncpy (SocCom->Content,row[4],Cns_MAX_BYTES_LONG_TEXT);
+   SocCom->Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+  }
+
+/*****************************************************************************/
 /******************** Reset fields of social publishing **********************/
 /*****************************************************************************/
 
@@ -2164,4 +2483,16 @@ static void Soc_ResetSocialNote (struct SocialNote *SocNot)
    SocNot->Unavailable = false;
    SocNot->DateTimeUTC = (time_t) 0;
    SocNot->NumShared   = 0;
+  }
+
+/*****************************************************************************/
+/********************** Reset fields of social comment ***********************/
+/*****************************************************************************/
+
+static void Soc_ResetSocialComment (struct SocialComment *SocCom)
+  {
+   SocCom->UsrCod      = -1L;
+   SocCom->NotCod      = -1L;
+   SocCom->DateTimeUTC = (time_t) 0;
+   SocCom->Content[0]  = '\0';
   }
