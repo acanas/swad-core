@@ -118,13 +118,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.102.3 (2016-01-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.102.4 (2016-01-08)"
 #define CSS_FILE		"swad15.102.css"
 #define JS_FILE			"swad15.100.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.102.4: Jan 08, 2016	Text in icon to comment a social note. (191644 lines)
         Version 15.102.3: Jan 08, 2016	The social notes of the user are shown in her/his global timeline even if he/she does not follow any user. (191603 lines)
         Version 15.102.2: Jan 08, 2016	When a user is eliminated, all her/his social publshing are removed. (191606 lines)
         Version 15.102.1: Jan 08, 2016	Changes in layout of social timeline. (191557 lines)

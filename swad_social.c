@@ -92,6 +92,44 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
 
   };
 
+static const char *Soc_Icons[Soc_NUM_SOCIAL_NOTES] =
+  {
+   NULL,		// Soc_NOTE_UNKNOWN
+
+   /* Institution tab */
+   "file64x64.gif",	// Soc_NOTE_INS_DOC_PUB_FILE
+   "file64x64.gif",	// Soc_NOTE_INS_SHA_PUB_FILE
+
+   /* Centre tab */
+   "file64x64.gif",	// Soc_NOTE_CTR_DOC_PUB_FILE
+   "file64x64.gif",	// Soc_NOTE_CTR_SHA_PUB_FILE
+
+   /* Degree tab */
+   "file64x64.gif",	// Soc_NOTE_DEG_DOC_PUB_FILE
+   "file64x64.gif",	// Soc_NOTE_DEG_SHA_PUB_FILE
+
+   /* Course tab */
+   "file64x64.gif",	// Soc_NOTE_CRS_DOC_PUB_FILE
+   "file64x64.gif",	// Soc_NOTE_CRS_SHA_PUB_FILE
+
+   /* Assessment tab */
+   "announce16x16.gif",	// Soc_NOTE_EXAM_ANNOUNCEMENT
+
+   /* Users tab */
+
+   /* Social tab */
+   NULL,		// Soc_NOTE_SOCIAL_POST (icon not used)
+   "forum64x64.gif",	// Soc_NOTE_FORUM_POST
+
+   /* Messages tab */
+   "note16x16.gif",	// Soc_NOTE_NOTICE
+
+   /* Statistics tab */
+
+   /* Profile tab */
+
+  };
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -109,7 +147,7 @@ struct SocialNote
   {
    long NotCod;
    Soc_NoteType_t NoteType;
-   long UsrCod;		// TODO: Rename as AuthorCod here and in database?
+   long UsrCod;
    long HieCod;		// Hierarchy code (institution/centre/degree/course)
    long Cod;		// Code of file, forum post, notice,...
    bool Unavailable;	// File, forum post, notice,... unavailable (removed)
@@ -120,7 +158,7 @@ struct SocialNote
 struct SocialComment
   {
    long ComCod;
-   long UsrCod;		// TODO: Rename as AuthorCod here and in database?
+   long UsrCod;
    long NotCod;		// Note code
    time_t DateTimeUTC;
    char Content[Cns_MAX_BYTES_LONG_TEXT];
@@ -158,7 +196,7 @@ static void Soc_PutLinkToWriteANewPost (Act_Action_t Action,void (*FuncParams) (
 static void Soc_FormSocialPost (void);
 static void Soc_ReceiveSocialPost (void);
 
-static void Soc_PutFormToCommentSocialNote (long NotCod);
+static void Soc_PutIconToToggleCommentSocialNote (long NotCod,bool PutText);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (long NotCod);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
@@ -559,7 +597,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
       /* Put icon to add a comment */
       if (!NumComments)
-         Soc_PutFormToCommentSocialNote (SocNot->NotCod);
+         Soc_PutIconToToggleCommentSocialNote (SocNot->NotCod,false);
 
       /* Put icons to share/unshare */
       if (IAmTheAuthor)			// I am the author
@@ -679,9 +717,10 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
    extern const char *Txt_not_available;
+   char Class[64];
 
    if (SocNot->Unavailable ||	// File/notice... pointer by this social note is unavailable
        Gbl.InsideForm)		// Inside another form
@@ -751,9 +790,18 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	}
 
       /***** Link and end form *****/
+      sprintf (Class,"%s ICON_HIGHLIGHT",The_ClassFormBold[Gbl.Prefs.Theme]);
       Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
-			  The_ClassForm[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_SOCIAL_NOTE[SocNot->NoteType]);
+			  Class);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICON20x20\" />"
+	                 "&nbsp;%s"
+	                 "</a>",
+            Gbl.Prefs.IconsURL,Soc_Icons[SocNot->NoteType],
+            Txt_SOCIAL_NOTE[SocNot->NoteType],
+            Txt_SOCIAL_NOTE[SocNot->NoteType],
+            Txt_SOCIAL_NOTE[SocNot->NoteType]);
       Act_FormEnd ();
      }
   }
@@ -1156,27 +1204,31 @@ static void Soc_ReceiveSocialPost (void)
   }
 
 /*****************************************************************************/
-/******************* Form to comment a social publishing *********************/
+/****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutFormToCommentSocialNote (long NotCod)
+static void Soc_PutIconToToggleCommentSocialNote (long NotCod,bool PutText)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Comment;
 
-   /***** Link to show/hide comment form in a social note *****/
+   /***** Link to toggle on/off the form to comment a social note *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_COMMENT ICON_HIGHLIGHT\">"
-		      "<input type=\"image\""
-		      " src=\"%s/write64x64.gif\""
+                      "<a href=\"\"");
+   if (PutText)
+      fprintf (Gbl.F.Out," class=\"%s\"",The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out," onclick=\"toggleDisplay('div_comment_%ld');return false;\" />"
+		      "<img src=\"%s/write64x64.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\""
-		      " onclick=\""
-		      "toggleDisplay('div_comment_%ld');"
-		      "return false;\" />"
-		      "</div>",
+		      " class=\"ICON20x20\" />",
+	    NotCod,
 	    Gbl.Prefs.IconsURL,
 	    Txt_Comment,
-	    Txt_Comment,
-	    NotCod);
+	    Txt_Comment);
+   if (PutText)
+      fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Comment);
+   fprintf (Gbl.F.Out,"</a>"
+		      "</div>");
   }
 
 /*****************************************************************************/
@@ -1239,7 +1291,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod)
 
       /* Put icon to add a comment */
       fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
-      Soc_PutFormToCommentSocialNote (NotCod);
+      Soc_PutIconToToggleCommentSocialNote (NotCod,true);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** End list *****/
