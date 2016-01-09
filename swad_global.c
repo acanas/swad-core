@@ -214,7 +214,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentIns.Ins.ShortName[0] = '\0';
    Gbl.CurrentIns.Ins.FullName[0] = '\0';
    Gbl.CurrentIns.Ins.WWW[0] = '\0';
-   // Gbl.CurrentIns.Ins.NumStds = Gbl.CurrentIns.Ins.NumTchs = Gbl.CurrentIns.Ins.NumUsrs =
    Gbl.CurrentIns.Ins.NumCtrs = Gbl.CurrentIns.Ins.NumDpts = Gbl.CurrentIns.Ins.NumDegs = 0;
    Gbl.CurrentIns.Ins.NumUsrs = 0;
 

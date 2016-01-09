@@ -26,6 +26,9 @@ var Gbl_HTMLContent;
 // Global variable used to call SWAD via AJAX
 var ActionAJAX;
 
+// Global variable that stores last publishing code got from database in timeline
+var LastPubCod = 0;
+
 // Global variables used in writeLocalClock()
 var secondsSince1970UTC;
 
@@ -322,7 +325,10 @@ var objXMLHttpReqCon = false;
 function refreshConnected() {
 	objXMLHttpReqCon = AJAXCreateObject();
 	if (objXMLHttpReqCon) {
-      	var RefreshParams = RefreshParamNxtActCon + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	var RefreshParams = RefreshParamNxtActCon + '&' +
+      						RefreshParamIdSes + '&' +
+      						RefreshParamCrsCod;
+
 		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;	// onreadystatechange must be lowercase
 		objXMLHttpReqCon.open('POST',ActionAJAX,true);
 		objXMLHttpReqCon.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -335,7 +341,10 @@ var objXMLHttpReqLog = false;
 function refreshLastClicks() {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
-      	var RefreshParams = RefreshParamNxtActLog + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	var RefreshParams = RefreshParamNxtActLog + '&' +
+      						RefreshParamIdSes + '&' +
+      						RefreshParamCrsCod;
+
 		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
 		objXMLHttpReqLog.open('POST',ActionAJAX,true);
 		objXMLHttpReqLog.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -348,7 +357,10 @@ var objXMLHttpReqSoc = false;
 function refreshSocialTimeline() {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
-      	var RefreshParams = RefreshParamNxtActSoc + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	var RefreshParams = RefreshParamNxtActSoc + '&' +
+      						RefreshParamIdSes + '&' +
+      						'LastPubCod=' + LastPubCod;
+
       	objXMLHttpReqSoc.onreadystatechange = readSocialTimelineData;	// onreadystatechange must be lowercase
       	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
       	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -442,10 +454,12 @@ function readLastClicksData() {
 function readSocialTimelineData() {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
-			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);	// Get separator position
+			var endOfDelay      = objXMLHttpReqSoc.responseText.indexOf('|',0);				// Get separator position
+			var endOfLastPubCod = objXMLHttpReqSoc.responseText.indexOf('|',endOfDelay+1);	// Get separator position
 
-			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+			var delay  = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));					// Get refresh delay
+			LastPubCod = parseInt(objXMLHttpReqSoc.responseText.substring(endOfDelay+1,endOfLastPubCod));	// Get last publishing code
+			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfLastPubCod+1);			// Get HTML code for social timeline
 
 			var recentTimeline = document.getElementById('recent_timeline');	// Access to UL with the recent timeline
 			if (recentTimeline) {

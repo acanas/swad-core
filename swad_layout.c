@@ -1497,8 +1497,10 @@ void Lay_RefreshLastClicks (void)
 
 void Lay_RefreshSocialTimeline (void)
   {
-   // Send, before the HTML, the refresh time
-   fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+   // Send, before the HTML, the refresh time and the last publishing got from database
+   fprintf (Gbl.F.Out,"%lu|%ld|",
+            Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE,
+            Gbl.Social.LastPubCod);
    Soc_GetAndShowRecentTimelineGbl ();
 
    /***** All the output is made, so don't write anymore *****/

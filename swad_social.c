@@ -316,13 +316,38 @@ void Soc_ShowTimelineGbl (void)
   }
 
 /*****************************************************************************/
+/**** Get parameter with the more recent publishing code got from database ***/
+/*****************************************************************************/
+// This parameter is sent and receiveda again via AJAX
+// As an alternative, it could be stored in database with the code of session
+
+void Soc_GetParamLastPubCod (void)
+  {
+   char LongStr[1+10+1];
+   long LongNum;
+
+   /***** Get the more recent publishing code *****/
+   Gbl.Social.LastPubCod = 0;
+   Par_GetParToText ("LastPubCod",LongStr,1+10);
+   if (LongStr[0])	// Parameter "LastPubCod" available
+      if (sscanf (LongStr,"%ld",&LongNum) == 1)
+	 Gbl.Social.LastPubCod = LongNum;
+  }
+
+/*****************************************************************************/
 /******* Get and show recent timeline including all the users I follow *******/
 /*****************************************************************************/
 
 void Soc_GetAndShowRecentTimelineGbl (void)
   {
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">PID = %lu; Time = %s</li>",
-            (unsigned long) Gbl.PID,Gbl.Now.YYYYMMDDHHMMSS);
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">"
+	              "PID = %lu; "
+	              "Time = %s; "
+	              "Gbl.Social.LastPubCod = %ld"
+	              "</li>",
+            (unsigned long) Gbl.PID,
+            Gbl.Now.YYYYMMDDHHMMSS,
+            Gbl.Social.LastPubCod);
   }
 
 /*****************************************************************************/
@@ -367,6 +392,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
          row = mysql_fetch_row (mysql_res);
          Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
 
+         if (NumPub == 0)	// The more recent publishing
+            Gbl.Social.LastPubCod = SocPub.PubCod;	// Last publishing code got from database
+
 	 /* Get data of social note */
 	 SocNot.NotCod = SocPub.NotCod;
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
@@ -384,6 +412,12 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Initialize javascript global variable with the code of the last punlishing *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
+                      "	LastPubCod = \"%ld\";\n"
+                      "</script>\n",
+            Gbl.Social.LastPubCod);
   }
 
 /*****************************************************************************/
