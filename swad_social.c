@@ -181,6 +181,7 @@ extern struct Globals Gbl;
 static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
                               const char *Title);
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
+static void Soc_PutLinkToViewRecentPublishings (void);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
@@ -370,10 +371,9 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
          Soc_PutHiddenFormToWriteNewPost ();
 
-      /***** Place to insert new publishings *****/
-      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\" class=\"LIST_LEFT\">");
-
-      fprintf (Gbl.F.Out,"</ul>");
+      /***** Hidden list where insert new publishings via AJAX *****/
+      Soc_PutLinkToViewRecentPublishings ();
+      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\"></ul>");
 
       /***** List publishings in timeline one by one *****/
       fprintf (Gbl.F.Out,"<ul id=\"timeline\" class=\"LIST_LEFT\">");
@@ -402,6 +402,25 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****** Put an icon to toggle on/off the form to comment a social note *******/
+/*****************************************************************************/
+
+static void Soc_PutLinkToViewRecentPublishings (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   /***** Link to toggle on/off the form to comment a social note *****/
+   fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
+	              " style=\"display:none;\">"
+                      "<a href=\"\" class=\"%s\""
+                      " onclick=\"moveRecentTimelineToTimeline();return false;\" />"
+                      "<span id=\"view_new_posts_count\">0</span> nuevos elementos"	// Need translation
+                      "</a>"
+	              "</div>",
+	    The_ClassForm[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/

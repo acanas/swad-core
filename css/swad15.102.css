@@ -368,7 +368,7 @@ a:hover						/* Default ==> underlined */
 /******************* Layout (third heading row with tabs) ********************/
 .HEAD_ROW_3_WHITE
 	{
-	background-color:white 100%;
+	background-color:white;
 	}
 .HEAD_ROW_3_GREY
 	{
@@ -1668,6 +1668,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /******************************** Social activity ****************************/
+#recent_timeline
+	{
+	display:none;
+	}
 .SOCIAL_PUB
 	{
 	border-bottom:1px solid silver;

@@ -445,23 +445,48 @@ function readSocialTimelineData() {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);	// Get separator position
 
 			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlSocialTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
 
-			var recentTimeline = document.getElementById('recent_timeline');	// Access to social timeline DIV
+			var recentTimeline = document.getElementById('recent_timeline');	// Access to UL with the recent timeline
 			if (recentTimeline) {
-				recentTimeline.innerHTML = htmlSocialTimeline;	// Update list of publishings in recent timeline
-				var lengthRecentTimeline = recentTimeline.childNodes.length;
-				if (lengthRecentTimeline) {
-					var timeline = document.getElementById("timeline");
-				    for(var i=0; i < lengthRecentTimeline; i++)
-						timeline.insertBefore(recentTimeline.lastChild, timeline.childNodes[0]);
-			    }
+				recentTimeline.innerHTML = htmlRecentTimeline + recentTimeline.innerHTML;	// Update list of publishings in recent timeline
+				var countRecentTimeline = recentTimeline.childNodes.length;
+				
+				if (countRecentTimeline) {
+					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
+					var viewNewPostsCount     = document.getElementById('view_new_posts_count');
+
+					// Update number of new posts
+					viewNewPostsCount.innerHTML = countRecentTimeline;
+
+					// Display message with new posts if hidden
+					viewNewPostsContainer.style.display = '';
+				}
 			}
 
 			if (delay >= 5000)	// If refresh slower than 1 time each 5 seconds, do refresh; else abort
 				setTimeout('refreshSocialTimeline()',delay);
 		}
 	}
+}
+
+// Move recent timeline to timeline
+function moveRecentTimelineToTimeline() {
+	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
+	var viewNewPostsCount     = document.getElementById('view_new_posts_count');
+	var recentTimeline        = document.getElementById('recent_timeline');	// Access to social timeline DIV
+	var countRecentTimeline = recentTimeline.childNodes.length;
+
+	if (countRecentTimeline) {
+		var timeline = document.getElementById("timeline");
+		// Move all the LI elements in UL 'recentTimeline' to the top of UL 'timeline'
+	    for(var i=0; i < countRecentTimeline; i++)
+			timeline.insertBefore(recentTimeline.lastChild, timeline.childNodes[0]);
+    }
+
+	// Reset and hide number of new posts after moving
+	viewNewPostsCount.innerHTML = 0;
+	viewNewPostsContainer.style.display = 'none';
 }
 
 // Zoom a user's photograph
