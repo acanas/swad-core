@@ -371,13 +371,12 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
          Soc_PutHiddenFormToWriteNewPost ();
 
       /***** Place to insert new publishings *****/
-      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\" class=\"LIST_LEFT\""
-	                 " style=\"background:yellow;\">");
+      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\" class=\"LIST_LEFT\">");
 
       fprintf (Gbl.F.Out,"</ul>");
 
       /***** List publishings in timeline one by one *****/
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      fprintf (Gbl.F.Out,"<ul id=\"timeline\" class=\"LIST_LEFT\">");
       for (NumPub = 0;
 	   NumPub < NumPublishings;
 	   NumPub++)

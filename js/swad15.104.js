@@ -447,9 +447,17 @@ function readSocialTimelineData() {
 			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
 			var htmlSocialTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
 
-			var divSocialTimeline = document.getElementById('recent_timeline');	// Access to social timeline DIV
-			if (divSocialTimeline)
-				divSocialTimeline.innerHTML = htmlSocialTimeline;	// Update global connected DIV
+			var recentTimeline = document.getElementById('recent_timeline');	// Access to social timeline DIV
+			if (recentTimeline) {
+				recentTimeline.innerHTML = htmlSocialTimeline;	// Update list of publishings in recent timeline
+				var lengthRecentTimeline = recentTimeline.childNodes.length;
+				if (lengthRecentTimeline) {
+					var timeline = document.getElementById("timeline");
+				    for(var i=0; i < lengthRecentTimeline; i++)
+						timeline.insertBefore(recentTimeline.lastChild, timeline.childNodes[0]);
+			    }
+			}
+
 			if (delay >= 5000)	// If refresh slower than 1 time each 5 seconds, do refresh; else abort
 				setTimeout('refreshSocialTimeline()',delay);
 		}
