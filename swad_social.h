@@ -83,6 +83,7 @@ typedef enum
 
 void Soc_ShowTimelineUsr (void);
 void Soc_ShowTimelineGbl (void);
+void Soc_GetAndShowRecentTimelineGbl (void);
 
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);

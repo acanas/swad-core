@@ -94,8 +94,8 @@ struct Globals
    bool GetMethod;	// Am I accessed using GET method?
    struct soap *soap;	// gSOAP runtime environment
    Act_Content_t ContentReceivedByCGI;	/* Content send by the form and received by the CGI:
-						Act_CONTENT_NORM (if CONTENT_TYPE==text/plain) or
-						Act_CONTENT_DATA (if CONTENT_TYPE==multipart/form-data) */
+					Act_CONTENT_NORM (if CONTENT_TYPE==text/plain) or
+					Act_CONTENT_DATA (if CONTENT_TYPE==multipart/form-data) */
    char DelimiterString[1000];
    char DelimiterStringIncludingInitialRet[2+1000];
    struct

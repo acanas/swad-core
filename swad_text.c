@@ -27721,6 +27721,27 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #endif
 
+const char *Txt_Post =	// Publish (verb)
+#if   L==1
+	"Publicar";
+#elif L==2
+	"Ver&ouml;ffentlichen";
+#elif L==3
+	"Post";
+#elif L==4
+	"Publicar";
+#elif L==5
+	"Publier";
+#elif L==6
+	"Publicar";	// Okoteve traducción
+#elif L==7
+	"Pubblicare";
+#elif L==8
+	"Publikowa&cacute;";
+#elif L==9
+	"Publicar";
+#endif
+
 const char *Txt_post =
 #if   L==1
 	"missatge";

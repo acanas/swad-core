@@ -42,6 +42,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_social.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
@@ -80,7 +81,7 @@ static void Lay_WritePageTitle (void);
 static void Lay_WriteRedirectionToMyLanguage (void);
 static void Lay_WriteScripts (void);
 static void Lay_WriteScriptInit (void);
-static void Lay_WriteScriptConnectedUsrs (void);
+static void Lay_WriteScriptParamsAJAX (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
 static void Lay_WritePageTopHeading (void);
@@ -122,9 +123,10 @@ void Lay_WriteStartOfPage (void)
    Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
-   if (Gbl.CurrentAct == ActRefCon ||
-       Gbl.CurrentAct == ActRefLstClk)
-     // Don't generate a full HTML page, only refresh connected users
+   if (Gbl.CurrentAct == ActRefCon    ||
+       Gbl.CurrentAct == ActRefLstClk ||
+       Gbl.CurrentAct == ActRefSocTim)
+     // Don't generate a full HTML page, only the content of a DIV or similar
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
       Gbl.Layout.WritingHTMLStart = false;
@@ -450,7 +452,7 @@ static void Lay_WriteScripts (void)
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
      {
       Lay_WriteScriptInit ();
-      Lay_WriteScriptConnectedUsrs ();
+      Lay_WriteScriptParamsAJAX ();
      }
 
    /***** Prepare script to draw months *****/
@@ -608,24 +610,29 @@ static void Lay_WriteScriptInit (void)
    if (Gbl.CurrentAct == ActLstClk)
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+   else if (Gbl.CurrentAct == ActSeeSocTmlGbl)
+      fprintf (Gbl.F.Out,"	setTimeout(\"refreshSocialTimeline()\",%lu);\n",
+               Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
   }
 
 /*****************************************************************************/
-/************** Write script to show connected users using AJAX **************/
+/************** Write script to set parameters needed by AJAX ****************/
 /*****************************************************************************/
 
-static void Lay_WriteScriptConnectedUsrs (void)
+static void Lay_WriteScriptParamsAJAX (void)
   {
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
                       "var RefreshParamNxtActCon = \"act=%ld\";\n"
                       "var RefreshParamNxtActLog = \"act=%ld\";\n"
+                      "var RefreshParamNxtActSoc = \"act=%ld\";\n"
                       "var RefreshParamIdSes = \"ses=%s\";\n"
                       "var RefreshParamCrsCod = \"crs=%ld\";\n"
                       "</script>\n",
-            Act_Actions[ActRefCon].ActCod,
+            Act_Actions[ActRefCon   ].ActCod,
             Act_Actions[ActRefLstClk].ActCod,
+            Act_Actions[ActRefSocTim].ActCod,
             Gbl.Session.Id,
             Gbl.CurrentCrs.Crs.CrsCod);
   }
@@ -1288,8 +1295,9 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
-   if (Gbl.CurrentAct != ActRefCon &&	// Refreshing connected users
-       Gbl.CurrentAct != ActRefLstClk)	// Refreshing last clics
+   if (Gbl.CurrentAct != ActRefCon    &&	// Refreshing connected users
+       Gbl.CurrentAct != ActRefLstClk &&	// Refreshing last clics
+       Gbl.CurrentAct != ActRefSocTim)		// Refreshing social timeline
       Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
@@ -1307,8 +1315,9 @@ void Lay_ShowErrorAndExit (const char *Message)
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      if (Gbl.CurrentAct != ActRefCon &&	// Refreshing connected users
-          Gbl.CurrentAct != ActRefLstClk)	// Refreshing last clicks
+      if (Gbl.CurrentAct != ActRefCon    &&	// Refreshing connected users
+          Gbl.CurrentAct != ActRefLstClk &&	// Refreshing last clicks
+          Gbl.CurrentAct != ActRefSocTim)	// Refreshing last clicks
 	{
 	 /***** Compute time to send page *****/
 	 Sta_ComputeTimeToSendPage ();
@@ -1469,7 +1478,7 @@ void Lay_RefreshNotifsAndConnected (void)
   }
 
 /*****************************************************************************/
-/******************** Refresh connected users via AJAX ***********************/
+/**************** Refresh last clicks in realtime via AJAX *******************/
 /*****************************************************************************/
 
 void Lay_RefreshLastClicks (void)
@@ -1477,6 +1486,20 @@ void Lay_RefreshLastClicks (void)
    // Send, before the HTML, the refresh time
    fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    Con_GetAndShowLastClicks ();
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+/*****************************************************************************/
+/********************* Refresh social timeline via AJAX **********************/
+/*****************************************************************************/
+
+void Lay_RefreshSocialTimeline (void)
+  {
+   // Send, before the HTML, the refresh time
+   fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+   Soc_GetAndShowRecentTimelineGbl ();
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;

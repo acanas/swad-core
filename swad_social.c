@@ -316,6 +316,16 @@ void Soc_ShowTimelineGbl (void)
   }
 
 /*****************************************************************************/
+/******* Get and show recent timeline including all the users I follow *******/
+/*****************************************************************************/
+
+void Soc_GetAndShowRecentTimelineGbl (void)
+  {
+   fprintf (Gbl.F.Out,"<li>PID = %lu; Time = %s</li>",
+            (unsigned long) Gbl.PID,Gbl.Now.YYYYMMDDHHMMSS);
+  }
+
+/*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
 
@@ -355,15 +365,19 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Start list *****/
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-
       /***** Form to write a new post *****/
       if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
 	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
          Soc_PutHiddenFormToWriteNewPost ();
 
+      /***** Place to insert new publishings *****/
+      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\" class=\"LIST_LEFT\""
+	                 " style=\"background:yellow;\">");
+
+      fprintf (Gbl.F.Out,"</ul>");
+
       /***** List publishings in timeline one by one *****/
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
       for (NumPub = 0;
 	   NumPub < NumPublishings;
 	   NumPub++)
@@ -379,8 +393,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 	 /* Write social note */
 	 Soc_WriteSocialNote (&SocPub,&SocNot,false,NumPub == NumPublishings - 1);
         }
-
-      /***** End list *****/
       fprintf (Gbl.F.Out,"</ul>");
 
       /***** End frame *****/
@@ -1067,13 +1079,14 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 
 static void Soc_PutHiddenFormToWriteNewPost (void)
   {
-   extern const char *Txt_Send_comment;
+   extern const char *Txt_Post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    char FullName[(Usr_MAX_BYTES_NAME+1)*3];
 
-   /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">");
+   /***** Start list *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
+                      "<li class=\"SOCIAL_PUB\">");
 
    /***** Left: write author's photo *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
@@ -1095,7 +1108,6 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
 		      "</div>",
 	    FullName,Gbl.Usrs.Me.UsrDat.Nickname);
 
-
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_COMMENT\">");
 
@@ -1111,13 +1123,12 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
    /* Content of new post */
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"45\" rows=\"3\">"
 		      "</textarea>");
-   Lay_HelpPlainEditor ();
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 		      "%s"
 		      "</button>",
-	    Txt_Send_comment);
+	    Txt_Post);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1125,8 +1136,9 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** End list item *****/
-   fprintf (Gbl.F.Out,"</li>");
+   /***** End list *****/
+   fprintf (Gbl.F.Out,"</li>"
+	              "</ul>");
   }
 
 /*****************************************************************************/
@@ -1174,13 +1186,16 @@ static void Soc_ReceiveSocialPost (void)
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
-   /* Insert post content in the database */
-   sprintf (Query,"INSERT INTO social_posts (Content) VALUES ('%s')",
-            Content);
-   PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
+   if (Content[0])
+     {
+      /* Insert post content in the database */
+      sprintf (Query,"INSERT INTO social_posts (Content) VALUES ('%s')",
+	       Content);
+      PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
-   /* Insert post in social notes */
-   Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
+      /* Insert post in social notes */
+      Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
+     }
   }
 
 /*****************************************************************************/
@@ -1681,17 +1696,20 @@ static void Soc_ReceiveComment (void)
    Par_GetParAndChangeFormat (ParamName,Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
-   /* Insert comment in the database */
-   sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
-	          " VALUES ('%ld','%ld',NOW())",
-            SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
+   if (Content[0])
+     {
+      /* Insert comment in the database */
+      sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
+		     " VALUES ('%ld','%ld',NOW())",
+	       SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
 
-   /* Insert comment content in the database */
-   sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
-	          " VALUES ('%ld','%s')",
-            ComCod,Content);
-   DB_QueryINSERT (Query,"can not store comment content");
+      /* Insert comment content in the database */
+      sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
+		     " VALUES ('%ld','%s')",
+	       ComCod,Content);
+      DB_QueryINSERT (Query,"can not store comment content");
+     }
   }
 
 /*****************************************************************************/

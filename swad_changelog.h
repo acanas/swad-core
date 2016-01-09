@@ -118,13 +118,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.103 (2016-01-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.104 (2016-01-09)"
 #define CSS_FILE		"swad15.102.css"
-#define JS_FILE			"swad15.100.2.js"
+#define JS_FILE			"swad15.104.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.104:   Jan 09, 2016	Refresh recent social timeline via AJAX. Not finished. (191720 lines)
+        Version 15.103.2: Jan 09, 2016	Check that social post or comments are not empty. (191652 lines)
+        Version 15.103.1: Jan 08, 2016	Changes in timeline. (191646 lines)
         Version 15.103:   Jan 08, 2016	Changes in the form to enter a new publishing. (191625 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1491','1497');

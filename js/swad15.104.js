@@ -23,7 +23,7 @@
 // Global variable (string) used to write HTML
 var Gbl_HTMLContent;
 
-// Global variable used in refreshConnected()
+// Global variable used to call SWAD via AJAX
 var ActionAJAX;
 
 // Global variables used in writeLocalClock()
@@ -322,7 +322,7 @@ var objXMLHttpReqCon = false;
 function refreshConnected() {
 	objXMLHttpReqCon = AJAXCreateObject();
 	if (objXMLHttpReqCon) {
-      		var RefreshParams = RefreshParamNxtActCon + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	var RefreshParams = RefreshParamNxtActCon + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
 		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;	// onreadystatechange must be lowercase
 		objXMLHttpReqCon.open('POST',ActionAJAX,true);
 		objXMLHttpReqCon.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -335,11 +335,24 @@ var objXMLHttpReqLog = false;
 function refreshLastClicks() {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
-      		var RefreshParams = RefreshParamNxtActLog + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	var RefreshParams = RefreshParamNxtActLog + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
 		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
 		objXMLHttpReqLog.open('POST',ActionAJAX,true);
 		objXMLHttpReqLog.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		objXMLHttpReqLog.send(RefreshParams);
+	}
+}
+
+//Automatic refresh of social timeline using AJAX. This function must be called from time to time
+var objXMLHttpReqSoc = false;
+function refreshSocialTimeline() {
+	objXMLHttpReqSoc = AJAXCreateObject();
+	if (objXMLHttpReqSoc) {
+      	var RefreshParams = RefreshParamNxtActSoc + '&' + RefreshParamIdSes + '&' + RefreshParamCrsCod;
+      	objXMLHttpReqSoc.onreadystatechange = readSocialTimelineData;	// onreadystatechange must be lowercase
+      	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+      	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      	objXMLHttpReqSoc.send(RefreshParams);
 	}
 }
 
@@ -364,14 +377,14 @@ function AJAXCreateObject() {
 function readConnUsrsData() {
 	if (objXMLHttpReqCon.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
-			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);		// Get separator position
-			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay+1);	// Get separator position
-			var endOfGblCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfNotif+1);	// Get separator position
+			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);				// Get separator position
+			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay+1);		// Get separator position
+			var endOfGblCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfNotif+1);		// Get separator position
 			var endOfCrsCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfGblCon+1);	// Get separator position
 			var endOfNumUsrs = objXMLHttpReqCon.responseText.indexOf('|',endOfCrsCon+1);	// Get separator position
 
-			var delay = parseInt(objXMLHttpReqCon.responseText.substring(0,endOfDelay));		// Get refresh delay
-			var htmlNotif  = objXMLHttpReqCon.responseText.substring(endOfDelay +1,endOfNotif);	// Get HTML code for new notifications
+			var delay = parseInt(objXMLHttpReqCon.responseText.substring(0,endOfDelay));			// Get refresh delay
+			var htmlNotif  = objXMLHttpReqCon.responseText.substring(endOfDelay +1,endOfNotif);		// Get HTML code for new notifications
 			var htmlGblCon = objXMLHttpReqCon.responseText.substring(endOfNotif +1,endOfGblCon);	// Get HTML code for connected
 			var htmlCrsCon = objXMLHttpReqCon.responseText.substring(endOfGblCon+1,endOfCrsCon);	// Get HTML code for course connected
 			var NumUsrsStr = objXMLHttpReqCon.responseText.substring(endOfCrsCon+1,endOfNumUsrs);	// Get number of users
@@ -411,17 +424,34 @@ function readConnUsrsData() {
 function readLastClicksData() {
 	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqLog.status == 200) {
-			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);			// Get separator position
-			var endOfLastClicks = objXMLHttpReqLog.responseText.indexOf('|',endOfDelay+1);	// Get separator position
+			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
 
 			var delay = parseInt(objXMLHttpReqLog.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay+1);	// Get HTML code for last clicks
+			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay+1);		// Get HTML code for last clicks
 
 			var divLastClicks = document.getElementById('lastclicks');			// Access to last click DIV
 			if (divLastClicks)
 				divLastClicks.innerHTML = htmlLastClicks;				// Update global connected DIV
 			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
 				setTimeout('refreshLastClicks()',delay);
+		}
+	}
+}
+
+//Receives and show social timeline data
+function readSocialTimelineData() {
+	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqSoc.status == 200) {
+			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);	// Get separator position
+
+			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
+			var htmlSocialTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+
+			var divSocialTimeline = document.getElementById('recent_timeline');	// Access to social timeline DIV
+			if (divSocialTimeline)
+				divSocialTimeline.innerHTML = htmlSocialTimeline;	// Update global connected DIV
+			if (delay >= 5000)	// If refresh slower than 1 time each 5 seconds, do refresh; else abort
+				setTimeout('refreshSocialTimeline()',delay);
 		}
 	}
 }
