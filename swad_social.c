@@ -178,14 +178,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
-                              const char *Title);
+static void Soc_ShowTimeline (const char *Query,const char *Title);
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_PutLinkToViewRecentPublishings (void);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
-                                 bool LastInList);
+                                 bool ViewTopLine);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -264,7 +263,7 @@ void Soc_ShowTimelineUsr (void)
 
    /***** Show timeline *****/
    sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
-   Soc_ShowTimeline (Query,ActSeePubPrf,Gbl.Title);
+   Soc_ShowTimeline (Query,Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -308,7 +307,7 @@ void Soc_ShowTimelineGbl (void)
 		  " ORDER BY PubCod DESC");
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,ActSeeSocTmlGbl,Txt_Public_activity);
+   Soc_ShowTimeline (Query,Txt_Public_activity);
 
    /***** Drop temporary table with publishing codes *****/
    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
@@ -322,7 +321,7 @@ void Soc_ShowTimelineGbl (void)
 
 void Soc_GetAndShowRecentTimelineGbl (void)
   {
-   fprintf (Gbl.F.Out,"<li>PID = %lu; Time = %s</li>",
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">PID = %lu; Time = %s</li>",
             (unsigned long) Gbl.PID,Gbl.Now.YYYYMMDDHHMMSS);
   }
 
@@ -330,11 +329,8 @@ void Soc_GetAndShowRecentTimelineGbl (void)
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
 
-static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
-                              const char *Title)
+static void Soc_ShowTimeline (const char *Query,const char *Title)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Update;
    extern const char *Txt_No_public_activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -351,20 +347,6 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
-
-      /***** Form to update timeline *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	{
-         Act_FormStartAnchor (UpdateAction,"timeline");
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	}
-      else
-         Act_FormStart (UpdateAction);
-      Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
 
       /***** Form to write a new post *****/
       if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
@@ -390,7 +372,7 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,NumPub == NumPublishings - 1);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
         }
       fprintf (Gbl.F.Out,"</ul>");
 
@@ -405,22 +387,26 @@ static void Soc_ShowTimeline (const char *Query,Act_Action_t UpdateAction,
   }
 
 /*****************************************************************************/
-/****** Put an icon to toggle on/off the form to comment a social note *******/
+/***************** Put link to view new publishings in timeline **************/
 /*****************************************************************************/
 
 static void Soc_PutLinkToViewRecentPublishings (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_See_new_activity;
 
    /***** Link to toggle on/off the form to comment a social note *****/
+   // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
+	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\""
 	              " style=\"display:none;\">"
                       "<a href=\"\" class=\"%s\""
                       " onclick=\"moveRecentTimelineToTimeline();return false;\" />"
-                      "<span id=\"view_new_posts_count\">0</span> nuevos elementos"	// Need translation
-                      "</a>"
+                      "%s (<span id=\"view_new_posts_count\">0</span>)"
+	              "</a>"
 	              "</div>",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+	    The_ClassFormBold[Gbl.Prefs.Theme],
+	    Txt_See_new_activity);
   }
 
 /*****************************************************************************/
@@ -430,7 +416,7 @@ static void Soc_PutLinkToViewRecentPublishings (void)
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,	// Social note is shown alone, not in a list
-                                 bool LastInList)	// Social note is shown in a list and it's the last one
+                                 bool ViewTopLine)	// Separate with a top line from previous social note
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -458,7 +444,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
    /***** Start list item *****/
    fprintf (Gbl.F.Out,"<li");
-   if (!(ShowAlone || LastInList))
+   if (!ShowAlone && ViewTopLine)
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
    fprintf (Gbl.F.Out,">");
 
@@ -1104,7 +1090,7 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
 
    /***** Start list *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
-                      "<li class=\"SOCIAL_PUB\">");
+                      "<li>");
 
    /***** Left: write author's photo *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
@@ -1803,7 +1789,7 @@ static void Soc_ShareSocialNote (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
       /***** Show the social note just shared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
      }
   }
 
@@ -1882,7 +1868,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
      }
   }
 
@@ -1970,7 +1956,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,true);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */

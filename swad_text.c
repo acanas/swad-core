@@ -33851,6 +33851,27 @@ const char *Txt_See_messages_received =
 	"Veja mensagens recebidas";
 #endif
 
+const char *Txt_See_new_activity =
+#if   L==1
+	 "Veure nova activitat";
+#elif L==2
+	 "Siehe neue Aktivit&auml;t";
+#elif L==3
+	 "See new activity";
+#elif L==4
+	 "Ver nueva actividad";
+#elif L==5
+	 "Voir nouvelle activit&eacute;";
+#elif L==6
+	 "Ver nueva actividad";	// Okoteve traducción
+#elif L==7
+	 "Vedere nuova attivit&agrave;";
+#elif L==8
+	 "Zobacz now&aogon; aktywno&sacute;&cacute;";
+#elif L==9
+	 "Veja nova atividade";
+#endif
+
 const char *Txt_See_notifications =
 #if   L==1
 	"Ver notificaciones";	// Necessita traduccio
