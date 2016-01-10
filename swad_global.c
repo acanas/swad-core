@@ -438,9 +438,10 @@ void Gbl_InitializeGlobals (void)
 
 void Gbl_Cleanup (void)
   {
-   if (Gbl.CurrentAct != ActRefCon    &&
-       Gbl.CurrentAct != ActRefLstClk &&
-       Gbl.CurrentAct != ActRefSocTim &&
+   if (Gbl.CurrentAct != ActRefCon       &&
+       Gbl.CurrentAct != ActRefLstClk    &&
+       Gbl.CurrentAct != ActRefNewSocPub &&
+       Gbl.CurrentAct != ActRefOldSocPub &&
        !Gbl.WebService.IsWebService &&
        Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW &&
        !Gbl.HiddenParamsInsertedIntoDB)

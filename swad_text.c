@@ -33851,6 +33851,27 @@ const char *Txt_See_messages_received =
 	"Veja mensagens recebidas";
 #endif
 
+const char *Txt_See_more =
+#if   L==1
+	 "Veure m&eacute;s";
+#elif L==2
+	 "Weitere";
+#elif L==3
+	 "See more";
+#elif L==4
+	 "Ver m&aacute;s";
+#elif L==5
+	 "Voir plus";
+#elif L==6
+	 "Ver m&aacute;s";	// Okoteve traducción
+#elif L==7
+	 "Vedere pi&ugrave;";
+#elif L==8
+	 "Zobacz wi&eogon;cej";
+#elif L==9
+	 "Veja mais";
+#endif
+
 const char *Txt_See_new_activity =
 #if   L==1
 	 "Veure nova activitat";

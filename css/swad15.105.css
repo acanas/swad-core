@@ -1668,14 +1668,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /******************************** Social activity ****************************/
-#view_new_posts_container
+#view_new_posts_container,#view_old_posts_container
 	{
 	display:table-cell;
 	height:50px;
 	text-align:center;
 	vertical-align:middle;
 	}
-#recent_timeline_list
+#new_timeline_list
 	{
 	display:none;
 	}

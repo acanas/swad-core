@@ -71,9 +71,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(8+52+15+90+72+67+205+183+143+163+36+27+82)
+#define Act_NUM_ACTIONS	(9+52+15+90+72+67+205+183+143+163+36+27+82)
 
-#define Act_MAX_ACTION_COD 1509
+#define Act_MAX_ACTION_COD 1510
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -86,8 +86,9 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActMnu		 3
 #define ActRefCon	 4
 #define ActRefLstClk	 5
-#define ActRefSocTim	 6
-#define ActWebSvc	 7
+#define ActRefNewSocPub	 6
+#define ActRefOldSocPub	 7
+#define ActWebSvc	 8
 
 /*****************************************************************************/
 /******************************** System tab *********************************/

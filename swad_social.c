@@ -49,10 +49,10 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_MAX_BYTES_SUMMARY 100
-#define Soc_NUM_PUBS_IN_TIMELINE 100
-#define Soc_WIDTH_TIMELINE "560px"
-#define Soc_MAX_NUM_SHARERS_SHOWN 10	// Maximum number of users shown who have share a social note
+#define Soc_WIDTH_TIMELINE		"560px"
+#define Soc_NUM_PUBS_IN_TIMELINE	  5	// Number of recent publishings shown before refreshing
+#define Soc_MAX_NUM_SHARERS_SHOWN	 10	// Maximum number of users shown who have share a social note
+#define Soc_MAX_BYTES_SUMMARY		100
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -187,7 +187,10 @@ static void Soc_ShowTimeline (const char *Query,const char *Title);
 static void Soc_ShowRecentTimeline (const char *Query);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
-static void Soc_PutLinkToViewRecentPublishings (void);
+
+static void Soc_PutLinkToViewNewPublishings (void);
+static void Soc_PutLinkToViewOldPublishings (void);
+
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
@@ -302,7 +305,7 @@ void Soc_ShowTimelineGbl (void)
 /******* Get and show recent timeline including all the users I follow *******/
 /*****************************************************************************/
 
-void Soc_GetAndShowRecentTimelineGbl (void)
+void Soc_GetAndShowNewTimelineGbl (void)
   {
    char Query[512];
 
@@ -315,6 +318,27 @@ void Soc_GetAndShowRecentTimelineGbl (void)
 
    /***** Drop temporary table with publishing codes *****/
    Soc_DropTemporaryTableWithPubCods ();
+  }
+
+/*****************************************************************************/
+/******** Get and show old timeline including all the users I follow *********/
+/*****************************************************************************/
+
+void Soc_GetAndShowOldTimelineGbl (void)
+  {
+   // char Query[512];
+
+   /***** Build query to get timeline *****/
+   // Soc_BuildQueryToGetTimelineGbl (true,	// Get only new publishings
+   //                                Query);
+
+   /***** Show recent timeline *****/
+   // Soc_ShowRecentTimeline (Query);
+
+   /***** Drop temporary table with publishing codes *****/
+   // Soc_DropTemporaryTableWithPubCods ();
+
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">Un ejemplo de post.</li>");
   }
 
 /*****************************************************************************/
@@ -452,11 +476,13 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
          Soc_PutHiddenFormToWriteNewPost ();
 
-      /***** Hidden div where insert new publishings via AJAX *****/
-      Soc_PutLinkToViewRecentPublishings ();
-      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline_list\"></ul>");
+      /***** Link to view new publishings via AJAX *****/
+      Soc_PutLinkToViewNewPublishings ();
 
-      /***** List publishings in timeline one by one *****/
+      /***** Hidden list where insert new publishings via AJAX *****/
+      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
+
+      /***** List with the publishings in timeline *****/
       fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
       for (NumPub = 0;
 	   NumPub < NumPublishings;
@@ -474,6 +500,12 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
         }
       fprintf (Gbl.F.Out,"</ul>");
+
+      /***** Link to view old publishings via AJAX *****/
+      Soc_PutLinkToViewOldPublishings ();
+
+      /***** Hidden list where insert old publishings via AJAX *****/
+      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -526,23 +558,44 @@ static void Soc_ShowRecentTimeline (const char *Query)
 /***************** Put link to view new publishings in timeline **************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToViewRecentPublishings (void)
+static void Soc_PutLinkToViewNewPublishings (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
 
-   /***** Link to toggle on/off the form to comment a social note *****/
+   /***** Link to view (show hidden) new publishings *****/
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
 	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\""
 	              " style=\"display:none;\">"
                       "<a href=\"\" class=\"%s\""
-                      " onclick=\"moveRecentTimelineToTimeline();return false;\" />"
+                      " onclick=\"moveNewTimelineToTimeline();return false;\" />"
                       "%s (<span id=\"view_new_posts_count\">0</span>)"
 	              "</a>"
 	              "</div>",
 	    The_ClassFormBold[Gbl.Prefs.Theme],
 	    Txt_See_new_activity);
+  }
+
+/*****************************************************************************/
+/***************** Put link to view old publishings in timeline **************/
+/*****************************************************************************/
+
+static void Soc_PutLinkToViewOldPublishings (void)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_See_more;
+
+   /***** Link to view old publishings *****/
+   fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
+	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\">"
+                      "<a href=\"\" class=\"%s\""
+                      " onclick=\"refreshOldTimeline();return false;\" />"
+                      "%s"
+	              "</a>"
+	              "</div>",
+	    The_ClassFormBold[Gbl.Prefs.Theme],
+	    Txt_See_more);
   }
 
 /*****************************************************************************/

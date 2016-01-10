@@ -349,15 +349,30 @@ function refreshLastClicks() {
 	}
 }
 
-//Automatic refresh of social timeline using AJAX. This function must be called from time to time
+// Automatic refresh of new publishings in social timeline using AJAX. This function must be called from time to time
 var objXMLHttpReqSoc = false;
-function refreshSocialTimeline() {
+function refreshNewTimeline() {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
-      	var RefreshParams = RefreshParamNxtActSoc + '&' +
+      	var RefreshParams = RefreshParamNxtActNewPub + '&' +
       						RefreshParamIdSes;
 
-      	objXMLHttpReqSoc.onreadystatechange = readSocialTimelineData;	// onreadystatechange must be lowercase
+      	objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
+      	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+      	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      	objXMLHttpReqSoc.send(RefreshParams);
+	}
+}
+
+// Refresh of old publishings in social timeline using AJAX. This function is called when user clicks in link
+var objXMLHttpReqSoc = false;
+function refreshOldTimeline() {
+	objXMLHttpReqSoc = AJAXCreateObject();
+	if (objXMLHttpReqSoc) {
+      	var RefreshParams = RefreshParamNxtActOldPub + '&' +
+      						RefreshParamIdSes;
+
+      	objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
       	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
       	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       	objXMLHttpReqSoc.send(RefreshParams);
@@ -446,25 +461,25 @@ function readLastClicksData() {
 	}
 }
 
-//Receives and show social timeline data
-function readSocialTimelineData() {
+// Receives and show new social timeline data
+function readNewTimelineData() {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
 			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+			var htmlNewTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
 
-			var recentTimeline = document.getElementById('recent_timeline_list');	// Access to UL with the recent timeline
-			if (recentTimeline) {
-				recentTimeline.innerHTML = htmlRecentTimeline + recentTimeline.innerHTML;	// Update list of publishings in recent timeline
-				var countRecentTimeline = recentTimeline.childNodes.length;
+			var newTimeline = document.getElementById('new_timeline_list');	// Access to UL with the new timeline
+			if (newTimeline) {
+				newTimeline.innerHTML = htmlNewTimeline + newTimeline.innerHTML;	// Update list of publishings in new timeline
+				var countNewTimeline = newTimeline.childNodes.length;
 				
-				if (countRecentTimeline) {
+				if (countNewTimeline) {
 					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
 					var viewNewPostsCount     = document.getElementById('view_new_posts_count');
 
 					// Update number of new posts
-					viewNewPostsCount.innerHTML = countRecentTimeline;
+					viewNewPostsCount.innerHTML = countNewTimeline;
 
 					// Display message with new posts if hidden
 					viewNewPostsContainer.style.display = '';
@@ -472,23 +487,49 @@ function readSocialTimelineData() {
 			}
 
 			if (delay >= 5000)	// If refresh slower than 1 time each 5 seconds, do refresh; else abort
-				setTimeout('refreshSocialTimeline()',delay);
+				setTimeout('refreshNewTimeline()',delay);
 		}
 	}
 }
 
-// Move recent timeline to timeline
-function moveRecentTimelineToTimeline() {
+// Receives and show old social timeline data
+function readOldTimelineData() {
+	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqSoc.status == 200) {
+			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
+			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
+			var htmlOldTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+
+			var oldTimeline = document.getElementById('old_timeline_list');	// Access to UL with the recent timeline
+			if (oldTimeline) {
+				oldTimeline.innerHTML = htmlOldTimeline;	// Fill list of publishings in old timeline
+				var countOldTimeline = oldTimeline.childNodes.length;
+				
+				if (countOldTimeline) {
+					var timeline = document.getElementById("timeline_list");
+
+					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
+					for (var i=0; i<countOldTimeline; i++)
+							timeline.appendChild(oldTimeline.firstChild);
+							// oldTimeline.removeChild(oldTimeline.childNodes[0]);	// Not necessary
+				}
+			}
+		}
+	}
+}
+
+// Move new timeline to top of timeline
+function moveNewTimelineToTimeline() {
 	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
 	var viewNewPostsCount     = document.getElementById('view_new_posts_count');
-	var recentTimeline        = document.getElementById('recent_timeline_list');	// Access to social timeline DIV
-	var countRecentTimeline = recentTimeline.childNodes.length;
+	var newTimeline           = document.getElementById('new_timeline_list');
+	var countNewTimeline = newTimeline.childNodes.length;
 
-	if (countRecentTimeline) {
+	if (countNewTimeline) {
 		var timeline = document.getElementById("timeline_list");
-		// Move all the LI elements in UL 'recentTimeline' to the top of UL 'timeline'
-	    for(var i=0; i < countRecentTimeline; i++)
-			timeline.insertBefore(recentTimeline.lastChild, timeline.childNodes[0]);
+		// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
+	    for (var i=0; i<countNewTimeline; i++)
+			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
     }
 
 	// Reset and hide number of new posts after moving

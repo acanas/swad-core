@@ -123,9 +123,10 @@ void Lay_WriteStartOfPage (void)
    Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
-   if (Gbl.CurrentAct == ActRefCon    ||
-       Gbl.CurrentAct == ActRefLstClk ||
-       Gbl.CurrentAct == ActRefSocTim)
+   if (Gbl.CurrentAct == ActRefCon       ||
+       Gbl.CurrentAct == ActRefLstClk    ||
+       Gbl.CurrentAct == ActRefNewSocPub ||
+       Gbl.CurrentAct == ActRefOldSocPub)
      // Don't generate a full HTML page, only the content of a DIV or similar
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
@@ -611,7 +612,7 @@ static void Lay_WriteScriptInit (void)
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    else if (Gbl.CurrentAct == ActSeeSocTmlGbl)
-      fprintf (Gbl.F.Out,"	setTimeout(\"refreshSocialTimeline()\",%lu);\n",
+      fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
@@ -626,13 +627,15 @@ static void Lay_WriteScriptParamsAJAX (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
                       "var RefreshParamNxtActCon = \"act=%ld\";\n"
                       "var RefreshParamNxtActLog = \"act=%ld\";\n"
-                      "var RefreshParamNxtActSoc = \"act=%ld\";\n"
+                      "var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+                      "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
                       "var RefreshParamIdSes = \"ses=%s\";\n"
                       "var RefreshParamCrsCod = \"crs=%ld\";\n"
                       "</script>\n",
-            Act_Actions[ActRefCon   ].ActCod,
-            Act_Actions[ActRefLstClk].ActCod,
-            Act_Actions[ActRefSocTim].ActCod,
+            Act_Actions[ActRefCon      ].ActCod,
+            Act_Actions[ActRefLstClk   ].ActCod,
+            Act_Actions[ActRefNewSocPub].ActCod,
+            Act_Actions[ActRefOldSocPub].ActCod,
             Gbl.Session.Id,
             Gbl.CurrentCrs.Crs.CrsCod);
   }
@@ -1295,9 +1298,10 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
-   if (Gbl.CurrentAct != ActRefCon    &&	// Refreshing connected users
-       Gbl.CurrentAct != ActRefLstClk &&	// Refreshing last clics
-       Gbl.CurrentAct != ActRefSocTim)		// Refreshing social timeline
+   if (Gbl.CurrentAct != ActRefCon       &&	// Refreshing connected users
+       Gbl.CurrentAct != ActRefLstClk    &&	// Refreshing last clics
+       Gbl.CurrentAct != ActRefNewSocPub &&	// Refreshing new social publishings in timeline
+       Gbl.CurrentAct != ActRefOldSocPub)	// Refreshing old social publishings in timeline
       Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
@@ -1315,9 +1319,10 @@ void Lay_ShowErrorAndExit (const char *Message)
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      if (Gbl.CurrentAct != ActRefCon    &&	// Refreshing connected users
-          Gbl.CurrentAct != ActRefLstClk &&	// Refreshing last clicks
-          Gbl.CurrentAct != ActRefSocTim)	// Refreshing last clicks
+      if (Gbl.CurrentAct != ActRefCon       &&	// Refreshing connected users
+          Gbl.CurrentAct != ActRefLstClk    &&	// Refreshing last clicks
+          Gbl.CurrentAct != ActRefNewSocPub &&	// Refreshing new social publishings in timeline
+          Gbl.CurrentAct != ActRefOldSocPub)	// Refreshing old social publishings in timeline
 	{
 	 /***** Compute time to send page *****/
 	 Sta_ComputeTimeToSendPage ();
@@ -1492,15 +1497,27 @@ void Lay_RefreshLastClicks (void)
   }
 
 /*****************************************************************************/
-/********************* Refresh social timeline via AJAX **********************/
+/********** Refresh new publishings in social timeline via AJAX **************/
 /*****************************************************************************/
 
-void Lay_RefreshSocialTimeline (void)
+void Lay_RefreshNewTimeline (void)
   {
    // Send, before the HTML, the refresh time and the last publishing got from database
    fprintf (Gbl.F.Out,"%lu|",
             Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
-   Soc_GetAndShowRecentTimelineGbl ();
+   Soc_GetAndShowNewTimelineGbl ();
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+/*****************************************************************************/
+/************ View new publishings in social timeline via AJAX ***************/
+/*****************************************************************************/
+
+void Lay_RefreshOldTimeline (void)
+  {
+   Soc_GetAndShowOldTimelineGbl ();
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;

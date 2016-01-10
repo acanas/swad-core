@@ -83,7 +83,8 @@ extern struct Globals Gbl;
 	  3. ActMnu			Show menu of a tab
 	  4. ActRefCon			Refresh number of notifications and connected users via AJAX
 	  5. ActRefLstClk		Refresh last clicks in log via AJAX
-New!!!!!!!!. ActRefSocTim		Refresh recent social timeline via AJAX
+New!!!!!!!!. ActRefNewSocPub		Refresh recent social timeline via AJAX
+New!!!!!!!!. ActRefNewSocPub		View old social timeline via AJAX
 	  6. ActWebSvc			Call plugin function
 System:
 	  7. ActSysReqSch		Request search in system tab
@@ -1339,7 +1340,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},
    /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshNotifsAndConnected	,NULL},
    /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshLastClicks		,NULL},
-   /* ActRefSocTim	*/{1509,-1,TabUnk,ActRefSocTim		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshSocialTimeline	,NULL},
+   /* ActRefNewSocPub	*/{1509,-1,TabUnk,ActRefNewSocPub	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshNewTimeline		,NULL},
+   /* ActRefOldSocPub	*/{1510,-1,TabUnk,ActRefNewSocPub	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshOldTimeline		,NULL},
    /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_WebService			,NULL},
 
    // TabSys ******************************************************************
@@ -4202,7 +4204,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemSocComUsr,	// #1506
 	ActRemSocComGbl,	// #1507
 	ActRemSocComUsr,	// #1508
-	ActRefSocTim,		// #1509
+	ActRefNewSocPub,	// #1509
+	ActRefOldSocPub,	// #1510
 	};
 
 /*****************************************************************************/
@@ -4501,9 +4504,10 @@ void Act_AdjustCurrentAction (void)
       return;
 
    /***** Don't adjust anything when refreshing users or on a web service *****/
-   if (Gbl.CurrentAct == ActRefCon    ||
-       Gbl.CurrentAct == ActRefLstClk ||
-       Gbl.CurrentAct == ActRefSocTim ||
+   if (Gbl.CurrentAct == ActRefCon       ||
+       Gbl.CurrentAct == ActRefLstClk    ||
+       Gbl.CurrentAct == ActRefNewSocPub ||
+       Gbl.CurrentAct == ActRefOldSocPub ||
        Gbl.WebService.IsWebService)
       return;
 
