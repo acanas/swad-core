@@ -52,8 +52,13 @@
 #define Soc_WIDTH_TIMELINE	    "560px"
 #define Soc_MAX_NUM_SHARERS_SHOWN	 10		// Maximum number of users shown who have share a social note
 #define Soc_MAX_BYTES_SUMMARY	 	100
-#define Soc_MAX_RECENT_PUBS_TO_GET	  5	// Max. number of recent publishings shown before refreshing
-#define Soc_MAX_OLD_PUBS_TO_GET		  5	// Max. number of publishings got everytime I want to see older publishings
+
+// Number of recent publishings got and shown the first time, before refreshing
+#define Soc_MAX_RECENT_PUBS_TO_SHOW	  50					// Publishings to show
+#define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
+
+// Number of old publishings got and shown when I want to see old publishings
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
 
 typedef enum
   {
@@ -381,7 +386,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
 	 if (FirstPubCod > 0)
 	    sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",FirstPubCod);
-	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_OLD_PUBS_TO_GET);
+	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
          break;
      }
 
@@ -500,16 +505,17 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    extern const char *Txt_No_public_activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumPublishings;
+   unsigned long NumPubsGot;
+   unsigned long NumPubsToShow;
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
 
    /***** Get timeline from database *****/
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** List my timeline *****/
-   if (NumPublishings)	// Publishings found in timeline
+   if (NumPubsGot)	// Publishings found in timeline
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
@@ -525,10 +531,12 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       /***** Hidden list where insert new publishings via AJAX *****/
       fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
 
-      /***** List with the publishings in timeline *****/
+      /***** List recent publishings in timeline *****/
       fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
+      NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
+	                                                            Soc_MAX_RECENT_PUBS_TO_SHOW;
       for (NumPub = 0;
-	   NumPub < NumPublishings;
+	   NumPub < NumPubsToShow;
 	   NumPub++)
 	{
          /* Get data of social publishing */
@@ -547,11 +555,14 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       /***** Store first publishing code into session *****/
       Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
-      /***** Link to view old publishings via AJAX *****/
-      Soc_PutLinkToViewOldPublishings ();
+      if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
+	{
+         /***** Link to view old publishings via AJAX *****/
+         Soc_PutLinkToViewOldPublishings ();
 
-      /***** Hidden list where insert old publishings via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
+         /***** Hidden list where insert old publishings via AJAX *****/
+         fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
+	}
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -572,17 +583,17 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumPublishings;
+   unsigned long NumPubsGot;
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
 
    /***** Get new publishings timeline from database *****/
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   /***** List new timeline *****/
+   /***** List new publishings timeline *****/
    for (NumPub = 0;
-	NumPub < NumPublishings;
+	NumPub < NumPubsGot;
 	NumPub++)
      {
       /* Get data of social publishing */
@@ -610,19 +621,19 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumPublishings;
+   unsigned long NumPubsGot;
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
 
    /***** Get old publishings timeline from database *****/
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+   NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   if (NumPublishings)
+   if (NumPubsGot)
      {
-      /***** List old timeline *****/
+      /***** List old publishings in timeline *****/
       for (NumPub = 0;
-	   NumPub < NumPublishings;
+	   NumPub < NumPubsGot;
 	   NumPub++)
 	{
 	 /* Get data of social publishing */

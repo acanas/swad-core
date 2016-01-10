@@ -123,13 +123,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.107.1 (2016-01-10)"
-#define CSS_FILE		"swad15.105.css"
-#define JS_FILE			"swad15.107.1.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.107.2 (2016-01-11)"
+#define CSS_FILE		"swad15.107.2.css"
+#define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.107.2: Jan 11, 2016	Hide link to see old publishings when oldest publishing is reached.
+					Some constants related to social timeline changed. (192159 lines)
         Version 15.107.1: Jan 10, 2016	Id of dates in timeline must be unique.
 					Changes in JavaScript to render dates and mathenatics. (192137 lines)
         Version 15.107:   Jan 10, 2016	Get older publishings from social timeline. (192112 lines)

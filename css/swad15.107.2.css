@@ -1678,7 +1678,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 #new_timeline_list
 	{
 	display:none;
+	margin:0;
+	padding:0;
 	}
+#old_timeline_list
+	{
+	margin:0;
+	padding:0;
+	}
+
 .SOCIAL_PUB
 	{
 	width:536px;

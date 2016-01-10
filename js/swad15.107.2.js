@@ -488,7 +488,7 @@ function readNewTimelineData() {
 				}
 			}
 
-			if (delay >= 5000)	// If refresh slower than 1 time each 5 seconds, do refresh; else abort
+			if (delay >= 10000)	// If refresh slower than 1 time each 10 seconds, do refresh; else abort
 				setTimeout('refreshNewTimeline()',delay);
 		}
 	}
@@ -519,6 +519,10 @@ function readOldTimelineData() {
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
 				}
+				
+				if (countOldTimeline < 10)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
+					// No more old publishings
+					document.getElementById("view_old_posts_container").style.display = 'none';
 			}
 		}
 	}
