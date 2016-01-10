@@ -384,10 +384,6 @@ struct Globals
      } Usrs;
    struct
      {
-      long LastPubCod;	// Last code of publishing got from database when refreshing timeline via AJAX
-     } Social;
-   struct
-     {
       Sco_Scope_t Current;
       Sco_Scope_t Default;
       unsigned Allowed;

@@ -2735,7 +2735,7 @@ static unsigned Svy_GetQstIndFromQstCod (long QstCod)
 
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned QstInd = 0;

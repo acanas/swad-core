@@ -178,13 +178,21 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query);
+static long Soc_GetLastPubCodFromSession (void);
+static void Soc_UpdateLastPubCodIntoSession (void);
+static void Soc_DropTemporaryTableWithPubCods (void);
+
 static void Soc_ShowTimeline (const char *Query,const char *Title);
+static void Soc_ShowRecentTimeline (const char *Query);
+
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_PutLinkToViewRecentPublishings (void);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
-                                 bool ViewTopLine);
+                                 bool ViewTopLine,
+                                 const char *Style);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -280,58 +288,15 @@ void Soc_ShowTimelineGbl (void)
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_ShowAlert (Lay_INFO,Txt_You_dont_follow_any_user);
 
-   /***** Create temporary table with publishing codes *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
-
-   sprintf (Query,"CREATE TEMPORARY TABLE pub_cods (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
-		  " SELECT MIN(PubCod) AS PubCod"
-		  " FROM social_timeline"
-		  " WHERE PublisherCod IN"
-		  " (SELECT '%ld'"
-		  " UNION"
-		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-		  " GROUP BY NotCod"
-		  " ORDER BY PubCod DESC LIMIT %u",
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Soc_NUM_PUBS_IN_TIMELINE);
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not create temporary table");
-
-   /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
-		  " FROM social_timeline WHERE PubCod IN "
-		  "(SELECT PubCod FROM pub_cods)"
-		  " ORDER BY PubCod DESC");
+   /***** Build query to get timeline *****/
+   Soc_BuildQueryToGetTimelineGbl (false,	// Do not get only new publishings
+                                   Query);
 
    /***** Show timeline *****/
    Soc_ShowTimeline (Query,Txt_Public_activity);
 
    /***** Drop temporary table with publishing codes *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
-  }
-
-/*****************************************************************************/
-/**** Get parameter with the more recent publishing code got from database ***/
-/*****************************************************************************/
-// This parameter is sent and receiveda again via AJAX
-// As an alternative, it could be stored in database with the code of session
-
-void Soc_GetParamLastPubCod (void)
-  {
-   char LongStr[1+10+1];
-   long LongNum;
-
-   /***** Get the more recent publishing code *****/
-   Gbl.Social.LastPubCod = 0;
-   Par_GetParToText ("LastPubCod",LongStr,1+10);
-   if (LongStr[0])	// Parameter "LastPubCod" available
-      if (sscanf (LongStr,"%ld",&LongNum) == 1)
-	 Gbl.Social.LastPubCod = LongNum;
+   Soc_DropTemporaryTableWithPubCods ();
   }
 
 /*****************************************************************************/
@@ -340,14 +305,124 @@ void Soc_GetParamLastPubCod (void)
 
 void Soc_GetAndShowRecentTimelineGbl (void)
   {
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">"
-	              "PID = %lu; "
-	              "Time = %s; "
-	              "Gbl.Social.LastPubCod = %ld"
-	              "</li>",
-            (unsigned long) Gbl.PID,
-            Gbl.Now.YYYYMMDDHHMMSS,
-            Gbl.Social.LastPubCod);
+   char Query[512];
+
+   /***** Build query to get timeline *****/
+   Soc_BuildQueryToGetTimelineGbl (true,	// Get only new publishings
+                                   Query);
+
+   /***** Show recent timeline *****/
+   Soc_ShowRecentTimeline (Query);
+
+   /***** Drop temporary table with publishing codes *****/
+   Soc_DropTemporaryTableWithPubCods ();
+  }
+
+/*****************************************************************************/
+/************************ Build query to get timeline ************************/
+/*****************************************************************************/
+
+static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query)
+  {
+   char SubQuery[64];
+   long LastPubCod;
+
+   /****** Build subquery in order to get only the publishings
+           more recent than LastPubCod *****/
+   SubQuery[0] = '\0';
+   if (GetOnlyNewPubs)
+     {
+      LastPubCod = Soc_GetLastPubCodFromSession ();
+      if (LastPubCod > 0)
+	 sprintf (SubQuery,"PubCod>'%ld' AND ",LastPubCod);
+     }
+
+   /***** Remove temporary table with publishing codes *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   /***** Create temporary table with publishing codes *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE pub_cods"
+	          " (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
+		  " SELECT MIN(PubCod) AS PubCod"
+		  " FROM social_timeline"
+		  " WHERE %sPublisherCod IN"
+		  " (SELECT '%ld'"
+		  " UNION"
+		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+		  " GROUP BY NotCod"
+		  " ORDER BY PubCod DESC LIMIT %u",
+            SubQuery,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Soc_NUM_PUBS_IN_TIMELINE);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Update last publishing code into session for next refresh *****/
+   // Do this inmediately after getting the publishings codes
+   Soc_UpdateLastPubCodIntoSession ();
+
+   /***** Build query to show timeline including the users I am following *****/
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+		  " FROM social_timeline WHERE PubCod IN "
+		  "(SELECT PubCod FROM pub_cods)"
+		  " ORDER BY PubCod DESC");
+  }
+
+/*****************************************************************************/
+/******** Get last publishing code of last refresh stored in session *********/
+/*****************************************************************************/
+
+static long Soc_GetLastPubCodFromSession (void)
+  {
+   char Query[128+Ses_LENGTH_SESSION_ID];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long LastPubCod;
+
+   /***** Get last page of received/sent messages from database *****/
+   sprintf (Query,"SELECT LastPubCod FROM sessions WHERE SessionId='%s'",
+            Gbl.Session.Id);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get last publishing code") != 1)
+      Lay_ShowErrorAndExit ("Error when getting last publishing code.");
+
+   /***** Get last publishing code *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%ld",&LastPubCod) != 1)
+      LastPubCod = 0;
+
+   return LastPubCod;
+  }
+
+/*****************************************************************************/
+/*********************** Update last publishing code *************************/
+/*****************************************************************************/
+
+static void Soc_UpdateLastPubCodIntoSession (void)
+  {
+   char Query[128+Ses_LENGTH_SESSION_ID];
+
+   /***** Update last publishing code *****/
+   sprintf (Query,"UPDATE sessions"
+	          " SET LastPubCod=(SELECT MAX(PubCod) FROM social_timeline)"
+	          " WHERE SessionId='%s'",
+	    Gbl.Session.Id);
+   DB_QueryUPDATE (Query,"can not update last page of messages");
+  }
+
+/*****************************************************************************/
+/**************** Drop temporary table with publishing codes *****************/
+/*****************************************************************************/
+
+static void Soc_DropTemporaryTableWithPubCods (void)
+  {
+   char Query[128];
+
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
   }
 
 /*****************************************************************************/
@@ -378,12 +453,12 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
          Soc_PutHiddenFormToWriteNewPost ();
 
-      /***** Hidden list where insert new publishings via AJAX *****/
+      /***** Hidden div where insert new publishings via AJAX *****/
       Soc_PutLinkToViewRecentPublishings ();
-      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"recent_timeline_list\"></ul>");
 
       /***** List publishings in timeline one by one *****/
-      fprintf (Gbl.F.Out,"<ul id=\"timeline\" class=\"LIST_LEFT\">");
+      fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
       for (NumPub = 0;
 	   NumPub < NumPublishings;
 	   NumPub++)
@@ -392,15 +467,12 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
          row = mysql_fetch_row (mysql_res);
          Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
 
-         if (NumPub == 0)	// The more recent publishing
-            Gbl.Social.LastPubCod = SocPub.PubCod;	// Last publishing code got from database
-
 	 /* Get data of social note */
 	 SocNot.NotCod = SocPub.NotCod;
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true,NULL);
         }
       fprintf (Gbl.F.Out,"</ul>");
 
@@ -412,12 +484,43 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
 
-   /***** Initialize javascript global variable with the code of the last punlishing *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-                      "	LastPubCod = \"%ld\";\n"
-                      "</script>\n",
-            Gbl.Social.LastPubCod);
+/*****************************************************************************/
+/************** Show recent social activity (recent timeline) ****************/
+/*****************************************************************************/
+
+static void Soc_ShowRecentTimeline (const char *Query)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumPublishings;
+   unsigned long NumPub;
+   struct SocialPublishing SocPub;
+   struct SocialNote SocNot;
+
+   /***** Get timeline from database *****/
+   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social notes");
+
+   /***** List recent timeline *****/
+   for (NumPub = 0;
+	NumPub < NumPublishings;
+	NumPub++)
+     {
+      /* Get data of social publishing */
+      row = mysql_fetch_row (mysql_res);
+      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+
+      /* Get data of social note */
+      SocNot.NotCod = SocPub.NotCod;
+      Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+      /* Write social note */
+      Soc_WriteSocialNote (&SocPub,&SocNot,false,true,"background:yellow;");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -450,7 +553,8 @@ static void Soc_PutLinkToViewRecentPublishings (void)
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,	// Social note is shown alone, not in a list
-                                 bool ViewTopLine)	// Separate with a top line from previous social note
+                                 bool ViewTopLine,	// Separate with a top line from previous social note
+                                 const char *Style)
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -480,6 +584,8 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    fprintf (Gbl.F.Out,"<li");
    if (!ShowAlone && ViewTopLine)
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
+   if (Style)
+      fprintf (Gbl.F.Out," style=\"%s\"",Style);
    fprintf (Gbl.F.Out,">");
 
    if (SocPub->PubCod <= 0 ||
@@ -1823,7 +1929,7 @@ static void Soc_ShareSocialNote (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
       /***** Show the social note just shared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
      }
   }
 
@@ -1902,7 +2008,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
      }
   }
 
@@ -1990,7 +2096,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */

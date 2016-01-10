@@ -26,9 +26,6 @@ var Gbl_HTMLContent;
 // Global variable used to call SWAD via AJAX
 var ActionAJAX;
 
-// Global variable that stores last publishing code got from database in timeline
-var LastPubCod = 0;
-
 // Global variables used in writeLocalClock()
 var secondsSince1970UTC;
 
@@ -358,8 +355,7 @@ function refreshSocialTimeline() {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
       	var RefreshParams = RefreshParamNxtActSoc + '&' +
-      						RefreshParamIdSes + '&' +
-      						'LastPubCod=' + LastPubCod;
+      						RefreshParamIdSes;
 
       	objXMLHttpReqSoc.onreadystatechange = readSocialTimelineData;	// onreadystatechange must be lowercase
       	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
@@ -454,14 +450,11 @@ function readLastClicksData() {
 function readSocialTimelineData() {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
-			var endOfDelay      = objXMLHttpReqSoc.responseText.indexOf('|',0);				// Get separator position
-			var endOfLastPubCod = objXMLHttpReqSoc.responseText.indexOf('|',endOfDelay+1);	// Get separator position
+			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
+			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
+			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
 
-			var delay  = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));					// Get refresh delay
-			LastPubCod = parseInt(objXMLHttpReqSoc.responseText.substring(endOfDelay+1,endOfLastPubCod));	// Get last publishing code
-			var htmlRecentTimeline = objXMLHttpReqSoc.responseText.substring(endOfLastPubCod+1);			// Get HTML code for social timeline
-
-			var recentTimeline = document.getElementById('recent_timeline');	// Access to UL with the recent timeline
+			var recentTimeline = document.getElementById('recent_timeline_list');	// Access to UL with the recent timeline
 			if (recentTimeline) {
 				recentTimeline.innerHTML = htmlRecentTimeline + recentTimeline.innerHTML;	// Update list of publishings in recent timeline
 				var countRecentTimeline = recentTimeline.childNodes.length;
@@ -488,11 +481,11 @@ function readSocialTimelineData() {
 function moveRecentTimelineToTimeline() {
 	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
 	var viewNewPostsCount     = document.getElementById('view_new_posts_count');
-	var recentTimeline        = document.getElementById('recent_timeline');	// Access to social timeline DIV
+	var recentTimeline        = document.getElementById('recent_timeline_list');	// Access to social timeline DIV
 	var countRecentTimeline = recentTimeline.childNodes.length;
 
 	if (countRecentTimeline) {
-		var timeline = document.getElementById("timeline");
+		var timeline = document.getElementById("timeline_list");
 		// Move all the LI elements in UL 'recentTimeline' to the top of UL 'timeline'
 	    for(var i=0; i < countRecentTimeline; i++)
 			timeline.insertBefore(recentTimeline.lastChild, timeline.childNodes[0]);
