@@ -113,6 +113,7 @@
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline?
+
 // TODO: Include time of last comment in table social_timeline to display social publishings with new comments when refreshing
 // TODO: Change refreshing time from 5 seconds to 1 minute or so. Increment one second after each refresh?
 // TODO: Show error message when commenting a removed social note
@@ -122,13 +123,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.107 (2016-01-10)"
+#define Log_PLATFORM_VERSION	"SWAD 15.107.1 (2016-01-10)"
 #define CSS_FILE		"swad15.105.css"
-#define JS_FILE			"swad15.107.js"
+#define JS_FILE			"swad15.107.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.107.1: Jan 10, 2016	Id of dates in timeline must be unique.
+					Changes in JavaScript to render dates and mathenatics. (192137 lines)
         Version 15.107:   Jan 10, 2016	Get older publishings from social timeline. (192112 lines)
 					1 change necessary in database:
 ALTER TABLE sessions ADD COLUMN FirstPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;

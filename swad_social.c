@@ -946,22 +946,29 @@ static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
+   char Id[32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1];
 
    UniqueId++;
 
-   /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<div id=\"date_%u\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
-	              " style=\"display:inline-block;\">",
-            UniqueId);
+   /***** Create Id. The id must be unique in timeline,
+          but the timeline is updated via AJAX.
+          So, Id uses:
+          - a name for this execution (Gbl.UniqueNameEncrypted)
+          - an extension for the current element (UniqueId) *****/
+   sprintf (Id,"date_%s_%u",Gbl.UniqueNameEncrypted,UniqueId);
 
-   /***** Write date and time *****/
+   /***** Container where the date-time is written *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
+	              " style=\"display:inline-block;\"></div>",
+            Id);
+
+   /***** Script to write date and time in browser local time *****/
+   // This must be out of the div where the output is written
+   // because it will be evaluated in a loop in JavaScript
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
+                      "writeLocalDateTimeFromUTC('%s',%ld,'&nbsp;','%s');"
                       "</script>",
-            UniqueId,(long) TimeUTC,Txt_Today);
-
-   /***** End cell *****/
-   fprintf (Gbl.F.Out,"</div>");
+            Id,(long) TimeUTC,Txt_Today);
   }
 
 /*****************************************************************************/

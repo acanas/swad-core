@@ -473,15 +473,17 @@ function readNewTimelineData() {
 			if (newTimeline) {
 				newTimeline.innerHTML = htmlNewTimeline + newTimeline.innerHTML;	// Update list of publishings in new timeline
 				var countNewTimeline = newTimeline.childNodes.length;
-				
+
 				if (countNewTimeline) {
-					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
-					var viewNewPostsCount     = document.getElementById('view_new_posts_count');
+					// Scripts in timeline got via AJAX are not executed ==> execute them
+					evalScriptsInElem (newTimeline);
 
 					// Update number of new posts
+					var viewNewPostsCount     = document.getElementById('view_new_posts_count');
 					viewNewPostsCount.innerHTML = countNewTimeline;
 
 					// Display message with new posts if hidden
+					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
 					viewNewPostsContainer.style.display = '';
 				}
 			}
@@ -506,12 +508,14 @@ function readOldTimelineData() {
 				var countOldTimeline = oldTimeline.childNodes.length;
 				
 				if (countOldTimeline) {
-					var timeline = document.getElementById("timeline_list");
+				    // Scripts in timeline got via AJAX are not executed ==> execute them
+				    evalScriptsInElem (oldTimeline);
 
 					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
+					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 							timeline.appendChild(oldTimeline.firstChild);
-					
+
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
 				}
@@ -529,6 +533,7 @@ function moveNewTimelineToTimeline() {
 
 	if (countNewTimeline) {
 		var timeline = document.getElementById("timeline_list");
+
 		// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
 	    for (var i=0; i<countNewTimeline; i++)
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
@@ -540,6 +545,16 @@ function moveNewTimelineToTimeline() {
 	// Reset and hide number of new posts after moving
 	viewNewPostsCount.innerHTML = 0;
 	viewNewPostsContainer.style.display = 'none';
+}
+
+// Scripts got via AJAX are not executed ==> execute them
+function evalScriptsInElem(elem) {
+	var scrs = elem.getElementsByTagName("script");
+	var s;
+	for (var i=0; i<scrs.length; i++) {
+		s = scrs[i].childNodes[0].nodeValue;
+		if (s != null) eval(s);
+	}
 }
 
 // Zoom a user's photograph
@@ -574,7 +589,7 @@ function noZoom() {
 	var xPos = -(187+15);
 	var yPos = -(250+15+110);
 	document.getElementById('zoomTxt').innerHTML = '';
-	document.getElementById('zoomImg').src='/icon/_.gif';
+	document.getElementById('zoomImg').src='/swad/icon/usr_bl.jpg';
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
 	document.getElementById('zoomLyr').style.top = yPos + 'px';
 }

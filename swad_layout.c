@@ -234,7 +234,7 @@ void Lay_WriteStartOfPage (void)
    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<body onload=\"init()\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
-                         "<img id=\"zoomImg\" src=\"%s/_.gif\""
+                         "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
                          " alt=\"\" title=\"\""
                          " class=\"IMG_USR\" />"
                          "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
