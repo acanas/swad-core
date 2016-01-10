@@ -191,8 +191,7 @@ static void Soc_PutLinkToViewRecentPublishings (void);
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,
-                                 bool ViewTopLine,
-                                 const char *Style);
+                                 bool ViewTopLine);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -472,7 +471,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true,NULL);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
         }
       fprintf (Gbl.F.Out,"</ul>");
 
@@ -516,7 +515,7 @@ static void Soc_ShowRecentTimeline (const char *Query)
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
       /* Write social note */
-      Soc_WriteSocialNote (&SocPub,&SocNot,false,true,"background:yellow;");
+      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
      }
 
    /***** Free structure that stores the query result *****/
@@ -553,8 +552,7 @@ static void Soc_PutLinkToViewRecentPublishings (void)
 static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
                                  const struct SocialNote *SocNot,
                                  bool ShowAlone,	// Social note is shown alone, not in a list
-                                 bool ViewTopLine,	// Separate with a top line from previous social note
-                                 const char *Style)
+                                 bool ViewTopLine)	// Separate with a top line from previous social note
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -584,8 +582,6 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    fprintf (Gbl.F.Out,"<li");
    if (!ShowAlone && ViewTopLine)
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
-   if (Style)
-      fprintf (Gbl.F.Out," style=\"%s\"",Style);
    fprintf (Gbl.F.Out,">");
 
    if (SocPub->PubCod <= 0 ||
@@ -1929,7 +1925,7 @@ static void Soc_ShareSocialNote (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
       /***** Show the social note just shared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
      }
   }
 
@@ -2008,7 +2004,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
+      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
      }
   }
 
@@ -2096,7 +2092,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false,NULL);
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */
