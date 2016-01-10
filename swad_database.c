@@ -1908,6 +1908,7 @@ mysql> DESCRIBE sessions;
 | CrsCod         | int(11)      | NO   |     | -1      |       |
 | LastTime       | datetime     | YES  |     | NULL    |       |
 | LastRefresh    | datetime     | YES  |     | NULL    |       |
+| FirstPubCod    | bigint(20)   | NO   |     | 0       |       |
 | LastPubCod     | bigint(20)   | NO   |     | 0       |       |
 | LastPageMsgRcv | int(11)      | NO   |     | 1       |       |
 | LastPageMsgSnt | int(11)      | NO   |     | 1       |       |
@@ -1915,7 +1916,7 @@ mysql> DESCRIBE sessions;
 | SearchString   | varchar(255) | NO   |     | NULL    |       |
 | SideCols       | tinyint(4)   | NO   |     | 3       |       |
 +----------------+--------------+------+-----+---------+-------+
-17 rows in set (0.00 sec)
+18 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
                    "SessionId CHAR(43) NOT NULL,"
@@ -1929,7 +1930,8 @@ mysql> DESCRIBE sessions;
                    "CrsCod INT NOT NULL DEFAULT -1,"
                    "LastTime DATETIME,"
                    "LastRefresh DATETIME,"
-	           "LastPubCod BIGINT NOT NULL DEFAULT 0"
+	           "FirstPubCod BIGINT NOT NULL DEFAULT 0,"
+	           "LastPubCod BIGINT NOT NULL DEFAULT 0,"
                    "LastPageMsgRcv INT NOT NULL DEFAULT 1,"
                    "LastPageMsgSnt INT NOT NULL DEFAULT 1,"
                    "WhatToSearch TINYINT NOT NULL DEFAULT 0,"

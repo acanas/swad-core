@@ -511,7 +511,9 @@ function readOldTimelineData() {
 					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
 					for (var i=0; i<countOldTimeline; i++)
 							timeline.appendChild(oldTimeline.firstChild);
-							// oldTimeline.removeChild(oldTimeline.childNodes[0]);	// Not necessary
+					
+					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
 				}
 			}
 		}
@@ -530,6 +532,9 @@ function moveNewTimelineToTimeline() {
 		// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
 	    for (var i=0; i<countNewTimeline; i++)
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
+
+		// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
     }
 
 	// Reset and hide number of new posts after moving

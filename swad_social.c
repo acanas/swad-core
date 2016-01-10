@@ -49,10 +49,18 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_WIDTH_TIMELINE		"560px"
-#define Soc_NUM_PUBS_IN_TIMELINE	  5	// Number of recent publishings shown before refreshing
-#define Soc_MAX_NUM_SHARERS_SHOWN	 10	// Maximum number of users shown who have share a social note
-#define Soc_MAX_BYTES_SUMMARY		100
+#define Soc_WIDTH_TIMELINE	    "560px"
+#define Soc_MAX_NUM_SHARERS_SHOWN	 10		// Maximum number of users shown who have share a social note
+#define Soc_MAX_BYTES_SUMMARY	 	100
+#define Soc_MAX_RECENT_PUBS_TO_GET	  5	// Max. number of recent publishings shown before refreshing
+#define Soc_MAX_OLD_PUBS_TO_GET		  5	// Max. number of publishings got everytime I want to see older publishings
+
+typedef enum
+  {
+   Soc_GET_RECENT_TIMELINE,
+   Soc_GET_ONLY_NEW_PUBS,
+   Soc_GET_ONLY_OLD_PUBS,
+  } Soc_WhatToGetFromTimeline_t;
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
   {
@@ -178,13 +186,16 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query);
-static long Soc_GetLastPubCodFromSession (void);
+static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
+                                            char *Query);
+static long Soc_GetPubCodFromSession (const char *FieldName);
 static void Soc_UpdateLastPubCodIntoSession (void);
+static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void Soc_DropTemporaryTableWithPubCods (void);
 
 static void Soc_ShowTimeline (const char *Query,const char *Title);
-static void Soc_ShowRecentTimeline (const char *Query);
+static void Soc_ShowNewPubsInTimeline (const char *Query);
+static void Soc_ShowOldPubsInTimeline (const char *Query);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 
@@ -269,7 +280,7 @@ void Soc_ShowTimelineUsr (void)
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
             Gbl.Usrs.Other.UsrDat.UsrCod,
-            Soc_NUM_PUBS_IN_TIMELINE);
+            Soc_MAX_RECENT_PUBS_TO_GET);
 
    /***** Show timeline *****/
    sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
@@ -291,8 +302,7 @@ void Soc_ShowTimelineGbl (void)
       Lay_ShowAlert (Lay_INFO,Txt_You_dont_follow_any_user);
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimelineGbl (false,	// Do not get only new publishings
-                                   Query);
+   Soc_BuildQueryToGetTimelineGbl (Soc_GET_RECENT_TIMELINE,Query);
 
    /***** Show timeline *****/
    Soc_ShowTimeline (Query,Txt_Public_activity);
@@ -310,11 +320,10 @@ void Soc_GetAndShowNewTimelineGbl (void)
    char Query[512];
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimelineGbl (true,	// Get only new publishings
-                                   Query);
+   Soc_BuildQueryToGetTimelineGbl (Soc_GET_ONLY_NEW_PUBS,Query);
 
-   /***** Show recent timeline *****/
-   Soc_ShowRecentTimeline (Query);
+   /***** Show new timeline *****/
+   Soc_ShowNewPubsInTimeline (Query);
 
    /***** Drop temporary table with publishing codes *****/
    Soc_DropTemporaryTableWithPubCods ();
@@ -326,38 +335,54 @@ void Soc_GetAndShowNewTimelineGbl (void)
 
 void Soc_GetAndShowOldTimelineGbl (void)
   {
-   // char Query[512];
+   char Query[512];
 
    /***** Build query to get timeline *****/
-   // Soc_BuildQueryToGetTimelineGbl (true,	// Get only new publishings
-   //                                Query);
+   Soc_BuildQueryToGetTimelineGbl (Soc_GET_ONLY_OLD_PUBS,Query);
 
-   /***** Show recent timeline *****/
-   // Soc_ShowRecentTimeline (Query);
+   /***** Show old timeline *****/
+   Soc_ShowOldPubsInTimeline (Query);
 
    /***** Drop temporary table with publishing codes *****/
-   // Soc_DropTemporaryTableWithPubCods ();
-
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB\">Un ejemplo de post.</li>");
+   Soc_DropTemporaryTableWithPubCods ();
   }
 
 /*****************************************************************************/
 /************************ Build query to get timeline ************************/
 /*****************************************************************************/
+// Query must have space for at least 512 chars
 
-static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query)
+static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
+                                            char *Query)
   {
-   char SubQuery[64];
+   char SubQueryRangePubs[64];
+   char SubQueryLimit[64];
    long LastPubCod;
+   long FirstPubCod;
 
-   /****** Build subquery in order to get only the publishings
-           more recent than LastPubCod *****/
-   SubQuery[0] = '\0';
-   if (GetOnlyNewPubs)
+   /****** Build subqueries *****/
+   SubQueryRangePubs[0] = '\0';
+   SubQueryLimit[0] = '\0';
+
+   switch (WhatToGetFromTimeline)
      {
-      LastPubCod = Soc_GetLastPubCodFromSession ();
-      if (LastPubCod > 0)
-	 sprintf (SubQuery,"PubCod>'%ld' AND ",LastPubCod);
+      case Soc_GET_RECENT_TIMELINE:
+	 // Get some limited recent publihings
+	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_RECENT_PUBS_TO_GET);
+	 break;
+      case Soc_GET_ONLY_NEW_PUBS:
+	 // Get the publishings (without limit) newer than LastPubCod
+	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
+	 if (LastPubCod > 0)
+	    sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",LastPubCod);
+         break;
+      case Soc_GET_ONLY_OLD_PUBS:
+	 // Get some limited publishings older than FirstPubCod
+	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
+	 if (FirstPubCod > 0)
+	    sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",FirstPubCod);
+	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_OLD_PUBS_TO_GET);
+         break;
      }
 
    /***** Remove temporary table with publishing codes *****/
@@ -375,16 +400,17 @@ static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query)
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
 		  " GROUP BY NotCod"
-		  " ORDER BY PubCod DESC LIMIT %u",
-            SubQuery,
+		  " ORDER BY PubCod DESC%s",
+            SubQueryRangePubs,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Soc_NUM_PUBS_IN_TIMELINE);
+	    SubQueryLimit);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Update last publishing code into session for next refresh *****/
-   // Do this inmediately after getting the publishings codes
+   // Do this inmediately after getting the publishings codes...
+   // ...in order to not lose publishings
    Soc_UpdateLastPubCodIntoSession ();
 
    /***** Build query to show timeline including the users I am following *****/
@@ -395,28 +421,31 @@ static void Soc_BuildQueryToGetTimelineGbl (bool GetOnlyNewPubs,char *Query)
   }
 
 /*****************************************************************************/
-/******** Get last publishing code of last refresh stored in session *********/
+/********* Get last/first social publishing code stored in session ***********/
 /*****************************************************************************/
+// FieldName can be:
+// "LastPubCod"
+// "FirstPubCod"
 
-static long Soc_GetLastPubCodFromSession (void)
+static long Soc_GetPubCodFromSession (const char *FieldName)
   {
    char Query[128+Ses_LENGTH_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long LastPubCod;
+   long PubCod;
 
-   /***** Get last page of received/sent messages from database *****/
-   sprintf (Query,"SELECT LastPubCod FROM sessions WHERE SessionId='%s'",
-            Gbl.Session.Id);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get last publishing code") != 1)
-      Lay_ShowErrorAndExit ("Error when getting last publishing code.");
+   /***** Get last publishing code from database *****/
+   sprintf (Query,"SELECT %s FROM sessions WHERE SessionId='%s'",
+            FieldName,Gbl.Session.Id);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing code from session") != 1)
+      Lay_ShowErrorAndExit ("Error when getting publishing code from session.");
 
    /***** Get last publishing code *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%ld",&LastPubCod) != 1)
-      LastPubCod = 0;
+   if (sscanf (row[0],"%ld",&PubCod) != 1)
+      PubCod = 0;
 
-   return LastPubCod;
+   return PubCod;
   }
 
 /*****************************************************************************/
@@ -432,7 +461,21 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 	          " SET LastPubCod=(SELECT MAX(PubCod) FROM social_timeline)"
 	          " WHERE SessionId='%s'",
 	    Gbl.Session.Id);
-   DB_QueryUPDATE (Query,"can not update last page of messages");
+   DB_QueryUPDATE (Query,"can not update last publishing code into session");
+  }
+
+/*****************************************************************************/
+/*********************** Update first publishing code ************************/
+/*****************************************************************************/
+
+static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
+  {
+   char Query[128+Ses_LENGTH_SESSION_ID];
+
+   /***** Update last publishing code *****/
+   sprintf (Query,"UPDATE sessions SET FirstPubCod='%ld' WHERE SessionId='%s'",
+	    FirstPubCod,Gbl.Session.Id);
+   DB_QueryUPDATE (Query,"can not update first publishing code into session");
   }
 
 /*****************************************************************************/
@@ -463,7 +506,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    struct SocialNote SocNot;
 
    /***** Get timeline from database *****/
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social notes");
+   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** List my timeline *****/
    if (NumPublishings)	// Publishings found in timeline
@@ -501,6 +544,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
         }
       fprintf (Gbl.F.Out,"</ul>");
 
+      /***** Store first publishing code into session *****/
+      Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
+
       /***** Link to view old publishings via AJAX *****/
       Soc_PutLinkToViewOldPublishings ();
 
@@ -518,10 +564,11 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
   }
 
 /*****************************************************************************/
-/************** Show recent social activity (recent timeline) ****************/
+/********** Show new social activity (new publishings in timeline) ***********/
 /*****************************************************************************/
+// The publishings are inserted as list elements of a hidden list
 
-static void Soc_ShowRecentTimeline (const char *Query)
+static void Soc_ShowNewPubsInTimeline (const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -530,10 +577,10 @@ static void Soc_ShowRecentTimeline (const char *Query)
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
 
-   /***** Get timeline from database *****/
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social notes");
+   /***** Get new publishings timeline from database *****/
+   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   /***** List recent timeline *****/
+   /***** List new timeline *****/
    for (NumPub = 0;
 	NumPub < NumPublishings;
 	NumPub++)
@@ -548,6 +595,50 @@ static void Soc_ShowRecentTimeline (const char *Query)
 
       /* Write social note */
       Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********** Show old social activity (old publishings in timeline) ***********/
+/*****************************************************************************/
+// The publishings are inserted as list elements of a hidden list
+
+static void Soc_ShowOldPubsInTimeline (const char *Query)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumPublishings;
+   unsigned long NumPub;
+   struct SocialPublishing SocPub;
+   struct SocialNote SocNot;
+
+   /***** Get old publishings timeline from database *****/
+   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
+
+   if (NumPublishings)
+     {
+      /***** List old timeline *****/
+      for (NumPub = 0;
+	   NumPub < NumPublishings;
+	   NumPub++)
+	{
+	 /* Get data of social publishing */
+	 row = mysql_fetch_row (mysql_res);
+	 Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+
+	 /* Get data of social note */
+	 SocNot.NotCod = SocPub.NotCod;
+	 Soc_GetDataOfSocialNoteByCod (&SocNot);
+
+	 /* Write social note */
+	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	}
+
+      /***** Store first publishing code into session *****/
+      Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
      }
 
    /***** Free structure that stores the query result *****/

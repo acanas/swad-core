@@ -116,19 +116,24 @@
 // TODO: Include time of last comment in table social_timeline to display social publishings with new comments when refreshing
 // TODO: Change refreshing time from 5 seconds to 1 minute or so. Increment one second after each refresh?
 // TODO: Show error message when commenting a removed social note
+// TODO: Show separated social note at top when a new comment is added
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.106 (2016-01-10)"
-#define CSS_FILE		"swad15.102.css"
-#define JS_FILE			"swad15.106.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.107 (2016-01-10)"
+#define CSS_FILE		"swad15.105.css"
+#define JS_FILE			"swad15.107.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.106:   Jan 10, 2016	Link at the bottom of timeline to get older publishings. (192028 lines)
+        Version 15.107:   Jan 10, 2016	Get older publishings from social timeline. (192112 lines)
+					1 change necessary in database:
+ALTER TABLE sessions ADD COLUMN FirstPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+
+        Version 15.106:   Jan 10, 2016	Link at the bottom of social timeline to get older publishings. (192028 lines)
         Version 15.105.1: Jan 10, 2016	Change in style writing recent social publishings. (191909 lines)
         Version 15.105:   Jan 10, 2016	Get only publishings newest than a give publishing. (191912 lines)
 					1 change necessary in database:
