@@ -15318,6 +15318,27 @@ const char *Txt_It_is_mandatory_to_choose_a_group =
 	"Escolher um grupo &eacute; obrigat&oacute;rio";
 #endif
 
+const char *Txt_It_is_not_possible_to_publish_your_comment =
+#if   L==1
+	"No &eacute;s possible publicar el comentari.";
+#elif L==2
+	"Es ist nicht m&ouml;glich, um Ihren Kommentar zu ver&ouml;ffentlichen.";
+#elif L==3
+	"It is not possible to publish your comment.";
+#elif L==4
+	"No es posible publicar el comentario.";
+#elif L==5
+	"Il est impossible de publier votre commentaire.";
+#elif L==6
+	"No es posible publicar el comentario.";	// Okoteve traducción
+#elif L==7
+	"Non &egrave; possibile pubblicare il commento.";
+#elif L==8
+	"Nie jest mo&zdot;liwe, aby opublikowa&cacute; komentarz.";
+#elif L==9
+	"N&atilde;o &eacute; poss&iacute;vel publicar o seu coment&aacute;rio.";
+#endif
+
 const char *Txt_It_is_optional_to_choose_a_group =
 #if   L==1
 	"Elegir grupo es voluntario";		// Necessita traduccio

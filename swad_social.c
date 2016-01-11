@@ -1996,6 +1996,7 @@ void Soc_ReceiveCommentUsr (void)
 static void Soc_ReceiveComment (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Published;
+   extern const char *Txt_It_is_not_possible_to_publish_your_comment;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    struct SocialPublishing SocPub;
@@ -2010,37 +2011,42 @@ static void Soc_ReceiveComment (void)
    SocNot.NotCod = SocPub.NotCod;
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-   /***** Get the content of the comment *****/
-   Par_GetParAndChangeFormat ("Comment",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,true);
-
-   if (Content[0])
+   if (SocNot.NotCod > 0)
      {
-      /***** Check if I can comment *****/
-      if (Soc_CheckIfICanCommentNote (SocNot.NotCod))
+      /***** Get the content of the comment *****/
+      Par_GetParAndChangeFormat ("Comment",Content,Cns_MAX_BYTES_LONG_TEXT,
+				 Str_TO_RIGOROUS_HTML,true);
+
+      if (Content[0])
 	{
-	 /***** Publish *****/
-	 /* Insert comment in the database */
-	 sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
-			" VALUES ('%ld','%ld',NOW())",
-		  SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-	 ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
+	 /***** Check if I can comment *****/
+	 if (Soc_CheckIfICanCommentNote (SocNot.NotCod))
+	   {
+	    /***** Publish *****/
+	    /* Insert comment in the database */
+	    sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
+			   " VALUES ('%ld','%ld',NOW())",
+		     SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	    ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
 
-	 /* Insert comment content in the database */
-	 sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
-			" VALUES ('%ld','%s')",
-		  ComCod,Content);
-	 DB_QueryINSERT (Query,"can not store comment content");
+	    /* Insert comment content in the database */
+	    sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
+			   " VALUES ('%ld','%s')",
+		     ComCod,Content);
+	    DB_QueryINSERT (Query,"can not store comment content");
 
-	 /***** Message of success *****/
-	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
+	    /***** Message of success *****/
+	    Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
-	 /***** Show the social note just commented *****/
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	    /***** Show the social note just commented *****/
+	    Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	   }
+	 else
+	    Lay_ShowErrorAndExit ("You can not comment this note.");
 	}
-      else
-	 Lay_ShowErrorAndExit ("You can not comment this note.");
      }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_It_is_not_possible_to_publish_your_comment);
   }
 
 /*****************************************************************************/
@@ -2053,10 +2059,11 @@ static void Soc_ReceiveComment (void)
 
 static bool Soc_CheckIfICanCommentNote (long NotCod)
   {
-   char Query[256];
+   // char Query[256];
 
    /***** Check if I am a publisher of this note
           or I follow any of the publishers of this note *****/
+   /*
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
 	          " WHERE NotCod='%ld' AND PublisherCod IN"
 	          " (SELECT '%ld'"
@@ -2066,6 +2073,9 @@ static bool Soc_CheckIfICanCommentNote (long NotCod)
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if I can comment a social note") != 0);
+   */
+   // TODO: Remove this function if not used in future
+   return (NotCod > 0);	// Anyone can comment
   }
 
 /*****************************************************************************/
@@ -2778,16 +2788,22 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get data of social publishing from database *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
-                  " FROM social_timeline"
-                  " WHERE PubCod='%ld'",
-            SocPub->PubCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing"))
+   if (SocPub->PubCod > 0)
      {
-      /***** Get social note *****/
-      row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublishingFromRow (row,SocPub);
+      /***** Get data of social publishing from database *****/
+      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+		     " FROM social_timeline"
+		     " WHERE PubCod='%ld'",
+	       SocPub->PubCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing"))
+	{
+	 /***** Get social note *****/
+	 row = mysql_fetch_row (mysql_res);
+	 Soc_GetDataOfSocialPublishingFromRow (row,SocPub);
+	}
+      else
+	 /***** Reset fields of social publishing *****/
+	 Soc_ResetSocialPublishing (SocPub);
      }
    else
       /***** Reset fields of social publishing *****/
@@ -2804,19 +2820,25 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get data of social note from database *****/
-   sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
-                  " FROM social_notes"
-                  " WHERE NotCod='%ld'",
-            SocNot->NotCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social note"))
+   if (SocNot->NotCod > 0)
      {
-      /***** Get data of social note *****/
-      row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialNoteFromRow (row,SocNot);
+      /***** Get data of social note from database *****/
+      sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
+		     " FROM social_notes"
+		     " WHERE NotCod='%ld'",
+	       SocNot->NotCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social note"))
+	{
+	 /***** Get data of social note *****/
+	 row = mysql_fetch_row (mysql_res);
+	 Soc_GetDataOfSocialNoteFromRow (row,SocNot);
 
-      /***** Get number of times this social note has been shared *****/
-      Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+	 /***** Get number of times this social note has been shared *****/
+	 Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+	}
+      else
+	 /***** Reset fields of social note *****/
+	 Soc_ResetSocialNote (SocNot);
      }
    else
       /***** Reset fields of social note *****/
@@ -2833,20 +2855,26 @@ static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get data of social comment from database *****/
-   sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
-                  "social_comments.NotCod,"
-	          "UNIX_TIMESTAMP(social_comments.TimeComment),"
-	          "social_comments_content.Content"
-		  " FROM social_comments,social_comments_content"
-		  " WHERE social_comments.ComCod='%ld'"
-		  " AND social_comments.ComCod=social_comments_content.ComCod",
-            SocCom->ComCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
+   if (SocCom->ComCod > 0)
      {
-      /***** Get data of social comment *****/
-      row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialCommentFromRow (row,SocCom);
+      /***** Get data of social comment from database *****/
+      sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
+		     "social_comments.NotCod,"
+		     "UNIX_TIMESTAMP(social_comments.TimeComment),"
+		     "social_comments_content.Content"
+		     " FROM social_comments,social_comments_content"
+		     " WHERE social_comments.ComCod='%ld'"
+		     " AND social_comments.ComCod=social_comments_content.ComCod",
+	       SocCom->ComCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
+	{
+	 /***** Get data of social comment *****/
+	 row = mysql_fetch_row (mysql_res);
+	 Soc_GetDataOfSocialCommentFromRow (row,SocCom);
+	}
+      else
+	 /***** Reset fields of social comment *****/
+	 Soc_ResetSocialComment (SocCom);
      }
    else
       /***** Reset fields of social comment *****/
@@ -2947,6 +2975,7 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
 
 static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub)
   {
+   SocPub->PubCod       = -1L;
    SocPub->NotCod       = -1L;
    SocPub->PublisherCod = -1L;
    SocPub->AuthorCod    = -1L;
@@ -2959,6 +2988,7 @@ static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub)
 
 static void Soc_ResetSocialNote (struct SocialNote *SocNot)
   {
+   SocNot->NotCod      = -1L;
    SocNot->NoteType    = Soc_NOTE_UNKNOWN;
    SocNot->UsrCod      = -1L;
    SocNot->HieCod      = -1L;
@@ -2974,6 +3004,7 @@ static void Soc_ResetSocialNote (struct SocialNote *SocNot)
 
 static void Soc_ResetSocialComment (struct SocialComment *SocCom)
   {
+   SocCom->ComCod      = -1L;
    SocCom->UsrCod      = -1L;
    SocCom->NotCod      = -1L;
    SocCom->DateTimeUTC = (time_t) 0;
