@@ -114,22 +114,24 @@
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline?
 
+// TODO: Increment one second after each refresh in social timeline?
 // TODO: Include time of last comment in table social_timeline to display social publishings with new comments when refreshing
-// TODO: Change refreshing time from 5 seconds to 1 minute or so. Increment one second after each refresh?
-// TODO: Show error message when commenting a removed social note
-// TODO: Show separated social note at top when a new comment is added
+// TODO: Show error message when trying to send a comment in a removed social note
+// TODO: Check if I can comment a social note
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.107.3 (2016-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.107.4 (2016-01-11)"
 #define CSS_FILE		"swad15.107.2.css"
 #define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.107.4: Jan 11, 2016	Show separated social note at top when a new comment is added.
+					Message of success when publishing a social note or comment. (192199 lines)
         Version 15.107.3: Jan 11, 2016	Fixed bug and code refactoring in social comments. (192160 lines)
         Version 15.107.2: Jan 11, 2016	Hide link to see old publishings when oldest publishing is reached.
 					Some constants related to social timeline changed. (192159 lines)

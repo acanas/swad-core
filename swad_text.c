@@ -35657,6 +35657,27 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES] =
 #endif
 	};
 
+const char *Txt_SOCIAL_PUBLISHING_Published =
+#if   L==1
+	"Publicat.";
+#elif L==2
+	"Ver&ouml;ffentlicht.";
+#elif L==3
+	"Published.";
+#elif L==4
+	"Publicado.";
+#elif L==5
+	"Publi&eacute;.";
+#elif L==6
+	"Publicado.";	// Okoteve traducción
+#elif L==7
+	"Pubblicato.";
+#elif L==8
+	"Opublikowany.";
+#elif L==9
+	"Publicado.";
+#endif
+
 const char *Txt_SOCIAL_PUBLISHING_Removed =
 #if   L==1
 	"Eliminat.";
