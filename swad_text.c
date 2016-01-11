@@ -15318,27 +15318,6 @@ const char *Txt_It_is_mandatory_to_choose_a_group =
 	"Escolher um grupo &eacute; obrigat&oacute;rio";
 #endif
 
-const char *Txt_It_is_not_possible_to_publish_your_comment =
-#if   L==1
-	"No &eacute;s possible publicar el comentari.";
-#elif L==2
-	"Es ist nicht m&ouml;glich, um Ihren Kommentar zu ver&ouml;ffentlichen.";
-#elif L==3
-	"It is not possible to publish your comment.";
-#elif L==4
-	"No es posible publicar el comentario.";
-#elif L==5
-	"Il est impossible de publier votre commentaire.";
-#elif L==6
-	"No es posible publicar el comentario.";	// Okoteve traducción
-#elif L==7
-	"Non &egrave; possibile pubblicare il commento.";
-#elif L==8
-	"Nie jest mo&zdot;liwe, aby opublikowa&cacute; komentarz.";
-#elif L==9
-	"N&atilde;o &eacute; poss&iacute;vel publicar o seu coment&aacute;rio.";
-#endif
-
 const char *Txt_It_is_optional_to_choose_a_group =
 #if   L==1
 	"Elegir grupo es voluntario";		// Necessita traduccio
@@ -40813,10 +40792,10 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 	"Il ID <strong>%s</strong>"
 	" &egrave; stato confermato.";
 #elif L==8
-	"The ID  ID <strong>%s</strong>"
+	"The ID <strong>%s</strong>"
 	" has been confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"The ID  ID <strong>%s</strong>"
+	"The ID <strong>%s</strong>"
 	" has been confirmed.";		// Necessita de tradução
 #endif
 
@@ -40843,10 +40822,10 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 	"Il ID <strong>%s</strong>"
 	" &egrave; stato registrato con successo.";
 #elif L==8
-	"The ID  ID <strong>%s</strong>"
+	"The ID <strong>%s</strong>"
 	" has been registered successfully.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"The ID  ID <strong>%s</strong>"
+	"The ID <strong>%s</strong>"
 	" has been registered successfully.";		// Necessita de tradução
 #endif
 
@@ -42305,6 +42284,26 @@ const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very imp
 	"The ISO 3166-1 numerical code %03ld already exists.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_original_post_no_longer_exists =
+#if   L==1
+	"La publicaci&oacute; original ja no existeix.";
+#elif L==2
+	"Der urspr&uuml;ngliche Post nicht mehr existiert.";
+#elif L==3
+	"The original post no longer exists.";
+#elif L==4
+	"La publicaci&oacute;n original ya no existe.";
+#elif L==5
+	"La publication originale a disparu.";
+#elif L==6
+	"La publicaci&oacute;n original ya no existe.";	// Okoteve traducción
+#elif L==7
+	"La pubblicazione originale non esiste pi&ugrave;.";
+#elif L==8
+	"Oryginalna publikacja ju&zdot; nie istnieje.";
+#elif L==9
+	"A publica&ccedil;&atilde;o original n&atilde;o existe mais.";
+#endif
 
 const char *Txt_The_password_can_not_consist_only_of_digits =
 #if   L==1

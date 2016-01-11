@@ -1996,7 +1996,7 @@ void Soc_ReceiveCommentUsr (void)
 static void Soc_ReceiveComment (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Published;
-   extern const char *Txt_It_is_not_possible_to_publish_your_comment;
+   extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    struct SocialPublishing SocPub;
@@ -2046,7 +2046,7 @@ static void Soc_ReceiveComment (void)
 	}
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_It_is_not_possible_to_publish_your_comment);
+      Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
   }
 
 /*****************************************************************************/
@@ -2115,6 +2115,7 @@ void Soc_ShareSocialNoteUsr (void)
 static void Soc_ShareSocialNote (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Shared;
+   extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
    bool IAmTheAuthor;
@@ -2127,32 +2128,37 @@ static void Soc_ShareSocialNote (void)
    /***** Get data of social note *****/
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-   IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (IAmTheAuthor)
-      IAmAPublisherOfThisSocNot = true;
-   else
-      IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
-									     Gbl.Usrs.Me.UsrDat.UsrCod);
-   ICanShare = (Gbl.Usrs.Me.Logged &&
-                !IAmTheAuthor &&		// I am not the author
-	        !IAmAPublisherOfThisSocNot);	// I have not shared the note
-   if (ICanShare)
+   if (SocNot.NotCod > 0)
      {
-      /***** Share (publish social note in timeline) *****/
-      SocPub.AuthorCod    = SocNot.UsrCod;
-      SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      SocPub.NotCod       = SocNot.NotCod;
-      Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+      IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (IAmTheAuthor)
+	 IAmAPublisherOfThisSocNot = true;
+      else
+	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
+										Gbl.Usrs.Me.UsrDat.UsrCod);
+      ICanShare = (Gbl.Usrs.Me.Logged &&
+		   !IAmTheAuthor &&		// I am not the author
+		   !IAmAPublisherOfThisSocNot);	// I have not shared the note
+      if (ICanShare)
+	{
+	 /***** Share (publish social note in timeline) *****/
+	 SocPub.AuthorCod    = SocNot.UsrCod;
+	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 SocPub.NotCod       = SocNot.NotCod;
+	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
-      /* Update number of times this social note is shared */
-      Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+	 /* Update number of times this social note is shared */
+	 Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
-      /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
+	 /***** Message of success *****/
+	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
-      /***** Show the social note just shared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	 /***** Show the social note just shared *****/
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	}
      }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
   }
 
 /*****************************************************************************/
