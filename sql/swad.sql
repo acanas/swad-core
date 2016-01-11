@@ -969,7 +969,6 @@ CREATE TABLE IF NOT EXISTS social_timeline (
 	UNIQUE INDEX(PubCod),
 	UNIQUE INDEX(NotCod,PublisherCod),
 	INDEX(PublisherCod),
-	INDEX(AuthorCod),
 	INDEX(TimePublish));
 --
 -- Table sta_degrees: stores statistics about degrees

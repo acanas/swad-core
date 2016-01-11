@@ -2035,21 +2035,18 @@ mysql> DESCRIBE social_timeline;
 | PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
 | NotCod       | bigint(20) | NO   | MUL | NULL    |                |
 | PublisherCod | int(11)    | NO   | MUL | NULL    |                |
-| AuthorCod    | int(11)    | NO   | MUL | NULL    |                |
 | TimePublish  | datetime   | NO   | MUL | NULL    |                |
 +--------------+------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
+4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timeline ("
 	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
                    "NotCod BIGINT NOT NULL,"
                    "PublisherCod INT NOT NULL,"
-                   "AuthorCod INT NOT NULL,"
                    "TimePublish DATETIME NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "UNIQUE INDEX(NotCod,PublisherCod),"
                    "INDEX(PublisherCod),"
-                   "INDEX(AuthorCod),"
                    "INDEX(TimePublish))");
 
    /***** Table sta_degrees *****/

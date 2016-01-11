@@ -151,8 +151,8 @@ struct SocialPublishing
   {
    long PubCod;
    long NotCod;
-   long PublisherCod;
-   long AuthorCod;
+   long PublisherCod;	// Sharer or writer of a comment
+   Soc_PubType_t PubType;
    time_t DateTimeUTC;
   };
 
@@ -283,7 +283,7 @@ void Soc_ShowTimelineUsr (void)
    char Query[512];
 
    /***** Build query to show timeline with publishing of a unique user *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
@@ -422,7 +422,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    Soc_UpdateLastPubCodIntoSession ();
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
 		  " FROM social_timeline WHERE PubCod IN "
 		  "(SELECT PubCod FROM pub_cods)"
 		  " ORDER BY PubCod DESC");
@@ -742,12 +742,11 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
    fprintf (Gbl.F.Out,">");
 
-   if (SocPub->PubCod <= 0 ||
-       SocPub->NotCod <= 0 ||
+   if (SocPub->PubCod       <= 0 ||
+       SocPub->NotCod       <= 0 ||
        SocPub->PublisherCod <= 0 ||
-       SocPub->AuthorCod <= 0 ||
-       SocNot->NoteType == Soc_NOTE_UNKNOWN ||
-       SocNot->UsrCod <= 0)
+       SocNot->NoteType     == Soc_NOTE_UNKNOWN ||
+       SocNot->UsrCod       <= 0)
       Lay_ShowAlert (Lay_ERROR,"Error in social note.");
    else
      {
@@ -1196,7 +1195,6 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
    SocPub.NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
    /***** Publish social note in timeline *****/
-   SocPub.AuthorCod    =
    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Soc_PublishSocialNoteInTimeline (&SocPub);
   }
@@ -1368,10 +1366,10 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 
    /***** Publish social note in timeline *****/
    sprintf (Query,"INSERT INTO social_timeline"
-	          " (NotCod,PublisherCod,AuthorCod,TimePublish)"
+	          " (NotCod,PublisherCod,TimePublish)"
                   " VALUES"
-                  " ('%ld','%ld','%ld',NOW())",
-            SocPub->NotCod,SocPub->PublisherCod,SocPub->AuthorCod);
+                  " ('%ld','%ld',NOW())",
+            SocPub->NotCod,SocPub->PublisherCod);
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
   }
 
@@ -2142,7 +2140,6 @@ static void Soc_ShareSocialNote (void)
       if (ICanShare)
 	{
 	 /***** Share (publish social note in timeline) *****/
-	 SocPub.AuthorCod    = SocNot.UsrCod;
 	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	 SocPub.NotCod       = SocNot.NotCod;
 	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
@@ -2244,13 +2241,15 @@ static void Soc_UnshareSocialPublishing (void)
 
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Remove social publishing *****/
    sprintf (Query,"DELETE FROM social_timeline"
-	          " WHERE NotCod='%ld'"
-	          " AND PublisherCod='%ld'"	// I have share this note
-	          " AND AuthorCod<>'%ld'",	// I am not the author
+                  " USING social_timeline,social_notes"
+	          " WHERE social_timeline.NotCod='%ld'"
+	          " AND social_timeline.PublisherCod='%ld'"	// I have share this note
+                  " AND social_timeline.NotCod=social_notes.NotCod"
+                  " AND social_notes.UsrCod<>'%ld'",		// I am not the author
 	    SocNot->NotCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2308,9 +2307,8 @@ static void Soc_RequestRemovalSocialNote (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 SocPub.AuthorCod    == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);
+                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have published this note
+                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
    if (ICanRemove)
      {
       if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
@@ -2390,9 +2388,8 @@ static void Soc_RemoveSocialNote (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 SocPub.AuthorCod    == Gbl.Usrs.Me.UsrDat.UsrCod &&
-                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);
+                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have published this note
+                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
    if (ICanRemove)
      {
       /***** Delete social publishing from database *****/
@@ -2412,11 +2409,8 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    char Query[256];
 
    /***** Remove all the social publishings of this note *****/
-   sprintf (Query,"DELETE FROM social_timeline"
-	          " WHERE NotCod='%ld'"
-	          " AND AuthorCod='%ld'",	// Extra check: I am the author
-	    SocNot->NotCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   sprintf (Query,"DELETE FROM social_timeline WHERE NotCod='%ld'",
+	    SocNot->NotCod);
    DB_QueryDELETE (Query,"can not remove a social publishing");
 
    /***** Remove social note *****/
@@ -2619,7 +2613,7 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/******************* Remove a social note from database **********************/
+/********** Remove all the social content of a user from database ************/
 /*****************************************************************************/
 
 void Soc_RemoveUsrSocialContent (long UsrCod)
@@ -2667,8 +2661,16 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
    /***** Remove all the social publishings of the user *****/
    sprintf (Query,"DELETE FROM social_timeline"
-	          " WHERE AuthorCod='%ld' OR PublisherCod='%ld'",
-	    UsrCod,UsrCod);
+	          " WHERE PublisherCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social publishings");
+
+   /***** Remove all the social publishings authored by the user *****/
+   sprintf (Query,"DELETE FROM social_timeline"
+                  " USING social_notes,social_timeline"
+	          " WHERE social_notes.UsrCod='%ld'"
+                  " AND social_notes.NotCod=social_timeline.NotCod",
+	    UsrCod);
    DB_QueryDELETE (Query,"can not remove social publishings");
 
    /***** Remove all the social notes of the user *****/
@@ -2797,7 +2799,7 @@ static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
    if (SocPub->PubCod > 0)
      {
       /***** Get data of social publishing from database *****/
-      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,AuthorCod,UNIX_TIMESTAMP(TimePublish)"
+      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
 		     " FROM social_timeline"
 		     " WHERE PubCod='%ld'",
 	       SocPub->PubCod);
@@ -2902,11 +2904,8 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
    /* Get publisher's code (row[2]) */
    SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get author's code (row[3]) */
-   SocPub->AuthorCod    = Str_ConvertStrCodToLongCod (row[3]);
-
-   /* Get time of the note (row[4]) */
-   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
+   /* Get time of the note (row[3]) */
+   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[3]);
   }
 
 /*****************************************************************************/
@@ -2984,7 +2983,6 @@ static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub)
    SocPub->PubCod       = -1L;
    SocPub->NotCod       = -1L;
    SocPub->PublisherCod = -1L;
-   SocPub->AuthorCod    = -1L;
    SocPub->DateTimeUTC  = (time_t) 0;
   }
 

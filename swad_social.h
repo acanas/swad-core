@@ -35,6 +35,13 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Soc_ORIGINAL_NOTE,
+   Soc_SHARED_NOTE,
+   Soc_COMMENT_TO_NOTE,
+  } Soc_PubType_t;
+
 #define Soc_NUM_SOCIAL_NOTES	13
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table social_notes
