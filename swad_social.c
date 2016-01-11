@@ -60,6 +60,8 @@
 // Number of old publishings got and shown when I want to see old publishings
 #define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
 
+#define Soc_MAX_LENGTH_ID	(256+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
+
 typedef enum
   {
    Soc_GET_RECENT_TIMELINE,
@@ -207,8 +209,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
 static void Soc_PutLinkToViewNewPublishings (void);
 static void Soc_PutLinkToViewOldPublishings (void);
 
-static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
-                                 const struct SocialNote *SocNot,
+static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool ShowNoteAlone,
                                  bool ViewTopLine);
 static void Soc_WriteDateTime (time_t TimeUTC);
@@ -221,24 +222,24 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 static void Soc_PutHiddenFormToWriteNewPost (void);
 static void Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (long PubCod,bool PutText,bool ShowNoteAlone);
-static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long PubCod,bool ShowNoteAlone);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
+                                                  bool PutText);
+static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
+                                                            const char UniqueId[Soc_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (long PubCod,long NotCod,
-                                           unsigned long NumComments,bool ShowNoteAlone);
+static void Soc_WriteCommentsInSocialNote (long NotCod,
+                                           const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone);
 static void Soc_PutFormToRemoveComment (long ComCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
-static void Soc_PutFormToUnshareSocialPublishing (long PubCod);
-static void Soc_PutFormToRemoveSocialPublishing (long PubCod);
+static void Soc_PutFormToUnshareSocialPublishing (long NotCod);
+static void Soc_PutFormToRemoveSocialPublishing (long NotCod);
 
 static void Soc_PutHiddenParamNotCod (long NotCod);
-static void Soc_PutHiddenParamPubCod (long PubCod);
 static void Soc_PutHiddenParamComCod (long ComCod);
 static long Soc_GetParamNotCod (void);
-static long Soc_GetParamPubCod (void);
 static long Soc_GetParamComCod (void);
 
 static void Soc_ReceiveComment (void);
@@ -260,7 +261,6 @@ static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 
-static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom);
 
@@ -269,9 +269,10 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
 static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
 static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom);
 
-static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub);
 static void Soc_ResetSocialNote (struct SocialNote *SocNot);
 static void Soc_ResetSocialComment (struct SocialComment *SocCom);
+
+static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -551,7 +552,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 Soc_WriteSocialNote (&SocNot,false,true);
         }
       fprintf (Gbl.F.Out,"</ul>");
 
@@ -608,7 +609,7 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
       /* Write social note */
-      Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+      Soc_WriteSocialNote (&SocNot,false,true);
      }
 
    /***** Free structure that stores the query result *****/
@@ -648,7 +649,7 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,false,true);
+	 Soc_WriteSocialNote (&SocNot,false,true);
 	}
 
       /***** Store first publishing code into session *****/
@@ -707,8 +708,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 /***************************** Write social note *****************************/
 /*****************************************************************************/
 
-static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
-                                 const struct SocialNote *SocNot,
+static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool ShowNoteAlone,	// Social note is shown alone, not in a list
                                  bool ViewTopLine)	// Separate with a top line from previous social note
   {
@@ -717,6 +717,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    extern const char *Txt_Degree;
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
+   char IdNewComment[Soc_MAX_LENGTH_ID];
    struct UsrData UsrDat;
    bool IAmTheAuthor = false;
    bool IAmAPublisherOfThisSocNot = false;
@@ -730,6 +731,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
    unsigned NumComments;
 
+   /***** Start frame ****/
    if (ShowNoteAlone)
      {
       Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
@@ -742,11 +744,9 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
    fprintf (Gbl.F.Out,">");
 
-   if (SocPub->PubCod       <= 0 ||
-       SocPub->NotCod       <= 0 ||
-       SocPub->PublisherCod <= 0 ||
-       SocNot->NoteType     == Soc_NOTE_UNKNOWN ||
-       SocNot->UsrCod       <= 0)
+   if (SocNot->NotCod   <= 0 ||
+       SocNot->NoteType == Soc_NOTE_UNKNOWN ||
+       SocNot->UsrCod   <= 0)
       Lay_ShowAlert (Lay_ERROR,"Error in social note.");
    else
      {
@@ -896,12 +896,15 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
 
+      /* Create unique id for new comment */
+      Soc_SetUniqueId (IdNewComment);
+
       /* Get number of comments in this social note */
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
       if (!NumComments)
-         Soc_PutIconToToggleCommentSocialNote (SocPub->PubCod,false,ShowNoteAlone);
+         Soc_PutIconToToggleCommentSocialNote (IdNewComment,false);
 
       /* Put icons to share/unshare */
       if (IAmTheAuthor)			// I am the author
@@ -909,7 +912,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
       else if (IAmAPublisherOfThisSocNot)	// I am a publisher of this social note,
 					   // but not the author ==> I have shared this social note
 	 /* Put icon to unshare this publishing */
-	 Soc_PutFormToUnshareSocialPublishing (SocPub->PubCod);
+	 Soc_PutFormToUnshareSocialPublishing (SocNot->NotCod);
       else					// I am not the author and I am not a publisher
 	{
 	 if (SocNot->Unavailable)		// Unavailable social notes can not be shared
@@ -924,11 +927,14 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 
       /* Put icon to remove this publishing */
       if (IAmTheAuthor && !ShowNoteAlone)
-	 Soc_PutFormToRemoveSocialPublishing (SocPub->PubCod);
+	 Soc_PutFormToRemoveSocialPublishing (SocNot->NotCod);
 
       /* Show comments */
-      Soc_WriteCommentsInSocialNote (SocPub->PubCod,SocNot->NotCod,
-                                     NumComments,ShowNoteAlone);
+      if (NumComments)
+	 Soc_WriteCommentsInSocialNote (SocNot->NotCod,IdNewComment);
+
+      /* Put hidden form to write a new comment */
+      Soc_PutHiddenFormToWriteNewCommentToSocialNote (SocNot->NotCod,IdNewComment);
 
       /* End of right part */
       fprintf (Gbl.F.Out,"</div>");
@@ -940,6 +946,7 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
    /***** End list item *****/
    fprintf (Gbl.F.Out,"</li>");
 
+   /***** End frame ****/
    if (ShowNoteAlone)
      {
       fprintf (Gbl.F.Out,"</ul>");
@@ -955,22 +962,15 @@ static void Soc_WriteSocialNote (const struct SocialPublishing *SocPub,
 static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
-   static unsigned UniqueId = 0;
-   char Id[32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1];
+   char IdDateTime[Soc_MAX_LENGTH_ID];
 
-   UniqueId++;
-
-   /***** Create Id. The id must be unique in timeline,
-          but the timeline is updated via AJAX.
-          So, Id uses:
-          - a name for this execution (Gbl.UniqueNameEncrypted)
-          - an extension for the current element (UniqueId) *****/
-   sprintf (Id,"date_%s_%u",Gbl.UniqueNameEncrypted,UniqueId);
+   /***** Create unique Id *****/
+   Soc_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
 	              " style=\"display:inline-block;\"></div>",
-            Id);
+            IdDateTime);
 
    /***** Script to write date and time in browser local time *****/
    // This must be out of the div where the output is written
@@ -978,7 +978,7 @@ static void Soc_WriteDateTime (time_t TimeUTC)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateTimeFromUTC('%s',%ld,'&nbsp;','%s');"
                       "</script>",
-            Id,(long) TimeUTC,Txt_Today);
+            IdDateTime,(long) TimeUTC,Txt_Today);
   }
 
 /*****************************************************************************/
@@ -1507,7 +1507,8 @@ static void Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (long PubCod,bool PutText,bool ShowNoteAlone)
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
+                                                  bool PutText)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Comment;
@@ -1517,12 +1518,11 @@ static void Soc_PutIconToToggleCommentSocialNote (long PubCod,bool PutText,bool 
                       "<a href=\"\"");
    if (PutText)
       fprintf (Gbl.F.Out," class=\"%s\"",The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out," onclick=\"toggleDisplay('div_comment_%ld');return false;\" />"
+   fprintf (Gbl.F.Out," onclick=\"toggleDisplay('%s');return false;\" />"
 		      "<img src=\"%s/write64x64.gif\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />",
-	    ShowNoteAlone ? 0 :
-		            PubCod,
+	    UniqueId,
 	    Gbl.Prefs.IconsURL,
 	    Txt_Comment,
 	    Txt_Comment);
@@ -1536,16 +1536,16 @@ static void Soc_PutIconToToggleCommentSocialNote (long PubCod,bool PutText,bool 
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long PubCod,bool ShowNoteAlone)
+static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
+                                                            const char UniqueId[Soc_MAX_LENGTH_ID])
   {
    extern const char *Txt_Send_comment;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"div_comment_%ld\""
+   fprintf (Gbl.F.Out,"<div id=\"%s\""
 		      " class=\"SOCIAL_FORM_COMMENT\""
 		      " style=\"display:none;\">",
-	    ShowNoteAlone ? 0 :
-		            PubCod);
+	    UniqueId);
 
    /***** Start form to write the post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1555,7 +1555,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long PubCod,bool Sho
      }
    else
       Act_FormStart (ActRcvSocComGbl);
-   Soc_PutHiddenParamPubCod (PubCod);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<textarea name=\"Comment\" cols=\"45\" rows=\"3\">"
 		      "</textarea>");
 
@@ -1590,63 +1590,58 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
 
-static void Soc_WriteCommentsInSocialNote (long PubCod,long NotCod,
-                                           unsigned long NumComments,bool ShowNoteAlone)
+static void Soc_WriteCommentsInSocialNote (long NotCod,
+                                           const char IdNewComment[Soc_MAX_LENGTH_ID])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned long NumComments;
    unsigned long NumCom;
    struct SocialComment SocCom;
 
-   if (NumComments)
+   /***** Get comments of this social note from database *****/
+   sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
+		  "social_comments.NotCod,"
+		  "UNIX_TIMESTAMP(social_comments.TimeComment),"
+		  "social_comments_content.Content"
+		  " FROM social_comments,social_comments_content"
+		  " WHERE social_comments.NotCod='%ld'"
+		  " AND social_comments.ComCod=social_comments_content.ComCod"
+		  " ORDER BY social_comments.ComCod",
+	    NotCod);
+   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+
+   /***** List comments *****/
+   if (NumComments)	// Comments to this social note found
      {
-      /***** Get comments of this social note from database *****/
-      sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
-		     "social_comments.NotCod,"
-		     "UNIX_TIMESTAMP(social_comments.TimeComment),"
-		     "social_comments_content.Content"
-		     " FROM social_comments,social_comments_content"
-		     " WHERE social_comments.NotCod='%ld'"
-		     " AND social_comments.ComCod=social_comments_content.ComCod"
-		     " ORDER BY social_comments.ComCod",
-	       NotCod);
-      NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+      /***** Start list *****/
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT SOCIAL_COMMENTS\">");
 
-      /***** List comments *****/
-      if (NumComments)	// Comments to this social note found
+      /***** List comments one by one *****/
+      for (NumCom = 0;
+	   NumCom < NumComments;
+	   NumCom++)
 	{
-	 /***** Start list *****/
-	 fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT SOCIAL_COMMENTS\">");
+	 /* Get data of social comment */
+	 row = mysql_fetch_row (mysql_res);
+	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
 
-	 /***** List comments one by one *****/
-	 for (NumCom = 0;
-	      NumCom < NumComments;
-	      NumCom++)
-	   {
-	    /* Get data of social comment */
-	    row = mysql_fetch_row (mysql_res);
-	    Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
-
-	    /* Write social comment */
-	    Soc_WriteSocialComment (&SocCom,false);
-	   }
-
-	 /* Put icon to add a comment */
-	 fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
-	 Soc_PutIconToToggleCommentSocialNote (PubCod,true,ShowNoteAlone);
-	 fprintf (Gbl.F.Out,"</li>");
-
-	 /***** End list *****/
-	 fprintf (Gbl.F.Out,"</ul>");
+	 /* Write social comment */
+	 Soc_WriteSocialComment (&SocCom,false);
 	}
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      /* Put icon to add a comment */
+      fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
+      Soc_PutIconToToggleCommentSocialNote (IdNewComment,true);
+      fprintf (Gbl.F.Out,"</li>");
+
+      /***** End list *****/
+      fprintf (Gbl.F.Out,"</ul>");
      }
 
-   /***** Put hidden form to write a new comment *****/
-   Soc_PutHiddenFormToWriteNewCommentToSocialNote (PubCod,ShowNoteAlone);
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -1826,7 +1821,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 /************ Form to unshare (stop sharing) social publishing ***************/
 /*****************************************************************************/
 
-static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
+static void Soc_PutFormToUnshareSocialPublishing (long NotCod)
   {
    extern const char *Txt_Unshare;
 
@@ -1838,7 +1833,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
      }
    else
       Act_FormStart (ActUnsSocPubGbl);
-   Soc_PutHiddenParamPubCod (PubCod);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/shared64x64.png\""
@@ -1854,7 +1849,7 @@ static void Soc_PutFormToUnshareSocialPublishing (long PubCod)
 /******************** Form to remove social publishing ***********************/
 /*****************************************************************************/
 
-static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
+static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
   {
    extern const char *Txt_Remove;
 
@@ -1866,7 +1861,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
      }
    else
       Act_FormStart (ActReqRemSocPubGbl);
-   Soc_PutHiddenParamPubCod (PubCod);
+   Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
@@ -1886,15 +1881,6 @@ static void Soc_PutFormToRemoveSocialPublishing (long PubCod)
 static void Soc_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong ("NotCod",NotCod);
-  }
-
-/*****************************************************************************/
-/*********** Put parameter with the code of a social publishing **************/
-/*****************************************************************************/
-
-static void Soc_PutHiddenParamPubCod (long PubCod)
-  {
-   Par_PutHiddenParamLong ("PubCod",PubCod);
   }
 
 /*****************************************************************************/
@@ -1921,23 +1907,6 @@ static long Soc_GetParamNotCod (void)
       Lay_ShowErrorAndExit ("Wrong code of social note.");
 
    return NotCod;
-  }
-
-/*****************************************************************************/
-/*********** Get parameter with the code of a social publishing **************/
-/*****************************************************************************/
-
-static long Soc_GetParamPubCod (void)
-  {
-   char LongStr[1+10+1];	// String that holds the social publishing code
-   long PubCod;
-
-   /* Get social punlishing code */
-   Par_GetParToText ("PubCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&PubCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social publishing.");
-
-   return PubCod;
   }
 
 /*****************************************************************************/
@@ -1997,16 +1966,11 @@ static void Soc_ReceiveComment (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
-   struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    long ComCod;
 
-   /***** Get data of social publishing *****/
-   SocPub.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialPublishingByCod (&SocPub);
-
    /***** Get data of social note *****/
-   SocNot.NotCod = SocPub.NotCod;
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
@@ -2037,7 +2001,7 @@ static void Soc_ReceiveComment (void)
 	    Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
 	    /***** Show the social note just commented *****/
-	    Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	    Soc_WriteSocialNote (&SocNot,true,false);
 	   }
 	 else
 	    Lay_ShowErrorAndExit ("You can not comment this note.");
@@ -2151,7 +2115,7 @@ static void Soc_ShareSocialNote (void)
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
 	 /***** Show the social note just shared *****/
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	 Soc_WriteSocialNote (&SocNot,true,false);
 	}
      }
    else
@@ -2195,18 +2159,13 @@ void Soc_UnshareSocialPubUsr (void)
 static void Soc_UnshareSocialPublishing (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Unshared;
-   struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool IAmTheAuthor;
    bool IAmAPublisherOfThisSocNot;
    bool ICanUnshare;
 
-   /***** Get data of social publishing *****/
-   SocPub.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialPublishingByCod (&SocPub);
-
    /***** Get data of social note *****/
-   SocNot.NotCod = SocPub.NotCod;
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2231,7 +2190,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+      Soc_WriteSocialNote (&SocNot,true,false);
      }
   }
 
@@ -2294,21 +2253,15 @@ static void Soc_RequestRemovalSocialNote (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
-   struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool ICanRemove;
 
-   /***** Get data of social publishing *****/
-   SocPub.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialPublishingByCod (&SocPub);
-
    /***** Get data of social note *****/
-   SocNot.NotCod = SocPub.NotCod;
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have published this note
-                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
+                 SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
    if (ICanRemove)
      {
       if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
@@ -2318,7 +2271,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	 Soc_WriteSocialNote (&SocNot,true,false);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */
@@ -2329,7 +2282,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	   }
 	 else
 	    Act_FormStart (ActRemSocPubGbl);
-	 Soc_PutHiddenParamPubCod (SocPub.PubCod);
+	 Soc_PutHiddenParamNotCod (SocNot.NotCod);
 
 	 /* End form */
 	 Lay_PutRemoveButton (Txt_Remove);
@@ -2375,21 +2328,15 @@ void Soc_RemoveSocialNoteUsr (void)
 static void Soc_RemoveSocialNote (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Removed;
-   struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool ICanRemove;
 
-   /***** Get data of social publishing *****/
-   SocPub.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialPublishingByCod (&SocPub);
-
    /***** Get data of social note *****/
-   SocNot.NotCod = SocPub.NotCod;
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    ICanRemove = (Gbl.Usrs.Me.Logged &&
-                 SocPub.PublisherCod == Gbl.Usrs.Me.UsrDat.UsrCod &&	// I have published this note
-                 SocNot.UsrCod       == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
+                 SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
    if (ICanRemove)
      {
       /***** Delete social publishing from database *****/
@@ -2787,38 +2734,6 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
   }
 
 /*****************************************************************************/
-/********* Get data of social publishing in timeline using its code **********/
-/*****************************************************************************/
-
-static void Soc_GetDataOfSocialPublishingByCod (struct SocialPublishing *SocPub)
-  {
-   char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   if (SocPub->PubCod > 0)
-     {
-      /***** Get data of social publishing from database *****/
-      sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
-		     " FROM social_timeline"
-		     " WHERE PubCod='%ld'",
-	       SocPub->PubCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing"))
-	{
-	 /***** Get social note *****/
-	 row = mysql_fetch_row (mysql_res);
-	 Soc_GetDataOfSocialPublishingFromRow (row,SocPub);
-	}
-      else
-	 /***** Reset fields of social publishing *****/
-	 Soc_ResetSocialPublishing (SocPub);
-     }
-   else
-      /***** Reset fields of social publishing *****/
-      Soc_ResetSocialPublishing (SocPub);
-  }
-
-/*****************************************************************************/
 /**************** Get data of social note using its code *********************/
 /*****************************************************************************/
 
@@ -2975,18 +2890,6 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
   }
 
 /*****************************************************************************/
-/******************** Reset fields of social publishing **********************/
-/*****************************************************************************/
-
-static void Soc_ResetSocialPublishing (struct SocialPublishing *SocPub)
-  {
-   SocPub->PubCod       = -1L;
-   SocPub->NotCod       = -1L;
-   SocPub->PublisherCod = -1L;
-   SocPub->DateTimeUTC  = (time_t) 0;
-  }
-
-/*****************************************************************************/
 /*********************** Reset fields of social note *************************/
 /*****************************************************************************/
 
@@ -3013,4 +2916,22 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom)
    SocCom->NotCod      = -1L;
    SocCom->DateTimeUTC = (time_t) 0;
    SocCom->Content[0]  = '\0';
+  }
+
+/*****************************************************************************/
+/***************************** Get unique Id *********************************/
+/*****************************************************************************/
+
+static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID])
+  {
+   static unsigned CountForThisExecution = 0;
+
+   /***** Create Id. The id must be unique in timeline,
+          but the timeline is updated via AJAX.
+          So, Id uses:
+          - a name for this execution (Gbl.UniqueNameEncrypted)
+          - a number for each element in this execution (CountForThisExecution) *****/
+   sprintf (UniqueId,"id_%s_%u",
+            Gbl.UniqueNameEncrypted,
+            ++CountForThisExecution);
   }
