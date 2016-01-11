@@ -242,6 +242,8 @@ static long Soc_GetParamPubCod (void);
 static long Soc_GetParamComCod (void);
 
 static void Soc_ReceiveComment (void);
+static bool Soc_CheckIfICanCommentNote (long NotCod);
+
 static void Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
@@ -2012,30 +2014,58 @@ static void Soc_ReceiveComment (void)
    Par_GetParAndChangeFormat ("Comment",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
-   // TODO: Check if I can comment <=>
-   // <=> if I can view this note <=>
-   // <=> if I am a publisher or if I follow at least one publisher (sharer)
    if (Content[0])
      {
-      /***** Publish *****/
-      /* Insert comment in the database */
-      sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
-		     " VALUES ('%ld','%ld',NOW())",
-	       SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
+      /***** Check if I can comment *****/
+      if (Soc_CheckIfICanCommentNote (SocNot.NotCod))
+	{
+	 /***** Publish *****/
+	 /* Insert comment in the database */
+	 sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
+			" VALUES ('%ld','%ld',NOW())",
+		  SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
 
-      /* Insert comment content in the database */
-      sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
-		     " VALUES ('%ld','%s')",
-	       ComCod,Content);
-      DB_QueryINSERT (Query,"can not store comment content");
+	 /* Insert comment content in the database */
+	 sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
+			" VALUES ('%ld','%s')",
+		  ComCod,Content);
+	 DB_QueryINSERT (Query,"can not store comment content");
 
-      /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
+	 /***** Message of success *****/
+	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
-      /***** Show the social note just commented *****/
-      Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	 /***** Show the social note just commented *****/
+	 Soc_WriteSocialNote (&SocPub,&SocNot,true,false);
+	}
+      else
+	 Lay_ShowErrorAndExit ("You can not comment this note.");
      }
+  }
+
+/*****************************************************************************/
+/******************* Check if I can comment a social note ********************/
+/*****************************************************************************/
+// I can comment a social note <=>
+// <=> if I can view the note <=>
+// <=> if I am a publisher (author or sharer)
+//     or I follow at least one publisher (author or sharer)
+
+static bool Soc_CheckIfICanCommentNote (long NotCod)
+  {
+   char Query[256];
+
+   /***** Check if I am a publisher of this note
+          or I follow any of the publishers of this note *****/
+   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
+	          " WHERE NotCod='%ld' AND PublisherCod IN"
+	          " (SELECT '%ld'"
+		  " UNION"
+		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')",
+	    NotCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if I can comment a social note") != 0);
   }
 
 /*****************************************************************************/
