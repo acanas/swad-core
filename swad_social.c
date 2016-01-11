@@ -69,7 +69,7 @@ typedef enum
    Soc_GET_ONLY_OLD_PUBS,
   } Soc_WhatToGetFromTimeline_t;
 
-static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
+static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
   {
    ActUnk,		// Soc_NOTE_UNKNOWN
 
@@ -107,7 +107,7 @@ static const Act_Action_t Soc_DefaultActions[Soc_NUM_SOCIAL_NOTES] =
 
   };
 
-static const char *Soc_Icons[Soc_NUM_SOCIAL_NOTES] =
+static const char *Soc_Icons[Soc_NUM_NOTE_TYPES] =
   {
    NULL,		// Soc_NOTE_UNKNOWN
 
@@ -266,6 +266,7 @@ static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
+static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str);
 static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
 static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom);
 
@@ -284,7 +285,7 @@ void Soc_ShowTimelineUsr (void)
    char Query[512];
 
    /***** Build query to show timeline with publishing of a unique user *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
                   " FROM social_timeline"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
@@ -423,7 +424,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    Soc_UpdateLastPubCodIntoSession ();
 
    /***** Build query to show timeline including the users I am following *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,UNIX_TIMESTAMP(TimePublish)"
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
 		  " FROM social_timeline WHERE PubCod IN "
 		  "(SELECT PubCod FROM pub_cods)"
 		  " ORDER BY PubCod DESC");
@@ -1026,7 +1027,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES];
+   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
 
@@ -1196,6 +1197,7 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
 
    /***** Publish social note in timeline *****/
    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   SocPub.PubType      = Soc_PUB_ORIGINAL_NOTE;
    Soc_PublishSocialNoteInTimeline (&SocPub);
   }
 
@@ -1366,10 +1368,12 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 
    /***** Publish social note in timeline *****/
    sprintf (Query,"INSERT INTO social_timeline"
-	          " (NotCod,PublisherCod,TimePublish)"
+	          " (NotCod,PublisherCod,PubType,TimePublish)"
                   " VALUES"
-                  " ('%ld','%ld',NOW())",
-            SocPub->NotCod,SocPub->PublisherCod);
+                  " ('%ld','%ld','%u',NOW())",
+            SocPub->NotCod,
+            SocPub->PublisherCod,
+            (unsigned) SocPub->PubType);
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
   }
 
@@ -2023,11 +2027,11 @@ static bool Soc_CheckIfICanCommentNote (long NotCod)
   {
    // char Query[256];
 
-   /***** Check if I am a publisher of this note
-          or I follow any of the publishers of this note *****/
+   /***** Check if I am the author of this note
+          or I follow the author of this note *****/
    /*
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
-	          " WHERE NotCod='%ld' AND PublisherCod IN"
+   sprintf (Query,"SELECT COUNT(*) FROM social_notes"
+	          " WHERE NotCod='%ld' AND UsrCod IN"
 	          " (SELECT '%ld'"
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')",
@@ -2104,8 +2108,9 @@ static void Soc_ShareSocialNote (void)
       if (ICanShare)
 	{
 	 /***** Share (publish social note in timeline) *****/
-	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	 SocPub.NotCod       = SocNot.NotCod;
+	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 SocPub.PubType      = Soc_PUB_SHARED_NOTE;
 	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	 /* Update number of times this social note is shared */
@@ -2200,18 +2205,16 @@ static void Soc_UnshareSocialPublishing (void)
 
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Remove social publishing *****/
    sprintf (Query,"DELETE FROM social_timeline"
-                  " USING social_timeline,social_notes"
-	          " WHERE social_timeline.NotCod='%ld'"
-	          " AND social_timeline.PublisherCod='%ld'"	// I have share this note
-                  " AND social_timeline.NotCod=social_notes.NotCod"
-                  " AND social_notes.UsrCod<>'%ld'",		// I am not the author
+	          " WHERE NotCod='%ld'"
+	          " AND PublisherCod='%ld'"	// I have share this note
+                  " AND PubType='%u'",		// It's a shared note
 	    SocNot->NotCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    (unsigned) Soc_PUB_SHARED_NOTE);
    DB_QueryDELETE (Query,"can not remove a social publishing");
   }
 
@@ -2633,11 +2636,15 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
 static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
   {
-   char Query[128];
+   char Query[256];
 
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
-	          " WHERE NotCod='%ld' AND PublisherCod='%ld'",
-	    NotCod,UsrCod);
+	          " WHERE NotCod='%ld'"
+	          " AND PublisherCod='%ld'"
+                  " AND PubType IN ('%u','%u')",
+	    NotCod,UsrCod,
+	    (unsigned) Soc_PUB_ORIGINAL_NOTE,
+	    (unsigned) Soc_PUB_SHARED_NOTE);
    return (DB_QueryCOUNT (Query,"can not check if a user has published a social note") != 0);
   }
 
@@ -2647,13 +2654,16 @@ static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
 
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Get number of times (users) this note has been shared *****/
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
-	          " WHERE NotCod='%ld' AND PublisherCod<>'%ld'",
+	          " WHERE NotCod='%ld'"
+	          " AND PublisherCod<>'%ld'"
+		  " AND PubType='%u'",
 	    SocNot->NotCod,
-	    SocNot->UsrCod);	// The author
+	    SocNot->UsrCod,	// The author
+	    (unsigned) Soc_PUB_SHARED_NOTE);
    SocNot->NumShared = (unsigned) DB_QueryCOUNT (Query,"can not get number of times a note has been shared");
   }
 
@@ -2682,9 +2692,13 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
       /***** Get list of publishers from database (only the first) *****/
       sprintf (Query,"SELECT PublisherCod"
 		     " FROM social_timeline"
-		     " WHERE NotCod='%ld' AND PublisherCod<>'%ld'"
+		     " WHERE NotCod='%ld'"
+		     " AND PublisherCod<>'%ld'"
+		     " AND PubType='%u'"
 		     " ORDER BY PubCod LIMIT %u",
-	       SocNot->NotCod,SocNot->UsrCod,
+	       SocNot->NotCod,
+	       SocNot->UsrCod,
+	       (unsigned) Soc_PUB_SHARED_NOTE,
 	       Soc_MAX_NUM_SHARERS_SHOWN);
       NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing");
       if (NumUsrs)
@@ -2746,7 +2760,7 @@ static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot)
    if (SocNot->NotCod > 0)
      {
       /***** Get data of social note from database *****/
-      sprintf (Query,"SELECT NotCod,NoteType,UsrCod,HieCod,Cod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
+      sprintf (Query,"SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,UNIX_TIMESTAMP(TimeNote)"
 		     " FROM social_notes"
 		     " WHERE NotCod='%ld'",
 	       SocNot->NotCod);
@@ -2819,8 +2833,11 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
    /* Get publisher's code (row[2]) */
    SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get time of the note (row[3]) */
-   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[3]);
+   /* Get type of publishing (row[3]) */
+   SocPub->PubType      = Soc_GetPubTypeFromStr ((const char *) row[3]);
+
+   /* Get time of the note (row[4]) */
+   SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
   }
 
 /*****************************************************************************/
@@ -2835,20 +2852,35 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    /* Get note type (row[1]) */
    SocNot->NoteType    = Soc_GetNoteTypeFromStr ((const char *) row[1]);
 
-   /* Get (from) user code (row[2]) */
-   SocNot->UsrCod      = Str_ConvertStrCodToLongCod (row[2]);
+   /* Get file/post... code (row[2]) */
+   SocNot->Cod         = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get hierarchy code (row[3]) */
-   SocNot->HieCod      = Str_ConvertStrCodToLongCod (row[3]);
+   /* Get (from) user code (row[3]) */
+   SocNot->UsrCod      = Str_ConvertStrCodToLongCod (row[3]);
 
-   /* Get file/post... code (row[4]) */
-   SocNot->Cod         = Str_ConvertStrCodToLongCod (row[4]);
+   /* Get hierarchy code (row[4]) */
+   SocNot->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
 
    /* File/post... unavailable (row[5]) */
    SocNot->Unavailable = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
 
    /* Get time of the note (row[6]) */
    SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
+  }
+
+/*****************************************************************************/
+/**** Get social publishing type from string number coming from database *****/
+/*****************************************************************************/
+
+static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (Str,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Soc_NUM_PUB_TYPES)
+         return (Soc_PubType_t) UnsignedNum;
+
+   return Soc_PUB_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -2860,7 +2892,7 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Soc_NUM_SOCIAL_NOTES)
+      if (UnsignedNum < Soc_NUM_NOTE_TYPES)
          return (Soc_NoteType_t) UnsignedNum;
 
    return Soc_NOTE_UNKNOWN;

@@ -35,17 +35,20 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Soc_ORIGINAL_NOTE,
-   Soc_SHARED_NOTE,
-   Soc_COMMENT_TO_NOTE,
-  } Soc_PubType_t;
-
-#define Soc_NUM_SOCIAL_NOTES	13
+#define Soc_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table social_notes
+typedef enum
+  {
+   Soc_PUB_UNKNOWN		= 0,
+   Soc_PUB_ORIGINAL_NOTE	= 1,
+   Soc_PUB_SHARED_NOTE		= 2,
+   Soc_PUB_COMMENT_TO_NOTE	= 3,
+  } Soc_PubType_t;
 
+#define Soc_NUM_NOTE_TYPES	13
+// If the numbers assigned to each event type change,
+// it is necessary to change old numbers to new ones in database table social_notes
 typedef enum
   {
    Soc_NOTE_UNKNOWN		=  0,

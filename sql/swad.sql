@@ -940,9 +940,9 @@ CREATE TABLE IF NOT EXISTS social_comments_content (
 CREATE TABLE IF NOT EXISTS social_notes (
 	NotCod BIGINT NOT NULL AUTO_INCREMENT,
 	NoteType TINYINT NOT NULL,
+	Cod INT NOT NULL DEFAULT -1,
 	UsrCod INT NOT NULL,
 	HieCod INT NOT NULL DEFAULT -1,
-	Cod INT NOT NULL DEFAULT -1,
 	Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',
 	TimeNote DATETIME NOT NULL,
 	UNIQUE INDEX(NotCod),
@@ -964,11 +964,12 @@ CREATE TABLE IF NOT EXISTS social_timeline (
 	PubCod BIGINT NOT NULL AUTO_INCREMENT,
 	NotCod BIGINT NOT NULL,
 	PublisherCod INT NOT NULL,
-	AuthorCod INT NOT NULL,
+	PubType TINYINT NOT NULL,
 	TimePublish DATETIME NOT NULL,
 	UNIQUE INDEX(PubCod),
 	UNIQUE INDEX(NotCod,PublisherCod),
 	INDEX(PublisherCod),
+	INDEX(PubType),
 	INDEX(TimePublish));
 --
 -- Table sta_degrees: stores statistics about degrees

@@ -1988,9 +1988,9 @@ mysql> DESCRIBE social_notes;
 +-------------+---------------+------+-----+---------+----------------+
 | NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
 | NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod         | int(11)       | NO   |     | -1      |                |
 | UsrCod      | int(11)       | NO   | MUL | NULL    |                |
 | HieCod      | int(11)       | NO   |     | -1      |                |
-| Cod         | int(11)       | NO   |     | -1      |                |
 | Unavailable | enum('N','Y') | NO   |     | N       |                |
 | TimeNote    | datetime      | NO   | MUL | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
@@ -1999,9 +1999,9 @@ mysql> DESCRIBE social_notes;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
 	           "NotCod BIGINT NOT NULL AUTO_INCREMENT,"
                    "NoteType TINYINT NOT NULL,"
+                   "Cod INT NOT NULL DEFAULT -1,"
                    "UsrCod INT NOT NULL,"
                    "HieCod INT NOT NULL DEFAULT -1,"
-                   "Cod INT NOT NULL DEFAULT -1,"
 	           "Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "TimeNote DATETIME NOT NULL,"
                    "UNIQUE INDEX(NotCod),"
@@ -2035,18 +2035,21 @@ mysql> DESCRIBE social_timeline;
 | PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
 | NotCod       | bigint(20) | NO   | MUL | NULL    |                |
 | PublisherCod | int(11)    | NO   | MUL | NULL    |                |
+| PubType      | tinyint(4) | NO   | MUL | NULL    |                |
 | TimePublish  | datetime   | NO   | MUL | NULL    |                |
 +--------------+------------+------+-----+---------+----------------+
-4 rows in set (0.01 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timeline ("
 	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
                    "NotCod BIGINT NOT NULL,"
                    "PublisherCod INT NOT NULL,"
+	           "PubType TINYINT NOT NULL,"
                    "TimePublish DATETIME NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "UNIQUE INDEX(NotCod,PublisherCod),"
                    "INDEX(PublisherCod),"
+                   "INDEX(PubType),"
                    "INDEX(TimePublish))");
 
    /***** Table sta_degrees *****/

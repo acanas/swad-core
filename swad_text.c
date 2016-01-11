@@ -35394,7 +35394,7 @@ const char *Txt_Size_of_photos =
 	"Tamanho das fotos";
 #endif
 
-const char *Txt_SOCIAL_NOTE[Soc_NUM_SOCIAL_NOTES] =
+const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 	{
 #if   L==1	// Soc_NOTE_UNKNOWN
 	 "Esdeveniment desconegut"

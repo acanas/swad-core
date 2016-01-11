@@ -123,13 +123,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.109 (2016-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.109.1 (2016-01-11)"
 #define CSS_FILE		"swad15.107.2.css"
 #define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.109.2: Jan 11, 2016	Comments are included in database table for timeline. (? lines)
+        Version 15.109.1: Jan 11, 2016	New field with the type of publishing in the database table for timeline. (192264 lines)
+					5 changes necessary in database:
+ALTER TABLE social_timeline ADD COLUMN PubType TINYINT NOT NULL AFTER PublisherCod,ADD INDEX (PubType);
+CREATE TABLE IF NOT EXISTS social_notes_new (NotCod BIGINT NOT NULL AUTO_INCREMENT,NoteType TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,HieCod INT NOT NULL DEFAULT -1,Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',TimeNote DATETIME NOT NULL,UNIQUE INDEX(NotCod),UNIQUE INDEX(NoteType,Cod),INDEX(UsrCod),INDEX(TimeNote));
+INSERT INTO social_notes_new (NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote) SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote FROM social_notes;
+DROP TABLE social_notes;
+RENAME TABLE social_notes_new TO social_notes;
+
         Version 15.109:   Jan 11, 2016	Fixed bug when comenting an unshared social note.
 					Refatored lot of code in timeline. (192221 lines)
         Version 15.108:   Jan 11, 2016	Field with the author of a social note is removed from table with timeline, because it can be obtained from table with social notes. (192289 lines)
