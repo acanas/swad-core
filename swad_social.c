@@ -54,11 +54,11 @@
 #define Soc_MAX_BYTES_SUMMARY	 	100
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Soc_MAX_RECENT_PUBS_TO_SHOW	  10					// Publishings to show
+#define Soc_MAX_RECENT_PUBS_TO_SHOW	  20					// Publishings to show
 // #define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
 
 // Number of old publishings got and shown when I want to see old publishings
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  20	// If you change this number, set also this constant to the new value in JavaScript
 
 #define Soc_MAX_LENGTH_ID	(256+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
 
@@ -370,34 +370,8 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
                                             char *Query)
   {
    char SubQueryRangePubs[64];
-   char SubQueryLimit[64];
    long LastPubCod;
    long FirstPubCod;
-
-   /****** Build subqueries *****/
-   SubQueryRangePubs[0] = '\0';
-   SubQueryLimit[0] = '\0';
-
-   switch (WhatToGetFromTimeline)
-     {
-      case Soc_GET_RECENT_TIMELINE:
-	 // Get some limited recent publihings
-	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_RECENT_PUBS_TO_SHOW);
-	 break;
-      case Soc_GET_ONLY_NEW_PUBS:
-	 // Get the publishings (without limit) newer than LastPubCod
-	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
-	 if (LastPubCod > 0)
-	    sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",LastPubCod);
-         break;
-      case Soc_GET_ONLY_OLD_PUBS:
-	 // Get some limited publishings older than FirstPubCod
-	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
-	 if (FirstPubCod > 0)
-	    sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",FirstPubCod);
-	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
-         break;
-     }
 
    /***** Remove temporary table with publishing codes *****/
    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
@@ -407,20 +381,77 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    /***** Create temporary table with publishing codes *****/
    // Get the maximum PubCod -more recent publishing (original, shared or commment)-
    // of every set of publishings corresponding to the same note
-   sprintf (Query,"CREATE TEMPORARY TABLE pub_cods"
-	          " (NewestPubForNote BIGINT NOT NULL,UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
-		  " SELECT MAX(PubCod) AS NewestPubForNote"
-		  " FROM social_pubs"
-		  " WHERE %sPublisherCod IN"
-		  " (SELECT '%ld'"
-		  " UNION"
-		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-		  " GROUP BY NotCod"
-		  " ORDER BY NewestPubForNote DESC%s",
-            SubQueryRangePubs,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    SubQueryLimit);
+   switch (WhatToGetFromTimeline)
+     {
+      case Soc_GET_RECENT_TIMELINE:
+	 // Get some limited recent publishings
+	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
+	                "(NewestPubForNote BIGINT NOT NULL,"
+	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
+	                " SELECT MAX(PubCod) AS NewestPubForNote"
+	                " FROM social_pubs"
+	                " WHERE PublisherCod IN"
+	                " (SELECT '%ld'"
+	                " UNION"
+	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+	                " AND NotCod NOT IN"
+	                " (SELECT NotCod FROM social_timelines WHERE SessionId='%s')"
+	                " GROUP BY NotCod"
+	                " ORDER BY NewestPubForNote DESC LIMIT %u",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Session.Id,
+	          Soc_MAX_RECENT_PUBS_TO_SHOW);
+	 break;
+      case Soc_GET_ONLY_NEW_PUBS:
+	 // Get the publishings (without limit) newer than LastPubCod
+	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
+	 if (LastPubCod > 0)
+	    sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",LastPubCod);
+	 else
+	    SubQueryRangePubs[0] = '\0';
+	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
+	                "(NewestPubForNote BIGINT NOT NULL,"
+	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
+	                " SELECT MAX(PubCod) AS NewestPubForNote"
+	                " FROM social_pubs"
+	                " WHERE %sPublisherCod IN"
+	                " (SELECT '%ld'"
+	                " UNION"
+	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+	                " GROUP BY NotCod"
+	                " ORDER BY NewestPubForNote DESC",
+	          SubQueryRangePubs,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+         break;
+      case Soc_GET_ONLY_OLD_PUBS:
+	 // Get some limited publishings older than FirstPubCod
+	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
+	 if (FirstPubCod > 0)
+	    sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",FirstPubCod);
+	 else
+	    SubQueryRangePubs[0] = '\0';
+	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
+	                "(NewestPubForNote BIGINT NOT NULL,"
+	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
+	                " SELECT MAX(PubCod) AS NewestPubForNote"
+	                " FROM social_pubs"
+	                " WHERE %sPublisherCod IN"
+	                " (SELECT '%ld'"
+	                " UNION"
+	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+	                " AND NotCod NOT IN"
+	                " (SELECT NotCod FROM social_timelines WHERE SessionId='%s')"
+	                " GROUP BY NotCod"
+	                " ORDER BY NewestPubForNote DESC LIMIT %u",
+	          SubQueryRangePubs,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Session.Id,
+	          Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
+         break;
+     }
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
