@@ -122,13 +122,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.6 (2016-01-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.8 (2016-01-12)"
 #define CSS_FILE		"swad15.110.2.css"
 #define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.8: Jan 12, 2016	Insert social notes in current social timeline in database.
+					Show old social notes only if they are not already shown in timeline. (192354 lines)
+        Version 15.110.7: Jan 12, 2016	Remove unused old social timelines in database. (192320 lines)
         Version 15.110.6: Jan 12, 2016	Social timeline for this session in database is cleared when timeline is reloaded. (192303 lines)
         Version 15.110.5: Jan 12, 2016	New database table used to store social notes already present in every timeline. (192288 lines)
 					1 change necessary in database:

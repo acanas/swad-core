@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_social.h"
 
 /*****************************************************************************/
 /**************************** Internal constants *****************************/
@@ -48,6 +49,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
+
+static void Ses_RemoveSessionFromDB (void);
 
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t Action,const char *ParamName);
 
@@ -214,7 +217,7 @@ void Ses_UpdateSessionLastRefreshInDB (void)
 /********************** Remove session from the database *********************/
 /*****************************************************************************/
 
-void Ses_RemoveSessionFromDB (void)
+static void Ses_RemoveSessionFromDB (void)
   {
    char Query[512];
 
@@ -222,6 +225,10 @@ void Ses_RemoveSessionFromDB (void)
    sprintf (Query,"DELETE FROM sessions WHERE SessionId='%s'",
             Gbl.Session.Id);
    DB_QueryDELETE (Query,"can not remove a session");
+
+   /***** Clear old unused social timelines in database *****/
+   // This is necessary to prevent the table growing and growing
+   Soc_ClearOldTimelinesDB ();
   }
 
 /*****************************************************************************/

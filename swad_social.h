@@ -125,4 +125,6 @@ void Soc_RemoveSocialComUsr (void);
 
 void Soc_RemoveUsrSocialContent (long UsrCod);
 
+void Soc_ClearOldTimelinesDB (void);
+
 #endif

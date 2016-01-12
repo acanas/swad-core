@@ -277,6 +277,7 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom);
 static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
 static void Soc_ClearTimelineForThisSession (void);
+static bool Soc_StoreSocialNoteInTimeline (long NotCod);
 
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
@@ -519,8 +520,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
+   bool AlreadyWasInTimeline;
 
-   /***** Clear timeline for this session in database *****/
+   /***** Clear social timeline for this session in database *****/
    Soc_ClearTimelineForThisSession ();
 
    /***** Get publishings from database *****/
@@ -557,9 +559,13 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       SocNot.NotCod = SocPub.NotCod;
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
+      /* Add this social note to timeline */
+      AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
+
       /* Write social note */
-	 fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
-      Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+      if (!AlreadyWasInTimeline)
+	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+         Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
      }
    fprintf (Gbl.F.Out,"</ul>");
 
@@ -613,8 +619,12 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
       SocNot.NotCod = SocPub.NotCod;
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
+      /* Add this social note to timeline */
+      Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
+
       /* Write social note */
-	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+      // New publishings are written even if the note was already un timeline
+      // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
       Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
      }
 
@@ -635,6 +645,7 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
+   bool AlreadyWasInTimeline;
 
    /***** Get old publishings timeline from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
@@ -654,9 +665,13 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 	 SocNot.NotCod = SocPub.NotCod;
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
+         /* Add this social note to timeline */
+         AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
+
 	 /* Write social note */
-	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
-	 Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+	 if (!AlreadyWasInTimeline)
+	    // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+	    Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
 	}
 
       /***** Store first publishing code into session *****/
@@ -777,13 +792,18 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /***** Write sharer if distinct to author *****/
       if (!ShowNoteAlone && SocPub)
-	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE)
-         //    && SocPub->PublisherCod != SocNot->UsrCod)
+	{
+	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
+	     SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
            {
             fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_SHARER\">");
-            fprintf (Gbl.F.Out,"Fulanito comparti&oacute;.");	// TODO: Need translation!!!
+            if (SocPub->PubType == Soc_PUB_SHARED_NOTE)
+               fprintf (Gbl.F.Out,"Fulanito ha compartido:");	// TODO: Need translation!!!
+            else
+               fprintf (Gbl.F.Out,"Fulanito ha comentado:");	// TODO: Need translation!!!
             fprintf (Gbl.F.Out,"</div>");
            }
+	}
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
@@ -1650,7 +1670,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
 	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
 
 	 /* Write social comment */
-	 	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocCom.ComCod);
+	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocCom.ComCod);
 	 Soc_WriteSocialComment (&SocCom,false);
 	}
 
@@ -2984,15 +3004,48 @@ static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID])
   }
 
 /*****************************************************************************/
+/**************** Clear unused old social timelines in database **************/
+/*****************************************************************************/
+
+void Soc_ClearOldTimelinesDB (void)
+  {
+   char Query[256];
+
+   /***** Remove social timelines for expired sessions *****/
+   sprintf (Query,"DELETE LOW_PRIORITY FROM social_timelines"
+                  " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
+   DB_QueryDELETE (Query,"can not remove old social timelines");
+  }
+
+/*****************************************************************************/
 /************* Clear social timeline for this session in database ************/
 /*****************************************************************************/
 
 static void Soc_ClearTimelineForThisSession (void)
   {
-   char Query[128];
+   char Query[128+Ses_LENGTH_SESSION_ID];
 
    /***** Remove social timeline for this session *****/
    sprintf (Query,"DELETE FROM social_timelines WHERE SessionId='%s'",
             Gbl.Session.Id);
    DB_QueryDELETE (Query,"can not remove social timeline");
+  }
+
+/*****************************************************************************/
+/*** Check if this social note is present in timeline. If not ==> add it *****/
+/*****************************************************************************/
+// Returns true if social note already was in timeline before inserting it
+
+static bool Soc_StoreSocialNoteInTimeline (long NotCod)
+  {
+   char Query[128+Ses_LENGTH_SESSION_ID];
+   bool AlreadyWasInTimeline;
+
+   sprintf (Query,"INSERT IGNORE INTO social_timelines"
+	          " (SessionId,NotCod) VALUES ('%s','%ld')",
+            Gbl.Session.Id,NotCod);
+   DB_QueryREPLACE (Query,"can not insert social note in timeline");
+   AlreadyWasInTimeline = (mysql_affected_rows (&Gbl.mysql) == 0);
+
+   return AlreadyWasInTimeline;
   }
