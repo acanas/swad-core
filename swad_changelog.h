@@ -122,13 +122,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.9 (2016-01-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.10 (2016-01-13)"
 #define CSS_FILE		"swad15.110.2.css"
 #define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.10:Jan 13, 2016	New temporary tables used to optimize querying timeline. (192398 lines)
         Version 15.110.9: Jan 12, 2016	Do not get social notes already present in timeline. (192388 lines)
         Version 15.110.8: Jan 12, 2016	Insert social notes in current social timeline in database.
 					Show old social notes only if they are not already shown in timeline. (192354 lines)

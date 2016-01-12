@@ -198,7 +198,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 static long Soc_GetPubCodFromSession (const char *FieldName);
 static void Soc_UpdateLastPubCodIntoSession (void);
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
-static void Soc_DropTemporaryTableWithPubCods (void);
+static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 
 static void Soc_ShowTimeline (const char *Query,const char *Title);
 static void Soc_ShowNewPubsInTimeline (const char *Query);
@@ -321,8 +321,8 @@ void Soc_ShowTimelineGbl (void)
    /***** Show timeline *****/
    Soc_ShowTimeline (Query,Txt_Public_activity);
 
-   /***** Drop temporary table with publishing codes *****/
-   Soc_DropTemporaryTableWithPubCods ();
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -339,8 +339,8 @@ void Soc_GetAndShowNewTimelineGbl (void)
    /***** Show new timeline *****/
    Soc_ShowNewPubsInTimeline (Query);
 
-   /***** Drop temporary table with publishing codes *****/
-   Soc_DropTemporaryTableWithPubCods ();
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -357,8 +357,8 @@ void Soc_GetAndShowOldTimelineGbl (void)
    /***** Show old timeline *****/
    Soc_ShowOldPubsInTimeline (Query);
 
-   /***** Drop temporary table with publishing codes *****/
-   Soc_DropTemporaryTableWithPubCods ();
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -373,10 +373,39 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    long LastPubCod;
    long FirstPubCod;
 
-   /***** Remove temporary table with publishing codes *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+
+   /***** Create temporary table with potential publishers *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE publishers "
+		  "(UsrCod INT NOT NULL,"
+		  "UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+		  " SELECT '%ld' AS UsrCod"
+		  " UNION"
+		  " SELECT FollowedCod AS UsrCod"
+		  " FROM usr_follow WHERE FollowerCod='%ld'",
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
    if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary tables");
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Create temporary table with notes already present in current timeline *****/
+   switch (WhatToGetFromTimeline)
+     {
+      case Soc_GET_ONLY_OLD_PUBS:
+      case Soc_GET_RECENT_TIMELINE:
+	 sprintf (Query,"CREATE TEMPORARY TABLE current_timeline "
+			"(NotCod BIGINT NOT NULL,"
+			"UNIQUE INDEX(NotCod)) ENGINE=MEMORY"
+			" SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
+	          Gbl.Session.Id);
+	 if (mysql_query (&Gbl.mysql,Query))
+	    DB_ExitOnMySQLError ("can not create temporary table");
+         break;
+      case Soc_GET_ONLY_NEW_PUBS:
+	 // Get publishings even if they are already present in current timeline
+         break;
+     }
 
    /***** Create temporary table with publishing codes *****/
    // Get the maximum PubCod -more recent publishing (original, shared or commment)-
@@ -390,17 +419,10 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE PublisherCod IN"
-	                " (SELECT '%ld'"
-	                " UNION"
-	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-	                " AND NotCod NOT IN"
-	                " (SELECT NotCod FROM social_timelines WHERE SessionId='%s')"
+	                " WHERE PublisherCod IN (SELECT UsrCod FROM publishers)"
+	                " AND NotCod NOT IN (SELECT NotCod FROM current_timeline)"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC LIMIT %u",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Session.Id,
 	          Soc_MAX_RECENT_PUBS_TO_SHOW);
 	 break;
       case Soc_GET_ONLY_NEW_PUBS:
@@ -415,15 +437,10 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE %sPublisherCod IN"
-	                " (SELECT '%ld'"
-	                " UNION"
-	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
+	                " WHERE %sPublisherCod IN (SELECT UsrCod FROM publishers)"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC",
-	          SubQueryRangePubs,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
+	          SubQueryRangePubs);
          break;
       case Soc_GET_ONLY_OLD_PUBS:
 	 // Get some limited publishings older than FirstPubCod
@@ -437,18 +454,11 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE %sPublisherCod IN"
-	                " (SELECT '%ld'"
-	                " UNION"
-	                " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
-	                " AND NotCod NOT IN"
-	                " (SELECT NotCod FROM social_timelines WHERE SessionId='%s')"
+	                " WHERE %sPublisherCod IN (SELECT UsrCod FROM publishers)"
+	                " AND NotCod NOT IN (SELECT NotCod FROM current_timeline)"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC LIMIT %u",
 	          SubQueryRangePubs,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Session.Id,
 	          Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
          break;
      }
@@ -526,14 +536,15 @@ static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   }
 
 /*****************************************************************************/
-/**************** Drop temporary table with publishing codes *****************/
+/*************** Drop temporary tables used to query timeline ****************/
 /*****************************************************************************/
 
-static void Soc_DropTemporaryTableWithPubCods (void)
+static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
   {
    char Query[128];
 
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS pub_cods");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS"
+	          " pub_cods,publishers,current_timeline");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
   }
