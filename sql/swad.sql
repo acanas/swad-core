@@ -946,9 +946,9 @@ CREATE TABLE IF NOT EXISTS social_posts (
 	UNIQUE INDEX(PstCod),
 	FULLTEXT(Content)) ENGINE = MYISAM;
 --
--- Table social_posts: stores social timeline
+-- Table social_pubs: stores social publishings (original notes, sharede notes or comments)
 --
-CREATE TABLE IF NOT EXISTS social_timeline (
+CREATE TABLE IF NOT EXISTS social_pubs (
 	PubCod BIGINT NOT NULL AUTO_INCREMENT,
 	NotCod BIGINT NOT NULL,
 	PublisherCod INT NOT NULL,

@@ -287,7 +287,7 @@ void Soc_ShowTimelineUsr (void)
 
    /***** Build query to show timeline with publishing of a unique user *****/
    sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-                  " FROM social_timeline"
+                  " FROM social_pubs"
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
             Gbl.Usrs.Other.UsrDat.UsrCod,
@@ -407,7 +407,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    sprintf (Query,"CREATE TEMPORARY TABLE pub_cods"
 	          " (NewestPubForNote BIGINT NOT NULL,UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 		  " SELECT MAX(PubCod) AS NewestPubForNote"
-		  " FROM social_timeline"
+		  " FROM social_pubs"
 		  " WHERE %sPublisherCod IN"
 		  " (SELECT '%ld'"
 		  " UNION"
@@ -428,7 +428,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 
    /***** Build query to show timeline including the users I am following *****/
    sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-		  " FROM social_timeline WHERE PubCod IN "
+		  " FROM social_pubs WHERE PubCod IN "
 		  "(SELECT NewestPubForNote FROM pub_cods)"
 		  " ORDER BY PubCod DESC");
   }
@@ -471,7 +471,7 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions"
-	          " SET LastPubCod=(SELECT MAX(PubCod) FROM social_timeline)"
+	          " SET LastPubCod=(SELECT MAX(PubCod) FROM social_pubs)"
 	          " WHERE SessionId='%s'",
 	    Gbl.Session.Id);
    DB_QueryUPDATE (Query,"can not update last publishing code into session");
@@ -1379,7 +1379,7 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
    char Query[256];
 
    /***** Publish social note in timeline *****/
-   sprintf (Query,"INSERT INTO social_timeline"
+   sprintf (Query,"INSERT INTO social_pubs"
 	          " (NotCod,PublisherCod,PubType,TimePublish)"
                   " VALUES"
                   " ('%ld','%ld','%u',NOW())",
@@ -1596,7 +1596,7 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
   {
    char Query[128];
 
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
+   sprintf (Query,"SELECT COUNT(*) FROM social_pubs"
 	          " WHERE NotCod='%ld' AND PubType='%u'",
 	    NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    return DB_QueryCOUNT (Query,"can not get number of comments in a social note");
@@ -1617,15 +1617,15 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
    struct SocialComment SocCom;
 
    /***** Get comments of this social note from database *****/
-   sprintf (Query,"SELECT social_timeline.PubCod,social_timeline.PublisherCod,"
-		  "social_timeline.NotCod,"
-		  "UNIX_TIMESTAMP(social_timeline.TimePublish),"
+   sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
+		  "social_pubs.NotCod,"
+		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		  "social_comments_content.Content"
-		  " FROM social_timeline,social_comments_content"
-		  " WHERE social_timeline.NotCod='%ld'"
-                  " AND social_timeline.PubType='%u'"
-		  " AND social_timeline.PubCod=social_comments_content.ComCod"
-		  " ORDER BY social_timeline.PubCod",
+		  " FROM social_pubs,social_comments_content"
+		  " WHERE social_pubs.NotCod='%ld'"
+                  " AND social_pubs.PubType='%u'"
+		  " AND social_pubs.PubCod=social_comments_content.ComCod"
+		  " ORDER BY social_pubs.PubCod",
 	    NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
 
@@ -2223,7 +2223,7 @@ static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
    char Query[128];
 
    /***** Remove social publishing *****/
-   sprintf (Query,"DELETE FROM social_timeline"
+   sprintf (Query,"DELETE FROM social_pubs"
 	          " WHERE NotCod='%ld'"
 	          " AND PublisherCod='%ld'"	// I have share this note
                   " AND PubType='%u'",		// It's a shared note
@@ -2375,15 +2375,15 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 
    /***** Remove content of the comments of this social note *****/
    sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_timeline,social_comments_content"
-	          " WHERE social_timeline.NotCod='%ld'"
-                  " AND social_timeline.PubType='%u'"
-	          " AND social_timeline.PubCod=social_comments_content.ComCod",
+	          " USING social_pubs,social_comments_content"
+	          " WHERE social_pubs.NotCod='%ld'"
+                  " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_content.ComCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /***** Remove all the social publishings of this note *****/
-   sprintf (Query,"DELETE FROM social_timeline WHERE NotCod='%ld'",
+   sprintf (Query,"DELETE FROM social_pubs WHERE NotCod='%ld'",
 	    SocNot->NotCod);
    DB_QueryDELETE (Query,"can not remove a social publishing");
 
@@ -2561,7 +2561,7 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    DB_QueryDELETE (Query,"can not remove a social comment");
 
    /***** Remove this social comment *****/
-   sprintf (Query,"DELETE FROM social_timeline"
+   sprintf (Query,"DELETE FROM social_pubs"
 	          " WHERE PubCod='%ld'"
 	          " AND PublisherCod='%ld'"	// Extra check: I am the author
 	          " AND PubType='%u'",		// Extra check: it's a comment
@@ -2585,28 +2585,28 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
    sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_timeline,social_comments_content"
-	          " WHERE social_timeline.NotCod IN"
+	          " USING social_pubs,social_comments_content"
+	          " WHERE social_pubs.NotCod IN"
 		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
-                  " AND social_timeline.PubType='%u'"
-	          " AND social_timeline.PubCod=social_comments_content.ComCod",
+                  " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_content.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /* Remove all the comments from any user in any social note of the user */
-   sprintf (Query,"DELETE FROM social_timeline"
+   sprintf (Query,"DELETE FROM social_pubs"
 	          " WHERE NotCod IN"
 		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
-                  " AND social_timeline.PubType='%u'",
+                  " AND social_pubs.PubType='%u'",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /* Remove content of all the comments of the user in any social note */
    sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_timeline,social_comments_content"
-	          " WHERE social_timeline.PublisherCod='%ld'"
-	          " AND social_timeline.PubType='%u'"
-	          " AND social_timeline.PubCod=social_comments_content.ComCod",
+	          " USING social_pubs,social_comments_content"
+	          " WHERE social_pubs.PublisherCod='%ld'"
+	          " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_content.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -2619,15 +2619,15 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    DB_QueryDELETE (Query,"can not remove social posts");
 
    /***** Remove all the social publishings of any user authored by the user *****/
-   sprintf (Query,"DELETE FROM social_timeline"
-                  " USING social_notes,social_timeline"
+   sprintf (Query,"DELETE FROM social_pubs"
+                  " USING social_notes,social_pubs"
 	          " WHERE social_notes.UsrCod='%ld'"
-                  " AND social_notes.NotCod=social_timeline.NotCod",
+                  " AND social_notes.NotCod=social_pubs.NotCod",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove social publishings");
 
    /***** Remove all the social publishings of the user *****/
-   sprintf (Query,"DELETE FROM social_timeline"
+   sprintf (Query,"DELETE FROM social_pubs"
 	          " WHERE PublisherCod='%ld'",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove social publishings");
@@ -2647,7 +2647,7 @@ static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
   {
    char Query[256];
 
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
+   sprintf (Query,"SELECT COUNT(*) FROM social_pubs"
 	          " WHERE NotCod='%ld'"
 	          " AND PublisherCod='%ld'"
                   " AND PubType IN ('%u','%u')",
@@ -2666,7 +2666,7 @@ static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
    char Query[256];
 
    /***** Get number of times (users) this note has been shared *****/
-   sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
+   sprintf (Query,"SELECT COUNT(*) FROM social_pubs"
 	          " WHERE NotCod='%ld'"
 	          " AND PublisherCod<>'%ld'"
 		  " AND PubType='%u'",
@@ -2700,7 +2700,7 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
      {
       /***** Get list of publishers from database (only the first) *****/
       sprintf (Query,"SELECT PublisherCod"
-		     " FROM social_timeline"
+		     " FROM social_pubs"
 		     " WHERE NotCod='%ld'"
 		     " AND PublisherCod<>'%ld'"
 		     " AND PubType='%u'"
@@ -2804,14 +2804,14 @@ static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom)
    if (SocCom->ComCod > 0)
      {
       /***** Get data of social comment from database *****/
-      sprintf (Query,"SELECT social_timeline.PubCod,social_timeline.PublisherCod,"
-		     "social_timeline.NotCod,"
-		     "UNIX_TIMESTAMP(social_timeline.TimePublish),"
+      sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
+		     "social_pubs.NotCod,"
+		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		     "social_comments_content.Content"
-		     " FROM social_timeline,social_comments_content"
-		     " WHERE social_timeline.PubCod='%ld'"
-                     " AND social_timeline.PubType='%u'"
-		     " AND social_timeline.PubCod=social_comments_content.ComCod",
+		     " FROM social_pubs,social_comments_content"
+		     " WHERE social_pubs.PubCod='%ld'"
+                     " AND social_pubs.PubType='%u'"
+		     " AND social_pubs.PubCod=social_comments_content.ComCod",
 	       SocCom->ComCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
 	{

@@ -2003,9 +2003,9 @@ mysql> DESCRIBE social_posts;
                    "UNIQUE INDEX(PstCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
-   /***** Table social_timeline *****/
+   /***** Table social_pubs *****/
 /*
-mysql> DESCRIBE social_timeline;
+mysql> DESCRIBE social_pubs;
 +--------------+------------+------+-----+---------+----------------+
 | Field        | Type       | Null | Key | Default | Extra          |
 +--------------+------------+------+-----+---------+----------------+
@@ -2017,7 +2017,7 @@ mysql> DESCRIBE social_timeline;
 +--------------+------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timeline ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_pubs ("
 	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
                    "NotCod BIGINT NOT NULL,"
                    "PublisherCod INT NOT NULL,"
