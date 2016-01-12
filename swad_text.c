@@ -23876,7 +23876,7 @@ const char *Txt_No_of_users_who_will_be_notified_by_e_mail =
 #elif L==9
 	"N&ordm; de utilizadores que ser&atilde;o notificados por e-mail";
 #endif
-
+/*
 const char *Txt_No_public_activity =
 #if   L==1
 	 "Cap activitat p&uacute;blica";
@@ -23897,7 +23897,7 @@ const char *Txt_No_public_activity =
 #elif L==9
 	 "Sem atividade p&uacute;blica";
 #endif
-
+*/
 const char *Txt_No_questions_found_matching_your_search_criteria =
 #if   L==1
 	"No hay preguntas con el criterio de b&uacute;squeda seleccionado.";	// Necessita traduccio

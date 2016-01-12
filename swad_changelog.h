@@ -123,14 +123,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.109.1 (2016-01-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110 (2016-01-12)"
 #define CSS_FILE		"swad15.107.2.css"
 #define JS_FILE			"swad15.107.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.109.2: Jan 11, 2016	Comments are included in database table for timeline. (? lines)
+        Version 15.110:   Jan 12, 2016	Comments are included in database table for timeline. (192352 lines)
+					2 changes necessary in database:
+DROP INDEX NotCod ON social_timeline;
+CREATE INDEX NotCod ON social_timeline (NotCod,PublisherCod,PubType);
+
         Version 15.109.1: Jan 11, 2016	New field with the type of publishing in the database table for timeline. (192264 lines)
 					5 changes necessary in database:
 ALTER TABLE social_timeline ADD COLUMN PubType TINYINT NOT NULL AFTER PublisherCod,ADD INDEX (PubType);

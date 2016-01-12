@@ -2047,7 +2047,7 @@ mysql> DESCRIBE social_timeline;
 	           "PubType TINYINT NOT NULL,"
                    "TimePublish DATETIME NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
-                   "UNIQUE INDEX(NotCod,PublisherCod),"
+                   "INDEX(NotCod,PublisherCod,PubType),"
                    "INDEX(PublisherCod),"
                    "INDEX(PubType),"
                    "INDEX(TimePublish))");
