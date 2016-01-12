@@ -1940,9 +1940,9 @@ mysql> DESCRIBE sessions;
                    "UNIQUE INDEX(SessionId),"
                    "INDEX(UsrCod))");
 
-   /***** Table social_comments_content *****/
+   /***** Table social_comments *****/
 /*
-mysql> DESCRIBE social_comments_content;
+mysql> DESCRIBE social_comments;
 +---------+------------+------+-----+---------+-------+
 | Field   | Type       | Null | Key | Default | Extra |
 +---------+------------+------+-----+---------+-------+
@@ -1951,7 +1951,7 @@ mysql> DESCRIBE social_comments_content;
 +---------+------------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_content ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 	           "ComCod BIGINT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
                    "UNIQUE INDEX(ComCod),"

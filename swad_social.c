@@ -1620,11 +1620,11 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
    sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		  "social_pubs.NotCod,"
 		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		  "social_comments_content.Content"
-		  " FROM social_pubs,social_comments_content"
+		  "social_comments.Content"
+		  " FROM social_pubs,social_comments"
 		  " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
-		  " AND social_pubs.PubCod=social_comments_content.ComCod"
+		  " AND social_pubs.PubCod=social_comments.ComCod"
 		  " ORDER BY social_pubs.PubCod",
 	    NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
@@ -2010,7 +2010,7 @@ static void Soc_ReceiveComment (void)
 	    Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	    /* Insert comment content in the database */
-	    sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
+	    sprintf (Query,"INSERT INTO social_comments (ComCod,Content)"
 			   " VALUES ('%ld','%s')",
 		     SocPub.PubCod,
 		     Content);
@@ -2374,11 +2374,11 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    char Query[256];
 
    /***** Remove content of the comments of this social note *****/
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_pubs,social_comments_content"
+   sprintf (Query,"DELETE FROM social_comments"
+	          " USING social_pubs,social_comments"
 	          " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_content.ComCod",
+	          " AND social_pubs.PubCod=social_comments.ComCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -2555,7 +2555,7 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    char Query[128];
 
    /***** Remove content of this social comment *****/
-   sprintf (Query,"DELETE FROM social_comments_content"
+   sprintf (Query,"DELETE FROM social_comments"
 	          " WHERE ComCod='%ld'",
 	    SocCom->ComCod);
    DB_QueryDELETE (Query,"can not remove a social comment");
@@ -2584,12 +2584,12 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_pubs,social_comments_content"
+   sprintf (Query,"DELETE FROM social_comments"
+	          " USING social_pubs,social_comments"
 	          " WHERE social_pubs.NotCod IN"
 		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_content.ComCod",
+	          " AND social_pubs.PubCod=social_comments.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -2602,11 +2602,11 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /* Remove content of all the comments of the user in any social note */
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_pubs,social_comments_content"
+   sprintf (Query,"DELETE FROM social_comments"
+	          " USING social_pubs,social_comments"
 	          " WHERE social_pubs.PublisherCod='%ld'"
 	          " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_content.ComCod",
+	          " AND social_pubs.PubCod=social_comments.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -2807,11 +2807,11 @@ static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom)
       sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		     "social_pubs.NotCod,"
 		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		     "social_comments_content.Content"
-		     " FROM social_pubs,social_comments_content"
+		     "social_comments.Content"
+		     " FROM social_pubs,social_comments"
 		     " WHERE social_pubs.PubCod='%ld'"
                      " AND social_pubs.PubType='%u'"
-		     " AND social_pubs.PubCod=social_comments_content.ComCod",
+		     " AND social_pubs.PubCod=social_comments.ComCod",
 	       SocCom->ComCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
 	{

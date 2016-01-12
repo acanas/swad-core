@@ -917,7 +917,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 --
 -- Table social_notes: stores the content of comments to social notes
 --
-CREATE TABLE IF NOT EXISTS social_comments_content (
+CREATE TABLE IF NOT EXISTS social_comments (
 	ComCod BIGINT NOT NULL,
 	Content LONGTEXT NOT NULL,
 	UNIQUE INDEX(ComCod),
