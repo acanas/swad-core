@@ -1692,6 +1692,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:536px;
 	border-top:1px solid silver;
 	}
+.SOCIAL_TOP_SHARER
+	{
+	box-sizing:border-box;
+	width:536px;
+	color:#A0A0A0;
+	font-size:12pt;
+	}
 .SOCIAL_LEFT_PHOTO
 	{
 	display:inline-block;

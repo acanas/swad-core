@@ -54,8 +54,8 @@
 #define Soc_MAX_BYTES_SUMMARY	 	100
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Soc_MAX_RECENT_PUBS_TO_SHOW	  50					// Publishings to show
-#define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
+#define Soc_MAX_RECENT_PUBS_TO_SHOW	  10					// Publishings to show
+// #define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
 
 // Number of old publishings got and shown when I want to see old publishings
 #define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
@@ -210,6 +210,7 @@ static void Soc_PutLinkToViewNewPublishings (void);
 static void Soc_PutLinkToViewOldPublishings (void);
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
+                                 const struct SocialPublishing *SocPub,
                                  bool ShowNoteAlone,
                                  bool ViewTopLine);
 static void Soc_WriteDateTime (time_t TimeUTC);
@@ -290,7 +291,7 @@ void Soc_ShowTimelineUsr (void)
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
             Gbl.Usrs.Other.UsrDat.UsrCod,
-            Soc_MAX_RECENT_PUBS_TO_GET);
+            Soc_MAX_RECENT_PUBS_TO_SHOW);
 
    /***** Show timeline *****/
    sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
@@ -378,7 +379,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
      {
       case Soc_GET_RECENT_TIMELINE:
 	 // Get some limited recent publihings
-	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_RECENT_PUBS_TO_GET);
+	 sprintf (SubQueryLimit," LIMIT %u",Soc_MAX_RECENT_PUBS_TO_SHOW);
 	 break;
       case Soc_GET_ONLY_NEW_PUBS:
 	 // Get the publishings (without limit) newer than LastPubCod
@@ -401,16 +402,18 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
    /***** Create temporary table with publishing codes *****/
+   // Get the maximum PubCod -more recent publishing (original, shared or commment)-
+   // of every set of publishings corresponding to the same note
    sprintf (Query,"CREATE TEMPORARY TABLE pub_cods"
-	          " (PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY"
-		  " SELECT MIN(PubCod) AS PubCod"
+	          " (NewestPubForNote BIGINT NOT NULL,UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
+		  " SELECT MAX(PubCod) AS NewestPubForNote"
 		  " FROM social_timeline"
 		  " WHERE %sPublisherCod IN"
 		  " (SELECT '%ld'"
 		  " UNION"
 		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')"
 		  " GROUP BY NotCod"
-		  " ORDER BY PubCod DESC%s",
+		  " ORDER BY NewestPubForNote DESC%s",
             SubQueryRangePubs,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -426,7 +429,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    /***** Build query to show timeline including the users I am following *****/
    sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
 		  " FROM social_timeline WHERE PubCod IN "
-		  "(SELECT PubCod FROM pub_cods)"
+		  "(SELECT NewestPubForNote FROM pub_cods)"
 		  " ORDER BY PubCod DESC");
   }
 
@@ -507,7 +510,6 @@ static void Soc_DropTemporaryTableWithPubCods (void)
 
 static void Soc_ShowTimeline (const char *Query,const char *Title)
   {
-   // extern const char *Txt_No_public_activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
@@ -519,61 +521,58 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    /***** Get timeline from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   /***** List my timeline *****/
-   // if (NumPubsGot)	// Publishings found in timeline
-   //  {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
 
-      /***** Form to write a new post *****/
-      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
-	  Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-         Soc_PutHiddenFormToWriteNewPost ();
+   /***** Form to write a new post *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
+       Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      Soc_PutHiddenFormToWriteNewPost ();
 
-      /***** Link to view new publishings via AJAX *****/
-      Soc_PutLinkToViewNewPublishings ();
+   /***** Link to view new publishings via AJAX *****/
+   Soc_PutLinkToViewNewPublishings ();
 
-      /***** Hidden list where insert new publishings via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
+   /***** Hidden list where insert new publishings via AJAX *****/
+   fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
 
-      /***** List recent publishings in timeline *****/
-      fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
-      NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
-	                                                            Soc_MAX_RECENT_PUBS_TO_SHOW;
-      for (NumPub = 0;
-	   NumPub < NumPubsToShow;
-	   NumPub++)
-	{
-         /* Get data of social publishing */
-         row = mysql_fetch_row (mysql_res);
-         Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+   /***** List recent publishings in timeline *****/
+   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
+   // NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
+   // 	                                                            Soc_MAX_RECENT_PUBS_TO_SHOW;
+   NumPubsToShow = NumPubsGot;
+   for (NumPub = 0;
+	NumPub < NumPubsToShow;
+	NumPub++)
+     {
+      /* Get data of social publishing */
+      row = mysql_fetch_row (mysql_res);
+      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
 
-	 /* Get data of social note */
-	 SocNot.NotCod = SocPub.NotCod;
-	 Soc_GetDataOfSocialNoteByCod (&SocNot);
+      /* Get data of social note */
+      SocNot.NotCod = SocPub.NotCod;
+      Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-	 /* Write social note */
-	 Soc_WriteSocialNote (&SocNot,false,true);
-        }
-      fprintf (Gbl.F.Out,"</ul>");
+      /* Write social note */
+	 fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+      Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+     }
+   fprintf (Gbl.F.Out,"</ul>");
 
-      /***** Store first publishing code into session *****/
-      Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
+   /***** Store first publishing code into session *****/
+   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
-      if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
-	{
-         /***** Link to view old publishings via AJAX *****/
-         Soc_PutLinkToViewOldPublishings ();
+   // if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
+   if (NumPubsToShow == Soc_MAX_RECENT_PUBS_TO_SHOW)
+     {
+      /***** Link to view old publishings via AJAX *****/
+      Soc_PutLinkToViewOldPublishings ();
 
-         /***** Hidden list where insert old publishings via AJAX *****/
-         fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
-	}
+      /***** Hidden list where insert old publishings via AJAX *****/
+      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
+     }
 
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
-   //  }
-   // else	// No publishing found in timeline
-   //   Lay_ShowAlert (Lay_INFO,Txt_No_public_activity);
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -610,7 +609,8 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
       /* Write social note */
-      Soc_WriteSocialNote (&SocNot,false,true);
+	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+      Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
      }
 
    /***** Free structure that stores the query result *****/
@@ -650,7 +650,8 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 	 Soc_GetDataOfSocialNoteByCod (&SocNot);
 
 	 /* Write social note */
-	 Soc_WriteSocialNote (&SocNot,false,true);
+	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
+	 Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
 	}
 
       /***** Store first publishing code into session *****/
@@ -710,6 +711,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 /*****************************************************************************/
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
+                                 const struct SocialPublishing *SocPub,
                                  bool ShowNoteAlone,	// Social note is shown alone, not in a list
                                  bool ViewTopLine)	// Separate with a top line from previous social note
   {
@@ -767,6 +769,16 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,
 										Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
+
+      /***** Write sharer if distinct to author *****/
+      if (!ShowNoteAlone && SocPub)
+	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE)
+         //    && SocPub->PublisherCod != SocNot->UsrCod)
+           {
+            fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_SHARER\">");
+            fprintf (Gbl.F.Out,"Fulanito comparti&oacute;.");	// TODO: Need translation!!!
+            fprintf (Gbl.F.Out,"</div>");
+           }
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
@@ -1584,11 +1596,6 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
   {
    char Query[128];
 
-   /*
-   sprintf (Query,"SELECT COUNT(*) FROM social_comments"
-	          " WHERE NotCod='%ld'",
-	    NotCod);
-   */
    sprintf (Query,"SELECT COUNT(*) FROM social_timeline"
 	          " WHERE NotCod='%ld' AND PubType='%u'",
 	    NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
@@ -1610,17 +1617,6 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
    struct SocialComment SocCom;
 
    /***** Get comments of this social note from database *****/
-   /*
-   sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
-		  "social_comments.NotCod,"
-		  "UNIX_TIMESTAMP(social_comments.TimeComment),"
-		  "social_comments_content.Content"
-		  " FROM social_comments,social_comments_content"
-		  " WHERE social_comments.NotCod='%ld'"
-		  " AND social_comments.ComCod=social_comments_content.ComCod"
-		  " ORDER BY social_comments.ComCod",
-	    NotCod);
-   */
    sprintf (Query,"SELECT social_timeline.PubCod,social_timeline.PublisherCod,"
 		  "social_timeline.NotCod,"
 		  "UNIX_TIMESTAMP(social_timeline.TimePublish),"
@@ -1649,6 +1645,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
 	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
 
 	 /* Write social comment */
+	 	    fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocCom.ComCod);
 	 Soc_WriteSocialComment (&SocCom,false);
 	}
 
@@ -1989,7 +1986,6 @@ static void Soc_ReceiveComment (void)
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
-   // long ComCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2013,18 +2009,9 @@ static void Soc_ReceiveComment (void)
 	    SocPub.PubType      = Soc_PUB_COMMENT_TO_NOTE;
 	    Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
-	    /* Insert comment in the database */
-	    /*
-	    sprintf (Query,"INSERT INTO social_comments (NotCod,UsrCod,TimeComment)"
-			   " VALUES ('%ld','%ld',NOW())",
-		     SocNot.NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-	    ComCod = DB_QueryINSERTandReturnCode (Query,"can not create comment");
-	    */
-
 	    /* Insert comment content in the database */
 	    sprintf (Query,"INSERT INTO social_comments_content (ComCod,Content)"
 			   " VALUES ('%ld','%s')",
-		     // ComCod,
 		     SocPub.PubCod,
 		     Content);
 	    DB_QueryINSERT (Query,"can not store comment content");
@@ -2033,7 +2020,7 @@ static void Soc_ReceiveComment (void)
 	    Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
 	    /***** Show the social note just commented *****/
-	    Soc_WriteSocialNote (&SocNot,true,false);
+	    Soc_WriteSocialNote (&SocNot,NULL,true,false);
 	   }
 	 else
 	    Lay_ShowErrorAndExit ("You can not comment this note.");
@@ -2148,7 +2135,7 @@ static void Soc_ShareSocialNote (void)
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
 	 /***** Show the social note just shared *****/
-	 Soc_WriteSocialNote (&SocNot,true,false);
+	 Soc_WriteSocialNote (&SocNot,NULL,true,false);
 	}
      }
    else
@@ -2223,7 +2210,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocNot,true,false);
+      Soc_WriteSocialNote (&SocNot,NULL,true,false);
      }
   }
 
@@ -2302,7 +2289,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocNot,true,false);
+	 Soc_WriteSocialNote (&SocNot,NULL,true,false);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */
@@ -2387,13 +2374,6 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    char Query[256];
 
    /***** Remove content of the comments of this social note *****/
-   /*
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_comments,social_comments_content"
-	          " WHERE social_comments.NotCod='%ld'"
-	          " AND social_comments.ComCod=social_comments_content.ComCod",
-	    SocNot->NotCod);
-   */
    sprintf (Query,"DELETE FROM social_comments_content"
 	          " USING social_timeline,social_comments_content"
 	          " WHERE social_timeline.NotCod='%ld'"
@@ -2401,14 +2381,6 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 	          " AND social_timeline.PubCod=social_comments_content.ComCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
-
-   /***** Remove comments of this social note *****/
-   /*
-   sprintf (Query,"DELETE FROM social_comments"
-	          " WHERE NotCod='%ld'",
-	    SocNot->NotCod);
-   DB_QueryDELETE (Query,"can not remove social comments");
-   */
 
    /***** Remove all the social publishings of this note *****/
    sprintf (Query,"DELETE FROM social_timeline WHERE NotCod='%ld'",
@@ -2589,13 +2561,6 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    DB_QueryDELETE (Query,"can not remove a social comment");
 
    /***** Remove this social comment *****/
-   /*
-   sprintf (Query,"DELETE FROM social_comments"
-	          " WHERE ComCod='%ld'"
-	          " AND UsrCod='%ld'",	// Extra check: I am the author
-	    SocCom->ComCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   */
    sprintf (Query,"DELETE FROM social_timeline"
 	          " WHERE PubCod='%ld'"
 	          " AND PublisherCod='%ld'"	// Extra check: I am the author
@@ -2619,14 +2584,6 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
-   /*
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_comments,social_comments_content"
-	          " WHERE social_comments.NotCod IN"
-		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
-	          " AND social_comments.ComCod=social_comments_content.ComCod",
-	    UsrCod);
-   */
    sprintf (Query,"DELETE FROM social_comments_content"
 	          " USING social_timeline,social_comments_content"
 	          " WHERE social_timeline.NotCod IN"
@@ -2637,12 +2594,6 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /* Remove all the comments from any user in any social note of the user */
-   /*
-   sprintf (Query,"DELETE FROM social_comments"
-	          " WHERE NotCod IN"
-		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')",
-	    UsrCod);
-   */
    sprintf (Query,"DELETE FROM social_timeline"
 	          " WHERE NotCod IN"
 		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
@@ -2651,13 +2602,6 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /* Remove content of all the comments of the user in any social note */
-   /*
-   sprintf (Query,"DELETE FROM social_comments_content"
-	          " USING social_comments,social_comments_content"
-	          " WHERE social_comments.UsrCod='%ld'"
-	          " AND social_comments.ComCod=social_comments_content.ComCod",
-	    UsrCod);
-   */
    sprintf (Query,"DELETE FROM social_comments_content"
 	          " USING social_timeline,social_comments_content"
 	          " WHERE social_timeline.PublisherCod='%ld'"
@@ -2665,14 +2609,6 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	          " AND social_timeline.PubCod=social_comments_content.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
-
-   /* Remove all the comments of the user in any social note */
-   /*
-   sprintf (Query,"DELETE FROM social_comments"
-	          " WHERE UsrCod='%ld'",
-	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove social comments");
-   */
 
    /***** Remove all the social posts of the user *****/
    sprintf (Query,"DELETE FROM social_posts"
@@ -2868,16 +2804,6 @@ static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom)
    if (SocCom->ComCod > 0)
      {
       /***** Get data of social comment from database *****/
-      /*
-      sprintf (Query,"SELECT social_comments.ComCod,social_comments.UsrCod,"
-		     "social_comments.NotCod,"
-		     "UNIX_TIMESTAMP(social_comments.TimeComment),"
-		     "social_comments_content.Content"
-		     " FROM social_comments,social_comments_content"
-		     " WHERE social_comments.ComCod='%ld'"
-		     " AND social_comments.ComCod=social_comments_content.ComCod",
-	       SocCom->ComCod);
-      */
       sprintf (Query,"SELECT social_timeline.PubCod,social_timeline.PublisherCod,"
 		     "social_timeline.NotCod,"
 		     "UNIX_TIMESTAMP(social_timeline.TimePublish),"
