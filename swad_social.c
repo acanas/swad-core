@@ -64,9 +64,12 @@
 
 typedef enum
   {
-   Soc_GET_RECENT_TIMELINE,
-   Soc_GET_ONLY_NEW_PUBS,
-   Soc_GET_ONLY_OLD_PUBS,
+   Soc_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
+				// or after editing timeline
+   Soc_GET_ONLY_NEW_PUBS,	// New publishings are retrieved via AJAX
+				// automatically from time to time
+   Soc_GET_ONLY_OLD_PUBS,	// Old publishings are retrieved via AJAX
+				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
@@ -373,6 +376,10 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    long LastPubCod;
    long FirstPubCod;
 
+   /***** Clear social timeline for this session in database *****/
+   if (WhatToGetFromTimeline == Soc_GET_RECENT_TIMELINE)
+      Soc_ClearTimelineForThisSession ();
+
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
@@ -563,9 +570,6 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    bool AlreadyWasInTimeline;
-
-   /***** Clear social timeline for this session in database *****/
-   Soc_ClearTimelineForThisSession ();
 
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
