@@ -276,6 +276,8 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom);
 
 static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
+static void Soc_ClearTimelineForThisSession (void);
+
 /*****************************************************************************/
 /*********** Show social activity (timeline) of a selected user **************/
 /*****************************************************************************/
@@ -518,7 +520,10 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
 
-   /***** Get timeline from database *****/
+   /***** Clear timeline for this session in database *****/
+   Soc_ClearTimelineForThisSession ();
+
+   /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start frame *****/
@@ -2976,4 +2981,18 @@ static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID])
    sprintf (UniqueId,"id_%s_%u",
             Gbl.UniqueNameEncrypted,
             ++CountForThisExecution);
+  }
+
+/*****************************************************************************/
+/************* Clear social timeline for this session in database ************/
+/*****************************************************************************/
+
+static void Soc_ClearTimelineForThisSession (void)
+  {
+   char Query[128];
+
+   /***** Remove social timeline for this session *****/
+   sprintf (Query,"DELETE FROM social_timelines WHERE SessionId='%s'",
+            Gbl.Session.Id);
+   DB_QueryDELETE (Query,"can not remove social timeline");
   }
