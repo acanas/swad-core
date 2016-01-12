@@ -960,6 +960,13 @@ CREATE TABLE IF NOT EXISTS social_pubs (
 	INDEX(PubType),
 	INDEX(TimePublish));
 --
+-- Table social_timelines: stores notes published in social timeline for every active session
+--
+CREATE TABLE IF NOT EXISTS social_timelines (
+	SessionId CHAR(43) NOT NULL,
+	NotCod BIGINT NOT NULL,
+	UNIQUE INDEX(SessionId,NotCod));
+--
 -- Table sta_degrees: stores statistics about degrees
 --
 CREATE TABLE IF NOT EXISTS sta_degrees (

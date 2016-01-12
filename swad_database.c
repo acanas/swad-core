@@ -2029,6 +2029,22 @@ mysql> DESCRIBE social_pubs;
                    "INDEX(PubType),"
                    "INDEX(TimePublish))");
 
+   /***** Table social_timelines *****/
+/*
+mysql> DESCRIBE social_timelines;
++-----------+------------+------+-----+---------+-------+
+| Field     | Type       | Null | Key | Default | Extra |
++-----------+------------+------+-----+---------+-------+
+| SessionId | char(43)   | NO   | PRI | NULL    |       |
+| NotCod    | bigint(20) | NO   | PRI | NULL    |       |
++-----------+------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timelines ("
+                   "SessionId CHAR(43) NOT NULL,"
+                   "NotCod BIGINT NOT NULL,"
+                   "UNIQUE INDEX(SessionId,NotCod))");
+
    /***** Table sta_degrees *****/
 /*
 mysql> DESCRIBE sta_degrees;
