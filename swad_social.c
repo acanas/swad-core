@@ -217,7 +217,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool ShowNoteAlone,
                                  bool ViewTopLine);
 static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub);
-static void Soc_WriteAuthorName (struct UsrData *UsrDat);
+static void Soc_WriteAuthorNote (struct UsrData *UsrDat);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -237,6 +237,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
                                            const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone);
+static void Soc_WriteAuthorComment (struct UsrData *UsrDat);
 static void Soc_PutFormToRemoveComment (long ComCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutFormToShareSocialNote (long NotCod);
@@ -861,7 +862,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Soc_WriteAuthorName (&UsrDat);
+      Soc_WriteAuthorNote (&UsrDat);
 
       /* Write date and time */
       Soc_WriteDateTime (SocNot->DateTimeUTC);
@@ -1077,10 +1078,10 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
   }
 
 /*****************************************************************************/
-/*************** Write sharer/commenter if distinct to author ****************/
+/************ Write name and nickname of autor of a social note **************/
 /*****************************************************************************/
 
-static void Soc_WriteAuthorName (struct UsrData *UsrDat)
+static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
 
@@ -1090,7 +1091,7 @@ static void Soc_WriteAuthorName (struct UsrData *UsrDat)
    Act_FormStart (ActSeePubPrf);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (Txt_View_public_profile,"DAT_N_BOLD");
-   Str_LimitLengthHTMLStr (UsrDat->FullName,17);
+   Str_LimitLengthHTMLStr (UsrDat->FullName,16);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
@@ -1554,7 +1555,7 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
 
    /* Write author's full name and nickname */
    strcpy (FullName,Gbl.Usrs.Me.UsrDat.FullName);
-   Str_LimitLengthHTMLStr (FullName,17);
+   Str_LimitLengthHTMLStr (FullName,16);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>"
@@ -1856,12 +1857,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,14);
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
-			 "<span class=\"DAT_BOLD\">%s</span>"
-			 "<span class=\"DAT_LIGHT\"> @%s</span>"
-			 "</div>",
-	       UsrDat.FullName,UsrDat.Nickname);
+      Soc_WriteAuthorComment (&UsrDat);
 
       /* Write date and time */
       Soc_WriteDateTime (SocCom->DateTimeUTC);
@@ -1888,6 +1884,34 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                          "</div>");
       Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/****** Write name and nickname of autor of a comment to a social note *******/
+/*****************************************************************************/
+
+static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_View_public_profile;
+
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
+
+   /***** Show user's name inside form to go to user's public profile *****/
+   Act_FormStart (ActSeePubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_BOLD");
+   Str_LimitLengthHTMLStr (UsrDat->FullName,12);
+   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
+   Act_FormEnd ();
+
+   /***** Show user's nickname inside form to go to user's public profile *****/
+   Act_FormStart (ActSeePubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_LIGHT");
+   fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
+   Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
