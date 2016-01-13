@@ -121,19 +121,20 @@
 // TODO: Limit text of post/comment in social timeline to 1000 characters? Limit textarea to 20 lines not resizeable.
 // TODO: Sinchronize timeline in other actions
 // TODO: Optimize Javascript not concatenating big strings in new timeline
-// TODO: FIX BUG: Timeline is not shown on user's profile
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.17 (2016-01-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.18 (2016-01-13)"
 #define CSS_FILE		"swad15.110.13.css"
 #define JS_FILE			"swad15.110.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.19:Jan 13, 2016	Fixed bug in user's timeline. (? lines)
+        Version 15.110.18:Jan 13, 2016	Optimization in query to get initial recent timeline. (192564 lines)
         Version 15.110.17:Jan 13, 2016	Reviewed code related to Soc_MAX_RECENT_PUBS_TO_GET. (192568 lines)
         Version 15.110.16:Jan 13, 2016	Form to go to public profile of author of comment in timeline. (192563 lines)
         Version 15.110.15:Jan 13, 2016	Form to go to public profile of author of note in timeline.
