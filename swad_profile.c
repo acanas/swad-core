@@ -420,7 +420,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateFromUTC('first_click_date',%ld,'&nbsp;');"
+                         "writeLocalDateHMSFromUTC('first_click_date',%ld,'&nbsp;');"
                          "</script>",
                (long) UsrFigures.FirstClickTimeUTC);
      }

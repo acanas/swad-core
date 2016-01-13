@@ -60,7 +60,8 @@ function writeLocalDateFromUTC(id,TimeUTC) {
 // TimeUTC is the date-time to write in UTC UNIX time format
 // separator is HTML code to write between date and time
 
-function writeLocalDateTimeFromUTC(id,TimeUTC,separator,StrToday) {
+function writeLocalDateHMSFromUTC(id,TimeUTC,separator,StrToday) {
+	// HMS: Hour, Minutes, Seconds
 	var today = new (Date);
 	var todayYea = today.getFullYear();
 	var todayMon = today.getMonth()+1;
@@ -99,6 +100,44 @@ function writeLocalDateTimeFromUTC(id,TimeUTC,separator,StrToday) {
 		document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
 												separator +
 												StrHou + ':' + StrMin + ':' + StrSec;
+}
+
+function writeLocalDateHMFromUTC(id,TimeUTC,separator,StrToday) {
+	// HM: Hour, Minutes
+	var today = new (Date);
+	var todayYea = today.getFullYear();
+	var todayMon = today.getMonth()+1;
+	var todayDay = today.getDate();
+	var d = new Date;
+	var Yea;
+	var Mon;
+	var Day;
+	var Hou;
+	var Min;
+	var StrMon;
+	var StrDay;
+	var StrHou;
+	var StrMin;
+
+	d.setTime(TimeUTC * 1000);
+	Yea = d.getFullYear();
+	Mon = d.getMonth() + 1;
+	Day = d.getDate();
+	Hou = d.getHours();
+	Min = d.getMinutes();
+	StrMon = ((Mon < 10) ? '0' : '') + Mon;
+	StrDay = ((Day < 10) ? '0' : '') + Day;
+	StrHou = ((Hou < 10) ? '0' : '') + Hou;
+	StrMin = ((Min < 10) ? '0' : '') + Min;
+	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
+		StrToday.length)
+		document.getElementById(id).innerHTML = StrToday +
+												separator +
+												StrHou + ':' + StrMin;
+	else
+		document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
+												separator +
+												StrHou + ':' + StrMin;
 }
 
 // Set local date-time form fields from UTC time

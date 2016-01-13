@@ -359,7 +359,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('svy_date_start_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('svy_date_start_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_START_TIME],Txt_Today);
@@ -375,7 +375,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('svy_date_end_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('svy_date_end_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_END_TIME],Txt_Today);

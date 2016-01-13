@@ -1720,7 +1720,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:310px;
+        width:320px;
 	text-align:left;
 	vertical-align:top;
         }
@@ -1728,7 +1728,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:170px;
+        width:160px;
 	text-align:right;
 	vertical-align:top;
         }
@@ -1800,7 +1800,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
         display:inline-block;
 	box-sizing:border-box;
-        width:270px;
+        width:280px;
 	text-align:left;
 	vertical-align:top;
         }

@@ -3361,7 +3361,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    /***** Write date and time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
+                      "writeLocalDateHMSFromUTC('date_%u',%ld,'&nbsp;','%s');"
                       "</script>",
             UniqueId,(long) TimeUTC,Txt_Today);
 

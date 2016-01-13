@@ -1675,7 +1675,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the date-time (row[3]) */
       fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateTimeFromUTC('date_%u',%ld,'&nbsp;','%s');"
+			 "writeLocalDateHMSFromUTC('date_%u',%ld,'&nbsp;','%s');"
 			 "</script>"
 			 "</td>",
                UniqueId,Gbl.RowEvenOdd,

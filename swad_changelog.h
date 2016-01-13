@@ -116,19 +116,23 @@
 
 // TODO: Increment one second after each refresh in social timeline?
 // TODO: Add a new type of visibility of profile "unknown". Keep the same for photos?
+// TODO: Limit text of post/comment in social timeline to 1000 characters?
 // TODO: Sinchronize timeline in other actions
+// TODO: Optimize Javascript not concatenating big strings in new timeline
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.11 (2016-01-13)"
-#define CSS_FILE		"swad15.110.2.css"
-#define JS_FILE			"swad15.107.2.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.13 (2016-01-13)"
+#define CSS_FILE		"swad15.110.13.css"
+#define JS_FILE			"swad15.110.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.13:Jan 13, 2016	Time in social timeline without seconds. (192495 lines)
+        Version 15.110.12:Jan 13, 2016	Display name of sharer/commenter in timeline. (192456 lines)
         Version 15.110.11:Jan 13, 2016	Fixed bug in social timeline. (192403 lines)
         Version 15.110.10:Jan 13, 2016	New temporary tables used to optimize querying timeline. (192398 lines)
         Version 15.110.9: Jan 12, 2016	Do not get social notes already present in timeline. (192388 lines)

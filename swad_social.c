@@ -610,8 +610,10 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 
       /* Write social note */
       if (!AlreadyWasInTimeline)
+	{
 	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
          Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+	}
      }
    fprintf (Gbl.F.Out,"</ul>");
 
@@ -716,8 +718,10 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 
 	 /* Write social note */
 	 if (!AlreadyWasInTimeline)
+	   {
 	    // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
 	    Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+	   }
 	}
 
       /***** Store first publishing code into session *****/
@@ -781,6 +785,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool ShowNoteAlone,	// Social note is shown alone, not in a list
                                  bool ViewTopLine)	// Separate with a top line from previous social note
   {
+   extern const char *Txt_SOCIAL_USER_has_shared;
+   extern const char *Txt_SOCIAL_USER_has_commented;
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
@@ -825,8 +831,30 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Deg.DegCod = -1L;
       Crs.CrsCod = -1L;
 
-      /***** Get author data *****/
+      /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Write sharer/commenter if distinct to author *****/
+      if (!ShowNoteAlone &&	// Listing, not note alone
+	  SocPub)		// SocPub may be NULL
+	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
+	     SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
+           {
+	    UsrDat.UsrCod = SocPub->PublisherCod;
+            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// TODO: Optimize with a specialized function, we only need FullName
+              {
+	       Str_LimitLengthHTMLStr (UsrDat.FullName,40);
+
+	       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_SHARER\">");
+	       fprintf (Gbl.F.Out,
+			SocPub->PubType == Soc_PUB_SHARED_NOTE ? Txt_SOCIAL_USER_has_shared :
+								 Txt_SOCIAL_USER_has_commented,
+			UsrDat.FullName);
+	       fprintf (Gbl.F.Out,"</div>");
+              }
+           }
+
+      /***** Get author data *****/
       UsrDat.UsrCod = SocNot->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.Logged)
@@ -834,21 +862,6 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	 IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,
 										Gbl.Usrs.Me.UsrDat.UsrCod);
-	}
-
-      /***** Write sharer if distinct to author *****/
-      if (!ShowNoteAlone && SocPub)
-	{
-	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
-	     SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
-           {
-            fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_SHARER\">");
-            if (SocPub->PubType == Soc_PUB_SHARED_NOTE)
-               fprintf (Gbl.F.Out,"Fulanito ha compartido:");	// TODO: Need translation!!!
-            else
-               fprintf (Gbl.F.Out,"Fulanito ha comentado:");	// TODO: Need translation!!!
-            fprintf (Gbl.F.Out,"</div>");
-           }
 	}
 
       /***** Left: write author's photo *****/
@@ -863,7 +876,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,16);
+      Str_LimitLengthHTMLStr (UsrDat.FullName,17);
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 			 "<span class=\"DAT_N_BOLD\">%s</span>"
 			 "<span class=\"DAT_LIGHT\"> @%s</span>"
@@ -1060,7 +1073,7 @@ static void Soc_WriteDateTime (time_t TimeUTC)
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateTimeFromUTC('%s',%ld,'&nbsp;','%s');"
+                      "writeLocalDateHMFromUTC('%s',%ld,'&nbsp;','%s');"
                       "</script>",
             IdDateTime,(long) TimeUTC,Txt_Today);
   }
@@ -1488,7 +1501,7 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
 
    /* Write author's full name and nickname */
    strcpy (FullName,Gbl.Usrs.Me.UsrDat.FullName);
-   Str_LimitLengthHTMLStr (FullName,16);
+   Str_LimitLengthHTMLStr (FullName,17);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>"
@@ -1790,7 +1803,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,12);
+      Str_LimitLengthHTMLStr (UsrDat.FullName,14);
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">"
 			 "<span class=\"DAT_BOLD\">%s</span>"
 			 "<span class=\"DAT_LIGHT\"> @%s</span>"

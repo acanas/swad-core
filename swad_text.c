@@ -35783,6 +35783,48 @@ const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone =	// No longer shared
 	"N&atilde;o compartilhado por qualquer pessoa";
 #endif
 
+const char *Txt_SOCIAL_USER_has_commented =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"%s ha comentat:";
+#elif L==2
+	"%s hat kommentiert:";
+#elif L==3
+	"%s has commented:";
+#elif L==4
+	"%s ha comentado:";
+#elif L==5
+	"%s a comment&eacute;:";
+#elif L==6
+	"%s ha comentado:";	// Okoteve traducción
+#elif L==7
+	"%s ha commentato:";
+#elif L==8
+	"%s skomentowa&lstroke:";
+#elif L==9
+	"%s comentou:";
+#endif
+
+const char *Txt_SOCIAL_USER_has_shared =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"%s ha compartit:";
+#elif L==2
+	"%s hat sich geteilt:";
+#elif L==3
+	"%s has shared:";
+#elif L==4
+	"%s ha compartido:";
+#elif L==5
+	"%s a partag&eacute;:";
+#elif L==6
+	"%s ha compartido:";	// Okoteve traducción
+#elif L==7
+	"%s ha condiviso:";
+#elif L==8
+	"%s podzieli&lstroke:";
+#elif L==9
+	"%s compartilhou:";
+#endif
+
 const char *Txt_Sort_degrees_by =
 #if   L==1
 	"Ordenar titulacions per";

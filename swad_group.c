@@ -1928,7 +1928,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       fprintf (Gbl.F.Out,"<br />%s: "
                          "<span id=\"open_time_%u\"></span>"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateTimeFromUTC('open_time_%u',%ld,'&nbsp;','%s');"
+                         "writeLocalDateHMSFromUTC('open_time_%u',%ld,'&nbsp;','%s');"
                          "</script>",
                Txt_Opening_of_groups,
                UniqueId,
