@@ -55,7 +55,10 @@
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_RECENT_PUBS_TO_SHOW	  20					// Publishings to show
-// #define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
+/* Try to get one more publishing that the number of publishings to show
+   For example, if the number of publishings to show is 10, try to get 11
+   If the number of publishings shown is lesser than the number of publishing got ==> show link to get old publishings */
+#define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
 
 // Number of old publishings got and shown when I want to see old publishings
 #define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  20	// If you change this number, set also this constant to the new value in JavaScript
@@ -300,7 +303,7 @@ void Soc_ShowTimelineUsr (void)
                   " WHERE PublisherCod='%ld'"
                   " ORDER BY PubCod DESC LIMIT %u",
             Gbl.Usrs.Other.UsrDat.UsrCod,
-            Soc_MAX_RECENT_PUBS_TO_SHOW);
+            Soc_MAX_RECENT_PUBS_TO_GET);
 
    /***** Show timeline *****/
    sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
@@ -433,7 +436,7 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                " AND NotCod NOT IN (SELECT NotCod FROM current_timeline)"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC LIMIT %u",
-	          Soc_MAX_RECENT_PUBS_TO_SHOW);
+	          Soc_MAX_RECENT_PUBS_TO_GET);
 	 break;
       case Soc_GET_ONLY_NEW_PUBS:
 	 // Get the publishings (without limit) newer than LastPubCod
@@ -593,9 +596,8 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 
    /***** List recent publishings in timeline *****/
    fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
-   // NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
-   // 	                                                            Soc_MAX_RECENT_PUBS_TO_SHOW;
-   NumPubsToShow = NumPubsGot;
+   NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
+    	                                                         Soc_MAX_RECENT_PUBS_TO_SHOW;
    for (NumPub = 0;
 	NumPub < NumPubsToShow;
 	NumPub++)
@@ -612,7 +614,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
 
       /* Write social note */
-      if (!AlreadyWasInTimeline)
+      if (!AlreadyWasInTimeline)	// This check is not necessary
+					// because we have got publishing
+					// not yet in timeline
 	{
 	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
          Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
@@ -623,8 +627,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    /***** Store first publishing code into session *****/
    Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
-   // if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
-   if (NumPubsToShow == Soc_MAX_RECENT_PUBS_TO_SHOW)
+   if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
      {
       /***** Link to view old publishings via AJAX *****/
       Soc_PutLinkToViewOldPublishings ();
@@ -720,7 +723,9 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
          AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
 
 	 /* Write social note */
-	 if (!AlreadyWasInTimeline)
+	 if (!AlreadyWasInTimeline)	// This check is not necessary
+					// because we have got publishing
+					// not yet in timeline
 	   {
 	    // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
 	    Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
