@@ -216,7 +216,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
                                  bool ShowNoteAlone,
                                  bool ViewTopLine);
-static void Soc_ShowTopPublisher (const struct SocialPublishing *SocPub);
+static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub);
+static void Soc_WriteAuthorName (struct UsrData *UsrDat);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -833,7 +834,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       /***** Write sharer/commenter if distinct to author *****/
       if (!ShowNoteAlone &&	// Listing, not note alone
 	  SocPub)		// SocPub may be NULL
-	 Soc_ShowTopPublisher (SocPub);
+	 Soc_WriteTopPublisher (SocPub);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -860,12 +861,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
-      Str_LimitLengthHTMLStr (UsrDat.FullName,17);
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
-			 "<span class=\"DAT_N_BOLD\">%s</span>"
-			 "<span class=\"DAT_LIGHT\"> @%s</span>"
-			 "</div>",
-	       UsrDat.FullName,UsrDat.Nickname);
+      Soc_WriteAuthorName (&UsrDat);
 
       /* Write date and time */
       Soc_WriteDateTime (SocNot->DateTimeUTC);
@@ -1039,7 +1035,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
 
-static void Soc_ShowTopPublisher (const struct SocialPublishing *SocPub)
+static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
   {
    extern const char *Txt_View_public_profile;
    extern const char *Txt_SOCIAL_USER_has_shared;
@@ -1078,6 +1074,34 @@ static void Soc_ShowTopPublisher (const struct SocialPublishing *SocPub)
 	 /***** Free memory used for user's data *****/
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
+  }
+
+/*****************************************************************************/
+/*************** Write sharer/commenter if distinct to author ****************/
+/*****************************************************************************/
+
+static void Soc_WriteAuthorName (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_View_public_profile;
+
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
+
+   /***** Show user's name inside form to go to user's public profile *****/
+   Act_FormStart (ActSeePubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_N_BOLD");
+   Str_LimitLengthHTMLStr (UsrDat->FullName,17);
+   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
+   Act_FormEnd ();
+
+   /***** Show user's nickname inside form to go to user's public profile *****/
+   Act_FormStart (ActSeePubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_LIGHT");
+   fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
+   Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

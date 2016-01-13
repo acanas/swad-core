@@ -128,13 +128,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.14 (2016-01-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.15 (2016-01-13)"
 #define CSS_FILE		"swad15.110.13.css"
 #define JS_FILE			"swad15.110.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.15:Jan 13, 2016	Form to go to public profile of author in timeline.
+					Extensions '.exe' and '.com' not allowed (Google reported malware). (192543 lines)
         Version 15.110.14:Jan 13, 2016	Form to go to public profile of sharer/commenter in timeline. (192525 lines)
         Version 15.110.13:Jan 13, 2016	Time in social timeline without seconds. (192495 lines)
         Version 15.110.12:Jan 13, 2016	Display name of sharer/commenter in timeline. (192456 lines)
