@@ -216,6 +216,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
                                  bool ShowNoteAlone,
                                  bool ViewTopLine);
+static void Soc_ShowTopPublisher (const struct SocialPublishing *SocPub);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -785,8 +786,6 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool ShowNoteAlone,	// Social note is shown alone, not in a list
                                  bool ViewTopLine)	// Separate with a top line from previous social note
   {
-   extern const char *Txt_SOCIAL_USER_has_shared;
-   extern const char *Txt_SOCIAL_USER_has_commented;
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
    extern const char *Txt_Degree;
@@ -831,28 +830,13 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Deg.DegCod = -1L;
       Crs.CrsCod = -1L;
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
       /***** Write sharer/commenter if distinct to author *****/
       if (!ShowNoteAlone &&	// Listing, not note alone
 	  SocPub)		// SocPub may be NULL
-	 if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
-	     SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
-           {
-	    UsrDat.UsrCod = SocPub->PublisherCod;
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// TODO: Optimize with a specialized function, we only need FullName
-              {
-	       Str_LimitLengthHTMLStr (UsrDat.FullName,40);
+	 Soc_ShowTopPublisher (SocPub);
 
-	       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_SHARER\">");
-	       fprintf (Gbl.F.Out,
-			SocPub->PubType == Soc_PUB_SHARED_NOTE ? Txt_SOCIAL_USER_has_shared :
-								 Txt_SOCIAL_USER_has_commented,
-			UsrDat.FullName);
-	       fprintf (Gbl.F.Out,"</div>");
-              }
-           }
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
 
       /***** Get author data *****/
       UsrDat.UsrCod = SocNot->UsrCod;
@@ -1049,6 +1033,51 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"</ul>");
       Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/*************** Write sharer/commenter if distinct to author ****************/
+/*****************************************************************************/
+
+static void Soc_ShowTopPublisher (const struct SocialPublishing *SocPub)
+  {
+   extern const char *Txt_View_public_profile;
+   extern const char *Txt_SOCIAL_USER_has_shared;
+   extern const char *Txt_SOCIAL_USER_has_commented;
+   struct UsrData UsrDat;
+
+   if (SocPub)
+      if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
+	  SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
+	{
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
+
+	 /***** Get user's data *****/
+	 UsrDat.UsrCod = SocPub->PublisherCod;
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// TODO: Optimize with a specialized function, we only need FullName
+	   {
+	    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
+
+	    /***** Show user's name inside form to go to user's public profile *****/
+	    Act_FormStart (ActSeePubPrf);
+	    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_View_public_profile,"SOCIAL_TOP_PUBLISHER");
+	    Str_LimitLengthHTMLStr (UsrDat.FullName,40);
+	    fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
+	    Act_FormEnd ();
+
+	    /***** Show action made *****/
+	    fprintf (Gbl.F.Out," %s",
+		     SocPub->PubType == Soc_PUB_SHARED_NOTE ? Txt_SOCIAL_USER_has_shared :
+							      Txt_SOCIAL_USER_has_commented);
+
+	    fprintf (Gbl.F.Out,"</div>");
+	   }
+
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
+	}
   }
 
 /*****************************************************************************/

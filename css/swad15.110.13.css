@@ -1692,12 +1692,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:536px;
 	border-top:1px solid silver;
 	}
-.SOCIAL_TOP_SHARER
+.SOCIAL_TOP_CONTAINER
 	{
 	box-sizing:border-box;
 	width:536px;
+	padding-top:10px;
+	}
+.SOCIAL_TOP_PUBLISHER
+	{
 	color:#A0A0A0;
-	font-size:12pt;
+	font-size:13pt;
 	}
 .SOCIAL_LEFT_PHOTO
 	{

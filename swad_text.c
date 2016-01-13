@@ -35783,46 +35783,46 @@ const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone =	// No longer shared
 	"N&atilde;o compartilhado por qualquer pessoa";
 #endif
 
-const char *Txt_SOCIAL_USER_has_commented =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_SOCIAL_USER_has_commented =
 #if   L==1
-	"%s ha comentat:";
+	"ha comentat:";
 #elif L==2
-	"%s hat kommentiert:";
+	"hat kommentiert:";
 #elif L==3
-	"%s has commented:";
+	"has commented:";
 #elif L==4
-	"%s ha comentado:";
+	"ha comentado:";
 #elif L==5
-	"%s a comment&eacute;:";
+	"a comment&eacute;:";
 #elif L==6
-	"%s ha comentado:";	// Okoteve traducción
+	"ha comentado:";	// Okoteve traducción
 #elif L==7
-	"%s ha commentato:";
+	"ha commentato:";
 #elif L==8
-	"%s skomentowa&lstroke:";
+	"skomentowa&lstroke:";
 #elif L==9
-	"%s comentou:";
+	"comentou:";
 #endif
 
-const char *Txt_SOCIAL_USER_has_shared =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_SOCIAL_USER_has_shared =
 #if   L==1
-	"%s ha compartit:";
+	"ha compartit:";
 #elif L==2
-	"%s hat sich geteilt:";
+	"hat sich geteilt:";
 #elif L==3
-	"%s has shared:";
+	"has shared:";
 #elif L==4
-	"%s ha compartido:";
+	"ha compartido:";
 #elif L==5
-	"%s a partag&eacute;:";
+	"a partag&eacute;:";
 #elif L==6
-	"%s ha compartido:";	// Okoteve traducción
+	"ha compartido:";	// Okoteve traducción
 #elif L==7
-	"%s ha condiviso:";
+	"ha condiviso:";
 #elif L==8
-	"%s podzieli&lstroke:";
+	"podzieli&lstroke:";
 #elif L==9
-	"%s compartilhou:";
+	"compartilhou:";
 #endif
 
 const char *Txt_Sort_degrees_by =

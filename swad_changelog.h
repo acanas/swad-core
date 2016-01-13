@@ -110,27 +110,32 @@
 // TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
+
+// TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline?
 
 // TODO: Increment one second after each refresh in social timeline?
 // TODO: Add a new type of visibility of profile "unknown". Keep the same for photos?
-// TODO: Limit text of post/comment in social timeline to 1000 characters?
+// TODO: Limit text of post/comment in social timeline to 1000 characters? Limit textarea to 20 lines not resizeable.
 // TODO: Sinchronize timeline in other actions
 // TODO: Optimize Javascript not concatenating big strings in new timeline
+// TODO: Review code related to Soc_MAX_RECENT_PUBS_TO_GET
+// TODO: FIX BUG: Timeline is not shown on user's profile
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.13 (2016-01-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.110.14 (2016-01-13)"
 #define CSS_FILE		"swad15.110.13.css"
 #define JS_FILE			"swad15.110.13.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.110.14:Jan 13, 2016	Form to go to public profile of sharer/commenter in timeline. (192525 lines)
         Version 15.110.13:Jan 13, 2016	Time in social timeline without seconds. (192495 lines)
         Version 15.110.12:Jan 13, 2016	Display name of sharer/commenter in timeline. (192456 lines)
         Version 15.110.11:Jan 13, 2016	Fixed bug in social timeline. (192403 lines)
