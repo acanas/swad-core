@@ -54,16 +54,22 @@
 #define Soc_MAX_BYTES_SUMMARY	 	100
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Soc_MAX_RECENT_PUBS_TO_SHOW	  20					// Publishings to show
+#define Soc_MAX_RECENT_PUBS_TO_SHOW	  10					// Publishings to show
 /* Try to get one more publishing that the number of publishings to show
    For example, if the number of publishings to show is 10, try to get 11
    If the number of publishings shown is lesser than the number of publishing got ==> show link to get old publishings */
 #define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
 
 // Number of old publishings got and shown when I want to see old publishings
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  20	// If you change this number, set also this constant to the new value in JavaScript
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
 
 #define Soc_MAX_LENGTH_ID	(256+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
+
+typedef enum
+  {
+   Soc_TIMELINE_USR,	// Show the timeline of a user
+   Soc_TIMELINE_GBL,	// Show the timeline of the users follwed by me
+  } Soc_TimelineUsrOrGbl_t;
 
 typedef enum
   {
@@ -199,8 +205,12 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
-                                            char *Query);
+static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+
+static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                         Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
+                                         char *Query);
 static long Soc_GetPubCodFromSession (const char *FieldName);
 static void Soc_UpdateLastPubCodIntoSession (void);
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
@@ -298,16 +308,16 @@ void Soc_ShowTimelineUsr (void)
    char Query[512];
 
    /***** Build query to show timeline with publishings of a unique user *****/
-   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-                  " FROM social_pubs"
-                  " WHERE PublisherCod='%ld'"
-                  " ORDER BY PubCod DESC LIMIT %u",
-            Gbl.Usrs.Other.UsrDat.UsrCod,
-            Soc_MAX_RECENT_PUBS_TO_GET);
+   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_USR,
+                                Soc_GET_RECENT_TIMELINE,
+                                Query);
 
    /***** Show timeline *****/
    sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
    Soc_ShowTimeline (Query,Gbl.Title);
+
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
@@ -325,7 +335,9 @@ void Soc_ShowTimelineGbl (void)
       Lay_ShowAlert (Lay_INFO,Txt_You_dont_follow_any_user);
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimelineGbl (Soc_GET_RECENT_TIMELINE,Query);
+   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
+                                Soc_GET_RECENT_TIMELINE,
+                                Query);
 
    /***** Show timeline *****/
    Soc_ShowTimeline (Query,Txt_Public_activity);
@@ -335,39 +347,86 @@ void Soc_ShowTimelineGbl (void)
   }
 
 /*****************************************************************************/
-/******* Get and show recent timeline including all the users I follow *******/
+/********** Refresh new publishings in social timeline via AJAX **************/
 /*****************************************************************************/
 
-void Soc_GetAndShowNewTimelineGbl (void)
+void Soc_RefreshNewTimelineGbl (void)
+  {
+   // Send, before the HTML, the refresh time
+   fprintf (Gbl.F.Out,"%lu|",
+            Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+
+   Soc_GetAndShowNewTimeline (Soc_TIMELINE_GBL);
+  }
+
+/*****************************************************************************/
+/****************** Get and show new publishings in timeline *****************/
+/*****************************************************************************/
+
+static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
    char Query[512];
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimelineGbl (Soc_GET_ONLY_NEW_PUBS,Query);
+   Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
+                                Soc_GET_ONLY_NEW_PUBS,
+                                Query);
 
    /***** Show new timeline *****/
    Soc_ShowNewPubsInTimeline (Query);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
-/******** Get and show old timeline including all the users I follow *********/
+/************ View new publishings in social timeline via AJAX ***************/
 /*****************************************************************************/
 
-void Soc_GetAndShowOldTimelineGbl (void)
+void Soc_GetOtherUsrNicknameFromUsrCod (void)
+  {
+   // User's code is already taken from nickname in Par_GetMainParameters ()
+   if (!Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname))
+      Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
+  }
+
+void Soc_RefreshOldTimelineUsr (void)
+  {
+   /***** If user exists, show old publishings *****/
+   // User's code is already taken from nickname in Par_GetMainParameters ()
+   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))        // Existing user
+      Soc_GetAndShowOldTimeline (Soc_TIMELINE_USR);
+  }
+
+void Soc_RefreshOldTimelineGbl (void)
+  {
+   Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
+  }
+
+/*****************************************************************************/
+/**************** Get and show old publishings in timeline *******************/
+/*****************************************************************************/
+
+static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
    char Query[512];
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimelineGbl (Soc_GET_ONLY_OLD_PUBS,Query);
+   Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
+                                Soc_GET_ONLY_OLD_PUBS,
+                                Query);
 
    /***** Show old timeline *****/
    Soc_ShowOldPubsInTimeline (Query);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -375,9 +434,11 @@ void Soc_GetAndShowOldTimelineGbl (void)
 /*****************************************************************************/
 // Query must have space for at least 512 chars
 
-static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
-                                            char *Query)
+static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                         Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
+                                         char *Query)
   {
+   char SubQueryPublishers[128];
    char SubQueryRangePubs[64];
    long LastPubCod;
    long FirstPubCod;
@@ -390,17 +451,28 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** Create temporary table with potential publishers *****/
-   sprintf (Query,"CREATE TEMPORARY TABLE publishers "
-		  "(UsrCod INT NOT NULL,"
-		  "UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-		  " SELECT '%ld' AS UsrCod"
-		  " UNION"
-		  " SELECT FollowedCod AS UsrCod"
-		  " FROM usr_follow WHERE FollowerCod='%ld'",
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not create temporary table");
+   switch (TimelineUsrOrGbl)
+     {
+      case Soc_TIMELINE_USR:	// Show the timeline of a user
+	 sprintf (SubQueryPublishers,"PublisherCod='%ld'",
+	          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case Soc_TIMELINE_GBL:	// Show the timeline of the users follwed by me
+	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
+		        "(UsrCod INT NOT NULL,"
+		        "UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+		        " SELECT '%ld' AS UsrCod"
+		        " UNION"
+		        " SELECT FollowedCod AS UsrCod"
+		        " FROM usr_follow WHERE FollowerCod='%ld'",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (mysql_query (&Gbl.mysql,Query))
+	    DB_ExitOnMySQLError ("can not create temporary table");
+
+	 sprintf (SubQueryPublishers,"PublisherCod IN (SELECT UsrCod FROM publishers)");
+	 break;
+     }
 
    /***** Create temporary table with notes already present in current timeline *****/
    if (WhatToGetFromTimeline == Soc_GET_ONLY_OLD_PUBS)
@@ -427,9 +499,10 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE PublisherCod IN (SELECT UsrCod FROM publishers)"
+	                " WHERE %s"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC LIMIT %u",
+	          SubQueryPublishers,
 	          Soc_MAX_RECENT_PUBS_TO_GET);
 	 break;
       case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
@@ -444,10 +517,11 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE %sPublisherCod IN (SELECT UsrCod FROM publishers)"
+	                " WHERE %s%s"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC",
-	          SubQueryRangePubs);
+	          SubQueryRangePubs,
+	          SubQueryPublishers);
          break;
       case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
 	 /* This query is made via AJAX
@@ -462,11 +536,12 @@ static void Soc_BuildQueryToGetTimelineGbl (Soc_WhatToGetFromTimeline_t WhatToGe
 	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
 	                " SELECT MAX(PubCod) AS NewestPubForNote"
 	                " FROM social_pubs"
-	                " WHERE %sPublisherCod IN (SELECT UsrCod FROM publishers)"
+	                " WHERE %s%s"
 	                " AND NotCod NOT IN (SELECT NotCod FROM current_timeline)"
 	                " GROUP BY NotCod"
 	                " ORDER BY NewestPubForNote DESC LIMIT %u",
 	          SubQueryRangePubs,
+	          SubQueryPublishers,
 	          Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
          break;
      }

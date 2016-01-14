@@ -1844,11 +1844,10 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
    /***** Get parameter with encrypted user's code *****/
    Usr_GetParamOtherUsrCodEncrypted ();
 
-   /***** Check if user exists and get his data *****/
+   /***** Check if user exists and get her/his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
       return true;
 
-   // Lay_ShowAlert (Lay_ERROR,"User does not exist.");
    return false;
   }
 

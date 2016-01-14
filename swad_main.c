@@ -116,11 +116,6 @@ int main (int argc, char *argv[])
 
       if (!Gbl.WebService.IsWebService)
 	{
-	 /***** Check if clicks are made from the same IP too quickly *****/
-	 // Disable this call. Don't check if too fast...
-	 // ...because uploading files using Dropzone.js will trigger error
-	 // Sta_ExitIfTooFast ();
-
 	 /***** Create file for HTML output *****/
 	 Fil_CreateFileForHTMLOutput ();
 

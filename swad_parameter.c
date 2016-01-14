@@ -123,7 +123,7 @@ void Par_GetMainParameters (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    long OtherUsrCod;
    char LongStr[1+10+1];
    char YearStr[2+1];
@@ -158,7 +158,22 @@ void Par_GetMainParameters (void)
      }
    // SWAD is not called from external site
 
+   /***** Set dfault action *****/
    Gbl.CurrentAct = ActUnk;
+
+   /***** Get another user's nickname, if exists
+          (this nickname is used to get another user's info,
+           not to get the logged user) *****/
+   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+      if (Nickname[0])
+	 if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
+	   {
+	    Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;	// Used to go to public profile
+	                                                // and to refresh old publishings in user's timeline
+	    Gbl.CurrentAct = ActSeePubPrf;	// Set default action if no other is specified
+	   }
+
+   /***** Get action to perform *****/
    Par_GetParToText ("act",UnsignedStr,10);
    if (UnsignedStr[0])
      {
@@ -312,16 +327,6 @@ void Par_GetMainParameters (void)
       if (LongStr[0])	// Parameter "CrsCod" available
 	 Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
      }
-
-   /***** Get user's nickname, if exists
-          (this nickname is used to go to a user's profile, not to get the logged user) *****/
-   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
-      if (Nickname[0])
-	 if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
-	   {
-	    Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;
-	    Gbl.CurrentAct = ActSeePubPrf;
-	   }
 
    /***** Get tab to activate *****/
    Gbl.CurrentTab = TabUnk;

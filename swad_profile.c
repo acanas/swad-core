@@ -80,7 +80,6 @@ extern struct Globals Gbl;
 
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
 
-static void Prf_GetUsrDatAndShowUserProfile (void);
 static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
 
@@ -168,55 +167,42 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
   }
 
 /*****************************************************************************/
-/**************** Get user's code and show a user's profile ******************/
+/******************** Get user and show a user's profile *********************/
 /*****************************************************************************/
+// Gbl.Usrs.Other.UsrDat.UsrCod may be already taken. If not ==> try to get it
 
-void Prf_GetUsrCodAndShowUserProfile (void)
-  {
-   /***** Try to get user *****/
-   // User's code may be already taken from nickname in Par_GetMainParameters ()
-   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-      // If user is not set, try to get it from user code
-      Usr_GetParamOtherUsrCodEncrypted ();
-
-   /***** Show user's profile *****/
-   Prf_GetUsrDatAndShowUserProfile ();
-  }
-
-/*****************************************************************************/
-/*************************** Show a user's profile ***************************/
-/*****************************************************************************/
-// If error, Nickname is used to fill the form to request another nickname
-
-static void Prf_GetUsrDatAndShowUserProfile (void)
+void Prf_GetUsrDatAndShowUserProfile (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool Error;
 
-   /***** Check if user exists and get his data *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
-      /***** Show public profile *****/
+   /***** Get user's data *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+      Usr_GetParamOtherUsrCodEncrypted ();
+   Error = !Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+   /***** Show profile and timeline *****/
+   if (!Error)
+      /* Show profile */
       Error = !Prf_ShowUserProfile ();
-   else
-      Error = true;
 
    if (Error)
      {
-      /***** Show error message *****/
+      /* Show error message */
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
-      /***** Request nickname again *****/
+      /* Request nickname again */
       Prf_RequestUserProfileWithDefaultNickname ("");
      }
    else if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
      {
-      /***** Start section *****/
+      /* Start section */
       fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-      /***** Show social activity (timeline) of this user *****/
+      /* Show public social activity (timeline) of this user */
       Soc_ShowTimelineUsr ();
 
-      /***** End section *****/
+      /* End section */
       fprintf (Gbl.F.Out,"</section>");
      }
   }

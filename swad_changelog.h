@@ -126,14 +126,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.110.18 (2016-01-13)"
-#define CSS_FILE		"swad15.110.13.css"
-#define JS_FILE			"swad15.110.13.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.111 (2016-01-14)"
+#define CSS_FILE		"swad15.111.css"
+#define JS_FILE			"swad15.111.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.110.19:Jan 13, 2016	Fixed bug in user's timeline. (? lines)
+        Version 15.111:   Jan 14, 2016	Fixed bug in user's timeline.
+					Code refactoring related with social timeline. (192622 lines)
         Version 15.110.18:Jan 13, 2016	Optimization in query to get initial recent timeline. (192564 lines)
         Version 15.110.17:Jan 13, 2016	Reviewed code related to Soc_MAX_RECENT_PUBS_TO_GET. (192568 lines)
         Version 15.110.16:Jan 13, 2016	Form to go to public profile of author of comment in timeline. (192563 lines)

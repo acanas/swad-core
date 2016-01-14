@@ -123,10 +123,11 @@ void Lay_WriteStartOfPage (void)
    Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
-   if (Gbl.CurrentAct == ActRefCon       ||
-       Gbl.CurrentAct == ActRefLstClk    ||
-       Gbl.CurrentAct == ActRefNewSocPub ||
-       Gbl.CurrentAct == ActRefOldSocPub)
+   if (Gbl.CurrentAct == ActRefCon          ||
+       Gbl.CurrentAct == ActRefLstClk       ||
+       Gbl.CurrentAct == ActRefNewSocPubGbl ||
+       Gbl.CurrentAct == ActRefOldSocPubUsr ||
+       Gbl.CurrentAct == ActRefOldSocPubGbl)
      // Don't generate a full HTML page, only the content of a DIV or similar
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
@@ -624,18 +625,41 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptParamsAJAX (void)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-                      "var RefreshParamNxtActCon = \"act=%ld\";\n"
-                      "var RefreshParamNxtActLog = \"act=%ld\";\n"
-                      "var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-                      "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-                      "var RefreshParamIdSes = \"ses=%s\";\n"
+   /***** Start script *****/
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
+
+   /***** Parameter to refresh connected users *****/
+   fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
+            Act_Actions[ActRefCon   ].ActCod);
+
+   /***** Parameter to refresh clicks in realtime *****/
+   fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
+            Act_Actions[ActRefLstClk].ActCod);
+
+   /***** Parameters related with refreshing of social timeline *****/
+   if (Gbl.CurrentAct == ActSeePubPrf)	// TODO: Add other actions where social timeline is shown
+     {
+      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+         Usr_GetParamOtherUsrCodEncrypted ();
+      if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
+         Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                    Gbl.Usrs.Other.UsrDat.Nickname);
+      fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+                         "var RefreshParamUsr = \"usr=@%s\";\n",
+	       Act_Actions[ActRefOldSocPubUsr].ActCod,
+	       Gbl.Usrs.Other.UsrDat.Nickname);
+     }
+   else if (Gbl.CurrentAct == ActSeeSocTmlGbl)	// TODO: Add other actions where social timeline is shown
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+                            "var RefreshParamUsr = \"\";\n",	// No user specified
+		  Act_Actions[ActRefNewSocPubGbl].ActCod,
+		  Act_Actions[ActRefOldSocPubGbl].ActCod);
+
+   /***** Parameters with code of session and current course code *****/
+   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
                       "var RefreshParamCrsCod = \"crs=%ld\";\n"
                       "</script>\n",
-            Act_Actions[ActRefCon      ].ActCod,
-            Act_Actions[ActRefLstClk   ].ActCod,
-            Act_Actions[ActRefNewSocPub].ActCod,
-            Act_Actions[ActRefOldSocPub].ActCod,
             Gbl.Session.Id,
             Gbl.CurrentCrs.Crs.CrsCod);
   }
@@ -1298,10 +1322,11 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
-   if (Gbl.CurrentAct != ActRefCon       &&	// Refreshing connected users
-       Gbl.CurrentAct != ActRefLstClk    &&	// Refreshing last clics
-       Gbl.CurrentAct != ActRefNewSocPub &&	// Refreshing new social publishings in timeline
-       Gbl.CurrentAct != ActRefOldSocPub)	// Refreshing old social publishings in timeline
+   if (Gbl.CurrentAct != ActRefCon          &&	// Refreshing connected users
+       Gbl.CurrentAct != ActRefLstClk       &&	// Refreshing last clics
+       Gbl.CurrentAct != ActRefNewSocPubGbl &&	// Refreshing new social publishings in timeline
+       Gbl.CurrentAct != ActRefOldSocPubUsr &&	// Refreshing old social publishings in timeline
+       Gbl.CurrentAct != ActRefOldSocPubGbl)	// Refreshing old social publishings in timeline
       Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
@@ -1319,10 +1344,11 @@ void Lay_ShowErrorAndExit (const char *Message)
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      if (Gbl.CurrentAct != ActRefCon       &&	// Refreshing connected users
-          Gbl.CurrentAct != ActRefLstClk    &&	// Refreshing last clicks
-          Gbl.CurrentAct != ActRefNewSocPub &&	// Refreshing new social publishings in timeline
-          Gbl.CurrentAct != ActRefOldSocPub)	// Refreshing old social publishings in timeline
+      if (Gbl.CurrentAct != ActRefCon          &&	// Refreshing connected users
+          Gbl.CurrentAct != ActRefLstClk       &&	// Refreshing last clicks
+          Gbl.CurrentAct != ActRefNewSocPubGbl &&	// Refreshing new social publishings in timeline
+          Gbl.CurrentAct != ActRefOldSocPubUsr &&	// Refreshing old social publishings in timeline
+          Gbl.CurrentAct != ActRefOldSocPubGbl)		// Refreshing old social publishings in timeline
 	{
 	 /***** Compute time to send page *****/
 	 Sta_ComputeTimeToSendPage ();
@@ -1491,33 +1517,6 @@ void Lay_RefreshLastClicks (void)
    // Send, before the HTML, the refresh time
    fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    Con_GetAndShowLastClicks ();
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-/*****************************************************************************/
-/********** Refresh new publishings in social timeline via AJAX **************/
-/*****************************************************************************/
-
-void Lay_RefreshNewTimeline (void)
-  {
-   // Send, before the HTML, the refresh time and the last publishing got from database
-   fprintf (Gbl.F.Out,"%lu|",
-            Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
-   Soc_GetAndShowNewTimelineGbl ();
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-/*****************************************************************************/
-/************ View new publishings in social timeline via AJAX ***************/
-/*****************************************************************************/
-
-void Lay_RefreshOldTimeline (void)
-  {
-   Soc_GetAndShowOldTimelineGbl ();
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;

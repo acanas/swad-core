@@ -377,9 +377,9 @@ var objXMLHttpReqLog = false;
 function refreshLastClicks() {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
-      	var RefreshParams = RefreshParamNxtActLog + '&' +
-      						RefreshParamIdSes + '&' +
-      						RefreshParamCrsCod;
+		var RefreshParams = RefreshParamNxtActLog + '&' +
+							RefreshParamIdSes + '&' +
+							RefreshParamCrsCod;
 
 		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
 		objXMLHttpReqLog.open('POST',ActionAJAX,true);
@@ -393,13 +393,13 @@ var objXMLHttpReqSoc = false;
 function refreshNewTimeline() {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
-      	var RefreshParams = RefreshParamNxtActNewPub + '&' +
-      						RefreshParamIdSes;
+		var RefreshParams = RefreshParamNxtActNewPub + '&' +
+							RefreshParamIdSes;
 
-      	objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
-      	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-      	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      	objXMLHttpReqSoc.send(RefreshParams);
+		objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqSoc.send(RefreshParams);
 	}
 }
 
@@ -408,13 +408,15 @@ var objXMLHttpReqSoc = false;
 function refreshOldTimeline() {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
-      	var RefreshParams = RefreshParamNxtActOldPub + '&' +
-      						RefreshParamIdSes;
+		var RefreshParams = RefreshParamNxtActOldPub + '&' + RefreshParamIdSes;
+		if (RefreshParamUsr)
+			if (RefreshParamUsr.length)
+				RefreshParams += '&' + RefreshParamUsr;
 
-      	objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
-      	objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-      	objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      	objXMLHttpReqSoc.send(RefreshParams);
+		objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqSoc.send(RefreshParams);
 	}
 }
 

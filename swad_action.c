@@ -83,8 +83,9 @@ extern struct Globals Gbl;
 	  3. ActMnu			Show menu of a tab
 	  4. ActRefCon			Refresh number of notifications and connected users via AJAX
 	  5. ActRefLstClk		Refresh last clicks in log via AJAX
-New!!!!!!!!. ActRefNewSocPub		Refresh recent social timeline via AJAX
-New!!!!!!!!. ActRefNewSocPub		View old social timeline via AJAX
+New!!!!!!!!. ActRefNewSocPubGbl		Refresh recent social timeline via AJAX
+New!!!!!!!!. ActRefOldSocPubUsr		View old social timeline of a user via AJAX
+New!!!!!!!!. ActRefOldSocPubGbl		View old social timeline with users I follow via AJAX
 	  6. ActWebSvc			Call plugin function
 System:
 	  7. ActSysReqSch		Request search in system tab
@@ -1340,8 +1341,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},
    /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshNotifsAndConnected	,NULL},
    /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshLastClicks		,NULL},
-   /* ActRefNewSocPub	*/{1509,-1,TabUnk,ActRefNewSocPub	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshNewTimeline		,NULL},
-   /* ActRefOldSocPub	*/{1510,-1,TabUnk,ActRefNewSocPub	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshOldTimeline		,NULL},
+   /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActRefNewSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshNewTimelineGbl	,NULL},
+   /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshOldTimelineUsr	,NULL},
+   /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshOldTimelineGbl	,NULL},
    /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_WebService			,NULL},
 
    // TabSys ******************************************************************
@@ -2349,7 +2351,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
    /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrCodAndShowUserProfile,NULL},
+   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
    /* ActCalNumClk	*/{1406,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
    /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
@@ -4204,8 +4206,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemSocComUsr,	// #1506
 	ActRemSocComGbl,	// #1507
 	ActRemSocComUsr,	// #1508
-	ActRefNewSocPub,	// #1509
-	ActRefOldSocPub,	// #1510
+	ActRefNewSocPubGbl,	// #1509
+	ActRefOldSocPubGbl,	// #1510
+	ActRefOldSocPubUsr,	// #1511
 	};
 
 /*****************************************************************************/
@@ -4504,10 +4507,11 @@ void Act_AdjustCurrentAction (void)
       return;
 
    /***** Don't adjust anything when refreshing users or on a web service *****/
-   if (Gbl.CurrentAct == ActRefCon       ||
-       Gbl.CurrentAct == ActRefLstClk    ||
-       Gbl.CurrentAct == ActRefNewSocPub ||
-       Gbl.CurrentAct == ActRefOldSocPub ||
+   if (Gbl.CurrentAct == ActRefCon          ||
+       Gbl.CurrentAct == ActRefLstClk       ||
+       Gbl.CurrentAct == ActRefNewSocPubGbl ||
+       Gbl.CurrentAct == ActRefOldSocPubUsr ||
+       Gbl.CurrentAct == ActRefOldSocPubGbl ||
        Gbl.WebService.IsWebService)
       return;
 
