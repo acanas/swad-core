@@ -687,10 +687,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       if (!AlreadyWasInTimeline)	// This check is not necessary
 					// because we have got publishing
 					// not yet in timeline
-	{
-	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
          Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
-	}
      }
    fprintf (Gbl.F.Out,"</ul>");
 
@@ -748,7 +745,6 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
 
       /* Write social note */
       // New publishings are written even if the note was already un timeline
-      // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
       Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
      }
 
@@ -796,10 +792,7 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 	 if (!AlreadyWasInTimeline)	// This check is not necessary
 					// because we have got publishing
 					// not yet in timeline
-	   {
-	    // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocPub.PubCod);
 	    Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
-	   }
 	}
 
       /***** Store first publishing code into session *****/
@@ -1863,7 +1856,6 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
 	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
 
 	 /* Write social comment */
-	 // fprintf (Gbl.F.Out,"<li>PubCod %ld:</li>",SocCom.ComCod);
 	 Soc_WriteSocialComment (&SocCom,false);
 	}
 

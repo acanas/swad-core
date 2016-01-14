@@ -127,13 +127,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.1 (2016-01-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.2 (2016-01-14)"
 #define CSS_FILE		"swad15.111.css"
 #define JS_FILE			"swad15.111.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113.2: Jan 14, 2016	Removed unused code. (192668 lines)
         Version 15.113.1: Jan 14, 2016	Remove unused function. (192675 lines)
         Version 15.113:   Jan 14, 2016	Code refactoring related to forms with unique identifiers.
 					Use unique identifiers in forms of lists of connected users. (192680 lines)
