@@ -121,19 +121,20 @@
 // TODO: Add a new type of visibility of profile "unknown". Keep the same for photos?
 // TODO: Limit text of post/comment in social timeline to 1000 characters? Limit textarea to 20 lines not resizeable.
 // TODO: Sinchronize timeline in other actions
-// TODO: Optimize Javascript not concatenating big strings in new timeline
+// TODO: Do checks about new positiion in JavaScript where MathJax is evaluated
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.3 (2016-01-14)"
-#define CSS_FILE		"swad15.111.css"
-#define JS_FILE			"swad15.111.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.4 (2016-01-14)"
+#define CSS_FILE		"swad15.113.4.css"
+#define JS_FILE			"swad15.113.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113.4: Jan 14, 2016	Optimize JavaScript not concatenating big strings in new timeline. (192687 lines)
         Version 15.113.3: Jan 14, 2016	Divs to get new publishings only in global timeline. (192673 lines)
         Version 15.113.2: Jan 14, 2016	Removed unused code. (192668 lines)
         Version 15.113.1: Jan 14, 2016	Remove unused function. (192675 lines)

@@ -664,7 +664,10 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       /* Link to view new publishings via AJAX */
       Soc_PutLinkToViewNewPublishings ();
 
-      /* Hidden list where insert new publishings via AJAX */
+      /* Hidden list where insert just received (not visible) publishings via AJAX */
+      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\"></ul>");
+
+      /* Hidden list where insert new (not visible) publishings via AJAX */
       fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
      }
 

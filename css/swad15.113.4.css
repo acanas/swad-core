@@ -1676,7 +1676,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	vertical-align:middle;
 	}
-#new_timeline_list
+#just_now_timeline_list,#new_timeline_list
 	{
 	display:none;
 	margin:0;

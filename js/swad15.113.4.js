@@ -510,20 +510,33 @@ function readNewTimelineData() {
 		if (objXMLHttpReqSoc.status == 200) {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
 			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlNewTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+			var htmlJustNowTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);// Get HTML code for social timeline
 
-			var newTimeline = document.getElementById('new_timeline_list');	// Access to UL with the new timeline
-			if (newTimeline) {
-				newTimeline.innerHTML = htmlNewTimeline + newTimeline.innerHTML;	// Update list of publishings in new timeline
-				var countNewTimeline = newTimeline.childNodes.length;
+			var justNowTimeline = document.getElementById('just_now_timeline_list');// Access to UL for the just received timeline
+			if (justNowTimeline) {
+				justNowTimeline.innerHTML = htmlJustNowTimeline;	// Update list of publishings in just now timeline		
+				var countJustNowTimeline = justNowTimeline.childNodes.length;
 
-				if (countNewTimeline) {
+				if (countJustNowTimeline) {	// New pubs just retrieved
 					// Scripts in timeline got via AJAX are not executed ==> execute them
-					evalScriptsInElem (newTimeline);
+					evalScriptsInElem (justNowTimeline);
+
+					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub,justNowTimeline]);
+
+					// Move just received timeline to top of new timeline
+					var newTimeline = document.getElementById('new_timeline_list');		// Access to UL with the new timeline
+
+					// Move all the LI elements in UL 'just_now_timeline_list' to the top of UL 'new_timeline_list'
+				    for (var i=0; i<countJustNowTimeline; i++)
+				    	newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.childNodes[0]);
+
+					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,newTimeline]);
 
 					// Update number of new posts
-					var viewNewPostsCount     = document.getElementById('view_new_posts_count');
-					viewNewPostsCount.innerHTML = countNewTimeline;
+					var viewNewPostsCount = document.getElementById('view_new_posts_count');
+					viewNewPostsCount.innerHTML = newTimeline.childNodes.length;
 
 					// Display message with new posts if hidden
 					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
@@ -554,13 +567,16 @@ function readOldTimelineData() {
 				    // Scripts in timeline got via AJAX are not executed ==> execute them
 				    evalScriptsInElem (oldTimeline);
 
+					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub,oldTimeline]);
+
 					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 							timeline.appendChild(oldTimeline.firstChild);
 
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
+					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
 				}
 				
 				if (countOldTimeline < 10)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
@@ -586,7 +602,7 @@ function moveNewTimelineToTimeline() {
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
 
 		// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
+		// MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
     }
 
 	// Reset and hide number of new posts after moving
