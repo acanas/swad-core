@@ -4354,12 +4354,6 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id)
    Act_FormStartInternal (NextAction,true,Id,NULL);	// Do put now parameter location (if no open session)
   }
 
-void Act_FormStartIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor)
-  {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   Act_FormStartInternal (NextAction,true,Id,Anchor);	// Do put now parameter location (if no open session)
-  }
-
 // Id can not be NULL
 static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor)
   {
