@@ -127,13 +127,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.4 (2016-01-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.5 (2016-01-14)"
 #define CSS_FILE		"swad15.113.4.css"
-#define JS_FILE			"swad15.113.4.js"
+#define JS_FILE			"swad15.113.5.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113.5: Jan 14, 2016	Change in message.
+					Removed unused code in JavaScript. (192684 lines)
         Version 15.113.4: Jan 14, 2016	Optimize JavaScript not concatenating big strings in new timeline. (192687 lines)
         Version 15.113.3: Jan 14, 2016	Divs to get new publishings only in global timeline. (192673 lines)
         Version 15.113.2: Jan 14, 2016	Removed unused code. (192668 lines)

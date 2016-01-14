@@ -19880,23 +19880,23 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabSoc *****************************************************
 	// ActSeeSocTmlGbl
 #if   L==1
-	 "Activitat social (l&iacute;nia de temps)"
+	 "Activitat p&uacute;blica dels usuaris que segueixo"
 #elif L==2
-	 "Soziale Aktivit&auml;t (Timeline)"
+	 "&Ouml;ffentliche Aktivit&auml;t der Nutzer Ich folge"
 #elif L==3
-	 "Social activity (timeline)"
+	 "Public activity of the users I follow"
 #elif L==4
-	 "Actividad social (l&iacute;nea de tiempo)"
+	 "Actividad p&uacute;blica de los usuarios que sigo"
 #elif L==5
-	 "Activit&eacute; sociale (timeline)"
+	 "Activit&eacute; publique des utilisateurs je suivre"
 #elif L==6
-	 "Actividad social (l&iacute;nea de tiempo)"	// Okoteve traducción
+	 "Actividad p&uacute;blica de los usuarios que sigo"	// Okoteve traducción
 #elif L==7
-	 "Attivit&agrave; sociale (timeline)"
+	 "Attivit&agrave; pubblica degli utenti che seguo"
 #elif L==8
-	 "Aktywno&sacute;&cacute; spo&lstrok;eczna (o&sacute; czasu)"
+	 "Aktywno&sacute;&cacute; publiczna u&zdot;ytkownik&oacute;w &sacute;ledz&eogon;"
 #elif L==9
-	 "Atividade social (timeline)"
+	 "Atividade p&uacute;blica dos usu&aacute;rios que eu sigo"
 #endif
 	,
 	 // ActReqPubPrf

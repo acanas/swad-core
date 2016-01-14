@@ -297,8 +297,8 @@ function writeLocalClock() {
 	var d;
 	var Mon;
 	var Day;
-        var Hou;
-        var Min;
+	var Hou;
+	var Min;
 	var StrMin;
 
 	setTimeout('writeLocalClock()',60000);
@@ -363,9 +363,9 @@ var objXMLHttpReqCon = false;
 function refreshConnected() {
 	objXMLHttpReqCon = AJAXCreateObject();
 	if (objXMLHttpReqCon) {
-      	var RefreshParams = RefreshParamNxtActCon + '&' +
-      						RefreshParamIdSes + '&' +
-      						RefreshParamCrsCod;
+		var RefreshParams = RefreshParamNxtActCon + '&' +
+							RefreshParamIdSes + '&' +
+							RefreshParamCrsCod;
 
 		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;	// onreadystatechange must be lowercase
 		objXMLHttpReqCon.open('POST',ActionAJAX,true);
@@ -528,11 +528,8 @@ function readNewTimelineData() {
 					var newTimeline = document.getElementById('new_timeline_list');		// Access to UL with the new timeline
 
 					// Move all the LI elements in UL 'just_now_timeline_list' to the top of UL 'new_timeline_list'
-				    for (var i=0; i<countJustNowTimeline; i++)
-				    	newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.childNodes[0]);
-
-					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,newTimeline]);
+					for (var i=0; i<countJustNowTimeline; i++)
+						newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.childNodes[0]);
 
 					// Update number of new posts
 					var viewNewPostsCount = document.getElementById('view_new_posts_count');
@@ -564,8 +561,8 @@ function readOldTimelineData() {
 				var countOldTimeline = oldTimeline.childNodes.length;
 				
 				if (countOldTimeline) {
-				    // Scripts in timeline got via AJAX are not executed ==> execute them
-				    evalScriptsInElem (oldTimeline);
+					// Scripts in timeline got via AJAX are not executed ==> execute them
+					evalScriptsInElem (oldTimeline);
 
 					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.Hub.Queue(["Typeset",MathJax.Hub,oldTimeline]);
@@ -574,9 +571,6 @@ function readOldTimelineData() {
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 							timeline.appendChild(oldTimeline.firstChild);
-
-					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
 				}
 				
 				if (countOldTimeline < 10)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
@@ -589,24 +583,21 @@ function readOldTimelineData() {
 
 // Move new timeline to top of timeline
 function moveNewTimelineToTimeline() {
-	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
-	var viewNewPostsCount     = document.getElementById('view_new_posts_count');
-	var newTimeline           = document.getElementById('new_timeline_list');
+	// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
+	var newTimeline = document.getElementById('new_timeline_list');
 	var countNewTimeline = newTimeline.childNodes.length;
-
 	if (countNewTimeline) {
 		var timeline = document.getElementById("timeline_list");
-
-		// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
-	    for (var i=0; i<countNewTimeline; i++)
+		for (var i=0; i<countNewTimeline; i++)
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
-
-		// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-		// MathJax.Hub.Queue(["Typeset",MathJax.Hub,timeline]);
     }
 
-	// Reset and hide number of new posts after moving
+	// Reset number of new posts after moving
+	var viewNewPostsCount = document.getElementById('view_new_posts_count');
 	viewNewPostsCount.innerHTML = 0;
+
+	// Hide link to view new posts after moving
+	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
 	viewNewPostsContainer.style.display = 'none';
 }
 
@@ -701,7 +692,7 @@ function uncheckParent(CheckBox, MainCheckbox) {
 // Deactivate all children checkboxes when parent checkbox is activated
 function uncheckChildren(MainCheckbox, GroupCheckboxes) {
 	var i, Formul = MainCheckbox.form;
-        if (MainCheckbox.checked)
+	if (MainCheckbox.checked)
 		for (i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == GroupCheckboxes) Formul.elements[i].checked = false;
 }
@@ -742,24 +733,24 @@ function enableDisableAns(Formul) {
 			if (Formul.elements[i].name == 'AnsInt')
 				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsMulti'		||
-			         Formul.elements[i].name == 'AnsFloatMin'	||
-			         Formul.elements[i].name == 'AnsFloatMax'	||
-			         Formul.elements[i].name == 'AnsTF'			||
-			         Formul.elements[i].name == 'AnsUni'		||
-			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].name == 'AnsFloatMin'	||
+				Formul.elements[i].name == 'AnsFloatMax'	||
+				Formul.elements[i].name == 'AnsTF'			||
+				Formul.elements[i].name == 'AnsUni'		||
+				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
 	else if (Formul.AnswerType[Tst_ANS_FLOAT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsFloatMin' ||
-			    Formul.elements[i].name == 'AnsFloatMax')
+				Formul.elements[i].name == 'AnsFloatMax')
 				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt'   ||
-			         Formul.elements[i].name == 'AnsTF'    ||
-			         Formul.elements[i].name == 'AnsUni'   ||
-			         Formul.elements[i].name == 'AnsMulti' ||
-			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].name == 'AnsTF'    ||
+				Formul.elements[i].name == 'AnsUni'   ||
+				Formul.elements[i].name == 'AnsMulti' ||
+				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
@@ -768,37 +759,37 @@ function enableDisableAns(Formul) {
 			if (Formul.elements[i].name == 'AnsTF')
 				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
-			         Formul.elements[i].name == 'AnsFloatMin' ||
-			         Formul.elements[i].name == 'AnsFloatMax' ||
-			         Formul.elements[i].name == 'AnsUni' ||
-			         Formul.elements[i].name == 'AnsMulti' ||
-			         Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].name == 'AnsFloatMin' ||
+				Formul.elements[i].name == 'AnsFloatMax' ||
+				Formul.elements[i].name == 'AnsUni' ||
+				Formul.elements[i].name == 'AnsMulti' ||
+				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],true);
 	}
 	else if (Formul.AnswerType[Tst_ANS_UNIQUE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsUni' ||
-			    Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
-			         Formul.elements[i].name == 'AnsFloatMin' ||
-			         Formul.elements[i].name == 'AnsFloatMax' ||
-			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsMulti')
+					 Formul.elements[i].name == 'AnsFloatMin' ||
+					 Formul.elements[i].name == 'AnsFloatMax' ||
+					 Formul.elements[i].name == 'AnsTF' ||
+					 Formul.elements[i].name == 'AnsMulti')
 				Formul.elements[i].disabled = true;
 			else enableDisableContAns(Formul.elements[i],false);
 	}
 	else if (Formul.AnswerType[Tst_ANS_MULTIPLE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsMulti' ||
-			    Formul.elements[i].name == 'Shuffle')
+				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = false;
 			else if (Formul.elements[i].name == 'AnsInt' ||
-			         Formul.elements[i].name == 'AnsFloatMin' ||
-			         Formul.elements[i].name == 'AnsFloatMax' ||
-			         Formul.elements[i].name == 'AnsTF' ||
-			         Formul.elements[i].name == 'AnsUni')
+					 Formul.elements[i].name == 'AnsFloatMin' ||
+					 Formul.elements[i].name == 'AnsFloatMax' ||
+					 Formul.elements[i].name == 'AnsTF' ||
+					 Formul.elements[i].name == 'AnsUni')
 				Formul.elements[i].disabled = true;
 			else
 				enableDisableContAns(Formul.elements[i],false);
@@ -806,11 +797,11 @@ function enableDisableAns(Formul) {
 	else if (Formul.AnswerType[Tst_ANS_TEXT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsInt' ||
-			    Formul.elements[i].name == 'AnsFloatMin' ||
-			    Formul.elements[i].name == 'AnsFloatMax' ||
-			    Formul.elements[i].name == 'AnsTF' ||
-			    Formul.elements[i].name == 'AnsUni' ||
-			    Formul.elements[i].name == 'AnsMulti')
+				Formul.elements[i].name == 'AnsFloatMin' ||
+				Formul.elements[i].name == 'AnsFloatMax' ||
+				Formul.elements[i].name == 'AnsTF' ||
+				Formul.elements[i].name == 'AnsUni' ||
+				Formul.elements[i].name == 'AnsMulti')
 				Formul.elements[i].disabled = true;
 			else
 				enableDisableContAns(Formul.elements[i],false);
@@ -847,18 +838,18 @@ function disableDetailedClicks() {
 function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var StartingMonth = [	// Calendar starts one row before current month
-	   10,	// January   --> October
-	   10,	// February  --> October
-	   10,	// Mars      --> October
-	    1,	// April     --> January
-	    1,	// May       --> January
-	    1,	// June      --> January
-		4,	// July      --> April
-		4,	// August    --> April
-		4,	// September --> April
-		7,	// October   --> July
-		7,	// November  --> July
-		7	// December  --> July
+		10,	// January   --> October
+		10,	// February  --> October
+		10,	// Mars      --> October
+		 1,	// April     --> January
+		 1,	// May       --> January
+		 1,	// June      --> January
+		 4,	// July      --> April
+		 4,	// August    --> April
+		 4,	// September --> April
+		 7,	// October   --> July
+		 7,	// November  --> July
+		 7	// December  --> July
 	];
 	var d = new Date;
 	d.setTime(TimeUTC * 1000);
@@ -1156,17 +1147,17 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 
 function GetDayOfWeekMondayFirst (Year,Month,Day) {
 	if (Month <= 2) {
-	   Month += 12;
-	   Year--;
+		Month += 12;
+		Year--;
 	}
 	return (((Day +
-             (Month * 2) +
-             Math.floor (((Month + 1) * 3) / 5) +
-             Year +
-             Math.floor (Year / 4) -
-             Math.floor (Year/100) +
-             Math.floor (Year/400) +
-             2) % 7) + 5) % 7;
+			(Month * 2) +
+			Math.floor (((Month + 1) * 3) / 5) +
+			Year +
+			Math.floor (Year / 4) -
+			Math.floor (Year/100) +
+			Math.floor (Year/400) +
+			2) % 7) + 5) % 7;
 }
 
 /*****************************************************************************/
@@ -1174,7 +1165,7 @@ function GetDayOfWeekMondayFirst (Year,Month,Day) {
 /*****************************************************************************/
 
 function GetNumDaysFebruary (Year) {
-   return (GetIfLeapYear (Year) ? 29 : 28);
+	return (GetIfLeapYear (Year) ? 29 : 28);
 }
 
 /*****************************************************************************/
@@ -1182,5 +1173,5 @@ function GetNumDaysFebruary (Year) {
 /*****************************************************************************/
 
 function GetIfLeapYear (Year) {
-   return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
+	return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
 }
