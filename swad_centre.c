@@ -351,7 +351,7 @@ static void Ctr_Configuration (bool PrintView)
 	    Act_FormStart (ActChgCtrPhoAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.FormId);
+		     Gbl.Form.Id);
             if (PhotoAttribution)
 	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
@@ -1139,7 +1139,7 @@ void Ctr_WriteSelectorOfCentre (void)
    fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:175px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
@@ -1268,7 +1268,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 for (NumIns = 0;
 	      NumIns < Gbl.Inss.Num;
 	      NumIns++)
@@ -1292,7 +1292,7 @@ static void Ctr_ListCentresForEdition (void)
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
 	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
 	 if (Ctr->PlcCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1326,7 +1326,7 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.FormId);
+		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1344,7 +1344,7 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.FormId);
+		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1362,7 +1362,7 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.FormId);
+		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1408,7 +1408,7 @@ static void Ctr_ListCentresForEdition (void)
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",
-		  Gbl.FormId,
+		  Gbl.Form.Id,
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING),
 		  Txt_CENTRE_STATUS[Ctr_STATUS_PENDING],
 		  (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE),

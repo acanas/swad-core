@@ -87,7 +87,7 @@ void Sco_PutSelectorScope (bool SendOnChange)
    fprintf (Gbl.F.Out,"<select name=\"Scope\"");
    if (SendOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,">");
 
    for (Scope = (Sco_Scope_t) 0;

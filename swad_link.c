@@ -356,7 +356,7 @@ static void Lnk_ListLinksForEdition (void)
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -369,7 +369,7 @@ static void Lnk_ListLinksForEdition (void)
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -382,7 +382,7 @@ static void Lnk_ListLinksForEdition (void)
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Lnk->WWW,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");

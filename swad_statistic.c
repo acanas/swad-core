@@ -1808,7 +1808,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO15x20",Pho_ZOOM,NULL);
+                        "PHOTO15x20",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
@@ -2053,7 +2053,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    fprintf (Gbl.F.Out,"%s: ",Txt_Color_of_the_graphic);
    fprintf (Gbl.F.Out,"<select name=\"ColorType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (ColorType = (Sta_ColorType_t) 0;
 	ColorType < Sta_NUM_COLOR_TYPES;
 	ColorType++)

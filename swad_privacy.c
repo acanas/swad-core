@@ -161,7 +161,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
 	 else
 	    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
-		     Gbl.FormId);
+		     Gbl.Form.Id);
 	 fprintf (Gbl.F.Out," />"
 			    "%s"
 			    "</li>",

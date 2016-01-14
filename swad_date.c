@@ -334,7 +334,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Year = FirstYear;
 	Year <= LastYear;
@@ -353,7 +353,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Month = 1;
 	Month <= 12;
@@ -370,7 +370,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
             Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Day = 1;
 	Day <= 31;
@@ -387,7 +387,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
             Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Hour = 0;
 	Hour <= 23;
@@ -404,7 +404,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Minute = 0;
 	Minute <= 59;
@@ -421,7 +421,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    Id,ParamName,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Second = 0;
 	Second <= 59;
@@ -581,7 +581,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	    Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -605,7 +605,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	    Id,Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.FormId);
+               Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -628,7 +628,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
             Id,Id);
    if (SubmitFormOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");

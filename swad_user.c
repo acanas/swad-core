@@ -1651,7 +1651,7 @@ void Usr_WriteLoggedUsrHead (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,
-                     "PHOTO18x24",Pho_ZOOM,NULL);
+                     "PHOTO18x24",Pho_ZOOM,false);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
@@ -2705,7 +2705,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM,NULL);
+                        "PHOTO21x28",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2807,7 +2807,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM,NULL);
+                        "PHOTO21x28",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2861,7 +2861,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
+                        "PHOTO21x28",Pho_NO_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2963,7 +2963,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
+                        "PHOTO21x28",Pho_NO_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3118,7 +3118,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM,NULL);
+                        "PHOTO21x28",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3174,7 +3174,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
+                        "PHOTO21x28",Pho_NO_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3252,7 +3252,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM,NULL);
+                        "PHOTO21x28",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -5203,7 +5203,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "<span class=\"%s\">%s</span>",
-	    Gbl.FormId,
+	    Gbl.Form.Id,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Display_photos);
   }
 
@@ -7311,7 +7311,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           ClassPhoto,Pho_ZOOM,NULL);
+                           ClassPhoto,Pho_ZOOM,false);
 
          /***** Photo foot *****/
          fprintf (Gbl.F.Out,"<br />");
@@ -7391,7 +7391,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    /***** Start selector *****/
    fprintf (Gbl.F.Out,"<select name=\"ColsClassPhoto\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
    for (Cols = 1;

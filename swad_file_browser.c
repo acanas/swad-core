@@ -3124,7 +3124,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "%s"
                       "</li>",
-            Gbl.FormId,
+            Gbl.Form.Id,
             Gbl.CurrentCrs.Crs.FullName);
 
    /***** List my groups for unique selection *****/
@@ -3157,7 +3157,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			    "%s %s"
 			    "</li>",
-		  Gbl.FormId,
+		  Gbl.Form.Id,
                   GrpDat.GrpTypName,GrpDat.GrpName);
         }
 
@@ -3213,7 +3213,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO93x124",Pho_ZOOM,NULL);
+                     "PHOTO93x124",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
@@ -4425,7 +4425,7 @@ static void Brw_WriteFormFullTree (void)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       " %s",
-            Gbl.FormId,
+            Gbl.Form.Id,
             Txt_Show_all_files);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -5700,7 +5700,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
 		  FileName,Gbl.FileBrowser.InputStyle,
                   Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
-                  Gbl.FormId);
+                  Gbl.Form.Id);
          Act_FormEnd ();
         }
       else
@@ -5958,7 +5958,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO15x20B",Pho_ZOOM,NULL);
+                        "PHOTO15x20B",Pho_ZOOM,false);
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
@@ -7835,7 +7835,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Form to upload files using the library Dropzone.js *****/
    // Use min-height:125px; or other number to stablish the height?
-   Gbl.NumForm++;
+   Gbl.Form.Num++;
    fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s\""
                       " class=\"dropzone\""
                       " enctype=\"multipart/form-data\""
@@ -9051,7 +9051,7 @@ void Brw_ShowFileMetadata (void)
 	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&PublisherUsrDat,ShowPhoto ? PhotoURL :
 	                	                           NULL,
-	                      "PHOTO15x20",Pho_ZOOM,NULL);
+	                      "PHOTO15x20",Pho_ZOOM,false);
 
 	    /* Write name */
 	    fprintf (Gbl.F.Out,"%s",

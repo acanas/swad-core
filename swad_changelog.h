@@ -121,18 +121,21 @@
 // TODO: Limit text of post/comment in social timeline to 1000 characters? Limit textarea to 20 lines not resizeable.
 // TODO: Sinchronize timeline in other actions
 // TODO: Optimize Javascript not concatenating big strings in new timeline
+// TODO: Do not put divs to get new publishings in user's timeline
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.112 (2016-01-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113 (2016-01-14)"
 #define CSS_FILE		"swad15.111.css"
 #define JS_FILE			"swad15.111.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113:   Jan 14, 2016	Code refactoring related to forms with unique identifiers.
+					Use unique identifiers in forms of lists of connected users. (192680 lines)
         Version 15.112:   Jan 14, 2016	Fixed bugs in user's timeline.
 					All forms in social timeline must have unique identifiers. (192676 lines)
         Version 15.111:   Jan 14, 2016	Fixed bug in user's timeline.

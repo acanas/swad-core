@@ -219,7 +219,7 @@ void Rec_ListFieldsRecordsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Rec_MAX_LENGTH_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -231,7 +231,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -241,7 +241,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
                          " onchange=\"document.getElementById('%s').submit();\">",
-               Gbl.FormId);
+               Gbl.Form.Id);
       for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
 	   Vis++)
@@ -1382,7 +1382,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
                       " class=\"ICON20x20\" />"
                       "<span class=\"%s\">&nbsp;%s</span>"
                       "</div>",
-            Gbl.FormId,
+            Gbl.Form.Id,
             Gbl.Prefs.IconsURL,
             Txt_Show_office_hours,
             Txt_Show_office_hours,
@@ -2075,7 +2075,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
          break;
      }
 
-   PutFormLinks = !Gbl.InsideForm &&						// Only if not inside another form
+   PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
    /***** Start frame *****/
@@ -2136,7 +2136,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Rec_C3_TOP);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-		     "PHOTO186x248",Pho_NO_ZOOM,NULL);
+		     "PHOTO186x248",Pho_NO_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -3376,7 +3376,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
-	    Gbl.FormId);
+	    Gbl.Form.Id);
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\"></option>");
@@ -3415,7 +3415,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
-	    Gbl.FormId);
+	    Gbl.Form.Id);
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
@@ -3461,7 +3461,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
@@ -3505,7 +3505,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       if (Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out," disabled=\"disabled\"></option>"
@@ -3545,7 +3545,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -3565,7 +3565,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Usr_MAX_LENGTH_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

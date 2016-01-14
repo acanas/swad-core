@@ -143,7 +143,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
                Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -170,7 +170,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Brw_ParamListFiles (FileType,PathInTree,FileName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");

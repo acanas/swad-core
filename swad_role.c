@@ -293,7 +293,7 @@ void Rol_PutFormToChangeMyRole (bool FormInHead)
    if (FormInHead)
       fprintf (Gbl.F.Out," style=\"width:130px;\"");
    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (Role = Rol__GUEST_;
         Role < Rol_NUM_ROLES;
         Role++)

@@ -1786,7 +1786,7 @@ static void For_PutFormWhichForums (void)
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
-               Gbl.FormId,Txt_FORUM_WHICH_FORUM[WhichForums]);
+               Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[WhichForums]);
      }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");

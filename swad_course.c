@@ -892,7 +892,7 @@ void Crs_WriteSelectorOfCourse (void)
    fprintf (Gbl.F.Out,"<select name=\"crs\" style=\"width:175px;\"");
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
@@ -1090,7 +1090,7 @@ void Crs_WriteSelectorMyCourses (void)
    fprintf (Gbl.F.Out,"<select name=\"CrsCod\""
 	              " style=\"width:130px; margin:1px;\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
 
    /***** Write an option when no course selected *****/
    if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
@@ -1410,7 +1410,7 @@ static void Crs_ListCoursesForEdition (void)
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                         Crs->InstitutionalCrsCod,
-                        Gbl.FormId);
+                        Gbl.Form.Id);
                Act_FormEnd ();
               }
             else
@@ -1426,7 +1426,7 @@ static void Crs_ListCoursesForEdition (void)
                fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
         	                  " class=\"INPUT_DEGREE\""
         	                  " onchange=\"document.getElementById('%s').submit();\">",
-                        Gbl.FormId);
+                        Gbl.Form.Id);
                for (NumDeg = 0;
         	    NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
         	    NumDeg++)
@@ -1451,7 +1451,7 @@ static void Crs_ListCoursesForEdition (void)
                fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
         	                  " style=\"width:50px;\""
         	                  " onchange=\"document.getElementById('%s').submit();\">",
-                        Gbl.FormId);
+                        Gbl.Form.Id);
                for (YearAux = 0;
         	    YearAux <= Deg_MAX_YEARS_PER_DEGREE;
         	    YearAux++)	// All the years are permitted because it's possible to move this course to another degree (with other active years)
@@ -1478,7 +1478,7 @@ static void Crs_ListCoursesForEdition (void)
                                   " class=\"INPUT_SHORT_NAME\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
-                        Gbl.FormId);
+                        Gbl.Form.Id);
                Act_FormEnd ();
               }
             else
@@ -1496,7 +1496,7 @@ static void Crs_ListCoursesForEdition (void)
                                   " class=\"INPUT_FULL_NAME\""
                                   " onchange=\"document.getElementById('%s').submit();\" />",
                         Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName,
-                        Gbl.FormId);
+                        Gbl.Form.Id);
                Act_FormEnd ();
               }
             else
@@ -1528,7 +1528,7 @@ static void Crs_ListCoursesForEdition (void)
                                   "<option value=\"%u\" selected=\"selected\">%s</option>"
                                   "<option value=\"%u\">%s</option>"
                                   "</select>",
-                        Gbl.FormId,
+                        Gbl.Form.Id,
                         (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
                         Txt_COURSE_STATUS[Crs_STATUS_PENDING],
                         (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),

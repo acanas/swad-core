@@ -1073,8 +1073,8 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
 		      "&nbsp;%s"
 		      "</div>"
 		      "</a>",
-	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,Text,
-	    Gbl.NumForm,Gbl.Prefs.IconsURL,Alt,Text,
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Text,
+	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Text,
 	    Text);
   }
 

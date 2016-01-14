@@ -275,7 +275,7 @@ static void Cty_Configuration (bool PrintView)
 	    Act_FormStart (ActChgCtyMapAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.FormId);
+		     Gbl.Form.Id);
             if (MapAttribution)
 	       fprintf (Gbl.F.Out,"%s",MapAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
@@ -1053,7 +1053,7 @@ void Cty_WriteSelectorOfCountry (void)
    fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:175px;\""
                       " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
-	    Gbl.FormId);
+	    Gbl.Form.Id);
    if (Gbl.CurrentCty.Cty.CtyCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
@@ -1106,7 +1106,7 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);
 
-   if (Gbl.InsideForm)	// If we are writing another form
+   if (Gbl.Form.Inside)	// If we are writing another form
       /***** Write country name without link *****/
       fprintf (Gbl.F.Out,"%s",CtyName);
    else
@@ -1456,7 +1456,7 @@ static void Cty_ListCountriesForEdition (void)
                             " size=\"15\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_BYTES_COUNTRY_NAME,
-                  Cty->Name[Lan],Gbl.FormId);
+                  Cty->Name[Lan],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1470,7 +1470,7 @@ static void Cty_ListCountriesForEdition (void)
                             " class=\"INPUT_WWW\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Cty_MAX_LENGTH_COUNTRY_WWW,
-                  Cty->WWW[Lan],Gbl.FormId);
+                  Cty->WWW[Lan],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");

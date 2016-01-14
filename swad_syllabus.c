@@ -153,7 +153,7 @@ void Syl_PutFormWhichSyllabus (void)
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
                          "</li>",
-               Gbl.FormId,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
+               Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
@@ -918,7 +918,7 @@ static void Syl_PutFormItemSyllabus (Inf_InfoType_t InfoType,bool NewItem,unsign
                       " onchange=\"document.getElementById('%s').submit();\" />",
 	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
 	    Txt_Enter_a_new_item_here,
-	    Gbl.FormId);
+	    Gbl.Form.Id);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
   }

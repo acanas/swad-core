@@ -108,9 +108,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.Tmp = NULL;
    Gbl.F.XML = NULL;
 
-   Gbl.InsideForm = false;		// Set to true inside a form to avoid nested forms
-   Gbl.NumForm = -1;			// Number of form. It's increased by 1 at the begin of each form
-   Gbl.NumFormConnectedUsrs = -1;	// Number of form in list of connected users. It's increased by 1 at the begin of each form
+   Gbl.Form.Num = -1;			// Number of form. It's increased by 1 at the begin of each form
+   Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
 
    Gbl.Error = false;
 

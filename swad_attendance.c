@@ -414,7 +414,7 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO15x20",Pho_ZOOM,NULL);
+                     "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);
@@ -1973,7 +1973,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO45x60",Pho_ZOOM,NULL);
+                        "PHOTO45x60",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3188,7 +3188,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM,NULL);
+                        "PHOTO21x28",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3326,7 +3326,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 				        NULL,
-		     "PHOTO21x28",Pho_ZOOM,NULL);
+		     "PHOTO21x28",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write user's ID ******/

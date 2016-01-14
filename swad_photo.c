@@ -312,7 +312,8 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\">");
    // if (PhotoExists)
-   Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO186x248",Pho_NO_ZOOM,NULL);
+   Pho_ShowUsrPhoto (UsrDat,PhotoURL,
+                     "PHOTO186x248",Pho_NO_ZOOM,false);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -550,7 +551,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
             Lay_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
          /***** Read file with coordinates for image map and compute the number of faces *****/
-         NumLastForm = Gbl.NumForm;
+         NumLastForm = Gbl.Form.Num;
          while (!feof (FileTxtMap))
            {
             if (fscanf (FileTxtMap,"%u %u %u %u %s\n",&X,&Y,&Radius,&BackgroundCode,StrFileName) != 5)        // Example of StrFileName = "4924a838630e_016"
@@ -1028,13 +1029,13 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
-                       const char *Id)
+                       bool FormUnique)
   {
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    bool PhotoExists;
-   bool PutLinkToPublicProfile = !Gbl.InsideForm &&						// Only if not inside another form
+   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
                                  Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
    bool PutZoomCode = PhotoURL &&							// Photo exists
                       Zoom == Pho_ZOOM &&						// Make zoom
@@ -1049,13 +1050,13 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
-      if (Id)
-         Act_FormStartId (ActSeePubPrf,Id);
+      if (FormUnique)
+         Act_FormStartUnique (ActSeePubPrf);
       else
          Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      if (Id)
-         Act_LinkFormSubmitId (NULL,NULL,Id);
+      if (FormUnique)
+         Act_LinkFormSubmitUnique (NULL,NULL);
       else
          Act_LinkFormSubmit (NULL,NULL);
      }
@@ -1570,7 +1571,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"AvgType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAvg++)
@@ -1639,7 +1640,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"PhotoSize\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
 	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
 	PhoSi++)
@@ -1708,7 +1709,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Usr_PutParamColsClassPhoto ();
    fprintf (Gbl.F.Out,"<select name=\"OrdDeg\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (Order = (Pho_HowOrderDegrees_t) 0;
 	Order < Pho_NUM_HOW_ORDER_DEGREES;
 	Order++)

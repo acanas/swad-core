@@ -672,12 +672,13 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    /***** Write message with number of users not listed *****/
    if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
      {
-      sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\" class=\"CENTER_TOP\">");
-      Act_FormStartId (ActLstCon,Gbl.FormId);
+      Act_FormStartUnique (ActLstCon);	// Must be unique because
+					// the list of connected users
+					// is dynamically updated via AJAX
       Sco_PutParamScope (Sco_SCOPE_CRS);
-      Act_LinkFormSubmitId (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme],Gbl.FormId);
+      Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"
 	                 "</a>",
@@ -1072,14 +1073,15 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	              "<td class=\"LEFT_MIDDLE COLOR%u\""
 	              " style=\"width:22px;\">",
 	    Gbl.RowEvenOdd);
-   sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
-   Act_FormStartId (ActSeePubPrf,Gbl.FormId);
+   Act_FormStartUnique (ActSeePubPrf);	// Must be unique because
+					// the list of connected users
+					// is dynamically updated via AJAX
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitId (UsrDat.FullName,NULL,Gbl.FormId);
+   Act_LinkFormSubmitUnique (UsrDat.FullName,NULL);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO21x28",Pho_ZOOM,NULL);
+                     "PHOTO21x28",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -1088,12 +1090,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
 	              " style=\"width:68px;\">",
 	    Font,Gbl.RowEvenOdd);
-   sprintf (Gbl.FormId,"form_con_%d",++Gbl.NumFormConnectedUsrs);
-   Act_FormStartId ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
-	                                    ActSeeRecOneTch,
-	            Gbl.FormId);
+   Act_FormStartUnique ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
+	                                        ActSeeRecOneTch);	// Must be unique because
+									// the list of connected users
+									// is dynamically updated via AJAX
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitId (Txt_View_record_for_this_course,Font,Gbl.FormId);
+   Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_RestrictLengthAndWriteName (&UsrDat,8);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
@@ -1271,7 +1273,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 						  NULL,
-			      "PHOTO21x28",Pho_ZOOM,NULL);
+			      "PHOTO21x28",Pho_ZOOM,false);
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write full name and link *****/

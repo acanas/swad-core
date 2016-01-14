@@ -508,7 +508,7 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"-1\"",
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       if (Hld->PlcCod <= 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_All_places);
@@ -530,7 +530,7 @@ static void Hld_ListHolidaysForEdition (void)
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">",
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       for (HolidayType = (Hld_HolidayType_t) 0;
 	   HolidayType < Hld_NUM_TYPES_HOLIDAY;
 	   HolidayType++)
@@ -574,7 +574,7 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
 	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name,Gbl.FormId);
+               Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");

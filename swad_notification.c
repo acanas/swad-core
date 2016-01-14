@@ -616,7 +616,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       " %s",
-            Gbl.FormId,
+            Gbl.Form.Id,
             Txt_Show_all_notifications);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -637,7 +637,7 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 /*****************************************************************************/
 /*********** Put form to go to an action depending on the event **************/
 /*****************************************************************************/
-// Return the value of Gbl.InsideForm (true if form is started)
+// Return the value of Gbl.Form.Inside (true if form is started)
 
 static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                      long CrsCod,long Cod)
@@ -712,7 +712,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Parameter to go to another course/degree/centre/institution *****/
-   if (Gbl.InsideForm)
+   if (Gbl.Form.Inside)
      {
       if (CrsCod > 0)				// Course specified
 	{
@@ -736,7 +736,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	}
      }
 
-   return Gbl.InsideForm;
+   return Gbl.Form.Inside;
   }
 
 /*****************************************************************************/

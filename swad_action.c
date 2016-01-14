@@ -4311,36 +4311,52 @@ char *Act_GetActionTextFromDB (long ActCod,char *Txt)
 /******************************** Start a form *******************************/
 /*****************************************************************************/
 
-void Act_FormStart (Act_Action_t NextAction)
-  {
-   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
-   Act_FormStartInternal (NextAction,true,Gbl.FormId,NULL);	// Do put now parameter location (if no open session)
-  }
-
 void Act_FormGoToStart (Act_Action_t NextAction)
   {
-   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
-   Act_FormStartInternal (NextAction,false,Gbl.FormId,NULL);	// Do not put now parameter location
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,false,Gbl.Form.Id,NULL);	// Do not put now parameter location
+  }
+
+void Act_FormStart (Act_Action_t NextAction)
+  {
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,NULL);	// Do put now parameter location (if no open session)
+  }
+
+void Act_FormStartUnique (Act_Action_t NextAction)
+  {
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.UniqueId,"form_%s_%d",
+            Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.FormId,"form_%d",Gbl.NumForm);
-   Act_FormStartInternal (NextAction,true,Gbl.FormId,Anchor);	// Do put now parameter location (if no open session)
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor);	// Do put now parameter location (if no open session)
+  }
+
+void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
+  {
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.UniqueId,"form_%s_%d",
+            Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,Anchor);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartId (Act_Action_t NextAction,const char *Id)
   {
-   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    Act_FormStartInternal (NextAction,true,Id,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartIdAnchor (Act_Action_t NextAction,const char *Id,const char *Anchor)
   {
-   Gbl.NumForm++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    Act_FormStartInternal (NextAction,true,Id,Anchor);	// Do put now parameter location (if no open session)
   }
 
@@ -4350,7 +4366,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
 
-   if (!Gbl.InsideForm)
+   if (!Gbl.Form.Inside)
      {
       /* Start form */
       fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
@@ -4377,7 +4393,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
       Act_SetParamsForm (Params,NextAction,PutParameterLocationIfNoSesion);
       fprintf (Gbl.F.Out,"%s",Params);
 
-      Gbl.InsideForm = true;
+      Gbl.Form.Inside = true;
      }
   }
 
@@ -4425,10 +4441,10 @@ void Act_SetParamsForm (char *Params,Act_Action_t NextAction,bool PutParameterLo
 
 void Act_FormEnd (void)
   {
-   if (Gbl.InsideForm)
+   if (Gbl.Form.Inside)
      {
       fprintf (Gbl.F.Out,"</form>");
-      Gbl.InsideForm = false;
+      Gbl.Form.Inside = false;
      }
   }
 
@@ -4439,7 +4455,12 @@ void Act_FormEnd (void)
 
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle)
   {
-   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.FormId);
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id);
+  }
+
+void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
+  {
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.UniqueId);
   }
 
 // Title can be NULL
@@ -4474,9 +4495,9 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
 		      "document.getElementById('updating_%d').style.display='';"	// Icon to be shown on click
 		      "document.getElementById('%s').submit();"
 		      "return false;\">",
-	    Gbl.NumForm,
-	    Gbl.NumForm,
-	    Gbl.FormId);
+	    Gbl.Form.Num,
+	    Gbl.Form.Num,
+	    Gbl.Form.Id);
   }
 
 /*****************************************************************************/

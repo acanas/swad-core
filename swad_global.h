@@ -86,10 +86,13 @@ struct Globals
    struct Files F;
    MYSQL mysql;
    pid_t PID;	// PID of current process
-   bool InsideForm;		// Set to true inside a form to avoid nested forms
-   int NumForm;			// Number of form, used in form submit links
-   int NumFormConnectedUsrs;	// Number of form in list of connected users, used in form submit links
-   char FormId[32];		// Identifier string used in forms
+   struct
+     {
+      int Num;			// Number of form, used in form submit links
+      char Id[32];		// Identifier string used in forms
+      char UniqueId[32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1];	// Unique identifier string used in forms
+      bool Inside;		// Set to true inside a form to avoid nested forms
+     } Form;
    bool Error;
    bool GetMethod;	// Am I accessed using GET method?
    struct soap *soap;	// gSOAP runtime environment

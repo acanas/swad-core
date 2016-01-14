@@ -424,7 +424,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -436,7 +436,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Mai_MAX_LENGTH_MAIL_INFO,Mai->Info,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

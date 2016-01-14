@@ -1525,7 +1525,7 @@ static void Tst_ShowFormEditTags (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  Tst_MAX_TAG_LENGTH,row[1],Gbl.FormId);
+                  Tst_MAX_TAG_LENGTH,row[1],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -2588,7 +2588,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          if (Str_ConvertToUpperLetter (row[3][0]) == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-                  Gbl.FormId);
+                  Gbl.Form.Id);
          Act_FormEnd ();
         }
       fprintf (Gbl.F.Out,"</td>");
@@ -6461,7 +6461,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO45x60",Pho_ZOOM,NULL);
+                     "PHOTO45x60",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to go to user's record card *****/
@@ -6597,7 +6597,7 @@ void Tst_ShowOneTestExam (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
                 	                                NULL,
-                     "PHOTO45x60",Pho_ZOOM,NULL);
+                     "PHOTO45x60",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

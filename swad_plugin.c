@@ -401,7 +401,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name,Gbl.FormId);
+               Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -412,7 +412,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description,Gbl.FormId);
+               Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -423,7 +423,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
 	                 " size=\"4\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo,Gbl.FormId);
+               Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -434,7 +434,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
 	                 " size=\"16\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey,Gbl.FormId);
+               Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -445,7 +445,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Plg->URL,Gbl.FormId);
+               Cns_MAX_LENGTH_WWW,Plg->URL,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -456,7 +456,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_IP,Plg->IP,Gbl.FormId);
+               Cns_MAX_LENGTH_IP,Plg->IP,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");

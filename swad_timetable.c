@@ -1207,7 +1207,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
 	 /***** Class type *****/
 	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:68px;\""
 	                    " onchange=\"document.getElementById('%s').submit();\">",
-	          Gbl.FormId);
+	          Gbl.Form.Id);
 	 for (CT = (TT_ClassType_t) 0;
 	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
 	      CT++)
@@ -1245,7 +1245,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
 	    /***** Class duration *****/
 	    fprintf (Gbl.F.Out,"<select name=\"ModTTDur\" style=\"width:57px;\""
 		               " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.FormId);
+		     Gbl.Form.Id);
             for (H = Hour + TimeTable[Day][Hour].Columns[Column].Duration;
         	 H < TT_HOURS_PER_DAY * 2;
         	 H++)
@@ -1275,7 +1275,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
 	                          "<select name=\"ModTTGrpCod\""
 	                          " style=\"width:110px;\""
 		                  " onchange=\"document.getElementById('%s').submit();\">",
-		        Txt_Group,Gbl.FormId);
+		        Txt_Group,Gbl.Form.Id);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
 	       if (GrpCod <= 0)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1304,7 +1304,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
 	                          "<input type=\"text\" name=\"ModHorLugar\""
 	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
-		        Txt_Classroom,TT_MAX_LENGTH_PLACE,Place,Gbl.FormId);
+		        Txt_Classroom,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
@@ -1314,7 +1314,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
                                   "<input type=\"text\" name=\"ModHorLugar\""
                                   " size=\"12\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
-		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.FormId);
+		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
 	      }
 	   }
          fprintf (Gbl.F.Out,"</span>");

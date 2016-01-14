@@ -1055,7 +1055,7 @@ void Ins_WriteSelectorOfInstitution (void)
    fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:175px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
@@ -1181,7 +1181,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:40px;\""
 			    " onchange=\"document.getElementById('%s').submit();\" />"
 			    "<option value=\"0\"",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 if (Ins->CtyCod == 0)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
@@ -1213,7 +1213,7 @@ static void Ins_ListInstitutionsForEdition (void)
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName,
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1231,7 +1231,7 @@ static void Ins_ListInstitutionsForEdition (void)
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName,
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1249,7 +1249,7 @@ static void Ins_ListInstitutionsForEdition (void)
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Cns_MAX_LENGTH_WWW,Ins->WWW,
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1296,7 +1296,7 @@ static void Ins_ListInstitutionsForEdition (void)
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",
-		  Gbl.FormId,
+		  Gbl.Form.Id,
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING),
 		  Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING],
 		  (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE),

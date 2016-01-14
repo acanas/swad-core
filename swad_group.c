@@ -1153,7 +1153,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1165,7 +1165,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
       if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrollment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
@@ -1187,7 +1187,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
       if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
@@ -1371,7 +1371,7 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\""
                             " onchange=\"document.getElementById('%s').submit();\">",
-                  Gbl.FormId);
+                  Gbl.Form.Id);
          for (NumTipGrpAux = 0;
               NumTipGrpAux < Gbl.CurrentCrs.Grps.GrpTypes.Num;
               NumTipGrpAux++)
@@ -1393,7 +1393,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.FormId);
+                  MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -1405,7 +1405,7 @@ static void Grp_ListGroupsForEdition (void)
                             " size=\"3\" maxlength=\"10\" value=\"");
          Grp_WriteMaxStdsGrp (Grp->MaxStudents);
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
-                  Gbl.FormId);
+                  Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -4179,7 +4179,7 @@ void Grp_ShowSelectorWhichGrps (void)
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                          " %s"
                          "</li>",
-               Gbl.FormId,Txt_Show_WHICH_groups[WhichGrps]);
+               Gbl.Form.Id,Txt_Show_WHICH_groups[WhichGrps]);
      }
    fprintf (Gbl.F.Out,"</ul>"
                       "</div>");

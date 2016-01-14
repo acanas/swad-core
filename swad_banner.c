@@ -359,7 +359,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName,Gbl.FormId);
+               Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -371,7 +371,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_FULL_NAME,Ban->FullName,Gbl.FormId);
+               Ban_MAX_LENGTH_FULL_NAME,Ban->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -382,7 +382,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_IMAGE,Ban->Img,Gbl.FormId);
+               Ban_MAX_LENGTH_IMAGE,Ban->Img,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -394,7 +394,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Ban->WWW,Gbl.FormId);
+               Cns_MAX_LENGTH_WWW,Ban->WWW,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");

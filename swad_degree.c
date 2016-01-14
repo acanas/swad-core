@@ -593,7 +593,7 @@ static void Deg_WriteSelectorOfDegree (void)
    fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:175px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-               Gbl.FormId);
+               Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
@@ -1277,7 +1277,7 @@ static void Deg_ListDegreeTypesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Deg_MAX_LENGTH_DEGREE_TYPE_NAME,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1289,7 +1289,7 @@ static void Deg_ListDegreeTypesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? " checked=\"checked\"" :
         	                                                   "",
-               Gbl.FormId);
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1500,7 +1500,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:62px;\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 for (NumCtr = 0;
 	      NumCtr < Gbl.Ctrs.Num;
 	      NumCtr++)
@@ -1526,7 +1526,7 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.FormId);
+		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1543,7 +1543,7 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName,Gbl.FormId);
+		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1559,7 +1559,7 @@ static void Deg_ListDegreesForEdition (void)
 	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
 	                    " style=\"width:62px;\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 for (NumDegTyp = 0;
 	      NumDegTyp < Gbl.Degs.DegTypes.Num;
 	      NumDegTyp++)
@@ -1590,7 +1590,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"FirstYear\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 for (Year = 0;
 	      Year <= Deg_MAX_YEARS_PER_DEGREE;
 	      Year++)
@@ -1614,7 +1614,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"LastYear\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.FormId);
+		  Gbl.Form.Id);
 	 for (Year = 0;
 	      Year <= Deg_MAX_YEARS_PER_DEGREE;
 	      Year++)
@@ -1640,7 +1640,7 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.FormId);
+		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -1675,7 +1675,7 @@ static void Deg_ListDegreesForEdition (void)
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",
-		  Gbl.FormId,
+		  Gbl.Form.Id,
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING),
 		  Txt_DEGREE_STATUS[Deg_STATUS_PENDING],
 		  (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE),

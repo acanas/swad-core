@@ -108,7 +108,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat);
 void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
-                       const char *Id);
+                       bool FormUnique);
 
 void Pho_ChangePhotoVisibility (void);
 

@@ -335,7 +335,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Cns_MAX_LENGTH_URL,URL,
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

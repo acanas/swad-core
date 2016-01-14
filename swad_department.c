@@ -531,7 +531,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
 	                 "onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"0\"",
-	       Gbl.FormId);
+	       Gbl.Form.Id);
       if (Dpt->InsCod == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
@@ -555,7 +555,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.FormId);
+               MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -567,7 +567,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.FormId);
+               MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -579,7 +579,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.FormId);
+               Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

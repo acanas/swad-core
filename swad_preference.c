@@ -244,7 +244,7 @@ void Pre_PutSelectorToSelectLanguage (void)
    fprintf (Gbl.F.Out,"<select name=\"Lan\""
 	              " style=\"width:112px; margin:0;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.FormId);
+            Gbl.Form.Id);
    for (Lan = (Txt_Language_t) 1;
 	Lan <= Txt_NUM_LANGUAGES;
 	Lan++)

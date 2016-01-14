@@ -464,7 +464,7 @@ static void Plc_ListPlacesForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.FormId);
+               Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -476,7 +476,7 @@ static void Plc_ListPlacesForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.FormId);
+               Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
