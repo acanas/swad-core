@@ -658,11 +658,15 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
        Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Soc_PutHiddenFormToWriteNewPost ();
 
-   /***** Link to view new publishings via AJAX *****/
-   Soc_PutLinkToViewNewPublishings ();
+   /***** New publishings refreshed dynamically via AJAX *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)				// Global timeline
+     {
+      /* Link to view new publishings via AJAX */
+      Soc_PutLinkToViewNewPublishings ();
 
-   /***** Hidden list where insert new publishings via AJAX *****/
-   fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
+      /* Hidden list where insert new publishings via AJAX */
+      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
+     }
 
    /***** List recent publishings in timeline *****/
    fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
