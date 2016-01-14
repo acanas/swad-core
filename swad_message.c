@@ -469,7 +469,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 					                NULL,
-		     "PHOTO21x28",Pho_ZOOM);
+		     "PHOTO21x28",Pho_ZOOM,NULL);
 
    /****** Write user's IDs ******/
    fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
@@ -2973,7 +2973,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO30x40",Pho_ZOOM);
+                        "PHOTO30x40",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
@@ -3136,7 +3136,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO21x28",Pho_ZOOM);
+                     "PHOTO21x28",Pho_ZOOM,NULL);
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
@@ -3282,7 +3282,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           "PHOTO21x28",Pho_ZOOM);
+                           "PHOTO21x28",Pho_ZOOM,NULL);
 
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
@@ -3655,7 +3655,7 @@ void Msg_ListBannedUsrs (void)
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
-                              "PHOTO21x28",Pho_ZOOM);
+                              "PHOTO21x28",Pho_ZOOM,NULL);
             fprintf (Gbl.F.Out,"</td>");
 
             /* Write user's full name */

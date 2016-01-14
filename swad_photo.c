@@ -312,7 +312,7 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    fprintf (Gbl.F.Out,"<tr>"
                       "<td colspan=\"2\">");
    // if (PhotoExists)
-   Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO186x248",Pho_NO_ZOOM);
+   Pho_ShowUsrPhoto (UsrDat,PhotoURL,"PHOTO186x248",Pho_NO_ZOOM,NULL);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -1027,7 +1027,8 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,Pho_Zoom_t Zoom)
+                       const char *ClassPhoto,Pho_Zoom_t Zoom,
+                       const char *Id)
   {
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
@@ -1048,9 +1049,15 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
-      Act_FormStart (ActSeePubPrf);
+      if (Id)
+         Act_FormStartId (ActSeePubPrf,Id);
+      else
+         Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (NULL,NULL);
+      if (Id)
+         Act_LinkFormSubmitId (NULL,NULL,Id);
+      else
+         Act_LinkFormSubmit (NULL,NULL);
      }
 
    /***** Start image *****/

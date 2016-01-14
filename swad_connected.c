@@ -1079,7 +1079,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO21x28",Pho_ZOOM);
+                     "PHOTO21x28",Pho_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -1271,7 +1271,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 						  NULL,
-			      "PHOTO21x28",Pho_ZOOM);
+			      "PHOTO21x28",Pho_ZOOM,NULL);
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write full name and link *****/

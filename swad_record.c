@@ -2136,7 +2136,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Rec_C3_TOP);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-		     "PHOTO186x248",Pho_NO_ZOOM);
+		     "PHOTO186x248",Pho_NO_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 

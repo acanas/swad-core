@@ -857,6 +857,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 /*****************************************************************************/
 /***************************** Write social note *****************************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
@@ -868,7 +869,6 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    extern const char *Txt_Degree;
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
-   char IdNewComment[Soc_MAX_LENGTH_ID];
    struct UsrData UsrDat;
    bool IAmTheAuthor = false;
    bool IAmAPublisherOfThisSocNot = false;
@@ -881,6 +881,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
    unsigned NumComments;
+   char IdNewComment[Soc_MAX_LENGTH_ID];
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Start frame ****/
    if (ShowNoteAlone)
@@ -927,10 +929,11 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+      Soc_SetUniqueId (IdForm);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
-			"PHOTO45x60",Pho_ZOOM);
+			"PHOTO45x60",Pho_ZOOM,IdForm);
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
@@ -1110,6 +1113,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 /*****************************************************************************/
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
   {
@@ -1117,6 +1121,7 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
    extern const char *Txt_SOCIAL_USER_has_shared;
    extern const char *Txt_SOCIAL_USER_has_commented;
    struct UsrData UsrDat;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    if (SocPub)
       if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
@@ -1132,9 +1137,10 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
 	    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
 
 	    /***** Show user's name inside form to go to user's public profile *****/
-	    Act_FormStart (ActSeePubPrf);
+	    Soc_SetUniqueId (IdForm);
+	    Act_FormStartId (ActSeePubPrf,IdForm);
 	    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_View_public_profile,"SOCIAL_TOP_PUBLISHER");
+	    Act_LinkFormSubmitId (Txt_View_public_profile,"SOCIAL_TOP_PUBLISHER",IdForm);
 	    Str_LimitLengthHTMLStr (UsrDat.FullName,40);
 	    fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
 	    Act_FormEnd ();
@@ -1155,25 +1161,29 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
 /*****************************************************************************/
 /************ Write name and nickname of autor of a social note **************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Act_FormStart (ActSeePubPrf);
+   Soc_SetUniqueId (IdForm);
+   Act_FormStartId (ActSeePubPrf,IdForm);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_N_BOLD");
+   Act_LinkFormSubmitId (Txt_View_public_profile,"DAT_N_BOLD",IdForm);
    Str_LimitLengthHTMLStr (UsrDat->FullName,16);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   Act_FormStart (ActSeePubPrf);
+   Soc_SetUniqueId (IdForm);
+   Act_FormStartId (ActSeePubPrf,IdForm);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_LIGHT");
+   Act_LinkFormSubmitId (Txt_View_public_profile,"DAT_LIGHT",IdForm);
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 
@@ -1247,6 +1257,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 /*****************************************************************************/
 /********* Put form to go to an action depending on the social note **********/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   {
@@ -1255,6 +1266,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    if (SocNot->Unavailable ||	// File/notice... pointer by this social note is unavailable
        Gbl.InsideForm)		// Inside another form
@@ -1268,39 +1280,41 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
      }
    else			// Not inside another form
      {
+      Soc_SetUniqueId (IdForm);
+
       /***** Parameters depending on the type of note *****/
       switch (SocNot->NoteType)
 	{
 	 case Soc_NOTE_INS_DOC_PUB_FILE:
 	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
 	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
 	    break;
 	 case Soc_NOTE_CTR_DOC_PUB_FILE:
 	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
 	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
 	    break;
 	 case Soc_NOTE_DEG_DOC_PUB_FILE:
 	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
 	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
 	    break;
 	 case Soc_NOTE_CRS_DOC_PUB_FILE:
 	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -1308,13 +1322,13 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	 case Soc_NOTE_SOCIAL_POST:	// Not applicable
 	    return;
 	 case Soc_NOTE_FORUM_POST:
-	    Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+	    Act_FormStartId (For_ActionsSeeFor[Gbl.Forum.ForumType],IdForm);
 	    For_PutAllHiddenParamsForum ();
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case Soc_NOTE_NOTICE:
-	    Act_FormStart (Soc_DefaultActions[SocNot->NoteType]);
+	    Act_FormStartId (Soc_DefaultActions[SocNot->NoteType],IdForm);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -1325,8 +1339,8 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 
       /***** Link and end form *****/
       sprintf (Class,"%s ICON_HIGHLIGHT",The_ClassFormBold[Gbl.Prefs.Theme]);
-      Act_LinkFormSubmit (Txt_SOCIAL_NOTE[SocNot->NoteType],
-			  Class);
+      Act_LinkFormSubmitId (Txt_SOCIAL_NOTE[SocNot->NoteType],
+			    Class,IdForm);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON20x20\" />"
@@ -1622,7 +1636,7 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
-		     "PHOTO45x60",Pho_ZOOM);
+		     "PHOTO45x60",Pho_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: author's name, time, summary and buttons *****/
@@ -1764,11 +1778,13 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
 /*****************************************************************************/
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char UniqueId[Soc_MAX_LENGTH_ID])
   {
    extern const char *Txt_Send_comment;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
@@ -1777,13 +1793,14 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 	    UniqueId);
 
    /***** Start form to write the post *****/
+   Soc_SetUniqueId (IdForm);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActRcvSocComUsr,"timeline");
+      Act_FormStartIdAnchor (ActRcvSocComUsr,IdForm,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActRcvSocComGbl);
+      Act_FormStartId (ActRcvSocComGbl,IdForm);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<textarea name=\"Comment\" cols=\"45\" rows=\"3\">"
 		      "</textarea>");
@@ -1818,6 +1835,7 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 /*****************************************************************************/
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteCommentsInSocialNote (long NotCod,
                                            const char IdNewComment[Soc_MAX_LENGTH_ID])
@@ -1878,6 +1896,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
 /*****************************************************************************/
 /**************************** Write social comment ***************************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone)	// Social comment is shown alone, not in a list
@@ -1891,6 +1910,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    bool IAmTheAuthor;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    if (ShowCommentAlone)
      {
@@ -1922,10 +1942,11 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+      Soc_SetUniqueId (IdForm);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
-			"PHOTO30x40",Pho_ZOOM);
+			"PHOTO30x40",Pho_ZOOM,IdForm);
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
@@ -1964,25 +1985,29 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 /*****************************************************************************/
 /****** Write name and nickname of autor of a comment to a social note *******/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   Act_FormStart (ActSeePubPrf);
+   Soc_SetUniqueId (IdForm);
+   Act_FormStartId (ActSeePubPrf,IdForm);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_BOLD");
+   Act_LinkFormSubmitId (Txt_View_public_profile,"DAT_BOLD",IdForm);
    Str_LimitLengthHTMLStr (UsrDat->FullName,12);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   Act_FormStart (ActSeePubPrf);
+   Soc_SetUniqueId (IdForm);
+   Act_FormStartId (ActSeePubPrf,IdForm);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (Txt_View_public_profile,"DAT_LIGHT");
+   Act_LinkFormSubmitId (Txt_View_public_profile,"DAT_LIGHT",IdForm);
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 
@@ -1992,19 +2017,22 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
 /*****************************************************************************/
 /********************** Form to remove social comment ************************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutFormToRemoveComment (long ComCod)
   {
    extern const char *Txt_Remove;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Form to remove social publishing *****/
+   Soc_SetUniqueId (IdForm);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActReqRemSocComUsr,"timeline");
+      Act_FormStartIdAnchor (ActReqRemSocComUsr,IdForm,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActReqRemSocComGbl);
+      Act_FormStartId (ActReqRemSocComGbl,IdForm);
    Soc_PutHiddenParamComCod (ComCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2045,19 +2073,22 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
 /*****************************************************************************/
 /************************* Form to share social note *************************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutFormToShareSocialNote (long NotCod)
   {
    extern const char *Txt_Share;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Form to share social note *****/
+   Soc_SetUniqueId (IdForm);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActShaSocNotUsr,"timeline");
+      Act_FormStartIdAnchor (ActShaSocNotUsr,IdForm,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActShaSocNotGbl);
+      Act_FormStartId (ActShaSocNotGbl,IdForm);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2074,19 +2105,22 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 /*****************************************************************************/
 /************ Form to unshare (stop sharing) social publishing ***************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutFormToUnshareSocialPublishing (long NotCod)
   {
    extern const char *Txt_Unshare;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Form to share social publishing *****/
+   Soc_SetUniqueId (IdForm);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActUnsSocPubUsr,"timeline");
+      Act_FormStartIdAnchor (ActUnsSocPubUsr,IdForm,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActUnsSocPubGbl);
+      Act_FormStartId (ActUnsSocPubGbl,IdForm);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2102,19 +2136,21 @@ static void Soc_PutFormToUnshareSocialPublishing (long NotCod)
 /*****************************************************************************/
 /******************** Form to remove social publishing ***********************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
   {
    extern const char *Txt_Remove;
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /***** Form to remove social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      Act_FormStartAnchor (ActReqRemSocPubUsr,"timeline");
+      Act_FormStartIdAnchor (ActReqRemSocPubUsr,IdForm,"timeline");
       Usr_PutParamOtherUsrCodEncrypted ();
      }
    else
-      Act_FormStart (ActReqRemSocPubGbl);
+      Act_FormStartId (ActReqRemSocPubGbl,IdForm);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2915,6 +2951,7 @@ static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
 /*****************************************************************************/
 /**************** Show users who have shared this social note ****************/
 /*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
   {
@@ -2927,6 +2964,7 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
    struct UsrData UsrDat;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
+   char IdForm[Soc_MAX_LENGTH_ID];
 
    /* Show number of users who have shared this social note */
    fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES\"> %u</span>",
@@ -2966,10 +3004,11 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
 	      {
                fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">");
+               Soc_SetUniqueId (IdForm);
 	       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 	                                             NULL,
-	                         "PHOTO18x24",Pho_ZOOM);
+	                         "PHOTO18x24",Pho_ZOOM,IdForm);
                fprintf (Gbl.F.Out,"</div>");
 
                NumUsrsShown++;

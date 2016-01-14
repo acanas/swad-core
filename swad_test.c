@@ -6461,7 +6461,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO45x60",Pho_ZOOM);
+                     "PHOTO45x60",Pho_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to go to user's record card *****/
@@ -6597,7 +6597,7 @@ void Tst_ShowOneTestExam (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
                 	                                NULL,
-                     "PHOTO45x60",Pho_ZOOM);
+                     "PHOTO45x60",Pho_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

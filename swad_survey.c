@@ -569,7 +569,7 @@ static void Svy_WriteAuthor (struct Survey *Svy)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-                     "PHOTO15x20",Pho_ZOOM);
+                     "PHOTO15x20",Pho_ZOOM,NULL);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);

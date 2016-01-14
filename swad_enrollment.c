@@ -2785,7 +2785,7 @@ void Enr_ShowEnrollmentRequests (void)
             ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
-                              "PHOTO21x28",Pho_ZOOM);
+                              "PHOTO21x28",Pho_ZOOM,NULL);
             fprintf (Gbl.F.Out,"</td>");
 
             /***** User name *****/

@@ -1651,7 +1651,7 @@ void Usr_WriteLoggedUsrHead (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,
-                     "PHOTO18x24",Pho_ZOOM);
+                     "PHOTO18x24",Pho_ZOOM,NULL);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
@@ -2705,7 +2705,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2807,7 +2807,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2861,7 +2861,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2963,7 +2963,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3118,7 +3118,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3174,7 +3174,7 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_NO_ZOOM);
+                        "PHOTO21x28",Pho_NO_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -3252,7 +3252,7 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
-                        "PHOTO21x28",Pho_ZOOM);
+                        "PHOTO21x28",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -7311,7 +7311,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
          ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
-                           ClassPhoto,Pho_ZOOM);
+                           ClassPhoto,Pho_ZOOM,NULL);
 
          /***** Photo foot *****/
          fprintf (Gbl.F.Out,"<br />");

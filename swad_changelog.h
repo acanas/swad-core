@@ -126,13 +126,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.111 (2016-01-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.112 (2016-01-14)"
 #define CSS_FILE		"swad15.111.css"
 #define JS_FILE			"swad15.111.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.112:   Jan 14, 2016	Fixed bugs in user's timeline.
+					All forms in social timeline must have unique identifiers. (192676 lines)
         Version 15.111:   Jan 14, 2016	Fixed bug in user's timeline.
 					Code refactoring related with social timeline. (192622 lines)
         Version 15.110.18:Jan 13, 2016	Optimization in query to get initial recent timeline. (192564 lines)

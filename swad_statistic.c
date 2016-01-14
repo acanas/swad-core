@@ -1808,7 +1808,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO15x20",Pho_ZOOM);
+                        "PHOTO15x20",Pho_ZOOM,NULL);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */

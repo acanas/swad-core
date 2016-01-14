@@ -3213,7 +3213,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-                     "PHOTO93x124",Pho_ZOOM);
+                     "PHOTO93x124",Pho_ZOOM,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
@@ -5958,7 +5958,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
-                        "PHOTO15x20B",Pho_ZOOM);
+                        "PHOTO15x20B",Pho_ZOOM,NULL);
      }
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
@@ -9051,7 +9051,7 @@ void Brw_ShowFileMetadata (void)
 	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&PublisherUsrDat,ShowPhoto ? PhotoURL :
 	                	                           NULL,
-	                      "PHOTO15x20",Pho_ZOOM);
+	                      "PHOTO15x20",Pho_ZOOM,NULL);
 
 	    /* Write name */
 	    fprintf (Gbl.F.Out,"%s",

@@ -375,7 +375,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-	             "PHOTO15x20",Pho_ZOOM);
+	             "PHOTO15x20",Pho_ZOOM,NULL);
 
    /***** Write name *****/
    strcpy (FirstName,UsrDat.FirstName);

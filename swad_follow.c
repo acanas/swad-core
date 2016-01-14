@@ -488,7 +488,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO45x60",Pho_ZOOM);
+			"PHOTO45x60",Pho_ZOOM,NULL);
      }
    fprintf (Gbl.F.Out,"</td>");
 
