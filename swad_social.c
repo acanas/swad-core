@@ -281,7 +281,7 @@ static long Soc_GetParamComCod (void);
 static void Soc_ReceiveComment (void);
 static bool Soc_CheckIfICanCommentNote (long NotCod);
 
-static void Soc_ShareSocialNote (void);
+static long Soc_ShareSocialNote (void);
 static void Soc_UnshareSocialPublishing (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 
@@ -1773,7 +1773,7 @@ void Soc_ReceiveSocialPostUsr (void)
 // Returns the code of the social note just created
 static long Soc_ReceiveSocialPost (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Published;
+   // extern const char *Txt_SOCIAL_PUBLISHING_Published;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    long PstCod;
@@ -1795,7 +1795,7 @@ static long Soc_ReceiveSocialPost (void)
       NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
 
       /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
+      // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
      }
    else
       NotCod = -1L;
@@ -2292,7 +2292,7 @@ void Soc_ReceiveCommentUsr (void)
 
 static void Soc_ReceiveComment (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Published;
+   // extern const char *Txt_SOCIAL_PUBLISHING_Published;
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
@@ -2329,7 +2329,7 @@ static void Soc_ReceiveComment (void)
 	    DB_QueryINSERT (Query,"can not store comment content");
 
 	    /***** Message of success *****/
-	    Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
+	    // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
 	    /***** Show the social note just commented *****/
 	    Soc_WriteSocialNote (&SocNot,NULL,true,true);
@@ -2377,15 +2377,19 @@ static bool Soc_CheckIfICanCommentNote (long NotCod)
 
 void Soc_ShareSocialNoteGbl (void)
   {
+   long NotCod;
+
    /***** Share social note *****/
-   Soc_ShareSocialNote ();
+   NotCod = Soc_ShareSocialNote ();
 
    /***** Write updated timeline after sharing (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGblHighlightingNot (NotCod);
   }
 
 void Soc_ShareSocialNoteUsr (void)
   {
+   long NotCod;
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -2396,18 +2400,18 @@ void Soc_ShareSocialNoteUsr (void)
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
    /***** Share social note *****/
-   Soc_ShareSocialNote ();
+   NotCod = Soc_ShareSocialNote ();
 
    /***** Write updated timeline after sharing (user) *****/
-   Soc_ShowTimelineUsr ();
+   Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_ShareSocialNote (void)
+static long Soc_ShareSocialNote (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Shared;
+   // extern const char *Txt_SOCIAL_PUBLISHING_Shared;
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
@@ -2444,14 +2448,16 @@ static void Soc_ShareSocialNote (void)
 	 Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
 	 /***** Message of success *****/
-	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
+	 // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
 	 /***** Show the social note just shared *****/
-	 Soc_WriteSocialNote (&SocNot,NULL,true,true);
+	 // Soc_WriteSocialNote (&SocNot,NULL,true,true);
 	}
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
+
+   return SocNot.NotCod;
   }
 
 /*****************************************************************************/
