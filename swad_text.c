@@ -193,15 +193,15 @@ const char *Txt_Switch_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
 const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
 	{
 	"",
-	"Canviant a catal&agrave;...",
-	"Umschaltung auf Deutsch...",
-	"Switching to English...",
-	"Cambiando a espa&ntilde;ol...",
-	"Passant au fran&ccedil;ais...",
-	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;...",
-	"Passando a italiano...",
-	"Prze&lstrok;&aogon;cz na polski...",
-	"Mudando para portugu&ecirc;s...",
+	"Canviant a catal&agrave;&hellip;",
+	"Umschaltung auf Deutsch&hellip;",
+	"Switching to English&hellip;",
+	"Cambiando a espa&ntilde;ol&hellip;",
+	"Passant au fran&ccedil;ais&hellip;",
+	"Moambue pe &ntilde;e'&#7869; ava&ntilde;e'&#7869;&hellip;",
+	"Passando a italiano&hellip;",
+	"Prze&lstrok;&aogon;cz na polski&hellip;",
+	"Mudando para portugu&ecirc;s&hellip;",
 	};
 
 /*****************************************************************************
@@ -684,7 +684,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nouveau message dans un forum",
 	"Nuevo mensaje en un foro",		// Okoteve traducción
 	"Nuovo post in un forum",
-	"Post nowe na forum",
+	"Nowy post na forum",
 	"Novo post em um fórum",
 	},
 	{
@@ -2341,23 +2341,23 @@ const char *Txt_and =
 
 const char *Txt_and_X_other_recipients =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"...i altres %u destinataris";
+	"&hellip;i altres %u destinataris";
 #elif L==2
-	"...und %u andere Empf&auml;nger";
+	"&hellip;und %u andere Empf&auml;nger";
 #elif L==3
-	"...and %u other recipients";
+	"&hellip;and %u other recipients";
 #elif L==4
-	"...y otros %u destinatarios";
+	"&hellip;y otros %u destinatarios";
 #elif L==5
-	"...et %u autres destinataires";
+	"&hellip;et %u autres destinataires";
 #elif L==6
-	"...y otros %u destinatarios";	// Okoteve traducción
+	"&hellip;y otros %u destinatarios";	// Okoteve traducción
 #elif L==7
-	"...e altri %u destinatari";
+	"&hellip;e altri %u destinatari";
 #elif L==8
-	"...i %u innych odbiorc&oacute;w";
+	"&hellip;i %u innych odbiorc&oacute;w";
 #elif L==9
-	"...e %u outros destinat&aacute;rios";
+	"&hellip;e %u outros destinat&aacute;rios";
 #endif
 
 const char *Txt_Announcements =
@@ -6664,23 +6664,23 @@ const char *Txt_Created_tables_in_the_database_that_did_not_exist =
 
 const char *Txt_Creating_database_tables_if_they_do_not_exist =
 #if   L==1
-	"Creando tablas de la base de datos si no existen...";	// Necessita traduccio
+	"Creando tablas de la base de datos si no existen&hellip;";	// Necessita traduccio
 #elif L==2
-	"Creating database tables if they do not exist...";	// Need Übersetzung
+	"Creating database tables if they do not exist&hellip;";	// Need Übersetzung
 #elif L==3
-	"Creating database tables if they do not exist...";
+	"Creating database tables if they do not exist&hellip;";
 #elif L==4
-	"Creando tablas de la base de datos si no existen...";
+	"Creando tablas de la base de datos si no existen&hellip;";
 #elif L==5
-	"Creating database tables if they do not exist...";	// Besoin de traduction
+	"Creating database tables if they do not exist&hellip;";	// Besoin de traduction
 #elif L==6
-	"Creando tablas de la base de datos si no existen...";	// Okoteve traducción
+	"Creando tablas de la base de datos si no existen&hellip;";	// Okoteve traducción
 #elif L==7
-	"Creazione tabelle della base di dati se non esistono...";
+	"Creazione tabelle della base di dati se non esistono&hellip;";
 #elif L==8
-	"Tworzenie tabel bazy danych, jesli ich nie ma ...";
+	"Tworzenie tabel bazy danych, jesli ich nie ma &hellip;";
 #elif L==9
-	"Creating database tables if they do not exist...";	// Necessita de tradução
+	"Creating database tables if they do not exist&hellip;";	// Necessita de tradução
 #endif
 
 const char *Txt_crs =	// Abbreviation of "course" (three characters + dot)
@@ -9537,44 +9537,44 @@ const char *Txt_Edit_rich_text =
 
 const char *Txt_eg_A_B =
 #if   L==1
-	"per ex.: A, B,...";
+	"per ex.: A, B,&hellip;";
 #elif L==2
-	"z. B.: A, B,...";
+	"z. B.: A, B,&hellip;";
 #elif L==3
-	"e.g., A, B,...";
+	"e.g., A, B,&hellip;";
 #elif L==4
-	"por ej.: A, B,...";
+	"por ej.: A, B,&hellip;";
 #elif L==5
-	"par exemple: A, B,...";
+	"par exemple: A, B,&hellip;";
 #elif L==6
-	"por ej.: A, B,...";	// Okoteve traducción
+	"por ej.: A, B,&hellip;";	// Okoteve traducción
 #elif L==7
-	"ad esempio: A, B,...";
+	"ad esempio: A, B,&hellip;";
 #elif L==8
-	"np. A, B, ...";
+	"np. A, B, &hellip;";
 #elif L==9
-	"ex.: A, B,...";
+	"ex.: A, B,&hellip;";
 #endif
 
 const char *Txt_eg_Lectures_Practicals =
 #if   L==1
-	"per ex.: Teoria, Pr&agrave;ctiques,...";
+	"per ex.: Teoria, Pr&agrave;ctiques,&hellip;";
 #elif L==2
-	"z. B.: Vorlesung, &Uuml;bung,...";
+	"z. B.: Vorlesung, &Uuml;bung,&hellip;";
 #elif L==3
-	"e.g., Lectures, Practicals,...";
+	"e.g., Lectures, Practicals,&hellip;";
 #elif L==4
-	"por ej.: Teor&iacute;a, Pr&aacute;cticas,...";
+	"por ej.: Teor&iacute;a, Pr&aacute;cticas,&hellip;";
 #elif L==5
-	"par exemple: Th&eacute;orie, Pratique,...";
+	"par exemple: Th&eacute;orie, Pratique,&hellip;";
 #elif L==6
-	"por ej.: Teor&iacute;a, Pr&aacute;cticas,...";	// Okoteve traducción
+	"por ej.: Teor&iacute;a, Pr&aacute;cticas,&hellip;";	// Okoteve traducción
 #elif L==7
-	"ad esempio: Teoria, Pratica,...";
+	"ad esempio: Teoria, Pratica,&hellip;";
 #elif L==8
-	"np. Wyklady, Praktyki ...";
+	"np. Wyklady, Praktyki &hellip;";
 #elif L==9
-	"ex.: Teoria, Pr&aacute;tica,...";
+	"ex.: Teoria, Pr&aacute;tica,&hellip;";
 #endif
 
 const char *Txt_ELAPSED_TIME =
@@ -10493,23 +10493,23 @@ const char *Txt_EXAM_ANNOUNCEMENT_Material_required =
 
 const char *Txt_EXAM_ANNOUNCEMENT_Mode =
 #if   L==1
-	"Modalidad<br />(escrito, oral,...)";	// Necessita traduccio
+	"Modalidad<br />(escrito, oral,&hellip;)";	// Necessita traduccio
 #elif L==2
-	"Pr&uuml;fungsart<br />(schriftlich, m&uuml;ndlich,...)";
+	"Pr&uuml;fungsart<br />(schriftlich, m&uuml;ndlich,&hellip;)";
 #elif L==3
-	"Mode<br />(written, oral,...)";
+	"Mode<br />(written, oral,&hellip;)";
 #elif L==4
-	"Modalidad<br />(escrito, oral,...)";
+	"Modalidad<br />(escrito, oral,&hellip;)";
 #elif L==5
-	"Mode<br />(&eacute;crit, oral,...)";
+	"Mode<br />(&eacute;crit, oral,&hellip;)";
 #elif L==6
-	"Modalidad<br />(escrito, oral,...)";	// Okoteve traducción
+	"Modalidad<br />(escrito, oral,&hellip;)";	// Okoteve traducción
 #elif L==7
-	"Modalit&agrave;<br />(scritto, orale,...)";
+	"Modalit&agrave;<br />(scritto, orale,&hellip;)";
 #elif L==8
-	"Tryb<br />(pisemnej, ustnej,...)";
+	"Tryb<br />(pisemnej, ustnej,&hellip;)";
 #elif L==9
-	"Modalidade<br />(escrita, oral,...)";
+	"Modalidade<br />(escrita, oral,&hellip;)";
 #endif
 
 const char *Txt_EXAM_ANNOUNCEMENT_Other_information =
@@ -10556,23 +10556,23 @@ const char *Txt_EXAM_ANNOUNCEMENT_Place_of_exam =
 
 const char *Txt_EXAM_ANNOUNCEMENT_Session =
 #if   L==1
-	"Convocatoria<br />(junio, septiembre,...)";	// Necessita traduccio
+	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Necessita traduccio
 #elif L==2
-	"Einberufung<br />(Juni, September,...)";
+	"Einberufung<br />(Juni, September,&hellip;)";
 #elif L==3
-	"Session<br />(june, september,...)";
+	"Session<br />(june, september,&hellip;)";
 #elif L==4
-	"Convocatoria<br />(junio, septiembre,...)";
+	"Convocatoria<br />(junio, septiembre,&hellip;)";
 #elif L==5
-	"P&eacute;riode<br />(juin, septembre,...)";
+	"P&eacute;riode<br />(juin, septembre,&hellip;)";
 #elif L==6
-	"Convocatoria<br />(junio, septiembre,...)";	// Okoteve traducción
+	"Convocatoria<br />(junio, septiembre,&hellip;)";	// Okoteve traducción
 #elif L==7
-	"Sessione<br />(giugno, settembre,...)";
+	"Sessione<br />(giugno, settembre,&hellip;)";
 #elif L==8
-	"Sesja<br />(czerwiec, wrzesien,...)";
+	"Sesja<br />(czerwiec, wrzesien,&hellip;)";
 #elif L==9
-	"Per&iacute;odo<br />(junho, setembro,...)";
+	"Per&iacute;odo<br />(junho, setembro,&hellip;)";
 #endif
 
 const char *Txt_EXAM_ANNOUNCEMENT_Start_time =
@@ -18793,11 +18793,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==3
 	"List of institutions of the current country"
 #elif L==4
-	"Lista de instituciones (universidades, institutos...) de este pa&iacute;s"
+	"Lista de instituciones (universidades, institutos&hellip;) de este pa&iacute;s"
 #elif L==5
 	"&Eacute;tablissement"
 #elif L==6
-	"Lista de instituciones (universidades, institutos...) de este pa&iacute;s"// Okoteve traducción
+	"Lista de instituciones (universidades, institutos&hellip;) de este pa&iacute;s"// Okoteve traducción
 #elif L==7
 	"Istituzioni"
 #elif L==8
@@ -18876,11 +18876,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==3
 	"List of centres of the current institution"
 #elif L==4
-	"Lista de centros (facultades, escuelas...) de esta instituci&oacute;n"
+	"Lista de centros (facultades, escuelas&hellip;) de esta instituci&oacute;n"
 #elif L==5
 	"Centres"
 #elif L==6
-	"Lista de centros (facultades, escuelas...) de esta instituci&oacute;n"	// Okoteve traducción
+	"Lista de centros (facultades, escuelas&hellip;) de esta instituci&oacute;n"	// Okoteve traducción
 #elif L==7
 	"Centri"
 #elif L==8
@@ -19063,11 +19063,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==3
 	"List of degrees of the current centre"
 #elif L==4
-	"Lista de titulaciones (carreras, m&aacute;steres...) de este centro"
+	"Lista de titulaciones (carreras, m&aacute;steres&hellip;) de este centro"
 #elif L==5
 	"&Eacute;tudes"
 #elif L==6
-	"Lista de titulaciones (carreras, m&aacute;steres...) de este centro"// Okoteve traducción
+	"Lista de titulaciones (carreras, m&aacute;steres&hellip;) de este centro"// Okoteve traducción
 #elif L==7
 	"Lauree"
 #elif L==8
@@ -20392,17 +20392,17 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActEdiPrf
 #if   L==1
-	"Les meves prefer&egrave;ncies (idioma, colors, notificacions ...)"
+	"Les meves prefer&egrave;ncies (idioma, colors, notificacions &hellip;)"
 #elif L==2
 	"Einstellungen"
 #elif L==3
 	"Preferences"
 #elif L==4
-	"Mis preferencias (idioma, colores, notificaciones...)"
+	"Mis preferencias (idioma, colores, notificaciones&hellip;)"
 #elif L==5
 	"Pr&eacute;f&eacute;rences"
 #elif L==6
-	"Mis preferencias (idioma, colores, notificaciones...)"	// Okoteve traducción
+	"Mis preferencias (idioma, colores, notificaciones&hellip;)"	// Okoteve traducción
 #elif L==7
 	"Preferenze"
 #elif L==8
@@ -22368,27 +22368,6 @@ const char *Txt_New_centre_of_INSTITUTION_X =	// Warning: it is very important t
 	"Novo centro de %s";
 #endif
 
-const char *Txt_New_comment =
-#if   L==1
-	"Nou comentari";
-#elif L==2
-	"Neue Kommentar";
-#elif L==3
-	"New comment";
-#elif L==4
-	"Nuevo comentario";
-#elif L==5
-	"Nouvelle commentaire";
-#elif L==6
-	"Nuevo comentario";	// Okoteve traducción
-#elif L==7
-	"Nuovo commento";
-#elif L==8
-	"Nowy komentarz";
-#elif L==9
-	"Novo coment&aacute;rio";
-#endif
-
 const char *Txt_New_country =
 #if   L==1
 	"Nuevo pa&iacute;s";	// Necessita traduccio
@@ -22828,6 +22807,48 @@ const char *Txt_New_record_field =
 	"Nowy rekord pola";
 #elif L==9
 	"Novo campo de cart&atilde;o";
+#endif
+
+const char *Txt_New_SOCIAL_comment =
+#if   L==1
+	"Nou comentari";
+#elif L==2
+	"Neue Kommentar";
+#elif L==3
+	"New comment";
+#elif L==4
+	"Nuevo comentario";
+#elif L==5
+	"Nouvelle commentaire";
+#elif L==6
+	"Nuevo comentario";	// Okoteve traducción
+#elif L==7
+	"Nuovo commento";
+#elif L==8
+	"Nowy komentarz";
+#elif L==9
+	"Novo coment&aacute;rio";
+#endif
+
+const char *Txt_New_SOCIAL_post =
+#if   L==1
+	"Novo missatge";
+#elif L==2
+	"Neue Beitrag";
+#elif L==3
+	"New post";
+#elif L==4
+	"Nuevo mensaje";
+#elif L==5
+	"Nouveau message";
+#elif L==6
+	"Nuevo mensaje";	// Okoteve traducción
+#elif L==7
+	"Nuovo post";
+#elif L==8
+	"Nowy post";
+#elif L==9
+	"Novo post";
 #endif
 
 const char *Txt_New_survey =
@@ -26104,121 +26125,121 @@ const char *Txt_optional =
 
 const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"...o pot crear un novo enlla&ccedil;"
+	"&hellip;o pot crear un novo enlla&ccedil;"
 	" dins de la carpeta <strong>%s</strong>:";
 #elif L==2
-	"...Oder Sie k&ouml;nnen ein neues Link"
+	"&hellip;Oder Sie k&ouml;nnen ein neues Link"
 	" im Verzeichnis <strong>%s</strong> anlegen:";
 #elif L==3
-	"...or you can create a new link"
+	"&hellip;or you can create a new link"
 	" inside the folder <strong>%s</strong>:";
 #elif L==4
-	"...o puede crear un nuevo enlace"
+	"&hellip;o puede crear un nuevo enlace"
 	" dentro de la carpeta <strong>%s</strong>:";
 #elif L==5
-	"...ou vous pouvez cr&eacute;er un nouveau lien"
+	"&hellip;ou vous pouvez cr&eacute;er un nouveau lien"
 	" dans le r&eacute;pertoire <strong>%s</strong>:";
 #elif L==6
-	"...o puede crear un nuevo enlace"
+	"&hellip;o puede crear un nuevo enlace"
 	" dentro de la carpeta <strong>%s</strong>:";	// Okoteve traducción
 #elif L==7
-	"...oppure &egrave; possibile creare una nuova cartella"
+	"&hellip;oppure &egrave; possibile creare una nuova cartella"
 	" all'interno della cartella <strong>%s</strong>:";
 #elif L==8
-	"...czy mo&zdot;esz utworzy&cacute; nowy link"
+	"&hellip;czy mo&zdot;esz utworzy&cacute; nowy link"
 	" wewn&aogon;trz folderu <strong>%s</strong>:";
 #elif L==9
-	"...ou voc&ecirc; pode criar uma nova liga&ccedil;&atilde;o"
+	"&hellip;ou voc&ecirc; pode criar uma nova liga&ccedil;&atilde;o"
 	" dentro do diret&oacute;rio <strong>%s</strong>:";
 #endif
 
 const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"...o pot realitzar una c&ograve;pia d'arxius"
+	"&hellip;o pot realitzar una c&ograve;pia d'arxius"
 	" a la carpeta <strong>%s</strong>:";
 #elif L==2
-	"...Oder Sie k&ouml;nnen die Kopie einer Datei"
+	"&hellip;Oder Sie k&ouml;nnen die Kopie einer Datei"
 	" in das Verzeichnis <strong>%s</strong>:";
 #elif L==3
-	"...or you can make a file copy"
+	"&hellip;or you can make a file copy"
 	" to the folder <strong>%s</strong>:";
 #elif L==4
-	"...o puede realizar una copia de archivos"
+	"&hellip;o puede realizar una copia de archivos"
 	" a la carpeta <strong>%s</strong>:";
 #elif L==5
-	"...ou vous pouvez faire une copie de fichiers"
+	"&hellip;ou vous pouvez faire une copie de fichiers"
 	" vers le r&eacute;pertoire <strong>%s</strong>:";
 #elif L==6
-	"...o puede realizar una copia de archivos"
+	"&hellip;o puede realizar una copia de archivos"
 	" a la carpeta <strong>%s</strong>:";		// Okoteve traducción
 #elif L==7
-	"...oppure &egrave; possibile effettuare una copia dei file"
+	"&hellip;oppure &egrave; possibile effettuare una copia dei file"
 	" nella cartella <strong>%s</strong>:";
 #elif L==8
-	"...czy mozna zrobic kopie pliku"
+	"&hellip;czy mozna zrobic kopie pliku"
 	" do folderu <strong>%s</strong>:";
 #elif L==9
-	"...ou voc&ecirc; pode fazer uma c&oacute;pia de arquivo"
+	"&hellip;ou voc&ecirc; pode fazer uma c&oacute;pia de arquivo"
 	" na diret&oacute;rio <strong>%s</strong>:";
 #endif
 
 const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"...o puede subir un nuevo archivo"
+	"&hellip;o puede subir un nuevo archivo"
 	" a la carpeta <strong>%s</strong>:";	// Necessita traduccio
 #elif L==2
-	"...oder senden Sie eine neue Datei"
+	"&hellip;oder senden Sie eine neue Datei"
 	" in das Verzeichnis <strong>%s</strong>:";
 #elif L==3
-	"...or you can upload a new file"
+	"&hellip;or you can upload a new file"
 	" to the folder <strong>%s</strong>:";
 #elif L==4
-	"...o puede subir un nuevo archivo"
+	"&hellip;o puede subir un nuevo archivo"
 	" a la carpeta <strong>%s</strong>:";
 #elif L==5
-	"...ou vous pouvez envoyer un nouveau fichier"
+	"&hellip;ou vous pouvez envoyer un nouveau fichier"
 	" dans le r&eacute;pertoire <strong>%s</strong>:";
 #elif L==6
-	"...o puede subir un nuevo archivo"
+	"&hellip;o puede subir un nuevo archivo"
 	" a la carpeta <strong>%s</strong>:";	// Okoteve traducción
 #elif L==7
-	"...oppure si pu&ograve; inviare un nuovo file"
+	"&hellip;oppure si pu&ograve; inviare un nuovo file"
 	" nella cartella <strong>%s</strong>:";
 #elif L==8
-	"...lub wyslac nowy plik"
+	"&hellip;lub wyslac nowy plik"
 	" do folderu <strong>%s</strong>:";
 #elif L==9
-	"...ou voc&ecirc; pode enviar um novo arquivo"
+	"&hellip;ou voc&ecirc; pode enviar um novo arquivo"
 	" para o diret&oacute;rio <strong>%s</strong>:";
 #endif
 
 const char *Txt_or_you_can_upload_new_files_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"...o puede subir nuevos archivos"
+	"&hellip;o puede subir nuevos archivos"
 	" a la carpeta <strong>%s</strong>:";	// Necessita traduccio
 #elif L==2
-	"...oder senden Sie neue Dateien"
+	"&hellip;oder senden Sie neue Dateien"
 	" in das Verzeichnis <strong>%s</strong>:";
 #elif L==3
-	"...or you can upload new files"
+	"&hellip;or you can upload new files"
 	" to the folder <strong>%s</strong>:";
 #elif L==4
-	"...o puede subir nuevos archivos"
+	"&hellip;o puede subir nuevos archivos"
 	" a la carpeta <strong>%s</strong>:";
 #elif L==5
-	"...ou vous pouvez envoyer des nouveaux fichiers"
+	"&hellip;ou vous pouvez envoyer des nouveaux fichiers"
 	" dans le r&eacute;pertoire <strong>%s</strong>:";
 #elif L==6
-	"...o puede subir nuevos archivos"
+	"&hellip;o puede subir nuevos archivos"
 	" a la carpeta <strong>%s</strong>:";	// Okoteve traducción
 #elif L==7
-	"...oppure si pu&ograve; inviare nuovi file"
+	"&hellip;oppure si pu&ograve; inviare nuovi file"
 	" nella cartella <strong>%s</strong>:";
 #elif L==8
-	"...lub wyslac nowy plik"
+	"&hellip;lub wyslac nowy plik"
 	" do folderu <strong>%s</strong>:";
 #elif L==9
-	"...ou voc&ecirc; pode enviar novos arquivos"
+	"&hellip;ou voc&ecirc; pode enviar novos arquivos"
 	" para o diret&oacute;rio <strong>%s</strong>:";
 #endif
 

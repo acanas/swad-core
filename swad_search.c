@@ -317,7 +317,7 @@ void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
 	    Sch_MAX_LENGTH_STRING_TO_FIND,
             Gbl.Search.Str);
    if (!Gbl.Search.Str[0])
-      fprintf (Gbl.F.Out," placeholder=\"%s...\"",
+      fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
 	       Txt_Search);
    fprintf (Gbl.F.Out," style=\"margin:0;\" />");
 

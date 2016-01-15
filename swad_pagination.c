@@ -253,7 +253,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage > 2)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "..."
+        	               "&hellip;"
         	               "</td>",
         	     Font);
         }
@@ -314,7 +314,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage < Pagination->StartPage-1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "..."
+        	               "&hellip;"
         	               "</td>",
                      Font);
         }
@@ -388,7 +388,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
         {
          if (Pagination->RightPage > Pagination->EndPage+1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "..."
+        	               "&hellip;"
         	               "</td>",
                      Font);
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
@@ -448,7 +448,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
         {
          if (Pagination->NumPags > Pagination->RightPage+1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "..."
+        	               "&hellip;"
         	               "</td>",
                      Font);
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",

@@ -1651,7 +1651,7 @@ static void Deg_ListDegreesForEdition (void)
                             " class=\"DAT\" title=\"%s\">%s",
                   Deg->WWW,Deg->WWW,WWW);
          if (strlen (Deg->WWW) > Deg_MAX_LENGTH_WWW_ON_SCREEN)
-            fprintf (Gbl.F.Out,"...");
+            fprintf (Gbl.F.Out,"&hellip;");
          fprintf (Gbl.F.Out,"</a>");
 	}
       fprintf (Gbl.F.Out,"</td>");

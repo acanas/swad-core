@@ -1372,7 +1372,7 @@ static void Ctr_ListCentresForEdition (void)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\">%s",
                   Ctr->WWW,Ctr->WWW,WWW);
          if (strlen (Ctr->WWW) > Ctr_MAX_LENGTH_WWW_ON_SCREEN)
-            fprintf (Gbl.F.Out,"...");
+            fprintf (Gbl.F.Out,"&hellip;");
          fprintf (Gbl.F.Out,"</a>");
 	}
       fprintf (Gbl.F.Out,"</td>");

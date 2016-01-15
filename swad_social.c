@@ -249,7 +249,7 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
-static void Soc_PutTextarea (void);
+static void Soc_PutTextarea (const char *Placeholder);
 
 static void Soc_ReceiveSocialPost (void);
 
@@ -1625,6 +1625,7 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 
 static void Soc_PutFormToWriteNewPost (void)
   {
+   extern const char *Txt_New_SOCIAL_post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    char FullName[(Usr_MAX_BYTES_NAME+1)*3];
@@ -1666,7 +1667,7 @@ static void Soc_PutFormToWriteNewPost (void)
       Act_FormStart (ActRcvSocPstGbl);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea ();
+   Soc_PutTextarea (Txt_New_SOCIAL_post);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1683,7 +1684,7 @@ static void Soc_PutFormToWriteNewPost (void)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void Soc_PutTextarea (void)
+static void Soc_PutTextarea (const char *Placeholder)
   {
    extern const char *Txt_Post;
    char IdButton[Soc_MAX_LENGTH_ID];
@@ -1693,12 +1694,13 @@ static void Soc_PutTextarea (void)
 
    /***** Textarea to write the content *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
-                      " placeholder=\"Nuevo comentario...\""	// TODO: Need translation
+                      " placeholder=\"%s&hellip;\""
 	              " class=\"SOCIAL_TEXTAREA\""
 	              " onfocus=\"expandTextarea(this,'%s','10');\""
 	              " onblur=\"contractTextarea(this,'%s','1');\">"
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
+            Placeholder,
             IdButton,IdButton);
 
    /***** Submit button *****/
@@ -1810,6 +1812,8 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID])
   {
+   extern const char *Txt_New_SOCIAL_comment;
+
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
 		      " class=\"SOCIAL_FORM_COMMENT\""
@@ -1827,7 +1831,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    Soc_PutHiddenParamNotCod (NotCod);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea ();
+   Soc_PutTextarea (Txt_New_SOCIAL_comment);
 
    /***** End form *****/
    Act_FormEnd ();
