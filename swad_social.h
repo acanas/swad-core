@@ -91,15 +91,15 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Soc_ShowTimelineUsr (void);
 void Soc_ShowTimelineGbl (void);
+void Soc_ShowTimelineUsr (void);
 
 void Soc_RefreshNewTimelineGbl (void);
 
-void Soc_RefreshOldTimelineUsr (void);
 void Soc_RefreshOldTimelineGbl (void);
+void Soc_RefreshOldTimelineUsr (void);
 
-void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
+long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path);

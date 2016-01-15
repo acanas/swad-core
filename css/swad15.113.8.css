@@ -1689,6 +1689,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding:0;
 	}
 
+.SOCIAL_PUB
+	{
+	width:536px;
+	border-top:1px solid silver;
+	}
 .SOCIAL_NEW_PUB
 	{
 	background-color:#DDECF1;
@@ -1697,12 +1702,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 @keyframes fadein
 	{
 	to {background-color:white;}
-	}
-
-.SOCIAL_PUB
-	{
-	width:536px;
-	border-top:1px solid silver;
 	}
 .SOCIAL_TOP_CONTAINER
 	{

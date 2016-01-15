@@ -124,13 +124,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.10 (2016-01-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.11 (2016-01-15)"
 #define CSS_FILE		"swad15.113.8.css"
 #define JS_FILE			"swad15.113.8.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113.11:Jan 15, 2016	When a new social post is received, fade its background. (192803 lines)
         Version 15.113.10:Jan 15, 2016	When a social note is not available, the button to comment is disabled.
 					Fixed bug receiving a comment to a social note. (192781 lines)
         Version 15.113.9: Jan 15, 2016	"..." changed by HTML entity "&hellip;". (192775 lines)

@@ -215,6 +215,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Soc_ShowTimelineGblHighlightingNot (long NotCod);
+static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
+
 static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
@@ -226,8 +229,9 @@ static void Soc_UpdateLastPubCodIntoSession (void);
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 
-static void Soc_ShowTimeline (const char *Query,const char *Title);
-static void Soc_ShowNewPubsInTimeline (const char *Query);
+static void Soc_ShowTimeline (const char *Query,const char *Title,
+                              long NotCodToHighlight);
+static void Soc_InsertNewPubsInTimeline (const char *Query);
 static void Soc_ShowOldPubsInTimeline (const char *Query);
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
@@ -237,8 +241,8 @@ static void Soc_PutLinkToViewOldPublishings (void);
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
-                                 bool ShowNoteAlone,
-                                 bool ViewTopLine);
+                                 bool Highlight,
+                                 bool ShowNoteAlone);
 static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub);
 static void Soc_WriteAuthorNote (struct UsrData *UsrDat);
 static void Soc_WriteDateTime (time_t TimeUTC);
@@ -251,7 +255,7 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 static void Soc_PutFormToWriteNewPost (void);
 static void Soc_PutTextarea (const char *Placeholder);
 
-static void Soc_ReceiveSocialPost (void);
+static long Soc_ReceiveSocialPost (void);
 
 static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
                                                   bool PutText);
@@ -311,32 +315,15 @@ static void Soc_ClearTimelineForThisSession (void);
 static bool Soc_StoreSocialNoteInTimeline (long NotCod);
 
 /*****************************************************************************/
-/*********** Show social activity (timeline) of a selected user **************/
-/*****************************************************************************/
-
-void Soc_ShowTimelineUsr (void)
-  {
-   extern const char *Txt_Public_activity_OF_A_USER;
-   char Query[512];
-
-   /***** Build query to show timeline with publishings of a unique user *****/
-   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_USR,
-                                Soc_GET_RECENT_TIMELINE,
-                                Query);
-
-   /***** Show timeline *****/
-   sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
-   Soc_ShowTimeline (Query,Gbl.Title);
-
-   /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
-  }
-
-/*****************************************************************************/
 /***** Show social activity (timeline) including all the users I follow ******/
 /*****************************************************************************/
 
 void Soc_ShowTimelineGbl (void)
+  {
+   Soc_ShowTimelineGblHighlightingNot (-1L);
+  }
+
+static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
   {
    extern const char *Txt_Public_activity;
    extern const char *Txt_You_dont_follow_any_user;
@@ -352,7 +339,34 @@ void Soc_ShowTimelineGbl (void)
                                 Query);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,Txt_Public_activity);
+   Soc_ShowTimeline (Query,Txt_Public_activity,NotCod);
+
+   /***** Drop temporary tables *****/
+   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+  }
+
+/*****************************************************************************/
+/*********** Show social activity (timeline) of a selected user **************/
+/*****************************************************************************/
+
+void Soc_ShowTimelineUsr (void)
+  {
+   Soc_ShowTimelineUsrHighlightingNot (-1L);
+  }
+
+static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
+  {
+   extern const char *Txt_Public_activity_OF_A_USER;
+   char Query[512];
+
+   /***** Build query to show timeline with publishings of a unique user *****/
+   Soc_BuildQueryToGetTimeline (Soc_TIMELINE_USR,
+                                Soc_GET_RECENT_TIMELINE,
+                                Query);
+
+   /***** Show timeline *****/
+   sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
+   Soc_ShowTimeline (Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -385,7 +399,7 @@ static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
                                 Query);
 
    /***** Show new timeline *****/
-   Soc_ShowNewPubsInTimeline (Query);
+   Soc_InsertNewPubsInTimeline (Query);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -398,11 +412,9 @@ static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /************ View new publishings in social timeline via AJAX ***************/
 /*****************************************************************************/
 
-void Soc_GetOtherUsrNicknameFromUsrCod (void)
+void Soc_RefreshOldTimelineGbl (void)
   {
-   // User's code is already taken from nickname in Par_GetMainParameters ()
-   if (!Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname))
-      Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
+   Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
   }
 
 void Soc_RefreshOldTimelineUsr (void)
@@ -411,11 +423,6 @@ void Soc_RefreshOldTimelineUsr (void)
    // User's code is already taken from nickname in Par_GetMainParameters ()
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))        // Existing user
       Soc_GetAndShowOldTimeline (Soc_TIMELINE_USR);
-  }
-
-void Soc_RefreshOldTimelineGbl (void)
-  {
-   Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
   }
 
 /*****************************************************************************/
@@ -648,7 +655,8 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
 
-static void Soc_ShowTimeline (const char *Query,const char *Title)
+static void Soc_ShowTimeline (const char *Query,const char *Title,
+                              long NotCodToHighlight)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -706,7 +714,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
       if (!AlreadyWasInTimeline)	// This check is not necessary
 					// because we have got publishing
 					// not yet in timeline
-         Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+         Soc_WriteSocialNote (&SocNot,&SocPub,
+                              SocNot.NotCod == NotCodToHighlight,
+                              false);
      }
    fprintf (Gbl.F.Out,"</ul>");
 
@@ -734,7 +744,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
 /*****************************************************************************/
 // The publishings are inserted as list elements of a hidden list
 
-static void Soc_ShowNewPubsInTimeline (const char *Query)
+static void Soc_InsertNewPubsInTimeline (const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -764,7 +774,7 @@ static void Soc_ShowNewPubsInTimeline (const char *Query)
 
       /* Write social note */
       // New publishings are written even if the note was already un timeline
-      Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+      Soc_WriteSocialNote (&SocNot,&SocPub,false,false);
      }
 
    /***** Free structure that stores the query result *****/
@@ -811,7 +821,7 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
 	 if (!AlreadyWasInTimeline)	// This check is not necessary
 					// because we have got publishing
 					// not yet in timeline
-	    Soc_WriteSocialNote (&SocNot,&SocPub,false,true);
+	    Soc_WriteSocialNote (&SocNot,&SocPub,false,false);
 	}
 
       /***** Store first publishing code into session *****/
@@ -873,8 +883,8 @@ static void Soc_PutLinkToViewOldPublishings (void)
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
-                                 bool ShowNoteAlone,	// Social note is shown alone, not in a list
-                                 bool ViewTopLine)	// Separate with a top line from previous social note
+                                 bool Highlight,	// hightlight social notee > 0
+                                 bool ShowNoteAlone)	// Social note is shown alone, not in a list
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -904,10 +914,15 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
    /***** Start list item *****/
    fprintf (Gbl.F.Out,"<li");
-   if (!ShowNoteAlone && ViewTopLine)
-      fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
-   // else
-   //   fprintf (Gbl.F.Out," class=\"SOCIAL_NEW_PUB\"");
+   if (!ShowNoteAlone || Highlight)
+     {
+      fprintf (Gbl.F.Out," class=\"");
+      if (!ShowNoteAlone)
+	 fprintf (Gbl.F.Out," SOCIAL_PUB");
+      if (Highlight)
+	 fprintf (Gbl.F.Out," SOCIAL_NEW_PUB");
+      fprintf (Gbl.F.Out,"\"");
+     }
    fprintf (Gbl.F.Out,">");
 
    if (SocNot->NotCod   <= 0 ||
@@ -1399,8 +1414,9 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 /*****************************************************************************/
 /************** Store and publish a social note into database ****************/
 /*****************************************************************************/
+// Return the code of the new note just created
 
-void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
+long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
   {
    char Query[256];
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
@@ -1442,6 +1458,8 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    SocPub.PubType      = Soc_PUB_ORIGINAL_NOTE;
    Soc_PublishSocialNoteInTimeline (&SocPub);
+
+   return SocPub.NotCod;
   }
 
 /*****************************************************************************/
@@ -1720,43 +1738,48 @@ static void Soc_PutTextarea (const char *Placeholder)
 
 void Soc_ReceiveSocialPostGbl (void)
   {
+   long NotCod;
+
    /***** Receive and store social post *****/
-   Soc_ReceiveSocialPost ();
+   NotCod = Soc_ReceiveSocialPost ();
 
    /***** Write updated timeline after publishing (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGblHighlightingNot (NotCod);
   }
 
 void Soc_ReceiveSocialPostUsr (void)
   {
+   long NotCod;
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /*****  Show user's profile *****/
+   /***** Show user's profile *****/
    Prf_ShowUserProfile ();
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
    /***** Receive and store social post *****/
-   Soc_ReceiveSocialPost ();
+   NotCod = Soc_ReceiveSocialPost ();
 
    /***** Write updated timeline after publishing (user) *****/
-   Soc_ShowTimelineUsr ();
+   Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_ReceiveSocialPost (void)
+// Returns the code of the social note just created
+static long Soc_ReceiveSocialPost (void)
   {
    extern const char *Txt_SOCIAL_PUBLISHING_Published;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    long PstCod;
+   long NotCod;
 
-   /***** Get and store new post *****/
-   /* Get the content of the post */
+   /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
@@ -1769,11 +1792,15 @@ static void Soc_ReceiveSocialPost (void)
       PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
       /* Insert post in social notes */
-      Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
+      NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
 
       /***** Message of success *****/
       Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
      }
+   else
+      NotCod = -1L;
+
+   return NotCod;
   }
 
 /*****************************************************************************/
@@ -2305,7 +2332,7 @@ static void Soc_ReceiveComment (void)
 	    Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
 
 	    /***** Show the social note just commented *****/
-	    Soc_WriteSocialNote (&SocNot,NULL,true,false);
+	    Soc_WriteSocialNote (&SocNot,NULL,true,true);
 	   }
 	 else
 	    Lay_ShowErrorAndExit ("You can not comment this note.");
@@ -2420,7 +2447,7 @@ static void Soc_ShareSocialNote (void)
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
 
 	 /***** Show the social note just shared *****/
-	 Soc_WriteSocialNote (&SocNot,NULL,true,false);
+	 Soc_WriteSocialNote (&SocNot,NULL,true,true);
 	}
      }
    else
@@ -2495,7 +2522,7 @@ static void Soc_UnshareSocialPublishing (void)
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocNot,NULL,true,false);
+      Soc_WriteSocialNote (&SocNot,NULL,true,true);
      }
   }
 
@@ -2574,7 +2601,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocNot,NULL,true,false);
+	 Soc_WriteSocialNote (&SocNot,NULL,true,true);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */
