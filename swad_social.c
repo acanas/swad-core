@@ -83,6 +83,14 @@ typedef enum
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
 
+/*
+typedef enum
+  {
+   Soc_POST,
+   Soc_COMMENT,
+  } Soc_PostOrComment_t;
+*/
+
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
   {
    ActUnk,		// Soc_NOTE_UNKNOWN
@@ -240,13 +248,15 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char *SummaryStr,unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
-static void Soc_PutHiddenFormToWriteNewPost (void);
+static void Soc_PutFormToWriteNewPost (void);
+static void Soc_PutTextarea (void);
+
 static void Soc_ReceiveSocialPost (void);
 
 static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
                                                   bool PutText);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char UniqueId[Soc_MAX_LENGTH_ID]);
+                                                            const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (long NotCod,
                                            const char IdNewComment[Soc_MAX_LENGTH_ID]);
@@ -658,7 +668,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title)
    /***** Form to write a new post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
        Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Soc_PutHiddenFormToWriteNewPost ();
+      Soc_PutFormToWriteNewPost ();
 
    /***** New publishings refreshed dynamically via AJAX *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)				// Global timeline
@@ -1613,9 +1623,8 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 /****************** Form to write a new social publishing ********************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenFormToWriteNewPost (void)
+static void Soc_PutFormToWriteNewPost (void)
   {
-   extern const char *Txt_Post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    char FullName[(Usr_MAX_BYTES_NAME+1)*3];
@@ -1656,20 +1665,8 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
    else
       Act_FormStart (ActRcvSocPstGbl);
 
-   /* Content of new post */
-   fprintf (Gbl.F.Out,"<textarea class=\"SOCIAL_FORM_POST\" name=\"Content\""
-	              " rows=\"1\" cols=\"45\" maxlength=\"%u\""
-                      " placeholder=\"Nuevo comentario\""	// TODO: Need translation
-	              " onfocus=\"getElementById('post_submit').style.display = ''; this.rows = '10';\""
-	              " onblur=\"if(this.value == '') { this.rows = '1'; getElementById('post_submit').style.display = 'none'; }\">"
-		      "</textarea>",
-            Soc_MAX_CHARS_IN_POST);
-
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<button id=\"post_submit\" type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\" style=\"display:none;\">"
-		      "%s"
-		      "</button>",
-	    Txt_Post);
+   /***** Textarea and button *****/
+   Soc_PutTextarea ();
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1680,6 +1677,38 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
    /***** End list *****/
    fprintf (Gbl.F.Out,"</li>"
 	              "</ul>");
+  }
+
+/*****************************************************************************/
+/*** Put textarea and button inside a form to submit a new post or comment ***/
+/*****************************************************************************/
+
+static void Soc_PutTextarea (void)
+  {
+   extern const char *Txt_Post;
+   char IdButton[Soc_MAX_LENGTH_ID];
+
+   /***** Set unique id for the button *****/
+   Soc_SetUniqueId (IdButton);
+
+   /***** Textarea to write the content *****/
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
+                      " placeholder=\"Nuevo comentario...\""	// TODO: Need translation
+	              " class=\"SOCIAL_TEXTAREA\""
+	              " onfocus=\"expandTextarea(this,'%s','10');\""
+	              " onblur=\"contractTextarea(this,'%s','1');\">"
+		      "</textarea>",
+            Soc_MAX_CHARS_IN_POST,
+            IdButton,IdButton);
+
+   /***** Submit button *****/
+   fprintf (Gbl.F.Out,"<button id=\"%s\" type=\"submit\""
+	              " class=\"BT_SUBMIT_INLINE BT_CREATE\""
+	              " style=\"display:none;\">"
+		      "%s"
+		      "</button>",
+            IdButton,
+	    Txt_Post);
   }
 
 /*****************************************************************************/
@@ -1779,15 +1808,13 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
 // All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char UniqueId[Soc_MAX_LENGTH_ID])
+                                                            const char IdNewComment[Soc_MAX_LENGTH_ID])
   {
-   extern const char *Txt_Send_comment;
-
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
 		      " class=\"SOCIAL_FORM_COMMENT\""
 		      " style=\"display:none;\">",
-	    UniqueId);
+	    IdNewComment);
 
    /***** Start form to write the post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1798,14 +1825,9 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    else
       Act_FormStartUnique (ActRcvSocComGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<textarea name=\"Comment\" cols=\"45\" rows=\"3\">"
-		      "</textarea>");
 
-   /***** Send button *****/
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
-		      "%s"
-		      "</button>",
-	    Txt_Send_comment);
+   /***** Textarea and button *****/
+   Soc_PutTextarea ();
 
    /***** End form *****/
    Act_FormEnd ();

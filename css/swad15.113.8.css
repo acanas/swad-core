@@ -41,7 +41,8 @@ select
 	}
 textarea
 	{
-	font-size:12pt;
+	font-size:13pt;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	}
 table
 	{
@@ -1669,14 +1670,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /******************************** Social activity ****************************/
-.SOCIAL_FORM_POST {
-    resize:none;
-}
-/*
-.SOCIAL_FORM_POST:focus {
-    height:200px;
-}
-*/
 #view_new_posts_container,#view_old_posts_container
 	{
 	display:table-cell;
@@ -1755,6 +1748,18 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:right;
 	vertical-align:top;
         }
+.SOCIAL_TEXTAREA
+	{
+	box-sizing:border-box;
+	width:480px;
+	margin:0;
+	resize:none;
+	}
+/*
+.SOCIAL_FORM_POST:focus {
+    height:200px;
+}
+*/
 .SOCIAL_ICON_COMMENT
 	{
 	display:inline-block;

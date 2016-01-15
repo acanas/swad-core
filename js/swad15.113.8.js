@@ -40,7 +40,7 @@ var countClockConnected = 0;
 //id is the id of the HTML element in which date will be written
 //TimeUTC is the date-time to write in UTC UNIX time format
 
-function writeLocalDateFromUTC(id,TimeUTC) {
+function writeLocalDateFromUTC (id,TimeUTC) {
 	var d = new Date;
 	var Yea;
 	var Mon;
@@ -62,7 +62,7 @@ function writeLocalDateFromUTC(id,TimeUTC) {
 // TimeUTC is the date-time to write in UTC UNIX time format
 // separator is HTML code to write between date and time
 
-function writeLocalDateHMSFromUTC(id,TimeUTC,separator,StrToday) {
+function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new (Date);
 	var todayYea = today.getFullYear();
@@ -104,7 +104,7 @@ function writeLocalDateHMSFromUTC(id,TimeUTC,separator,StrToday) {
 												StrHou + ':' + StrMin + ':' + StrSec;
 }
 
-function writeLocalDateHMFromUTC(id,TimeUTC,separator,StrToday) {
+function writeLocalDateHMFromUTC (id,TimeUTC,separator,StrToday) {
 	// HM: Hour, Minutes
 	var today = new (Date);
 	var todayYea = today.getFullYear();
@@ -143,7 +143,7 @@ function writeLocalDateHMFromUTC(id,TimeUTC,separator,StrToday) {
 }
 
 // Set local date-time form fields from UTC time
-function setLocalDateTimeFormFromUTC(id,TimeUTC) {
+function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	var FormYea = document.getElementById(id+'Year'  );
 	var FormMon = document.getElementById(id+'Month' );
 	var FormDay = document.getElementById(id+'Day'   );
@@ -183,7 +183,7 @@ function setLocalDateTimeFormFromUTC(id,TimeUTC) {
 }
 
 // Set UTC time from local date-time form fields 
-function setUTCFromLocalDateTimeForm(id) {
+function setUTCFromLocalDateTimeForm (id) {
 	var d = new (Date);
 
 	// Important: set year first in order to work properly with leap years
@@ -200,7 +200,7 @@ function setUTCFromLocalDateTimeForm(id) {
 
 // Set form param with time difference between UTC time and client local time, in minutes
 // For example, if your time zone is GMT+2, -120 will be returned
-function setTZ(id) {
+function setTZ (id) {
 	var FormTZ = document.getElementById(id);
 	var d = new (Date);
 
@@ -209,7 +209,7 @@ function setTZ(id) {
 
 // Set form param with time difference between UTC time and client local time, in minutes
 // For example, if your time zone is GMT+2, -120 will be returned
-function setTZname(id) {
+function setTZname (id) {
 	var FormTZname = document.getElementById(id);
 	var tz = jstz.determine();	// Determines the time zone of the browser client
 	FormTZname.value = tz.name();	// Returns the name of the time zone eg "Europe/Berlin"
@@ -244,22 +244,22 @@ function adjustDateForm (id) {
 }
 
 // Set a date range form to yesterday
-function setDateToYesterday() {
+function setDateToYesterday () {
 	var d = new (Date);
 
-	d.setTime(d.getTime() - 24*60*60*1000);	// Today - 1 day
+	d.setTime (d.getTime () - 24*60*60*1000);	// Today - 1 day
 	setDateRange(d);
 }
 
 // Set a date range form to today
-function setDateToToday() {
+function setDateToToday () {
 	var d = new (Date);
 
 	setDateRange(d);
 }
 
 // Set a date range form to a specific day
-function setDateRange(d) {
+function setDateRange (d) {
 	var FormYea;
 	var Yea = d.getFullYear();
 	var Mon = d.getMonth()+1;
@@ -293,7 +293,7 @@ function setDateRange(d) {
 }
 
 // Write clock in client local time updated every minute
-function writeLocalClock() {
+function writeLocalClock () {
 	var d;
 	var Mon;
 	var Day;
@@ -319,7 +319,7 @@ function writeLocalClock() {
 												'</span>';
 }
       
-function writeClockConnected() {
+function writeClockConnected () {
 	var BoxClock;
 	var H;
 	var M;
@@ -360,7 +360,7 @@ function writeClockConnected() {
 
 // Automatic refresh of connected users using AJAX. This function must be called from time to time
 var objXMLHttpReqCon = false;
-function refreshConnected() {
+function refreshConnected () {
 	objXMLHttpReqCon = AJAXCreateObject();
 	if (objXMLHttpReqCon) {
 		var RefreshParams = RefreshParamNxtActCon + '&' +
@@ -376,7 +376,7 @@ function refreshConnected() {
 
 // Automatic refresh of last clicks using AJAX. This function must be called from time to time
 var objXMLHttpReqLog = false;
-function refreshLastClicks() {
+function refreshLastClicks () {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
 		var RefreshParams = RefreshParamNxtActLog + '&' +
@@ -392,7 +392,7 @@ function refreshLastClicks() {
 
 // Automatic refresh of new publishings in social timeline using AJAX. This function must be called from time to time
 var objXMLHttpReqSoc = false;
-function refreshNewTimeline() {
+function refreshNewTimeline () {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
 		var RefreshParams = RefreshParamNxtActNewPub + '&' +
@@ -407,8 +407,8 @@ function refreshNewTimeline() {
 
 // Refresh of old publishings in social timeline using AJAX. This function is called when user clicks in link
 var objXMLHttpReqSoc = false;
-function refreshOldTimeline() {
-	objXMLHttpReqSoc = AJAXCreateObject();
+function refreshOldTimeline () {
+	objXMLHttpReqSoc = AJAXCreateObject ();
 	if (objXMLHttpReqSoc) {
 		var RefreshParams = RefreshParamNxtActOldPub + '&' + RefreshParamIdSes;
 		if (RefreshParamUsr)
@@ -423,7 +423,7 @@ function refreshOldTimeline() {
 }
 
 // Create AJAX object	(try is unknown in earlier versions of Netscape, but works in IE5)
-function AJAXCreateObject() {
+function AJAXCreateObject () {
 	var obj = false;
 	if (window.XMLHttpRequest) {	// Mozilla, Safari,...
 		obj = new XMLHttpRequest();
@@ -440,7 +440,7 @@ function AJAXCreateObject() {
 }
 
 // Receives and show connected users data
-function readConnUsrsData() {
+function readConnUsrsData () {
 	if (objXMLHttpReqCon.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
 			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);				// Get separator position
@@ -487,7 +487,7 @@ function readConnUsrsData() {
 }
 
 // Receives and show last clicks data
-function readLastClicksData() {
+function readLastClicksData () {
 	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqLog.status == 200) {
 			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
@@ -505,7 +505,7 @@ function readLastClicksData() {
 }
 
 // Receives and show new social timeline data
-function readNewTimelineData() {
+function readNewTimelineData () {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
@@ -548,7 +548,7 @@ function readNewTimelineData() {
 }
 
 // Receives and show old social timeline data
-function readOldTimelineData() {
+function readOldTimelineData () {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
@@ -582,7 +582,7 @@ function readOldTimelineData() {
 }
 
 // Move new timeline to top of timeline
-function moveNewTimelineToTimeline() {
+function moveNewTimelineToTimeline () {
 	// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
 	var newTimeline = document.getElementById('new_timeline_list');
 	var countNewTimeline = newTimeline.childNodes.length;
@@ -604,7 +604,7 @@ function moveNewTimelineToTimeline() {
 }
 
 // Scripts got via AJAX are not executed ==> execute them
-function evalScriptsInElem(elem) {
+function evalScriptsInElem (elem) {
 	var scrs = elem.getElementsByTagName("script");
 	var s;
 	for (var i=0; i<scrs.length; i++) {
@@ -613,8 +613,28 @@ function evalScriptsInElem(elem) {
 	}
 }
 
+// Expand textarea when focus. Called from a textarea onfocus
+function expandTextarea (textareaElem,idButton,rows) {
+	textareaElem.rows = rows;
+	document.getElementById(idButton).style.display = '';
+}
+
+// Contract textarea when focus. Called from a textarea onblur
+function contractTextarea (textareaElem,idButton,rows) {
+	if (textareaElem.value == '') {
+		document.getElementById(idButton).style.display = 'none';
+		textareaElem.rows = rows;
+	}
+}
+
+//Change display of a element (hidden or visible)
+function toggleDisplay (elementID) {
+	var stl = document.getElementById (elementID).style;
+	stl.display = (stl.display === 'none') ? '' : 'none';
+}
+
 // Zoom a user's photograph
-function zoom(img,urlPhoto,shortName) {
+function zoom (img,urlPhoto,shortName) {
 	var zoomImgWidth  = 186;	// big photo
 	var zoomImgHeight = 248;	// big photo
 	var padding = 7;			// padding around big photo including border
@@ -641,20 +661,13 @@ function zoom(img,urlPhoto,shortName) {
 }
 
 // Exit from zooming a user's photograph
-function noZoom() {
+function noZoom () {
 	var xPos = -(187+15);
 	var yPos = -(250+15+110);
 	document.getElementById('zoomTxt').innerHTML = '';
 	document.getElementById('zoomImg').src='/swad/icon/usr_bl.jpg';
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
 	document.getElementById('zoomLyr').style.top = yPos + 'px';
-}
-
-// Change display of a element (hidden or visible)
-function toggleDisplay(elementID) {
-	(function(style) {
-		style.display = style.display === 'none' ? '' : 'none';
-	})(document.getElementById(elementID).style);
 }
 
 // Select or unselect a radio element in a form
@@ -667,7 +680,7 @@ function selectUnselectRadio (radio,groupRadios,numRadiosInGroup){
 
 // Activate a parent checkbox when all children checkboxes are activated
 // Deactivate a parent checkbox when any child checkbox is deactivated
-function checkParent(CheckBox, MainCheckbox) {
+function checkParent (CheckBox, MainCheckbox) {
 	var IsChecked = true, i, Formul = CheckBox.form;
 	for (i=0; i<Formul.elements.length; i++)
 		if (Formul.elements[i].name == CheckBox.name)
@@ -676,7 +689,7 @@ function checkParent(CheckBox, MainCheckbox) {
 }
 // Activate all children checkboxes when parent checkbox is activated
 // Deactivate all children checkboxes when parent checkbox is deactivated
-function togglecheckChildren(MainCheckbox, GroupCheckboxes) {
+function togglecheckChildren (MainCheckbox, GroupCheckboxes) {
 	var i, Formul = MainCheckbox.form;
 	for (i=0; i<Formul.elements.length; i++)
 		if (Formul.elements[i].name == GroupCheckboxes) Formul.elements[i].checked = MainCheckbox.checked;
@@ -684,7 +697,7 @@ function togglecheckChildren(MainCheckbox, GroupCheckboxes) {
 
 // Deactivate a parent checkbox when any child checkbox is activated
 // Activate a parent checkbox when all children checkboxes are deactivated
-function uncheckParent(CheckBox, MainCheckbox) {
+function uncheckParent (CheckBox, MainCheckbox) {
 	var IsChecked = false, i, Formul = CheckBox.form;
 	for (i=0; i<Formul.elements.length; i++)
 		if (Formul.elements[i].name == CheckBox.name)
@@ -692,7 +705,7 @@ function uncheckParent(CheckBox, MainCheckbox) {
 	Formul[MainCheckbox].checked = !IsChecked;
 }
 // Deactivate all children checkboxes when parent checkbox is activated
-function uncheckChildren(MainCheckbox, GroupCheckboxes) {
+function uncheckChildren (MainCheckbox, GroupCheckboxes) {
 	var i, Formul = MainCheckbox.form;
 	if (MainCheckbox.checked)
 		for (i=0; i<Formul.elements.length; i++)
@@ -700,14 +713,14 @@ function uncheckChildren(MainCheckbox, GroupCheckboxes) {
 }
 
 // Change text of a test descriptor
-function changeTxtTag(NumTag){
+function changeTxtTag (NumTag){
 	var Sel = document.getElementById('SelDesc' + NumTag);
 
 	document.getElementById('TagTxt' + NumTag).value = Sel.options[Sel.selectedIndex].value;
 }
 
 // Change selectors of test descriptors
-function changeSelTag(NumTag) {
+function changeSelTag (NumTag) {
 	var Sel = document.getElementById('SelDesc'+NumTag);
 	var Txt = document.getElementById('TagTxt' +NumTag);
 
@@ -722,7 +735,7 @@ function changeSelTag(NumTag) {
 }
 
 // Activate or deactivate answer types of a test question
-function enableDisableAns(Formul) {
+function enableDisableAns (Formul) {
 	var Tst_ANS_INT				= 0;
 	var Tst_ANS_FLOAT			= 1;
 	var Tst_ANS_TRUE_FALSE		= 2;
@@ -811,23 +824,23 @@ function enableDisableAns(Formul) {
 }
 
 // Activate or deactivate response contents of a test question
-function enableDisableContAns(Elem, IsDisabled) {
+function enableDisableContAns (elem, isDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
 
 	for ( var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (Elem.name == ('AnsStr' + i) ||
-			Elem.name == ('FbStr'  + i))
-			Elem.disabled = IsDisabled;
+		if (elem.name == ('AnsStr' + i) ||
+			elem.name == ('FbStr'  + i))
+			elem.disabled = isDisabled;
 }
 
 // Selection of statistics of current course ****/
-function enableDetailedClicks() {
+function enableDetailedClicks () {
 	document.getElementById('CountType').disabled = true;
 	document.getElementById('GroupedBy').disabled = true;
 	document.getElementById('RowsPage').disabled = false;
 }
 
-function disableDetailedClicks() {
+function disableDetailedClicks () {
 	document.getElementById('CountType').disabled = false;
 	document.getElementById('GroupedBy').disabled = false;
 	document.getElementById('RowsPage').disabled = true;

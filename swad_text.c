@@ -34303,7 +34303,7 @@ const char *Txt_Set_password =
 #elif L==9
 	"Definir senha";
 #endif
-
+/*
 const char *Txt_Send_comment =
 #if   L==1
 	"Enviar comentari";
@@ -34324,7 +34324,7 @@ const char *Txt_Send_comment =
 #elif L==9
 	"Enviar coment&aacute;rio";
 #endif
-
+*/
 const char *Txt_Send_message =
 #if   L==1
 	"Enviar missatge";
