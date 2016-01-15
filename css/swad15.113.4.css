@@ -1669,6 +1669,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /******************************** Social activity ****************************/
+.SOCIAL_FORM_POST {
+    resize:none;
+}
+/*
+.SOCIAL_FORM_POST:focus {
+    height:200px;
+}
+*/
 #view_new_posts_container,#view_old_posts_container
 	{
 	display:table-cell;
@@ -1686,6 +1694,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	margin:0;
 	padding:0;
+	}
+
+.SOCIAL_NEW_PUB
+	{
+	background-color:#DDECF1;
+	animation: fadein 2s linear forwards;
+	}
+@keyframes fadein
+	{
+	to {background-color:white;}
 	}
 
 .SOCIAL_PUB

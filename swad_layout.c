@@ -609,12 +609,16 @@ static void Lay_WriteScriptInit (void)
                       "	setTimeout(\"refreshConnected()\",%lu);\n",
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);
+
    if (Gbl.CurrentAct == ActLstClk)
+      // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (Gbl.CurrentAct == ActSeeSocTmlGbl)
+   else if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeeSocTmlGbl)
+      // In all the actions children of ActSeeSocTmlGbl ==> refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
   }
@@ -637,8 +641,9 @@ static void Lay_WriteScriptParamsAJAX (void)
             Act_Actions[ActRefLstClk].ActCod);
 
    /***** Parameters related with refreshing of social timeline *****/
-   if (Gbl.CurrentAct == ActSeePubPrf)	// TODO: Add other actions where social timeline is shown
+   if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeePubPrf)
      {
+      // In all the actions children of ActSeePubPrf ==> put parameters used by AJAX
       if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
          Usr_GetParamOtherUsrCodEncrypted ();
       if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
@@ -649,12 +654,13 @@ static void Lay_WriteScriptParamsAJAX (void)
 	       Act_Actions[ActRefOldSocPubUsr].ActCod,
 	       Gbl.Usrs.Other.UsrDat.Nickname);
      }
-   else if (Gbl.CurrentAct == ActSeeSocTmlGbl)	// TODO: Add other actions where social timeline is shown
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-                            "var RefreshParamUsr = \"\";\n",	// No user specified
-		  Act_Actions[ActRefNewSocPubGbl].ActCod,
-		  Act_Actions[ActRefOldSocPubGbl].ActCod);
+   else if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeeSocTmlGbl)
+      // In all the actions children of ActSeeSocTmlGbl ==> put parameters used by AJAX
+      fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+			 "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+			 "var RefreshParamUsr = \"\";\n",	// No user specified
+	       Act_Actions[ActRefNewSocPubGbl].ActCod,
+	       Act_Actions[ActRefOldSocPubGbl].ActCod);
 
    /***** Parameters with code of session and current course code *****/
    fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"

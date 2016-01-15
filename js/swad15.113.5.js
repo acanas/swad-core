@@ -588,8 +588,10 @@ function moveNewTimelineToTimeline() {
 	var countNewTimeline = newTimeline.childNodes.length;
 	if (countNewTimeline) {
 		var timeline = document.getElementById("timeline_list");
-		for (var i=0; i<countNewTimeline; i++)
+		for (var i=0; i<countNewTimeline; i++) {
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
+			timeline.childNodes[0].className += " SOCIAL_NEW_PUB";
+		}
     }
 
 	// Reset number of new posts after moving

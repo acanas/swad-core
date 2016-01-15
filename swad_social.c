@@ -53,6 +53,8 @@
 #define Soc_MAX_NUM_SHARERS_SHOWN	 10		// Maximum number of users shown who have share a social note
 #define Soc_MAX_BYTES_SUMMARY	 	100
 
+#define Soc_MAX_CHARS_IN_POST	1000
+
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_RECENT_PUBS_TO_SHOW	  10					// Publishings to show
 /* Try to get one more publishing that the number of publishings to show
@@ -894,6 +896,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    fprintf (Gbl.F.Out,"<li");
    if (!ShowNoteAlone && ViewTopLine)
       fprintf (Gbl.F.Out," class=\"SOCIAL_PUB\"");
+   // else
+   //   fprintf (Gbl.F.Out," class=\"SOCIAL_NEW_PUB\"");
    fprintf (Gbl.F.Out,">");
 
    if (SocNot->NotCod   <= 0 ||
@@ -1653,11 +1657,16 @@ static void Soc_PutHiddenFormToWriteNewPost (void)
       Act_FormStart (ActRcvSocPstGbl);
 
    /* Content of new post */
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"45\" rows=\"3\">"
-		      "</textarea>");
+   fprintf (Gbl.F.Out,"<textarea class=\"SOCIAL_FORM_POST\" name=\"Content\""
+	              " rows=\"1\" cols=\"45\" maxlength=\"%u\""
+                      " placeholder=\"Nuevo comentario\""	// TODO: Need translation
+	              " onfocus=\"getElementById('post_submit').style.display = ''; this.rows = '10';\""
+	              " onblur=\"if(this.value == '') { this.rows = '1'; getElementById('post_submit').style.display = 'none'; }\">"
+		      "</textarea>",
+            Soc_MAX_CHARS_IN_POST);
 
    /***** Send button *****/
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
+   fprintf (Gbl.F.Out,"<button id=\"post_submit\" type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\" style=\"display:none;\">"
 		      "%s"
 		      "</button>",
 	    Txt_Post);
