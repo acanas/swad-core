@@ -258,7 +258,7 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (long NotCod,
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
                                            const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone);
@@ -1071,17 +1071,18 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
-      if (!NumComments)
+      if (!NumComments &&
+	  !SocNot->Unavailable)	// Unavailable social notes can not be commented
          Soc_PutIconToToggleCommentSocialNote (IdNewComment,false);
 
       /* Put icons to share/unshare */
-      if (IAmTheAuthor)			// I am the author
+      if (IAmTheAuthor)				// I am the author
 	 Soc_PutDisabledIconShare (SocNot->NumShared);
-      else if (IAmAPublisherOfThisSocNot)	// I am a publisher of this social note,
-					   // but not the author ==> I have shared this social note
+      else if (IAmAPublisherOfThisSocNot)	// I am a sharer of this social note,
+						// but not the author ==> I have shared this social note
 	 /* Put icon to unshare this publishing */
 	 Soc_PutFormToUnshareSocialPublishing (SocNot->NotCod);
-      else					// I am not the author and I am not a publisher
+      else					// I am not the author and I am not a sharer
 	{
 	 if (SocNot->Unavailable)		// Unavailable social notes can not be shared
 	    Soc_PutDisabledIconShare (SocNot->NumShared);
@@ -1099,7 +1100,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /* Show comments */
       if (NumComments)
-	 Soc_WriteCommentsInSocialNote (SocNot->NotCod,IdNewComment);
+	 Soc_WriteCommentsInSocialNote (SocNot,IdNewComment);
 
       /* Put hidden form to write a new comment */
       Soc_PutHiddenFormToWriteNewCommentToSocialNote (SocNot->NotCod,IdNewComment);
@@ -1859,7 +1860,7 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteCommentsInSocialNote (long NotCod,
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
                                            const char IdNewComment[Soc_MAX_LENGTH_ID])
   {
    char Query[512];
@@ -1879,7 +1880,7 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
                   " AND social_pubs.PubType='%u'"
 		  " AND social_pubs.PubCod=social_comments.ComCod"
 		  " ORDER BY social_pubs.PubCod",
-	    NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
 
    /***** List comments *****/
@@ -1902,9 +1903,12 @@ static void Soc_WriteCommentsInSocialNote (long NotCod,
 	}
 
       /* Put icon to add a comment */
-      fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
-      Soc_PutIconToToggleCommentSocialNote (IdNewComment,true);
-      fprintf (Gbl.F.Out,"</li>");
+      if (!SocNot->Unavailable)	// Unavailable social notes can not be commented
+	{
+	 fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
+	 Soc_PutIconToToggleCommentSocialNote (IdNewComment,true);
+	 fprintf (Gbl.F.Out,"</li>");
+	}
 
       /***** End list *****/
       fprintf (Gbl.F.Out,"</ul>");
@@ -2275,7 +2279,7 @@ static void Soc_ReceiveComment (void)
    if (SocNot.NotCod > 0)
      {
       /***** Get the content of the comment *****/
-      Par_GetParAndChangeFormat ("Comment",Content,Cns_MAX_BYTES_LONG_TEXT,
+      Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
 				 Str_TO_RIGOROUS_HTML,true);
 
       if (Content[0])
