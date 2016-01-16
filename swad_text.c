@@ -8644,6 +8644,27 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 	"Voc&ecirc; realmente deseja remover o seguinte coment&aacute;rio?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_following_post =
+#if   L==1
+	"De veres voleu eliminar el seg&uuml;ent missatge?";
+#elif L==2
+	"Wollen Sie wirklich, um die folgende Beitrag zu entfernen?";
+#elif L==3
+	"Do you really want to remove the following post?";
+#elif L==4
+	"&iquest;Realmente desea eliminar el siguiente mensaje?";
+#elif L==5
+	"Voulez-vous vraiment supprimer le message suivant?";
+#elif L==6
+	"&iquest;Realmente desea eliminar el siguiente mensaje?";		// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il seguente post?";
+#elif L==8
+	"Czy na pewno chcesz usunac nastepujace post?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover o seguinte post?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar el siguiente usuario"

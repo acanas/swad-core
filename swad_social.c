@@ -883,7 +883,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  const struct SocialPublishing *SocPub,
-                                 bool Highlight,	// hightlight social notee > 0
+                                 bool Highlight,	// Highlight social note
                                  bool ShowNoteAlone)	// Social note is shown alone, not in a list
   {
    extern const char *Txt_Forum;
@@ -2614,7 +2614,7 @@ void Soc_RequestRemSocialNoteUsr (void)
 
 static void Soc_RequestRemovalSocialNote (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    extern const char *Txt_Remove;
    struct SocialNote SocNot;
    bool ICanRemove;
@@ -2631,10 +2631,10 @@ static void Soc_RequestRemovalSocialNote (void)
 	{
 	 /***** Show warning and social note *****/
 	 /* Warning message */
-	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
+	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show social note */
-	 Soc_WriteSocialNote (&SocNot,NULL,true,true);
+	 Soc_WriteSocialNote (&SocNot,NULL,false,true);
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */
