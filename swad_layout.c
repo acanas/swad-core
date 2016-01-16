@@ -641,26 +641,44 @@ static void Lay_WriteScriptParamsAJAX (void)
             Act_Actions[ActRefLstClk].ActCod);
 
    /***** Parameters related with refreshing of social timeline *****/
-   if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeePubPrf)
-     {
-      // In all the actions children of ActSeePubPrf ==> put parameters used by AJAX
-      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-         Usr_GetParamOtherUsrCodEncrypted ();
-      if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
-         Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                    Gbl.Usrs.Other.UsrDat.Nickname);
-      fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-                         "var RefreshParamUsr = \"usr=@%s\";\n",
-	       Act_Actions[ActRefOldSocPubUsr].ActCod,
-	       Gbl.Usrs.Other.UsrDat.Nickname);
-     }
-   else if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeeSocTmlGbl)
-      // In all the actions children of ActSeeSocTmlGbl ==> put parameters used by AJAX
+   if (Gbl.CurrentAct == ActSeeSocTmlGbl    ||
+       Gbl.CurrentAct == ActRcvSocPstGbl    ||
+       Gbl.CurrentAct == ActRcvSocComUsr    ||
+       Gbl.CurrentAct == ActShaSocNotGbl    ||
+       Gbl.CurrentAct == ActUnsSocPubGbl    ||
+       Gbl.CurrentAct == ActReqRemSocPubGbl ||
+       Gbl.CurrentAct == ActRemSocPubGbl    ||
+       Gbl.CurrentAct == ActReqRemSocComGbl ||
+       Gbl.CurrentAct == ActRemSocComGbl)
+      /* In all the actions related to view or editing global timeline ==>
+         put parameters used by AJAX */
       fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 			 "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			 "var RefreshParamUsr = \"\";\n",	// No user specified
 	       Act_Actions[ActRefNewSocPubGbl].ActCod,
 	       Act_Actions[ActRefOldSocPubGbl].ActCod);
+   else if (Gbl.CurrentAct == ActSeePubPrf       ||
+            Gbl.CurrentAct == ActRcvSocPstGbl    ||
+            Gbl.CurrentAct == ActRcvSocComUsr    ||
+            Gbl.CurrentAct == ActShaSocNotGbl    ||
+            Gbl.CurrentAct == ActUnsSocPubGbl    ||
+            Gbl.CurrentAct == ActReqRemSocPubGbl ||
+            Gbl.CurrentAct == ActRemSocPubGbl    ||
+            Gbl.CurrentAct == ActReqRemSocComGbl ||
+            Gbl.CurrentAct == ActRemSocComGbl)
+     {
+      /* In all the actions related to view or editing user's timeline ==>
+         put parameters used by AJAX */
+      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+	 Usr_GetParamOtherUsrCodEncrypted ();
+      if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
+	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
+				    Gbl.Usrs.Other.UsrDat.Nickname);
+      fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+			 "var RefreshParamUsr = \"usr=@%s\";\n",
+	       Act_Actions[ActRefOldSocPubUsr].ActCod,
+	       Gbl.Usrs.Other.UsrDat.Nickname);
+     }
 
    /***** Parameters with code of session and current course code *****/
    fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
