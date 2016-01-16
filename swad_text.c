@@ -4624,6 +4624,27 @@ const char *Txt_Comment =	// As a verb
 	"Comentar";
 #endif
 
+const char *Txt_Comment_removed =
+#if   L==1
+	"Comentari eliminat.";
+#elif L==2
+	"Kommentar entfernt.";
+#elif L==3
+	"Comment removed.";
+#elif L==4
+	"Comentario eliminado.";
+#elif L==5
+	"Commentaire supprim&eacute;.";
+#elif L==6
+	"Comentario eliminado.";		// Okoteve traducción
+#elif L==7
+	"Commento rimosso.";
+#elif L==8
+	"Komentarz usuniety.";
+#elif L==9
+	"Coment&aacute;rio removido.";
+#endif
+
 const char *Txt_Comments =
 #if   L==1
 	"Comentaris";
@@ -27514,7 +27535,7 @@ const char *Txt_Post_sent =
 
 const char *Txt_Post_removed =
 #if   L==1
-	"Mensaje eliminado.";		// Necessita traduccio
+	"Missatge eliminat.";
 #elif L==2
 	"Nachricht entfernt.";
 #elif L==3
@@ -27522,7 +27543,7 @@ const char *Txt_Post_removed =
 #elif L==4
 	"Mensaje eliminado.";
 #elif L==5
-	"Post removed.";		// Besoin de traduction
+	"Message supprim&eacute;.";
 #elif L==6
 	"Mensaje eliminado.";		// Okoteve traducción
 #elif L==7
@@ -27530,7 +27551,7 @@ const char *Txt_Post_removed =
 #elif L==8
 	"Post usuniety.";
 #elif L==9
-	"Post removed.";		// Necessita de tradução
+	"Post removido.";
 #endif
 
 const char *Txt_Post_unbanned =
@@ -34345,28 +34366,7 @@ const char *Txt_Set_password =
 #elif L==9
 	"Definir senha";
 #endif
-/*
-const char *Txt_Send_comment =
-#if   L==1
-	"Enviar comentari";
-#elif L==2
-	"Senden Kommentar";
-#elif L==3
-	"Send comment";
-#elif L==4
-	"Enviar comentario";
-#elif L==5
-	"Envoyer commentaire";
-#elif L==6
-	"Enviar comentario";	// Okoteve traducción
-#elif L==7
-	"Invia commento";
-#elif L==8
-	"Wy&sacute;lij komentarz";
-#elif L==9
-	"Enviar coment&aacute;rio";
-#endif
-*/
+
 const char *Txt_Send_message =
 #if   L==1
 	"Enviar missatge";
@@ -35699,70 +35699,7 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #endif
 	};
 
-const char *Txt_SOCIAL_PUBLISHING_Published =
-#if   L==1
-	"Publicat.";
-#elif L==2
-	"Ver&ouml;ffentlicht.";
-#elif L==3
-	"Published.";
-#elif L==4
-	"Publicado.";
-#elif L==5
-	"Publi&eacute;.";
-#elif L==6
-	"Publicado.";	// Okoteve traducción
-#elif L==7
-	"Pubblicato.";
-#elif L==8
-	"Opublikowany.";
-#elif L==9
-	"Publicado.";
-#endif
-
-const char *Txt_SOCIAL_PUBLISHING_Removed =
-#if   L==1
-	"Eliminat.";
-#elif L==2
-	"Entfernt.";
-#elif L==3
-	"Removed.";
-#elif L==4
-	"Eliminado.";
-#elif L==5
-	"Supprim&eacute;.";
-#elif L==6
-	"Eliminado.";	// Okoteve traducción
-#elif L==7
-	"Rimosso.";
-#elif L==8
-	"Usuniete.";
-#elif L==9
-	"Removido.";
-#endif
-
-const char *Txt_SOCIAL_PUBLISHING_Shared =
-#if   L==1
-	"Compartit.";
-#elif L==2
-	"Geteilt.";
-#elif L==3
-	"Shared.";
-#elif L==4
-	"Compartido.";
-#elif L==5
-	"Partag&eacute;.";
-#elif L==6
-	"Compartido.";	// Okoteve traducción
-#elif L==7
-	"Condiviso.";
-#elif L==8
-	"Dzielone.";
-#elif L==9
-	"Compartilhado.";
-#endif
-
-const char *Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Compartit per %u";
 #elif L==2
@@ -35783,28 +35720,7 @@ const char *Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS =	// Warning: it is very imp
 	"Compartilhado por %u";
 #endif
 
-const char *Txt_SOCIAL_PUBLISHING_Unshared =	// No longer shared
-#if   L==1
-	"No compartit.";
-#elif L==2
-	"Kein geteilt.";
-#elif L==3
-	"Unshared.";
-#elif L==4
-	"No compartido.";
-#elif L==5
-	"Non partag&eacute;.";
-#elif L==6
-	"No compartido.";	// Okoteve traducción
-#elif L==7
-	"Non condiviso.";
-#elif L==8
-	"Niedzielon&aogon;.";
-#elif L==9
-	"N&atilde;o compartilhado.";
-#endif
-
-const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone =	// No longer shared
+const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone =	// No longer shared
 #if   L==1
 	"No compartit per ning&uacute;";
 #elif L==2

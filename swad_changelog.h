@@ -124,13 +124,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.15 (2016-01-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.16 (2016-01-16)"
 #define CSS_FILE		"swad15.113.8.css"
 #define JS_FILE			"swad15.113.8.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.113.16:Jan 16, 2016	Removed unused code and messages. (192743 lines)
         Version 15.113.15:Jan 16, 2016	Changes in feedback on request to remove a social note. (192871 lines)
         Version 15.113.14:Jan 16, 2016	Changes in feedback when a social comment is published. (192850 lines)
         Version 15.113.13:Jan 16, 2016	Changes in feedback when a social note is unshared. (192846 lines)

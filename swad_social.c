@@ -279,7 +279,6 @@ static long Soc_GetParamNotCod (void);
 static long Soc_GetParamComCod (void);
 
 static long Soc_ReceiveComment (void);
-static bool Soc_CheckIfICanCommentNote (long NotCod);
 
 static long Soc_ShareSocialNote (void);
 static long Soc_UnshareSocialNote (void);
@@ -1785,7 +1784,6 @@ void Soc_ReceiveSocialPostUsr (void)
 // Returns the code of the social note just created
 static long Soc_ReceiveSocialPost (void)
   {
-   // extern const char *Txt_SOCIAL_PUBLISHING_Published;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    long PstCod;
@@ -1805,9 +1803,6 @@ static long Soc_ReceiveSocialPost (void)
 
       /* Insert post in social notes */
       NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
-
-      /***** Message of success *****/
-      // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
      }
    else
       NotCod = -1L;
@@ -2109,13 +2104,13 @@ static void Soc_PutFormToRemoveComment (long ComCod)
 
 static void Soc_PutDisabledIconShare (unsigned NumShared)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS;
-   extern const char *Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone;
+   extern const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS;
+   extern const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone;
 
    if (NumShared)
-      sprintf (Gbl.Title,Txt_SOCIAL_PUBLISHING_Shared_by_X_USERS,NumShared);
+      sprintf (Gbl.Title,Txt_SOCIAL_NOTE_Shared_by_X_USERS,NumShared);
    else
-      strcpy (Gbl.Title,Txt_SOCIAL_PUBLISHING_Not_shared_by_anyone);
+      strcpy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone);
 
    /***** Disabled icon to share *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_DISABLED\">"
@@ -2308,7 +2303,6 @@ void Soc_ReceiveCommentUsr (void)
 
 static long Soc_ReceiveComment (void)
   {
-   // extern const char *Txt_SOCIAL_PUBLISHING_Published;
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
@@ -2327,66 +2321,28 @@ static long Soc_ReceiveComment (void)
 
       if (Content[0])
 	{
-	 /***** Check if I can comment *****/
-	 if (Soc_CheckIfICanCommentNote (SocNot.NotCod))
-	   {
-	    /***** Publish *****/
-	    /* Insert into publishings */
-	    SocPub.NotCod       = SocNot.NotCod;
-	    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	    SocPub.PubType      = Soc_PUB_COMMENT_TO_NOTE;
-	    Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+	 /***** Publish *****/
+	 /* Insert into publishings */
+	 SocPub.NotCod       = SocNot.NotCod;
+	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+	 SocPub.PubType      = Soc_PUB_COMMENT_TO_NOTE;
+	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
-	    /* Insert comment content in the database */
-	    sprintf (Query,"INSERT INTO social_comments (ComCod,Content)"
-			   " VALUES ('%ld','%s')",
-		     SocPub.PubCod,
-		     Content);
-	    DB_QueryINSERT (Query,"can not store comment content");
+	 /* Insert comment content in the database */
+	 sprintf (Query,"INSERT INTO social_comments (ComCod,Content)"
+			" VALUES ('%ld','%s')",
+		  SocPub.PubCod,
+		  Content);
+	 DB_QueryINSERT (Query,"can not store comment content");
 
-	    /***** Message of success *****/
-	    // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Published);
-
-	    /***** Show the social note just commented *****/
-	    Soc_WriteSocialNote (&SocNot,&SocPub,true,true);
-	   }
-	 else
-	    Lay_ShowErrorAndExit ("You can not comment this note.");
+	 /***** Show the social note just commented *****/
+	 Soc_WriteSocialNote (&SocNot,&SocPub,true,true);
 	}
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
-  }
-
-/*****************************************************************************/
-/******************* Check if I can comment a social note ********************/
-/*****************************************************************************/
-// I can comment a social note <=>
-// <=> if I can view the note <=>
-// <=> if I am a publisher (author or sharer)
-//     or I follow at least one publisher (author or sharer)
-
-static bool Soc_CheckIfICanCommentNote (long NotCod)
-  {
-   // char Query[256];
-
-   /***** Check if I am the author of this note
-          or I follow the author of this note *****/
-   /*
-   sprintf (Query,"SELECT COUNT(*) FROM social_notes"
-	          " WHERE NotCod='%ld' AND UsrCod IN"
-	          " (SELECT '%ld'"
-		  " UNION"
-		  " SELECT FollowedCod FROM usr_follow WHERE FollowerCod='%ld')",
-	    NotCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if I can comment a social note") != 0);
-   */
-   // TODO: Remove this function if not used in future
-   return (NotCod > 0);	// Anyone can comment
   }
 
 /*****************************************************************************/
@@ -2429,7 +2385,6 @@ void Soc_ShareSocialNoteUsr (void)
 
 static long Soc_ShareSocialNote (void)
   {
-   // extern const char *Txt_SOCIAL_PUBLISHING_Shared;
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
@@ -2464,12 +2419,6 @@ static long Soc_ShareSocialNote (void)
 
 	 /* Update number of times this social note is shared */
 	 Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
-
-	 /***** Message of success *****/
-	 // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Shared);
-
-	 /***** Show the social note just shared *****/
-	 // Soc_WriteSocialNote (&SocNot,NULL,true,true);
 	}
      }
    else
@@ -2518,7 +2467,6 @@ void Soc_UnshareSocialNoteUsr (void)
 
 static long Soc_UnshareSocialNote (void)
   {
-   // extern const char *Txt_SOCIAL_PUBLISHING_Unshared;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;	// Used to print message indicating that I have unshared
    bool IAmTheAuthor;
@@ -2545,9 +2493,6 @@ static long Soc_UnshareSocialNote (void)
 
       /***** Update number of times this social note is shared *****/
       Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
-
-      /***** Message of success *****/
-      // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
@@ -2690,7 +2635,7 @@ void Soc_RemoveSocialNoteUsr (void)
 
 static void Soc_RemoveSocialNote (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Removed;
+   extern const char *Txt_Post_removed;
    struct SocialNote SocNot;
    bool ICanRemove;
 
@@ -2706,7 +2651,7 @@ static void Soc_RemoveSocialNote (void)
       Soc_RemoveASocialNoteFromDB (&SocNot);
 
       /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
+      Lay_ShowAlert (Lay_SUCCESS,Txt_Post_removed);
      }
   }
 
@@ -2864,7 +2809,7 @@ void Soc_RemoveSocialComUsr (void)
 
 static void Soc_RemoveSocialComment (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Removed;
+   extern const char *Txt_Comment_removed;
    struct SocialComment SocCom;
    struct SocialNote SocNot;
    bool ICanRemove;
@@ -2887,7 +2832,7 @@ static void Soc_RemoveSocialComment (void)
       Soc_RemoveASocialCommentFromDB (&SocCom);
 
       /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Removed);
+      Lay_ShowAlert (Lay_SUCCESS,Txt_Comment_removed);
      }
   }
 
