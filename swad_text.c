@@ -35846,6 +35846,27 @@ const char *Txt_SOCIAL_USER_has_shared =
 	"compartilhou:";
 #endif
 
+const char *Txt_SOCIAL_USER_has_stopped_sharing =
+#if   L==1
+	"ha deixat de compartir:";
+#elif L==2
+	"hat Sharing gestoppt:";
+#elif L==3
+	"has stopped sharing:";
+#elif L==4
+	"ha dejado de compartir:";
+#elif L==5
+	"a cess&eacute; de partage:";
+#elif L==6
+	"ha dejado de compartir:";	// Okoteve traducción
+#elif L==7
+	"ha smesso di condividere:";
+#elif L==8
+	"przesta&lstrok; udost&eogon;pniania:";
+#elif L==9
+	"parou compartilhar:";
+#endif
+
 const char *Txt_Sort_degrees_by =
 #if   L==1
 	"Ordenar titulacions per";

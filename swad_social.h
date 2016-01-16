@@ -113,8 +113,8 @@ void Soc_ReceiveCommentUsr (void);
 
 void Soc_ShareSocialNoteGbl (void);
 void Soc_ShareSocialNoteUsr (void);
-void Soc_UnshareSocialPubGbl (void);
-void Soc_UnshareSocialPubUsr (void);
+void Soc_UnshareSocialNoteGbl (void);
+void Soc_UnshareSocialNoteUsr (void);
 
 void Soc_RequestRemSocialNoteGbl (void);
 void Soc_RequestRemSocialNoteUsr (void);

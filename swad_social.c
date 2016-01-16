@@ -282,7 +282,7 @@ static void Soc_ReceiveComment (void);
 static bool Soc_CheckIfICanCommentNote (long NotCod);
 
 static long Soc_ShareSocialNote (void);
-static void Soc_UnshareSocialPublishing (void);
+static long Soc_UnshareSocialNote (void);
 static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 
 static void Soc_RequestRemovalSocialNote (void);
@@ -938,8 +938,9 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
-      if (!ShowNoteAlone &&	// Listing, not note alone
-	  SocPub)		// SocPub may be NULL
+      // if (!ShowNoteAlone &&	// Listing, not note alone
+      // 	  SocPub)		// SocPub may be NULL
+      if (SocPub)		// SocPub may be NULL
 	 Soc_WriteTopPublisher (SocPub);
 
       /***** Initialize structure with user's data *****/
@@ -1146,13 +1147,13 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
   {
    extern const char *Txt_View_public_profile;
+   extern const char *Txt_SOCIAL_USER_has_stopped_sharing;
    extern const char *Txt_SOCIAL_USER_has_shared;
    extern const char *Txt_SOCIAL_USER_has_commented;
    struct UsrData UsrDat;
 
    if (SocPub)
-      if (SocPub->PubType == Soc_PUB_SHARED_NOTE ||
-	  SocPub->PubType == Soc_PUB_COMMENT_TO_NOTE)
+      if (SocPub->PubType != Soc_PUB_ORIGINAL_NOTE)
 	{
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
@@ -1172,9 +1173,20 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
 	    Act_FormEnd ();
 
 	    /***** Show action made *****/
-	    fprintf (Gbl.F.Out," %s",
-		     SocPub->PubType == Soc_PUB_SHARED_NOTE ? Txt_SOCIAL_USER_has_shared :
-							      Txt_SOCIAL_USER_has_commented);
+	    switch (SocPub->PubType)
+	      {
+	       case Soc_PUB_UNKNOWN:	// Used to print message indicating that I have unshared
+		  fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_stopped_sharing);
+		  break;
+	       case Soc_PUB_ORIGINAL_NOTE:	// Not applicable
+		  break;
+	       case Soc_PUB_SHARED_NOTE:
+		  fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_shared);
+		  break;
+	       case Soc_PUB_COMMENT_TO_NOTE:
+		  fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_commented);
+		  break;
+	      }
 
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
@@ -2461,20 +2473,24 @@ static long Soc_ShareSocialNote (void)
   }
 
 /*****************************************************************************/
-/************** Unshare a previously shared social publishing ****************/
+/***************** Unshare a previously shared social note *******************/
 /*****************************************************************************/
 
-void Soc_UnshareSocialPubGbl (void)
+void Soc_UnshareSocialNoteGbl (void)
   {
-   /***** Unshare a previously shared social publishing *****/
-   Soc_UnshareSocialPublishing ();
+   long NotCod;
+
+   /***** Unshare a previously shared social note *****/
+   NotCod = Soc_UnshareSocialNote ();
 
    /***** Write updated timeline after unsharing (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGblHighlightingNot (NotCod);
   }
 
-void Soc_UnshareSocialPubUsr (void)
+void Soc_UnshareSocialNoteUsr (void)
   {
+   long NotCod;
+
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -2484,20 +2500,21 @@ void Soc_UnshareSocialPubUsr (void)
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Unshare a previously shared social publishing *****/
-   Soc_UnshareSocialPublishing ();
+   /***** Unshare a previously shared social note *****/
+   NotCod = Soc_UnshareSocialNote ();
 
    /***** Write updated timeline after unsharing (user) *****/
-   Soc_ShowTimelineUsr ();
+   Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    fprintf (Gbl.F.Out,"</section>");
   }
 
-static void Soc_UnshareSocialPublishing (void)
+static long Soc_UnshareSocialNote (void)
   {
-   extern const char *Txt_SOCIAL_PUBLISHING_Unshared;
+   // extern const char *Txt_SOCIAL_PUBLISHING_Unshared;
    struct SocialNote SocNot;
+   struct SocialPublishing SocPub;	// Used to print message indicating that I have unshared
    bool IAmTheAuthor;
    bool IAmAPublisherOfThisSocNot;
    bool ICanUnshare;
@@ -2524,12 +2541,16 @@ static void Soc_UnshareSocialPublishing (void)
       Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
       /***** Message of success *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
+      // Lay_ShowAlert (Lay_SUCCESS,Txt_SOCIAL_PUBLISHING_Unshared);
 
       /***** Show the social note corresponding
              to the publishing just unshared *****/
-      Soc_WriteSocialNote (&SocNot,NULL,true,true);
+      SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      SocPub.PubType      = Soc_PUB_UNKNOWN;	// Used to print message indicating that I have unshared
+      Soc_WriteSocialNote (&SocNot,&SocPub,true,true);
      }
+
+   return SocNot.NotCod;
   }
 
 /*****************************************************************************/
