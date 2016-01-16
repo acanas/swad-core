@@ -124,14 +124,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.13 (2016-01-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.113.14 (2016-01-16)"
 #define CSS_FILE		"swad15.113.8.css"
 #define JS_FILE			"swad15.113.8.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.113.13:Jan 16, 2016	Change in feddback when a social post is unshared. (192846 lines)
+        Version 15.113.14:Jan 16, 2016	Changes in feedback when a social comment is published. (192850 lines)
+        Version 15.113.13:Jan 16, 2016	Changes in feedback when a social post is unshared. (192846 lines)
         Version 15.113.12:Jan 15, 2016	When a new social post is commented, shared or unshared, fade its background. (192807 lines)
         Version 15.113.11:Jan 15, 2016	When a new social post is received, fade its background. (192803 lines)
         Version 15.113.10:Jan 15, 2016	When a social note is not available, the button to comment is disabled.
