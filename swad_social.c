@@ -497,10 +497,10 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 switch (WhatToGetFromTimeline)
            {
             case Soc_GET_ONLY_NEW_PUBS:
+            case Soc_GET_RECENT_TIMELINE:
 	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
 					     " (SELECT NotCod FROM not_codes)");
 	       break;
-            case Soc_GET_RECENT_TIMELINE:
             case Soc_GET_ONLY_OLD_PUBS:
 	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
 					     " (SELECT NotCod FROM current_timeline)");
@@ -524,10 +524,10 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 switch (WhatToGetFromTimeline)
            {
             case Soc_GET_ONLY_NEW_PUBS:
+            case Soc_GET_RECENT_TIMELINE:
 	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
 					     " (SELECT NotCod FROM not_codes)");
 	       break;
-            case Soc_GET_RECENT_TIMELINE:
             case Soc_GET_ONLY_OLD_PUBS:
 	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
 					     " (SELECT NotCod FROM current_timeline)");
@@ -1168,7 +1168,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
 
       /* Put icon to remove this publishing */
-      if (IAmTheAuthor && !ShowNoteAlone)
+      if (IAmTheAuthor)
 	 Soc_PutFormToRemoveSocialPublishing (SocNot->NotCod);
 
       /* Show comments */

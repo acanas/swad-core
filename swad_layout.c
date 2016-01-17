@@ -614,8 +614,16 @@ static void Lay_WriteScriptInit (void)
       // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeeSocTmlGbl)
-      // In all the actions children of ActSeeSocTmlGbl ==> refresh timeline via AJAX
+   else if (Gbl.CurrentAct == ActSeeSocTmlGbl    ||
+            Gbl.CurrentAct == ActRcvSocPstGbl    ||
+            Gbl.CurrentAct == ActRcvSocComGbl    ||
+            Gbl.CurrentAct == ActShaSocNotGbl    ||
+            Gbl.CurrentAct == ActUnsSocPubGbl    ||
+            Gbl.CurrentAct == ActReqRemSocPubGbl ||
+            Gbl.CurrentAct == ActRemSocPubGbl    ||
+            Gbl.CurrentAct == ActReqRemSocComGbl ||
+            Gbl.CurrentAct == ActRemSocComGbl)
+      // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
 
@@ -643,7 +651,7 @@ static void Lay_WriteScriptParamsAJAX (void)
    /***** Parameters related with refreshing of social timeline *****/
    if (Gbl.CurrentAct == ActSeeSocTmlGbl    ||
        Gbl.CurrentAct == ActRcvSocPstGbl    ||
-       Gbl.CurrentAct == ActRcvSocComUsr    ||
+       Gbl.CurrentAct == ActRcvSocComGbl    ||
        Gbl.CurrentAct == ActShaSocNotGbl    ||
        Gbl.CurrentAct == ActUnsSocPubGbl    ||
        Gbl.CurrentAct == ActReqRemSocPubGbl ||
