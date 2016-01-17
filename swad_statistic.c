@@ -271,7 +271,7 @@ void Sta_LogAccess (const char *Comments)
   {
    char Query[2048];
    long LogCod;
-   Rol_Role_t RoleToStore = (Gbl.CurrentAct == ActLogOut) ? Gbl.Usrs.Me.LoggedRoleBeforeCloseSession :
+   Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.LoggedRoleBeforeCloseSession :
                                                             Gbl.Usrs.Me.LoggedRole;
 
    /***** Insert access into database *****/
@@ -280,7 +280,7 @@ void Sta_LogAccess (const char *Comments)
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
-            Act_Actions[Gbl.CurrentAct].ActCod,
+            Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -305,7 +305,7 @@ void Sta_LogAccess (const char *Comments)
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
-            LogCod,Act_Actions[Gbl.CurrentAct].ActCod,
+            LogCod,Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentCtr.Ctr.CtrCod,
@@ -1423,7 +1423,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Free the memory used by the list of users *****/
-   if (Gbl.CurrentAct == ActSeeAccCrs)
+   if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_FreeListsSelectedUsrCods ();
 
    /***** Free memory used by the data of the user *****/
@@ -2037,14 +2037,14 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 	              "<td colspan=\"26\" class=\"%s CENTER_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme]);
 
-   Act_FormStartAnchor (Gbl.CurrentAct,"stat_form");
+   Act_FormStartAnchor (Gbl.Action.Act,"stat_form");
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
-   if (Gbl.CurrentAct == ActSeeAccCrs)
+   if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
-   else // Gbl.CurrentAct == ActSeeAccGbl
+   else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);
       Sco_PutParamScope (Gbl.Scope.Current);

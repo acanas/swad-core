@@ -2917,10 +2917,10 @@ static void Att_PutButtonToShowDetails (void)
 
    /***** Button to show more details *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (Gbl.CurrentAct);
+   Act_FormStart (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (Gbl.CurrentAct,Gbl.Usrs.Select.All);
+   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select.All);
    if (Gbl.AttEvents.StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Lay_PutConfirmButton (Txt_Show_more_details);
@@ -2948,9 +2948,9 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	  depending on the events selected *****/
    if (TypeOfView == Att_NORMAL_VIEW)
      {
-      Act_FormStart (Gbl.CurrentAct);
+      Act_FormStart (Gbl.Action.Act);
       Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParUsrCodAll (Gbl.CurrentAct,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select.All);
      }
 
    /***** Start frame *****/

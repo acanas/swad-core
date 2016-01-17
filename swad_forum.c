@@ -1439,7 +1439,7 @@ void For_SetForumTypeAndRestrictAccess (void)
    extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
    bool ICanSeeForum = false;
 
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeForSWAUsr:	case ActSeePstForSWAUsr:
       case ActRcvThrForSWAUsr:	case ActRcvRepForSWAUsr:
@@ -3757,12 +3757,12 @@ void For_RecForumPst (void)
    For_SetForumTypeAndRestrictAccess ();
 
    /***** Get the code of the thread y the número of page *****/
-   if (Gbl.CurrentAct == ActRcvRepForCrsUsr || Gbl.CurrentAct == ActRcvRepForCrsTch ||
-       Gbl.CurrentAct == ActRcvRepForDegUsr || Gbl.CurrentAct == ActRcvRepForDegTch ||
-       Gbl.CurrentAct == ActRcvRepForCtrUsr || Gbl.CurrentAct == ActRcvRepForCtrTch ||
-       Gbl.CurrentAct == ActRcvRepForInsUsr || Gbl.CurrentAct == ActRcvRepForInsTch ||
-       Gbl.CurrentAct == ActRcvRepForGenUsr || Gbl.CurrentAct == ActRcvRepForGenTch ||
-       Gbl.CurrentAct == ActRcvRepForSWAUsr || Gbl.CurrentAct == ActRcvRepForSWATch)
+   if (Gbl.Action.Act == ActRcvRepForCrsUsr || Gbl.Action.Act == ActRcvRepForCrsTch ||
+       Gbl.Action.Act == ActRcvRepForDegUsr || Gbl.Action.Act == ActRcvRepForDegTch ||
+       Gbl.Action.Act == ActRcvRepForCtrUsr || Gbl.Action.Act == ActRcvRepForCtrTch ||
+       Gbl.Action.Act == ActRcvRepForInsUsr || Gbl.Action.Act == ActRcvRepForInsTch ||
+       Gbl.Action.Act == ActRcvRepForGenUsr || Gbl.Action.Act == ActRcvRepForGenTch ||
+       Gbl.Action.Act == ActRcvRepForSWAUsr || Gbl.Action.Act == ActRcvRepForSWATch)
      {
       PstIsAReply = true;
 

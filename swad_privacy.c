@@ -180,7 +180,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 /************************ Get visibility from string *************************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
+Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str,
+                                           Pri_Visibility_t DefaultVisibility)
   {
    Pri_Visibility_t Visibility;
 
@@ -190,14 +191,15 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
       if (!strcasecmp (Str,Pri_VisibilityDB[Visibility]))
 	 return Visibility;
 
-   return Pri_VISIBILITY_DEFAULT;
+   return DefaultVisibility;
   }
 
 /*****************************************************************************/
 /**************** Get parameter with visibility from form ********************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
+                                         Pri_Visibility_t DefaultVisibility)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
@@ -212,7 +214,7 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
       return (Pri_Visibility_t) UnsignedNum;
      }
 
-   return Pri_VISIBILITY_DEFAULT;
+   return DefaultVisibility;
   }
 
 /*****************************************************************************/

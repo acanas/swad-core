@@ -231,7 +231,7 @@ void TT_ShowClassTimeTable (void)
    bool PutEditOfficeHours;
 
    /***** Initializations *****/
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeCrsTT:
       case ActPrnCrsTT:
@@ -246,8 +246,8 @@ void TT_ShowClassTimeTable (void)
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
      }
-   PrintView = (Gbl.CurrentAct == ActPrnCrsTT ||
-	        Gbl.CurrentAct == ActPrnMyTT);
+   PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
+	        Gbl.Action.Act == ActPrnMyTT);
    PutEditCrsTT = (TimeTableType == TT_COURSE_TIMETABLE &&
 	           !PrintView &&
                    Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
@@ -383,8 +383,8 @@ void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
    TT_CreatTimeTableFromDB (TimeTableType,UsrCod);
 
    /***** If timetable must be modified... *****/
-   if (Gbl.CurrentAct == ActChgCrsTT ||
-       Gbl.CurrentAct == ActChgTut)
+   if (Gbl.Action.Act == ActChgCrsTT ||
+       Gbl.Action.Act == ActChgTut)
      {
       /* Get parameters for time table editing */
       TT_GetParamsTimeTable ();
@@ -571,8 +571,8 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
 	 break;
       case TT_COURSE_TIMETABLE:
          if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS ||
-             Gbl.CurrentAct == ActEdiCrsTT ||
-             Gbl.CurrentAct == ActChgCrsTT)	// If we are editing, all groups are shown
+             Gbl.Action.Act == ActEdiCrsTT ||
+             Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             sprintf (Query,"SELECT Day,Hour,Duration,Place,ClassType,GroupName,GrpCod"
         	           " FROM timetable_crs"
                            " WHERE CrsCod='%ld'"
@@ -773,7 +773,7 @@ static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
    unsigned ColumnsToDrawIncludingExtraColumn;
    unsigned ContinuousFreeMinicolumns;
 
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
@@ -811,8 +811,8 @@ static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR);
 
    /***** Get list of groups types and groups in this course *****/
-   if (Gbl.CurrentAct == ActEdiCrsTT ||
-       Gbl.CurrentAct == ActChgCrsTT)
+   if (Gbl.Action.Act == ActEdiCrsTT ||
+       Gbl.Action.Act == ActChgCrsTT)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Write the table row by row *****/
@@ -902,8 +902,8 @@ static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
      }
 
    /***** Free list of groups types and groups in this course *****/
-   if (Gbl.CurrentAct == ActEdiCrsTT ||
-       Gbl.CurrentAct == ActChgCrsTT)
+   if (Gbl.Action.Act == ActEdiCrsTT ||
+       Gbl.Action.Act == ActChgCrsTT)
       Grp_FreeListGrpTypesAndGrps ();
 
    /***** Row with day names *****/
@@ -1109,7 +1109,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
       return;
 
    /***** Set type of view depending on current action *****/
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:

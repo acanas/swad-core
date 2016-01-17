@@ -205,7 +205,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
         NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
         NumOptInMenu++)
      {
-      if ((Action = Mnu_MenuActions[Gbl.CurrentTab][NumOptInMenu]) == 0)
+      if ((Action = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu]) == 0)
          return ActUnk;
       if (Act_CheckIfIHavePermissionToExecuteAction (Action))
          return Action;
@@ -236,12 +236,12 @@ void Mnu_WriteMenuThisTab (void)
         NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
         NumOptInMenu++)
      {
-      NumAct = Mnu_MenuActions[Gbl.CurrentTab][NumOptInMenu];
+      NumAct = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu];
       if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
          break;
       if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
         {
-         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.CurrentAct].SuperAction);
+         IsTheSelectedAction = (NumAct == Act_Actions[Gbl.Action.Act].SuperAction);
 
          Title = Act_GetSubtitleAction (NumAct);
 
@@ -271,7 +271,7 @@ void Mnu_WriteMenuThisTab (void)
 	                    "</div>",
 		  IsTheSelectedAction ? The_ClassTxtMenuOn[Gbl.Prefs.Theme] :
                                         The_ClassTxtMenuOff[Gbl.Prefs.Theme],
-		  Txt_MENU_TITLE[Gbl.CurrentTab][NumOptInMenu]);
+		  Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 
          /***** End of link and form *****/
          fprintf (Gbl.F.Out,"</div>"

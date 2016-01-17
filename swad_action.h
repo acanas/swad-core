@@ -85,11 +85,14 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActUnk			 1
 #define ActHom			 2
 #define ActMnu			 3
+
+// The following 5 actions use AJAX to refresh only a part of the page
 #define ActRefCon		 4
 #define ActRefLstClk		 5
 #define ActRefNewSocPubGbl	 6
-#define ActRefOldSocPubUsr	 7
-#define ActRefOldSocPubGbl	 8
+#define ActRefOldSocPubGbl	 7
+#define ActRefOldSocPubUsr	 8
+
 #define ActWebSvc		 9
 
 /*****************************************************************************/

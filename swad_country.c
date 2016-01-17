@@ -665,7 +665,7 @@ void Cty_ListCountries2 (void)
    Lay_EndRoundFrameTable ();
 
    /***** Div for Google Geochart *****/
-   if (Gbl.CurrentAct == ActSeeCty)
+   if (Gbl.Action.Act == ActSeeCty)
      {
       fprintf (Gbl.F.Out,"<div id=\"chart_div\""
 	                 " style=\"width:500px; margin:12px auto;\">"

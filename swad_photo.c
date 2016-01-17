@@ -1036,10 +1036,10 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
-                                 Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+                                 Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
    bool PutZoomCode = PhotoURL &&							// Photo exists
                       Zoom == Pho_ZOOM &&						// Make zoom
-                      Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+                      Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
    /***** Replace tildes, ñ, etc. in full name by codes,
           because some browsers (i.e., IE5)
@@ -1120,7 +1120,7 @@ void Pho_ChangePhotoVisibility (void)
    char Query[128];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho");
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho",Pri_PHOTO_VISIBILITY_DEFAULT);
 
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"

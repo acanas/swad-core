@@ -305,7 +305,7 @@ bool Ses_GetSessionData (void)
       Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
-      if (Gbl.CurrentAct != ActLogOut)	// When closing session, last search will not be needed
+      if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed
 	{
 	 /* Get what to search (row[8]) */
 	 Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;

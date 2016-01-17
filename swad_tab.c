@@ -102,9 +102,9 @@ void Tab_DrawTabs (void)
       ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
 
       /* If current tab is unknown, then activate the first one with access allowed */
-      if (Gbl.CurrentTab == TabUnk)
+      if (Gbl.Action.Tab == TabUnk)
 	{
-	 Gbl.CurrentTab = NumTab;
+	 Gbl.Action.Tab = NumTab;
 	 Tab_DisableIncompatibleTabs ();
 	}
 
@@ -112,20 +112,20 @@ void Tab_DrawTabs (void)
 	{
 	 /* Form, icon (at top) and text (at bottom) of the tab */
 	 fprintf (Gbl.F.Out,"<li class=\"%s %s\">",
-		  NumTab == Gbl.CurrentTab ? "TAB_ON" :
+		  NumTab == Gbl.Action.Tab ? "TAB_ON" :
 					     "TAB_OFF",
-		  NumTab == Gbl.CurrentTab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
+		  NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
 					     The_TabOffBgColors[Gbl.Prefs.Theme]);
 	 if (ICanViewTab)
 	   {
 	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	    if (NumTab != Gbl.CurrentTab)
+	    if (NumTab != Gbl.Action.Tab)
 	       fprintf (Gbl.F.Out," class=\"ICON_HIGHLIGHT\"");
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
-	                        NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+	                        NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
@@ -136,7 +136,7 @@ void Tab_DrawTabs (void)
 		     Tab_TabIcons[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
 		     Txt_TABS_FULL_TXT[NumTab],
-		     NumTab == Gbl.CurrentTab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+		     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 			                        The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		     Txt_TABS_SHORT_TXT[NumTab]);
 	    Act_FormEnd ();
@@ -211,15 +211,15 @@ void Tab_DrawBreadcrumb (void)
    /***** Home *****/
    Tab_WriteBreadcrumbHome ();
 
-   if (Gbl.CurrentAct == ActMnu ||
-       Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
+   if (Gbl.Action.Act == ActMnu ||
+       Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
      {
       /***** Tab *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
                The_ClassTxtTabOn[Gbl.Prefs.Theme]);
       Tab_WriteBreadcrumbTab ();
 
-      if (Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
+      if (Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
         {
          /***** Menu *****/
          fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
@@ -258,12 +258,12 @@ static void Tab_WriteBreadcrumbTab (void)
 
    /***** Start form *****/
    Act_FormStart (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.CurrentTab);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.CurrentTab],The_ClassTxtTabOn[Gbl.Prefs.Theme]);
+   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
+   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
    fprintf (Gbl.F.Out,"%s</a>",
-	    Txt_TABS_FULL_TXT[Gbl.CurrentTab]);
+	    Txt_TABS_FULL_TXT[Gbl.Action.Tab]);
    Act_FormEnd ();
   }
 
@@ -274,10 +274,10 @@ static void Tab_WriteBreadcrumbTab (void)
 static void Tab_WriteBreadcrumbAction (void)
   {
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   const char *Title = Act_GetTitleAction (Gbl.CurrentAct);
+   const char *Title = Act_GetTitleAction (Gbl.Action.Act);
 
    /***** Start form *****/
-   Act_FormStart (Act_Actions[Gbl.CurrentAct].SuperAction);
+   Act_FormStart (Act_Actions[Gbl.Action.Act].SuperAction);
    Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme]);
 
    /***** Title and end of form *****/
@@ -292,53 +292,53 @@ static void Tab_WriteBreadcrumbAction (void)
 
 void Tab_SetCurrentTab (void)
   {
-   Gbl.CurrentTab = Act_Actions[Gbl.CurrentAct].Tab;
+   Gbl.Action.Tab = Act_Actions[Gbl.Action.Act].Tab;
 
    /***** Change action and tab if country, institution, centre or degree
           are incompatible with the current tab *****/
-   switch (Gbl.CurrentTab)
+   switch (Gbl.Action.Tab)
      {
       case TabCty:
 	 if (Gbl.CurrentCty.Cty.CtyCod <= 0)		// No country selected
-	    Gbl.CurrentAct = ActSeeCty;
+	    Gbl.Action.Act = ActSeeCty;
 	 break;
       case TabIns:
 	 if (Gbl.CurrentIns.Ins.InsCod <= 0)		// No institution selected
 	   {
 	    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
+	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
+	       Gbl.Action.Act = ActSeeCty;
 	  }
 	break;
       case TabCtr:
 	 if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)		// No centre selected
 	   {
 	    if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected, but no centre selected
-	       Gbl.CurrentAct = ActSeeCtr;
+	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
+	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
+	       Gbl.Action.Act = ActSeeCty;
 	   }
          break;
       case TabDeg:
          if (Gbl.CurrentDeg.Deg.DegCod <= 0)		// No degree selected
 	   {
 	    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected, but no degree selected
-	       Gbl.CurrentAct = ActSeeDeg;
+	       Gbl.Action.Act = ActSeeDeg;
 	    else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected, but no centre selected
-	       Gbl.CurrentAct = ActSeeCtr;
+	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
-	       Gbl.CurrentAct = ActSeeIns;
+	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
-	       Gbl.CurrentAct = ActSeeCty;
+	       Gbl.Action.Act = ActSeeCty;
 	   }
          break;
       default:
          break;
      }
-   Gbl.CurrentTab = Act_Actions[Gbl.CurrentAct].Tab;
+   Gbl.Action.Tab = Act_Actions[Gbl.Action.Act].Tab;
 
    Tab_DisableIncompatibleTabs ();
   }
@@ -351,7 +351,7 @@ void Tab_DisableIncompatibleTabs (void)
   {
    /***** Set country, institution, centre, degree and course depending on the current tab.
           This will disable tabs incompatible with the current one. *****/
-   switch (Gbl.CurrentTab)
+   switch (Gbl.Action.Tab)
      {
       case TabSys:
 	 Gbl.CurrentCty.Cty.CtyCod = -1L;

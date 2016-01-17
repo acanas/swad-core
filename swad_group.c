@@ -4210,7 +4210,7 @@ void Grp_GetParamWhichGrps (void)
          Gbl.CurrentCrs.Grps.WhichGrps = (Grp_WhichGroups_t) UnsignedNum;
         }
       else	// This parameter does not exist ==> set default value
-         switch (Gbl.CurrentAct)
+         switch (Gbl.Action.Act)
            {
             case ActSeeCrsTT:
             case ActPrnCrsTT:

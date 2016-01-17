@@ -178,8 +178,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
    Usr_UsrDataConstructor (&Gbl.Usrs.Other.UsrDat);
 
-   Gbl.CurrentAct = ActUnk;
-   Gbl.CurrentTab = TabUnk;
+   Gbl.Action.Act = ActUnk;
+   Gbl.Action.UsesAJAX = false;
+   Gbl.Action.Tab = TabUnk;
 
    Gbl.Usrs.LstGsts.NumUsrs = 0;
    Gbl.Usrs.LstGsts.Lst = NULL;
@@ -437,13 +438,9 @@ void Gbl_InitializeGlobals (void)
 
 void Gbl_Cleanup (void)
   {
-   if (Gbl.CurrentAct != ActRefCon          &&
-       Gbl.CurrentAct != ActRefLstClk       &&
-       Gbl.CurrentAct != ActRefNewSocPubGbl &&
-       Gbl.CurrentAct != ActRefOldSocPubUsr &&
-       Gbl.CurrentAct != ActRefOldSocPubGbl &&
+   if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW &&
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&
        !Gbl.HiddenParamsInsertedIntoDB)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);

@@ -123,11 +123,7 @@ void Lay_WriteStartOfPage (void)
    Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
-   if (Gbl.CurrentAct == ActRefCon          ||
-       Gbl.CurrentAct == ActRefLstClk       ||
-       Gbl.CurrentAct == ActRefNewSocPubGbl ||
-       Gbl.CurrentAct == ActRefOldSocPubUsr ||
-       Gbl.CurrentAct == ActRefOldSocPubGbl)
+   if (Gbl.Action.UsesAJAX)
      // Don't generate a full HTML page, only the content of a DIV or similar
      {
       fprintf (Gbl.F.Out,"Content-Type: text/html; charset=windows-1252\r\n\r\n");
@@ -197,31 +193,31 @@ void Lay_WriteStartOfPage (void)
    // css/dropzone.css
    // images/spritemap@2x.png
    // images/spritemap.png
-   if (Gbl.CurrentAct == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
-       Gbl.CurrentAct == ActFrmCreShaIns ||	// Brw_ADMI_SHARE_INS
-       Gbl.CurrentAct == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
-       Gbl.CurrentAct == ActFrmCreShaCtr ||	// Brw_ADMI_SHARE_CTR
-       Gbl.CurrentAct == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
-       Gbl.CurrentAct == ActFrmCreShaDeg ||	// Brw_ADMI_SHARE_DEG
-       Gbl.CurrentAct == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
-       Gbl.CurrentAct == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
-       Gbl.CurrentAct == ActFrmCreShaCrs ||	// Brw_ADMI_SHARE_CRS
-       Gbl.CurrentAct == ActFrmCreShaGrp ||	// Brw_ADMI_SHARE_GRP
-       Gbl.CurrentAct == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
-       Gbl.CurrentAct == ActFrmCreAsgCrs ||	// Brw_ADMI_ASSIG_CRS
-       Gbl.CurrentAct == ActFrmCreWrkUsr ||	// Brw_ADMI_WORKS_USR
-       Gbl.CurrentAct == ActFrmCreWrkCrs ||	// Brw_ADMI_WORKS_CRS
-       Gbl.CurrentAct == ActFrmCreMrkCrs ||	// Brw_ADMI_MARKS_CRS
-       Gbl.CurrentAct == ActFrmCreMrkGrp ||	// Brw_ADMI_MARKS_GRP
-       Gbl.CurrentAct == ActFrmCreBrf)		// Brw_ADMI_BRIEF_USR
+   if (Gbl.Action.Act == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
+       Gbl.Action.Act == ActFrmCreShaIns ||	// Brw_ADMI_SHARE_INS
+       Gbl.Action.Act == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
+       Gbl.Action.Act == ActFrmCreShaCtr ||	// Brw_ADMI_SHARE_CTR
+       Gbl.Action.Act == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
+       Gbl.Action.Act == ActFrmCreShaDeg ||	// Brw_ADMI_SHARE_DEG
+       Gbl.Action.Act == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
+       Gbl.Action.Act == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
+       Gbl.Action.Act == ActFrmCreShaCrs ||	// Brw_ADMI_SHARE_CRS
+       Gbl.Action.Act == ActFrmCreShaGrp ||	// Brw_ADMI_SHARE_GRP
+       Gbl.Action.Act == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
+       Gbl.Action.Act == ActFrmCreAsgCrs ||	// Brw_ADMI_ASSIG_CRS
+       Gbl.Action.Act == ActFrmCreWrkUsr ||	// Brw_ADMI_WORKS_USR
+       Gbl.Action.Act == ActFrmCreWrkCrs ||	// Brw_ADMI_WORKS_CRS
+       Gbl.Action.Act == ActFrmCreMrkCrs ||	// Brw_ADMI_MARKS_CRS
+       Gbl.Action.Act == ActFrmCreMrkGrp ||	// Brw_ADMI_MARKS_GRP
+       Gbl.Action.Act == ActFrmCreBrf)		// Brw_ADMI_BRIEF_USR
       fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
 	                 " href=\"%s/dropzone/css/dropzone.css\""
 	                 " type=\"text/css\" />\n",
                Cfg_HTTPS_URL_SWAD_PUBLIC);
 
    /* Redirect to correct language */
-   if ((Gbl.CurrentAct == ActAutUsrInt ||
-        Gbl.CurrentAct == ActAutUsrExt) &&					// Action is log in
+   if ((Gbl.Action.Act == ActAutUsrInt ||
+        Gbl.Action.Act == ActAutUsrExt) &&					// Action is log in
        Gbl.Usrs.Me.Logged &&							// I am just logged
        Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
       Lay_WriteRedirectionToMyLanguage ();
@@ -232,7 +228,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
       fprintf (Gbl.F.Out,"<body onload=\"init()\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
@@ -317,16 +313,16 @@ void Lay_WriteStartOfPage (void)
 
    /* Write title of the current action */
    if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
-      Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].IndexInMenu >= 0)
+      Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].IndexInMenu >= 0)
       Lay_WriteTitleAction ();
 
    Gbl.Layout.WritingHTMLStart = false;
    Gbl.Layout.HTMLStartWritten = true;
 
    /* Write new year greeting */
-   if (Gbl.CurrentAct == ActAutUsrInt ||
-       Gbl.CurrentAct == ActAutUsrExt ||
-       Gbl.CurrentAct == ActAutUsrChgLan)
+   if (Gbl.Action.Act == ActAutUsrInt ||
+       Gbl.Action.Act == ActAutUsrExt ||
+       Gbl.Action.Act == ActAutUsrChgLan)
       if (Gbl.Now.Date.Month == 1 &&
 	  Gbl.Now.Date.Day == 1)
         {
@@ -354,7 +350,7 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/
-      if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+      if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
          Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
@@ -451,7 +447,7 @@ static void Lay_WriteScripts (void)
 #endif
 
    /***** Scripts used only in main window *****/
-   if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
      {
       Lay_WriteScriptInit ();
       Lay_WriteScriptParamsAJAX ();
@@ -459,8 +455,8 @@ static void Lay_WriteScripts (void)
 
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||		// Left column visible
-       Gbl.CurrentAct == ActSeeCal ||
-       Gbl.CurrentAct == ActPrnCal)
+       Gbl.Action.Act == ActSeeCal ||
+       Gbl.Action.Act == ActPrnCal)
      {
       /***** Get list of holidays *****/
       if (!Gbl.Hlds.LstIsRead)
@@ -524,7 +520,7 @@ static void Lay_WriteScripts (void)
      }
 
    /***** Scripts depending on action *****/
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       /***** Script to print world map *****/
       case ActSeeCty:
@@ -610,19 +606,19 @@ static void Lay_WriteScriptInit (void)
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);
 
-   if (Gbl.CurrentAct == ActLstClk)
+   if (Gbl.Action.Act == ActLstClk)
       // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (Gbl.CurrentAct == ActSeeSocTmlGbl    ||
-            Gbl.CurrentAct == ActRcvSocPstGbl    ||
-            Gbl.CurrentAct == ActRcvSocComGbl    ||
-            Gbl.CurrentAct == ActShaSocNotGbl    ||
-            Gbl.CurrentAct == ActUnsSocPubGbl    ||
-            Gbl.CurrentAct == ActReqRemSocPubGbl ||
-            Gbl.CurrentAct == ActRemSocPubGbl    ||
-            Gbl.CurrentAct == ActReqRemSocComGbl ||
-            Gbl.CurrentAct == ActRemSocComGbl)
+   else if (Gbl.Action.Act == ActSeeSocTmlGbl    ||
+            Gbl.Action.Act == ActRcvSocPstGbl    ||
+            Gbl.Action.Act == ActRcvSocComGbl    ||
+            Gbl.Action.Act == ActShaSocNotGbl    ||
+            Gbl.Action.Act == ActUnsSocPubGbl    ||
+            Gbl.Action.Act == ActReqRemSocPubGbl ||
+            Gbl.Action.Act == ActRemSocPubGbl    ||
+            Gbl.Action.Act == ActReqRemSocComGbl ||
+            Gbl.Action.Act == ActRemSocComGbl)
       // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
@@ -642,22 +638,22 @@ static void Lay_WriteScriptParamsAJAX (void)
 
    /***** Parameter to refresh connected users *****/
    fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
-            Act_Actions[ActRefCon   ].ActCod);
+            Act_Actions[ActRefCon].ActCod);
 
    /***** Parameter to refresh clicks in realtime *****/
    fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
             Act_Actions[ActRefLstClk].ActCod);
 
    /***** Parameters related with refreshing of social timeline *****/
-   if (Gbl.CurrentAct == ActSeeSocTmlGbl    ||
-       Gbl.CurrentAct == ActRcvSocPstGbl    ||
-       Gbl.CurrentAct == ActRcvSocComGbl    ||
-       Gbl.CurrentAct == ActShaSocNotGbl    ||
-       Gbl.CurrentAct == ActUnsSocPubGbl    ||
-       Gbl.CurrentAct == ActReqRemSocPubGbl ||
-       Gbl.CurrentAct == ActRemSocPubGbl    ||
-       Gbl.CurrentAct == ActReqRemSocComGbl ||
-       Gbl.CurrentAct == ActRemSocComGbl)
+   if (Gbl.Action.Act == ActSeeSocTmlGbl    ||
+       Gbl.Action.Act == ActRcvSocPstGbl    ||
+       Gbl.Action.Act == ActRcvSocComGbl    ||
+       Gbl.Action.Act == ActShaSocNotGbl    ||
+       Gbl.Action.Act == ActUnsSocPubGbl    ||
+       Gbl.Action.Act == ActReqRemSocPubGbl ||
+       Gbl.Action.Act == ActRemSocPubGbl    ||
+       Gbl.Action.Act == ActReqRemSocComGbl ||
+       Gbl.Action.Act == ActRemSocComGbl)
       /* In all the actions related to view or editing global timeline ==>
          put parameters used by AJAX */
       fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
@@ -665,15 +661,15 @@ static void Lay_WriteScriptParamsAJAX (void)
 			 "var RefreshParamUsr = \"\";\n",	// No user specified
 	       Act_Actions[ActRefNewSocPubGbl].ActCod,
 	       Act_Actions[ActRefOldSocPubGbl].ActCod);
-   else if (Gbl.CurrentAct == ActSeePubPrf       ||
-            Gbl.CurrentAct == ActRcvSocPstGbl    ||
-            Gbl.CurrentAct == ActRcvSocComUsr    ||
-            Gbl.CurrentAct == ActShaSocNotGbl    ||
-            Gbl.CurrentAct == ActUnsSocPubGbl    ||
-            Gbl.CurrentAct == ActReqRemSocPubGbl ||
-            Gbl.CurrentAct == ActRemSocPubGbl    ||
-            Gbl.CurrentAct == ActReqRemSocComGbl ||
-            Gbl.CurrentAct == ActRemSocComGbl)
+   else if (Gbl.Action.Act == ActSeePubPrf       ||
+            Gbl.Action.Act == ActRcvSocPstGbl    ||
+            Gbl.Action.Act == ActRcvSocComUsr    ||
+            Gbl.Action.Act == ActShaSocNotGbl    ||
+            Gbl.Action.Act == ActUnsSocPubGbl    ||
+            Gbl.Action.Act == ActReqRemSocPubGbl ||
+            Gbl.Action.Act == ActRemSocPubGbl    ||
+            Gbl.Action.Act == ActReqRemSocComGbl ||
+            Gbl.Action.Act == ActRemSocComGbl)
      {
       /* In all the actions related to view or editing user's timeline ==>
          put parameters used by AJAX */
@@ -872,18 +868,18 @@ static void Lay_WriteTitleAction (void)
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
 	              " style=\"background-image:url('%s/%s/%s');\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-	    Act_Actions[Act_Actions[Gbl.CurrentAct].SuperAction].Icon);
+	    Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].Icon);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
-	    Txt_TABS_FULL_TXT[Act_Actions[Gbl.CurrentAct].Tab],
-	    Act_GetTitleAction (Gbl.CurrentAct));
+	    Txt_TABS_FULL_TXT[Act_Actions[Gbl.Action.Act].Tab],
+	    Act_GetTitleAction (Gbl.Action.Act));
 
    /***** Subtitle *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
 	    The_ClassSubtitleAction[Gbl.Prefs.Theme],
-	    Act_GetSubtitleAction (Gbl.CurrentAct));
+	    Act_GetSubtitleAction (Gbl.Action.Act));
 
    /***** Container end *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -968,8 +964,8 @@ static void Lay_ShowRightColumn (void)
 
    /***** SWADroid advertisement *****/
    if (!Gbl.Usrs.Me.Logged ||
-       Gbl.CurrentAct == ActAutUsrInt ||
-       Gbl.CurrentAct == ActAutUsrExt)
+       Gbl.Action.Act == ActAutUsrInt ||
+       Gbl.Action.Act == ActAutUsrExt)
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
@@ -1354,11 +1350,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
-   if (Gbl.CurrentAct != ActRefCon          &&	// Refreshing connected users
-       Gbl.CurrentAct != ActRefLstClk       &&	// Refreshing last clics
-       Gbl.CurrentAct != ActRefNewSocPubGbl &&	// Refreshing new social publishings in timeline
-       Gbl.CurrentAct != ActRefOldSocPubUsr &&	// Refreshing old social publishings in timeline
-       Gbl.CurrentAct != ActRefOldSocPubGbl)	// Refreshing old social publishings in timeline
+   if (!Gbl.Action.UsesAJAX)
       Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
@@ -1376,11 +1368,7 @@ void Lay_ShowErrorAndExit (const char *Message)
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      if (Gbl.CurrentAct != ActRefCon          &&	// Refreshing connected users
-          Gbl.CurrentAct != ActRefLstClk       &&	// Refreshing last clicks
-          Gbl.CurrentAct != ActRefNewSocPubGbl &&	// Refreshing new social publishings in timeline
-          Gbl.CurrentAct != ActRefOldSocPubUsr &&	// Refreshing old social publishings in timeline
-          Gbl.CurrentAct != ActRefOldSocPubGbl)		// Refreshing old social publishings in timeline
+      if (!Gbl.Action.UsesAJAX)
 	{
 	 /***** Compute time to send page *****/
 	 Sta_ComputeTimeToSendPage ();
@@ -1392,7 +1380,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
 	    // Here Gbl.F.Out is stdout
-	    if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+	    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
 	       Lay_WriteAboutZone ();
 
 	    fprintf (Gbl.F.Out,"</body>\n"

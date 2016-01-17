@@ -142,7 +142,7 @@ void Par_GetMainParameters (void)
    /***** Get action to perform *****/
    if (Gbl.WebService.IsWebService)
      {
-      Gbl.CurrentAct = ActWebSvc;
+      Gbl.Action.Act = ActWebSvc;
       Tab_SetCurrentTab ();
       return;
      }
@@ -152,14 +152,14 @@ void Par_GetMainParameters (void)
    if (Gbl.Imported.ExternalUsrId[0] &&
        Gbl.Imported.ExternalSesId[0])
      {
-      Gbl.CurrentAct = ActAutUsrExt;
+      Gbl.Action.Act = ActAutUsrExt;
       Tab_SetCurrentTab ();
       return;
      }
    // SWAD is not called from external site
 
    /***** Set dfault action *****/
-   Gbl.CurrentAct = ActUnk;
+   Gbl.Action.Act = ActUnk;
 
    /***** Get another user's nickname, if exists
           (this nickname is used to get another user's info,
@@ -170,7 +170,7 @@ void Par_GetMainParameters (void)
 	   {
 	    Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;	// Used to go to public profile
 	                                                // and to refresh old publishings in user's timeline
-	    Gbl.CurrentAct = ActSeePubPrf;	// Set default action if no other is specified
+	    Gbl.Action.Act = ActSeePubPrf;	// Set default action if no other is specified
 	   }
 
    /***** Get action to perform *****/
@@ -179,7 +179,7 @@ void Par_GetMainParameters (void)
      {
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
          if (UnsignedNum <= Act_MAX_ACTION_COD)
-            Gbl.CurrentAct = Act_FromActCodToAction[UnsignedNum];
+            Gbl.Action.Act = Act_FromActCodToAction[UnsignedNum];
      }
    else
      {
@@ -188,8 +188,14 @@ void Par_GetMainParameters (void)
       if (UnsignedStr[0])
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum <= Act_MAX_ACTION_COD)
-	       Gbl.CurrentAct = Act_FromActCodToAction[UnsignedNum];
+	       Gbl.Action.Act = Act_FromActCodToAction[UnsignedNum];
      }
+   if (Gbl.Action.Act == ActRefCon          ||
+       Gbl.Action.Act == ActRefLstClk       ||
+       Gbl.Action.Act == ActRefNewSocPubGbl ||
+       Gbl.Action.Act == ActRefOldSocPubGbl ||
+       Gbl.Action.Act == ActRefOldSocPubUsr)
+      Gbl.Action.UsesAJAX = true;
 
    /***** Get session identifier, if exists *****/
    Par_GetParToText ("ses",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
@@ -228,7 +234,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get user password and login *****/
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActAutUsrInt:
          Pwd_GetParamUsrPwdLogin ();
@@ -329,15 +335,15 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get tab to activate *****/
-   Gbl.CurrentTab = TabUnk;
-   if (Gbl.CurrentAct == ActMnu)
+   Gbl.Action.Tab = TabUnk;
+   if (Gbl.Action.Act == ActMnu)
      {
       Par_GetParToText ("NxtTab",UnsignedStr,10);
       if (UnsignedStr[0])
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Tab_NUM_TABS)
 	      {
-	       Gbl.CurrentTab = (Act_Tab_t) UnsignedNum;
+	       Gbl.Action.Tab = (Act_Tab_t) UnsignedNum;
 	       Tab_DisableIncompatibleTabs ();
 	      }
      }

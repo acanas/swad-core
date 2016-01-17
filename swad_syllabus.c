@@ -190,8 +190,8 @@ void Syl_EditSyllabus (void)
    /***** Set syllabus type and load syllabus from XML file to memory *****/
    InfoType = Syl_SetSyllabusTypeAndLoadToMemory ();
 
-   if (Gbl.CurrentAct == ActEditorSylLec ||
-       Gbl.CurrentAct == ActEditorSylPra)
+   if (Gbl.Action.Act == ActEditorSylLec ||
+       Gbl.Action.Act == ActEditorSylPra)
       Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
 
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
@@ -243,7 +243,7 @@ static Inf_InfoType_t Syl_SetSyllabusTypeAndLoadToMemory (void)
    Inf_InfoType_t InfoType = Inf_LECTURES;	// Initialized to avoid warning
 
    /***** Set the type of syllabus (lectures or practicals) *****/
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeSyl:
 	 InfoType = (Gbl.CurrentCrs.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
@@ -483,10 +483,10 @@ static void Syl_ShowSyllabus (Inf_InfoType_t InfoType)
    int i;
    int NumButtons = Gbl.CurrentCrs.Syllabus.EditionIsActive ? 5 :
 	                                                      0;
-   bool ShowRowInsertNewItem = (Gbl.CurrentAct == ActInsIteSylLec || Gbl.CurrentAct == ActInsIteSylPra ||
-                                Gbl.CurrentAct == ActModIteSylLec || Gbl.CurrentAct == ActModIteSylPra ||
-				Gbl.CurrentAct == ActRgtIteSylLec || Gbl.CurrentAct == ActRgtIteSylPra ||
-                                Gbl.CurrentAct == ActLftIteSylLec || Gbl.CurrentAct == ActLftIteSylPra);
+   bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
+                                Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
+				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
+                                Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
 
    /***** Set width of columns of the table *****/
    fprintf (Gbl.F.Out,"<colgroup>");

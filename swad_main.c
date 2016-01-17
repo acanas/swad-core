@@ -126,7 +126,7 @@ int main (int argc, char *argv[])
 	 Con_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
-	 if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+	 if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
 	    Ses_GetNumSessions ();
 
 	 /***** Check user and get user's data *****/
@@ -134,22 +134,22 @@ int main (int argc, char *argv[])
 	}
 
       /***** Check if the user have permission to execute the action *****/
-      if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.CurrentAct))
+      if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.Action.Act))
 	 Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
 
       /***** Update most frequently used actions *****/
       Act_UpdateMFUActions ();
 
       /***** Execute a function depending on the action *****/
-      if (Act_Actions[Gbl.CurrentAct].FunctionPriori != NULL)
-	 Act_Actions[Gbl.CurrentAct].FunctionPriori ();
+      if (Act_Actions[Gbl.Action.Act].FunctionPriori != NULL)
+	 Act_Actions[Gbl.Action.Act].FunctionPriori ();
 
       /***** Start writing HTML output *****/
       Lay_WriteStartOfPage ();
 
       /***** Make a processing or other depending on the action *****/
-      if (Act_Actions[Gbl.CurrentAct].FunctionPosteriori != NULL)
-	 Act_Actions[Gbl.CurrentAct].FunctionPosteriori ();
+      if (Act_Actions[Gbl.Action.Act].FunctionPosteriori != NULL)
+	 Act_Actions[Gbl.Action.Act].FunctionPosteriori ();
      }
 
    /***** Cleanup and exit *****/

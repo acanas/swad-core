@@ -232,12 +232,12 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Act_FormStartAnchor (Action,"follow_section");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
-                          (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
+                          (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
         	                                       "FOLLOW_NUM");
      }
    else
       fprintf (Gbl.F.Out,"<span class=\"%s\">",
-	       (Gbl.CurrentAct == Action) ? "FOLLOW_NUM_B" :
+	       (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
 					    "FOLLOW_NUM");
    fprintf (Gbl.F.Out,"%u",NumUsrs);
    if (NumUsrs)
@@ -250,7 +250,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
+            (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
         	                         The_ClassForm[Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
@@ -258,7 +258,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Act_FormStartAnchor (Action,"follow_section");
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
-                          (Gbl.CurrentAct == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
+                          (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
         	                                       The_ClassForm[Gbl.Prefs.Theme]);
      }
    fprintf (Gbl.F.Out,"%s",Title);

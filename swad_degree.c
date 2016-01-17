@@ -976,7 +976,7 @@ void Deg_InitCurrentCourse (void)
      }
 
    /***** Once we know course code, adjust action and tab *****/
-   // if (Gbl.CurrentAct != ActMnu)
+   // if (Gbl.Action.Act != ActMnu)
    //   Lay_SetCurrentTab ();	// Use the tab associated to current action
 
    /***** Initialize default fields for edition to current values *****/

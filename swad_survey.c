@@ -2226,7 +2226,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    unsigned NumAns,NumAnswers = 0;
    Svy_AnswerType_t AnsType;
 
-   if (Gbl.CurrentAct == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
+   if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
      {
       if ((SvyQst->QstCod > 0))	// If parameter QstCod received ==> question already exists in the database
         {
@@ -2781,9 +2781,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   bool Editing = (Gbl.CurrentAct == ActEdiOneSvy ||
-	           Gbl.CurrentAct == ActEdiOneSvyQst ||
-	           Gbl.CurrentAct == ActRcvSvyQst);
+   bool Editing = (Gbl.Action.Act == ActEdiOneSvy ||
+	           Gbl.Action.Act == ActEdiOneSvyQst ||
+	           Gbl.Action.Act == ActRcvSvyQst);
    bool PutFormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
 
    /***** Get data of questions from database *****/

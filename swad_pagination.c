@@ -543,7 +543,7 @@ void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
          switch (WhatPaginate)
            {
             case Pag_MESSAGES_RECEIVED:
-               if (Gbl.CurrentAct == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
+               if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
 							// from a notification of received message
                   // Show the page corresponding to the expanded message
                   Gbl.Pag.CurrentPage = 1;	// Now set the current page to the first, but later the correct page will be calculated

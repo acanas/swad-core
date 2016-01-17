@@ -1112,12 +1112,12 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
   }
 
 /*****************************************************************************/
-/******** Returns bibliography, assessment, etc. from Gbl.CurrentAct *********/
+/******** Returns bibliography, assessment, etc. from Gbl.Action.Act *********/
 /*****************************************************************************/
 
 Inf_InfoType_t Inf_AsignInfoType (void)
   {
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeCrsInf:
       case ActEdiCrsInf:

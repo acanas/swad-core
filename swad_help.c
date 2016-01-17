@@ -134,7 +134,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						 "BT_CONFIRM",Txt_Register_students);
 	   }
 
-	 if (Gbl.CurrentAct != ActMyCrs)	// I am not seeing the action to list my courses
+	 if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 	    /* Request list my courses */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						 ActMyCrs,
@@ -192,9 +192,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	   {
-	    if (Gbl.CurrentAct != ActAutUsrInt &&
-		Gbl.CurrentAct != ActAutUsrExt &&
-                Gbl.CurrentAct != ActAutUsrChgLan)	// I am not just logged
+	    if (Gbl.Action.Act != ActAutUsrInt &&
+		Gbl.Action.Act != ActAutUsrExt &&
+                Gbl.Action.Act != ActAutUsrChgLan)	// I am not just logged
 	      {
 	       /* Request my removing from this course */
 	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,

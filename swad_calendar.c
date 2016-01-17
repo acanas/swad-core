@@ -234,7 +234,7 @@ void Cal_DrawCalendar (void)
    extern const char *Txt_Print;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
-   bool PrintView = (Gbl.CurrentAct == ActPrnCal);
+   bool PrintView = (Gbl.Action.Act == ActPrnCal);
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -280,7 +280,7 @@ void Cal_DrawCalendar (void)
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
-	    (Gbl.CurrentAct == ActPrnCal) ? "true" :
+	    (Gbl.Action.Act == ActPrnCal) ? "true" :
 		                            "false",
 	    Cfg_HTTPS_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);

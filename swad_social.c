@@ -57,10 +57,10 @@
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
-#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	10	// Recent publishings to show (first time)
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	10	// IMPORTANT: If you change this number,
-							// set also this constant
-							// to the new value in JavaScript
+#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	20	// Recent publishings to show (first time)
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	20	// IMPORTANT: If you change this number,
+							// set also this constant to the new value
+							// in JavaScript function readOldTimelineData
 
 #define Soc_MAX_LENGTH_ID	(32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
 
@@ -1217,7 +1217,7 @@ static void Soc_WriteTopPublisher (const struct SocialPublishing *SocPub)
 
 	 /***** Get user's data *****/
 	 UsrDat.UsrCod = SocPub->PublisherCod;
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// TODO: Optimize with a specialized function, we only need FullName
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Really we only need EncryptedUsrCod and FullName
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
 

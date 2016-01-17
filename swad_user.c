@@ -196,7 +196,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Lay_ShowAlert (Lay_WARNING,Txt_You_must_send_your_photo_because_);
-      else if (Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW)
+      else if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
                   Pho_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
@@ -249,8 +249,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EmailConfirmed = false;
 
    UsrDat->Photo[0] = '\0';
-   UsrDat->PhotoVisibility =
-   UsrDat->ProfileVisibility = Pri_VISIBILITY_DEFAULT;
+   UsrDat->PhotoVisibility   = Pri_PHOTO_VISIBILITY_DEFAULT;
+   UsrDat->ProfileVisibility = Pri_PROFILE_VISIBILITY_DEFAULT;
 
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';
@@ -486,8 +486,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Get rest of data */
    strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
    UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11],Pri_PHOTO_VISIBILITY_DEFAULT);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12],Pri_PROFILE_VISIBILITY_DEFAULT);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
    UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
    UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
@@ -1863,9 +1863,9 @@ void Usr_ChkUsrAndGetUsrData (void)
 
    if (Gbl.Session.HasBeenDisconnected)
      {
-      if (Gbl.CurrentAct != ActRefCon)
+      if (Gbl.Action.Act != ActRefCon)
 	{
-	 Gbl.CurrentAct = ActLogOut;
+	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
 	 Lay_ShowAlert (Lay_WARNING,Txt_The_session_has_expired_due_to_inactivity);
 	 PutFormLogin = true;
@@ -1874,7 +1874,7 @@ void Usr_ChkUsrAndGetUsrData (void)
    else	// !Gbl.Session.HasBeenDisconnected
      {
       /***** Check user and get user's data *****/
-      if (Gbl.CurrentAct == ActCreUsrAcc)
+      if (Gbl.Action.Act == ActCreUsrAcc)
 	{
 	 /***** Create new account and login *****/
 	 if (Acc_CreateNewAccountAndLogIn ())			// User logged in
@@ -1892,7 +1892,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    Mai_SendMailMsgToConfirmEmail ();
 	   }
 	}
-      else	// Gbl.CurrentAct != ActCreUsrAcc
+      else	// Gbl.Action.Act != ActCreUsrAcc
 	{
 	 /***** Check user and get user's data *****/
 	 if (Gbl.Session.IsOpen)
@@ -1902,7 +1902,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetUsrRoleAndPrefs ();
 
-	       if (Gbl.CurrentAct == ActRefCon)	// If refreshing connected users ==> don't refresh session
+	       if (Gbl.Action.Act == ActRefCon)	// If refreshing connected users ==> don't refresh session
 		  Ses_UpdateSessionLastRefreshInDB ();
 	       else
 		 {
@@ -1914,7 +1914,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.CurrentAct == ActAutUsrInt)
+	 else if (Gbl.Action.Act == ActAutUsrInt)
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())		// User logged in
 	      {
@@ -1929,7 +1929,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.CurrentAct == ActAutUsrExt)
+	 else if (Gbl.Action.Act == ActAutUsrExt)
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromExternalLogin ())	// User logged in
 	      {
@@ -1957,15 +1957,15 @@ void Usr_ChkUsrAndGetUsrData (void)
      }
 
    /***** Adjust tab and action *****/
-   if (Gbl.CurrentAct != ActRefCon)
+   if (Gbl.Action.Act != ActRefCon)
      {
       if (Gbl.Usrs.Me.Logged)
 	{
 	 /***** Set default tab when unknown *****/
-	 if (Gbl.CurrentTab == TabUnk)
+	 if (Gbl.Action.Tab == TabUnk)
 	   {
-	    // Don't adjust Gbl.CurrentAct here
-	    Gbl.CurrentTab = ((Gbl.Usrs.Me.UsrLast.LastTab == TabCrs) &&
+	    // Don't adjust Gbl.Action.Act here
+	    Gbl.Action.Tab = ((Gbl.Usrs.Me.UsrLast.LastTab == TabCrs) &&
 			      (Gbl.CurrentCrs.Crs.CrsCod <= 0)) ? TabSys :
 								  Gbl.Usrs.Me.UsrLast.LastTab;
 	    Tab_DisableIncompatibleTabs ();
@@ -1973,11 +1973,11 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 Usr_UpdateMyLastData ();
 	 Crs_UpdateCrsLast ();
 	}
-      else if (Gbl.CurrentAct == ActUnk)	// No user logged and unknown action
+      else if (Gbl.Action.Act == ActUnk)	// No user logged and unknown action
 	 Act_AdjustActionWhenNoUsrLogged ();
 
       /***** When I change to another tab, go to the first option allowed *****/
-      if (Gbl.CurrentAct == ActMnu)
+      if (Gbl.Action.Act == ActMnu)
 	{
 	 if (Gbl.Usrs.Me.Logged)
 	   {
@@ -1987,7 +1987,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 else
 	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 	 if (Action != ActUnk)
-	    Gbl.CurrentAct = Action;
+	    Gbl.Action.Act = Action;
 	}
      }
   }
@@ -2386,8 +2386,8 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Get my last data *****/
    Usr_GetMyLastData ();
-   if (Gbl.CurrentAct == ActAutUsrInt ||
-       Gbl.CurrentAct == ActAutUsrExt)	// If I just logged in...
+   if (Gbl.Action.Act == ActAutUsrInt ||
+       Gbl.Action.Act == ActAutUsrExt)	// If I just logged in...
      {
       /***** WhatToSearch is stored in session,
              but in login it is got from user's last data *****/
@@ -2548,9 +2548,9 @@ void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
           Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&	// ...and I am a student in the current course...
           !Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn &&			// ...but the current degree type...
           !Gbl.CurrentCrs.Crs.AllowDirectLogIn &&			// ...and the current course do not allow to log in directly
-          (Gbl.CurrentAct == ActSeeCrsInf ||
-           Gbl.CurrentAct == ActAutUsrInt ||
-           Gbl.CurrentAct == ActHom))
+          (Gbl.Action.Act == ActSeeCrsInf ||
+           Gbl.Action.Act == ActAutUsrInt ||
+           Gbl.Action.Act == ActHom))
          {
           sprintf (Gbl.Message,Txt_This_course_requires_log_in_from_X_to_have_full_functionality_,
                    Cfg_EXTERNAL_LOGIN_URL,Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME,
@@ -2636,7 +2636,7 @@ void Usr_UpdateMyLastData (void)
       sprintf (Query,"UPDATE usr_last SET LastCrs='%ld',LastTab='%u',LastTime=NOW()"
                      " WHERE UsrCod='%ld'",
                Gbl.CurrentCrs.Crs.CrsCod,
-               (unsigned) Gbl.CurrentTab,
+               (unsigned) Gbl.Action.Tab,
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update last user's data");
      }
@@ -2658,7 +2658,7 @@ static void Usr_InsertMyLastData (void)
                   " VALUES ('%ld','%ld','%u',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.CurrentCrs.Crs.CrsCod,
-            (unsigned) Gbl.CurrentTab);
+            (unsigned) Gbl.Action.Tab);
    DB_QueryINSERT (Query,"can not insert last user's data");
   }
 /*****************************************************************************/
@@ -3653,7 +3653,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,
      }
 
    /***** Create query for users in the course *****/
-   if (Gbl.CurrentAct == ActReqMsgUsr)        // Selecting users to write a message
+   if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
       sprintf (Query,"SELECT crs_usr.UsrCod,crs_usr.Accepted,usr_data.Sex"
                      " FROM crs_usr,usr_data"
                      " WHERE crs_usr.CrsCod='%ld'"
@@ -4539,12 +4539,12 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put form to confirm that I want to see the big list *****/
-   Act_FormStart (Gbl.CurrentAct);
+   Act_FormStart (Gbl.Action.Act);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (Gbl.CurrentAct);
+   Usr_PutExtraParamsUsrList (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
 
    /***** Send button *****/
@@ -4581,7 +4581,7 @@ void Usr_GetListsSelectedUsrs (void)
    /***** Get selected users *****/
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
-      Ses_GetHiddenParFromDB (Gbl.CurrentAct,"UsrCodAll",
+      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",
                               Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
 			Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
@@ -5008,7 +5008,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 
 void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
   {
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActLstGst:
       case ActLstStd:

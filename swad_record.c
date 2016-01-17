@@ -874,7 +874,7 @@ void Rec_ListRecordsGsts (void)
    extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumUsrs = 0;
    const char *Ptr;
-   Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevGst) ? Rec_RECORD_LIST :
+   Rec_RecordViewType_t TypeOfView = (Gbl.Action.Act == ActSeeRecSevGst) ? Rec_RECORD_LIST :
                                                                            Rec_RECORD_PRINT;
    struct UsrData UsrDat;
 
@@ -882,7 +882,7 @@ void Rec_ListRecordsGsts (void)
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
-   if (Gbl.CurrentAct == ActPrnRecSevGst)
+   if (Gbl.Action.Act == ActPrnRecSevGst)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected users *****/
@@ -896,7 +896,7 @@ void Rec_ListRecordsGsts (void)
       return;
      }
 
-   if (Gbl.CurrentAct == ActSeeRecSevGst)
+   if (Gbl.Action.Act == ActSeeRecSevGst)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -924,7 +924,7 @@ void Rec_ListRecordsGsts (void)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin-bottom:12px;");
-	 if (Gbl.CurrentAct == ActPrnRecSevGst &&
+	 if (Gbl.Action.Act == ActPrnRecSevGst &&
 	     NumUsrs != 0 &&
 	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
 	    fprintf (Gbl.F.Out,"page-break-before:always;");
@@ -1099,7 +1099,7 @@ static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView)
         	               " class=\"CENTER_MIDDLE\""
         	               " style=\"margin-bottom:12px;",
         	     Anchor);
-            if (Gbl.CurrentAct == ActPrnRecSevStd &&
+            if (Gbl.Action.Act == ActPrnRecSevStd &&
                 NumUsr != 0 &&
                 (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
                fprintf (Gbl.F.Out,"page-break-before:always;");
@@ -1210,7 +1210,7 @@ void Rec_ListRecordsTchs (void)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsrs = 0;
    const char *Ptr;
-   Rec_RecordViewType_t TypeOfView = (Gbl.CurrentAct == ActSeeRecSevTch) ? Rec_RECORD_LIST :
+   Rec_RecordViewType_t TypeOfView = (Gbl.Action.Act == ActSeeRecSevTch) ? Rec_RECORD_LIST :
                                                                            Rec_RECORD_PRINT;
    struct UsrData UsrDat;
    bool ShowOfficeHours;
@@ -1226,7 +1226,7 @@ void Rec_ListRecordsTchs (void)
    ShowOfficeHours = Rec_GetParamShowOfficeHours ();
 
    /***** Get parameter with number of user records per page (only for printing) *****/
-   if (Gbl.CurrentAct == ActPrnRecSevTch)
+   if (Gbl.Action.Act == ActPrnRecSevTch)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected teachers *****/
@@ -1240,7 +1240,7 @@ void Rec_ListRecordsTchs (void)
       return;
      }
 
-   if (Gbl.CurrentAct == ActSeeRecSevTch)
+   if (Gbl.Action.Act == ActSeeRecSevTch)
      {
       /***** Show contextual menu *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1281,7 +1281,7 @@ void Rec_ListRecordsTchs (void)
 
             fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
         	               " style=\"margin-bottom:12px;");
-            if (Gbl.CurrentAct == ActPrnRecSevTch &&
+            if (Gbl.Action.Act == ActPrnRecSevTch &&
                 NumUsrs != 0 &&
                 (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
                fprintf (Gbl.F.Out,"page-break-before:always;");
@@ -2076,7 +2076,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.CurrentAct].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -2436,8 +2436,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    Act_FormStart (ActChgMyData);
             break;
 	 case Rec_FORM_NEW_RECORD_OTHER_NEW_USR:
-	    Act_FormStart ( Gbl.CurrentAct == ActReqMdfStd ? ActCreStd :
-		           (Gbl.CurrentAct == ActReqMdfTch ? ActCreTch :
+	    Act_FormStart ( Gbl.Action.Act == ActReqMdfStd ? ActCreStd :
+		           (Gbl.Action.Act == ActReqMdfTch ? ActCreTch :
 		        	                             ActCreOth));
 	    ID_PutParamOtherUsrIDPlain ();				// New user
 	    break;

@@ -154,8 +154,12 @@ struct Globals
      } Session;
 
    bool YearOK;
-   Act_Tab_t CurrentTab;
-   Act_Action_t CurrentAct;
+   struct
+     {
+      Act_Tab_t Tab;
+      Act_Action_t Act;
+      bool UsesAJAX;
+     } Action;
    time_t StartExecutionTimeUTC;
    struct tm *tblock;
    struct DateTime Now;

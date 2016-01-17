@@ -739,7 +739,7 @@ static void Tst_WriteTestHead (unsigned NumTst)
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Gbl.CurrentAct == ActSeeTst ? Txt_Test :
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Action.Act == ActSeeTst ? Txt_Test :
                                                                   Txt_Test_result);
    Lay_WriteHeaderClassPhoto (3,false,false,
                               Gbl.CurrentIns.Ins.InsCod,
@@ -747,7 +747,7 @@ static void Tst_WriteTestHead (unsigned NumTst)
                               Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Header row *****/
-   if (Gbl.CurrentAct == ActAssTst &&
+   if (Gbl.Action.Act == ActAssTst &&
        Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
       fprintf (Gbl.F.Out,"<tr>"
@@ -970,7 +970,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   if (Gbl.CurrentAct == ActSeeTst)
+   if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
    else	// Assessing exam / Viewing old exam
      {
@@ -3893,7 +3893,7 @@ static int Tst_GetParamsTst (void)
      }
 
    /***** Get other parameters, depending on action *****/
-   if (Gbl.CurrentAct == ActSeeTst)
+   if (Gbl.Action.Act == ActSeeTst)
      {
       Tst_GetParamNumQst ();
       if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
@@ -4093,7 +4093,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    bool TagNotFound;
    bool OptionsDisabled;
 
-   if (Gbl.CurrentAct == ActEdiOneTstQst) // If no receiving the question, but editing a new or existing question
+   if (Gbl.Action.Act == ActEdiOneTstQst) // If no receiving the question, but editing a new or existing question
      {
       Tst_InitQst ();
       if (Tst_GetQstCod ())	// If parameter QstCod received ==> question already exists in the database
@@ -6347,7 +6347,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 		  Gbl.RowEvenOdd);
 	 if (ICanViewExam)
 	   {
-	    Act_FormStart (Gbl.CurrentAct == ActSeeMyTstExa ? ActSeeOneTstExaMe :
+	    Act_FormStart (Gbl.Action.Act == ActSeeMyTstExa ? ActSeeOneTstExaMe :
 						              ActSeeOneTstExaOth);
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file64x64.gif\""
@@ -6544,7 +6544,7 @@ void Tst_ShowOneTestExam (void)
    Tst_GetExamDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
    Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
    ICanViewScore = true;
-   switch (Gbl.CurrentAct)
+   switch (Gbl.Action.Act)
      {
       case ActSeeOneTstExaMe:
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)		// The exam is not mine

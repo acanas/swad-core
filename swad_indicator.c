@@ -484,7 +484,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Put form to confirm that I want to see the big list *****/
-   Act_FormStart (Gbl.CurrentAct);
+   Act_FormStart (Gbl.Action.Act);
    Sco_PutParamScope (Gbl.Scope.Current);
    Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
    Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);

@@ -114,24 +114,29 @@
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
-// TODO: Go to forum post (or at least to forum thread) from social timeline?
+// TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
-
 // TODO: Increment one second after each refresh in social timeline?
-// TODO: Add a new type of visibility of profile "unknown". Keep the same for photos?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.114.4 (2016-01-17)"
-#define CSS_FILE		"swad15.113.8.css"
-#define JS_FILE			"swad15.113.8.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.115 (2016-01-17)"
+#define CSS_FILE		"swad15.115.css"
+#define JS_FILE			"swad15.115.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.114.4: Jan 17, 2016	Change related to button to remove a social post. (? lines)
+        Version 15.115:   Jan 17, 2016	Code refactoring in actions. (192823 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1509','es','N','Refrescar timeline global (nuevos mensajes)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1510','es','N','Cargar mensajes anteriores en timeline global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1511','es','N','Cargar mensajes anteriores en timeline usuario');
+
+        Version 15.114.5: Jan 17, 2016	Distinct default visibility for photo and profile. (192827 lines)
+        Version 15.114.4: Jan 17, 2016	Change related to button to remove a social post. (192821 lines)
         Version 15.114.3: Jan 17, 2016	Fixed bug when getting timeline. (192820 lines)
         Version 15.114.2: Jan 17, 2016	Fixed bug when getting timeline. (192811 lines)
         Version 15.114.1: Jan 17, 2016	Optimized queries to get timeline. (192790 lines)

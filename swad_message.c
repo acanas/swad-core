@@ -1722,7 +1722,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       /***** Show form to delete all messages *****/
       Msg_ShowFormDelSentOrRecMsgs (TypeOfMessages,NumMsgs);
 
-      if (Gbl.CurrentAct == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
+      if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
 						// from a notification of received message, so show the page where the message is inside
         {
          /***** Get the page where the expanded message is inside *****/
@@ -3144,7 +3144,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    if (UsrDat->UsrCod > 0)
      {
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
-      if (Act_Actions[Gbl.CurrentAct].SuperAction == ActSeeRcvMsg)
+      if (Act_Actions[Gbl.Action.Act].SuperAction == ActSeeRcvMsg)
 	{
          if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
             // Sender is banned
