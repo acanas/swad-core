@@ -2960,7 +2960,7 @@ static void Svy_WriteQstStem (const char *Stem)
                      HeadingRigorousHTML,LengthHeading,false);
 
    /* Write the stem */
-   fprintf (Gbl.F.Out,"<tt>%s</tt>",HeadingRigorousHTML);
+   fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
 
    /* Free memory allocated for the stem */
    free ((void *) HeadingRigorousHTML);
@@ -3027,9 +3027,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
                NumAns + 1);
 
       /* Write the text of the answer */
-      fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">"
-	                 "<tt>%s</tt>"
-	                 "</td>",
+      fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">%s</td>",
                Answer);
 
       /* Show stats of this answer */

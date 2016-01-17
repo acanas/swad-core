@@ -500,7 +500,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    /***** Print XML tree *****/
    Lay_WriteTitle (Txt_XML_file_content);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	              "<textarea cols=\"60\" rows=\"4\">");
+	              "<textarea cols=\"60\" rows=\"5\""
+	              " spellcheck=\"false\" readonly>");
    XML_PrintTree (RootElem);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</div>");
@@ -1104,17 +1105,17 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         fprintf (Gbl.F.Out,"<span class=\"%s\"><tt>(%ld)</tt></span>",
+         fprintf (Gbl.F.Out,"<span class=\"%s\">(%ld)</span>",
                   ClassStem,Gbl.Test.Answer.Integer);
          break;
       case Tst_ANS_FLOAT:
-         fprintf (Gbl.F.Out,"<span class=\"%s\"><tt>([%lg; %lg])</tt></span>",
+         fprintf (Gbl.F.Out,"<span class=\"%s\">([%lg; %lg])</span>",
                   ClassStem,Gbl.Test.Answer.FloatingPoint[0],Gbl.Test.Answer.FloatingPoint[1]);
          break;
       case Tst_ANS_TRUE_FALSE:
-         fprintf (Gbl.F.Out,"<span class=\"%s\"><tt>(",ClassStem);
+         fprintf (Gbl.F.Out,"<span class=\"%s\">(",ClassStem);
          Tst_WriteAnsTF (Gbl.Test.Answer.TF);
-         fprintf (Gbl.F.Out,")</tt></span>");
+         fprintf (Gbl.F.Out,")</span>");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -1172,14 +1173,14 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Write the text and the feedback of the answer */
             fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-        	               "<p class=\"%s\">"
-        	               "<tt>%s</tt>"
-        	               "</p>",
+        	               "<div class=\"%s\">"
+        	               "%s"
+        	               "</div>",
                      ClassStem,AnswerText);
             if (AnswerFeedbackLength)
-	       fprintf (Gbl.F.Out,"<p class=\"TEST_EDI_LIGHT\">"
-		                  "<tt>%s</tt>"
-		                  "</p>",
+	       fprintf (Gbl.F.Out,"<div class=\"TEST_EDI_LIGHT\">"
+		                  "%s"
+		                  "</div>",
 			AnswerFeedback);
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");

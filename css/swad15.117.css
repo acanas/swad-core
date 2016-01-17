@@ -1840,25 +1840,23 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-
-.MSG_TXT		{font-family:"Courier New","DejaVu LGC Sans Mono","Bitstream Vera Sans Mono",monospace; color:#404040; font-size:12pt;}
-
-.MSG_TIT		{color:#4D88A1; font-size:12pt;}
-.MSG_TIT_NEW		{color:#4D88A1; font-size:12pt; font-weight:bold;}
-.MSG_TIT_REM		{color:#AFC4CC; font-size:12pt;}
+.MSG_TXT	{color:#404040; font-size:13pt;}
+.MSG_TIT	{color:#4D88A1; font-size:13pt;}
+.MSG_TIT_NEW	{color:#4D88A1; font-size:13pt; font-weight:bold;}
+.MSG_TIT_REM	{color:#AFC4CC; font-size:13pt;}
 .MSG_TIT_BG
 	{
 	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#4D88A1;
-	font-size:12pt;
+	font-size:13pt;
 	}
 .MSG_TIT_BG_NEW
 	{
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#4D88A1;
-	font-size:12pt;
+	font-size:13pt;
 	font-weight:bold;
 	}
 .MSG_TIT_BG_REM
@@ -1866,7 +1864,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
 	color:#AFC4CC;
-	font-size:12pt;
+	font-size:13pt;
 	}
 .MSG_AUT		{color:#4D88A1; font-size:11pt;}
 .MSG_AUT_LIGHT		{color:#AFC4CC; font-size:11pt;}

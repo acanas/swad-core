@@ -2831,9 +2831,8 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
       Msg_GetMsgContent (MsgCod,Content);
       if (Content[0])
         {
-         fprintf (Gbl.F.Out,"<tt>");
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-         fprintf (Gbl.F.Out,"</tt><br />&nbsp;");
+         fprintf (Gbl.F.Out,"<br />&nbsp;");
         }
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

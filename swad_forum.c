@@ -1213,8 +1213,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Write post content *****/
    fprintf (Gbl.F.Out,"</table>"
 	              "</td>"
-	              "<td class=\"MSG_TXT LEFT_TOP\">"
-	              "<tt>");
+	              "<td class=\"MSG_TXT LEFT_TOP\">");
    if (Enabled)
      {
       strncpy (Content,OriginalContent,Cns_MAX_BYTES_LONG_TEXT);
@@ -1223,8 +1222,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-   fprintf (Gbl.F.Out,"</tt>"
-	              "<br />&nbsp;"
+   fprintf (Gbl.F.Out,"<br />&nbsp;"
 	              "</td>"
 	              "</tr>");
 

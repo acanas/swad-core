@@ -2719,7 +2719,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
       case Tst_ANS_INT:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\"><tt>(%ld)</tt></span>",
+         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">(%ld)</span>",
                   Tst_GetIntAnsFromStr (row[1]));
          break;
       case Tst_ANS_FLOAT:
@@ -2733,17 +2733,15 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             row = mysql_fetch_row (mysql_res);
             FloatNum[i] = Tst_GetFloatAnsFromStr (row[1]);
            }
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\"><tt>([%lg; %lg])</tt></span>",
+         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">([%lg; %lg])</span>",
                   FloatNum[0],FloatNum[1]);
          break;
       case Tst_ANS_TRUE_FALSE:
          Tst_CheckIfNumberOfAnswersIsOne ();
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">"
-                            "<tt>(");
+         fprintf (Gbl.F.Out,"<span class=\"TEST_EDI\">(");
          Tst_WriteAnsTF (row[1][0]);
-         fprintf (Gbl.F.Out,")</tt>"
-                            "</span>");
+         fprintf (Gbl.F.Out,")</span>");
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
