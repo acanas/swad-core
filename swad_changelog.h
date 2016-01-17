@@ -122,13 +122,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.116 (2016-01-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.116.1 (2016-01-17)"
 #define CSS_FILE		"swad15.115.css"
 #define JS_FILE			"swad15.115.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.116.1: Jan 17, 2016	Help when writing social posts or comments. (192877 lines)
         Version 15.116:   Jan 17, 2016	Optimization in the query to get timeline. (192878 lines)
         Version 15.115.2: Jan 17, 2016	Code refactoring in timeline. (192860 lines)
         Version 15.115.1: Jan 17, 2016	Code refactoring in timeline. (192857 lines)

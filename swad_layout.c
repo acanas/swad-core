@@ -1738,13 +1738,13 @@ void Lay_HelpPlainEditor (void)
 
    Lay_HelpTextEditor (Txt_TEXT_plain,
                        "\\(LaTeX\\)",
-                       "$$LaTeX$$, \\[LaTeX\\]");
+                       "$$LaTeX$$,&nbsp;\\[LaTeX\\]");
   }
 
 void Lay_HelpRichEditor (void)
   {
    Lay_HelpTextEditor ("<a href=\"http://johnmacfarlane.net/pandoc/README.html#pandocs-markdown\""
-	               " target=\"_blank\">Markdown + Pandoc</a>",
+	               " target=\"_blank\">Markdown+Pandoc</a>",
                        "$LaTeX$",
                        "$$LaTeX$$");
   }
@@ -1756,13 +1756,11 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    extern const char *Txt_Equation_centered;
 
    fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">"
-	              "<code>"
-	              "%s: %s"
-                      "&nbsp;&nbsp;"
-                      "%s: %s"
-                      "&nbsp;&nbsp;"
-                      "%s: %s"
-                      "</code>"
+	              "%s:&nbsp;%s"
+                      " "
+                      "%s:&nbsp;<code>%s</code>"
+                      " "
+                      "%s:&nbsp;<code>%s</code>"
                       "</div>",
             Txt_Text,Text,
             Txt_Inline_math,InlineMath,

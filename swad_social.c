@@ -1043,9 +1043,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
-      // if (!ShowNoteAlone &&	// Listing, not note alone
-      // 	  SocPub)		// SocPub may be NULL
-      if (SocPub)		// SocPub may be NULL
+      if (SocPub)	// SocPub may be NULL
 	 Soc_WriteTopPublisher (SocPub);
 
       /***** Initialize structure with user's data *****/
@@ -1832,20 +1830,22 @@ static void Soc_PutTextarea (const char *Placeholder)
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
                       " placeholder=\"%s&hellip;\""
 	              " class=\"SOCIAL_TEXTAREA\""
-	              " onfocus=\"expandTextarea(this,'%s','10');\""
+	              " onfocus=\"expandTextarea(this,'%s','5');\""
 	              " onblur=\"contractTextarea(this,'%s','1');\">"
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
             Placeholder,
             IdButton,IdButton);
 
-   /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<button id=\"%s\" type=\"submit\""
-	              " class=\"BT_SUBMIT_INLINE BT_CREATE\""
-	              " style=\"display:none;\">"
+   /***** Help on editor and submit button *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
+            IdButton);
+   Lay_HelpPlainEditor ();
+   fprintf (Gbl.F.Out,"<button type=\"submit\""
+	              " class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 		      "%s"
-		      "</button>",
-            IdButton,
+		      "</button>"
+		      "</div>",
 	    Txt_Post);
   }
 
