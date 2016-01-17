@@ -474,14 +474,14 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    /***** Create temporary table with notes got in this execution *****/
    sprintf (Query,"CREATE TEMPORARY TABLE not_codes "
 	          "(NotCod BIGINT NOT NULL,"
-	          "UNIQUE INDEX(NotCod)) ENGINE=MEMORY");
+	          "INDEX(NotCod)) ENGINE=MEMORY");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Create temporary table with notes already present in timeline for this session *****/
    sprintf (Query,"CREATE TEMPORARY TABLE current_timeline "
 		  "(NotCod BIGINT NOT NULL,"
-		  "UNIQUE INDEX(NotCod)) ENGINE=MEMORY"
+		  "INDEX(NotCod)) ENGINE=MEMORY"
 		  " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
 	    Gbl.Session.Id);
    if (mysql_query (&Gbl.mysql,Query))
@@ -494,8 +494,18 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 sprintf (SubQueryPublishers,"PublisherCod='%ld'",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 
-         strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
-		                       " (SELECT NotCod FROM current_timeline)");
+	 switch (WhatToGetFromTimeline)
+           {
+            case Soc_GET_ONLY_NEW_PUBS:
+	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
+					     " (SELECT NotCod FROM not_codes)");
+	       break;
+            case Soc_GET_RECENT_TIMELINE:
+            case Soc_GET_ONLY_OLD_PUBS:
+	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
+					     " (SELECT NotCod FROM current_timeline)");
+	       break;
+           }
 	 break;
       case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
 	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
@@ -511,8 +521,18 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	    DB_ExitOnMySQLError ("can not create temporary table");
 	 sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod");
 
-         strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
-		                       " (SELECT NotCod FROM current_timeline)");
+	 switch (WhatToGetFromTimeline)
+           {
+            case Soc_GET_ONLY_NEW_PUBS:
+	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
+					     " (SELECT NotCod FROM not_codes)");
+	       break;
+            case Soc_GET_RECENT_TIMELINE:
+            case Soc_GET_ONLY_OLD_PUBS:
+	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
+					     " (SELECT NotCod FROM current_timeline)");
+	       break;
+           }
 	 break;
      }
 
@@ -611,6 +631,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	 sprintf (Query,"INSERT INTO pub_codes SET PubCod='%ld'",PubCod);
 	 DB_QueryINSERT (Query,"can not store publishing code");
+
 
 	 /* Get social note code (row[1]) */
 	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -3340,10 +3361,10 @@ static void Soc_ClearTimelineThisSession (void)
 
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[256+Ses_LENGTH_SESSION_ID];
 
    sprintf (Query,"INSERT IGNORE INTO social_timelines (SessionId,NotCod)"
-	          " SELECT '%s',NotCod FROM not_codes",
+	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
             Gbl.Session.Id);
    DB_QueryREPLACE (Query,"can not insert social notes in timeline");
   }
