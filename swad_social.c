@@ -484,6 +484,60 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
+
+   /***** Create subquery with range of publishings to get from social_pubs *****/
+   switch (WhatToGetFromTimeline)
+     {
+      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
+	 /* This query is made via AJAX automatically from time to time */
+	 MaxPubsToGet = Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW;
+
+	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
+	 if (LastPubCod > 0)
+	    switch (TimelineUsrOrGbl)
+              {
+               case Soc_TIMELINE_USR:	// Show the timeline of a user
+	          sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",
+	                   LastPubCod);
+	          break;
+               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	          sprintf (SubQueryRangePubs,"social_pubs.PubCod>'%ld' AND ",
+	                   LastPubCod);
+                  break;
+	      }
+	 else
+	    SubQueryRangePubs[0] = '\0';
+	 break;
+      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
+	 /* This is the first query to get initial timeline shown
+	    ==> no notes yet in current timeline table */
+	 MaxPubsToGet = Soc_MAX_REC_PUBS_TO_GET_AND_SHOW;
+
+	 SubQueryRangePubs[0] = '\0';
+	 break;
+      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
+	 /* This query is made via AJAX
+	    when I click in link to get old publishings */
+	 MaxPubsToGet = Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW;
+
+	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
+	 if (FirstPubCod > 0)
+	    switch (TimelineUsrOrGbl)
+              {
+               case Soc_TIMELINE_USR:	// Show the timeline of a user
+	          sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",
+	                   FirstPubCod);
+	          break;
+               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	          sprintf (SubQueryRangePubs,"social_pubs.PubCod<'%ld' AND ",
+	                   FirstPubCod);
+                  break;
+	      }
+	 else
+	    SubQueryRangePubs[0] = '\0';
+	 break;
+     }
+
    /***** Create temporary table and subquery with potential publishers *****/
    switch (TimelineUsrOrGbl)
      {
@@ -539,69 +593,18 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 break;
      }
 
-   /***** Create temporary table with publishing codes *****/
-   // Get the maximum PubCod -more recent publishing (original, shared or commment)-
-   // of every set of publishings corresponding to the same note
-   switch (WhatToGetFromTimeline)
-     {
-      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-	 MaxPubsToGet = Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW;
-
-	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
-	 if (LastPubCod > 0)
-	    switch (TimelineUsrOrGbl)
-              {
-               case Soc_TIMELINE_USR:	// Show the timeline of a user
-	          sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",
-	                   LastPubCod);
-	          break;
-               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	          sprintf (SubQueryRangePubs,"social_pubs.PubCod>'%ld' AND ",
-	                   LastPubCod);
-                  break;
-	      }
-	 else
-	    SubQueryRangePubs[0] = '\0';
-	 break;
-      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
-	 MaxPubsToGet = Soc_MAX_REC_PUBS_TO_GET_AND_SHOW;
-
-	 SubQueryRangePubs[0] = '\0';
-	 break;
-      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
-	 /* This query is made via AJAX
-	    when I click in link to get old publishings */
-	 MaxPubsToGet = Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW;
-
-	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
-	 if (FirstPubCod > 0)
-	    switch (TimelineUsrOrGbl)
-              {
-               case Soc_TIMELINE_USR:	// Show the timeline of a user
-	          sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",
-	                   FirstPubCod);
-	          break;
-               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	          sprintf (SubQueryRangePubs,"social_pubs.PubCod<'%ld' AND ",
-	                   FirstPubCod);
-                  break;
-	      }
-	 else
-	    SubQueryRangePubs[0] = '\0';
-	 break;
-     }
-
+   /***** Get the publishings in timeline *****/
    /*
-      As an alternative, we tried
+      With the current approach, we select one by one
+      the publishings and notes in a loop. In each iteration,
+      we get the more recent note that is not already retrieved.
+
+      As an alternative, we tried to get the maximum PubCod,
+      i.e more recent publishing (original, shared or commment),
+      of every set of publishings corresponding to the same note:
       "SELECT MAX(PubCod) AS NewestPubCod FROM social_pubs ...
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
-      but it's slow (several seconds) with a big table.
-
-      With the current approach, we select one by one the notes in a loop.
-      In each iteration, we get the more recent note that is not already retrieved.
+      but this query is slow (several seconds) with a big table.
     */
    for (NumPub = 0;
 	NumPub < MaxPubsToGet;
@@ -634,7 +637,6 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	 sprintf (Query,"INSERT INTO pub_codes SET PubCod='%ld'",PubCod);
 	 DB_QueryINSERT (Query,"can not store publishing code");
-
 
 	 /* Get social note code (row[1]) */
 	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
