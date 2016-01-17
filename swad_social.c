@@ -51,9 +51,9 @@
 
 #define Soc_WIDTH_TIMELINE	    "560px"
 #define Soc_MAX_NUM_SHARERS_SHOWN	 10		// Maximum number of users shown who have share a social note
-#define Soc_MAX_BYTES_SUMMARY	 	100
 
-#define Soc_MAX_CHARS_IN_POST	1000
+#define Soc_MAX_BYTES_SUMMARY	       1000
+#define Soc_MAX_CHARS_IN_POST	       1000
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
@@ -446,16 +446,25 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
                                          char *Query)
   {
    char SubQueryPublishers[128];
-   char SubQueryRangePubs[128];
+   char SubQueryRangeBottom[128];
+   char SubQueryRangeTop[128];
    char SubQueryAlreadyExists[256];
-   long LastPubCod;
-   long FirstPubCod;
+   struct
+     {
+      long Top;
+      long Bottom;
+     } RangePubsToGet;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned MaxPubsToGet = 0;	// Initialized to avoid warning
    unsigned NumPub;
    long PubCod;
    long NotCod;
+   const unsigned MaxPubsToGet[3] =
+     {
+      Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW,	// Soc_GET_ONLY_NEW_PUBS
+      Soc_MAX_REC_PUBS_TO_GET_AND_SHOW,	// Soc_GET_RECENT_TIMELINE
+      Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW,	// Soc_GET_ONLY_OLD_PUBS
+     };
 
    /***** Clear social timeline for this session in database *****/
    if (WhatToGetFromTimeline == Soc_GET_RECENT_TIMELINE)
@@ -483,60 +492,6 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	    Gbl.Session.Id);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
-
-
-   /***** Create subquery with range of publishings to get from social_pubs *****/
-   switch (WhatToGetFromTimeline)
-     {
-      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-	 MaxPubsToGet = Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW;
-
-	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
-	 if (LastPubCod > 0)
-	    switch (TimelineUsrOrGbl)
-              {
-               case Soc_TIMELINE_USR:	// Show the timeline of a user
-	          sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",
-	                   LastPubCod);
-	          break;
-               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	          sprintf (SubQueryRangePubs,"social_pubs.PubCod>'%ld' AND ",
-	                   LastPubCod);
-                  break;
-	      }
-	 else
-	    SubQueryRangePubs[0] = '\0';
-	 break;
-      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
-	 MaxPubsToGet = Soc_MAX_REC_PUBS_TO_GET_AND_SHOW;
-
-	 SubQueryRangePubs[0] = '\0';
-	 break;
-      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
-	 /* This query is made via AJAX
-	    when I click in link to get old publishings */
-	 MaxPubsToGet = Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW;
-
-	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
-	 if (FirstPubCod > 0)
-	    switch (TimelineUsrOrGbl)
-              {
-               case Soc_TIMELINE_USR:	// Show the timeline of a user
-	          sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",
-	                   FirstPubCod);
-	          break;
-               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	          sprintf (SubQueryRangePubs,"social_pubs.PubCod<'%ld' AND ",
-	                   FirstPubCod);
-                  break;
-	      }
-	 else
-	    SubQueryRangePubs[0] = '\0';
-	 break;
-     }
 
    /***** Create temporary table and subquery with potential publishers *****/
    switch (TimelineUsrOrGbl)
@@ -594,10 +549,52 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
      }
 
    /***** Get the publishings in timeline *****/
+   /* Initialize range of pubs:
+
+            social_pubs
+               _____
+              |_____|11
+              |_____|10
+             _|_____| 9 <-- RangePubsToGet.Top
+     Get    / |_____| 8
+    pubs   |  |_____| 7
+    from  <   |_____| 6
+    this   |  |_____| 5
+   range    \_|_____| 4
+              |_____| 3 <-- RangePubsToGet.Bottom
+              |_____| 2
+              |_____| 1
+                      0
+   */
+   switch (WhatToGetFromTimeline)
+     {
+      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
+	 /* This query is made via AJAX automatically from time to time */
+	 RangePubsToGet.Top    = 0;	// +Infinite
+	 RangePubsToGet.Bottom = Soc_GetPubCodFromSession ("LastPubCod");
+	 break;
+      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
+	 /* This is the first query to get initial timeline shown
+	    ==> no notes yet in current timeline table */
+	 RangePubsToGet.Top    = 0;	// +Infinite
+	 RangePubsToGet.Bottom = 0;	// -Infinite
+	 break;
+      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
+	 /* This query is made via AJAX
+	    when I click in link to get old publishings */
+	 RangePubsToGet.Top    = Soc_GetPubCodFromSession ("FirstPubCod");
+	 RangePubsToGet.Bottom = 0;	// -Infinite
+	 break;
+     }
+
    /*
       With the current approach, we select one by one
       the publishings and notes in a loop. In each iteration,
-      we get the more recent note that is not already retrieved.
+      we get the more recent publishing (original, shared or commment)
+      of every set of publishings corresponding to the same note:
+      checking that the note is not already retrieved.
+      After getting a publishing, its note code is stored
+      in order to not get it again.
 
       As an alternative, we tried to get the maximum PubCod,
       i.e more recent publishing (original, shared or commment),
@@ -607,24 +604,41 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
       but this query is slow (several seconds) with a big table.
     */
    for (NumPub = 0;
-	NumPub < MaxPubsToGet;
+	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
 	NumPub++)
      {
+      /* Create subqueries with range of publishings to get from social_pubs */
+      if (RangePubsToGet.Bottom > 0)
+	 sprintf (SubQueryRangeBottom,
+		  TimelineUsrOrGbl == Soc_TIMELINE_USR ? "PubCod>'%ld' AND " :
+							 "social_pubs.PubCod>'%ld' AND ",
+		  RangePubsToGet.Bottom);
+      else
+	 SubQueryRangeBottom[0] = '\0';
+      if (RangePubsToGet.Top > 0)
+	 sprintf (SubQueryRangeTop,
+		  TimelineUsrOrGbl == Soc_TIMELINE_USR ? "PubCod<'%ld' AND " :
+							 "social_pubs.PubCod<'%ld' AND ",
+		  RangePubsToGet.Top);
+      else
+	 SubQueryRangeTop[0] = '\0';
+
+      /* Select the most recent publishing from social_pubs */
       switch (TimelineUsrOrGbl)
 	{
 	 case Soc_TIMELINE_USR:	// Show the timeline of a user
 	    sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs"
-			   " WHERE %s%s%s"
+			   " WHERE %s%s%s%s"
 			   " ORDER BY PubCod DESC LIMIT 1",
-		     SubQueryRangePubs,
+		     SubQueryRangeBottom,SubQueryRangeTop,
 		     SubQueryPublishers,
 		     SubQueryAlreadyExists);
 	    break;
 	 case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
 	    sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs,publishers"
-			   " WHERE %s%s%s"
+			   " WHERE %s%s%s%s"
 			   " ORDER BY social_pubs.PubCod DESC LIMIT 1",
-		     SubQueryRangePubs,
+		     SubQueryRangeBottom,SubQueryRangeTop,
 		     SubQueryPublishers,
 		     SubQueryAlreadyExists);
 	    break;
@@ -637,6 +651,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	 sprintf (Query,"INSERT INTO pub_codes SET PubCod='%ld'",PubCod);
 	 DB_QueryINSERT (Query,"can not store publishing code");
+	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
 	 /* Get social note code (row[1]) */
 	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -645,7 +660,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	 sprintf (Query,"INSERT INTO current_timeline SET NotCod='%ld'",NotCod);
 	 DB_QueryINSERT (Query,"can not store note code");
 	}
-      else
+      else	// Nothing got ==> abort loop
          break;	// Last publishing
      }
 
@@ -739,34 +754,34 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
 /*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
-/*
-            / +-----+ just_now_timeline_list (Posts retrieved automatically
-           |  |-----|                         via AJAX from time to time.
-           |  +-----+                         They are transferred inmediately
+/*             _____
+            / |_____| just_now_timeline_list (Posts retrieved automatically
+           |  |_____|                         via AJAX from time to time.
+           |  |_____|                         They are transferred inmediately
            |     |                            to new_timeline_list.)
-  Hidden  <      v
-           |  +-----+ new_timeline_list (Posts retrieved but hidden.
-           |  |-----|                    When user clicks to view them,
-           |  |-----|                    they are transferred
-            \ +-----+                    to visible timeline_list.)
+  Hidden  <    __v__
+           |  |_____| new_timeline_list (Posts retrieved but hidden.
+           |  |_____|                    When user clicks to view them,
+           |  |_____|                    they are transferred
+            \ |_____|                    to visible timeline_list.)
                  |
-                 v
-            / +-----+ timeline_list (Posts visible on page)
-           |  |-----|
-  Visible  |  |-----|
-    on    <   |-----|
-   page    |  |-----|
-           |  |-----|
-            \ +-----+
+               __v__
+            / |_____| timeline_list (Posts visible on page)
+           |  |_____|
+  Visible  |  |_____|
+    on    <   |_____|
+   page    |  |_____|
+           |  |_____|
+            \ |_____|
                  ^
-                 |
-            / +-----+ old_timeline_list (Posts just retrieved via AJAX
-           |  |-----|                    when user clicks "see more".
-           |  |-----|                    They are transferred inmediately
-  Hidden  <   |-----|                    to timeline_list.)
-           |  |-----|
-           |  |-----|
-            \ +-----+
+               __|__
+            / |_____| old_timeline_list (Posts just retrieved via AJAX
+           |  |_____|                    when user clicks "see more".
+           |  |_____|                    They are transferred inmediately
+  Hidden  <   |_____|                    to timeline_list.)
+           |  |_____|
+           |  |_____|
+            \ |_____|
 */
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight)
