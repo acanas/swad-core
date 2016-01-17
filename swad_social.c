@@ -466,34 +466,50 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
    /***** Create temporary table with publishing codes *****/
    sprintf (Query,"CREATE TEMPORARY TABLE pub_codes "
-	          "(PubCod BIGINT NOT NULL,"
-	          "UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
+	          "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Create temporary table with notes got in this execution *****/
    sprintf (Query,"CREATE TEMPORARY TABLE not_codes "
-	          "(NotCod BIGINT NOT NULL,"
-	          "INDEX(NotCod)) ENGINE=MEMORY");
+	          "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Create temporary table with notes already present in timeline for this session *****/
    sprintf (Query,"CREATE TEMPORARY TABLE current_timeline "
-		  "(NotCod BIGINT NOT NULL,"
-		  "INDEX(NotCod)) ENGINE=MEMORY"
+		  "(NotCod BIGINT NOT NULL,INDEX(NotCod)) ENGINE=MEMORY"
 		  " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
 	    Gbl.Session.Id);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
-   /***** Create temporary table with potential publishers *****/
+   /***** Create temporary table and subquery with potential publishers *****/
    switch (TimelineUsrOrGbl)
      {
       case Soc_TIMELINE_USR:	// Show the timeline of a user
 	 sprintf (SubQueryPublishers,"PublisherCod='%ld'",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
+		        "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+		        " SELECT '%ld' AS UsrCod"
+		        " UNION"
+		        " SELECT FollowedCod AS UsrCod"
+		        " FROM usr_follow WHERE FollowerCod='%ld'",
+	          Gbl.Usrs.Me.UsrDat.UsrCod,
+	          Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (mysql_query (&Gbl.mysql,Query))
+	    DB_ExitOnMySQLError ("can not create temporary table");
+	 sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod");
+	 break;
+     }
 
+   /***** Create subquery to get only notes not present in timeline *****/
+   switch (TimelineUsrOrGbl)
+     {
+      case Soc_TIMELINE_USR:	// Show the timeline of a user
 	 switch (WhatToGetFromTimeline)
            {
             case Soc_GET_ONLY_NEW_PUBS:
@@ -508,19 +524,6 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
            }
 	 break;
       case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
-		        "(UsrCod INT NOT NULL,"
-		        "UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-		        " SELECT '%ld' AS UsrCod"
-		        " UNION"
-		        " SELECT FollowedCod AS UsrCod"
-		        " FROM usr_follow WHERE FollowerCod='%ld'",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not create temporary table");
-	 sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod");
-
 	 switch (WhatToGetFromTimeline)
            {
             case Soc_GET_ONLY_NEW_PUBS:
@@ -734,7 +737,35 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
 /*****************************************************************************/
 /*********************** Show social activity (timeline) *********************/
 /*****************************************************************************/
-
+/*
+            / +-----+ just_now_timeline_list (Posts retrieved automatically
+           |  |-----|                         via AJAX from time to time.
+           |  +-----+                         They are transferred inmediately
+           |     |                            to new_timeline_list.)
+  Hidden  <      v
+           |  +-----+ new_timeline_list (Posts retrieved but hidden.
+           |  |-----|                    When user clicks to view them,
+           |  |-----|                    they are transferred
+            \ +-----+                    to visible timeline_list.)
+                 |
+                 v
+            / +-----+ timeline_list (Posts visible on page)
+           |  |-----|
+  Visible  |  |-----|
+    on    <   |-----|
+   page    |  |-----|
+           |  |-----|
+            \ +-----+
+                 ^
+                 |
+            / +-----+ old_timeline_list (Posts just retrieved via AJAX
+           |  |-----|                    when user clicks "see more".
+           |  |-----|                    They are transferred inmediately
+  Hidden  <   |-----|                    to timeline_list.)
+           |  |-----|
+           |  |-----|
+            \ +-----+
+*/
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight)
   {
