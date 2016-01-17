@@ -119,19 +119,20 @@
 
 // TODO: Increment one second after each refresh in social timeline?
 // TODO: Add a new type of visibility of profile "unknown". Keep the same for photos?
-// TODO: Check if number of old publishings got is correct or it is better to get one more publishing
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.113.17 (2016-01-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.114.1 (2016-01-17)"
 #define CSS_FILE		"swad15.113.8.css"
 #define JS_FILE			"swad15.113.8.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.114.1: Jan 17, 2016	Optimized queries to get timeline. (192790 lines)
+        Version 15.114:   Jan 17, 2016	Optimized queries to get timeline. (192817 lines)
         Version 15.113.17:Jan 16, 2016	Fixed bug in user's timeline. (192763 lines)
         Version 15.113.16:Jan 16, 2016	Removed unused code and messages. (192743 lines)
         Version 15.113.15:Jan 16, 2016	Changes in feedback on request to remove a social note. (192871 lines)

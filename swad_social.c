@@ -56,14 +56,11 @@
 #define Soc_MAX_CHARS_IN_POST	1000
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Soc_MAX_RECENT_PUBS_TO_SHOW	  10					// Publishings to show
-/* Try to get one more publishing that the number of publishings to show
-   For example, if the number of publishings to show is 10, try to get 11
-   If the number of publishings shown is lesser than the number of publishing got ==> show link to get old publishings */
-#define Soc_MAX_RECENT_PUBS_TO_GET	  (Soc_MAX_RECENT_PUBS_TO_SHOW+1)	// Publishings to get
-
-// Number of old publishings got and shown when I want to see old publishings
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW  10	// If you change this number, set also this constant to the new value in JavaScript
+#define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
+#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	10	// Recent publishings to show (first time)
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	10	// IMPORTANT: If you change this number,
+							// set also this constant
+							// to the new value in JavaScript
 
 #define Soc_MAX_LENGTH_ID	(32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
 
@@ -75,21 +72,13 @@ typedef enum
 
 typedef enum
   {
-   Soc_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
-				// or after editing timeline
    Soc_GET_ONLY_NEW_PUBS,	// New publishings are retrieved via AJAX
 				// automatically from time to time
+   Soc_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
+				// or after editing timeline
    Soc_GET_ONLY_OLD_PUBS,	// Old publishings are retrieved via AJAX
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
-
-/*
-typedef enum
-  {
-   Soc_POST,
-   Soc_COMMENT,
-  } Soc_PostOrComment_t;
-*/
 
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
   {
@@ -310,8 +299,8 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom);
 
 static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
-static void Soc_ClearTimelineForThisSession (void);
-static bool Soc_StoreSocialNoteInTimeline (long NotCod);
+static void Soc_ClearTimelineThisSession (void);
+static void Soc_AddNotesJustRetrievedToTimelineThisSession (void);
 
 /*****************************************************************************/
 /***** Show social activity (timeline) including all the users I follow ******/
@@ -326,7 +315,7 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
   {
    extern const char *Txt_Public_activity;
    extern const char *Txt_You_dont_follow_any_user;
-   char Query[512];
+   char Query[1024];
 
    /***** Show warning if I do not follow anyone *****/
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
@@ -356,7 +345,7 @@ void Soc_ShowTimelineUsr (void)
 static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
   {
    extern const char *Txt_Public_activity_OF_A_USER;
-   char Query[512];
+   char Query[1024];
 
    /***** Build query to show timeline with publishings of a unique user *****/
    Soc_BuildQueryToGetTimeline (Soc_TIMELINE_USR,
@@ -390,7 +379,7 @@ void Soc_RefreshNewTimelineGbl (void)
 
 static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Build query to get timeline *****/
    Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
@@ -430,7 +419,7 @@ void Soc_RefreshOldTimelineUsr (void)
 
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Build query to get timeline *****/
    Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
@@ -450,23 +439,53 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /*****************************************************************************/
 /************************ Build query to get timeline ************************/
 /*****************************************************************************/
-// Query must have space for at least 512 chars
+// Query must have space for at least 1024 chars
 
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
                                          char *Query)
   {
    char SubQueryPublishers[128];
-   char SubQueryRangePubs[64];
+   char SubQueryRangePubs[128];
+   char SubQueryAlreadyExists[256];
    long LastPubCod;
    long FirstPubCod;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned MaxPubsToGet = 0;	// Initialized to avoid warning
+   unsigned NumPub;
+   long PubCod;
+   long NotCod;
 
    /***** Clear social timeline for this session in database *****/
    if (WhatToGetFromTimeline == Soc_GET_RECENT_TIMELINE)
-      Soc_ClearTimelineForThisSession ();
+      Soc_ClearTimelineThisSession ();
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
+
+   /***** Create temporary table with publishing codes *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE pub_codes "
+	          "(PubCod BIGINT NOT NULL,"
+	          "UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Create temporary table with notes got in this execution *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE not_codes "
+	          "(NotCod BIGINT NOT NULL,"
+	          "UNIQUE INDEX(NotCod)) ENGINE=MEMORY");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /***** Create temporary table with notes already present in timeline for this session *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE current_timeline "
+		  "(NotCod BIGINT NOT NULL,"
+		  "UNIQUE INDEX(NotCod)) ENGINE=MEMORY"
+		  " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
+	    Gbl.Session.Id);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Create temporary table with potential publishers *****/
    switch (TimelineUsrOrGbl)
@@ -474,8 +493,11 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
       case Soc_TIMELINE_USR:	// Show the timeline of a user
 	 sprintf (SubQueryPublishers,"PublisherCod='%ld'",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
+
+         strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
+		                       " (SELECT NotCod FROM current_timeline)");
 	 break;
-      case Soc_TIMELINE_GBL:	// Show the timeline of the users follwed by me
+      case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
 	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
 		        "(UsrCod INT NOT NULL,"
 		        "UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
@@ -487,21 +509,11 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	          Gbl.Usrs.Me.UsrDat.UsrCod);
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
+	 sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod");
 
-	 sprintf (SubQueryPublishers,"PublisherCod IN (SELECT UsrCod FROM publishers)");
+         strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
+		                       " (SELECT NotCod FROM current_timeline)");
 	 break;
-     }
-
-   /***** Create temporary table with notes already present in current timeline *****/
-   if (WhatToGetFromTimeline == Soc_GET_ONLY_OLD_PUBS)
-     {
-      sprintf (Query,"CREATE TEMPORARY TABLE current_timeline "
-		     "(NotCod BIGINT NOT NULL,"
-		     "UNIQUE INDEX(NotCod)) ENGINE=MEMORY"
-		     " SELECT NotCod FROM social_timelines WHERE SessionId='%s'",
-	       Gbl.Session.Id);
-      if (mysql_query (&Gbl.mysql,Query))
-	 DB_ExitOnMySQLError ("can not create temporary table");
      }
 
    /***** Create temporary table with publishing codes *****/
@@ -509,72 +521,120 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    // of every set of publishings corresponding to the same note
    switch (WhatToGetFromTimeline)
      {
+      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
+	 /* This query is made via AJAX automatically from time to time */
+	 MaxPubsToGet = Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW;
+
+	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
+	 if (LastPubCod > 0)
+	    switch (TimelineUsrOrGbl)
+              {
+               case Soc_TIMELINE_USR:	// Show the timeline of a user
+	          sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",
+	                   LastPubCod);
+	          break;
+               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	          sprintf (SubQueryRangePubs,"social_pubs.PubCod>'%ld' AND ",
+	                   LastPubCod);
+                  break;
+	      }
+	 else
+	    SubQueryRangePubs[0] = '\0';
+	 break;
       case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
 	 /* This is the first query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
-	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
-	                "(NewestPubForNote BIGINT NOT NULL,"
-	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
-	                " SELECT MAX(PubCod) AS NewestPubForNote"
-	                " FROM social_pubs"
-	                " WHERE %s"
-	                " GROUP BY NotCod"
-	                " ORDER BY NewestPubForNote DESC LIMIT %u",
-	          SubQueryPublishers,
-	          Soc_MAX_RECENT_PUBS_TO_GET);
+	 MaxPubsToGet = Soc_MAX_REC_PUBS_TO_GET_AND_SHOW;
+
+	 SubQueryRangePubs[0] = '\0';
 	 break;
-      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-	 LastPubCod = Soc_GetPubCodFromSession ("LastPubCod");
-	 if (LastPubCod > 0)
-	    sprintf (SubQueryRangePubs,"PubCod>'%ld' AND ",LastPubCod);
-	 else
-	    SubQueryRangePubs[0] = '\0';
-	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
-	                "(NewestPubForNote BIGINT NOT NULL,"
-	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
-	                " SELECT MAX(PubCod) AS NewestPubForNote"
-	                " FROM social_pubs"
-	                " WHERE %s%s"
-	                " GROUP BY NotCod"
-	                " ORDER BY NewestPubForNote DESC",
-	          SubQueryRangePubs,
-	          SubQueryPublishers);
-         break;
       case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publishings */
+	 MaxPubsToGet = Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW;
+
 	 FirstPubCod = Soc_GetPubCodFromSession ("FirstPubCod");
 	 if (FirstPubCod > 0)
-	    sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",FirstPubCod);
+	    switch (TimelineUsrOrGbl)
+              {
+               case Soc_TIMELINE_USR:	// Show the timeline of a user
+	          sprintf (SubQueryRangePubs,"PubCod<'%ld' AND ",
+	                   FirstPubCod);
+	          break;
+               case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	          sprintf (SubQueryRangePubs,"social_pubs.PubCod<'%ld' AND ",
+	                   FirstPubCod);
+                  break;
+	      }
 	 else
 	    SubQueryRangePubs[0] = '\0';
-	 sprintf (Query,"CREATE TEMPORARY TABLE pub_cods "
-	                "(NewestPubForNote BIGINT NOT NULL,"
-	                "UNIQUE INDEX(NewestPubForNote)) ENGINE=MEMORY"
-	                " SELECT MAX(PubCod) AS NewestPubForNote"
-	                " FROM social_pubs"
-	                " WHERE %s%s"
-	                " AND NotCod NOT IN (SELECT NotCod FROM current_timeline)"
-	                " GROUP BY NotCod"
-	                " ORDER BY NewestPubForNote DESC LIMIT %u",
-	          SubQueryRangePubs,
-	          SubQueryPublishers,
-	          Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW);
-         break;
+	 break;
      }
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not create temporary table");
+
+   /*
+      As an alternative, we tried
+      "SELECT MAX(PubCod) AS NewestPubCod FROM social_pubs ...
+      " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
+      but it's slow (several seconds) with a big table.
+
+      With the current approach, we select one by one the notes in a loop.
+      In each iteration, we get the more recent note that is not already retrieved.
+    */
+   for (NumPub = 0;
+	NumPub < MaxPubsToGet;
+	NumPub++)
+     {
+      switch (TimelineUsrOrGbl)
+	{
+	 case Soc_TIMELINE_USR:	// Show the timeline of a user
+	    sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs"
+			   " WHERE %s%s%s"
+			   " ORDER BY PubCod DESC LIMIT 1",
+		     SubQueryRangePubs,
+		     SubQueryPublishers,
+		     SubQueryAlreadyExists);
+	    break;
+	 case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+	    sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs,publishers"
+			   " WHERE %s%s%s"
+			   " ORDER BY social_pubs.PubCod DESC LIMIT 1",
+		     SubQueryRangePubs,
+		     SubQueryPublishers,
+		     SubQueryAlreadyExists);
+	    break;
+	}
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing") == 1)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get code of social publishing (row[0]) */
+	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
+	 sprintf (Query,"INSERT INTO pub_codes SET PubCod='%ld'",PubCod);
+	 DB_QueryINSERT (Query,"can not store publishing code");
+
+	 /* Get social note code (row[1]) */
+	 NotCod = Str_ConvertStrCodToLongCod (row[1]);
+	 sprintf (Query,"INSERT INTO not_codes SET NotCod='%ld'",NotCod);
+	 DB_QueryINSERT (Query,"can not store note code");
+	 sprintf (Query,"INSERT INTO current_timeline SET NotCod='%ld'",NotCod);
+	 DB_QueryINSERT (Query,"can not store note code");
+	}
+      else
+         break;	// Last publishing
+     }
 
    /***** Update last publishing code into session for next refresh *****/
    // Do this inmediately after getting the publishings codes...
    // ...in order to not lose publishings
    Soc_UpdateLastPubCodIntoSession ();
 
+   /***** Add notes just retrieved to current timeline for this session *****/
+   Soc_AddNotesJustRetrievedToTimelineThisSession ();
+
    /***** Build query to show timeline including the users I am following *****/
    sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
 		  " FROM social_pubs WHERE PubCod IN "
-		  "(SELECT NewestPubForNote FROM pub_cods)"
+		  "(SELECT PubCod FROM pub_codes)"
 		  " ORDER BY PubCod DESC");
   }
 
@@ -645,7 +705,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
    char Query[128];
 
    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS"
-	          " pub_cods,publishers,current_timeline");
+	          " pub_codes,not_codes,publishers,current_timeline");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
   }
@@ -660,11 +720,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
-   unsigned long NumPubsToShow;
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
-   bool AlreadyWasInTimeline;
 
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
@@ -692,10 +750,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
 
    /***** List recent publishings in timeline *****/
    fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
-   NumPubsToShow = (NumPubsGot <= Soc_MAX_RECENT_PUBS_TO_SHOW) ? NumPubsGot :
-    	                                                         Soc_MAX_RECENT_PUBS_TO_SHOW;
+
    for (NumPub = 0;
-	NumPub < NumPubsToShow;
+	NumPub < NumPubsGot;
 	NumPub++)
      {
       /* Get data of social publishing */
@@ -706,23 +763,17 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
       SocNot.NotCod = SocPub.NotCod;
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-      /* Add this social note to timeline */
-      AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
-
       /* Write social note */
-      if (!AlreadyWasInTimeline)	// This check is not necessary
-					// because we have got publishing
-					// not yet in timeline
-         Soc_WriteSocialNote (&SocNot,&SocPub,
-                              SocNot.NotCod == NotCodToHighlight,
-                              false);
+      Soc_WriteSocialNote (&SocNot,&SocPub,
+			   SocNot.NotCod == NotCodToHighlight,
+			   false);
      }
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Store first publishing code into session *****/
    Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
-   if (NumPubsGot > Soc_MAX_RECENT_PUBS_TO_SHOW)
+   if (NumPubsGot == Soc_MAX_REC_PUBS_TO_GET_AND_SHOW)
      {
       /***** Link to view old publishings via AJAX *****/
       Soc_PutLinkToViewOldPublishings ();
@@ -768,11 +819,7 @@ static void Soc_InsertNewPubsInTimeline (const char *Query)
       SocNot.NotCod = SocPub.NotCod;
       Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-      /* Add this social note to timeline */
-      Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
-
       /* Write social note */
-      // New publishings are written even if the note was already un timeline
       Soc_WriteSocialNote (&SocNot,&SocPub,false,false);
      }
 
@@ -793,39 +840,29 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
-   bool AlreadyWasInTimeline;
 
    /***** Get old publishings timeline from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
-   if (NumPubsGot)
+   /***** List old publishings in timeline *****/
+   for (NumPub = 0;
+	NumPub < NumPubsGot;
+	NumPub++)
      {
-      /***** List old publishings in timeline *****/
-      for (NumPub = 0;
-	   NumPub < NumPubsGot;
-	   NumPub++)
-	{
-	 /* Get data of social publishing */
-	 row = mysql_fetch_row (mysql_res);
-	 Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+      /* Get data of social publishing */
+      row = mysql_fetch_row (mysql_res);
+      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
 
-	 /* Get data of social note */
-	 SocNot.NotCod = SocPub.NotCod;
-	 Soc_GetDataOfSocialNoteByCod (&SocNot);
+      /* Get data of social note */
+      SocNot.NotCod = SocPub.NotCod;
+      Soc_GetDataOfSocialNoteByCod (&SocNot);
 
-         /* Add this social note to timeline */
-         AlreadyWasInTimeline = Soc_StoreSocialNoteInTimeline (SocNot.NotCod);
-
-	 /* Write social note */
-	 if (!AlreadyWasInTimeline)	// This check is not necessary
-					// because we have got publishing
-					// not yet in timeline
-	    Soc_WriteSocialNote (&SocNot,&SocPub,false,false);
-	}
-
-      /***** Store first publishing code into session *****/
-      Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
+      /* Write social note */
+      Soc_WriteSocialNote (&SocNot,&SocPub,false,false);
      }
+
+   /***** Store first publishing code into session *****/
+   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3287,7 +3324,7 @@ void Soc_ClearOldTimelinesDB (void)
 /************* Clear social timeline for this session in database ************/
 /*****************************************************************************/
 
-static void Soc_ClearTimelineForThisSession (void)
+static void Soc_ClearTimelineThisSession (void)
   {
    char Query[128+Ses_LENGTH_SESSION_ID];
 
@@ -3298,20 +3335,15 @@ static void Soc_ClearTimelineForThisSession (void)
   }
 
 /*****************************************************************************/
-/*** Check if this social note is present in timeline. If not ==> add it *****/
+/****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
-// Returns true if social note already was in timeline before inserting it
 
-static bool Soc_StoreSocialNoteInTimeline (long NotCod)
+static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
    char Query[128+Ses_LENGTH_SESSION_ID];
-   bool AlreadyWasInTimeline;
 
-   sprintf (Query,"INSERT IGNORE INTO social_timelines"
-	          " (SessionId,NotCod) VALUES ('%s','%ld')",
-            Gbl.Session.Id,NotCod);
-   DB_QueryREPLACE (Query,"can not insert social note in timeline");
-   AlreadyWasInTimeline = (mysql_affected_rows (&Gbl.mysql) == 0);
-
-   return AlreadyWasInTimeline;
+   sprintf (Query,"INSERT IGNORE INTO social_timelines (SessionId,NotCod)"
+	          " SELECT '%s',NotCod FROM not_codes",
+            Gbl.Session.Id);
+   DB_QueryREPLACE (Query,"can not insert social notes in timeline");
   }

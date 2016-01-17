@@ -11220,3 +11220,29 @@ CREATE TABLE IF NOT EXISTS social_timeline_new (PubCod BIGINT NOT NULL AUTO_INCR
 CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,NotCod INT NOT NULL,TimeComment DATETIME NOT NULL,UNIQUE INDEX(ComCod),INDEX(UsrCod),INDEX(NotCod,TimeComment),INDEX(TimeComment));
 
 CREATE TABLE IF NOT EXISTS social_comments_content (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;
+
+
+
+
+
+
+
+CREATE TEMPORARY TABLE note_codes (NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod)) ENGINE=MEMORY;
+
+CREATE TEMPORARY TABLE current_timeline (NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod)) ENGINE=MEMORY;
+
+DROP PROCEDURE IF EXISTS get_note_cods;
+DELIMITER |
+CREATE PROCEDURE get_note_cods()
+BEGIN
+  SET @i = 0;
+  WHILE @i < 20 DO
+    SET @NewestNotCod = (SELECT log_borrame.CrsCod AS NewestNotCod FROM log_borrame,usr_data WHERE log_borrame.LogCod<388900000 AND log_borrame.UsrCod=usr_data.UsrCod AND log_borrame.CrsCod NOT IN (SELECT NotCod FROM current_timeline) ORDER BY log_borrame.LogCod DESC LIMIT 1);
+    INSERT INTO note_codes (NotCod) VALUES (@NewestNotCod);
+    INSERT INTO current_timeline (NotCod) VALUES (@NewestNotCod);
+    SET @i = @i + 1;
+  END WHILE;
+END;
+|
+DELIMITER ;
+CALL get_note_cods();
