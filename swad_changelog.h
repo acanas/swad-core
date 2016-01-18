@@ -118,17 +118,26 @@
 // TODO: Width of column for data in notifications is too short
 // TODO: Increment one second after each refresh in social timeline?
 
+// TODO: Date-time without seconds in user's public profile.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.118.1 (2016-01-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.118.2 (2016-01-18)"
 #define CSS_FILE		"swad15.117.css"
 #define JS_FILE			"swad15.117.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.118.2: Jan 18, 2016	Fixed bug in social_timelines table. (192973 lines)
+ALTER TABLE sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE tst_status CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE hidden_params CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE imported_groups CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+ALTER TABLE imported_sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+
         Version 15.118.1: Jan 18, 2016	Fixed bugs in social timeline. (192966 lines)
         Version 15.118:   Jan 18, 2016	Change in privacy options (new value "unknown"). (192967 lines)
 					3 changes necessary in database:
