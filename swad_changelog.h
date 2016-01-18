@@ -122,13 +122,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.117.1 (2016-01-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.118 (2016-01-18)"
 #define CSS_FILE		"swad15.117.css"
 #define JS_FILE			"swad15.117.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.118:   Jan 18, 2016	Change in privacy options (new value "unknown"). (192967 lines)
+					3 changes necessary in database:
+ALTER TABLE usr_data CHANGE COLUMN PhotoVisibility PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';
+ALTER TABLE usr_data CHANGE COLUMN ProfileVisibility ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';
+UPDATE usr_data SET ProfileVisibility='unknown' WHERE ProfileVisibility IN ('user','course');
+
         Version 15.117.1: Jan 18, 2016	Summary of changes in database made from version 15.74.7 to 15.117.1. (? lines)
 Edit file swad_copy.sh changing swad.js to swad*.js
 					29 changes necessary in database:

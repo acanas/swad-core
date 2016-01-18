@@ -27293,6 +27293,27 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	" incluindo o seu sexo.";
 #endif
 
+const char *Txt_Please_review_your_privacy_preferences =
+#if   L==1
+	"Si us plau, revisi les seves prefer&egrave;ncies de privacitat.";
+#elif L==2
+	"Bitte &uuml;berpr&uuml;fen Sie Ihre Datenschutzeinstellungen.";
+#elif L==3
+	"Please review your privacy preferences.";
+#elif L==4
+	"Por favor, revise sus preferencias de privacidad.";
+#elif L==5
+	"S'il vous pla&icirc;t revoir vos pr&eacute;f&eacute;rences de privacit&eacute;.";
+#elif L==6
+	"Por favor, revise sus preferencias de privacidad.";	// Okoteve traducción
+#elif L==7
+	"Si prega di rivedere le vostre preferenze di privatezza.";
+#elif L==8
+	"Prosz&eogon; sprawdzi&cacute; ustawienia prywatno&sacute;ci.";
+#elif L==9
+	"Por favor, revise suas prefer&ecirc;ncias de privacidade.";
+#endif
+
 const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications =
 #if   L==1
 	"Por favor, especifique si permite el acceso"
@@ -27681,7 +27702,27 @@ const char *Txt_Privacy =
 #endif
 
 const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
-   {		// Pri_VISIBILITY_USER
+   {		// Pri_VISIBILITY_UNKNOWN
+#if   L==1
+	 "Desconeguda"
+#elif L==2
+	 "Unbekannt"
+#elif L==3
+	 "Unknown"
+#elif L==4
+	 "Desconocida"
+#elif L==5
+	 "Inconnu"
+#elif L==6
+	 "Desconocida"	// Okoteve traducción
+#elif L==7
+	 "Sconosciuta"
+#elif L==8
+	 "Nieznany"
+#elif L==9
+	 "Desconhecida"
+#endif
+	 ,	// Pri_VISIBILITY_USER
 #if   L==1
 	 "Visible por m&iacute; y mis profesores / mis estudiantes"	// Necessita traduccio
 #elif L==2

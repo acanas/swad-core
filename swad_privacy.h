@@ -32,14 +32,15 @@
 /*****************************************************************************/
 
 /***** Visibility (who can see user's photo / public profile) *****/
-#define Pri_NUM_OPTIONS_PRIVACY 4
+#define Pri_NUM_OPTIONS_PRIVACY 5
 
-typedef enum	// These numbers are stored in database. So, if you change them here, do the same in database
+typedef enum
   {
-   Pri_VISIBILITY_USER   = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
-   Pri_VISIBILITY_COURSE = 1,	// Visible by users sharing courses with me
-   Pri_VISIBILITY_SYSTEM = 2,	// Visible by any user logged in platform
-   Pri_VISIBILITY_WORLD  = 3,	// Public, visible by all the people, even unlogged visitors
+   Pri_VISIBILITY_UNKNOWN = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
+   Pri_VISIBILITY_USER    = 1,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
+   Pri_VISIBILITY_COURSE  = 2,	// Visible by users sharing courses with me
+   Pri_VISIBILITY_SYSTEM  = 3,	// Visible by any user logged in platform
+   Pri_VISIBILITY_WORLD   = 4,	// Public, visible by all the people, even unlogged visitors
   } Pri_Visibility_t;
 
 #define Pri_PHOTO_VISIBILITY_DEFAULT	Pri_VISIBILITY_SYSTEM
@@ -52,10 +53,8 @@ typedef enum	// These numbers are stored in database. So, if you change them her
 void Pri_PutLinkToChangeMyPrivacy (void);
 void Pri_EditMyPrivacy (void);
 
-Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str,
-                                           Pri_Visibility_t DefaultVisibility);
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
-                                         Pri_Visibility_t DefaultVisibility);
+Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName);
 
 bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod);
 

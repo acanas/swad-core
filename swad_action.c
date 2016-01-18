@@ -4599,10 +4599,26 @@ void Act_AdjustCurrentAction (void)
       switch (Gbl.Action.Act)
         {
          case ActHom: case ActLogOut:
-         case ActFrmUsrAcc: case ActFrmChgMyPwd: case ActReqEdiRecCom:
+         case ActFrmUsrAcc: case ActFrmChgMyPwd:
+         case ActReqEdiRecCom:
             break;
          default:
 	    Gbl.Action.Act = ActReqEdiMyIns;
+	    Tab_SetCurrentTab ();
+            return;
+        }
+
+   /***** If any of my preferences about privacy is unknown *****/
+   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
+      switch (Gbl.Action.Act)
+        {
+         case ActHom: case ActLogOut:
+         case ActFrmUsrAcc: case ActFrmChgMyPwd:
+         case ActReqEdiRecCom: case ActReqEdiMyIns:
+            break;
+         default:
+	    Gbl.Action.Act = ActEdiPri;
 	    Tab_SetCurrentTab ();
             return;
         }
@@ -4634,14 +4650,12 @@ void Act_AdjustCurrentAction (void)
                case ActFrmChgMyPwd:
                case ActReqEdiRecCom:
                case ActReqEdiMyIns:
+               case ActEdiPri:
                case ActReqSelGrp:
                case ActReqMdfOneStd:	// A student use this action to remove him/herself from current course
                case ActSeeCrsTT:
                case ActPrnCrsTT:
                case ActChgCrsTT1stDay:
-               // case ActSeeMyTT:	// TODO: Remove these 3 actions from here?
-               // case ActPrnMyTT:
-               // case ActChgMyTT1stDay:
                   // These last actions are allowed in order to students could see/print timetable before register in groups
                   break;
                default:

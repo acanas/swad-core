@@ -46,6 +46,7 @@ extern struct Globals Gbl;
 /***** Visibility (who can see user's photo or public profile) *****/
 const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
   {
+   "unknown",	// Pri_VISIBILITY_UNKNOWN
    "user",	// Pri_VISIBILITY_USER
    "course",	// Pri_VISIBILITY_COURSE
    "system",	// Pri_VISIBILITY_SYSTEM
@@ -84,10 +85,16 @@ void Pri_PutLinkToChangeMyPrivacy (void)
 
 void Pri_EditMyPrivacy (void)
   {
+   extern const char *Txt_Please_review_your_privacy_preferences;
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
    extern const char *Txt_Public_activity;
+
+   /***** If any of my preferences about privacy is unknown *****/
+   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Privacy);
@@ -145,8 +152,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    if (Action != ActUnk)
       Act_FormStart (Action);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-   for (Visibility = (Pri_Visibility_t) 0;
-	Visibility < Pri_NUM_OPTIONS_PRIVACY;
+   for (Visibility = Pri_VISIBILITY_USER;
+	Visibility <= Pri_VISIBILITY_WORLD;
 	Visibility++)
       if (MaskAllowedVisibility & 1 << Visibility)
 	{
@@ -180,8 +187,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 /************************ Get visibility from string *************************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str,
-                                           Pri_Visibility_t DefaultVisibility)
+Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
   {
    Pri_Visibility_t Visibility;
 
@@ -191,15 +197,14 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str,
       if (!strcasecmp (Str,Pri_VisibilityDB[Visibility]))
 	 return Visibility;
 
-   return DefaultVisibility;
+   return Pri_VISIBILITY_UNKNOWN;
   }
 
 /*****************************************************************************/
 /**************** Get parameter with visibility from form ********************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
-                                         Pri_Visibility_t DefaultVisibility)
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
@@ -214,7 +219,7 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
       return (Pri_Visibility_t) UnsignedNum;
      }
 
-   return DefaultVisibility;
+   return Pri_VISIBILITY_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -231,6 +236,8 @@ bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod)
    /***** Check if I can see the other's photo *****/
    switch (Visibility)
      {
+      case Pri_VISIBILITY_UNKNOWN:
+	 return (Gbl.Usrs.Me.UsrDat.UsrCod == OtherUsrCod);	// It's me? I always can see my things
       case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
          if (Gbl.Usrs.Me.UsrDat.UsrCod == OtherUsrCod)		// It's me, I always can see my things
             return true;

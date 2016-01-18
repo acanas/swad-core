@@ -240,10 +240,10 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Accepted = true;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
-   UsrDat->Surname1[0] = '\0';
-   UsrDat->Surname2[0] = '\0';
+   UsrDat->Surname1[0]  = '\0';
+   UsrDat->Surname2[0]  = '\0';
    UsrDat->FirstName[0] = '\0';
-   UsrDat->FullName[0] = '\0';
+   UsrDat->FullName[0]  = '\0';
 
    UsrDat->Email[0] = '\0';
    UsrDat->EmailConfirmed = false;
@@ -255,29 +255,29 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';
    UsrDat->StrBirthday[0] = '\0';
-   UsrDat->Birthday.Day = 0;
+   UsrDat->Birthday.Day   = 0;
    UsrDat->Birthday.Month = 0;
-   UsrDat->Birthday.Year = 0;
-   UsrDat->LocalAddress[0] = '\0';
-   UsrDat->LocalPhone[0] = '\0';
+   UsrDat->Birthday.Year  = 0;
+   UsrDat->LocalAddress[0]  = '\0';
+   UsrDat->LocalPhone[0]    = '\0';
    UsrDat->FamilyAddress[0] = '\0';
-   UsrDat->FamilyPhone[0] = '\0';
+   UsrDat->FamilyPhone[0]   = '\0';
    if (UsrDat->Comments)
       UsrDat->Comments[0] = '\0';
 
-   UsrDat->InsCtyCod = -1L;
-   UsrDat->InsCod = -1L;
+   UsrDat->InsCtyCod  = -1L;
+   UsrDat->InsCod     = -1L;
    UsrDat->Tch.CtrCod = -1L;
    UsrDat->Tch.DptCod = -1L;
-   UsrDat->Tch.Office[0] = '\0';
+   UsrDat->Tch.Office[0]      = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
 
-   UsrDat->Prefs.Language = Txt_LANGUAGE_UNKNOWN;			// Language unknown
+   UsrDat->Prefs.Language       = Txt_LANGUAGE_UNKNOWN;			// Language unknown
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
-   UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-   UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
-   UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
-   UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+   UsrDat->Prefs.Theme          = The_THEME_DEFAULT;
+   UsrDat->Prefs.IconSet        = Ico_ICON_SET_DEFAULT;
+   UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;
+   UsrDat->Prefs.SideCols       = Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.EmailNtfEvents = 0;        // By default, don't notify anything
   }
 
@@ -486,8 +486,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Get rest of data */
    strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
    UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11],Pri_PHOTO_VISIBILITY_DEFAULT);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12],Pri_PROFILE_VISIBILITY_DEFAULT);
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
    UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
    UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
