@@ -5901,6 +5901,7 @@ static void Brw_WriteDatesAssignment (void)
 
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata)
   {
+   extern const char *Txt_Today;
    static unsigned UniqueId = 0;
 
    /***** Write the file size *****/
@@ -5921,10 +5922,10 @@ static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadat
       UniqueId++;
       fprintf (Gbl.F.Out,"<span id=\"filedate%u\"></span>"
 	                 "<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('filedate%u',%ld);"
+			 "writeLocalDateHMSFromUTC('filedate%u',%ld,'&nbsp;','%s');"
                          "</script>",
                UniqueId,
-               UniqueId,(long) FileMetadata->Time);
+               UniqueId,(long) FileMetadata->Time,Txt_Today);
      }
    fprintf (Gbl.F.Out,"</td>");
   }
