@@ -187,7 +187,7 @@ struct SocialComment
    long UsrCod;
    long NotCod;		// Note code
    time_t DateTimeUTC;
-   char Content[Cns_MAX_BYTES_LONG_TEXT];
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
   };
 
 /*****************************************************************************/
@@ -566,24 +566,22 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
               |_____| 1
                       0
    */
+   RangePubsToGet.Top    = 0;	// +Infinite
+   RangePubsToGet.Bottom = 0;	// -Infinite
    switch (WhatToGetFromTimeline)
      {
       case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
-	 RangePubsToGet.Top    = 0;	// +Infinite
 	 RangePubsToGet.Bottom = Soc_GetPubCodFromSession ("LastPubCod");
 	 break;
       case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
 	 /* This is the first query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
-	 RangePubsToGet.Top    = 0;	// +Infinite
-	 RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
       case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publishings */
 	 RangePubsToGet.Top    = Soc_GetPubCodFromSession ("FirstPubCod");
-	 RangePubsToGet.Bottom = 0;	// -Infinite
 	 break;
      }
 
