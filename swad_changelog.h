@@ -122,13 +122,46 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.117 (2016-01-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.117.1 (2016-01-18)"
 #define CSS_FILE		"swad15.117.css"
 #define JS_FILE			"swad15.117.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.117.1: Jan 18, 2016	Summary of changes in database made from version 15.74.7 to 15.117.1. (? lines)
+Edit file swad_copy.sh changing swad.js to swad*.js
+					29 changes necessary in database:
+CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;
+CREATE TABLE IF NOT EXISTS social_notes (NotCod BIGINT NOT NULL AUTO_INCREMENT,NoteType TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,HieCod INT NOT NULL DEFAULT -1,Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',TimeNote DATETIME NOT NULL,UNIQUE INDEX(NotCod),UNIQUE INDEX(NoteType,Cod),INDEX(UsrCod),INDEX(TimeNote));
+CREATE TABLE IF NOT EXISTS social_posts (PstCod INT NOT NULL AUTO_INCREMENT,Content LONGTEXT NOT NULL,UNIQUE INDEX(PstCod),FULLTEXT(Content)) ENGINE = MYISAM;
+CREATE TABLE IF NOT EXISTS social_pubs (PubCod BIGINT NOT NULL AUTO_INCREMENT,NotCod BIGINT NOT NULL,PublisherCod INT NOT NULL,PubType TINYINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(PubCod),INDEX(NotCod,PublisherCod,PubType),INDEX(PublisherCod),INDEX(PubType),INDEX(TimePublish));
+CREATE TABLE IF NOT EXISTS social_timelines (SessionId CHAR(43) NOT NULL,NotCod BIGINT NOT NULL,UNIQUE INDEX(SessionId,NotCod));
+ALTER TABLE sessions ADD COLUMN LastPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+ALTER TABLE sessions ADD COLUMN FirstPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1490','es','N','Ver actividad social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1491','es','Y','Redactar public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1492','es','N','Crear public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1493','es','N','Eliminar public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1494','es','N','Solicitar elim. public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1495','es','N','Compartir public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1496','es','N','Dejar de compartir public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1497','es','Y','Redactar public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1498','es','N','Crear public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1499','es','N','Compartir public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1500','es','N','Dejar de compartir public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1501','es','N','Solicitar elim. public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1502','es','N','Eliminar public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1503','es','N','Crear comentario social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1504','es','N','Crear comentario social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1505','es','N','Solicitar elim. coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1506','es','N','Solicitar elim. coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1507','es','N','Eliminar coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1508','es','N','Eliminar coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1509','es','N','Refrescar timeline global (nuevos mensajes)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1510','es','N','Cargar mensajes anteriores en timeline global');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1511','es','N','Cargar mensajes anteriores en timeline usuario');
+
         Version 15.117:   Jan 17, 2016	Change in styles of messages, forums, surveys and tests. (192872 lines)
         Version 15.116.1: Jan 17, 2016	Help when writing social posts or comments. (192877 lines)
         Version 15.116:   Jan 17, 2016	Optimization in the query to get timeline. (192878 lines)
