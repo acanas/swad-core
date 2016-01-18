@@ -1957,6 +1957,23 @@ mysql> DESCRIBE social_comments;
                    "UNIQUE INDEX(ComCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
+   /***** Table social_comments_favs *****/
+/*
+mysql> DESCRIBE social_comments_favs;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| ComCod | bigint(20) | NO   | PRI | NULL    |       |
+| UsrCod | int(11)    | NO   | PRI | NULL    |       |
++--------+------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_favs ("
+	           "ComCod BIGINT NOT NULL,"
+                   "UsrCod INT NOT NULL,"
+                   "UNIQUE INDEX(ComCod,UsrCod),"
+                   "INDEX(UsrCod))");
+
    /***** Table social_notes *****/
 /*
 mysql> DESCRIBE social_notes;
@@ -1985,6 +2002,23 @@ mysql> DESCRIBE social_notes;
                    "UNIQUE INDEX(NoteType,Cod),"
                    "INDEX(UsrCod),"
                    "INDEX(TimeNote))");
+
+   /***** Table social_notes_favs *****/
+/*
+mysql> DESCRIBE social_notes_favs;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| NotCod | bigint(20) | NO   | PRI | NULL    |       |
+| UsrCod | int(11)    | NO   | PRI | NULL    |       |
++--------+------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes_favs ("
+	           "NotCod BIGINT NOT NULL,"
+                   "UsrCod INT NOT NULL,"
+                   "UNIQUE INDEX(NotCod,UsrCod),"
+                   "INDEX(UsrCod))");
 
    /***** Table social_posts *****/
 /*
