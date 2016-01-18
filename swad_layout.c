@@ -614,7 +614,9 @@ static void Lay_WriteScriptInit (void)
             Gbl.Action.Act == ActRcvSocPstGbl    ||
             Gbl.Action.Act == ActRcvSocComGbl    ||
             Gbl.Action.Act == ActShaSocNotGbl    ||
-            Gbl.Action.Act == ActUnsSocPubGbl    ||
+            Gbl.Action.Act == ActUnsSocNotGbl    ||
+            Gbl.Action.Act == ActFavSocNotGbl    ||
+            Gbl.Action.Act == ActUnfSocNotGbl    ||
             Gbl.Action.Act == ActReqRemSocPubGbl ||
             Gbl.Action.Act == ActRemSocPubGbl    ||
             Gbl.Action.Act == ActReqRemSocComGbl ||
@@ -649,7 +651,9 @@ static void Lay_WriteScriptParamsAJAX (void)
        Gbl.Action.Act == ActRcvSocPstGbl    ||
        Gbl.Action.Act == ActRcvSocComGbl    ||
        Gbl.Action.Act == ActShaSocNotGbl    ||
-       Gbl.Action.Act == ActUnsSocPubGbl    ||
+       Gbl.Action.Act == ActUnsSocNotGbl    ||
+       Gbl.Action.Act == ActFavSocNotGbl    ||
+       Gbl.Action.Act == ActUnfSocNotGbl    ||
        Gbl.Action.Act == ActReqRemSocPubGbl ||
        Gbl.Action.Act == ActRemSocPubGbl    ||
        Gbl.Action.Act == ActReqRemSocComGbl ||
@@ -662,14 +666,16 @@ static void Lay_WriteScriptParamsAJAX (void)
 	       Act_Actions[ActRefNewSocPubGbl].ActCod,
 	       Act_Actions[ActRefOldSocPubGbl].ActCod);
    else if (Gbl.Action.Act == ActSeePubPrf       ||
-            Gbl.Action.Act == ActRcvSocPstGbl    ||
+            Gbl.Action.Act == ActRcvSocPstUsr    ||
             Gbl.Action.Act == ActRcvSocComUsr    ||
-            Gbl.Action.Act == ActShaSocNotGbl    ||
-            Gbl.Action.Act == ActUnsSocPubGbl    ||
-            Gbl.Action.Act == ActReqRemSocPubGbl ||
-            Gbl.Action.Act == ActRemSocPubGbl    ||
-            Gbl.Action.Act == ActReqRemSocComGbl ||
-            Gbl.Action.Act == ActRemSocComGbl)
+            Gbl.Action.Act == ActShaSocNotUsr    ||
+            Gbl.Action.Act == ActUnsSocNotUsr    ||
+            Gbl.Action.Act == ActFavSocNotUsr    ||
+            Gbl.Action.Act == ActUnfSocNotUsr    ||
+            Gbl.Action.Act == ActReqRemSocPubUsr ||
+            Gbl.Action.Act == ActRemSocPubUsr    ||
+            Gbl.Action.Act == ActReqRemSocComUsr ||
+            Gbl.Action.Act == ActRemSocComUsr)
      {
       /* In all the actions related to view or editing user's timeline ==>
          put parameters used by AJAX */

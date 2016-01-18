@@ -11055,6 +11055,27 @@ const char *Txt_Family_address =
 	"Endere&ccedil;o Fam&iacute;lia";
 #endif
 
+const char *Txt_Favourite =
+#if   L==1
+	"Favorit";
+#elif L==2
+	"Favorit";
+#elif L==3
+	"Favourite";
+#elif L==4
+	"Favorito";
+#elif L==5
+	"Favori";
+#elif L==6
+	"Favorito";	// Okoteve traducción
+#elif L==7
+	"Preferito";
+#elif L==8
+	"Ulubiony";
+#elif L==9
+	"Favorito";
+#endif
+
 const char *Txt_Feedback =
 #if   L==1
 	"Realimentaci&oacute;n";	// Necessita traduccio
@@ -16401,6 +16422,27 @@ const char *Txt_Mark_all_notifications_as_read =
 	"Mark all notifications as read";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Marcar todas as notifica&ccedil;&otilde;es como lidas";
+#endif
+
+const char *Txt_Mark_as_favourite =
+#if   L==1
+	"Marca com favorit";
+#elif L==2
+	"Markieren als Favorit";
+#elif L==3
+	"Mark as favourite";
+#elif L==4
+	"Marcar como favorito";
+#elif L==5
+	"Marquer comme favori";
+#elif L==6
+	"Marcar como favorito";	// Okoteve traducción
+#elif L==7
+	"Segnare come preferito";
+#elif L==8
+	"Oznacz jako ulubiony";
+#elif L==9
+	"Marcar como favorito";
 #endif
 
 const char *Txt_Marks_management_area =
@@ -35740,6 +35782,27 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #endif
 	};
 
+const char *Txt_SOCIAL_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+#if   L==1
+	"Marcat com favorit per %u";
+#elif L==2
+	"Von %u vorgemerkt";
+#elif L==3
+	"Favourited by %u";
+#elif L==4
+	"Marcado como favorito por %u";
+#elif L==5
+	"Ajout&eacute; aux favoris par %u";
+#elif L==6
+	"Marcado como favorito por %u";	// Okoteve traducción
+#elif L==7
+	"Preferiti da %u";
+#elif L==8
+	"Dodane do ulubionych przez %u";
+#elif L==9
+	"Marcado como favorito por %u";
+#endif
+
 const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Compartit per %u";
@@ -35759,6 +35822,27 @@ const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS =	// Warning: it is very important
 	"Udost&eogon;pnione przez %u";
 #elif L==9
 	"Compartilhado por %u";
+#endif
+
+const char *Txt_SOCIAL_NOTE_Not_favourited_by_anyone =	// No longer shared
+#if   L==1
+	"No marcat com favorit per ning&uacute;";
+#elif L==2
+	"Niemand hat sie als Favorit markiert";
+#elif L==3
+	"Not favourited by anyone";
+#elif L==4
+	"No marcado como favorito por nadie";
+#elif L==5
+	"Personne n'a marqu&eacute; comme favori";
+#elif L==6
+	"No marcado como favorito por nadie";	// Okoteve traducción
+#elif L==7
+	"Non preferiti da chiunque";
+#elif L==8
+	"Nie przez nikogo ulubionych";
+#elif L==9
+	"N&atilde;o marcado como favorito por qualquer pessoa";
 #endif
 
 const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone =	// No longer shared
@@ -35803,6 +35887,27 @@ const char *Txt_SOCIAL_USER_has_commented =
 	"comentou:";
 #endif
 
+const char *Txt_SOCIAL_USER_has_marked_as_favourite =
+#if   L==1
+	"ha marcat com favorit:";
+#elif L==2
+	"hat als Favorit markiert:";
+#elif L==3
+	"has marked as favourite:";
+#elif L==4
+	"ha marcado como favorito:";
+#elif L==5
+	"a marqu&eacute; en tant que favori:";
+#elif L==6
+	"ha marcado como favorito:";	// Okoteve traducción
+#elif L==7
+	"ha segnato come preferito:";
+#elif L==8
+	"oznaczone jako ulubiony:";
+#elif L==9
+	"marcou como favorito:";
+#endif
+
 const char *Txt_SOCIAL_USER_has_shared =
 #if   L==1
 	"ha compartit:";
@@ -35843,6 +35948,27 @@ const char *Txt_SOCIAL_USER_has_stopped_sharing =
 	"przesta&lstrok; udost&eogon;pniania:";
 #elif L==9
 	"parou compartilhar:";
+#endif
+
+const char *Txt_SOCIAL_USER_has_unmarked_as_favourite =
+#if   L==1
+	"ha desmarcat com favorit:";
+#elif L==2
+	"hat als Favorit unmarkiert:";
+#elif L==3
+	"has unmarked as favourite:";
+#elif L==4
+	"ha desmarcado como favorito:";
+#elif L==5
+	"a pas marqu&eacute; en tant que favori:";
+#elif L==6
+	"ha desmarcado como favorito:";	// Okoteve traducción
+#elif L==7
+	"ha smarcato come preferito:";
+#elif L==8
+	"nieoznaczonych jako ulubiony:";
+#elif L==9
+	"desmarcou como favorito:";
 #endif
 
 const char *Txt_Sort_degrees_by =

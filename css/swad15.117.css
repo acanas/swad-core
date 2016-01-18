@@ -1763,19 +1763,20 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:inline-block;
 	padding-top:10px;
-	padding-right:20px;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_SHARE
+.SOCIAL_ICON_SHARE_FAV
 	{
 	display:inline-block;
 	padding-top:10px;
+	padding-left:20px;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_SHARE_DISABLED
+.SOCIAL_ICON_SHARE_FAV_DISABLED
 	{
 	display:inline-block;
 	padding-top:10px;
+	padding-left:20px;
 	opacity:0.2;
 	vertical-align:bottom;
 	}
