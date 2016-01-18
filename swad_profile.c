@@ -317,6 +317,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_From_TIME;
    extern const char *Txt_day;
    extern const char *Txt_days;
+   extern const char *Txt_Today;
    extern const char *Txt_Clicks;
    extern const char *Txt_clicks;
    extern const char *Txt_Downloads;
@@ -406,9 +407,9 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('first_click_date',%ld,'&nbsp;');"
+                         "writeLocalDateFromUTC('first_click_date',%ld,'%s');"
                          "</script>",
-               (long) UsrFigures.FirstClickTimeUTC);
+               (long) UsrFigures.FirstClickTimeUTC,Txt_Today);
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store first click time *****/

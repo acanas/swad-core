@@ -118,19 +118,18 @@
 // TODO: Width of column for data in notifications is too short
 // TODO: Increment one second after each refresh in social timeline?
 
-// TODO: Date-time without seconds in user's public profile.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.118.3 (2016-01-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.118.4 (2016-01-18)"
 #define CSS_FILE		"swad15.117.css"
-#define JS_FILE			"swad15.117.js"
+#define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.118.4: Jan 18, 2016	Date-time without seconds in user's public profile. (192984 lines)
         Version 15.118.3: Jan 18, 2016	Fixed bug in date-time of files in file-browsers. (192975 lines)
         Version 15.118.2: Jan 18, 2016	Fixed bug in social_timelines table. (192973 lines)
 ALTER TABLE sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;

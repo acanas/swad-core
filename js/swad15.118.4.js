@@ -40,8 +40,12 @@ var countClockConnected = 0;
 //id is the id of the HTML element in which date will be written
 //TimeUTC is the date-time to write in UTC UNIX time format
 
-function writeLocalDateFromUTC (id,TimeUTC) {
-	var d = new Date;
+function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
+	var today = new Date();
+	var todayYea = today.getFullYear();
+	var todayMon = today.getMonth()+1;
+	var todayDay = today.getDate();
+	var d = new Date();
 	var Yea;
 	var Mon;
 	var Day;
@@ -54,7 +58,13 @@ function writeLocalDateFromUTC (id,TimeUTC) {
 	Day = d.getDate();
 	StrMon = ((Mon < 10) ? '0' : '') + Mon;
 	StrDay = ((Day < 10) ? '0' : '') + Day;
-	document.getElementById(id).innerHTML = Yea + '-' + StrMon + '-' + StrDay;
+
+	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
+		StrToday.length)
+		document.getElementById(id).innerHTML = StrToday;
+	else
+		document.getElementById(id).innerHTML = Yea + '-' + StrMon + '-' + StrDay;
+
 }
 
 /*************** Write a date-time in client local time **********************/
@@ -64,11 +74,11 @@ function writeLocalDateFromUTC (id,TimeUTC) {
 
 function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
 	// HMS: Hour, Minutes, Seconds
-	var today = new (Date);
+	var today = new Date();
 	var todayYea = today.getFullYear();
 	var todayMon = today.getMonth()+1;
 	var todayDay = today.getDate();
-	var d = new Date;
+	var d = new Date();
 	var Yea;
 	var Mon;
 	var Day;
@@ -106,11 +116,11 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
 
 function writeLocalDateHMFromUTC (id,TimeUTC,separator,StrToday) {
 	// HM: Hour, Minutes
-	var today = new (Date);
+	var today = new Date();
 	var todayYea = today.getFullYear();
 	var todayMon = today.getMonth()+1;
 	var todayDay = today.getDate();
-	var d = new Date;
+	var d = new Date();
 	var Yea;
 	var Mon;
 	var Day;
@@ -155,7 +165,7 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	var YearIsValid = false;
 
 	if (TimeUTC) {
-		d = new Date;
+		d = new Date();
 		d.setTime(TimeUTC * 1000);
 		Year = d.getFullYear();
 		for (var i=0; i<FormYea.options.length && !YearIsValid; i++)
@@ -184,7 +194,7 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 
 // Set UTC time from local date-time form fields 
 function setUTCFromLocalDateTimeForm (id) {
-	var d = new (Date);
+	var d = new Date();
 
 	// Important: set year first in order to work properly with leap years
 	d.setFullYear(document.getElementById(id+'Year'  ).value);
@@ -202,7 +212,7 @@ function setUTCFromLocalDateTimeForm (id) {
 // For example, if your time zone is GMT+2, -120 will be returned
 function setTZ (id) {
 	var FormTZ = document.getElementById(id);
-	var d = new (Date);
+	var d = new Date();
 
 	FormTZ.value = d.getTimezoneOffset();
 }
@@ -245,7 +255,7 @@ function adjustDateForm (id) {
 
 // Set a date range form to yesterday
 function setDateToYesterday () {
-	var d = new (Date);
+	var d = new Date();
 
 	d.setTime (d.getTime () - 24*60*60*1000);	// Today - 1 day
 	setDateRange(d);
@@ -253,7 +263,7 @@ function setDateToYesterday () {
 
 // Set a date range form to today
 function setDateToToday () {
-	var d = new (Date);
+	var d = new Date();
 
 	setDateRange(d);
 }
@@ -303,7 +313,7 @@ function writeLocalClock () {
 
 	setTimeout('writeLocalClock()',60000);
 
-	d = new Date;
+	d = new Date();
 	d.setTime(secondsSince1970UTC * 1000);
 	secondsSince1970UTC += 60;	// For next call
 
@@ -866,7 +876,7 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 		 7,	// November  --> July
 		 7	// December  --> July
 	];
-	var d = new Date;
+	var d = new Date();
 	d.setTime(TimeUTC * 1000);
 	var CurrentMonth = d.getMonth() + 1;
 	var CurrentYear = d.getFullYear();
@@ -915,7 +925,7 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 
 function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
-	var d = new Date;
+	var d = new Date();
 	d.setTime(TimeUTC * 1000);
 	var Year = d.getFullYear();
 	var Month = d.getMonth() + 1;
