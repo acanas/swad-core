@@ -312,6 +312,7 @@ static void Soc_UpdateNumTimesANoteHasBeenFav (struct SocialNote *SocNot);
 
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
 static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot);
+static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query);
 
 static void Soc_GetDataOfSocialNoteByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialCommentByCod (struct SocialComment *SocCom);
@@ -3414,96 +3415,55 @@ static void Soc_UpdateNumTimesANoteHasBeenFav (struct SocialNote *SocNot)
 /*****************************************************************************/
 /**************** Show users who have shared this social note ****************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
   {
    char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs;
-   unsigned NumUsr;
-   unsigned NumUsrsShown = 0;
-   struct UsrData UsrDat;
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
 
-   /***** Show number of users who have shared this social note *****/
-   fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES_FAVS\"> %u</span>",
-            SocNot->NumShared);
-
-   if (SocNot->NumShared)
-     {
-      /***** Get list of publishers from database (only the first) *****/
-      sprintf (Query,"SELECT PublisherCod"
-		     " FROM social_pubs"
-		     " WHERE NotCod='%ld'"
-		     " AND PublisherCod<>'%ld'"
-		     " AND PubType='%u'"
-		     " ORDER BY PubCod LIMIT %u",
-	       SocNot->NotCod,
-	       SocNot->UsrCod,
-	       (unsigned) Soc_PUB_SHARED_NOTE,
-	       Soc_MAX_SHARERS_FAVERS_SHOWN);
-      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users who shared a social note");
-      if (NumUsrs)
-	{
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
-
-	 /***** List users *****/
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
-	   {
-	    /***** Get user *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get user's code (row[0]) */
-	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	    /***** Get user's data and show user's photo *****/
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
-	      {
-               fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">");
-	       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-	                                             NULL,
-	                         "PHOTO18x24",Pho_ZOOM,true);	// Use unique id
-               fprintf (Gbl.F.Out,"</div>");
-
-               NumUsrsShown++;
-              }
-	   }
-
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
-	}
-
-      if (SocNot->NumShared > NumUsrsShown)
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
-	                    "<img src=\"%s/ellipsis32x32.gif\""
-			    " alt=\"%u\" title=\"%u\""
-			    " class=\"ICON20x20\" />"
-			    "</div>",
-		  Gbl.Prefs.IconsURL,
-		  SocNot->NumShared - NumUsrsShown,
-		  SocNot->NumShared - NumUsrsShown);
-     }
+   /***** Get users who have shared this note *****/
+   sprintf (Query,"SELECT PublisherCod"
+		  " FROM social_pubs"
+		  " WHERE NotCod='%ld'"
+		  " AND PublisherCod<>'%ld'"
+		  " AND PubType='%u'"
+		  " ORDER BY PubCod LIMIT %u",
+	    SocNot->NotCod,
+	    SocNot->UsrCod,
+	    (unsigned) Soc_PUB_SHARED_NOTE,
+	    Soc_MAX_SHARERS_FAVERS_SHOWN);
+   Soc_ShowSharersOrFavers (SocNot->NumShared,Query);
   }
 
+/*****************************************************************************/
+/********* Show users who have marked this social note as favourite **********/
+/*****************************************************************************/
+
+static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
+  {
+   char Query[256];
+
+   /***** Get users who have mark this note as favourite *****/
+   sprintf (Query,"SELECT UsrCod"
+		  " FROM social_notes_fav"
+		  " WHERE NotCod='%ld'"
+		  " AND UsrCod<>'%ld'"	// Extra check
+		  " ORDER BY TimeFav LIMIT %u",
+	    SocNot->NotCod,
+	    SocNot->UsrCod,
+	    Soc_MAX_SHARERS_FAVERS_SHOWN);
+   Soc_ShowSharersOrFavers (SocNot->NumFavs,Query);
+  }
 
 /*****************************************************************************/
 /********* Show users who have marked this social note as favourite **********/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
+static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
   {
-   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUsrs;
+   unsigned NumFirstUsrs;
    unsigned NumUsr;
    unsigned NumUsrsShown = 0;
    struct UsrData UsrDat;
@@ -3512,28 +3472,20 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 
    /***** Show number of users who have marked this social note as favourite *****/
    fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES_FAVS\"> %u</span>",
-            SocNot->NumFavs);
+            NumUsrs);
 
-   if (SocNot->NumFavs)
+   if (NumUsrs)
      {
-      /***** Get list of publishers from database (only the first) *****/
-      sprintf (Query,"SELECT UsrCod"
-		     " FROM social_notes_fav"
-		     " WHERE NotCod='%ld'"
-		     " AND UsrCod<>'%ld'"	// Extra check
-		     " ORDER BY TimeFav LIMIT %u",
-	       SocNot->NotCod,
-	       SocNot->UsrCod,
-	       Soc_MAX_SHARERS_FAVERS_SHOWN);
-      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users who fav a social note");
-      if (NumUsrs)
+      /***** Get list of users from database *****/
+      NumFirstUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users");
+      if (NumFirstUsrs)
 	{
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List users *****/
 	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
+	      NumUsr < NumFirstUsrs;
 	      NumUsr++)
 	   {
 	    /***** Get user *****/
@@ -3560,15 +3512,15 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
 
-      if (SocNot->NumFavs > NumUsrsShown)
+      if (NumUsrs > NumUsrsShown)
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
 	                    "<img src=\"%s/ellipsis32x32.gif\""
 			    " alt=\"%u\" title=\"%u\""
 			    " class=\"ICON20x20\" />"
 			    "</div>",
 		  Gbl.Prefs.IconsURL,
-		  SocNot->NumFavs - NumUsrsShown,
-		  SocNot->NumFavs - NumUsrsShown);
+		  NumUsrs - NumUsrsShown,
+		  NumUsrs - NumUsrsShown);
      }
   }
 
