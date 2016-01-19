@@ -11055,27 +11055,6 @@ const char *Txt_Family_address =
 	"Endere&ccedil;o Fam&iacute;lia";
 #endif
 
-const char *Txt_Favourite =
-#if   L==1
-	"Favorit";
-#elif L==2
-	"Favorit";
-#elif L==3
-	"Favourite";
-#elif L==4
-	"Favorito";
-#elif L==5
-	"Favori";
-#elif L==6
-	"Favorito";	// Okoteve traducción
-#elif L==7
-	"Preferito";
-#elif L==8
-	"Ulubiony";
-#elif L==9
-	"Favorito";
-#endif
-
 const char *Txt_Feedback =
 #if   L==1
 	"Realimentaci&oacute;n";	// Necessita traduccio
@@ -35782,6 +35761,27 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #endif
 	};
 
+const char *Txt_SOCIAL_NOTE_Favourite =
+#if   L==1
+	"Favorit";
+#elif L==2
+	"Favorit";
+#elif L==3
+	"Favourite";
+#elif L==4
+	"Favorito";
+#elif L==5
+	"Favori";
+#elif L==6
+	"Favorito";	// Okoteve traducción
+#elif L==7
+	"Preferito";
+#elif L==8
+	"Ulubiony";
+#elif L==9
+	"Favorito";
+#endif
+
 const char *Txt_SOCIAL_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Marcat com favorit per %u";
@@ -35801,6 +35801,27 @@ const char *Txt_SOCIAL_NOTE_Favourited_by_X_USERS =	// Warning: it is very impor
 	"Dodane do ulubionych przez %u";
 #elif L==9
 	"Marcado como favorito por %u";
+#endif
+
+const char *Txt_SOCIAL_NOTE_Shared =
+#if   L==1
+	"Compartit";
+#elif L==2
+	"Geteilt";
+#elif L==3
+	"Shared";
+#elif L==4
+	"Compartido";
+#elif L==5
+	"Partag&eacute;";
+#elif L==6
+	"Compartido";	// Okoteve traducción
+#elif L==7
+	"Condiviso";
+#elif L==8
+	"Udost&eogon;pnione";
+#elif L==9
+	"Compartilhado";
 #endif
 
 const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
@@ -47223,27 +47244,6 @@ const char *Txt_Unread_BR_msgs =
 	"Unread<br />msgs.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"N&atilde;o<br />lidas";
-#endif
-
-const char *Txt_Unshare =
-#if   L==1
-	"Compartir";
-#elif L==2
-	"Teilen";
-#elif L==3
-	"Unshare";
-#elif L==4
-	"Dejar de compartir";
-#elif L==5
-	"Arr&ecirc;ter le partage";
-#elif L==6
-	"Dejar de compartir";	// Okoteve traducción
-#elif L==7
-	"Interrompere la condivisione";
-#elif L==8
-	"Zatrzymaj udost&eogon;pnianie";
-#elif L==9
-	"Descompartilhar";
 #endif
 
 const char *Txt_Update =

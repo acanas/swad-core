@@ -122,13 +122,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.120.2 (2016-01-19)"
-#define CSS_FILE		"swad15.120.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.120.3 (2016-01-19)"
+#define CSS_FILE		"swad15.120.3.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.120.3: Jan 19, 2016	Minor changes in layout of timeline. (193517 lines)
         Version 15.120.2: Jan 19, 2016	Code optimization on sharers or favers. (193491 lines)
         Version 15.120.1: Jan 19, 2016	Show number of users who marked a social note as favourite. (193533 lines)
         Version 15.120:   Jan 19, 2016	Mark/unmark social notes as favourites. (193475 lines)

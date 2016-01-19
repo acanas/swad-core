@@ -50,7 +50,7 @@
 /*****************************************************************************/
 
 #define Soc_WIDTH_TIMELINE	    "560px"
-#define Soc_MAX_SHARERS_FAVERS_SHOWN	 10	// Maximum number of users shown who have share/fav a social note
+#define Soc_MAX_SHARERS_FAVERS_SHOWN	  6	// Maximum number of users shown who have share/fav a social note
 
 #define Soc_MAX_BYTES_SUMMARY	       1000
 #define Soc_MAX_CHARS_IN_POST	       1000
@@ -261,6 +261,7 @@ static long Soc_ReceiveSocialPost (void);
 
 static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
                                                   bool PutText);
+static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
@@ -1115,7 +1116,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
 	{
 	 /* Write post content */
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
 	 Soc_GetAndWriteSocialPost (SocNot->Cod);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1225,8 +1226,9 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
-      if (!NumComments &&
-	  !SocNot->Unavailable)	// Unavailable social notes can not be commented
+      if (NumComments || SocNot->Unavailable)	// Unavailable social notes can not be commented
+	 Soc_PutIconCommentDisabled ();
+      else
          Soc_PutIconToToggleCommentSocialNote (IdNewComment,false);
 
       /* Put icons to share/unshare */
@@ -2006,6 +2008,25 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
   }
 
 /*****************************************************************************/
+/****** Put an icon to toggle on/off the form to comment a social note *******/
+/*****************************************************************************/
+
+static void Soc_PutIconCommentDisabled (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Comment;
+
+   /***** Disabled icon to comment a social note *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_COMMENT_DISABLED\">"
+ 		      "<img src=\"%s/write64x64.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Comment,Txt_Comment);
+  }
+
+/*****************************************************************************/
 /******************* Form to comment a social publishing *********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
@@ -2182,7 +2203,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Soc_WriteDateTime (SocCom->DateTimeUTC);
 
       /* Write content of the social comment */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
 
@@ -2337,8 +2358,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 		      " class=\"ICON20x20\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
-	    Txt_Share,
-	    Txt_Share);
+	    Txt_Share,Txt_Share);
    Act_FormEnd ();
   }
 
@@ -2378,7 +2398,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
 
 static void Soc_PutFormToUnshareSocialNote (long NotCod)
   {
-   extern const char *Txt_Unshare;
+   extern const char *Txt_SOCIAL_NOTE_Shared;
 
    /***** Form to share social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -2396,7 +2416,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
 		      " class=\"ICON20x20\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
-	    Txt_Unshare,Txt_Unshare);
+	    Txt_SOCIAL_NOTE_Shared,Txt_SOCIAL_NOTE_Shared);
    Act_FormEnd ();
   }
 
@@ -2407,7 +2427,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
 
 static void Soc_PutFormToUnfavSocialNote (long NotCod)
   {
-   extern const char *Txt_Favourite;
+   extern const char *Txt_SOCIAL_NOTE_Favourite;
 
    /***** Form to share social publishing *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -2425,7 +2445,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
 		      " class=\"ICON20x20\" />"
 		      "</div>",
 	    Gbl.Prefs.IconsURL,
-	    Txt_Favourite,Txt_Favourite);
+	    Txt_SOCIAL_NOTE_Favourite,Txt_SOCIAL_NOTE_Favourite);
    Act_FormEnd ();
   }
 

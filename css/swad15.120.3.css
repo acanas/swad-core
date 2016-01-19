@@ -1754,15 +1754,23 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
-/*
-.SOCIAL_FORM_POST:focus {
-    height:200px;
-}
-*/
+.SOCIAL_TXT
+	{
+	padding-top:2px;
+	color:#404040;
+	font-size:13pt;
+	}
 .SOCIAL_ICON_COMMENT
 	{
 	display:inline-block;
 	padding-top:10px;
+	vertical-align:bottom;
+	}
+.SOCIAL_ICON_COMMENT_DISABLED
+	{
+	display:inline-block;
+	padding-top:10px;
+	opacity:0.1;
 	vertical-align:bottom;
 	}
 .SOCIAL_ICON_SHARE_FAV
@@ -1777,7 +1785,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:inline-block;
 	padding-top:10px;
 	padding-left:20px;
-	opacity:0.2;
+	opacity:0.1;
 	vertical-align:bottom;
 	}
 .SOCIAL_ICON_REMOVE
