@@ -923,14 +923,6 @@ CREATE TABLE IF NOT EXISTS social_comments (
 	UNIQUE INDEX(ComCod),
 	FULLTEXT(Content)) ENGINE = MYISAM;
 --
--- Table social_comments_fav: stores users who marked social comments as favourite
---
-CREATE TABLE IF NOT EXISTS social_comments_fav (
-	ComCod BIGINT NOT NULL,
-	UsrCod INT NOT NULL,
-	UNIQUE INDEX(ComCod,UsrCod),
-	INDEX(UsrCod));
---
 -- Table social_notes: stores social notes
 --
 CREATE TABLE IF NOT EXISTS social_notes (
@@ -951,8 +943,10 @@ CREATE TABLE IF NOT EXISTS social_notes (
 CREATE TABLE IF NOT EXISTS social_notes_fav (
 	NotCod BIGINT NOT NULL,
 	UsrCod INT NOT NULL,
+	TimeFav DATETIME NOT NULL,
 	UNIQUE INDEX(NotCod,UsrCod),
-	INDEX(UsrCod));
+	INDEX(UsrCod),
+	INDEX(TimeFav));
 --
 -- Table social_posts: stores social posts (public comments written by users)
 --

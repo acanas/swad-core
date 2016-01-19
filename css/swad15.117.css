@@ -1787,7 +1787,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:bottom;
 	float:right;
 	}
-.SOCIAL_NUM_SHARES	{color:#A0A0A0; font-size:12pt; font-weight:bold;}
+.SOCIAL_NUM_SHARES_FAVS
+	{
+	color:#A0A0A0;
+	font-size:12pt;
+	font-weight:bold;
+	}
 .SOCIAL_SHARER
 	{
 	display:inline-block;

@@ -1957,23 +1957,6 @@ mysql> DESCRIBE social_comments;
                    "UNIQUE INDEX(ComCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
-   /***** Table social_comments_fav *****/
-/*
-mysql> DESCRIBE social_comments_fav;
-+--------+------------+------+-----+---------+-------+
-| Field  | Type       | Null | Key | Default | Extra |
-+--------+------------+------+-----+---------+-------+
-| ComCod | bigint(20) | NO   | PRI | NULL    |       |
-| UsrCod | int(11)    | NO   | PRI | NULL    |       |
-+--------+------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_fav ("
-	           "ComCod BIGINT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "UNIQUE INDEX(ComCod,UsrCod),"
-                   "INDEX(UsrCod))");
-
    /***** Table social_notes *****/
 /*
 mysql> DESCRIBE social_notes;
@@ -2006,19 +1989,22 @@ mysql> DESCRIBE social_notes;
    /***** Table social_notes_fav *****/
 /*
 mysql> DESCRIBE social_notes_fav;
-+--------+------------+------+-----+---------+-------+
-| Field  | Type       | Null | Key | Default | Extra |
-+--------+------------+------+-----+---------+-------+
-| NotCod | bigint(20) | NO   | PRI | NULL    |       |
-| UsrCod | int(11)    | NO   | PRI | NULL    |       |
-+--------+------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| NotCod  | bigint(20) | NO   | PRI | NULL    |       |
+| UsrCod  | int(11)    | NO   | PRI | NULL    |       |
+| TimeFav | datetime   | NO   | MUL | NULL    |       |
++---------+------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes_fav ("
 	           "NotCod BIGINT NOT NULL,"
                    "UsrCod INT NOT NULL,"
+	           "TimeFav DATETIME NOT NULL,"
                    "UNIQUE INDEX(NotCod,UsrCod),"
-                   "INDEX(UsrCod))");
+                   "INDEX(UsrCod),"
+                   "INDEX(TimeFav))");
 
    /***** Table social_posts *****/
 /*

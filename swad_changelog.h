@@ -122,18 +122,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.120 (2016-01-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.120.1 (2016-01-19)"
 #define CSS_FILE		"swad15.117.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.120.1: Jan 19, 2016	Show number of users who marked a social note as favourite. (193533 lines)
         Version 15.120:   Jan 19, 2016	Mark/unmark social notes as favourites. (193475 lines)
-        Version 15.119:   Jan 18, 2016	New tables to mark social notes and comments as favourites. (193036 lines)
-					2 changes necessary in database:
-CREATE TABLE IF NOT EXISTS social_comments_fav (ComCod BIGINT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(ComCod,UsrCod),INDEX(UsrCod));
-CREATE TABLE IF NOT EXISTS social_notes_fav (NotCod BIGINT NOT NULL,UsrCod INT NOT NULL,UNIQUE INDEX(NotCod,UsrCod),INDEX(UsrCod));
+        Version 15.119:   Jan 18, 2016	New table to mark social notes as favourites. (193036 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS social_notes_fav (NotCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(NotCod,UsrCod),INDEX(UsrCod),INDEX(TimeFav));
 
         Version 15.118.4: Jan 18, 2016	Date-time without seconds in user's public profile. (192984 lines)
         Version 15.118.3: Jan 18, 2016	Fixed bug in date-time of files in file-browsers. (192975 lines)
