@@ -117,6 +117,7 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 // TODO: Increment one second after each refresh in social timeline?
+// TODO: Notifications of new followers should go to follower's profile
 
 // TODO: Fav comments (remove favs when comment is removed)
 
@@ -124,13 +125,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.120.5 (2016-01-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.121 (2016-01-19)"
 #define CSS_FILE		"swad15.120.3.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.121:   Jan 19, 2016	Favs in social comments. Not finished. (193782 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS social_comments_fav (FavCod BIGINT AUTO_INCREMENT,ComCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(FavCod),UNIQUE INDEX(ComCod,UsrCod),INDEX(UsrCod));
+
         Version 15.120.5: Jan 19, 2016	Remove favs when a social note is removed.
 					Remove favs when a user is removed. (193544 lines)
         Version 15.120.4: Jan 19, 2016	Changes in database table social_notes_fav. (193527 lines)

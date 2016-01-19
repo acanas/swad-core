@@ -1957,6 +1957,28 @@ mysql> DESCRIBE social_comments;
                    "UNIQUE INDEX(ComCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
+   /***** Table social_comments_fav *****/
+/*
+mysql> DESCRIBE social_comments_fav;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| ComCod  | bigint(20) | NO   | MUL | NULL    |                |
+| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
+| TimeFav | datetime   | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_fav ("
+	           "FavCod BIGINT AUTO_INCREMENT,"
+	           "ComCod BIGINT NOT NULL,"
+                   "UsrCod INT NOT NULL,"
+	           "TimeFav DATETIME NOT NULL,"	// Not used. For future use
+	           "UNIQUE INDEX(FavCod),"
+                   "UNIQUE INDEX(ComCod,UsrCod),"
+                   "INDEX(UsrCod))");
+
    /***** Table social_notes *****/
 /*
 mysql> DESCRIBE social_notes;

@@ -1010,7 +1010,9 @@ Social:
 	843. ActShaSocNotGbl		Share a social note in the timeline (global)
 	844. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
 NEW	843. ActFavSocNotGbl		Favourite a social note in the timeline (global)
-NEW	844. ActUnfSocNotGbl		Unfavourite a previously shared social note in the timeline (global)
+NEW	844. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
+NEW	843. ActFavSocComGbl		Favourite a social comment in the timeline (global)
+NEW	844. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
 	845. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
 	846. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
 	847. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
@@ -1021,7 +1023,9 @@ NEW	844. ActUnfSocNotGbl		Unfavourite a previously shared social note in the tim
 	851. ActShaSocNotUsr		Share a social note in the timeline (user)
 	852. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
 NEW	851. ActFavSocNotUsr		Favourite a social note in the timeline (user)
-NEW	852. ActUnfSocNotUsr		Unfavourite a previously shared social note in the timeline (user)
+NEW	852. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
+NEW	851. ActFavSocComUsr		Favourite a social comment in the timeline (user)
+NEW	852. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
 	853. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
 	854. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
 	855. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
@@ -2343,6 +2347,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUnsSocNotGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteGbl	,NULL},
    /* ActFavSocNotGbl	*/{1512,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteGbl		,NULL},
    /* ActUnfSocNotGbl	*/{1513,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteGbl		,NULL},
+   /* ActFavSocComGbl	*/{1516,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentGbl	,NULL},
+   /* ActUnfSocComGbl	*/{1517,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentGbl	,NULL},
    /* ActReqRemSocPubGbl*/{1494,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteGbl	,NULL},
    /* ActRemSocPubGbl	*/{1493,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteGbl	,NULL},
    /* ActReqRemSocComGbl*/{1505,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComGbl	,NULL},
@@ -2352,8 +2358,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
    /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
    /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
-   /* ActShaSocNotUsr	*/{1514,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1515,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
+   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
    /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
    /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
    /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
@@ -4221,6 +4229,10 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUnfSocNotGbl,	// #1513
 	ActFavSocNotUsr,	// #1514
 	ActUnfSocNotUsr,	// #1515
+	ActFavSocComGbl,	// #1516
+	ActUnfSocComGbl,	// #1517
+	ActFavSocComUsr,	// #1518
+	ActUnfSocComUsr,	// #1519
 	};
 
 /*****************************************************************************/

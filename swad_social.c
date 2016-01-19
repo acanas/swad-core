@@ -199,6 +199,7 @@ struct SocialComment
    long UsrCod;
    long NotCod;		// Note code
    time_t DateTimeUTC;
+   unsigned NumFavs;	// Number of times (users) this comment has been favourited
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
   };
 
@@ -270,7 +271,9 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone);
 static void Soc_WriteAuthorComment (struct UsrData *UsrDat);
+
 static void Soc_PutFormToRemoveComment (long ComCod);
+static void Soc_PutFormToFavSocialComment (long ComCod);
 
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutDisabledIconFav (unsigned NumFavs);
@@ -292,10 +295,11 @@ static long Soc_ReceiveComment (void);
 
 static long Soc_ShareSocialNote (void);
 static long Soc_FavSocialNote (void);
+static long Soc_FavSocialComment (void);
 
 static long Soc_UnshareSocialNote (void);
-static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot);
 static long Soc_UnfavSocialNote (void);
+static long Soc_UnfavSocialComment (void);
 
 static void Soc_RequestRemovalSocialNote (void);
 static void Soc_RemoveSocialNote (void);
@@ -305,8 +309,9 @@ static void Soc_RequestRemovalSocialComment (void);
 static void Soc_RemoveSocialComment (void);
 static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
 
-static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
-static bool Soc_CheckIfNoteIsFavouritedByUsr (long NotCod,long UsrCod);
+static bool Soc_CheckIfNotIsPublishedInTimelineByUsr (long NotCod,long UsrCod);
+static bool Soc_CheckIfNotIsFavouritedByUsr (long NotCod,long UsrCod);
+static bool Soc_CheckIfComIsFavouritedByUsr (long ComCod,long UsrCod);
 
 static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_UpdateNumTimesANoteHasBeenFav (struct SocialNote *SocNot);
@@ -1089,10 +1094,10 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       if (Gbl.Usrs.Me.Logged)
 	{
 	 IAmTheAuthor = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot->NotCod,
-										Gbl.Usrs.Me.UsrDat.UsrCod);
-	 IAmAFavouriterOfThisSocNot = Soc_CheckIfNoteIsFavouritedByUsr (SocNot->NotCod,
-									Gbl.Usrs.Me.UsrDat.UsrCod);
+	 IAmAPublisherOfThisSocNot = Soc_CheckIfNotIsPublishedInTimelineByUsr (SocNot->NotCod,
+									       Gbl.Usrs.Me.UsrDat.UsrCod);
+	 IAmAFavouriterOfThisSocNot = Soc_CheckIfNotIsFavouritedByUsr (SocNot->NotCod,
+								       Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
 
       /***** Left: write author's photo *****/
@@ -2154,6 +2159,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
    bool IAmTheAuthor;
+   bool IAmAFavouriterOfThisSocCom;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
 
@@ -2184,6 +2190,8 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
       IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
 	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      IAmAFavouriterOfThisSocCom = Soc_CheckIfComIsFavouritedByUsr (SocCom->ComCod,
+								    Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
@@ -2206,6 +2214,23 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
+
+      /* Put icon to fav this social comment */
+      if (!IAmTheAuthor && !ShowCommentAlone)
+	 Soc_PutFormToFavSocialComment (SocCom->ComCod);
+
+      /* Put icon to mark this social comment as favourite */
+      if (IAmTheAuthor)				// I am the author
+	 Soc_PutDisabledIconFav (SocCom->NumFavs);
+      else if (IAmAFavouriterOfThisSocCom)	// I have favourited this social note
+	 /* Put icon to unfav this publishing */
+	 Soc_PutFormToUnfavSocialComment (SocCom->ComCod);
+      else					// I am not the author and I am not a favouriter
+         /* Put icon to mark this social comment as favourite */
+	 Soc_PutFormToFavSocialComment (SocCom->ComCod);
+
+      /* Show who have marked this social comment as favourite */
+      Soc_ShowUsrsWhoHaveMarkedSocialCommentAsFav (SocComt);
 
       /* Put icon to remove this social comment */
       if (IAmTheAuthor && !ShowCommentAlone)
@@ -2282,6 +2307,35 @@ static void Soc_PutFormToRemoveComment (long ComCod)
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/***************** Form to mark a social comment as favourite ****************/
+/*****************************************************************************/
+// All forms in this function and nested functions must have unique identifiers
+
+static void Soc_PutFormToFavSocialComment (long ComCod)
+  {
+   extern const char *Txt_Mark_as_favourite;
+
+   /***** Form to mark social comment as favourite *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartUniqueAnchor (ActFavSocComUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+      Act_FormStartUnique (ActFavSocComGbl);
+   Soc_PutHiddenParamComCod (ComCod);
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+		      "<input type=\"image\""
+		      " src=\"%s/fav64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</div>",
+	    Gbl.Prefs.IconsURL,
+	    Txt_Mark_as_favourite,Txt_Mark_as_favourite);
    Act_FormEnd ();
   }
 
@@ -2674,8 +2728,8 @@ static long Soc_ShareSocialNote (void)
       if (IAmTheAuthor)
 	 IAmAPublisherOfThisSocNot = true;
       else
-	 IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
-										Gbl.Usrs.Me.UsrDat.UsrCod);
+	 IAmAPublisherOfThisSocNot = Soc_CheckIfNotIsPublishedInTimelineByUsr (SocNot.NotCod,
+									       Gbl.Usrs.Me.UsrDat.UsrCod);
       ICanShare = (Gbl.Usrs.Me.Logged &&
 		   !IAmTheAuthor &&		// I am not the author
 		   !IAmAPublisherOfThisSocNot);	// I have not shared the note
@@ -2753,8 +2807,8 @@ static long Soc_FavSocialNote (void)
    if (SocNot.NotCod > 0)
      {
       IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-      IAmAFavouriterOfThisSocNot = Soc_CheckIfNoteIsFavouritedByUsr (SocNot.NotCod,
-								     Gbl.Usrs.Me.UsrDat.UsrCod);
+      IAmAFavouriterOfThisSocNot = Soc_CheckIfNotIsFavouritedByUsr (SocNot.NotCod,
+								    Gbl.Usrs.Me.UsrDat.UsrCod);
       ICanFav = (Gbl.Usrs.Me.Logged &&
 		 !IAmTheAuthor &&		// I am not the author
 		 !IAmAFavouriterOfThisSocNot);	// I have not favourited the note
@@ -2762,7 +2816,7 @@ static long Soc_FavSocialNote (void)
 	{
 	 /***** Mark as favourite in database *****/
 	 sprintf (Query,"INSERT IGNORE INTO social_notes_fav"
-			" (NotCod,UsrCod) VALUES ('%ld','%ld')",
+			" (NotCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
 		  SocNot.NotCod,
 		  Gbl.Usrs.Me.UsrDat.UsrCod);
 	 DB_QueryINSERT (Query,"can not favourite social note");
@@ -2770,8 +2824,7 @@ static long Soc_FavSocialNote (void)
 	 /* Update number of times this social note is favourited */
 	 Soc_UpdateNumTimesANoteHasBeenFav (&SocNot);
 
-	 /***** Show the social note corresponding
-		to the publishing just fav *****/
+	 /***** Show the social note just favourited *****/
 	 Soc_WriteSocialNote (&SocNot,
 	                      Soc_TOP_MESSAGE_FAV,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                      true,true);
@@ -2781,6 +2834,92 @@ static long Soc_FavSocialNote (void)
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
 
    return SocNot.NotCod;
+  }
+
+/*****************************************************************************/
+/********************* Mark a social comment as favourite ********************/
+/*****************************************************************************/
+
+void Soc_FavSocialCommentGbl (void)
+  {
+   long NotCod;
+
+   /***** Mark social comment as favourite *****/
+   NotCod = Soc_FavSocialComment ();
+
+   /***** Write updated timeline after marking as favourite (global) *****/
+   Soc_ShowTimelineGblHighlightingNot (NotCod);
+  }
+
+void Soc_FavSocialCommentUsr (void)
+  {
+   long NotCod;
+
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+   /***** Mark social comment as favourite *****/
+   NotCod = Soc_FavSocialComment ();
+
+   /***** Write updated timeline after marking as favourite (user) *****/
+   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
+  }
+
+static long Soc_FavSocialComment (void)
+  {
+   extern const char *Txt_The_original_comment_no_longer_exists;
+   struct SocialComment SocCom;
+   bool IAmTheAuthor;
+   bool IAmAFavouriterOfThisSocCom;
+   bool ICanFav;
+   char Query[256];
+
+   /***** Get the code of the social note to mark as favourite *****/
+   SocCom.ComCod = Soc_GetParamComCod ();
+
+   /***** Get data of social note *****/
+   Soc_GetDataOfSocialCommentByCod (&SocCom);
+
+   if (SocCom.ComCod > 0 &&
+       SocCom.NotCod > 0)	// Extra check
+     {
+      IAmTheAuthor = (SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+      IAmAFavouriterOfThisSocCom = Soc_CheckIfComIsFavouritedByUsr (SocCom.ComCod,
+								    Gbl.Usrs.Me.UsrDat.UsrCod);
+      ICanFav = (Gbl.Usrs.Me.Logged &&
+		 !IAmTheAuthor &&		// I am not the author
+		 !IAmAFavouriterOfThisSocCom);	// I have not favourited the comment
+      if (ICanFav)
+	{
+	 /***** Mark as favourite in database *****/
+	 sprintf (Query,"INSERT IGNORE INTO social_comments_fav"
+			" (ComCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
+		  SocCom.ComCod,
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+	 DB_QueryINSERT (Query,"can not favourite social comment");
+
+	 /* Update number of times this social comment is favourited */
+	 Soc_UpdateNumTimesACommentHasBeenFav (&SocCom);
+
+	 /***** Show the social comment just favourited *****/
+	 Soc_WriteSocialComment (&SocCom,
+	                         Soc_TOP_MESSAGE_FAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+	                         true);
+	}
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_The_original_comment_no_longer_exists);
+
+   return SocCom.NotCod;
   }
 
 /*****************************************************************************/
@@ -2827,6 +2966,7 @@ static long Soc_UnshareSocialNote (void)
    bool IAmTheAuthor;
    bool IAmAPublisherOfThisSocNot;
    bool ICanUnshare;
+   char Query[256];
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2836,15 +2976,22 @@ static long Soc_UnshareSocialNote (void)
    if (IAmTheAuthor)
       IAmAPublisherOfThisSocNot = true;
    else
-      IAmAPublisherOfThisSocNot = Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,
-									     Gbl.Usrs.Me.UsrDat.UsrCod);
+      IAmAPublisherOfThisSocNot = Soc_CheckIfNotIsPublishedInTimelineByUsr (SocNot.NotCod,
+									    Gbl.Usrs.Me.UsrDat.UsrCod);
    ICanUnshare = (Gbl.Usrs.Me.Logged &&
                   !IAmTheAuthor &&		// I am not the author
 	          IAmAPublisherOfThisSocNot);	// I have shared the note
    if (ICanUnshare)
      {
       /***** Delete social publishing from database *****/
-      Soc_UnshareASocialPublishingFromDB (&SocNot);
+      sprintf (Query,"DELETE FROM social_pubs"
+		     " WHERE NotCod='%ld'"
+		     " AND PublisherCod='%ld'"	// I have share this note
+		     " AND PubType='%u'",	// It's a shared note
+	       SocNot.NotCod,
+	       Gbl.Usrs.Me.UsrDat.UsrCod,
+	       (unsigned) Soc_PUB_SHARED_NOTE);
+      DB_QueryDELETE (Query,"can not remove a social publishing");
 
       /***** Update number of times this social note is shared *****/
       Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
@@ -2857,25 +3004,6 @@ static long Soc_UnshareSocialNote (void)
      }
 
    return SocNot.NotCod;
-  }
-
-/*****************************************************************************/
-/**************** Unshare a social publishing from database ******************/
-/*****************************************************************************/
-
-static void Soc_UnshareASocialPublishingFromDB (struct SocialNote *SocNot)
-  {
-   char Query[128];
-
-   /***** Remove social publishing *****/
-   sprintf (Query,"DELETE FROM social_pubs"
-	          " WHERE NotCod='%ld'"
-	          " AND PublisherCod='%ld'"	// I have share this note
-                  " AND PubType='%u'",		// It's a shared note
-	    SocNot->NotCod,
-	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (unsigned) Soc_PUB_SHARED_NOTE);
-   DB_QueryDELETE (Query,"can not remove a social publishing");
   }
 
 /*****************************************************************************/
@@ -2906,7 +3034,7 @@ void Soc_UnfavSocialNoteUsr (void)
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
 
-   /***** Unshare a previously shared social note *****/
+   /***** Unfav a social note previously marked as favourite *****/
    NotCod = Soc_UnfavSocialNote ();
 
    /***** Write updated timeline after unfav (user) *****/
@@ -2929,8 +3057,8 @@ static long Soc_UnfavSocialNote (void)
    Soc_GetDataOfSocialNoteByCod (&SocNot);
 
    IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   IAmAFavouriterOfThisSocNot = Soc_CheckIfNoteIsFavouritedByUsr (SocNot.NotCod,
-								  Gbl.Usrs.Me.UsrDat.UsrCod);
+   IAmAFavouriterOfThisSocNot = Soc_CheckIfNotIsFavouritedByUsr (SocNot.NotCod,
+								 Gbl.Usrs.Me.UsrDat.UsrCod);
    ICanUnfav = (Gbl.Usrs.Me.Logged &&
                 !IAmTheAuthor &&		// I am not the author
 	        IAmAFavouriterOfThisSocNot);	// I have favourited the note
@@ -2946,14 +3074,90 @@ static long Soc_UnfavSocialNote (void)
       /***** Update number of times this social note is favourited *****/
       Soc_UpdateNumTimesANoteHasBeenFav (&SocNot);
 
-      /***** Show the social note corresponding
-             to the publishing just unfavourited *****/
+      /***** Show the social note just unfavourited *****/
       Soc_WriteSocialNote (&SocNot,
 	                   Soc_TOP_MESSAGE_UNFAV,Gbl.Usrs.Me.UsrDat.UsrCod,
                            true,true);
      }
 
    return SocNot.NotCod;
+  }
+
+/*****************************************************************************/
+/***** Stop marking as favourite a previously favourited social comment *****/
+/*****************************************************************************/
+
+void Soc_UnfavSocialCommentGbl (void)
+  {
+   long NotCod;
+
+   /***** Stop marking as favourite a previously favourited social comment *****/
+   NotCod = Soc_UnfavSocialComment ();
+
+   /***** Write updated timeline after unfav (global) *****/
+   Soc_ShowTimelineGblHighlightingNot (NotCod);
+  }
+
+void Soc_UnfavSocialCommentUsr (void)
+  {
+   long NotCod;
+
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show user's profile *****/
+   Prf_ShowUserProfile ();
+
+   /***** Start section *****/
+   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+   /***** Unfav a social comment previously marked as favourite *****/
+   NotCod = Soc_UnfavSocialComment ();
+
+   /***** Write updated timeline after unfav (user) *****/
+   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+
+   /***** End section *****/
+   fprintf (Gbl.F.Out,"</section>");
+  }
+
+static long Soc_UnfavSocialComment (void)
+  {
+   struct SocialComment SocCom;
+   bool IAmTheAuthor;
+   bool IAmAFavouriterOfThisSocCom;
+   bool ICanUnfav;
+   char Query[256];
+
+   /***** Get data of social comment *****/
+   SocCom.ComCod = Soc_GetParamComCod ();
+   Soc_GetDataOfSocialCommentByCod (&SocCom);
+
+   IAmTheAuthor = (SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   IAmAFavouriterOfThisSocCom = Soc_CheckIfComIsFavouritedByUsr (SocCom.ComCod,
+								 Gbl.Usrs.Me.UsrDat.UsrCod);
+   ICanUnfav = (Gbl.Usrs.Me.Logged &&
+                !IAmTheAuthor &&		// I am not the author
+	        IAmAFavouriterOfThisSocCom);	// I have favourited the comment
+   if (ICanUnfav)
+     {
+      /***** Delete the mark as favourite from database *****/
+      sprintf (Query,"DELETE FROM social_comments_fav"
+	             " WHERE ComCod='%ld' AND UsrCod='%ld'",
+	       SocCom.ComCod,
+	       Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryDELETE (Query,"can not unfavourite social comment");
+
+      /***** Update number of times this social comment is favourited *****/
+      Soc_UpdateNumTimesACommentHasBeenFav (&SocCom);
+
+      /***** Show the social comment just unfavourited *****/
+      Soc_WriteSocialComment (&SocCom,
+	                      Soc_TOP_MESSAGE_UNFAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+                              true);
+     }
+
+   return SocCom.NotCod;
   }
 
 /*****************************************************************************/
@@ -3005,7 +3209,7 @@ static void Soc_RequestRemovalSocialNote (void)
                  SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// I am the author of this note
    if (ICanRemove)
      {
-      if (Soc_CheckIfNoteIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
+      if (Soc_CheckIfNotIsPublishedInTimelineByUsr (SocNot.NotCod,SocNot.UsrCod))
 	{
 	 /***** Show warning and social note *****/
 	 /* Warning message */
@@ -3388,7 +3592,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 /**************** Check if a user has published a social note ****************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
+static bool Soc_CheckIfNotIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
   {
    char Query[256];
 
@@ -3406,7 +3610,7 @@ static bool Soc_CheckIfNoteIsPublishedInTimelineByUsr (long NotCod,long UsrCod)
 /*************** Check if a user has favourited a social note ****************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfNoteIsFavouritedByUsr (long NotCod,long UsrCod)
+static bool Soc_CheckIfNotIsFavouritedByUsr (long NotCod,long UsrCod)
   {
    char Query[256];
 
@@ -3414,6 +3618,20 @@ static bool Soc_CheckIfNoteIsFavouritedByUsr (long NotCod,long UsrCod)
 	          " WHERE NotCod='%ld' AND UsrCod='%ld'",
 	    NotCod,UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user has favourited a social note") != 0);
+  }
+
+/*****************************************************************************/
+/************* Check if a user has favourited a social comment ***************/
+/*****************************************************************************/
+
+static bool Soc_CheckIfComIsFavouritedByUsr (long ComCod,long UsrCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"SELECT COUNT(*) FROM social_comments_fav"
+	          " WHERE ComCod='%ld' AND UsrCod='%ld'",
+	    ComCod,UsrCod);
+   return (DB_QueryCOUNT (Query,"can not check if a user has favourited a social comment") != 0);
   }
 
 /*****************************************************************************/
@@ -3495,7 +3713,7 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
   }
 
 /*****************************************************************************/
-/********* Show users who have marked this social note as favourite **********/
+/************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 

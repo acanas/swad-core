@@ -617,6 +617,8 @@ static void Lay_WriteScriptInit (void)
             Gbl.Action.Act == ActUnsSocNotGbl    ||
             Gbl.Action.Act == ActFavSocNotGbl    ||
             Gbl.Action.Act == ActUnfSocNotGbl    ||
+            Gbl.Action.Act == ActFavSocComGbl    ||
+            Gbl.Action.Act == ActUnfSocComGbl    ||
             Gbl.Action.Act == ActReqRemSocPubGbl ||
             Gbl.Action.Act == ActRemSocPubGbl    ||
             Gbl.Action.Act == ActReqRemSocComGbl ||
@@ -654,6 +656,8 @@ static void Lay_WriteScriptParamsAJAX (void)
        Gbl.Action.Act == ActUnsSocNotGbl    ||
        Gbl.Action.Act == ActFavSocNotGbl    ||
        Gbl.Action.Act == ActUnfSocNotGbl    ||
+       Gbl.Action.Act == ActFavSocComGbl    ||
+       Gbl.Action.Act == ActUnfSocComGbl    ||
        Gbl.Action.Act == ActReqRemSocPubGbl ||
        Gbl.Action.Act == ActRemSocPubGbl    ||
        Gbl.Action.Act == ActReqRemSocComGbl ||
@@ -672,6 +676,8 @@ static void Lay_WriteScriptParamsAJAX (void)
             Gbl.Action.Act == ActUnsSocNotUsr    ||
             Gbl.Action.Act == ActFavSocNotUsr    ||
             Gbl.Action.Act == ActUnfSocNotUsr    ||
+            Gbl.Action.Act == ActFavSocComUsr    ||
+            Gbl.Action.Act == ActUnfSocComUsr    ||
             Gbl.Action.Act == ActReqRemSocPubUsr ||
             Gbl.Action.Act == ActRemSocPubUsr    ||
             Gbl.Action.Act == ActReqRemSocComUsr ||
