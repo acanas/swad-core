@@ -3098,6 +3098,11 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
    char Query[256];
 
+   /***** Remove favs for this note *****/
+   sprintf (Query,"DELETE FROM social_notes_fav WHERE NotCod='%ld'",
+	    SocNot->NotCod);
+   DB_QueryDELETE (Query,"can not remove favs for social note");
+
    /***** Remove content of the comments of this social note *****/
    sprintf (Query,"DELETE FROM social_comments"
 	          " USING social_pubs,social_comments"
@@ -3306,6 +3311,21 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
 void Soc_RemoveUsrSocialContent (long UsrCod)
   {
    char Query[512];
+
+   /***** Remove favs *****/
+   /* Remove all favs made by this user in any social note */
+   sprintf (Query,"DELETE FROM social_notes_fav"
+	          " WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove favs for social note");
+
+   /* Remove all favs for all notes of this user */
+   sprintf (Query,"DELETE FROM social_notes_fav"
+	          " USING social_notes,social_notes_fav"
+	          " WHERE social_notes.UsrCod='%ld'"	// Author
+	          " AND social_notes.NotCod=social_notes_fav.NotCod",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove favs for social note");
 
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
