@@ -125,13 +125,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.121 (2016-01-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.121.1 (2016-01-19)"
 #define CSS_FILE		"swad15.120.3.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.121.1: Jan 19, 2016	Favs in social comments. Not finished. (193868 lines)
         Version 15.121:   Jan 19, 2016	Favs in social comments. Not finished. (193782 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS social_comments_fav (FavCod BIGINT AUTO_INCREMENT,ComCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(FavCod),UNIQUE INDEX(ComCod,UsrCod),INDEX(UsrCod));

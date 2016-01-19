@@ -42493,6 +42493,27 @@ const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very imp
 	"The ISO 3166-1 numerical code %03ld already exists.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_comment_no_longer_exists =
+#if   L==1
+	"El comentari ja no existeix.";
+#elif L==2
+	"Der Kommentar nicht mehr existiert.";
+#elif L==3
+	"The comment no longer exists.";
+#elif L==4
+	"El comentario ya no existe.";
+#elif L==5
+	"Le commentaire a disparu.";
+#elif L==6
+	"El comentario ya no existe.";	// Okoteve traducción
+#elif L==7
+	"Il commento non esiste pi&ugrave;.";
+#elif L==8
+	"Komentarz ju&zdot; nie istnieje.";
+#elif L==9
+	"O coment&aacute;rio n&atilde;o existe mais.";
+#endif
+
 const char *Txt_The_original_post_no_longer_exists =
 #if   L==1
 	"La publicaci&oacute; original ja no existeix.";
