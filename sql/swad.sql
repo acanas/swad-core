@@ -941,12 +941,13 @@ CREATE TABLE IF NOT EXISTS social_notes (
 -- Table social_notes_fav: stores users who marked social notes as favourite
 --
 CREATE TABLE IF NOT EXISTS social_notes_fav (
+	FavCod BIGINT AUTO_INCREMENT,
 	NotCod BIGINT NOT NULL,
 	UsrCod INT NOT NULL,
 	TimeFav DATETIME NOT NULL,
+	UNIQUE INDEX(FavCod),
 	UNIQUE INDEX(NotCod,UsrCod),
-	INDEX(UsrCod),
-	INDEX(TimeFav));
+	INDEX(UsrCod));
 --
 -- Table social_posts: stores social posts (public comments written by users)
 --

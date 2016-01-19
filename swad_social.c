@@ -3467,7 +3467,7 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 		  " FROM social_notes_fav"
 		  " WHERE NotCod='%ld'"
 		  " AND UsrCod<>'%ld'"	// Extra check
-		  " ORDER BY TimeFav LIMIT %u",
+		  " ORDER BY FavCod LIMIT %u",
 	    SocNot->NotCod,
 	    SocNot->UsrCod,
 	    Soc_MAX_SHARERS_FAVERS_SHOWN);
