@@ -1485,7 +1485,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:10px;
 	text-align:center;
 	color:#808080;
-	font-size:9pt;
+	font-size:8pt;
 	}
 
 /*********************************** Lists ***********************************/
@@ -1773,7 +1773,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	padding-bottom:10px;
 	}
-.SOCIAL_TEXTAREA
+.SOCIAL_TEXTAREA_POST
 	{
 	box-sizing:border-box;
 	width:480px;
@@ -1839,27 +1839,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-left:4px;
 	vertical-align:bottom;
 	}
-.SOCIAL_COMMENTS
-	{
-	}
 .SOCIAL_COMMENT
 	{
 	border-top:1px solid silver;
-	}
-.SOCIAL_FORM_COMMENT
-	{
-	display:inline-block;
-	margin-left:56px;
-	padding-bottom:10px;
-	width:480px;
-	text-align:center;
 	}
 .SOCIAL_COMMENT_PHOTO
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	width:40px;
-	height:60px;
+	height:54px;
 	padding:10px 0;
 	text-align:left;
 	vertical-align:top;
@@ -1879,6 +1868,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:top;
         }
+.SOCIAL_FORM_NEW_COMMENT
+	{
+	display:inline-block;
+	margin-left:56px;
+	border-top:1px solid silver;
+	padding-bottom:10px;
+	width:480px;
+	text-align:center;
+	}
+.SOCIAL_TEXTAREA_COMMENT
+	{
+	box-sizing:border-box;
+	width:440px;
+	margin:0;
+	resize:none;
+	}
 
 /*********************************** Messages ********************************/
 .MSG_TO_ONE_RCP

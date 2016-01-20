@@ -1647,7 +1647,7 @@ void Usr_WriteLoggedUsrHead (void)
                The_ClassUsr[Gbl.Prefs.Theme]);
      }
 
-   /***** Show photo *****/
+   /***** Show my photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,

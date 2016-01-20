@@ -255,7 +255,7 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
-static void Soc_PutTextarea (const char *Placeholder);
+static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 static long Soc_ReceiveSocialPost (void);
 
@@ -1851,7 +1851,7 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
                       "<li>");
 
-   /***** Left: write author's photo *****/
+   /***** Left: write author's photo (my photo) *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
@@ -1884,7 +1884,7 @@ static void Soc_PutFormToWriteNewPost (void)
       Act_FormStart (ActRcvSocPstGbl);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea (Txt_New_SOCIAL_post);
+   Soc_PutTextarea (Txt_New_SOCIAL_post,"SOCIAL_TEXTAREA_POST");
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1901,7 +1901,7 @@ static void Soc_PutFormToWriteNewPost (void)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void Soc_PutTextarea (const char *Placeholder)
+static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
    extern const char *Txt_Post;
    char IdButton[Soc_MAX_LENGTH_ID];
@@ -1912,12 +1912,12 @@ static void Soc_PutTextarea (const char *Placeholder)
    /***** Textarea to write the content *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
                       " placeholder=\"%s&hellip;\""
-	              " class=\"SOCIAL_TEXTAREA\""
+	              " class=\"%s\""
 	              " onfocus=\"expandTextarea(this,'%s','5');\""
 	              " onblur=\"contractTextarea(this,'%s','1');\">"
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
-            Placeholder,
+            Placeholder,ClassTextArea,
             IdButton,IdButton);
 
    /***** Help on editor and submit button *****/
@@ -2056,12 +2056,25 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID])
   {
    extern const char *Txt_New_SOCIAL_comment;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX+1];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
-		      " class=\"SOCIAL_FORM_COMMENT\""
+		      " class=\"SOCIAL_FORM_NEW_COMMENT\""
 		      " style=\"display:none;\">",
 	    IdNewComment);
+
+   /***** Left: write author's photo (my photo) *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
+					             NULL,
+		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Right: form to write the comment *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
    /***** Start form to write the post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -2074,10 +2087,13 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    Soc_PutHiddenParamNotCod (NotCod);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea (Txt_New_SOCIAL_comment);
+   Soc_PutTextarea (Txt_New_SOCIAL_comment,"SOCIAL_TEXTAREA_COMMENT");
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End right container *****/
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2128,7 +2144,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    if (NumComments)	// Comments to this social note found
      {
       /***** Start list *****/
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT SOCIAL_COMMENTS\">");
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
       /***** List comments one by one *****/
       for (NumCom = 0;

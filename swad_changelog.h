@@ -119,21 +119,20 @@
 // TODO: Increment one second after each refresh in social timeline?
 // TODO: Notifications of new followers should go to follower's profile
 
-// TODO: Textarea in comments smaller and with my photo at left
 // TODO: Fav comments (remove favs when comment is removed)
-// TODO: Fix bugs on comment favourites
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.121.4 (2016-01-20)"
-#define CSS_FILE		"swad15.121.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.121.5 (2016-01-20)"
+#define CSS_FILE		"swad15.121.5.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.121.5: Jan 20, 2016	New layout of form to write a new social comment. (193922 lines)
         Version 15.121.4: Jan 20, 2016	Fixed bug related to favs in social comments. (193904 lines)
         Version 15.121.3: Jan 20, 2016	Favs in social comments. Not finished.
 					Changes in layout of social timeline. (193901 lines)

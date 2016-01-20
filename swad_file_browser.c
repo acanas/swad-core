@@ -975,9 +975,9 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 #define Brw_MAX_FILES_ASSIG_PER_STD	500
 #define Brw_MAX_FOLDS_ASSIG_PER_STD	50
 
-#define Brw_MAX_QUOTA_WORKS_PER_STD		( 2ULL*Brw_GiB)
-#define Brw_MAX_FILES_WORKS_PER_STD		500
-#define Brw_MAX_FOLDS_WORKS_PER_STD		50
+#define Brw_MAX_QUOTA_WORKS_PER_STD	( 2ULL*Brw_GiB)
+#define Brw_MAX_FILES_WORKS_PER_STD	500
+#define Brw_MAX_FOLDS_WORKS_PER_STD	50
 
 #define Brw_MAX_QUOTA_MARKS_CRS		( 1ULL*Brw_GiB)
 #define Brw_MAX_FILES_MARKS_CRS		500
@@ -999,8 +999,8 @@ const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
 	            0,	// Rol_ROLE_INS_ADM
 	            0,	// Rol_ROLE_SYS_ADM
   };
-#define Brw_MAX_FILES_BRIEF			5000
-#define Brw_MAX_FOLDS_BRIEF		1000
+#define Brw_MAX_FILES_BRIEF	5000
+#define Brw_MAX_FOLDS_BRIEF	1000
 
 /* Extensions allowed for uploaded files */
 const char *Brw_FileExtensionsAllowed[] =
@@ -1130,6 +1130,7 @@ const char *Brw_MIMETypesAllowed[] =
    "application/download",		// zip files in Firefox caused by an error?
    "application/excel",			// Microsoft Excel xls
    "application/finale",		// Finale .mus
+   "application/force",			// PDF uploaded from Firefox
    "application/force-download",	// RAR uploaded from Firefox
    "application/futuresplash",		// Flash
    "application/gzip",			// GNU ZIP gz, gzip

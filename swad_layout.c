@@ -1750,7 +1750,7 @@ void Lay_HelpPlainEditor (void)
 
    Lay_HelpTextEditor (Txt_TEXT_plain,
                        "\\(LaTeX\\)",
-                       "$$LaTeX$$,&nbsp;\\[LaTeX\\]");
+                       "$$LaTeX$$&nbsp;\\[LaTeX\\]");
   }
 
 void Lay_HelpRichEditor (void)
