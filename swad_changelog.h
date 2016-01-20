@@ -121,13 +121,24 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.122 (2016-01-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.122.1 (2016-01-20)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.122.1: Jan 20, 2016	Changes in table of actions. (194018 lines)
+					8 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1512','es','N','Marcar post social como favorito (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1513','es','N','Desmarcar post social como favorito (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1514','es','N','Marcar post social como favorito (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1515','es','N','Desmarcar post social como favorito (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1516','es','N','Marcar comentario social como favorito (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1517','es','N','Desmarcar comentario social como favorito (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1518','es','N','Marcar comentario social como favorito (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1519','es','N','Desmarcar comentario social como favorito (usuario)');
+
         Version 15.122:   Jan 20, 2016	Notifications of new followers go to follower's profile.
 					Changes in notifications. (194008 lines)
         Version 15.121.9: Jan 20, 2016	Code optimization in social comments. (193952 lines)
