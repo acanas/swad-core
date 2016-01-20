@@ -120,18 +120,22 @@
 // TODO: Notifications of new followers should go to follower's profile
 
 // TODO: Fav comments (remove favs when comment is removed)
+// TODO: Fix bugs on comment favourites
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.121.1 (2016-01-19)"
-#define CSS_FILE		"swad15.120.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.121.3 (2016-01-19)"
+#define CSS_FILE		"swad15.121.3.css"
 #define JS_FILE			"swad15.118.4.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.121.3: Jan 20, 2016	Favs in social comments. Not finished.
+					Changes in layout of social timeline. (193901 lines)
+        Version 15.121.2: Jan 19, 2016	Favs in social comments. Not finished. (193868 lines)
         Version 15.121.1: Jan 19, 2016	Favs in social comments. Not finished. (193868 lines)
         Version 15.121:   Jan 19, 2016	Favs in social comments. Not finished. (193782 lines)
 					1 change necessary in database:

@@ -265,8 +265,7 @@ static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
-                                           const char IdNewComment[Soc_MAX_LENGTH_ID]);
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     Soc_TopMessage_t TopMessage,long UsrCod,
                                     bool ShowCommentAlone);
@@ -1107,7 +1106,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
-			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
+			"PHOTO42x56",Pho_ZOOM,true);	// Use unique id
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
@@ -1226,6 +1225,12 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
 
+      /* End of right part */
+      fprintf (Gbl.F.Out,"</div>");
+
+
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_LEFT\">");
+
       /* Create unique id for new comment */
       Soc_SetUniqueId (IdNewComment);
 
@@ -1233,10 +1238,34 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
-      if (NumComments || SocNot->Unavailable)	// Unavailable social notes can not be commented
+      // if (NumComments || SocNot->Unavailable)	// Unavailable social notes can not be commented
+      if (SocNot->Unavailable)	// Unavailable social notes can not be commented
 	 Soc_PutIconCommentDisabled ();
       else
          Soc_PutIconToToggleCommentSocialNote (IdNewComment,false);
+
+      fprintf (Gbl.F.Out,"</div>");
+
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_RIGHT\">"
+	                 "<div class=\"SOCIAL_ICONS_FAV_SHA_REM\">");
+
+      /* Put icon to mark this social note as favourite */
+      if (IAmTheAuthor)				// I am the author
+	 Soc_PutDisabledIconFav (SocNot->NumFavs);
+      else if (IAmAFavouriterOfThisSocNot)	// I have favourited this social note
+	 /* Put icon to unfav this publishing */
+	 Soc_PutFormToUnfavSocialNote (SocNot->NotCod);
+      else					// I am not the author and I am not a sharer
+	{
+	 if (SocNot->Unavailable)		// Unavailable social notes can not be favourited
+	    Soc_PutDisabledIconFav (SocNot->NumFavs);
+	 else
+	    /* Put icon to share this publishing */
+	    Soc_PutFormToFavSocialNote (SocNot->NotCod);
+	}
+
+      /* Show who have marked this social note as favourite */
+      Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
 
       /* Put icons to share/unshare */
       if (IAmTheAuthor)				// I am the author
@@ -1257,37 +1286,22 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       /* Show who have shared this social note */
       Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
 
-      /* Put icon to mark this social note as favourite */
-      if (IAmTheAuthor)				// I am the author
-	 Soc_PutDisabledIconFav (SocNot->NumFavs);
-      else if (IAmAFavouriterOfThisSocNot)	// I have favourited this social note
-	 /* Put icon to unfav this publishing */
-	 Soc_PutFormToUnfavSocialNote (SocNot->NotCod);
-      else					// I am not the author and I am not a sharer
-	{
-	 if (SocNot->Unavailable)		// Unavailable social notes can not be favourited
-	    Soc_PutDisabledIconFav (SocNot->NumFavs);
-	 else
-	    /* Put icon to share this publishing */
-	    Soc_PutFormToFavSocialNote (SocNot->NotCod);
-	}
-
-      /* Show who have marked this social note as favourite */
-      Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
-
       /* Put icon to remove this social note */
       if (IAmTheAuthor)
 	 Soc_PutFormToRemoveSocialPublishing (SocNot->NotCod);
 
+      /* End of icon bar */
+      fprintf (Gbl.F.Out,"</div>");
+
       /* Show comments */
       if (NumComments)
-	 Soc_WriteCommentsInSocialNote (SocNot,IdNewComment);
+	 Soc_WriteCommentsInSocialNote (SocNot);
+
+      /* End of bottom right */
+      fprintf (Gbl.F.Out,"</div>");
 
       /* Put hidden form to write a new comment */
       Soc_PutHiddenFormToWriteNewCommentToSocialNote (SocNot->NotCod,IdNewComment);
-
-      /* End of right part */
-      fprintf (Gbl.F.Out,"</div>");
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1842,7 +1856,7 @@ static void Soc_PutFormToWriteNewPost (void)
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
-		     "PHOTO45x60",Pho_ZOOM,false);
+		     "PHOTO42x56",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: author's name, time, summary and buttons *****/
@@ -1858,7 +1872,7 @@ static void Soc_PutFormToWriteNewPost (void)
 	    FullName,Gbl.Usrs.Me.UsrDat.Nickname);
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_COMMENT\">");
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_NEW_POST\">");
 
    /* Start form to write the post */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -2088,8 +2102,7 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
-                                           const char IdNewComment[Soc_MAX_LENGTH_ID])
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2130,14 +2143,6 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
 	 Soc_WriteSocialComment (&SocCom,
 	                         Soc_TOP_MESSAGE_NONE,-1L,
 	                         false);
-	}
-
-      /* Put icon to add a comment */
-      if (!SocNot->Unavailable)	// Unavailable social notes can not be commented
-	{
-	 fprintf (Gbl.F.Out,"<li class=\"SOCIAL_COMMENT\">");
-	 Soc_PutIconToToggleCommentSocialNote (IdNewComment,true);
-	 fprintf (Gbl.F.Out,"</li>");
 	}
 
       /***** End list *****/
@@ -2222,10 +2227,6 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
-
-      /* Put icon to fav this social comment */
-      if (!IAmTheAuthor && !ShowCommentAlone)
-	 Soc_PutFormToFavSocialComment (SocCom->ComCod);
 
       /* Put icon to mark this social comment as favourite */
       if (IAmTheAuthor)				// I am the author
@@ -2336,7 +2337,7 @@ static void Soc_PutFormToFavSocialComment (long ComCod)
    else
       Act_FormStartUnique (ActFavSocComGbl);
    Soc_PutHiddenParamComCod (ComCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/fav64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2362,7 +2363,7 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
       strcpy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone);
 
    /***** Disabled icon to share *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV_DISABLED\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_DISABLED\">"
 		      "<img src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />"
@@ -2386,7 +2387,7 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
       strcpy (Gbl.Title,Txt_SOCIAL_NOTE_Not_favourited_by_anyone);
 
    /***** Disabled icon to mark as favourite *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV_DISABLED\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV_DISABLED\">"
 		      "<img src=\"%s/fav64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />"
@@ -2413,7 +2414,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
    else
       Act_FormStartUnique (ActShaSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/share64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2442,7 +2443,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
    else
       Act_FormStartUnique (ActFavSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/fav64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2471,7 +2472,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
    else
       Act_FormStartUnique (ActUnsSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/shared64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2500,7 +2501,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
    else
       Act_FormStartUnique (ActUnfSocNotGbl);
    Soc_PutHiddenParamNotCod (NotCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/faved64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2529,7 +2530,7 @@ static void Soc_PutFormToUnfavSocialComment (long ComCod)
    else
       Act_FormStartUnique (ActUnfSocComGbl);
    Soc_PutHiddenParamNotCod (ComCod);
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_SHARE_FAV ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/faved64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
