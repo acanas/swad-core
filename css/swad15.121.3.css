@@ -1704,6 +1704,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	to {background-color:white;}
 	}
+
 .SOCIAL_FORM_NEW_POST
 	{
 	padding:10px 0;
@@ -1751,6 +1752,7 @@ a:hover img.CENTRE_PHOTO_SHOW
         display:inline-block;
 	box-sizing:border-box;
         width:160px;
+        text-align:right;
 	vertical-align:top;
         }
 .SOCIAL_BOTTOM_LEFT	/* Container for button used to toggle new comment form */
@@ -1780,7 +1782,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .SOCIAL_TXT
 	{
-	padding:8px 0;
+	padding:5px 0;
 	color:#404040;
 	font-size:13pt;
 	}

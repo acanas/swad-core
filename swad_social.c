@@ -1425,8 +1425,8 @@ static void Soc_WriteDateTime (time_t TimeUTC)
    Soc_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\""
-	              " style=\"display:inline-block;\"></div>",
+   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\">"
+	              "</div>",
             IdDateTime);
 
    /***** Script to write date and time in browser local time *****/
@@ -2529,7 +2529,7 @@ static void Soc_PutFormToUnfavSocialComment (long ComCod)
      }
    else
       Act_FormStartUnique (ActUnfSocComGbl);
-   Soc_PutHiddenParamNotCod (ComCod);
+   Soc_PutHiddenParamComCod (ComCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/faved64x64.png\""
@@ -3833,7 +3833,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
 	       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 	                                             NULL,
-	                         "PHOTO18x24",Pho_ZOOM,true);	// Use unique id
+	                         "PHOTO15x20",Pho_ZOOM,true);	// Use unique id
                fprintf (Gbl.F.Out,"</div>");
 
                NumUsrsShown++;
