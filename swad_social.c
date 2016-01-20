@@ -3356,6 +3356,15 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
    char Query[256];
 
+   /***** Remove favs for all comments in this note *****/
+   sprintf (Query,"DELETE FROM social_comments_fav"
+                  " USING social_notes,social_comments,social_comments_fav"
+	          " WHERE social_notes.NotCod='%ld'"
+	          " AND social_notes.ComCod=social_comments.ComCod"
+	          " AND social_comments.ComCod=social_comments_fav.ComCod",
+	    SocNot->NotCod);
+   DB_QueryDELETE (Query,"can not remove favs for social note");
+
    /***** Remove favs for this note *****/
    sprintf (Query,"DELETE FROM social_notes_fav WHERE NotCod='%ld'",
 	    SocNot->NotCod);
@@ -3544,9 +3553,13 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
   {
    char Query[128];
 
+   /***** Remove favs for this comment *****/
+   sprintf (Query,"DELETE FROM social_comments_fav WHERE ComCod='%ld'",
+	    SocCom->ComCod);
+   DB_QueryDELETE (Query,"can not remove favs for social comment");
+
    /***** Remove content of this social comment *****/
-   sprintf (Query,"DELETE FROM social_comments"
-	          " WHERE ComCod='%ld'",
+   sprintf (Query,"DELETE FROM social_comments WHERE ComCod='%ld'",
 	    SocCom->ComCod);
    DB_QueryDELETE (Query,"can not remove a social comment");
 
@@ -3572,20 +3585,42 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
   {
    char Query[512];
 
-   /***** Remove favs *****/
-   /* Remove all favs made by this user in any social note */
-   sprintf (Query,"DELETE FROM social_notes_fav"
-	          " WHERE UsrCod='%ld'",
+   /***** Remove favs for comments *****/
+   /* Remove all favs made by this user in any social comment */
+   sprintf (Query,"DELETE FROM social_comments_fav WHERE UsrCod='%ld'",
 	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove favs for social note");
+   DB_QueryDELETE (Query,"can not remove favs");
+
+   /* Remove all favs for all comments of this user */
+   sprintf (Query,"DELETE FROM social_comments_fav"
+	          " USING social_comments,social_comments_fav"
+	          " WHERE social_comments.UsrCod='%ld'"	// Author of the comment
+	          " AND social_comments.ComCod=social_comments_fav.ComCod",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove favs");
+
+   /* Remove all favs for all comments in all the social notes of the user */
+   sprintf (Query,"DELETE FROM social_comments_fav"
+	          " USING social_notes,social_comments,social_comments_fav"
+	          " WHERE social_notes.UsrCod='%ld'"	// Author of the note
+	          " AND social_notes.NotCod=social_comments.NotCod"
+	          " AND social_comments.ComCod=social_comments_fav.ComCod",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove social comments");
+
+   /***** Remove favs for notes *****/
+   /* Remove all favs made by this user in any social note */
+   sprintf (Query,"DELETE FROM social_notes_fav WHERE UsrCod='%ld'",
+	    UsrCod);
+   DB_QueryDELETE (Query,"can not remove favs");
 
    /* Remove all favs for all notes of this user */
    sprintf (Query,"DELETE FROM social_notes_fav"
 	          " USING social_notes,social_notes_fav"
-	          " WHERE social_notes.UsrCod='%ld'"	// Author
+	          " WHERE social_notes.UsrCod='%ld'"	// Author of the note
 	          " AND social_notes.NotCod=social_notes_fav.NotCod",
 	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove favs for social note");
+   DB_QueryDELETE (Query,"can not remove favs");
 
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
