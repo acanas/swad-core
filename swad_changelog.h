@@ -123,13 +123,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.121.8 (2016-01-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.121.9 (2016-01-20)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.121.9: Jan 20, 2016	Code optimization in social comments. (193952 lines)
         Version 15.121.8: Jan 20, 2016	Fixed bugs removing favs to social comments. (193960 lines)
         Version 15.121.7: Jan 20, 2016	Changes in layout of social timeline. (193955 lines)
         Version 15.121.6: Jan 20, 2016	Remove favs when a social comment is removed.

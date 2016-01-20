@@ -259,8 +259,7 @@ static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 static long Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
-                                                  bool PutText);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID]);
 static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Soc_MAX_LENGTH_ID]);
@@ -1242,7 +1241,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       if (SocNot->Unavailable)	// Unavailable social notes can not be commented
 	 Soc_PutIconCommentDisabled ();
       else
-         Soc_PutIconToToggleCommentSocialNote (IdNewComment,false);
+         Soc_PutIconToToggleCommentSocialNote (IdNewComment);
 
       fprintf (Gbl.F.Out,"</div>");
 
@@ -2003,29 +2002,22 @@ static long Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID],
-                                                  bool PutText)
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID])
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Comment;
 
    /***** Link to toggle on/off the form to comment a social note *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_COMMENT ICON_HIGHLIGHT\">"
-                      "<a href=\"\"");
-   if (PutText)
-      fprintf (Gbl.F.Out," class=\"%s\"",The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out," onclick=\"toggleDisplay('%s');return false;\" />"
-		      "<img src=\"%s/write64x64.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />",
-	    UniqueId,
-	    Gbl.Prefs.IconsURL,
-	    Txt_Comment,
-	    Txt_Comment);
-   if (PutText)
-      fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Comment);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</div>");
+                      "<a href=\"\""
+                      " onclick=\"toggleDisplay('%s');return false;\" />"
+                      "<img src=\"%s/write64x64.gif\""
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICON20x20\" />"
+                      "</a>"
+                      "</div>",
+            UniqueId,
+            Gbl.Prefs.IconsURL,
+            Txt_Comment,Txt_Comment);
   }
 
 /*****************************************************************************/
@@ -2034,7 +2026,6 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LE
 
 static void Soc_PutIconCommentDisabled (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Comment;
 
    /***** Disabled icon to comment a social note *****/
