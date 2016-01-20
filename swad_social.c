@@ -1102,7 +1102,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	}
 
       /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
@@ -1110,7 +1110,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
       Soc_WriteAuthorNote (&UsrDat);
@@ -1852,7 +1852,7 @@ static void Soc_PutFormToWriteNewPost (void)
                       "<li>");
 
    /***** Left: write author's photo (my photo) *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">");
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
@@ -1860,7 +1860,7 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: author's name, time, summary and buttons *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
 
    /* Write author's full name and nickname */
    strcpy (FullName,Gbl.Usrs.Me.UsrDat.FullName);
@@ -2192,9 +2192,13 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (ShowCommentAlone)
      {
       Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_LEFT_PHOTO\">"
+
+      /***** Write sharer/commenter if distinct to author *****/
+      Soc_WriteTopMessage (TopMessage,UsrCod);
+
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">"
                          "</div>"
-                         "<div class=\"SOCIAL_RIGHT_CONTAINER\">"
+                         "<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">"
                          "<ul class=\"LIST_LEFT\">");
      }
 
@@ -2210,9 +2214,6 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Lay_ShowAlert (Lay_ERROR,"Error in social comment.");
    else
      {
-      /***** Write sharer/commenter if distinct to author *****/
-      Soc_WriteTopMessage (TopMessage,UsrCod);
-
       /***** Get author's data *****/
       Usr_UsrDataConstructor (&UsrDat);
       UsrDat.UsrCod = SocCom->UsrCod;
@@ -2271,7 +2272,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (ShowCommentAlone)
      {
       fprintf (Gbl.F.Out,"</ul>"
-                         "</div>");
+                         "</div>");	// SOCIAL_NOTE_RIGHT_CONTAINER
       Lay_EndRoundFrame ();
      }
   }
@@ -3356,16 +3357,17 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
    char Query[256];
 
-   /***** Remove favs for all comments in this note *****/
+   /***** Remove favs *****/
+   /* Remove favs for all comments in this note */
    sprintf (Query,"DELETE FROM social_comments_fav"
-                  " USING social_notes,social_comments,social_comments_fav"
-	          " WHERE social_notes.NotCod='%ld'"
-	          " AND social_notes.ComCod=social_comments.ComCod"
-	          " AND social_comments.ComCod=social_comments_fav.ComCod",
-	    SocNot->NotCod);
+                  " USING social_pubs,social_comments_fav"
+	          " WHERE social_pubs.NotCod='%ld'"
+                  " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove favs for social note");
 
-   /***** Remove favs for this note *****/
+   /* Remove favs for this note */
    sprintf (Query,"DELETE FROM social_notes_fav WHERE NotCod='%ld'",
 	    SocNot->NotCod);
    DB_QueryDELETE (Query,"can not remove favs for social note");
@@ -3593,19 +3595,21 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
    /* Remove all favs for all comments of this user */
    sprintf (Query,"DELETE FROM social_comments_fav"
-	          " USING social_comments,social_comments_fav"
-	          " WHERE social_comments.UsrCod='%ld'"	// Author of the comment
-	          " AND social_comments.ComCod=social_comments_fav.ComCod",
-	    UsrCod);
+	          " USING social_pubs,social_comments_fav"
+	          " WHERE social_pubs.PublisherCod='%ld'"	// Author of the comment
+                  " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove favs");
 
    /* Remove all favs for all comments in all the social notes of the user */
    sprintf (Query,"DELETE FROM social_comments_fav"
-	          " USING social_notes,social_comments,social_comments_fav"
+	          " USING social_notes,social_pubs,social_comments_fav"
 	          " WHERE social_notes.UsrCod='%ld'"	// Author of the note
-	          " AND social_notes.NotCod=social_comments.NotCod"
-	          " AND social_comments.ComCod=social_comments_fav.ComCod",
-	    UsrCod);
+	          " AND social_notes.NotCod=social_pubs.NotCod"
+                  " AND social_pubs.PubType='%u'"
+	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
    /***** Remove favs for notes *****/
@@ -3625,9 +3629,9 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
    /***** Remove social comments *****/
    /* Remove content of all the comments in all the social notes of the user */
    sprintf (Query,"DELETE FROM social_comments"
-	          " USING social_pubs,social_comments"
-	          " WHERE social_pubs.NotCod IN"
-		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
+	          " USING social_notes,social_pubs,social_comments"
+	          " WHERE social_notes.UsrCod='%ld'"
+		  " AND social_notes.NotCod=social_pubs.NotCod"
                   " AND social_pubs.PubType='%u'"
 	          " AND social_pubs.PubCod=social_comments.ComCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
@@ -3635,8 +3639,9 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 
    /* Remove all the comments from any user in any social note of the user */
    sprintf (Query,"DELETE FROM social_pubs"
-	          " WHERE NotCod IN"
-		  " (SELECT NotCod FROM social_notes WHERE UsrCod='%ld')"
+	          " USING social_notes,social_pubs"
+	          " WHERE social_notes.UsrCod='%ld'"
+		  " AND social_notes.NotCod=social_pubs.NotCod"
                   " AND social_pubs.PubType='%u'",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
