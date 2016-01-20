@@ -348,7 +348,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	               AsgCod,
+	               AsgCod,Gbl.CurrentCrs.Crs.CrsCod,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

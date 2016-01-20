@@ -405,7 +405,7 @@ void Exa_ListExamAnnouncementsSee (void)
 
    /***** Mark possible notifications as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
-	               -1L,
+	               -1L,Gbl.CurrentCrs.Crs.CrsCod,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

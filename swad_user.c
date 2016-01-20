@@ -346,7 +346,7 @@ void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods)
   }
 
 /*****************************************************************************/
-/** Get user code from user's record in database using encrypted user code ***/
+/******** Get user's code from database using encrypted user's code **********/
 /*****************************************************************************/
 // Input: UsrDat->EncryptedUsrCod must hold user's encrypted code
 
@@ -368,7 +368,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
       if (NumRows != 1)
          Lay_ShowErrorAndExit ("Error when getting user's code.");
 
-      /***** Get user code *****/
+      /***** Get user's code *****/
       row = mysql_fetch_row (mysql_res);
       UsrDat->UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -377,6 +377,41 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
      }
    else
       UsrDat->UsrCod = -1L;
+  }
+
+/*****************************************************************************/
+/********* Get encrypted user's code from database using user's code *********/
+/*****************************************************************************/
+// Input: UsrDat->UsrCod must hold user's code
+
+void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+
+   if (UsrDat->UsrCod > 0)
+     {
+      /***** Get encrypted user's code from database *****/
+      sprintf (Query,"SELECT EncryptedUsrCod FROM usr_data"
+	             " WHERE UsrCod='%ld'",
+               UsrDat->UsrCod);
+      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get encrypted user's code");
+
+      if (NumRows != 1)
+         Lay_ShowErrorAndExit ("Error when getting encrypted user's code.");
+
+      /***** Get encrypted user's code *****/
+      row = mysql_fetch_row (mysql_res);
+      strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod)-1);
+      UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod)-1] = '\0';
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+   else
+      UsrDat->EncryptedUsrCod[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -417,7 +452,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /***** Read user's data *****/
    row = mysql_fetch_row (mysql_res);
 
-   /* Get encrypted user code */
+   /* Get encrypted user's code */
    strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod)-1);
    UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod)-1] = '\0';
 

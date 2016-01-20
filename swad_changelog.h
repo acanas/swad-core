@@ -116,20 +116,20 @@
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
-// TODO: Increment one second after each refresh in social timeline?
-// TODO: Notifications of new followers should go to follower's profile
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.121.9 (2016-01-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.122 (2016-01-20)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.122:   Jan 20, 2016	Notifications of new followers go to follower's profile.
+					Changes in notifications. (194008 lines)
         Version 15.121.9: Jan 20, 2016	Code optimization in social comments. (193952 lines)
         Version 15.121.8: Jan 20, 2016	Fixed bugs removing favs to social comments. (193960 lines)
         Version 15.121.7: Jan 20, 2016	Changes in layout of social timeline. (193955 lines)

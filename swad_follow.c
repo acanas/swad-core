@@ -415,8 +415,9 @@ void Fol_ListFollowers (void)
 
 	 /***** If it's me, mark possible notification as seen *****/
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
-	    Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,-1L,
-				Gbl.Usrs.Me.UsrDat.UsrCod);
+	    Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
+	                         -1L,-1L,
+				 Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -545,7 +546,7 @@ void Fol_FollowUsr (void)
             /***** Create notification for this followed.
                    If this followed wants to receive notifications by e-mail, activate the sending of a notification *****/
             if (CreateNotif)
-               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,-1L,
+               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }

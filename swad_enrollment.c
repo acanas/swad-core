@@ -367,7 +367,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
 	                                                                      Ntf_EVENT_ENROLLMENT_TEACHER,
-                       -1L,
+                       -1L,Gbl.CurrentCrs.Crs.CrsCod,
                        Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -2823,7 +2823,7 @@ void Enr_ShowEnrollmentRequests (void)
 
             /***** Mark possible notification as seen *****/
             Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLLMENT_REQUEST,
-                                ReqCod,
+                                ReqCod,Gbl.CurrentCrs.Crs.CrsCod,
                                 Gbl.Usrs.Me.UsrDat.UsrCod);
            }
          else        // User does not exists or user already belongs to course ==> remove pair from crs_usr_requests table

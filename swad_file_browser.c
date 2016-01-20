@@ -9210,13 +9210,13 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_ADMI_DOCUM_CRS:
 	    case Brw_ADMI_DOCUM_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_SHARE_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_SHOW_MARKS_CRS:
@@ -9224,7 +9224,7 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_ADMI_MARKS_CRS:
 	    case Brw_ADMI_MARKS_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
@@ -9349,13 +9349,13 @@ void Brw_DownloadFile (void)
 	    case Brw_ADMI_DOCUM_CRS:
 	    case Brw_ADMI_DOCUM_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_SHARE_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_SHOW_MARKS_CRS:
@@ -9363,7 +9363,7 @@ void Brw_DownloadFile (void)
 	    case Brw_ADMI_MARKS_CRS:
 	    case Brw_ADMI_MARKS_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,
+				   FileMetadata.FilCod,Gbl.CurrentCrs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:

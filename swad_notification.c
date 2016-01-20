@@ -644,6 +644,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct FileMetadata FileMetadata;
+   struct UsrData UsrDat;
    long InsCod = -1L;
    long CtrCod = -1L;
    long DegCod = -1L;
@@ -693,17 +694,30 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
-      case Ntf_EVENT_NOTICE:
-         Act_FormStart (Ntf_DefaultActions[NotifyEvent]);
-	 Not_PutHiddenParamNotCod (Cod);
+      case Ntf_EVENT_FOLLOWER:
+         UsrDat.UsrCod = Cod;	// Cod is the follower's code
+         Usr_GetEncryptedUsrCodFromUsrCod (&UsrDat);
+         if (UsrDat.EncryptedUsrCod[0])	// User's code found ==>
+					// go to user's public profile
+           {
+            Act_FormStart (ActSeePubPrf);
+            /* Put param to go to follower's profile */
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+           }
+         else	// No user's code found ==> go to see my followers
+            Act_FormStart (ActSeeFlr);
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
 	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
 	 For_PutAllHiddenParamsForum ();
 	 break;
+      case Ntf_EVENT_NOTICE:
+         Act_FormStart (ActShoNot);
+	 Not_PutHiddenParamNotCod (Cod);
+	 break;
       case Ntf_EVENT_MESSAGE:
-         Act_FormStart (Ntf_DefaultActions[NotifyEvent]);
+         Act_FormStart (ActExpRcvMsg);
 	 Msg_PutHiddenParamMsgCod (Cod);
 	 break;
       default:
@@ -817,23 +831,28 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
 /********************** Set possible notification as seen ********************/
 /*****************************************************************************/
 
-void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod)
+void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod)
   {
    char Query[256];
 
    /***** Set notification as seen by me *****/
    if (ToUsrCod > 0)	// If the user code is specified
      {
-      if (Cod > 0)	// Set only one notification as seen
+      if (Cod > 0)		// Set only one notification for the user as seen
          sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
                         " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND Cod='%ld'",
                   (unsigned) Ntf_STATUS_BIT_READ,
                   ToUsrCod,(unsigned) NotifyEvent,Cod);
-      else		// Set all notifications of this type, in the current course for the user, as seen
+      else if (CrsCod > 0)	// Set all notifications of this type in the current course for the user as seen
          sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
                         " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND CrsCod='%ld'",
                   (unsigned) Ntf_STATUS_BIT_READ,
                   ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
+      else			// Set all notifications of this type for the user as seen
+         sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
+                        " WHERE ToUsrCod='%ld' AND NotifyEvent='%u'",
+                  (unsigned) Ntf_STATUS_BIT_READ,
+                  ToUsrCod,(unsigned) NotifyEvent);
       DB_QueryUPDATE (Query,"can not set notification(s) as seen");
      }
   }

@@ -1030,16 +1030,16 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
                Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-           	                   PstCod,
-           	                   Gbl.Usrs.Me.UsrDat.UsrCod);
+           	                    PstCod,Gbl.CurrentCrs.Crs.CrsCod,
+           	                    Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             default:
                break;
            }
          if (Thr.NumMyPosts)
             Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
-        	                PstCod,
-        	                Gbl.Usrs.Me.UsrDat.UsrCod);
+        	                 PstCod,-1L,
+        	                 Gbl.Usrs.Me.UsrDat.UsrCod);
         }
 
       Lay_EndRoundFrameTable ();

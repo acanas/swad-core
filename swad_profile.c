@@ -33,6 +33,7 @@
 #include "swad_global.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
+#include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
@@ -205,6 +206,12 @@ void Prf_GetUsrDatAndShowUserProfile (void)
       /* End section */
       fprintf (Gbl.F.Out,"</section>");
      }
+
+   /***** If it's not me, mark possible notification as seen *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+      Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
+                           Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
+			   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

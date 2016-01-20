@@ -538,7 +538,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    /***** Mark possible notification as seen *****/
    if (Svy.CrsCod > 0)	// Only course surveys are notified
       Ntf_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
-	                  SvyCod,
+	                  SvyCod,Svy.CrsCod,
 	                  Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End frame *****/

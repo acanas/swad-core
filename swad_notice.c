@@ -476,8 +476,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
 
       /***** Mark possible notification as seen *****/
       Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
-	                  -1L,
-	                  Gbl.Usrs.Me.UsrDat.UsrCod);
+	                   -1L,Gbl.CurrentCrs.Crs.CrsCod,
+	                   Gbl.Usrs.Me.UsrDat.UsrCod);
      }
   }
 

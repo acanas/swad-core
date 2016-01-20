@@ -103,7 +103,7 @@ void Ntf_ShowMyNotifications (void);
 Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
 void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,unsigned MaxChars,bool GetContent);
-void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
+void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod);
 void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_MarkNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);

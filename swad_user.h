@@ -203,6 +203,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
+void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat);
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);
 
 void Usr_BuildFullName (struct UsrData *UsrDat);

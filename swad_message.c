@@ -1167,7 +1167,7 @@ void Msg_ExpRecMsg (void)
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
-	               Gbl.Msg.ExpandedMsgCod,
+	               Gbl.Msg.ExpandedMsgCod,-1L,
 	               Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show again the messages *****/
