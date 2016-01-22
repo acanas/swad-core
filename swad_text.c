@@ -663,16 +663,15 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	},
 	{
 	// Ntf_EVENT_SOCIAL_POST
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
+	"Novo missatge social",
+	"Neue soziale Beitrag",
+	"New social post",
+	"Nuevo mensaje social",
+	"Nouveau message social",
+	"Nuevo mensaje social",			// Okoteve traducción
+	"Nuovo post sociale",
+	"Nowy post spoleczna",
+	"Novo post sociais",
 	},
 	{
 	// Ntf_EVENT_SOCIAL_COMMENT
@@ -25122,23 +25121,23 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_POST
-	 ""
+	"Nous missatges socials"
 #elif L==2
-	 ""
+	"Neue soziale Beitr&auml;ge"
 #elif L==3
-	 ""
+	"New social posts"
 #elif L==4
-	 ""
+	"Nuevos mensajes sociales"
 #elif L==5
-	 ""
+	"Nouveaux messages sociaux"
 #elif L==6
-	 ""	// Okoteve traducción
+	"Nuevos mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 ""
+	"Nuovi post sociali"
 #elif L==8
-	 ""
+	"Nowe post spo&lstrok;eczne"
 #elif L==9
-	 ""
+	"Novos post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
@@ -25505,23 +25504,23 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_POST
-	 ""
+	"Novo missatge social"
 #elif L==2
-	 ""
+	"Neue soziale Beitrag"
 #elif L==3
-	 ""
+	"New social post"
 #elif L==4
-	 ""
+	"Nuevo mensaje social"
 #elif L==5
-	 ""
+	"Nouveau message social"
 #elif L==6
-	 ""	// Okoteve traducción
+	"Nuevo mensaje social"	// Okoteve traducción
 #elif L==7
-	 ""
+	"Nuovo post sociale"
 #elif L==8
-	 ""
+	"Nowy post spo&lstrok;eczna"
 #elif L==9
-	 ""
+	"Novo post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
