@@ -1992,7 +1992,7 @@ static long Soc_ReceiveSocialPost (void)
       /* Insert post in social notes */
       NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
 
-      /***** Notify by e-mail about the new notice *****/
+      /***** Store notification about the new post *****/
       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_POST,NotCod);
      }
    else
@@ -2705,6 +2705,9 @@ static long Soc_ReceiveComment (void)
 		  SocPub.PubCod,
 		  Content);
 	 DB_QueryINSERT (Query,"can not store comment content");
+
+	 /***** Store notification about the new comment *****/
+	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_COMMENT,SocNot.NotCod);
 
 	 /***** Show the social note just commented *****/
 	 Soc_WriteSocialNote (&SocNot,

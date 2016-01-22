@@ -59,13 +59,13 @@ typedef enum
    Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
 
    /* Social tab */
-   Ntf_EVENT_SOCIAL_POST	=  9,
-   Ntf_EVENT_SOCIAL_COMMENT	= 10,
-   Ntf_EVENT_SOCIAL_FAV		= 11,
-   Ntf_EVENT_SOCIAL_SHARE	= 12,
-   Ntf_EVENT_FOLLOWER	= 13,	// Old 14
-   Ntf_EVENT_FORUM_POST_COURSE	= 14,	// Old 10
-   Ntf_EVENT_FORUM_REPLY	= 15,	// Old 11
+   Ntf_EVENT_SOCIAL_POST	=  9,	// New social post from one of the users I follow
+   Ntf_EVENT_SOCIAL_COMMENT	= 10,	// New comment to one of my social notes
+   Ntf_EVENT_SOCIAL_FAV		= 11,	// New favourite to one of my social notes or comments
+   Ntf_EVENT_SOCIAL_SHARE	= 12,	// New sharing of one of my social notes
+   Ntf_EVENT_FOLLOWER		= 13,	// Old 14
+   Ntf_EVENT_FORUM_POST_COURSE	= 14,	// Old 10	// New post in forums of my courses
+   Ntf_EVENT_FORUM_REPLY	= 15,	// Old 11	// New reply to one of my posts in any forum
 
    /* Messages tab */
    Ntf_EVENT_NOTICE		= 16,	// Old  9

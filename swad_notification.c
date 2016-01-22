@@ -844,6 +844,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
 	 Soc_GetNotifNewSocialPost (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_SOCIAL_COMMENT:
+	 Soc_GetNotifNewSocialComment (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_SOCIAL_FAV:
          break;
@@ -1197,17 +1198,18 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 	     Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_SOCIAL_POST:
+      case Ntf_EVENT_SOCIAL_POST:	// New social post from one of the users I follow
 	 // Get all my followers
 	 sprintf (Query,"SELECT FollowerCod FROM usr_follow"
 	                " WHERE FollowedCod='%ld'",
 		  Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_SOCIAL_COMMENT:
+      case Ntf_EVENT_SOCIAL_COMMENT:	// New comment to one of my social notes
+	 !!!
          break;
-      case Ntf_EVENT_SOCIAL_FAV:
+      case Ntf_EVENT_SOCIAL_FAV:	// New favourite to one of my social notes or comments
          break;
-      case Ntf_EVENT_SOCIAL_SHARE:
+      case Ntf_EVENT_SOCIAL_SHARE:	// New sharing of one of my social notes
          break;
       case Ntf_EVENT_FOLLOWER:	// This function should not be called in this case
          return 0;
