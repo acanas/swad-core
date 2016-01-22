@@ -1686,10 +1686,10 @@ void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType
   }
 
 /*****************************************************************************/
-/*********** Mark possible notifications of one file as removed **************/
+/************** Mark social notes of one file as unavailable *****************/
 /*****************************************************************************/
 
-void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path)
+void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
@@ -4184,4 +4184,47 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
             Gbl.Session.Id);
    DB_QueryREPLACE (Query,"can not insert social notes in timeline");
+  }
+
+/*****************************************************************************/
+/******************* Get notification of a new social post *******************/
+/*****************************************************************************/
+// This function may be called inside a web service, so don't report error
+
+void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long PstCod,
+                                unsigned MaxChars,bool GetContent)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   SummaryStr[0] = '\0';	// Return nothing on error
+
+   /***** Get social post from database *****/
+   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
+            PstCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
+     {
+      /***** Get row *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /****** Get content (row[0]) *****/
+      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+     }
+   else
+      Content[0] = '\0';
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Copy content string *****/
+   if (GetContent)
+      if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
+         strcpy (*ContentStr,Content);
+
+   /***** Copy summary string *****/
+   Str_LimitLengthHTMLStr (Content,MaxChars);
+   strcpy (SummaryStr,Content);
   }

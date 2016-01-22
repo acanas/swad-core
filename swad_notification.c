@@ -585,7 +585,8 @@ void Ntf_ShowMyNotifications (void)
            {
             ContentStr = NULL;
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                           Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD,false);
+                                           Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                           Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD,false);
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
                                "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
@@ -801,8 +802,10 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
 /******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
-void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_NotifyEvent_t NotifyEvent,
-                                    long Cod,long CrsCod,long UsrCod,unsigned MaxChars,bool GetContent)
+void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
+                                    Ntf_NotifyEvent_t NotifyEvent,
+                                    long Cod,long CrsCod,long UsrCod,
+                                    unsigned MaxChars,bool GetContent)
   {
    SummaryStr[0] = '\0';
 
@@ -831,6 +834,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
 	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_SOCIAL_POST:
+	 Soc_GetNotifNewSocialPost (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_SOCIAL_COMMENT:
          break;

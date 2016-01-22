@@ -102,7 +102,7 @@ void Soc_RefreshOldTimelineUsr (void);
 long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);
-void Soc_MarkSocialNoteOneFileAsRemoved (const char *Path);
+void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path);
 void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path);
 
 void Soc_ReceiveSocialPostGbl (void);
@@ -138,5 +138,8 @@ void Soc_RemoveSocialComUsr (void);
 void Soc_RemoveUsrSocialContent (long UsrCod);
 
 void Soc_ClearOldTimelinesDB (void);
+
+void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long PstCod,
+                                unsigned MaxChars,bool GetContent);
 
 #endif

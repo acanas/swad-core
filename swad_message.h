@@ -95,7 +95,8 @@ void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages);
 void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages);
 void Msg_GetMsgSubject (long MsgCod,char *Subject);
-void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,unsigned MaxChars,bool GetContent);
+void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,
+                          unsigned MaxChars,bool GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,

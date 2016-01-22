@@ -10627,10 +10627,10 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char *Path)
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
-          Set possible social note as removed.
+          Set possible social note as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifOneFileAsRemoved (Path);
-   Soc_MarkSocialNoteOneFileAsRemoved (Path);
+   Soc_MarkSocialNoteOneFileAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MARKS_CRS ||

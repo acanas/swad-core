@@ -2676,7 +2676,8 @@ int swad__getNotifications (struct soap *soap,
          /* Get summary and content */
          ContentStr = NULL;
          Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                        Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE,true);
+                                        Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                        Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE,true);
 
          getNotificationsOut->notificationsArray.__ptr[NumRow].summary = (char *) soap_malloc (Gbl.soap,strlen (SummaryStr)+1);
          strcpy (getNotificationsOut->notificationsArray.__ptr[NumRow].summary,SummaryStr);

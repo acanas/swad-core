@@ -2843,22 +2843,23 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
   }
 
 /*****************************************************************************/
-/*********************** Show brief subject of a message *********************/
+/******************** Get subject and content of a message *******************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,unsigned MaxChars,bool GetContent)
+void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,
+                          unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_MSG_Subject;
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Subject,Content FROM msg_content"
-                  " WHERE MsgCod='%ld'",MsgCod);
+   sprintf (Query,"SELECT Subject,Content FROM msg_content WHERE MsgCod='%ld'",
+            MsgCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
         {
