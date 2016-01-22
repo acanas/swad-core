@@ -703,15 +703,15 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	{
 	// Ntf_EVENT_SOCIAL_SHARE
 	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
+	"Nova compartició de missatge social",
+	"Neue gemeinsame Nutzung von soziale Beitrag",
+	"New sharing of social post",
+	"Nueva compartición de mensaje social",
+	"Nouveau partage de message social",
+	"Nueva compartición de mensaje social",			// Okoteve traducción
+	"Nuova condivisione di post sociale",
+	"Nowy podzial post spoleczna",
+	"Nova partilha de post sociais",
 	},
 	{
 	// Ntf_EVENT_FOLLOWER
@@ -25182,23 +25182,23 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_SHARE
-	 ""
+	 "Noves comparticions de missatges socials"
 #elif L==2
-	 ""
+	 "Neue gemeinsame Nutzung zu sozialen Beitr&auml;ge"
 #elif L==3
-	 ""
+	 "New sharings of social posts"
 #elif L==4
-	 ""
+	 "Nuevas comparticiones de mensajes sociales"
 #elif L==5
-	 ""
+	 "Nouveaux partages &agrave; messages sociaux"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nuevas comparticiones de mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuove condivisioni a post sociali"
 #elif L==8
-	 ""
+	 "Nowe podzial post spo&lstrok;ecznej"
 #elif L==9
-	 ""
+	 "Novas partilhas de post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FOLLOWER
@@ -25565,23 +25565,23 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_SHARE
-	 ""
+	 "Nova compartici&oacute; d'un missatge social"
 #elif L==2
-	 ""
+	 "gemeinsame Nutzung von soziale Beitrag"
 #elif L==3
-	 ""
+	 "New sharing of social post"
 #elif L==4
-	 ""
+	 "Nueva compartici&oacute;n de un mensaje social"
 #elif L==5
-	 ""
+	 "Nouveau partage &agrave; message social"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nueva compartici&oacute;n de un mensaje social"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuova condivisione a un post sociale"
 #elif L==8
-	 ""
+	 "Nowy podzial post spo&lstrok;eczna"
 #elif L==9
-	 ""
+	 "Nova partilha de um post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FOLLOWER
