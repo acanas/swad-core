@@ -57,33 +57,39 @@ extern struct Globals Gbl;
 
 const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "unknown",
+   "unknown",		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "documentFile",
-   "sharedFile",
+   "documentFile",	// Ntf_EVENT_DOCUMENT_FILE
+   "sharedFile",	// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "assignment",
-   "examAnnouncement",
-   "marksFile",
+   "assignment",	// Ntf_EVENT_ASSIGNMENT
+   "examAnnouncement",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "marksFile",		// Ntf_EVENT_MARKS_FILE
 
-   /* Enrollment tab */
-   "enrollmentStudent",
-   "enrollmentTeacher",
-   "enrollmentRequest",
+   /* Users tab */
+   "enrollmentStudent",	// Ntf_EVENT_ENROLLMENT_STUDENT
+   "enrollmentTeacher",	// Ntf_EVENT_ENROLLMENT_TEACHER
+   "enrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
+
+   /* Social tab */
+   "socialPost",	// Ntf_EVENT_SOCIAL_POST
+   "socialComment",	// Ntf_EVENT_SOCIAL_COMMENT
+   "socialFav",		// Ntf_EVENT_SOCIAL_FAV
+   "socialShare",	// Ntf_EVENT_SOCIAL_SHARE
+   "follower",		// Ntf_EVENT_FOLLOWER
+   "forumPostCourse",	// Ntf_EVENT_FORUM_POST_COURSE
+   "forumReply",	// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "notice",
-   "forumPostCourse",
-   "forumReply",
-   "message",
+   "notice",		// Ntf_EVENT_NOTICE
+   "message",		// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "survey",
+   "survey",		// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "follower",
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
@@ -105,21 +111,22 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-			// Ntf_EVENT_FOLLOWER
-			// Ntf_EVENT_FORUM_POST_COURSE
-			// Ntf_EVENT_FORUM_REPLY
+   ActSeeSocTmlGbl,	// Ntf_EVENT_SOCIAL_POST
+   ActSeeSocTmlGbl,	// Ntf_EVENT_SOCIAL_COMMENT
+   ActSeeSocTmlGbl,	// Ntf_EVENT_SOCIAL_FAV
+   ActSeeSocTmlGbl,	// Ntf_EVENT_SOCIAL_SHARE
+   ActSeeFlr,		// Ntf_EVENT_FOLLOWER
+   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE
+   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
    ActShoNot,		// Ntf_EVENT_NOTICE
-   ActSeeFor,		// Ntf_EVENT_FORUM_POST_COURSE	TODO: Move to social tab
-   ActSeeFor,		// Ntf_EVENT_FORUM_REPLY	TODO: Move to social tab
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
    ActSeeAllSvy,	// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   ActSeeFlr,		// Ntf_EVENT_FOLLOWER		TODO: Move to social tab
   };
 
 /*****************************************************************************/
@@ -129,65 +136,77 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 // Notify me notification events
 static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "NotifyNtfEventUnknown",
+   "NotifyNtfEventUnknown",		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "NotifyNtfEventDocumentFile",
-   "NotifyNtfEventSharedFile",
+   "NotifyNtfEventDocumentFile",	// Ntf_EVENT_DOCUMENT_FILE
+   "NotifyNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "NotifyNtfEventAssignment",
-   "NotifyNtfEventExamAnnouncement",
-   "NotifyNtfEventMarksFile",
+   "NotifyNtfEventAssignment",		// Ntf_EVENT_ASSIGNMENT
+   "NotifyNtfEventExamAnnouncement",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "NotifyNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
 
-   /* Enrollment tab */
-   "NotifyNtfEventEnrollmentStudent",
-   "NotifyNtfEventEnrollmentTeacher",
-   "NotifyNtfEventEnrollmentRequest",
+   /* Users tab */
+   "NotifyNtfEventEnrollmentStudent",	// Ntf_EVENT_ENROLLMENT_STUDENT
+   "NotifyNtfEventEnrollmentTeacher",	// Ntf_EVENT_ENROLLMENT_TEACHER
+   "NotifyNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
+
+   /* Social tab */
+   "NotifyNtfEventSocialPost",		// Ntf_EVENT_SOCIAL_POST
+   "NotifyNtfEventSocialComment",	// Ntf_EVENT_SOCIAL_COMMENT
+   "NotifyNtfEventSocialFav",		// Ntf_EVENT_SOCIAL_FAV
+   "NotifyNtfEventSocialShare",		// Ntf_EVENT_SOCIAL_SHARE
+   "NotifyNtfEventFollower",		// Ntf_EVENT_FOLLOWER
+   "NotifyNtfEventForumPostCourse",	// Ntf_EVENT_FORUM_POST_COURSE
+   "NotifyNtfEventForumReply",		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "NotifyNtfEventNotice",
-   "NotifyNtfEventForumPostCourse",
-   "NotifyNtfEventForumReply",
-   "NotifyNtfEventMessage",
+   "NotifyNtfEventNotice",		// Ntf_EVENT_NOTICE
+   "NotifyNtfEventMessage",		// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "NotifyNtfEventSurvey",
+   "NotifyNtfEventSurvey",		// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "NotifyNtfEventFollower",
   };
 
 // Email me about notification events
 static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "EmailNtfEventUnknown",
+   "EmailNtfEventUnknown",		// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "EmailNtfEventDocumentFile",
-   "EmailNtfEventSharedFile",
+   "EmailNtfEventDocumentFile",		// Ntf_EVENT_DOCUMENT_FILE
+   "EmailNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "EmailNtfEventAssignment",
-   "EmailNtfEventExamAnnouncement",
-   "EmailNtfEventMarksFile",
+   "EmailNtfEventAssignment",		// Ntf_EVENT_ASSIGNMENT
+   "EmailNtfEventExamAnnouncement",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "EmailNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
 
-   /* Enrollment tab */
-   "EmailNtfEventEnrollmentStudent",
-   "EmailNtfEventEnrollmentTeacher",
-   "EmailNtfEventEnrollmentRequest",
+   /* Users tab */
+   "EmailNtfEventEnrollmentStudent",	// Ntf_EVENT_ENROLLMENT_STUDENT
+   "EmailNtfEventEnrollmentTeacher",	// Ntf_EVENT_ENROLLMENT_TEACHER
+   "EmailNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
+
+   /* Social tab */
+   "EmailNtfEventSocialPost",		// Ntf_EVENT_SOCIAL_POST
+   "EmailNtfEventSocialComment",	// Ntf_EVENT_SOCIAL_COMMENT
+   "EmailNtfEventSocialFav",		// Ntf_EVENT_SOCIAL_FAV
+   "EmailNtfEventSocialShare",		// Ntf_EVENT_SOCIAL_SHARE
+   "EmailNtfEventFollower",		// Ntf_EVENT_FOLLOWER
+   "EmailNtfEventForumPostCourse",	// Ntf_EVENT_FORUM_POST_COURSE
+   "EmailNtfEventForumReply",		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "EmailNtfEventNotice",
-   "EmailNtfEventForumPostCourse",
-   "EmailNtfEventForumReply",
-   "EmailNtfEventMessage",
+   "EmailNtfEventNotice",		// Ntf_EVENT_NOTICE
+   "EmailNtfEventMessage",		// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "EmailNtfEventSurvey",
+   "EmailNtfEventSurvey",		// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "EmailNtfEventFollower",
   };
 
 // Icons for notification events
@@ -204,22 +223,28 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "announce16x16.gif",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
    "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
-   /* Enrollment tab */
+   /* Users tab */
    "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_STUDENT
    "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_TEACHER
    "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLLMENT_REQUEST
 
-   /* Messages tab */
-   "note16x16.gif",			// Ntf_EVENT_NOTICE
+   /* Social tab */
+   "soc64x64.png",			// Ntf_EVENT_SOCIAL_POST
+   "soc64x64.png",			// Ntf_EVENT_SOCIAL_COMMENT
+   "fav64x64.png",			// Ntf_EVENT_SOCIAL_FAV
+   "share64x64.png",			// Ntf_EVENT_SOCIAL_SHARE
+   "follow64x64.png",			// Ntf_EVENT_FOLLOWER
    "forum16x16.gif",			// Ntf_EVENT_FORUM_POST_COURSE
    "forum16x16.gif",			// Ntf_EVENT_FORUM_REPLY
+
+   /* Messages tab */
+   "note16x16.gif",			// Ntf_EVENT_NOTICE
    "msg64x64.gif",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
    "survey16x16.gif",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
-   "follow64x64.png",			// Ntf_EVENT_FOLLOWER
   };
 
 /*****************************************************************************/
@@ -805,12 +830,23 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
       case Ntf_EVENT_ENROLLMENT_REQUEST:
 	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
-      case Ntf_EVENT_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+      case Ntf_EVENT_SOCIAL_POST:
+         break;
+      case Ntf_EVENT_SOCIAL_COMMENT:
+         break;
+      case Ntf_EVENT_SOCIAL_FAV:
+         break;
+      case Ntf_EVENT_SOCIAL_SHARE:
+         break;
+      case Ntf_EVENT_FOLLOWER:
+         Fol_GetNotifFollower (SummaryStr,ContentStr);
          break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
          For_GetSummaryAndContentForumPst (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         break;
+      case Ntf_EVENT_NOTICE:
+         Not_GetSummaryAndContentNotice (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_MESSAGE:
          Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
@@ -820,9 +856,6 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,Ntf_Notif
          break;
       case Ntf_EVENT_SURVEY:
          Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
-         break;
-      case Ntf_EVENT_FOLLOWER:
-         Fol_GetNotifFollower (SummaryStr,ContentStr);
          break;
      }
   }
@@ -1153,6 +1186,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 	     Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
+      case Ntf_EVENT_SOCIAL_POST:
+         break;
+      case Ntf_EVENT_SOCIAL_COMMENT:
+         break;
+      case Ntf_EVENT_SOCIAL_FAV:
+         break;
+      case Ntf_EVENT_SOCIAL_SHARE:
+         break;
+      case Ntf_EVENT_FOLLOWER:	// This function should not be called in this case
+         return 0;
       case Ntf_EVENT_FORUM_POST_COURSE:
 	 // Check if forum is for users or for all users in the course
 	 switch (For_GetForumTypeOfAPost (Cod))
@@ -1208,8 +1251,6 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
                   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_FOLLOWER:	// This function should not be called in this case
-         return 0;
      }
 
    if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get users to be notified"))) // Users found
@@ -1516,6 +1557,14 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		     fprintf (Gbl.Msg.FileMail,"%s: %s\n",
 			      Txt_Course_NO_HTML[ToUsrLanguage],
 			      Crs.FullName);
+		  break;
+	       case Ntf_EVENT_SOCIAL_POST:
+		  break;
+	       case Ntf_EVENT_SOCIAL_COMMENT:
+		  break;
+	       case Ntf_EVENT_SOCIAL_FAV:
+		  break;
+	       case Ntf_EVENT_SOCIAL_SHARE:
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
 	       case Ntf_EVENT_FORUM_REPLY:

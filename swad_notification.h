@@ -37,7 +37,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	15
+#define Ntf_NUM_NOTIFY_EVENTS	(1+18)
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database tables notif and sta_notif
 typedef enum
@@ -59,21 +59,22 @@ typedef enum
    Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
 
    /* Social tab */
-   // Ntf_EVENT_FOLLOWER
-   // Ntf_EVENT_FORUM_POST_COURSE
-   // Ntf_EVENT_FORUM_REPLY
+   Ntf_EVENT_SOCIAL_POST	=  9,
+   Ntf_EVENT_SOCIAL_COMMENT	= 10,
+   Ntf_EVENT_SOCIAL_FAV		= 11,
+   Ntf_EVENT_SOCIAL_SHARE	= 12,
+   Ntf_EVENT_FOLLOWER	= 13,	// Old 14
+   Ntf_EVENT_FORUM_POST_COURSE	= 14,	// Old 10
+   Ntf_EVENT_FORUM_REPLY	= 15,	// Old 11
 
    /* Messages tab */
-   Ntf_EVENT_NOTICE		=  9,
-   Ntf_EVENT_FORUM_POST_COURSE	= 10,	// TODO: Move to social tab
-   Ntf_EVENT_FORUM_REPLY	= 11,	// TODO: Move to social tab
-   Ntf_EVENT_MESSAGE		= 12,
+   Ntf_EVENT_NOTICE		= 16,	// Old  9
+   Ntf_EVENT_MESSAGE		= 17,	// Old 12
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY		= 13,
+   Ntf_EVENT_SURVEY		= 18,	// Old 13
 
    /* Profile tab */
-   Ntf_EVENT_FOLLOWER		= 14,	// TODO: Move to social tab
 
   } Ntf_NotifyEvent_t;
 

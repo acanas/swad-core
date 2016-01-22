@@ -11246,3 +11246,123 @@ END;
 |
 DELIMITER ;
 CALL get_note_cods();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----- SWAD 15.123 (2016/01/21) -----
+ 0 ---> unchanged
+...
+ 8 ---> unchanged
+
+ 9 ---> new
+...
+12 ---> new
+
+13 ---> 18
+12 ---> 17
+ 9 ---> 16
+11 ---> 15
+14 ---> 13
+10 ---> 14
+   
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=10;
+
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=10;
+
+13 ---> 18
+12 ---> 17
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  0  0  0 | 0  x  a  b | x  x  x  x | x  x  x  x | x  x  x  x
+          0            3            0            0            0
+                    |  |
+     _______________|  |
+    |   _______________|
+    |  |
+    v  v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  0 | 0  x  0  0 | x  x  x  x | x  x  x  x | x  x  x  x
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x3000) << 5));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x3000);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x3000) << 5));
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x3000);
+
+ 9 ---> 16
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  0 | 0  x  0  0 | x  x  c  x | x  x  x  x | x  x  x  x
+          0            0            2            0            0
+           ______________________|
+          |                       
+          v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | 0  x  0  0 | x  x  0  x | x  x  x  x | x  x  x  x
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x200) << 7));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x200);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x200) << 7));
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x200);
+
+11 ---> 15
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | 0  x  0  0 | d  x  0  x | x  x  x  x | x  x  x  x
+          0            0            8            0            0
+               ____________|
+              |                       
+              v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | d  x  0  0 | 0  x  0  x | x  x  x  x | x  x  x  x
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x800) << 4));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x800);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x800) << 4));
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x800);
+
+14 ---> 13
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | d  e  0  0 | 0  x  0  x | x  x  x  x | x  x  x  x
+          0            4            0            0            0
+                 |__
+                    |                       
+                    v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | d  0  e  0 | 0  x  0  x | x  x  x  x | x  x  x  x
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x4000) << 4));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x4000);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x4000) << 4));
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x4000);
+
+10 ---> 14
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | d  0  e  0 | 0  f  0  x | x  x  x  x | x  x  x  x
+          0            0            4            0            0
+                  ____________|
+                 |                       
+                 v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ 0  a  b  c | d  f  e  0 | 0  0  0  x | x  x  x  x | x  x  x  x
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents | ((NotifNtfEvents & 0x400) << 4));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x400);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents | ((EmailNtfEvents & 0x400) << 4));
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x400);
+
+
+
+

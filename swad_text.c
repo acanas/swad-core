@@ -662,17 +662,69 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo pedido de inscrição",
 	},
 	{
-	// Ntf_EVENT_NOTICE
+	// Ntf_EVENT_SOCIAL_POST
 	"",
-	"Nou avís",
-	"Neuen Ankündigungen",
-	"New notice",
-	"Nuevo aviso",
-	"Nouvel avis",
-	"Nuevo aviso",				// Okoteve traducción
-	"Nuovo avviso",
-	"Nowe obwieszczenie",
-	"Novo anúncio",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	},
+	{
+	// Ntf_EVENT_SOCIAL_COMMENT
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	},
+	{
+	// Ntf_EVENT_SOCIAL_FAV
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	},
+	{
+	// Ntf_EVENT_SOCIAL_SHARE
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	},
+	{
+	// Ntf_EVENT_FOLLOWER
+	"",
+	"Nou seguidor",
+	"Neue Anh&auml;nger",
+	"New follower",
+	"Nuevo seguidor",
+	"Nouveau suiveur",
+	"Nuevo seguidor",	// Okoteve traducción
+	"Nuovo follower",
+	"Nowy obserwuj&aogon;",
+	"Novo seguidor",
 	},
 	{
 	// Ntf_EVENT_FORUM_POST_COURSE
@@ -701,6 +753,19 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nova resposta em um fórum",
 	},
 	{
+	// Ntf_EVENT_NOTICE
+	"",
+	"Nou avís",
+	"Neuen Ankündigungen",
+	"New notice",
+	"Nuevo aviso",
+	"Nouvel avis",
+	"Nuevo aviso",				// Okoteve traducción
+	"Nuovo avviso",
+	"Nowe obwieszczenie",
+	"Novo anúncio",
+	},
+	{
 	// Ntf_EVENT_MESSAGE
 	"",
 	"Nou missatge",
@@ -725,19 +790,6 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nuovo sondaggio",
 	"Nowe badania",
 	"Novo inqu&eacute;rito",
-	},
-	{
-	// Ntf_EVENT_FOLLOWER
-	"",
-	"Nou seguidor",
-	"Neue Anh&auml;nger",
-	"New follower",
-	"Nuevo seguidor",
-	"Nouveau suiveur",
-	"Nuevo seguidor",	// Okoteve traducción
-	"Nuovo follower",
-	"Nowy obserwuj&aogon;",
-	"Novo seguidor",
 	},
 };
 
@@ -25069,24 +25121,104 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_NOTICE
-	 "Nous avisos"
+#if   L==1	// Ntf_EVENT_SOCIAL_POST
+	 ""
 #elif L==2
-	 "Neue Ank&uuml;ndigungen"
+	 ""
 #elif L==3
-	 "New notices"
+	 ""
 #elif L==4
-	 "Nuevos avisos"
+	 ""
 #elif L==5
-	 "Nouveaux avis"
+	 ""
 #elif L==6
-	 "Nuevos avisos"	// Okoteve traducción
+	 ""	// Okoteve traducción
 #elif L==7
-	 "Nuovi avvisi"
+	 ""
 #elif L==8
-	 "Nowe ogloszenia"
+	 ""
 #elif L==9
-	 "Novos avisos"
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_FAV
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_SHARE
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_FOLLOWER
+	 "Nous seguidors"
+#elif L==2
+	 "Neue Anh&auml;nger"
+#elif L==3
+	 "New followers"
+#elif L==4
+	 "Nuevos seguidores"
+#elif L==5
+	 "Nouveaux suiveurs"
+#elif L==6
+	 "Nuevos seguidores"	// Okoteve traducción
+#elif L==7
+	 "Nuovi followers"
+#elif L==8
+	 "Nowe obserwuj&aogon;"
+#elif L==9
+	 "Novos seguidores"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FORUM_POST_COURSE
@@ -25129,6 +25261,26 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas respostas aos meus posts em f&oacute;runs"
 #endif
 	 ,
+#if   L==1	// Ntf_EVENT_NOTICE
+	 "Nous avisos"
+#elif L==2
+	 "Neue Ank&uuml;ndigungen"
+#elif L==3
+	 "New notices"
+#elif L==4
+	 "Nuevos avisos"
+#elif L==5
+	 "Nouveaux avis"
+#elif L==6
+	 "Nuevos avisos"	// Okoteve traducción
+#elif L==7
+	 "Nuovi avvisi"
+#elif L==8
+	 "Nowe ogloszenia"
+#elif L==9
+	 "Novos avisos"
+#endif
+	 ,
 #if   L==1	// Ntf_EVENT_MESSAGE
 	 "Nous missatges"
 #elif L==2
@@ -25167,26 +25319,6 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Nowe badania"
 #elif L==9
 	 "Novos inqu&eacute;ritos"
-#endif
-	 ,
-#if   L==1	// Ntf_EVENT_FOLLOWER
-	 "Nous seguidors"
-#elif L==2
-	 "Neue Anh&auml;nger"
-#elif L==3
-	 "New followers"
-#elif L==4
-	 "Nuevos seguidores"
-#elif L==5
-	 "Nouveaux suiveurs"
-#elif L==6
-	 "Nuevos seguidores"	// Okoteve traducción
-#elif L==7
-	 "Nuovi followers"
-#elif L==8
-	 "Nowe obserwuj&aogon;"
-#elif L==9
-	 "Novos seguidores"
 #endif
 	};
 
@@ -25372,24 +25504,104 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Pedido de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_NOTICE
-	 "Av&iacute;s"
+#if   L==1	// Ntf_EVENT_SOCIAL_POST
+	 ""
 #elif L==2
-	 "Ank&uuml;ndigungen"
+	 ""
 #elif L==3
-	 "Notice"
+	 ""
 #elif L==4
-	 "Aviso"
+	 ""
 #elif L==5
-	 "Avis"
+	 ""
 #elif L==6
-	 "Marandu"
+	 ""	// Okoteve traducción
 #elif L==7
-	 "Avviso"
+	 ""
 #elif L==8
-	 "Informacja"
+	 ""
 #elif L==9
-	 "An&uacute;ncio"
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_FAV
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_SOCIAL_SHARE
+	 ""
+#elif L==2
+	 ""
+#elif L==3
+	 ""
+#elif L==4
+	 ""
+#elif L==5
+	 ""
+#elif L==6
+	 ""	// Okoteve traducción
+#elif L==7
+	 ""
+#elif L==8
+	 ""
+#elif L==9
+	 ""
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_FOLLOWER
+	"Seguidor"
+#elif L==2
+	"Anh&auml;nger"
+#elif L==3
+	"Follower"
+#elif L==4
+	"Seguidor"
+#elif L==5
+	"Suiveur"
+#elif L==6
+	"Seguidor"	// Okoteve traducción
+#elif L==7
+	"Follower"
+#elif L==8
+	"Obserwuj&aogon;"
+#elif L==9
+	"Seguidor"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FORUM_POST_COURSE
@@ -25432,6 +25644,26 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Resposta em um f&oacute;rum"
 #endif
 	 ,
+#if   L==1	// Ntf_EVENT_NOTICE
+	 "Av&iacute;s"
+#elif L==2
+	 "Ank&uuml;ndigungen"
+#elif L==3
+	 "Notice"
+#elif L==4
+	 "Aviso"
+#elif L==5
+	 "Avis"
+#elif L==6
+	 "Marandu"
+#elif L==7
+	 "Avviso"
+#elif L==8
+	 "Informacja"
+#elif L==9
+	 "An&uacute;ncio"
+#endif
+	 ,
 #if   L==1	// Ntf_EVENT_MESSAGE
 	 "Missatge"
 #elif L==2
@@ -25470,26 +25702,6 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Badania"
 #elif L==9
 	 "Inqu&eacute;rito"
-#endif
-	 ,
-#if   L==1	// Ntf_EVENT_FOLLOWER
-	"Seguidor"
-#elif L==2
-	"Anh&auml;nger"
-#elif L==3
-	"Follower"
-#elif L==4
-	"Seguidor"
-#elif L==5
-	"Suiveur"
-#elif L==6
-	"Seguidor"	// Okoteve traducción
-#elif L==7
-	"Follower"
-#elif L==8
-	"Obserwuj&aogon;"
-#elif L==9
-	"Seguidor"
 #endif
 	};
 
