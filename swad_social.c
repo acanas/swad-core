@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notice.h"
+#include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_social.h"
@@ -285,7 +286,6 @@ static void Soc_PutFormToUnfavSocialComment (long ComCod);
 
 static void Soc_PutFormToRemoveSocialPublishing (long NotCod);
 
-static void Soc_PutHiddenParamNotCod (long NotCod);
 static void Soc_PutHiddenParamComCod (long ComCod);
 static long Soc_GetParamNotCod (void);
 static long Soc_GetParamComCod (void);
@@ -1991,6 +1991,9 @@ static long Soc_ReceiveSocialPost (void)
 
       /* Insert post in social notes */
       NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
+
+      /***** Notify by e-mail about the new notice *****/
+      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_POST,NotCod);
      }
    else
       NotCod = -1L;
@@ -2583,7 +2586,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
 /************** Put parameter with the code of a social note *****************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenParamNotCod (long NotCod)
+void Soc_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong ("NotCod",NotCod);
   }
@@ -4191,10 +4194,10 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long PstCod,
+void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long NotCod,
                                 unsigned MaxChars,bool GetContent)
   {
-   char Query[128];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
@@ -4202,8 +4205,11 @@ void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long PstCod,
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
-            PstCod);
+   sprintf (Query,"SELECT social_posts.Content FROM social_notes,social_posts"
+	          " WHERE social_notes.NotCod='%ld'"
+	          " AND social_notes.NoteType='%u' AND"
+	          " AND social_notes.Cod=social_posts.PstCod",
+            NotCod,(unsigned) Soc_NOTE_SOCIAL_POST);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
      {
       /***** Get row *****/

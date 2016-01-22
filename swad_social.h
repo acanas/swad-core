@@ -108,6 +108,8 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path);
 void Soc_ReceiveSocialPostGbl (void);
 void Soc_ReceiveSocialPostUsr (void);
 
+void Soc_PutHiddenParamNotCod (long NotCod);
+
 void Soc_ReceiveCommentGbl (void);
 void Soc_ReceiveCommentUsr (void);
 
@@ -139,7 +141,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod);
 
 void Soc_ClearOldTimelinesDB (void);
 
-void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long PstCod,
+void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long NotCod,
                                 unsigned MaxChars,bool GetContent);
 
 #endif

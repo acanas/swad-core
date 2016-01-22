@@ -720,6 +720,13 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
+      case Ntf_EVENT_SOCIAL_POST:
+      case Ntf_EVENT_SOCIAL_COMMENT:
+      case Ntf_EVENT_SOCIAL_FAV:
+      case Ntf_EVENT_SOCIAL_SHARE:
+         Act_FormStart (ActSeeSocTmlGbl);
+	 Soc_PutHiddenParamNotCod (Cod);	// TODO: For future display of selected social note at top
+	 break;
       case Ntf_EVENT_FOLLOWER:
          UsrDat.UsrCod = Cod;	// Cod is the follower's code
          Usr_GetEncryptedUsrCodFromUsrCod (&UsrDat);
@@ -1087,8 +1094,8 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
   }
 
 /*****************************************************************************/
-/***** Get a list with user's codes of all users in current course/group  ****/
-/***** who wants to be notified by e-mail about an event, and notify them ****/
+/********** Get a list with user's codes of all users to be notified *********/
+/********** about an event, and notify them                          *********/
 /*****************************************************************************/
 // Return the number of users notified by e-mail
 
@@ -1191,6 +1198,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_SOCIAL_POST:
+	 // Get all my followers
+	 sprintf (Query,"SELECT FollowerCod FROM usr_follow"
+	                " WHERE FollowedCod='%ld'",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_SOCIAL_COMMENT:
          break;
@@ -1544,6 +1555,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    switch (NotifyEvent)
 	      {
 	       case Ntf_EVENT_UNKNOWN:
+	       case Ntf_EVENT_SOCIAL_POST:
+	       case Ntf_EVENT_SOCIAL_COMMENT:
+	       case Ntf_EVENT_SOCIAL_FAV:
+	       case Ntf_EVENT_SOCIAL_SHARE:
 	       case Ntf_EVENT_FOLLOWER:
 		  break;
 	       case Ntf_EVENT_DOCUMENT_FILE:
@@ -1561,14 +1576,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		     fprintf (Gbl.Msg.FileMail,"%s: %s\n",
 			      Txt_Course_NO_HTML[ToUsrLanguage],
 			      Crs.FullName);
-		  break;
-	       case Ntf_EVENT_SOCIAL_POST:
-		  break;
-	       case Ntf_EVENT_SOCIAL_COMMENT:
-		  break;
-	       case Ntf_EVENT_SOCIAL_FAV:
-		  break;
-	       case Ntf_EVENT_SOCIAL_SHARE:
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
 	       case Ntf_EVENT_FORUM_REPLY:
