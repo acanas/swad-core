@@ -690,15 +690,15 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	{
 	// Ntf_EVENT_SOCIAL_FAV
 	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
+	"Nou favorit a un missatge social",
+	"Neue Favorit zu soziale Beitrag",
+	"New favourite to social post",
+	"Nuevo favorito a un mensaje social",
+	"Nouveau favori à message social",
+	"Nuevo favorito a un mensaje social",			// Okoteve traducción
+	"Nuovo preferito a un post sociale",
+	"Nowy ulubiony do post spoleczna",
+	"Novo favorito a um post sociais",
 	},
 	{
 	// Ntf_EVENT_SOCIAL_SHARE
@@ -25158,27 +25158,27 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==8
 	 "Nowe komentarze do post spo&lstrok;ecznej"
 #elif L==9
-	 "Novos coment&aacute;rio a um post sociais"
+	 "Novos coment&aacute;rio a post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_FAV
-	 ""
+	 "Nous favorits a missatges socials"
 #elif L==2
-	 ""
+	 "Neue Favorit zu sozialen Beitr&auml;ge"
 #elif L==3
-	 ""
+	 "New favourite to social posts"
 #elif L==4
-	 ""
+	 "Nuevos favoritos a mensajes sociales"
 #elif L==5
-	 ""
+	 "Nouveaux favori &agrave; messages sociaux"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nuevos favoritos a mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuovi preferito a post sociali"
 #elif L==8
-	 ""
+	 "Nowe ulubiony do post spo&lstrok;ecznej"
 #elif L==9
-	 ""
+	 "Novos favoritos a post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_SHARE
@@ -25545,23 +25545,23 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_FAV
-	 ""
+	 "Nou favorit a un missatge social"
 #elif L==2
-	 ""
+	 "Neue Favorit zu soziale Beitrag"
 #elif L==3
-	 ""
+	 "New favourite to social post"
 #elif L==4
-	 ""
+	 "Nuevo favorito a un mensaje social"
 #elif L==5
-	 ""
+	 "Nouveau favori &agrave; message social"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nuevo favorito a un mensaje social"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuovo preferito a un post sociale"
 #elif L==8
-	 ""
+	 "Nowy ulubiony do post spo&lstrok;eczna"
 #elif L==9
-	 ""
+	 "Novo favorito a um post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_SHARE
