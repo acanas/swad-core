@@ -663,6 +663,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	},
 	{
 	// Ntf_EVENT_SOCIAL_POST
+	"",
 	"Novo missatge social",
 	"Neue soziale Beitrag",
 	"New social post",
@@ -676,15 +677,15 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	{
 	// Ntf_EVENT_SOCIAL_COMMENT
 	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
+	"Nou comentari a un missatge social",
+	"Neue Kommentar zu soziale Beitrag",
+	"New comment to social post",
+	"Nuevo comentario a un mensaje social",
+	"Nouveau commentaire à message social",
+	"Nuevo comentario a un mensaje social",			// Okoteve traducción
+	"Nuovo commento a un post sociale",
+	"Nowy komentarz do post spoleczna",
+	"Novo comentário a um post sociais",
 	},
 	{
 	// Ntf_EVENT_SOCIAL_FAV
@@ -22933,7 +22934,7 @@ const char *Txt_New_SOCIAL_comment =
 #elif L==4
 	"Nuevo comentario";
 #elif L==5
-	"Nouvelle commentaire";
+	"Nouveau commentaire";
 #elif L==6
 	"Nuevo comentario";	// Okoteve traducción
 #elif L==7
@@ -25123,7 +25124,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #if   L==1	// Ntf_EVENT_SOCIAL_POST
 	"Nous missatges socials"
 #elif L==2
-	"Neue soziale Beitr&auml;ge"
+	"Neue sozialen Beitr&auml;ge"
 #elif L==3
 	"New social posts"
 #elif L==4
@@ -25141,23 +25142,23 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
-	 ""
+	 "Nous comentaris a missatges socials"
 #elif L==2
-	 ""
+	 "Neue Kommentare zu sozialen Beitr&auml;ge"
 #elif L==3
-	 ""
+	 "New comments to social posts"
 #elif L==4
-	 ""
+	 "Nuevos comentario a mensajes sociales"
 #elif L==5
-	 ""
+	 "Nouveaux commentaires &agrave; messages sociaux"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nuevos comentario a mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuovi commenti a post sociali"
 #elif L==8
-	 ""
+	 "Nowe komentarze do post spo&lstrok;ecznej"
 #elif L==9
-	 ""
+	 "Novos coment&aacute;rio a um post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_FAV
@@ -25524,23 +25525,23 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
-	 ""
+	 "Nou comentari a un missatge social"
 #elif L==2
-	 ""
+	 "Neue Kommentar zu soziale Beitrag"
 #elif L==3
-	 ""
+	 "New comment to social post"
 #elif L==4
-	 ""
+	 "Nuevo comentario a un mensaje social"
 #elif L==5
-	 ""
+	 "Nouveau commentaire &agrave; message social"
 #elif L==6
-	 ""	// Okoteve traducción
+	 "Nuevo comentario a un mensaje social"	// Okoteve traducción
 #elif L==7
-	 ""
+	 "Nuovo commento a un post sociale"
 #elif L==8
-	 ""
+	 "Nowy komentarz do post spo&lstrok;eczna"
 #elif L==9
-	 ""
+	 "Novo coment&aacute;rio a um post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SOCIAL_FAV
