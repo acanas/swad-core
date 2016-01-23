@@ -25155,63 +25155,63 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_COMMENT
-	 "Nous comentaris a missatges socials"
+	 "Nous comentaris als meus missatges socials"
 #elif L==2
-	 "Neue Kommentare zu sozialen Beitr&auml;ge"
+	 "Neue Kommentare zu meinem sozialen Beitr&auml;ge"
 #elif L==3
-	 "New comments to social posts"
+	 "New comments to my social posts"
 #elif L==4
-	 "Nuevos comentario a mensajes sociales"
+	 "Nuevos comentarios a mis mensajes sociales"
 #elif L==5
-	 "Nouveaux commentaires &agrave; messages sociaux"
+	 "Nouveaux commentaires &agrave; mes messages sociaux"
 #elif L==6
-	 "Nuevos comentario a mensajes sociales"	// Okoteve traducción
+	 "Nuevos comentarios a mis mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 "Nuovi commenti a post sociali"
+	 "Nuovi commenti ai miei post sociali"
 #elif L==8
-	 "Nowe komentarze do post spo&lstrok;ecznej"
+	 "Nowe komentarze do moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novos coment&aacute;rio a post sociais"
+	 "Novos coment&aacute;rio &agrave;s minhos post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_FAV
-	 "Nous favorits a missatges socials"
+	 "Nous favorits als meus missatges socials"
 #elif L==2
-	 "Neue Favorit zu sozialen Beitr&auml;ge"
+	 "Neue Favorit zu meinem sozialen Beitr&auml;ge"
 #elif L==3
-	 "New favourite to social posts"
+	 "New favourite to my social posts"
 #elif L==4
-	 "Nuevos favoritos a mensajes sociales"
+	 "Nuevos favoritos a mis mensajes sociales"
 #elif L==5
-	 "Nouveaux favori &agrave; messages sociaux"
+	 "Nouveaux favori &agrave; mes messages sociaux"
 #elif L==6
-	 "Nuevos favoritos a mensajes sociales"	// Okoteve traducción
+	 "Nuevos favoritos a mis mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 "Nuovi preferito a post sociali"
+	 "Nuovi preferito ai miei post sociali"
 #elif L==8
-	 "Nowe ulubiony do post spo&lstrok;ecznej"
+	 "Nowe ulubiony do moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novos favoritos a post sociais"
+	 "Novos favoritos &agrave;s minhos post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_SHARE
-	 "Noves comparticions de missatges socials"
+	 "Noves comparticions dels meus missatges socials"
 #elif L==2
-	 "Neue gemeinsame Nutzung zu sozialen Beitr&auml;ge"
+	 "Neue gemeinsame Nutzung zu meinem sozialen Beitr&auml;ge"
 #elif L==3
-	 "New sharings of social posts"
+	 "New sharings of my social posts"
 #elif L==4
-	 "Nuevas comparticiones de mensajes sociales"
+	 "Nuevas comparticiones de mis mensajes sociales"
 #elif L==5
-	 "Nouveaux partages &agrave; messages sociaux"
+	 "Nouveaux partages de mes messages sociaux"
 #elif L==6
-	 "Nuevas comparticiones de mensajes sociales"	// Okoteve traducción
+	 "Nuevas comparticiones de mis mensajes sociales"	// Okoteve traducción
 #elif L==7
-	 "Nuove condivisioni a post sociali"
+	 "Nuove condivisioni dei miei post sociali"
 #elif L==8
-	 "Nowe podzial post spo&lstrok;ecznej"
+	 "Nowe podzial moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novas partilhas de post sociais"
+	 "Novas partilhas de minhos post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_MENTION

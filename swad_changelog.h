@@ -125,13 +125,30 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.124.1 (2016-01-23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.124.2 (2016-01-23)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.124.2: Jan 23, 2016	Changed numeration of notifications in database. (194546 lines)
+					14 changes necessary in database:
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=19 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=19 WHERE NotifyEvent=13;
+UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0xF8000) | ((NotifNtfEvents & 0x0200) << 8) | ((NotifNtfEvents & 0x0C00) << 5) | ((NotifNtfEvents & 0x3000) << 6));
+UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xF8000) | ((EmailNtfEvents & 0x0200) << 8) | ((EmailNtfEvents & 0x0C00) << 5) | ((EmailNtfEvents & 0x3000) << 6));
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x3E00);
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x3E00);
+
         Version 15.124.1: Jan 23, 2016	New social notifications. Not finished. (194530 lines)
         Version 15.124:   Jan 23, 2016	New social notifications. Not finished. (194466 lines)
         Version 15.123.7: Jan 22, 2016	New social notifications. Not finished. (194347 lines)
