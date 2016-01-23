@@ -368,6 +368,13 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
+
+   /***** Mark all my notifications related to timeline as seen *****/
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_PUBLISH,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

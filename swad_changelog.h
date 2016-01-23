@@ -120,18 +120,20 @@
 // TODO: Change ComCod to PubCod in social_comments and social_comments_fav
 // TODO: When receiving a new post, create first the publishing, then the post
 // TODO: Change PstCod to PubCod in social_posts, removing AUTO_INCREMENT
+// TODO: Mark timeline notifications as removed when post/comment are removed or fav/share are undone
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.124.2 (2016-01-23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.124.3 (2016-01-24)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.124.3: Jan 24, 2016	Mark timeline notifications as seen after viewing social timeline. (? lines)
         Version 15.124.2: Jan 23, 2016	Changed numeration of notifications in database. (194546 lines)
 					14 changes necessary in database:
 UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=9;
