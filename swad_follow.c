@@ -415,7 +415,7 @@ void Fol_ListFollowers (void)
 
 	 /***** If it's me, mark possible notification as seen *****/
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
-	    Ntf_MarkNotifAsSeen (Ntf_EVENT_SOCIAL_FOLLOWER,
+	    Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
 	                         -1L,-1L,
 				 Gbl.Usrs.Me.UsrDat.UsrCod);
 	}
@@ -539,14 +539,14 @@ void Fol_FollowUsr (void)
 	    DB_QueryREPLACE (Query,"can not follow user");
 
 	    /***** This follow must be notified by e-mail? *****/
-            CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_SOCIAL_FOLLOWER));
+            CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
             NotifyByEmail = CreateNotif &&
-        	            (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_SOCIAL_FOLLOWER));
+        	            (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
 
             /***** Create notification for this followed.
                    If this followed wants to receive notifications by e-mail, activate the sending of a notification *****/
             if (CreateNotif)
-               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_SOCIAL_FOLLOWER,&Gbl.Usrs.Other.UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
+               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }

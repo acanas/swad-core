@@ -662,7 +662,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo pedido de inscrição",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
+	// Ntf_EVENT_TIMELINE_PUBLISH
 	"",
 	"Novo missatge social",
 	"Neue soziale Beitrag",
@@ -675,7 +675,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
+	// Ntf_EVENT_TIMELINE_COMMENT
 	"",
 	"Nou comentari a un missatge social",
 	"Neue Kommentar zu soziale Beitrag",
@@ -688,7 +688,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo comentário a um post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_PUB_FAVED
+	// Ntf_EVENT_TIMELINE_FAV
 	"",
 	"Nou favorit a un missatge social",
 	"Neue Favorit zu soziale Beitrag",
@@ -701,7 +701,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo favorito a um post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_PUB_SHARED
+	// Ntf_EVENT_TIMELINE_SHARE
 	"",
 	"Nova compartició de missatge social",
 	"Neue gemeinsame Nutzung von soziale Beitrag",
@@ -714,7 +714,20 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nova partilha de post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_FOLLOWER
+	// Ntf_EVENT_TIMELINE_MENTION
+	"",
+	"Nova menció",
+	"Neue Erwähnung",
+	"New mention",
+	"Nueva mención",
+	"Nouveau mention",
+	"Nueva mención",			// Okoteve traducción
+	"Nuovo menzione",
+	"Nowa wzmianka",
+	"Nova menção",
+	},
+	{
+	// Ntf_EVENT_FOLLOWER
 	"",
 	"Nou seguidor",
 	"Neue Anh&auml;nger",
@@ -25121,7 +25134,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
+#if   L==1	// Ntf_EVENT_TIMELINE_PUBLISH
 	"Nous missatges socials"
 #elif L==2
 	"Neue sozialen Beitr&auml;ge"
@@ -25141,7 +25154,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
+#if   L==1	// Ntf_EVENT_TIMELINE_COMMENT
 	 "Nous comentaris a missatges socials"
 #elif L==2
 	 "Neue Kommentare zu sozialen Beitr&auml;ge"
@@ -25161,7 +25174,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos coment&aacute;rio a post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_FAVED
+#if   L==1	// Ntf_EVENT_TIMELINE_FAV
 	 "Nous favorits a missatges socials"
 #elif L==2
 	 "Neue Favorit zu sozialen Beitr&auml;ge"
@@ -25181,7 +25194,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos favoritos a post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_SHARED
+#if   L==1	// Ntf_EVENT_TIMELINE_SHARE
 	 "Noves comparticions de missatges socials"
 #elif L==2
 	 "Neue gemeinsame Nutzung zu sozialen Beitr&auml;ge"
@@ -25201,7 +25214,27 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas partilhas de post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_FOLLOWER
+#if   L==1	// Ntf_EVENT_TIMELINE_MENTION
+	 "Noves mencions"
+#elif L==2
+	 "Neue Erw&auml;hnungen"
+#elif L==3
+	 "New mentions"
+#elif L==4
+	 "Nuevas menciones"
+#elif L==5
+	 "Nouvelles mentions"
+#elif L==6
+	 "Nuevas menciones"	// Okoteve traducción
+#elif L==7
+	 "Nuovi menzioni"
+#elif L==8
+	 "Nowe wzmianki"
+#elif L==9
+	 "Novas men&ccedil;&otilde;es"
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_FOLLOWER
 	 "Nous seguidors"
 #elif L==2
 	 "Neue Anh&auml;nger"
@@ -25504,7 +25537,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Pedido de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
+#if   L==1	// Ntf_EVENT_TIMELINE_PUBLISH
 	"Novo missatge social"
 #elif L==2
 	"Neue soziale Beitrag"
@@ -25524,7 +25557,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novo post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
+#if   L==1	// Ntf_EVENT_TIMELINE_COMMENT
 	 "Nou comentari a un missatge social"
 #elif L==2
 	 "Neue Kommentar zu soziale Beitrag"
@@ -25544,7 +25577,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novo coment&aacute;rio a um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_FAVED
+#if   L==1	// Ntf_EVENT_TIMELINE_FAV
 	 "Nou favorit a un missatge social"
 #elif L==2
 	 "Neue Favorit zu soziale Beitrag"
@@ -25564,10 +25597,10 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novo favorito a um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_PUB_SHARED
+#if   L==1	// Ntf_EVENT_TIMELINE_SHARE
 	 "Nova compartici&oacute; d'un missatge social"
 #elif L==2
-	 "gemeinsame Nutzung von soziale Beitrag"
+	 "Neue gemeinsame Nutzung von soziale Beitrag"
 #elif L==3
 	 "New sharing of social post"
 #elif L==4
@@ -25584,7 +25617,27 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Nova partilha de um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_FOLLOWER
+#if   L==1	// Ntf_EVENT_TIMELINE_MENTION
+	 "Nova menci&oacute;"
+#elif L==2
+	 "Neue Erw&auml;hnung"
+#elif L==3
+	 "New mention"
+#elif L==4
+	 "Nueva menci&oacute;n"
+#elif L==5
+	 "Nouvelle mention"
+#elif L==6
+	 "Nueva menci&oacute;n"			// Okoteve traducción
+#elif L==7
+	 "Nuova menzione"
+#elif L==8
+	 "Nowa wzmianka"
+#elif L==9
+	 "Nova men&ccedil;&atilde;o"
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_FOLLOWER
 	"Seguidor"
 #elif L==2
 	"Anh&auml;nger"

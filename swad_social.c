@@ -1848,7 +1848,7 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
 
    /***** Store notification about the new publishing *****/
-   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED,SocPub->PubCod);
+   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub->PubCod);
   }
 
 /*****************************************************************************/
@@ -2720,7 +2720,7 @@ static long Soc_ReceiveComment (void)
 	 DB_QueryINSERT (Query,"can not store comment content");
 
 	 /***** Store notification about the new comment *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_PUB_COMMENTED,SocPub.PubCod);
+	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
 
 	 /***** Show the social note just commented *****/
 	 Soc_WriteSocialNote (&SocNot,
@@ -3029,15 +3029,15 @@ static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
      {
       /***** This fav must be notified by e-mail? *****/
-      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_SOCIAL_PUB_FAVED));
+      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_TIMELINE_FAV));
       NotifyByEmail = CreateNotif &&
-		      (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_SOCIAL_PUB_FAVED));
+		      (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_TIMELINE_FAV));
 
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by e-mail,
 	     activate the sending of a notification *****/
       if (CreateNotif)
-	 Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_SOCIAL_PUB_FAVED,&UsrDat,PubCod,
+	 Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_FAV,&UsrDat,PubCod,
 					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 									0));
      }
