@@ -117,17 +117,22 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 
+// TODO: Change ComCod to PubCod in social_comments and social_comments_fav
+// TODO: When receiving a new post, create first the publishing, then the post
+// TODO: Change PstCod to PubCod in social_posts, removing AUTO_INCREMENT
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.123.7 (2016-01-22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.124 (2016-01-23)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.123:   Jan 23, 2016	New social notifications. Not finished. (194466 lines)
         Version 15.123.7: Jan 22, 2016	New social notifications. Not finished. (194347 lines)
         Version 15.123.6: Jan 22, 2016	New social notifications. Not finished. (194342 lines)
         Version 15.123.5: Jan 22, 2016	New social notifications. Not finished. (194328 lines)

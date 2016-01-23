@@ -141,7 +141,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod);
 
 void Soc_ClearOldTimelinesDB (void);
 
-void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long NotCod,
-                                unsigned MaxChars,bool GetContent);
+void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCod,
+                                   unsigned MaxChars,bool GetContent);
 
 #endif

@@ -662,7 +662,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo pedido de inscrição",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_POST
+	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
 	"",
 	"Novo missatge social",
 	"Neue soziale Beitrag",
@@ -675,7 +675,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_COMMENT
+	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
 	"",
 	"Nou comentari a un missatge social",
 	"Neue Kommentar zu soziale Beitrag",
@@ -688,7 +688,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo comentário a um post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_FAV
+	// Ntf_EVENT_SOCIAL_PUB_FAVED
 	"",
 	"Nou favorit a un missatge social",
 	"Neue Favorit zu soziale Beitrag",
@@ -701,7 +701,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo favorito a um post sociais",
 	},
 	{
-	// Ntf_EVENT_SOCIAL_SHARE
+	// Ntf_EVENT_SOCIAL_PUB_SHARED
 	"",
 	"Nova compartició de missatge social",
 	"Neue gemeinsame Nutzung von soziale Beitrag",
@@ -714,7 +714,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nova partilha de post sociais",
 	},
 	{
-	// Ntf_EVENT_FOLLOWER
+	// Ntf_EVENT_SOCIAL_FOLLOWER
 	"",
 	"Nou seguidor",
 	"Neue Anh&auml;nger",
@@ -25121,7 +25121,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_POST
+#if   L==1	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
 	"Nous missatges socials"
 #elif L==2
 	"Neue sozialen Beitr&auml;ge"
@@ -25141,7 +25141,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
 	 "Nous comentaris a missatges socials"
 #elif L==2
 	 "Neue Kommentare zu sozialen Beitr&auml;ge"
@@ -25161,7 +25161,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos coment&aacute;rio a post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_FAV
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_FAVED
 	 "Nous favorits a missatges socials"
 #elif L==2
 	 "Neue Favorit zu sozialen Beitr&auml;ge"
@@ -25181,7 +25181,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos favoritos a post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_SHARE
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_SHARED
 	 "Noves comparticions de missatges socials"
 #elif L==2
 	 "Neue gemeinsame Nutzung zu sozialen Beitr&auml;ge"
@@ -25201,7 +25201,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas partilhas de post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_FOLLOWER
+#if   L==1	// Ntf_EVENT_SOCIAL_FOLLOWER
 	 "Nous seguidors"
 #elif L==2
 	 "Neue Anh&auml;nger"
@@ -25504,7 +25504,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Pedido de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_POST
+#if   L==1	// Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED
 	"Novo missatge social"
 #elif L==2
 	"Neue soziale Beitrag"
@@ -25524,7 +25524,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novo post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_COMMENT
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_COMMENTED
 	 "Nou comentari a un missatge social"
 #elif L==2
 	 "Neue Kommentar zu soziale Beitrag"
@@ -25544,7 +25544,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novo coment&aacute;rio a um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_FAV
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_FAVED
 	 "Nou favorit a un missatge social"
 #elif L==2
 	 "Neue Favorit zu soziale Beitrag"
@@ -25564,7 +25564,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novo favorito a um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SOCIAL_SHARE
+#if   L==1	// Ntf_EVENT_SOCIAL_PUB_SHARED
 	 "Nova compartici&oacute; d'un missatge social"
 #elif L==2
 	 "gemeinsame Nutzung von soziale Beitrag"
@@ -25584,7 +25584,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Nova partilha de um post sociais"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_FOLLOWER
+#if   L==1	// Ntf_EVENT_SOCIAL_FOLLOWER
 	"Seguidor"
 #elif L==2
 	"Anh&auml;nger"

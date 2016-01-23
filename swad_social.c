@@ -295,6 +295,7 @@ static long Soc_ReceiveComment (void);
 static long Soc_ShareSocialNote (void);
 static long Soc_FavSocialNote (void);
 static long Soc_FavSocialComment (void);
+static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod);
 
 static long Soc_UnshareSocialNote (void);
 static long Soc_UnfavSocialNote (void);
@@ -683,6 +684,15 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
 	 /* Get code of social publishing (row[0]) */
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+      else
+	 PubCod = -1L;
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      if (PubCod > 0)
+	{
 	 sprintf (Query,"INSERT INTO pub_codes SET PubCod='%ld'",PubCod);
 	 DB_QueryINSERT (Query,"can not store publishing code");
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
@@ -737,6 +747,9 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&PubCod) != 1)
       PubCod = 0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    return PubCod;
   }
@@ -874,6 +887,9 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
      }
    fprintf (Gbl.F.Out,"</ul>");
 
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
    /***** Store first publishing code into session *****/
    Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
@@ -888,9 +904,6 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -969,11 +982,11 @@ static void Soc_ShowOldPubsInTimeline (const char *Query)
                            false,false);
      }
 
-   /***** Store first publishing code into session *****/
-   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Store first publishing code into session *****/
+   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
   }
 
 /*****************************************************************************/
@@ -1833,6 +1846,9 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
             SocPub->PublisherCod,
             (unsigned) SocPub->PubType);
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
+
+   /***** Store notification about the new publishing *****/
+   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_NEW_PUB_BY_FOLLOWED,SocPub->PubCod);
   }
 
 /*****************************************************************************/
@@ -1991,9 +2007,6 @@ static long Soc_ReceiveSocialPost (void)
 
       /* Insert post in social notes */
       NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
-
-      /***** Store notification about the new post *****/
-      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_POST,NotCod);
      }
    else
       NotCod = -1L;
@@ -2215,7 +2228,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
 	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       IAmAFavouriterOfThisSocCom = Soc_CheckIfCommIsFavouritedByUsr (SocCom->ComCod,
-								    Gbl.Usrs.Me.UsrDat.UsrCod);
+								     Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
@@ -2707,7 +2720,7 @@ static long Soc_ReceiveComment (void)
 	 DB_QueryINSERT (Query,"can not store comment content");
 
 	 /***** Store notification about the new comment *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_COMMENT,SocNot.NotCod);
+	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SOCIAL_PUB_COMMENTED,SocPub.PubCod);
 
 	 /***** Show the social note just commented *****/
 	 Soc_WriteSocialNote (&SocNot,
@@ -2844,11 +2857,14 @@ void Soc_FavSocialNoteUsr (void)
 static long Soc_FavSocialNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
    struct SocialNote SocNot;
    bool IAmTheAuthor;
    bool IAmAFavouriterOfThisSocNot;
    bool ICanFav;
-   char Query[256];
+   long PubCod;
 
    /***** Get the code of the social note to mark as favourite *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2860,7 +2876,7 @@ static long Soc_FavSocialNote (void)
      {
       IAmTheAuthor = (SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       IAmAFavouriterOfThisSocNot = Soc_CheckIfNoteIsFavouritedByUsr (SocNot.NotCod,
-								    Gbl.Usrs.Me.UsrDat.UsrCod);
+								     Gbl.Usrs.Me.UsrDat.UsrCod);
       ICanFav = (Gbl.Usrs.Me.Logged &&
 		 !IAmTheAuthor &&		// I am not the author
 		 !IAmAFavouriterOfThisSocNot);	// I have not favourited the note
@@ -2875,6 +2891,24 @@ static long Soc_FavSocialNote (void)
 
 	 /* Update number of times this social note is favourited */
 	 SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
+
+	 /**** Create notification about favourite post
+	       for the author of the post ***/
+	 sprintf (Query,"SELECT PubCod FROM social_pubs"
+	                " WHERE NotCod='%ld' AND PubType='%u'",
+	          SocNot.NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
+	 if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing") == 1)
+	   {
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get code of social publishing (row[0]) */
+	    PubCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	    Soc_CreateFavNotifToAuthor (SocNot.UsrCod,PubCod);
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
 	 /***** Show the social note just favourited *****/
 	 Soc_WriteSocialNote (&SocNot,
@@ -2946,7 +2980,7 @@ static long Soc_FavSocialComment (void)
      {
       IAmTheAuthor = (SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       IAmAFavouriterOfThisSocCom = Soc_CheckIfCommIsFavouritedByUsr (SocCom.ComCod,
-								    Gbl.Usrs.Me.UsrDat.UsrCod);
+								     Gbl.Usrs.Me.UsrDat.UsrCod);
       ICanFav = (Gbl.Usrs.Me.Logged &&
 		 !IAmTheAuthor &&		// I am not the author
 		 !IAmAFavouriterOfThisSocCom);	// I have not favourited the comment
@@ -2962,6 +2996,10 @@ static long Soc_FavSocialComment (void)
 	 /* Update number of times this social comment is favourited */
 	 SocCom.NumFavs = Soc_GetNumTimesACommHasBeenFav (&SocCom);
 
+	 /**** Create notification about favourite post
+	       for the author of the post ***/
+	 Soc_CreateFavNotifToAuthor (SocCom.UsrCod,SocCom.ComCod);
+
 	 /***** Show the social comment just favourited *****/
 	 Soc_WriteSocialComment (&SocCom,
 	                         Soc_TOP_MESSAGE_FAV,Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2972,6 +3010,40 @@ static long Soc_FavSocialComment (void)
       Lay_ShowAlert (Lay_WARNING,Txt_The_comment_no_longer_exists);
 
    return SocCom.NotCod;
+  }
+
+/*****************************************************************************/
+/**** Create notif. about fav. post/comment for the author of post/comment ***/
+/*****************************************************************************/
+
+static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod)
+  {
+   struct UsrData UsrDat;
+   bool CreateNotif;
+   bool NotifyByEmail;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   UsrDat.UsrCod = AuthorCod;
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+     {
+      /***** This fav must be notified by e-mail? *****/
+      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_SOCIAL_PUB_FAVED));
+      NotifyByEmail = CreateNotif &&
+		      (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_SOCIAL_PUB_FAVED));
+
+      /***** Create notification for the author of the post.
+	     If this author wants to receive notifications by e-mail,
+	     activate the sending of a notification *****/
+      if (CreateNotif)
+	 Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_SOCIAL_PUB_FAVED,&UsrDat,PubCod,
+					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+									0));
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -3187,7 +3259,7 @@ static long Soc_UnfavSocialComment (void)
 
    IAmTheAuthor = (SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    IAmAFavouriterOfThisSocCom = Soc_CheckIfCommIsFavouritedByUsr (SocCom.ComCod,
-								 Gbl.Usrs.Me.UsrDat.UsrCod);
+								  Gbl.Usrs.Me.UsrDat.UsrCod);
    ICanUnfav = (Gbl.Usrs.Me.Logged &&
                 !IAmTheAuthor &&		// I am not the author
 	        IAmAFavouriterOfThisSocCom);	// I have favourited the comment
@@ -3897,6 +3969,9 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
 	 Usr_UsrDataDestructor (&UsrDat);
 	}
 
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
       if (NumUsrs > NumUsrsShown)
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
 	                    "<img src=\"%s/ellipsis32x32.gif\""
@@ -3935,6 +4010,9 @@ static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
       else
 	 /***** Reset fields of social note *****/
 	 Soc_ResetSocialNote (SocNot);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
    else
       /***** Reset fields of social note *****/
@@ -3972,6 +4050,9 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
       else
 	 /***** Reset fields of social comment *****/
 	 Soc_ResetSocialComment (SocCom);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
    else
       /***** Reset fields of social comment *****/
@@ -4195,45 +4276,99 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 /*****************************************************************************/
 /******************* Get notification of a new social post *******************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
 
-void Soc_GetNotifNewSocialPost (char *SummaryStr,char **ContentStr,long NotCod,
-                                unsigned MaxChars,bool GetContent)
+void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCod,
+                                   unsigned MaxChars,bool GetContent)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   struct SocialPublishing SocPub;
+   struct SocialNote SocNot;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   SummaryStr[0] = '\0';	// Return nothing on error
+   /***** Return nothing on error *****/
+   SocPub.PubType = Soc_PUB_UNKNOWN;
+   SummaryStr[0] = '\0';
+   Content[0] = '\0';
 
-   /***** Get social post from database *****/
-   sprintf (Query,"SELECT social_posts.Content FROM social_notes,social_posts"
-	          " WHERE social_notes.NotCod='%ld'"
-	          " AND social_notes.NoteType='%u' AND"
-	          " AND social_notes.Cod=social_posts.PstCod",
-            NotCod,(unsigned) Soc_NOTE_SOCIAL_POST);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
+   /***** Get summary and content from social post from database *****/
+   sprintf (Query,"SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
+		  " FROM social_pubs WHERE PubCod='%ld'",
+            PubCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social publishing") == 1)   // Result should have a unique row
      {
-      /***** Get row *****/
+      /* Get data of social publishing */
       row = mysql_fetch_row (mysql_res);
-
-      /****** Get content (row[0]) *****/
-      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
      }
-   else
-      Content[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get summary and content *****/
+   switch (SocPub.PubType)
+     {
+      case Soc_PUB_UNKNOWN:
+	 break;
+      case Soc_PUB_ORIGINAL_NOTE:
+      case Soc_PUB_SHARED_NOTE:
+	 /* Get data of social note */
+	 SocNot.NotCod = SocPub.NotCod;
+	 Soc_GetDataOfSocialNotByCod (&SocNot);
+
+	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
+	   {
+	    /***** Get content of social post from database *****/
+	    sprintf (Query,"SELECT Content FROM social_posts"
+			   " WHERE PstCod='%ld'",
+		     SocNot.Cod);
+	    if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post") == 1)   // Result should have a unique row
+	      {
+	       /***** Get row *****/
+	       row = mysql_fetch_row (mysql_res);
+
+	       /****** Get content (row[0]) *****/
+	       strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+	      }
+
+	    /***** Free structure that stores the query result *****/
+            DB_FreeMySQLResult (&mysql_res);
+
+	    /***** Copy summary string *****/
+	    Str_LimitLengthHTMLStr (Content,MaxChars);
+	    strcpy (SummaryStr,Content);
+	   }
+	 else
+	    Soc_GetNoteSummary (&SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+	 break;
+      case Soc_PUB_COMMENT_TO_NOTE:
+	 /***** Get content of social post from database *****/
+	 sprintf (Query,"SELECT Content FROM social_comments"
+			" WHERE ComCod='%ld'",
+		  SocPub.PubCod);
+	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a comment to a social note") == 1)   // Result should have a unique row
+	   {
+	    /***** Get row *****/
+	    row = mysql_fetch_row (mysql_res);
+
+	    /****** Get content (row[0]) *****/
+	    strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** Copy summary string *****/
+	 Str_LimitLengthHTMLStr (Content,MaxChars);
+	 strcpy (SummaryStr,Content);
+	 break;
+     }
 
    /***** Copy content string *****/
    if (GetContent)
       if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
          strcpy (*ContentStr,Content);
-
-   /***** Copy summary string *****/
-   Str_LimitLengthHTMLStr (Content,MaxChars);
-   strcpy (SummaryStr,Content);
   }
