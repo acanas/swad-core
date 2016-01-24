@@ -3690,6 +3690,12 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
   {
    char Query[128];
 
+   /***** Mark possible notifications on this comment as removed *****/
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,SocCom->ComCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->ComCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,SocCom->ComCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->ComCod);
+
    /***** Remove favs for this comment *****/
    sprintf (Query,"DELETE FROM social_comments_fav WHERE ComCod='%ld'",
 	    SocCom->ComCod);
