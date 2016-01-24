@@ -80,46 +80,88 @@ static const char Str_CR[2] = {13,0};
 /*****************************************************************************/
 /*
 Insertion example:
-In the web http://www.ugr.es/ or in http://swad.ugr.es/ you can find the info.
-In the web <a href="http://www.ugr.es/" target="_blank">http://www.ugr.es/</a> or in <a href="http://www.ugr.es/" target="_blank">http://swad.ugr.es/</a> you can find the info.
+The web site of @rms is https://stallman.org/
+The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="https://stallman.org/" target="_blank">https://stallman.org/</a>
 */
-#define LINK1 "<a href=\""
-#define LINK2 "\" target=\"_blank\">"
-#define LINK3 "</a>"
-#define MAX_URLS_IN_TEXT 1000
+#define ANCHOR_1_URL	"<a href=\""
+#define ANCHOR_2_URL	"\" target=\"_blank\">"
+#define ANCHOR_3	"</a>"
+
+#define MAX_LINKS 1000
+
 #define MAX_BYTES_LIMITED_URL 1024	// Max. number of bytes of the URL shown on screen
 
 void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
-   unsigned long TxtLength = strlen (Txt);
-   unsigned LinkLength1 = strlen (LINK1);
-   unsigned LinkLength2 = strlen (LINK2);
-   unsigned LinkLength3 = strlen (LINK3);
-   unsigned LinkTotalLength = LinkLength1 + LinkLength2 + LinkLength3;
-   char *PtrSrc,*PtrDst;
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   char ANCHOR_1_NICK[256+Ses_LENGTH_SESSION_ID];
+   char ANCHOR_2_NICK[128];
+   unsigned long TxtLength;
+   unsigned long TxtLengthWithInsertedAnchors;
+   unsigned Anchor1URLLength;
+   unsigned Anchor1NickLength;
+   unsigned Anchor2URLLength;
+   unsigned Anchor2NickLength;
+   unsigned Anchor3Length;
+   unsigned AnchorURLTotalLength;
+   unsigned AnchorNickTotalLength;
+   char *PtrSrc;
+   char *PtrDst;
    bool URLStartFound;
-   int NumURLs = 0,NumURL;
+   bool IsNickname;
+   int NumURLs  = 0;
+   int NumNicks  = 0;
+   int NumLinks = 0;
+   int NumLink;
    struct
      {
       char *PtrStart;
       char *PtrEnd;
-      size_t NumActualBytes;		// Actual length of the link
-     } URL[MAX_URLS_IN_TEXT];
-   size_t URLLengthOnScreenTotal = 0;
-   size_t Length,i;
+      size_t NumActualBytes;		// Actual length of the URL/nickname
+      size_t AnchorsLengthUntilHere;
+     } Links[MAX_LINKS];
+   size_t LinksTotalLength = 0;
+   size_t Length;
+   size_t i;
    size_t NumChars1,NumChars2;
    size_t NumBytesToCopy;
    size_t NumBytesToShow;		// Length of the link displayed on screen (may be shorter than actual length)
    char LimitedURL[MAX_BYTES_LIMITED_URL+1];
    char Ch;
 
+   /****** Initialize lengths *****/
+   if (Gbl.Usrs.Me.Logged)
+     {
+      sprintf (ANCHOR_1_NICK,"<a href=\"%s/%s?ses=%s&amp;usr=",
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.Session.Id);
+      sprintf (ANCHOR_2_NICK,"\">");
+     }
+   else
+     {
+      sprintf (ANCHOR_1_NICK,"<a href=\"%s/%s?usr=",
+	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+      sprintf (ANCHOR_2_NICK,"\" target=\"_blank\">");
+     }
+   TxtLength         = strlen (Txt);
+   Anchor1URLLength  = strlen (ANCHOR_1_URL);
+   Anchor1NickLength = strlen (ANCHOR_1_NICK);
+   Anchor2URLLength  = strlen (ANCHOR_2_URL);
+   Anchor2NickLength = strlen (ANCHOR_2_NICK);
+   Anchor3Length     = strlen (ANCHOR_3);
+   AnchorURLTotalLength  = Anchor1URLLength  + Anchor2URLLength  + Anchor3Length;
+   AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3Length;
+
    /***** Find starts and ends of URLs *****/
    for (PtrSrc = Txt;
 	*PtrSrc;)
+      /* Check if the next char is the start of a URL */
       if (tolower ((int) *PtrSrc) == (int) 'h')
         {
          URLStartFound = false;
-         URL[NumURLs].PtrStart = PtrSrc;
+         Links[NumLinks].PtrStart = PtrSrc;
          if (tolower ((int) *++PtrSrc) == (int) 't') // ht...
            {
             if (tolower ((int) *++PtrSrc) == (int) 't') // htt...
@@ -155,7 +197,7 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
                PtrSrc += NumChars1;
                if ((Ch >= 0 && Ch <= 32) || Ch == '<'  || Ch == '"')
                  {
-                  URL[NumURLs].PtrEnd = PtrSrc - NumChars1 - 1;
+                  Links[NumLinks].PtrEnd = PtrSrc - NumChars1 - 1;
                   break;
                  }
                else if (Ch == ',' || Ch == '.' || Ch == ';' || Ch == ':' || Ch == ')' || Ch == ']' || Ch == '}')
@@ -164,72 +206,134 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
                   PtrSrc += NumChars2;
                   if ((Ch >= 0 && Ch <= 32) || Ch == '<' || Ch == '"')
                     {
-                     URL[NumURLs].PtrEnd = PtrSrc - NumChars2 - NumChars1 - 1;
+                     Links[NumLinks].PtrEnd = PtrSrc - NumChars2 - NumChars1 - 1;
                      break;
                     }
                  }
               }
 
             /* Calculate length of this URL */
-            URL[NumURLs].NumActualBytes = (size_t) (URL[NumURLs].PtrEnd - URL[NumURLs].PtrStart) + 1;
-            if (URL[NumURLs].NumActualBytes <= MaxCharsURLOnScreen)
-               URLLengthOnScreenTotal += URL[NumURLs].NumActualBytes;
+            Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd - Links[NumLinks].PtrStart) + 1;
+            if (Links[NumLinks].NumActualBytes <= MaxCharsURLOnScreen)
+               LinksTotalLength += Links[NumLinks].NumActualBytes;
             else	// If URL is too long to be displayed ==> short it
               {
                /* Make a copy of this URL */
-               NumBytesToCopy = (URL[NumURLs].NumActualBytes < MAX_BYTES_LIMITED_URL) ? URL[NumURLs].NumActualBytes :
-        	                                                                        MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,URL[NumURLs].PtrStart,NumBytesToCopy);
+               NumBytesToCopy = (Links[NumLinks].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLinks].NumActualBytes :
+        	                                                                           MAX_BYTES_LIMITED_URL;
+               strncpy (LimitedURL,Links[NumLinks].PtrStart,NumBytesToCopy);
                LimitedURL[NumBytesToCopy] = '\0';
 
                /* Limit the number of characters on screen of the copy, and calculate its length in bytes */
-               URLLengthOnScreenTotal += Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
+               LinksTotalLength += Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
               }
+            if (NumLinks == 0)
+               Links[NumLinks].AnchorsLengthUntilHere = AnchorURLTotalLength;
+            else
+               Links[NumLinks].AnchorsLengthUntilHere = Links[NumLinks - 1].AnchorsLengthUntilHere +
+                                                        AnchorURLTotalLength;
 
-            /* Increment number of found URLs */
-            if (++NumURLs == MAX_URLS_IN_TEXT)
+	    /* Increment number of found nicknames and links */
+	    NumURLs++;
+	    NumLinks++;
+	    if (NumLinks == MAX_LINKS)
                break;
            }
         }
+      /* Check if the next char is the start of a nickname */
+      else if ((int) *PtrSrc == (int) '@')
+	{
+         Links[NumLinks].PtrStart = PtrSrc;
+
+	 /* Find nickname end */
+	 PtrSrc++;	// Points to first character after @
+
+	 /* A nick can have digits, letters and '_'  */
+	 for (;
+	      *PtrSrc;
+	      PtrSrc++)
+	    if (!((*PtrSrc >= 'a' && *PtrSrc <= 'z') ||
+		  (*PtrSrc >= 'A' && *PtrSrc <= 'Z') ||
+		  (*PtrSrc >= '0' && *PtrSrc <= '9') ||
+		  (*PtrSrc == '_')))
+	       break;
+
+	 /* Calculate length of this nickname */
+	 Links[NumLinks].PtrEnd = PtrSrc - 1;
+         Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd - Links[NumLinks].PtrStart) + 1;
+
+	 /* A nick (without arroba) must have a number of characters
+            Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA */
+	 Length = Links[NumLinks].NumActualBytes - 1;	// Do not count the initial @
+	 IsNickname = (Length >= Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA &&
+	               Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+
+	 if (IsNickname)
+	   {
+	    LinksTotalLength += Links[NumLinks].NumActualBytes;
+            if (NumLinks == 0)
+               Links[NumLinks].AnchorsLengthUntilHere = AnchorNickTotalLength;
+            else
+               Links[NumLinks].AnchorsLengthUntilHere = Links[NumLinks - 1].AnchorsLengthUntilHere +
+                                                        AnchorNickTotalLength;
+
+	    /* Increment number of found nicknames and links */
+	    NumNicks++;
+	    NumLinks++;
+	    if (NumLinks == MAX_LINKS)
+	       break;
+	   }
+	}
+      /* The next char is not the start of URL or nickname */
       else	// Character != 'h'
          PtrSrc++;
 
-   if (NumURLs)	// If there are one or more URLs in text
+   /***** If there are one or more links (URLs or nicknames) in text *****/
+   if (NumLinks)
      {
-      /***** Insert links from end to start of text, only if there is enough space available in text *****/
-      if (TxtLength + URLLengthOnScreenTotal + LinkTotalLength*NumURLs <= MaxLength)
-         for (NumURL = NumURLs - 1;
-              NumURL >= 0;
-              NumURL--)
+      /***** Insert links from end to start of text,
+             only if there is enough space available in text *****/
+      TxtLengthWithInsertedAnchors = TxtLength +
+	                             LinksTotalLength +
+	                             AnchorURLTotalLength  * NumURLs +
+	                             AnchorNickTotalLength * NumNicks;
+      if (TxtLengthWithInsertedAnchors <= MaxLength)
+         for (NumLink = NumLinks - 1;
+              NumLink >= 0;
+              NumLink--)
            {
-            /* Step 1: Move forward the text after the URL (it's mandatory to do the copy in reverse order to avoid overwriting source) */
+            IsNickname = (*(Links[NumLink].PtrStart) == '@');
+
+            /* Step 1: Move forward the text after the link (URL or nickname)
+               (it's mandatory to do the copy in reverse order to avoid overwriting source) */
             for (i = 0,
-                 PtrSrc = (NumURL == NumURLs - 1) ? Txt + TxtLength :
-                                                    URL[NumURL + 1].PtrStart - 1,
-                 PtrDst = PtrSrc + URLLengthOnScreenTotal + LinkTotalLength * (NumURL + 1),
-                 Length = PtrSrc - URL[NumURL].PtrEnd;
+                 PtrSrc = (NumLink == NumLinks - 1) ? Txt + TxtLength :
+                                                      Links[NumLink + 1].PtrStart - 1,
+                 PtrDst = PtrSrc + LinksTotalLength + Links[NumLink].AnchorsLengthUntilHere,
+                 Length = PtrSrc - Links[NumLink].PtrEnd;
                  i < Length;
                  i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 2: Insert LINK3 */
-            for (i=0, PtrSrc = LINK3 + LinkLength3 - 1;
-        	 i < LinkLength3;
+            /* Step 2: Insert ANCHOR_3 */
+            for (i=0, PtrSrc = ANCHOR_3 + Anchor3Length - 1;
+        	 i < Anchor3Length;
         	 i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 3: Move forward the URL to be shown on screen */
-            if (URL[NumURL].NumActualBytes <= MaxCharsURLOnScreen)
+            /* Step 3: Move forward the link (URL or nickname) to be shown on screen */
+            if (IsNickname ||
+        	Links[NumLink].NumActualBytes <= MaxCharsURLOnScreen)
               {
-               NumBytesToShow = URL[NumURL].NumActualBytes;
-               PtrSrc = URL[NumURL].PtrEnd;	// PtrSrc must point to end of complete URL
+               NumBytesToShow = Links[NumLink].NumActualBytes;
+               PtrSrc = Links[NumLink].PtrEnd;	// PtrSrc must point to end of complete URL or nickname
               }
             else	// If URL is too long to be displayed ==> short it
               {
                /* Make a copy of this URL */
-               NumBytesToCopy = (URL[NumURL].NumActualBytes < MAX_BYTES_LIMITED_URL) ? URL[NumURL].NumActualBytes :
-        	                                                                       MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,URL[NumURL].PtrStart,NumBytesToCopy);
+               NumBytesToCopy = (Links[NumLink].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLink].NumActualBytes :
+        	                                                                          MAX_BYTES_LIMITED_URL;
+               strncpy (LimitedURL,Links[NumLink].PtrStart,NumBytesToCopy);
                LimitedURL[NumBytesToCopy] = '\0';
 
                /* Limit the length of the copy */
@@ -243,25 +347,39 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
         	 i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 4: Insert LINK2 */
-            for (i = 0, PtrSrc = LINK2 + LinkLength2 - 1;
-        	 i < LinkLength2;
+            /* Step 4: Insert ANCHOR_2_LINK or ANCHOR_2_URL */
+            if (IsNickname)
+	       for (i = 0, PtrSrc = ANCHOR_2_NICK + Anchor2NickLength - 1;
+		    i < Anchor2NickLength;
+		    i++)
+		  *PtrDst-- = *PtrSrc--;
+            else
+               for (i = 0, PtrSrc = ANCHOR_2_URL  + Anchor2URLLength  - 1;
+		    i < Anchor2URLLength;
+		    i++)
+		  *PtrDst-- = *PtrSrc--;
+
+            /* Step 5: Insert link into directive A
+                       (it's mandatory to do the copy in reverse order
+                       to avoid overwriting source URL or nickname) */
+            for (i = 0, PtrSrc = Links[NumLink].PtrEnd;
+        	 i < Links[NumLink].NumActualBytes;
         	 i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 5: Insert URL into directive A (it's mandatory to do the copy in reverse order to avoid overwriting source URL) */
-            for (i = 0, PtrSrc = URL[NumURL].PtrEnd;
-        	 i < URL[NumURL].NumActualBytes;
-        	 i++)
-               *PtrDst-- = *PtrSrc--;
+            /* Step 6: Insert ANCHOR_1_NICK or ANCHOR_1_URL */
+            if (IsNickname)
+	       for (i = 0, PtrSrc = ANCHOR_1_NICK + Anchor1NickLength - 1;
+		    i < Anchor1NickLength;
+		    i++)
+		  *PtrDst-- = *PtrSrc--;
+            else
+	       for (i = 0, PtrSrc = ANCHOR_1_URL  + Anchor1URLLength  - 1;
+		    i < Anchor1URLLength;
+		    i++)
+		  *PtrDst-- = *PtrSrc--;
 
-            /* Step 6: Insert LINK1 */
-            for (i = 0, PtrSrc = LINK1 + LinkLength1 - 1;
-        	 i < LinkLength1;
-        	 i++)
-               *PtrDst-- = *PtrSrc--;
-
-            URLLengthOnScreenTotal -= NumBytesToShow;
+            LinksTotalLength -= NumBytesToShow;
            }
      }
   }
@@ -947,7 +1065,12 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
-                case 0x5C:  /* "%5C" --> "&#92;" (\) */
+               case 0x40:  /* "%40" --> "@" */
+                  strcpy (StrSpecialChar,"@");
+                  NumPrintableCharsFromReturn++;
+                  ThereIsSpaceChar = false;
+                  break;
+               case 0x5C:  /* "%5C" --> "&#92;" (\) */
         	  if (ChangeTo == Str_TO_MARKDOWN)
         	    {	// Escape sequence for database, two characters
         	     StrSpecialChar[0] = '\\';	// 1. An inverted bar
