@@ -304,6 +304,7 @@ static long Soc_UnfavSocialComment (void);
 static void Soc_RequestRemovalSocialNote (void);
 static void Soc_RemoveSocialNote (void);
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
+static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
 
 static void Soc_RequestRemovalSocialComment (void);
 static void Soc_RemoveSocialComment (void);
@@ -3077,10 +3078,7 @@ static long Soc_UnshareSocialNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct SocialNote SocNot;
-   long PubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3094,36 +3092,15 @@ static long Soc_UnshareSocialNote (void)
 	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
-	    /***** Get code of social publishing from database *****/
-	    sprintf (Query,"SELECT PubCod FROM social_pubs"
-			   " WHERE NotCod='%ld'"
-			   " AND PublisherCod='%ld'"	// I have share this note
-			   " AND PubType='%u'",	// It's a shared note
-		     SocNot.NotCod,
-		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     (unsigned) Soc_PUB_SHARED_NOTE);
-	    if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social publishing") == 1)   // Result should have a unique row
-	      {
-	       /* Get code of social publishing (row[0]) */
-	       row = mysql_fetch_row (mysql_res);
-	       PubCod = Str_ConvertStrCodToLongCod (row[0]);
-	      }
-	    else
-	       PubCod = -1L;
-
-	    /* Free structure that stores the query result */
-	    DB_FreeMySQLResult (&mysql_res);
-
-	    if (PubCod > 0)
-	      {
-	       /***** Delete social publishing from database *****/
-	       sprintf (Query,"DELETE FROM social_pubs WHERE PubCod='%ld'",
-			PubCod);
-	       DB_QueryDELETE (Query,"can not remove a social publishing");
-
-	       /***** Mark possible notification as removed *****/
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,PubCod);
-	      }
+	    /***** Delete social publishing from database *****/
+	    sprintf (Query,"DELETE FROM social_pubs"
+	                   " WHERE NotCod='%ld'"
+	                   " AND Publisher='%ld'"
+	                   " AND PubType='%u'",
+	             SocNot.NotCod,
+	             Gbl.Usrs.Me.UsrDat.UsrCod,
+	             (unsigned) Soc_PUB_SHARED_NOTE);
+	    DB_QueryDELETE (Query,"can not remove a social publishing");
 
 	    /***** Update number of times this social note is shared *****/
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
@@ -3442,7 +3419,52 @@ static void Soc_RemoveSocialNote (void)
 
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
-   char Query[256];
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long PubCod;
+   unsigned long NumComments;
+   unsigned long NumCom;
+
+   /***** Mark possible notifications on this social note as removed *****/
+   PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+   if (PubCod > 0)
+     {
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+     }
+
+   /***** Mark possible notifications on the comments
+          of this social note as removed *****/
+   /* Get comments of this social note */
+   sprintf (Query,"SELECT PubCod FROM social_pubs"
+	          " WHERE NotCod='%ld' AND PubType='%u'",
+	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+
+   /* For each comment... */
+   for (NumCom = 0;
+	NumCom < NumComments;
+	NumCom++)
+     {
+      /* Get code of social comment **/
+      row = mysql_fetch_row (mysql_res);
+      PubCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Mark notifications as removed */
+      if (PubCod > 0)
+	{
+	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
+	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
+	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+	}
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove favs *****/
    /* Remove favs for all comments in this note */
@@ -3492,6 +3514,29 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 
    /***** Reset social note *****/
    Soc_ResetSocialNote (SocNot);
+  }
+
+/*****************************************************************************/
+/************ Get code of social publishing of the original note *************/
+/*****************************************************************************/
+
+static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get code of social publishing of the original note *****/
+   sprintf (Query,"SELECT PubCod FROM social_pubs"
+		  " WHERE NotCod='%ld' AND PubType='%u'",
+	    NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social publishing") == 1)   // Result should have a unique row
+     {
+      /* Get code of social publishing (row[0]) */
+      row = mysql_fetch_row (mysql_res);
+      return Str_ConvertStrCodToLongCod (row[0]);
+     }
+   return -1L;
   }
 
 /*****************************************************************************/
