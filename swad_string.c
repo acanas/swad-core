@@ -76,7 +76,7 @@ static const char Str_CR[2] = {13,0};
 /*****************************************************************************/
 
 /*****************************************************************************/
-/************************* Insert links in URLs ******************************/
+/****************** Insert a link in every URL or nickname *******************/
 /*****************************************************************************/
 /*
 Insertion example:
@@ -91,20 +91,20 @@ The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="ht
 
 #define MAX_BYTES_LIMITED_URL 1024	// Max. number of bytes of the URL shown on screen
 
-void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
+void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char ANCHOR_1_NICK[256+Ses_LENGTH_SESSION_ID];
    char ANCHOR_2_NICK[128];
-   unsigned long TxtLength;
-   unsigned long TxtLengthWithInsertedAnchors;
-   unsigned Anchor1URLLength;
-   unsigned Anchor1NickLength;
-   unsigned Anchor2URLLength;
-   unsigned Anchor2NickLength;
-   unsigned Anchor3Length;
-   unsigned AnchorURLTotalLength;
-   unsigned AnchorNickTotalLength;
+   size_t TxtLength;
+   size_t TxtLengthWithInsertedAnchors;
+   size_t Anchor1URLLength;
+   size_t Anchor1NickLength;
+   size_t Anchor2URLLength;
+   size_t Anchor2NickLength;
+   size_t Anchor3Length;
+   size_t AnchorURLTotalLength;
+   size_t AnchorNickTotalLength;
    char *PtrSrc;
    char *PtrDst;
    bool URLStartFound;
@@ -154,7 +154,7 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
    AnchorURLTotalLength  = Anchor1URLLength  + Anchor2URLLength  + Anchor3Length;
    AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3Length;
 
-   /***** Find starts and ends of URLs *****/
+   /***** Find starts and ends of links (URLs and nicknames) *****/
    for (PtrSrc = Txt;
 	*PtrSrc;)
       /* Check if the next char is the start of a URL */
@@ -349,15 +349,19 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
 
             /* Step 4: Insert ANCHOR_2_LINK or ANCHOR_2_URL */
             if (IsNickname)
-	       for (i = 0, PtrSrc = ANCHOR_2_NICK + Anchor2NickLength - 1;
-		    i < Anchor2NickLength;
-		    i++)
-		  *PtrDst-- = *PtrSrc--;
+              {
+	       PtrSrc = ANCHOR_2_NICK + Anchor2NickLength - 1;
+	       Length = Anchor2NickLength;
+              }
             else
-               for (i = 0, PtrSrc = ANCHOR_2_URL  + Anchor2URLLength  - 1;
-		    i < Anchor2URLLength;
-		    i++)
-		  *PtrDst-- = *PtrSrc--;
+              {
+	       PtrSrc = ANCHOR_2_URL  + Anchor2URLLength  - 1;
+	       Length = Anchor2URLLength;
+              }
+	    for (i = 0;
+		 i < Length;
+		 i++)
+	       *PtrDst-- = *PtrSrc--;
 
             /* Step 5: Insert link into directive A
                        (it's mandatory to do the copy in reverse order
@@ -369,15 +373,19 @@ void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLO
 
             /* Step 6: Insert ANCHOR_1_NICK or ANCHOR_1_URL */
             if (IsNickname)
-	       for (i = 0, PtrSrc = ANCHOR_1_NICK + Anchor1NickLength - 1;
-		    i < Anchor1NickLength;
-		    i++)
-		  *PtrDst-- = *PtrSrc--;
+              {
+	       PtrSrc = ANCHOR_1_NICK + Anchor1NickLength - 1;
+	       Length = Anchor1NickLength;
+              }
             else
-	       for (i = 0, PtrSrc = ANCHOR_1_URL  + Anchor1URLLength  - 1;
-		    i < Anchor1URLLength;
-		    i++)
-		  *PtrDst-- = *PtrSrc--;
+              {
+	       PtrSrc = ANCHOR_1_URL  + Anchor1URLLength  - 1;
+	       Length = Anchor1URLLength;
+              }
+	    for (i = 0;
+		 i < Length;
+		 i++)
+	       *PtrDst-- = *PtrSrc--;
 
             LinksTotalLength -= NumBytesToShow;
            }

@@ -3392,7 +3392,7 @@ void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks
   {
    /***** Insert links in URLs *****/
    if (InsertLinks)
-      Str_InsertLinkInURLs (Content,MaxLength,60);
+      Str_InsertLinks (Content,MaxLength,60);
 
    /***** Write message to file *****/
    if (ChangeBRToRet)

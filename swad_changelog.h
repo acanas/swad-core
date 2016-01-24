@@ -127,13 +127,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.126 (2016-01-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.126.1 (2016-01-24)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.126.1: Jan 24, 2016	Optimization in code to insert links. (194736 lines)
         Version 15.126:   Jan 24, 2016	In any text where URL is replaced by anchor, now @nickname is also replaced to link to user's profile. (194727 lines)
 					2 changes necessary in database:
 UPDATE social_posts SET Content=REPLACE(Content,'&#64;','@');

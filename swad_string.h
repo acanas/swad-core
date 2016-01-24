@@ -66,7 +66,7 @@ typedef enum
 /***************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Str_InsertLinkInURLs (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
+void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
 size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen);
 // bool Str_URLLooksValid (const char *URL);
 void Str_ConvertToTitleType (char *Str);

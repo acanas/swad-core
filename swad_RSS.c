@@ -205,7 +205,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
          /* Write full content of the notice */
          strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
          Content[Cns_MAX_BYTES_TEXT] = '\0';
-         Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,40);
+         Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
          fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
                   UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);
 

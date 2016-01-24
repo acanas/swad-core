@@ -156,7 +156,7 @@ void Ann_ShowAllAnnouncements (void)
       /* Get the content (row[4]) and insert links */
       strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
       Content[Cns_MAX_BYTES_TEXT] = '\0';
-      Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,50);
+      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
       /* Show the announcement */
       Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
@@ -220,7 +220,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	 /* Get the content (row[2]) and insert links */
 	 strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
 	 Content[Cns_MAX_BYTES_TEXT] = '\0';
-	 Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,50);
+	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */
 	 Ann_DrawAnAnnouncement (AnnCod,Ann_ACTIVE_ANNOUNCEMENT,Subject,Content,

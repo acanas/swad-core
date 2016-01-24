@@ -373,7 +373,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Att_GetAttEventTxtFromDB (Att->AttCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 

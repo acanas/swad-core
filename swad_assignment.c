@@ -328,7 +328,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinkInURLs (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 

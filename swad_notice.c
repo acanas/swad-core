@@ -449,7 +449,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
 
 	 /* Get the content (row[3]) and insert links */
 	 strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
-	 Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
+	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 	                       Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
             Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
@@ -514,7 +514,7 @@ static void Not_GetDataAndShowNotice (long NotCod,bool ICanEditNotices)
 
       /* Get the content (row[2]) and insert links*/
       strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
-      Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,
+      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 			    Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
 
       /* Get status of the notice (row[3]) */
