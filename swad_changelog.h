@@ -127,13 +127,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.125.2 (2016-01-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.125.3 (2016-01-24)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.125.3: Jan 24, 2016	Fixed bug when unsharing a social note. (194610 lines)
         Version 15.125.2: Jan 24, 2016	Mark notifications as removed after removing a comment to a social note. (194609 lines)
         Version 15.125.1: Jan 24, 2016	Mark notifications as removed after removing a social note. (194603 lines)
         Version 15.125:   Jan 24, 2016	Code refactoring in social timeline. (194563 lines)

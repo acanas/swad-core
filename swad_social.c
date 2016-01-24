@@ -3095,7 +3095,7 @@ static long Soc_UnshareSocialNote (void)
 	    /***** Delete social publishing from database *****/
 	    sprintf (Query,"DELETE FROM social_pubs"
 	                   " WHERE NotCod='%ld'"
-	                   " AND Publisher='%ld'"
+	                   " AND PublisherCod='%ld'"
 	                   " AND PubType='%u'",
 	             SocNot.NotCod,
 	             Gbl.Usrs.Me.UsrDat.UsrCod,
