@@ -87,16 +87,17 @@ typedef enum
 
   } Soc_NoteType_t;
 
+#define Soc_NUM_TOP_MESSAGES (1+7)
 typedef enum
   {
-   Soc_TOP_MESSAGE_NONE,
-   Soc_TOP_MESSAGE_PUBLISHED,
-   Soc_TOP_MESSAGE_COMMENTED,
-   Soc_TOP_MESSAGE_FAVED,
-   Soc_TOP_MESSAGE_UNFAVED,
-   Soc_TOP_MESSAGE_SHARED,
-   Soc_TOP_MESSAGE_UNSHARED,
-   Soc_TOP_MESSAGE_MENTIONED,
+   Soc_TOP_MESSAGE_NONE		= 0,
+   Soc_TOP_MESSAGE_PUBLISHED	= 1,
+   Soc_TOP_MESSAGE_COMMENTED	= 2,
+   Soc_TOP_MESSAGE_FAVED	= 3,
+   Soc_TOP_MESSAGE_UNFAVED	= 4,
+   Soc_TOP_MESSAGE_SHARED	= 5,
+   Soc_TOP_MESSAGE_UNSHARED	= 6,
+   Soc_TOP_MESSAGE_MENTIONED	= 7,
   } Soc_TopMessage_t;
 
 struct SocialPublishing

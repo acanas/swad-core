@@ -36152,152 +36152,158 @@ const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone =	// No longer shared
 	"N&atilde;o compartilhado por qualquer pessoa";
 #endif
 
-const char *Txt_SOCIAL_USER_has_commented =
+const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES] =
+	{
+	// Soc_TOP_MESSAGE_NONE
+	""
+	,
+	// Soc_TOP_MESSAGE_PUBLISHED:
 #if   L==1
-	"ha comentat:";
+	"ha publicat"
 #elif L==2
-	"hat kommentiert:";
+	"hat ver&ouml;ffentlicht"
 #elif L==3
-	"has commented:";
+	"has published"
 #elif L==4
-	"ha comentado:";
+	"ha publicado"
 #elif L==5
-	"a comment&eacute;:";
+	"a publi&eacute;"
 #elif L==6
-	"ha comentado:";	// Okoteve traducción
+	"ha publicado"		// Okoteve traducción
 #elif L==7
-	"ha commentato:";
+	"ha pubblicato"
 #elif L==8
-	"skomentowa&lstrok;";
+	"opublikowa&lstrok;"
 #elif L==9
-	"comentou:";
+	"publicou"
 #endif
-
-const char *Txt_SOCIAL_USER_has_marked_as_favourite =
+	,
+	// Soc_TOP_MESSAGE_COMMENTED:
 #if   L==1
-	"ha marcat com favorit:";
+	"ha comentat"
 #elif L==2
-	"hat als Favorit markiert:";
+	"hat kommentiert"
 #elif L==3
-	"has marked as favourite:";
+	"has commented"
 #elif L==4
-	"ha marcado como favorito:";
+	"ha comentado"
 #elif L==5
-	"a marqu&eacute; en tant que favori:";
+	"a comment&eacute;"
 #elif L==6
-	"ha marcado como favorito:";	// Okoteve traducción
+	"ha comentado"	// Okoteve traducción
 #elif L==7
-	"ha segnato come preferito:";
+	"ha commentato"
 #elif L==8
-	"oznaczone jako ulubiony:";
+	"skomentowa&lstrok;"
 #elif L==9
-	"marcou como favorito:";
+	"comentou"
 #endif
-
-const char *Txt_SOCIAL_USER_has_mentioned_you =
+	,
+	// Soc_TOP_MESSAGE_FAVED:
 #if   L==1
-	"li ha esmentat:";
+	"ha marcat com favorit"
 #elif L==2
-	"hat Sie erw&auml;hnt:";
+	"hat als Favorit markiert"
 #elif L==3
-	"has mentioned you:";
+	"has marked as favourite"
 #elif L==4
-	"le ha mencionado:";
+	"ha marcado como favorito"
 #elif L==5
-	"vous a mentionn&eacute;:";
+	"a marqu&eacute; en tant que favori"
 #elif L==6
-	"le ha mencionado:";	// Okoteve traducción
+	"ha marcado como favorito"	// Okoteve traducción
 #elif L==7
-	"ti ha menzionato:";
+	"ha segnato come preferito"
 #elif L==8
-	"wspomnia&lstrok; o Tobie";
+	"oznaczone jako ulubiony"
 #elif L==9
-	"mencionou voc&ecirc;:";
+	"marcou como favorito"
 #endif
-
-const char *Txt_SOCIAL_USER_has_published =
+	,
+	// Soc_TOP_MESSAGE_UNFAVED:
 #if   L==1
-	"ha publicat:";
+	"ha desmarcat com favorit"
 #elif L==2
-	"hat ver&ouml;ffentlicht:";
+	"hat als Favorit unmarkiert"
 #elif L==3
-	"has published:";
+	"has unmarked as favourite"
 #elif L==4
-	"ha publicado:";
+	"ha desmarcado como favorito"
 #elif L==5
-	"a publi&eacute;:";
+	"a pas marqu&eacute; en tant que favori"
 #elif L==6
-	"ha publicado:";	// Okoteve traducción
+	"ha desmarcado como favorito"	// Okoteve traducción
 #elif L==7
-	"ha pubblicato:";
+	"ha smarcato come preferito"
 #elif L==8
-	"opublikowa&lstrok;";
+	"nieoznaczonych jako ulubiony"
 #elif L==9
-	"publicou:";
+	"desmarcou como favorito"
 #endif
-
-const char *Txt_SOCIAL_USER_has_shared =
+	,
+	// Soc_TOP_MESSAGE_SHARED:
 #if   L==1
-	"ha compartit:";
+	"ha compartit"
 #elif L==2
-	"hat sich geteilt:";
+	"hat sich geteilt"
 #elif L==3
-	"has shared:";
+	"has shared"
 #elif L==4
-	"ha compartido:";
+	"ha compartido"
 #elif L==5
-	"a partag&eacute;:";
+	"a partag&eacute;"
 #elif L==6
-	"ha compartido:";	// Okoteve traducción
+	"ha compartido"	// Okoteve traducción
 #elif L==7
-	"ha condiviso:";
+	"ha condiviso"
 #elif L==8
-	"podzieli&lstrok;";
+	"podzieli&lstrok;"
 #elif L==9
-	"compartilhou:";
+	"compartilhou"
 #endif
-
-const char *Txt_SOCIAL_USER_has_stopped_sharing =
+	,
+	// Soc_TOP_MESSAGE_UNSHARED:
 #if   L==1
-	"ha deixat de compartir:";
+	"ha deixat de compartir"
 #elif L==2
-	"hat Sharing gestoppt:";
+	"hat Sharing gestoppt"
 #elif L==3
-	"has stopped sharing:";
+	"has stopped sharing"
 #elif L==4
-	"ha dejado de compartir:";
+	"ha dejado de compartir"
 #elif L==5
-	"a cess&eacute; de partage:";
+	"a cess&eacute; de partage"
 #elif L==6
-	"ha dejado de compartir:";	// Okoteve traducción
+	"ha dejado de compartir"	// Okoteve traducción
 #elif L==7
-	"ha smesso di condividere:";
+	"ha smesso di condividere"
 #elif L==8
-	"przesta&lstrok; udost&eogon;pniania:";
+	"przesta&lstrok; udost&eogon;pniania"
 #elif L==9
-	"parou compartilhar:";
+	"parou compartilhar"
 #endif
-
-const char *Txt_SOCIAL_USER_has_unmarked_as_favourite =
+	,
+	// Soc_TOP_MESSAGE_MENTIONED:
 #if   L==1
-	"ha desmarcat com favorit:";
+	"li ha esmentat"
 #elif L==2
-	"hat als Favorit unmarkiert:";
+	"hat Sie erw&auml;hnt"
 #elif L==3
-	"has unmarked as favourite:";
+	"has mentioned you"
 #elif L==4
-	"ha desmarcado como favorito:";
+	"le ha mencionado"
 #elif L==5
-	"a pas marqu&eacute; en tant que favori:";
+	"vous a mentionn&eacute;"
 #elif L==6
-	"ha desmarcado como favorito:";	// Okoteve traducción
+	"le ha mencionado"	// Okoteve traducción
 #elif L==7
-	"ha smarcato come preferito:";
+	"ti ha menzionato"
 #elif L==8
-	"nieoznaczonych jako ulubiony:";
+	"wspomnia&lstrok; o Tobie"
 #elif L==9
-	"desmarcou como favorito:";
+	"mencionou voc&ecirc;"
 #endif
+	};
 
 const char *Txt_Sort_degrees_by =
 #if   L==1

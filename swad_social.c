@@ -1398,13 +1398,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
   {
    extern const char *Txt_View_public_profile;
-   extern const char *Txt_SOCIAL_USER_has_published;
-   extern const char *Txt_SOCIAL_USER_has_commented;
-   extern const char *Txt_SOCIAL_USER_has_marked_as_favourite;
-   extern const char *Txt_SOCIAL_USER_has_unmarked_as_favourite;
-   extern const char *Txt_SOCIAL_USER_has_shared;
-   extern const char *Txt_SOCIAL_USER_has_stopped_sharing;
-   extern const char *Txt_SOCIAL_USER_has_mentioned_you;
+   extern const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES];
    struct UsrData UsrDat;
 
    if (TopMessage != Soc_TOP_MESSAGE_NONE)
@@ -1427,32 +1421,8 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 	 Act_FormEnd ();
 
 	 /***** Show action made *****/
-	 switch (TopMessage)
-	   {
-	    case Soc_TOP_MESSAGE_NONE:	// Not applicable
-	       break;
-	    case Soc_TOP_MESSAGE_PUBLISHED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_published);
-	       break;
-	    case Soc_TOP_MESSAGE_COMMENTED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_commented);
-	       break;
-	    case Soc_TOP_MESSAGE_FAVED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_marked_as_favourite);
-	       break;
-	    case Soc_TOP_MESSAGE_UNFAVED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_unmarked_as_favourite);
-	       break;
-	    case Soc_TOP_MESSAGE_SHARED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_shared);
-	       break;
-	    case Soc_TOP_MESSAGE_UNSHARED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_stopped_sharing);
-	       break;
-	    case Soc_TOP_MESSAGE_MENTIONED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_mentioned_you);
-	       break;
-	   }
+	 if (TopMessage != Soc_TOP_MESSAGE_NONE)
+            fprintf (Gbl.F.Out," %s:",Txt_SOCIAL_NOTE_TOP_MESSAGES[TopMessage]);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
