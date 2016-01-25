@@ -213,7 +213,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
               }
 
             /* Calculate length of this URL */
-            Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd - Links[NumLinks].PtrStart) + 1;
+            Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd + 1 - Links[NumLinks].PtrStart);
             if (Links[NumLinks].NumActualBytes <= MaxCharsURLOnScreen)
                LinksTotalLength += Links[NumLinks].NumActualBytes;
             else	// If URL is too long to be displayed ==> short it
@@ -260,7 +260,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 
 	 /* Calculate length of this nickname */
 	 Links[NumLinks].PtrEnd = PtrSrc - 1;
-         Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd - Links[NumLinks].PtrStart) + 1;
+         Links[NumLinks].NumActualBytes = (size_t) (PtrSrc - Links[NumLinks].PtrStart);
 
 	 /* A nick (without arroba) must have a number of characters
             Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA */
@@ -285,7 +285,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	   }
 	}
       /* The next char is not the start of URL or nickname */
-      else	// Character != 'h'
+      else	// Character distinct to 'h' or '@'
          PtrSrc++;
 
    /***** If there are one or more links (URLs or nicknames) in text *****/

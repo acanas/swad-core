@@ -3746,6 +3746,7 @@ void For_RecForumPst (void)
    long ThrCod = 0;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
+   struct SocialPublishing SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
 
    /***** Get order type, degree and course of the forum *****/
@@ -3834,7 +3835,7 @@ void For_RecForumPst (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_SWAD_USRS:
-         Soc_StoreAndPublishSocialNote (Soc_NOTE_FORUM_POST,PstCod);
+         Soc_StoreAndPublishSocialNote (Soc_NOTE_FORUM_POST,PstCod,&SocPub);
          break;
       default:
 	 break;

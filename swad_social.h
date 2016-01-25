@@ -87,6 +87,26 @@ typedef enum
 
   } Soc_NoteType_t;
 
+typedef enum
+  {
+   Soc_TOP_MESSAGE_NONE,
+   Soc_TOP_MESSAGE_SHARED,
+   Soc_TOP_MESSAGE_UNSHARED,
+   Soc_TOP_MESSAGE_FAV,
+   Soc_TOP_MESSAGE_UNFAV,
+   Soc_TOP_MESSAGE_COMMENTED,
+  } Soc_TopMessage_t;
+
+struct SocialPublishing
+  {
+   long PubCod;
+   long NotCod;
+   long PublisherCod;	// Sharer or writer of a comment
+   Soc_PubType_t PubType;
+   time_t DateTimeUTC;
+   Soc_TopMessage_t TopMessage;	// Used to show feedback on the action made
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -99,7 +119,7 @@ void Soc_RefreshNewTimelineGbl (void);
 void Soc_RefreshOldTimelineGbl (void);
 void Soc_RefreshOldTimelineUsr (void);
 
-long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod);
+void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path);

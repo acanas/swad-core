@@ -279,6 +279,7 @@ void Exa_ReceiveExamAnnouncement (void)
    long ExaCod;
    bool NewExamAnnouncement;
    unsigned NumUsrsToBeNotifiedByEMail;
+   struct SocialPublishing SocPub;
 
    /***** Allocate memory for the exam announcement *****/
    Exa_AllocMemExamAnnouncement ();
@@ -306,7 +307,7 @@ void Exa_ReceiveExamAnnouncement (void)
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
-   Soc_StoreAndPublishSocialNote (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   Soc_StoreAndPublishSocialNote (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod,&SocPub);
 
    /***** Show exam announcement *****/
    Exa_ListExamAnnouncementsEdit ();

@@ -81,16 +81,6 @@ typedef enum
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
 
-typedef enum
-  {
-   Soc_TOP_MESSAGE_NONE,
-   Soc_TOP_MESSAGE_SHARED,
-   Soc_TOP_MESSAGE_UNSHARED,
-   Soc_TOP_MESSAGE_FAV,
-   Soc_TOP_MESSAGE_UNFAV,
-   Soc_TOP_MESSAGE_COMMENTED,
-  } Soc_TopMessage_t;
-
 static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
   {
    ActUnk,		// Soc_NOTE_UNKNOWN
@@ -170,16 +160,6 @@ static const char *Soc_Icons[Soc_NUM_NOTE_TYPES] =
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
-
-struct SocialPublishing
-  {
-   long PubCod;
-   long NotCod;
-   long PublisherCod;	// Sharer or writer of a comment
-   Soc_PubType_t PubType;
-   time_t DateTimeUTC;
-   Soc_TopMessage_t TopMessage;	// Used to show feedback on the action made
-  };
 
 struct SocialNote
   {
@@ -339,6 +319,8 @@ static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
 static void Soc_ClearTimelineThisSession (void);
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void);
+
+static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);
 
 /*****************************************************************************/
 /***** Show social activity (timeline) including all the users I follow ******/
@@ -1251,7 +1233,6 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       /* End of right part */
       fprintf (Gbl.F.Out,"</div>");
 
-
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_LEFT\">");
 
       /* Create unique id for new comment */
@@ -1637,11 +1618,10 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 /*****************************************************************************/
 // Return the code of the new note just created
 
-long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
+void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub)
   {
    char Query[256];
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
-   struct SocialPublishing SocPub;
 
    switch (NoteType)
      {
@@ -1673,14 +1653,12 @@ long Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod)
 	          " (NoteType,UsrCod,HieCod,Cod,Unavailable,TimeNote)"
                   " VALUES ('%u','%ld','%ld','%ld','N',NOW())",
             (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod,Cod);
-   SocPub.NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
+   SocPub->NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
    /***** Publish social note in timeline *****/
-   SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   SocPub.PubType      = Soc_PUB_ORIGINAL_NOTE;
-   Soc_PublishSocialNoteInTimeline (&SocPub);
-
-   return SocPub.NotCod;
+   SocPub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   SocPub->PubType      = Soc_PUB_ORIGINAL_NOTE;
+   Soc_PublishSocialNoteInTimeline (SocPub);
   }
 
 /*****************************************************************************/
@@ -1857,9 +1835,6 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
             SocPub->PublisherCod,
             (unsigned) SocPub->PubType);
    SocPub->PubCod = DB_QueryINSERTandReturnCode (Query,"can not publish social note");
-
-   /***** Store notification about the new publishing *****/
-   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub->PubCod);
   }
 
 /*****************************************************************************/
@@ -2002,7 +1977,7 @@ static long Soc_ReceiveSocialPost (void)
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    char Query[128+Cns_MAX_BYTES_LONG_TEXT];
    long PstCod;
-   long NotCod;
+   struct SocialPublishing SocPub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -2017,12 +1992,18 @@ static long Soc_ReceiveSocialPost (void)
       PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
       /* Insert post in social notes */
-      NotCod = Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod);
+      Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
+
+      /***** Store notifications about the new publishing *****/
+      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
+
+      /***** Analyze content and store notifications about mentions *****/
+      Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
      }
    else
-      NotCod = -1L;
+      SocPub.NotCod = -1L;
 
-   return NotCod;
+   return SocPub.NotCod;
   }
 
 /*****************************************************************************/
@@ -2731,8 +2712,14 @@ static long Soc_ReceiveComment (void)
 		  Content);
 	 DB_QueryINSERT (Query,"can not store comment content");
 
-	 /***** Store notification about the new comment *****/
+	 /***** Store notifications about the new publishing *****/
+	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
+
+	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
+
+	 /***** Analyze content and store notifications about mentions *****/
+	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
 
 	 /***** Show the social note just commented *****/
 	 Soc_WriteSocialNote (&SocNot,
@@ -2811,6 +2798,9 @@ static long Soc_ShareSocialNote (void)
 
 	    /* Update number of times this social note is shared */
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+
+	    /***** Store notifications about the new publishing *****/
+	    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
 	   }
      }
    else
@@ -4437,4 +4427,90 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
    if (GetContent)
       if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
          strcpy (*ContentStr,Content);
+  }
+/*****************************************************************************/
+/*** Create a notification about mention for any nickname in a publishing ****/
+/*****************************************************************************/
+/*
+ Example: "The user @rms says..."
+                     ^ ^
+         PtrStart ___| |___ PtrEnd
+                 Length = 3
+*/
+static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt)
+  {
+   const char *Ptr;
+   bool IsNickname;
+   struct
+     {
+      const char *PtrStart;
+      const char *PtrEnd;
+      size_t Length;		// Length of the nickname
+     } Nickname;
+   struct UsrData UsrDat;
+   bool CreateNotif;
+   bool NotifyByEmail;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Find nicknames and create notifications *****/
+   for (Ptr = Txt;
+	*Ptr;)
+      /* Check if the next char is the start of a nickname */
+      if ((int) *Ptr == (int) '@')
+	{
+	 /* Find nickname end */
+	 Ptr++;	// Points to first character after @
+         Nickname.PtrStart = Ptr;
+
+	 /* A nick can have digits, letters and '_'  */
+	 for (;
+	      *Ptr;
+	      Ptr++)
+	    if (!((*Ptr >= 'a' && *Ptr <= 'z') ||
+		  (*Ptr >= 'A' && *Ptr <= 'Z') ||
+		  (*Ptr >= '0' && *Ptr <= '9') ||
+		  (*Ptr == '_')))
+	       break;
+
+	 /* Calculate length of this nickname */
+	 Nickname.PtrEnd = Ptr - 1;
+         Nickname.Length = (size_t) (Ptr - Nickname.PtrStart);
+
+	 /* A nick (without arroba) must have a number of characters
+            Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA */
+	 IsNickname = (Nickname.Length >= Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA &&
+	               Nickname.Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+
+	 if (IsNickname)
+	   {
+	    /* Copy nickname */
+	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
+	    UsrDat.Nickname[Nickname.Length] = '\0';
+
+	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
+	       if (UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// It's not me
+		 {
+		  /* Get user's data */
+		  Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+
+		  /* Create notification for the mentioned user *****/
+		  CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		  if (CreateNotif)
+		    {
+		     NotifyByEmail = (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
+						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+										    0));
+		    }
+		 }
+	   }
+	}
+      /* The next char is not the start of a nickname */
+      else	// Character != '@'
+         Ptr++;
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
