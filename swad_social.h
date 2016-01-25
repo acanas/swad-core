@@ -121,6 +121,8 @@ void Soc_RefreshNewTimelineGbl (void);
 void Soc_RefreshOldTimelineGbl (void);
 void Soc_RefreshOldTimelineUsr (void);
 
+void Soc_MarkMyNotifAsSeen (void);
+
 void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);

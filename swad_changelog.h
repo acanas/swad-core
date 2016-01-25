@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.129.2 (2016-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.129.3 (2016-01-25)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.129.3: Jan 25, 2016	Changed text in some messages. (194964 lines)
         Version 15.129.2: Jan 25, 2016	Mark timeline notifications as seen when new social activity is shown. (194967 lines)
         Version 15.129.1: Jan 25, 2016	Do not show top message in social timeline for original publishings. (194979 lines)
         Version 15.129:   Jan 25, 2016	Do not notify new social sharings or comments. (194979 lines)

@@ -25538,103 +25538,103 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_PUBLISH
-	"Novo missatge social"
+	"Missatge social"
 #elif L==2
-	"Neue soziale Beitrag"
+	"Soziale Beitrag"
 #elif L==3
-	"New social post"
+	"Social post"
 #elif L==4
-	"Nuevo mensaje social"
+	"Mensaje social"
 #elif L==5
-	"Nouveau message social"
+	"Message social"
 #elif L==6
-	"Nuevo mensaje social"	// Okoteve traducción
+	"Mensaje social"	// Okoteve traducción
 #elif L==7
-	"Nuovo post sociale"
+	"Post sociale"
 #elif L==8
-	"Nowy post spo&lstrok;eczna"
+	"Post spo&lstrok;eczna"
 #elif L==9
-	"Novo post sociais"
+	"Post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_COMMENT
-	 "Nou comentari a un missatge social"
+	 "Comentari a un missatge social"
 #elif L==2
-	 "Neue Kommentar zu soziale Beitrag"
+	 "Kommentar zu soziale Beitrag"
 #elif L==3
-	 "New comment to social post"
+	 "Comment to social post"
 #elif L==4
-	 "Nuevo comentario a un mensaje social"
+	 "Comentario a un mensaje social"
 #elif L==5
-	 "Nouveau commentaire &agrave; message social"
+	 "Commentaire &agrave; message social"
 #elif L==6
-	 "Nuevo comentario a un mensaje social"	// Okoteve traducción
+	 "Comentario a un mensaje social"	// Okoteve traducción
 #elif L==7
-	 "Nuovo commento a un post sociale"
+	 "Commento a un post sociale"
 #elif L==8
-	 "Nowy komentarz do post spo&lstrok;eczna"
+	 "Komentarz do post spo&lstrok;eczna"
 #elif L==9
-	 "Novo coment&aacute;rio a um post sociais"
+	 "Coment&aacute;rio a um post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_FAV
-	 "Nou favorit a un missatge social"
+	 "Missatge social marcat com favorit"
 #elif L==2
-	 "Neue Favorit zu soziale Beitrag"
+	 "Social Beitrag als Favorit markiert"
 #elif L==3
-	 "New favourite to social post"
+	 "Social post marked as favourite"
 #elif L==4
-	 "Nuevo favorito a un mensaje social"
+	 "Mensaje social marcado como favorito"
 #elif L==5
-	 "Nouveau favori &agrave; message social"
+	 "Message social marqu&eacute;e comme favori"
 #elif L==6
-	 "Nuevo favorito a un mensaje social"	// Okoteve traducción
+	 "Mensaje social marcado como favorito"	// Okoteve traducción
 #elif L==7
-	 "Nuovo preferito a un post sociale"
+	 "Post sociale segnato come preferito"
 #elif L==8
-	 "Nowy ulubiony do post spo&lstrok;eczna"
+	 "Post spo&lstrok;ecznej oznaczone jako ulubiony"
 #elif L==9
-	 "Novo favorito a um post sociais"
+	 "Post sociais marcado como favorito"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_SHARE
-	 "Nova compartici&oacute; d'un missatge social"
+	 "Missatge social compartit"
 #elif L==2
-	 "Neue gemeinsame Nutzung von soziale Beitrag"
+	 "Social Beitrag gemeinsamer"
 #elif L==3
-	 "New sharing of social post"
+	 "Social post shared"
 #elif L==4
-	 "Nueva compartici&oacute;n de un mensaje social"
+	 "Mensaje social compartido"
 #elif L==5
-	 "Nouveau partage &agrave; message social"
+	 "Message social partagé&eacute;"
 #elif L==6
-	 "Nueva compartici&oacute;n de un mensaje social"	// Okoteve traducción
+	 "Mensaje social compartido"	// Okoteve traducción
 #elif L==7
-	 "Nuova condivisione a un post sociale"
+	 "Post sociale condiviso"
 #elif L==8
-	 "Nowy podzial post spo&lstrok;eczna"
+	 "Post spo&lstrok;ecznej wsp&oacute;lne"
 #elif L==9
-	 "Nova partilha de um post sociais"
+	 "Post sociais compartido"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_MENTION
-	 "Nova menci&oacute;"
+	 "Menci&oacute;"
 #elif L==2
-	 "Neue Erw&auml;hnung"
+	 "Erw&auml;hnung"
 #elif L==3
-	 "New mention"
+	 "Mention"
 #elif L==4
-	 "Nueva menci&oacute;n"
+	 "Menci&oacute;n"
 #elif L==5
-	 "Nouvelle mention"
+	 "Mention"
 #elif L==6
-	 "Nueva menci&oacute;n"			// Okoteve traducción
+	 "Menci&oacute;n"			// Okoteve traducción
 #elif L==7
-	 "Nuova menzione"
+	 "Menzione"
 #elif L==8
-	 "Nowa wzmianka"
+	 "Wzmianka"
 #elif L==9
-	 "Nova men&ccedil;&atilde;o"
+	 "Men&ccedil;&atilde;o"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FOLLOWER

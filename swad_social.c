@@ -128,8 +128,6 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
 static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
-static void Soc_MarkAllMyNotifAboutTimelineAsSeen (void);
-
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
                                          char *Query);
@@ -349,9 +347,6 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
-
-   /***** Mark all my notifications related to timeline as seen *****/
-   Soc_MarkAllMyNotifAboutTimelineAsSeen ();
   }
 
 /*****************************************************************************/
@@ -414,7 +409,7 @@ static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** Mark all my notifications related to timeline as seen *****/
-   Soc_MarkAllMyNotifAboutTimelineAsSeen ();
+   // Soc_MarkMyNotifAsSeen ();
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -464,7 +459,7 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /************ Mark all my notifications about timeline as seen ***************/
 /*****************************************************************************/
 
-static void Soc_MarkAllMyNotifAboutTimelineAsSeen (void)
+void Soc_MarkMyNotifAsSeen (void)
   {
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_PUBLISH,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2857,10 +2852,6 @@ static long Soc_ShareSocialNote (void)
 	    /**** Create notification about shared post
 		  for the author of the post ***/
 	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-
-	    sprintf (Gbl.Message,"OriginalPubCod = %ld",OriginalPubCod);
-	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
 	    if (OriginalPubCod > 0)
 	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
