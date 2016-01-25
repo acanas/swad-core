@@ -3069,6 +3069,7 @@ static long Soc_UnshareSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
    struct SocialNote SocNot;
+   long PubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3094,6 +3095,11 @@ static long Soc_UnshareSocialNote (void)
 
 	    /***** Update number of times this social note is shared *****/
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+
+            /***** Mark possible notifications on this social note as removed *****/
+	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (PubCod > 0)
+	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,PubCod);
 
 	    /***** Show the social note corresponding
 		   to the publishing just unshared *****/

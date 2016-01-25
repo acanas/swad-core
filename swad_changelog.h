@@ -121,20 +121,21 @@
 // TODO: When receiving a new post, create first the publishing, then the post
 // TODO: Change PstCod to PubCod in social_posts, removing AUTO_INCREMENT
 // TODO: View highlighted social note when clicking in timeline notification
-// TODO: Mark timeline notifications as removed when unfav/unshared?
+// TODO: Mark timeline notifications as removed when unfav?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.127 (2016-01-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.127.1 (2016-01-25)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.127:   Jan 24, 2016	New function to count the number of @nicknames in a text and store it in social publishing. (194825 lines)
+        Version 15.127.1: Jan 25, 2016	Mark timeline notifications as removed when a social note is unshared. (194831 lines)
+        Version 15.127:   Jan 25, 2016	New function to count the number of @nicknames in a text and store it in social publishing. (194825 lines)
         Version 15.126.1: Jan 24, 2016	Optimization in code to insert links. (194736 lines)
         Version 15.126:   Jan 24, 2016	In any text where URL is replaced by anchor, now @nickname is also replaced to link to user's profile. (194727 lines)
 					2 changes necessary in database:
