@@ -257,7 +257,8 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 
 void Usr_PutParamOtherUsrCodEncrypted (void);
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
-void Usr_GetParamOtherUsrCodEncrypted (void);
+void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat);
+void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
 
 void Usr_ChkUsrAndGetUsrData (void);

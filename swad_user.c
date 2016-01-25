@@ -1850,19 +1850,30 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTE
 /********* Get hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_GetParamOtherUsrCodEncrypted (void)
+void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
   {
-   Par_GetParToText ("OtherUsrCod",Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-   if (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod[0])        // If parameter exists...
+   Par_GetParToText ("OtherUsrCod",UsrDat->EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+   if (UsrDat->EncryptedUsrCod[0])        // If parameter exists...
      {
-      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Gbl.Usrs.Other.UsrDat.UsrCod < 0)        // Check is user's code is valid
+      Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
+      if (UsrDat->UsrCod < 0)        // Check is user's code is valid
          Lay_ShowErrorAndExit ("Wrong user's code.");
-      ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
      }
-   else        // Parameter does not exist
+   else
+      UsrDat->UsrCod = -1L;
+  }
+
+/*****************************************************************************/
+/********* Get hidden parameter encrypted user's code of other user **********/
+/*****************************************************************************/
+
+void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void)
+  {
+   Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)        // If parameter exists...
+      ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+   else       					 // Parameter does not exist
      {
-      Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
       Gbl.Usrs.Other.UsrDat.IDs.Num = 0;
       Gbl.Usrs.Other.UsrDat.IDs.List = NULL;
@@ -1877,7 +1888,7 @@ void Usr_GetParamOtherUsrCodEncrypted (void)
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
   {
    /***** Get parameter with encrypted user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Check if user exists and get her/his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user

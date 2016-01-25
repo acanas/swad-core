@@ -90,11 +90,13 @@ typedef enum
 typedef enum
   {
    Soc_TOP_MESSAGE_NONE,
+   Soc_TOP_MESSAGE_PUBLISHED,
+   Soc_TOP_MESSAGE_COMMENTED,
+   Soc_TOP_MESSAGE_FAVED,
+   Soc_TOP_MESSAGE_UNFAVED,
    Soc_TOP_MESSAGE_SHARED,
    Soc_TOP_MESSAGE_UNSHARED,
-   Soc_TOP_MESSAGE_FAV,
-   Soc_TOP_MESSAGE_UNFAV,
-   Soc_TOP_MESSAGE_COMMENTED,
+   Soc_TOP_MESSAGE_MENTIONED,
   } Soc_TopMessage_t;
 
 struct SocialPublishing
@@ -128,7 +130,7 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path);
 void Soc_ReceiveSocialPostGbl (void);
 void Soc_ReceiveSocialPostUsr (void);
 
-void Soc_PutHiddenParamNotCod (long NotCod);
+void Soc_PutHiddenParamPubCod (long PubCod);
 
 void Soc_ReceiveCommentGbl (void);
 void Soc_ReceiveCommentUsr (void);

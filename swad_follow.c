@@ -359,7 +359,7 @@ void Fol_ListFollowers (void)
    struct UsrData UsrDat;
 
    /***** Get user to view user he/she follows *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)	// If user not specified, view my profile
       Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 

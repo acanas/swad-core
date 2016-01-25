@@ -258,8 +258,11 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
+
 static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                     long CrsCod,long Cod);
+                                     long CrsCod,struct UsrData *UsrDat,long Cod);
+static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
+
 static void Ntf_UpdateMyLastAccessToNotifications (void);
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
 static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
@@ -471,7 +474,7 @@ void Ntf_ShowMyNotifications (void)
                             "<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
                   ClassBackground);
          if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
          if (PutLink)
            {
@@ -498,7 +501,7 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
                   ClassBackground);
          if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
          if (PutLink)
            {
@@ -522,7 +525,7 @@ void Ntf_ShowMyNotifications (void)
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
                Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
@@ -540,7 +543,7 @@ void Ntf_ShowMyNotifications (void)
          else if (Crs.CrsCod > 0)
            {
             if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,Cod);
+               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
                Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
@@ -671,11 +674,10 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 // Return the value of Gbl.Form.Inside (true if form is started)
 
 static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                     long CrsCod,long Cod)
+                                     long CrsCod,struct UsrData *UsrDat,long Cod)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct FileMetadata FileMetadata;
-   struct UsrData UsrDat;
    long InsCod = -1L;
    long CtrCod = -1L;
    long DegCod = -1L;
@@ -732,17 +734,17 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
          Act_FormStart (ActSeeSocTmlGbl);
-	 // Soc_PutHiddenParamPubCod (Cod);	// TODO: For future display of selected social note at top
+	 Soc_PutHiddenParamPubCod (Cod);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
       case Ntf_EVENT_FOLLOWER:
-         UsrDat.UsrCod = Cod;	// Cod is the follower's code
-         Usr_GetEncryptedUsrCodFromUsrCod (&UsrDat);
-         if (UsrDat.EncryptedUsrCod[0])	// User's code found ==>
+         if (UsrDat->EncryptedUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
             Act_FormStart (ActSeePubPrf);
             /* Put param to go to follower's profile */
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
            }
          else	// No user's code found ==> go to see my followers
             Act_FormStart (ActSeeFlr);
@@ -791,6 +793,36 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    return Gbl.Form.Inside;
+  }
+
+
+/*****************************************************************************/
+/******************* Get parameter with notify event type ********************/
+/*****************************************************************************/
+
+static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
+  {
+   Par_PutHiddenParamUnsigned ("NotifyEvent",(unsigned) NotifyEvent);
+  }
+
+/*****************************************************************************/
+/******************* Get parameter with notify event type ********************/
+/*****************************************************************************/
+
+Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+
+   Par_GetParToText ("NotifyEvent",UnsignedStr,10);
+   if (UnsignedStr[0])
+     {
+      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Ntf_NUM_NOTIFY_EVENTS)
+	    return (Ntf_NotifyEvent_t) UnsignedNum;
+     }
+
+   return Ntf_EVENT_UNKNOWN;
   }
 
 /*****************************************************************************/

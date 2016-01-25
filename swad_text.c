@@ -36168,7 +36168,7 @@ const char *Txt_SOCIAL_USER_has_commented =
 #elif L==7
 	"ha commentato:";
 #elif L==8
-	"skomentowa&lstroke:";
+	"skomentowa&lstrok;";
 #elif L==9
 	"comentou:";
 #endif
@@ -36194,6 +36194,48 @@ const char *Txt_SOCIAL_USER_has_marked_as_favourite =
 	"marcou como favorito:";
 #endif
 
+const char *Txt_SOCIAL_USER_has_mentioned_you =
+#if   L==1
+	"li ha esmentat:";
+#elif L==2
+	"hat Sie erw&auml;hnt:";
+#elif L==3
+	"has mentioned you:";
+#elif L==4
+	"le ha mencionado:";
+#elif L==5
+	"vous a mentionn&eacute;:";
+#elif L==6
+	"le ha mencionado:";	// Okoteve traducción
+#elif L==7
+	"ti ha menzionato:";
+#elif L==8
+	"wspomnia&lstrok; o Tobie";
+#elif L==9
+	"mencionou voc&ecirc;:";
+#endif
+
+const char *Txt_SOCIAL_USER_has_published =
+#if   L==1
+	"ha publicat:";
+#elif L==2
+	"hat ver&ouml;ffentlicht:";
+#elif L==3
+	"has published:";
+#elif L==4
+	"ha publicado:";
+#elif L==5
+	"a publi&eacute;:";
+#elif L==6
+	"ha publicado:";	// Okoteve traducción
+#elif L==7
+	"ha pubblicato:";
+#elif L==8
+	"opublikowa&lstrok;";
+#elif L==9
+	"publicou:";
+#endif
+
 const char *Txt_SOCIAL_USER_has_shared =
 #if   L==1
 	"ha compartit:";
@@ -36210,7 +36252,7 @@ const char *Txt_SOCIAL_USER_has_shared =
 #elif L==7
 	"ha condiviso:";
 #elif L==8
-	"podzieli&lstroke:";
+	"podzieli&lstrok;";
 #elif L==9
 	"compartilhou:";
 #endif

@@ -179,7 +179,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    /***** Get user's data *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-      Usr_GetParamOtherUsrCodEncrypted ();
+      Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
    Error = !Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
    /***** Show profile and timeline *****/
@@ -722,7 +722,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
 void Prf_CalculateFirstClickTime (void)
   {
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get first click time from log and store as user's figure *****/
    Prf_GetFirstClickFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -784,7 +784,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 void Prf_CalculateNumClicks (void)
   {
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get number of clicks and store as user's figure *****/
    Prf_GetNumClicksAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -832,7 +832,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 void Prf_CalculateNumFileViews (void)
   {
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get number of file views and store as user's figure *****/
    Prf_GetNumFileViewsAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -878,7 +878,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 void Prf_CalculateNumForPst (void)
   {
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get number of forum posts and store as user's figure *****/
    Prf_GetNumForPstAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -924,7 +924,7 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
 void Prf_CalculateNumMsgSnt (void)
   {
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get number of messages sent and store as user's figure *****/
    Prf_GetNumMsgSntAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);

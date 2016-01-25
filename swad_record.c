@@ -956,7 +956,7 @@ void Rec_ListRecordsGsts (void)
 void Rec_GetUsrAndShowRecordOneStdCrs (void)
   {
    /***** Get the selected student *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
       if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
@@ -1140,7 +1140,7 @@ static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView)
 void Rec_GetUsrAndShowRecordOneTchCrs (void)
   {
    /***** Get the selected teacher *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show the record *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
@@ -1443,7 +1443,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
 
    /***** Get the user whose record we want to modify *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
    /***** Get list of fields of records in current course *****/

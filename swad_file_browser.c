@@ -2038,7 +2038,7 @@ void Brw_GetParAndInitFileBrowser (void)
          /* Get lists of the selected users */
          Usr_GetListsSelectedUsrs ();
          /* Get user whose folder will be used to make any operation */
-         Usr_GetParamOtherUsrCodEncrypted ();
+         Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
          /* Get whether we must create the zip file or not */
          Gbl.FileBrowser.ZIP.CreateZIP = ZIP_GetCreateZIPFromForm ();
          break;

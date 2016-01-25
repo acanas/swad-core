@@ -384,7 +384,7 @@ void Pho_RecUsrPhotoDetFaces (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
@@ -425,7 +425,7 @@ void Pho_RemoveUsrPhoto (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))

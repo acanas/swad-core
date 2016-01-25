@@ -2058,7 +2058,7 @@ void Enr_AskIfRejectSignUp (void)
    Rol_Role_t Role;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
      {
@@ -2115,7 +2115,7 @@ void Enr_RejectSignUp (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
      {
@@ -3028,7 +3028,7 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
    struct ListUsrCods ListUsrCods;
 
    /***** Check if UsrCod is present in parameters *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** If UsrCod is present in parameters,

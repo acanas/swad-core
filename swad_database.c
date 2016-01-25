@@ -2036,15 +2036,15 @@ mysql> DESCRIBE social_posts;
 +---------+----------+------+-----+---------+----------------+
 | Field   | Type     | Null | Key | Default | Extra          |
 +---------+----------+------+-----+---------+----------------+
-| PstCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
+| PubCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
 | Content | longtext | NO   | MUL | NULL    |                |
 +---------+----------+------+-----+---------+----------------+
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
-                   "PstCod INT NOT NULL AUTO_INCREMENT,"
+                   "PubCod INT NOT NULL AUTO_INCREMENT,"
                    "Content LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(PstCod),"
+                   "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
    /***** Table social_pubs *****/

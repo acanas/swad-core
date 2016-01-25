@@ -686,7 +686,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* In all the actions related to view or editing user's timeline ==>
          put parameters used by AJAX */
       if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-	 Usr_GetParamOtherUsrCodEncrypted ();
+	 Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
       if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
 	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
 				    Gbl.Usrs.Other.UsrDat.Nickname);

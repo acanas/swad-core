@@ -266,7 +266,7 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod);
 
 static void Soc_PutFormToRemoveSocialPublishing (long NotCod);
 
-static void Soc_PutHiddenParamPubCod (long PubCod);
+static void Soc_PutHiddenParamNotCod (long NotCod);
 static long Soc_GetParamNotCod (void);
 static long Soc_GetParamPubCod (void);
 
@@ -328,7 +328,76 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 
 void Soc_ShowTimelineGbl (void)
   {
-   Soc_ShowTimelineGblHighlightingNot (-1L);
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long PubCod;
+   struct SocialNote SocNot;
+   struct UsrData UsrDat;
+   Ntf_NotifyEvent_t NotifyEvent;
+   Soc_TopMessage_t TopMessage;
+
+   /***** Initialize social note code to -1 ==> no highlighted note *****/
+   SocNot.NotCod = -1L;
+
+   /***** Get parameter with the code of a social publishing *****/
+   // This parameter is optional. It can be provided by a notification.
+   // If > 0 ==> the social note is shown highlighted above the timeline
+   PubCod = Soc_GetParamPubCod ();
+   if (PubCod > 0)
+     {
+      /***** Get code of social note from database *****/
+      sprintf (Query,"SELECT NotCod FROM social_pubs WHERE PubCod='%ld'",
+	       PubCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
+	{
+	 /* Get code of social note */
+	 row = mysql_fetch_row (mysql_res);
+	 SocNot.NotCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   if (SocNot.NotCod > 0)
+     {
+      /* Get who did the action (publishing, commenting, faving, sharing, mentioning) */
+      Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
+
+      /* Get what he/she did */
+      NotifyEvent = Ntf_GetParamNotifyEvent ();
+      switch (NotifyEvent)
+        {
+	 case Ntf_EVENT_TIMELINE_PUBLISH:
+	    TopMessage = Soc_TOP_MESSAGE_PUBLISHED;
+	    break;
+	 case Ntf_EVENT_TIMELINE_COMMENT:
+	    TopMessage = Soc_TOP_MESSAGE_COMMENTED;
+	    break;
+	 case Ntf_EVENT_TIMELINE_FAV:
+	    TopMessage = Soc_TOP_MESSAGE_FAVED;
+	    break;
+	 case Ntf_EVENT_TIMELINE_SHARE:
+	    TopMessage = Soc_TOP_MESSAGE_SHARED;
+	    break;
+	 case Ntf_EVENT_TIMELINE_MENTION:
+	    TopMessage = Soc_TOP_MESSAGE_MENTIONED;
+	    break;
+	 default:
+	    TopMessage = Soc_TOP_MESSAGE_NONE;
+	    break;
+        }
+
+      /***** Show the social note highlighted *****/
+      Soc_GetDataOfSocialNotByCod (&SocNot);
+      Soc_WriteSocialNote (&SocNot,
+			   TopMessage,UsrDat.UsrCod,
+			   true,true);
+     }
+
+   /***** Show timeline with possible highlighted note *****/
+   Soc_ShowTimelineGblHighlightingNot (SocNot.NotCod);
   }
 
 static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
@@ -670,9 +739,8 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	}
       if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing") == 1)
 	{
+	 /* Get code of social publishing */
 	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get code of social publishing (row[0]) */
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
       else
@@ -1330,11 +1398,13 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
   {
    extern const char *Txt_View_public_profile;
-   extern const char *Txt_SOCIAL_USER_has_shared;
-   extern const char *Txt_SOCIAL_USER_has_stopped_sharing;
+   extern const char *Txt_SOCIAL_USER_has_published;
+   extern const char *Txt_SOCIAL_USER_has_commented;
    extern const char *Txt_SOCIAL_USER_has_marked_as_favourite;
    extern const char *Txt_SOCIAL_USER_has_unmarked_as_favourite;
-   extern const char *Txt_SOCIAL_USER_has_commented;
+   extern const char *Txt_SOCIAL_USER_has_shared;
+   extern const char *Txt_SOCIAL_USER_has_stopped_sharing;
+   extern const char *Txt_SOCIAL_USER_has_mentioned_you;
    struct UsrData UsrDat;
 
    if (TopMessage != Soc_TOP_MESSAGE_NONE)
@@ -1361,20 +1431,26 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 	   {
 	    case Soc_TOP_MESSAGE_NONE:	// Not applicable
 	       break;
+	    case Soc_TOP_MESSAGE_PUBLISHED:
+	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_published);
+	       break;
+	    case Soc_TOP_MESSAGE_COMMENTED:
+	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_commented);
+	       break;
+	    case Soc_TOP_MESSAGE_FAVED:
+	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_marked_as_favourite);
+	       break;
+	    case Soc_TOP_MESSAGE_UNFAVED:
+	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_unmarked_as_favourite);
+	       break;
 	    case Soc_TOP_MESSAGE_SHARED:
 	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_shared);
 	       break;
 	    case Soc_TOP_MESSAGE_UNSHARED:
 	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_stopped_sharing);
 	       break;
-	    case Soc_TOP_MESSAGE_FAV:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_marked_as_favourite);
-	       break;
-	    case Soc_TOP_MESSAGE_UNFAV:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_unmarked_as_favourite);
-	       break;
-	    case Soc_TOP_MESSAGE_COMMENTED:
-	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_commented);
+	    case Soc_TOP_MESSAGE_MENTIONED:
+	       fprintf (Gbl.F.Out," %s",Txt_SOCIAL_USER_has_mentioned_you);
 	       break;
 	   }
 
@@ -2592,7 +2668,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
 /************** Put parameter with the code of a social note *****************/
 /*****************************************************************************/
 
-void Soc_PutHiddenParamNotCod (long NotCod)
+static void Soc_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong ("NotCod",NotCod);
   }
@@ -2601,7 +2677,7 @@ void Soc_PutHiddenParamNotCod (long NotCod)
 /*********** Put parameter with the code of a social publishing **************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenParamPubCod (long PubCod)
+void Soc_PutHiddenParamPubCod (long PubCod)
   {
    Par_PutHiddenParamLong ("PubCod",PubCod);
   }
@@ -2618,7 +2694,7 @@ static long Soc_GetParamNotCod (void)
    /* Get social note code */
    Par_GetParToText ("NotCod",LongStr,1+10);
    if (sscanf (LongStr,"%ld",&NotCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social note.");
+      return -1L;
 
    return NotCod;
   }
@@ -2635,7 +2711,7 @@ static long Soc_GetParamPubCod (void)
    /* Get social comment code */
    Par_GetParToText ("PubCod",LongStr,1+10);
    if (sscanf (LongStr,"%ld",&PubCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social publishing.");
+      return -1L;
 
    return PubCod;
   }
@@ -2777,10 +2853,8 @@ static long Soc_ShareSocialNote (void)
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
 
-   /***** Get the code of the social note to share *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-
    /***** Get data of social note *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNotByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
@@ -2856,10 +2930,8 @@ static long Soc_FavSocialNote (void)
    struct SocialNote SocNot;
    long PubCod;
 
-   /***** Get the code of the social note to mark as favourite *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-
    /***** Get data of social note *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
    Soc_GetDataOfSocialNotByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
@@ -2899,7 +2971,7 @@ static long Soc_FavSocialNote (void)
 
 	    /***** Show the social note just favourited *****/
 	    Soc_WriteSocialNote (&SocNot,
-				 Soc_TOP_MESSAGE_FAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+				 Soc_TOP_MESSAGE_FAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
 				 true,true);
 	   }
      }
@@ -2953,10 +3025,8 @@ static long Soc_FavSocialComment (void)
    struct SocialComment SocCom;
    char Query[256];
 
-   /***** Get the code of the social publishing to mark as favourite *****/
+   /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
-
-   /***** Get data of social note *****/
    Soc_GetDataOfSocialComByCod (&SocCom);
 
    if (SocCom.PubCod > 0)
@@ -2982,7 +3052,7 @@ static long Soc_FavSocialComment (void)
 
 	    /***** Show the social comment just favourited *****/
 	    Soc_WriteSocialComment (&SocCom,
-				    Soc_TOP_MESSAGE_FAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Soc_TOP_MESSAGE_FAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    true);
 	   }
      }
@@ -3188,7 +3258,7 @@ static long Soc_UnfavSocialNote (void)
 
 	    /***** Show the social note just unfavourited *****/
 	    Soc_WriteSocialNote (&SocNot,
-				 Soc_TOP_MESSAGE_UNFAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+				 Soc_TOP_MESSAGE_UNFAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
 				 true,true);
 	   }
      }
@@ -3269,7 +3339,7 @@ static long Soc_UnfavSocialComment (void)
 
 	    /***** Show the social comment just unfavourited *****/
 	    Soc_WriteSocialComment (&SocCom,
-				    Soc_TOP_MESSAGE_UNFAV,Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Soc_TOP_MESSAGE_UNFAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    true);
 	   }
      }
@@ -3585,10 +3655,8 @@ static void Soc_RequestRemovalSocialComment (void)
    extern const char *Txt_Remove;
    struct SocialComment SocCom;
 
-   /***** Get the code of the social comment to remove *****/
-   SocCom.PubCod = Soc_GetParamPubCod ();
-
    /***** Get data of social comment *****/
+   SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
 
    if (SocCom.PubCod > 0)
@@ -3665,10 +3733,8 @@ static void Soc_RemoveSocialComment (void)
    extern const char *Txt_Comment_removed;
    struct SocialComment SocCom;
 
-   /***** Get the code of the social comment to remove *****/
-   SocCom.PubCod = Soc_GetParamPubCod ();
-
    /***** Get data of social comment *****/
+   SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
 
    if (SocCom.PubCod > 0)

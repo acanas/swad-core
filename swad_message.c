@@ -704,7 +704,7 @@ void Msg_RecMsgFromUsr (void)
       OriginalMsgCod = Msg_GetParamMsgCod ();
 
    /* Get user's code of possible preselected recipient */
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /* Get lists of selected users */
    Usr_GetListsSelectedUsrs ();
@@ -3480,7 +3480,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    char Query[256];
 
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
@@ -3537,7 +3537,7 @@ static void Msg_UnbanSender (void)
    char Query[256];
 
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncrypted ();
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))

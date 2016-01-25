@@ -102,6 +102,9 @@ typedef enum
 /*****************************************************************************/
 
 void Ntf_ShowMyNotifications (void);
+
+Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void);
+
 Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
 void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
