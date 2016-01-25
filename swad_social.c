@@ -335,7 +335,43 @@ void Soc_ShowTimelineGbl (void)
    struct SocialNote SocNot;
    struct UsrData UsrDat;
    Ntf_NotifyEvent_t NotifyEvent;
-   Soc_TopMessage_t TopMessage;
+   const Soc_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
+     {
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_UNKNOWN
+
+      /* Course tab */
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_DOCUMENT_FILE
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SHARED_FILE
+
+      /* Assessment tab */
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ASSIGNMENT
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_EXAM_ANNOUNCEMENT
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MARKS_FILE
+
+      /* Users tab */
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLLMENT_STUDENT
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLLMENT_TEACHER
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLLMENT_REQUEST
+
+      /* Social tab */
+      Soc_TOP_MESSAGE_PUBLISHED,	// Ntf_EVENT_TIMELINE_PUBLISH
+      Soc_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
+      Soc_TOP_MESSAGE_FAVED,		// Ntf_EVENT_TIMELINE_FAV
+      Soc_TOP_MESSAGE_SHARED,		// Ntf_EVENT_TIMELINE_SHARE
+      Soc_TOP_MESSAGE_MENTIONED,	// Ntf_EVENT_TIMELINE_MENTION
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FOLLOWER
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FORUM_POST_COURSE
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FORUM_REPLY
+
+      /* Messages tab */
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_NOTICE
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MESSAGE
+
+      /* Statistics tab */
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY
+
+      /* Profile tab */
+     };
 
    /***** Initialize social note code to -1 ==> no highlighted note *****/
    SocNot.NotCod = -1L;
@@ -367,32 +403,11 @@ void Soc_ShowTimelineGbl (void)
 
       /* Get what he/she did */
       NotifyEvent = Ntf_GetParamNotifyEvent ();
-      switch (NotifyEvent)
-        {
-	 case Ntf_EVENT_TIMELINE_PUBLISH:
-	    TopMessage = Soc_TOP_MESSAGE_PUBLISHED;
-	    break;
-	 case Ntf_EVENT_TIMELINE_COMMENT:
-	    TopMessage = Soc_TOP_MESSAGE_COMMENTED;
-	    break;
-	 case Ntf_EVENT_TIMELINE_FAV:
-	    TopMessage = Soc_TOP_MESSAGE_FAVED;
-	    break;
-	 case Ntf_EVENT_TIMELINE_SHARE:
-	    TopMessage = Soc_TOP_MESSAGE_SHARED;
-	    break;
-	 case Ntf_EVENT_TIMELINE_MENTION:
-	    TopMessage = Soc_TOP_MESSAGE_MENTIONED;
-	    break;
-	 default:
-	    TopMessage = Soc_TOP_MESSAGE_NONE;
-	    break;
-        }
 
       /***** Show the social note highlighted *****/
       Soc_GetDataOfSocialNotByCod (&SocNot);
       Soc_WriteSocialNote (&SocNot,
-			   TopMessage,UsrDat.UsrCod,
+			   TopMessages[NotifyEvent],UsrDat.UsrCod,
 			   true,true);
      }
 
@@ -1421,10 +1436,8 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 	 Act_FormEnd ();
 
 	 /***** Show action made *****/
-	 if (TopMessage != Soc_TOP_MESSAGE_NONE)
-            fprintf (Gbl.F.Out," %s:",Txt_SOCIAL_NOTE_TOP_MESSAGES[TopMessage]);
-
-	 fprintf (Gbl.F.Out,"</div>");
+         fprintf (Gbl.F.Out," %s:</div>",
+                  Txt_SOCIAL_NOTE_TOP_MESSAGES[TopMessage]);
 	}
 
       /***** Free memory used for user's data *****/
@@ -4172,6 +4185,14 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 
 static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub)
   {
+   const Soc_TopMessage_t TopMessages[Soc_NUM_PUB_TYPES] =
+     {
+      Soc_TOP_MESSAGE_NONE,		// Soc_PUB_UNKNOWN
+      Soc_TOP_MESSAGE_PUBLISHED,	// Soc_PUB_ORIGINAL_NOTE
+      Soc_TOP_MESSAGE_SHARED,		// Soc_PUB_SHARED_NOTE
+      Soc_TOP_MESSAGE_COMMENTED,	// Soc_PUB_COMMENT_TO_NOTE
+     };
+
    /***** Get code of social publishing (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4183,19 +4204,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
 
    /***** Get type of publishing (row[3]) *****/
    SocPub->PubType      = Soc_GetPubTypeFromStr ((const char *) row[3]);
-   switch (SocPub->PubType)
-     {
-      case Soc_PUB_UNKNOWN:
-      case Soc_PUB_ORIGINAL_NOTE:
-	 SocPub->TopMessage = Soc_TOP_MESSAGE_NONE;
-	 break;
-      case Soc_PUB_SHARED_NOTE:
-	 SocPub->TopMessage = Soc_TOP_MESSAGE_SHARED;
-	 break;
-      case Soc_PUB_COMMENT_TO_NOTE:
-	 SocPub->TopMessage = Soc_TOP_MESSAGE_COMMENTED;
-	 break;
-     }
+   SocPub->TopMessage   = TopMessages[SocPub->PubType];
 
    /***** Get time of the note (row[4]) *****/
    SocPub->DateTimeUTC  = Dat_GetUNIXTimeFromStr (row[4]);
