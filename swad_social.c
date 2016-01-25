@@ -3157,6 +3157,7 @@ static long Soc_UnfavSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    char Query[256];
+   long PubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3179,6 +3180,11 @@ static long Soc_UnfavSocialNote (void)
 
 	    /***** Update number of times this social note is favourited *****/
 	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
+
+            /***** Mark possible notifications on this social note as removed *****/
+	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (PubCod > 0)
+	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,PubCod);
 
 	    /***** Show the social note just unfavourited *****/
 	    Soc_WriteSocialNote (&SocNot,
@@ -3257,6 +3263,9 @@ static long Soc_UnfavSocialComment (void)
 
 	    /***** Update number of times this social comment is favourited *****/
 	    SocCom.NumFavs = Soc_GetNumTimesACommHasBeenFav (&SocCom);
+
+            /***** Mark possible notifications on this social comment as removed *****/
+            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom.ComCod);
 
 	    /***** Show the social comment just unfavourited *****/
 	    Soc_WriteSocialComment (&SocCom,
