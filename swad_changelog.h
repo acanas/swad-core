@@ -117,20 +117,19 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 
-// TODO: Remove timeline notifications when clicking on "Show new activity" or "Show more"
-// TODO: Do not show top message for original publishings
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.129 (2016-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.129.2 (2016-01-25)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.129.2: Jan 25, 2016	Mark timeline notifications as seen when new social activity is shown. (194967 lines)
+        Version 15.129.1: Jan 25, 2016	Do not show top message in social timeline for original publishings. (194979 lines)
         Version 15.129:   Jan 25, 2016	Do not notify new social sharings or comments. (194979 lines)
         Version 15.128.5: Jan 25, 2016	Fixed bug and code optimization when sharing a social note. (194958 lines)
         Version 15.128.4: Jan 25, 2016	Fixed bug when removing a social note. (194961 lines)

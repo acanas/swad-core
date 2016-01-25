@@ -36157,27 +36157,6 @@ const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES] =
 	// Soc_TOP_MESSAGE_NONE
 	""
 	,
-	// Soc_TOP_MESSAGE_PUBLISHED:
-#if   L==1
-	"ha publicat"
-#elif L==2
-	"hat ver&ouml;ffentlicht"
-#elif L==3
-	"has published"
-#elif L==4
-	"ha publicado"
-#elif L==5
-	"a publi&eacute;"
-#elif L==6
-	"ha publicado"		// Okoteve traducción
-#elif L==7
-	"ha pubblicato"
-#elif L==8
-	"opublikowa&lstrok;"
-#elif L==9
-	"publicou"
-#endif
-	,
 	// Soc_TOP_MESSAGE_COMMENTED:
 #if   L==1
 	"ha comentat"

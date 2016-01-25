@@ -128,6 +128,8 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
 static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
+static void Soc_MarkAllMyNotifAboutTimelineAsSeen (void);
+
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
                                          char *Query);
@@ -278,7 +280,7 @@ void Soc_ShowTimelineGbl (void)
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLLMENT_REQUEST
 
       /* Social tab */
-      Soc_TOP_MESSAGE_PUBLISHED,	// Ntf_EVENT_TIMELINE_PUBLISH
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_TIMELINE_PUBLISH
       Soc_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
       Soc_TOP_MESSAGE_FAVED,		// Ntf_EVENT_TIMELINE_FAV
       Soc_TOP_MESSAGE_SHARED,		// Ntf_EVENT_TIMELINE_SHARE
@@ -349,11 +351,7 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** Mark all my notifications related to timeline as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_PUBLISH,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Soc_MarkAllMyNotifAboutTimelineAsSeen ();
   }
 
 /*****************************************************************************/
@@ -415,6 +413,9 @@ static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
+   /***** Mark all my notifications related to timeline as seen *****/
+   Soc_MarkAllMyNotifAboutTimelineAsSeen ();
+
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
@@ -457,6 +458,19 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+/*****************************************************************************/
+/************ Mark all my notifications about timeline as seen ***************/
+/*****************************************************************************/
+
+static void Soc_MarkAllMyNotifAboutTimelineAsSeen (void)
+  {
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_PUBLISH,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -4197,7 +4211,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
    const Soc_TopMessage_t TopMessages[Soc_NUM_PUB_TYPES] =
      {
       Soc_TOP_MESSAGE_NONE,		// Soc_PUB_UNKNOWN
-      Soc_TOP_MESSAGE_PUBLISHED,	// Soc_PUB_ORIGINAL_NOTE
+      Soc_TOP_MESSAGE_NONE,		// Soc_PUB_ORIGINAL_NOTE
       Soc_TOP_MESSAGE_SHARED,		// Soc_PUB_SHARED_NOTE
       Soc_TOP_MESSAGE_COMMENTED,	// Soc_PUB_COMMENT_TO_NOTE
      };
