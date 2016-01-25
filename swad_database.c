@@ -1946,15 +1946,15 @@ mysql> DESCRIBE social_comments;
 +---------+------------+------+-----+---------+-------+
 | Field   | Type       | Null | Key | Default | Extra |
 +---------+------------+------+-----+---------+-------+
-| ComCod  | bigint(20) | NO   | PRI | NULL    |       |
+| PubCod  | bigint(20) | NO   | PRI | NULL    |       |
 | Content | longtext   | NO   | MUL | NULL    |       |
 +---------+------------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
-	           "ComCod BIGINT NOT NULL,"
+	           "PubCod BIGINT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(ComCod),"
+                   "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
    /***** Table social_comments_fav *****/
@@ -1964,7 +1964,7 @@ mysql> DESCRIBE social_comments_fav;
 | Field   | Type       | Null | Key | Default | Extra          |
 +---------+------------+------+-----+---------+----------------+
 | FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| ComCod  | bigint(20) | NO   | MUL | NULL    |                |
+| PubCod  | bigint(20) | NO   | MUL | NULL    |                |
 | UsrCod  | int(11)    | NO   | MUL | NULL    |                |
 | TimeFav | datetime   | NO   |     | NULL    |                |
 +---------+------------+------+-----+---------+----------------+
@@ -1972,11 +1972,11 @@ mysql> DESCRIBE social_comments_fav;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_fav ("
 	           "FavCod BIGINT AUTO_INCREMENT,"
-	           "ComCod BIGINT NOT NULL,"
+	           "PubCod BIGINT NOT NULL,"
                    "UsrCod INT NOT NULL,"
 	           "TimeFav DATETIME NOT NULL,"	// Not used. For future use
 	           "UNIQUE INDEX(FavCod),"
-                   "UNIQUE INDEX(ComCod,UsrCod),"
+                   "UNIQUE INDEX(PubCod,UsrCod),"
                    "INDEX(UsrCod))");
 
    /***** Table social_notes *****/

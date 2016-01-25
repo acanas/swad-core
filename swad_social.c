@@ -176,7 +176,7 @@ struct SocialNote
 
 struct SocialComment
   {
-   long ComCod;
+   long PubCod;
    long UsrCod;
    long NotCod;		// Note code
    time_t DateTimeUTC;
@@ -251,8 +251,8 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     bool ShowCommentAlone);
 static void Soc_WriteAuthorComment (struct UsrData *UsrDat);
 
-static void Soc_PutFormToRemoveComment (long ComCod);
-static void Soc_PutFormToFavSocialComment (long ComCod);
+static void Soc_PutFormToRemoveComment (long PubCod);
+static void Soc_PutFormToFavSocialComment (long PubCod);
 
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutDisabledIconFav (unsigned NumFavs);
@@ -262,13 +262,13 @@ static void Soc_PutFormToFavSocialNote (long NotCod);
 
 static void Soc_PutFormToUnshareSocialNote (long NotCod);
 static void Soc_PutFormToUnfavSocialNote (long NotCod);
-static void Soc_PutFormToUnfavSocialComment (long ComCod);
+static void Soc_PutFormToUnfavSocialComment (long PubCod);
 
 static void Soc_PutFormToRemoveSocialPublishing (long NotCod);
 
-static void Soc_PutHiddenParamComCod (long ComCod);
+static void Soc_PutHiddenParamPubCod (long PubCod);
 static long Soc_GetParamNotCod (void);
-static long Soc_GetParamComCod (void);
+static long Soc_GetParamPubCod (void);
 
 static long Soc_ReceiveComment (void);
 
@@ -292,7 +292,7 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
 
 static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
-static bool Soc_CheckIfCommIsFavedByUsr (long ComCod,long UsrCod);
+static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 
 static unsigned Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static unsigned Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot);
@@ -2134,7 +2134,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 		  " FROM social_pubs,social_comments"
 		  " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
-		  " AND social_pubs.PubCod=social_comments.ComCod"
+		  " AND social_pubs.PubCod=social_comments.PubCod"
 		  " ORDER BY social_pubs.PubCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
@@ -2207,7 +2207,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out," class=\"SOCIAL_COMMENT\"");
    fprintf (Gbl.F.Out,">");
 
-   if (SocCom->ComCod <= 0 ||
+   if (SocCom->PubCod <= 0 ||
        SocCom->NotCod <= 0 ||
        SocCom->UsrCod <= 0)
       Lay_ShowAlert (Lay_ERROR,"Error in social comment.");
@@ -2220,7 +2220,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       IAmTheAuthor = (Gbl.Usrs.Me.Logged &&
 	              UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
       if (!IAmTheAuthor)
-	 IAmAFaverOfThisSocCom = Soc_CheckIfCommIsFavedByUsr (SocCom->ComCod,
+	 IAmAFaverOfThisSocCom = Soc_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
@@ -2250,17 +2250,17 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 	 Soc_PutDisabledIconFav (SocCom->NumFavs);
       else if (IAmAFaverOfThisSocCom)	// I have favourited this social note
 	 /* Put icon to unfav this publishing */
-	 Soc_PutFormToUnfavSocialComment (SocCom->ComCod);
+	 Soc_PutFormToUnfavSocialComment (SocCom->PubCod);
       else					// I am not the author and I am not a favouriter
          /* Put icon to mark this social comment as favourite */
-	 Soc_PutFormToFavSocialComment (SocCom->ComCod);
+	 Soc_PutFormToFavSocialComment (SocCom->PubCod);
 
       /* Show who have marked this social comment as favourite */
       Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
 
       /* Put icon to remove this social comment */
       if (IAmTheAuthor && !ShowCommentAlone)
-	 Soc_PutFormToRemoveComment (SocCom->ComCod);
+	 Soc_PutFormToRemoveComment (SocCom->PubCod);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2311,7 +2311,7 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToRemoveComment (long ComCod)
+static void Soc_PutFormToRemoveComment (long PubCod)
   {
    extern const char *Txt_Remove;
 
@@ -2323,7 +2323,7 @@ static void Soc_PutFormToRemoveComment (long ComCod)
      }
    else
       Act_FormStartUnique (ActReqRemSocComGbl);
-   Soc_PutHiddenParamComCod (ComCod);
+   Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_REMOVE ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/remove-on64x64.png\""
@@ -2341,7 +2341,7 @@ static void Soc_PutFormToRemoveComment (long ComCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToFavSocialComment (long ComCod)
+static void Soc_PutFormToFavSocialComment (long PubCod)
   {
    extern const char *Txt_Mark_as_favourite;
 
@@ -2353,7 +2353,7 @@ static void Soc_PutFormToFavSocialComment (long ComCod)
      }
    else
       Act_FormStartUnique (ActFavSocComGbl);
-   Soc_PutHiddenParamComCod (ComCod);
+   Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/fav64x64.png\""
@@ -2534,7 +2534,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToUnfavSocialComment (long ComCod)
+static void Soc_PutFormToUnfavSocialComment (long PubCod)
   {
    extern const char *Txt_SOCIAL_NOTE_Favourite;
 
@@ -2546,7 +2546,7 @@ static void Soc_PutFormToUnfavSocialComment (long ComCod)
      }
    else
       Act_FormStartUnique (ActUnfSocComGbl);
-   Soc_PutHiddenParamComCod (ComCod);
+   Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICON_FAV ICON_HIGHLIGHT\">"
 		      "<input type=\"image\""
 		      " src=\"%s/faved64x64.png\""
@@ -2598,12 +2598,12 @@ void Soc_PutHiddenParamNotCod (long NotCod)
   }
 
 /*****************************************************************************/
-/************* Put parameter with the code of a social comment ***************/
+/*********** Put parameter with the code of a social publishing **************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenParamComCod (long ComCod)
+static void Soc_PutHiddenParamPubCod (long PubCod)
   {
-   Par_PutHiddenParamLong ("ComCod",ComCod);
+   Par_PutHiddenParamLong ("PubCod",PubCod);
   }
 
 /*****************************************************************************/
@@ -2624,20 +2624,20 @@ static long Soc_GetParamNotCod (void)
   }
 
 /*****************************************************************************/
-/************* Get parameter with the code of a social comment ***************/
+/************ Get parameter with the code of a social publishing *************/
 /*****************************************************************************/
 
-static long Soc_GetParamComCod (void)
+static long Soc_GetParamPubCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the social comment code
-   long ComCod;
+   char LongStr[1+10+1];	// String that holds the code
+   long PubCod;
 
    /* Get social comment code */
-   Par_GetParToText ("ComCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&ComCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of social comment.");
+   Par_GetParToText ("PubCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&PubCod) != 1)
+      Lay_ShowErrorAndExit ("Wrong code of social publishing.");
 
-   return ComCod;
+   return PubCod;
   }
 
 /*****************************************************************************/
@@ -2706,7 +2706,7 @@ static long Soc_ReceiveComment (void)
 	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	 /* Insert comment content in the database */
-	 sprintf (Query,"INSERT INTO social_comments (ComCod,Content)"
+	 sprintf (Query,"INSERT INTO social_comments (PubCod,Content)"
 			" VALUES ('%ld','%s')",
 		  SocPub.PubCod,
 		  Content);
@@ -2953,23 +2953,23 @@ static long Soc_FavSocialComment (void)
    struct SocialComment SocCom;
    char Query[256];
 
-   /***** Get the code of the social note to mark as favourite *****/
-   SocCom.ComCod = Soc_GetParamComCod ();
+   /***** Get the code of the social publishing to mark as favourite *****/
+   SocCom.PubCod = Soc_GetParamPubCod ();
 
    /***** Get data of social note *****/
    Soc_GetDataOfSocialComByCod (&SocCom);
 
-   if (SocCom.ComCod > 0)
+   if (SocCom.PubCod > 0)
      {
       if (Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
-	 if (!Soc_CheckIfCommIsFavedByUsr (SocCom.ComCod,
+	 if (!Soc_CheckIfCommIsFavedByUsr (SocCom.PubCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark as favourite in database *****/
 	    sprintf (Query,"INSERT IGNORE INTO social_comments_fav"
-			   " (ComCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
-		     SocCom.ComCod,
+			   " (PubCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
+		     SocCom.PubCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod);
 	    DB_QueryINSERT (Query,"can not favourite social comment");
 
@@ -2978,7 +2978,7 @@ static long Soc_FavSocialComment (void)
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    Soc_CreateFavNotifToAuthor (SocCom.UsrCod,SocCom.ComCod);
+	    Soc_CreateFavNotifToAuthor (SocCom.UsrCod,SocCom.PubCod);
 
 	    /***** Show the social comment just favourited *****/
 	    Soc_WriteSocialComment (&SocCom,
@@ -3243,21 +3243,21 @@ static long Soc_UnfavSocialComment (void)
    char Query[256];
 
    /***** Get data of social comment *****/
-   SocCom.ComCod = Soc_GetParamComCod ();
+   SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
 
-   if (SocCom.ComCod > 0)
+   if (SocCom.PubCod > 0)
      {
       if (SocCom.NumFavs &&
 	  Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// I am not the author
-	 if (Soc_CheckIfCommIsFavedByUsr (SocCom.ComCod,
+	 if (Soc_CheckIfCommIsFavedByUsr (SocCom.PubCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
 	    sprintf (Query,"DELETE FROM social_comments_fav"
-			   " WHERE ComCod='%ld' AND UsrCod='%ld'",
-		     SocCom.ComCod,
+			   " WHERE PubCod='%ld' AND UsrCod='%ld'",
+		     SocCom.PubCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod);
 	    DB_QueryDELETE (Query,"can not unfavourite social comment");
 
@@ -3265,7 +3265,7 @@ static long Soc_UnfavSocialComment (void)
 	    SocCom.NumFavs = Soc_GetNumTimesACommHasBeenFav (&SocCom);
 
             /***** Mark possible notifications on this social comment as removed *****/
-            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom.ComCod);
+            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom.PubCod);
 
 	    /***** Show the social comment just unfavourited *****/
 	    Soc_WriteSocialComment (&SocCom,
@@ -3477,7 +3477,7 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
                   " USING social_pubs,social_comments_fav"
 	          " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove favs for social note");
 
@@ -3491,7 +3491,7 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 	          " USING social_pubs,social_comments"
 	          " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments.ComCod",
+	          " AND social_pubs.PubCod=social_comments.PubCod",
 	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -3586,12 +3586,12 @@ static void Soc_RequestRemovalSocialComment (void)
    struct SocialComment SocCom;
 
    /***** Get the code of the social comment to remove *****/
-   SocCom.ComCod = Soc_GetParamComCod ();
+   SocCom.PubCod = Soc_GetParamPubCod ();
 
    /***** Get data of social comment *****/
    Soc_GetDataOfSocialComByCod (&SocCom);
 
-   if (SocCom.ComCod > 0)
+   if (SocCom.PubCod > 0)
      {
       if (Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
@@ -3614,7 +3614,7 @@ static void Soc_RequestRemovalSocialComment (void)
 	   }
 	 else
 	    Act_FormStart (ActRemSocComGbl);
-	 Soc_PutHiddenParamComCod (SocCom.ComCod);
+	 Soc_PutHiddenParamPubCod (SocCom.PubCod);
 
 	 /* End form */
 	 Lay_PutRemoveButton (Txt_Remove);
@@ -3666,12 +3666,12 @@ static void Soc_RemoveSocialComment (void)
    struct SocialComment SocCom;
 
    /***** Get the code of the social comment to remove *****/
-   SocCom.ComCod = Soc_GetParamComCod ();
+   SocCom.PubCod = Soc_GetParamPubCod ();
 
    /***** Get data of social comment *****/
    Soc_GetDataOfSocialComByCod (&SocCom);
 
-   if (SocCom.ComCod > 0)
+   if (SocCom.PubCod > 0)
      {
       if (Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
@@ -3696,19 +3696,19 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    char Query[128];
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,SocCom->ComCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->ComCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,SocCom->ComCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->ComCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,SocCom->PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,SocCom->PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->PubCod);
 
    /***** Remove favs for this comment *****/
-   sprintf (Query,"DELETE FROM social_comments_fav WHERE ComCod='%ld'",
-	    SocCom->ComCod);
+   sprintf (Query,"DELETE FROM social_comments_fav WHERE PubCod='%ld'",
+	    SocCom->PubCod);
    DB_QueryDELETE (Query,"can not remove favs for social comment");
 
    /***** Remove content of this social comment *****/
-   sprintf (Query,"DELETE FROM social_comments WHERE ComCod='%ld'",
-	    SocCom->ComCod);
+   sprintf (Query,"DELETE FROM social_comments WHERE PubCod='%ld'",
+	    SocCom->PubCod);
    DB_QueryDELETE (Query,"can not remove a social comment");
 
    /***** Remove this social comment *****/
@@ -3716,7 +3716,7 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
 	          " WHERE PubCod='%ld'"
 	          " AND PublisherCod='%ld'"	// Extra check: I am the author
 	          " AND PubType='%u'",		// Extra check: it's a comment
-	    SocCom->ComCod,
+	    SocCom->PubCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove a social comment");
@@ -3744,7 +3744,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	          " USING social_pubs,social_comments_fav"
 	          " WHERE social_pubs.PublisherCod='%ld'"	// Author of the comment
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove favs");
 
@@ -3754,7 +3754,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	          " WHERE social_notes.UsrCod='%ld'"	// Author of the note
 	          " AND social_notes.NotCod=social_pubs.NotCod"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments_fav.ComCod",
+	          " AND social_pubs.PubCod=social_comments_fav.PubCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -3779,7 +3779,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	          " WHERE social_notes.UsrCod='%ld'"
 		  " AND social_notes.NotCod=social_pubs.NotCod"
                   " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments.ComCod",
+	          " AND social_pubs.PubCod=social_comments.PubCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -3797,7 +3797,7 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	          " USING social_pubs,social_comments"
 	          " WHERE social_pubs.PublisherCod='%ld'"
 	          " AND social_pubs.PubType='%u'"
-	          " AND social_pubs.PubCod=social_comments.ComCod",
+	          " AND social_pubs.PubCod=social_comments.PubCod",
 	    UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
    DB_QueryDELETE (Query,"can not remove social comments");
 
@@ -3860,13 +3860,13 @@ static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
 /************* Check if a user has favourited a social comment ***************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfCommIsFavedByUsr (long ComCod,long UsrCod)
+static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   {
    char Query[256];
 
    sprintf (Query,"SELECT COUNT(*) FROM social_comments_fav"
-	          " WHERE ComCod='%ld' AND UsrCod='%ld'",
-	    ComCod,UsrCod);
+	          " WHERE PubCod='%ld' AND UsrCod='%ld'",
+	    PubCod,UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user has favourited a social comment") != 0);
   }
 
@@ -3916,9 +3916,9 @@ static unsigned Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
 
    /***** Get number of times (users) this comment has been favourited *****/
    sprintf (Query,"SELECT COUNT(*) FROM social_comments_fav"
-	          " WHERE ComCod='%ld'"
+	          " WHERE PubCod='%ld'"
 	          " AND UsrCod<>'%ld'",	// Extra check
-	    SocCom->ComCod,
+	    SocCom->PubCod,
 	    SocCom->UsrCod);	// The author
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of times a comment has been favourited");
   }
@@ -3973,10 +3973,10 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment
 
    /***** Get users who have marked this comment as favourite *****/
    sprintf (Query,"SELECT UsrCod FROM social_comments_fav"
-		  " WHERE ComCod='%ld'"
+		  " WHERE PubCod='%ld'"
 		  " AND UsrCod<>'%ld'"	// Extra check
 		  " ORDER BY FavCod LIMIT %u",
-	    SocCom->ComCod,
+	    SocCom->PubCod,
 	    SocCom->UsrCod,
 	    Soc_MAX_SHARERS_FAVERS_SHOWN);
    Soc_ShowSharersOrFavers (SocCom->NumFavs,Query);
@@ -4100,7 +4100,7 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (SocCom->ComCod > 0)
+   if (SocCom->PubCod > 0)
      {
       /***** Get data of social comment from database *****/
       sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
@@ -4110,8 +4110,8 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 		     " FROM social_pubs,social_comments"
 		     " WHERE social_pubs.PubCod='%ld'"
                      " AND social_pubs.PubType='%u'"
-		     " AND social_pubs.PubCod=social_comments.ComCod",
-	       SocCom->ComCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		     " AND social_pubs.PubCod=social_comments.PubCod",
+	       SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of social comment"))
 	{
 	 /***** Get data of social comment *****/
@@ -4236,7 +4236,7 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
 static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom)
   {
    /***** Get code of social comment (row[0]) *****/
-   SocCom->ComCod      = Str_ConvertStrCodToLongCod (row[0]);
+   SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get (from) user code (row[1]) *****/
    SocCom->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
@@ -4277,7 +4277,7 @@ static void Soc_ResetSocialNote (struct SocialNote *SocNot)
 
 static void Soc_ResetSocialComment (struct SocialComment *SocCom)
   {
-   SocCom->ComCod      = -1L;
+   SocCom->PubCod      = -1L;
    SocCom->UsrCod      = -1L;
    SocCom->NotCod      = -1L;
    SocCom->DateTimeUTC = (time_t) 0;
@@ -4417,7 +4417,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
       case Soc_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of social post from database *****/
 	 sprintf (Query,"SELECT Content FROM social_comments"
-			" WHERE ComCod='%ld'",
+			" WHERE PubCod='%ld'",
 		  SocPub.PubCod);
 	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the content of a comment to a social note") == 1)   // Result should have a unique row
 	   {

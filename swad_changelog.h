@@ -117,7 +117,6 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 
-// TODO: Change ComCod to PubCod in social_comments and social_comments_fav
 // TODO: When receiving a new post, create first the publishing, then the post
 // TODO: Change PstCod to PubCod in social_posts, removing AUTO_INCREMENT
 // TODO: View highlighted social note when clicking in timeline notification
@@ -126,13 +125,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.127.2 (2016-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.127.3 (2016-01-25)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.127.3: Jan 25, 2016	Changed ComCod to PubCod in social_comments and social_comments_fav. (194841 lines)
+					2 changes necessary in database:
+ALTER TABLE social_comments_fav CHANGE COLUMN ComCod PubCod BIGINT NOT NULL;
+ALTER TABLE social_comments CHANGE COLUMN ComCod PubCod BIGINT NOT NULL;
+
         Version 15.127.2: Jan 25, 2016	Mark timeline notifications as removed when a social note/comment is unfaved. (194838 lines)
         Version 15.127.1: Jan 25, 2016	Mark timeline notifications as removed when a social note is unshared. (194831 lines)
         Version 15.127:   Jan 25, 2016	New function to count the number of @nicknames in a text and store it in social publishing. (194825 lines)

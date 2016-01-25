@@ -918,20 +918,20 @@ CREATE TABLE IF NOT EXISTS sessions (
 -- Table social_comments: stores the content of comments to social notes
 --
 CREATE TABLE IF NOT EXISTS social_comments (
-	ComCod BIGINT NOT NULL,
+	PubCod BIGINT NOT NULL,
 	Content LONGTEXT NOT NULL,
-	UNIQUE INDEX(ComCod),
+	UNIQUE INDEX(PubCod),
 	FULLTEXT(Content)) ENGINE = MYISAM;
 --
 -- Table social_comments_fav: stores users who marked social comments as favourite
 --
 CREATE TABLE IF NOT EXISTS social_comments_fav (
 	FavCod BIGINT AUTO_INCREMENT,
-	ComCod BIGINT NOT NULL,
+	PubCod BIGINT NOT NULL,
 	UsrCod INT NOT NULL,
 	TimeFav DATETIME NOT NULL,
 	UNIQUE INDEX(FavCod),
-	UNIQUE INDEX(ComCod,UsrCod),
+	UNIQUE INDEX(PubCod,UsrCod),
 	INDEX(UsrCod));
 --
 -- Table social_notes: stores social notes
