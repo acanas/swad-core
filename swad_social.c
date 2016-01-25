@@ -209,6 +209,8 @@ static long Soc_UnfavSocialComment (void);
 static void Soc_RequestRemovalSocialNote (void);
 static void Soc_RemoveSocialNote (void);
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
+
+static long Soc_GetNotCodOfSocialPublishing (long PubCod);
 static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
 
 static void Soc_RequestRemovalSocialComment (void);
@@ -253,9 +255,6 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 
 void Soc_ShowTimelineGbl (void)
   {
-   char Query[128];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long PubCod;
    struct SocialNote SocNot;
    struct UsrData UsrDat;
@@ -306,20 +305,8 @@ void Soc_ShowTimelineGbl (void)
    // If > 0 ==> the social note is shown highlighted above the timeline
    PubCod = Soc_GetParamPubCod ();
    if (PubCod > 0)
-     {
       /***** Get code of social note from database *****/
-      sprintf (Query,"SELECT NotCod FROM social_pubs WHERE PubCod='%ld'",
-	       PubCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
-	{
-	 /* Get code of social note */
-	 row = mysql_fetch_row (mysql_res);
-	 SocNot.NotCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
+      SocNot.NotCod = Soc_GetNotCodOfSocialPublishing (PubCod);
 
    if (SocNot.NotCod > 0)
      {
@@ -2770,9 +2757,6 @@ static long Soc_ReceiveComment (void)
 		  Content);
 	 DB_QueryINSERT (Query,"can not store comment content");
 
-	 /***** Store notifications about the new publishing *****/
-	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
-
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
 
@@ -2834,7 +2818,7 @@ static long Soc_ShareSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
-   long PubCod;
+   long OriginalPubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2856,14 +2840,15 @@ static long Soc_ShareSocialNote (void)
 	    /* Update number of times this social note is shared */
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
-	    /***** Store notifications about the new publishing *****/
-	    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
-
 	    /**** Create notification about shared post
 		  for the author of the post ***/
-	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (PubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot.UsrCod,PubCod,Ntf_EVENT_TIMELINE_SHARE);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+
+	    sprintf (Gbl.Message,"OriginalPubCod = %ld",OriginalPubCod);
+	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+	    if (OriginalPubCod > 0)
+	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
    else
@@ -2915,7 +2900,7 @@ static long Soc_FavSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
    struct SocialNote SocNot;
-   long PubCod;
+   long OriginalPubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2940,9 +2925,9 @@ static long Soc_FavSocialNote (void)
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (PubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot.UsrCod,PubCod,Ntf_EVENT_TIMELINE_FAV);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (OriginalPubCod > 0)
+	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
 
 	    /***** Show the social note just favourited *****/
 	    Soc_WriteSocialNote (&SocNot,
@@ -3115,7 +3100,7 @@ static long Soc_UnshareSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
    struct SocialNote SocNot;
-   long PubCod;
+   long OriginalPubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3143,9 +3128,9 @@ static long Soc_UnshareSocialNote (void)
 	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
 
             /***** Mark possible notifications on this social note as removed *****/
-	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (PubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,PubCod);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (OriginalPubCod > 0)
+	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
 
 	    /***** Show the social note corresponding
 		   to the publishing just unshared *****/
@@ -3203,7 +3188,7 @@ static long Soc_UnfavSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    char Query[256];
-   long PubCod;
+   long OriginalPubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3228,9 +3213,9 @@ static long Soc_UnfavSocialNote (void)
 	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
 
             /***** Mark possible notifications on this social note as removed *****/
-	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (PubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,PubCod);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (OriginalPubCod > 0)
+	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 
 	    /***** Show the social note just unfavourited *****/
 	    Soc_WriteSocialNote (&SocNot,
@@ -3474,20 +3459,32 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
-   unsigned long NumPublishings;
-   unsigned long NumPub;
+   unsigned long NumComments;
+   unsigned long NumCom;
 
    /***** Mark possible notifications on the publishings
           of this social note as removed *****/
-   /* Get publishings (original, shared or comments) of this social note */
-   sprintf (Query,"SELECT PubCod FROM social_pubs WHERE NotCod='%ld'",
-	    SocNot->NotCod);
-   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+   /* Mark notifications of the original social note as removed */
+   PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+   if (PubCod > 0)
+     {
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+     }
 
-   /* For each publishing... */
-   for (NumPub = 0;
-	NumPub < NumPublishings;
-	NumPub++)
+   /* Get comments of this social note */
+   sprintf (Query,"SELECT PubCod FROM social_pubs"
+	          " WHERE NotCod='%ld' AND PubType ='%u'",
+	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+
+   /* For each comment... */
+   for (NumCom = 0;
+	NumCom < NumComments;
+	NumCom++)
      {
       /* Get code of social comment **/
       row = mysql_fetch_row (mysql_res);
@@ -3496,10 +3493,8 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
       /* Mark notifications as removed */
       if (PubCod > 0)
 	{
-	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-         Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
 	}
      }
@@ -3558,6 +3553,33 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
+/******************* Get code of social note of a publishing *****************/
+/*****************************************************************************/
+
+static long Soc_GetNotCodOfSocialPublishing (long PubCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long NotCod = -1L;
+
+   /***** Get code of social note from database *****/
+   sprintf (Query,"SELECT NotCod FROM social_pubs WHERE PubCod='%ld'",
+	    PubCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get code of social note") == 1)   // Result should have a unique row
+     {
+      /* Get code of social note */
+      row = mysql_fetch_row (mysql_res);
+      NotCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NotCod;
+  }
+
+/*****************************************************************************/
 /************ Get code of social publishing of the original note *************/
 /*****************************************************************************/
 
@@ -3566,6 +3588,7 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   long OriginalPubCod = -1L;
 
    /***** Get code of social publishing of the original note *****/
    sprintf (Query,"SELECT PubCod FROM social_pubs"
@@ -3575,9 +3598,13 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
      {
       /* Get code of social publishing (row[0]) */
       row = mysql_fetch_row (mysql_res);
-      return Str_ConvertStrCodToLongCod (row[0]);
+      OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
      }
-   return -1L;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return OriginalPubCod;
   }
 
 /*****************************************************************************/
@@ -3728,7 +3755,6 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    char Query[128];
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,SocCom->PubCod);
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->PubCod);
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,SocCom->PubCod);
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->PubCod);

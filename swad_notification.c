@@ -1235,7 +1235,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 	     Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_TIMELINE_PUBLISH:	// New social publishing from one of the users I follow
+      case Ntf_EVENT_TIMELINE_PUBLISH:	// New social publishing (original, no comment or sharing) from one of the users I follow
          // Cod is the code of the social publishing (not used in the following query)
 	 // Get all my followers
 	 sprintf (Query,"SELECT FollowerCod FROM usr_follow"
