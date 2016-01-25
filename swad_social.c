@@ -81,82 +81,6 @@ typedef enum
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
 
-static const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
-  {
-   ActUnk,		// Soc_NOTE_UNKNOWN
-
-   /* Institution tab */
-   ActReqDatSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
-   ActReqDatShaIns,	// Soc_NOTE_INS_SHA_PUB_FILE
-
-   /* Centre tab */
-   ActReqDatSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
-   ActReqDatShaCtr,	// Soc_NOTE_CTR_SHA_PUB_FILE
-
-   /* Degree tab */
-   ActReqDatSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
-   ActReqDatShaDeg,	// Soc_NOTE_DEG_SHA_PUB_FILE
-
-   /* Course tab */
-   ActReqDatSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
-   ActReqDatShaCrs,	// Soc_NOTE_CRS_SHA_PUB_FILE
-
-   /* Assessment tab */
-   ActSeeExaAnn,	// Soc_NOTE_EXAM_ANNOUNCEMENT
-
-   /* Users tab */
-
-   /* Social tab */
-   ActUnk,		// Soc_NOTE_SOCIAL_POST (action not used)
-   ActSeeFor,		// Soc_NOTE_FORUM_POST
-
-   /* Messages tab */
-   ActShoNot,		// Soc_NOTE_NOTICE
-
-   /* Statistics tab */
-
-   /* Profile tab */
-
-  };
-
-static const char *Soc_Icons[Soc_NUM_NOTE_TYPES] =
-  {
-   NULL,		// Soc_NOTE_UNKNOWN
-
-   /* Institution tab */
-   "file64x64.gif",	// Soc_NOTE_INS_DOC_PUB_FILE
-   "file64x64.gif",	// Soc_NOTE_INS_SHA_PUB_FILE
-
-   /* Centre tab */
-   "file64x64.gif",	// Soc_NOTE_CTR_DOC_PUB_FILE
-   "file64x64.gif",	// Soc_NOTE_CTR_SHA_PUB_FILE
-
-   /* Degree tab */
-   "file64x64.gif",	// Soc_NOTE_DEG_DOC_PUB_FILE
-   "file64x64.gif",	// Soc_NOTE_DEG_SHA_PUB_FILE
-
-   /* Course tab */
-   "file64x64.gif",	// Soc_NOTE_CRS_DOC_PUB_FILE
-   "file64x64.gif",	// Soc_NOTE_CRS_SHA_PUB_FILE
-
-   /* Assessment tab */
-   "announce16x16.gif",	// Soc_NOTE_EXAM_ANNOUNCEMENT
-
-   /* Users tab */
-
-   /* Social tab */
-   NULL,		// Soc_NOTE_SOCIAL_POST (icon not used)
-   "forum64x64.gif",	// Soc_NOTE_FORUM_POST
-
-   /* Messages tab */
-   "note16x16.gif",	// Soc_NOTE_NOTICE
-
-   /* Statistics tab */
-
-   /* Profile tab */
-
-  };
-
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -275,7 +199,8 @@ static long Soc_ReceiveComment (void);
 static long Soc_ShareSocialNote (void);
 static long Soc_FavSocialNote (void);
 static long Soc_FavSocialComment (void);
-static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod);
+static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                     Ntf_NotifyEvent_t NotifyEvent);
 
 static long Soc_UnshareSocialNote (void);
 static long Soc_UnfavSocialNote (void);
@@ -1550,6 +1475,80 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
+   const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
+     {
+      ActUnk,			// Soc_NOTE_UNKNOWN
+
+      /* Institution tab */
+      ActReqDatSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
+      ActReqDatShaIns,		// Soc_NOTE_INS_SHA_PUB_FILE
+
+      /* Centre tab */
+      ActReqDatSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
+      ActReqDatShaCtr,		// Soc_NOTE_CTR_SHA_PUB_FILE
+
+      /* Degree tab */
+      ActReqDatSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
+      ActReqDatShaDeg,		// Soc_NOTE_DEG_SHA_PUB_FILE
+
+      /* Course tab */
+      ActReqDatSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
+      ActReqDatShaCrs,		// Soc_NOTE_CRS_SHA_PUB_FILE
+
+      /* Assessment tab */
+      ActSeeExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
+
+      /* Users tab */
+
+      /* Social tab */
+      ActUnk,			// Soc_NOTE_SOCIAL_POST (action not used)
+      ActSeeFor,		// Soc_NOTE_FORUM_POST
+
+      /* Messages tab */
+      ActShoNot,		// Soc_NOTE_NOTICE
+
+      /* Statistics tab */
+
+      /* Profile tab */
+
+     };
+   const char *Soc_Icons[Soc_NUM_NOTE_TYPES] =
+     {
+      NULL,			// Soc_NOTE_UNKNOWN
+
+      /* Institution tab */
+      "file64x64.gif",		// Soc_NOTE_INS_DOC_PUB_FILE
+      "file64x64.gif",		// Soc_NOTE_INS_SHA_PUB_FILE
+
+      /* Centre tab */
+      "file64x64.gif",		// Soc_NOTE_CTR_DOC_PUB_FILE
+      "file64x64.gif",		// Soc_NOTE_CTR_SHA_PUB_FILE
+
+      /* Degree tab */
+      "file64x64.gif",		// Soc_NOTE_DEG_DOC_PUB_FILE
+      "file64x64.gif",		// Soc_NOTE_DEG_SHA_PUB_FILE
+
+      /* Course tab */
+      "file64x64.gif",		// Soc_NOTE_CRS_DOC_PUB_FILE
+      "file64x64.gif",		// Soc_NOTE_CRS_SHA_PUB_FILE
+
+      /* Assessment tab */
+      "announce16x16.gif",	// Soc_NOTE_EXAM_ANNOUNCEMENT
+
+      /* Users tab */
+
+      /* Social tab */
+      NULL,			// Soc_NOTE_SOCIAL_POST (icon not used)
+      "forum64x64.gif",		// Soc_NOTE_FORUM_POST
+
+      /* Messages tab */
+      "note16x16.gif",		// Soc_NOTE_NOTICE
+
+      /* Statistics tab */
+
+      /* Profile tab */
+
+     };
 
    if (SocNot->Unavailable ||	// File/notice... pointer by this social note is unavailable
        Gbl.Form.Inside)		// Inside another form
@@ -2835,6 +2834,7 @@ static long Soc_ShareSocialNote (void)
    extern const char *Txt_The_original_post_no_longer_exists;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
+   long PubCod;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2858,6 +2858,12 @@ static long Soc_ShareSocialNote (void)
 
 	    /***** Store notifications about the new publishing *****/
 	    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
+
+	    /**** Create notification about shared post
+		  for the author of the post ***/
+	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (PubCod > 0)
+	       Soc_CreateNotifToAuthor (SocNot.UsrCod,PubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
    else
@@ -2908,8 +2914,6 @@ static long Soc_FavSocialNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct SocialNote SocNot;
    long PubCod;
 
@@ -2936,21 +2940,9 @@ static long Soc_FavSocialNote (void)
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    sprintf (Query,"SELECT PubCod FROM social_pubs"
-			   " WHERE NotCod='%ld' AND PubType='%u'",
-		     SocNot.NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE);
-	    if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing") == 1)
-	      {
-	       row = mysql_fetch_row (mysql_res);
-
-	       /* Get code of social publishing (row[0]) */
-	       PubCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	       Soc_CreateFavNotifToAuthor (SocNot.UsrCod,PubCod);
-	      }
-
-	    /***** Free structure that stores the query result *****/
-	    DB_FreeMySQLResult (&mysql_res);
+	    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (PubCod > 0)
+	       Soc_CreateNotifToAuthor (SocNot.UsrCod,PubCod,Ntf_EVENT_TIMELINE_FAV);
 
 	    /***** Show the social note just favourited *****/
 	    Soc_WriteSocialNote (&SocNot,
@@ -3031,7 +3023,7 @@ static long Soc_FavSocialComment (void)
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    Soc_CreateFavNotifToAuthor (SocCom.UsrCod,SocCom.PubCod);
+	    Soc_CreateNotifToAuthor (SocCom.UsrCod,SocCom.PubCod,Ntf_EVENT_TIMELINE_FAV);
 
 	    /***** Show the social comment just favourited *****/
 	    Soc_WriteSocialComment (&SocCom,
@@ -3046,10 +3038,11 @@ static long Soc_FavSocialComment (void)
   }
 
 /*****************************************************************************/
-/**** Create notif. about fav. post/comment for the author of post/comment ***/
+/*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod)
+static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                     Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
    bool CreateNotif;
@@ -3062,15 +3055,15 @@ static void Soc_CreateFavNotifToAuthor (long AuthorCod,long PubCod)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
      {
       /***** This fav must be notified by e-mail? *****/
-      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_TIMELINE_FAV));
+      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent));
       NotifyByEmail = CreateNotif &&
-		      (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_TIMELINE_FAV));
+		      (UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent));
 
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by e-mail,
 	     activate the sending of a notification *****/
       if (CreateNotif)
-	 Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_FAV,&UsrDat,PubCod,
+	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
 					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 									0));
      }
@@ -3477,35 +3470,24 @@ static void Soc_RemoveSocialNote (void)
 
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   {
-   char Query[128];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
-   unsigned long NumComments;
-   unsigned long NumCom;
+   unsigned long NumPublishings;
+   unsigned long NumPub;
 
-   /***** Mark possible notifications on this social note as removed *****/
-   PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
-   if (PubCod > 0)
-     {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
-     }
-
-   /***** Mark possible notifications on the comments
+   /***** Mark possible notifications on the publishings
           of this social note as removed *****/
-   /* Get comments of this social note */
-   sprintf (Query,"SELECT PubCod FROM social_pubs"
-	          " WHERE NotCod='%ld' AND PubType='%u'",
-	    SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
-   NumComments = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
+   /* Get publishings (original, shared or comments) of this social note */
+   sprintf (Query,"SELECT PubCod FROM social_pubs WHERE NotCod='%ld'",
+	    SocNot->NotCod);
+   NumPublishings = DB_QuerySELECT (Query,&mysql_res,"can not get social comments");
 
-   /* For each comment... */
-   for (NumCom = 0;
-	NumCom < NumComments;
-	NumCom++)
+   /* For each publishing... */
+   for (NumPub = 0;
+	NumPub < NumPublishings;
+	NumPub++)
      {
       /* Get code of social comment **/
       row = mysql_fetch_row (mysql_res);
@@ -3517,6 +3499,7 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+         Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
 	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
 	}
      }

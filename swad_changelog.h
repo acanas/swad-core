@@ -117,19 +117,19 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 
-// TODO: Fix bug: when sharing ==> the notification is "New social post" instead of "Shared"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.128.3 (2016-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.128.5 (2016-01-25)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.128.5: Jan 25, 2016	Fixed bug and code optimization when sharing a social note. (194958 lines)
+        Version 15.128.4: Jan 25, 2016	Fixed bug when removing a social note. (194961 lines)
         Version 15.128.3: Jan 25, 2016	Optimization in top message of social note. (194969 lines)
         Version 15.128.2: Jan 25, 2016	Optimization in top message of social note. (194960 lines)
         Version 15.128.1: Jan 25, 2016	Optimization in top message of social note. (194965 lines)
