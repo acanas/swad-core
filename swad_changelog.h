@@ -121,14 +121,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.130 (2016-01-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.130.1 (2016-01-26)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.130:   Jan 26, 2016	Do not notify new social notes. (194914 lines)
+        Version 15.130.1: Jan 26, 2016	Fixed bug when mentioning an user who does not exist. (194914 lines)
+        Version 15.130:   Jan 26, 2016	Do not notify new social notes. (194913 lines)
 					22 changes necessary in database:
 UPDATE notif SET NotifyEvent= 9 WHERE NotifyEvent=10;
 UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=11;

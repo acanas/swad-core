@@ -124,7 +124,6 @@ void Par_GetMainParameters (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   long OtherUsrCod;
    char LongStr[1+10+1];
    char YearStr[2+1];
 
@@ -162,16 +161,17 @@ void Par_GetMainParameters (void)
    Gbl.Action.Act = ActUnk;
 
    /***** Get another user's nickname, if exists
-          (this nickname is used to get another user's info,
+          (this nickname is used to go to another user's profile,
            not to get the logged user) *****/
    if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
       if (Nickname[0])
-	 if ((OtherUsrCod = Nck_GetUsrCodFromNickname (Nickname)) > 0)
-	   {
-	    Gbl.Usrs.Other.UsrDat.UsrCod = OtherUsrCod;	// Used to go to public profile
-	                                                // and to refresh old publishings in user's timeline
-	    Gbl.Action.Act = ActSeePubPrf;	// Set default action if no other is specified
-	   }
+	{
+	 // This user's code is used to go to public profile
+	 // and to refresh old publishings in user's timeline
+	 // If user does not exist ==> UsrCod = -1
+	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Nickname);
+	 Gbl.Action.Act = ActSeePubPrf;	// Set default action if no other is specified
+	}
 
    /***** Get action to perform *****/
    Par_GetParToText ("act",UnsignedStr,10);

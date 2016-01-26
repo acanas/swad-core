@@ -407,9 +407,6 @@ static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
-   /***** Mark all my notifications related to timeline as seen *****/
-   // Soc_MarkMyNotifAsSeen ();
-
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
@@ -457,6 +454,7 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /*****************************************************************************/
 /************ Mark all my notifications about timeline as seen ***************/
 /*****************************************************************************/
+// Executed as a priori function
 
 void Soc_MarkMyNotifAsSeen (void)
   {
