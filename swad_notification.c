@@ -74,7 +74,6 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "enrollmentRequest",		// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-   "timelinePublish",		// Ntf_EVENT_TIMELINE_PUBLISH
    "timelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
    "timelineFav",		// Ntf_EVENT_TIMELINE_FAV
    "timelineShare",		// Ntf_EVENT_TIMELINE_SHARE
@@ -112,7 +111,6 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-   ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_PUBLISH
    ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_COMMENT
    ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_FAV
    ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_SHARE
@@ -155,7 +153,6 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "NotifyNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-   "NotifyNtfEventTimelinePublish",	// Ntf_EVENT_TIMELINE_PUBLISH
    "NotifyNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
    "NotifyNtfEventTimelineFav",		// Ntf_EVENT_TIMELINE_FAV
    "NotifyNtfEventTimelineShare",	// Ntf_EVENT_TIMELINE_SHARE
@@ -194,7 +191,6 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "EmailNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-   "EmailNtfEventTimelinePublish",	// Ntf_EVENT_TIMELINE_PUBLISH
    "EmailNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
    "EmailNtfEventTimelineFav",		// Ntf_EVENT_TIMELINE_FAV
    "EmailNtfEventTimelineShare",	// Ntf_EVENT_TIMELINE_SHARE
@@ -233,7 +229,6 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLLMENT_REQUEST
 
    /* Social tab */
-   "soc64x64.png",			// Ntf_EVENT_TIMELINE_PUBLISH
    "soc64x64.png",			// Ntf_EVENT_TIMELINE_COMMENT
    "fav64x64.png",			// Ntf_EVENT_TIMELINE_FAV
    "share64x64.png",			// Ntf_EVENT_TIMELINE_SHARE
@@ -727,7 +722,6 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
-      case Ntf_EVENT_TIMELINE_PUBLISH:
       case Ntf_EVENT_TIMELINE_COMMENT:
       case Ntf_EVENT_TIMELINE_FAV:
       case Ntf_EVENT_TIMELINE_SHARE:
@@ -879,7 +873,6 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
       case Ntf_EVENT_ENROLLMENT_REQUEST:
 	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
-      case Ntf_EVENT_TIMELINE_PUBLISH:
       case Ntf_EVENT_TIMELINE_COMMENT:
       case Ntf_EVENT_TIMELINE_FAV:
       case Ntf_EVENT_TIMELINE_SHARE:
@@ -1234,13 +1227,6 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 	     Gbl.CurrentCtr.Ctr.CtrCod,
 	 	     Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
-         break;
-      case Ntf_EVENT_TIMELINE_PUBLISH:	// New social publishing (original, no comment or sharing) from one of the users I follow
-         // Cod is the code of the social publishing (not used in the following query)
-	 // Get all my followers
-	 sprintf (Query,"SELECT FollowerCod FROM usr_follow"
-	                " WHERE FollowedCod='%ld'",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing
@@ -1600,7 +1586,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    switch (NotifyEvent)
 	      {
 	       case Ntf_EVENT_UNKNOWN:
-	       case Ntf_EVENT_TIMELINE_PUBLISH:
 	       case Ntf_EVENT_TIMELINE_COMMENT:
 	       case Ntf_EVENT_TIMELINE_FAV:
 	       case Ntf_EVENT_TIMELINE_SHARE:

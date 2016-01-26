@@ -662,19 +662,6 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo pedido de inscrição",
 	},
 	{
-	// Ntf_EVENT_TIMELINE_PUBLISH
-	"",
-	"Novo missatge social",
-	"Neue soziale Beitrag",
-	"New social post",
-	"Nuevo mensaje social",
-	"Nouveau message social",
-	"Nuevo mensaje social",			// Okoteve traducción
-	"Nuovo post sociale",
-	"Nowy post spoleczna",
-	"Novo post sociais",
-	},
-	{
 	// Ntf_EVENT_TIMELINE_COMMENT
 	"",
 	"Nou comentari a un missatge social",
@@ -25134,26 +25121,6 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_TIMELINE_PUBLISH
-	"Nous missatges socials"
-#elif L==2
-	"Neue sozialen Beitr&auml;ge"
-#elif L==3
-	"New social posts"
-#elif L==4
-	"Nuevos mensajes sociales"
-#elif L==5
-	"Nouveaux messages sociaux"
-#elif L==6
-	"Nuevos mensajes sociales"	// Okoteve traducción
-#elif L==7
-	"Nuovi post sociali"
-#elif L==8
-	"Nowe post spo&lstrok;eczne"
-#elif L==9
-	"Novos post sociais"
-#endif
-	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_COMMENT
 	 "Nous comentaris als meus missatges socials"
 #elif L==2
@@ -25535,26 +25502,6 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "&Zdot;&aogon;danie rejestracji"
 #elif L==9
 	 "Pedido de inscri&ccedil;&atilde;o"
-#endif
-	 ,
-#if   L==1	// Ntf_EVENT_TIMELINE_PUBLISH
-	"Missatge social"
-#elif L==2
-	"Soziale Beitrag"
-#elif L==3
-	"Social post"
-#elif L==4
-	"Mensaje social"
-#elif L==5
-	"Message social"
-#elif L==6
-	"Mensaje social"	// Okoteve traducción
-#elif L==7
-	"Post sociale"
-#elif L==8
-	"Post spo&lstrok;eczna"
-#elif L==9
-	"Post sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_COMMENT

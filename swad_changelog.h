@@ -121,13 +121,38 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.129.3 (2016-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.130 (2016-01-26)"
 #define CSS_FILE		"swad15.121.7.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.130:   Jan 26, 2016	Do not notify new social notes. (194914 lines)
+					22 changes necessary in database:
+UPDATE notif SET NotifyEvent= 9 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=15;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=16;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=17;
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=18;
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=19;
+UPDATE sta_notif SET NotifyEvent= 9 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=15;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=16;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=17;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=18;
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=19;
+UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0x7FE00) | ((NotifNtfEvents & 0xFFC00) >> 1));
+UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xFFE00) | ((EmailNtfEvents & 0xFFC00) >> 1));
+
         Version 15.129.3: Jan 25, 2016	Changed text in some messages. (194964 lines)
         Version 15.129.2: Jan 25, 2016	Mark timeline notifications as seen when new social activity is shown. (194967 lines)
         Version 15.129.1: Jan 25, 2016	Do not show top message in social timeline for original publishings. (194979 lines)

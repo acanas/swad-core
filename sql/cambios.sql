@@ -11342,3 +11342,53 @@ UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x3E00);
 UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x3E00);
 
 
+
+----- SWAD 15.130 (2016/01/26) -----
+
+
+ 0 ---> unchanged
+...
+ 8 ---> unchanged
+ 
+ 10 ---> 9
+ 11 ---> 10
+ 
+ 19 ---> 18
+
+UPDATE notif SET NotifyEvent= 9 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=15;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=16;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=17;
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=18;
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=19;
+
+UPDATE sta_notif SET NotifyEvent= 9 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=14;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=15;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=16;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=17;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=18;
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=19;
+
+ 9 ---> 17
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ a  b  c  d | e  f  g  h | i  j  k  x | x  x  x  x | x  x  x  x
+ |        F            F      |     C            0            0
+ |__                          |__
+    |                            |
+    |                            |
+    v                            v
+19 18 17 16 |15 14 13 12 |11 10  9  8 | 7  6  5  4 | 3  2  1  0
+ x  a  b  c | d  e  f  g | h  i  j  x | x  x  x  x | x  x  x  x
+
+UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0x7FE00) | ((NotifNtfEvents & 0xFFC00) >> 1));
+UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xFFE00) | ((EmailNtfEvents & 0xFFC00) >> 1));
+
+

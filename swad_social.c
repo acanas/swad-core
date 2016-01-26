@@ -278,7 +278,6 @@ void Soc_ShowTimelineGbl (void)
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLLMENT_REQUEST
 
       /* Social tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_TIMELINE_PUBLISH
       Soc_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
       Soc_TOP_MESSAGE_FAVED,		// Ntf_EVENT_TIMELINE_FAV
       Soc_TOP_MESSAGE_SHARED,		// Ntf_EVENT_TIMELINE_SHARE
@@ -461,7 +460,6 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 
 void Soc_MarkMyNotifAsSeen (void)
   {
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_PUBLISH,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2048,9 +2046,6 @@ static long Soc_ReceiveSocialPost (void)
       /* Insert post in social notes */
       Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
 
-      /***** Store notifications about the new publishing *****/
-      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_PUBLISH,SocPub.PubCod);
-
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
      }
@@ -3473,7 +3468,6 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
    if (PubCod > 0)
      {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_PUBLISH,PubCod);
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);

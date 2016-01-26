@@ -37,7 +37,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	(1+19)
+#define Ntf_NUM_NOTIFY_EVENTS	(1+18)
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database tables notif and sta_notif
 typedef enum
@@ -59,21 +59,20 @@ typedef enum
    Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
 
    /* Social tab */
-   Ntf_EVENT_TIMELINE_PUBLISH	=  9,	// New social publishing (post or comment) from one of the users I follow
-   Ntf_EVENT_TIMELINE_COMMENT	= 10,	// New comment to one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_FAV	= 11,	// New fav of one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_SHARE	= 12,	// New sharing of one of my social notes
-   Ntf_EVENT_TIMELINE_MENTION	= 13,	// New mention (reserved for future use)
-   Ntf_EVENT_FOLLOWER		= 14,
-   Ntf_EVENT_FORUM_POST_COURSE	= 15,	// New post in forums of my courses
-   Ntf_EVENT_FORUM_REPLY	= 16,	// New reply to one of my posts in any forum
+   Ntf_EVENT_TIMELINE_COMMENT	=  9,	// Old 10	// New comment to one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_FAV	= 10,	// Old 11	// New fav of one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_SHARE	= 11,	// Old 12	// New sharing of one of my social notes
+   Ntf_EVENT_TIMELINE_MENTION	= 12,	// Old 13	// New mention
+   Ntf_EVENT_FOLLOWER		= 13,	// Old 14
+   Ntf_EVENT_FORUM_POST_COURSE	= 14,	// Old 15	// New post in forums of my courses
+   Ntf_EVENT_FORUM_REPLY	= 15,	// Old 16	// New reply to one of my posts in any forum
 
    /* Messages tab */
-   Ntf_EVENT_NOTICE		= 17,
-   Ntf_EVENT_MESSAGE		= 18,
+   Ntf_EVENT_NOTICE		= 16,	// Old 17
+   Ntf_EVENT_MESSAGE		= 17,	// Old 18
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY		= 19,
+   Ntf_EVENT_SURVEY		= 18,	// Old 19
 
    /* Profile tab */
 
