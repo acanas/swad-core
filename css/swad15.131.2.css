@@ -80,6 +80,10 @@ hr.BLUE_SEPARA		{height:0; border-top:0; border-bottom:#4D88A1 dotted 1px;}
 hr.YELLOW_SEPARA	{height:0; border-top:0; border-bottom:#BD4815 dotted 1px;}
 
 /*********************** Text decoration of links ****************************/
+a
+	{
+	color:#4D88A1;
+	}
 a:link, a:visited, a:active
 	{
 	text-decoration:none;

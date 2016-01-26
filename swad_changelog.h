@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.131.1 (2016-01-26)"
-#define CSS_FILE		"swad15.121.7.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.131.2 (2016-01-26)"
+#define CSS_FILE		"swad15.131.2.css"
 #define JS_FILE			"swad15.121.7.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.131.2: Jan 26, 2016	Change in default color of links. (194998 lines)
         Version 15.131.1: Jan 26, 2016	Optimization in the function that insert links in text. (194993 lines)
         Version 15.131:   Jan 26, 2016	Link around @nickname is inserted as form. (195011 lines)
         Version 15.130.2: Jan 26, 2016	Optimization in the function that insert links in text. (194928 lines)
