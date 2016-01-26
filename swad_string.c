@@ -90,7 +90,7 @@ The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="ht
 action="https://localhost/swad/es" method="post">
 <input type="hidden" name="ses" value="2jb9CGhIJ81_qhDyeQ6MWDFKQ5ZaA_F68tq22ZAjYww">
 <input type="hidden" name="usr" value="@acanas">
-<a onclick="document.getElementById('form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53').submit();return false;" class="DAT_N_BOLD" title="Ver perfil público" href="">
+<a href="" onclick="document.getElementById('form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53').submit();return false;">
 @acanas
 </a>
 </form>
@@ -99,7 +99,7 @@ action="https://localhost/swad/es" method="post">
 
 #define ANCHOR_1_URL	"<a href=\""
 #define ANCHOR_2_URL	"\" target=\"_blank\">"
-#define ANCHOR_3	"</a>"
+#define ANCHOR_3_URL	"</a>"
 
 #define MAX_LINKS 1000
 
@@ -108,31 +108,38 @@ action="https://localhost/swad/es" method="post">
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char ANCHOR_1_NICK[256+Ses_LENGTH_SESSION_ID];
-   char ANCHOR_2_NICK[128];
+   char Anchor1Nick[1024];
+   char Anchor2Nick[1024];
+   char Anchor3Nick[64];
    size_t TxtLength;
    size_t TxtLengthWithInsertedAnchors;
+
    size_t Anchor1URLLength;
-   size_t Anchor1NickLength;
    size_t Anchor2URLLength;
-   size_t Anchor2NickLength;
-   size_t Anchor3Length;
+   size_t Anchor3URLLength;
    size_t AnchorURLTotalLength;
-   size_t AnchorNickTotalLength;
+
+   size_t Anchor1NickLength = 0;	// Initialized only to avoid warning
+   size_t Anchor2NickLength = 0;	// Initialized only to avoid warning
+   size_t Anchor3NickLength;
+   size_t AnchorNickTotalLength = 0;	// Initialized only to avoid warning
+
    char *PtrSrc;
    char *PtrDst;
    bool URLStartFound;
    bool IsNickname;
-   int NumURLs  = 0;
-   int NumNicks  = 0;
    int NumLinks = 0;
    int NumLink;
    struct
      {
-      char *PtrStart;
-      char *PtrEnd;
+      char *PtrStart;			// Pointer to the first char of URL/nickname in original text
+      char *PtrEnd;			// Pointer to the last  char of URL/nickname in original text
       size_t NumActualBytes;		// Actual length of the URL/nickname
-      size_t AddedLengthUntilHere;
+      char *Anchor1Nick;
+      char *Anchor2Nick;
+      size_t Anchor1NickLength;
+      size_t Anchor2NickLength;
+      size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
      } Links[MAX_LINKS];
    size_t LengthVisibleLink;
    size_t Length;
@@ -145,29 +152,35 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    char Ch;
 
    /****** Initialize lengths *****/
-   if (Gbl.Usrs.Me.Logged)
+   TxtLength         = strlen (Txt);
+
+   // In this case the length of anchor is fixed
+   // so it can be calculated once
+   Anchor1URLLength  = strlen (ANCHOR_1_URL);
+   Anchor2URLLength  = strlen (ANCHOR_2_URL);
+   Anchor3URLLength  = strlen (ANCHOR_3_URL);
+   AnchorURLTotalLength  = Anchor1URLLength  + Anchor2URLLength  + Anchor3URLLength;
+
+   if (Gbl.Usrs.Me.Logged)	// In this case the length of anchor is variable
+				// so it can be calculated for each link
      {
-      sprintf (ANCHOR_1_NICK,"<a href=\"%s/%s?ses=%s&amp;usr=",
-	       Cfg_HTTPS_URL_SWAD_CGI,
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.Session.Id);
-      sprintf (ANCHOR_2_NICK,"\">");
+      sprintf (Anchor3Nick,"</a>"
+	                   "</form>");
+      Anchor3NickLength = strlen (Anchor3Nick);
      }
-   else
+   else				// In this case the length of anchor is fixed
+				// so it can be calculated once
      {
-      sprintf (ANCHOR_1_NICK,"<a href=\"%s/%s?usr=",
+      sprintf (Anchor1Nick,"<a href=\"%s/%s?usr=",
 	       Cfg_HTTPS_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-      sprintf (ANCHOR_2_NICK,"\" target=\"_blank\">");
+      sprintf (Anchor2Nick,"\" target=\"_blank\">");
+      sprintf (Anchor3Nick,"</a>");
+      Anchor1NickLength = strlen (Anchor1Nick);
+      Anchor2NickLength = strlen (Anchor2Nick);
+      Anchor3NickLength = strlen (Anchor3Nick);
+      AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3NickLength;
      }
-   TxtLength         = strlen (Txt);
-   Anchor1URLLength  = strlen (ANCHOR_1_URL);
-   Anchor1NickLength = strlen (ANCHOR_1_NICK);
-   Anchor2URLLength  = strlen (ANCHOR_2_URL);
-   Anchor2NickLength = strlen (ANCHOR_2_NICK);
-   Anchor3Length     = strlen (ANCHOR_3);
-   AnchorURLTotalLength  = Anchor1URLLength  + Anchor2URLLength  + Anchor3Length;
-   AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3Length;
 
    /***** Find starts and ends of links (URLs and nicknames) *****/
    for (PtrSrc = Txt;
@@ -227,6 +240,10 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                  }
               }
 
+            /* Initialize anchors for this link */
+            Links[NumLinks].Anchor1Nick = NULL;
+            Links[NumLinks].Anchor2Nick = NULL;
+
             /* Calculate length of this URL */
             Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd + 1 - Links[NumLinks].PtrStart);
             if (Links[NumLinks].NumActualBytes <= MaxCharsURLOnScreen)
@@ -248,8 +265,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
                                                       AnchorURLTotalLength + LengthVisibleLink;
 
-	    /* Increment number of found nicknames and links */
-	    NumURLs++;
+	    /* Increment number of found links */
 	    NumLinks++;
 	    if (NumLinks == MAX_LINKS)
                break;
@@ -285,15 +301,56 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 
 	 if (IsNickname)
 	   {
+            /* Initialize anchors for this link */
+            Links[NumLinks].Anchor1Nick = NULL;
+            Links[NumLinks].Anchor2Nick = NULL;
+
 	    LengthVisibleLink = Links[NumLinks].NumActualBytes;
+
+            if (Gbl.Usrs.Me.Logged)	// In this case the length of anchor is variable
+				        // so it must be calculated for each link
+              {
+               /* Create unique id for this form */
+	       Gbl.Form.Num++;
+	       sprintf (Gbl.Form.UniqueId,"form_%s_%d",
+			Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+
+	       /* Store first part of anchor */
+	       sprintf (Anchor1Nick,"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+				    "<input type=\"hidden\" name=\"ses\" value=\"%s\">"
+				    "<input type=\"hidden\" name=\"usr\" value=\"",
+			Cfg_HTTPS_URL_SWAD_CGI,
+			Txt_STR_LANG_ID[Gbl.Prefs.Language],
+			Gbl.Form.UniqueId,
+			Gbl.Session.Id);
+               Anchor1NickLength = strlen (Anchor1Nick);
+	       if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength+1)) == NULL)
+		  Lay_ShowErrorAndExit ("Not enough memory to insert link.");
+	       strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
+	       Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
+
+	       /* Store second part of anchor */
+	       sprintf (Anchor2Nick,"\">"
+				    "<a href=\"\""
+				    " onclick=\"document.getElementById('%s').submit();"
+				    "return false;\">",
+                        Gbl.Form.UniqueId);
+               Anchor2NickLength = strlen (Anchor2Nick);
+               if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength+1)) == NULL)
+		  Lay_ShowErrorAndExit ("Not enough memory to insert link.");
+	       strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
+	       Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
+
+               AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3NickLength;
+              }
+
             if (NumLinks == 0)
                Links[NumLinks].AddedLengthUntilHere = AnchorNickTotalLength + LengthVisibleLink;
             else
                Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
                                                       AnchorNickTotalLength + LengthVisibleLink;
 
-	    /* Increment number of found nicknames and links */
-	    NumNicks++;
+	    /* Increment number of found links */
 	    NumLinks++;
 	    if (NumLinks == MAX_LINKS)
 	       break;
@@ -327,10 +384,20 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                  i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 2: Insert ANCHOR_3 */
-            for (i=0, PtrSrc = ANCHOR_3 + Anchor3Length - 1;
-        	 i < Anchor3Length;
-        	 i++)
+            /* Step 2: Insert Anchor3Nick or ANCHOR_3_URL */
+            if (IsNickname)
+              {
+	       Length = Anchor3NickLength;
+	       PtrSrc = Anchor3Nick + Length - 1;
+              }
+            else
+              {
+	       Length = Anchor3URLLength;
+	       PtrSrc = ANCHOR_3_URL + Length - 1;
+              }
+	    for (i = 0;
+		 i < Length;
+		 i++)
                *PtrDst-- = *PtrSrc--;
 
             /* Step 3: Move forward the link (URL or nickname) to be shown on screen */
@@ -358,16 +425,24 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
         	 i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 4: Insert ANCHOR_2_LINK or ANCHOR_2_URL */
+            /* Step 4: Insert Anchor2Nick or ANCHOR_2_URL */
             if (IsNickname)
               {
-	       PtrSrc = ANCHOR_2_NICK + Anchor2NickLength - 1;
-	       Length = Anchor2NickLength;
+               if (Gbl.Usrs.Me.Logged)	// In this case the length of anchor is variable
+       	         {
+		  Length = Links[NumLink].Anchor2NickLength;
+		  PtrSrc = Links[NumLink].Anchor2Nick + Length - 1;
+        	 }
+               else
+        	 {
+		  Length = Anchor2NickLength;
+		  PtrSrc = Anchor2Nick + Length - 1;
+        	 }
               }
             else
               {
-	       PtrSrc = ANCHOR_2_URL  + Anchor2URLLength  - 1;
 	       Length = Anchor2URLLength;
+	       PtrSrc = ANCHOR_2_URL + Length - 1;
               }
 	    for (i = 0;
 		 i < Length;
@@ -382,22 +457,41 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
         	 i++)
                *PtrDst-- = *PtrSrc--;
 
-            /* Step 6: Insert ANCHOR_1_NICK or ANCHOR_1_URL */
+            /* Step 6: Insert Anchor1Nick or ANCHOR_1_URL */
             if (IsNickname)
               {
-	       PtrSrc = ANCHOR_1_NICK + Anchor1NickLength - 1;
-	       Length = Anchor1NickLength;
+               if (Gbl.Usrs.Me.Logged)	// In this case the length of anchor is variable
+       	         {
+		  Length = Links[NumLink].Anchor1NickLength;
+		  PtrSrc = Links[NumLink].Anchor1Nick + Length - 1;
+        	 }
+               else
+        	 {
+		  Length = Anchor1NickLength;
+		  PtrSrc = Anchor1Nick + Length - 1;
+        	 }
               }
             else
               {
-	       PtrSrc = ANCHOR_1_URL  + Anchor1URLLength  - 1;
 	       Length = Anchor1URLLength;
+	       PtrSrc = ANCHOR_1_URL + Length - 1;
               }
 	    for (i = 0;
 		 i < Length;
 		 i++)
 	       *PtrDst-- = *PtrSrc--;
            }
+     }
+
+   /***** Free memory for anchors *****/
+   for (NumLink = 0;
+	NumLink < NumLinks;
+	NumLink++)
+     {
+      if (Links[NumLink].Anchor1Nick)
+	 free ((void *) Links[NumLink].Anchor1Nick);
+      if (Links[NumLink].Anchor2Nick)
+	 free ((void *) Links[NumLink].Anchor2Nick);
      }
   }
 

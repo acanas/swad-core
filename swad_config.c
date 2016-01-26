@@ -27,6 +27,7 @@
 
 #include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For fseek, ftell...
+#include <stdlib.h>		// For malloc and free
 #include <string.h>		// For strcasecmp...
 
 #include "swad_config.h"
