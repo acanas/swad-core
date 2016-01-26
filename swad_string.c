@@ -83,6 +83,20 @@ Insertion example:
 The web site of @rms is https://stallman.org/
 The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="https://stallman.org/" target="_blank">https://stallman.org/</a>
 */
+
+/*
+
+<form id="form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53"
+action="https://localhost/swad/es" method="post">
+<input type="hidden" name="ses" value="2jb9CGhIJ81_qhDyeQ6MWDFKQ5ZaA_F68tq22ZAjYww">
+<input type="hidden" name="usr" value="@acanas">
+<a onclick="document.getElementById('form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53').submit();return false;" class="DAT_N_BOLD" title="Ver perfil público" href="">
+@acanas
+</a>
+</form>
+
+*/
+
 #define ANCHOR_1_URL	"<a href=\""
 #define ANCHOR_2_URL	"\" target=\"_blank\">"
 #define ANCHOR_3	"</a>"
@@ -118,12 +132,13 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
       char *PtrStart;
       char *PtrEnd;
       size_t NumActualBytes;		// Actual length of the URL/nickname
-      size_t AnchorsLengthUntilHere;
+      size_t AddedLengthUntilHere;
      } Links[MAX_LINKS];
-   size_t LinksTotalLength = 0;
+   size_t LengthVisibleLink;
    size_t Length;
    size_t i;
-   size_t NumChars1,NumChars2;
+   size_t NumChars1;
+   size_t NumChars2;
    size_t NumBytesToCopy;
    size_t NumBytesToShow;		// Length of the link displayed on screen (may be shorter than actual length)
    char LimitedURL[MAX_BYTES_LIMITED_URL+1];
@@ -215,7 +230,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             /* Calculate length of this URL */
             Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd + 1 - Links[NumLinks].PtrStart);
             if (Links[NumLinks].NumActualBytes <= MaxCharsURLOnScreen)
-               LinksTotalLength += Links[NumLinks].NumActualBytes;
+               LengthVisibleLink = Links[NumLinks].NumActualBytes;
             else	// If URL is too long to be displayed ==> short it
               {
                /* Make a copy of this URL */
@@ -225,13 +240,13 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                LimitedURL[NumBytesToCopy] = '\0';
 
                /* Limit the number of characters on screen of the copy, and calculate its length in bytes */
-               LinksTotalLength += Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
+               LengthVisibleLink = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
               }
             if (NumLinks == 0)
-               Links[NumLinks].AnchorsLengthUntilHere = AnchorURLTotalLength;
+               Links[NumLinks].AddedLengthUntilHere = AnchorURLTotalLength + LengthVisibleLink;
             else
-               Links[NumLinks].AnchorsLengthUntilHere = Links[NumLinks - 1].AnchorsLengthUntilHere +
-                                                        AnchorURLTotalLength;
+               Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
+                                                      AnchorURLTotalLength + LengthVisibleLink;
 
 	    /* Increment number of found nicknames and links */
 	    NumURLs++;
@@ -270,12 +285,12 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 
 	 if (IsNickname)
 	   {
-	    LinksTotalLength += Links[NumLinks].NumActualBytes;
+	    LengthVisibleLink = Links[NumLinks].NumActualBytes;
             if (NumLinks == 0)
-               Links[NumLinks].AnchorsLengthUntilHere = AnchorNickTotalLength;
+               Links[NumLinks].AddedLengthUntilHere = AnchorNickTotalLength + LengthVisibleLink;
             else
-               Links[NumLinks].AnchorsLengthUntilHere = Links[NumLinks - 1].AnchorsLengthUntilHere +
-                                                        AnchorNickTotalLength;
+               Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
+                                                      AnchorNickTotalLength + LengthVisibleLink;
 
 	    /* Increment number of found nicknames and links */
 	    NumNicks++;
@@ -293,10 +308,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
      {
       /***** Insert links from end to start of text,
              only if there is enough space available in text *****/
-      TxtLengthWithInsertedAnchors = TxtLength +
-	                             LinksTotalLength +
-	                             AnchorURLTotalLength  * NumURLs +
-	                             AnchorNickTotalLength * NumNicks;
+      TxtLengthWithInsertedAnchors = TxtLength + Links[NumLinks - 1].AddedLengthUntilHere;
       if (TxtLengthWithInsertedAnchors <= MaxLength)
          for (NumLink = NumLinks - 1;
               NumLink >= 0;
@@ -309,7 +321,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             for (i = 0,
                  PtrSrc = (NumLink == NumLinks - 1) ? Txt + TxtLength :
                                                       Links[NumLink + 1].PtrStart - 1,
-                 PtrDst = PtrSrc + LinksTotalLength + Links[NumLink].AnchorsLengthUntilHere,
+                 PtrDst = PtrSrc + Links[NumLink].AddedLengthUntilHere,
                  Length = PtrSrc - Links[NumLink].PtrEnd;
                  i < Length;
                  i++)
@@ -326,7 +338,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
         	Links[NumLink].NumActualBytes <= MaxCharsURLOnScreen)
               {
                NumBytesToShow = Links[NumLink].NumActualBytes;
-               PtrSrc = Links[NumLink].PtrEnd;	// PtrSrc must point to end of complete URL or nickname
+               PtrSrc = Links[NumLink].PtrEnd;			// PtrSrc must point to end of complete nickname
               }
             else	// If URL is too long to be displayed ==> short it
               {
@@ -339,8 +351,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                /* Limit the length of the copy */
                NumBytesToShow = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
 
-               /* PtrSrc must point to end of limited URL */
-               PtrSrc = LimitedURL + NumBytesToShow - 1;
+               PtrSrc = LimitedURL + NumBytesToShow - 1;	// PtrSrc must point to end of limited URL
               }
             for (i = 0;
         	 i < NumBytesToShow;
@@ -386,8 +397,6 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		 i < Length;
 		 i++)
 	       *PtrDst-- = *PtrSrc--;
-
-            LinksTotalLength -= NumBytesToShow;
            }
      }
   }

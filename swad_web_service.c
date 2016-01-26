@@ -3684,7 +3684,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
    Ptr = degrees;
-
+/*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
 	 char QueryDebug[512*1024];
@@ -3692,7 +3692,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
 	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
 	}
-
+*/
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
@@ -3757,6 +3757,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    if (NumRows == 1)	// Question found
      {
+/*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
 	 char QueryDebug[512*1024];
@@ -3764,7 +3765,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
 	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
 	}
-
+*/
       /* Get next question */
       row = mysql_fetch_row (mysql_res);
 
@@ -3794,6 +3795,7 @@ int swad__getTrivialQuestion (struct soap *soap,
      }
    else		// Empty question
      {
+/*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
 	 char QueryDebug[512*1024];
@@ -3801,7 +3803,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Ninguna pregunta devuelta')");
 	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
 	}
-
+*/
       /* Question code (row[0]) */
       QstCod = -1L;
       getTrivialQuestionOut->question.questionCode = -1;
