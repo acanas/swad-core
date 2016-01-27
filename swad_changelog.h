@@ -116,23 +116,25 @@
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
+// TODO: Recommendations about users to follow
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.131.2 (2016-01-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.131.3 (2016-01-27)"
 #define CSS_FILE		"swad15.131.2.css"
-#define JS_FILE			"swad15.121.7.js"
+#define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.131.3: Jan 27, 2016	Animated link to view old timeline. (195015 lines)
         Version 15.131.2: Jan 26, 2016	Change in default color of links. (194998 lines)
         Version 15.131.1: Jan 26, 2016	Optimization in the function that insert links in text. (194993 lines)
         Version 15.131:   Jan 26, 2016	Link around @nickname is inserted as form. (195011 lines)
         Version 15.130.2: Jan 26, 2016	Optimization in the function that insert links in text. (194928 lines)
-        Version 15.130.1: Jan 26, 2016	Fixed bug when mentioning an user who does not exist. (194914 lines)
+        Version 15.130.1: Jan 26, 2016	Fixed bug when mentioning a user who does not exist. (194914 lines)
         Version 15.130:   Jan 26, 2016	Do not notify new social notes. (194913 lines)
 					22 changes necessary in database:
 UPDATE notif SET NotifyEvent= 9 WHERE NotifyEvent=10;

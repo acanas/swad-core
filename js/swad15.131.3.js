@@ -586,6 +586,11 @@ function readOldTimelineData () {
 				if (countOldTimeline < 20)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
 					// No more old publishings
 					document.getElementById("view_old_posts_container").style.display = 'none';
+				else {
+					// There may be more publishings
+					document.getElementById('get_old_timeline').style.display='';			// Show icon to be hidden on click
+					document.getElementById('getting_old_timeline').style.display='none';	// Hide icon to be shown on click
+				}
 			}
 		}
 	}

@@ -51,7 +51,7 @@
 /*****************************************************************************/
 
 #define Soc_WIDTH_TIMELINE	    "560px"
-#define Soc_MAX_SHARERS_FAVERS_SHOWN	  6	// Maximum number of users shown who have share/fav a social note
+#define Soc_MAX_SHARERS_FAVERS_SHOWN	  7	// Maximum number of users shown who have share/fav a social note
 
 #define Soc_MAX_BYTES_SUMMARY	       1000
 #define Soc_MAX_CHARS_IN_POST	       1000
@@ -617,7 +617,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
       With the current approach, we select one by one
       the publishings and notes in a loop. In each iteration,
       we get the more recent publishing (original, shared or commment)
-      of every set of publishings corresponding to the same note:
+      of every set of publishings corresponding to the same note,
       checking that the note is not already retrieved.
       After getting a publishing, its note code is stored
       in order to not get it again.
@@ -1011,15 +1011,26 @@ static void Soc_PutLinkToViewOldPublishings (void)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
 
-   /***** Link to view old publishings *****/
+   /***** Animated link to view old publishings *****/
    fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
 	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\">"
-                      "<a href=\"\" class=\"%s\""
-                      " onclick=\"refreshOldTimeline();return false;\" />"
-                      "%s"
+                      "<a href=\"\" class=\"%s\" onclick=\""
+   		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
+		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
+                      "refreshOldTimeline();"
+		      "return false;\">"
+	              "<img id=\"get_old_timeline\""
+	              " src=\"%s/recycle16x16.gif\" alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "<img id=\"getting_old_timeline\""
+		      " src=\"%s/working16x16.gif\" alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" style=\"display:none;\" />"				// Animated icon hidden
+		      "&nbsp;%s"
 	              "</a>"
 	              "</div>",
 	    The_ClassFormBold[Gbl.Prefs.Theme],
+	    Gbl.Prefs.IconsURL,Txt_See_more,Txt_See_more,
+	    Gbl.Prefs.IconsURL,Txt_See_more,Txt_See_more,
 	    Txt_See_more);
   }
 
@@ -1363,7 +1374,7 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
   }
 
 /*****************************************************************************/
-/************ Write name and nickname of autor of a social note **************/
+/************ Write name and nickname of author of a social note *************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
@@ -1438,10 +1449,8 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    /***** Result should have a unique row *****/
    if (NumRows == 1)
      {
-      /***** Get number of rows *****/
-      row = mysql_fetch_row (mysql_res);
-
       /****** Get content (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
       strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
      }
@@ -1542,7 +1551,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 
      };
 
-   if (SocNot->Unavailable ||	// File/notice... pointer by this social note is unavailable
+   if (SocNot->Unavailable ||	// File/notice... pointed by this social note is unavailable
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
@@ -2325,7 +2334,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
   }
 
 /*****************************************************************************/
-/****** Write name and nickname of autor of a comment to a social note *******/
+/****** Write name and nickname of author of a comment to a social note ******/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
