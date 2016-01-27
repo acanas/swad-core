@@ -614,7 +614,7 @@ void Fol_GetAndShowRankingFollowers (void)
 			" ORDER BY N DESC,FollowedCod LIMIT 100");
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCTROW usr_follow.FollowedCod,COUNT(usr_follow.FollowerCod) AS N"
+         sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
@@ -627,7 +627,7 @@ void Fol_GetAndShowRankingFollowers (void)
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCTROW usr_follow.FollowedCod,COUNT(usr_follow.FollowerCod) AS N"
+         sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_follow"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -639,7 +639,7 @@ void Fol_GetAndShowRankingFollowers (void)
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCTROW usr_follow.FollowedCod,COUNT(usr_follow.FollowerCod) AS N"
+         sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM degrees,courses,crs_usr,usr_follow"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
@@ -650,7 +650,7 @@ void Fol_GetAndShowRankingFollowers (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT DISTINCTROW usr_follow.FollowedCod,COUNT(usr_follow.FollowerCod) AS N"
+         sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM courses,crs_usr,usr_follow"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -660,7 +660,7 @@ void Fol_GetAndShowRankingFollowers (void)
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT DISTINCTROW usr_follow.FollowedCod,COUNT(usr_follow.FollowerCod) AS N"
+         sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM crs_usr,usr_follow"
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_follow.FollowedCod"
