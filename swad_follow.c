@@ -46,6 +46,8 @@
 
 #define Fol_NUM_COLUMNS_FOLLOW 3
 
+#define Fol_MAX_USRS_TO_FOLLOW_SUGGESTED (Fol_NUM_COLUMNS_FOLLOW * 3)
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -89,12 +91,16 @@ void Fol_PutLinkWhoToFollow (void)
 /******************** Put link to suggest users to follow ********************/
 /*****************************************************************************/
 
-#define Fol_MAX_USRS_SUGGESTED 1000
-
 void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    char Query[2048];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
 
    /***** First try: build query to get users to follow *****/
    sprintf (Query,"SELECT UsrCod FROM"
@@ -147,7 +153,7 @@ void Fol_SuggestWhoToFollow (void)
                   " (SELECT FollowedCod FROM usr_follow"
                   " WHERE FollowerCod='%ld')"
 
-		  // Get only Fol_MAX_USRS_SUGGESTED users
+		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
                   " ORDER BY RAND() LIMIT %u",
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -159,31 +165,84 @@ void Fol_SuggestWhoToFollow (void)
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_USER],
    Gbl.Usrs.Me.UsrDat.UsrCod,
-   Fol_MAX_USRS_SUGGESTED);
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
-   Lay_ShowAlert (Lay_INFO,Query);
+   // Lay_ShowAlert (Lay_INFO,Query);
 
-   /***** Second try: build query to get users to follow *****/
-   sprintf (Query,// Users with privacy
-                  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-                  "SELECT UsrCod FROM usr_data"
-                  " WHERE UsrCod<>'%ld'"
-                  " AND ProfileVisibility IN ('%s','%s')"
+   /***** Try to get users *****/
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
 
-		  // Not select my followed
-                  " AND UsrCod NOT IN"
-                  " (SELECT FollowedCod FROM usr_follow"
-                  " WHERE FollowerCod='%ld')"
+   if (!NumUsrs)
+     {
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
-		  // Get only Fol_MAX_USRS_SUGGESTED users
-                  " ORDER BY RAND() LIMIT %u",
-   Gbl.Usrs.Me.UsrDat.UsrCod,
-   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-   Pri_VisibilityDB[Pri_VISIBILITY_WORLD],
-   Gbl.Usrs.Me.UsrDat.UsrCod,
-   Fol_MAX_USRS_SUGGESTED);
+      /***** Second try: build query to get users to follow *****/
+      sprintf (Query,// Users with privacy
+		     // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+		     "SELECT UsrCod FROM usr_data"
+		     " WHERE UsrCod<>'%ld'"
+		     " AND ProfileVisibility IN ('%s','%s')"
 
-   Lay_ShowAlert (Lay_INFO,Query);
+		     // Not select my followed
+		     " AND UsrCod NOT IN"
+		     " (SELECT FollowedCod FROM usr_follow"
+		     " WHERE FollowerCod='%ld')"
+
+		     // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
+		     " ORDER BY RAND() LIMIT %u",
+      Gbl.Usrs.Me.UsrDat.UsrCod,
+      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+      Pri_VisibilityDB[Pri_VISIBILITY_WORLD],
+      Gbl.Usrs.Me.UsrDat.UsrCod,
+      Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
+
+      // Lay_ShowAlert (Lay_INFO,Query);
+
+      /***** Get users *****/
+      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
+     }
+
+   if (NumUsrs)
+     {
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Start listing *****/
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+			 " style=\"margin:12px auto;\">");
+
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /***** Get user *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get user's code (row[0]) */
+	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /***** Show user *****/
+	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
+	    fprintf (Gbl.F.Out,"<tr>");
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	    Fol_ShowFollowedOrFollower (&UsrDat);
+	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+	     NumUsr == NumUsrs - 1)
+	    fprintf (Gbl.F.Out,"</tr>");
+	}
+
+      /***** End listing *****/
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+   else
+      Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

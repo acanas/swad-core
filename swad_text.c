@@ -24223,6 +24223,36 @@ const char *Txt_No_user_has_been_removed =
 	"No user has been removed.";			// Necessita de tradução
 #endif
 
+const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
+#if   L==1
+	"No hi ha cap usuari a qui vost&egrave; pugui seguir."
+	" Intenteu-ho m&eacute;s endavant.";
+#elif L==2
+	"Kein Benutzer dem Sie folgen k&ouml;nnen."
+	" Versuchen Sie es sp&auml;ter noch einmal.";
+#elif L==3
+	"No user to whom you can follow."
+	" Try again later.";
+#elif L==4
+	"No hay ning&uacute;n usuario a quien usted pueda seguir."
+	" Int&eacute;ntelo m&aacute;s adelante.";
+#elif L==5
+	"Aucun utilisateur auquel vous pouvez suivre."
+	" R&eacute;essayez plus tard.";
+#elif L==6
+	"No hay ning&uacute;n usuario a quien usted pueda seguir."
+	" Int&eacute;ntelo m&aacute;s adelante.";	// Okoteve traducción
+#elif L==7
+	"Nessun utente a cui &egrave; possibile seguire."
+	" Riprovare pi&ugrave; tardi.";
+#elif L==8
+	"No u&zdot;ytkownika, do kt&oacute;rego mo&zdot;na &sacute;ledzi&cacute;."
+	" Spr&oacute;buj ponownie p&oacute;&zacute;niej.";
+#elif L==9
+	"Nenhum usu&aacute;rio a quem voc&ecirc; pode seguir."
+	" Tente novamente mais tarde.";
+#endif
+
 const char *Txt_No_users_found[Rol_NUM_ROLES] =
    {
 #if   L==1	// Rol_ROLE_UNKNOWN
