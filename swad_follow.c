@@ -73,7 +73,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
-/******************** Put link to suggest users to follow ********************/
+/********************** Put link to show users to follow **********************/
 /*****************************************************************************/
 
 void Fol_PutLinkWhoToFollow (void)
@@ -88,7 +88,7 @@ void Fol_PutLinkWhoToFollow (void)
   }
 
 /*****************************************************************************/
-/******************** Put link to suggest users to follow ********************/
+/***************************** Show users to follow **************************/
 /*****************************************************************************/
 
 void Fol_SuggestWhoToFollow (void)

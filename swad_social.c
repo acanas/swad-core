@@ -335,7 +335,7 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
    /***** Check if I follow someone *****/
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
      {
-      /***** Put links to suggests users to follow *****/
+      /***** Put link to show users to follow *****/
       Fol_PutLinkWhoToFollow ();
 
       /***** Show warning if I do not follow anyone *****/

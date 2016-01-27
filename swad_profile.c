@@ -127,7 +127,7 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
 
 void Prf_RequestUserProfile (void)
   {
-   /***** Put links to suggests users to follow *****/
+   /***** Put link to show users to follow *****/
    Fol_PutLinkWhoToFollow ();
 
    /* By default, the nickname is filled with my nickname
@@ -192,9 +192,6 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    if (Error)
      {
-      /***** Put links to suggests users to follow *****/
-      Fol_PutLinkWhoToFollow ();
-
       /* Show error message */
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
@@ -232,21 +229,24 @@ bool Prf_ShowUserProfile (void)
    bool UsrFollowsMe;
    bool IFollowUsr;
 
+   /***** Contextual links *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
+      Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+      Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
+      Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   else
+      /***** Put link to show users to follow *****/
+      Fol_PutLinkWhoToFollow ();
+
    /***** Check if I can see the public profile *****/
    if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
                           Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      /***** Contextual links *****/
-      if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
-	 Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-	 Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
-	 Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
 	 /* Get user's role in current course */

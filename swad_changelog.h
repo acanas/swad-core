@@ -123,16 +123,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.133 (2016-01-27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.133.1 (2016-01-27)"
 #define CSS_FILE		"swad15.131.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.133.1: Jan 27, 2016	Change in link to show users to follow. (195238 lines)
         Version 15.133:   Jan 27, 2016	List users to follow. (195236 lines)
         Version 15.132.1: Jan 27, 2016	Build query to get users to follow. (195158 lines)
-        Version 15.132:   Jan 27, 2016	Put link to suggest users to follow. (195116 lines)
+        Version 15.132:   Jan 27, 2016	Put link to show users to follow. (195116 lines)
 					2 changes necessary in database:
 CREATE INDEX PhotoVisibility ON usr_data (PhotoVisibility);
 CREATE INDEX ProfileVisibility ON usr_data (ProfileVisibility);
