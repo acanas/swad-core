@@ -858,7 +858,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
                   "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_courses,"
                   "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS usr_courses"
                   " WHERE my_courses.CrsCod=usr_courses.CrsCod"
-                  " AND my_courses.Role!=usr_courses.Role",
+                  " AND my_courses.Role<>usr_courses.Role",
             Gbl.Usrs.Me.UsrDat.UsrCod,UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
   }

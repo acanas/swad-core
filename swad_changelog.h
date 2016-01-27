@@ -118,33 +118,24 @@
 // TODO: Width of column for data in notifications is too short
 
 // TODO: Recommendations about users to follow
-/* The query can be something like this:
 
-SELECT DISTINCT usr_follow.FollowedCod,usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_nicknames.Nickname
- FROM usr_follow,usr_data,usr_nicknames
- WHERE usr_follow.FollowerCod IN (SELECT FollowedCod FROM usr_follow WHERE FollowerCod='1346')
- AND usr_follow.FollowedCod NOT IN (SELECT FollowedCod FROM usr_follow WHERE FollowerCod='1346')
- AND usr_follow.FollowedCod<>'1346'
- AND usr_follow.FollowedCod=usr_data.UsrCod
- AND (usr_data.ProfileVisibility IN ('system','world')
-      OR (usr_data.ProfileVisibility='course'
-          AND usr_data.UsrCod IN
-          (SELECT UsrCod FROM crs_usr WHERE CrsCod IN
-           (SELECT CrsCod FROM crs_usr WHERE UsrCod='1346'))))
- AND usr_follow.FollowedCod=usr_nicknames.UsrCod ORDER BY RAND() LIMIT 3;
-
- */
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.131.4 (2016-01-27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.132 (2016-01-27)"
 #define CSS_FILE		"swad15.131.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+
+        Version 15.132:   Jan 27, 2016	Put link to suggest users to follow. (195116 lines)
+					2 changes necessary in database:
+CREATE INDEX PhotoVisibility ON usr_data (PhotoVisibility);
+CREATE INDEX ProfileVisibility ON usr_data (ProfileVisibility);
+
         Version 15.131.4: Jan 27, 2016	Fixed bug in ranking of followed. (195030 lines)
         Version 15.131.3: Jan 27, 2016	Animated link to view old timeline. (195015 lines)
         Version 15.131.2: Jan 26, 2016	Change in default color of links. (194998 lines)

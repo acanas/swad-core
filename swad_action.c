@@ -1038,6 +1038,7 @@ Social:
 	869. ActCalNumForPst		Calculate number of forum posts and store into user's figures
 	870. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 
+NEW.....871. ActWhoFol			Suggest list of users to follow
 	871. ActFolUsr			Follow another user
 	872. ActUnfUsr			Unfollow another user
 	873. ActSeeFlg			Show following
@@ -2374,6 +2375,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCalNumForPst	*/{1408,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
    /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
 
+   /* ActWhoFol		*/{1520,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_SuggestWhoToFollow		,NULL},
    /* ActFolUsr		*/{1410,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
    /* ActUnfUsr		*/{1411,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
    /* ActSeeFlg		*/{1412,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
@@ -4233,6 +4235,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUnfSocComGbl,	// #1517
 	ActFavSocComUsr,	// #1518
 	ActUnfSocComUsr,	// #1519
+	ActWhoFol,		// #1520
 	};
 
 /*****************************************************************************/

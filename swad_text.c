@@ -49201,6 +49201,27 @@ const char *Txt_What_would_you_like_to_do =
 	"O que voc&ecirc; faria?";
 #endif
 
+const char *Txt_Who_to_follow =
+#if   L==1
+	"A qui seguir";
+#elif L==2
+	"Wer zu folgen";
+#elif L==3
+	"Who to follow";
+#elif L==4
+	"A qui&eacute;n seguir";
+#elif L==5
+	"Qui &agrave; suivre";
+#elif L==6
+	"A qui&eacute;n seguir";	// Okoteve traducción
+#elif L==7
+	"Chi da seguire";
+#elif L==8
+	"Kto do na&sacute;ladowania";
+#elif L==9
+	"Quem seguir";
+#endif
+
 const char *Txt_With_centres =
 #if   L==1
 	"Amb centres";

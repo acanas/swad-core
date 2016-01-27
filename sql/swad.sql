@@ -1222,6 +1222,8 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(IconSet),
 	INDEX(Language),
 	INDEX(FirstDayOfWeek),
+	INDEX(PhotoVisibility),
+	INDEX(ProfileVisibility),
 	INDEX(CtyCod),
 	INDEX(InsCtyCod),
 	INDEX(InsCod),

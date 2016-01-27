@@ -43,6 +43,9 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Fol_PutLinkWhoToFollow (void);
+void Fol_SuggestWhoToFollow (void);
+
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 unsigned Fol_GetNumFollowing (long UsrCod);
 unsigned Fol_GetNumFollowers (long UsrCod);

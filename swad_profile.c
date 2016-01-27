@@ -127,6 +127,9 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
 
 void Prf_RequestUserProfile (void)
   {
+   /***** Put links to suggests users to follow *****/
+   Fol_PutLinkWhoToFollow ();
+
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
    Prf_RequestUserProfileWithDefaultNickname (Gbl.Usrs.Me.UsrDat.Nickname);
@@ -189,6 +192,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    if (Error)
      {
+      /***** Put links to suggests users to follow *****/
+      Fol_PutLinkWhoToFollow ();
+
       /* Show error message */
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 

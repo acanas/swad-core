@@ -71,6 +71,77 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
+/******************** Put link to suggest users to follow ********************/
+/*****************************************************************************/
+
+void Fol_PutLinkWhoToFollow (void)
+  {
+   extern const char *Txt_Who_to_follow;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActWhoFol,NULL,
+                          "follow64x64.png",
+                          Txt_Who_to_follow,Txt_Who_to_follow);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/******************** Put link to suggest users to follow ********************/
+/*****************************************************************************/
+
+void Fol_SuggestWhoToFollow (void)
+  {
+/* The query can be something like this:
+
+  SELECT UsrCod FROM
+  (
+
+   SELECT DISTINCT usr_follow.FollowedCod AS UsrCod
+   FROM usr_follow,
+   (SELECT FollowedCod FROM usr_follow
+   WHERE FollowerCod='1346') AS my_followed,
+   usr_data
+   WHERE usr_follow.FollowerCod=my_followed.FollowedCod
+   AND usr_follow.FollowedCod<>'1346'
+   AND usr_follow.FollowedCod=usr_data.UsrCod
+   AND usr_data.ProfileVisibility IN ('system','world')
+
+   UNION
+
+   SELECT DISTINCT crs_usr.UsrCod
+   FROM crs_usr,
+   (SELECT CrsCod FROM crs_usr
+   WHERE UsrCod='1346') AS my_crs,
+   usr_data
+   WHERE crs_usr.CrsCod=my_crs.CrsCod
+   AND crs_usr.UsrCod<>'1346'
+   AND crs_usr.UsrCod=usr_data.UsrCod
+   AND usr_data.ProfileVisibility='course'
+
+   UNION
+
+   SELECT DISTINCT crs_usr.UsrCod
+   FROM crs_usr,
+   (SELECT CrsCod,Role FROM crs_usr WHERE
+   UsrCod='1346') AS my_crs_role,
+   usr_data
+   WHERE crs_usr.CrsCod=my_crs_role.CrsCod
+   AND crs_usr.Role<>my_crs_role.Role
+   AND crs_usr.UsrCod=usr_data.UsrCod
+   AND usr_data.ProfileVisibility='user'
+
+  ) AS UsrsToFollow
+
+ WHERE UsrCod NOT IN
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod='1346')
+
+ ORDER BY RAND() LIMIT 3;
+
+ */
+  }
+
+/*****************************************************************************/
 /*************** Check if a user is a follower of another user ***************/
 /*****************************************************************************/
 

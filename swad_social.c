@@ -332,9 +332,15 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
    extern const char *Txt_You_dont_follow_any_user;
    char Query[1024];
 
-   /***** Show warning if I do not follow anyone *****/
+   /***** Check if I follow someone *****/
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
-      Lay_ShowAlert (Lay_INFO,Txt_You_dont_follow_any_user);
+     {
+      /***** Put links to suggests users to follow *****/
+      Fol_PutLinkWhoToFollow ();
+
+      /***** Show warning if I do not follow anyone *****/
+      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_follow_any_user);
+     }
 
    /***** Build query to get timeline *****/
    Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,

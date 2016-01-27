@@ -2520,13 +2520,14 @@ mysql> DESCRIBE usr_data;
 | Surname2          | varchar(32)                                      | NO   |     | NULL    |                |
 | FirstName         | varchar(32)                                      | NO   |     | NULL    |                |
 | Sex               | enum('unknown','female','male')                  | NO   |     | unknown |                |
+| Layout            | tinyint(4)                                       | NO   | MUL | 0       |                |
 | Theme             | char(16)                                         | NO   | MUL | NULL    |                |
 | IconSet           | char(16)                                         | NO   | MUL | NULL    |                |
 | Language          | char(2)                                          | NO   | MUL | NULL    |                |
 | FirstDayOfWeek    | tinyint(4)                                       | NO   | MUL | 0       |                |
 | Photo             | char(43)                                         | NO   |     | NULL    |                |
-| PhotoVisibility   | enum('unknown','user','course','system','world') | NO   |     | unknown |                |
-| ProfileVisibility | enum('unknown','user','course','system','world') | NO   |     | unknown |                |
+| PhotoVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
+| ProfileVisibility | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | CtyCod            | int(11)                                          | NO   | MUL | -1      |                |
 | InsCtyCod         | int(11)                                          | NO   | MUL | -1      |                |
 | InsCod            | int(11)                                          | NO   | MUL | -1      |                |
@@ -2543,10 +2544,10 @@ mysql> DESCRIBE usr_data;
 | Comments          | text                                             | NO   |     | NULL    |                |
 | Menu              | tinyint(4)                                       | NO   | MUL | 0       |                |
 | SideCols          | tinyint(4)                                       | NO   | MUL | 3       |                |
-| NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
+| NotifNtfEvents    | int(11)                                          | NO   |     | -1      |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-32 rows in set (0.00 sec)
+33 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2587,6 +2588,8 @@ mysql> DESCRIBE usr_data;
                    "INDEX(IconSet),"
                    "INDEX(Language),"
                    "INDEX(FirstDayOfWeek),"
+		   "INDEX(PhotoVisibility),"
+		   "INDEX(ProfileVisibility),"
                    "INDEX(CtyCod),"
                    "INDEX(InsCtyCod),"
                    "INDEX(InsCod),"
