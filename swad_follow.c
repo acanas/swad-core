@@ -95,7 +95,7 @@ void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
-   char Query[2048];
+   char Query[3072];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -103,12 +103,15 @@ void Fol_SuggestWhoToFollow (void)
    struct UsrData UsrDat;
 
    /***** First try: build query to get users to follow *****/
-   sprintf (Query,"SELECT UsrCod FROM"
+   sprintf (Query,"SELECT DISTINCT UsrCod FROM"
                   " ("
-		  // Users with privacy
+
+		  /***** Likely known users *****/
+                  "SELECT DISTINCT UsrCod FROM"
+                  " ("
+		  // Users followed by my followed whose privacy is
                   // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-                  // who are followed from my followed
-                  " SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
+                  "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
                   " FROM usr_follow,"
                   " (SELECT FollowedCod FROM usr_follow"
                   " WHERE FollowerCod='%ld') AS my_followed,"
@@ -118,11 +121,12 @@ void Fol_SuggestWhoToFollow (void)
                   " AND usr_follow.FollowedCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s')"
 
-                  " UNION"
+                  " UNION "
 
-		  // Users with privacy Pri_VISIBILITY_COURSE
-                  // who share any course with me
-                  " SELECT DISTINCT crs_usr.UsrCod"
+		  // Users who share any course with me
+		  // and whose privacy is Pri_VISIBILITY_COURSE,
+                  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+                  "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   " (SELECT CrsCod FROM crs_usr"
                   " WHERE UsrCod='%ld') AS my_crs,"
@@ -130,13 +134,13 @@ void Fol_SuggestWhoToFollow (void)
                   " WHERE crs_usr.CrsCod=my_crs.CrsCod"
                   " AND crs_usr.UsrCod<>'%ld'"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
-                  " AND usr_data.ProfileVisibility='%s'"
+                  " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
 
-                  " UNION"
+                  " UNION "
 
-		  // Users with privacy Pri_VISIBILITY_USER
-                  // who share any course with me with another role
-                  " SELECT DISTINCT crs_usr.UsrCod"
+		  // Users who share any course with me with another role
+		  // and whose privacy is Pri_VISIBILITY_USER
+                  "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   " (SELECT CrsCod,Role FROM crs_usr"
                   " WHERE UsrCod='%ld') AS my_crs_role,"
@@ -146,65 +150,62 @@ void Fol_SuggestWhoToFollow (void)
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility='%s'"
 
-                  ") AS UsrsToFollow"
+                  ") AS LikelyKnownUsrsToFollow"
 
-		  // Not select my followed
+		  // Do not select my followed
                   " WHERE UsrCod NOT IN"
                   " (SELECT FollowedCod FROM usr_follow"
                   " WHERE FollowerCod='%ld')"
+
+                  " UNION "
+
+		  /***** Likely unknown users *****/
+		  // Add some likely unknown random users with privacy
+                  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+		  "SELECT UsrCod FROM usr_data"
+		  " WHERE UsrCod<>'%ld'"
+		  " AND ProfileVisibility IN ('%s','%s')"
+		  // Do not select my followed
+		  " AND UsrCod NOT IN"
+		  " (SELECT FollowedCod FROM usr_follow"
+		  " WHERE FollowerCod='%ld')"
+		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
+		  " ORDER BY RAND() LIMIT %u"
+
+                  ") AS UsrsToFollow"
 
 		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
                   " ORDER BY RAND() LIMIT %u",
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-   Pri_VisibilityDB[Pri_VISIBILITY_WORLD],
+   Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+   Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
-   Pri_VisibilityDB[Pri_VISIBILITY_USER],
+   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
+
+   Gbl.Usrs.Me.UsrDat.UsrCod,
+   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+   Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+   Gbl.Usrs.Me.UsrDat.UsrCod,
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED,
    Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
-   // Lay_ShowAlert (Lay_INFO,Query);
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      Lay_ShowAlert (Lay_INFO,Query);
 
-   /***** Try to get users *****/
+   /***** Get users *****/
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
-
-   if (!NumUsrs)
-     {
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Second try: build query to get users to follow *****/
-      sprintf (Query,// Users with privacy
-		     // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-		     "SELECT UsrCod FROM usr_data"
-		     " WHERE UsrCod<>'%ld'"
-		     " AND ProfileVisibility IN ('%s','%s')"
-
-		     // Not select my followed
-		     " AND UsrCod NOT IN"
-		     " (SELECT FollowedCod FROM usr_follow"
-		     " WHERE FollowerCod='%ld')"
-
-		     // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
-		     " ORDER BY RAND() LIMIT %u",
-      Gbl.Usrs.Me.UsrDat.UsrCod,
-      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-      Pri_VisibilityDB[Pri_VISIBILITY_WORLD],
-      Gbl.Usrs.Me.UsrDat.UsrCod,
-      Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
-
-      // Lay_ShowAlert (Lay_INFO,Query);
-
-      /***** Get users *****/
-      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
-     }
-
    if (NumUsrs)
      {
+      /***** Put link to show users to follow *****/
+      Fol_PutLinkWhoToFollow ();
+
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
