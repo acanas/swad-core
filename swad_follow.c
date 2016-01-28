@@ -468,6 +468,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
 void Fol_ListFollowing (void)
   {
+   extern const char *Txt_Following;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -493,8 +494,7 @@ void Fol_ListFollowing (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-		               " style=\"margin:12px auto;\">");
+            Lay_StartRoundFrameTable (NULL,2,Txt_Following);
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -517,7 +517,7 @@ void Fol_ListFollowing (void)
 	      }
 
 	    /***** End listing *****/
-	    fprintf (Gbl.F.Out,"</table>");
+	    Lay_EndRoundFrameTable ();
 
 	    /***** Free memory used for user's data *****/
 	    Usr_UsrDataDestructor (&UsrDat);
@@ -539,6 +539,7 @@ void Fol_ListFollowing (void)
 
 void Fol_ListFollowers (void)
   {
+   extern const char *Txt_Followers;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -569,8 +570,7 @@ void Fol_ListFollowers (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-	    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-		               " style=\"margin:12px auto;\">");
+            Lay_StartRoundFrameTable (NULL,2,Txt_Followers);
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -593,7 +593,7 @@ void Fol_ListFollowers (void)
 	      }
 
 	    /***** End listing *****/
-	    fprintf (Gbl.F.Out,"</table>");
+	    Lay_EndRoundFrameTable ();
 
 	    /***** Free memory used for user's data *****/
 	    Usr_UsrDataDestructor (&UsrDat);
