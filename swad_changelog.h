@@ -123,14 +123,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.133.2 (2016-01-28)"
+#define Log_PLATFORM_VERSION	"SWAD 15.133.3 (2016-01-28)"
 #define CSS_FILE		"swad15.131.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.132.2: Jan 28, 2016	Changes in query to get users to follow. (195241 lines)
+        Version 15.133.3: Jan 28, 2016	Changes in query to get users to follow. (195254 lines)
+        Version 15.133.2: Jan 28, 2016	Changes in query to get users to follow. (195241 lines)
         Version 15.133.1: Jan 27, 2016	Change in link to show users to follow. (195238 lines)
         Version 15.133:   Jan 27, 2016	List users to follow. (195236 lines)
         Version 15.132.1: Jan 27, 2016	Build query to get users to follow. (195158 lines)

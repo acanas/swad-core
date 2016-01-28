@@ -95,7 +95,7 @@ void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
-   char Query[3072];
+   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -105,12 +105,12 @@ void Fol_SuggestWhoToFollow (void)
    /***** First try: build query to get users to follow *****/
    sprintf (Query,"SELECT DISTINCT UsrCod FROM"
                   " ("
-
 		  /***** Likely known users *****/
-                  "SELECT DISTINCT UsrCod FROM"
+                  "(SELECT DISTINCT UsrCod FROM"
                   " ("
 		  // Users followed by my followed whose privacy is
                   // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+                  "("
                   "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
                   " FROM usr_follow,"
                   " (SELECT FollowedCod FROM usr_follow"
@@ -120,12 +120,12 @@ void Fol_SuggestWhoToFollow (void)
                   " AND usr_follow.FollowedCod<>'%ld'"
                   " AND usr_follow.FollowedCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s')"
-
+                  ")"
                   " UNION "
-
 		  // Users who share any course with me
 		  // and whose privacy is Pri_VISIBILITY_COURSE,
                   // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+                  "("
                   "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   " (SELECT CrsCod FROM crs_usr"
@@ -135,11 +135,11 @@ void Fol_SuggestWhoToFollow (void)
                   " AND crs_usr.UsrCod<>'%ld'"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
-
+                  ")"
                   " UNION "
-
 		  // Users who share any course with me with another role
 		  // and whose privacy is Pri_VISIBILITY_USER
+                  "("
                   "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   " (SELECT CrsCod,Role FROM crs_usr"
@@ -149,16 +149,17 @@ void Fol_SuggestWhoToFollow (void)
                   " AND crs_usr.Role<>my_crs_role.Role"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility='%s'"
-
+                  ")"
                   ") AS LikelyKnownUsrsToFollow"
-
 		  // Do not select my followed
                   " WHERE UsrCod NOT IN"
                   " (SELECT FollowedCod FROM usr_follow"
                   " WHERE FollowerCod='%ld')"
-
+		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED*2 users
+		  " ORDER BY RAND() LIMIT %u"
+                  ")"
                   " UNION "
-
+                  "("
 		  /***** Likely unknown users *****/
 		  // Add some likely unknown random users with privacy
                   // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
@@ -171,9 +172,8 @@ void Fol_SuggestWhoToFollow (void)
 		  " WHERE FollowerCod='%ld')"
 		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
 		  " ORDER BY RAND() LIMIT %u"
-
+		  ")"
                   ") AS UsrsToFollow"
-
 		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED users
                   " ORDER BY RAND() LIMIT %u",
    Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -188,12 +188,14 @@ void Fol_SuggestWhoToFollow (void)
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED*2,	// 2/3 likely known users
 
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
    Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
-   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED,
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED,	// 1/3 likely unknown users
+
    Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -658,20 +660,20 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 
    /***** Check if I can see the public profile *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"width:50px; height:62px;\">");
+	              " style=\"width:64px; height:84px;\">");
    if (Visible)
      {
       /***** User's photo *****/
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
-			"PHOTO45x60",Pho_ZOOM,false);
+			"PHOTO60x80",Pho_ZOOM,false);
      }
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Put form to go to public profile *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	              " style=\"min-width:87px; height:62px;\">");
+	              " style=\"min-width:87px; height:84px;\">");
    if (Visible &&
        UsrDat->Nickname[0])
      {
