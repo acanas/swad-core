@@ -128,7 +128,8 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
 void Prf_RequestUserProfile (void)
   {
    /***** Put link to show users to follow *****/
-   Fol_PutLinkWhoToFollow ();
+   if (Gbl.Usrs.Me.Logged)
+      Fol_PutLinkWhoToFollow ();
 
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
@@ -230,18 +231,21 @@ bool Prf_ShowUserProfile (void)
    bool IFollowUsr;
 
    /***** Contextual links *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
-      Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
-      Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
-      Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
-      fprintf (Gbl.F.Out,"</div>");
+      if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
+	 Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+	 Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
+	 Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+      else
+	 /***** Put link to show users to follow *****/
+	 Fol_PutLinkWhoToFollow ();
      }
-   else
-      /***** Put link to show users to follow *****/
-      Fol_PutLinkWhoToFollow ();
 
    /***** Check if I can see the public profile *****/
    if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
