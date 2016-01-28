@@ -4423,6 +4423,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   bool ContentCopied = false;
 
    /***** Return nothing on error *****/
    SocPub.PubType = Soc_PUB_UNKNOWN;
@@ -4473,6 +4474,14 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	    /***** Free structure that stores the query result *****/
             DB_FreeMySQLResult (&mysql_res);
 
+	    /***** Copy content string *****/
+	    if (GetContent)
+	       if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
+		 {
+		  strcpy (*ContentStr,Content);
+		  ContentCopied = true;
+		 }
+
 	    /***** Copy summary string *****/
 	    Str_LimitLengthHTMLStr (Content,MaxChars);
 	    strcpy (SummaryStr,Content);
@@ -4498,17 +4507,26 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
 
+	 /***** Copy content string *****/
+	 if (GetContent)
+	    if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
+	      {
+	       strcpy (*ContentStr,Content);
+	       ContentCopied = true;
+	      }
+
 	 /***** Copy summary string *****/
 	 Str_LimitLengthHTMLStr (Content,MaxChars);
 	 strcpy (SummaryStr,Content);
 	 break;
      }
 
-   /***** Copy content string *****/
-   if (GetContent)
-      if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
-         strcpy (*ContentStr,Content);
+   /***** Create empty content string if nothing copied *****/
+   if (GetContent && !ContentCopied)
+      if ((*ContentStr = (char *) malloc (1)) != NULL)
+         (*ContentStr)[0] = '\0';
   }
+
 /*****************************************************************************/
 /*** Create a notification about mention for any nickname in a publishing ****/
 /*****************************************************************************/
