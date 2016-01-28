@@ -94,6 +94,9 @@ void Fol_PutLinkWhoToFollow (void)
 void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Who_to_follow;
+   extern const char *Txt_Update;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    char Query[2048];
    MYSQL_RES *mysql_res;
@@ -198,15 +201,20 @@ void Fol_SuggestWhoToFollow (void)
 
    Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
-   // if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-   //    Lay_ShowAlert (Lay_INFO,Query);
-
    /***** Get users *****/
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
    if (NumUsrs)
      {
-      /***** Put link to show users to follow *****/
-      Fol_PutLinkWhoToFollow ();
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Who_to_follow);
+
+      /***** Put form to update connected users *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Act_FormStart (ActWhoFol);
+      Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+      Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -240,6 +248,9 @@ void Fol_SuggestWhoToFollow (void)
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
