@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.133.7 (2016-01-28)"
+#define Log_PLATFORM_VERSION	"SWAD 15.133.8 (2016-01-29)"
 #define CSS_FILE		"swad15.131.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.133.8: Jan 29, 2016	Link to request a user's profile. (195328 lines)
         Version 15.133.7: Jan 28, 2016	Changes in layout of followed/followers. (195288 lines)
         Version 15.133.6: Jan 28, 2016	Changes in layout of "Who to follow". (195287 lines)
         Version 15.133.5: Jan 28, 2016	Unlogged users can not view "Who to follow". (195276 lines)

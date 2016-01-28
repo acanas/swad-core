@@ -105,6 +105,9 @@ void Fol_SuggestWhoToFollow (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
 
+   /***** Put link to request user's profile *****/
+   Prf_PutLinkRequestUserProfile ();
+
    /***** First try: build query to get users to follow *****/
    sprintf (Query,"SELECT DISTINCT UsrCod FROM"
                   " ("
@@ -206,7 +209,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Who_to_follow);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow);
 
       /***** Put form to update connected users *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -221,7 +224,7 @@ void Fol_SuggestWhoToFollow (void)
 
       /***** Start listing *****/
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-			 " style=\"margin:12px auto;\">");
+			 " style=\"margin:0 auto;\">");
 
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
@@ -494,7 +497,7 @@ void Fol_ListFollowing (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-            Lay_StartRoundFrameTable (NULL,2,Txt_Following);
+            Lay_StartRoundFrameTable ("560px",2,Txt_Following);
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -570,7 +573,7 @@ void Fol_ListFollowers (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** Start listing *****/
-            Lay_StartRoundFrameTable (NULL,2,Txt_Followers);
+            Lay_StartRoundFrameTable ("560px",2,Txt_Followers);
 
 	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
@@ -629,49 +632,8 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX+1];
    bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
 
-   /***** Put form to follow / unfollow *****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\""
-	              " style=\"width:25px; height:62px;\">");
-   if (Visible &&
-       Gbl.Usrs.Me.Logged &&
-       Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat->UsrCod)
-     {
-      if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
-	{
-	 Act_FormStart (ActUnfUsr);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Following_unfollow,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/following64x64.png\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_Unfollow,Txt_Following_unfollow);
-	 Act_FormEnd ();
-	}
-      else	// I do not follow this user
-	{
-	 Act_FormStart (ActFolUsr);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Follow,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\">"
-			    "<img src=\"%s/follow64x64.png\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_Follow,Txt_Follow);
-	 Act_FormEnd ();
-	}
-     }
-   fprintf (Gbl.F.Out,"</td>");
-
    /***** Check if I can see the public profile *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-	              " style=\"width:64px; height:84px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR_PHOTO\">");
    if (Visible)
      {
       /***** User's photo *****/
@@ -680,21 +642,67 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 					   NULL,
 			"PHOTO60x80",Pho_ZOOM,false);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"FOLLOW_USR_NAME\">");
 
    /***** Put form to go to public profile *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-	              " style=\"min-width:87px; height:84px;\">");
    if (Visible &&
        UsrDat->Nickname[0])
      {
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
-      Usr_RestrictLengthAndWriteName (UsrDat,8);
+      Usr_RestrictLengthAndWriteName (UsrDat,10);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
+
+   /***** Put form to follow / unfollow *****/
+   if (Visible && Gbl.Usrs.Me.Logged)
+     {
+      if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIDDEN\">"
+			    "<img src=\"%s/usr64x64.gif\""
+			    " alt=\"\""
+			    " class=\"ICON25x25\" />"
+			    "</div>"
+			    "</a>",
+		  Gbl.Prefs.IconsURL);
+      else
+	{
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
+	   {
+	    Act_FormStart (ActUnfUsr);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_Following_unfollow,NULL);
+	    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
+			       "<img src=\"%s/following64x64.png\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICON25x25\" />"
+			       "</div>"
+			       "</a>",
+		     Gbl.Prefs.IconsURL,
+		     Txt_Unfollow,Txt_Following_unfollow);
+	    Act_FormEnd ();
+	   }
+	 else	// I do not follow this user
+	   {
+	    Act_FormStart (ActFolUsr);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_Follow,NULL);
+	    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
+			       "<img src=\"%s/follow64x64.png\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICON25x25\" />"
+			       "</div>"
+			       "</a>",
+		     Gbl.Prefs.IconsURL,
+		     Txt_Follow,Txt_Follow);
+	    Act_FormEnd ();
+	   }
+	}
+     }
+
    fprintf (Gbl.F.Out,"</td>");
   }
 

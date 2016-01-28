@@ -122,6 +122,21 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
   }
 
 /*****************************************************************************/
+/******************* Put link to request a user's profile ********************/
+/*****************************************************************************/
+
+void Prf_PutLinkRequestUserProfile (void)
+  {
+   extern const char *Txt_View_public_profile;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActReqPubPrf,NULL,
+                          "usr64x64.gif",
+                          Txt_View_public_profile,Txt_View_public_profile);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /************************** Request a user's profile *************************/
 /*****************************************************************************/
 

@@ -40,6 +40,7 @@
 /*****************************************************************************/
 
 char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba);
+void Prf_PutLinkRequestUserProfile (void);
 void Prf_RequestUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
