@@ -198,8 +198,8 @@ void Fol_SuggestWhoToFollow (void)
 
    Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_ShowAlert (Lay_INFO,Query);
+   // if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   //    Lay_ShowAlert (Lay_INFO,Query);
 
    /***** Get users *****/
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");

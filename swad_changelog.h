@@ -130,7 +130,10 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.133.3: Jan 28, 2016	Changes in query to get users to follow. (195254 lines)
+        Version 15.133.3: Jan 28, 2016	Changes in query to get users to follow. (195256 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1520','es','N','A qui&eacute;n seguir');
+
         Version 15.133.2: Jan 28, 2016	Changes in query to get users to follow. (195241 lines)
         Version 15.133.1: Jan 27, 2016	Change in link to show users to follow. (195238 lines)
         Version 15.133:   Jan 27, 2016	List users to follow. (195236 lines)
