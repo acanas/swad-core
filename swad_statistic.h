@@ -109,10 +109,10 @@ typedef enum
    Sta_OER,			// Number of OERs (Open Educational Resources)
    Sta_ASSIGNMENTS,		// Number of assignments
    Sta_TESTS,			// Number of test questions
+   Sta_FORUMS,			// Number of forums, threads and posts
    Sta_NOTIFY_EVENTS,		// Number of users per notify event
    Sta_NOTICES,			// Number of notices
    Sta_MESSAGES,		// Number of users' (sent and received) messages
-   Sta_FORUMS,			// Number of forums, threads and posts
    Sta_SURVEYS,			// Number of surveys
    Sta_PRIVACY,			// Number of users per privacity
    Sta_LANGUAGES,		// Number of users per language

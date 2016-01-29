@@ -37607,6 +37607,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Testes"
 #endif
 	 ,
+#if   L==1				// Sta_FORUMS
+	 "F&ograve;rums"
+#elif L==2
+	 "Foren"
+#elif L==3
+	 "Forums"
+#elif L==4
+	 "Foros"
+#elif L==5
+	 "Forums"
+#elif L==6
+	 "Foros"		// Okoteve traducción
+#elif L==7
+	 "Forum"
+#elif L==8
+	 "Forums"		// Potrzebujesz tlumaczenie
+#elif L==9
+	 "F&oacute;runs"
+#endif
+	 ,
 #if   L==1				// Sta_NOTIFY_EVENTS
 	 "Notificacions"
 #elif L==2
@@ -37665,26 +37685,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Wiadomo&sacute;ci"
 #elif L==9
 	 "Mensagens"
-#endif
-	 ,
-#if   L==1				// Sta_FORUMS
-	 "F&ograve;rums"
-#elif L==2
-	 "Foren"
-#elif L==3
-	 "Forums"
-#elif L==4
-	 "Foros"
-#elif L==5
-	 "Forums"
-#elif L==6
-	 "Foros"		// Okoteve traducción
-#elif L==7
-	 "Forum"
-#elif L==8
-	 "Forums"		// Potrzebujesz tlumaczenie
-#elif L==9
-	 "F&oacute;runs"
 #endif
 	 ,
 #if   L==1				// Sta_SURVEYS

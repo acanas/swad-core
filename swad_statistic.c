@@ -3889,6 +3889,10 @@ void Sta_ShowUseOfPlatform (void)
          /***** Number of tests *****/
          Sta_GetAndShowTestsStats ();
          break;
+      case Sta_FORUMS:
+         /***** Number of forums, threads and posts *****/
+         Sta_GetAndShowForumStats ();
+         break;
       case Sta_NOTIFY_EVENTS:
          /***** Number of users who want to be notified by e-mail on each event *****/
          Sta_GetAndShowNumUsrsPerNotifyEvent ();
@@ -3900,10 +3904,6 @@ void Sta_ShowUseOfPlatform (void)
       case Sta_MESSAGES:
          /***** Number of sent and received messages *****/
          Sta_GetAndShowMsgsStats ();
-         break;
-      case Sta_FORUMS:
-         /***** Number of forums, threads and posts *****/
-         Sta_GetAndShowForumStats ();
          break;
       case Sta_SURVEYS:
          /***** Number of surveys *****/
