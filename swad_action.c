@@ -1001,7 +1001,7 @@ Users:
         836. ActLstClk			List last clicks in real time
 Social:
         837. ActSeeSocTmlGbl		Show social timeline (global)
-	838. ActReqPubPrf		Request @nickname to show a public user's profile
+        838. ActWhoFol			Suggest list of users to follow
 	839. ActSeeFor			Show the level superior of the forums
 	840. ActSeeChtRms		Show the chat rooms
 
@@ -1018,27 +1018,27 @@ Social:
 	851. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
 	852. ActRemSocComGbl		Remove of a comment in a social note (global)
 
-	853. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
-	854. ActRcvSocComUsr		Comment a social note in the timeline (user)
-	855. ActShaSocNotUsr		Share a social note in the timeline (user)
-	856. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
-	857. ActFavSocNotUsr		Favourite a social note in the timeline (user)
-	858. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
-	859. ActFavSocComUsr		Favourite a social comment in the timeline (user)
-	860. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
-	861. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
-	862. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
-	863. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
-	864. ActRemSocComUsr		Remove of a comment in a social note (user)
+	853. ActReqPubPrf		Request @nickname to show a public user's profile
 
-	865. ActSeePubPrf		Show a public user's profile
+	854. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
+	855. ActRcvSocComUsr		Comment a social note in the timeline (user)
+	856. ActShaSocNotUsr		Share a social note in the timeline (user)
+	857. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
+	858. ActFavSocNotUsr		Favourite a social note in the timeline (user)
+	859. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
+	860. ActFavSocComUsr		Favourite a social comment in the timeline (user)
+	861. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
+	862. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
+	863. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
+	864. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
+	865. ActRemSocComUsr		Remove of a comment in a social note (user)
+
 	866. ActCal1stClkTim		Calculate first click time from log and store into user's figures
 	867. ActCalNumClk		Calculate number of clicks from log and store into user's figures
 	868. ActCalNumFileViews		Calculate number of file views and store into user's figures
 	869. ActCalNumForPst		Calculate number of forum posts and store into user's figures
 	870. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 
-NEW.....871. ActWhoFol			Suggest list of users to follow
 	871. ActFolUsr			Follow another user
 	872. ActUnfUsr			Unfollow another user
 	873. ActSeeFlg			Show following
@@ -2338,7 +2338,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabSoc ******************************************************************
    /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ShowTimelineGbl		,"soc64x64.png"		},
-   /* ActReqPubPrf	*/{1401, 1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,"prf64x64.gif"		},
+   /* ActWhoFol		*/{1520, 1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_SuggestWhoToFollow		,"prf64x64.gif"		},
    /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
@@ -2355,31 +2355,32 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1505,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RequestRemSocialComGbl	,NULL},
    /* ActRemSocComGbl	*/{1507,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RemoveSocialComGbl		,NULL},
 
-   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
-   /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
-   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
-   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
-   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
-   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
-   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
-   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
-   /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
-   /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
+   /* ActReqPubPrf	*/{1401,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
+   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
+   /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
+   /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
+   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
+   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
+   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
+   /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
+   /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActWhoFol		*/{1520,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_SuggestWhoToFollow		,NULL},
-   /* ActFolUsr		*/{1410,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabSoc,ActReqPubPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
-   /* ActSeeFlg		*/{1412,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
-   /* ActSeeFlr		*/{1413,-1,TabSoc,ActReqPubPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
+   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+
+   /* ActFolUsr		*/{1410,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
 
    /* ActSeeForCrsUsr	*/{ 345,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForCrsTch	*/{ 431,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
