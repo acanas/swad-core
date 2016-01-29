@@ -645,31 +645,28 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"FOLLOW_USR_NAME\">");
 
-   /***** Put form to go to public profile *****/
-   if (Visible &&
-       UsrDat->Nickname[0])
+   if (Visible)
      {
+      /***** Put form to go to public profile *****/
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
       Usr_RestrictLengthAndWriteName (UsrDat,10);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
-     }
 
-   /***** Put form to follow / unfollow *****/
-   if (Visible && Gbl.Usrs.Me.Logged)
-     {
-      if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      if (!Gbl.Usrs.Me.Logged ||			// Not logged
+	  Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// It's me
+         /***** Inactive icon to follow / unfollow *****/
 	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIDDEN\">"
 			    "<img src=\"%s/usr64x64.gif\""
 			    " alt=\"\""
 			    " class=\"ICON25x25\" />"
-			    "</div>"
-			    "</a>",
+			    "</div>",
 		  Gbl.Prefs.IconsURL);
       else
 	{
+         /***** Put form to follow / unfollow *****/
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
 	   {
 	    Act_FormStart (ActUnfUsr);

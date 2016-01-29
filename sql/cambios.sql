@@ -11391,4 +11391,128 @@ UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=19;
 UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0x7FE00) | ((NotifNtfEvents & 0xFFC00) >> 1));
 UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xFFE00) | ((EmailNtfEvents & 0xFFC00) >> 1));
 
+---------------
+
+
+OPTIMIZE TABLE IP_prefs;
+OPTIMIZE TABLE actions;
+OPTIMIZE TABLE actions_MFU;
+OPTIMIZE TABLE admin;
+OPTIMIZE TABLE ann_seen;
+
+OPTIMIZE TABLE announcements;
+OPTIMIZE TABLE asg_grp;
+OPTIMIZE TABLE assignments;
+OPTIMIZE TABLE att_events;
+OPTIMIZE TABLE att_grp;
+OPTIMIZE TABLE att_usr;
+
+OPTIMIZE TABLE banners;
+OPTIMIZE TABLE birthdays_today;
+OPTIMIZE TABLE centres;
+OPTIMIZE TABLE chat;
+OPTIMIZE TABLE clicks_without_photo;
+OPTIMIZE TABLE clipboard;
+OPTIMIZE TABLE connected;
+
+OPTIMIZE TABLE countries;
+OPTIMIZE TABLE courses;
+OPTIMIZE TABLE crs_grp;
+OPTIMIZE TABLE crs_grp_types;
+OPTIMIZE TABLE crs_grp_usr;
+OPTIMIZE TABLE crs_info_read;
+OPTIMIZE TABLE crs_info_src;
+OPTIMIZE TABLE crs_info_txt;
+OPTIMIZE TABLE crs_last;
+OPTIMIZE TABLE crs_record_fields;
+OPTIMIZE TABLE crs_records;
+OPTIMIZE TABLE crs_usr;
+OPTIMIZE TABLE crs_usr_requests;
+
+OPTIMIZE TABLE debug;
+OPTIMIZE TABLE deg_types;
+OPTIMIZE TABLE degrees;
+OPTIMIZE TABLE departments;
+OPTIMIZE TABLE exam_announcements;
+OPTIMIZE TABLE expanded_folders;
+
+OPTIMIZE TABLE file_browser_last;
+OPTIMIZE TABLE file_browser_size;
+OPTIMIZE TABLE file_view;
+OPTIMIZE TABLE files;
+
+
+OPTIMIZE TABLE forum_disabled_post;
+OPTIMIZE TABLE forum_post;
+OPTIMIZE TABLE forum_thr_clip;
+OPTIMIZE TABLE forum_thr_read;
+OPTIMIZE TABLE forum_thread;
+
+
+OPTIMIZE TABLE hidden_params;
+OPTIMIZE TABLE holidays;
+OPTIMIZE TABLE imported_groups;
+OPTIMIZE TABLE imported_sessions;
+OPTIMIZE TABLE imported_students;
+OPTIMIZE TABLE institutions;
+OPTIMIZE TABLE links;
+
+OPTIMIZE TABLE mail_domains;
+OPTIMIZE TABLE marks_properties;
+OPTIMIZE TABLE msg_banned;
+
+OPTIMIZE TABLE msg_content;
+OPTIMIZE TABLE msg_content_deleted;
+OPTIMIZE TABLE msg_rcv;
+OPTIMIZE TABLE msg_rcv_deleted;
+OPTIMIZE TABLE msg_snt;
+OPTIMIZE TABLE msg_snt_deleted;
+
+| notices              | 
+| notices_deleted      | 
+| notif                | 
+| pending_emails       | 
+| pending_passwd       | 
+| places               | 
+| plugins              | 
+| sessions             | 
+| social_comments      | 
+| social_comments_fav  | 
+| social_notes         | 
+| social_notes_fav     | 
+| social_posts         | 
+| social_pubs          | 
+| social_timelines     | 
+| sta_degrees          | 
+| sta_notif            | 
+| surveys              | 
+| svy_answers          | 
+| svy_grp              | 
+| svy_questions        | 
+| svy_users            | 
+| timetable_crs        | 
+| timetable_crs_backup | 
+| timetable_tut        | 
+| timetable_tut_backup | 
+| tst_answers          | 
+| tst_config           | 
+| tst_exam_questions   | 
+| tst_exams            | 
+| tst_question_tags    | 
+| tst_questions        | 
+| tst_status           | 
+| tst_tags             | 
+| usr_IDs              | 
+| usr_banned           | 
+| usr_data             | 
+| usr_emails           | 
+| usr_figures          | 
+| usr_follow           | 
+| usr_last             | 
+| usr_nicknames        | 
+| usr_webs             | 
+| ws_keys              | 
++----------------------+
+
+
 
