@@ -6590,7 +6590,8 @@ static void Sta_GetAndShowFollowStats (void)
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    sprintf (Query,"SELECT COUNT(DISTINCT FollowedCod) FROM usr_follow");
+	    sprintf (Query,"SELECT COUNT(DISTINCT %s) FROM usr_follow",
+	             FieldDB[Fol]);
 	    break;
 	 case Sco_SCOPE_CTY:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
