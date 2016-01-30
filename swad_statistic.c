@@ -6550,17 +6550,21 @@ static void Sta_GetAndShowFollowStats (void)
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Followed;
    extern const char *Txt_Followers;
-   char Query[1024];
-   unsigned Fol;
-   unsigned NumUsrsTotal;
-   unsigned NumUsrs;
+   extern const char *Txt_FollowPerFollow[2];
    const char *FieldDB[2] =
      {
       "FollowedCod",
       "FollowerCod"
      };
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned Fol;
+   unsigned NumUsrsTotal;
+   unsigned NumUsrs;
+   float Average;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS]);
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW]);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6654,7 +6658,7 @@ static void Sta_GetAndShowFollowStats (void)
 	}
       NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of following/followers");
 
-      /***** Write number of users who want to be notified by e-mail on each event *****/
+      /***** Write number of followed / followers *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
@@ -6672,6 +6676,119 @@ static void Sta_GetAndShowFollowStats (void)
                NumUsrsTotal ? (float) NumUsrs * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
+     }
+
+   /***** Write number of followed/followers per follower/followed *****/
+   for (Fol = 0;
+	Fol < 2;
+	Fol++)
+     {
+      switch (Gbl.Scope.Current)
+	{
+	 case Sco_SCOPE_SYS:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(%s) AS N"
+			   " FROM usr_follow"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 case Sco_SCOPE_CTY:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     Gbl.CurrentCty.Cty.CtyCod,
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 case Sco_SCOPE_INS:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			   " FROM centres,degrees,courses,crs_usr,usr_follow"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     Gbl.CurrentIns.Ins.InsCod,
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 case Sco_SCOPE_CTR:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			   " FROM degrees,courses,crs_usr,usr_follow"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     Gbl.CurrentCtr.Ctr.CtrCod,
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 case Sco_SCOPE_DEG:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			   " FROM courses,crs_usr,usr_follow"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     Gbl.CurrentDeg.Deg.DegCod,
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 case Sco_SCOPE_CRS:
+	    sprintf (Query,"SELECT AVG(N) FROM "
+			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+			   " FROM crs_usr,usr_follow"
+			   " WHERE crs_usr.CrsCod='%ld'"
+			   " AND crs_usr.UsrCod=usr_follow.%s"
+			   " GROUP BY %s) AS F",
+		     FieldDB[Fol],
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     FieldDB[Fol],
+		     FieldDB[1 - Fol]);
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+	}
+      DB_QuerySELECT (Query,&mysql_res,"can not get number of questions per survey");
+
+      /***** Get number of courses *****/
+      row = mysql_fetch_row (mysql_res);
+      Average = Str_GetFloatNumFromStr (row[0]);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Write number of followed per follower *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%s"
+			 "</td>"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%5.2f"
+			 "</td>"
+			 "<td>"
+			 "</td>"
+			 "</tr>",
+	       Txt_FollowPerFollow[Fol],
+	       Average);
      }
 
    Lay_EndRoundFrameTable ();

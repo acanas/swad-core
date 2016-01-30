@@ -12139,6 +12139,49 @@ const char *Txt_Follow =
 	"Seguir";
 #endif
 
+const char *Txt_FollowPerFollow[2] =
+      {
+#if   L==1
+	"Mitjana de seguits per cada seguidor"
+#elif L==2
+	"Durchschnittliche gefolgt pro anh&auml;nger"
+#elif L==3
+	"Average followed per follower"
+#elif L==4
+	"Promedio de seguidos por cada seguidor"
+#elif L==5
+	"Moyenne de suivis par suiveur"
+#elif L==6
+	"Promedio de seguidos por cada seguidor"	// Okoteve traducción
+#elif L==7
+	"Media di seguiti per seguace"
+#elif L==8
+        "&Sacute;rednia liczba obserwowani za obserwuj&aogon;"
+#elif L==9
+	 "M&eacute;dia por seguidos por seguidor"
+#endif
+      ,
+#if   L==1
+	"Mitjana de seguidors per cada seguit"
+#elif L==2
+	"Durchschnittliche anh&auml;nger pro gefolgt"
+#elif L==3
+	"Average followers per followed"
+#elif L==4
+	"Promedio de seguidores por cada seguido"
+#elif L==5
+	"Moyenne de suiveurs par suivie"
+#elif L==6
+	"Promedio de seguidores por cada seguido"	// Okoteve traducción
+#elif L==7
+	"Media di seguace per seguito"
+#elif L==8
+        "&Sacute;rednia liczba obserwuj&aogon; za obserwowani"
+#elif L==9
+	"M&eacute;dia por seguidores por seguido"
+#endif
+      };
+
 const char *Txt_Followed =
 #if   L==1
 	"Seguits";
@@ -12174,7 +12217,7 @@ const char *Txt_Followers =
 #elif L==6
 	"Seguidores";	// Okoteve traducción
 #elif L==7
-	"Seguendo";
+	"Seguaci";
 #elif L==8
 	"Obserwuj&aogon;";
 #elif L==9
