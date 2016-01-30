@@ -97,7 +97,7 @@ typedef enum
    Sta_CLICKS_GBL_PER_COURSE			= 23,
   } Sta_ClicksGroupedBy_t;
 
-#define Sta_NUM_FIGURES 21
+#define Sta_NUM_FIGURES 22
 typedef enum
   {
    Sta_USERS,			// Number of users
@@ -109,6 +109,7 @@ typedef enum
    Sta_OER,			// Number of OERs (Open Educational Resources)
    Sta_ASSIGNMENTS,		// Number of assignments
    Sta_TESTS,			// Number of test questions
+   Sta_FOLLOW,			// Number of following and followers
    Sta_FORUMS,			// Number of forums, threads and posts
    Sta_NOTIFY_EVENTS,		// Number of users per notify event
    Sta_NOTICES,			// Number of notices

@@ -12139,6 +12139,27 @@ const char *Txt_Follow =
 	"Seguir";
 #endif
 
+const char *Txt_Followed =
+#if   L==1
+	"Seguits";
+#elif L==2
+	"Gefolgt";
+#elif L==3
+	"Followed";
+#elif L==4
+	"Seguidos";
+#elif L==5
+	"Suivis";
+#elif L==6
+	"Seguidos";	// Okoteve traducción
+#elif L==7
+	"Seguiti";
+#elif L==8
+	"Obserwowani";
+#elif L==9
+	"Seguidos";
+#endif
+
 const char *Txt_Followers =
 #if   L==1
 	"Seguidors";
@@ -12153,7 +12174,7 @@ const char *Txt_Followers =
 #elif L==6
 	"Seguidores";	// Okoteve traducción
 #elif L==7
-	"Followers";
+	"Seguendo";
 #elif L==8
 	"Obserwuj&aogon;";
 #elif L==9
@@ -12174,7 +12195,7 @@ const char *Txt_Following =
 #elif L==6
 	"Siguiendo";	// Okoteve traducción
 #elif L==7
-	"Following";
+	"Seguendo";
 #elif L==8
 	"Nast&eogon;puj&aogon;cy";
 #elif L==9
@@ -12195,7 +12216,7 @@ const char *Txt_Following_unfollow =
 #elif L==6
 	"Siguiendo, dejar de seguir";	// Okoteve traducción
 #elif L==7
-	"Following, smetti";
+	"Seguendo, smetti";
 #elif L==8
 	"Nast&eogon;puj&aogon;cy, nie obserwuj";
 #elif L==9
@@ -37605,6 +37626,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Tests"		// Potrzebujesz tlumaczenie
 #elif L==9
 	 "Testes"
+#endif
+	 ,
+#if   L==1				// Sta_FOLLOW
+	"Seguits / Seguidors"
+#elif L==2
+	"Gefolgt / Anh&auml;nger"
+#elif L==3
+	"Followed / Followers"
+#elif L==4
+	"Seguidos / Seguidores"
+#elif L==5
+	"Suivis / Suiveurs"
+#elif L==6
+	"Seguidos / Seguidores"	// Okoteve traducción
+#elif L==7
+	"Seguiti / Seguaci"
+#elif L==8
+	"Obserwowani / Obserwuj&aogon;"
+#elif L==9
+	"Seguidos / Seguidores"
 #endif
 	 ,
 #if   L==1				// Sta_FORUMS

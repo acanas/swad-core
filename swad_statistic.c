@@ -205,6 +205,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
 static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res);
 
+static unsigned Sta_GetTotalNumberOfUsersInPlatform (void);
+
 static void Sta_GetAndShowUsersStats (void);
 static void Sta_GetAndShowUsersRanking (void);
 
@@ -220,9 +222,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 
 static void Sta_GetAndShowAssignmentsStats (void);
 static void Sta_GetAndShowTestsStats (void);
-static void Sta_GetAndShowNumUsrsPerNotifyEvent (void);
-static void Sta_GetAndShowNoticesStats (void);
-static void Sta_GetAndShowMsgsStats (void);
+
+static void Sta_GetAndShowFollowStats (void);
 
 static void Sta_GetAndShowForumStats (void);
 static void Sta_ShowStatOfAForumType (For_ForumType_t ForumType,
@@ -233,6 +234,11 @@ static void Sta_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *Icon,struct Sta_StatsForum *StatsForum,
                                          const char *ForumName1,const char *ForumName2);
 static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum);
+
+static void Sta_GetAndShowNumUsrsPerNotifyEvent (void);
+static void Sta_GetAndShowNoticesStats (void);
+static void Sta_GetAndShowMsgsStats (void);
+
 
 static void Sta_GetAndShowSurveysStats (void);
 static void Sta_GetAndShowNumUsrsPerPrivacy (void);
@@ -3889,6 +3895,10 @@ void Sta_ShowUseOfPlatform (void)
          /***** Number of tests *****/
          Sta_GetAndShowTestsStats ();
          break;
+      case Sta_FOLLOW:
+         /***** Number of following and followers *****/
+         Sta_GetAndShowFollowStats ();
+         break;
       case Sta_FORUMS:
          /***** Number of forums, threads and posts *****/
          Sta_GetAndShowForumStats ();
@@ -5143,7 +5153,20 @@ static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
-/************************* Get total number of users *************************/
+/****************** Get total number of users in platform ********************/
+/*****************************************************************************/
+
+static unsigned Sta_GetTotalNumberOfUsersInPlatform (void)
+  {
+   char Query[128];
+
+   /***** Get number of users from database *****/
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data");
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
+  }
+
+/*****************************************************************************/
+/******************* Get total number of users in courses ********************/
 /*****************************************************************************/
 // Here Rol_ROLE_UNKNOWN means "students or teachers"
 
@@ -6516,30 +6539,26 @@ static void Sta_GetAndShowTestsStats (void)
   }
 
 /*****************************************************************************/
-/****** Get and show number of users who want to be notified by e-mail *******/
+/************** Get and show number of following and followers ***************/
 /*****************************************************************************/
 
-static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
+static void Sta_GetAndShowFollowStats (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
-   extern const char *Txt_Event;
-   extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
+   extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_Number_of_BR_events;
-   extern const char *Txt_Number_of_BR_e_mails;
-   extern const char *Txt_Total;
-   Ntf_NotifyEvent_t NotifyEvent;
+   extern const char *Txt_Followed;
+   extern const char *Txt_Followers;
    char Query[1024];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrsTotalInPlatform;
-   unsigned NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent;
-   unsigned NumUsrs[Ntf_NUM_NOTIFY_EVENTS];
-   unsigned NumEventsTotal = 0;
-   unsigned NumEvents[Ntf_NUM_NOTIFY_EVENTS];
-   unsigned NumMailsTotal = 0;
-   unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
+   unsigned Fol;
+   unsigned NumUsrsTotal;
+   unsigned NumUsrs;
+   const char *FieldDB[2] =
+     {
+      "FollowedCod",
+      "FollowerCod"
+     };
 
    Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS]);
 
@@ -6554,242 +6573,87 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
                       "</tr>",
-            Txt_Event,
+            Txt_Users,
             Txt_No_of_users,
-            Txt_PERCENT_of_users,
-            Txt_Number_of_BR_events,
-            Txt_Number_of_BR_e_mails);
+            Txt_PERCENT_of_users);
 
-   /***** Get total number of users in platform *****/
-   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);	// !!!!!!
+   /***** Get total number of users *****/
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
 
-   /***** Get total number of users who want to be notified by e-mail on some event, from database *****/
-   switch (Gbl.Scope.Current)
+   /***** Get total number of following/followers from database *****/
+   for (Fol = 0;
+	Fol < 2;
+	Fol++)
      {
-      case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-                        " WHERE EmailNtfEvents<>0");
-         break;
-      case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE institutions.CtyCod='%ld'"
-                        " AND institutions.InsCod=centres.InsCod"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-                  Gbl.CurrentCty.Cty.CtyCod);
-         break;
-      case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE centres.InsCod='%ld'"
-                        " AND centres.CtrCod=degrees.CtrCod"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-                  Gbl.CurrentIns.Ins.InsCod);
-         break;
-      case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM degrees,courses,crs_usr,usr_data"
-                        " WHERE degrees.CtrCod='%ld'"
-                        " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
-         break;
-      case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM courses,crs_usr,usr_data"
-                        " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-                  Gbl.CurrentDeg.Deg.DegCod);
-         break;
-      case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-                        " FROM crs_usr,usr_data"
-                        " WHERE crs_usr.CrsCod='%ld'"
-                        " AND crs_usr.UsrCod=usr_data.UsrCod"
-                        " AND usr_data.EmailNtfEvents<>0",
-                  Gbl.CurrentCrs.Crs.CrsCod);
-         break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
-     }
-   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of users who want to be notified by e-mail on some event");
-
-   /***** For each notify event... *****/
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
-	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
-     {
-      /***** Get the number of users who want to be notified by e-mail on this event, from database *****/
       switch (Gbl.Scope.Current)
-        {
-         case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-        	           " WHERE ((EmailNtfEvents & %u)<>0)",
-                     (1 << NotifyEvent));
-            break;
+	{
+	 case Sco_SCOPE_SYS:
+	    sprintf (Query,"SELECT COUNT(DISTINCT FollowedCod) FROM usr_follow");
+	    break;
 	 case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-                     Gbl.CurrentCty.Cty.CtyCod,(1 << NotifyEvent));
-            break;
+	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
+			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s",
+	             FieldDB[Fol],
+		     Gbl.CurrentCty.Cty.CtyCod,
+		     FieldDB[Fol]);
+	    break;
 	 case Sco_SCOPE_INS:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-                     Gbl.CurrentIns.Ins.InsCod,(1 << NotifyEvent));
-            break;
-         case Sco_SCOPE_CTR:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-                     Gbl.CurrentCtr.Ctr.CtrCod,(1 << NotifyEvent));
-            break;
-         case Sco_SCOPE_DEG:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-                     Gbl.CurrentDeg.Deg.DegCod,(1 << NotifyEvent));
-            break;
-         case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
-        	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
-                     Gbl.CurrentCrs.Crs.CrsCod,(1 << NotifyEvent));
-            break;
+	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
+			   " FROM centres,degrees,courses,crs_usr,usr_follow"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s",
+	             FieldDB[Fol],
+		     Gbl.CurrentIns.Ins.InsCod,
+		     FieldDB[Fol]);
+	    break;
+	 case Sco_SCOPE_CTR:
+	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
+			   " FROM degrees,courses,crs_usr,usr_follow"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s",
+	             FieldDB[Fol],
+		     Gbl.CurrentCtr.Ctr.CtrCod,
+		     FieldDB[Fol]);
+	    break;
+	 case Sco_SCOPE_DEG:
+	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
+			   " FROM courses,crs_usr,usr_follow"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=usr_follow.%s",
+	             FieldDB[Fol],
+		     Gbl.CurrentDeg.Deg.DegCod,
+		     FieldDB[Fol]);
+	    break;
+	 case Sco_SCOPE_CRS:
+	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
+			   " FROM crs_usr,usr_follow"
+			   " WHERE crs_usr.CrsCod='%ld'"
+			   " AND crs_usr.UsrCod=usr_follow.%s",
+	             FieldDB[Fol],
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     FieldDB[Fol]);
+	    break;
 	 default:
 	    Lay_ShowErrorAndExit ("Wrong scope.");
 	    break;
-        }
-      NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who want to be notified by e-mail on an event");
+	}
+      NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of following/followers");
 
-      /***** Get number of notifications by e-mail from database *****/
-      switch (Gbl.Scope.Current)
-        {
-         case Sco_SCOPE_SYS:
-            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE NotifyEvent='%u'",
-                     (unsigned) NotifyEvent);
-            break;
-	 case Sco_SCOPE_CTY:
-            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM institutions,centres,degrees,sta_notif"
-                           " WHERE institutions.CtyCod='%ld'"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
-                     Gbl.CurrentCty.Cty.CtyCod,(unsigned) NotifyEvent);
-            break;
-	 case Sco_SCOPE_INS:
-            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM centres,degrees,sta_notif"
-                           " WHERE centres.InsCod='%ld'"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
-                     Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
-            break;
-         case Sco_SCOPE_CTR:
-            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
-                           " FROM degrees,sta_notif"
-                           " WHERE degrees.CtrCod='%ld'"
-                           " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
-                     Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
-            break;
-         case Sco_SCOPE_DEG:
-            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE DegCod='%ld'"
-                           " AND NotifyEvent='%u'",
-                     Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
-            break;
-         case Sco_SCOPE_CRS:
-            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
-                           " FROM sta_notif"
-                           " WHERE CrsCod='%ld'"
-                           " AND NotifyEvent='%u'",
-                     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
-            break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
-	    break;
-        }
-      DB_QuerySELECT (Query,&mysql_res,"can not get the number of notifications by e-mail");
-
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of events notified */
-      if (row[0])
-        {
-         if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of notifications by e-mail.");
-        }
-      else
-         NumEvents[NotifyEvent] = 0;
-
-      /* Get number of mails sent */
-      if (row[1])
-        {
-         if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of e-mails to notify events3.");
-        }
-      else
-         NumMails[NotifyEvent] = 0;
-
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-
-      /* Update total number of events and mails */
-      NumEventsTotal += NumEvents[NotifyEvent];
-      NumMailsTotal += NumMails[NotifyEvent];
-     }
-
-   /***** Write number of users who want to be notified by e-mail on each event *****/
-   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
-	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+      /***** Write number of users who want to be notified by e-mail on each event *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
@@ -6800,237 +6664,15 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
                          "</tr>",
-               Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
-               NumUsrs[NotifyEvent],
-               NumUsrsTotalInPlatform ? (float) NumUsrs[NotifyEvent] * 100.0 /
-        	                        (float) NumUsrsTotalInPlatform :
-        	                        0.0,
-               NumEvents[NotifyEvent],
-               NumMails[NotifyEvent]);
-
-   /***** Write total number of users who want to be notified by e-mail on some event *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%5.2f%%"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-            Txt_Total,
-            NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
-            NumUsrsTotalInPlatform ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
-        	                     (float) NumUsrsTotalInPlatform :
-        	                     0.0,
-            NumEventsTotal,
-            NumMailsTotal);
-
-   Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/***************************** Show stats of notices *************************/
-/*****************************************************************************/
-
-static void Sta_GetAndShowNoticesStats (void)
-  {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
-   extern const char *Txt_NOTICE_Active_BR_notices;
-   extern const char *Txt_NOTICE_Obsolete_BR_notices;
-   extern const char *Txt_NOTICE_Deleted_BR_notices;
-   extern const char *Txt_Total;
-   extern const char *Txt_Number_of_BR_notifications;
-   Not_Status_t NoticeStatus;
-   unsigned NumNotices[Not_NUM_STATUS];
-   unsigned NumNoticesDeleted;
-   unsigned NumTotalNotices = 0;
-   unsigned NumNotif;
-   unsigned NumTotalNotifications = 0;
-
-   /***** Get the number of notices active and obsolete
-          from this location (all the platform, current degree or current course) *****/
-   for (NoticeStatus = (Not_Status_t) 0;
-	NoticeStatus < Not_NUM_STATUS;
-	NoticeStatus++)
-     {
-      NumNotices[NoticeStatus] = Not_GetNumNotices (Gbl.Scope.Current,NoticeStatus,&NumNotif);
-      NumTotalNotices += NumNotices[NoticeStatus];
-      NumTotalNotifications += NumNotif;
+               Fol == 0 ? Txt_Followed :
+        	          Txt_Followers,
+               NumUsrs,
+               NumUsrsTotal ? (float) NumUsrs * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0.0);
      }
-   NumNoticesDeleted = Not_GetNumNoticesDeleted (Gbl.Scope.Current,&NumNotif);
-   NumTotalNotices += NumNoticesDeleted;
-   NumTotalNotifications += NumNotif;
 
-   /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES]);
-
-   /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_NOTICE_Active_BR_notices,
-            Txt_NOTICE_Obsolete_BR_notices,
-            Txt_NOTICE_Deleted_BR_notices,
-            Txt_Total,
-            Txt_Number_of_BR_notifications);
-
-   /***** Write number of notices *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-            NumNotices[Not_ACTIVE_NOTICE],
-            NumNotices[Not_OBSOLETE_NOTICE],
-            NumNoticesDeleted,
-            NumTotalNotices,
-            NumTotalNotifications);
-
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/*************************** Show stats of messages **************************/
-/*****************************************************************************/
-
-static void Sta_GetAndShowMsgsStats (void)
-  {
-   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
-   extern const char *Txt_Messages;
-   extern const char *Txt_MSGS_Not_deleted;
-   extern const char *Txt_MSGS_Deleted;
-   extern const char *Txt_Total;
-   extern const char *Txt_Number_of_BR_notifications;
-   extern const char *Txt_MSGS_Sent;
-   extern const char *Txt_MSGS_Received;
-   unsigned NumMsgsSentNotDeleted,NumMsgsSentDeleted;
-   unsigned NumMsgsReceivedNotDeleted,NumMsgsReceivedAndDeleted;
-   unsigned NumMsgsReceivedAndNotified;
-
-   /***** Get the number of unique messages sent from this location (all the platform, current degree or current course) *****/
-   NumMsgsSentNotDeleted      = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsSentDeleted         = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_DELETED );
-
-   NumMsgsReceivedNotDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsReceivedAndDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_DELETED );
-   NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
-
-   /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES]);
-
-   /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Messages,
-            Txt_MSGS_Not_deleted,
-            Txt_MSGS_Deleted,
-            Txt_Total,
-            Txt_Number_of_BR_notifications);
-
-   /***** Write number of messages *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "-"
-                      "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "</tr>",
-            Txt_MSGS_Sent,
-            NumMsgsSentNotDeleted,
-            NumMsgsSentDeleted,
-            NumMsgsSentNotDeleted + NumMsgsSentDeleted,
-            Txt_MSGS_Received,
-            NumMsgsReceivedNotDeleted,
-            NumMsgsReceivedAndDeleted,
-            NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted,
-            NumMsgsReceivedAndNotified);
-
-   /***** End table *****/
    Lay_EndRoundFrameTable ();
   }
 
@@ -7386,6 +7028,526 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
   }
 
 /*****************************************************************************/
+/****** Get and show number of users who want to be notified by e-mail *******/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Event;
+   extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Number_of_BR_events;
+   extern const char *Txt_Number_of_BR_e_mails;
+   extern const char *Txt_Total;
+   Ntf_NotifyEvent_t NotifyEvent;
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrsTotal;
+   unsigned NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent;
+   unsigned NumUsrs[Ntf_NUM_NOTIFY_EVENTS];
+   unsigned NumEventsTotal = 0;
+   unsigned NumEvents[Ntf_NUM_NOTIFY_EVENTS];
+   unsigned NumMailsTotal = 0;
+   unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
+
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS]);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Event,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users,
+            Txt_Number_of_BR_events,
+            Txt_Number_of_BR_e_mails);
+
+   /***** Get total number of users *****/
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+
+   /***** Get total number of users who want to be notified by e-mail on some event, from database *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+         sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+                        " WHERE EmailNtfEvents<>0");
+         break;
+      case Sco_SCOPE_CTY:
+         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+                        " WHERE institutions.CtyCod='%ld'"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod"
+                        " AND usr_data.EmailNtfEvents<>0",
+                  Gbl.CurrentCty.Cty.CtyCod);
+         break;
+      case Sco_SCOPE_INS:
+         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                        " FROM centres,degrees,courses,crs_usr,usr_data"
+                        " WHERE centres.InsCod='%ld'"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod"
+                        " AND usr_data.EmailNtfEvents<>0",
+                  Gbl.CurrentIns.Ins.InsCod);
+         break;
+      case Sco_SCOPE_CTR:
+         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                        " FROM degrees,courses,crs_usr,usr_data"
+                        " WHERE degrees.CtrCod='%ld'"
+                        " AND degrees.DegCod=courses.DegCod"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod"
+                        " AND usr_data.EmailNtfEvents<>0",
+                  Gbl.CurrentCtr.Ctr.CtrCod);
+         break;
+      case Sco_SCOPE_DEG:
+         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                        " FROM courses,crs_usr,usr_data"
+                        " WHERE courses.DegCod='%ld'"
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod"
+                        " AND usr_data.EmailNtfEvents<>0",
+                  Gbl.CurrentDeg.Deg.DegCod);
+         break;
+      case Sco_SCOPE_CRS:
+         sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+                        " FROM crs_usr,usr_data"
+                        " WHERE crs_usr.CrsCod='%ld'"
+                        " AND crs_usr.UsrCod=usr_data.UsrCod"
+                        " AND usr_data.EmailNtfEvents<>0",
+                  Gbl.CurrentCrs.Crs.CrsCod);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of users who want to be notified by e-mail on some event");
+
+   /***** For each notify event... *****/
+   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+     {
+      /***** Get the number of users who want to be notified by e-mail on this event, from database *****/
+      switch (Gbl.Scope.Current)
+        {
+         case Sco_SCOPE_SYS:
+            sprintf (Query,"SELECT COUNT(*) FROM usr_data"
+        	           " WHERE ((EmailNtfEvents & %u)<>0)",
+                     (1 << NotifyEvent));
+            break;
+	 case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+                     Gbl.CurrentCty.Cty.CtyCod,(1 << NotifyEvent));
+            break;
+	 case Sco_SCOPE_INS:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM centres,degrees,courses,crs_usr,usr_data"
+                           " WHERE centres.InsCod='%ld'"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+                     Gbl.CurrentIns.Ins.InsCod,(1 << NotifyEvent));
+            break;
+         case Sco_SCOPE_CTR:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM degrees,courses,crs_usr,usr_data"
+                           " WHERE degrees.CtrCod='%ld'"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+                     Gbl.CurrentCtr.Ctr.CtrCod,(1 << NotifyEvent));
+            break;
+         case Sco_SCOPE_DEG:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM courses,crs_usr,usr_data"
+                           " WHERE courses.DegCod='%ld'"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+                     Gbl.CurrentDeg.Deg.DegCod,(1 << NotifyEvent));
+            break;
+         case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
+        	           " FROM crs_usr,usr_data"
+                           " WHERE crs_usr.CrsCod='%ld'"
+                           " AND crs_usr.UsrCod=usr_data.UsrCod"
+                           " AND ((usr_data.EmailNtfEvents & %u)<>0)",
+                     Gbl.CurrentCrs.Crs.CrsCod,(1 << NotifyEvent));
+            break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+        }
+      NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who want to be notified by e-mail on an event");
+
+      /***** Get number of notifications by e-mail from database *****/
+      switch (Gbl.Scope.Current)
+        {
+         case Sco_SCOPE_SYS:
+            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
+                           " FROM sta_notif"
+                           " WHERE NotifyEvent='%u'",
+                     (unsigned) NotifyEvent);
+            break;
+	 case Sco_SCOPE_CTY:
+            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                           " FROM institutions,centres,degrees,sta_notif"
+                           " WHERE institutions.CtyCod='%ld'"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=sta_notif.DegCod"
+                           " AND sta_notif.NotifyEvent='%u'",
+                     Gbl.CurrentCty.Cty.CtyCod,(unsigned) NotifyEvent);
+            break;
+	 case Sco_SCOPE_INS:
+            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                           " FROM centres,degrees,sta_notif"
+                           " WHERE centres.InsCod='%ld'"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=sta_notif.DegCod"
+                           " AND sta_notif.NotifyEvent='%u'",
+                     Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
+            break;
+         case Sco_SCOPE_CTR:
+            sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
+                           " FROM degrees,sta_notif"
+                           " WHERE degrees.CtrCod='%ld'"
+                           " AND degrees.DegCod=sta_notif.DegCod"
+                           " AND sta_notif.NotifyEvent='%u'",
+                     Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
+            break;
+         case Sco_SCOPE_DEG:
+            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
+                           " FROM sta_notif"
+                           " WHERE DegCod='%ld'"
+                           " AND NotifyEvent='%u'",
+                     Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
+            break;
+         case Sco_SCOPE_CRS:
+            sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
+                           " FROM sta_notif"
+                           " WHERE CrsCod='%ld'"
+                           " AND NotifyEvent='%u'",
+                     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
+            break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+        }
+      DB_QuerySELECT (Query,&mysql_res,"can not get the number of notifications by e-mail");
+
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get number of events notified */
+      if (row[0])
+        {
+         if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
+            Lay_ShowErrorAndExit ("Error when getting the number of notifications by e-mail.");
+        }
+      else
+         NumEvents[NotifyEvent] = 0;
+
+      /* Get number of mails sent */
+      if (row[1])
+        {
+         if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
+            Lay_ShowErrorAndExit ("Error when getting the number of e-mails to notify events3.");
+        }
+      else
+         NumMails[NotifyEvent] = 0;
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /* Update total number of events and mails */
+      NumEventsTotal += NumEvents[NotifyEvent];
+      NumMailsTotal += NumMails[NotifyEvent];
+     }
+
+   /***** Write number of users who want to be notified by e-mail on each event *****/
+   for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
+	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
+	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "</tr>",
+               Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
+               NumUsrs[NotifyEvent],
+               NumUsrsTotal ? (float) NumUsrs[NotifyEvent] * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0.0,
+               NumEvents[NotifyEvent],
+               NumMails[NotifyEvent]);
+
+   /***** Write total number of users who want to be notified by e-mail on some event *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%5.2f%%"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "</tr>",
+            Txt_Total,
+            NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
+            NumUsrsTotal ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+        	           (float) NumUsrsTotal :
+        	           0.0,
+            NumEventsTotal,
+            NumMailsTotal);
+
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/***************************** Show stats of notices *************************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNoticesStats (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_NOTICE_Active_BR_notices;
+   extern const char *Txt_NOTICE_Obsolete_BR_notices;
+   extern const char *Txt_NOTICE_Deleted_BR_notices;
+   extern const char *Txt_Total;
+   extern const char *Txt_Number_of_BR_notifications;
+   Not_Status_t NoticeStatus;
+   unsigned NumNotices[Not_NUM_STATUS];
+   unsigned NumNoticesDeleted;
+   unsigned NumTotalNotices = 0;
+   unsigned NumNotif;
+   unsigned NumTotalNotifications = 0;
+
+   /***** Get the number of notices active and obsolete
+          from this location (all the platform, current degree or current course) *****/
+   for (NoticeStatus = (Not_Status_t) 0;
+	NoticeStatus < Not_NUM_STATUS;
+	NoticeStatus++)
+     {
+      NumNotices[NoticeStatus] = Not_GetNumNotices (Gbl.Scope.Current,NoticeStatus,&NumNotif);
+      NumTotalNotices += NumNotices[NoticeStatus];
+      NumTotalNotifications += NumNotif;
+     }
+   NumNoticesDeleted = Not_GetNumNoticesDeleted (Gbl.Scope.Current,&NumNotif);
+   NumTotalNotices += NumNoticesDeleted;
+   NumTotalNotifications += NumNotif;
+
+   /***** Table start *****/
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES]);
+
+   /***** Write table heading *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_NOTICE_Active_BR_notices,
+            Txt_NOTICE_Obsolete_BR_notices,
+            Txt_NOTICE_Deleted_BR_notices,
+            Txt_Total,
+            Txt_Number_of_BR_notifications);
+
+   /***** Write number of notices *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "</tr>",
+            NumNotices[Not_ACTIVE_NOTICE],
+            NumNotices[Not_OBSOLETE_NOTICE],
+            NumNoticesDeleted,
+            NumTotalNotices,
+            NumTotalNotifications);
+
+   /***** End table *****/
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/*************************** Show stats of messages **************************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowMsgsStats (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Messages;
+   extern const char *Txt_MSGS_Not_deleted;
+   extern const char *Txt_MSGS_Deleted;
+   extern const char *Txt_Total;
+   extern const char *Txt_Number_of_BR_notifications;
+   extern const char *Txt_MSGS_Sent;
+   extern const char *Txt_MSGS_Received;
+   unsigned NumMsgsSentNotDeleted,NumMsgsSentDeleted;
+   unsigned NumMsgsReceivedNotDeleted,NumMsgsReceivedAndDeleted;
+   unsigned NumMsgsReceivedAndNotified;
+
+   /***** Get the number of unique messages sent from this location (all the platform, current degree or current course) *****/
+   NumMsgsSentNotDeleted      = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsSentDeleted         = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_DELETED );
+
+   NumMsgsReceivedNotDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsReceivedAndDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_DELETED );
+   NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
+
+   /***** Table start *****/
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES]);
+
+   /***** Write table heading *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Messages,
+            Txt_MSGS_Not_deleted,
+            Txt_MSGS_Deleted,
+            Txt_Total,
+            Txt_Number_of_BR_notifications);
+
+   /***** Write number of messages *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "-"
+                      "</td>"
+                      "</tr>"
+                      "<tr>"
+                      "<td class=\"DAT LEFT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "</tr>",
+            Txt_MSGS_Sent,
+            NumMsgsSentNotDeleted,
+            NumMsgsSentDeleted,
+            NumMsgsSentNotDeleted + NumMsgsSentDeleted,
+            Txt_MSGS_Received,
+            NumMsgsReceivedNotDeleted,
+            NumMsgsReceivedAndDeleted,
+            NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted,
+            NumMsgsReceivedAndNotified);
+
+   /***** End table *****/
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
 /***************************** Show stats of surveys *************************/
 /*****************************************************************************/
 
@@ -7487,7 +7649,6 @@ static void Sta_GetAndShowNumUsrsPerPrivacy (void)
 
    Lay_EndRoundFrameTable ();
   }
-
 
 /*****************************************************************************/
 /********** Get and show number of users who have chosen a privacy ***********/

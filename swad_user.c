@@ -3619,9 +3619,9 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
    char Query[128];
 
    /***** Get the number of users in a country from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+   sprintf (Query,"SELECT COUNT(UsrCod)"
 	          " FROM usr_data"
-                  " WHERE usr_data.CtyCod='%ld'",
+                  " WHERE CtyCod='%ld'",
             CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a country");
   }
@@ -3635,9 +3635,9 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
    char Query[128];
 
    /***** Get the number of users in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+   sprintf (Query,"SELECT COUNT(UsrCod)"
 	          " FROM usr_data"
-                  " WHERE usr_data.InsCod='%ld'",
+                  " WHERE InsCod='%ld'",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in an institution");
   }
@@ -3651,9 +3651,9 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
    char Query[128];
 
    /***** Get the number of users in a centre from database *****/
-   sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+   sprintf (Query,"SELECT COUNT(UsrCod)"
 	          " FROM usr_data"
-                  " WHERE usr_data.CtrCod='%ld'",
+                  " WHERE CtrCod='%ld'",
             CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a centre");
   }
