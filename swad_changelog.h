@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.136 (2016-01-30)"
-#define CSS_FILE		"swad15.134.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.136.1 (2016-02-02)"
+#define CSS_FILE		"swad15.136.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.136.1: Feb 02, 2016	Change in layout of tabs and menus. (195689 lines)
         Version 15.136:   Jan 30, 2016	Average number of followed/followers per follower/followed. (195674 lines)
         Version 15.135.1: Jan 30, 2016	Fixed bug in figure with number of following and followers. (195518 lines)
         Version 15.135:   Jan 30, 2016	New figure with number of following and followers. (195516 lines)

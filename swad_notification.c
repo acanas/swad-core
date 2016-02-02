@@ -234,11 +234,11 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "share64x64.png",			// Ntf_EVENT_TIMELINE_SHARE
    "arroba64x64.gif",			// Ntf_EVENT_TIMELINE_MENTION
    "follow64x64.png",			// Ntf_EVENT_FOLLOWER
-   "forum16x16.gif",			// Ntf_EVENT_FORUM_POST_COURSE
-   "forum16x16.gif",			// Ntf_EVENT_FORUM_REPLY
+   "forum64x64.gif",			// Ntf_EVENT_FORUM_POST_COURSE
+   "forum64x64.gif",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "note16x16.gif",			// Ntf_EVENT_NOTICE
+   "note64x64.gif",			// Ntf_EVENT_NOTICE
    "msg64x64.gif",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
