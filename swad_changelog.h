@@ -121,13 +121,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.136.3 (2016-02-04)"
-#define CSS_FILE		"swad15.136.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.136.5 (2016-02-04)"
+#define CSS_FILE		"swad15.136.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.136.5: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195702 lines)
+        Version 15.136.4: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195687 lines)
         Version 15.136.3: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195686 lines)
         Version 15.136.2: Feb 04, 2016	Change in layout of most frequent actions. (195689 lines)
         Version 15.136.1: Feb 02, 2016	Change in layout of tabs and menus. (195689 lines)

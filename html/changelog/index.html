@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>Changelog</h1>
 		<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2015
+		<a href="http://www.ugr.es/~acanas/">Antonio Ca&ntilde;as Vargas</a>, 1999-2016
 	</td>
 	</tr>
 
@@ -58,13 +58,1394 @@
 
 	<tr>
 	<td align="center">
-		Last update: December 24, 2015
+		Last update: February 2, 2016
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.136.1: Feb 02, 2016</dt>
+							<dd>
+							Change in layout of tabs and menus. (195689 lines)
+							</dd>
+		<dt>Version 15.136:   Jan 30, 2016</dt>
+							<dd>
+							Average number of followed/followers per follower/followed. (195674 lines)
+							</dd>
+		<dt>Version 15.135.1: Jan 30, 2016</dt>
+							<dd>
+							Fixed bug in figure with number of following and followers. (195518 lines)
+							</dd>
+		<dt>Version 15.135:   Jan 30, 2016</dt>
+							<dd>
+							New figure with number of following and followers. (195516 lines)
+							</dd>
+		<dt>Version 15.134.2: Jan 29, 2016</dt>
+							<dd>
+							New order of figures. (195327 lines)
+							</dd>
+		<dt>Version 15.134.1: Jan 29, 2016</dt>
+							<dd>
+							Changes in lists of following/followers. (195326 lines)
+							</dd>
+		<dt>Version 15.134:   Jan 29, 2016</dt>
+							<dd>
+							Change in menu of social tab. (195328 lines)
+							</dd>
+		<dt>Version 15.133.8: Jan 29, 2016</dt>
+							<dd>
+							Link to request a user's profile. (195328 lines)
+							</dd>
+		<dt>Version 15.133.7: Jan 28, 2016</dt>
+							<dd>
+							Changes in layout of followed/followers. (195288 lines)
+							</dd>
+		<dt>Version 15.133.6: Jan 28, 2016</dt>
+							<dd>
+							Changes in layout of "Who to follow". (195287 lines)
+							</dd>
+		<dt>Version 15.133.5: Jan 28, 2016</dt>
+							<dd>
+							Unlogged users can not view "Who to follow". (195276 lines)
+							</dd>
+		<dt>Version 15.133.4: Jan 28, 2016</dt>
+							<dd>
+							Fixed bug in notifications about timeline events. Reported by Juan Miguel Boyero Corral. (195272 lines)
+							</dd>
+		<dt>Version 15.133.3: Jan 28, 2016</dt>
+							<dd>
+							Changes in query to get users to follow. (195256 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1520','es','N','A qui&eacute;n seguir');
+							</code></small>
+							</dd>
+		<dt>Version 15.133.2: Jan 28, 2016</dt>
+							<dd>
+							Changes in query to get users to follow. (195241 lines)
+							</dd>
+		<dt>Version 15.133.1: Jan 27, 2016</dt>
+							<dd>
+							Change in link to show users to follow. (195238 lines)
+							</dd>
+		<dt>Version 15.133:   Jan 27, 2016</dt>
+							<dd>
+							List users to follow. (195236 lines)
+							</dd>
+		<dt>Version 15.132.1: Jan 27, 2016</dt>
+							<dd>
+							Build query to get users to follow. (195158 lines)
+							</dd>
+		<dt>Version 15.132:   Jan 27, 2016</dt>
+							<dd>
+							Put link to show users to follow. (195116 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+CREATE INDEX PhotoVisibility ON usr_data (PhotoVisibility);<br />
+CREATE INDEX ProfileVisibility ON usr_data (ProfileVisibility);
+							</code></small>
+							</dd>
+		<dt>Version 15.131.4: Jan 27, 2016</dt>
+							<dd>
+							Fixed bug in ranking of followed. (195030 lines)
+							</dd>
+		<dt>Version 15.131.3: Jan 27, 2016</dt>
+							<dd>
+							Animated link to view old timeline. (195015 lines)
+							</dd>
+		<dt>Version 15.131.2: Jan 26, 2016</dt>
+							<dd>
+							Change in default color of links. (194998 lines)
+							</dd>
+		<dt>Version 15.131.1: Jan 26, 2016</dt>
+							<dd>
+							Optimization in the function that insert links in text. (194993 lines)
+							</dd>
+		<dt>Version 15.131:   Jan 26, 2016</dt>
+							<dd>
+							Link around @nickname is inserted as form. (195011 lines)
+							</dd>
+		<dt>Version 15.130.2: Jan 26, 2016</dt>
+							<dd>
+							Optimization in the function that insert links in text. (194928 lines)
+							</dd>
+		<dt>Version 15.130.1: Jan 26, 2016</dt>
+							<dd>
+							Fixed bug when mentioning a user who does not exist. (194914 lines)
+							</dd>
+		<dt>Version 15.130:   Jan 26, 2016</dt>
+							<dd>
+							Do not notify new social notes. (194913 lines)<br />
+							22 changes necessary in database:<br />
+							<small><code>
+UPDATE notif SET NotifyEvent= 9 WHERE NotifyEvent=10;<br />
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=11;<br />
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=12;<br />
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=13;<br />
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=14;<br />
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=15;<br />
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=16;<br />
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=17;<br />
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=18;<br />
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=19;<br />
+UPDATE sta_notif SET NotifyEvent= 9 WHERE NotifyEvent=10;<br />
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=11;<br />
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=12;<br />
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=13;<br />
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=14;<br />
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=15;<br />
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=16;<br />
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=17;<br />
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=18;<br />
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=19;<br />
+UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0x7FE00) | ((NotifNtfEvents & 0xFFC00) >> 1));<br />
+UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xFFE00) | ((EmailNtfEvents & 0xFFC00) >> 1));
+							</code></small>
+							</dd>
+		<dt>Version 15.129.3: Jan 25, 2016</dt>
+							<dd>
+							Changed text in some messages. (194964 lines)
+							</dd>
+		<dt>Version 15.129.2: Jan 25, 2016</dt>
+							<dd>
+							Mark timeline notifications as seen when new social activity is shown. (194967 lines)
+							</dd>
+		<dt>Version 15.129.1: Jan 25, 2016</dt>
+							<dd>
+							Do not show top message in social timeline for original publishings. (194979 lines)
+							</dd>
+		<dt>Version 15.129:   Jan 25, 2016</dt>
+							<dd>
+							Do not notify new social sharings or comments. (194979 lines)
+							</dd>
+		<dt>Version 15.128.5: Jan 25, 2016</dt>
+							<dd>
+							Fixed bug and code optimization when sharing a social note. (194958 lines)
+							</dd>
+		<dt>Version 15.128.4: Jan 25, 2016</dt>
+							<dd>
+							Fixed bug when removing a social note. (194961 lines)
+							</dd>
+		<dt>Version 15.128.3: Jan 25, 2016</dt>
+							<dd>
+							Optimization in top message of social note. (194969 lines)
+							</dd>
+		<dt>Version 15.128.2: Jan 25, 2016</dt>
+							<dd>
+							Optimization in top message of social note. (194960 lines)
+							</dd>
+		<dt>Version 15.128.1: Jan 25, 2016</dt>
+							<dd>
+							Optimization in top message of social note. (194965 lines)
+							</dd>
+		<dt>Version 15.128:   Jan 25, 2016</dt>
+							<dd>
+							View highlighted social note when clicking in timeline notification. (194980 lines)
+							</dd>
+		<dt>Version 15.127.3: Jan 25, 2016</dt>
+							<dd>
+							Changed ComCod to PubCod in social_comments and social_comments_fav. (194841 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE social_comments_fav CHANGE COLUMN ComCod PubCod BIGINT NOT NULL;<br />
+ALTER TABLE social_comments CHANGE COLUMN ComCod PubCod BIGINT NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 15.127.2: Jan 25, 2016</dt>
+							<dd>
+							Mark timeline notifications as removed when a social note/comment is unfaved. (194838 lines)
+							</dd>
+		<dt>Version 15.127.1: Jan 25, 2016</dt>
+							<dd>
+							Mark timeline notifications as removed when a social note is unshared. (194831 lines)
+							</dd>
+		<dt>Version 15.127:   Jan 25, 2016</dt>
+							<dd>
+							New function to count the number of @nicknames in a text and store it in social publishing. (194825 lines)
+							</dd>
+		<dt>Version 15.126.1: Jan 24, 2016</dt>
+							<dd>
+							Optimization in code to insert links. (194736 lines)
+							</dd>
+		<dt>Version 15.126:   Jan 24, 2016</dt>
+							<dd>
+							In any text where URL is replaced by anchor, now @nickname is also replaced to link to user's profile. (194727 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+UPDATE social_posts SET Content=REPLACE(Content,'&amp;#64;','@');<br />
+UPDATE social_comments SET Content=REPLACE(Content,'&amp;#64;','@');
+							</code></small>
+							</dd>
+		<dt>Version 15.125.3: Jan 24, 2016</dt>
+							<dd>
+							Fixed bug when unsharing a social note. (194610 lines)
+							</dd>
+		<dt>Version 15.125.2: Jan 24, 2016</dt>
+							<dd>
+							Mark notifications as removed after removing a comment to a social note. (194609 lines)
+							</dd>
+		<dt>Version 15.125.1: Jan 24, 2016</dt>
+							<dd>
+							Mark notifications as removed after removing a social note. (194603 lines)
+							</dd>
+		<dt>Version 15.125:   Jan 24, 2016</dt>
+							<dd>
+							Code refactoring in social timeline. (194563 lines)
+							</dd>
+		<dt>Version 15.124.3: Jan 24, 2016</dt>
+							<dd>
+							Mark timeline notifications as seen after viewing social timeline. (194554 lines)
+							</dd>
+		<dt>Version 15.124.2: Jan 23, 2016</dt>
+							<dd>
+							Changed numeration of notifications in database. (194546 lines)<br />
+							14 changes necessary in database:<br />
+							<small><code>
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=9;<br />
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=10;<br />
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=11;<br />
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=12;<br />
+UPDATE notif SET NotifyEvent=19 WHERE NotifyEvent=13;<br />
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=9;<br />
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=10;<br />
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=11;<br />
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=12;<br />
+UPDATE sta_notif SET NotifyEvent=19 WHERE NotifyEvent=13;<br />
+UPDATE usr_data SET NotifNtfEvents = ((NotifNtfEvents & ~0xF8000) | ((NotifNtfEvents & 0x0200) << 8) | ((NotifNtfEvents & 0x0C00) << 5) | ((NotifNtfEvents & 0x3000) << 6));<br />
+UPDATE usr_data SET EmailNtfEvents = ((EmailNtfEvents & ~0xF8000) | ((EmailNtfEvents & 0x0200) << 8) | ((EmailNtfEvents & 0x0C00) << 5) | ((EmailNtfEvents & 0x3000) << 6));<br />
+UPDATE usr_data SET NotifNtfEvents = (NotifNtfEvents |  0x3E00);<br />
+UPDATE usr_data SET EmailNtfEvents = (EmailNtfEvents & ~0x3E00);
+							</code></small>
+							</dd>
+		<dt>Version 15.124.1: Jan 23, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194530 lines)
+							</dd>
+		<dt>Version 15.124:   Jan 23, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194466 lines)
+							</dd>
+		<dt>Version 15.123.7: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194347 lines)
+							</dd>
+		<dt>Version 15.123.6: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194342 lines)
+							</dd>
+		<dt>Version 15.123.5: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194328 lines)
+							</dd>
+		<dt>Version 15.123.4: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194281 lines)
+							</dd>
+		<dt>Version 15.123.3: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194280 lines)
+							</dd>
+		<dt>Version 15.123.2: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194279 lines)
+							</dd>
+		<dt>Version 15.123.1: Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194277 lines)
+							</dd>
+		<dt>Version 15.123:   Jan 22, 2016</dt>
+							<dd>
+							New social notifications. Not finished. (194277 lines)
+							</dd>
+		<dt>Version 15.122.1: Jan 20, 2016</dt>
+							<dd>
+							Changes in table of actions. (194018 lines)<br />
+							8 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1512','es','N','Marcar post social como favorito (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1513','es','N','Desmarcar post social como favorito (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1514','es','N','Marcar post social como favorito (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1515','es','N','Desmarcar post social como favorito (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1516','es','N','Marcar comentario social como favorito (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1517','es','N','Desmarcar comentario social como favorito (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1518','es','N','Marcar comentario social como favorito (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1519','es','N','Desmarcar comentario social como favorito (usuario)');
+							</code></small>
+							</dd>
+		<dt>Version 15.122:   Jan 20, 2016</dt>
+							<dd>
+							Notifications of new followers go to follower's profile.<br />
+							Changes in notifications. (194008 lines)
+							</dd>
+		<dt> Version 15.121.9: Jan 20, 2016</dt>
+							<dd>
+							Code optimization in social comments. (193952 lines)
+							</dd>
+		<dt>Version 15.121.8: Jan 20, 2016</dt>
+							<dd>
+							Fixed bugs removing favs to social comments. (193960 lines)
+							</dd>
+		<dt>Version 15.121.7: Jan 20, 2016</dt>
+							<dd>
+							Changes in layout of social timeline. (193955 lines)
+							</dd>
+		<dt>Version 15.121.6: Jan 20, 2016</dt>
+							<dd>
+							Remove favs when a social comment is removed.<br />
+							Remove favs when a user is removed. (193953 lines)
+							</dd>
+		<dt>Version 15.121.5: Jan 20, 2016</dt>
+							<dd>
+							New layout of form to write a new social comment. (193922 lines)
+							</dd>
+		<dt>Version 15.121.4: Jan 20, 2016</dt>
+							<dd>
+							Fixed bug related to favs in social comments. (193904 lines)
+							</dd>
+		<dt>Version 15.121.3: Jan 20, 2016</dt>
+							<dd>
+							Favs in social comments. Not finished.<br />
+							Changes in layout of social timeline. (193901 lines)
+							</dd>
+		<dt>Version 15.121.2: Jan 19, 2016</dt>
+							<dd>
+							Favs in social comments. Not finished. (193868 lines)
+							</dd>
+		<dt>Version 15.121.1: Jan 19, 2016</dt>
+							<dd>
+							Favs in social comments. Not finished. (193868 lines)
+							</dd>
+		<dt>Version 15.121:   Jan 19, 2016</dt>
+							<dd>
+							Favs in social comments. Not finished. (193782 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_comments_fav (FavCod BIGINT AUTO_INCREMENT,ComCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(FavCod),UNIQUE INDEX(ComCod,UsrCod),INDEX(UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 15.120.5: Jan 19, 2016</dt>
+							<dd>
+							Remove favs when a social note is removed.<br />
+							Remove favs when a user is removed. (193544 lines)
+							</dd>
+		<dt>Version 15.120.4: Jan 19, 2016</dt>
+							<dd>
+							Changes in database table social_notes_fav. (193527 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE social_notes_fav;<br />
+CREATE TABLE IF NOT EXISTS social_notes_fav (FavCod BIGINT AUTO_INCREMENT,NotCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(FavCod),UNIQUE INDEX(NotCod,UsrCod),INDEX(UsrCod));
+							</code></small>
+							</dd>
+		<dt>Version 15.120.3: Jan 19, 2016</dt>
+							<dd>
+							Minor changes in layout of timeline. (193517 lines)
+							</dd>
+		<dt>Version 15.120.2: Jan 19, 2016</dt>
+							<dd>
+							Code optimization on sharers or favers. (193491 lines)
+							</dd>
+		<dt>Version 15.120.1: Jan 19, 2016</dt>
+							<dd>
+							Show number of users who marked a social note as favourite. (193533 lines)
+							</dd>
+		<dt>Version 15.120:   Jan 19, 2016</dt>
+							<dd>
+							Mark/unmark social notes as favourites. (193475 lines)
+							</dd>
+		<dt>Version 15.119:   Jan 18, 2016</dt>
+							<dd>
+							New table to mark social notes as favourites. (193036 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_notes_fav (NotCod BIGINT NOT NULL,UsrCod INT NOT NULL,TimeFav DATETIME NOT NULL,UNIQUE INDEX(NotCod,UsrCod),INDEX(UsrCod),INDEX(TimeFav));
+							</code></small>
+							</dd>
+		<dt>Version 15.118.4: Jan 18, 2016</dt>
+							<dd>
+							Date-time without seconds in user's public profile. (192984 lines)
+							</dd>
+		<dt>Version 15.118.3: Jan 18, 2016</dt>
+							<dd>
+							Fixed bug in date-time of files in file-browsers. (192975 lines)
+							</dd>
+		<dt>Version 15.118.2: Jan 18, 2016</dt>
+							<dd>
+							Fixed bug in social_timelines table. (192973 lines)<br />
+							<small><code>
+ALTER TABLE sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;<br />
+ALTER TABLE tst_status CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;<br />
+ALTER TABLE hidden_params CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;<br />
+ALTER TABLE imported_groups CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;<br />
+ALTER TABLE imported_sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1_spanish_ci NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 15.118.1: Jan 18, 2016</dt>
+							<dd>
+							Fixed bugs in social timeline. (192966 lines)
+							</dd>
+		<dt>Version 15.118:   Jan 18, 2016</dt>
+							<dd>
+							Change in privacy options (new value "unknown"). (192967 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_data CHANGE COLUMN PhotoVisibility PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';<br />
+ALTER TABLE usr_data CHANGE COLUMN ProfileVisibility ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';<br />
+UPDATE usr_data SET ProfileVisibility='unknown' WHERE ProfileVisibility IN ('user','course');
+							</code></small>
+							</dd>
+		<dt>Version 15.117.1: Jan 18, 2016</dt>
+							<dd>
+							Summary of changes in database made from version 15.74.7 to 15.117.1. (? lines)<br />
+Edit file swad_copy.sh changing swad.js to swad*.js<br />
+							29 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;<br />
+CREATE TABLE IF NOT EXISTS social_notes (NotCod BIGINT NOT NULL AUTO_INCREMENT,NoteType TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,HieCod INT NOT NULL DEFAULT -1,Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',TimeNote DATETIME NOT NULL,UNIQUE INDEX(NotCod),UNIQUE INDEX(NoteType,Cod),INDEX(UsrCod),INDEX(TimeNote));<br />
+CREATE TABLE IF NOT EXISTS social_posts (PstCod INT NOT NULL AUTO_INCREMENT,Content LONGTEXT NOT NULL,UNIQUE INDEX(PstCod),FULLTEXT(Content)) ENGINE = MYISAM;<br />
+CREATE TABLE IF NOT EXISTS social_pubs (PubCod BIGINT NOT NULL AUTO_INCREMENT,NotCod BIGINT NOT NULL,PublisherCod INT NOT NULL,PubType TINYINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(PubCod),INDEX(NotCod,PublisherCod,PubType),INDEX(PublisherCod),INDEX(PubType),INDEX(TimePublish));<br />
+CREATE TABLE IF NOT EXISTS social_timelines (SessionId CHAR(43) NOT NULL,NotCod BIGINT NOT NULL,UNIQUE INDEX(SessionId,NotCod));<br />
+ALTER TABLE sessions ADD COLUMN LastPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;<br />
+ALTER TABLE sessions ADD COLUMN FirstPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1490','es','N','Ver actividad social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1491','es','Y','Redactar public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1492','es','N','Crear public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1493','es','N','Eliminar public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1494','es','N','Solicitar elim. public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1495','es','N','Compartir public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1496','es','N','Dejar de compartir public. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1497','es','Y','Redactar public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1498','es','N','Crear public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1499','es','N','Compartir public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1500','es','N','Dejar de compartir public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1501','es','N','Solicitar elim. public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1502','es','N','Eliminar public. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1503','es','N','Crear comentario social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1504','es','N','Crear comentario social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1505','es','N','Solicitar elim. coment. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1506','es','N','Solicitar elim. coment. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1507','es','N','Eliminar coment. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1508','es','N','Eliminar coment. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1509','es','N','Refrescar timeline global (nuevos mensajes)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1510','es','N','Cargar mensajes anteriores en timeline global');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1511','es','N','Cargar mensajes anteriores en timeline usuario');
+							</code></small>
+							</dd>
+		<dt>Version 15.117:   Jan 17, 2016</dt>
+							<dd>
+							Change in styles of messages, forums, surveys and tests. (192872 lines)
+							</dd>
+		<dt>Version 15.116.1: Jan 17, 2016</dt>
+							<dd>
+							Help when writing social posts or comments. (192877 lines)
+							</dd>
+		<dt>Version 15.116:   Jan 17, 2016</dt>
+							<dd>
+							Optimization in the query to get timeline. (192878 lines)
+							</dd>
+		<dt>Version 15.115.2: Jan 17, 2016</dt>
+							<dd>
+							Code refactoring in timeline. (192860 lines)
+							</dd>
+		<dt>Version 15.115.1: Jan 17, 2016</dt>
+							<dd>
+							Code refactoring in timeline. (192857 lines)
+							</dd>
+		<dt>Version 15.115:   Jan 17, 2016</dt>
+							<dd>
+							Code refactoring in actions. (192823 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1509','es','N','Refrescar timeline global (nuevos mensajes)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1510','es','N','Cargar mensajes anteriores en timeline global');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1511','es','N','Cargar mensajes anteriores en timeline usuario');
+							</code></small>
+							</dd>
+		<dt>Version 15.114.5: Jan 17, 2016</dt>
+							<dd>
+							Distinct default visibility for photo and profile. (192827 lines)
+							</dd>
+		<dt>Version 15.114.4: Jan 17, 2016</dt>
+							<dd>
+							Change related to button to remove a social post. (192821 lines)
+							</dd>
+		<dt>Version 15.114.3: Jan 17, 2016</dt>
+							<dd>
+							Fixed bug when getting timeline. (192820 lines)
+							</dd>
+		<dt>Version 15.114.2: Jan 17, 2016</dt>
+							<dd>
+							Fixed bug when getting timeline. (192811 lines)
+							</dd>
+		<dt>Version 15.114.1: Jan 17, 2016</dt>
+							<dd>
+							Optimized queries to get timeline. (192790 lines)
+							</dd>
+		<dt>Version 15.114:   Jan 17, 2016</dt>
+							<dd>
+							Optimized queries to get timeline. (192817 lines)
+							</dd>
+		<dt>Version 15.113.17:Jan 16, 2016</dt>
+							<dd>
+							Fixed bug in user's timeline. (192763 lines)
+							</dd>
+		<dt>Version 15.113.16:Jan 16, 2016</dt>
+							<dd>
+							Removed unused code and messages. (192743 lines)
+							</dd>
+		<dt>Version 15.113.15:Jan 16, 2016</dt>
+							<dd>
+							Changes in feedback on request to remove a social note. (192871 lines)
+							</dd>
+		<dt>Version 15.113.14:Jan 16, 2016</dt>
+							<dd>
+							Changes in feedback when a social comment is published. (192850 lines)
+							</dd>
+		<dt>Version 15.113.13:Jan 16, 2016</dt>
+							<dd>
+							Changes in feedback when a social note is unshared. (192846 lines)
+							</dd>
+		<dt>Version 15.113.12:Jan 15, 2016</dt>
+							<dd>
+							When a new social post is commented, shared or unshared, fade its background. (192807 lines)
+							</dd>
+		<dt>Version 15.113.11:Jan 15, 2016</dt>
+							<dd>
+							When a new social post is received, fade its background. (192803 lines)
+							</dd>
+		<dt>Version 15.113.10:Jan 15, 2016</dt>
+							<dd>
+							When a social note is not available, the button to comment is disabled.<br />
+							Fixed bug receiving a comment to a social note. (192781 lines)
+							</dd>
+		<dt>Version 15.113.9: Jan 15, 2016</dt>
+							<dd>
+							&quot;...&quot; changed by HTML entity &quot;&amp;hellip;&quot;. (192775 lines)
+							</dd>
+		<dt>Version 15.113.8: Jan 15, 2016</dt>
+							<dd>
+							Changes in textareas to enter new social posts or comments. (192751 lines)
+							</dd>
+		<dt>Version 15.113.7: Jan 15, 2016</dt>
+							<dd>
+							New social publishings fade in when user click to view them.<br />
+							New style for textarea where enter a new social post. (192715 lines)
+							</dd>
+		<dt>Version 15.113.6: Jan 14, 2016</dt>
+							<dd>
+							Sinchronize timeline in other actions. (192684 lines)
+							</dd>
+		<dt>Version 15.113.5: Jan 14, 2016</dt>
+							<dd>
+							Change in message.<br />
+							Removed unused code in JavaScript. (192684 lines)
+							</dd>
+		<dt>Version 15.113.4: Jan 14, 2016</dt>
+							<dd>
+							Optimize JavaScript not concatenating big strings in new timeline. (192687 lines)
+							</dd>
+		<dt>Version 15.113.3: Jan 14, 2016</dt>
+							<dd>
+							Divs to get new publishings only in global timeline. (192673 lines)
+							</dd>
+		<dt>Version 15.113.2: Jan 14, 2016</dt>
+							<dd>
+							Removed unused code. (192668 lines)
+							</dd>
+		<dt>Version 15.113.1: Jan 14, 2016</dt>
+							<dd>
+							Remove unused function. (192675 lines)
+							</dd>
+		<dt>Version 15.113:   Jan 14, 2016</dt>
+							<dd>
+							Code refactoring related to forms with unique identifiers.<br />
+							Use unique identifiers in forms of lists of connected users. (192680 lines)
+							</dd>
+		<dt>Version 15.112:   Jan 14, 2016</dt>
+							<dd>
+							Fixed bugs in user's timeline.<br />
+							All forms in social timeline must have unique identifiers. (192676 lines)
+							</dd>
+		<dt>Version 15.111:   Jan 14, 2016</dt>
+							<dd>
+							Fixed bug in user's timeline.<br />
+							Code refactoring related with social timeline. (192622 lines)
+							</dd>
+		<dt>Version 15.110.18:Jan 13, 2016</dt>
+							<dd>
+							Optimization in query to get initial recent timeline. (192564 lines)
+							</dd>
+		<dt>Version 15.110.17:Jan 13, 2016</dt>
+							<dd>
+							Reviewed code related to Soc_MAX_RECENT_PUBS_TO_GET. (192568 lines)
+							</dd>
+		<dt>Version 15.110.16:Jan 13, 2016</dt>
+							<dd>
+							Form to go to public profile of author of comment in timeline. (192563 lines)
+							</dd>
+		<dt>Version 15.110.15:Jan 13, 2016</dt>
+							<dd>
+							Form to go to public profile of author of note in timeline.<br />
+							Extensions '.exe' and '.com' not allowed (Google reported malware). (192543 lines)
+							</dd>
+		<dt>Version 15.110.14:Jan 13, 2016</dt>
+							<dd>
+							Form to go to public profile of sharer/commenter in timeline. (192525 lines)
+							</dd>
+		<dt>Version 15.110.13:Jan 13, 2016</dt>
+							<dd>
+							Time in social timeline without seconds. (192495 lines)
+							</dd>
+		<dt>Version 15.110.12:Jan 13, 2016</dt>
+							<dd>
+							Display name of sharer/commenter in timeline. (192456 lines)
+							</dd>
+		<dt>Version 15.110.11:Jan 13, 2016</dt>
+							<dd>
+							Fixed bug in social timeline. (192403 lines)
+							</dd>
+		<dt>Version 15.110.10:Jan 13, 2016</dt>
+							<dd>
+							New temporary tables used to optimize querying timeline. (192398 lines)
+							</dd>
+		<dt>Version 15.110.9: Jan 12, 2016</dt>
+							<dd>
+							Do not get social notes already present in timeline. (192388 lines)
+							</dd>
+		<dt>Version 15.110.8: Jan 12, 2016</dt>
+							<dd>
+							Insert social notes in current social timeline in database.<br />
+							Show old social notes only if they are not already shown in timeline. (192354 lines)
+							</dd>
+		<dt>Version 15.110.7: Jan 12, 2016</dt>
+							<dd>
+							Remove unused old social timelines in database. (192320 lines)
+							</dd>
+		<dt>Version 15.110.6: Jan 12, 2016</dt>
+							<dd>
+							Social timeline for this session in database is cleared when timeline is reloaded. (192303 lines)
+							</dd>
+		<dt>Version 15.110.5: Jan 12, 2016</dt>
+							<dd>
+							New database table used to store social notes already present in every timeline. (192288 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_timelines (SessionId CHAR(43) NOT NULL,NotCod BIGINT NOT NULL,UNIQUE INDEX(SessionId,NotCod));
+							</code></small>
+							</dd>
+		<dt>Version 15.110.4: Jan 12, 2016</dt>
+							<dd>
+							Database table with social comments renamed. (192263 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP TABLE social_comments;<br />
+RENAME TABLE social_comments_content TO social_comments;
+							</code></small>
+							</dd>
+		<dt>Version 15.110.3: Jan 12, 2016</dt>
+							<dd>
+							Database table with social publishings renamed. (192259 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+RENAME TABLE social_timeline TO social_pubs;
+							</code></small>
+							</dd>
+		<dt>Version 15.110.2: Jan 12, 2016</dt>
+							<dd>
+							Changes in social timeline. (192256 lines)
+							</dd>
+		<dt>Version 15.110.1: Jan 12, 2016</dt>
+							<dd>
+							Removed database table for social comments and unused code. (192237 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+DROP TABLE social_comments;
+							</code></small>
+							</dd>
+		<dt>Version 15.110:   Jan 12, 2016</dt>
+							<dd>
+							Comments are included in database table for timeline. (192352 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP INDEX NotCod ON social_timeline;<br />
+CREATE INDEX NotCod ON social_timeline (NotCod,PublisherCod,PubType);
+							</code></small>
+							</dd>
+		<dt>Version 15.109.1: Jan 11, 2016</dt>
+							<dd>
+							New field with the type of publishing in the database table for timeline. (192264 lines)<br />
+							5 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE social_timeline ADD COLUMN PubType TINYINT NOT NULL AFTER PublisherCod,ADD INDEX (PubType);<br />
+CREATE TABLE IF NOT EXISTS social_notes_new (NotCod BIGINT NOT NULL AUTO_INCREMENT,NoteType TINYINT NOT NULL,Cod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,HieCod INT NOT NULL DEFAULT -1,Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',TimeNote DATETIME NOT NULL,UNIQUE INDEX(NotCod),UNIQUE INDEX(NoteType,Cod),INDEX(UsrCod),INDEX(TimeNote));<br />
+INSERT INTO social_notes_new (NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote) SELECT NotCod,NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote FROM social_notes;<br />
+DROP TABLE social_notes;<br />
+RENAME TABLE social_notes_new TO social_notes;
+							</code></small>
+							</dd>
+		<dt>Version 15.109:   Jan 11, 2016</dt>
+							<dd>
+							Fixed bug when comenting an unshared social note.<br />
+							Refatored lot of code in timeline. (192221 lines)
+							</dd>
+		<dt>Version 15.108:   Jan 11, 2016</dt>
+							<dd>
+							Field with the author of a social note is removed from table with timeline, because it can be obtained from table with social notes. (192289 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE social_timeline DROP COLUMN AuthorCod;
+							</code></small>
+							</dd>
+		<dt>Version 15.107.7: Jan 11, 2016</dt>
+							<dd>
+							Show error message when trying to share a removed social note. (192284 lines)
+							</dd>
+		<dt>Version 15.107.6: Jan 11, 2016</dt>
+							<dd>
+							Show error message when trying to send a comment in a removed social note. (192276 lines)
+							</dd>
+		<dt>Version 15.107.5: Jan 11, 2016</dt>
+							<dd>
+							Check if a user can comment a social note. (192225 lines)
+							</dd>
+		<dt>Version 15.107.4: Jan 11, 2016</dt>
+							<dd>
+							Show separated social note at top when a new comment is added.<br />
+							Message of success when publishing a social note or comment. (192199 lines)
+							</dd>
+		<dt>Version 15.107.3: Jan 11, 2016</dt>
+							<dd>
+							Fixed bug and code refactoring in social comments. (192160 lines)
+							</dd>
+		<dt>Version 15.107.2: Jan 11, 2016</dt>
+							<dd>
+							Hide link to see old publishings when oldest publishing is reached.<br />
+							Some constants related to social timeline changed. (192159 lines)
+							</dd>
+		<dt>Version 15.107.1: Jan 10, 2016</dt>
+							<dd>
+							Id of dates in timeline must be unique.<br />
+							Changes in JavaScript to render dates and mathenatics. (192137 lines)
+							</dd>
+		<dt>Version 15.107:   Jan 10, 2016</dt>
+							<dd>
+							Get older publishings from social timeline. (192112 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE sessions ADD COLUMN FirstPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+							</code></small>
+							</dd>
+		<dt>Version 15.106:   Jan 10, 2016</dt>
+							<dd>
+							Link at the bottom of social timeline to get older publishings. (192028 lines)
+							</dd>
+		<dt>Version 15.105.1: Jan 10, 2016</dt>
+							<dd>
+							Change in style writing recent social publishings. (191909 lines)
+							</dd>
+		<dt>Version 15.105:   Jan 10, 2016</dt>
+							<dd>
+							Get only publishings newest than a give publishing. (191912 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE sessions ADD COLUMN LastPubCod BIGINT NOT NULL DEFAULT 0 AFTER LastRefresh;
+							</code></small>
+							</dd>
+		<dt>Version 15.104.4: Jan 09, 2016</dt>
+							<dd>
+							Last social publishing code is sent and got via AJAX. (191831 lines)
+							</dd>
+		<dt>Version 15.104.3: Jan 09, 2016</dt>
+							<dd>
+							Changes in layout of social timeline. (191784 lines)
+							</dd>
+		<dt>Version 15.104.2: Jan 09, 2016</dt>
+							<dd>
+							Refresh recent social timeline via AJAX. (191769 lines)
+							</dd>
+		<dt>Version 15.104.1: Jan 09, 2016</dt>
+							<dd>
+							Refresh recent social timeline via AJAX. (191727 lines)
+							</dd>
+		<dt>Version 15.104:   Jan 09, 2016</dt>
+							<dd>
+							Refresh recent social timeline via AJAX. Not finished. (191720 lines)
+							</dd>
+		<dt>Version 15.103.2: Jan 09, 2016</dt>
+							<dd>
+							Check that social post or comments are not empty. (191652 lines)
+							</dd>
+		<dt>Version 15.103.1: Jan 08, 2016</dt>
+							<dd>
+							Changes in timeline. (191646 lines)
+							</dd>
+		<dt>Version 15.103:   Jan 08, 2016</dt>
+							<dd>
+							Changes in the form to enter a new publishing. (191625 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1491','1497');
+							</code></small>
+							</dd>
+		<dt>Version 15.102.4: Jan 08, 2016</dt>
+							<dd>
+							Text in icon to comment a social note. (191644 lines)
+							</dd>
+		<dt>Version 15.102.3: Jan 08, 2016</dt>
+							<dd>
+							The social notes of the user are shown in her/his global timeline even if he/she does not follow any user. (191603 lines)
+							</dd>
+		<dt>Version 15.102.2: Jan 08, 2016</dt>
+							<dd>
+							When a user is eliminated, all her/his social publshing are removed. (191606 lines)
+							</dd>
+		<dt>Version 15.102.1: Jan 08, 2016</dt>
+							<dd>
+							Changes in layout of social timeline. (191557 lines)
+							</dd>
+		<dt>Version 15.102:   Jan 08, 2016</dt>
+							<dd>
+							Remove a comment in social timeline. (191534 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1505','es','N','Solicitar elim. coment. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1506','es','N','Solicitar elim. coment. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1507','es','N','Eliminar coment. social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1508','es','N','Eliminar coment. social (usuario)');
+							</code></small>
+							</dd>
+		<dt>Version 15.101.3: Jan 07, 2016</dt>
+							<dd>
+							Changes in CSS related to social timeline. (191229 lines)
+							</dd>
+		<dt>Version 15.101.2: Jan 07, 2016</dt>
+							<dd>
+							Show social comments in social notes. (191229 lines)
+							</dd>
+		<dt>Version 15.101.1: Jan 07, 2016</dt>
+							<dd>
+							Show social comments in social notes. Not finished. (191181 lines)
+							</dd>
+		<dt>Version 15.101:   Jan 07, 2016</dt>
+							<dd>
+							Store social comment in database. (191091 lines)<br />
+							16 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_comments (ComCod BIGINT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,NotCod INT NOT NULL,TimeComment DATETIME NOT NULL,UNIQUE INDEX(ComCod),INDEX(UsrCod),INDEX(NotCod,TimeComment),INDEX(TimeComment));<br />
+CREATE TABLE IF NOT EXISTS social_comments_content (ComCod BIGINT NOT NULL,Content LONGTEXT NOT NULL,UNIQUE INDEX(ComCod),FULLTEXT(Content)) ENGINE = MYISAM;<br />
+UPDATE actions SET Txt='Redactar public. social (global)'            WHERE ActCod='1491' AND Language='es';<br />
+UPDATE actions SET Txt='Crear public. social (global)'               WHERE ActCod='1492' AND Language='es';<br />
+UPDATE actions SET Txt='Eliminar public. social (global)'            WHERE ActCod='1493' AND Language='es';<br />
+UPDATE actions SET Txt='Solicitar elim. public. social (global)'     WHERE ActCod='1494' AND Language='es';<br />
+UPDATE actions SET Txt='Compartir public. social (global)'           WHERE ActCod='1495' AND Language='es';<br />
+UPDATE actions SET Txt='Dejar de compartir public. social (global)'  WHERE ActCod='1496' AND Language='es';<br />
+UPDATE actions SET Txt='Redactar public. social (usuario)'           WHERE ActCod='1497' AND Language='es';<br />
+UPDATE actions SET Txt='Crear public. social (usuario)'              WHERE ActCod='1498' AND Language='es';<br />
+UPDATE actions SET Txt='Compartir public. social (usuario)'          WHERE ActCod='1499' AND Language='es';<br />
+UPDATE actions SET Txt='Dejar de compartir public. social (usuario)' WHERE ActCod='1500' AND Language='es';<br />
+UPDATE actions SET Txt='Solicitar elim. public. social (usuario)'    WHERE ActCod='1501' AND Language='es';<br />
+UPDATE actions SET Txt='Eliminar public. social (usuario)'           WHERE ActCod='1502' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1503','es','N','Crear comentario social (global)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1504','es','N','Crear comentario social (usuario)');
+							</code></small>
+							</dd>
+		<dt>Version 15.100.4: Jan 07, 2016</dt>
+							<dd>
+							Fixed bug when sharing a social note.<br />
+							Receive social comment. (191012 lines)
+							</dd>
+		<dt>Version 15.100.3: Jan 07, 2016</dt>
+							<dd>
+							Fixed bug when sharing and unsharing a social note. (190999 lines)
+							</dd>
+		<dt>Version 15.100.2: Jan 07, 2016</dt>
+							<dd>
+							Hidden form to reply a social note. (190983 lines)
+							</dd>
+		<dt>Version 15.100.1: Jan 07, 2016</dt>
+							<dd>
+							New icon in social note to reply. (190937 lines)
+							</dd>
+		<dt>Version 15.100:   Jan 06, 2016</dt>
+							<dd>
+							When an author removes a social note, all the publishings of this note are removed. (190842 lines)
+							</dd>
+		<dt>Version 15.99.1:  Jan 05, 2016</dt>
+							<dd>
+							Change in message in social timeline. (190917 lines)
+							</dd>
+		<dt>Version 15.99:    Jan 05, 2016</dt>
+							<dd>
+							Changes in social timeline. (190892 lines)
+							</dd>
+		<dt>Version 15.98:    Jan 05, 2016</dt>
+							<dd>
+							If a social note is unavailable and is shared, put button to unshare.<br />
+							Several bugs in social timeline fixed. (190789 lines)
+							</dd>
+		<dt>Version 15.97.5:  Jan 04, 2016</dt>
+							<dd>
+							Button to remove a social note is not shown if author already removed the note (but it yet exists because another user shared it). (190763 lines)
+							</dd>
+		<dt>Version 15.97.4:  Jan 04, 2016</dt>
+							<dd>
+							Guests can see and write in global forums. (190758 lines)
+							</dd>
+		<dt>Version 15.97.3:  Jan 04, 2016</dt>
+							<dd>
+							Link to user's privacy in my public profile. (190755 lines)
+							</dd>
+		<dt>Version 15.97.2:  Jan 04, 2016</dt>
+							<dd>
+							New option in user's privacy. (190743 lines)
+							</dd>
+		<dt>Version 15.97.1:  Jan 04, 2016</dt>
+							<dd>
+							User's timeline below user's profile visible only by logged users. (190719 lines)
+							</dd>
+		<dt>Version 15.97:    Jan 04, 2016</dt>
+							<dd>
+							Show list of some users who has shared a social note. (190718 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_timeline_new (PubCod BIGINT NOT NULL AUTO_INCREMENT, NotCod BIGINT NOT NULL, PublisherCod INT NOT NULL, AuthorCod INT NOT NULL, TimePublish DATETIME NOT NULL, UNIQUE INDEX(PubCod), UNIQUE INDEX(NotCod,PublisherCod), INDEX(PublisherCod), INDEX(AuthorCod), INDEX(TimePublish)) SELECT PubCod,NotCod,PublisherCod,AuthorCod,TimePublish FROM social_timeline ORDER BY PubCod;<br />
+DROP TABLE social_timeline;<br />
+RENAME TABLE social_timeline_new TO social_timeline;
+							</code></small>
+							</dd>
+		<dt>Version 15.96.1:  Jan 04, 2016</dt>
+							<dd>
+							Changes in title of user's timeline. (190641 lines)
+							</dd>
+		<dt>Version 15.96:    Jan 04, 2016</dt>
+							<dd>
+							Display number of times a social note is shared. (190616 lines)
+							</dd>
+		<dt>Version 15.95.2:  Jan 04, 2016</dt>
+							<dd>
+							Unavailable social notes can not be shared. (190556 lines)
+							</dd>
+		<dt>Version 15.95.1:  Jan 04, 2016</dt>
+							<dd>
+							Optimization in writing social note. (190555 lines)
+							</dd>
+		<dt>Version 15.95:    Jan 04, 2016</dt>
+							<dd>
+							Fixed bug in social timeline: social notes can be shared, not social publishings. (190583 lines)
+							</dd>
+		<dt>Version 15.94.1:  Jan 04, 2016</dt>
+							<dd>
+							Changes when writing an unavailable social note. (190557 lines)
+							</dd>
+		<dt>Version 15.94:    Jan 04, 2016</dt>
+							<dd>
+							Social notes are marked as unavailable when a folder and its children are removed. (190551 lines)
+							</dd>
+		<dt>Version 15.93.8:  Jan 04, 2016</dt>
+							<dd>
+							Social note is marked as unavailable when a public file is removed. (190486 lines)
+							</dd>
+		<dt>Version 15.93.7:  Jan 03, 2016</dt>
+							<dd>
+							Social note is marked as unavailable when a public forum post is removed. (190419 lines)
+							</dd>
+		<dt>Version 15.93.6:  Jan 03, 2016</dt>
+							<dd>
+							Social note is marked as unavailable when a exam announcement is removed. (190409 lines)
+							</dd>
+		<dt>Version 15.93.5:  Jan 03, 2016</dt>
+							<dd>
+							Social note is marked as unavailable when a notice is removed. (190406 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+CREATE UNIQUE INDEX NotCod ON social_notes (NotCod);<br />
+DROP INDEX SocCod ON social_notes;<br />
+DROP INDEX TimeEvent ON social_notes;<br />
+CREATE INDEX TimeNote ON social_notes (TimeNote);<br />
+DROP INDEX SocialEvent ON social_notes;<br />
+CREATE UNIQUE INDEX NoteTypeCod ON social_notes (NoteType,Cod);
+							</code></small>
+							</dd>
+		<dt>Version 15.93.4:  Jan 03, 2016</dt>
+							<dd>
+							Changes in links to actions in social timeline.<br />
+							New field Unavailable in table of social notes. (190354 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE social_notes ADD COLUMN Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Cod;
+							</code></small>
+							</dd>
+		<dt>Version 15.93.3:  Jan 03, 2016</dt>
+							<dd>
+							Code refactoring in file browser related with file metadata. (190345 lines)
+							</dd>
+		<dt>Version 15.93.2:  Jan 03, 2016</dt>
+							<dd>
+							To show a file in social timeline, file code is passed as parameter instead of path. (190360 lines)
+							</dd>
+		<dt>Version 15.93.1:  Jan 03, 2016</dt>
+							<dd>
+							Show text indicating document not available in social note. (190358 lines)
+							</dd>
+		<dt>Version 15.93:    Jan 03, 2016</dt>
+							<dd>
+							Fixing bugs in file metadata of files in institution, centre and degree zones. (190335 lines)
+							</dd>
+		<dt>Version 15.92:    Jan 02, 2016</dt>
+							<dd>
+							Fixing bugs in file metadata of files in institution, centre and degree zones. Not finished. (190365 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE social_notes DROP COLUMN DegCod;
+							</code></small>
+							</dd>
+		<dt>Version 15.91.4:  Jan 02, 2016</dt>
+							<dd>
+							Fixed minor bugs in social timeline. (190184 lines)
+							</dd>
+		<dt>Version 15.91.3:  Jan 02, 2016</dt>
+							<dd>
+							Just before to remove a social note, display at top the note to remove. (190183 lines)
+							</dd>
+		<dt>Version 15.91.2:  Jan 02, 2016</dt>
+							<dd>
+							After unsharing a social note, display at top the note just unshared. (190175 lines)
+							</dd>
+		<dt>Version 15.91.1:  Jan 02, 2016</dt>
+							<dd>
+							After sharing a social note, display at top the note just shared. (190168 lines)
+							</dd>
+		<dt>Version 15.91:    Jan 02, 2016</dt>
+							<dd>
+							Every social note can be shared.<br />
+                                       			Fixed bug when unsharing a social note. (190161 lines)
+							</dd>
+		<dt>Version 15.90:    Jan 02, 2016</dt>
+							<dd>
+							Change in fields of database table that stores social notes. (190122 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE social_notes ADD COLUMN HieCod INT NOT NULL DEFAULT -1 AFTER UsrCod;<br />
+UPDATE social_notes SET HieCod=InsCod WHERE NoteType IN ('1','2');<br />
+UPDATE social_notes SET HieCod=CtrCod WHERE NoteType IN ('3','4');<br />
+UPDATE social_notes SET HieCod=DegCod WHERE NoteType IN ('5','6');<br />
+UPDATE social_notes SET HieCod=CrsCod WHERE NoteType IN ('7','8','9','12');<br />
+ALTER TABLE social_notes DROP COLUMN CtyCod,DROP COLUMN InsCod,DROP COLUMN CtrCod,DROP COLUMN CrsCod;
+							</code></small>
+							</dd>
+		<dt>Version 15.89.2:  Jan 02, 2016</dt>
+							<dd>
+							Change in layout of user profile. (190141 lines)
+							</dd>
+		<dt>Version 15.89.1:  Jan 02, 2016</dt>
+							<dd>
+							Change in layout of user profile. (190137 lines)
+							</dd>
+		<dt>Version 15.89:    Jan 02, 2016</dt>
+							<dd>
+							Social timeline can be updated from user profile. (190084 lines)<br />
+							13 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Ver actividad social (global)' WHERE ActCod='1490' AND Language='es';<br />
+UPDATE actions SET Txt='Redactar comentario social (global)' WHERE ActCod='1491' AND Language='es';<br />
+UPDATE actions SET Txt='Crear comentario social (global)' WHERE ActCod='1492' AND Language='es';<br />
+UPDATE actions SET Txt='Eliminar comentario social (global)' WHERE ActCod='1493' AND Language='es';<br />
+UPDATE actions SET Txt='Solicitar elim. coment. social (global)' WHERE ActCod='1494' AND Language='es';<br />
+UPDATE actions SET Txt='Compartir comentario social (global)' WHERE ActCod='1495' AND Language='es';<br />
+UPDATE actions SET Txt='Dejar de compartir coment. social (global)' WHERE ActCod='1496' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1497','es','N','Redactar comentario social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1498','es','N','Crear comentario social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1502','es','N','Eliminar comentario social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1501','es','N','Solicitar elim. coment. social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1499','es','N','Compartir comentario social (usuario)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1500','es','N','Dejar de compartir coment. social (usuario)');
+							</code></small>
+							</dd>
+		<dt>Version 15.88.3:  Jan 01, 2016</dt>
+							<dd>
+							Changes in contextual options in social timeline. (189907 lines)
+							</dd>
+		<dt>Version 15.88.2:  Jan 01, 2016</dt>
+							<dd>
+							Messages translated. (189902 lines)
+							</dd>
+		<dt>Version 15.88.1:  Jan 01, 2016</dt>
+							<dd>
+							Changes in layout of social timeline. (189854 lines)
+							</dd>
+		<dt>Version 15.88:    Jan 01, 2016</dt>
+							<dd>
+							New buttons in social timeline to share/unshare a social publishing. (189841 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1495','es','N','Compartir comentario social');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1496','es','N','Dejar de compartir comentario social');
+							</code></small>
+							</dd>
+		<dt>Version 15.87:    Dec 31, 2015</dt>
+							<dd>
+							New database table to store users who write or share social notes. (189594 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_timeline (PubCod BIGINT NOT NULL AUTO_INCREMENT,AuthorCod INT NOT NULL,PublisherCod INT NOT NULL,NotCod BIGINT NOT NULL,TimePublish DATETIME NOT NULL,UNIQUE INDEX(PubCod),INDEX(AuthorCod),INDEX(PublisherCod),INDEX(NotCod),INDEX(TimePublish));<br />
+INSERT INTO social_timeline (AuthorCod,PublisherCod,NotCod,TimePublish) SELECT UsrCod,UsrCod,NotCod,TimeNote FROM social_notes ORDER BY NotCod;<br />
+ALTER TABLE social_notes CHANGE COLUMN SocialNote NoteType TINYINT NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 15.86.1:  Dec 31, 2015</dt>
+							<dd>
+							Change in database table with social notes. (189457 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE social_notes CHANGE COLUMN SocCod NotCod BIGINT NOT NULL AUTO_INCREMENT;
+							</code></small>
+							</dd>
+		<dt>Version 15.86:    Dec 30, 2015</dt>
+							<dd>
+							Renamed database tables related to social events. (189451 lines)<br />
+							7 changes necessary in database:<br />
+							<small><code>
+RENAME TABLE social_post TO social_posts;<br />
+RENAME TABLE social TO social_notes;<br />
+ALTER TABLE social_notes CHANGE COLUMN SocialEvent SocialNote TINYINT NOT NULL;<br />
+ALTER TABLE social_notes CHANGE COLUMN TimeEvent TimeNote DATETIME NOT NULL;<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1492','es','N','Crear comentario social');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1493','es','N','Eliminar comentario social');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1494','es','N','Solicitar elim. comentario social');
+							</code></small>
+							</dd>
+		<dt>Version 15.85.1:  Dec 30, 2015</dt>
+							<dd>
+							Remove social events when a user is removed. (189439 lines)
+							</dd>
+		<dt>Version 15.85:    Dec 30, 2015</dt>
+							<dd>
+							Forums option is moved to social tab. (189439 lines)
+							</dd>
+		<dt>Version 15.84.5:  Dec 30, 2015</dt>
+							<dd>
+							Form to update connected users. (189430 lines)
+							</dd>
+		<dt>Version 15.84.4:  Dec 30, 2015</dt>
+							<dd>
+							Code refactoring in profile. (189427 lines)
+							</dd>
+		<dt>Version 15.84.3:  Dec 30, 2015</dt>
+							<dd>
+							Form to update timeline. (189444 lines)
+							</dd>
+		<dt>Version 15.84.2:  Dec 30, 2015</dt>
+							<dd>
+							Help about editor in new social post. (189422 lines)
+							</dd>
+		<dt>Version 15.84.1:  Dec 30, 2015</dt>
+							<dd>
+							Request confirmation before removing a social post. (189419 lines)
+							</dd>
+		<dt>Version 15.84:    Dec 30, 2015</dt>
+							<dd>
+							Remove social post. (189316 lines)
+							</dd>
+		<dt>Version 15.83.1:  Dec 30, 2015</dt>
+							<dd>
+							Fixed bug in user's public profile. (189210 lines)
+							</dd>
+		<dt>Version 15.83:    Dec 30, 2015</dt>
+							<dd>
+							Form to remove a social post. (189209 lines)
+							</dd>
+		<dt>Version 15.82.4:  Dec 30, 2015</dt>
+							<dd>
+							Action to write a new social post is removed form menu. (189159 lines)
+							</dd>
+		<dt>Version 15.82.3:  Dec 30, 2015</dt>
+							<dd>
+							Contextual link to write a new social post. (189199 lines)
+							</dd>
+		<dt>Version 15.82.2:  Dec 30, 2015</dt>
+							<dd>
+							Current timeline is displayed below the form to write a new social post. (189183 lines)
+							</dd>
+		<dt>Version 15.82.1:  Dec 29, 2015</dt>
+							<dd>
+							Public social posts are displayed in timeline. (189176 lines)
+							</dd>
+		<dt>Version 15.82:    Dec 29, 2015</dt>
+							<dd>
+							Public social post is received and stored in a new database table. (189136 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social_post (PstCod INT NOT NULL AUTO_INCREMENT,Content LONGTEXT NOT NULL,UNIQUE INDEX(PstCod),FULLTEXT(Content)) ENGINE = MYISAM;
+							</code></small>
+							</dd>
+		<dt>Version 15.81.1:  Dec 29, 2015</dt>
+							<dd>
+							Form to write a public social post. Not finished. (189094 lines)
+							</dd>
+		<dt>Version 15.81:    Dec 29, 2015</dt>
+							<dd>
+							New option to write a public social post. Not finished. (189030 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1491','es','N','Redactar comentario social');
+							</code></small>
+							</dd>
+		<dt>Version 15.80.2:  Dec 29, 2015</dt>
+							<dd>
+							Change in layout of social events (timeline). (188972 lines)
+							</dd>
+		<dt>Version 15.80.1:  Dec 29, 2015</dt>
+							<dd>
+							Message translated. (188967 lines)
+							</dd>
+		<dt>Version 15.80:    Dec 29, 2015</dt>
+							<dd>
+							Changes in layout of user's profile. (188944 lines)
+							</dd>
+		<dt>Version 15.79.2:  Dec 29, 2015</dt>
+							<dd>
+							Include my public activity in timeline. (188838 lines)
+							</dd>
+		<dt>Version 15.79.1:  Dec 29, 2015</dt>
+							<dd>
+							Changes in layout of user's profile. (188836 lines)
+							</dd>
+		<dt>Version 15.79:    Dec 29, 2015</dt>
+							<dd>
+							Show timeline of a selected user.<br />
+                                        		Changes in CSS related to social activity. (188834 lines)
+							</dd>
+		<dt>Version 15.78.1:  Dec 29, 2015</dt>
+							<dd>
+							Go directly to notice in notifications and social events. (188785 lines)
+							</dd>
+		<dt>Version 15.78:    Dec 29, 2015</dt>
+							<dd>
+							Links in social events.<br />
+							Actions related to shared files renamed. (188776 lines)
+							</dd>
+		<dt>Version 15.77.8:  Dec 29, 2015</dt>
+							<dd>
+							Author's name length is limited in social events. (188662 lines)
+							</dd>
+		<dt>Version 15.77.7:  Dec 29, 2015</dt>
+							<dd>
+							When a date-time is written in local time, and the date is today, 'Today' is displayed instead of date. (188660 lines)<br />
+							1 change necessary:<br />
+Edit file swad_copy.sh changing swad.js to swad*.js
+							</dd>
+		<dt>Version 15.77.6:  Dec 29, 2015</dt>
+							<dd>
+							Show type of event on social events (timeline). (188647 lines)
+							</dd>
+		<dt>Version 15.77.5:  Dec 29, 2015</dt>
+							<dd>
+							Insert social event when publishing an exam announcement.<br />
+                                      			Changes in CSS related to social activity. (188392 lines)
+							</dd>
+		<dt>Version 15.77.4:  Dec 29, 2015</dt>
+							<dd>
+							Insert social event when publishing a new notice.<br />
+                                        		Changes in CSS related to social activity. (188410 lines)
+							</dd>
+		<dt>Version 15.77.3:  Dec 28, 2015</dt>
+							<dd>
+							Insert social event when changing file from private to public. (188402 lines)
+							</dd>
+		<dt>Version 15.77.2:  Dec 28, 2015</dt>
+							<dd>
+							Changes in CSS related to social activity. (188368 lines)
+							</dd>
+		<dt>Version 15.77.1:  Dec 28, 2015</dt>
+							<dd>
+							Insert social event when posting in a global forum. (188342 lines)
+							</dd>
+		<dt>Version 15.77:    Dec 28, 2015</dt>
+							<dd>
+							New table in database for social activity. (188287 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE IF NOT EXISTS social (SocCod BIGINT NOT NULL AUTO_INCREMENT,SocialEvent TINYINT NOT NULL,UsrCod INT NOT NULL,CtyCod INT NOT NULL DEFAULT -1,InsCod INT NOT NULL DEFAULT -1,CtrCod INT NOT NULL DEFAULT -1,DegCod INT NOT NULL DEFAULT -1,CrsCod INT NOT NULL DEFAULT -1,Cod INT NOT NULL DEFAULT -1,TimeEvent DATETIME NOT NULL,UNIQUE INDEX(SocCod),INDEX(SocialEvent),INDEX(UsrCod),INDEX(TimeEvent));<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1490','es','N','Ver actividad social (timeline)');
+							</code></small>
+							</dd>
+		<dt>Version 15.76.1:  Dec 28, 2015</dt>
+							<dd>
+							Refactoring in swad_database. (187926 lines)
+							</dd>
+		<dt>Version 15.76:    Dec 28, 2015</dt>
+							<dd>
+							New option for social network activity (timeline).<br />
+							New module swad_social. (187807 lines)
+							</dd>
+		<dt>Version 15.75:    Dec 28, 2015</dt>
+							<dd>
+							New tab SOCIAL for social networking. (187664 lines)
+							</dd>
+		<dt>Version 15.74.8:  Dec 28, 2015</dt>
+							<dd>
+							&quot;Course&quot; is moved to the top of the menu used to go directly to my courses. (187564 lines)
+							</dd>
+		<dt>Version 15.74.7:  Dec 26, 2015</dt>
+							<dd>
+							Changes in small icons. (187563 lines)
+							</dd>
+		<dt>Version 15.74.6:  Dec 26, 2015</dt>
+							<dd>
+							Reply icon is shown without text. (187562 lines)
+							</dd>
+		<dt>Version 15.74.5:  Dec 26, 2015</dt>
+							<dd>
+							Text in link to remove messages is now shorter.<br />
+							Fixed bug in messages. (187563 lines)
+							</dd>
+		<dt>Version 15.74.4:  Dec 26, 2015</dt>
+							<dd>
+							Change in text when no course is selected. (187757 lines)
+							</dd>
+		<dt>Version 15.74.3:  Dec 26, 2015</dt>
+							<dd>
+							Changes in layout of breadcrumb. (187770 lines)
+							</dd>
+		<dt>Version 15.74.2:  Dec 26, 2015</dt>
+							<dd>
+							Changes in list of countries. (187761 lines)
+							</dd>
+		<dt>Version 15.74.1:  Dec 26, 2015</dt>
+							<dd>
+							Changes in layout of breadcrumb. (187775 lines)
+							</dd>
+		<dt>Version 15.74:    Dec 26, 2015</dt>
+							<dd>
+							New layout of breadcrumb. (187750 lines)
+							</dd>
+		<dt>Version 15.73.4:  Dec 26, 2015</dt>
+							<dd>
+							Code refactoring in breadcrumb. (187719 lines)
+							</dd>
+		<dt>Version 15.73.3:  Dec 25, 2015</dt>
+							<dd>
+							Select one of my courses goes to the current action. (187710 lines)
+							</dd>
+		<dt>Version 15.73.2:  Dec 25, 2015</dt>
+							<dd>
+							Background of selected course in light blue. (187698 lines)
+							</dd>
+		<dt>Version 15.73.1:  Dec 25, 2015</dt>
+							<dd>
+							Background of selected privacy options in light blue. (187704 lines)
+							</dd>
+		<dt>Version 15.73:    Dec 24, 2015</dt>
+							<dd>
+							Fixed bug in privacy form.<br />
+							Privacy is moved to preferences.<br />
+							Default privacy is changed from "user" to "system". (187700 lines)
+							</dd>
+		<dt>Version 15.72.7:  Dec 24, 2015</dt>
+							<dd>
+							Remove message to teachers to verify indicators. (187695 lines)
+							</dd>
 		<dt>Version 15.72.6:  Dec 24, 2015</dt>
 							<dd>
 							Debug message removed. (187796 lines)

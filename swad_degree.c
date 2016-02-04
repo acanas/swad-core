@@ -799,7 +799,7 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<h1 id=\"big_name\" class=\"%s\">",
+   fprintf (Gbl.F.Out,"<h1 id=\"main_title\" class=\"%s\">",
 	    The_ClassCourse[Gbl.Prefs.Theme]);
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
@@ -819,7 +819,8 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	 Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 
       /***** Text *****/
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+      fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
+	                 "<div id=\"big_full_name\">"
 	                 "%s"	// Full name
 	                 "</div>"
 			 "<div class=\"NOT_SHOWN\">"
@@ -827,7 +828,8 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 			 "</div>"
 	                 "<div id=\"big_short_name\">"
 	                 "%s"	// Short name
-	                 "</div>",
+	                 "</div>"
+                         "</div>",
 	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
 	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
 	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
@@ -841,7 +843,8 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
      }
    else	// No country selected
       /* This main title takes up space but it is invisible */
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\" class=\"HIDDEN\">"
+      fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
+	                 "<div id=\"big_full_name\" class=\"HIDDEN\">"
 	                 "%s"	// Full name
 	                 "</div>"
 			 "<div class=\"NOT_SHOWN\">"
@@ -849,7 +852,8 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 			 "</div>"
 	                 "<div id=\"big_short_name\" class=\"HIDDEN\">"
 	                 "%s"	// Short name
-	                 "</div>",
+	                 "</div>"
+                         "</div>",
 	       Cfg_PLATFORM_FULL_NAME,
 	       Cfg_PLATFORM_SHORT_NAME);
 

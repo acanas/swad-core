@@ -277,10 +277,10 @@
 					<li><strong>userRole</strong>: integer, maximum role of the user,
 						with one of the following 4 values:
 						<ul>
-							<li>0: unknown, an error has occurred.</li>
-							<li>1: invited, not enrolled in any course.</li>
-							<li>2: student in all his/her courses.</li>
-							<li>3: teacher in at aleast one of his/her courses.</li>
+							<li><var>0</var>: unknown, an error has occurred.</li>
+							<li><var>1</var>: invited, not enrolled in any course.</li>
+							<li><var>2</var>: student in all his/her courses.</li>
+							<li><var>3</var>: teacher in at aleast one of his/her courses.</li>
 						</ul>
 					</li>
 				</ul>
@@ -320,10 +320,10 @@
 					<li><strong>userRole</strong>: integer, maximum role of the user,
 						with one of the following 4 values:
 						<ul>
-							<li>0: unknown, an error has occurred.</li>
-							<li>1: invited, not enrolled in any course.</li>
-							<li>2: student in all his/her courses.</li>
-							<li>3: teacher in at aleast one of his/her courses.</li>
+							<li><var>0</var>: unknown, an error has occurred.</li>
+							<li><var>1</var>: invited, not enrolled in any course.</li>
+							<li><var>2</var>: student in all his/her courses.</li>
+							<li><var>3</var>: teacher in at aleast one of his/her courses.</li>
 						</ul>
 					</li>
 					<li><strong>degreeName</strong>: string.</li>
@@ -376,9 +376,9 @@
 							<li><strong>userRole</strong>: integer, role of the user in the course,
 								with one of the following 3 values:
 								<ul>
-									<li>0: unknown, an error has occurred.</li>
-									<li>2: student in this course.</li>
-									<li>3: teacher in this course.</li>
+									<li><var>0</var>: unknown, an error has occurred.</li>
+									<li><var>2</var>: student in this course.</li>
+									<li><var>3</var>: teacher in this course.</li>
 								</ul>
 							</li>
 							<li><strong>courseShortName</strong>: string.</li>
@@ -403,14 +403,14 @@
 					<li><strong>infoType</strong>: string,
 						with one of the following 7 values:
 						<ul>
-							<li>&quot;introduction&quot;: introduction to the course.</li>
-							<li>&quot;guide&quot;: teaching guide of the course.</li>
-							<li>&quot;lectures&quot;: lectures syllabus.</li>
-							<li>&quot;practicals&quot;: practicals (laboratory) syllabus.</li>
-							<li>&quot;bibliography&quot;: bibliography.</li>
-							<li>&quot;FAQ&quot;: FAQ.</li>
-							<li>&quot;links&quot;: links.</li>
-							<li>&quot;assessment&quot;: info on assessment system.</li>
+							<li><var>introduction</var>: introduction to the course.</li>
+							<li><var>guide</var>: teaching guide of the course.</li>
+							<li><var>lectures</var>: lectures syllabus.</li>
+							<li><var>practicals</var>: practicals (laboratory) syllabus.</li>
+							<li><var>bibliography</var>: bibliography.</li>
+							<li><var>FAQ</var>: FAQ.</li>
+							<li><var>links</var>: links.</li>
+							<li><var>assessment</var>: info on assessment system.</li>
 						</ul>
 					</li>
 				</ul>
@@ -420,15 +420,15 @@
 					<li><strong>infoSrc</strong>: string,
 						with one of the following 6 values:
 						<ul>
-							<li>&quot;none&quot;: no info. <strong>infoTxt</strong> will be empty.</li>
-							<li>&quot;editor&quot;: internal editor. <strong>infoTxt</strong> will contain a full XHTML page.</li>
-							<li>&quot;plainText&quot;: plain text. <strong>infoTxt</strong> will contain a full XHTML page.</li>
-							<li>&quot;richText&quot;: rich text. <strong>infoTxt</strong> will contain a full XHTML page.</li>
-							<li>&quot;page&quot;: web page, in HTML format.
+							<li><var>none</var>: no info. <strong>infoTxt</strong> will be empty.</li>
+							<li><var>editor</var>: internal editor. <strong>infoTxt</strong> will contain a full XHTML page.</li>
+							<li><var>plainText</var>: plain text. <strong>infoTxt</strong> will contain a full XHTML page.</li>
+							<li><var>richText</var>: rich text. <strong>infoTxt</strong> will contain a full XHTML page.</li>
+							<li><var>page</var>: web page, in HTML format.
 								<strong>infoTxt</strong> will contain a full HTML page.
 								If the page contain images or other archives, the result will be incomplete,
 								because only the main page is returned.</li>
-							<li>&quot;URL&quot;: URL address. <strong>infoTxt</strong> will contain the URL in plain text.</li>
+							<li><var>URL</var>: URL address. <strong>infoTxt</strong> will contain the URL in plain text.</li>
 						</ul>
 					</li>
 					<li><strong>infoTxt</strong>: string with the information.</li>
@@ -584,15 +584,15 @@
 					<li><strong>treeCode</strong>: integer,
 						with one of the following 3 values:
 						<ul>
-							<li>1: documents zone.
+							<li><var>1</var>: documents zone.
 								To download a file,
 								call <a href="#getFile"><code>getFile</code></a>.
 							</li>
-							<li>2: shared files zone.
+							<li><var>2</var>: shared files zone.
 								To download a file,
 								call <a href="#getFile"><code>getFile</code></a>.
 							</li>
-							<li>3: marks zone.
+							<li><var>3</var>: marks zone.
 								To view marks,
 								call <a href="#getMarks"><code>getMarks</code></a>
 								or <a href="#getFile"><code>getFile</code></a>:
@@ -760,11 +760,11 @@
 					<li><strong>feedback</strong>: string with the type of feedback for the user,
 						with one of the following 5 values:
 						<ul>
-							<li>&quot;nothing&quot;: no feedback.</li>
-							<li>&quot;totalResult&quot;: minimum feedback: only total score.</li>
-							<li>&quot;eachResult&quot;: medium feedback: score of each question.</li>
-							<li>&quot;eachGoodBad&quot;: high feedback: correct answer in each question.</li>
-							<li>&quot;fullFeedback&quot;: maximum feedback: text of feedback.</li>
+							<li><var>nothing</var>: no feedback.</li>
+							<li><var>totalResult</var>: minimum feedback: only total score.</li>
+							<li><var>eachResult</var>: medium feedback: score of each question.</li>
+							<li><var>eachGoodBad</var>: high feedback: correct answer in each question.</li>
+							<li><var>fullFeedback</var>: maximum feedback: text of feedback.</li>
 						</ul>
 					</li>
 				</ul>
@@ -812,12 +812,12 @@
 							<li><strong>answerType</strong>: string,
 								with one of the following 6 values:
 								<ul>
-									<li>&quot;int&quot;: integer number.</li>
-									<li>&quot;float&quot;: floating point number.</li>
-									<li>&quot;TF&quot;: true / false.</li>
-									<li>&quot;uniqueChoice&quot;: choice of a unique answer between several options.</li>
-									<li>&quot;multipleChoice&quot;: choice of several answers between several options.</li>
-									<li>&quot;text&quot;: string.</li>
+									<li><var>int</var>: integer number.</li>
+									<li><var>float</var>: floating point number.</li>
+									<li><var>TF</var>: true / false.</li>
+									<li><var>uniqueChoice</var>: choice of a unique answer between several options.</li>
+									<li><var>multipleChoice</var>: choice of several answers between several options.</li>
+									<li><var>text</var>: string.</li>
 								</ul>
 							<li><strong>shuffle</strong>: integer. If not 0 &rArr; the answers can be shuffled.</li>
 							<li><strong>stem</strong>: string with the stem of the question.</li>
@@ -833,7 +833,7 @@
 							<li><strong>correct</strong>: integer. If not 0 &rArr; the answer is correct.</li>
 							<li><strong>answerText</strong>: string with the text of the answer.</li>
 							<li><strong>answerFeedback</strong>: string with the feedback for this answer
-								(only when <strong>answerType</strong> is &quot;uniqueChoice&quot;, &quot;multipleChoice&quot; or &quot;text&quot;).
+								(only when <strong>answerType</strong> is <var>uniqueChoice</var>, <var>multipleChoice</var> or <var>text</var>).
 						</ul>
 					</li>
 
@@ -872,7 +872,7 @@
 							<li><strong>answerType</strong>: string,
 								currently only the following value is returned:
 								<ul>
-									<li>&quot;uniqueChoice&quot;: choice of a unique answer between several options.</li>
+									<li><var>uniqueChoice</var>: choice of a unique answer between several options.</li>
 								</ul>
 							<li><strong>shuffle</strong>: integer. If not 0 &rArr; the answers can be shuffled.</li>
 							<li><strong>stem</strong>: string with the stem of the question.</li>
@@ -1151,22 +1151,27 @@
 								When a user opens this notification,
 								you should call <a href="#markNotificationsAsRead"><code>markNotificationsAsRead</code></a> with this value.</li>
 							<li><strong>eventType</strong>: string,
-								with one of the following 13 values:
-								<ul>
-									<li>&quot;documentFile&quot;: document.</li>
-									<li>&quot;sharedFile&quot;: shared file.</li>
-									<li>&quot;assignment&quot;: assignment.</li>
-									<li>&quot;examAnnouncement&quot;: exam announcement.</li>
-									<li>&quot;marksFile&quot;: marks/grades file.</li>
-									<li>&quot;enrollmentStudent&quot;: enrollment in a course as a student.</li>
-									<li>&quot;enrollmentTeacher&quot;: enrollment in a course as a teacher.</li>
-									<li>&quot;enrollmentRequest&quot;: enrollment request.</li>
-									<li>&quot;notice&quot;: notice (yellow note).</li>
-									<li>&quot;forumPostCourse&quot;: new message in a forum of a course.</li>
-									<li>&quot;forumReply&quot;: reply to a message in a forum.</li>
-									<li>&quot;message&quot;: message received from another user.</li>
-									<li>&quot;survey&quot;: survey.</li>
-								</ul>
+								with one of the following 18 values:
+								<ol>				
+									<li><var>documentFile</var>: document.</li>
+									<li><var>sharedFile</var>: shared file.</li>
+									<li><var>assignment</var>: assignment.</li>
+									<li><var>examAnnouncement</var>: exam announcement.</li>
+									<li><var>marksFile</var>: marks/grades file.</li>
+									<li><var>enrollmentStudent</var>: I have been enrolled in a course as a student.</li>
+									<li><var>enrollmentTeacher</var>: I have been enrolled in a course as a teacher.</li>
+									<li><var>enrollmentRequest</var>: enrollment request.</li>
+									<li><var>timelineComment</var>: comment to one of my social publishings (posts or comments).</li>
+									<li><var>timelineFav</var>: fav to one of my social publishings (posts or comments).</li>
+									<li><var>timelineShare</var>: sharing of one of my social posts.</li>
+									<li><var>timelineMention</var>: mention to me in a social publishing (post or comment).</li>
+									<li><var>follower</var>: a user has followed me.</li>
+									<li><var>forumPostCourse</var>: message in a forum of one of my courses.</li>
+									<li><var>forumReply</var>: reply to a message in a forum.</li>
+									<li><var>notice</var>: notice (yellow note).</li>
+									<li><var>message</var>: message to me from another user.</li>
+									<li><var>survey</var>: survey.</li>
+								</ol>
 							</li>
 							<li><strong>eventCode</strong>: integer.
 								A non-unique code associated to some notifications.
@@ -1206,7 +1211,7 @@
 							</li>
 							<li><strong>summary</strong>: string with a brief description of the notification, for example the subject of a message.</li>
 							<li><strong>content</strong>: string with the full content of the notification, for example the text of a message.
-								If <code>eventType</code> is &quot;marksFile&quot;,
+								If <code>eventType</code> is <var>marksFile</var>,
 								<code>content</code> will be HTML code
 								with information about the marks (qualifications, scores)
 								of the logged student from an HTML file of marks.
