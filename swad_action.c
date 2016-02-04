@@ -4966,7 +4966,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li>");
          Act_FormStart (Action);
-         Act_LinkFormSubmit (Title,"MFU_ACT");
+         Act_LinkFormSubmit (Title,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON20x20\""
@@ -4974,9 +4974,7 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
                   Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
                   Act_Actions[Action].Icon,
                   MenuStr,TabMenuStr);
-	 Str_LimitLengthHTMLStr (MenuStr,12);
-	 fprintf (Gbl.F.Out," %s</a>",
-                  MenuStr);
+	 fprintf (Gbl.F.Out," %s</a>",MenuStr);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</li>");
         }

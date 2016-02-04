@@ -220,7 +220,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Assessment tab */
    "desk16x16.gif",			// Ntf_EVENT_ASSIGNMENT
-   "announce16x16.gif",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "announce64x64.gif",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
    "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
