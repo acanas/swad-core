@@ -792,83 +792,66 @@ void Deg_WriteCtyInsCtrDeg (void)
   }
 
 /*****************************************************************************/
-/**************** Write course full name in the top of the page **************/
+/*************** Write course full name in the top of the page ***************/
 /*****************************************************************************/
-
-#define Deg_MAX_LENGTH_ORIGINAL_NAME		255	// Maximum length of full name
-#define Deg_MAX_LENGTH_SHORT_NAME_ON_PAGE_HEAD	 32	// Maximum lenght on screen
-#define Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD	 55	// Maximum lenght on screen
 
 void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
-   char ShortName[Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Short name of country, institution, centre, degree or course
-   char FullName [Deg_MAX_LENGTH_ORIGINAL_NAME+1];	// Full  name of country, institution, centre, degree or course
 
    fprintf (Gbl.F.Out,"<h1 id=\"big_name\" class=\"%s\">",
 	    The_ClassCourse[Gbl.Prefs.Theme]);
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
      {
-      /* Limit length of short name */
-      strncpy (ShortName,
-	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
-	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-	       Deg_MAX_LENGTH_ORIGINAL_NAME);
-      ShortName[Deg_MAX_LENGTH_ORIGINAL_NAME] = '\0';
-      Str_LimitLengthHTMLStr (ShortName,Deg_MAX_LENGTH_SHORT_NAME_ON_PAGE_HEAD);
+      /***** Logo *****/
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
+	  Gbl.CurrentDeg.Deg.DegCod > 0)
+	 Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
+		       Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
+      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	 Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
+		       Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
+      else if (Gbl.CurrentIns.Ins.InsCod > 0)
+	 Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
+		       Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
+      else
+	 Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
 
-      /* Limit length of full name */
-      strncpy (FullName,
+      /***** Text *****/
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+	                 "%s"	// Full name
+	                 "</div>"
+			 "<div class=\"NOT_SHOWN\">"
+			 " / "	// To separate
+			 "</div>"
+	                 "<div id=\"big_short_name\">"
+	                 "%s"	// Short name
+	                 "</div>",
 	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
 	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
 	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
 	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
 	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-	       Deg_MAX_LENGTH_ORIGINAL_NAME);
-      FullName[Deg_MAX_LENGTH_ORIGINAL_NAME] = '\0';
-      Str_LimitLengthHTMLStr (FullName ,Deg_MAX_LENGTH_FULL_NAME_ON_PAGE_HEAD);
-
-      if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
-	{
-         if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-	                  Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
-	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-	                  Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
-	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-	                  Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
-	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-            Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
-	}
-      fprintf (Gbl.F.Out,"<span id=\"big_full_name\">"
-	                 "%s"
-	                 "</span>"
-			 "<span class=\"NOT_SHOWN\">"
-			 " / "	// To separate
-			 "</span>"
-	                 "<abbr id=\"big_short_name\">"
-	                 "%s"
-	                 "</abbr>",
-	       FullName,ShortName);
+	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
+	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
+	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
+	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
+	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))));
      }
    else	// No country selected
       /* This main title takes up space but it is invisible */
-      fprintf (Gbl.F.Out,"<span id=\"big_full_name\" class=\"HIDDEN\">"
-	                 "%s"
-	                 "</span>"
-			 "<span class=\"NOT_SHOWN\">"
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\" class=\"HIDDEN\">"
+	                 "%s"	// Full name
+	                 "</div>"
+			 "<div class=\"NOT_SHOWN\">"
 			 " / "	// To separate
-			 "</span>"
-	                 "<abbr id=\"big_short_name\" class=\"HIDDEN\">"
-	                 "%s"
-	                 "</abbr>",
-	       Cfg_PLATFORM_FULL_NAME,Cfg_PLATFORM_SHORT_NAME);
+			 "</div>"
+	                 "<div id=\"big_short_name\" class=\"HIDDEN\">"
+	                 "%s"	// Short name
+	                 "</div>",
+	       Cfg_PLATFORM_FULL_NAME,
+	       Cfg_PLATFORM_SHORT_NAME);
 
    fprintf (Gbl.F.Out,"</h1>");
   }
