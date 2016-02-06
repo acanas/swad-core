@@ -773,7 +773,7 @@ void Cty_WriteScriptGoogleGeochart (void)
    extern const char *Txt_Users_NO_HTML;
    extern const char *Txt_Institutions_NO_HTML;
    unsigned NumCty;
-   unsigned NumUsrsWithCountry = 0;
+   unsigned MaxUsrsInCountry = 0;
    unsigned NumCtysWithUsrs = 0;
 
    /***** Write start of the script *****/
@@ -802,7 +802,8 @@ void Cty_WriteScriptGoogleGeochart (void)
                   Gbl.Ctys.Lst[NumCty].Alpha2,
                   Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
                   Gbl.Ctys.Lst[NumCty].NumInss);
-         NumUsrsWithCountry += Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
+         if (Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty > MaxUsrsInCountry)
+            MaxUsrsInCountry = Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
          NumCtysWithUsrs++;
         }
 
@@ -818,9 +819,8 @@ void Cty_WriteScriptGoogleGeochart (void)
                       "	chart.draw(data, options);\n"
                       "	};\n"
                       "</script>\n",
-            NumCtysWithUsrs ? (unsigned) pow (10.0,ceil (log10 (2.0 * (double) NumUsrsWithCountry /
-                                                                      (double) NumCtysWithUsrs))) :
-        	              0);	// colorAxis.maxValue = 2*Average_number_of_users
+            NumCtysWithUsrs ? MaxUsrsInCountry :
+        	              0);
   }
 
 /*****************************************************************************/
