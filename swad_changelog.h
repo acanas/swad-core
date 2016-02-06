@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.136.6 (2016-02-06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.136.7 (2016-02-06)"
 #define CSS_FILE		"swad15.136.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.136.7: Feb 06, 2016	Fixed bug in social tab when not logged. (195715 lines)
         Version 15.136.6: Feb 06, 2016	Change in graphic with number of users per country. (195703 lines)
         Version 15.136.5: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195702 lines)
         Version 15.136.4: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195687 lines)

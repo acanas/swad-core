@@ -18122,7 +18122,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Atividade"
 #endif
 	,
-	// ActWhoFol
+	// ActSeeSocPrf
 #if   L==1
 	 "Perfils"
 #elif L==2
@@ -20078,7 +20078,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Atividade p&uacute;blica dos usu&aacute;rios que eu sigo"
 #endif
 	,
-	 // ActWhoFol
+	 // ActSeeSocPrf
 #if   L==1
 	 "Perfils p&uacute;blics"
 #elif L==2

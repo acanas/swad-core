@@ -39,6 +39,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Prf_SeeSocialProfiles (void);
+
 char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba);
 void Prf_PutLinkRequestUserProfile (void);
 void Prf_RequestUserProfile (void);

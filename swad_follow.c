@@ -81,7 +81,7 @@ void Fol_PutLinkWhoToFollow (void)
    extern const char *Txt_Who_to_follow;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActWhoFol,NULL,
+   Lay_PutContextualLink (ActSeeSocPrf,NULL,
                           "follow64x64.png",
                           Txt_Who_to_follow,Txt_Who_to_follow);
    fprintf (Gbl.F.Out,"</div>");
@@ -213,7 +213,7 @@ void Fol_SuggestWhoToFollow (void)
 
       /***** Put form to update connected users *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_FormStart (ActWhoFol);
+      Act_FormStart (ActSeeSocPrf);
       Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
       Act_FormEnd ();

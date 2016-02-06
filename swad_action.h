@@ -1043,7 +1043,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 /*****************************************************************************/
 // Actions in menu
 #define ActSeeSocTmlGbl		(ActLstClk+  1)
-#define ActWhoFol		(ActLstClk+  2)
+#define ActSeeSocPrf		(ActLstClk+  2)
 #define ActSeeFor		(ActLstClk+  3)
 #define ActSeeChtRms		(ActLstClk+  4)
 // Secondary actions

@@ -105,6 +105,18 @@ static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
 
 /*****************************************************************************/
+/************* Suggest who to follow or request user's profile ***************/
+/*****************************************************************************/
+
+void Prf_SeeSocialProfiles (void)
+  {
+   if (Gbl.Usrs.Me.Logged)
+      Fol_SuggestWhoToFollow ();
+   else
+      Prf_RequestUserProfile ();
+  }
+
+/*****************************************************************************/
 /************************** Get public profile URL ***************************/
 /*****************************************************************************/
 

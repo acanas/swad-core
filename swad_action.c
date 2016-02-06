@@ -1001,7 +1001,7 @@ Users:
         836. ActLstClk			List last clicks in real time
 Social:
         837. ActSeeSocTmlGbl		Show social timeline (global)
-        838. ActWhoFol			Suggest list of users to follow
+        838. ActSeeSocPrf		Suggest list of users to follow
 	839. ActSeeFor			Show the level superior of the forums
 	840. ActSeeChtRms		Show the chat rooms
 
@@ -2338,7 +2338,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabSoc ******************************************************************
    /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ShowTimelineGbl		,"soc64x64.png"		},
-   /* ActWhoFol		*/{1520, 1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_SuggestWhoToFollow		,"prf64x64.gif"		},
+   /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_SeeSocialProfiles		,"prf64x64.gif"		},
    /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
@@ -2355,32 +2355,32 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1505,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RequestRemSocialComGbl	,NULL},
    /* ActRemSocComGbl	*/{1507,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RemoveSocialComGbl		,NULL},
 
-   /* ActReqPubPrf	*/{1401,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,NULL},
+   /* ActReqPubPrf	*/{1401,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,NULL},
 
-   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
-   /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
-   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
-   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
-   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
-   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
-   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
-   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
-   /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
-   /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
+   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
+   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
+   /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
+   /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
+   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
+   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
+   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
+   /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
+   /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
 
-   /* ActFolUsr		*/{1410,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabSoc,ActWhoFol		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
-   /* ActSeeFlg		*/{1412,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
-   /* ActSeeFlr		*/{1413,-1,TabSoc,ActWhoFol		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
+   /* ActFolUsr		*/{1410,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
 
    /* ActSeeForCrsUsr	*/{ 345,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
    /* ActSeeForCrsTch	*/{ 431,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
@@ -4236,7 +4236,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUnfSocComGbl,	// #1517
 	ActFavSocComUsr,	// #1518
 	ActUnfSocComUsr,	// #1519
-	ActWhoFol,		// #1520
+	ActSeeSocPrf,		// #1520
 	};
 
 /*****************************************************************************/
