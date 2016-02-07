@@ -121,13 +121,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.136.7 (2016-02-06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.137 (2016-02-07)"
 #define CSS_FILE		"swad15.136.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.137:   Feb 07, 2016	New figure about number of social notes. (195953 lines)
         Version 15.136.7: Feb 06, 2016	Fixed bug in social tab when not logged. (195715 lines)
         Version 15.136.6: Feb 06, 2016	Change in graphic with number of users per country. (195703 lines)
         Version 15.136.5: Feb 04, 2016	Change in layout of main title (country/institution/centre/degree/course). (195702 lines)
@@ -136,8 +137,8 @@
         Version 15.136.2: Feb 04, 2016	Change in layout of most frequent actions. (195689 lines)
         Version 15.136.1: Feb 02, 2016	Change in layout of tabs and menus. (195689 lines)
         Version 15.136:   Jan 30, 2016	Average number of followed/followers per follower/followed. (195674 lines)
-        Version 15.135.1: Jan 30, 2016	Fixed bug in figure with number of following and followers. (195518 lines)
-        Version 15.135:   Jan 30, 2016	New figure with number of following and followers. (195516 lines)
+        Version 15.135.1: Jan 30, 2016	Fixed bug in figure about number of following and followers. (195518 lines)
+        Version 15.135:   Jan 30, 2016	New figure about number of following and followers. (195516 lines)
         Version 15.134.2: Jan 29, 2016	New order of figures. (195327 lines)
         Version 15.134.1: Jan 29, 2016	Changes in lists of following/followers. (195326 lines)
         Version 15.134:   Jan 29, 2016	Change in menu of social tab. (195328 lines)

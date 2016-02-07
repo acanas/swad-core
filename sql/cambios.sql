@@ -11515,4 +11515,4 @@ OPTIMIZE TABLE msg_snt_deleted;
 +----------------------+
 
 
-
+SELECT COUNT(*) FROM social_notes WHERE NoteType='10';

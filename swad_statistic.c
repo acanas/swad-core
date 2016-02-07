@@ -48,6 +48,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_tab.h"
 #include "swad_web_service.h"
@@ -223,6 +224,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 static void Sta_GetAndShowAssignmentsStats (void);
 static void Sta_GetAndShowTestsStats (void);
 
+static void Sta_GetAndShowSocialActivityStats (void);
 static void Sta_GetAndShowFollowStats (void);
 
 static void Sta_GetAndShowForumStats (void);
@@ -3841,6 +3843,32 @@ void Pho_PutHiddenParamFigureType (void)
 
 void Sta_ShowUseOfPlatform (void)
   {
+   void (*Sta_Function[Sta_NUM_FIGURES])(void) =	// Array of pointers to functions
+     {
+      Sta_GetAndShowUsersStats,			// Sta_USERS
+      Sta_GetAndShowUsersRanking,		// Sta_USERS_RANKING
+      Sta_GetAndShowHierarchyStats,		// Sta_HIERARCHY
+      Sta_GetAndShowInstitutionsStats,		// Sta_INSTITUTIONS
+      Net_ShowWebAndSocialNetworksStats,	// Sta_SOCIAL_NETWORKS
+      Sta_GetAndShowFileBrowsersStats,		// Sta_FOLDERS_AND_FILES
+      Sta_GetAndShowOERsStats,			// Sta_OER
+      Sta_GetAndShowAssignmentsStats,		// Sta_ASSIGNMENTS
+      Sta_GetAndShowTestsStats,			// Sta_TESTS
+      Sta_GetAndShowSocialActivityStats,	// Sta_SOCIAL_ACTIVITY
+      Sta_GetAndShowFollowStats,		// Sta_FOLLOW
+      Sta_GetAndShowForumStats,			// Sta_FORUMS
+      Sta_GetAndShowNumUsrsPerNotifyEvent,	// Sta_NOTIFY_EVENTS
+      Sta_GetAndShowNoticesStats,		// Sta_NOTICES
+      Sta_GetAndShowMsgsStats,			// Sta_MESSAGES
+      Sta_GetAndShowSurveysStats,		// Sta_SURVEYS
+      Sta_GetAndShowNumUsrsPerPrivacy,		// Sta_PRIVACY
+      Sta_GetAndShowNumUsrsPerLanguage,		// Sta_LANGUAGES
+      Sta_GetAndShowNumUsrsPerFirstDayOfWeek,	// Sta_FIRST_DAY_OF_WEEK
+      Sta_GetAndShowNumUsrsPerTheme,		// Sta_THEMES
+      Sta_GetAndShowNumUsrsPerIconSet,		// Sta_ICON_SETS
+      Sta_GetAndShowNumUsrsPerMenu,		// Sta_MENUS
+      Sta_GetAndShowNumUsrsPerSideColumns,	// Sta_SIDE_COLUMNS
+     };
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
@@ -3856,98 +3884,7 @@ void Sta_ShowUseOfPlatform (void)
    Sta_ReqUseOfPlatform ();
 
    /***** Show the stat of use selected by user *****/
-   switch (Gbl.Stat.FigureType)
-     {
-      case Sta_USERS_RANKING:
-	 /***** Users ranking *****/
-         Sta_GetAndShowUsersRanking ();
-         break;
-      case Sta_USERS:
-	 /***** Number of users *****/
-         Sta_GetAndShowUsersStats ();
-         break;
-      case Sta_HIERARCHY:
-         /***** Number of degrees and courses *****/
-	 Sta_GetAndShowHierarchyStats ();
-         break;
-      case Sta_INSTITUTIONS:
-         /***** Number of institutions with users *****/
-	 Sta_GetAndShowInstitutionsStats ();
-         break;
-      case Sta_SOCIAL_NETWORKS:
-	 /***** Number of users in social networks *****/
-         Net_ShowWebAndSocialNetworksStats ();
-         break;
-      case Sta_FOLDERS_AND_FILES:
-         /***** File browsers (folders and files) *****/
-	 // TODO: add links to statistic
-         Sta_GetAndShowFileBrowsersStats ();
-         break;
-      case Sta_OER:
-	 /***** Number of Open Educational Resources (OERs) *****/
-	 Sta_GetAndShowOERsStats ();
-	 break;
-      case Sta_ASSIGNMENTS:
-         /***** Number of assignments *****/
-         Sta_GetAndShowAssignmentsStats ();
-         break;
-      case Sta_TESTS:
-         /***** Number of tests *****/
-         Sta_GetAndShowTestsStats ();
-         break;
-      case Sta_FOLLOW:
-         /***** Number of following and followers *****/
-         Sta_GetAndShowFollowStats ();
-         break;
-      case Sta_FORUMS:
-         /***** Number of forums, threads and posts *****/
-         Sta_GetAndShowForumStats ();
-         break;
-      case Sta_NOTIFY_EVENTS:
-         /***** Number of users who want to be notified by e-mail on each event *****/
-         Sta_GetAndShowNumUsrsPerNotifyEvent ();
-         break;
-      case Sta_NOTICES:
-         /***** Number of notices *****/
-         Sta_GetAndShowNoticesStats ();
-         break;
-      case Sta_MESSAGES:
-         /***** Number of sent and received messages *****/
-         Sta_GetAndShowMsgsStats ();
-         break;
-      case Sta_SURVEYS:
-         /***** Number of surveys *****/
-         Sta_GetAndShowSurveysStats ();
-         break;
-      case Sta_PRIVACY:
-         /***** Number of users who have chosen a privacy *****/
-         Sta_GetAndShowNumUsrsPerPrivacy ();
-         break;
-      case Sta_LANGUAGES:
-         /***** Number of users who have chosen a language *****/
-         Sta_GetAndShowNumUsrsPerLanguage ();
-         break;
-      case Sta_FIRST_DAY_OF_WEEK:
-         /***** Number of users who have chosen a first day of week *****/
-         Sta_GetAndShowNumUsrsPerFirstDayOfWeek ();
-         break;
-      case Sta_THEMES:
-         /***** Number of users who have chosen a theme *****/
-         Sta_GetAndShowNumUsrsPerTheme ();
-         break;
-      case Sta_ICON_SETS:
-         /***** Number of users who have chosen an icon set *****/
-         Sta_GetAndShowNumUsrsPerIconSet ();
-         break;
-      case Sta_MENUS:
-         /***** Number of users who have chosen a menu *****/
-         Sta_GetAndShowNumUsrsPerMenu ();
-         break;
-      case Sta_SIDE_COLUMNS:
-         /***** Number of users who have chosen a layout of columns *****/
-         Sta_GetAndShowNumUsrsPerSideColumns ();
-         break;
-     }
+   Sta_Function[Gbl.Stat.FigureType] ();
   }
 
 /*****************************************************************************/
@@ -6539,6 +6476,283 @@ static void Sta_GetAndShowTestsStats (void)
   }
 
 /*****************************************************************************/
+/******************** Get and show number of social notes ********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowSocialActivityStats (void)
+  {
+   extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
+   extern const char *Txt_Type;
+   extern const char *Txt_No_of_social_posts;
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_No_of_posts_BR_per_user;
+   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
+   extern const char *Txt_Total;
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Soc_NoteType_t NoteType;
+   unsigned long NumSocialNotes;
+   unsigned NumUsrs;
+   unsigned NumUsrsTotal;
+
+   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY]);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Type,
+            Txt_No_of_social_posts,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users,
+            Txt_No_of_posts_BR_per_user);
+
+   /***** Get total number of users *****/
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+
+   /***** Get total number of following/followers from database *****/
+   for (NoteType = (Soc_NoteType_t) 0;
+	NoteType < Soc_NUM_NOTE_TYPES;
+	NoteType++)
+     {
+      switch (Gbl.Scope.Current)
+	{
+	 case Sco_SCOPE_SYS:
+	    sprintf (Query,"SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
+		           " FROM social_notes WHERE NoteType='%u'",
+	             NoteType);
+	    break;
+	 case Sco_SCOPE_CTY:
+	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+			   " WHERE institutions.CtyCod='%ld'"
+			   " AND institutions.InsCod=centres.InsCod"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=social_notes.UsrCod"
+			   " AND social_notes.NoteType='%u'",
+		     Gbl.CurrentCty.Cty.CtyCod,
+		     (unsigned) NoteType);
+	    break;
+	 case Sco_SCOPE_INS:
+	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			   " FROM centres,degrees,courses,crs_usr,social_notes"
+			   " WHERE centres.InsCod='%ld'"
+			   " AND centres.CtrCod=degrees.CtrCod"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=social_notes.UsrCod"
+			   " AND social_notes.NoteType='%u'",
+		     Gbl.CurrentIns.Ins.InsCod,
+		     (unsigned) NoteType);
+	    break;
+	 case Sco_SCOPE_CTR:
+	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			   " FROM degrees,courses,crs_usr,social_notes"
+			   " WHERE degrees.CtrCod='%ld'"
+			   " AND degrees.DegCod=courses.DegCod"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=social_notes.UsrCod"
+			   " AND social_notes.NoteType='%u'",
+		     Gbl.CurrentCtr.Ctr.CtrCod,
+		     (unsigned) NoteType);
+	    break;
+	 case Sco_SCOPE_DEG:
+	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			   " FROM courses,crs_usr,social_notes"
+			   " WHERE courses.DegCod='%ld'"
+			   " AND courses.CrsCod=crs_usr.CrsCod"
+			   " AND crs_usr.UsrCod=social_notes.UsrCod"
+			   " AND social_notes.NoteType='%u'",
+		     Gbl.CurrentDeg.Deg.DegCod,
+		     (unsigned) NoteType);
+	    break;
+	 case Sco_SCOPE_CRS:
+	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			   " FROM crs_usr,social_notes"
+			   " WHERE crs_usr.CrsCod='%ld'"
+			   " AND crs_usr.UsrCod=social_notes.UsrCod"
+			   " AND social_notes.NoteType='%u'",
+		     Gbl.CurrentCrs.Crs.CrsCod,
+		     (unsigned) NoteType);
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+	}
+      NumSocialNotes = 0;
+      NumUsrs = 0;
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get number of social notes"))
+	{
+	 /***** Get number of social notes and number of users *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get number of social notes */
+	 if (row[0])
+	    if (sscanf (row[0],"%lu",&NumSocialNotes) != 1)
+	       NumSocialNotes = 0;
+
+	 /* Get number of users */
+	 if (row[1])
+	    if (sscanf (row[1],"%u",&NumUsrs) != 1)
+	       NumUsrs = 0;
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Write number of social notes and number of users *****/
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"DAT LEFT_MIDDLE\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%lu"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%.2f"
+                         "</td>"
+                         "</tr>",
+               Txt_SOCIAL_NOTE[NoteType],
+               NumSocialNotes,
+               NumUsrs,
+               NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
+        	              0.0,
+               NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
+        	         0.0);
+     }
+
+   /***** Get and write totals *****/
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 sprintf (Query,"SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
+			" FROM social_notes");
+	 break;
+      case Sco_SCOPE_CTY:
+	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			" FROM institutions,centres,degrees,courses,crs_usr,social_notes"
+			" WHERE institutions.CtyCod='%ld'"
+			" AND institutions.InsCod=centres.InsCod"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=social_notes.UsrCod",
+		  Gbl.CurrentCty.Cty.CtyCod);
+	 break;
+      case Sco_SCOPE_INS:
+	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			" FROM centres,degrees,courses,crs_usr,social_notes"
+			" WHERE centres.InsCod='%ld'"
+			" AND centres.CtrCod=degrees.CtrCod"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=social_notes.UsrCod",
+		  Gbl.CurrentIns.Ins.InsCod);
+	 break;
+      case Sco_SCOPE_CTR:
+	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			" FROM degrees,courses,crs_usr,social_notes"
+			" WHERE degrees.CtrCod='%ld'"
+			" AND degrees.DegCod=courses.DegCod"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=social_notes.UsrCod",
+		  Gbl.CurrentCtr.Ctr.CtrCod);
+	 break;
+      case Sco_SCOPE_DEG:
+	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			" FROM courses,crs_usr,social_notes"
+			" WHERE courses.DegCod='%ld'"
+			" AND courses.CrsCod=crs_usr.CrsCod"
+			" AND crs_usr.UsrCod=social_notes.UsrCod",
+		  Gbl.CurrentDeg.Deg.DegCod);
+	 break;
+      case Sco_SCOPE_CRS:
+	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
+			" FROM crs_usr,social_notes"
+			" WHERE crs_usr.CrsCod='%ld'"
+			" AND crs_usr.UsrCod=social_notes.UsrCod",
+		  Gbl.CurrentCrs.Crs.CrsCod);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   NumSocialNotes = 0;
+   NumUsrs = 0;
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of social notes"))
+     {
+      /* Get number of social notes and number of users */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get number of social notes */
+      if (row[0])
+	 if (sscanf (row[0],"%lu",&NumSocialNotes) != 1)
+	    NumSocialNotes = 0;
+
+      /* Get number of users */
+      if (row[1])
+	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
+	    NumUsrs = 0;
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /* Write totals */
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+		      "%lu"
+		      "</td>"
+		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+		      "%5.2f%%"
+		      "</td>"
+		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+		      "%.2f"
+		      "</td>"
+		      "</tr>",
+	    Txt_Total,
+	    NumSocialNotes,
+	    NumUsrs,
+	    NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
+			   0.0,
+	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
+		      0.0);
+
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
 /************** Get and show number of following and followers ***************/
 /*****************************************************************************/
 
@@ -6769,7 +6983,7 @@ static void Sta_GetAndShowFollowStats (void)
 	}
       DB_QuerySELECT (Query,&mysql_res,"can not get number of questions per survey");
 
-      /***** Get number of courses *****/
+      /***** Get average *****/
       row = mysql_fetch_row (mysql_res);
       Average = Str_GetFloatNumFromStr (row[0]);
 
@@ -6808,8 +7022,8 @@ static void Sta_GetAndShowForumStats (void)
    extern const char *Txt_No_of_messages;
    extern const char *Txt_Number_of_BR_notifications;
    extern const char *Txt_No_of_threads_BR_per_forum;
-   extern const char *Txt_No_of_messages_BR_per_thread;
-   extern const char *Txt_No_of_messages_BR_per_forum;
+   extern const char *Txt_No_of_posts_BR_per_thread;
+   extern const char *Txt_No_of_posts_BR_per_forum;
    struct Sta_StatsForum StatsForum;
 
    /***** Reset total stats *****/
@@ -6862,8 +7076,8 @@ static void Sta_GetAndShowForumStats (void)
             Txt_No_of_messages,
             Txt_Number_of_BR_notifications,
             Txt_No_of_threads_BR_per_forum,
-            Txt_No_of_messages_BR_per_thread,
-            Txt_No_of_messages_BR_per_forum);
+            Txt_No_of_posts_BR_per_thread,
+            Txt_No_of_posts_BR_per_forum);
 
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)

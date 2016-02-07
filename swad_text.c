@@ -23867,13 +23867,13 @@ const char *Txt_No_of_messages =
 	"N&ordm; de mensagens";
 #endif
 
-const char *Txt_No_of_messages_BR_per_forum =
+const char *Txt_No_of_posts_BR_per_forum =
 #if   L==1
 	"N&ordm; de mensajes<br />por foro";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten<br />pro Forum";
 #elif L==3
-	"No. of messages<br />per forum";
+	"No. of posts<br />per forum";
 #elif L==4
 	"N&ordm; de mensajes<br />por foro";
 #elif L==5
@@ -23881,28 +23881,49 @@ const char *Txt_No_of_messages_BR_per_forum =
 #elif L==6
 	"N&ordm; de mensajes<br />por foro";	// Okoteve traducción
 #elif L==7
-	"Numero di messaggi<br />per forum";
+	"Numero di post<br />per forum";
 #elif L==8
 	"Liczba wiadomosci<br />per forum";
 #elif L==9
 	"N&ordm; de mensagens<br />por f&oacute;rum";
 #endif
 
-const char *Txt_No_of_messages_BR_per_thread =
+const char *Txt_No_of_posts_BR_per_user =
+#if   L==1
+	"N&ordm; de mensajes<br />por usuari";	// Necessita traduccio
+#elif L==2
+	"Anzahl der Nachrichten<br />pro Benutzer";
+#elif L==3
+	"No. of posts<br />per user";
+#elif L==4
+	"N&ordm; de mensajes<br />por usuario";
+#elif L==5
+	"Nombre de messages<br />par utilisateur";
+#elif L==6
+	"N&ordm; de mensajes<br />por puruh&aacute;ra";	// Okoteve traducción
+#elif L==7
+	"Numero di post<br />per utente";
+#elif L==8
+	"Liczba wiadomosci<br />per u&zdot;ytkownik";
+#elif L==9
+	"N&ordm; de mensagens<br />por utilizador";
+#endif
+
+const char *Txt_No_of_posts_BR_per_thread =
 #if   L==1
 	"N&ordm; de mensajes<br />por discusi&oacute;n";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten<br />pro Thread";
 #elif L==3
-	"No. of messages<br />per thread";
+	"No. of posts<br />per thread";
 #elif L==4
-	"N&ordm; de mensajes<br />por discusi&oacute;n";
+	"N&ordm; de mensajes<br />por usuario";
 #elif L==5
 	"Nombre de messages<br />par fil";
 #elif L==6
 	"N&ordm; de mensajes<br />por discusi&oacute;n";	// Okoteve traducción
 #elif L==7
-	"Numero di messaggi<br />per discussione";
+	"Numero di post<br />per discussione";
 #elif L==8
 	"Liczba wiadomosci<br />per watku";
 #elif L==9
@@ -23970,6 +23991,27 @@ const char *Txt_No_of_questions =
 	"Liczba pyta&nacute;";
 #elif L==9
 	"N&ordm; de quest&otilde;es";
+#endif
+
+const char *Txt_No_of_social_posts =
+#if   L==1
+	"Nombre de missatges socials";
+#elif L==2
+	"Anzahl der sozialen Beitr&auml;ge";
+#elif L==3
+	"No. of social posts";
+#elif L==4
+	"N&ordm; de mensajes sociales";
+#elif L==5
+	"Nombre de messages sociaux";
+#elif L==6
+	"N&ordm; de mensajes sociales";	// Okoteve traducción
+#elif L==7
+	"Numero di post sociali";
+#elif L==8
+	"Liczba post spo&lstrok;ecznej";
+#elif L==9
+	"N&ordm; de post sociais";
 #endif
 
 const char *Txt_No_of_threads =
@@ -24076,28 +24118,7 @@ const char *Txt_No_of_users_who_will_be_notified_by_e_mail =
 #elif L==9
 	"N&ordm; de utilizadores que ser&atilde;o notificados por e-mail";
 #endif
-/*
-const char *Txt_No_public_activity =
-#if   L==1
-	 "Cap activitat p&uacute;blica";
-#elif L==2
-	 "Keine &ouml;ffentliche Aktivit&auml;t";
-#elif L==3
-	 "No public activity";
-#elif L==4
-	 "Ninguna actividad p&uacute;blica";
-#elif L==5
-	 "Aucune activit&eacute; public";
-#elif L==6
-	 "Ninguna actividad p&uacute;blica";	// Okoteve traducción
-#elif L==7
-	 "Nessuna attivit&agrave; pubblica";
-#elif L==8
-	 "Brak aktywno&sacute;&cacute; publiczne";
-#elif L==9
-	 "Sem atividade p&uacute;blica";
-#endif
-*/
+
 const char *Txt_No_questions_found_matching_your_search_criteria =
 #if   L==1
 	"No hay preguntas con el criterio de b&uacute;squeda seleccionado.";	// Necessita traduccio
@@ -36411,7 +36432,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #endif
 	 ,
 #if   L==1
-	 "usuario"	// Necessita traduccio
+	 "usuari"
 #elif L==2
 	 "Benutzer"
 #elif L==3
@@ -37669,6 +37690,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Tests"		// Potrzebujesz tlumaczenie
 #elif L==9
 	 "Testes"
+#endif
+	 ,
+#if   L==1				// Sta_SOCIAL_ACTIVITY
+	 "Activitat p&uacute;blica"
+#elif L==2
+	 "&Ouml;ffentliche Aktivit&auml;t"
+#elif L==3
+	 "Public activity"
+#elif L==4
+	 "Actividad p&uacute;blica"
+#elif L==5
+	 "Activit&eacute; public"
+#elif L==6
+	 "Actividad p&uacute;blica"	// Okoteve traducción
+#elif L==7
+	 "Attivit&agrave; pubblica"
+#elif L==8
+	 "Aktywno&sacute;&cacute; publiczne"
+#elif L==9
+	 "Atividade p&uacute;blica"
 #endif
 	 ,
 #if   L==1				// Sta_FOLLOW
