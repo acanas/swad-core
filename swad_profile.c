@@ -696,7 +696,7 @@ static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName)
 
 static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
@@ -705,13 +705,15 @@ static unsigned long Prf_GetRankingNumClicksPerDay (long UsrCod)
                   " AS NumClicksPerDay"
                   " FROM usr_figures"
                   " WHERE UsrCod<>'%ld'"	// Necessary because the following comparison is not exact in floating point
-                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0'"
+                  " AND NumClicks>'0'"
+                  " AND UNIX_TIMESTAMP(FirstClickTime)>'0')"
                   " AS TableNumClicksPerDay"
                   " WHERE NumClicksPerDay>"
                   "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
                   " FROM usr_figures"
                   " WHERE UsrCod='%ld'"
-                  " AND NumClicks>='0' AND UNIX_TIMESTAMP(FirstClickTime)>'0')",
+                  " AND NumClicks>'0'"
+                  " AND UNIX_TIMESTAMP(FirstClickTime)>'0')",
 	    UsrCod,UsrCod);
    return DB_QueryCOUNT (Query,"can not get ranking using number of clicks per day");
   }
@@ -726,7 +728,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
    /***** Select number of rows with values already calculated *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_figures"
-	          " WHERE NumClicks>='0'"
+	          " WHERE NumClicks>'0'"
 	          " AND UNIX_TIMESTAMP(FirstClickTime)>'0'");
    return DB_QueryCOUNT (Query,"can not get number of users with number of clicks per day");
   }
@@ -1345,7 +1347,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 sprintf (Query,"SELECT UsrCod,"
 	                "NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
 	                " FROM usr_figures"
-			" WHERE UNIX_TIMESTAMP(FirstClickTime)>'0'"
+			" WHERE NumClicks>'0'"
+			" AND UNIX_TIMESTAMP(FirstClickTime)>'0'"
 			" AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
          break;
@@ -1360,6 +1363,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>'0'"
 			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>'0'"
 			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
@@ -1375,6 +1379,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>'0'"
 			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>'0'"
 			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
@@ -1389,6 +1394,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>'0'"
 			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>'0'"
 			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
@@ -1402,6 +1408,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>'0'"
 			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>'0'"
 			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
@@ -1414,6 +1421,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
                         " FROM crs_usr,usr_figures"
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_figures.UsrCod"
+			" AND usr_figures.NumClicks>'0'"
 			" AND UNIX_TIMESTAMP(usr_figures.FirstClickTime)>'0'"
 			" AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 			" ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
