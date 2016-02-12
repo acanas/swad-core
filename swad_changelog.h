@@ -107,7 +107,6 @@
 //	 only (the groups he/she should have attend) union (the groups he/she really attended)
 //	 should be shown.
 // TODO: When page is refreshed in course works, prevent users to be duplicated
-// TODO: Fix bug at the end of ranking (number too low) when a course is selected
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
 
@@ -121,13 +120,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.137 (2016-02-07)"
+#define Log_PLATFORM_VERSION	"SWAD 15.137.1 (2016-02-13)"
 #define CSS_FILE		"swad15.136.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.137.1: Feb 13, 2016	Fixed bug at the end of ranking (number too low). (195960 lines)
         Version 15.137:   Feb 07, 2016	New figure about number of social notes. (195953 lines)
         Version 15.136.7: Feb 06, 2016	Fixed bug in social tab when not logged. (195715 lines)
         Version 15.136.6: Feb 06, 2016	Change in graphic with number of users per country. (195703 lines)
