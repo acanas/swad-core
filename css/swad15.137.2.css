@@ -103,6 +103,12 @@ a:hover						/* Default ==> underlined */
 	display:table;
 	box-sizing:border-box;
 	width:100%;
+	/*
+	background-color:black;
+	background-image:url('/swad/background.jpg');
+	background-repeat:no-repeat;
+	background-size:100%;
+	*/
 	}
 
 /************************* Layout (first heading row) ************************/
@@ -512,10 +518,15 @@ a:hover						/* Default ==> underlined */
 	text-decoration:none;
 	}
 
-.TAB_ON_WHITE	{background-color:#F7F6F5;}
-.TAB_ON_GREY	{background-color:#F7F6F5;}
+/*.TAB_ON_WHITE	{background-color:#F7F6F5;}*/
+.TAB_ON_WHITE	{background-color:rgba(247, 246, 245, 0.95);}
+/*.TAB_ON_GREY	{background-color:#F7F6F5;}*/
+.TAB_ON_GREY	{background-color:rgba(247, 246, 245, 0.95);}
 .TAB_ON_BLUE	{background-color:#E8F3F6;}
-.TAB_ON_YELLOW	{background-color:#FFF2BD;}
+/*.TAB_ON_BLUE	{background-color:#E8F3F6;}*/
+.TAB_ON_BLUE	{background-color:rgba(232, 243, 246, 0.95);}
+/* .TAB_ON_YELLOW	{background-color:#FFF2BD;} */
+.TAB_ON_YELLOW	{background-color:rgba(255, 242, 189, 0.95);}
 
 .TAB_OFF_WHITE	{background-color:#D4D4D4;}
 .TAB_OFF_GREY	{background-color:#D4D4D4;}
@@ -884,6 +895,7 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	margin:0 auto;
+	background:white;
 	border-style:solid;
 	border-width:1px;
 	border-color:#80C040;
@@ -900,6 +912,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:148px;
 	margin:0;
+	background:white;
 	border-style:solid;
 	border-width:1px;
 	border-color:#8CBCCE;
@@ -923,6 +936,7 @@ a:hover						/* Default ==> underlined */
 	width:148px;
 	margin:0;
 	padding:5px;
+	background:white;
 	border-style:solid;
 	border-width:1px;
 	border-color:#8CBCCE;
@@ -1171,6 +1185,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:148px;
 	margin:0;
+	background:white;
 	border-style:solid;
 	border-width:1px;
 	border-color:#8CBCCE;
@@ -2250,6 +2265,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	float:left;
 	text-align:left;
 	padding-bottom:20px;
+	background:white;
 	}
 .FOOT_LIST_TITLE
 	{
