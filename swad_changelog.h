@@ -121,20 +121,18 @@
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
 // TODO: Put link "Ir a ..." after editing a degree, centre or institution (similar to course)
 
-// TODO: Change "Año o semestre" to "Curso o semestre"
-// TODO: Change "El curso de la asignatura..." to "El curso/semestre de la asignatura..."
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.139.1 (2016-02-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.139.2 (2016-02-29)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.139.2: Feb 29, 2016	Changed message related to year/semester. (195731 lines)
         Version 15.139.1: Feb 29, 2016	Remove fields FirstYear and LastYear from database table degrees. (195732 lines)
 					1 change necessary in database:
 ALTER TABLE degrees DROP COLUMN FirstYear,DROP COLUMN LastYear;

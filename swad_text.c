@@ -4905,7 +4905,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	"Parab&eacute;ns! Voc&ecirc; criou seu ACC conta."
 	" Agora %s vai pedir-lhe alguns dados para completar o seu perfil."
 	" Em seguida, voc&ecirc; ser&aacute; capaz de aplicar para a matrícula em cursos."
-	" Se um curso n&atilde;o existir,"
+	" Se uma disciplina n&atilde;o existir,"
 	" voc&ecirc; pode cri&aacute;-lo antes de solicitar a inscri&ccedil;&atilde;o do mesmo"
 	" (o mesmo se aplica &agrave;s institui&ccedil;&otilde;es, centros e graus).";
 #endif
@@ -14211,31 +14211,31 @@ const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_re
 
 const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1
-	"En el curso <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
+	"En el a&ntilde;o/semestre <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
 	" ya exist&iacute;a una asignatura con el nombre <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"In the year <strong>%s</strong> of the degree <strong>%s</strong>"
+	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
 	" already existed a course with the name <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3
-	"In the year <strong>%s</strong> of the degree <strong>%s</strong>"
+	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
 	" already existed a course with the name <strong>%s</strong>.";
 #elif L==4
-	"En el curso <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
+	"En el a&ntilde;o/semestre <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
 	" ya exist&iacute;a una asignatura con el nombre <strong>%s</strong>.";
 #elif L==5
-	"In the year <strong>%s</strong> of the degree <strong>%s</strong>"
+	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
 	" already existed a course with the name <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
-	"En el curso <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
+	"En el a&ntilde;o/semestre <strong>%s</strong> de la titulaci&oacute;n <strong>%s</strong>"
 	" ya exist&iacute;a una asignatura con el nombre <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
-	"Nell'anno <strong>%s</strong> di laurea <strong>%s</strong>"
+	"Nell'anno/semester <strong>%s</strong> di laurea <strong>%s</strong>"
 	" gi&agrave; esiste un corso con il nome <strong>%s</strong>.";
 #elif L==8
-	"W roku <strong>%s</strong> stopnia <strong>%s</strong>"
+	"W roku/semestr <strong>%s</strong> stopnia <strong>%s</strong>"
 	" istnialy juz kurs&oacute;w z nazwa <strong>%s</strong>.";
 #elif L==9
-	"In the year <strong>%s</strong> of the degree <strong>%s</strong>"
+	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
 	" already existed a course with the name <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
@@ -40531,23 +40531,23 @@ const char *Txt_The_course_X_already_exists =	// Warning: it is very important t
 
 const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"La asignatura <strong>%s</strong> ya existe en el curso %s.";	// Necessita traduccio
+	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";	// Necessita traduccio
 #elif L==2
-	"Die Kurs <strong>%s</strong> wurde bereits in Studienjahr %s eingegeben.";
+	"Die Kurs <strong>%s</strong> wurde bereits in Studienjahr/Semester %s eingegeben.";
 #elif L==3
-	"The course <strong>%s</strong> already exists in year %s.";
+	"The course <strong>%s</strong> already exists in year/semester %s.";
 #elif L==4
-	"La asignatura <strong>%s</strong> ya existe en el curso %s.";
+	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";
 #elif L==5
-	"The course <strong>%s</strong> already exists in year %s.";	// Besoin de traduction
+	"The course <strong>%s</strong> already exists in year/semester %s.";	// Besoin de traduction
 #elif L==6
-	"La asignatura <strong>%s</strong> ya existe en el curso %s.";	// Okoteve traducción
+	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";	// Okoteve traducción
 #elif L==7
-	"Il corso <strong>%s</strong> esiste gi&agrave; nell'anno %s.";
+	"Il corso <strong>%s</strong> esiste gi&agrave; nell'anno/semester %s.";
 #elif L==8
-	"The course <strong>%s</strong> already exists in year %s.";	// Potrzebujesz tlumaczenie
+	"The course <strong>%s</strong> already exists in year/semester %s.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"The course <strong>%s</strong> already exists in year %s.";	// Necessita de tradução
+	"The course <strong>%s</strong> already exists in year/semester %s.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -44563,44 +44563,44 @@ const char *Txt_The_works_of_X_have_been_removed_in_a_total_of_Y_of_his_her_Z_co
 
 const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"El curso <strong>%u</strong> no est&aacute; permitido.";	// Necessita traduccio
+	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Necessita traduccio
 #elif L==2
-	"The year <strong>%u</strong> is not enabled.";			// Need Übersetzung
+	"The year/semester <strong>%u</strong> is not enabled.";			// Need Übersetzung
 #elif L==3
-	"The year <strong>%u</strong> is not enabled.";
+	"The year/semester <strong>%u</strong> is not enabled.";
 #elif L==4
-	"El curso <strong>%u</strong> no est&aacute; permitido.";
+	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";
 #elif L==5
-	"The year <strong>%u</strong> is not enabled.";			// Besoin de traduction
+	"The year/semester <strong>%u</strong> is not enabled.";			// Besoin de traduction
 #elif L==6
-	"El curso <strong>%u</strong> no est&aacute; permitido.";	// Okoteve traducción
+	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Okoteve traducción
 #elif L==7
-	"L'anno <strong>%u</strong> non &egrave; consentito.";
+	"L'anno/semester <strong>%u</strong> non &egrave; consentito.";
 #elif L==8
-	"The year <strong>%u</strong> is not allowed.";			// Potrzebujesz tlumaczenie
+	"The year/semester <strong>%u</strong> is not allowed.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The year <strong>%u</strong> is not allowed.";			// Necessita de tradução
+	"The year/semester <strong>%u</strong> is not allowed.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El curso de la asignatura <strong>%s</strong> ha cambiado.";	// Necessita traduccio
+	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Necessita traduccio
 #elif L==2
-	"The year of the couse <strong>%s</strong> has changed.";	// Need Übersetzung
+	"The year/semester of the couse <strong>%s</strong> has changed.";		// Need Übersetzung
 #elif L==3
-	"The year of the couse <strong>%s</strong> has changed.";
+	"The year/semester of the couse <strong>%s</strong> has changed.";
 #elif L==4
-	"El curso de la asignatura <strong>%s</strong> ha cambiado.";
+	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";
 #elif L==5
-	"The year of the couse <strong>%s</strong> has changed.";	// Besoin de traduction
+	"The year/semester of the couse <strong>%s</strong> has changed.";		// Besoin de traduction
 #elif L==6
-	"El curso de la asignatura <strong>%s</strong> ha cambiado.";	// Okoteve traducción
+	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Okoteve traducción
 #elif L==7
-	"L'anno del corso <strong>%s</strong> &egrave; cambiato.";
+	"L'anno/semestre del corso <strong>%s</strong> &egrave; cambiato.";
 #elif L==8
-	"The year of the couse <strong>%s</strong> has changed.";	// Potrzebujesz tlumaczenie
+	"The year/semestre of the couse <strong>%s</strong> has changed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"The year of the couse <strong>%s</strong> has changed.";	// Necessita de tradução
+	"The year/semestre of the couse <strong>%s</strong> has changed.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_ZIP_file_has_been_received_successfully =
