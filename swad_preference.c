@@ -236,8 +236,6 @@ void Pre_RemoveOldPrefsFromIP (void)
 
 void Pre_PutLinkToChangeLanguage (void)
   {
-   extern const char *Txt_Log_in;
-
    Lay_PutContextualLink (ActEdiPrf,NULL,
                           "cty64x64.gif",
                           "Change language","Change language");

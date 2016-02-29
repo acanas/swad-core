@@ -11887,27 +11887,6 @@ const char *Txt_First_name =
 	"Nome";
 #endif
 
-const char *Txt_First_BR_year =	// "First academic year", the opposite to "Last academic year"
-#if   L==1
-	"Primer<br />a&ntilde;o/sem.";	// Necessita traduccio
-#elif L==2
-	"First<br />year/sem.";		// Need Übersetzung
-#elif L==3
-	"First<br />year/sem.";
-#elif L==4
-	"Primer<br />a&ntilde;o/sem.";
-#elif L==5
-	"First<br />year/sem.";		// Besoin de traduction
-#elif L==6
-	"Primer<br />a&ntilde;o/sem.";	// Okoteve traducción
-#elif L==7
-	"Primo<br />anno/sem.";
-#elif L==8
-	"Pierwszy<br />rok/sem.";
-#elif L==9
-	"First<br />year/sem.";		// Necessita de tradução
-#endif
-
 const char *Txt_Folder =
 #if   L==1
 	"Carpeta";
@@ -15558,27 +15537,6 @@ const char *Txt_Last_clicks_in_real_time =
 	"Ostatnie dwa klikni&eogon;cia w czasie rzeczywistym";
 #elif L==9
 	"&Uacute;ltimos cliques em tempo real";
-#endif
-
-const char *Txt_Last_BR_year =	// "Last academic year", the opposite to "First academic year"
-#if   L==1
-	"&Uacute;ltimo<br />a&ntilde;o/sem.";	// Necessita traduccio
-#elif L==2
-	"Last<br />year/sem.";		// Need Übersetzung
-#elif L==3
-	"Last<br />year/sem.";
-#elif L==4
-	"&Uacute;ltimo<br />a&ntilde;o/sem.";
-#elif L==5
-	"Last<br />year/sem.";		// Besoin de traduction
-#elif L==6
-	"&Uacute;ltimo<br />a&ntilde;o/sem.";	// Okoteve traducción
-#elif L==7
-	"Last<br />anno/sem.";
-#elif L==8
-	"Ostatni<br />rok/sem.";
-#elif L==9
-	"Last<br />year/sem.";		// Necessita de tradução
 #endif
 
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
@@ -44603,34 +44561,25 @@ const char *Txt_The_works_of_X_have_been_removed_in_a_total_of_Y_of_his_her_Z_co
 	" have been removed in a total of %u of her/his %u courses.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_year_X_is_not_enabled_on_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"El curso <strong>%s</strong> no est&aacute; habilitado"
-	" en la titulaci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
+	"El curso <strong>%u</strong> no est&aacute; permitido.";	// Necessita traduccio
 #elif L==2
-	"The year <strong>%s</strong> is not enabled"
-	" on the degree <strong>%s</strong>.";			// Need Übersetzung
+	"The year <strong>%u</strong> is not enabled.";			// Need Übersetzung
 #elif L==3
-	"The year <strong>%s</strong> is not enabled"
-	" on the degree <strong>%s</strong>.";
+	"The year <strong>%u</strong> is not enabled.";
 #elif L==4
-	"El curso <strong>%s</strong> no est&aacute; habilitado"
-	" en la titulaci&oacute;n <strong>%s</strong>.";
+	"El curso <strong>%u</strong> no est&aacute; permitido.";
 #elif L==5
-	"The year <strong>%s</strong> is not enabled"
-	" on the degree <strong>%s</strong>.";			// Besoin de traduction
+	"The year <strong>%u</strong> is not enabled.";			// Besoin de traduction
 #elif L==6
-	"El curso <strong>%s</strong> no est&aacute; habilitado"
-	" en la titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
+	"El curso <strong>%u</strong> no est&aacute; permitido.";	// Okoteve traducción
 #elif L==7
-	"L'anno <strong>%s</strong> non &egrave; abilitato"
-	" nella laurea <strong>%s</strong>.";
+	"L'anno <strong>%u</strong> non &egrave; consentito.";
 #elif L==8
-	"The year <strong>%s</strong> is not enabled"
-	" on the degree <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"The year <strong>%u</strong> is not allowed.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The year <strong>%s</strong> is not enabled"
-	" on the degree <strong>%s</strong>.";			// Necessita de tradução
+	"The year <strong>%u</strong> is not allowed.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -44652,27 +44601,6 @@ const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very im
 	"The year of the couse <strong>%s</strong> has changed.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"The year of the couse <strong>%s</strong> has changed.";	// Necessita de tradução
-#endif
-
-const char *Txt_The_years_of_the_degree_have_changed =
-#if   L==1
-	"Los a&ntilde;os de la titulaci&oacute;n han cambiado.";	// Necessita traduccio
-#elif L==2
-	"The years of the degree have changed.";			// Need Übersetzung
-#elif L==3
-	"The years of the degree have changed.";
-#elif L==4
-	"Los a&ntilde;os de la titulaci&oacute;n han cambiado.";
-#elif L==5
-	"The years of the degree have changed.";			// Besoin de traduction
-#elif L==6
-	"Los a&ntilde;os de la titulaci&oacute;n han cambiado.";	// Okoteve traducción
-#elif L==7
-	"Gli anni della laurea sono cambiati.";
-#elif L==8
-	"The years of the degree have changed.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"The years of the degree have changed.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_ZIP_file_has_been_received_successfully =

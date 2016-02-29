@@ -119,19 +119,25 @@
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 
-// TODO: Remove edition of years in edition of degrees. Every degree will have years from 1 to 12 (and N.A.)
+// TODO: Remove fields 'FirstYear' and 'LastYear' from database table 'degrees'
+// TODO: Change "Año o semestre" to "Curso o semestre"
+// TODO: Change "El curso de la asignatura..." to "El curso/semestre de la asignatura..."
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.138 (2016-02-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.139 (2016-02-29)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.139:   Feb 29, 2016	Remove edition of years in edition of degrees. Every degree now have years from 1 to 12 (and N.A.) (195734 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('550','551');
+
         Version 15.138:   Feb 29, 2016	Form to sign up is shown below login form. (196012 lines)
         Version 15.137.3: Feb 29, 2016	Change in button when file uploading is done. (195986 lines)
         Version 15.137.2: Feb 13, 2016	Fixed bug in search of my documents. (195985 lines)

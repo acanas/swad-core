@@ -294,8 +294,6 @@ Centre:
 	185. ActRenDegFul		Request change of the full name of a degree
 	186. ActChgDegTyp		Request change of the type of a degree
 	187. ActChgDegCtr		Request change of the centre of a degree
-	188. ActChgDegFstYea		Request change of the first year of a degree
-	189. ActChgDegLstYea		Request change of the last year of a degree
 	190. ActChgDegWWW		Request change of the web of a degree
 	191. ActChgDegSta		Request change of status of a degree
 
@@ -1578,8 +1576,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenDegFul	*/{ 547,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RenameDegreeFull		,NULL},
    /* ActChgDegTyp	*/{ 544,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegreeType		,NULL},
    /* ActChgDegCtr	*/{1049,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegreeCtr		,NULL},
-   /* ActChgDegFstYea	*/{ 550,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegFirstYear		,NULL},
-   /* ActChgDegLstYea	*/{ 551,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegLastYear		,NULL},
    /* ActChgDegWWW	*/{ 554,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegStatus		,NULL},
 
@@ -3263,8 +3259,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRenDegFul,		// #547
 	-1,			// #548 (obsolete action)
 	-1,			// #549 (obsolete action)
-	ActChgDegFstYea,	// #550
-	ActChgDegLstYea,	// #551
+	-1,			// #550 (obsolete action)
+	-1,			// #551 (obsolete action)
 	-1,			// #552
 	ActRecDegLog,		// #553
 	ActChgDegWWW,		// #554

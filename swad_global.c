@@ -305,8 +305,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingDeg.DegCod       = -1L;
    Gbl.Degs.EditingDeg.ShortName[0] = '\0';
    Gbl.Degs.EditingDeg.FullName[0]  = '\0';
-   Gbl.Degs.EditingDeg.FirstYear    =
-   Gbl.Degs.EditingDeg.LastYear     = 0;
    Gbl.Degs.EditingDeg.WWW[0]       = '\0';
    Gbl.Degs.EditingDeg.NumCrss      = 0;
    Gbl.Degs.EditingDeg.LstCrss      = NULL;

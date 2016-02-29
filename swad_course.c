@@ -241,14 +241,13 @@ static void Crs_Configuration (bool PrintView)
      {
       fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\">");
       for (Year = 0;
-	   Year <= Gbl.CurrentDeg.Deg.LastYear;
+	   Year <= Deg_MAX_YEARS_PER_DEGREE;
            Year++)
-         if (Deg_CheckIfYearIsValidInDeg (Year,&Gbl.CurrentDeg.Deg))
-            fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-                     Year,
-                     Year == Gbl.CurrentCrs.Crs.Year ? " selected=\"selected\"" :
-                	                               "",
-                     Txt_YEAR_OF_DEGREE[Year]);
+	 fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
+		  Year,
+		  Year == Gbl.CurrentCrs.Crs.Year ? " selected=\"selected\"" :
+						    "",
+		  Txt_YEAR_OF_DEGREE[Year]);
       fprintf (Gbl.F.Out,"</select>");
      }
    else
@@ -1676,14 +1675,13 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"OthCrsYear\" style=\"width:50px;\">");
    for (Year = 0;
-	Year <= Gbl.CurrentDeg.Deg.LastYear;
+	Year <= Deg_MAX_YEARS_PER_DEGREE;
         Year++)
-      if (Deg_CheckIfYearIsValidInDeg (Year,&Gbl.CurrentDeg.Deg))
-         fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-                  Year,
-                  Year == Crs->Year ? " selected=\"selected\"" :
-                	              "",
-                  Txt_YEAR_OF_DEGREE[Year]);
+      fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
+	       Year,
+	       Year == Crs->Year ? " selected=\"selected\"" :
+				   "",
+	       Txt_YEAR_OF_DEGREE[Year]);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -1867,7 +1865,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course;
-   extern const char *Txt_The_year_X_is_not_enabled_on_the_degree_Y;
+   extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    struct Course *Crs;
    struct Degree Deg;
@@ -1883,7 +1881,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 
    /***** Check if year is correct *****/
    Deg_GetDataOfDegreeByCod (&Deg);
-   if (Deg_CheckIfYearIsValidInDeg (Crs->Year,&Deg))	// If year is valid
+   if (Crs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       if (Crs->ShortName[0] &&
 	  Crs->FullName[0])	// If there's a course name
@@ -1912,8 +1910,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
      }
    else	// Year not valid
      {
-      sprintf (Gbl.Message,Txt_The_year_X_is_not_enabled_on_the_degree_Y,
-	       Txt_YEAR_OF_DEGREE[Crs->Year],Deg.FullName);
+      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
@@ -2435,7 +2432,7 @@ void Crs_ChangeCrsDegree (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   extern const char *Txt_The_year_X_is_not_enabled_on_the_degree_Y;
+   extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Course *Crs;
    bool ICanChangeCrsToNewDeg;
@@ -2471,7 +2468,7 @@ void Crs_ChangeCrsDegree (void)
    if (ICanChangeCrsToNewDeg)
      {
       /***** If new degree has current course year... *****/
-      if (Deg_CheckIfYearIsValidInDeg (Crs->Year,&NewDeg))
+      if (Crs->Year <= Deg_MAX_YEARS_PER_DEGREE)
         {
          /***** If name of course was in database in the new degree... *****/
          if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,"ShortName",Crs->ShortName,-1L))
@@ -2505,8 +2502,7 @@ void Crs_ChangeCrsDegree (void)
         }
       else	// New degree has no current course year
         {
-         sprintf (Gbl.Message,Txt_The_year_X_is_not_enabled_on_the_degree_Y,
-                  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName);
+         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
@@ -2530,7 +2526,7 @@ void Crs_ChangeCrsYear (void)
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
-   extern const char *Txt_The_year_X_is_not_enabled_on_the_degree_Y;
+   extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    struct Course *Crs;
    struct Degree Deg;
@@ -2556,7 +2552,7 @@ void Crs_ChangeCrsYear (void)
       Deg.DegCod = Crs->DegCod;
       Deg_GetDataOfDegreeByCod (&Deg);
 
-      if (Deg_CheckIfYearIsValidInDeg (NewYear,&Deg))	// If year is valid
+      if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
          if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,NewYear,"ShortName",Crs->ShortName,-1L))
@@ -2592,8 +2588,7 @@ void Crs_ChangeCrsYear (void)
         }
       else	// Year not valid
         {
-         sprintf (Gbl.Message,Txt_The_year_X_is_not_enabled_on_the_degree_Y,
-                  Txt_YEAR_OF_DEGREE[NewYear],Deg.FullName);
+         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }

@@ -76,8 +76,6 @@ struct Degree
    long RequesterUsrCod;				// User code of the person who requested the creation of this degree
    char ShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
    char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
-   unsigned FirstYear;
-   unsigned LastYear;
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumCrss;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
@@ -144,8 +142,6 @@ void Deg_RenameDegreeFull (void);
 void Deg_ChangeDegTypeLogIn (void);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegreeCtr (void);
-void Deg_ChangeDegFirstYear (void);
-void Deg_ChangeDegLastYear (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_RequestLogo (void);
@@ -158,8 +154,6 @@ unsigned Deg_GetNumDegsInIns (long InsCod);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetNumDegsWithCrss (const char *SubQuery);
 unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
-
-bool Deg_CheckIfYearIsValidInDeg (unsigned Year,struct Degree *Deg);
 
 void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
