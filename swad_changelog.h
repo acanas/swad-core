@@ -110,23 +110,30 @@
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
 
-// TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
+// TODO: Change size of DegTypName in table deg_types from VARCHAR(32) TO VARCHAR(255)
+// TODO: Remove AllowDirectLogIn in table deg_types
+// TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
+// TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
+
+// TODO: Remove edition of years in edition of degrees. Every degree will have years from 1 to 12 (and N.A.)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.137.2 (2016-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.138 (2016-02-29)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.138:   Feb 29, 2016	Form to sign up is shown below login form. (196012 lines)
+        Version 15.137.3: Feb 29, 2016	Change in button when file uploading is done. (195986 lines)
         Version 15.137.2: Feb 13, 2016	Fixed bug in search of my documents. (195985 lines)
         Version 15.137.1: Feb 13, 2016	Fixed bug at the end of ranking (number too low). (195968 lines)
         Version 15.137:   Feb 07, 2016	New figure about number of social notes. (195953 lines)

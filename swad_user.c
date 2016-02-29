@@ -1444,13 +1444,25 @@ void Usr_Logout (void)
   }
 
 /*****************************************************************************/
+/*************************** Put link to log in ******************************/
+/*****************************************************************************/
+
+void Usr_PutLinkToLogin (void)
+  {
+   extern const char *Txt_Log_in;
+
+   Lay_PutContextualLink (ActFrmLogIn,NULL,
+                          "login-green64x64.png",
+                          Txt_Log_in,Txt_Log_in);
+  }
+
+/*****************************************************************************/
 /************************ Write form for user log in *************************/
 /*****************************************************************************/
 
 void Usr_WriteFormLogin (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Create_account;
    extern const char *Txt_Enter_from_X;
    extern const char *Txt_Log_in;
    extern const char *Txt_User;
@@ -1460,10 +1472,6 @@ void Usr_WriteFormLogin (void)
 
    /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Link to create a new account */
-   Lay_PutContextualLink (ActFrmUsrAcc,NULL,"arroba64x64.gif",
-                          Txt_Create_account,Txt_Create_account);
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1480,8 +1488,9 @@ void Usr_WriteFormLogin (void)
       fprintf (Gbl.F.Out,"</a>");
      }
 
-   /* Link to send a new password */
+   /* Links to send a new password and to change language */
    Pwd_PutLinkToSendNewPasswd ();
+   Pre_PutLinkToChangeLanguage ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1537,6 +1546,9 @@ void Usr_WriteFormLogin (void)
 	              Txt_Log_in);
    Lay_EndRoundFrameTable ();
    Act_FormEnd ();
+
+   /***** Form to create a new account *****/
+   Acc_ShowFormRequestNewAccount ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2620,7 +2632,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLogOut,NULL,"logout64x64.png",
+   Lay_PutContextualLink (ActLogOut,NULL,"logout-red64x64.png",
                           Txt_Log_out,Txt_Log_out);
    fprintf (Gbl.F.Out,"</div>");
 

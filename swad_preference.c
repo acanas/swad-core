@@ -231,6 +231,19 @@ void Pre_RemoveOldPrefsFromIP (void)
   }
 
 /*****************************************************************************/
+/************** Put link to change language (edit preferences) ***************/
+/*****************************************************************************/
+
+void Pre_PutLinkToChangeLanguage (void)
+  {
+   extern const char *Txt_Log_in;
+
+   Lay_PutContextualLink (ActEdiPrf,NULL,
+                          "cty64x64.gif",
+                          "Change language","Change language");
+  }
+
+/*****************************************************************************/
 /********************* Put a selector to select language *********************/
 /*****************************************************************************/
 // Width == 0 means don't force width of selector

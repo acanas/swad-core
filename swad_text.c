@@ -11382,23 +11382,23 @@ const char *Txt_File_size =
 
 const char *Txt_FILE_UPLOAD_Done =
 #if   L==1
-	"Finalitzar";
+	"Fet";
 #elif L==2
 	"Gemacht";
 #elif L==3
 	"Done";
 #elif L==4
-	"Finalizar";
+	"Hecho";
 #elif L==5
-	"Fini";
+	"Termin&eacute;";
 #elif L==6
-	"Finalizar";	// Okoteve traducción
+	"Hecho";	// Okoteve traducción
 #elif L==7
 	"Fatto";
 #elif L==8
 	"Gotowe";
 #elif L==9
-	"Terminar";
+	"Feito";
 #endif
 
 const char *Txt_File_with_the_logo =

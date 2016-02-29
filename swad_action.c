@@ -4539,7 +4539,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
       Gbl.Action.Act = ActSeeCtyInf;
    else
-      Gbl.Action.Act = Cfg_DEFAULT_ACTION_WHEN_NO_USR_LOGGED;
+      Gbl.Action.Act = ActFrmLogIn;
    Tab_SetCurrentTab ();
   }
 

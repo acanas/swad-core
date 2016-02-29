@@ -37,6 +37,7 @@
 #include "swad_ID.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_profile.h"
 #include "swad_social.h"
 
@@ -101,12 +102,13 @@ void Acc_ShowFormAccount (void)
       Acc_ShowFormChangeMyAccount ();
    else
      {
-      Acc_ShowFormRequestNewAccountWithParams ("","");
+      /* Links to log in and to change language */
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Usr_PutLinkToLogin ();
+      Pre_PutLinkToChangeLanguage ();
+      fprintf (Gbl.F.Out,"</div>");
 
-      /***** Form to send students to be enrolled / removed *****/
-      Act_FormStart (ActEdiPrf);
-      Lay_PutConfirmButton ("Change language");
-      Act_FormEnd ();
+      Acc_ShowFormRequestNewAccount ();
      }
   }
 
@@ -114,11 +116,19 @@ void Acc_ShowFormAccount (void)
 /********************* Show form to create a new account *********************/
 /*****************************************************************************/
 
+void Acc_ShowFormRequestNewAccount (void)
+  {
+   Acc_ShowFormRequestNewAccountWithParams ("","");
+  }
+
+/*****************************************************************************/
+/************ Show form to create a new account using parameters *************/
+/*****************************************************************************/
+
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Log_in;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
@@ -126,12 +136,6 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-
-   /***** Link to log in *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActFrmLogIn,NULL,"login64x64.png",
-                          Txt_Log_in,Txt_Log_in);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);

@@ -247,6 +247,7 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod);
 
 void Usr_WriteFormLoginLogout (void);
 void Usr_Logout (void);
+void Usr_PutLinkToLogin (void);
 void Usr_WriteFormLogin (void);
 void Usr_WelcomeUsr (void);
 void Usr_PutFormLogIn (void);

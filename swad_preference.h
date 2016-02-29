@@ -45,6 +45,7 @@ void Pre_GetPrefsFromIP (void);
 void Pre_SetPrefsFromIP (void);
 void Pre_RemoveOldPrefsFromIP (void);
 
+void Pre_PutLinkToChangeLanguage (void);
 void Pre_PutSelectorToSelectLanguage (void);
 void Pre_AskChangeLanguage (void);
 void Pre_ChangeLanguage (void);
