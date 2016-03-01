@@ -2066,15 +2066,13 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
    char Query[1024];
 
    /***** Create a new degree *****/
-   sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,WWW)"
-                  " VALUES ('%ld','%ld','%u','%ld',"
-                  "'%s','%s','%s')",
-            Deg->CtrCod,Deg->DegTypCod,
-            Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,
-            Deg->ShortName,Deg->FullName,Deg->WWW);
-   DB_QueryINSERT (Query,"can not create a new degree");
+   sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
+	          "RequesterUsrCod,ShortName,FullName,WWW)"
+                  " VALUES ('%ld','%ld','%u',"
+                  "'%ld','%s','%s','%s')",
+            Deg->CtrCod,Deg->DegTypCod,Status,
+            Gbl.Usrs.Me.UsrDat.UsrCod,Deg->ShortName,Deg->FullName,Deg->WWW);
+   Deg->DegCod = DB_QueryINSERTandReturnCode (Query,"can not create a new degree");
 
    /***** Write success message *****/
    sprintf (Gbl.Message,Txt_Created_new_degree_X,

@@ -119,19 +119,20 @@
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
-// TODO: Put link "Ir a ..." after editing a degree, centre or institution (similar to course)
+// TODO: Put link "Ir a ..." after editing a centre or institution (similar to course and degree)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.141 (2016-03-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.141.1 (2016-03-01)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.141.1: Mar 01, 2016	Fixed bug when creating a new degree. (195897 lines)
         Version 15.141:   Mar 01, 2016	Button to go to another degree after editing. (195898 lines)
         Version 15.140.1: Mar 01, 2016	The link to go to another course after editing is replaced by a button. (195817 lines)
         Version 15.140:   Mar 01, 2016	New option "landing page". (195817 lines)
