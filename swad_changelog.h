@@ -125,13 +125,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.140 (2016-03-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.140.1 (2016-03-01)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.140.1: Mar 01, 2016	The link to go to another course after editing is replaced by a button. (195817 lines)
         Version 15.140:   Mar 01, 2016	New option "landing page". (195817 lines)
 					2 changes necessary in database:
 UPDATE actions SET Txt='Formularios cambiar rol y cerrar sesi&oacute;n' WHERE ActCod='843' AND Language='es';

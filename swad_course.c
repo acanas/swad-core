@@ -97,7 +97,7 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 static void Crs_EmptyCourseCompletely (long CrsCod);
 static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
-static void Crs_PutLinkToGoToCrs (struct Course *Crs);
+static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 
 static void Crs_PutLinkToSearchCourses (void);
 static void Crs_PutLinkToSearchCoursesParams (void);
@@ -1982,8 +1982,8 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
             Crs->FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-   /***** Put link to go to course created *****/
-   Crs_PutLinkToGoToCrs (Crs);
+   /***** Put button to go to course created *****/
+   Crs_PutButtonToGoToCrs (Crs);
   }
 
 /*****************************************************************************/
@@ -2412,9 +2412,9 @@ void Crs_ChangeInsCrsCod (void)
          Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
 
-      /***** Put link to go to course changed *****/
+      /***** Put button to go to course changed *****/
       if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-         Crs_PutLinkToGoToCrs (Crs);
+         Crs_PutButtonToGoToCrs (Crs);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
@@ -2495,9 +2495,9 @@ void Crs_ChangeCrsDegree (void)
                      Crs->FullName,NewDeg.FullName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-            /***** Put link to go to course changed *****/
+            /***** Put button to go to course changed *****/
             if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-               Crs_PutLinkToGoToCrs (Crs);
+               Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// New degree has no current course year
@@ -2581,9 +2581,9 @@ void Crs_ChangeCrsYear (void)
                      Crs->ShortName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-            /***** Put link to go to course changed *****/
+            /***** Put button to go to course changed *****/
             if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-               Crs_PutLinkToGoToCrs (Crs);
+               Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// Year not valid
@@ -2726,9 +2726,13 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
                         FieldName,NewCrsName,Crs->CrsCod);
                DB_QueryUPDATE (Query,"can not update the name of a course");
 
-               /***** Write message to show the change made *****/
+               /* Write message to show the change made */
                sprintf (Gbl.Message,Txt_The_name_of_the_course_X_has_changed_to_Y,
                         CurrentCrsName,NewCrsName);
+
+               /* Change current course name in order to display it properly */
+               strncpy (CurrentCrsName,NewCrsName,MaxLength);
+               CurrentCrsName[MaxLength] = '\0';
 
                CourseHasBeenRenamed = true;
               }
@@ -2786,9 +2790,9 @@ void Crs_ChangeCrsStatus (void)
             Crs->ShortName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-   /***** Put link to go to course changed *****/
+   /***** Put button to go to course changed *****/
    if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-      Crs_PutLinkToGoToCrs (Crs);
+      Crs_PutButtonToGoToCrs (Crs);
 
    /***** Show the form again *****/
    Crs_ReqEditCourses ();
@@ -2805,31 +2809,27 @@ void Crs_ContEditAfterChgCrs (void)
 	                      Lay_INFO,
 	          Gbl.Message);
 
-   /***** Put link to go to course changed *****/
+   /***** Put button to go to course changed *****/
    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-      Crs_PutLinkToGoToCrs (&Gbl.Degs.EditingCrs);
+      Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
 
    /***** Show the form again *****/
    Crs_ReqEditCourses ();
   }
 
 /*****************************************************************************/
-/******************** Put centered link to go to course **********************/
+/************************ Put button to go to course *************************/
 /*****************************************************************************/
 
-static void Crs_PutLinkToGoToCrs (struct Course *Crs)
+static void Crs_PutButtonToGoToCrs (struct Course *Crs)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Go_to_X;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormGoToStart (ActSeeCrsInf);
+   Act_FormStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (Crs->CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>",Gbl.Title);
+   Lay_PutConfirmButton (Gbl.Title);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
