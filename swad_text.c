@@ -18450,6 +18450,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabPrf *****************************************************
 	// ActFrmLogIn
 #if   L==1
+	"Entrar"
+#elif L==2
+	"Einloggen"
+#elif L==3
+	"Log in"
+#elif L==4
+	"Entrar"
+#elif L==5
+	"S'identifier"
+#elif L==6
+	"Entrar"	// Okoteve traducción
+#elif L==7
+	"Accesso"
+#elif L==8
+	"Zaloguj Si&eogon;"
+#elif L==9
+	"Entrar"
+#endif
+	,
+	// ActFrmRolSes
+#if   L==1
 	"Sessi&oacute;"
 #elif L==2
 	"Sitzung"
@@ -18616,7 +18637,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"A&ccedil;&otilde;es"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -20443,6 +20463,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Role nesta sess&atilde;o"
 #endif
 	,
+	// ActFrmRolSes
+#if   L==1
+	"Rol en aquesta sessi&oacute;"
+#elif L==2
+	"Rolle in dieser Sitzung"
+#elif L==3
+	"Role in this session"
+#elif L==4
+	"Rol en esta sesi&oacute;n"
+#elif L==5
+	"R&ocirc;le dans cette session"
+#elif L==6
+	"Rol en esta sesi&oacute;n"	// Okoteve traducción
+#elif L==7
+	"Ruolo in questa sessione"
+#elif L==8
+	"Rola w tej sesji"
+#elif L==9
+	"Role nesta sess&atilde;o"
+#endif
+	,
 	// ActMyCrs
 #if   L==1
 	"Assignatures a les quals pertanyo"
@@ -20590,7 +20631,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,

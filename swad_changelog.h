@@ -125,13 +125,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.139.2 (2016-02-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.140 (2016-03-01)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.140:   Mar 01, 2016	New option "landing page". (195817 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Formularios cambiar rol y cerrar sesi&oacute;n' WHERE ActCod='843' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1521','es','N','P&aacute;gina de inicio');
+
         Version 15.139.2: Feb 29, 2016	Changed message related to year/semester. (195731 lines)
         Version 15.139.1: Feb 29, 2016	Remove fields FirstYear and LastYear from database table degrees. (195732 lines)
 					1 change necessary in database:

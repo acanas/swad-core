@@ -120,6 +120,9 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
 static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void);
 static bool Usr_ChkUsrAndGetUsrDataFromSession (void);
+static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void);
+static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
+static void Usr_ShowAlertNoUsrWithThisID (void);
 
 static void Usr_SetUsrRoleAndPrefs (void);
 
@@ -1407,22 +1410,29 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
   }
 
 /*****************************************************************************/
-/****************** Write form for user log in or log out ********************/
+/***************************** Write landing page ****************************/
 /*****************************************************************************/
 
-void Usr_WriteFormLoginLogout (void)
+void Usr_WriteLandingPage (void)
   {
-   if (Gbl.Session.IsOpen)
-     {
-      /***** Form to change my role *****/
-      Usr_ShowFormsLogoutAndRole ();
+   /***** Form to log in *****/
+   Usr_WriteFormLogin ();
 
-      /***** Show help to enroll me *****/
-      Hlp_ShowHelpWhatWouldYouLikeToDo ();
-     }
-   else
-      /***** Form to log in *****/
-      Usr_WriteFormLogin ();
+   /***** Form to create a new account *****/
+   Acc_ShowFormRequestNewAccount ();
+  }
+
+/*****************************************************************************/
+/************************ Write form for user log out ************************/
+/*****************************************************************************/
+
+void Usr_WriteFormLogout (void)
+  {
+   /***** Form to change my role *****/
+   Usr_ShowFormsLogoutAndRole ();
+
+   /***** Show help to enroll me *****/
+   Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
 /*****************************************************************************/
@@ -1472,6 +1482,9 @@ void Usr_WriteFormLogin (void)
 
    /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Links to create a new account */
+   Acc_PutLinkToCreateAccount ();
 
    /* Link to enter from external site */
    if (Cfg_EXTERNAL_LOGIN_URL[0] &&
@@ -1546,9 +1559,6 @@ void Usr_WriteFormLogin (void)
 	              Txt_Log_in);
    Lay_EndRoundFrameTable ();
    Act_FormEnd ();
-
-   /***** Form to create a new account *****/
-   Acc_ShowFormRequestNewAccount ();
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2058,20 +2068,18 @@ void Usr_ChkUsrAndGetUsrData (void)
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
   {
-   extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
-   extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    struct ListUsrCods ListUsrCods;
    bool PasswordCorrect = false;
 
    /***** Check if user typed anything *****/
    if (!Gbl.Usrs.Me.UsrIdLogin)
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
 
@@ -2081,7 +2089,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
       // User is trying to log using his/her nickname
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
      }
@@ -2090,7 +2098,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
       // User is trying to log using his/her e-mail
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
      }
@@ -2104,7 +2112,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 // User is trying to log using his/her ID
 	 if (strlen (Gbl.Usrs.Me.UsrIdLogin) > ID_MAX_LENGTH_USR_ID)        // User's ID too long
 	   {
-	    Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	    Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	    return false;
 	   }
 
@@ -2132,10 +2140,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	       /* Free memory used for list of users' codes found for this ID */
 	       Usr_FreeListUsrCods (&ListUsrCods);
 
-	       sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-			Gbl.Usrs.Me.UsrIdLogin);
-	       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-
+	       Usr_ShowAlertThereAreMoreThanOneUsr ();
 	       return false;
 	      }
 	   }
@@ -2155,7 +2160,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	         }
 	       else
 	 	 {
-	 	  Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+		  Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 	  return false;
 	 	 }
 	      }
@@ -2164,21 +2169,19 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	       /* Free memory used for list of users' codes found for this ID */
 	       Usr_FreeListUsrCods (&ListUsrCods);
 
-	       sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-		        Gbl.Usrs.Me.UsrIdLogin);
-	       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	       Usr_ShowAlertThereAreMoreThanOneUsr ();
 	       return false;
 	      }
 	   }
 	 else	// No users found for this ID
 	   {
-	    Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	    Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	    return false;
 	   }
 	}
       else	// String is not a valid user's nickname, e-mail or ID
 	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
      }
@@ -2199,7 +2202,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 Pwd_AssignMyPendingPasswordToMyCurrentPassword ();
       else
 	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
      }
@@ -2215,9 +2218,6 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 
 static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
   {
-   extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
-   extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
-   extern const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_;
    struct ListUsrCods ListUsrCods;
    bool ItSeemsANewUsrIsEnteringFromExternalSite = false;
    char PathRelParamsToCommandsPriv[PATH_MAX+1];
@@ -2247,7 +2247,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
       // User is trying to log using his/her ID
       if (strlen (Gbl.Usrs.Me.UsrIdLogin) > ID_MAX_LENGTH_USR_ID)        // User's ID too long
 	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
 
@@ -2273,10 +2273,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
 
-	    sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-		     Gbl.Usrs.Me.UsrIdLogin);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-
+	    Usr_ShowAlertThereAreMoreThanOneUsr ();
 	    return false;
 	   }
 	}
@@ -2298,10 +2295,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
 
-	    sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
-		     Gbl.Usrs.Me.UsrIdLogin);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-
+	    Usr_ShowAlertThereAreMoreThanOneUsr ();
 	    return false;
 	   }
 	}
@@ -2310,7 +2304,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
      }
    else	// String is not a valid user's nickname, e-mail or ID
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
 
@@ -2362,17 +2356,13 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
       if (ItSeemsANewUsrIsEnteringFromExternalSite)
 	{
 	 /***** User does not exist in the platform *****/
-	 sprintf (Gbl.Message,Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_,
-	          Cfg_PLATFORM_SHORT_NAME,
-	          Gbl.Usrs.Me.UsrIdLogin,
-	          Cfg_PLATFORM_SHORT_NAME);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Usr_ShowAlertNoUsrWithThisID ();
          return false;
 	}
      }
    else	// External user's ID or session are not valid
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
 
@@ -2385,15 +2375,13 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
 
 static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
   {
-   extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
-
    /***** Session is open and user's code is get from session *****/
    Gbl.Usrs.Me.UsrDat.UsrCod = Gbl.Session.UsrCod;
 
    /* Check if user exists in database, and get his/her data */
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat))
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
 
@@ -2402,11 +2390,56 @@ static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
       is the same as the stored in database? */
    if (!Pwd_CheckCurrentPassword ())	// If my password is not correct...
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
      }
 
    return true;
+  }
+
+/*****************************************************************************/
+/** Show alert indicating that user does not exists or password is incorrect */
+/*****************************************************************************/
+
+static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void)
+  {
+   extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
+
+   Gbl.Action.Act = ActFrmLogIn;
+   Tab_SetCurrentTab ();
+   Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+  }
+
+/*****************************************************************************/
+/****** Show alert indicating that more than one user share the same ID ******/
+/*****************************************************************************/
+
+static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
+  {
+   extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
+
+   Gbl.Action.Act = ActFrmLogIn;
+   Tab_SetCurrentTab ();
+   sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+	    Gbl.Usrs.Me.UsrIdLogin);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+  }
+
+/*****************************************************************************/
+/********** Show alert indicating that this ID does not exist ****************/
+/*****************************************************************************/
+
+static void Usr_ShowAlertNoUsrWithThisID (void)
+  {
+   extern const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_;
+
+   Gbl.Action.Act = ActFrmLogIn;
+   Tab_SetCurrentTab ();
+   sprintf (Gbl.Message,Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_,
+	    Cfg_PLATFORM_SHORT_NAME,
+	    Gbl.Usrs.Me.UsrIdLogin,
+	    Cfg_PLATFORM_SHORT_NAME);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
   }
 
 /*****************************************************************************/

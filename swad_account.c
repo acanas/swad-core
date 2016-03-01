@@ -93,6 +93,19 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat);
 static void Acc_RemoveUsr (struct UsrData *UsrDat);
 
 /*****************************************************************************/
+/******************** Put link to create a new account ***********************/
+/*****************************************************************************/
+
+void Acc_PutLinkToCreateAccount (void)
+  {
+   extern const char *Txt_Create_account;
+
+   Lay_PutContextualLink (ActFrmUsrAcc,NULL,
+                          "arroba64x64.gif",
+                          Txt_Create_account,Txt_Create_account);
+  }
+
+/*****************************************************************************/
 /******** Show form to change my account or to create a new account **********/
 /*****************************************************************************/
 

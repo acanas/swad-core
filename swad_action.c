@@ -1243,7 +1243,8 @@ Statistics:
        1069. ActSeeAccCrs		Query clicks to current course
        1070. ActSeeAllStaCrs		Show statistics of courses
 Profile:
-       1071. ActFrmLogIn		Show form to log in
+NEW    1071. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
+       1071. ActFrmRolSes		Show form to log out and to change current role in this session
        1072. ActMyCrs			Select one of my courses
        1073. ActSeeMyTT			Show the timetable of all courses of the logged user
        1074. ActFrmUsrAcc		Show form to the creation or change of user's account
@@ -1252,14 +1253,14 @@ Profile:
        1077. ActAdmBrf			Show the briefcase of private archives
        1078. ActMFUAct			Show most frequently used actions
 
+       1084. ActReqSndNewPwd		Show form to send a new password via e-mail
+       1085. ActSndNewPwd		Send a new password via e-mail
+       1082. ActLogOut			Close session
+
        1079. ActAutUsrInt		Authentify user internally (directly from the platform)
        1080. ActAutUsrExt		Authentify user externally (remotely from an external site)
        1081. ActAutUsrChgLan		Change language to my language just after authentication
-       1082. ActLogOut			Close session
        1083. ActAnnSee			Mark announcement as seen
-
-       1084. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1085. ActSndNewPwd		Send a new password via e-mail
        1086. ActChgMyRol		Change type of logged user
 
        1087. ActCreUsrAcc		Create new user account
@@ -2605,25 +2606,26 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabPrf ******************************************************************
    // Actions in menu:
-   /* ActFrmLogIn	*/{ 843, 0,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLoginLogout	,"keyuser64x64.gif"	},
-   /* ActMyCrs		*/{ 987, 1,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
-   /* ActSeeMyTT	*/{ 408, 2,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActFrmUsrAcc	*/{  36, 3,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba64x64.gif"	},
-   /* ActReqEdiRecCom	*/{ 285, 4,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
-   /* ActEdiPrf		*/{ 673, 5,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
-   /* ActAdmBrf		*/{  23, 6,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
-   /* ActMFUAct		*/{ 993, 7,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Act_ShowMyMFUActions		,"star64x64.gif"	},
+   /* ActFrmLogIn	*/{1521, 0,TabPrf,ActFrmLogIn		,0x001,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteLandingPage		,"keyuser64x64.gif"	},
+   /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
+   /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
+   /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
+   /* ActFrmUsrAcc	*/{  36, 4,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba64x64.gif"	},
+   /* ActReqEdiRecCom	*/{ 285, 5,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
+   /* ActEdiPrf		*/{ 673, 6,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
+   /* ActAdmBrf		*/{  23, 7,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
+   /* ActMFUAct		*/{ 993, 8,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Act_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
-   /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrExt	*/{ 794,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrChgLan	*/{1077,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActLogOut		*/{  10,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
-   /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
-
    /* ActReqSndNewPwd	*/{ 665,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,NULL},
    /* ActSndNewPwd	*/{ 633,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
-   /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmLogIn		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
+   /* ActLogOut		*/{  10,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
+
+   /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
+   /* ActAutUsrExt	*/{ 794,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
+   /* ActAutUsrChgLan	*/{1077,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
+   /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
+   /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
    /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
 
@@ -3552,7 +3554,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSetUp,		// #840
 	ActChgThe,		// #841
 	-1,			// #842 (obsolete action)
-	ActFrmLogIn,		// #843
+	ActFrmRolSes,		// #843
 	ActHom,			// #844
 	ActRefCon,		// #845
 	ActRcvFilAsgCrsCla,	// #846
@@ -4233,6 +4235,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActFavSocComUsr,	// #1518
 	ActUnfSocComUsr,	// #1519
 	ActSeeSocPrf,		// #1520
+	ActFrmLogIn,		// #1521
 	};
 
 /*****************************************************************************/

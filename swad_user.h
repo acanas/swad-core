@@ -245,7 +245,8 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
 
 bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod);
 
-void Usr_WriteFormLoginLogout (void);
+void Usr_WriteLandingPage (void);
+void Usr_WriteFormLogout (void);
 void Usr_Logout (void);
 void Usr_PutLinkToLogin (void);
 void Usr_WriteFormLogin (void);

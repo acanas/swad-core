@@ -44,6 +44,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Acc_PutLinkToCreateAccount (void);
 void Acc_ShowFormAccount (void);
 void Acc_ShowFormRequestNewAccount (void);
 void Acc_ShowFormChangeMyAccount (void);
