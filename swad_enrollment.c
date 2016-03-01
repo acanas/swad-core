@@ -1522,7 +1522,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		  Imp_ImportStdsFromAnImpGrp (GrpCod,&LstGrps,&NumUsrsRegistered);
 
 		  /* Update the institutional course code to the external course code */
-		  Crs_UpdateCurrentInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,ExternalCrsCod);
+		  Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,ExternalCrsCod);
 		 }
 	      }
 	   }

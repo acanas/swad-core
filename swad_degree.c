@@ -117,9 +117,10 @@ static unsigned Deg_CountNumDegsOfType (long DegTypCod);
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_RemoveDegreeTypeCompletely (long DegTypCod);
 static void Deg_RemoveDegreeCompletely (long DegCod);
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
+static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod);
+static void Deg_PutButtonToGoToDeg (struct Degree *Deg);
 
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
@@ -2079,6 +2080,9 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
    sprintf (Gbl.Message,Txt_Created_new_degree_X,
             Deg->FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Put button to go to degree created *****/
+   Deg_PutButtonToGoToDeg (Deg);
   }
 
 /*****************************************************************************/
@@ -2601,7 +2605,7 @@ void Deg_RemoveDegree (void)
    if ((Deg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
-   /***** Get data of the degree from database *****/
+   /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Check if this degree has courses *****/
@@ -3134,7 +3138,7 @@ void Deg_RenameDegreeType (void)
                      NewNameDegTyp,DegTyp->DegTypCod);
             DB_QueryUPDATE (Query,"can not update the type of a degree");
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_type_of_degree_X_has_been_renamed_as_Y,
                      DegTyp->DegTypName,NewNameDegTyp);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -3159,7 +3163,13 @@ void Deg_RenameDegreeType (void)
 
 void Deg_RenameDegreeShort (void)
   {
-   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHORT_NAME);
+   struct Degree *Deg;
+
+   Deg = &Gbl.Degs.EditingDeg;
+
+   if (Deg_RenameDegree (Deg,Cns_SHORT_NAME))
+      if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)	// If renaming current degree...
+         strcpy (Gbl.CurrentDeg.Deg.ShortName,Deg->ShortName);	// Overwrite current degree name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
@@ -3168,14 +3178,22 @@ void Deg_RenameDegreeShort (void)
 
 void Deg_RenameDegreeFull (void)
   {
-   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_FULL_NAME);
+   struct Degree *Deg;
+
+   Deg = &Gbl.Degs.EditingDeg;
+
+   if (Deg_RenameDegree (Deg,Cns_FULL_NAME))
+      if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)	// If renaming current degree...
+         strcpy (Gbl.CurrentDeg.Deg.FullName,Deg->FullName);	// Overwrite current degree name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
+// Returns true if the degree is renamed
+// Returns false if the degree is not renamed
 
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName)
+static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_degree_X_empty;
    extern const char *Txt_The_degree_X_already_exists;
@@ -3187,6 +3205,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentDegName = NULL;		// Initialized to avoid warning
    char NewDegName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
+   bool DegreeHasBeenRenamed = false;
 
    switch (ShortOrFullName)
      {
@@ -3212,15 +3231,15 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    /* Get the new name for the degree */
    Par_GetParToText (ParamName,NewDegName,MaxLength);
 
-   /***** Get from the database the type and the old names of the degree *****/
-   Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
+   /***** Get data of degree *****/
+   Deg_GetDataOfDegreeByCod (Deg);
 
    /***** Check if new name is empty *****/
    if (!NewDegName[0])
      {
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_degree_X_empty,
                CurrentDegName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Gbl.Error = true;
      }
    else
      {
@@ -3232,7 +3251,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
            {
             sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
                      NewDegName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else
            {
@@ -3241,23 +3260,23 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
                      FieldName,NewDegName,Deg->DegCod);
             DB_QueryUPDATE (Query,"can not update the name of a degree");
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_name_of_the_degree_X_has_changed_to_Y,
                      CurrentDegName,NewDegName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+	    /* Change current degree name in order to display it properly */
+	    strncpy (CurrentDegName,NewDegName,MaxLength);
+	    CurrentDegName[MaxLength] = '\0';
+
+	    DegreeHasBeenRenamed = true;
            }
         }
       else	// The same name
-        {
          sprintf (Gbl.Message,Txt_The_name_of_the_degree_X_has_not_changed,
                   CurrentDegName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-        }
      }
 
-   /***** Show the form again *****/
-   strcpy (CurrentDegName,NewDegName);
-   Deg_EditDegrees ();
+   return DegreeHasBeenRenamed;
   }
 
 /*****************************************************************************/
@@ -3357,7 +3376,7 @@ void Deg_ChangeDegreeType (void)
    /* Get the new degree type */
    NewDegTypCod = Deg_GetParamOtherDegTypCod ();
 
-   /* Get from the database the type and the name of the editing degree */
+   /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg);
 
    /***** Update the table of degrees changing old type by new type *****/
@@ -3370,6 +3389,10 @@ void Deg_ChangeDegreeType (void)
 	    Deg->FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
+   /***** Put button to go to degree changed *****/
+   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
+      Deg_PutButtonToGoToDeg (Deg);
+
    /***** Show the form again *****/
    Gbl.Degs.EditingDegTyp.DegTypCod = NewDegTypCod;
    Deg_EditDegrees ();
@@ -3381,8 +3404,9 @@ void Deg_ChangeDegreeType (void)
 
 void Deg_ChangeDegreeCtr (void)
   {
-   extern const char *Txt_The_centre_of_the_degree_has_changed;
+   extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Degree *Deg;
+   struct Centre NewCtr;
    char Query[512];
 
    Deg = &Gbl.Degs.EditingDeg;
@@ -3393,15 +3417,26 @@ void Deg_ChangeDegreeCtr (void)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    /* Get parameter with centre code */
-   Deg->CtrCod = Ctr_GetParamOtherCtrCod ();
+   NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
+
+   /***** Get data of degree and new centre *****/
+   Deg_GetDataOfDegreeByCod (Deg);
+   Ctr_GetDataOfCentreByCod (&NewCtr);
 
    /***** Update centre in table of degrees *****/
    sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
-            Deg->CtrCod,Deg->DegCod);
+            NewCtr.CtrCod,Deg->DegCod);
    DB_QueryUPDATE (Query,"can not update the centre of a degree");
+   Deg->CtrCod = NewCtr.CtrCod;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_centre_of_the_degree_has_changed);
+   sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
+	    Deg->FullName,NewCtr.FullName);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Put button to go to degree changed *****/
+   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
+      Deg_PutButtonToGoToDeg (Deg);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -3429,10 +3464,13 @@ void Deg_ChangeDegWWW (void)
    /* Get the new WWW for the degree */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
 
+   /***** Get data of degree *****/
+   Deg_GetDataOfDegreeByCod (Deg);
+
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
-      /* Update the table changing old WWW by new WWW */
+      /***** Update the table changing old WWW by new WWW *****/
       sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",
                NewWWW,Deg->DegCod);
       DB_QueryUPDATE (Query,"can not update the web of a degree");
@@ -3441,6 +3479,10 @@ void Deg_ChangeDegWWW (void)
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
                NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+      /***** Put button to go to degree changed *****/
+      if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
+	 Deg_PutButtonToGoToDeg (Deg);
      }
    else
      {
@@ -3495,8 +3537,50 @@ void Deg_ChangeDegStatus (void)
             Deg->ShortName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
+   /***** Put button to go to degree changed *****/
+   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
+      Deg_PutButtonToGoToDeg (Deg);
+
    /***** Show the form again *****/
    Deg_EditDegrees ();
+  }
+
+/*****************************************************************************/
+/************* Show message of success after changing a degree ***************/
+/*****************************************************************************/
+
+void Deg_ContEditAfterChgDeg (void)
+  {
+   if (Gbl.Error)
+      /***** Write error message *****/
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   else
+     {
+      /***** Write success message showing the change made *****/
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      /***** Put button to go to degree changed *****/
+      if (Gbl.Degs.EditingDeg.DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
+	 Deg_PutButtonToGoToDeg (&Gbl.Degs.EditingDeg);
+     }
+
+   /***** Show the form again *****/
+   Deg_EditDegrees ();
+  }
+
+/*****************************************************************************/
+/************************ Put button to go to degree *************************/
+/*****************************************************************************/
+
+static void Deg_PutButtonToGoToDeg (struct Degree *Deg)
+  {
+   extern const char *Txt_Go_to_X;
+
+   Act_FormStart (ActSeeDegInf);
+   Deg_PutParamDegCod (Deg->DegCod);
+   sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShortName);
+   Lay_PutConfirmButton (Gbl.Title);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

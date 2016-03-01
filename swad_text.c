@@ -40080,27 +40080,6 @@ const char *Txt_The_banner_X_is_now_visible =	// Warning: it is very important t
 	"O banner <strong>%s</strong> &eacute; agora visible.";
 #endif
 
-const char *Txt_The_centre_of_the_degree_has_changed =
-#if   L==1
-	"El centro de la titulaci&oacute;n ha cambiado.";	// Necessita traduccio
-#elif L==2
-	"The centre of the degree has changed.";		// Need Übersetzung
-#elif L==3
-	"The centre of the degree has changed.";
-#elif L==4
-	"El centro de la titulaci&oacute;n ha cambiado.";
-#elif L==5
-	"The centre of the degree has changed.";		// Besoin de traduction
-#elif L==6
-	"El centro de la titulaci&oacute;n ha cambiado.";	// Okoteve traducción
-#elif L==7
-	"Il centro della laurea &egrave; cambiato.";
-#elif L==8
-	"The centre of the degree has changed.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"The centre of the degree has changed.";		// Necessita de tradução
-#endif
-
 const char *Txt_The_centre_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El centro <strong>%s</strong> ya existe.";		// Necessita traduccio
@@ -40702,6 +40681,36 @@ const char *Txt_The_degree_X_already_exists =	// Warning: it is very important t
 	"The degree <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"The degree <strong>%s</strong> already exists.";	// Necessita de tradução
+#endif
+
+const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1
+	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
+	" al centro <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"The degree <strong>%s</strong> has been moved"
+	" to the centre <strong>%s</strong>.";		// Need Übersetzung
+#elif L==3
+	"The degree <strong>%s</strong> has been moved"
+	" to the centre <strong>%s</strong>.";
+#elif L==4
+	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
+	" al centro <strong>%s</strong>.";
+#elif L==5
+	"The degree <strong>%s</strong> has been moved"
+	" to the centre <strong>%s</strong>.";		// Besoin de traduction
+#elif L==6
+	"La titulaci&oacute;n <strong>%s</strong> se ha movido"
+	" al centro <strong>%s</strong>.";		// Okoteve traducción
+#elif L==7
+	"La laurea <strong>%s</strong> &egrave; stata spostata"
+	" al centro <strong>%s</strong>.";
+#elif L==8
+	"The degree <strong>%s</strong> has been moved"
+	" to the centre <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"The degree <strong>%s</strong> has been moved"
+	" to the centre <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences

@@ -2400,7 +2400,7 @@ void Crs_ChangeInsCrsCod (void)
       /***** Change the institutional course code *****/
       if (strcmp (NewInstitutionalCrsCod,Crs->InstitutionalCrsCod))
         {
-         Crs_UpdateCurrentInstitutionalCrsCod (Crs,NewInstitutionalCrsCod);
+         Crs_UpdateInstitutionalCrsCod (Crs,NewInstitutionalCrsCod);
          sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
                   Crs->ShortName,NewInstitutionalCrsCod);
          Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -2489,6 +2489,7 @@ void Crs_ChangeCrsDegree (void)
             sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
                      NewDeg.DegCod,Crs->CrsCod);
             DB_QueryUPDATE (Query,"can not move course to another degree");
+            Crs->DegCod = NewDeg.DegCod;
 
             /***** Write message to show the change made *****/
             sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
@@ -2600,15 +2601,12 @@ void Crs_ChangeCrsYear (void)
   }
 
 /*****************************************************************************/
-/******** Change the institutional course code of the current course *********/
+/************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 
-void Crs_UpdateCurrentInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
+void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod)
   {
    char Query[512];
-
-   strncpy (Gbl.CurrentCrs.Crs.InstitutionalCrsCod,NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-   Gbl.CurrentCrs.Crs.InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
 
    /***** Update institutional course code in table of courses *****/
    sprintf (Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod='%ld'",
@@ -2743,7 +2741,10 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
         }
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
+     {
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Error = true;
+     }
 
    return CourseHasBeenRenamed;
   }
@@ -2804,14 +2805,18 @@ void Crs_ChangeCrsStatus (void)
 
 void Crs_ContEditAfterChgCrs (void)
   {
-   /***** Write error/success message showing the change made *****/
-   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
-	                      Lay_INFO,
-	          Gbl.Message);
+   if (Gbl.Error)
+      /***** Write error message *****/
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   else
+     {
+      /***** Write success message showing the change made *****/
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   /***** Put button to go to course changed *****/
-   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-      Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
+      /***** Put button to go to course changed *****/
+      if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
+         Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
+     }
 
    /***** Show the form again *****/
    Crs_ReqEditCourses ();

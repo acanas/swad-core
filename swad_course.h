@@ -120,7 +120,7 @@ void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsDegree (void);
 void Crs_ChangeCrsYear (void);
-void Crs_UpdateCurrentInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
+void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);
 void Crs_ChangeCrsStatus (void);
