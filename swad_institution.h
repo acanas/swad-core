@@ -114,6 +114,8 @@ void Ins_RenameInsFull (void);
 void Ins_ChangeInsCountry (void);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
+void Ins_ContEditAfterChgIns (void);
+
 void Ins_RequestLogo (void);
 void Ins_ReceiveLogo (void);
 void Ins_RemoveLogo (void);

@@ -75,8 +75,10 @@ static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 static void Ins_PutParamOtherInsCod (long InsCod);
-static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName);
+static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
+static void Ins_PutButtonToGoToIns (struct Institution *Ins);
+
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
 static void Ins_RecFormRequestOrCreateIns (unsigned Status);
@@ -1472,7 +1474,13 @@ void Ins_RemoveInstitution (void)
 
 void Ins_RenameInsShort (void)
   {
-   Ins_RenameInstitution (Cns_SHORT_NAME);
+   struct Institution *Ins;
+
+   Ins = &Gbl.Inss.EditingIns;
+
+   if (Ins_RenameInstitution (Ins,Cns_SHORT_NAME))
+      if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)	// If renaming current institution...
+         strcpy (Gbl.CurrentIns.Ins.ShortName,Ins->ShortName);	// Overwrite current institution name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
@@ -1481,28 +1489,35 @@ void Ins_RenameInsShort (void)
 
 void Ins_RenameInsFull (void)
   {
-   Ins_RenameInstitution (Cns_FULL_NAME);
+   struct Institution *Ins;
+
+   Ins = &Gbl.Inss.EditingIns;
+
+   if (Ins_RenameInstitution (Ins,Cns_FULL_NAME))
+      if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)	// If renaming current institution...
+         strcpy (Gbl.CurrentIns.Ins.FullName,Ins->FullName);	// Overwrite current institution name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
+// Returns true if the institution is renamed
+// Returns false if the institution is not renamed
 
-static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName)
+static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_institution_X_empty;
    extern const char *Txt_The_institution_X_already_exists;
-   extern const char *Txt_The_name_of_the_institution_X_has_changed_to_Y;
+   extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_institution_X_has_not_changed;
    char Query[512];
-   struct Institution *Ins;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
    char NewInsName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
+   bool InstitutionHasBeenRenamed = false;
 
-   Ins = &Gbl.Inss.EditingIns;
    switch (ShortOrFullName)
      {
       case Cns_SHORT_NAME:
@@ -1535,7 +1550,7 @@ static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName)
      {
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
                CurrentInsName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Gbl.Error = true;
      }
    else
      {
@@ -1547,7 +1562,7 @@ static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName)
            {
             sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
                      NewInsName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else
            {
@@ -1556,23 +1571,23 @@ static void Ins_RenameInstitution (Cns_ShortOrFullName_t ShortOrFullName)
                      FieldName,NewInsName,Ins->InsCod);
             DB_QueryUPDATE (Query,"can not update the name of an institution");
 
-            /***** Write message to show the change made *****/
-            sprintf (Gbl.Message,Txt_The_name_of_the_institution_X_has_changed_to_Y,
+            /* Write message to show the change made */
+            sprintf (Gbl.Message,Txt_The_institution_X_has_been_renamed_as_Y,
                      CurrentInsName,NewInsName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+	    /* Change current institution name in order to display it properly */
+	    strncpy (CurrentInsName,NewInsName,MaxLength);
+	    CurrentInsName[MaxLength] = '\0';
+
+            InstitutionHasBeenRenamed = true;
            }
         }
       else	// The same name
-        {
          sprintf (Gbl.Message,Txt_The_name_of_the_institution_X_has_not_changed,
                   CurrentInsName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-        }
      }
 
-   /***** Show the form again *****/
-   strcpy (CurrentInsName,NewInsName);
-   Ins_EditInstitutions ();
+   return InstitutionHasBeenRenamed;
   }
 
 /*****************************************************************************/
@@ -1642,13 +1657,15 @@ void Ins_ChangeInsCountry (void)
 	                " WHERE InsCod='%ld'",
 		  NewCty.CtyCod,Ins->InsCod);
 	 DB_QueryUPDATE (Query,"can not update the country of an institution");
+         Ins->CtyCod = NewCty.CtyCod;
 
 	 /***** Write message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
 		  Ins->FullName,NewCty.Name[Gbl.Prefs.Language]);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-         Ins->CtyCod = NewCty.CtyCod;
+	 /***** Put button to go to institution changed *****/
+         Ins_PutButtonToGoToIns (Ins);
 	}
      }
 
@@ -1678,6 +1695,9 @@ void Ins_ChangeInsWWW (void)
    /* Get the new WWW for the institution */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
 
+   /***** Get data of institution *****/
+   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
+
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
@@ -1690,6 +1710,9 @@ void Ins_ChangeInsWWW (void)
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
                NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+      /***** Put button to go to institution changed *****/
+      Ins_PutButtonToGoToIns (Ins);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
@@ -1741,8 +1764,52 @@ void Ins_ChangeInsStatus (void)
             Ins->ShortName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
+   /***** Put button to go to institution changed *****/
+   Ins_PutButtonToGoToIns (Ins);
+
    /***** Show the form again *****/
    Ins_EditInstitutions ();
+  }
+
+/*****************************************************************************/
+/*********** Show message of success after changing an institution ***********/
+/*****************************************************************************/
+
+void Ins_ContEditAfterChgIns (void)
+  {
+   if (Gbl.Error)
+      /***** Write error message *****/
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   else
+     {
+      /***** Write success message showing the change made *****/
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      /***** Put button to go to institution changed *****/
+      Ins_PutButtonToGoToIns (&Gbl.Inss.EditingIns);
+     }
+
+   /***** Show the form again *****/
+   Ins_EditInstitutions ();
+  }
+
+/*****************************************************************************/
+/********************* Put button to go to institution ***********************/
+/*****************************************************************************/
+
+static void Ins_PutButtonToGoToIns (struct Institution *Ins)
+  {
+   extern const char *Txt_Go_to_X;
+
+   // If the institution is different to the current one...
+   if (Ins->InsCod != Gbl.CurrentIns.Ins.InsCod)
+     {
+      Act_FormStart (ActSeeInsInf);
+      Ins_PutParamInsCod (Ins->InsCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Ins->ShortName);
+      Lay_PutConfirmButton (Gbl.Title);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/
@@ -2049,12 +2116,15 @@ static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Ins->ShortName,Ins->FullName,Ins->WWW);
-   DB_QueryINSERT (Query,"can not create institution");
+   Ins->InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
 
    /***** Write success message *****/
    sprintf (Gbl.Message,Txt_Created_new_institution_X,
             Ins->FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Put button to go to institution created *****/
+   Ins_PutButtonToGoToIns (Ins);
   }
 
 /*****************************************************************************/

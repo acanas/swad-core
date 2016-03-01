@@ -2413,8 +2413,7 @@ void Crs_ChangeInsCrsCod (void)
         }
 
       /***** Put button to go to course changed *****/
-      if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-         Crs_PutButtonToGoToCrs (Crs);
+      Crs_PutButtonToGoToCrs (Crs);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
@@ -2497,8 +2496,7 @@ void Crs_ChangeCrsDegree (void)
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
             /***** Put button to go to course changed *****/
-            if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-               Crs_PutButtonToGoToCrs (Crs);
+            Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// New degree has no current course year
@@ -2583,8 +2581,7 @@ void Crs_ChangeCrsYear (void)
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
             /***** Put button to go to course changed *****/
-            if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-               Crs_PutButtonToGoToCrs (Crs);
+            Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// Year not valid
@@ -2792,8 +2789,7 @@ void Crs_ChangeCrsStatus (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to course changed *****/
-   if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-      Crs_PutButtonToGoToCrs (Crs);
+   Crs_PutButtonToGoToCrs (Crs);
 
    /***** Show the form again *****/
    Crs_ReqEditCourses ();
@@ -2814,8 +2810,7 @@ void Crs_ContEditAfterChgCrs (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
       /***** Put button to go to course changed *****/
-      if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If changing other course different than the current one...
-         Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
+      Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
      }
 
    /***** Show the form again *****/
@@ -2830,11 +2825,15 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs)
   {
    extern const char *Txt_Go_to_X;
 
-   Act_FormStart (ActSeeCrsInf);
-   Crs_PutParamCrsCod (Crs->CrsCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
-   Lay_PutConfirmButton (Gbl.Title);
-   Act_FormEnd ();
+   // If the course is different to the current one...
+   if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+     {
+      Act_FormStart (ActSeeCrsInf);
+      Crs_PutParamCrsCod (Crs->CrsCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
+      Lay_PutConfirmButton (Gbl.Title);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/

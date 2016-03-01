@@ -1684,10 +1684,10 @@ void Ctr_RenameCentreFull (void)
   }
 
 /*****************************************************************************/
-/************************ Change the name of a degree ************************/
+/************************ Change the name of a centre ************************/
 /*****************************************************************************/
-// Returns true if the degree is renamed
-// Returns false if the degree is not renamed
+// Returns true if the centre is renamed
+// Returns false if the centre is not renamed
 
 static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName)
   {
@@ -1760,7 +1760,7 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
             sprintf (Gbl.Message,Txt_The_centre_X_has_been_renamed_as_Y,
                      CurrentCtrName,NewCtrName);
 
-	    /* Change current degree name in order to display it properly */
+	    /* Change current centre name in order to display it properly */
 	    strncpy (CurrentCtrName,NewCtrName,MaxLength);
 	    CurrentCtrName[MaxLength] = '\0';
 
@@ -1811,6 +1811,9 @@ void Ctr_ChangeCtrWWW (void)
 
    /* Get the new WWW for the centre */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+
+   /***** Get data of centre *****/
+   Ctr_GetDataOfCentreByCod (Ctr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1903,8 +1906,7 @@ void Ctr_ContEditAfterChgCtr (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
       /***** Put button to go to centre changed *****/
-      if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// If changing other centre different than the current one...
-	 Ctr_PutButtonToGoToCtr (&Gbl.Ctrs.EditingCtr);
+      Ctr_PutButtonToGoToCtr (&Gbl.Ctrs.EditingCtr);
      }
 
    /***** Show the form again *****/
@@ -1919,11 +1921,15 @@ static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
   {
    extern const char *Txt_Go_to_X;
 
-   Act_FormStart (ActSeeCtrInf);
-   Ctr_PutParamCtrCod (Ctr->CtrCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
-   Lay_PutConfirmButton (Gbl.Title);
-   Act_FormEnd ();
+   // If the centre is different to the current one...
+   if (Ctr->CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
+     {
+      Act_FormStart (ActSeeCtrInf);
+      Ctr_PutParamCtrCod (Ctr->CtrCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
+      Lay_PutConfirmButton (Gbl.Title);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/

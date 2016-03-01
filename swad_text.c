@@ -42357,25 +42357,25 @@ const char *Txt_The_name_of_the_holiday_X_has_not_changed =	// Warning: it is ve
 	"The name of the holiday <strong>%s</strong> has not changed.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_name_of_the_institution_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"El nombre de la instituci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"The name of the institution <strong>%s</strong> has changed to <strong>%s</strong>.";		// Need Übersetzung
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3
-	"The name of the institution <strong>%s</strong> has changed to <strong>%s</strong>.";
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4
-	"El nombre de la instituci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5
-	"The name of the institution <strong>%s</strong> has changed to <strong>%s</strong>.";		// Besoin de traduction
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
 #elif L==6
-	"El nombre de la instituci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
-	"Il nome dell'istituzione <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
+	"L'istituzione <strong>%s</strong> &egrave; stata rinominata <strong>%s</strong>.";
 #elif L==8
-	"The name of the institution <strong>%s</strong> has changed to <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The name of the institution <strong>%s</strong> has changed to <strong>%s</strong>.";		// Necessita de tradução
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_name_of_the_institution_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences

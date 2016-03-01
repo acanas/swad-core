@@ -3388,8 +3388,7 @@ void Deg_ChangeDegreeType (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to degree changed *****/
-   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
-      Deg_PutButtonToGoToDeg (Deg);
+   Deg_PutButtonToGoToDeg (Deg);
 
    /***** Show the form again *****/
    Gbl.Degs.EditingDegTyp.DegTypCod = NewDegTypCod;
@@ -3433,8 +3432,7 @@ void Deg_ChangeDegreeCtr (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to degree changed *****/
-   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
-      Deg_PutButtonToGoToDeg (Deg);
+   Deg_PutButtonToGoToDeg (Deg);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -3479,8 +3477,7 @@ void Deg_ChangeDegWWW (void)
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Put button to go to degree changed *****/
-      if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
-	 Deg_PutButtonToGoToDeg (Deg);
+      Deg_PutButtonToGoToDeg (Deg);
      }
    else
      {
@@ -3536,8 +3533,7 @@ void Deg_ChangeDegStatus (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to degree changed *****/
-   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
-      Deg_PutButtonToGoToDeg (Deg);
+   Deg_PutButtonToGoToDeg (Deg);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -3558,8 +3554,7 @@ void Deg_ContEditAfterChgDeg (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
       /***** Put button to go to degree changed *****/
-      if (Gbl.Degs.EditingDeg.DegCod != Gbl.CurrentDeg.Deg.DegCod)	// If changing other degree different than the current one...
-	 Deg_PutButtonToGoToDeg (&Gbl.Degs.EditingDeg);
+      Deg_PutButtonToGoToDeg (&Gbl.Degs.EditingDeg);
      }
 
    /***** Show the form again *****/
@@ -3574,11 +3569,15 @@ static void Deg_PutButtonToGoToDeg (struct Degree *Deg)
   {
    extern const char *Txt_Go_to_X;
 
-   Act_FormStart (ActSeeDegInf);
-   Deg_PutParamDegCod (Deg->DegCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShortName);
-   Lay_PutConfirmButton (Gbl.Title);
-   Act_FormEnd ();
+   // If the degree is different to the current one...
+   if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)
+     {
+      Act_FormStart (ActSeeDegInf);
+      Deg_PutParamDegCod (Deg->DegCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShortName);
+      Lay_PutConfirmButton (Gbl.Title);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/
