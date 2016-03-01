@@ -40101,6 +40101,36 @@ const char *Txt_The_centre_X_already_exists =	// Warning: it is very important t
 	"The centre <strong>%s</strong> already exists.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1
+	"El centro <strong>%s</strong> se ha movido"
+	" a la instituci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"The centre <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";		// Need Übersetzung
+#elif L==3
+	"The centre <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";
+#elif L==4
+	"El centro <strong>%s</strong> se ha movido"
+	" a la instituci&oacute;n <strong>%s</strong>.";
+#elif L==5
+	"The centre <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";		// Besoin de traduction
+#elif L==6
+	"El centro <strong>%s</strong> se ha movido"
+	" a la instituci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"Il centre <strong>%s</strong> &egrave; stato spostato"
+	" alla istituzione <strong>%s</strong>.";
+#elif L==8
+	"The centre <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"The centre <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";		// Necessita de tradução
+#endif
+
 const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio

@@ -82,8 +82,9 @@ static bool Ctr_CheckIfICanEdit (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
-static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName);
+static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
+static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
 static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists);
 static void Ctr_PutFormToCreateCentre (void);
@@ -1580,8 +1581,9 @@ void Ctr_RemoveCentre (void)
 
 void Ctr_ChangeCentreIns (void)
   {
-   extern const char *Txt_The_institution_of_the_centre_has_changed;
+   extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
    struct Centre *Ctr;
+   struct Institution NewIns;
    char Query[512];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
@@ -1592,15 +1594,25 @@ void Ctr_ChangeCentreIns (void)
       Lay_ShowErrorAndExit ("Code of centre is missing.");
 
    /* Get parameter with institution code */
-   Ctr->InsCod = Ins_GetParamOtherInsCod ();
+   NewIns.InsCod = Ins_GetParamOtherInsCod ();
+
+   /***** Get data of centre and new institution *****/
+   Ctr_GetDataOfCentreByCod (Ctr);
+   Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
    /***** Update institution in table of centres *****/
    sprintf (Query,"UPDATE centres SET InsCod='%ld' WHERE CtrCod='%ld'",
-            Ctr->InsCod,Ctr->CtrCod);
+            NewIns.InsCod,Ctr->CtrCod);
    DB_QueryUPDATE (Query,"can not update the institution of a centre");
+   Ctr->InsCod = NewIns.InsCod;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_institution_of_the_centre_has_changed);
+   sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+	    Ctr->FullName,NewIns.FullName);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Put button to go to centre changed *****/
+   Ctr_PutButtonToGoToCtr (Ctr);
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
@@ -1634,6 +1646,9 @@ void Ctr_ChangeCentrePlace (void)
    /***** Write message to show the change made *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_The_place_of_the_centre_has_changed);
 
+   /***** Put button to go to centre changed *****/
+   Ctr_PutButtonToGoToCtr (Ctr);
+
    /***** Show the form again *****/
    Ctr_EditCentres ();
   }
@@ -1644,7 +1659,13 @@ void Ctr_ChangeCentrePlace (void)
 
 void Ctr_RenameCentreShort (void)
   {
-   Ctr_RenameCentre (Cns_SHORT_NAME);
+   struct Centre *Ctr;
+
+   Ctr = &Gbl.Ctrs.EditingCtr;
+
+   if (Ctr_RenameCentre (Ctr,Cns_SHORT_NAME))
+      if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)	// If renaming current centre...
+         strcpy (Gbl.CurrentCtr.Ctr.ShortName,Ctr->ShortName);	// Overwrite current centre name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
@@ -1653,28 +1674,35 @@ void Ctr_RenameCentreShort (void)
 
 void Ctr_RenameCentreFull (void)
   {
-   Ctr_RenameCentre (Cns_FULL_NAME);
+   struct Centre *Ctr;
+
+   Ctr = &Gbl.Ctrs.EditingCtr;
+
+   if (Ctr_RenameCentre (Ctr,Cns_FULL_NAME))
+      if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)	// If renaming current centre...
+         strcpy (Gbl.CurrentCtr.Ctr.FullName,Ctr->FullName);	// Overwrite current centre name in order to show correctly in page title and heading
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
+// Returns true if the degree is renamed
+// Returns false if the degree is not renamed
 
-static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
+static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty;
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_centre_X_has_not_changed;
    char Query[512];
-   struct Centre *Ctr;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
    char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
+   bool CentreHasBeenRenamed = false;
 
-   Ctr = &Gbl.Ctrs.EditingCtr;
    switch (ShortOrFullName)
      {
       case Cns_SHORT_NAME:
@@ -1707,7 +1735,7 @@ static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
      {
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
                CurrentCtrName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Gbl.Error = true;
      }
    else
      {
@@ -1719,7 +1747,7 @@ static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      NewCtrName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else
            {
@@ -1728,23 +1756,23 @@ static void Ctr_RenameCentre (Cns_ShortOrFullName_t ShortOrFullName)
                      FieldName,NewCtrName,Ctr->CtrCod);
             DB_QueryUPDATE (Query,"can not update the name of a centre");
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_centre_X_has_been_renamed_as_Y,
                      CurrentCtrName,NewCtrName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+	    /* Change current degree name in order to display it properly */
+	    strncpy (CurrentCtrName,NewCtrName,MaxLength);
+	    CurrentCtrName[MaxLength] = '\0';
+
+	    CentreHasBeenRenamed = true;
            }
         }
       else	// The same name
-        {
          sprintf (Gbl.Message,Txt_The_name_of_the_centre_X_has_not_changed,
                   CurrentCtrName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-        }
      }
 
-   /***** Show the form again *****/
-   strcpy (CurrentCtrName,NewCtrName);
-   Ctr_EditCentres ();
+   return CentreHasBeenRenamed;
   }
 
 /*****************************************************************************/
@@ -1796,6 +1824,9 @@ void Ctr_ChangeCtrWWW (void)
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
                NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+      /***** Put button to go to centre changed *****/
+      Ctr_PutButtonToGoToCtr (Ctr);
      }
    else
      {
@@ -1850,8 +1881,49 @@ void Ctr_ChangeCtrStatus (void)
             Ctr->ShortName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
+   /***** Put button to go to centre changed *****/
+   Ctr_PutButtonToGoToCtr (Ctr);
+
    /***** Show the form again *****/
    Ctr_EditCentres ();
+  }
+
+/*****************************************************************************/
+/************* Show message of success after changing a centre ***************/
+/*****************************************************************************/
+
+void Ctr_ContEditAfterChgCtr (void)
+  {
+   if (Gbl.Error)
+      /***** Write error message *****/
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   else
+     {
+      /***** Write success message showing the change made *****/
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      /***** Put button to go to centre changed *****/
+      if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// If changing other centre different than the current one...
+	 Ctr_PutButtonToGoToCtr (&Gbl.Ctrs.EditingCtr);
+     }
+
+   /***** Show the form again *****/
+   Ctr_EditCentres ();
+  }
+
+/*****************************************************************************/
+/************************ Put button to go to centre *************************/
+/*****************************************************************************/
+
+static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
+  {
+   extern const char *Txt_Go_to_X;
+
+   Act_FormStart (ActSeeCtrInf);
+   Ctr_PutParamCtrCod (Ctr->CtrCod);
+   sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
+   Lay_PutConfirmButton (Gbl.Title);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -2401,12 +2473,15 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Ctr->ShortName,Ctr->FullName,Ctr->WWW);
-   DB_QueryINSERT (Query,"can not create a new centre");
+   Ctr->CtrCod = DB_QueryINSERTandReturnCode (Query,"can not create a new centre");
 
    /***** Write success message *****/
    sprintf (Gbl.Message,Txt_Created_new_centre_X,
             Ctr->FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Put button to go to centre created *****/
+   Ctr_PutButtonToGoToCtr (Ctr);
   }
 
 /*****************************************************************************/

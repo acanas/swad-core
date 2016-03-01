@@ -110,6 +110,7 @@ void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
+void Ctr_ContEditAfterChgCtr (void);
 
 void Ctr_RequestLogo (void);
 void Ctr_ReceiveLogo (void);
