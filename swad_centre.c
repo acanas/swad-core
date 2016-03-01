@@ -1924,7 +1924,7 @@ static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
    // If the centre is different to the current one...
    if (Ctr->CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
      {
-      Act_FormStart (ActSeeCtrInf);
+      Act_FormStart (ActSeeDeg);
       Ctr_PutParamCtrCod (Ctr->CtrCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
       Lay_PutConfirmButton (Gbl.Title);

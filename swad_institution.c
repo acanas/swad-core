@@ -1804,7 +1804,7 @@ static void Ins_PutButtonToGoToIns (struct Institution *Ins)
    // If the institution is different to the current one...
    if (Ins->InsCod != Gbl.CurrentIns.Ins.InsCod)
      {
-      Act_FormStart (ActSeeInsInf);
+      Act_FormStart (ActSeeCtr);
       Ins_PutParamInsCod (Ins->InsCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Ins->ShortName);
       Lay_PutConfirmButton (Gbl.Title);

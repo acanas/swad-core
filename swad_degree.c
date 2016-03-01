@@ -3572,7 +3572,7 @@ static void Deg_PutButtonToGoToDeg (struct Degree *Deg)
    // If the degree is different to the current one...
    if (Deg->DegCod != Gbl.CurrentDeg.Deg.DegCod)
      {
-      Act_FormStart (ActSeeDegInf);
+      Act_FormStart (ActSeeCrs);
       Deg_PutParamDegCod (Deg->DegCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShortName);
       Lay_PutConfirmButton (Gbl.Title);
