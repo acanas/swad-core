@@ -125,13 +125,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.142 (2016-03-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.142.1 (2016-03-01)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.142.1: Mar 01, 2016	Changes in some help messages. (195985 lines)
         Version 15.142:   Mar 01, 2016	Button to go to another centre after editing. (195984 lines)
         Version 15.141.1: Mar 01, 2016	Fixed bug when creating a new degree. (195897 lines)
         Version 15.141:   Mar 01, 2016	Button to go to another degree after editing. (195898 lines)
