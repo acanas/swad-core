@@ -124,13 +124,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.143.5 (2016-03-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.143.6 (2016-03-03)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.143.6: Mar 03, 2016	Direct login forms unavailable when external login service unavailable. (196219 lines)
         Version 15.143.5: Mar 02, 2016	Changed text messages related to edition of courses. (196166 lines)
         Version 15.143.4: Mar 02, 2016	Changed text messages related to edition of degrees. (196126 lines)
         Version 15.143.3: Mar 02, 2016	Changed text messages related to edition of centres. (196126 lines)

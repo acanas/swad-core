@@ -1190,19 +1190,20 @@ static void Deg_ListDegreeTypesForSeeing (void)
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Direct log in is allowed for this degree type? */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
-                         "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\" />"
-                         "</td>",
-               BgColor,
-               Gbl.Prefs.IconsURL,
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? "ok_green" :
-        	                                                   "tr",
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
-                                                                   Txt_Direct_authentication_not_allowed,
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
-                                                                   Txt_Direct_authentication_not_allowed);
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">"
+			    "<img src=\"%s/%s16x16.gif\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"ICON20x20\" />"
+			    "</td>",
+		  BgColor,
+		  Gbl.Prefs.IconsURL,
+		  Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? "ok_green" :
+								      "tr",
+		  Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
+								      Txt_Direct_authentication_not_allowed,
+		  Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? Txt_Direct_authentication_allowed :
+								      Txt_Direct_authentication_not_allowed);
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE %s\">"
@@ -1269,16 +1270,19 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Direct log in is allowed for this degree type? */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActChgDegTypLog);
-      Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s"
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? " checked=\"checked\"" :
-        	                                                   "",
-               Gbl.Form.Id);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+	{
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+	 Act_FormStart (ActChgDegTypLog);
+	 Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s"
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Gbl.Degs.DegTypes.Lst[NumDegTyp].AllowDirectLogIn ? " checked=\"checked\"" :
+								      "",
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>");
+	}
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
@@ -1706,13 +1710,14 @@ static void Deg_PutFormToCreateDegType (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Type_of_BR_degree,
-            Txt_Direct_authentication);
+                      "</th>",
+            Txt_Type_of_BR_degree);
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>",
+	       Txt_Direct_authentication);
+   fprintf (Gbl.F.Out,"</tr>");
 
    /***** Degree type name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1723,13 +1728,14 @@ static void Deg_PutFormToCreateDegType (void)
             Deg_MAX_LENGTH_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
 
    /***** Direct log in is allowed for this degree type? *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s />"
-                      "</td>"
-                      "<td></td>"
-                      "</tr>",
-            Gbl.Degs.EditingDegTyp.AllowDirectLogIn ? " checked=\"checked\"" :
-        	                                      "");
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+			 "<input type=\"checkbox\" name=\"AllowDirectLogIn\" value=\"Y\"%s />"
+			 "</td>"
+			 "<td></td>"
+			 "</tr>",
+	       Gbl.Degs.EditingDegTyp.AllowDirectLogIn ? " checked=\"checked\"" :
+							 "");
 
 
    /***** Send button and end frame *****/
@@ -1880,16 +1886,17 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
                       "<th class=\"BM\"></th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+                      "</th>",
+            Txt_Type_of_BR_degree);
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>",
+	       Txt_Direct_authentication);
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Type_of_BR_degree,
-            Txt_Direct_authentication,
             Txt_Degrees_ABBREVIATION);
   }
 
@@ -1911,17 +1918,19 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+                      "</th>",
+            Txt_Code,
+            Txt_Type_of_BR_degree);
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "</tr>",
+	       Txt_Direct_authentication);
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Code,
-            Txt_Type_of_BR_degree,
-            Txt_Direct_authentication,
             Txt_Degrees_ABBREVIATION);
   }
 
@@ -2041,6 +2050,9 @@ static void Deg_CreateDegreeType (struct DegreeType *DegTyp)
   {
    extern const char *Txt_Created_new_type_of_degree_X;
    char Query[128+Deg_MAX_LENGTH_DEGREE_TYPE_NAME];
+
+   if (!Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service does not exist
+      DegTyp->AllowDirectLogIn = true;
 
    /***** Create a new degree type *****/
    sprintf (Query,"INSERT INTO deg_types"
@@ -2218,7 +2230,10 @@ static void Deg_GetListDegTypes (void)
          Gbl.Degs.DegTypes.Lst[NumRow].DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
 
          /* Get whether this degree type allows direct log in or not (row[2]) */
-         Gbl.Degs.DegTypes.Lst[NumRow].AllowDirectLogIn = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+         if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+            Gbl.Degs.DegTypes.Lst[NumRow].AllowDirectLogIn = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+         else
+            Gbl.Degs.DegTypes.Lst[NumRow].AllowDirectLogIn = true;
 
          /* Number of degrees of this type (row[3]) */
          if (sscanf (row[3],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
@@ -2444,8 +2459,13 @@ void Deg_RecFormNewDegTyp (void)
    Par_GetParToText ("DegTypName",DegTyp->DegTypName,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
 
    /* Get whether this degree type allows direct log in or not */
-   Par_GetParToText ("AllowDirectLogIn",YN,1);
-   DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+     {
+      Par_GetParToText ("AllowDirectLogIn",YN,1);
+      DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+     }
+   else
+      DegTyp->AllowDirectLogIn = true;
 
    if (DegTyp->DegTypName[0])	// If there's a degree type name
      {
@@ -2707,7 +2727,10 @@ bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
      {
       DegTyp->DegTypCod = -1L;
       DegTyp->DegTypName[0] = '\0';
-      DegTyp->AllowDirectLogIn = false;
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+         DegTyp->AllowDirectLogIn = false;
+      else
+         DegTyp->AllowDirectLogIn = true;
       DegTyp->NumDegs = 0;
       return false;
      }
@@ -2727,7 +2750,10 @@ bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       strcpy (DegTyp->DegTypName,row[0]);
 
       /* Get whether this degree type allows direct log in or not (row[1]) */
-      DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+         DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      else
+         DegTyp->AllowDirectLogIn = true;
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = Deg_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -2739,7 +2765,10 @@ bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
      {
       DegTyp->DegTypCod = -1L;
       DegTyp->DegTypName[0] = '\0';
-      DegTyp->AllowDirectLogIn = false;
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+         DegTyp->AllowDirectLogIn = false;
+      else
+         DegTyp->AllowDirectLogIn = true;
       DegTyp->NumDegs = 0;
       return false;
      }
@@ -3331,9 +3360,14 @@ void Deg_ChangeDegTypeLogIn (void)
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    /* Get whether this degree type allows direct log in or not */
-   // Do this after getting data of degree type in order to overwrite AllowDirectLogIn with the user preference
-   Par_GetParToText ("AllowDirectLogIn",YN,1);
-   DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+     {
+      // Do this after getting data of degree type in order to overwrite AllowDirectLogIn with the user preference
+      Par_GetParToText ("AllowDirectLogIn",YN,1);
+      DegTyp->AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+     }
+   else
+      DegTyp->AllowDirectLogIn = true;
 
    /***** Update table of degree types *****/
    sprintf (Query,"UPDATE deg_types SET AllowDirectLogIn='%c' WHERE DegTypCod='%ld'",

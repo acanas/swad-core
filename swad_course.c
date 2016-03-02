@@ -456,8 +456,13 @@ void Crs_ChangeCourseConfig (void)
    Gbl.CurrentCrs.Crs.Year = Deg_ConvStrToYear (YearStr);
 
    /* Get whether this course allows direct log in or not */
-   Par_GetParToText ("AllowDirectLogIn",YN,1);
-   Gbl.CurrentCrs.Crs.AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+     {
+      Par_GetParToText ("AllowDirectLogIn",YN,1);
+      Gbl.CurrentCrs.Crs.AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+     }
+   else
+      Gbl.CurrentCrs.Crs.AllowDirectLogIn = true;
 
    /***** Update table of degree types *****/
    sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u',AllowDirectLogIn='%c'"
@@ -1969,9 +1974,11 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
    /***** Insert new course into pending requests *****/
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
                   "AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName)"
-                  " VALUES ('%ld','%u','%s','N','%u','%ld','%s','%s')",
+                  " VALUES ('%ld','%u','%s','%c','%u','%ld','%s','%s')",
             Crs->DegCod,Crs->Year,
             Crs->InstitutionalCrsCod,
+            Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0] ? 'N' :
+        	                                       'Y',
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Crs->ShortName,Crs->FullName);
@@ -2044,7 +2051,10 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      Crs->AllowDirectLogIn = false;
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+         Crs->AllowDirectLogIn = false;
+      else
+         Crs->AllowDirectLogIn = true;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
       Crs->ShortName[0] = '\0';
@@ -2074,7 +2084,10 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      Crs->AllowDirectLogIn = false;
+      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+         Crs->AllowDirectLogIn = false;
+      else
+         Crs->AllowDirectLogIn = true;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
       Crs->ShortName[0] = '\0';
@@ -2113,7 +2126,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
 
    /***** Get whether this course allows direct log in or not (row[4]) *****/
-   Crs->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      Crs->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
+   else
+      Crs->AllowDirectLogIn = true;
 
    /***** Get course status (row[5]) *****/
    if (sscanf (row[5],"%u",&(Crs->Status)) != 1)

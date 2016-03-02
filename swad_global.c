@@ -225,7 +225,10 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.CurrentDegTyp.DegTyp.DegTypCod = -1L;
    Gbl.CurrentDegTyp.DegTyp.DegTypName[0] = '\0';
-   Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn = false;
+   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
+      Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn = false;
+   else
+      Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn = true;
 
    Gbl.CurrentDeg.Deg.DegCod = -1L;
    Gbl.CurrentDeg.Deg.ShortName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
