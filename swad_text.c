@@ -12733,7 +12733,7 @@ const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning
 
 const char *Txt_Full_name =
 #if   L==1
-	"Nombre completo";	// Necessita traduccio
+	"Nom complet";
 #elif L==2
 	"Vollst&auml;ndiger Name";
 #elif L==3
@@ -12754,7 +12754,7 @@ const char *Txt_Full_name =
 
 const char *Txt_Full_BR_Name =
 #if   L==1
-	"Nombre<br />completo";	// Necessita traduccio
+	"Nom<br />complet";
 #elif L==2
 	"Vollst&auml;ndiger<br />Name";
 #elif L==3
@@ -12771,6 +12771,27 @@ const char *Txt_Full_BR_Name =
 	"Pelna<br />nazwa";
 #elif L==9
 	"Nome<br />completo";
+#endif
+
+const char *Txt_Full_name_of_the_institution =
+#if   L==1
+	"Nom complet de la instituci&oacute;";
+#elif L==2
+	"Vollst&auml;ndiger Name der Institution";
+#elif L==3
+	"Full name of the institution";
+#elif L==4
+	"Nombre completo de la instituci&oacute;n";
+#elif L==5
+	"Nom complet de l'institution";
+#elif L==6
+	"Nombre completo de la instituci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Nome completo dell'istituzione";
+#elif L==8
+	"Pe&lstrok;na nazwa instytucji";
+#elif L==9
+	"Nome completo da institui&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Function =
@@ -22736,23 +22757,23 @@ const char *Txt_New_holiday =
 
 const char *Txt_New_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Nova instituci&oacute;n de %s";
+	"Nova instituci&oacute;n (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...) de %s";
 #elif L==2
-	"Neue Hochschule von %s";
+	"Neue Hochschule (Universit&auml;t, Hochschule, Schule, Hochschule, Organisation, Unternehmen...) von %s";
 #elif L==3
-	"New institution of %s";
+	"New institution (university, college, school, academy, organization, company...) of %s";
 #elif L==4
-	"Nueva instituci&oacute;n de %s";
+	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...) de %s";
 #elif L==5
-	"Nouvel &eacute;tablissement de %s";
+	"Nouvel &eacute;tablissement (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...) de %s";
 #elif L==6
-	"Nueva instituci&oacute;n de %s";	// Okoteve traducción
+	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...) de %s";	// Okoteve traducción
 #elif L==7
-	"Nuova istituzione di %s";
+	"Nuova istituzione (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...) di %s";
 #elif L==8
-	"Nowa instytucja %s";
+	"Nowa instytucja (uniwersytet, uczelnia, szko&lstrok;a, akademia, organizacja, firma...) %s";
 #elif L==9
-	"Nova institu&ccedil;&atilde;o de %s";
+	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...) de %s";
 #endif
 
 const char *Txt_New_link =
@@ -35236,7 +35257,7 @@ const char *Txt_shared_files_area =
 
 const char *Txt_Short_name =
 #if   L==1
-	"Nombre breve";		// Necessita traduccio
+	"Nom breu";
 #elif L==2
 	"Kurzname";
 #elif L==3
@@ -35250,14 +35271,14 @@ const char *Txt_Short_name =
 #elif L==7
 	"Nome breve";
 #elif L==8
-	"Short name";		// Potrzebujesz tlumaczenie
+	"Nazwa skr&oacute;cona";
 #elif L==9
 	"Nome abreviado";
 #endif
 
 const char *Txt_Short_BR_Name =
 #if   L==1
-	"Nombre<br />breve";	// Necessita traduccio
+	"Nom<br />breu";
 #elif L==2
 	"Kurzname";
 #elif L==3
@@ -35271,9 +35292,30 @@ const char *Txt_Short_BR_Name =
 #elif L==7
 	"Nome<br />breve";
 #elif L==8
-	"Short<br />name";	// Potrzebujesz tlumaczenie
+	"Nazwa<br />skr&oacute;cona";
 #elif L==9
 	"Nome<br />abreviado";
+#endif
+
+const char *Txt_Short_name_of_the_institution =
+#if   L==1
+	"Nom breu de la instituci&oacute;";
+#elif L==2
+	"Kurzname der Institution";
+#elif L==3
+	"Short name of the institution";
+#elif L==4
+	"Nombre breve de la instituci&oacute;n";
+#elif L==5
+	"Nom abr&eacute;g&eacute; de l'institution";
+#elif L==6
+	"Nombre breve de la instituci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Nome breve dell'istituzione";
+#elif L==8
+	"Skr&oacute;cona nazwa instytucji";
+#elif L==9
+	"Nome abreviado da institui&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Shortcut =

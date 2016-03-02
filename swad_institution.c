@@ -1968,8 +1968,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Country;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Full_name;
+   extern const char *Txt_Short_name_of_the_institution;
+   extern const char *Txt_Full_name_of_the_institution;
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Centres_ABBREVIATION;
@@ -2014,8 +2014,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "</tr>",
             Txt_Code,
             Txt_Country,
-            Txt_Short_name,
-            Txt_Full_name,
+            Txt_Short_name_of_the_institution,
+            Txt_Full_name_of_the_institution,
             Txt_WWW,
             Txt_Users,
             Txt_Centres_ABBREVIATION,
