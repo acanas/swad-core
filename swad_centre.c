@@ -2317,8 +2317,8 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_Code;
    extern const char *Txt_Institution;
    extern const char *Txt_Place;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Full_name;
+   extern const char *Txt_Short_name_of_the_centre;
+   extern const char *Txt_Full_name_of_the_centre;
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -2367,8 +2367,8 @@ static void Ctr_PutHeadCentresForEdition (void)
             Txt_Code,
             Txt_Institution,
             Txt_Place,
-            Txt_Short_name,
-            Txt_Full_name,
+            Txt_Short_name_of_the_centre,
+            Txt_Full_name_of_the_centre,
             Txt_WWW,
             Txt_Users,
             Txt_Degrees_ABBREVIATION,

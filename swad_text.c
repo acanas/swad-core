@@ -12773,6 +12773,27 @@ const char *Txt_Full_BR_Name =
 	"Nome<br />completo";
 #endif
 
+const char *Txt_Full_name_of_the_centre =
+#if   L==1
+	"Nom complet del centre";
+#elif L==2
+	"Vollst&auml;ndiger Name der Lehrinstitut";
+#elif L==3
+	"Full name of the centre";
+#elif L==4
+	"Nombre completo del centro";
+#elif L==5
+	"Nom complet du centre";
+#elif L==6
+	"Nombre completo del centro";	// Okoteve traducción
+#elif L==7
+	"Nome completo del centro";
+#elif L==8
+	"Pe&lstrok;na nazwa centrum";
+#elif L==9
+	"Nome completo do centro";
+#endif
+
 const char *Txt_Full_name_of_the_institution =
 #if   L==1
 	"Nom complet de la instituci&oacute;";
@@ -22547,23 +22568,23 @@ const char *Txt_New_banner =
 
 const char *Txt_New_centre_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Nou centre de %s";
+	"Nou centre (facultat, escola, institut, divisi&oacute;, edifici...) de %s";
 #elif L==2
-	"Neues Lehrinstitut von %s";
+	"Neues Lehrinstitut (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...) von %s";
 #elif L==3
-	"New centre of %s";
+	"New centre (faculty, school, college, division, building...) of %s";
 #elif L==4
-	"Nuevo centro de %s";
+	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...) de %s";
 #elif L==5
-	"Nouveau centre de %s";
+	"Nouveau centre (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...) de %s";
 #elif L==6
-	"Nuevo centro de %s";	// Okoteve traducción
+	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...) de %s";	// Okoteve traducción
 #elif L==7
-	"Nuovo centro di %s";
+	"Nuovo centro (facolt&agrave;, scuola, istituto, divisione, costruzione...) di %s";
 #elif L==8
-	"Nowe centrum %s";
+	"Nowe centrum (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...) %s";
 #elif L==9
-	"Novo centro de %s";
+	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...) de %s";
 #endif
 
 const char *Txt_New_country =
@@ -35295,6 +35316,27 @@ const char *Txt_Short_BR_Name =
 	"Nazwa<br />skr&oacute;cona";
 #elif L==9
 	"Nome<br />abreviado";
+#endif
+
+const char *Txt_Short_name_of_the_centre =
+#if   L==1
+	"Nom breu del centre";
+#elif L==2
+	"Kurzname der Lehrinstitut";
+#elif L==3
+	"Short name of the centre";
+#elif L==4
+	"Nombre breve del centro";
+#elif L==5
+	"Nom abr&eacute;g&eacute; du centre";
+#elif L==6
+	"Nombre breve del centro";	// Okoteve traducción
+#elif L==7
+	"Nome breve del centro";
+#elif L==8
+	"Skr&oacute;cona nazwa centrum";
+#elif L==9
+	"Nome abreviado do centro";
 #endif
 
 const char *Txt_Short_name_of_the_institution =
