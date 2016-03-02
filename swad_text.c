@@ -12752,25 +12752,25 @@ const char *Txt_Full_name =
 	"Nome completo";
 #endif
 
-const char *Txt_Full_BR_Name =
+const char *Txt_Full_name_of_the_degree =
 #if   L==1
-	"Nom<br />complet";
+	"Nom complet de la titulaci&oacute;";
 #elif L==2
-	"Vollst&auml;ndiger<br />Name";
+	"Vollst&auml;ndiger Name der Studiengang";
 #elif L==3
-	"Full<br />name";
+	"Full name of the degree";
 #elif L==4
-	"Nombre<br />completo";
+	"Nombre completo de la titulaci&oacute;n";
 #elif L==5
-	"Nom<br />complet";
+	"Nom complet du &eacute;tude";
 #elif L==6
-	"Nombre<br />completo";	// Okoteve traducción
+	"Nombre completo de la titulaci&oacute;n";	// Okoteve traducción
 #elif L==7
-	"Nome<br />completo";
+	"Nome completo della laurea";
 #elif L==8
-	"Pelna<br />nazwa";
+	"Pe&lstrok;na nazwa stopie&nacute;";
 #elif L==9
-	"Nome<br />completo";
+	"Nome completo da titula&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Full_name_of_the_centre =
@@ -22631,23 +22631,23 @@ const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to inc
 
 const char *Txt_New_degree_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Nova titulaci&oacute; de %s";
+	"Nova titulaci&oacute; (carrera, llicenciatura, diplomatura, grau, postgrau, m&agrave;ster, cicle, nivell...) de %s";
 #elif L==2
-	"Neuer Studiengang von %s";
+	"Neuer Studiengang (Karriere, Diplom, Grad, Graduierten, Master, Zyklus, Niveau...) von %s";
 #elif L==3
-	"New degree of %s";
+	"New degree (career, diploma, degree, postgraduate, master, cycle, level...) of %s";
 #elif L==4
-	"Nueva titulaci&oacute;n de %s";
+	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...) de %s";
 #elif L==5
-	"Nouvel &eacute;tude de %s";
+	"Nouvel &eacute;tude (carri&egrave;re, grade, dipl&ocirc;me, degr&eacute;, troisi&agrave;me cycle, master, cycle, niveau...) de %s";
 #elif L==6
-	"Nueva titulaci&oacute;n de %s";	// Okoteve traducción
+	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...) de %s";	// Okoteve traducción
 #elif L==7
-	"Nuova laurea di %s";
+	"Nuova laurea (carriera, diploma, laurea, post-laurea, master, ciclo, livello...) di %s";
 #elif L==8
-	"Nowy stopien %s";
+	"Nowy stopie&nacute; (zawodowe, stopie&nacute;, dyplom, magisterskie, podyplomowe, magisterskie, cykl, poziom...) %s";
 #elif L==9
-	"Nova titula&ccedil;&atilde;o de %s";
+	"Nova titula&ccedil;&atilde;o (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...) de %s";
 #endif
 
 const char *Txt_New_department =
@@ -35297,25 +35297,25 @@ const char *Txt_Short_name =
 	"Nome abreviado";
 #endif
 
-const char *Txt_Short_BR_Name =
+const char *Txt_Short_name_of_the_degree =
 #if   L==1
-	"Nom<br />breu";
+	"Nom breu de la titulaci&oacute;";
 #elif L==2
-	"Kurzname";
+	"Kurzname der Studiengang";
 #elif L==3
-	"Short<br />name";
+	"Short name of the degree";
 #elif L==4
-	"Nombre<br />breve";
+	"Nombre breve de la titulaci&oacute;n";
 #elif L==5
-	"Nom<br />abr&eacute;g&eacute;";
+	"Nom abr&eacute;g&eacute; du &eacute;tude";
 #elif L==6
-	"Nombre<br />breve";	// Okoteve traducción
+	"Nombre breve de la titulaci&oacute;n";	// Okoteve traducción
 #elif L==7
-	"Nome<br />breve";
+	"Nome breve della laurea";
 #elif L==8
-	"Nazwa<br />skr&oacute;cona";
+	"Skr&oacute;cona nazwa stopie&nacute;";
 #elif L==9
-	"Nome<br />abreviado";
+	"Nome abreviado da titula&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Short_name_of_the_centre =

@@ -1966,8 +1966,8 @@ static void Deg_PutHeadDegreesForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Centre;
-   extern const char *Txt_Short_BR_Name;
-   extern const char *Txt_Full_BR_Name;
+   extern const char *Txt_Short_name_of_the_degree;
+   extern const char *Txt_Full_name_of_the_degree;
    extern const char *Txt_Type;
    extern const char *Txt_WWW;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -2007,8 +2007,8 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "</tr>",
             Txt_Code,
             Txt_Centre,
-            Txt_Short_BR_Name,
-            Txt_Full_BR_Name,
+            Txt_Short_name_of_the_degree,
+            Txt_Full_name_of_the_degree,
             Txt_Type,
             Txt_WWW,
             Txt_Courses_ABBREVIATION,
