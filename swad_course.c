@@ -1787,8 +1787,8 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_optional;
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Full_name;
+   extern const char *Txt_Short_name_of_the_course;
+   extern const char *Txt_Full_name_of_the_course;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Status;
@@ -1831,8 +1831,8 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Institutional_code,Txt_optional,
             Txt_Degree,
             Txt_Year_OF_A_DEGREE,
-            Txt_Short_name,
-            Txt_Full_name,
+            Txt_Short_name_of_the_course,
+            Txt_Full_name_of_the_course,
             Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
             Txt_Status,

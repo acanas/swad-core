@@ -12794,6 +12794,27 @@ const char *Txt_Full_name_of_the_centre =
 	"Nome completo do centro";
 #endif
 
+const char *Txt_Full_name_of_the_course =
+#if   L==1
+	"Nom complet de l'assignatura";
+#elif L==2
+	"Vollst&auml;ndiger Name der Kurs";
+#elif L==3
+	"Full name of the course";
+#elif L==4
+	"Nombre completo de la asignatura";
+#elif L==5
+	"Nom complet de la mati&egrave;re";
+#elif L==6
+	"Nombre completo de la asignatura";	// Okoteve traducción
+#elif L==7
+	"Nome completo del corso";
+#elif L==8
+	"Pe&lstrok;na nazwa kurs";
+#elif L==9
+	"Nome completo da disciplina";
+#endif
+
 const char *Txt_Full_name_of_the_institution =
 #if   L==1
 	"Nom complet de la instituci&oacute;";
@@ -22610,23 +22631,23 @@ const char *Txt_New_country =
 
 const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Nova assignatura de %s";
+	"Nova assignatura (assignatura, curs, mat&egrave;ria, disciplina...) de %s";
 #elif L==2
-	"Neue Kurs der %s";
+	"Neue Kurs (Kurs, Thema, Disziplin...) der %s";
 #elif L==3
-	"New course of %s";
+	"New course (course, subject, discipline...) of %s";
 #elif L==4
-	"Nueva asignatura de %s";
+	"Nueva asignatura (asignatura, curso, materia, disciplina...) de %s";
 #elif L==5
-	"Nouvelle mati&egrave;re de %s";
+	"Nouvelle mati&egrave;re (mati&egrave;re, cours, discipline...) de %s";
 #elif L==6
-	"Nueva asignatura de %s";	// Okoteve traducción
+	"Nueva asignatura (asignatura, curso, materia, disciplina...) de %s";	// Okoteve traducción
 #elif L==7
-	"Nuovo corso di %s";
+	"Nuovo corso (corso, materia...) di %s";
 #elif L==8
 	"Nowy kurs %s";
 #elif L==9
-	"Nova disciplina de %s";
+	"Nova disciplina (disciplina, curso...) de %s";
 #endif
 
 const char *Txt_New_degree_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
@@ -35337,6 +35358,27 @@ const char *Txt_Short_name_of_the_centre =
 	"Skr&oacute;cona nazwa centrum";
 #elif L==9
 	"Nome abreviado do centro";
+#endif
+
+const char *Txt_Short_name_of_the_course =
+#if   L==1
+	"Nom breu de l'assignatura";
+#elif L==2
+	"Kurzname der Kurs";
+#elif L==3
+	"Short name of the course";
+#elif L==4
+	"Nombre breve de la asignatura";
+#elif L==5
+	"Nom abr&eacute;g&eacute; de la mati&egrave;re";
+#elif L==6
+	"Nombre breve de la asignatura";	// Okoteve traducción
+#elif L==7
+	"Nome breve del corso";
+#elif L==8
+	"Skr&oacute;cona nazwa kurs";
+#elif L==9
+	"Nome abreviado da disciplina";
 #endif
 
 const char *Txt_Short_name_of_the_institution =

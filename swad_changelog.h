@@ -120,19 +120,18 @@
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
 
-// TODO: Change "Nombre completo" to "Nombre completo de la asignatura o curso"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.143.4 (2016-03-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.143.5 (2016-03-02)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.143.5: Mar 02, 2016	Changed text messages related to edition of courses. (196166 lines)
         Version 15.143.4: Mar 02, 2016	Changed text messages related to edition of degrees. (196126 lines)
         Version 15.143.3: Mar 02, 2016	Changed text messages related to edition of centres. (196126 lines)
         Version 15.143.2: Mar 02, 2016	Changed text messages related to edition of institutions. (196086 lines)
