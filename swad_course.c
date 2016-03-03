@@ -74,7 +74,6 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /*****************************************************************************/
 
 static void Crs_Configuration (bool PrintView);
-static void Crs_PutFormToConfigLogIn (bool IsForm);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
@@ -327,10 +326,6 @@ static void Crs_Configuration (bool PrintView)
      }
    else
      {
-      /***** Choice whether a course allows direct log in *****/
-      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
-	 Crs_PutFormToConfigLogIn (IsForm);
-
       /***** Number of teachers *****/
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s RIGHT_MIDDLE\">"
@@ -393,50 +388,6 @@ static void Crs_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/********* Put form to choice whether a course allows direct log in **********/
-/*****************************************************************************/
-
-static void Crs_PutFormToConfigLogIn (bool IsForm)
-  {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Students_authentication;
-   extern const char *Txt_STUDENTS_must_enter_through_X;
-   extern const char *Txt_STUDENTS_may_enter_directly;
-
-   /***** Can students enter directly? *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],
-	    Txt_Students_authentication);
-
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AllowDirectLogIn\" value=\"N\"");
-   if (!Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn &&
-       !Gbl.CurrentCrs.Crs.AllowDirectLogIn)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (!IsForm || Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /><span class=\"DAT\">");
-   fprintf (Gbl.F.Out,Txt_STUDENTS_must_enter_through_X,
-	    Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
-   fprintf (Gbl.F.Out,"<br /></span>");
-
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AllowDirectLogIn\" value=\"Y\"");
-   if (Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn ||
-       Gbl.CurrentCrs.Crs.AllowDirectLogIn)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (!IsForm || Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /><span class=\"DAT\">%s</span>",
-	    Txt_STUDENTS_may_enter_directly);
-
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
-  }
-
-/*****************************************************************************/
 /******************** Change the configuration of a course *******************/
 /*****************************************************************************/
 
@@ -445,7 +396,6 @@ void Crs_ChangeCourseConfig (void)
    extern const char *Txt_The_configuration_of_the_course_X_has_been_updated;
    char Query[512];
    char YearStr[2+1];
-   char YN[1+1];
 
    /***** Get parameters from form *****/
    /* Get institutional code */
@@ -455,22 +405,11 @@ void Crs_ChangeCourseConfig (void)
    Par_GetParToText ("OthCrsYear",YearStr,2);
    Gbl.CurrentCrs.Crs.Year = Deg_ConvStrToYear (YearStr);
 
-   /* Get whether this course allows direct log in or not */
-   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
-     {
-      Par_GetParToText ("AllowDirectLogIn",YN,1);
-      Gbl.CurrentCrs.Crs.AllowDirectLogIn = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-     }
-   else
-      Gbl.CurrentCrs.Crs.AllowDirectLogIn = true;
-
    /***** Update table of degree types *****/
-   sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u',AllowDirectLogIn='%c'"
+   sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u'"
                   " WHERE CrsCod='%ld'",
             Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
             Gbl.CurrentCrs.Crs.Year,
-            Gbl.CurrentCrs.Crs.AllowDirectLogIn ? 'Y' :
-        	                                  'N',
             Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not update the configuration of a course");
 
@@ -1007,13 +946,13 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    switch (WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
                         " FROM courses WHERE DegCod='%ld' AND Status=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
-         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+         sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
                         " FROM courses WHERE DegCod='%ld' AND (Status & %u)=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -1973,12 +1912,10 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
 
    /***** Insert new course into pending requests *****/
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
-                  "AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName)"
-                  " VALUES ('%ld','%u','%s','%c','%u','%ld','%s','%s')",
+                  "Status,RequesterUsrCod,ShortName,FullName)"
+                  " VALUES ('%ld','%u','%s','%u','%ld','%s','%s')",
             Crs->DegCod,Crs->Year,
             Crs->InstitutionalCrsCod,
-            Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0] ? 'N' :
-        	                                       'Y',
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Crs->ShortName,Crs->FullName);
@@ -2051,10 +1988,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
-         Crs->AllowDirectLogIn = false;
-      else
-         Crs->AllowDirectLogIn = true;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
       Crs->ShortName[0] = '\0';
@@ -2066,7 +1999,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
      }
 
    /***** Get data of a course from database *****/
-   sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,AllowDirectLogIn,Status,RequesterUsrCod,ShortName,FullName"
+   sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
                   " FROM courses WHERE CrsCod='%ld'",
             Crs->CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a course");
@@ -2084,10 +2017,6 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;
       Crs->Year = 0;
-      if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
-         Crs->AllowDirectLogIn = false;
-      else
-         Crs->AllowDirectLogIn = true;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
       Crs->ShortName[0] = '\0';
@@ -2124,12 +2053,6 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    /***** Get institutional course code (row[3]) *****/
    strncpy (Crs->InstitutionalCrsCod,row[3],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
    Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
-
-   /***** Get whether this course allows direct log in or not (row[4]) *****/
-   if (Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])	// If external login service exists
-      Crs->AllowDirectLogIn = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
-   else
-      Crs->AllowDirectLogIn = true;
 
    /***** Get course status (row[5]) *****/
    if (sscanf (row[5],"%u",&(Crs->Status)) != 1)

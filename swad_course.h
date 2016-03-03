@@ -78,7 +78,6 @@ struct Course
    char InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];	// Institutional code of the course
    long DegCod;
    unsigned Year;					// Year: 0 (optatives), 1, 2, 3...
-   bool AllowDirectLogIn;				// Students may enter directly, or must enter via external plugin?
    Crs_Status_t Status;					// Course status
    long RequesterUsrCod;				// User code of the person who requested the creation of this course
    char ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];	// Short name of course

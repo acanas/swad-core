@@ -2581,15 +2581,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-        {
-         if (Gbl.Imported.ExternalRole == Rol_UNKNOWN &&		// I logged in directly, not from external service...
-             Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&	// ...and I am a student in the current course...
-             !Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn &&		// ...but the current degree type...
-             !Gbl.CurrentCrs.Crs.AllowDirectLogIn)			// ...and the current course do not allow to log in directly
-            Gbl.Usrs.Me.AvailableRoles = (1 << Rol_VISITOR);	// In this case, my role will be visitor, and an alert will be shown
-         else
-            Gbl.Usrs.Me.AvailableRoles = (1 << Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB);
-        }
+         Gbl.Usrs.Me.AvailableRoles = (1 << Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB);
       else if (Gbl.Usrs.Me.MaxRole >= Rol_STUDENT)
          Gbl.Usrs.Me.AvailableRoles = (1 << Rol_VISITOR);
       else
@@ -2614,40 +2606,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
            Gbl.Usrs.Me.LoggedRole++)
          if (Gbl.Usrs.Me.AvailableRoles & (1 << Gbl.Usrs.Me.LoggedRole))
             break;
-  }
-
-/*****************************************************************************/
-/******** Write warning when degree type does not allow direct login *********/
-/*****************************************************************************/
-/*
-When is forbidden direct log in?
-                                                      Gbl.CurrentCrs.Crs.AllowDirectLogIn
-                                                      false                          true
-                                           false      forbidden                    allowed
-Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn
-                                           true       allowed                      allowed
-*/
-
-void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void)
-  {
-   extern const char *Txt_This_course_requires_log_in_from_X_to_have_full_functionality_;
-
-   if (Cfg_EXTERNAL_LOGIN_URL[0] && Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])
-      /* If I belong to current course but my role in current course is visitor, show alert */
-      if (Gbl.Usrs.Me.IBelongToCurrentCrs &&
-          Gbl.Imported.ExternalRole == Rol_UNKNOWN &&			// I logged in directly, not from external service...
-          Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&	// ...and I am a student in the current course...
-          !Gbl.CurrentDegTyp.DegTyp.AllowDirectLogIn &&			// ...but the current degree type...
-          !Gbl.CurrentCrs.Crs.AllowDirectLogIn &&			// ...and the current course do not allow to log in directly
-          (Gbl.Action.Act == ActSeeCrsInf ||
-           Gbl.Action.Act == ActAutUsrInt ||
-           Gbl.Action.Act == ActHom))
-         {
-          sprintf (Gbl.Message,Txt_This_course_requires_log_in_from_X_to_have_full_functionality_,
-                   Cfg_EXTERNAL_LOGIN_URL,Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME,
-                   Cfg_EXTERNAL_LOGIN_URL,Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
-          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         }
   }
 
 /*****************************************************************************/

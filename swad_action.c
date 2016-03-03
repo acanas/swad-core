@@ -110,7 +110,6 @@ System:
 	 27. ActNewDegTyp		Request the creation of a type of degree
 	 28. ActRemDegTyp		Request the removal of a type of degree
 	 29. ActRenDegTyp		Request renaming of a type of degree
-	 30. ActChgDegTypLog		REquest changing whether direct log in is allowd
 
 	 31. ActRemOldCrs		Remove completely old courses
 	 32. ActEdiMai			Edit mail domains
@@ -1381,7 +1380,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewDegTyp	*/{ 537,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RecFormNewDegTyp		,NULL},
    /* ActRemDegTyp	*/{ 545,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RemoveDegreeType		,NULL},
    /* ActRenDegTyp	*/{ 538,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RenameDegreeType		,NULL},
-   /* ActChgDegTypLog   */{1006,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegTypeLogIn		,NULL},
 
    /* ActRemOldCrs	*/{1110,-1,TabSys,ActReqRemOldCrs	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_RemoveOldCrss		,NULL},
 
@@ -3717,7 +3715,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #1003 (obsolete action)
 	-1,			// #1004 (obsolete action)
 	-1,			// #1005 (obsolete action)
-	ActChgDegTypLog,	// #1006
+	-1,			// #1006 (obsolete action)
 	ActReqImpTstQst,	// #1007
 	ActImpTstQst,		// #1008
 	ActSeeCrs,		// #1009

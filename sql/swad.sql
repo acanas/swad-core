@@ -237,7 +237,6 @@ CREATE TABLE IF NOT EXISTS courses (
 	DegCod INT NOT NULL DEFAULT -1,
 	Year TINYINT NOT NULL DEFAULT 0,
 	InsCrsCod CHAR(7) NOT NULL,
-	AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',
         Status TINYINT NOT NULL DEFAULT 0,
         RequesterUsrCod INT NOT NULL DEFAULT -1,
 	ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,
@@ -378,7 +377,6 @@ CREATE TABLE IF NOT EXISTS debug (
 CREATE TABLE IF NOT EXISTS deg_types (
 	DegTypCod INT NOT NULL AUTO_INCREMENT,
 	DegTypName VARCHAR(32) NOT NULL,
-	AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(DegTypCod));
 --
 -- Table degrees: stores the degrees

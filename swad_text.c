@@ -7883,69 +7883,6 @@ const char *Txt_Details =
 	"Detalhes";
 #endif
 
-const char *Txt_Direct_authentication =
-#if   L==1
-	"&iquest;Autenticaci&oacute; directa?";
-#elif L==2
-	"Direkte Authentifizierung?";
-#elif L==3
-	"Direct authentication?";
-#elif L==4
-	"&iquest;Autenticaci&oacute;n directa?";
-#elif L==5
-	"Authentification directe?";
-#elif L==6
-	"&iquest;Autenticaci&oacute;n directa?";	// Okoteve traducción
-#elif L==7
-	"Autenticazione diretta?";
-#elif L==8
-	"Bezpo&sacute;redni uwierzytelniania?";
-#elif L==9
-	"Autentica&ccedil;&atilde;o direta?";
-#endif
-
-const char *Txt_Direct_authentication_allowed =
-#if   L==1
-	"Autenticaci&oacute; directa permesa";
-#elif L==2
-	"Direkte Authentifizierung erlaubt";
-#elif L==3
-	"Direct authentication allowed";
-#elif L==4
-	"Autenticaci&oacute;n directa permitida";
-#elif L==5
-	"Authentification directe autoris&eacute;e";
-#elif L==6
-	"Autenticaci&oacute;n directa permitida";	// Okoteve traducción
-#elif L==7
-	"Autenticazione diretta permessa";
-#elif L==8
-	"Bezpo&sacute;redni uwierzytelniania dozwolone";
-#elif L==9
-	"Autentica&ccedil;&atilde;o direta permitida";
-#endif
-
-const char *Txt_Direct_authentication_not_allowed =
-#if   L==1
-	"Autenticaci&oacute; directa no permesa";
-#elif L==2
-	"Direkte Authentifizierung nicht erlaubt";
-#elif L==3
-	"Direct authentication not allowed";
-#elif L==4
-	"Autenticaci&oacute;n directa no permitida";
-#elif L==5
-	"Authentification directe n'est pas autoris&eacute;e";
-#elif L==6
-	"Autenticaci&oacute;n directa no permitida";	// Okoteve traducción
-#elif L==7
-	"Autenticazione diretta non permessa";
-#elif L==8
-	"Bezpo&sacute;redni uwierzytelniania nie dozwolone";
-#elif L==9
-	"Autentica&ccedil;&atilde;o direta n&atilde;o permitida";
-#endif
-
 const char *Txt_Disclaimer_the_files_hosted_here_ =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"Aviso legal: los archivos alojados aqu&iacute;, salvo que se indique lo contrario,"
@@ -38370,69 +38307,6 @@ const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 	"estu.";
 #endif
 
-const char *Txt_Students_authentication =
-#if   L==1
-	"Autenticaci&oacute;<br />d'estudiants";
-#elif L==2
-	"Studenten-<br />Authentifizierung";
-#elif L==3
-	"Students'<br />authentication";
-#elif L==4
-	"Autenticaci&oacute;n<br />de estudiantes";
-#elif L==5
-	"Authentification des &eacute;tudiants";
-#elif L==6
-	"Autenticaci&oacute;n<br />de estudiantes";	// Okoteve traducción
-#elif L==7
-	"Autenticazione degli studenti";
-#elif L==8
-	"Uwierzytelnianie student&oacute;w";
-#elif L==9
-	"Autentica&ccedil;&atilde;o de estudantes";
-#endif
-
-const char *Txt_STUDENTS_may_enter_directly =
-#if   L==1
-	"poden entrar directament";
-#elif L==2
-	"k&ouml;nnen direkt eingeben";
-#elif L==3
-	"may enter directly";
-#elif L==4
-	"pueden entrar directamente";
-#elif L==5
-	"peuvent entrer directement";
-#elif L==6
-	"pueden entrar directamente";	// Okoteve traducción
-#elif L==7
-	"possono entrare direttamente";
-#elif L==8
-	"moga wej&sacute;&cacute; bezpo&sacute;rednio";
-#elif L==9
-	"podem entrar diretamente";
-#endif
-
-const char *Txt_STUDENTS_must_enter_through_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"han d'entrar per %s";
-#elif L==2
-	"m&uuml;ssen durch %s eingeben";
-#elif L==3
-	"must enter through %s";
-#elif L==4
-	"deben entrar por %s";
-#elif L==5
-	"doivent entrer par %s";
-#elif L==6
-	"deben entrar por %s";	// Okoteve traducción
-#elif L==7
-	"devono entrare attraverso %s";
-#elif L==8
-	"musz&aogon; wej&sacute;&cacute; przez %s";
-#elif L==9
-	"devem entrar atrav&eacute;s %s";
-#endif
-
 const char *Txt_Student_record_card_in_this_course_has_been_updated =
 #if   L==1
 	"La ficha del estudiante en la asignatura se ha actualizado.";	// Necessita traduccio
@@ -43863,48 +43737,6 @@ const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y =	// Warning: it is v
 	"The type of degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Necessita de tradução
 #endif
 
-const char *Txt_The_type_of_degree_X_no_longer_allows_direct_authentication =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"El tipus de titulaci&oacute; <strong>%s</strong> ja no permet autenticaci&oacute; directa.";
-#elif L==2
-	"The type of degree <strong>%s</strong> no longer allows direct authentication.";		// Need Übersetzung
-#elif L==3
-	"The type of degree <strong>%s</strong> no longer allows direct authentication.";
-#elif L==4
-	"El tipo de titulaci&oacute;n <strong>%s</strong> ya no permite autenticaci&oacute;n directa.";
-#elif L==5
-	"The type of degree <strong>%s</strong> no longer allows direct authentication.";		// Besoin de traduction
-#elif L==6
-	"El tipo de titulaci&oacute;n <strong>%s</strong> ya no permite autenticaci&oacute;n directa.";	// Okoteve traducción
-#elif L==7
-	"Il tipo di laurea <strong>%s</strong> non permette pi&ugrave; ora l'autenticazione diretta.";
-#elif L==8
-	"The type of degree <strong>%s</strong> no longer allows direct authentication.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"The type of degree <strong>%s</strong> no longer allows direct authentication.";		// Necessita de tradução
-#endif
-
-const char *Txt_The_type_of_degree_X_now_allows_direct_authentication =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"El tipus de titulaci&oacute; <strong>%s</strong> ara permet autenticaci&oacute; directa.";
-#elif L==2
-	"The type of degree <strong>%s</strong> now allows direct authentication.";			// Need Übersetzung
-#elif L==3
-	"The type of degree <strong>%s</strong> now allows direct authentication.";
-#elif L==4
-	"El tipo de titulaci&oacute;n <strong>%s</strong> ahora permite autenticaci&oacute;n directa.";
-#elif L==5
-	"The type of degree <strong>%s</strong> now allows direct authentication.";			// Besoin de traduction
-#elif L==6
-	"El tipo de titulaci&oacute;n <strong>%s</strong> ahora permite autenticaci&oacute;n directa.";	// Okoteve traducción
-#elif L==7
-	"Il tipo di laurea <strong>%s</strong> permette ora l'autenticazione diretta.";
-#elif L==8
-	"The type of degree <strong>%s</strong> now allows direct authentication.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"The type of degree <strong>%s</strong> now allows direct authentication.";			// Necessita de tradução
-#endif
-
 const char *Txt_The_type_of_degree_of_the_degree_X_has_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El tipo de titulaci&oacute;n de la titulaci&oacute;n <strong>%s</strong> ha cambiado.";	// Necessita traduccio
@@ -45673,54 +45505,6 @@ const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is v
 	"There was an error in assessing the test %u.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"There was an error in assessing the test %u.";		// Necessita de tradução
-#endif
-
-const char *Txt_This_course_requires_log_in_from_X_to_have_full_functionality_ =	// Warning: it is very important to include four %s in the following sentences
-#if   L==1
-	"Esta asignatura requiere entrar"
-	" desde <a href=\"%s\" target=\"_blank\">%s</a>"
-	" para disfrutar de la funcionalidad completa."
-	" Por favor, entre desde <a href=\"%s\" target=\"_blank\">%s</a>.";	// Necessita traduccio
-#elif L==2
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Need Übersetzung
-#elif L==3
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";
-#elif L==4
-	"Esta asignatura requiere entrar"
-	" desde <a href=\"%s\" target=\"_blank\">%s</a>"
-	" para disfrutar de la funcionalidad completa."
-	" Por favor, entre desde <a href=\"%s\" target=\"_blank\">%s</a>.";
-#elif L==5
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Besoin de traduction
-#elif L==6
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Okoteve traducción
-#elif L==7
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Bisogno di traduzione
-#elif L==8
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"This course requires log in"
-	" from <a href=\"%s\" target=\"_blank\">%s</a>"
-	" to have full functionality."
-	" Please log in from <a href=\"%s\" target=\"_blank\">%s</a>.";		// Necessita de tradução
 #endif
 
 const char *Txt_this_field_is_filled_in_the_record_of_one_student =

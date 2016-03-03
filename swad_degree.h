@@ -84,7 +84,6 @@ struct DegreeType
   {
    long DegTypCod;					// Degree type code
    char DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME+1];	// Degree type name
-   bool AllowDirectLogIn;				// Does this degree type allow direct log in?
    unsigned NumDegs;					// Number of degrees of this type
   };
 
@@ -139,7 +138,6 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RenameDegreeType (void);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_ChangeDegTypeLogIn (void);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegreeCtr (void);
 void Deg_ChangeDegWWW (void);

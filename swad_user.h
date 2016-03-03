@@ -265,7 +265,6 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
 
 void Usr_ChkUsrAndGetUsrData (void);
 
-void Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin (void);
 void Usr_ShowFormsLogoutAndRole (void);
 
 bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);

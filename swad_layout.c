@@ -304,9 +304,6 @@ void Lay_WriteStartOfPage (void)
    /* Start of canvas: main zone for actions output */
    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
-   /* Write warning when degree type does not allow direct login */
-   Usr_WarningWhenDegreeTypeDoesntAllowDirectLogin ();
-
    /* If it is mandatory to read any information about course */
    if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
       Inf_WriteMsgYouMustReadInfo ();

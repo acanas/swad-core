@@ -115,7 +115,6 @@
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
 // TODO: Width of column for data in notifications is too short
 // TODO: Change size of DegTypName in table deg_types from VARCHAR(32) TO VARCHAR(255)
-// TODO: Remove AllowDirectLogIn in table deg_types
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
@@ -124,13 +123,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.143.6 (2016-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.144 (2016-03-03)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.144:   Mar 03, 2016	Direct login always available. (195755 lines)
+					3 changes necessary in database:
+ALTER TABLE courses DROP COLUMN AllowDirectLogIn;
+ALTER TABLE deg_types DROP COLUMN AllowDirectLogIn;
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1006';
+
         Version 15.143.6: Mar 03, 2016	Direct login forms unavailable when external login service unavailable. (196219 lines)
         Version 15.143.5: Mar 02, 2016	Changed text messages related to edition of courses. (196166 lines)
         Version 15.143.4: Mar 02, 2016	Changed text messages related to edition of degrees. (196126 lines)

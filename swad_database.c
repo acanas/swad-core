@@ -556,27 +556,25 @@ mysql> DESCRIBE countries;
    /***** Table courses *****/
 /*
 mysql> DESCRIBE courses;
-+------------------+---------------+------+-----+---------+----------------+
-| Field            | Type          | Null | Key | Default | Extra          |
-+------------------+---------------+------+-----+---------+----------------+
-| CrsCod           | int(11)       | NO   | PRI | NULL    | auto_increment |
-| DegCod           | int(11)       | NO   | MUL | -1      |                |
-| Year             | tinyint(4)    | NO   |     | 0       |                |
-| InsCrsCod        | char(7)       | NO   |     | NULL    |                |
-| AllowDirectLogIn | enum('N','Y') | NO   |     | Y       |                |
-| Status           | tinyint(4)    | NO   | MUL | 0       |                |
-| RequesterUsrCod  | int(11)       | NO   |     | -1      |                |
-| ShortName        | varchar(32)   | NO   |     | NULL    |                |
-| FullName         | varchar(127)  | NO   |     | NULL    |                |
-+------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0.01 sec)
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| CrsCod          | int(11)      | NO   | PRI | NULL    | auto_increment |
+| DegCod          | int(11)      | NO   | MUL | -1      |                |
+| Year            | tinyint(4)   | NO   |     | 0       |                |
+| InsCrsCod       | char(7)      | NO   |     | NULL    |                |
+| Status          | tinyint(4)   | NO   | MUL | 0       |                |
+| RequesterUsrCod | int(11)      | NO   |     | -1      |                |
+| ShortName       | varchar(32)  | NO   |     | NULL    |                |
+| FullName        | varchar(127) | NO   |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
                    "CrsCod INT NOT NULL AUTO_INCREMENT,"
                    "DegCod INT NOT NULL DEFAULT -1,"
                    "Year TINYINT NOT NULL DEFAULT 0,"
                    "InsCrsCod CHAR(7) NOT NULL,"
-                   "AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',"
                    "Status TINYINT NOT NULL DEFAULT 0,"
                    "RequesterUsrCod INT NOT NULL DEFAULT -1,"
                    "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
@@ -839,19 +837,17 @@ mysql> DESCRIBE crs_usr_requests;
    /***** Table deg_types *****/
 /*
 mysql> DESCRIBE deg_types;
-+------------------+---------------+------+-----+---------+----------------+
-| Field            | Type          | Null | Key | Default | Extra          |
-+------------------+---------------+------+-----+---------+----------------+
-| DegTypCod        | int(11)       | NO   | PRI | NULL    | auto_increment |
-| DegTypName       | varchar(32)   | NO   |     | NULL    |                |
-| AllowDirectLogIn | enum('N','Y') | NO   |     | Y       |                |
-+------------------+---------------+------+-----+---------+----------------+
-3 rows in set (0.00 sec)
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| DegTypCod  | int(11)     | NO   | PRI | NULL    | auto_increment |
+| DegTypName | varchar(32) | NO   |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_types ("
                    "DegTypCod INT NOT NULL AUTO_INCREMENT,"
                    "DegTypName VARCHAR(32) NOT NULL,"
-                   "AllowDirectLogIn ENUM('N','Y') NOT NULL DEFAULT 'Y',"
                    "UNIQUE INDEX(DegTypCod))");
 
    /***** Table degrees *****/
