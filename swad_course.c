@@ -2054,19 +2054,19 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    strncpy (Crs->InstitutionalCrsCod,row[3],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
    Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
 
-   /***** Get course status (row[5]) *****/
-   if (sscanf (row[5],"%u",&(Crs->Status)) != 1)
+   /***** Get course status (row[4]) *****/
+   if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
       Lay_ShowErrorAndExit ("Wrong course status.");
 
-   /***** Get requester user'code (row[6]) *****/
-   Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[6]);
+   /***** Get requester user'code (row[5]) *****/
+   Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
-   /***** Get the short name of the course (row[7]) *****/
-   strncpy (Crs->ShortName,row[7],Crs_MAX_LENGTH_COURSE_SHORT_NAME);
+   /***** Get the short name of the course (row[6]) *****/
+   strncpy (Crs->ShortName,row[6],Crs_MAX_LENGTH_COURSE_SHORT_NAME);
    Crs->ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME] = '\0';
 
-   /***** Get the full name of the course (row[8]) *****/
-   strncpy (Crs->FullName,row[8],Crs_MAX_LENGTH_COURSE_FULL_NAME);
+   /***** Get the full name of the course (row[7]) *****/
+   strncpy (Crs->FullName,row[7],Crs_MAX_LENGTH_COURSE_FULL_NAME);
    Crs->FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
 
    /***** Get number of students *****/

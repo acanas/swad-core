@@ -2128,11 +2128,11 @@ static void Deg_GetListDegTypes (void)
 
    /***** Get types of degree from database *****/
    sprintf (Query,"(SELECT deg_types.DegTypCod,deg_types.DegTypName AS DegTypName,"
-                  " deg_types.AllowDirectLogin AS AllowDirectLogin,COUNT(degrees.DegCod)"
+                  " COUNT(degrees.DegCod)"
                   " FROM deg_types,degrees WHERE deg_types.DegTypCod=degrees.DegTypCod"
                   " GROUP BY degrees.DegTypCod)"
                   " UNION "
-                  "(SELECT DegTypCod,DegTypName,AllowDirectLogin,'0'"
+                  "(SELECT DegTypCod,DegTypName,'0'"
                   " FROM deg_types WHERE DegTypCod NOT IN (SELECT DegTypCod FROM degrees))"
                   " ORDER BY DegTypName");
    Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get types of degree");
@@ -2160,8 +2160,8 @@ static void Deg_GetListDegTypes (void)
          strncpy (Gbl.Degs.DegTypes.Lst[NumRow].DegTypName,row[1],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
          Gbl.Degs.DegTypes.Lst[NumRow].DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
 
-         /* Number of degrees of this type (row[3]) */
-         if (sscanf (row[3],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
+         /* Number of degrees of this type (row[2]) */
+         if (sscanf (row[2],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
             Lay_ShowErrorAndExit ("Error when getting number of degrees of a type");
         }
      }
