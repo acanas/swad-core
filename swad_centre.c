@@ -1626,6 +1626,7 @@ void Ctr_ChangeCentrePlace (void)
   {
    extern const char *Txt_The_place_of_the_centre_has_changed;
    struct Centre *Ctr;
+   long NewPlcCod;
    char Query[512];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
@@ -1636,12 +1637,16 @@ void Ctr_ChangeCentrePlace (void)
       Lay_ShowErrorAndExit ("Code of centre is missing.");
 
    /* Get parameter with centre code */
-   Ctr->PlcCod = Plc_GetParamPlcCod ();
+   NewPlcCod = Plc_GetParamPlcCod ();
+
+   /***** Get data of centre from database *****/
+   Ctr_GetDataOfCentreByCod (Ctr);
 
    /***** Update place in table of centres *****/
    sprintf (Query,"UPDATE centres SET PlcCod='%ld' WHERE CtrCod='%ld'",
-            Ctr->PlcCod,Ctr->CtrCod);
+            NewPlcCod,Ctr->CtrCod);
    DB_QueryUPDATE (Query,"can not update the place of a centre");
+   Ctr->PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_The_place_of_the_centre_has_changed);

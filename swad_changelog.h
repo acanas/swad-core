@@ -123,13 +123,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.144.1 (2016-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.144.2 (2016-03-05)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.144.2: Mar 05, 2016	Fixed minor bugs in edition of centres. (195761 lines)
         Version 15.144.1: Mar 03, 2016	Fixed bugs related to last chages made. (195756 lines)
         Version 15.144:   Mar 03, 2016	Direct login always available. (195755 lines)
 					3 changes necessary in database:
