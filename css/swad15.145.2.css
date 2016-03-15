@@ -921,6 +921,16 @@ a:hover						/* Default ==> underlined */
 	font-size:11pt;
 	color:#4D88A1;
 	}
+#MFU_actions ul
+	{
+	box-sizing:border-box;
+	width:138px;
+	margin-top:2px;
+	padding-top:2px;
+	border-style:solid;
+	border-width:1px 0 0 0;
+	border-color:#DDECF1;
+	}
 #MFU_actions li
 	{
 	width:138px;
