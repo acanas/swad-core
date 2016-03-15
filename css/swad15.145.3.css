@@ -905,6 +905,15 @@ a:hover						/* Default ==> underlined */
 	color:#398000;
 	overflow:hidden;
 	}
+.CONNECTED_LIST
+	{
+	box-sizing:border-box;
+	margin-top:2px;
+	padding-top:2px;
+	border-style:solid;
+	border-width:1px 0 0 0;
+	border-color:#BFDF9F;
+	}
 
 /*************************** Most frequent actions ***************************/
 #MFU_actions

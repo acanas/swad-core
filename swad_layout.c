@@ -955,7 +955,7 @@ static void Lay_ShowRightColumn (void)
       fprintf (Gbl.F.Out,"<div id=\"courseconnected\""	// Used for AJAX based refresh
 	                 " class=\"LEFT_RIGHT_CELL\">");
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToCourse ();
+      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
      }
 
@@ -1507,7 +1507,7 @@ void Lay_RefreshNotifsAndConnected (void)
    if (ShowConnected)
      {
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToCourse ();
+      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)
