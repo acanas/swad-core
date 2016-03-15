@@ -4924,6 +4924,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
 void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
   {
    extern const char *Txt_Frequent_actions;
+   extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumAct;
@@ -4933,18 +4934,17 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
    char MenuStr[128+1];
    char TabMenuStr[128+6+128+1];
 
-   /***** Start table *****/
+   /***** Start frame and link *****/
+   fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
    Act_FormStart (ActMFUAct);
    Act_LinkFormSubmit (Txt_Frequent_actions,"MFU_ACT");
    fprintf (Gbl.F.Out," %s"
 	              "</a>",
-	    Txt_Frequent_actions);
+	    Txt_Frequent_ACTIONS);
    Act_FormEnd ();
 
-   fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">"
-	              "<ul class=\"LIST_LEFT\">");
-
    /***** Write list of frequently used actions *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    for (NumAct = 0;
 	NumAct < ListMFUActions->NumActions;
 	NumAct++)
@@ -4976,10 +4976,10 @@ void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions)
          fprintf (Gbl.F.Out,"</li>");
         }
      }
+   fprintf (Gbl.F.Out,"</ul>");
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
+   /***** End frame *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

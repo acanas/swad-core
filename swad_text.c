@@ -12500,7 +12500,28 @@ const char *Txt_Found_an_index_html_file =
 	"Found an <em>index.html</em> file.";			// Necessita de tradução
 #endif
 
-const char *Txt_Frequent_actions =	// Check that this sentence fits within the allocated space
+const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the allocated space
+#if   L==1
+	"Freq&uuml;ents";
+#elif L==2
+	"H&auml;ufige";
+#elif L==3
+	"Frequent";
+#elif L==4
+	"Frecuentes";
+#elif L==5
+	"Frequent";
+#elif L==6
+	"Frecuentes";	// Okoteve traducción
+#elif L==7
+	"Frequenti";
+#elif L==8
+	"Cz&eogon;ste";
+#elif L==9
+	"Freq&uuml;entes";
+#endif
+
+const char *Txt_Frequent_actions =
 #if   L==1
 	"Accions freq&uuml;ents";
 #elif L==2
@@ -12516,7 +12537,7 @@ const char *Txt_Frequent_actions =	// Check that this sentence fits within the a
 #elif L==7
 	"Azioni frequenti";
 #elif L==8
-	"Czeste dzialania";
+	"Cz&eogon;ste dzia&lstrok;ania";
 #elif L==9
 	"A&ccedil;&otilde;es freq&uuml;entes";
 #endif
@@ -18597,23 +18618,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActMFUAct
 #if   L==1
-	"Accions"
+	"Freq&uuml;ents"
 #elif L==2
-	"Aktionen"
+	"H&auml;ufige"
 #elif L==3
-	"Actions"
+	"Frequent"
 #elif L==4
-	"Acciones"
+	"Frecuentes"
 #elif L==5
-	"Actions"
+	"Frequent"
 #elif L==6
-	"Acciones"	// Okoteve traducción
+	"Frecuentes"	// Okoteve traducción
 #elif L==7
-	"Azioni"
+	"Frequenti"
 #elif L==8
-	"Akcje"
+	"Cz&eogon;ste"
 #elif L==9
-	"A&ccedil;&otilde;es"
+	"Freq&uuml;entes"
 #endif
 	,
 	NULL,
