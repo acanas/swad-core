@@ -4910,27 +4910,6 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" (o mesmo se aplica &agrave;s institui&ccedil;&otilde;es, centros e graus).";
 #endif
 
-const char *Txt_Connected_PLURAL =
-#if   L==1
-	"Connectats";
-#elif L==2
-	"Angemeldet";
-#elif L==3
-	"Connected";
-#elif L==4
-	"Conectados";
-#elif L==5
-	"Connect&eacute;s";
-#elif L==6
-	"Conectados";	// Okoteve traducción
-#elif L==7
-	"Connessi";
-#elif L==8
-	"Online";
-#elif L==9
-	"Conectados";
-#endif
-
 const char *Txt_connected_PLURAL =
 #if   L==1
 	"connectats";

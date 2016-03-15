@@ -938,9 +938,6 @@ static void Lay_ShowLeftColumn (void)
 
 static void Lay_ShowRightColumn (void)
   {
-   extern const char *The_ClassConnected[The_NUM_THEMES];
-   extern const char *Txt_Connected_users;
-   extern const char *Txt_Connected_PLURAL;
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
 
    Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_RIGHT_COLUMN;
@@ -950,10 +947,6 @@ static void Lay_ShowRightColumn (void)
 
    /***** Connected users *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
-   Act_FormStart (ActLstCon);
-   Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s</a>",Txt_Connected_PLURAL);
-   Act_FormEnd ();
 
    /***** Number of connected users in the whole platform *****/
    fprintf (Gbl.F.Out,"<div id=\"globalconnected\">");	// Used for AJAX based refresh

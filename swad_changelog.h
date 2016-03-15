@@ -118,18 +118,25 @@
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
+// TODO: Change links from external degrees to internal degrees in STATS > Degrees
+
+// TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
+// TODO: Important!!!! E-mail should not be visible for not logged users
+// TODO: Fix bug in marks reported by Francisco Ocaña
+// TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.144.2 (2016-03-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.144.3 (2016-03-15)"
 #define CSS_FILE		"swad15.137.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.144.3: Mar 15, 2016	Changes in layout of connected users (right zone). (195742 lines)
         Version 15.144.2: Mar 05, 2016	Fixed minor bugs in edition of centres. (195761 lines)
         Version 15.144.1: Mar 03, 2016	Fixed bugs related to last chages made. (195756 lines)
         Version 15.144:   Mar 03, 2016	Direct login always available. (195755 lines)

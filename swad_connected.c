@@ -339,6 +339,8 @@ void Con_GetAndShowLastClicks (void)
 
 void Con_ShowGlobalConnectedUsrs (void)
   {
+   extern const char *The_ClassConnected[The_NUM_THEMES];
+   extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
@@ -353,46 +355,48 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
 
+   /***** Link to view more details about connected users *****/
+   Act_FormStart (ActLstCon);
+   Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+
    /***** Write total number of sessions *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
-                      "%u %s"
-                      "</div>",
+   fprintf (Gbl.F.Out,"%u %s",
             Gbl.Session.NumSessions,
             (Gbl.Session.NumSessions == 1) ? Txt_session :
         	                             Txt_sessions);
 
    /***** Write total number of users *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
-                      "%u %s:"
-                      "</div>",
+   fprintf (Gbl.F.Out,"<br />"
+	              "%u %s:",
             UsrsTotal,
             (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
         	               Txt_users);
 
    /***** Write total number of students *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
-                      "%u %s"
-                      "</div>",
+   fprintf (Gbl.F.Out,"<br />"
+                      "%u %s",
             StdsTotal,
             (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
-                               Txt_ROLES_PLURAL_abc  [Rol_STUDENT][Usr_SEX_UNKNOWN]);
+                               Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of teachers *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
-                      "%u %s"
-                      "</div>",
+   fprintf (Gbl.F.Out,"<br />"
+                      "%u %s",
             TchsTotal,
             (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
                                Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
 
    /***** Write total number of users who do not belong to any course *****/
    if (WithoutCoursesTotal)
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_TOP\">"
-                         "%u %s"
-                         "</div>",
+      fprintf (Gbl.F.Out,"<br />"
+                         "%u %s",
                WithoutCoursesTotal,
                (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
                                             Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+
+   /***** End of link to view more details about connected users *****/
+   fprintf (Gbl.F.Out,"</a>");
+   Act_FormEnd ();
 
    /***** Container end *****/
    fprintf (Gbl.F.Out,"</div>");
