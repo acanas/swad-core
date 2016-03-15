@@ -409,28 +409,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
 	}
 
-      /***** Link to RSS file *****/
-      if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-	{
-	 /* Create RSS file if not exists */
-	 sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
-		  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
-
-	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-			    "<a href=\"");
-	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
-	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-			    "<img src=\"%s/rss16x16.gif\""
-			    " alt=\"RSS\" title=\"RSS\""
-			    " class=\"ICON20x20\" />"
-			    "</a>"
-			    "</div>",
-	          Gbl.Prefs.IconsURL);
-	}
-
       /***** Show the notices *****/
       for (NumNot = 0;
 	   NumNot < NumNotices;
@@ -468,9 +446,34 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
 	                  ICanEditNotices);
 	}
 
-      if (TypeNoticesListing == Not_LIST_FULL_NOTICES && NumNotices)
-         /***** End frame *****/
-	 Lay_EndRoundFrame ();
+      switch (TypeNoticesListing)
+        {
+	 case Not_LIST_BRIEF_NOTICES:
+            /***** Link to RSS file *****/
+	    /* Create RSS file if not exists */
+	    sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
+		     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+	    if (!Fil_CheckIfPathExists (PathRelRSSFile))
+	       RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+
+	    /* Put a link to the RSS file */
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+			       "<a href=\"");
+	    RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
+	    fprintf (Gbl.F.Out,"\" target=\"_blank\">"
+			       "<img src=\"%s/rss16x16.gif\""
+			       " alt=\"RSS\" title=\"RSS\""
+			       " class=\"ICON20x20\" />"
+			       "</a>"
+			       "</div>",
+		     Gbl.Prefs.IconsURL);
+	    break;
+	 case Not_LIST_FULL_NOTICES:
+	    if (NumNotices)
+	       /***** End frame *****/
+	       Lay_EndRoundFrame ();
+	    break;
+	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

@@ -3157,7 +3157,7 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    sprintf (Title,"<div class=\"CENTER_MIDDLE\">"
 	          "<a href=\"%s/%s/\" target=\"_blank\">%s</a>"
 	          "</div>",
-            Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_DATA_PROTECTION_FOLDER,
+            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_DATA_PROTECTION_FOLDER,
             Txt_DATA_PROTECTION_CLAUSE);
    Lay_WriteTitle (Title);
   }

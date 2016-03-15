@@ -96,8 +96,8 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
             Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_NAME);
 
    fprintf (FileRSS,"<image>\n");
-   fprintf (FileRSS,"<url>%s/%s/swad112x32.png</url>\n",
-            Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_LOGO);
+   fprintf (FileRSS,"<url>%s/swad112x32.png</url>\n",
+            Gbl.Prefs.IconsURL);
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
@@ -332,5 +332,5 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 void RSS_WriteRSSLink (FILE *FileTgt,long CrsCod)
   {
    fprintf (FileTgt,"%s/%s/%ld/%s/%s",
-            Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

@@ -129,13 +129,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.145.3 (2016-03-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.145.4 (2016-03-15)"
 #define CSS_FILE		"swad15.145.3.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.145.4: Mar 15, 2016	Link to RSS file is moved to the end of notices in left column. (195751 lines)
+Copy file swad112x32.png to icon directory
+
         Version 15.145.3: Mar 15, 2016	Changes in layout of connected users. (195746 lines)
         Version 15.145.2: Mar 15, 2016	Changes in layout of frequent actions. (195762 lines)
         Version 15.145.1: Mar 15, 2016	Changes in layout of frequent actions. (195751 lines)

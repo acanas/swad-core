@@ -66,7 +66,7 @@
 #define Cfg_PLATFORM_LOGO_BIG_WIDTH		140
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Ca&ntilde;as Vargas"	// Main responsible for the platform
+#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"	// Main responsible for the platform
 #define Cfg_HELP_WEB				"http://cevug.ugr.es/contactar/contactar_multilang_simple_.php?amb=tic"	// Web to solve questions and problems
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"openswad.org"			// SMTP server for sending automatic e-mails
@@ -411,7 +411,6 @@
 #define Cfg_FOLDER_DEGREE_PHOTO_AVERAGE		"avg_all"
 
 /* Folders with icons. They should be created with icons during installation */
-#define Cfg_FOLDER_PUBLIC_LOGO			"logo"
 #define Cfg_FOLDER_PUBLIC_ICON			"icon"
 #define Cfg_ICON_FOLDER_THEMES			"theme"		// Directory with all the images for each theme
 #define Cfg_ICON_FOLDER_ICON_SETS		"iconset"	// Directory with all the icons for each icon set

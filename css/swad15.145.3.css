@@ -1107,7 +1107,7 @@ a:hover						/* Default ==> underlined */
 .NOTICE_CONTAINER_ACTIVE
 	{
 	box-sizing:border-box;
-	margin:10px auto;
+	margin:0 auto 10px auto;
 	padding:10px;
 	background-image:linear-gradient(rgba(238,216,108,0.8) 0%,rgba(248,237,149,0.8) 15%,rgba(250,240,152,0.8) 100%);	
 	box-shadow:0 8px 10px -5px rgba(125,113,0,0.8);
@@ -1117,7 +1117,7 @@ a:hover						/* Default ==> underlined */
 .NOTICE_CONTAINER_OBSOLETE
 	{
 	box-sizing:border-box;
-	margin:10px auto;
+	margin:0 auto 10px auto;
 	padding:10px;
 	background-image:linear-gradient(rgba(238,216,108,0.4) 0%,rgba(248,237,149,0.4) 15%,rgba(250,240,152,0.4) 100%);	
 	box-shadow:0 8px 10px -5px rgba(125,113,0,0.4);
