@@ -975,7 +975,7 @@ static void Lay_ShowRightColumn (void)
 	       Gbl.Prefs.IconsURL);
 
    /***** Institutional links *****/
-   Lnk_WriteMenuWithInstitutionalLinks ();
+   // Lnk_WriteMenuWithInstitutionalLinks ();
   }
 
 /*****************************************************************************/
