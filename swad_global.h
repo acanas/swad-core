@@ -372,7 +372,6 @@ struct Globals
 	} ClassPhoto;
       struct
         {
-         Con_WhereToShow_t WhereToShow;
          unsigned long TimeToRefreshInMs;
          unsigned NumUsr;
          unsigned NumUsrs;

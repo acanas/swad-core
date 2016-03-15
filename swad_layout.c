@@ -940,29 +940,24 @@ static void Lay_ShowRightColumn (void)
   {
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
 
-   Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_RIGHT_COLUMN;
-
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
 
-   /***** Connected users *****/
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
-
    /***** Number of connected users in the whole platform *****/
-   fprintf (Gbl.F.Out,"<div id=\"globalconnected\">");	// Used for AJAX based refresh
+   fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
+	              " class=\"LEFT_RIGHT_CELL\">");
    Con_ShowGlobalConnectedUsrs ();
    fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
 
    /***** Number of connected users in the current course *****/
-   fprintf (Gbl.F.Out,"<div id=\"courseconnected\">");	// Used for AJAX based refresh
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// There is a course selected
      {
+      fprintf (Gbl.F.Out,"<div id=\"courseconnected\""	// Used for AJAX based refresh
+	                 " class=\"LEFT_RIGHT_CELL\">");
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToLocation ();
+      Con_ShowConnectedUsrsBelongingToCourse ();
+      fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
      }
-   fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
-
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** SWADroid advertisement *****/
    if (!Gbl.Usrs.Me.Logged ||
@@ -1502,8 +1497,6 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 1021))	// Do this only one of 1021 times (1021 is prime)
       Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
 
-   Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_RIGHT_COLUMN;
-
    // Send, before the HTML, the refresh time
    fprintf (Gbl.F.Out,"%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
    if (Gbl.Usrs.Me.Logged)
@@ -1514,7 +1507,7 @@ void Lay_RefreshNotifsAndConnected (void)
    if (ShowConnected)
      {
       Gbl.Scope.Current = Sco_SCOPE_CRS;
-      Con_ShowConnectedUsrsBelongingToLocation ();
+      Con_ShowConnectedUsrsBelongingToCourse ();
      }
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)

@@ -53,6 +53,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
+static void Con_ShowConnectedUsrsBelongingToLocation (void);
 
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_Role_t Role);
@@ -73,11 +74,9 @@ static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 void Con_ShowConnectedUsrs (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    extern const char *Txt_Update;
-   extern const char *Txt_Scope;
 
    /***** Link to show last clicks in real time *****/
    if (Gbl.Usrs.Me.Logged)
@@ -87,8 +86,9 @@ void Con_ShowConnectedUsrs (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /***** Set where to show connected users to main zone *****/
-   Gbl.Usrs.Connected.WhereToShow = Con_SHOW_ON_MAIN_ZONE;
+   /***** Get scope *****/
+   Sco_SetScopesForListingStudents ();
+   Sco_GetScope ();
 
    /***** Start frame *****/
    /* Current time */
@@ -103,33 +103,16 @@ void Con_ShowConnectedUsrs (void)
    /***** Put form to update connected users *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Act_FormStart (ActLstCon);
+   Sco_PutParamScope (Gbl.Scope.Current);
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Put form to change scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-                      " style=\"padding-bottom:12px;\">");
-   Act_FormStart (ActLstCon);
-   Gbl.Scope.Current = Sco_SCOPE_CRS;
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-     {
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	                 "%s:&nbsp;"
-	                 "</label>",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-      Sco_SetScopesForListingStudents ();
-      Sco_GetScope ();
-      Sco_PutSelectorScope (true);
-     }
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* Number of connected users in the whole platform */
+   /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
 
-   /* Show connected users in the current location */
+   /***** Show connected users in the current location *****/
    Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End frame *****/
@@ -365,34 +348,39 @@ void Con_ShowGlobalConnectedUsrs (void)
             (Gbl.Session.NumSessions == 1) ? Txt_session :
         	                             Txt_sessions);
 
-   /***** Write total number of users *****/
-   fprintf (Gbl.F.Out,"<br />"
-	              "%u %s:",
-            UsrsTotal,
-            (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-        	               Txt_users);
-
-   /***** Write total number of students *****/
-   fprintf (Gbl.F.Out,"<br />"
-                      "%u %s",
-            StdsTotal,
-            (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
-                               Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
-
-   /***** Write total number of teachers *****/
-   fprintf (Gbl.F.Out,"<br />"
-                      "%u %s",
-            TchsTotal,
-            (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
-                               Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
-
-   /***** Write total number of users who do not belong to any course *****/
-   if (WithoutCoursesTotal)
+   if (UsrsTotal)
+     {
+      /***** Write total number of users *****/
       fprintf (Gbl.F.Out,"<br />"
-                         "%u %s",
-               WithoutCoursesTotal,
-               (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
-                                            Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+			 "%u %s:",
+	       UsrsTotal,
+	       (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
+				  Txt_users);
+
+      /***** Write total number of students *****/
+      if (StdsTotal)
+	 fprintf (Gbl.F.Out,"<br />"
+			    "%u %s",
+		  StdsTotal,
+		  (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
+				     Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+
+      /***** Write total number of teachers *****/
+      if (TchsTotal)
+	 fprintf (Gbl.F.Out,"<br />"
+			    "%u %s",
+		  TchsTotal,
+		  (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
+				     Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
+
+      /***** Write total number of users who do not belong to any course *****/
+      if (WithoutCoursesTotal)
+	 fprintf (Gbl.F.Out,"<br />"
+			    "%u %s",
+		  WithoutCoursesTotal,
+		  (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
+					       Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+     }
 
    /***** End of link to view more details about connected users *****/
    fprintf (Gbl.F.Out,"</a>");
@@ -442,117 +430,124 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 /****** Show number of connected users who belong to current location ********/
 /*****************************************************************************/
 
-void Con_ShowConnectedUsrsBelongingToLocation (void)
+static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
    extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_from;
    char LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR+1];
    struct ConnectedUsrs Usrs;
 
-   switch (Gbl.Scope.Current)
-     {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         break;
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
-            return;
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
-            return;
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
-            return;
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
-            return;
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
-            return;
-         break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
-     }
-
-   /***** Number of connected users who belong to scope *****/
+   /***** Set location name depending on scope *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          strcpy (LocationName,Cfg_PLATFORM_SHORT_NAME);
          break;
       case Sco_SCOPE_CTY:		// Show connected users in the current country
+         if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
+            return;
          strcpy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
          break;
       case Sco_SCOPE_INS:		// Show connected users in the current institution
+         if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
+            return;
          strcpy (LocationName,Gbl.CurrentIns.Ins.ShortName);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
+         if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
+            return;
          strcpy (LocationName,Gbl.CurrentCtr.Ctr.ShortName);
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
+         if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
+            return;
          strcpy (LocationName,Gbl.CurrentDeg.Deg.ShortName);
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
+         if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
+            return;
          strcpy (LocationName,Gbl.CurrentCrs.Crs.ShortName);
          break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
+	 return;
      }
-   switch (Gbl.Usrs.Connected.WhereToShow)
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
+		      " style=\"width:390px; margin-top:6px;\">");
+
+   /***** Number of connected users who belong to scope *****/
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%u %s ",
+	    The_ClassConnected[Gbl.Prefs.Theme],
+	    Usrs.NumUsrs,
+	    Txt_from);
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
      {
-      case Con_SHOW_ON_MAIN_ZONE:
-         Str_LimitLengthHTMLStr (LocationName,40);
-         break;
-      case Con_SHOW_ON_RIGHT_COLUMN:
-         Str_LimitLengthHTMLStr (LocationName,12);
-         Str_ReplaceSpecialCharByCodes (LocationName,Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
+      /* Put form to change scope */
+      Act_FormStart (ActLstCon);
+      Sco_PutSelectorScope (true);
+      Act_FormEnd ();
      }
+   else
+     {
+      /* Write location name depending on the scope */
+      Str_LimitLengthHTMLStr (LocationName,40);
+      fprintf (Gbl.F.Out,"%s",LocationName);
+     }
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Number of teachers and students *****/
+   fprintf (Gbl.F.Out,"<table>");
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TEACHER);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STUDENT);
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol__GUEST_);
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/* Show number of connected users who belong to current course on right col. */
+/*****************************************************************************/
+
+void Con_ShowConnectedUsrsBelongingToCourse (void)
+  {
+   extern const char *The_ClassConnected[The_NUM_THEMES];
+   extern const char *Txt_from;
+   char CourseName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];
+   struct ConnectedUsrs Usrs;
+
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
+      return;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
+
+   /***** Number of connected users who belong to course *****/
+   strcpy (CourseName,Gbl.CurrentCrs.Crs.ShortName);
+   Str_LimitLengthHTMLStr (CourseName,12);
+   Str_ReplaceSpecialCharByCodes (CourseName,Crs_MAX_LENGTH_COURSE_SHORT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%u %s %s</span>",
             The_ClassConnected[Gbl.Prefs.Theme],
             Usrs.NumUsrs,
             Txt_from,
-            LocationName);
+            CourseName);
 
-   /***** Start table *****/
-   switch (Gbl.Usrs.Connected.WhereToShow)
-     {
-      case Con_SHOW_ON_MAIN_ZONE:
-         fprintf (Gbl.F.Out,"<div class=\"CONNECTED\" style=\"width:390px;\">"
-                            "<table>");
-	 break;
-      case Con_SHOW_ON_RIGHT_COLUMN:
-         fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">"
-                            "<table class=\"LEFT_RIGHT_CONTENT_WIDTH;\">");
-         break;
-     }
+   /***** Number of teachers and students *****/
+   fprintf (Gbl.F.Out,"<table class=\"LEFT_RIGHT_CONTENT_WIDTH;\">");
+   Gbl.Usrs.Connected.NumUsr        = 0;
+   Gbl.Usrs.Connected.NumUsrs       = 0;
+   Gbl.Usrs.Connected.NumUsrsToList = 0;
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_TEACHER);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_STUDENT);
+   fprintf (Gbl.F.Out,"</table>");
 
-   switch (Gbl.Usrs.Connected.WhereToShow)
-     {
-      case Con_SHOW_ON_MAIN_ZONE:
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TEACHER);
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STUDENT);
-         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-            Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol__GUEST_);
-         break;
-      case Con_SHOW_ON_RIGHT_COLUMN:
-         Gbl.Usrs.Connected.NumUsr        = 0;
-         Gbl.Usrs.Connected.NumUsrs       = 0;
-         Gbl.Usrs.Connected.NumUsrsToList = 0;
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_TEACHER);
-         Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColumn (Rol_STUDENT);
-         break;
-     }
-
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>"
-		      "</div>");
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -567,46 +562,49 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 
    /***** Write number of connected users who belong to current course *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Usrs);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\" class=\"CENTER_TOP\">"
-                      "%u %s"
-                      "</td>"
-                      "</tr>",
-            Usrs.NumUsrs,
-            (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
-                                  Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
-
-   /***** List connected users belonging to this location *****/
-   switch (Gbl.Scope.Current)
+   if (Usrs.NumUsrs)
      {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
-            return;
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
-            return;
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
-            return;
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
-            return;
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (Gbl.Usrs.Me.LoggedRole < Rol_STUDENT)
-            return;
-         break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
-     }
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"3\" class=\"CENTER_TOP\">"
+			 "%u %s"
+			 "</td>"
+			 "</tr>",
+	       Usrs.NumUsrs,
+	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
 
-   /***** I can see connected users *****/
-   Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
+      /***** List connected users belonging to this location *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	 case Sco_SCOPE_CTY:		// Show connected users in the current country
+	    if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+	       return;
+	    break;
+	 case Sco_SCOPE_INS:		// Show connected users in the current institution
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
+	       return;
+	    break;
+	 case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
+	       return;
+	    break;
+	 case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
+	       return;
+	    break;
+	 case Sco_SCOPE_CRS:		// Show connected users in the current course
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_STUDENT)
+	       return;
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+	}
+
+      /***** I can see connected users *****/
+      Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
+     }
   }
 
 /*****************************************************************************/
@@ -622,75 +620,78 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnRightColum
    unsigned NumUsrsThisRole = Gbl.Usrs.Connected.Usrs[Role].NumUsrs;
    Usr_Sex_t UsrSex = Gbl.Usrs.Connected.Usrs[Role].Sex;
 
-   /***** Write number of connected users who belong to current course *****/
-   Gbl.Usrs.Connected.NumUsrs       += NumUsrsThisRole;
-   Gbl.Usrs.Connected.NumUsrsToList += NumUsrsThisRole;
-   if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
-      Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"3\" class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
-                      "%u %s"
-                      "</td>"
-                      "</tr>",
-            NumUsrsThisRole,
-            (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-                                     Txt_ROLES_PLURAL_abc[Role][UsrSex]);
-
-   /***** List connected users belonging to this location *****/
-   switch (Gbl.Scope.Current)
+   if (NumUsrsThisRole)
      {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
-            return;
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-            return;
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-            return;
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (!(Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-            return;
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
-               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-            return;
-         break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
-     }
+      /***** Write number of connected users who belong to current course *****/
+      Gbl.Usrs.Connected.NumUsrs       += NumUsrsThisRole;
+      Gbl.Usrs.Connected.NumUsrsToList += NumUsrsThisRole;
+      if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
+	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
-   /***** I can see connected users *****/
-   Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role);
-
-   /***** Write message with number of users not listed *****/
-   if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
-     {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"CENTER_TOP\">");
-      Act_FormStartUnique (ActLstCon);	// Must be unique because
-					// the list of connected users
-					// is dynamically updated via AJAX
-      Sco_PutParamScope (Sco_SCOPE_CRS);
-      Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"
-	                 "</a>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Connected_users,Txt_Connected_users);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+			 "<td colspan=\"3\" class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+			 "%u %s"
+			 "</td>"
+			 "</tr>",
+	       NumUsrsThisRole,
+	       (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
+					Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+
+      /***** List connected users belonging to this location *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	 case Sco_SCOPE_CTY:		// Show connected users in the current country
+	    if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+	       return;
+	    break;
+	 case Sco_SCOPE_INS:		// Show connected users in the current institution
+	    if (!(Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+	       return;
+	    break;
+	 case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	    if (!(Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+	       return;
+	    break;
+	 case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	    if (!(Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+	       return;
+	    break;
+	 case Sco_SCOPE_CRS:		// Show connected users in the current course
+	    if (!(Gbl.Usrs.Me.IBelongToCurrentCrs ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
+	       return;
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong scope.");
+	    break;
+	}
+
+      /***** I can see connected users *****/
+      Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role);
+
+      /***** Write message with number of users not listed *****/
+      if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td colspan=\"3\" class=\"CENTER_TOP\">");
+	 Act_FormStartUnique (ActLstCon);	// Must be unique because
+						// the list of connected users
+						// is dynamically updated via AJAX
+	 Sco_PutParamScope (Sco_SCOPE_CRS);
+	 Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
+			    " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"
+			    "</a>",
+		  Gbl.Prefs.IconsURL,
+		  Txt_Connected_users,Txt_Connected_users);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	}
      }
   }
 

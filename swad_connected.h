@@ -37,12 +37,6 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Con_SHOW_ON_MAIN_ZONE    = 0,
-   Con_SHOW_ON_RIGHT_COLUMN = 1,
-  } Con_WhereToShow_t;
-
 struct ConnectedUsrs
   {
    unsigned NumUsrs;
@@ -59,7 +53,7 @@ void Con_ShowLastClicks (void);
 void Con_GetAndShowLastClicks (void);
 void Con_ShowGlobalConnectedUsrs (void);
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);
-void Con_ShowConnectedUsrsBelongingToLocation (void);
+void Con_ShowConnectedUsrsBelongingToCourse (void);
 void Con_UpdateMeInConnectedList (void);
 void Con_RemoveOldConnected (void);
 
