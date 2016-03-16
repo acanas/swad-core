@@ -66,6 +66,8 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 static void Cty_Configuration (bool PrintView);
 
+static void Cty_PutIconToEdit (void);
+
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 static void Cty_GetParamCtyOrderType (void);
 static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
@@ -498,13 +500,10 @@ void Cty_ListCountries2 (void)
    unsigned NumCty;
    const char *BgColor;
 
-   /***** Put link (form) to edit countries *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_PutFormToEdit (ActEdiCty);
-
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Countries);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconToEdit);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
@@ -662,7 +661,8 @@ void Cty_ListCountries2 (void)
             Crs_GetNumCrssInCty (-1L));
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
@@ -674,6 +674,18 @@ void Cty_ListCountries2 (void)
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
+  }
+
+/*****************************************************************************/
+/********************* Put link (form) to edit countries *********************/
+/*****************************************************************************/
+
+static void Cty_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      Lay_PutContextualLink (ActEdiCty,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
