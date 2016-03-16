@@ -67,8 +67,8 @@ static void Ins_Configuration (bool PrintView);
 
 static void Ins_ListInstitutions (void);
 static void Ins_ListInstitutionsForSeeing (bool ICanEdit);
-static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutIconToEdit (void);
+static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
 static void Ins_ListInstitutionsForEdition (void);
@@ -525,6 +525,7 @@ void Ins_ShowInssOfCurrentCty (void)
 static void Ins_ListInstitutions (void)
   {
    extern const char *Txt_No_institutions_have_been_created_in_this_country;
+   extern const char *Txt_Create_another_institution;
    extern const char *Txt_Create_institution;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
@@ -536,7 +537,8 @@ static void Ins_ListInstitutions (void)
    if (ICanEdit)
      {
       Act_FormStart (ActEdiIns);
-      Lay_PutConfirmButton (Txt_Create_institution);
+      Lay_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
+	                                   Txt_Create_institution);
       Act_FormEnd ();
      }
   }
@@ -568,6 +570,17 @@ static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
    /***** Table end *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/******************** Put link (form) to edit institutions *******************/
+/*****************************************************************************/
+
+static void Ins_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiIns,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
@@ -655,17 +668,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 	    TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/******************** Put link (form) to edit institutions *******************/
-/*****************************************************************************/
-
-static void Ins_PutIconToEdit (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiIns,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

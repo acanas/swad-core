@@ -80,7 +80,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
-static void Crs_ListCoursesForSeeing (void);
+static void Crs_ListCoursesForSeeing (bool ICanEdit);
+static void Crs_PutIconToEdit (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 static void Crs_ListCoursesForEdition (void);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
@@ -1105,24 +1106,21 @@ void Crs_WriteSelectorMyCourses (void)
 static void Crs_ListCourses (void)
   {
    extern const char *Txt_No_courses_have_been_created_in_this_degree;
+   extern const char *Txt_Create_another_course;
    extern const char *Txt_Create_course;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    if (Gbl.CurrentDeg.Deg.NumCrss)	// There are courses in the current degree
-     {
-      if (ICanEdit)
-	 Lay_PutFormToEdit (ActEdiCrs);
-      Crs_ListCoursesForSeeing ();
-     }
+      Crs_ListCoursesForSeeing (ICanEdit);
    else					// No courses created in the current degree
-     {
       Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
-      if (ICanEdit)
-	{
-	 Act_FormStart (ActEdiCrs);
-         Lay_PutConfirmButton (Txt_Create_course);
-         Act_FormEnd ();
-	}
+
+   if (ICanEdit)
+     {
+      Act_FormStart (ActEdiCrs);
+      Lay_PutConfirmButton (Gbl.CurrentDeg.Deg.NumCrss ? Txt_Create_another_course :
+	                                                 Txt_Create_course);
+      Act_FormEnd ();
      }
   }
 
@@ -1148,15 +1146,18 @@ static void Crs_EditCourses (void)
 /********************** List current courses for seeing **********************/
 /*****************************************************************************/
 
-static void Crs_ListCoursesForSeeing (void)
+static void Crs_ListCoursesForSeeing (bool ICanEdit)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
    unsigned Year;
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
+   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        ICanEdit ? Crs_PutIconToEdit :
+                                   NULL);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Crs_PutHeadCoursesForSeeing ();
 
    /***** List the courses *****/
@@ -1168,7 +1169,19 @@ static void Crs_ListCoursesForSeeing (void)
    Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Put link (form) to edit courses **********************/
+/*****************************************************************************/
+
+static void Crs_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiCrs,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

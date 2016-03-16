@@ -73,8 +73,8 @@ static void Ctr_Configuration (bool PrintView);
 
 static void Ctr_ListCentres (void);
 static void Ctr_ListCentresForSeeing (bool ICanEdit);
-static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_PutIconToEdit (void);
+static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrderType (void);
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
@@ -591,6 +591,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
 static void Ctr_ListCentres (void)
   {
    extern const char *Txt_No_centres_have_been_created_in_this_institution;
+   extern const char *Txt_Create_another_centre;
    extern const char *Txt_Create_centre;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
@@ -602,7 +603,8 @@ static void Ctr_ListCentres (void)
    if (ICanEdit)
      {
       Act_FormStart (ActEdiCtr);
-      Lay_PutConfirmButton (Txt_Create_centre);
+      Lay_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
+	                                   Txt_Create_centre);
       Act_FormEnd ();
      }
   }
@@ -634,6 +636,17 @@ static void Ctr_ListCentresForSeeing (bool ICanEdit)
    /***** Table end *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Put link (form) to edit centres **********************/
+/*****************************************************************************/
+
+static void Ctr_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiCtr,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
@@ -725,17 +738,6 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    Txt_CENTRE_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/********************** Put link (form) to edit centres **********************/
-/*****************************************************************************/
-
-static void Ctr_PutIconToEdit (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiCtr,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

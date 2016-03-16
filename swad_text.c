@@ -5727,6 +5727,90 @@ const char *Txt_Create_announcement =
 	"Criar an&uacute;ncio";
 #endif
 
+const char *Txt_Create_another_centre =
+#if   L==1
+	"Crear un altre centre";
+#elif L==2
+	"Erstellen Sie ein anderes Lehrinstitut";
+#elif L==3
+	"Create another centre";
+#elif L==4
+	"Crear otro centro";
+#elif L==5
+	"Cr&eacute;er un autre centre";
+#elif L==6
+	"Crear otro centro";	// Okoteve traducción
+#elif L==7
+	"Crea un altro centro";
+#elif L==8
+	"Tworzenie inny centrum";
+#elif L==9
+	"Criar um outro centro";
+#endif
+
+const char *Txt_Create_another_course =
+#if   L==1
+	"Crear una altra assignatura";
+#elif L==2
+	"Erstellen Sie ein anderes Kurs";
+#elif L==3
+	"Create another course";
+#elif L==4
+	"Crear otra asignatura";
+#elif L==5
+	"Cr&eacute;er une autre mati&egrave;re";
+#elif L==6
+	"Crear otra asignatura";	// Okoteve traducción
+#elif L==7
+	"Crea un altro corso";
+#elif L==8
+	"Tworzenie inny kursu";
+#elif L==9
+	"Criar uma outra disciplina";
+#endif
+
+const char *Txt_Create_another_degree =
+#if   L==1
+	"Crear una altra titulaci&oacute;";
+#elif L==2
+	"Erstellen Sie ein anderes Studiengang";
+#elif L==3
+	"Create another degree";
+#elif L==4
+	"Crear otra titulaci&oacute;n";
+#elif L==5
+	"Cr&eacute;er un autre &eacute;tude";
+#elif L==6
+	"Crear otra titulaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Crea una altra laurea";
+#elif L==8
+	"Tworzenie inny stopnia";
+#elif L==9
+	"Criar uma outra titula&ccedil;&atilde;o";
+#endif
+
+const char *Txt_Create_another_institution =
+#if   L==1
+	"Crear una altra instituci&oacute;";
+#elif L==2
+	"Erstellen Sie ein anderes Hochschule";
+#elif L==3
+	"Create another institution";
+#elif L==4
+	"Crear otra instituci&oacute;n";
+#elif L==5
+	"Cr&eacute;er un autre &eacute;tablissement";
+#elif L==6
+	"Crear otra instituci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Crea una altra istituzione";
+#elif L==8
+	"Tworzenie inny instytucji";
+#elif L==9
+	"Criar uma outra institu&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Create_assignment =
 #if   L==1
 	"Crear actividad";	// Necessita traduccio
@@ -5771,7 +5855,7 @@ const char *Txt_Create_banner =
 
 const char *Txt_Create_centre =
 #if   L==1
-	"Crear centro";		// Necessita traduccio
+	"Crear centre";
 #elif L==2
 	"Lehrinstitut eingeben";
 #elif L==3
@@ -5813,7 +5897,7 @@ const char *Txt_Create_country =
 
 const char *Txt_Create_course =
 #if   L==1
-	"Crear asignatura";	// Necessita traduccio
+	"Crear assignatura";
 #elif L==2
 	"Kurs eingeben";
 #elif L==3
@@ -5834,7 +5918,7 @@ const char *Txt_Create_course =
 
 const char *Txt_Create_degree =
 #if   L==1
-	"Crear titulaci&oacute;n";	// Necessita traduccio
+	"Crear titulaci&oacute;";
 #elif L==2
 	"Studiengang eingeben";
 #elif L==3
@@ -5981,7 +6065,7 @@ const char *Txt_Create_holiday =
 
 const char *Txt_Create_institution =
 #if   L==1
-	"Crear instituci&oacute;n";	// Necessita traduccio
+	"Crear instituci&oacute;";
 #elif L==2
 	"Hochschule eingeben";
 #elif L==3

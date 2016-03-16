@@ -92,6 +92,7 @@ static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
 static void Deg_ListDegreeTypesForEdition (void);
 static void Deg_ListDegreesForSeeing (bool ICanEdit);
+static void Deg_PutIconToEdit (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEdit (struct Degree *Deg);
@@ -101,7 +102,6 @@ static void Deg_PutFormToCreateDegType (void);
 static void Deg_PutFormToCreateDegree (void);
 static void Deg_PutHeadDegreeTypesForSeeing (void);
 static void Deg_PutHeadDegreeTypesForEdition (void);
-static void Deg_PutIconToEdit (void);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_CreateDegreeType (struct DegreeType *DegTyp);
@@ -1293,6 +1293,17 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
   }
 
 /*****************************************************************************/
+/********************** Put link (form) to edit degrees **********************/
+/*****************************************************************************/
+
+static void Deg_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiDeg,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
 /************************ List one degree for seeing *************************/
 /*****************************************************************************/
 
@@ -1877,17 +1888,6 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
   }
 
 /*****************************************************************************/
-/********************** Put link (form) to edit centres **********************/
-/*****************************************************************************/
-
-static void Deg_PutIconToEdit (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiDeg,NULL,"edit64x64.png",Txt_Edit,NULL);
-  }
-
-/*****************************************************************************/
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
@@ -2049,6 +2049,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
 static void Deg_ListDegrees (void)
   {
    extern const char *Txt_No_degrees_have_been_created_in_this_centre;
+   extern const char *Txt_Create_another_degree;
    extern const char *Txt_Create_degree;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
@@ -2060,7 +2061,8 @@ static void Deg_ListDegrees (void)
    if (ICanEdit)
      {
       Act_FormStart (ActEdiDeg);
-      Lay_PutConfirmButton (Txt_Create_degree);
+      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.NumDegs ? Txt_Create_another_degree :
+	                                                 Txt_Create_degree);
       Act_FormEnd ();
      }
   }
