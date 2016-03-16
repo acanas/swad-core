@@ -340,8 +340,10 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
-   Act_FormStart (ActLstCon);
-   Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+   Act_FormStartUnique (ActLstCon);	// Must be unique because
+					// the list of connected users
+					// is dynamically updated via AJAX
+   Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 
    /* Write total number of sessions */
    fprintf (Gbl.F.Out,"%u %s",
@@ -532,8 +534,10 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
-   Act_FormStart (ActLstCon);
-   Act_LinkFormSubmit (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+   Act_FormStartUnique (ActLstCon);	// Must be unique because
+					// the list of connected users
+					// is dynamically updated via AJAX
+   Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 
    /* Write total number of connected users belonging to the current course */
    strcpy (CourseName,Gbl.CurrentCrs.Crs.ShortName);
