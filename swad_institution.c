@@ -530,7 +530,7 @@ static void Ins_ListInstitutions (void)
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
       Ins_ListInstitutionsForSeeing (ICanEdit);
-   else
+   else			// No insrtitutions created in the current country
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
 
    if (ICanEdit)

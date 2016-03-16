@@ -72,8 +72,9 @@ extern struct Globals Gbl;
 static void Ctr_Configuration (bool PrintView);
 
 static void Ctr_ListCentres (void);
-static void Ctr_ListCentresForSeeing (void);
+static void Ctr_ListCentresForSeeing (bool ICanEdit);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
+static void Ctr_PutIconToEdit (void);
 static void Ctr_GetParamCtrOrderType (void);
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
@@ -594,20 +595,15 @@ static void Ctr_ListCentres (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
-     {
-      if (ICanEdit)
-	 Lay_PutFormToEdit (ActEdiCtr);
-      Ctr_ListCentresForSeeing ();
-     }
+      Ctr_ListCentresForSeeing (ICanEdit);
    else			// No centres created in the current institution
-     {
       Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
-      if (ICanEdit)
-	{
-	 Act_FormStart (ActEdiCtr);
-         Lay_PutConfirmButton (Txt_Create_centre);
-         Act_FormEnd ();
-	}
+
+   if (ICanEdit)
+     {
+      Act_FormStart (ActEdiCtr);
+      Lay_PutConfirmButton (Txt_Create_centre);
+      Act_FormEnd ();
      }
   }
 
@@ -615,7 +611,7 @@ static void Ctr_ListCentres (void)
 /*************** List the centres of the current institution *****************/
 /*****************************************************************************/
 
-static void Ctr_ListCentresForSeeing (void)
+static void Ctr_ListCentresForSeeing (bool ICanEdit)
   {
    extern const char *Txt_Centres_of_INSTITUTION_X;
    unsigned NumCtr;
@@ -623,7 +619,10 @@ static void Ctr_ListCentresForSeeing (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        ICanEdit ? Ctr_PutIconToEdit :
+                                   NULL);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
    /***** Write all the centres and their nuber of teachers *****/
@@ -633,6 +632,7 @@ static void Ctr_ListCentresForSeeing (void)
       Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
    /***** Table end *****/
+   fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrameTable ();
   }
 
@@ -725,6 +725,18 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    Txt_CENTRE_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+
+/*****************************************************************************/
+/********************** Put link (form) to edit centres **********************/
+/*****************************************************************************/
+
+static void Ctr_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiCtr,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

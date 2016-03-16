@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.146.3 (2016-03-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.146.4 (2016-03-16)"
 #define CSS_FILE		"swad15.146.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.146.4: Mar 16, 2016	Icons to edit centres integrated in frame. (195798 lines)
         Version 15.146.3: Mar 16, 2016	Icons to edit institutions integrated in frame. (195790 lines)
         Version 15.146.2: Mar 16, 2016	Icons to edit countries integrated in frame. (195781 lines)
         Version 15.146.1: Mar 16, 2016	Icons to remove/edit/print an exam announcement integrated in frame. (195771 lines)
