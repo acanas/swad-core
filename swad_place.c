@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Plc_GetParamPlcOrderType (void);
-static void Plc_PutFormToEditPlcs (void);
+static void Plc_PutIconToEdit (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
 static void Plc_RenamePlace (Cns_ShortOrFullName_t ShortOrFullName);
@@ -92,13 +92,12 @@ void Plc_SeePlaces (void)
       /***** Get list of places *****/
       Plc_GetListPlaces ();
 
-      /***** Put link (form) to edit places *****/
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admins and system admins can edit places
-	 Plc_PutFormToEditPlcs ();
-
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Places);
-      fprintf (Gbl.F.Out,"<tr>");
+      Lay_StartRoundFrame (NULL,Txt_Places,
+                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEdit :
+                        	                                   NULL);
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                         "<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
@@ -171,6 +170,7 @@ void Plc_SeePlaces (void)
 	       NumCtrsWithPlc);
 
       /***** Table end *****/
+      fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 
       /***** Free list of places *****/
@@ -198,14 +198,11 @@ static void Plc_GetParamPlcOrderType (void)
 /********************** Put a link (form) to edit places *********************/
 /*****************************************************************************/
 
-static void Plc_PutFormToEditPlcs (void)
+static void Plc_PutIconToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiPlc,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActEdiPlc,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

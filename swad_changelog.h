@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.147.3 (2016-03-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.147.4 (2016-03-16)"
 #define CSS_FILE		"swad15.146.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.147.4: Mar 16, 2016	Icon to edit places integrated in frame. (? lines)
         Version 15.147.3: Mar 16, 2016	Icon to edit groups integrated in frame. (195867 lines)
         Version 15.147.2: Mar 16, 2016	Icon to edit degree types integrated in frame. (195866 lines)
         Version 15.147.1: Mar 16, 2016	Removed links to view when editing. (195854 lines)
