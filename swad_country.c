@@ -501,7 +501,9 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconToEdit);
+   Lay_StartRoundFrame (NULL,Txt_Countries,
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Cty_PutIconToEdit :
+                                                                NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
@@ -684,8 +686,7 @@ static void Cty_PutIconToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_PutContextualLink (ActEdiCty,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiCty,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

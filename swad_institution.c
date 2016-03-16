@@ -66,8 +66,9 @@ extern struct Globals Gbl;
 static void Ins_Configuration (bool PrintView);
 
 static void Ins_ListInstitutions (void);
-static void Ins_ListInstitutionsForSeeing (void);
+static void Ins_ListInstitutionsForSeeing (bool ICanEdit);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
+static void Ins_PutIconToEdit (void);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
 static void Ins_ListInstitutionsForEdition (void);
@@ -528,20 +529,15 @@ static void Ins_ListInstitutions (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
-     {
-      if (ICanEdit)
-	 Lay_PutFormToEdit (ActEdiIns);
-      Ins_ListInstitutionsForSeeing ();
-     }
-   else			// No institutions created in the current country
-     {
+      Ins_ListInstitutionsForSeeing (ICanEdit);
+   else
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
-      if (ICanEdit)
-	{
-	 Act_FormStart (ActEdiIns);
-         Lay_PutConfirmButton (Txt_Create_institution);
-         Act_FormEnd ();
-	}
+
+   if (ICanEdit)
+     {
+      Act_FormStart (ActEdiIns);
+      Lay_PutConfirmButton (Txt_Create_institution);
+      Act_FormEnd ();
      }
   }
 
@@ -549,7 +545,7 @@ static void Ins_ListInstitutions (void)
 /*************** List the institutions of the current country ****************/
 /*****************************************************************************/
 
-static void Ins_ListInstitutionsForSeeing (void)
+static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
   {
    extern const char *Txt_Institutions_of_COUNTRY_X;
    unsigned NumIns;
@@ -557,7 +553,10 @@ static void Ins_ListInstitutionsForSeeing (void)
    /***** Table head *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        ICanEdit ? Ins_PutIconToEdit :
+                                   NULL);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
    /***** Write all the institutions and their nuber of users *****/
@@ -567,7 +566,8 @@ static void Ins_ListInstitutionsForSeeing (void)
       Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -655,6 +655,17 @@ static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned Nu
 	    TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS[StatusTxt]);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/******************** Put link (form) to edit institutions *******************/
+/*****************************************************************************/
+
+static void Ins_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiIns,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
