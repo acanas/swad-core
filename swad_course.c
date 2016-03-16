@@ -1130,10 +1130,6 @@ static void Crs_ListCourses (void)
 
 static void Crs_EditCourses (void)
   {
-   if (Gbl.CurrentDeg.Deg.NumCrss)
-      /***** Put link (form) to view courses *****/
-      Lay_PutFormToView (ActSeeCrs);
-
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
 

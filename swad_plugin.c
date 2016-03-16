@@ -171,10 +171,7 @@ void Plg_EditPlugins (void)
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
 
-   if (Gbl.Plugins.Num)
-      /***** Put link (form) to view plugins *****/
-      Lay_PutFormToView (ActLstPlg);
-   else
+   if (!Gbl.Plugins.Num)
       /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_plugins);
 

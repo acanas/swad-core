@@ -979,20 +979,6 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
-/************************* Put a link (form) to view *************************/
-/*****************************************************************************/
-
-void Lay_PutFormToView (Act_Action_t Action)
-  {
-   extern const char *Txt_View;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,"eye-on64x64.png",
-                          Txt_View,Txt_View);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /************************* Put a link (form) to edit *************************/
 /*****************************************************************************/
 

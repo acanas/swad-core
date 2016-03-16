@@ -766,10 +766,6 @@ void Ins_EditInstitutions (void)
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
-   if (Gbl.Inss.Num)
-      /***** Put link (form) to view institutions *****/
-      Lay_PutFormToView (ActSeeIns);
-
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
 

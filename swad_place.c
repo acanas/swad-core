@@ -219,10 +219,7 @@ void Plc_EditPlaces (void)
    /***** Get list of places *****/
    Plc_GetListPlaces ();
 
-   if (Gbl.Plcs.Num)
-      /***** Put link (form) to view places *****/
-      Lay_PutFormToView (ActSeePlc);
-   else
+   if (!Gbl.Plcs.Num)
       /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_places);
 

@@ -175,10 +175,7 @@ void Lnk_EditLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   if (Gbl.Links.Num)
-      /***** Put link (form) to view links *****/
-      Lay_PutFormToView (ActSeeLnk);
-   else
+   if (!Gbl.Links.Num)
       /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_links);
 

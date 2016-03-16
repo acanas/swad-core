@@ -775,10 +775,6 @@ void Ctr_EditCentres (void)
       /***** Get list of centres *****/
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
-      if (Gbl.Ctrs.Num)
-	 /***** Put link (form) to view centres *****/
-         Lay_PutFormToView (ActSeeCtr);
-
       /***** Put a form to create a new centre *****/
       Ctr_PutFormToCreateCentre ();
 

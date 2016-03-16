@@ -143,10 +143,7 @@ void Ban_EditBanners (void)
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
 	               " FROM banners ORDER BY ShortName");
 
-   if (Gbl.Banners.Num)
-      /***** Put link (form) to view banners *****/
-      Lay_PutFormToView (ActSeeBan);
-   else
+   if (!Gbl.Banners.Num)
       /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_banners);
 

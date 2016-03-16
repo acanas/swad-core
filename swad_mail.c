@@ -192,10 +192,7 @@ void Mai_EditMailDomains (void)
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
 
-   if (Gbl.Mails.Num)
-      /***** Put link (form) to view mail domains *****/
-      Lay_PutFormToView (ActSeeMai);
-   else
+   if (!Gbl.Mails.Num)
       /***** Help message *****/
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_mail_domains);
 
