@@ -633,7 +633,7 @@ static void Ctr_ListCentresForSeeing (bool ICanEdit)
 
    /***** Table end *****/
    fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -726,7 +726,6 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
-
 
 /*****************************************************************************/
 /********************** Put link (form) to edit centres **********************/

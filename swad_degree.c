@@ -91,7 +91,7 @@ static void Deg_WriteSelectorOfDegree (void);
 static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
 static void Deg_ListDegreeTypesForEdition (void);
-static void Deg_ListDegreesForSeeing (void);
+static void Deg_ListDegreesForSeeing (bool ICanEdit);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEdit (struct Degree *Deg);
@@ -101,6 +101,7 @@ static void Deg_PutFormToCreateDegType (void);
 static void Deg_PutFormToCreateDegree (void);
 static void Deg_PutHeadDegreeTypesForSeeing (void);
 static void Deg_PutHeadDegreeTypesForEdition (void);
+static void Deg_PutIconToEdit (void);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_CreateDegreeType (struct DegreeType *DegTyp);
@@ -1266,7 +1267,7 @@ static void Deg_ListDegreeTypesForEdition (void)
 /********************** List current degrees for seeing **********************/
 /*****************************************************************************/
 
-static void Deg_ListDegreesForSeeing (void)
+static void Deg_ListDegreesForSeeing (bool ICanEdit)
   {
    extern const char *Txt_Degrees_of_CENTRE_X;
    unsigned NumDeg;
@@ -1274,7 +1275,10 @@ static void Deg_ListDegreesForSeeing (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        ICanEdit ? Deg_PutIconToEdit :
+                                   NULL);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Deg_PutHeadDegreesForSeeing ();
 
    /***** List the degrees *****/
@@ -1284,7 +1288,8 @@ static void Deg_ListDegreesForSeeing (void)
       Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1872,6 +1877,17 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
   }
 
 /*****************************************************************************/
+/********************** Put link (form) to edit centres **********************/
+/*****************************************************************************/
+
+static void Deg_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiDeg,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
@@ -2037,20 +2053,15 @@ static void Deg_ListDegrees (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
-     {
-      if (ICanEdit)
-	 Lay_PutFormToEdit (ActEdiDeg);
-      Deg_ListDegreesForSeeing ();
-     }
+      Deg_ListDegreesForSeeing (ICanEdit);
    else					// No degrees created in the current centre
-     {
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees_have_been_created_in_this_centre);
-      if (ICanEdit)
-	{
-	 Act_FormStart (ActEdiDeg);
-         Lay_PutConfirmButton (Txt_Create_degree);
-         Act_FormEnd ();
-	}
+
+   if (ICanEdit)
+     {
+      Act_FormStart (ActEdiDeg);
+      Lay_PutConfirmButton (Txt_Create_degree);
+      Act_FormEnd ();
      }
   }
 
