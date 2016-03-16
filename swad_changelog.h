@@ -129,20 +129,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.147.1 (2016-03-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.147.2 (2016-03-16)"
 #define CSS_FILE		"swad15.146.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.147.2: Mar 16, 2016	Icon to edit degree types integrated in frame. (195866 lines)
         Version 15.147.1: Mar 16, 2016	Removed links to view when editing. (195854 lines)
         Version 15.147:   Mar 16, 2016	New buttons to create another institution / centre / degree / course. (195903 lines)
-        Version 15.146.6: Mar 16, 2016	Icons to edit courses integrated in frame. (195814 lines)
-        Version 15.146.5: Mar 16, 2016	Icons to edit degrees integrated in frame. (195806 lines)
-        Version 15.146.4: Mar 16, 2016	Icons to edit centres integrated in frame. (195798 lines)
-        Version 15.146.3: Mar 16, 2016	Icons to edit institutions integrated in frame. (195790 lines)
-        Version 15.146.2: Mar 16, 2016	Icons to edit countries integrated in frame. (195781 lines)
+        Version 15.146.6: Mar 16, 2016	Icon to edit courses integrated in frame. (195814 lines)
+        Version 15.146.5: Mar 16, 2016	Icon to edit degrees integrated in frame. (195806 lines)
+        Version 15.146.4: Mar 16, 2016	Icon to edit centres integrated in frame. (195798 lines)
+        Version 15.146.3: Mar 16, 2016	Icon to edit institutions integrated in frame. (195790 lines)
+        Version 15.146.2: Mar 16, 2016	Icon to edit countries integrated in frame. (195781 lines)
         Version 15.146.1: Mar 16, 2016	Icons to remove/edit/print an exam announcement integrated in frame. (195771 lines)
         Version 15.146:   Mar 16, 2016	Now frame rectangles can have icons at top.
 					Icon to edit banners integrated in frame. (195772 lines)

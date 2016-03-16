@@ -92,7 +92,8 @@ static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
 static void Deg_ListDegreeTypesForEdition (void);
 static void Deg_ListDegreesForSeeing (bool ICanEdit);
-static void Deg_PutIconToEdit (void);
+static void Deg_PutIconToEditDegTyp (void);
+static void Deg_PutIconToEditDeg (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEdit (struct Degree *Deg);
@@ -1049,10 +1050,6 @@ void Deg_WriteSelectorDegTypes (void)
 
 void Deg_SeeDegTypes (void)
   {
-   /***** Put link (form) to edit degree types *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_PutFormToEdit (ActEdiDegTyp);
-
    /***** Get list of degree types *****/
    Deg_GetListDegTypes ();
 
@@ -1149,9 +1146,11 @@ static void Deg_ListDegreeTypesForSeeing (void)
    unsigned NumDegTyp;
    const char *BgColor;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
-
    /***** Write heading *****/
+   Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Deg_PutIconToEditDegTyp :
+                                                                NULL);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Deg_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
@@ -1195,7 +1194,9 @@ static void Deg_ListDegreeTypesForSeeing (void)
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** Table end *****/
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1273,7 +1274,7 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Deg_PutIconToEdit :
+                        ICanEdit ? Deg_PutIconToEditDeg :
                                    NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Deg_PutHeadDegreesForSeeing ();
@@ -1290,10 +1291,21 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
   }
 
 /*****************************************************************************/
+/******************* Put link (form) to edit degree types ********************/
+/*****************************************************************************/
+
+static void Deg_PutIconToEditDegTyp (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiDegTyp,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
 /********************** Put link (form) to edit degrees **********************/
 /*****************************************************************************/
 
-static void Deg_PutIconToEdit (void)
+static void Deg_PutIconToEditDeg (void)
   {
    extern const char *Txt_Edit;
 
@@ -1842,7 +1854,7 @@ static void Deg_PutFormToCreateDegree (void)
 static void Deg_PutHeadDegreeTypesForSeeing (void)
   {
    extern const char *Txt_Type_of_BR_degree;
-   extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Degrees;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1854,7 +1866,7 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
                       "</th>"
                       "</tr>",
             Txt_Type_of_BR_degree,
-            Txt_Degrees_ABBREVIATION);
+            Txt_Degrees);
   }
 
 /*****************************************************************************/
@@ -1865,7 +1877,7 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Type_of_BR_degree;
-   extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Degrees;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1881,7 +1893,7 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
                       "</tr>",
             Txt_Code,
             Txt_Type_of_BR_degree,
-            Txt_Degrees_ABBREVIATION);
+            Txt_Degrees);
   }
 
 /*****************************************************************************/
