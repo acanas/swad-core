@@ -70,6 +70,7 @@ static void Grp_ListGroupTypesForEdition (void);
 static void Grp_WriteHeadingGroupTypes (void);
 static void Grp_ListGroupsForEdition (void);
 static void Grp_WriteHeadingGroups (void);
+static void Grp_PutIconToEdit (void);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp);
@@ -1528,30 +1529,12 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 
 void Grp_ReqRegisterInGrps (void)
   {
-   extern const char *Txt_Change_my_groups;
-   extern const char *Txt_Enroll_in_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
-   unsigned NumGrpsIBelong;
-
-   /***** Put link (form) to edit groups *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_PutFormToEdit (ActReqEdiGrp);
 
    /***** Check if this course has groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
-     {
-      /***** Start form *****/
-      Act_FormStart (ActChgGrp);
-
       /***** Show list of groups to register/remove me *****/
-      NumGrpsIBelong = Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
-
-      /***** End form *****/
-      Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-	                                     Txt_Enroll_in_groups);
-      Act_FormEnd ();
-     }
+      Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
    else	// This course has not groups
      {
       sprintf (Gbl.Message,Txt_No_groups_have_been_created_in_the_course_X,
@@ -1563,13 +1546,18 @@ void Grp_ReqRegisterInGrps (void)
 /*****************************************************************************/
 /***************** Show list of groups to register/remove me *****************/
 /*****************************************************************************/
-// Returns the number of groups I belongs to
 
-unsigned Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
+void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
   {
    extern const char *Txt_My_groups;
+   extern const char *Txt_Change_my_groups;
+   extern const char *Txt_Enroll_in_groups;
    unsigned NumGrpTyp;
    unsigned NumGrpsIBelong = 0;
+   bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
+   bool ICanEdit = !Gbl.Form.Inside &&
+	           (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1579,23 +1567,48 @@ unsigned Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    if (ShowWarningsToStudents)
       Grp_ShowWarningToStdsToChangeGrps ();
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_My_groups);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_My_groups,
+                        ICanEdit ? Grp_PutIconToEdit :
+                                   NULL);
+
+   /***** Start form *****/
+   if (PutFormToChangeGrps)
+      Act_FormStart (ActChgGrp);
 
    /***** List the groups the user belongs to for change *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
       if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 	 NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+   fprintf (Gbl.F.Out,"</table>");
 
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   /***** End form *****/
+   if (PutFormToChangeGrps)
+     {
+      Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+	                                     Txt_Enroll_in_groups);
+      Act_FormEnd ();
+     }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
 
-   return NumGrpsIBelong;
+/*****************************************************************************/
+/*************************** Put icon to edit groups *************************/
+/*****************************************************************************/
+
+static void Grp_PutIconToEdit (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActReqEdiGrp,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

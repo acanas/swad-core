@@ -979,20 +979,6 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
-/************************* Put a link (form) to edit *************************/
-/*****************************************************************************/
-
-void Lay_PutFormToEdit (Act_Action_t Action)
-  {
-   extern const char *Txt_Edit;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /***************** Show an icon with a link in contextual menu ***************/
 /*****************************************************************************/
 
