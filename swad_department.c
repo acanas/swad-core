@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Dpt_GetParamDptOrderType (void);
-static void Dpt_PutFormToEditDpts (void);
+static void Dpt_PutIconToEditDpts (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
 static void Dpt_RenameDepartment (Cns_ShortOrFullName_t ShortOrFullName);
@@ -95,13 +95,12 @@ void Dpt_SeeDepts (void)
       /***** Get list of departments *****/
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
-      /***** Put link (form) to edit departments *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	  Dpt_PutFormToEditDpts ();
-
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,0,Txt_Departments);
-      fprintf (Gbl.F.Out,"<tr>");
+      Lay_StartRoundFrame (NULL,Txt_Departments,
+                           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+                        	                                   NULL);
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                         "<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
 	   Order++)
@@ -180,7 +179,8 @@ void Dpt_SeeDepts (void)
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** Table end *****/
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
 
       /***** Free list of departments *****/
       Dpt_FreeListDepartments ();
@@ -204,17 +204,14 @@ static void Dpt_GetParamDptOrderType (void)
   }
 
 /*****************************************************************************/
-/******************** Put a link (form) to edit departments ******************/
+/************************ Put icon to edit departments ***********************/
 /*****************************************************************************/
 
-static void Dpt_PutFormToEditDpts (void)
+static void Dpt_PutIconToEditDpts (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiDpt,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActEdiDpt,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
