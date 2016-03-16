@@ -78,6 +78,7 @@ static long Exa_AddExamAnnouncementToDB (void);
 static void Exa_ModifyExamAnnouncementInDB (long ExaCod);
 static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void Exa_PutIconsExamAnnouncement (void);
 static void Exa_PutParamExaCod (void);
 
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
@@ -724,9 +725,6 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Remove;
-   extern const char *Txt_Edit;
-   extern const char *Txt_Print;
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Year;
@@ -773,37 +771,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable ("625px",0,NULL);
-
-   if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-     {
-      Gbl.LstExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameters in contextual links
-
-      fprintf (Gbl.F.Out,"<tr>" \
-	                 "<td class=\"LEFT_MIDDLE\">");
-
-      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	{
-	 /***** Link to remove this exam announcement *****/
-	 Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCod,"remove-on64x64.png",
-                                Txt_Remove,NULL);
-
-	 /***** Link to edit this exam announcement *****/
-	 Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCod,"edit64x64.png",
-                                Txt_Edit,NULL);
-	}
-
-      /***** Link to print view *****/
-      Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCod,"print64x64.png",
-			     Txt_Print,NULL);
-
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
-
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"CENTER_MIDDLE\">");
+   Gbl.LstExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameter in contextual links
+   Lay_StartRoundFrame ("625px",NULL,
+                        TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
+                                                                      NULL);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1210,21 +1181,46 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
                       "</table>");
 
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>" \
-	              "</tr>");
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      Lay_EndRoundFrameTableWithButton ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
-	                                               Lay_CREATE_BUTTON,
-	                                Txt_Publish_announcement_OF_EXAM);
+      Lay_EndRoundFrameWithButton ((ExaCod > 0) ? Lay_CONFIRM_BUTTON :
+	                                          Lay_CREATE_BUTTON,
+	                           Txt_Publish_announcement_OF_EXAM);
    else
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
 
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       QR_ExamAnnnouncement ();
   }
 
 /*****************************************************************************/
-/***************** Params used to edit an attendance event *******************/
+/********* Put icons to remove / edit / print an exam announcement ***********/
+/*****************************************************************************/
+
+static void Exa_PutIconsExamAnnouncement (void)
+  {
+   extern const char *Txt_Remove;
+   extern const char *Txt_Edit;
+   extern const char *Txt_Print;
+
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      /***** Link to remove this exam announcement *****/
+      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCod,"remove-on64x64.png",
+			     Txt_Remove,NULL);
+
+      /***** Link to edit this exam announcement *****/
+      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCod,"edit64x64.png",
+			     Txt_Edit,NULL);
+     }
+
+   /***** Link to print view *****/
+   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCod,"print64x64.png",
+			  Txt_Print,NULL);
+  }
+
+/*****************************************************************************/
+/*************** Param with the code of an exam announcement *****************/
 /*****************************************************************************/
 
 static void Exa_PutParamExaCod (void)
