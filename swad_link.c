@@ -58,9 +58,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (void);
 
-static void Lnk_PutFormToEditLinks (void);
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
 static void Lnk_RenameLink (Cns_ShortOrFullName_t ShortOrFullName);
@@ -80,14 +80,12 @@ void Lnk_SeeLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Put link (form) to edit links *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lnk_PutFormToEditLinks ();
-
    /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      Lay_StartRoundFrame (NULL,Txt_Links,NULL);
+      Lay_StartRoundFrame (NULL,Txt_Links,
+                           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
+                        	                                   NULL);
       Lnk_WriteListOfLinks ();
       Lay_EndRoundFrame ();
      }
@@ -96,6 +94,16 @@ void Lnk_SeeLinks (void)
    Lnk_FreeListLinks ();
   }
 
+/*****************************************************************************/
+/************************** Put icon to edit links ***************************/
+/*****************************************************************************/
+
+static void Lnk_PutIconToEditLinks (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiLnk,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
 
 /*****************************************************************************/
 /***************** Write menu with some institutional links ******************/
@@ -148,20 +156,6 @@ static void Lnk_WriteListOfLinks (void)
 
    /***** List end *****/
    fprintf (Gbl.F.Out,"</ul>");
-  }
-
-/*****************************************************************************/
-/********************** Put a link (form) to edit links **********************/
-/*****************************************************************************/
-
-static void Lnk_PutFormToEditLinks (void)
-  {
-   extern const char *Txt_Edit;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiLnk,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

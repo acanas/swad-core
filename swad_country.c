@@ -66,7 +66,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 static void Cty_Configuration (bool PrintView);
 
-static void Cty_PutIconToEdit (void);
+static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 static void Cty_GetParamCtyOrderType (void);
@@ -502,7 +502,7 @@ void Cty_ListCountries2 (void)
 
    /***** Table head *****/
    Lay_StartRoundFrame (NULL,Txt_Countries,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Cty_PutIconToEdit :
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Cty_PutIconToEditCountries :
                                                                 NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
@@ -682,7 +682,7 @@ void Cty_ListCountries2 (void)
 /********************* Put link (form) to edit countries *********************/
 /*****************************************************************************/
 
-static void Cty_PutIconToEdit (void)
+static void Cty_PutIconToEditCountries (void)
   {
    extern const char *Txt_Edit;
 

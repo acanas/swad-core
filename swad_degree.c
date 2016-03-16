@@ -92,8 +92,8 @@ static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
 static void Deg_ListDegreeTypesForEdition (void);
 static void Deg_ListDegreesForSeeing (bool ICanEdit);
-static void Deg_PutIconToEditDegTyp (void);
-static void Deg_PutIconToEditDeg (void);
+static void Deg_PutIconToEditDegTypes (void);
+static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEdit (struct Degree *Deg);
@@ -1148,7 +1148,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
 
    /***** Write heading *****/
    Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Deg_PutIconToEditDegTyp :
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Deg_PutIconToEditDegTypes :
                                                                 NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Deg_PutHeadDegreeTypesForSeeing ();
@@ -1274,7 +1274,7 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShortName);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Deg_PutIconToEditDeg :
+                        ICanEdit ? Deg_PutIconToEditDegrees :
                                    NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Deg_PutHeadDegreesForSeeing ();
@@ -1294,7 +1294,7 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
-static void Deg_PutIconToEditDegTyp (void)
+static void Deg_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
 
@@ -1305,7 +1305,7 @@ static void Deg_PutIconToEditDegTyp (void)
 /********************** Put link (form) to edit degrees **********************/
 /*****************************************************************************/
 
-static void Deg_PutIconToEditDeg (void)
+static void Deg_PutIconToEditDegrees (void)
   {
    extern const char *Txt_Edit;
 

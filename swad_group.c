@@ -70,7 +70,7 @@ static void Grp_ListGroupTypesForEdition (void);
 static void Grp_WriteHeadingGroupTypes (void);
 static void Grp_ListGroupsForEdition (void);
 static void Grp_WriteHeadingGroups (void);
-static void Grp_PutIconToEdit (void);
+static void Grp_PutIconToEditGroups (void);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp);
@@ -1569,7 +1569,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_My_groups,
-                        ICanEdit ? Grp_PutIconToEdit :
+                        ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL);
 
    /***** Start form *****/
@@ -1604,7 +1604,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 /*************************** Put icon to edit groups *************************/
 /*****************************************************************************/
 
-static void Grp_PutIconToEdit (void)
+static void Grp_PutIconToEditGroups (void)
   {
    extern const char *Txt_Edit;
 

@@ -67,7 +67,7 @@ static void Ins_Configuration (bool PrintView);
 
 static void Ins_ListInstitutions (void);
 static void Ins_ListInstitutionsForSeeing (bool ICanEdit);
-static void Ins_PutIconToEdit (void);
+static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
@@ -556,7 +556,7 @@ static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Ins_PutIconToEdit :
+                        ICanEdit ? Ins_PutIconToEditInstitutions :
                                    NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
@@ -576,7 +576,7 @@ static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
 /******************** Put link (form) to edit institutions *******************/
 /*****************************************************************************/
 
-static void Ins_PutIconToEdit (void)
+static void Ins_PutIconToEditInstitutions (void)
   {
    extern const char *Txt_Edit;
 

@@ -73,7 +73,7 @@ static void Ctr_Configuration (bool PrintView);
 
 static void Ctr_ListCentres (void);
 static void Ctr_ListCentresForSeeing (bool ICanEdit);
-static void Ctr_PutIconToEdit (void);
+static void Ctr_PutIconToEditFrames (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrderType (void);
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
@@ -622,7 +622,7 @@ static void Ctr_ListCentresForSeeing (bool ICanEdit)
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Ctr_PutIconToEdit :
+                        ICanEdit ? Ctr_PutIconToEditFrames :
                                    NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
@@ -642,7 +642,7 @@ static void Ctr_ListCentresForSeeing (bool ICanEdit)
 /********************** Put link (form) to edit centres **********************/
 /*****************************************************************************/
 
-static void Ctr_PutIconToEdit (void)
+static void Ctr_PutIconToEditFrames (void)
   {
    extern const char *Txt_Edit;
 

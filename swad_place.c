@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Plc_GetParamPlcOrderType (void);
-static void Plc_PutIconToEdit (void);
+static void Plc_PutIconToEditPlaces (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
 static void Plc_RenamePlace (Cns_ShortOrFullName_t ShortOrFullName);
@@ -94,7 +94,7 @@ void Plc_SeePlaces (void)
 
       /***** Table head *****/
       Lay_StartRoundFrame (NULL,Txt_Places,
-                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEdit :
+                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
                         	                                   NULL);
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                          "<tr>");
@@ -198,7 +198,7 @@ static void Plc_GetParamPlcOrderType (void)
 /********************** Put a link (form) to edit places *********************/
 /*****************************************************************************/
 
-static void Plc_PutIconToEdit (void)
+static void Plc_PutIconToEditPlaces (void)
   {
    extern const char *Txt_Edit;
 

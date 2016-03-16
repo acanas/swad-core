@@ -81,7 +81,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static void Crs_EditCourses (void);
 static void Crs_ListCoursesForSeeing (bool ICanEdit);
-static void Crs_PutIconToEdit (void);
+static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 static void Crs_ListCoursesForEdition (void);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
@@ -1151,7 +1151,7 @@ static void Crs_ListCoursesForSeeing (bool ICanEdit)
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShortName);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Crs_PutIconToEdit :
+                        ICanEdit ? Crs_PutIconToEditCourses :
                                    NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    Crs_PutHeadCoursesForSeeing ();
@@ -1173,7 +1173,7 @@ static void Crs_ListCoursesForSeeing (bool ICanEdit)
 /********************** Put link (form) to edit courses **********************/
 /*****************************************************************************/
 
-static void Crs_PutIconToEdit (void)
+static void Crs_PutIconToEditCourses (void)
   {
    extern const char *Txt_Edit;
 
