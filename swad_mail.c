@@ -946,7 +946,7 @@ void Mai_ShowFormOthEmail (void)
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Email);
+         Lay_StartRoundFrame (NULL,Txt_Email,NULL);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);

@@ -85,14 +85,11 @@ void Ban_SeeBanners (void)
                        " WHERE Hidden='N'"
 	               " ORDER BY ShortName");
 
-   /***** Put banner (form) to edit banners *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Ban_PutFormToEditBanners ();
-
-   /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Banners);
+   /***** Frame head *****/
+   Lay_StartRoundFrame ("300px",Txt_Banners,Ban_PutFormToEditBanners);
 
    /***** Write all the banners *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
    for (NumBan = 0;
 	NumBan < Gbl.Banners.Num;
 	NumBan++)
@@ -112,9 +109,10 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShortName,
                Gbl.Banners.Lst[NumBan].FullName);
+   fprintf (Gbl.F.Out,"</table>");
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   /***** Frame end *****/
+   Lay_EndRoundFrame ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -128,11 +126,9 @@ static void Ban_PutFormToEditBanners (void)
   {
    extern const char *Txt_Edit;
 
-   /***** Link to edit banners *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiBan,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      /***** Link to edit banners *****/
+      Lay_PutContextualLink (ActEdiBan,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

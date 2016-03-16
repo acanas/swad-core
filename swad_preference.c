@@ -72,7 +72,7 @@ void Pre_EditPrefs (void)
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_StartRoundFrame (NULL,Txt_Language);
+   Lay_StartRoundFrame (NULL,Txt_Language,NULL);
    fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>");

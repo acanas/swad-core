@@ -877,7 +877,7 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[InfoType]);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[InfoType],NULL);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",

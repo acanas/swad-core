@@ -840,7 +840,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title);
+   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,NULL);
 
    /***** Form to write a new post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
@@ -1073,7 +1073,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    /***** Start frame ****/
    if (ShowNoteAlone)
      {
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL,NULL);
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
      }
 
@@ -2252,7 +2252,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 
    if (ShowCommentAlone)
      {
-      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL);
+      Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,NULL,NULL);
 
       /***** Write sharer/commenter if distinct to author *****/
       Soc_WriteTopMessage (TopMessage,UsrCod);

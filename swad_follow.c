@@ -209,7 +209,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,NULL);
 
       /***** Put form to update connected users *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");

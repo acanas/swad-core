@@ -2905,7 +2905,7 @@ void Brw_AskEditWorksCrs (void)
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Draw class photos to select users *****/
-         Lay_StartRoundFrame (NULL,Txt_Users);
+         Lay_StartRoundFrame (NULL,Txt_Users,NULL);
 
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
@@ -7793,7 +7793,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Create_folder);
+   Lay_StartRoundFrame (NULL,Txt_Create_folder,NULL);
    sprintf (Gbl.Message,Txt_You_can_create_a_new_folder_inside_the_folder_X,
 	    FileNameToShow);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
@@ -7828,7 +7828,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
-   Lay_StartRoundFrame ("95%",Txt_Upload_files);
+   Lay_StartRoundFrame ("95%",Txt_Upload_files,NULL);
 
    /***** Help message *****/
    sprintf (Gbl.Message,Txt_or_you_can_upload_new_files_to_the_folder_X,
@@ -7914,7 +7914,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style=\"display:none;\">");
-   Lay_StartRoundFrame (NULL,Txt_Upload_file);
+   Lay_StartRoundFrame (NULL,Txt_Upload_file,NULL);
 
    /***** Help message *****/
    sprintf (Gbl.Message,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
@@ -7981,7 +7981,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Paste);
+   Lay_StartRoundFrame (NULL,Txt_Paste,NULL);
 
    /***** Help message *****/
    sprintf (Gbl.Message,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
@@ -8028,7 +8028,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Create_link);
+   Lay_StartRoundFrame (NULL,Txt_Create_link,NULL);
 
    /***** Help message *****/
    sprintf (Gbl.Message,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
@@ -11427,7 +11427,7 @@ void Brw_AskRemoveOldFiles (void)
    Brw_PutParamsContextualLink ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Remove_old_files);
+   Lay_StartRoundFrame (NULL,Txt_Remove_old_files,NULL);
 
    /***** Form to request number of months (to remove files older) *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",

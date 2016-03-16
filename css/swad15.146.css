@@ -1295,6 +1295,10 @@ a:hover						/* Default ==> underlined */
 	text-align:center;
 	overflow:hidden;
 	}
+.FRAME_ICONS
+	{
+	float:left;
+	}
 .FRAME_TABLE
 	{
 	box-sizing:border-box;

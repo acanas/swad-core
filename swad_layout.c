@@ -1236,7 +1236,7 @@ void Lay_WriteTitle (const char *Title)
 
 void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char *Title)
   {
-   Lay_StartRoundFrame (Width,Title);
+   Lay_StartRoundFrame (Width,Title,NULL);
 
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE");
    if (CellPadding)
@@ -1244,7 +1244,7 @@ void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char
    fprintf (Gbl.F.Out,"\">");
   }
 
-void Lay_StartRoundFrame (const char *Width,const char *Title)
+void Lay_StartRoundFrame (const char *Width,const char *Title,void (*FunctionToDrawContextualIcons) (void))
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"box-sizing:border-box; width:100%%;\">"
@@ -1252,6 +1252,13 @@ void Lay_StartRoundFrame (const char *Width,const char *Title)
    if (Width)
        fprintf (Gbl.F.Out," style=\"box-sizing:border-box; width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
+
+   if (FunctionToDrawContextualIcons)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
+      FunctionToDrawContextualIcons ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    if (Title)
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">"

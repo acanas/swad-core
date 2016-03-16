@@ -124,7 +124,7 @@ void Ann_ShowAllAnnouncements (void)
 
    if (NumAnnouncements)
       /***** Start frame *****/
-      Lay_StartRoundFrame ("550px",Txt_Announcements);
+      Lay_StartRoundFrame ("550px",Txt_Announcements,NULL);
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
 

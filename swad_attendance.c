@@ -2518,7 +2518,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
 	 /***** Draw a class photo with students of the course *****/
 	 /* Start frame */
-	 Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+	 Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],NULL);
 
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt);

@@ -87,7 +87,7 @@ void Lnk_SeeLinks (void)
    /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      Lay_StartRoundFrame (NULL,Txt_Links);
+      Lay_StartRoundFrame (NULL,Txt_Links,NULL);
       Lnk_WriteListOfLinks ();
       Lay_EndRoundFrame ();
      }

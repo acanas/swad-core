@@ -599,8 +599,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	                                ActRcvFrmEnrSevTch);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Role == Rol_STUDENT ? Txt_Admin_several_students :
-	                                           Txt_Admin_several_teachers);
+   Lay_StartRoundFrame (NULL,
+                        Role == Rol_STUDENT ? Txt_Admin_several_students :
+	                                      Txt_Admin_several_teachers,
+	                NULL);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -706,7 +708,7 @@ void Enr_AskRemoveOldUsrs (void)
    Act_FormStart (ActRemOldUsr);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
@@ -2184,7 +2186,7 @@ void Enr_ShowEnrollmentRequests (void)
    Rol_Role_t DesiredRole;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrollment_requests);
+   Lay_StartRoundFrame (NULL,Txt_Enrollment_requests,NULL);
 
    /***** Selection of scope and roles *****/
    /* Start form */
@@ -2976,7 +2978,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    extern const char *Txt_Admin_one_user;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Admin_one_user);
+   Lay_StartRoundFrame (NULL,Txt_Admin_one_user,NULL);
 
    /***** Write form to request another user's ID *****/
    Enr_WriteFormToReqAnotherUsrID ( Role == Rol_STUDENT ? ActReqMdfStd :

@@ -325,8 +325,10 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                     Gbl.Usrs.LstStds.NumUsrs))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
-	                                                Txt_New_message);
+      Lay_StartRoundFrame (NULL,
+                           Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
+	                                           Txt_New_message,
+	                   NULL);
 
       /***** Form to select type of list used for select several users *****/
       if (Gbl.Usrs.LstTchs.NumUsrs ||
@@ -1709,8 +1711,10 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
    NumMsgs = (unsigned) NumRows;
 
    /***** Start frame with messages *****/
-   Lay_StartRoundFrame ("97%",TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
-								        Txt_Messages_sent);
+   Lay_StartRoundFrame ("97%",
+                        TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
+								  Txt_Messages_sent,
+			NULL);
 
    /* Write number of messages and number of new messages */
    fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">");

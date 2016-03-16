@@ -1193,7 +1193,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /* Office hours */
-   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE],NULL);
    TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Other.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
 
@@ -1293,7 +1293,7 @@ void Rec_ListRecordsTchs (void)
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE]);
+	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE],NULL);
 	       TT_ShowTimeTable (TT_TUTOR_TIMETABLE,UsrDat.UsrCod);
 	       Lay_EndRoundFrame ();
               }

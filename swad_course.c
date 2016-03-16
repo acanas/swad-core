@@ -466,7 +466,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_My_courses);
+   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"display:inline-block;\">"
                       "<ul class=\"LIST_LEFT\">");
@@ -3197,7 +3197,7 @@ void Crs_AskRemoveOldCrss (void)
    Act_FormStart (ActRemOldCrs);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",

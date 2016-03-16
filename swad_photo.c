@@ -1924,7 +1924,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    if (NumRows)	// Degrees with students found
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Degrees);
+      Lay_StartRoundFrame (NULL,Txt_Degrees,NULL);
 
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2016,7 +2016,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	{
-	 Lay_StartRoundFrame (NULL,Txt_Degrees);
+	 Lay_StartRoundFrame (NULL,Txt_Degrees,NULL);
 
 	 /***** Form to select type of list used to display degree photos *****/
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);

@@ -178,7 +178,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
    Act_FormStart (ActSeePubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_View_public_profile);
+   Lay_StartRoundFrame (NULL,Txt_View_public_profile,NULL);
 
    /***** Form to request user's @nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"

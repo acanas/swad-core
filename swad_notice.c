@@ -403,7 +403,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEditNotices)
             /***** Start frame *****/
 	    sprintf (StrWidth,"%upx",
 		     Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-            Lay_StartRoundFrame (StrWidth,Txt_All_notices);
+            Lay_StartRoundFrame (StrWidth,Txt_All_notices,NULL);
 	   }
 	 else
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);

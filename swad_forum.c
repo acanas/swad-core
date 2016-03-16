@@ -909,7 +909,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Thread);
+   Lay_StartRoundFrame (NULL,Txt_Thread,NULL);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -1629,7 +1629,7 @@ void For_ShowForumList (void)
    Usr_GetMyInstitutions ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Forums);
+   Lay_StartRoundFrame (NULL,Txt_Forums,NULL);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2472,7 +2472,7 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Forum);
+   Lay_StartRoundFrame (NULL,Txt_Forum,NULL);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();

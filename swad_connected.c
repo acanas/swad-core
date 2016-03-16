@@ -98,7 +98,7 @@ void Con_ShowConnectedUsrs (void)
             Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
-   Lay_StartRoundFrame (NULL,Gbl.Title);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Put form to update connected users *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -139,7 +139,7 @@ void Con_ShowLastClicks (void)
   {
    extern const char *Txt_Last_clicks_in_real_time;
 
-   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time);
+   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time,NULL);
 
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
 	              " class=\"CENTER_MIDDLE\">");

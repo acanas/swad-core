@@ -5948,7 +5948,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 	                        Gbl.Usrs.LstStds.NumUsrs))
         {
          /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Exams);
+         Lay_StartRoundFrame (NULL,Txt_Exams,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
