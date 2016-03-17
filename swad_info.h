@@ -68,33 +68,29 @@ typedef enum
 /*****************************************************************************/
 
 void Inf_ShowInfo (void);
+void Inf_PutIconToEditInfo (void);
 void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
-bool Inf_CheckIfIHaveReadInfo (Inf_InfoType_t InfoType);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
-int Inf_WritePageIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer);
-void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_BYTES_URL+1]);
+int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer);
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_URL+1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
-void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType);
-void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType);
-void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType);
-void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType);
-void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType);
-Inf_InfoType_t Inf_AsignInfoType (void);
+void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc);
+void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc);
+void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc);
+void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc);
+void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc);
 Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void);
-void Inf_SetInfoSrcIntoDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t InfoSrc);
-void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
+void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc);
+void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                           Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
 Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
 Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
-void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
-                           const char *InfoTxtHTML,const char *InfoTxtMD);
-void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
-                           char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength);
-bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType);
-int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer);
+int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer);
+
 void Inf_EditPlainTxtInfo (void);
 void Inf_EditRichTxtInfo (void);
 void Inf_RecAndChangePlainTxtInfo (void);

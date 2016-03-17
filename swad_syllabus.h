@@ -72,7 +72,7 @@ void Syl_GetParamItemNumber (void);
 void Syl_EditSyllabus (void);
 void Syl_FreeListItemsSyllabus (void);
 int Syl_ReadLevelItemSyllabus (void);
-int Syl_WriteSyllabusIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer);
+int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
 void Syl_PutParamNumItem (unsigned NumItem);
 void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 void Syl_RemoveItemSyllabus (void);

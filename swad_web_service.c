@@ -1287,7 +1287,8 @@ int swad__getCourseInfo (struct soap *soap,
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,&InfoSrc,&MustBeRead);
+   Gbl.CurrentCrs.Info.Type = InfoType;
+   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
    getCourseInfo->infoSrc = (char *) soap_malloc (Gbl.soap,strlen (NamesInWSForInfoSrc[InfoSrc]) + 1);
    strcpy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc]);
 
@@ -1301,11 +1302,11 @@ int swad__getCourseInfo (struct soap *soap,
       case Inf_INFO_SRC_NONE:		// No info available
          break;
       case Inf_INFO_SRC_EDITOR:		// Internal editor (only for syllabus)
-	 switch (InfoType)
+	 switch (Gbl.CurrentCrs.Info.Type)
 	   {
 	    case Inf_LECTURES:		// Syllabus (lectures)
 	    case Inf_PRACTICALS:	// Syllabys (practicals)
-	       Result = Syl_WriteSyllabusIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
+	       Result = Syl_WriteSyllabusIntoHTMLBuffer (&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1313,14 +1314,14 @@ int swad__getCourseInfo (struct soap *soap,
 	 break;
       case Inf_INFO_SRC_PLAIN_TEXT:	// Plain text
       case Inf_INFO_SRC_RICH_TEXT:	// Rich text (not yet available)
-	 Result = Inf_WritePlainTextIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
+	 Result = Inf_WritePlainTextIntoHTMLBuffer (&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_PAGE:		// Web page hosted in SWAD server
-	 Result = Inf_WritePageIntoHTMLBuffer (InfoType,&(getCourseInfo->infoTxt));
+	 Result = Inf_WritePageIntoHTMLBuffer (&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_URL:		// Link to a web page
          getCourseInfo->infoTxt = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL+1);
-         Inf_WriteURLIntoTxtBuffer (InfoType,getCourseInfo->infoTxt);
+         Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
          break;
      }
 

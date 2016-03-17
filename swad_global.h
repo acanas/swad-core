@@ -436,6 +436,7 @@ struct Globals
         } Grps;
       struct
 	{
+         Inf_InfoType_t Type;
 	 struct
 	   {
 	    char URL[Cns_MAX_BYTES_URL+1];	// URL

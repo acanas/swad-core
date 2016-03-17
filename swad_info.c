@@ -71,7 +71,7 @@ const char *Inf_FileNamesForInfoType[Inf_NUM_INFO_TYPES] =
 /*****************************************************************************/
 
 /* Functions to write forms in course edition (FAQ, links, etc.) */
-void (*Inf_FormsForEditionTypes[Inf_NUM_INFO_SOURCES])(Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType) =
+void (*Inf_FormsForEditionTypes[Inf_NUM_INFO_SOURCES])(Inf_InfoSrc_t InfoSrc) =
   {
    NULL,
    Inf_FormToEnterIntegratedEditor,
@@ -280,19 +280,24 @@ const char *Inf_NamesInDBForInfoType[Inf_NUM_INFO_TYPES] =
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType);
-static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustBeRead);
-static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType);
+static void Inf_PutButtonToEditInfo (void);
+static void Inf_PutFormToForceStdsToReadInfo (bool MustBeRead);
+static void Inf_PutFormToConfirmIHaveReadInfo (void);
+static bool Inf_CheckIfIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
-static void Inf_SetForceReadIntoDB (Inf_InfoType_t InfoType,bool MustBeRead);
-static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead);
+static void Inf_SetForceReadIntoDB (bool MustBeRead);
+static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
-static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType);
-static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType);
-static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL);
-static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType);
-static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType);
+static void Inf_CheckAndShowPage (void);
+static void Inf_CheckAndShowURL (void);
+static void Inf_ShowPage (const char *URL);
+static Inf_InfoType_t Inf_AsignInfoType (void);
+static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
+static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength);
+static bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType);
+static void Inf_ShowPlainTxtInfo (void);
+static void Inf_ShowRichTxtInfo (void);
 
 /*****************************************************************************/
 /******** Show course info (theory, practices, bibliography, etc.) ***********/
@@ -301,14 +306,18 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType);
 void Inf_ShowInfo (void)
   {
    extern const char *Txt_No_information_available;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get info source from database *****/
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,&InfoSrc,&MustBeRead);
+   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
 
-   switch (InfoType)
+   switch (Gbl.CurrentCrs.Info.Type)
      {
       case Inf_LECTURES:
       case Inf_PRACTICALS:
@@ -323,16 +332,13 @@ void Inf_ShowInfo (void)
       case Rol_STUDENT:
          /* Put checkbox to force students to read this couse info */
          if (MustBeRead)
-            Inf_PutFormToConfirmIHaveReadInfo (InfoType);
+            Inf_PutFormToConfirmIHaveReadInfo ();
          break;
       case Rol_TEACHER:
       case Rol_SYS_ADM:
-         /* Put link (form) to edit this course info */
-         Inf_PutFormToEditInfo (InfoType);
-
          /* Put checkbox to force students to read this couse info */
          if (InfoSrc != Inf_INFO_SRC_NONE)
-            Inf_PutFormToForceStdsToReadInfo (InfoType,MustBeRead);
+            Inf_PutFormToForceStdsToReadInfo (MustBeRead);
          break;
       default:
          break;
@@ -341,99 +347,88 @@ void Inf_ShowInfo (void)
    switch (InfoSrc)
      {
       case Inf_INFO_SRC_NONE:
-	 if (InfoType != Inf_INTRODUCTION)
+	 if (Gbl.CurrentCrs.Info.Type != Inf_INTRODUCTION)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+
+	 /* Put button to edit info */
+	 if (ICanEdit)
+	    Inf_PutButtonToEditInfo ();
          break;
       case Inf_INFO_SRC_EDITOR:
-         switch (InfoType)
+         switch (Gbl.CurrentCrs.Info.Type)
            {
-            case Inf_INTRODUCTION:
-               break;
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-
-	       // TODO: Remove the following lines, here only for debug purposes
-
-               /*
-               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-        	 {
-                  char QueryDebug[512*1024];
-        	  char *HTMLBuffer;
-                  Syl_WriteSyllabusIntoHTMLBuffer (InfoType,&HTMLBuffer);
-                  sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'%s')",HTMLBuffer);
-                  DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
-                  free ((void *) HTMLBuffer);
-        	 }
-               */
-
                Syl_EditSyllabus ();
                break;
+            case Inf_INTRODUCTION:
             case Inf_TEACHING_GUIDE:
             case Inf_BIBLIOGRAPHY:
             case Inf_FAQ:
             case Inf_LINKS:
             case Inf_ASSESSMENT:
 	       Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+
+	       /* Put button to edit info */
+	       if (ICanEdit)
+		  Inf_PutButtonToEditInfo ();
 	       break;
            }
          break;
       case Inf_INFO_SRC_PLAIN_TEXT:
-         Inf_ShowPlainTxtInfo (InfoType);
+         Inf_ShowPlainTxtInfo ();
          break;
       case Inf_INFO_SRC_RICH_TEXT:
-         Inf_ShowRichTxtInfo (InfoType);
+         Inf_ShowRichTxtInfo ();
          break;
       case Inf_INFO_SRC_PAGE:
-	       // TODO: Remove the following lines, here only for debug purposes
-
-               /*
-               if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-        	 {
-                  char QueryDebug[512*1024];
-        	  char *HTMLBuffer;
-                  Inf_WritePageIntoHTMLBuffer (InfoType,&HTMLBuffer);
-                  sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'%s')",HTMLBuffer);
-                  DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
-                  free ((void *) HTMLBuffer);
-        	 }
-               */
-
          /***** Open file with web page *****/
-	 Inf_CheckAndShowPage (InfoType);
+	 Inf_CheckAndShowPage ();
          break;
       case Inf_INFO_SRC_URL:
          /***** Check if file with URL exists *****/
-	 Inf_CheckAndShowURL (InfoType);
+	 Inf_CheckAndShowURL ();
          break;
      }
   }
 
 /*****************************************************************************/
-/******************** Put a link (form) to edit course info ******************/
+/*********************** Put button to edit course info **********************/
 /*****************************************************************************/
 
-static void Inf_PutFormToEditInfo (Inf_InfoType_t InfoType)
+static void Inf_PutButtonToEditInfo (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Inf_ActionsEditInfo[InfoType],NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Act_FormStart (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type]);
+   Lay_PutConfirmButton (Txt_Edit);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************************ Put icon to edit course info ***********************/
+/*****************************************************************************/
+
+void Inf_PutIconToEditInfo (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL,
+                          "edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustBeRead)
+static void Inf_PutFormToForceStdsToReadInfo (bool MustBeRead)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Force_students_to_read_this_information;
 
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
-   Act_FormStart (Inf_ActionsChangeForceReadInfo[InfoType]);
+   Act_FormStart (Inf_ActionsChangeForceReadInfo[Gbl.CurrentCrs.Info.Type]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
    if (MustBeRead)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -450,15 +445,15 @@ static void Inf_PutFormToForceStdsToReadInfo (Inf_InfoType_t InfoType,bool MustB
 /***** Put a form (checkbox) to confirm that I have read a course info *******/
 /*****************************************************************************/
 
-static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
+static void Inf_PutFormToConfirmIHaveReadInfo (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_I_have_read_this_information;
-   bool IHaveRead = Inf_CheckIfIHaveReadInfo (InfoType);
+   bool IHaveRead = Inf_CheckIfIHaveReadInfo ();
 
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme]);
-   Act_FormStart (Inf_ActionsIHaveReadInfo[InfoType]);
+   Act_FormStart (Inf_ActionsIHaveReadInfo[Gbl.CurrentCrs.Info.Type]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
    if (IHaveRead)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -475,14 +470,16 @@ static void Inf_PutFormToConfirmIHaveReadInfo (Inf_InfoType_t InfoType)
 /******************** Check I have read a course info ************************/
 /*****************************************************************************/
 
-bool Inf_CheckIfIHaveReadInfo (Inf_InfoType_t InfoType)
+static bool Inf_CheckIfIHaveReadInfo (void)
   {
    char Query[512];
 
    /***** Get if info source is already stored in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_info_read"
                   " WHERE UsrCod='%ld' AND CrsCod='%ld' AND InfoType='%s'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+            Gbl.Usrs.Me.UsrDat.UsrCod,
+            Gbl.CurrentCrs.Crs.CrsCod,
+            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    return (DB_QueryCOUNT (Query,"can not get if I have read course info") != 0);
   }
 
@@ -582,11 +579,13 @@ void Inf_ChangeForceReadInfo (void)
   {
    extern const char *Txt_Students_now_are_required_to_read_this_information;
    extern const char *Txt_Students_are_no_longer_obliged_to_read_this_information;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    bool MustBeRead = Inf_GetMustBeReadFromForm ();
 
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+
    /***** Set status (if info must be read or not) into database *****/
-   Inf_SetForceReadIntoDB (InfoType,MustBeRead);
+   Inf_SetForceReadIntoDB (MustBeRead);
 
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,
@@ -605,11 +604,13 @@ void Inf_ChangeIHaveReadInfo (void)
   {
    extern const char *Txt_You_have_confirmed_that_you_have_read_this_information;
    extern const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    bool IHaveRead = Inf_GetIfIHaveReadFromForm ();
 
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+
    /***** Set status (if I have read or not a information) into database *****/
-   Inf_SetIHaveReadIntoDB (InfoType,IHaveRead);
+   Inf_SetIHaveReadIntoDB (IHaveRead);
 
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,
@@ -650,7 +651,7 @@ static bool Inf_GetIfIHaveReadFromForm (void)
 /***************** Set if students must read course info *********************/
 /*****************************************************************************/
 
-static void Inf_SetForceReadIntoDB (Inf_InfoType_t InfoType,bool MustBeRead)
+static void Inf_SetForceReadIntoDB (bool MustBeRead)
   {
    char Query[512];
 
@@ -659,7 +660,7 @@ static void Inf_SetForceReadIntoDB (Inf_InfoType_t InfoType,bool MustBeRead)
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
             MustBeRead ? 'Y' :
         	         'N',
-            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    DB_QueryUPDATE (Query,"can not update if info must be read");
   }
 
@@ -667,7 +668,7 @@ static void Inf_SetForceReadIntoDB (Inf_InfoType_t InfoType,bool MustBeRead)
 /********************* Set if I have read course info ************************/
 /*****************************************************************************/
 
-static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead)
+static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
   {
    char Query[512];
 
@@ -678,7 +679,7 @@ static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead)
                      " VALUES ('%ld','%ld','%s')",
                Gbl.Usrs.Me.UsrDat.UsrCod,
                Gbl.CurrentCrs.Crs.CrsCod,
-               Inf_NamesInDBForInfoType[InfoType]);
+               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       DB_QueryUPDATE (Query,"can not set that I have read course info");
      }
    else
@@ -688,7 +689,7 @@ static void Inf_SetIHaveReadIntoDB (Inf_InfoType_t InfoType,bool IHaveRead)
                      " WHERE UsrCod='%ld' AND CrsCod='%ld' AND InfoType='%s'",
                Gbl.Usrs.Me.UsrDat.UsrCod,
                Gbl.CurrentCrs.Crs.CrsCod,
-               Inf_NamesInDBForInfoType[InfoType]);
+               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       DB_QueryDELETE (Query,"can not set that I have not read course info");
      }
   }
@@ -712,7 +713,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 /**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
 
-static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
+static void Inf_CheckAndShowPage (void)
   {
    extern const char *Txt_No_information_available;
    const char *FileNameHTML;
@@ -726,24 +727,24 @@ static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
    /* 1. Check if index.html exists */
    FileNameHTML = "index.html";
    sprintf (PathRelFileHTML,"%s/%s",
-	    Gbl.CurrentCrs.Info.Links[InfoType].PathRelWebPage,FileNameHTML);
+	    Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage,FileNameHTML);
    if (Fil_CheckIfPathExists (PathRelFileHTML))
      {
       sprintf (URL,"%s/%s",
-	       Gbl.CurrentCrs.Info.Links[InfoType].URLWebPage,FileNameHTML);
-      Inf_ShowPage (InfoType,URL);
+	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].URLWebPage,FileNameHTML);
+      Inf_ShowPage (URL);
      }
    else
      {
       /* 2. If index.html not exists, try index.htm */
       FileNameHTML = "index.htm";
       sprintf (PathRelFileHTML,"%s/%s",
-	       Gbl.CurrentCrs.Info.Links[InfoType].PathRelWebPage,FileNameHTML);
+	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage,FileNameHTML);
       if (Fil_CheckIfPathExists (PathRelFileHTML))
 	{
 	 sprintf (URL,"%s/%s",
-	          Gbl.CurrentCrs.Info.Links[InfoType].URLWebPage,FileNameHTML);
-	 Inf_ShowPage (InfoType,URL);
+	          Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].URLWebPage,FileNameHTML);
+	 Inf_ShowPage (URL);
 	}
       else
 	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
@@ -755,7 +756,7 @@ static void Inf_CheckAndShowPage (Inf_InfoType_t InfoType)
 /*****************************************************************************/
 // This function is called only from web service
 
-int Inf_WritePageIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
+int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
   {
    char PathRelFileHTML[PATH_MAX+1];
    FILE *FileHTML;
@@ -768,14 +769,14 @@ int Inf_WritePageIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
    sprintf (PathRelFileHTML,"%s/index.html",
-	    Gbl.CurrentCrs.Info.Links[InfoType].PathRelWebPage);
+	    Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage);
    if (Fil_CheckIfPathExists (PathRelFileHTML))
       FileExists = true;
    else
      {
       /* 2. If index.html not exists, try index.htm */
       sprintf (PathRelFileHTML,"%s/index.htm",
-	       Gbl.CurrentCrs.Info.Links[InfoType].PathRelWebPage);
+	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage);
       if (Fil_CheckIfPathExists (PathRelFileHTML))
          FileExists = true;
      }
@@ -823,20 +824,20 @@ int Inf_WritePageIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 /**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
 
-static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType)
+static void Inf_CheckAndShowURL (void)
   {
    extern const char *Txt_No_information_available;
    FILE *FileURL;
 
    /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL ,"rb")))
+   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL ,"rb")))
      {
       if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_URL,FileURL) == NULL)
 	 Gbl.CurrentCrs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
       if (Gbl.CurrentCrs.Info.URL[0])
-	 Inf_ShowPage (InfoType,Gbl.CurrentCrs.Info.URL);
+	 Inf_ShowPage (Gbl.CurrentCrs.Info.URL);
       else
 	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
      }
@@ -849,7 +850,7 @@ static void Inf_CheckAndShowURL (Inf_InfoType_t InfoType)
 /*****************************************************************************/
 // This function is called only from web service
 
-void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_BYTES_URL+1])
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_URL+1])
   {
    FILE *FileURL;
 
@@ -857,7 +858,7 @@ void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_B
    TxtBuffer[0] = '\0';
 
    /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"rb")))
+   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"rb")))
      {
       if (fgets (TxtBuffer,Cns_MAX_BYTES_URL,FileURL) == NULL)
 	 TxtBuffer[0] = '\0';
@@ -870,14 +871,18 @@ void Inf_WriteURLIntoTxtBuffer (Inf_InfoType_t InfoType,char TxtBuffer[Cns_MAX_B
 /*************** Show link to a internal or external a page ******************/
 /*****************************************************************************/
 
-static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
+static void Inf_ShowPage (const char *URL)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[InfoType],NULL);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+                        ICanEdit ? Inf_PutIconToEditInfo :
+                        	   NULL);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -897,11 +902,13 @@ static void Inf_ShowPage (Inf_InfoType_t InfoType,const char *URL)
 
 void Inf_SetInfoSrc (void)
   {
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    Inf_InfoSrc_t InfoSrcSelected = Inf_GetInfoSrcFromForm ();
 
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+
    /***** Set info source into database *****/
-   Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,InfoSrcSelected);
+   Inf_SetInfoSrcIntoDB (InfoSrcSelected);
 
    /***** Show the selected info *****/
    Inf_ShowInfo ();
@@ -917,19 +924,21 @@ void Inf_FormsToSelSendInfo (void)
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    Inf_InfoSrc_t InfoSrc,InfoSrcSelected;
    bool MustBeRead;
 
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+
    /***** Put link to view *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Inf_ActionsSeeInfo[InfoType],NULL,
+   Lay_PutContextualLink (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL,
 			  "eye-on64x64.png",
 			  Txt_View,Txt_View);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get info source from database *****/
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,&InfoSrcSelected,&MustBeRead);
+   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);
 
    /***** Form to choice between alternatives *****/
    /* Start of table */
@@ -946,7 +955,7 @@ void Inf_FormsToSelSendInfo (void)
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
-      Act_FormStart (Inf_ActionsSelecInfoSrc[InfoType]);
+      Act_FormStart (Inf_ActionsSelecInfoSrc[Gbl.CurrentCrs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"InfoSrc\" value=\"%u\"",
 	       (unsigned) InfoSrc);
       if (InfoSrc == InfoSrcSelected)
@@ -967,7 +976,7 @@ void Inf_FormsToSelSendInfo (void)
          fprintf (Gbl.F.Out,"<span class=\"DAT\">(%s)</span>",
                   Txt_INFO_SRC_HELP[InfoSrc]);
       if (Inf_FormsForEditionTypes[InfoSrc])
-         Inf_FormsForEditionTypes[InfoSrc] (InfoSrc,InfoType);
+         Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -980,12 +989,12 @@ void Inf_FormsToSelSendInfo (void)
 /****************** Form to enter in integrated editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
+void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
+   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit);
@@ -998,12 +1007,12 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoT
 /****************** Form to enter in plain text editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
+void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
+   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit_plain_text);
@@ -1016,12 +1025,12 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTy
 /******************* Form to enter in rich text editor ***********************/
 /*****************************************************************************/
 
-void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
+void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
+   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit_rich_text);
@@ -1034,14 +1043,14 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoTyp
 /******************* Form to upload a file with a page ***********************/
 /*****************************************************************************/
 
-void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
+void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
+   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** File *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
@@ -1069,7 +1078,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
 /********************* Form to send a link to a web page *********************/
 /*****************************************************************************/
 
-void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
+void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_URL;
@@ -1077,7 +1086,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
    FILE *FileURL;
 
    /***** Start form *****/
-   Act_FormStart (Inf_ActionsInfo[InfoSrc][InfoType]);
+   Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Link *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
@@ -1089,7 +1098,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
                       "<input type=\"text\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"rb")) == NULL)
+   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else
      {
@@ -1115,7 +1124,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc,Inf_InfoType_t InfoType)
 /******** Returns bibliography, assessment, etc. from Gbl.Action.Act *********/
 /*****************************************************************************/
 
-Inf_InfoType_t Inf_AsignInfoType (void)
+static Inf_InfoType_t Inf_AsignInfoType (void)
   {
    switch (Gbl.Action.Act)
      {
@@ -1256,33 +1265,38 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
 /********* Set info source for a type of course info from database ***********/
 /*****************************************************************************/
 
-void Inf_SetInfoSrcIntoDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t InfoSrc)
+void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
   {
    char Query[512];
 
    /***** Get if info source is already stored in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_info_src"
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+            Gbl.CurrentCrs.Crs.CrsCod,
+            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    if (DB_QueryCOUNT (Query,"can not get if info source is already stored in database"))	// Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
          sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
                         " WHERE CrsCod='%ld' AND InfoType='%s'",
                   Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
-                  CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+                  Gbl.CurrentCrs.Crs.CrsCod,
+                  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       else	// MustBeRead remains unchanged
          sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s'"
                         " WHERE CrsCod='%ld' AND InfoType='%s'",
                   Inf_NamesInDBForInfoSrc[InfoSrc],
-                  CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+                  Gbl.CurrentCrs.Crs.CrsCod,
+                  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       DB_QueryUPDATE (Query,"can not update info source");
      }
    else		// Info is not stored in database, so insert it
      {
       sprintf (Query,"INSERT INTO crs_info_src (CrsCod,InfoType,InfoSrc,MustBeRead)"
                      " VALUES ('%ld','%s','%s','N')",
-               CrsCod,Inf_NamesInDBForInfoType[InfoType],Inf_NamesInDBForInfoSrc[InfoSrc]);
+               Gbl.CurrentCrs.Crs.CrsCod,
+               Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+               Inf_NamesInDBForInfoSrc[InfoSrc]);
       DB_QueryINSERT (Query,"can not insert info source");
      }
   }
@@ -1291,7 +1305,8 @@ void Inf_SetInfoSrcIntoDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t Inf
 /********* Get info source for a type of course info from database ***********/
 /*****************************************************************************/
 
-void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
+void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                           Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1459,8 +1474,7 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 /********** Set info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
-                           const char *InfoTxtHTML,const char *InfoTxtMD)
+static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
   {
    char Query[256+Cns_MAX_BYTES_LONG_TEXT];
 
@@ -1468,7 +1482,9 @@ void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
    sprintf (Query,"REPLACE INTO crs_info_txt"
 	          " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
                   " VALUES ('%ld','%s','%s','%s')",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType],InfoTxtHTML,InfoTxtMD);
+            Gbl.CurrentCrs.Crs.CrsCod,
+            Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+            InfoTxtHTML,InfoTxtMD);
    DB_QueryREPLACE (Query,"can not update info text");
   }
 
@@ -1476,8 +1492,7 @@ void Inf_SetInfoTxtIntoDB (long CrsCod,Inf_InfoType_t InfoType,
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
-                           char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength)
+static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1488,7 +1503,7 @@ void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
           (bibliography, FAQ, links or evaluation) from database *****/
    sprintf (Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
 
    /***** The result of the query must have one row or none *****/
@@ -1530,7 +1545,7 @@ void Inf_GetInfoTxtFromDB (Inf_InfoType_t InfoType,
 /*** Check if info text for a type of course info is not empty in database ***/
 /*****************************************************************************/
 
-bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1565,22 +1580,27 @@ bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
 /********************* Show information about the course *********************/
 /*****************************************************************************/
 
-static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
+static void Inf_ShowPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_No_information_available;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtHTML[0])
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
+      Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+                           ICanEdit ? Inf_PutIconToEditInfo :
+                        	      NULL);
+      fprintf (Gbl.F.Out,"<table>");
 
-      if (InfoType == Inf_INTRODUCTION ||
-          InfoType == Inf_TEACHING_GUIDE)
+      if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
+          Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<tr>"
@@ -1594,10 +1614,11 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
       /***** Write text *****/
       fprintf (Gbl.F.Out,"%s",TxtHTML);
 
-      /***** Finish table *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable ();
+	                 "</tr>"
+	                 "</table>");
+      Lay_EndRoundFrame ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
@@ -1607,7 +1628,7 @@ static void Inf_ShowPlainTxtInfo (Inf_InfoType_t InfoType)
 /********************* Show information about the course *********************/
 /*****************************************************************************/
 
-static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
+static void Inf_ShowRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_No_information_available;
@@ -1620,20 +1641,22 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
    char MathJaxURL[PATH_MAX];
    char Command[512+PATH_MAX*3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
-
-   // Lay_ShowAlert (Lay_INFO,TxtHTML);
-   // Lay_ShowAlert (Lay_INFO,TxtMD);
+   Inf_GetInfoTxtFromDB (TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtMD[0])
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
+      Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+                           ICanEdit ? Inf_PutIconToEditInfo :
+                        	      NULL);
+      fprintf (Gbl.F.Out,"<table>");
 
-      if (InfoType == Inf_INTRODUCTION ||
-          InfoType == Inf_TEACHING_GUIDE)
+      if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
+          Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<tr>"
@@ -1700,8 +1723,9 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
       /***** Finish table *****/
       fprintf (Gbl.F.Out,"</div>"
 	                 "</td>"
-	                 "</tr>");
-      Lay_EndRoundFrameTable ();
+	                 "</tr>"
+	                 "</table>");
+      Lay_EndRoundFrame ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
@@ -1712,7 +1736,7 @@ static void Inf_ShowRichTxtInfo (Inf_InfoType_t InfoType)
 /*****************************************************************************/
 // This function is called only from web service
 
-int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
+int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
@@ -1725,7 +1749,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtHTML[0])
      {
@@ -1749,7 +1773,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (Inf_InfoType_t InfoType,char **HTMLBuffer)
 			    "</head>\n"
 			    "<body>\n",
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],	// Language
-	       Txt_INFO_TITLE[InfoType]);		// Page title
+	       Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);		// Page title
 
       /***** Write plain text into text buffer *****/
       fprintf (FileHTMLTmp,"<div class=\"DAT LEFT_MIDDLE\">\n");
@@ -1808,19 +1832,21 @@ void Inf_EditPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Start table *****/
-   Act_FormStart (Inf_ActionsRcvPlaTxtInfo[InfoType]);
-   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   if (InfoType == Inf_INTRODUCTION ||
-       InfoType == Inf_TEACHING_GUIDE)
+   /***** Start table *****/
+   Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
+   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+
+   if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
+       Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
       Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1846,19 +1872,21 @@ void Inf_EditRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Start form *****/
-   Act_FormStart (Inf_ActionsRcvRchTxtInfo[InfoType]);
-   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[InfoType]);
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   if (InfoType == Inf_INTRODUCTION ||
-       InfoType == Inf_TEACHING_GUIDE)
+   /***** Start form *****/
+   Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
+   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+
+   if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
+       Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
       Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1882,9 +1910,11 @@ void Inf_EditRichTxtInfo (void)
 
 void Inf_RecAndChangePlainTxtInfo (void)
   {
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
@@ -1895,12 +1925,10 @@ void Inf_RecAndChangePlainTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "plain text" in database *****/
-   Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt_HTMLFormat[0] ? Inf_INFO_SRC_PLAIN_TEXT :
+   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_INFO_SRC_PLAIN_TEXT :
 	                                     Inf_INFO_SRC_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
@@ -1916,9 +1944,11 @@ void Inf_RecAndChangePlainTxtInfo (void)
 
 void Inf_RecAndChangeRichTxtInfo (void)
   {
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
@@ -1929,12 +1959,10 @@ void Inf_RecAndChangeRichTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "rich text" in database *****/
-   Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,
-                         Txt_HTMLFormat[0] ? Inf_INFO_SRC_RICH_TEXT :
+   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_INFO_SRC_RICH_TEXT :
 	                                     Inf_INFO_SRC_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
@@ -1951,15 +1979,17 @@ void Inf_RecAndChangeRichTxtInfo (void)
 void Inf_ReceiveURLInfo (void)
   {
    extern const char *Txt_The_URL_X_has_been_updated;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    FILE *FileURL;
    bool URLIsOK = false;
+
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get parameter with URL *****/
    Par_GetParToText ("InfoSrcURL",Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_URL);
 
    /***** Open file with URL *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileURL,"wb")) != NULL)
+   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"wb")) != NULL)
      {
       /***** Write URL *****/
       fprintf (FileURL,"%s",Gbl.CurrentCrs.Info.URL);
@@ -1979,7 +2009,7 @@ void Inf_ReceiveURLInfo (void)
    if (URLIsOK)
      {
       /***** Change info source to URL in database *****/
-      Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Inf_INFO_SRC_URL);
+      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_URL);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -1987,7 +2017,7 @@ void Inf_ReceiveURLInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Inf_INFO_SRC_NONE);
+      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();
@@ -2008,13 +2038,15 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_Found_an_index_htm_file;
    extern const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
-   Inf_InfoType_t InfoType = Inf_AsignInfoType ();
    char SourceFileName[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    char StrUnzip[100+PATH_MAX*2+1];
    char *PathWebPage;
    bool FileIsOK = false;
+
+   /***** Set info type *****/
+   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** First of all, store in disk the file from stdin (really from Gbl.F.Tmp) *****/
    Fil_StartReceptionOfFile (SourceFileName,MIMEType);
@@ -2034,7 +2066,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** End the reception of the data *****/
-      PathWebPage = Gbl.CurrentCrs.Info.Links[InfoType].PathRelWebPage;
+      PathWebPage = Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage;
       if (Str_FileIs (SourceFileName,"html") ||
           Str_FileIs (SourceFileName,"htm" )) // .html or .htm file
         {
@@ -2053,13 +2085,13 @@ void Inf_ReceivePagInfo (void)
         {
          Brw_RemoveTree (PathWebPage);
          Fil_CreateDirIfNotExists (PathWebPage);
-         if (Fil_EndReceptionOfFile (Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileZIP))
+         if (Fil_EndReceptionOfFile (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP))
            {
             Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 
             /* Uncompress ZIP */
             sprintf (StrUnzip,"unzip -qq -o %s -d %s",
-                     Gbl.CurrentCrs.Info.Links[InfoType].PathRelFileZIP,PathWebPage);
+                     Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP,PathWebPage);
             if (system (StrUnzip) == 0)
               {
                /* Check if uploaded file is index.html or index.htm */
@@ -2096,7 +2128,7 @@ void Inf_ReceivePagInfo (void)
    if (FileIsOK)
      {
       /***** Change info source to page in database *****/
-      Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Inf_INFO_SRC_PAGE);
+      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_PAGE);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2104,7 +2136,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Gbl.CurrentCrs.Crs.CrsCod,InfoType,Inf_INFO_SRC_NONE);
+      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();
