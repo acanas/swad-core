@@ -338,6 +338,64 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    ActAdmShaCtr,	// Brw_ADMI_SHARE_CTR
    ActAdmShaIns,	// Brw_ADMI_SHARE_INS
   };
+
+static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_UNKNOWN
+   ActAdmDocCrs,	// Brw_SHOW_DOCUM_CRS
+   ActAdmMrkCrs,	// Brw_SHOW_MARKS_CRS
+   ActUnk,		// Brw_ADMI_DOCUM_CRS
+   ActUnk,		// Brw_ADMI_SHARE_CRS
+   ActUnk,		// Brw_ADMI_SHARE_GRP
+   ActUnk,		// Brw_ADMI_WORKS_USR
+   ActUnk,		// Brw_ADMI_WORKS_CRS
+   ActUnk,		// Brw_ADMI_MARKS_CRS
+   ActUnk,		// Brw_ADMI_BRIEF_USR
+   ActAdmDocGrp,	// Brw_SHOW_DOCUM_GRP
+   ActUnk,		// Brw_ADMI_DOCUM_GRP
+   ActAdmMrkGrp,	// Brw_SHOW_MARKS_GRP
+   ActUnk,		// Brw_ADMI_MARKS_GRP
+   ActUnk,		// Brw_ADMI_ASSIG_USR
+   ActUnk,		// Brw_ADMI_ASSIG_CRS
+   ActAdmDocDeg,	// Brw_SHOW_DOCUM_DEG
+   ActUnk,		// Brw_ADMI_DOCUM_DEG
+   ActAdmDocCtr,	// Brw_SHOW_DOCUM_CTR
+   ActUnk,		// Brw_ADMI_DOCUM_CTR
+   ActAdmDocIns,	// Brw_SHOW_DOCUM_INS
+   ActUnk,		// Brw_ADMI_DOCUM_INS
+   ActUnk,		// Brw_ADMI_SHARE_DEG
+   ActUnk,		// Brw_ADMI_SHARE_CTR
+   ActUnk,		// Brw_ADMI_SHARE_INS
+  };
+static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_UNKNOWN
+   ActUnk,		// Brw_SHOW_DOCUM_CRS
+   ActUnk,		// Brw_SHOW_MARKS_CRS
+   ActSeeDocCrs,	// Brw_ADMI_DOCUM_CRS
+   ActUnk,		// Brw_ADMI_SHARE_CRS
+   ActUnk,		// Brw_ADMI_SHARE_GRP
+   ActUnk,		// Brw_ADMI_WORKS_USR
+   ActUnk,		// Brw_ADMI_WORKS_CRS
+   ActSeeMrkCrs,	// Brw_ADMI_MARKS_CRS
+   ActUnk,		// Brw_ADMI_BRIEF_USR
+   ActUnk,		// Brw_SHOW_DOCUM_GRP
+   ActSeeDocGrp,	// Brw_ADMI_DOCUM_GRP
+   ActUnk,		// Brw_SHOW_MARKS_GRP
+   ActSeeMrkGrp,	// Brw_ADMI_MARKS_GRP
+   ActUnk,		// Brw_ADMI_ASSIG_USR
+   ActUnk,		// Brw_ADMI_ASSIG_CRS
+   ActUnk,		// Brw_SHOW_DOCUM_DEG
+   ActSeeDocDeg,	// Brw_ADMI_DOCUM_DEG
+   ActUnk,		// Brw_SHOW_DOCUM_CTR
+   ActSeeDocCtr,	// Brw_ADMI_DOCUM_CTR
+   ActUnk,		// Brw_SHOW_DOCUM_INS
+   ActSeeDocIns,	// Brw_ADMI_DOCUM_INS
+   ActUnk,		// Brw_ADMI_SHARE_DEG
+   ActUnk,		// Brw_ADMI_SHARE_CTR
+   ActUnk,		// Brw_ADMI_SHARE_INS
+  };
+
 static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    ActUnk,		// Brw_UNKNOWN
@@ -1334,6 +1392,8 @@ static void Brw_FormToChangeCrsGrpZone (void);
 static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError);
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
+static void Brw_PutIconToEditFileBrowser (void);
+static void Brw_PutIconToSeeFileBrowser (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
@@ -1343,8 +1403,6 @@ static void Brw_ShowSizeOfFileTree (void);
 static void Brw_StoreSizeOfFileTreeInDB (void);
 
 static void Brw_PutParamsContextualLink (void);
-static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
-                                      Act_Action_t Action);
 
 static void Brw_WriteFormFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
@@ -3323,6 +3381,9 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Works_area;
    extern const char *Txt_Temporary_private_storage_area;
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
+   void (*FunctionToDrawContextualIcons) (void);
+   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Set title of file browser *****/
    Brw_TitleOfFileBrowser[Brw_UNKNOWN       ] = NULL;				// Brw_UNKNOWN
@@ -3351,6 +3412,58 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_CTR] = Txt_Shared_files_area;		// Brw_ADMI_SHARE_CTR
    Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_INS] = Txt_Shared_files_area;		// Brw_ADMI_SHARE_INS
 
+   /***** Set function to write contextual icons in frame *****/
+   FunctionToDrawContextualIcons = NULL;
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_SHOW_DOCUM_INS:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	 break;
+      case Brw_ADMI_DOCUM_INS:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	 break;
+      case Brw_SHOW_DOCUM_CTR:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	 break;
+      case Brw_ADMI_DOCUM_CTR:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	 break;
+      case Brw_SHOW_DOCUM_DEG:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	 break;
+      case Brw_ADMI_DOCUM_DEG:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	 break;
+      case Brw_SHOW_DOCUM_CRS:
+      case Brw_SHOW_DOCUM_GRP:
+	 if (IAmTeacherOrSysAdm)
+	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	 break;
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
+	 if (IAmTeacherOrSysAdm)
+	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	 break;
+      case Brw_SHOW_MARKS_CRS:
+      case Brw_SHOW_MARKS_GRP:
+	 if (IAmTeacherOrSysAdm)
+	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	 break;
+      case Brw_ADMI_MARKS_CRS:
+      case Brw_ADMI_MARKS_GRP:
+	 if (IAmTeacherOrSysAdm)
+	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	 break;
+      default:
+	 break;
+     }
+
    /***** Check if the maximum quota has been exceeded *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
       Brw_SetAndCheckQuota ();
@@ -3361,10 +3474,12 @@ static void Brw_ShowFileBrowser (void)
    /***** Start frame *****/
    Gbl.FileBrowser.Id++;
    fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
-   Lay_StartRoundFrameTable ("100%",0,Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type]);
+   Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+                        FunctionToDrawContextualIcons);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table>"
+	              "<tr>"
                       "<td class=\"CENTER_MIDDLE\" colspan=\"%u\">",
             Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type]);
    Brw_WriteSubtitleOfFileBrowser ();
@@ -3384,8 +3499,37 @@ static void Brw_ShowFileBrowser (void)
       Brw_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
 
    /***** End of table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</section>");
+  }
+
+/*****************************************************************************/
+/************************ Put icon to edit file browser **********************/
+/*****************************************************************************/
+
+static void Brw_PutIconToEditFileBrowser (void)
+  {
+   extern const char *Txt_Edit;
+
+   if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
+      Lay_PutContextualLink (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
+                             Brw_PutParamsContextualLink,
+			     "edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
+/************************ Put icon to see file browser ***********************/
+/*****************************************************************************/
+
+static void Brw_PutIconToSeeFileBrowser (void)
+  {
+   extern const char *Txt_View;
+
+   if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
+      Lay_PutContextualLink (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+                             Brw_PutParamsContextualLink,
+			     "eye-on64x64.png",Txt_View,NULL);
   }
 
 /*****************************************************************************/
@@ -3394,80 +3538,17 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_WriteTopBeforeShowingFileBrowser (void)
   {
-   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
-
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
 
    /***** Write contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   switch (Gbl.FileBrowser.Type)
+   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR &&
+       Gbl.Action.Act != ActAskRemOldBrf)
      {
-      case Brw_SHOW_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocIns);
-	 break;
-      case Brw_ADMI_DOCUM_INS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocIns);
-	 break;
-      case Brw_SHOW_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCtr);
-	 break;
-      case Brw_ADMI_DOCUM_CTR:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCtr);
-	 break;
-      case Brw_SHOW_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocDeg);
-	 break;
-      case Brw_ADMI_DOCUM_DEG:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocDeg);
-	 break;
-      case Brw_SHOW_DOCUM_CRS:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocCrs);
-	 break;
-      case Brw_ADMI_DOCUM_CRS:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocCrs);
-	 break;
-      case Brw_SHOW_DOCUM_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmDocGrp);
-	 break;
-      case Brw_ADMI_DOCUM_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeDocGrp);
-	 break;
-      case Brw_SHOW_MARKS_CRS:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkCrs);
-	 break;
-      case Brw_ADMI_MARKS_CRS:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkCrs);
-	 break;
-      case Brw_SHOW_MARKS_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_ADMIN,ActAdmMrkGrp);
-	 break;
-      case Brw_ADMI_MARKS_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Brw_PutFormToShowOrAdmin (Brw_SHOW,ActSeeMrkGrp);
-	 break;
-      case Brw_ADMI_BRIEF_USR:
-	 if (Gbl.Action.Act != ActAskRemOldBrf)
-	    Brw_PutFormToAskRemOldFiles ();
-	 break;
-      default:
-	 break;
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Brw_PutFormToAskRemOldFiles ();
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
@@ -4334,31 +4415,6 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 		  " WHERE ZoneUsrCod='%ld'",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove files in user's file zones");
-  }
-
-/*****************************************************************************/
-/*********** Write a form (link) to go to show or admin documents ************/
-/*****************************************************************************/
-
-static void Brw_PutFormToShowOrAdmin (Brw_ShowOrAdmin_t ShowOrAdmin,
-                                      Act_Action_t Action)
-  {
-   extern const char *Txt_View;
-   extern const char *Txt_Edit;
-
-   switch (ShowOrAdmin)
-     {
-      case Brw_SHOW:
-         Lay_PutContextualLink (Action,Brw_PutParamsContextualLink,
-                                "eye-on64x64.png",
-                                Txt_View,Txt_View);
-	 break;
-      case Brw_ADMIN:
-         Lay_PutContextualLink (Action,Brw_PutParamsContextualLink,
-                                "edit64x64.png",
-                                Txt_Edit,Txt_Edit);
-	 break;
-     }
   }
 
 /*****************************************************************************/
