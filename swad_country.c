@@ -447,7 +447,7 @@ static void Cty_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/************* Put icon to print the configuration of a course ***************/
+/************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
 static void Cty_PutIconToPrint (void)

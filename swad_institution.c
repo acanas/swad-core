@@ -64,6 +64,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ins_Configuration (bool PrintView);
+static void Ins_PutIconToPrint (void);
 
 static void Ins_ListInstitutions (void);
 static void Ins_ListInstitutionsForSeeing (bool ICanEdit);
@@ -242,7 +243,6 @@ static void Ins_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Centres;
-   extern const char *Txt_Print;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -258,28 +258,24 @@ static void Ins_Configuration (bool PrintView)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      /***** Links to show centres, to print view and to upload logo *****/
-      if (!PrintView)
+      /***** Contextual links *****/
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 /* Link to print view */
-         Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",
-                                Txt_Print,Txt_Print);
-
 	 /* Link to upload logo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    Log_PutFormToChangeLogo (Sco_SCOPE_INS);
+	 Log_PutFormToChangeLogo (Sco_SCOPE_INS);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,NULL);
+      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                         Ins_PutIconToPrint);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
+      fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -290,8 +286,10 @@ static void Ins_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
+
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Institution full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -488,9 +486,23 @@ static void Ins_Configuration (bool PrintView)
 		  Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Gbl.CurrentIns.Ins.InsCod));
 	}
 
-      /***** End of the frame *****/
-      Lay_EndRoundFrameTable ();
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/********** Put icon to print the configuration of an institution ************/
+/*****************************************************************************/
+
+static void Ins_PutIconToPrint (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",Txt_Print,NULL);
   }
 
 /*****************************************************************************/
