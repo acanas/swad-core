@@ -85,6 +85,7 @@ typedef enum
 /*****************************************************************************/
 
 static void Deg_Configuration (bool PrintView);
+static void Deg_PutIconToPrint (void);
 
 static void Deg_ListDegreeTypes (void);
 static void Deg_WriteSelectorOfDegree (void);
@@ -301,7 +302,6 @@ static void Deg_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Courses;
-   extern const char *Txt_Print;
    extern const char *Txt_Degree;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -314,28 +314,23 @@ static void Deg_Configuration (bool PrintView)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       /***** Links to show courses, to print view and to upload logo *****/
-      if (!PrintView)
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	  /* Link to print view */
-         Lay_PutContextualLink (ActPrnDegInf,NULL,"print64x64.png",
-                                Txt_Print,Txt_Print);
-
 	 /* Link to upload logo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    Log_PutFormToChangeLogo (Sco_SCOPE_DEG);
+	 Log_PutFormToChangeLogo (Sco_SCOPE_DEG);
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
-
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,NULL);
+      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                         Deg_PutIconToPrint);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
+      fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -347,8 +342,10 @@ static void Deg_Configuration (bool PrintView)
                Gbl.CurrentDeg.Deg.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
+
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Degree full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -478,9 +475,23 @@ static void Deg_Configuration (bool PrintView)
 		  Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,Gbl.CurrentDeg.Deg.DegCod));
 	}
 
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
       /***** End frame *****/
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/************* Put icon to print the configuration of a degree ***************/
+/*****************************************************************************/
+
+static void Deg_PutIconToPrint (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnDegInf,NULL,"print64x64.png",Txt_Print,NULL);
   }
 
 /*****************************************************************************/

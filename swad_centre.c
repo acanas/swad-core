@@ -543,8 +543,11 @@ static void Ctr_Configuration (bool PrintView)
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
 
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
       /***** End frame *****/
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
      }
   }
 
