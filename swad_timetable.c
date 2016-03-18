@@ -118,6 +118,9 @@ static void TT_GetParamsTimeTable (void);
 static void TT_PutContextualIcons (void);
 static void TT_ShowSelectorWhichGrps (Act_Action_t Action);
 
+static void TT_PutIconToViewCrsTT (void);
+static void TT_PutIconToViewMyTT (void);
+
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod);
 static void TT_WriteTutTimeTableIntoDB (long UsrCod);
 static void TT_CreatTimeTableFromDB (long UsrCod);
@@ -340,18 +343,12 @@ static void TT_ShowSelectorWhichGrps (Act_Action_t Action)
 
 void TT_EditCrsTimeTable (void)
   {
-   extern const char *Txt_Show_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-
-   /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock64x64.gif",
-                          Txt_Show_timetable,Txt_Show_timetable);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                        TT_PutIconToViewCrsTT);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
@@ -362,20 +359,40 @@ void TT_EditCrsTimeTable (void)
 
 void TT_ShowMyTutTimeTable (void)
   {
-   extern const char *Txt_Show_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-
-   /***** Link (form) to see my timetable *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock64x64.gif",
-                          Txt_Show_timetable,Txt_Show_timetable);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                        TT_PutIconToViewMyTT);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Put icon to view course timetable ********************/
+/*****************************************************************************/
+
+static void TT_PutIconToViewCrsTT (void)
+  {
+   extern const char *Txt_Show_timetable;
+
+   /***** Link (form) to see course timetable *****/
+   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock64x64.gif",
+                          Txt_Show_timetable,NULL);
+  }
+
+/*****************************************************************************/
+/************************ Put icon to view my timetable **********************/
+/*****************************************************************************/
+
+static void TT_PutIconToViewMyTT (void)
+  {
+   extern const char *Txt_Show_timetable;
+
+   /***** Link (form) to see my timetable *****/
+   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock64x64.gif",
+                          Txt_Show_timetable,NULL);
   }
 
 /*****************************************************************************/
