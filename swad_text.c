@@ -9251,6 +9251,27 @@ const char *Txt_documents_management_area =
 	"zona de gest&atilde;o de documentos";
 #endif
 
+const char *Txt_Done =
+#if   L==1
+	"Fet";
+#elif L==2
+	"Gemacht";
+#elif L==3
+	"Done";
+#elif L==4
+	"Hecho";
+#elif L==5
+	"Termin&eacute;";
+#elif L==6
+	"Hecho";	// Okoteve traducción
+#elif L==7
+	"Fatto";
+#elif L==8
+	"Gotowe";
+#elif L==9
+	"Feito";
+#endif
+
 const char *Txt_Done_assess_exam =
 #if   L==1
 	"He acabat; corregir examen";
@@ -11378,27 +11399,6 @@ const char *Txt_File_size =
 	"Rozmiar pliku";
 #elif L==9
 	"Tamanho do arquivo";
-#endif
-
-const char *Txt_FILE_UPLOAD_Done =
-#if   L==1
-	"Fet";
-#elif L==2
-	"Gemacht";
-#elif L==3
-	"Done";
-#elif L==4
-	"Hecho";
-#elif L==5
-	"Termin&eacute;";
-#elif L==6
-	"Hecho";	// Okoteve traducción
-#elif L==7
-	"Fatto";
-#elif L==8
-	"Gotowe";
-#elif L==9
-	"Feito";
 #endif
 
 const char *Txt_File_with_the_logo =
@@ -45682,36 +45682,6 @@ const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_
 #elif L==9
 	"This post has been banned,"
 	" probably for not satisfy the rules of the forums.";			// Necessita de tradução
-#endif
-
-const char *Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_ =
-#if   L==1
-	"Aquest programa ha estat editat pels professors de l'assignatura"
-	" i podria no coincidir amb el programa oficial.";
-#elif L==2
-	"This syllabus has been edited by teachers of the course"
-	" and may not match the official syllabus.";			// Need Übersetzung
-#elif L==3
-	"This syllabus has been edited by teachers of the course"
-	" and may not match the official syllabus.";
-#elif L==4
-	"Este programa ha sido editado por los profesores de la asignatura"
-	" y podr&iacute;a no coincidir con el programa oficial.";
-#elif L==5
-	"This syllabus has been edited by teachers of the course"
-	" and may not match the official syllabus.";			// Besoin de traduction
-#elif L==6
-	"Este programa ha sido editado por los profesores de la asignatura"
-	" y podr&iacute;a no coincidir con el programa oficial.";	// Okoteve traducción
-#elif L==7
-	"Questo programma &egrave; stato editato per i professori del corso"
-	" e potrebbe non corrispondere al programma ufficiale.";
-#elif L==8
-	"This syllabus has been edited by teachers of the course"
-	" and may not match the official syllabus.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"This syllabus has been edited by teachers of the course"
-	" and may not match the official syllabus.";			// Necessita de tradução
 #endif
 
 const char *Txt_This_survey_has_no_questions =

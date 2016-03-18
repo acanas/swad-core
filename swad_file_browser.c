@@ -7879,7 +7879,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_FILE_UPLOAD_Done;
+   extern const char *Txt_Done;
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
    /***** Start frame *****/
@@ -7949,7 +7949,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
       Par_PutHiddenParamChar ("FullTree",'Y');
 
    /***** Button to send *****/
-   Lay_PutConfirmButton (Txt_FILE_UPLOAD_Done);
+   Lay_PutConfirmButton (Txt_Done);
 
    /***** End form *****/
    Act_FormEnd ();

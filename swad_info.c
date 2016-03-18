@@ -920,22 +920,15 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
-   extern const char *Txt_View;
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
-   Inf_InfoSrc_t InfoSrc,InfoSrcSelected;
+   Inf_InfoSrc_t InfoSrc;
+   Inf_InfoSrc_t InfoSrcSelected;
    bool MustBeRead;
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
-
-   /***** Put link to view *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL,
-			  "eye-on64x64.png",
-			  Txt_View,Txt_View);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get info source from database *****/
    Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);

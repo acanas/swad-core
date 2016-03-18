@@ -125,17 +125,25 @@
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
 
+// TODO: Show tagline at top, near logo
+// TODO: Show big header h1 when no country specified
+// TODO: Integrate "Print" link
+// TODO: Remove "View" link from course info
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.149 (2016-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.149.1 (2016-03-18)"
 #define CSS_FILE		"swad15.146.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.149.1: Mar 18, 2016	Button Done after internal editor of syllabus.
+					Focus on new item in internal editor of syllabus.
+					Removed links to view course info. (195920 lines)
         Version 15.149:   Mar 17, 2016	Icon to edit course info integrated in frame.
 					Code refacgtoring related to course info. (195949 lines)
         Version 15.148:   Mar 17, 2016	Icon to see/edit file browser integrated in frame. (195914 lines)

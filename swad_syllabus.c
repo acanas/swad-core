@@ -180,13 +180,12 @@ void Syl_GetParamItemNumber (void)
 void Syl_EditSyllabus (void)
   {
    extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_View;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_;
+   extern const char *Txt_Done;
    extern const char *Txt_The_syllabus_lectures_of_the_course_X_is_not_available;
    extern const char *Txt_The_syllabus_practicals_of_the_course_X_is_not_available;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit;
+   bool PutIconToEdit;
 
    /***** Set syllabus type and load syllabus from XML file to memory *****/
    Syl_SetSyllabusTypeAndLoadToMemory ();
@@ -197,21 +196,14 @@ void Syl_EditSyllabus (void)
 
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
-      if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
-	{
-	 /***** Put link to view *****/
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Lay_PutContextualLink (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL,
-				"eye-on64x64.png",
-				Txt_View,Txt_View);
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
-      /***** Start of table *****/
+      /***** Start frame *****/
+      ICanEdit = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+      PutIconToEdit = ICanEdit && !Gbl.CurrentCrs.Syllabus.EditionIsActive;
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-                           ICanEdit ? Inf_PutIconToEditInfo :
-                                      NULL);
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">");
+                           PutIconToEdit ? Inf_PutIconToEditInfo :
+                                           NULL);
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\" style=\"width:100%%\">");
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus ();
@@ -220,14 +212,19 @@ void Syl_EditSyllabus (void)
       if (Gbl.CurrentCrs.Syllabus.EditionIsActive && LstItemsSyllabus.NumItems == 0)
          Syl_ShowRowSyllabus (0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
 
-      /***** End of table *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
-      Lay_EndRoundFrame ();
 
-      if (!Gbl.CurrentCrs.Syllabus.EditionIsActive)
-         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">"
-                            "<br />%s</div>",
-                  Txt_This_syllabus_has_been_edited_by_teachers_of_the_course_);
+      if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
+	{
+	 /***** Button to view *****/
+         Act_FormStart (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
+	 Lay_PutConfirmButton (Txt_Done);
+	 Act_FormEnd ();
+	}
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
    else
      {
@@ -914,8 +911,10 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
                             (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                        ActModIteSylPra));
    Syl_PutParamNumItem (NumItem);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\""
-	              " size=\"80\" maxlength=\"%u\" value=\"%s\""
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\"");
+   if (NewItem)
+      fprintf (Gbl.F.Out," autofocus");
+   fprintf (Gbl.F.Out," size=\"80\" maxlength=\"%u\" value=\"%s\""
                       " placeholder=\"%s\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
 	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
