@@ -1153,7 +1153,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Act_FormStart (ActRenGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
-	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
+	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                MAX_LENGTH_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
@@ -2079,7 +2079,7 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpTypName\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"12\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             MAX_LENGTH_GROUP_TYPE_NAME,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 

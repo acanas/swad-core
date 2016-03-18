@@ -65,7 +65,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /*****************************************************************************/
 
 static void Mai_GetParamMaiOrderType (void);
-static void Mai_PutFormToEditMailDomains (void);
+static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
@@ -98,13 +98,12 @@ void Mai_SeeMailDomains (void)
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
 
-   /***** Put link (form) to edit mail domains *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Mai_PutFormToEditMailDomains ();
-
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Mail_domains_allowed_for_notifications);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Mail_domains_allowed_for_notifications,
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
+                                                                NULL);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	              "<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
@@ -145,7 +144,8 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -168,17 +168,14 @@ static void Mai_GetParamMaiOrderType (void)
   }
 
 /*****************************************************************************/
-/******************** Put a mail (form) to edit mail domains *****************/
+/************************ Put icon to edit mail domains **********************/
 /*****************************************************************************/
 
-static void Mai_PutFormToEditMailDomains (void)
+static void Mai_PutIconToEditMailDomains (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiMai,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActEdiMai,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
