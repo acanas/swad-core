@@ -692,7 +692,7 @@ a:hover						/* Default ==> underlined */
 #main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{
 	opacity:1;
-	transform:scale(1.2,1.2);
+	transform:scale(1.25,1.25);
 	}
 #main_horizontal .MENU_ICON
 	{

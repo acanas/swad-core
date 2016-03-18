@@ -129,19 +129,19 @@
 // TODO: Move info about number of files to bottom of file browsers
 // TODO: Show tagline at top, near logo
 // TODO: Show big header h1 when no country specified
-// TODO: Integrate "Print" link
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.150.7 (2016-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.150.8 (2016-03-18)"
 #define CSS_FILE		"swad15.150.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.150.8: Mar 18, 2016	Icons to print/show-all guests integrated in frame. (195967 lines)
         Version 15.150.7: Mar 18, 2016	Icon to print degree configuration integrated in frame. (195970 lines)
         Version 15.150.6: Mar 18, 2016	Icon to print centre configuration integrated in frame. (195959 lines)
         Version 15.150.5: Mar 18, 2016	Icon to print institution configuration integrated in frame. (195961 lines)
