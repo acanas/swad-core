@@ -1225,12 +1225,10 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,void (*FunctionToD
        fprintf (Gbl.F.Out," style=\"box-sizing:border-box; width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
    if (FunctionToDrawContextualIcons)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
       FunctionToDrawContextualIcons ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   fprintf (Gbl.F.Out,"</div>");
 
    if (Title)
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">"

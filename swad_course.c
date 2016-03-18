@@ -74,6 +74,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /*****************************************************************************/
 
 static void Crs_Configuration (bool PrintView);
+static void Crs_PutIconToPrint (void);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
@@ -141,7 +142,6 @@ void Crs_PrintConfiguration (void)
 static void Crs_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Print;
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -164,31 +164,22 @@ static void Crs_Configuration (bool PrintView)
    /***** Messages and links above the frame *****/
    if (!PrintView)
      {
-      /***** Links to print view and request enrollment *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Link to print view */
-      Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",
-                             Txt_Print,Txt_Print);
-
       /* Link to request enrollment in the current course */
       if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
+	{
+         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Enr_PutLinkToRequestSignUp ();
-
-      fprintf (Gbl.F.Out,"</div>");
-
-      /* Start form */
-      if (IsForm)
-         Act_FormStart (ActChgCrsLog);
+         fprintf (Gbl.F.Out,"</div>");
+	}
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,NULL);
+   Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                      Crs_PutIconToPrint);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
+   fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -199,9 +190,15 @@ static void Crs_Configuration (bool PrintView)
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"<br />%s"
-                      "</td>"
-		      "</tr>",
+                      "</div>",
             Gbl.CurrentCrs.Crs.FullName);
+
+   /***** Start form *****/
+   if (IsForm)
+      Act_FormStart (ActChgCrsLog);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -377,15 +374,29 @@ static void Crs_Configuration (bool PrintView)
                Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
      }
 
-   /***** Send button and end frame *****/
-   if (IsForm)
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
-   else
-      Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
 
-   /***** End form *****/
+   /***** Send button and end form *****/
    if (IsForm)
+     {
+      Lay_PutConfirmButton (Txt_Save);
       Act_FormEnd ();
+     }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/************* Put icon to print the configuration of a course ***************/
+/*****************************************************************************/
+
+static void Crs_PutIconToPrint (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",Txt_Print,NULL);
   }
 
 /*****************************************************************************/
