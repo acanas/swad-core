@@ -172,11 +172,16 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
-static void Usr_PutIconToPrintGuests (void);
-static void Usr_PutIconToShowAllDataGuests (void);
-static void Usr_PutLinkToShowGuestsAllDataParams (void);
-static void Usr_PutLinkToShowStdsAllDataParams (void);
-static void Usr_PutLinkToShowTchsAllDataParams (void);
+
+static void Usr_PutIconToPrintGsts (void);
+static void Usr_PutIconToPrintStds (void);
+static void Usr_PutIconToPrintTchs (void);
+static void Usr_PutIconToShowGstsAllData (void);
+static void Usr_PutIconToShowStdsAllData (void);
+static void Usr_PutIconToShowTchsAllData (void);
+static void Usr_ShowGstsAllDataParams (void);
+static void Usr_ShowStdsAllDataParams (void);
+static void Usr_ShowTchsAllDataParams (void);
 
 static void Usr_PutLinkToListOfficialStudents (void);
 
@@ -6661,8 +6666,8 @@ void Usr_SeeGuests (void)
 
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintGuests :
-                                                                          Usr_PutIconToShowAllDataGuests);
+                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintGsts :
+                                                                          Usr_PutIconToShowGstsAllData);
 
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
@@ -6718,42 +6723,6 @@ void Usr_SeeGuests (void)
    Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
   }
 
-static void Usr_PutIconToPrintGuests (void)
-  {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnGstPho,Usr_PutLinkToShowGuestsAllDataParams,
-			  "print64x64.png",Txt_Print,NULL);
-  }
-
-static void Usr_PutIconToShowAllDataGuests (void)
-  {
-   extern const char *Txt_Show_all_data;
-
-   Lay_PutContextualLink (ActLstGstAll,Usr_PutLinkToShowGuestsAllDataParams,
-			  "table64x64.gif",Txt_Show_all_data,NULL);
-  }
-
-static void Usr_PutLinkToShowGuestsAllDataParams (void)
-  {
-   Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstGstAll);
-  }
-
-static void Usr_PutLinkToShowStdsAllDataParams (void)
-  {
-   Grp_PutParamsCodGrps ();
-   Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstStdAll);
-  }
-
-static void Usr_PutLinkToShowTchsAllDataParams (void)
-  {
-   Sco_PutParamScope (Gbl.Scope.Current);
-   Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstTchAll);
-  }
-
 /*****************************************************************************/
 /******************** Show list or class photo of students *******************/
 /*****************************************************************************/
@@ -6762,8 +6731,6 @@ void Usr_SeeStudents (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
-   extern const char *Txt_Print;
-   extern const char *Txt_Show_all_data;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
    bool ICanViewRecords;
@@ -6846,31 +6813,11 @@ void Usr_SeeStudents (void)
          /***** Get list of selected users *****/
          Usr_GetListsSelectedUsrs ();
 
-         switch (Gbl.Usrs.Me.ListType)
-           {
-            case Usr_CLASS_PHOTO:
-                /***** Link to print view *****/
-	       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-               Lay_PutContextualLink (ActPrnStdPho,Usr_PutLinkToShowStdsAllDataParams,
-                                      "print64x64.png",
-                                      Txt_Print,Txt_Print);
-	       fprintf (Gbl.F.Out,"</div>");
-	       break;
-	    case Usr_LIST:
-	       if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
-		 {
-		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-                  Lay_PutContextualLink (ActLstStdAll,Usr_PutLinkToShowStdsAllDataParams,
-                                         "table64x64.gif",
-                                         Txt_Show_all_data,Txt_Show_all_data);
-		  fprintf (Gbl.F.Out,"</div>");
-		 }
-	       break;
-           }
-
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],NULL);
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintStds :
+                               ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
+                        	                                          NULL));
 
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
@@ -6957,8 +6904,6 @@ void Usr_SeeTeachers (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
-   extern const char *Txt_Print;
-   extern const char *Txt_Show_all_data;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_records;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
@@ -7015,32 +6960,11 @@ void Usr_SeeTeachers (void)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs))
 	{
-	 /***** Link to print view *****/
-         switch (Gbl.Usrs.Me.ListType)
-           {
-            case Usr_CLASS_PHOTO:
-               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-               Lay_PutContextualLink (ActPrnTchPho,Usr_PutLinkToShowTchsAllDataParams,
-                                      "print64x64.png",
-                                      Txt_Print,Txt_Print);
-	       fprintf (Gbl.F.Out,"</div>");
-	       break;
-            case Usr_LIST:
-	       if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-		 {
-		  /****** Link to show all the data ******/
-		  fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-                  Lay_PutContextualLink (ActLstTchAll,Usr_PutLinkToShowTchsAllDataParams,
-                                         "table64x64.gif",
-                                         Txt_Show_all_data,Txt_Show_all_data);
-		  fprintf (Gbl.F.Out,"</div>");
-		 }
-               break;
-           }
-
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],NULL);
-
+         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintTchs :
+                               ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
+                        	                                          NULL));
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
 
@@ -7103,6 +7027,78 @@ void Usr_SeeTeachers (void)
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
+  }
+
+/*****************************************************************************/
+/***************** Functions used to print lists of users ********************/
+/*****************************************************************************/
+
+static void Usr_PutIconToPrintGsts (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnGstPho,Usr_ShowGstsAllDataParams,
+			  "print64x64.png",Txt_Print,NULL);
+  }
+
+static void Usr_PutIconToPrintStds (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnStdPho,Usr_ShowStdsAllDataParams,
+			  "print64x64.png",Txt_Print,NULL);
+  }
+
+static void Usr_PutIconToPrintTchs (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnTchPho,Usr_ShowTchsAllDataParams,
+			  "print64x64.png",Txt_Print,NULL);
+  }
+
+static void Usr_PutIconToShowGstsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
+			  "table64x64.gif",Txt_Show_all_data,NULL);
+  }
+
+static void Usr_PutIconToShowStdsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
+			  "table64x64.gif",Txt_Show_all_data,NULL);
+  }
+
+static void Usr_PutIconToShowTchsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
+			  "table64x64.gif",Txt_Show_all_data,NULL);
+  }
+
+static void Usr_ShowGstsAllDataParams (void)
+  {
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstGstAll);
+  }
+
+static void Usr_ShowStdsAllDataParams (void)
+  {
+   Grp_PutParamsCodGrps ();
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstStdAll);
+  }
+
+static void Usr_ShowTchsAllDataParams (void)
+  {
+   Sco_PutParamScope (Gbl.Scope.Current);
+   Usr_PutParamListWithPhotos ();
+   Usr_PutExtraParamsUsrList (ActLstTchAll);
   }
 
 /*****************************************************************************/
