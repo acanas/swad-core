@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plg_PutFormToEditPlugins (void);
+static void Plg_PutIconToEditPlugins (void);
 static void Plg_ListPluginsForEdition (void);
 static void Plg_PutParamPlgCod (long PlgCod);
 static void Plg_GetListPlugins (void);
@@ -90,15 +90,14 @@ void Plg_ListPlugins (void)
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
 
-   /***** Put link (form) to edit plugins *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Plg_PutFormToEditPlugins ();
-
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Plugins);
+   Lay_StartRoundFrame (NULL,Txt_Plugins,
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
+                                                                NULL);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                      "<tr>"
                       "<th style=\"width:40px;\">"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -140,24 +139,22 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
   }
 
 /*****************************************************************************/
-/********************** Put a link (form) to edit plugins ********************/
+/*************************** Put icon to edit plugins ************************/
 /*****************************************************************************/
 
-static void Plg_PutFormToEditPlugins (void)
+static void Plg_PutIconToEditPlugins (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiPlg,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActEdiPlg,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
