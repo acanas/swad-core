@@ -234,8 +234,16 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    extern const char *Txt_Update_students;
    extern const char *Txt_Update_students_according_to_selected_groups;
    unsigned NumGrpTyp;
+   bool ICanEdit = !Gbl.Form.Inside &&
+	           (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Groups,
+                        ICanEdit ? Grp_PutIconToEditGroups :
+                                   NULL);
 
    /***** Start form to update the students listed
           depending on the groups selected *****/
@@ -246,9 +254,6 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 
    /***** Put parameters needed depending on the action *****/
    Usr_PutExtraParamsUsrList (NextAction);
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Groups,NULL);
 
    /***** Select all groups *****/
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
@@ -283,11 +288,11 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
-
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</div>");
   }
 
