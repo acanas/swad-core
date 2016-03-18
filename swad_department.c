@@ -99,7 +99,7 @@ void Dpt_SeeDepts (void)
       Lay_StartRoundFrame (NULL,Txt_Departments,
                            Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                   NULL);
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;

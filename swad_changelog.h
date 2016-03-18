@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.149.1 (2016-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.150 (2016-03-18)"
 #define CSS_FILE		"swad15.146.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.150:   Mar 18, 2016	Icon to edit timetable integrated in frame. (195923 lines)
         Version 15.149.1: Mar 18, 2016	Button Done after internal editor of syllabus.
 					Focus on new item in internal editor of syllabus.
 					Removed links to view course info. (195920 lines)

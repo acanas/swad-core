@@ -96,7 +96,7 @@ void Plc_SeePlaces (void)
       Lay_StartRoundFrame (NULL,Txt_Places,
                            Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
                         	                                   NULL);
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;

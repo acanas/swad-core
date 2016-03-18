@@ -115,19 +115,19 @@ bool TimeTableHoursChecked[TT_HOURS_PER_DAY*2];
 
 static void TT_ShowTimeTableGrpsSelected (void);
 static void TT_GetParamsTimeTable (void);
+static void TT_PutContextualIcons (void);
 static void TT_ShowSelectorWhichGrps (Act_Action_t Action);
 
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod);
 static void TT_WriteTutTimeTableIntoDB (long UsrCod);
-static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCod);
+static void TT_CreatTimeTableFromDB (long UsrCod);
 static void TT_ModifTimeTable (void);
-static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType);
+static void TT_DrawTimeTable (void);
 static void TT_TimeTableDrawAdjustRow (void);
 static void TT_TimeTableDrawDaysCells (void);
 static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour);
 static void TT_DrawCellAlignTimeTable (void);
-static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
-                                  unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
+static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place);
 
 /*****************************************************************************/
@@ -221,14 +221,9 @@ static void TT_GetParamsTimeTable (void)
 
 void TT_ShowClassTimeTable (void)
   {
-   extern const char *Txt_Edit;
-   extern const char *Txt_Edit_office_hours;
-   extern const char *Txt_Print;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-   TT_TimeTableType_t TimeTableType = TT_COURSE_TIMETABLE;	// Initialized to avoid warning
-   bool PrintView;
-   bool PutEditCrsTT;
-   bool PutEditOfficeHours;
+   bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
+	             Gbl.Action.Act == ActPrnMyTT);;
 
    /***** Initializations *****/
    switch (Gbl.Action.Act)
@@ -236,56 +231,37 @@ void TT_ShowClassTimeTable (void)
       case ActSeeCrsTT:
       case ActPrnCrsTT:
       case ActChgCrsTT1stDay:
-         TimeTableType = TT_COURSE_TIMETABLE;
+         Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
 	 break;
       case ActSeeMyTT:
       case ActPrnMyTT:
       case ActChgMyTT1stDay:
-         TimeTableType = TT_MY_TIMETABLE;
+         Gbl.TimeTable.Type = TT_MY_TIMETABLE;
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
      }
-   PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
-	        Gbl.Action.Act == ActPrnMyTT);
-   PutEditCrsTT = (TimeTableType == TT_COURSE_TIMETABLE &&
-	           !PrintView &&
-                   Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
-   PutEditOfficeHours = (TimeTableType == TT_MY_TIMETABLE &&
-	                 !PrintView &&
-                         (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
+   Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
+   Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT = (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
+	                                             !PrintView &&
+                                                     Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+   Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours = (Gbl.TimeTable.Type == TT_MY_TIMETABLE &&
+	                                                   !PrintView &&
+                                                           (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
 
-   /***** Put buttons *****/
-   if (PutEditCrsTT || PutEditOfficeHours || !PrintView)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      if (PutEditCrsTT)
-         Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
-                                "edit64x64.png",
-                                Txt_Edit,Txt_Edit);
-
-      if (PutEditOfficeHours)
-         Lay_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",
-                                Txt_Edit_office_hours,Txt_Edit_office_hours);
-
-      if (!PrintView)
-         Lay_PutContextualLink (TimeTableType == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-                                                                       ActPrnMyTT,
-                                Grp_PutParamWhichGrps,"print64x64.png",
-                                Txt_Print,Txt_Print);
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Start frame *****/
-   Lay_StartRoundFrameTable ("100%",0,Txt_TIMETABLE_TYPES[TimeTableType]);
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                        (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
+                         Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
+                         Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
+                                                                       NULL);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
    /***** Start time table drawing *****/
-   if (TimeTableType == TT_COURSE_TIMETABLE)
+   if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (1,PrintView,false,
 				 Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
@@ -298,11 +274,11 @@ void TT_ShowClassTimeTable (void)
 			 "<td>");
 
       /***** Select whether show only my groups or all groups *****/
-      TT_ShowSelectorWhichGrps (TimeTableType == TT_COURSE_TIMETABLE ? ActSeeCrsTT :
+      TT_ShowSelectorWhichGrps (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActSeeCrsTT :
 	                                                               ActSeeMyTT);
 
       /***** Show form to change first day of week *****/
-      Cal_ShowIntegratedFormToSelFirstDayOfWeek (TimeTableType == TT_COURSE_TIMETABLE ? ActChgCrsTT1stDay :
+      Cal_ShowIntegratedFormToSelFirstDayOfWeek (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActChgCrsTT1stDay :
 	                                                                                ActChgMyTT1stDay);
 
       fprintf (Gbl.F.Out,"</td>"
@@ -312,12 +288,39 @@ void TT_ShowClassTimeTable (void)
    /***** Show the time table *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CENTER_MIDDLE\">");
-   TT_ShowTimeTable (TimeTableType,Gbl.Usrs.Me.UsrDat.UsrCod);
+   TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	              "</tr>"
+	              "</table>");
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons above the time table *****************/
+/*****************************************************************************/
+
+static void TT_PutContextualIcons (void)
+  {
+   extern const char *Txt_Edit;
+   extern const char *Txt_Edit_office_hours;
+   extern const char *Txt_Print;
+
+   if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
+      Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
+			     "edit64x64.png",
+			     Txt_Edit,NULL);
+
+   if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
+      Lay_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",
+			     Txt_Edit_office_hours,NULL);
+
+   if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
+      Lay_PutContextualLink (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+								    ActPrnMyTT,
+			     Grp_PutParamWhichGrps,"print64x64.png",
+			     Txt_Print,NULL);
   }
 
 /*****************************************************************************/
@@ -347,8 +350,9 @@ void TT_EditCrsTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Editable time table *****/
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[TT_COURSE_TIMETABLE],NULL);
-   TT_ShowTimeTable (TT_COURSE_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+   TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
 
@@ -368,8 +372,9 @@ void TT_ShowMyTutTimeTable (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Time table *****/
-   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[TT_TUTOR_TIMETABLE],NULL);
-   TT_ShowTimeTable (TT_TUTOR_TIMETABLE,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
+   Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+   TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
 
@@ -377,10 +382,10 @@ void TT_ShowMyTutTimeTable (void)
 /*********** Show course timetable or tutor timetable of a teacher ***********/
 /*****************************************************************************/
 
-void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
+void TT_ShowTimeTable (long UsrCod)
   {
    /***** Create an internal table with the timetable from database *****/
-   TT_CreatTimeTableFromDB (TimeTableType,UsrCod);
+   TT_CreatTimeTableFromDB (UsrCod);
 
    /***** If timetable must be modified... *****/
    if (Gbl.Action.Act == ActChgCrsTT ||
@@ -393,7 +398,7 @@ void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
       TT_ModifTimeTable ();
 
       /* Write a new timetable in database */
-      switch (TimeTableType)
+      switch (Gbl.TimeTable.Type)
         {
          case TT_COURSE_TIMETABLE:
             TT_WriteCrsTimeTableIntoDB (Gbl.CurrentCrs.Crs.CrsCod);
@@ -406,11 +411,11 @@ void TT_ShowTimeTable (TT_TimeTableType_t TimeTableType,long UsrCod)
         }
 
       /* Get a new table from database */
-      TT_CreatTimeTableFromDB (TimeTableType,UsrCod);
+      TT_CreatTimeTableFromDB (UsrCod);
      }
 
    /***** Draw timetable *****/
-   TT_DrawTimeTable (TimeTableType);
+   TT_DrawTimeTable ();
   }
 
 /*****************************************************************************/
@@ -492,7 +497,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
 /********** Create an internal table with timetable from database ************/
 /*****************************************************************************/
 
-static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCod)
+static void TT_CreatTimeTableFromDB (long UsrCod)
   {
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
    char Query[4096];
@@ -530,7 +535,7 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
         }
 
    /***** Get timetable from database *****/
-   switch (TimeTableType)
+   switch (Gbl.TimeTable.Type)
      {
       case TT_MY_TIMETABLE:
          switch (Gbl.CurrentCrs.Grps.WhichGrps)
@@ -608,8 +613,8 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
      {
       row = mysql_fetch_row (mysql_res);
 
-      if (TimeTableType == TT_MY_TIMETABLE ||
-          TimeTableType == TT_COURSE_TIMETABLE)
+      if (Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
+          Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
          /* Group code */
          if (sscanf (row[6],"%ld",&GrpCod) != 1)
             GrpCod = -1;
@@ -632,7 +637,7 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
 	 Lay_ShowErrorAndExit ("Wrong duration in timetable.");
 
       /* Type of class */
-      switch (TimeTableType)
+      switch (Gbl.TimeTable.Type)
         {
          case TT_COURSE_TIMETABLE:
          case TT_MY_TIMETABLE:
@@ -692,13 +697,13 @@ static void TT_CreatTimeTableFromDB (TT_TimeTableType_t TimeTableType,long UsrCo
                  }
 
                /* Group and place */
-               switch (TimeTableType)
+               switch (Gbl.TimeTable.Type)
                  {
                   case TT_MY_TIMETABLE:
                   case TT_COURSE_TIMETABLE:
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].CrsCod =
-                        (TimeTableType == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
-                                                            Gbl.CurrentCrs.Crs.CrsCod);
+                        (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
+                                                                 Gbl.CurrentCrs.Crs.CrsCod);
                      strcpy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Group,row[5]);
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].GrpCod = GrpCod;
                      // no break;
@@ -761,7 +766,7 @@ static void TT_ModifTimeTable (void)
 /********************* Draw timetable using internal table *******************/
 /*****************************************************************************/
 
-static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
+static void TT_DrawTimeTable (void)
   {
    bool Editing = false;
    unsigned DayColumn;	// Column from left (0) to right (6)
@@ -866,13 +871,11 @@ static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
               {
                if (ContinuousFreeMinicolumns)
                  {
-                  TT_TimeTableDrawCell (TimeTableType,
-                                        Day,Hour,Column-1,ContinuousFreeMinicolumns,
+                  TT_TimeTableDrawCell (Day,Hour,Column-1,ContinuousFreeMinicolumns,
                                         -1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1,NULL);
                   ContinuousFreeMinicolumns = 0;
                  }
-               TT_TimeTableDrawCell (TimeTableType,
-                                     Day,Hour,Column,TT_NUM_MINICOLUMNS_PER_DAY/ColumnsToDrawIncludingExtraColumn,
+               TT_TimeTableDrawCell (Day,Hour,Column,TT_NUM_MINICOLUMNS_PER_DAY/ColumnsToDrawIncludingExtraColumn,
 	                             TimeTable[Day][Hour].Columns[Column].CrsCod,
 				     TimeTable[Day][Hour].Columns[Column].HourType,
 	                             TimeTable[Day][Hour].Columns[Column].ClassType,
@@ -882,8 +885,7 @@ static void TT_DrawTimeTable (TT_TimeTableType_t TimeTableType)
                                      TimeTable[Day][Hour].Columns[Column].Place);
               }
          if (ContinuousFreeMinicolumns)
-            TT_TimeTableDrawCell (TimeTableType,
-                                  Day,Hour,Column-1,ContinuousFreeMinicolumns,
+            TT_TimeTableDrawCell (Day,Hour,Column-1,ContinuousFreeMinicolumns,
                                   -1L,TT_FREE_HOUR,TT_NO_CLASS,0,NULL,-1L,NULL);
         }
 
@@ -1057,8 +1059,7 @@ static void TT_DrawCellAlignTimeTable (void)
 /*************************** Write a timetable cell **************************/
 /*****************************************************************************/
 
-static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
-                                  unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
+static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place)
   {
    extern const char *Txt_unknown_course;
@@ -1158,7 +1159,7 @@ static void TT_TimeTableDrawCell (TT_TimeTableType_t TimeTableType,
 	 if (HourType != TT_FREE_HOUR) // If cell is not empty...
 	   {
 	    fprintf (Gbl.F.Out,"<span class=\"TT_TXT\">");
-	    if (TimeTableType == TT_MY_TIMETABLE)
+	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
                Crs_GetDataOfCourseByCod (&Crs);

@@ -558,7 +558,7 @@ static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
    Lay_StartRoundFrame (NULL,Gbl.Title,
                         ICanEdit ? Ins_PutIconToEditInstitutions :
                                    NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
    /***** Write all the institutions and their nuber of users *****/

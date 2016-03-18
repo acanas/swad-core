@@ -1590,7 +1590,7 @@ static void Inf_ShowPlainTxtInfo (void)
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL);
-      fprintf (Gbl.F.Out,"<table>");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1646,7 +1646,7 @@ static void Inf_ShowRichTxtInfo (void)
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL);
-      fprintf (Gbl.F.Out,"<table>");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)

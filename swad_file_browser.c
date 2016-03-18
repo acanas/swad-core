@@ -3478,7 +3478,7 @@ static void Brw_ShowFileBrowser (void)
                         FunctionToDrawContextualIcons);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">"
 	              "<tr>"
                       "<td class=\"CENTER_MIDDLE\" colspan=\"%u\">",
             Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type]);

@@ -223,8 +223,7 @@ void Fol_SuggestWhoToFollow (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start listing *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-			 " style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;

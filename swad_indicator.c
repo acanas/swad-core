@@ -90,16 +90,13 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrss;
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Indicators_of_courses);
-
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">");
+   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
 
    /***** Form to update indicators *****/
    /* Start form */
    Act_FormStart (ActReqStaCrs);
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
@@ -143,7 +140,7 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* Show only courses with a numer of indicators */
+   /* Show only courses with a number of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
@@ -181,11 +178,6 @@ void Ind_ReqIndicatorsCourses (void)
    /* End form */
    Act_FormEnd ();
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td class=\"CENTER_MIDDLE\">");
-
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
    if (Ind_GetIfShowBigList (NumCrss))
@@ -205,9 +197,7 @@ void Ind_ReqIndicatorsCourses (void)
      }
 
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

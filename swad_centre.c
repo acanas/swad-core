@@ -624,7 +624,7 @@ static void Ctr_ListCentresForSeeing (bool ICanEdit)
    Lay_StartRoundFrame (NULL,Gbl.Title,
                         ICanEdit ? Ctr_PutIconToEditFrames :
                                    NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
    /***** Write all the centres and their nuber of teachers *****/

@@ -504,7 +504,7 @@ void Cty_ListCountries2 (void)
    Lay_StartRoundFrame (NULL,Txt_Countries,
                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Cty_PutIconToEditCountries :
                                                                 NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
 	Order <= Cty_ORDER_BY_NUM_USRS;

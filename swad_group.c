@@ -1577,7 +1577,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
       Act_FormStart (ActChgGrp);
 
    /***** List the groups the user belongs to for change *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)

@@ -604,8 +604,7 @@ void Sta_AskShowGblHits (void)
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<section id=\"stat_form\">");
    Lay_StartRoundFrame (NULL,Txt_Statistics_of_all_visits,NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-                      " style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Start and end dates for the search *****/
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();

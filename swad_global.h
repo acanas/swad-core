@@ -605,12 +605,21 @@ struct Globals
      } Pag;
    struct
      {
-      unsigned Day,Hour,Column;
+      TT_TimeTableType_t Type;
+      unsigned Day;
+      unsigned Hour;
+      unsigned Column;
       TT_ClassType_t ClassType;
       unsigned Duration;
       char Place[TT_MAX_BYTES_PLACE+1];
       char Group[TT_MAX_BYTES_GROUP+1];
       long GrpCod;		// Group code (-1 if no group selected)
+      struct
+        {
+	 bool PutIconPrint;
+	 bool PutIconEditCrsTT;
+	 bool PutIconEditOfficeHours;
+        } ContextualIcons;
      } TimeTable;
    struct
      {

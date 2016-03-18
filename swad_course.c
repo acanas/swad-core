@@ -1153,7 +1153,7 @@ static void Crs_ListCoursesForSeeing (bool ICanEdit)
    Lay_StartRoundFrame (NULL,Gbl.Title,
                         ICanEdit ? Crs_PutIconToEditCourses :
                                    NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Crs_PutHeadCoursesForSeeing ();
 
    /***** List the courses *****/

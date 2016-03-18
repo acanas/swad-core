@@ -89,7 +89,7 @@ void Ban_SeeBanners (void)
    Lay_StartRoundFrame ("300px",Txt_Banners,Ban_PutFormToEditBanners);
 
    /***** Write all the banners *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    for (NumBan = 0;
 	NumBan < Gbl.Banners.Num;
 	NumBan++)

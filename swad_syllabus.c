@@ -203,7 +203,7 @@ void Syl_EditSyllabus (void)
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            PutIconToEdit ? Inf_PutIconToEditInfo :
                                            NULL);
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\" style=\"width:100%%\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_1\">");
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus ();

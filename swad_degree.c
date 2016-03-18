@@ -1150,7 +1150,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
    Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Deg_PutIconToEditDegTypes :
                                                                 NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Deg_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
@@ -1276,7 +1276,7 @@ static void Deg_ListDegreesForSeeing (bool ICanEdit)
    Lay_StartRoundFrame (NULL,Gbl.Title,
                         ICanEdit ? Deg_PutIconToEditDegrees :
                                    NULL);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Deg_PutHeadDegreesForSeeing ();
 
    /***** List the degrees *****/
