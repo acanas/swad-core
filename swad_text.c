@@ -23655,25 +23655,25 @@ const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...
 	"N&ordm;";
 #endif
 
-const char *Txt_No_information_available =
+const char *Txt_No_information =
 #if   L==1
-	"No hay informaci&oacute;n disponible.";	// Necessita traduccio
+	"No hi ha informaci&oacute;.";
 #elif L==2
-	"Keine Informationen verf&uuml;gbar.";
+	"Keine Informationen.";
 #elif L==3
-	"No information available.";
+	"No information.";
 #elif L==4
-	"No hay informaci&oacute;n disponible.";
+	"No hay informaci&oacute;n.";
 #elif L==5
-	"Aucune information disponible.";
+	"Aucune information.";
 #elif L==6
-	"No hay informaci&oacute;n disponible.";	// Okoteve traducción
+	"No hay informaci&oacute;n.";	// Okoteve traducción
 #elif L==7
-	"Nessuna informazione disponibile.";
+	"Nessuna informazione.";
 #elif L==8
 	"Brak informacji.";
 #elif L==9
-	"N&atilde;o h&aacute; informa&ccedil;&atilde;o dispon&iacute;vel.";
+	"N&atilde;o h&aacute; informa&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_No_institutions_have_been_created_in_this_country =

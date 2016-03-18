@@ -305,11 +305,13 @@ static void Inf_ShowRichTxtInfo (void);
 
 void Inf_ShowInfo (void)
   {
-   extern const char *Txt_No_information_available;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
+   extern const char *Txt_No_information;
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool ShowWarningNoInfo = false;
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
@@ -347,12 +349,7 @@ void Inf_ShowInfo (void)
    switch (InfoSrc)
      {
       case Inf_INFO_SRC_NONE:
-	 if (Gbl.CurrentCrs.Info.Type != Inf_INTRODUCTION)
-	    Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
-
-	 /* Put button to edit info */
-	 if (ICanEdit)
-	    Inf_PutButtonToEditInfo ();
+	 ShowWarningNoInfo = true;
          break;
       case Inf_INFO_SRC_EDITOR:
          switch (Gbl.CurrentCrs.Info.Type)
@@ -367,11 +364,7 @@ void Inf_ShowInfo (void)
             case Inf_FAQ:
             case Inf_LINKS:
             case Inf_ASSESSMENT:
-	       Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
-
-	       /* Put button to edit info */
-	       if (ICanEdit)
-		  Inf_PutButtonToEditInfo ();
+               ShowWarningNoInfo = true;
 	       break;
            }
          break;
@@ -389,6 +382,17 @@ void Inf_ShowInfo (void)
          /***** Check if file with URL exists *****/
 	 Inf_CheckAndShowURL ();
          break;
+     }
+
+   if (ShowWarningNoInfo)
+     {
+      Lay_StartRoundFrame ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+			   ICanEdit ? Inf_PutIconToEditInfo :
+				      NULL);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information);
+      if (ICanEdit)
+	 Inf_PutButtonToEditInfo ();
+      Lay_EndRoundFrame ();
      }
   }
 
@@ -715,7 +719,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 
 static void Inf_CheckAndShowPage (void)
   {
-   extern const char *Txt_No_information_available;
+   extern const char *Txt_No_information;
    const char *FileNameHTML;
    char PathRelFileHTML[PATH_MAX+1];
    char URL[PATH_MAX+1];
@@ -747,7 +751,7 @@ static void Inf_CheckAndShowPage (void)
 	 Inf_ShowPage (URL);
 	}
       else
-	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+	 Lay_ShowAlert (Lay_INFO,Txt_No_information);
      }
   }
 
@@ -826,7 +830,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
 
 static void Inf_CheckAndShowURL (void)
   {
-   extern const char *Txt_No_information_available;
+   extern const char *Txt_No_information;
    FILE *FileURL;
 
    /***** Check if file with URL exists *****/
@@ -839,10 +843,10 @@ static void Inf_CheckAndShowURL (void)
       if (Gbl.CurrentCrs.Info.URL[0])
 	 Inf_ShowPage (Gbl.CurrentCrs.Info.URL);
       else
-	 Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+	 Lay_ShowAlert (Lay_INFO,Txt_No_information);
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information);
   }
 
 /*****************************************************************************/
@@ -1576,7 +1580,7 @@ static bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
 static void Inf_ShowPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_information_available;
+   extern const char *Txt_No_information;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
@@ -1614,7 +1618,7 @@ static void Inf_ShowPlainTxtInfo (void)
       Lay_EndRoundFrame ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information);
   }
 
 /*****************************************************************************/
@@ -1624,7 +1628,7 @@ static void Inf_ShowPlainTxtInfo (void)
 static void Inf_ShowRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_information_available;
+   extern const char *Txt_No_information;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
    char PathFileMD[PATH_MAX+1];
@@ -1721,7 +1725,7 @@ static void Inf_ShowRichTxtInfo (void)
       Lay_EndRoundFrame ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information_available);
+      Lay_ShowAlert (Lay_INFO,Txt_No_information);
   }
 
 /*****************************************************************************/
