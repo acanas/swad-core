@@ -70,6 +70,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ctr_Configuration (bool PrintView);
+static void Ctr_PutIconToPrint (void);
 
 static void Ctr_ListCentres (void);
 static void Ctr_ListCentresForSeeing (bool ICanEdit);
@@ -250,7 +251,6 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Print;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -278,32 +278,25 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      /***** Links to show degrees, to print view
-             and to upload photo and logo *****/
-      if (!PrintView)
+      /***** Contextual links *****/
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-         /* Link to print view */
-         Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",
-                                Txt_Print,Txt_Print);
-
 	 /* Links to upload logo and photo */
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	   {
-	    Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
-	    Ctr_PutFormToChangeCtrPhoto (PhotoExists);
-	   }
+	 Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
+	 Ctr_PutFormToChangeCtrPhoto (PhotoExists);
 
          fprintf (Gbl.F.Out,"</div>");
 	}
 
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,NULL);
+      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                         Ctr_PutIconToPrint);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
+      fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -314,8 +307,7 @@ static void Ctr_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Centre photo *****/
       if (PhotoExists)
@@ -324,8 +316,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Ctr_GetPhotoAttribution (Gbl.CurrentCtr.Ctr.CtrCod,&PhotoAttribution);
 
 	 /* Photo image */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"DAT_SMALL CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 		     Gbl.CurrentCtr.Ctr.WWW);
@@ -342,14 +333,12 @@ static void Ctr_Configuration (bool PrintView)
 			      "CENTRE_PHOTO_SHOW");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"</a>");
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Photo attribution */
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
 	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtrPhoAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
@@ -358,20 +347,20 @@ static void Ctr_Configuration (bool PrintView)
 	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
 	    Act_FormEnd ();
-	    fprintf (Gbl.F.Out,"</td>"
-		               "</tr>");
+	    fprintf (Gbl.F.Out,"</div>");
 	   }
 	 else if (PhotoAttribution)
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"ATTRIBUTION\">"
+	    fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
 			       "%s"
-			       "</td>"
-			       "</tr>",
+			       "</div>",
 		     PhotoAttribution);
 
 	 /* Free memory used for photo attribution */
 	 Ctr_FreePhotoAttribution (&PhotoAttribution);
 	}
+
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -557,6 +546,17 @@ static void Ctr_Configuration (bool PrintView)
       /***** End frame *****/
       Lay_EndRoundFrameTable ();
      }
+  }
+
+/*****************************************************************************/
+/************* Put icon to print the configuration of a centre ***************/
+/*****************************************************************************/
+
+static void Ctr_PutIconToPrint (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print,NULL);
   }
 
 /*****************************************************************************/
