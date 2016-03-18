@@ -65,6 +65,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 /*****************************************************************************/
 
 static void Cty_Configuration (bool PrintView);
+static void Cty_PutIconToPrint (void);
 
 static void Cty_PutIconToEditCountries (void);
 
@@ -205,7 +206,6 @@ static void Cty_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Institutions;
-   extern const char *Txt_Print;
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
@@ -220,24 +220,12 @@ static void Cty_Configuration (bool PrintView)
 
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
-      if (!PrintView)
-	{
-	 /***** Links to show institutions and to print view  *****/
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-	 /* Link to print view */
-	 Lay_PutContextualLink (ActPrnCtyInf,NULL,"print64x64.png",
-	                        Txt_Print,Txt_Print);
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,NULL);
+      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                         Cty_PutIconToPrint);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"TITLE_LOCATION\">");
+      fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -246,8 +234,7 @@ static void Cty_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Country map (and link to WWW if exists) *****/
       if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
@@ -256,9 +243,7 @@ static void Cty_Configuration (bool PrintView)
 	 Cty_GetMapAttribution (Gbl.CurrentCty.Cty.CtyCod,&MapAttribution);
 
 	 /* Map image */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\""
-			    " class=\"DAT_SMALL CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
 		     Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language]);
@@ -266,14 +251,12 @@ static void Cty_Configuration (bool PrintView)
 			                                     "COUNTRY_MAP_SHOW");
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"</a>");
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Map attribution */
 	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
 	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
 	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
@@ -282,20 +265,20 @@ static void Cty_Configuration (bool PrintView)
 	       fprintf (Gbl.F.Out,"%s",MapAttribution);
 	    fprintf (Gbl.F.Out,"</textarea>");
 	    Act_FormEnd ();
-	    fprintf (Gbl.F.Out,"</td>"
-		               "</tr>");
+	    fprintf (Gbl.F.Out,"</div>");
            }
 	 else if (MapAttribution)
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"ATTRIBUTION\">"
+	    fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
 			       "%s"
-                               "</td>"
-			       "</tr>",
+                               "</div>",
 	             MapAttribution);
 
 	 /* Free memory used for map attribution */
 	 Cty_FreeMapAttribution (&MapAttribution);
 	}
+
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -455,9 +438,23 @@ static void Cty_Configuration (bool PrintView)
 		  Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Gbl.CurrentCty.Cty.CtyCod));
 	}
 
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
       /***** End frame *****/
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/************* Put icon to print the configuration of a course ***************/
+/*****************************************************************************/
+
+static void Cty_PutIconToPrint (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCtyInf,NULL,"print64x64.png",Txt_Print,NULL);
   }
 
 /*****************************************************************************/

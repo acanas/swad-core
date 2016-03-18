@@ -125,6 +125,7 @@
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
 
+// TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
 // TODO: Show tagline at top, near logo
 // TODO: Show big header h1 when no country specified
@@ -134,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.150.3 (2016-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.150.4 (2016-03-18)"
 #define CSS_FILE		"swad15.150.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.150.4: Mar 18, 2016	Icon to print country configuration integrated in frame. (195952 lines)
         Version 15.150.3: Mar 18, 2016	Changes in layout of course info. (195956 lines)
         Version 15.150.2: Mar 18, 2016	Icon to print course configuration integrated in frame.
 					Changes in layout of frames. (195950 lines)
