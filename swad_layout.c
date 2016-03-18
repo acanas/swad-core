@@ -1539,7 +1539,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 /****** Write header and footer of the class photo or academic calendar ******/
 /*****************************************************************************/
 
-void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingClassPhoto,
+void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
    struct Institution Ins;
@@ -1559,11 +1559,8 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"%u\" class=\"CENTER_MIDDLE\">"
-                      "<table style=\"width:100%%; padding:12px;\">"
-                      "<tr>",
-            NumColumns);
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">"
+                      "<tr>");
 
    /***** First column: institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:80px;\">");
@@ -1627,9 +1624,7 @@ void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingC
 
    /***** Table end *****/
    fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-	              "</td>"
-	              "</tr>");
+	              "</table>");
   }
 
 /*****************************************************************************/

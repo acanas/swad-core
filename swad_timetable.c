@@ -142,8 +142,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"TIT_CLASSPHOTO CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"TIT_CLASSPHOTO CENTER_MIDDLE\">");
    switch (Gbl.CurrentCrs.Grps.WhichGrps)
      {
       case Grp_ONLY_MY_GROUPS:
@@ -154,8 +153,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
         fprintf (Gbl.F.Out,"%s",Txt_All_groups);
         break;
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -261,11 +259,10 @@ void TT_ShowClassTimeTable (void)
                          Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                          Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
                                                                        NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
    /***** Start time table drawing *****/
    if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
-      Lay_WriteHeaderClassPhoto (1,PrintView,false,
+      Lay_WriteHeaderClassPhoto (PrintView,false,
 				 Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    if (PrintView)
@@ -273,28 +270,17 @@ void TT_ShowClassTimeTable (void)
       TT_ShowTimeTableGrpsSelected ();
    else
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td>");
-
       /***** Select whether show only my groups or all groups *****/
       TT_ShowSelectorWhichGrps (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActSeeCrsTT :
-	                                                               ActSeeMyTT);
+	                                                                    ActSeeMyTT);
 
       /***** Show form to change first day of week *****/
       Cal_ShowIntegratedFormToSelFirstDayOfWeek (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActChgCrsTT1stDay :
-	                                                                                ActChgMyTT1stDay);
-
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+	                                                                                     ActChgMyTT1stDay);
      }
 
    /***** Show the time table *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_MIDDLE\">");
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

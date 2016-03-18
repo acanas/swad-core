@@ -110,7 +110,7 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);
 
-void Lay_WriteHeaderClassPhoto (unsigned NumColumns,bool PrintView,bool DrawingClassPhoto,
+void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod);
 
 void Lay_AdvertisementMobile (void);

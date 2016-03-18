@@ -6677,16 +6677,16 @@ void Usr_SeeGuests (void)
 	 Act_FormStart (ActSeeRecSevGst);
 	 Grp_PutParamsCodGrps ();
 
-         /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
-
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
+	    Lay_WriteHeaderClassPhoto (false,true,
 				       (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
 					                                              -1L,
 				       -1L,
 				       -1L);
+
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
 	 /* Put a row to select all users */
          Usr_PutCheckboxToSelectAllTheUsers (Rol__GUEST_);
@@ -6830,11 +6830,8 @@ void Usr_SeeStudents (void)
 	    Grp_PutParamsCodGrps ();
            }
 
-         /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
-
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
+	    Lay_WriteHeaderClassPhoto (false,true,
 				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					Gbl.Scope.Current == Sco_SCOPE_DEG ||
 					Gbl.Scope.Current == Sco_SCOPE_CTR ||
@@ -6845,6 +6842,9 @@ void Usr_SeeStudents (void)
 					                                         -1L,
 					Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                        -1L);
+
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -6973,11 +6973,8 @@ void Usr_SeeTeachers (void)
          if (ICanViewRecords)
             Act_FormStart (ActSeeRecSevTch);
 
-         /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
-
          if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,false,true,
+	    Lay_WriteHeaderClassPhoto (false,true,
 				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					Gbl.Scope.Current == Sco_SCOPE_DEG ||
 					Gbl.Scope.Current == Sco_SCOPE_CTR ||
@@ -6988,6 +6985,9 @@ void Usr_SeeTeachers (void)
 					                                         -1L,
 					Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                        -1L);
+
+         /* Start table */
+         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -7140,14 +7140,16 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstGsts.NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_StartRoundFrameTable (NULL,0,NULL);
-      Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
+      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
                                                                                 -1L,
 				 -1L,-1L);
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
@@ -7180,8 +7182,8 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_StartRoundFrameTable (NULL,0,NULL);
-      Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
+      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
 				  Gbl.Scope.Current == Sco_SCOPE_CTR ||
@@ -7192,8 +7194,10 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                   -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
@@ -7234,8 +7238,8 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (Gbl.Usrs.LstTchs.NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_StartRoundFrameTable (NULL,0,NULL);
-      Lay_WriteHeaderClassPhoto (Gbl.Usrs.ClassPhoto.Cols,true,true,
+      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
 				  Gbl.Scope.Current == Sco_SCOPE_CTR ||
@@ -7246,8 +7250,10 @@ void Usr_SeeTchClassPhotoPrn (void)
 					                                   -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
+      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);

@@ -604,15 +604,14 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Test);
-      Lay_WriteHeaderClassPhoto (1,false,false,
+      Lay_StartRoundFrame (NULL,Txt_Test,NULL);
+      Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentDeg.Deg.DegCod,
 				 Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Write warning *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
       fprintf (Gbl.F.Out,Txt_You_can_not_make_a_new_test_in_the_course_X_until,
                Gbl.CurrentCrs.Crs.FullName);
       fprintf (Gbl.F.Out,": "
@@ -621,12 +620,11 @@ static bool Tst_CheckIfNextTstAllowed (void)
                          "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('date_next_test',%ld,'&nbsp;','%s');"
 			 "</script>"
-			 "</td>"
-			 "</tr>",
+			 "</div>",
 	       (long) TimeNextTestUTC,Txt_Today);
 
       /***** End frame *****/
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
 
       return false;
      }
@@ -738,24 +736,25 @@ static void Tst_WriteTestHead (unsigned NumTst)
    extern const char *Txt_Test_result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Action.Act == ActSeeTst ? Txt_Test :
-                                                                  Txt_Test_result);
-   Lay_WriteHeaderClassPhoto (3,false,false,
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Gbl.Action.Act == ActSeeTst ? Txt_Test :
+                                                           Txt_Test_result,NULL);
+   Lay_WriteHeaderClassPhoto (false,false,
                               Gbl.CurrentIns.Ins.InsCod,
                               Gbl.CurrentDeg.Deg.DegCod,
                               Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Header row *****/
+   /***** Header *****/
    if (Gbl.Action.Act == ActAssTst &&
        Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"DAT CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
       fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</div>");
      }
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
   }
 
 /*****************************************************************************/
@@ -764,7 +763,8 @@ static void Tst_WriteTestHead (unsigned NumTst)
 
 static void Tst_WriteTestFoot (void)
   {
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

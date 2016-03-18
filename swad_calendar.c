@@ -247,19 +247,15 @@ void Cal_DrawCalendar (void)
    /***** Create list of calls for examination *****/
    Exa_CreateListOfExamAnnouncements ();
 
-   /***** Start of table and title *****/
+   /***** Start frame *****/
    Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
 	                                      Cal_PutIconToPrintCalendar);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
-   Lay_WriteHeaderClassPhoto (1,PrintView,false,
+   Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,
 			      Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Draw several months *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_TOP\">");
-
    /* Show form to change first day of week */
    if (!PrintView)
       Cal_ShowIntegratedFormToSelFirstDayOfWeek (ActChgCal1stDay);
@@ -286,10 +282,6 @@ void Cal_DrawCalendar (void)
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",
 	    Params);
-
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>");
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();

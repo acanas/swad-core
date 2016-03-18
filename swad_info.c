@@ -1590,18 +1590,16 @@ static void Inf_ShowPlainTxtInfo (void)
 
    if (TxtHTML[0])
      {
-      /***** Start table *****/
+      /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"DAT LEFT_MIDDLE\">");
 
       /***** Convert to respectful HTML and insert links *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1611,10 +1609,8 @@ static void Inf_ShowPlainTxtInfo (void)
       /***** Write text *****/
       fprintf (Gbl.F.Out,"%s",TxtHTML);
 
-      /***** End table *****/
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>");
+      /***** End frame *****/
+      fprintf (Gbl.F.Out,"</div>");
       Lay_EndRoundFrame ();
      }
    else
@@ -1646,19 +1642,16 @@ static void Inf_ShowRichTxtInfo (void)
 
    if (TxtMD[0])
      {
-      /***** Start table *****/
+      /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (3,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<div id=\"crs_info\">");
+      fprintf (Gbl.F.Out,"<div id=\"crs_info\" class=\"LEFT_MIDDLE\">");
 
       /***** Store text into a temporary .md file in HTML output directory *****/
       // TODO: change to another directory?
@@ -1717,11 +1710,8 @@ static void Inf_ShowRichTxtInfo (void)
       fclose (FileHTML);
       unlink (PathFileHTML);
 
-      /***** Finish table *****/
-      fprintf (Gbl.F.Out,"</div>"
-	                 "</td>"
-	                 "</tr>"
-	                 "</table>");
+      /***** End frame *****/
+      fprintf (Gbl.F.Out,"</div>");
       Lay_EndRoundFrame ();
      }
    else
@@ -1834,30 +1824,28 @@ void Inf_EditPlainTxtInfo (void)
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start table *****/
+   /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+      Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Lay_HelpPlainEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>",
+	              "</textarea>"
+	              "</div>",
             TxtHTML);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
-   /***** End form *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   /***** End frame and form *****/
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
@@ -1874,30 +1862,28 @@ void Inf_EditRichTxtInfo (void)
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start form *****/
+   /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrameTable (NULL,0,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (1,false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+      Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Lay_HelpRichEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>",
+	              "</textarea>"
+	              "</div>",
             TxtHTML);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
-   /***** End form *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   /***** End frame and form *****/
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
   }
 
