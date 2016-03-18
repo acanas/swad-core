@@ -247,46 +247,44 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    /***** Put parameters needed depending on the action *****/
    Usr_PutExtraParamsUsrList (NextAction);
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Groups);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Groups,NULL);
 
    /***** Select all groups *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" class=\"%s CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.ClassPhoto.AllGroups)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
 	              " %s"
-	              "</td>"
-	              "</tr>",
+	              "</div>",
             Txt_All_groups);
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** List the groups for each group type *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
       if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
          Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
 
    /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"6\" class=\"CENTER_MIDDLE\""
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"padding-top:12px;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
 
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** End form *****/
    Act_FormEnd ();
