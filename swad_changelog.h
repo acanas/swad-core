@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.150.9 (2016-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.150.10 (2016-03-18)"
 #define CSS_FILE		"swad15.150.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.150.10:Mar 18, 2016	Icon to print calendar integrated in frame. (195961 lines)
         Version 15.150.9: Mar 18, 2016	Icons to print/show-all students/teachers integrated in frame. (195957 lines)
         Version 15.150.8: Mar 18, 2016	Icons to print/show-all guests integrated in frame. (195967 lines)
         Version 15.150.7: Mar 18, 2016	Icon to print degree configuration integrated in frame. (195970 lines)

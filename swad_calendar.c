@@ -63,6 +63,8 @@ static void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *Cla
 
 static unsigned Cal_GetParamFirstDayOfWeek (void);
 
+static void Cal_PutIconToPrintCalendar (void);
+
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
 /*****************************************************************************/
@@ -231,7 +233,6 @@ void Cal_DrawCurrentMonth (void)
 */
 void Cal_DrawCalendar (void)
   {
-   extern const char *Txt_Print;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Params[256+256+Ses_LENGTH_SESSION_ID+256];
    bool PrintView = (Gbl.Action.Act == ActPrnCal);
@@ -247,15 +248,9 @@ void Cal_DrawCalendar (void)
    Exa_CreateListOfExamAnnouncements ();
 
    /***** Start of table and title *****/
-   if (!PrintView)
-     {
-      /* Link to print view */
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Lay_PutContextualLink (ActPrnCal,NULL,"print64x64.png",
-                             Txt_Print,Txt_Print);
-      fprintf (Gbl.F.Out,"</div>");
-     }
-   Lay_StartRoundFrameTable (NULL,0,NULL);
+   Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
+	                                      Cal_PutIconToPrintCalendar);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
    Lay_WriteHeaderClassPhoto (1,PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,
@@ -293,11 +288,24 @@ void Cal_DrawCalendar (void)
 	    Params);
 
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	              "</tr>"
+	              "</table>");
 
    /***** Free list of dates of exam announcements *****/
    Exa_FreeListExamAnnouncements ();
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
   }
+
+/*****************************************************************************/
+/************************ Draw an academic calendar **************************/
+/*****************************************************************************/
+
+static void Cal_PutIconToPrintCalendar (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCal,NULL,"print64x64.png",Txt_Print,NULL);
+  }
+
