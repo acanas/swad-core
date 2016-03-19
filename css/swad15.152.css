@@ -712,7 +712,7 @@ a:hover						/* Default ==> underlined */
 	}
 #main_horizontal .MENU_OPT_OFF
 	{
-	opacity:0.67;
+	opacity:0.667;
 	}
 #main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{

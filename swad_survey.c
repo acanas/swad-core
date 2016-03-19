@@ -244,10 +244,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	   NumSvy++)
 	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
 
-      /***** Table end *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
-   else	// No assignments created
+   else	// No surveys created
       Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
 
    /***** Button to create a new survey *****/

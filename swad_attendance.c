@@ -71,6 +71,9 @@ typedef enum
 
 static void Att_ShowAllAttEvents (void);
 static void Att_PutFormToSelectWhichGroupsToShow (void);
+static void Att_PutIconToCreateNewAttEvent (void);
+static void Att_PutButtonToCreateNewAttEvent (void);
+static void Att_PutParamsToCreateNewAttEvent (void);
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete);
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
 static void Att_GetParamAttOrderType (void);
@@ -78,9 +81,6 @@ static void Att_GetParamAttOrderType (void);
 static void Att_PutFormToListMyAttendance (void);
 static void Att_PutFormToListStdsAttendance (void);
 static void Att_PutFormToListStdsParams (void);
-
-static void Att_PutFormToCreateNewAttEvent (void);
-static void Att_PutFormToCreateNewAttEventParams (void);
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_PutParams (void);
@@ -131,8 +131,6 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
-   extern const char *Txt_No_events;
-
    /***** Get parameters *****/
    Att_GetParamAttOrderType ();
    Grp_GetParamWhichGrps ();
@@ -142,39 +140,35 @@ void Att_SeeAttEvents (void)
    Att_GetListAttEvents (Att_NEWEST_FIRST);
 
    /***** Show contextual menu *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-   /* Put link (form) to create a bew attendance event */
-   switch (Gbl.Usrs.Me.LoggedRole)
+   if (Gbl.AttEvents.Num ||
+       Gbl.Usrs.Me.UsrDat.Nickname[0])
      {
-      case Rol_STUDENT:
-	 if (Gbl.AttEvents.Num)
-	    Att_PutFormToListMyAttendance ();
-         break;
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         Att_PutFormToCreateNewAttEvent ();
-	 if (Gbl.AttEvents.Num)
-	    Att_PutFormToListStdsAttendance ();
-         break;
-      default:
-         break;
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to show list of attendance */
+      if (Gbl.AttEvents.Num)
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STUDENT:
+	       Att_PutFormToListMyAttendance ();
+	       break;
+	    case Rol_TEACHER:
+	    case Rol_SYS_ADM:
+	       Att_PutFormToListStdsAttendance ();
+	       break;
+	    default:
+	       break;
+	   }
+
+      /* Put link to my QR code */
+      if (Gbl.Usrs.Me.UsrDat.Nickname[0])
+	 QR_PutLinkToPrintQRCode (Gbl.Usrs.Me.UsrDat.Nickname,true);
+
+      fprintf (Gbl.F.Out,"</div>");
      }
 
-   /* Put link to my QR code */
-   if (Gbl.Usrs.Me.UsrDat.Nickname[0])
-      QR_PutLinkToPrintQRCode (Gbl.Usrs.Me.UsrDat.Nickname,true);
-
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Show all the attendance events *****/
-   if (Gbl.AttEvents.Num)
-      Att_ShowAllAttEvents ();
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_events);
-
-   /***** Free list of attendance events *****/
-   Att_FreeListAttEvents ();
+   Att_ShowAllAttEvents ();
   }
 
 /*****************************************************************************/
@@ -188,35 +182,36 @@ static void Att_ShowAllAttEvents (void)
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_No_events;
    Att_EventsOrderType_t Order;
    struct Pagination Pagination;
    unsigned NumAttEvent;
 
-      /***** Compute variables related to pagination *****/
-      Pagination.NumItems = Gbl.AttEvents.Num;
-      Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
-      Pag_CalculatePagination (&Pagination);
-      Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+   /***** Compute variables related to pagination *****/
+   Pagination.NumItems = Gbl.AttEvents.Num;
+   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pag_CalculatePagination (&Pagination);
+   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
 
-      /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-	 Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+   /***** Write links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
 
-      /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Events);
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("100%",Txt_Events,
+			(Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+			 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ? Att_PutIconToCreateNewAttEvent :
+								  NULL);
 
-      /***** Select whether show only my groups or all groups *****/
-      if (Gbl.CurrentCrs.Grps.NumGrps)
-	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"4\">");
-	 Att_PutFormToSelectWhichGroupsToShow ();
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
+   /***** Select whether show only my groups or all groups *****/
+   if (Gbl.CurrentCrs.Grps.NumGrps)
+      Att_PutFormToSelectWhichGroupsToShow ();
 
+   if (Gbl.AttEvents.Num)
+     {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+			 "<tr>");
       for (Order = Att_ORDER_BY_START_DATE;
 	   Order <= Att_ORDER_BY_END_DATE;
 	   Order++)
@@ -252,12 +247,24 @@ static void Att_ShowAllAttEvents (void)
 	   NumAttEvent++)
 	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
 
-      /***** Table end *****/
-      Lay_EndRoundFrameTable ();
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+   else	// No events created
+      Lay_ShowAlert (Lay_INFO,Txt_No_events);
 
-      /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-	 Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+   /***** Button to create a new attendance event *****/
+   Att_PutButtonToCreateNewAttEvent ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Write again links to pages *****/
+   if (Pagination.MoreThanOnePage)
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+
+   /***** Free list of attendance events *****/
+   Att_FreeListAttEvents ();
   }
 
 /*****************************************************************************/
@@ -271,6 +278,44 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Grp_ShowSelectorWhichGrps ();
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Put icon to create a new attendance event ******************/
+/*****************************************************************************/
+
+static void Att_PutIconToCreateNewAttEvent (void)
+  {
+   extern const char *Txt_New_event;
+
+   /***** Put form to create a new attendance event *****/
+   Lay_PutContextualLink (ActFrmNewAtt,Att_PutParamsToCreateNewAttEvent,
+                          "plus64x64.png",Txt_New_event,NULL);
+  }
+
+/*****************************************************************************/
+/**************** Put button to create a new attendance event ****************/
+/*****************************************************************************/
+
+static void Att_PutButtonToCreateNewAttEvent (void)
+  {
+   extern const char *Txt_New_event;
+
+   Act_FormStart (ActFrmNewAtt);
+   Att_PutParamsToCreateNewAttEvent ();
+   Lay_PutConfirmButton (Txt_New_event);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************** Put parameters to create a new attendance event **************/
+/*****************************************************************************/
+
+static void Att_PutParamsToCreateNewAttEvent (void)
+  {
+   Att_PutHiddenParamAttOrderType ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -492,28 +537,6 @@ static void Att_PutFormToListStdsParams (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
-
-/*****************************************************************************/
-/*********** Put a link (form) to create a new attendance event **************/
-/*****************************************************************************/
-
-static void Att_PutFormToCreateNewAttEvent (void)
-  {
-   extern const char *Txt_New_event;
-
-   /***** Put form to create a new attendance event *****/
-   Lay_PutContextualLink (ActFrmNewAtt,Att_PutFormToCreateNewAttEventParams,
-                          "plus64x64.png",
-                          Txt_New_event,Txt_New_event);
-  }
-
-static void Att_PutFormToCreateNewAttEventParams (void)
-  {
-   Att_PutHiddenParamAttOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-  }
-
 /*****************************************************************************/
 /************** Put a link (form) to edit one attendance event ***************/
 /*****************************************************************************/
@@ -1136,9 +1159,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Show current attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
-   if (Gbl.AttEvents.Num)
-      Att_ShowAllAttEvents ();
-   Att_FreeListAttEvents ();
+   Att_ShowAllAttEvents ();
   }
 
 /*****************************************************************************/
