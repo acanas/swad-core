@@ -59,7 +59,7 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad40x40.png"			// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
@@ -111,7 +111,7 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad40x40.png"			// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"				// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"openswad220x40.png"
@@ -180,7 +180,7 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad40x40.png"			// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"				// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
@@ -239,7 +239,7 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad40x40.png"			// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"				// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
 #define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"

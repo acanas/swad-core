@@ -685,7 +685,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
       /***** Form to go to select institutions *****/
       Act_FormGoToStart (ActSeeCtyInf);
@@ -698,7 +698,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    else
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
 
       /***** Form to go to select countries *****/
       Act_FormGoToStart (ActSeeCty);
@@ -710,7 +710,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
       /***** Form to go to select centres *****/
       Act_FormGoToStart (ActSeeInsInf);
@@ -723,7 +723,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
 
       /***** Form to go to select institutions *****/
       Act_FormGoToStart (ActSeeIns);
@@ -733,13 +733,13 @@ void Deg_WriteCtyInsCtrDeg (void)
      }
    else
       /***** Separator and hidden institution *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
 	       ClassOff,Txt_Institution);
 
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
       /***** Form to go to the centre *****/
       Act_FormGoToStart (ActSeeCtrInf);
@@ -752,7 +752,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
 
       /***** Form to go to select centres *****/
       Act_FormGoToStart (ActSeeCtr);
@@ -762,13 +762,13 @@ void Deg_WriteCtyInsCtrDeg (void)
      }
    else
       /***** Separator and hidden centre *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
 	       ClassOff,Txt_Centre);
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected...
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassOn);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
       /***** Form to go to the degree *****/
       Act_FormGoToStart (ActSeeDegInf);
@@ -784,7 +784,7 @@ void Deg_WriteCtyInsCtrDeg (void)
    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
      {
       /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",ClassSemiOff);
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
 
       /***** Form to go to select degrees *****/
       Act_FormGoToStart (ActSeeDeg);
@@ -794,11 +794,11 @@ void Deg_WriteCtyInsCtrDeg (void)
      }
    else
       /***** Separator and hidden degree *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> / %s</span>",
+      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
 	       ClassOff,Txt_Degree);
 
    /***** Separator *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\"> / </span>",
+   fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
 	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? ClassOn :
             ((Gbl.CurrentDeg.Deg.DegCod > 0) ? ClassSemiOff :
 		                               ClassOff));
@@ -815,60 +815,50 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
    fprintf (Gbl.F.Out,"<h1 id=\"main_title\" class=\"%s\">",
 	    The_ClassCourse[Gbl.Prefs.Theme]);
 
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
-     {
-      /***** Logo *****/
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
-	  Gbl.CurrentDeg.Deg.DegCod > 0)
-	 Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-		       Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
-      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	 Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-		       Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
-      else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	 Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-		       Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
-      else
-	 Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
+   /***** Logo *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
+       Gbl.CurrentDeg.Deg.DegCod > 0)
+      Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
+		    Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+      Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
+		    Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)
+      Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
+		    Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+      Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
+   else
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"TOP_LOGO\" />",
+               Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+               Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
 
-      /***** Text *****/
-      fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
-	                 "<div id=\"big_full_name\">"
-	                 "%s"	// Full name
-	                 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "	// To separate
-			 "</div>"
-	                 "<div id=\"big_short_name\">"
-	                 "%s"	// Short name
-	                 "</div>"
-                         "</div>",
-	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
-	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-	        (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
-	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))));
-     }
-   else	// No country selected
-      /* This main title takes up space but it is invisible */
-      fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
-	                 "<div id=\"big_full_name\" class=\"HIDDEN\">"
-	                 "%s"	// Full name
-	                 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "	// To separate
-			 "</div>"
-	                 "<div id=\"big_short_name\" class=\"HIDDEN\">"
-	                 "%s"	// Short name
-	                 "</div>"
-                         "</div>",
-	       Cfg_PLATFORM_FULL_NAME,
-	       Cfg_PLATFORM_SHORT_NAME);
+   /***** Text *****/
+   fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
+		      "<div id=\"big_full_name\">"
+		      "%s"	// Full name
+		      "</div>"
+		      "<div class=\"NOT_SHOWN\">"
+		      " / "	// To separate
+		      "</div>"
+		      "<div id=\"big_short_name\">"
+		      "%s"	// Short name
+		      "</div>"
+		      "</div>",
+	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
+	    ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
+	    ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
+	    ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
+	    ((Gbl.CurrentCty.Cty.CtyCod > 0) ? Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language] :
+					       Cfg_PLATFORM_FULL_NAME)))),
+	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
+	    ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
+	    ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
+	    ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
+	    ((Gbl.CurrentCty.Cty.CtyCod > 0) ? Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language] :
+					       Cfg_PLATFORM_SHORT_NAME)))));
 
    fprintf (Gbl.F.Out,"</h1>");
   }

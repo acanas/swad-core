@@ -166,6 +166,31 @@ a:hover						/* Default ==> underlined */
 		display:inline-block;
 		}
 	}
+
+@media only screen and (max-width: 1023px)
+	{	/* For mobile phones and tablets */
+	#head_row_1_tagline
+		{
+		display:none;
+    		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For mobile phones and tablets */
+	#head_row_1_tagline
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		max-width:220px;
+		padding:0 4px;
+		color:#B0B0B0;
+		font-size:11pt;
+		font-weight:bold;
+		line-height:110%;
+		text-align:left;
+		vertical-align:middle;
+		}
+	}
+
 #head_row_1_search
 	{
 	display:inline-block;

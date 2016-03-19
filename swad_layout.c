@@ -758,7 +758,7 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1\" class=\"%s\">",
             ClassHeadRow1[Gbl.Prefs.Theme]);
 
-   /* 1st. row, 1st. column: logo and search */
+   /* 1st. row, 1st. column: logo, tagline and search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">"
@@ -783,6 +783,11 @@ static void Lay_WritePageTopHeading (void)
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
+
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_tagline\">"
+                      "%s"
+                      "</div>",	// head_row_1_logo_small
+            "free platform for learning & educational management");	// TODO: Need translation!!!!!
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
