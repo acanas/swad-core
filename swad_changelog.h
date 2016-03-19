@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.151.4 (2016-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.151.5 (2016-03-19)"
 #define CSS_FILE		"swad15.150.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.151.5: Mar 19, 2016	Icon to edit holidays integrated in frame. (195931 lines)
         Version 15.151.4: Mar 19, 2016	Icon to edit plugins integrated in frame. (195933 lines)
         Version 15.151.3: Mar 19, 2016	Icon to edit mail domains integrated in frame. (195934 lines)
         Version 15.151.2: Mar 19, 2016	Changes in layout of groups. (195935 lines)

@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Hld_GetParamHldOrderType (void);
-static void Hld_PutFormToEditHlds (void);
+static void Hld_PutIconToEditHlds (void);
 static Hld_HolidayType_t Hld_GetParamHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
 static void Hld_ListHolidaysForEdition (void);
@@ -91,14 +91,12 @@ void Hld_SeeHolidays (void)
       /***** Get list of holidays *****/
       Hld_GetListHolidays ();
 
-      /***** Put link (form) to edit holidays *****/
-      // Institution admins or system admins can edit holidays
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	 Hld_PutFormToEditHlds ();
-
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Holidays);
-      fprintf (Gbl.F.Out,"<tr>");
+      Lay_StartRoundFrame (NULL,Txt_Holidays,
+                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
+                        	                                   NULL);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                         "<tr>");
       for (Order = Hld_ORDER_BY_PLACE;
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
@@ -167,6 +165,7 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** Table end *****/
+      fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 
       /***** Free list of holidays *****/
@@ -191,17 +190,14 @@ static void Hld_GetParamHldOrderType (void)
   }
 
 /*****************************************************************************/
-/********************* Put a link (form) to edit holidays ********************/
+/************************* Put icon to edit holidays *************************/
 /*****************************************************************************/
 
-static void Hld_PutFormToEditHlds (void)
+static void Hld_PutIconToEditHlds (void)
   {
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiHld,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActEdiHld,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/
