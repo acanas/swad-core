@@ -99,9 +99,6 @@ void Asg_SeeAssignments (void)
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
-   /***** Get list of assignments *****/
-   Asg_GetListAssignments ();
-
    /***** Show all the assignments *****/
    Asg_ShowAllAssignments ();
   }
@@ -122,6 +119,9 @@ static void Asg_ShowAllAssignments (void)
    tAsgsOrderType Order;
    struct Pagination Pagination;
    unsigned NumAsg;
+
+   /***** Get list of assignments *****/
+   Asg_GetListAssignments ();
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Asgs.Num;
@@ -227,12 +227,10 @@ static void Asg_PutIconToCreateNewAsg (void)
 static void Asg_PutButtonToCreateNewAsg (void)
   {
    extern const char *Txt_New_assignment;
-   extern const char *Txt_Create_assignment;
 
    Act_FormStart (ActFrmNewAsg);
    Asg_PutParamsToCreateNewAsg ();
-   Lay_PutConfirmButton (Gbl.Asgs.Num ? Txt_New_assignment :
-	                                Txt_Create_assignment);
+   Lay_PutConfirmButton (Txt_New_assignment);
    Act_FormEnd ();
   }
 
@@ -1141,12 +1139,8 @@ void Asg_RequestCreatOrEditAsg (void)
       Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
-   /***** Get list of assignments *****/
-   Asg_GetListAssignments ();
-
    /***** Show current assignments, if any *****/
-   if (Gbl.Asgs.Num)
-      Asg_ShowAllAssignments ();
+   Asg_ShowAllAssignments ();
   }
 
 /*****************************************************************************/
@@ -1332,18 +1326,18 @@ void Asg_RecFormAssignment (void)
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
+
+      /***** Notify by e-mail about the new assignment *****/
+      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.AsgCod)))
+	 Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
+      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+
+      /***** Show assignments again *****/
+      Asg_SeeAssignments ();
      }
    else
       // TODO: The form should be filled with partial data, now is always empty
       Asg_RequestCreatOrEditAsg ();
-
-   /***** Notify by e-mail about the new assignment *****/
-   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.AsgCod)))
-      Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
-   Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
-
-   /***** Show assignments again *****/
-   Asg_SeeAssignments ();
   }
 
 /*****************************************************************************/
