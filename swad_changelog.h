@@ -132,13 +132,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.153.1 (2016-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.154 (2016-03-19)"
 #define CSS_FILE		"swad15.152.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.154:   Mar 19, 2016	Icon to add new survey integrated in frame.
+					Changes in layout of surveys. (196018 lines)
         Version 15.153.1: Mar 19, 2016	Fixed layout in edition of assignments. (195980 lines)
         Version 15.153:   Mar 19, 2016	Icon to add new assignment integrated in frame.
 					Changes in layout of assignments. (195984 lines)

@@ -23408,23 +23408,23 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 
 const char *Txt_No_assignments =
 #if   L==1
-	"No hi ha activitats";
+	"No hi ha activitats.";
 #elif L==2
-	"Keine Aufgaben";
+	"Keine Aufgaben.";
 #elif L==3
-	"No assignments";
+	"No assignments.";
 #elif L==4
-	"No hay actividades";
+	"No hay actividades.";
 #elif L==5
-	"Il n'y a pas d'activit&eacute;s";
+	"Il n'y a pas d'activit&eacute;s.";
 #elif L==6
-	"No hay actividades";	// Okoteve traducción
+	"No hay actividades.";	// Okoteve traducción
 #elif L==7
-	"Non ci sono attivit&agrave;";
+	"Non ci sono attivit&agrave;.";
 #elif L==8
-	"Brak zadania";
+	"Brak zadania.";
 #elif L==9
-	"N&atilde;o h&aacute; atividades";
+	"N&atilde;o h&aacute; atividades.";
 #endif
 
 const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
@@ -24283,6 +24283,27 @@ const char *Txt_no_subject =
 	"bez tematu";
 #elif L==9
 	"sem assunto";
+#endif
+
+const char *Txt_No_surveys =
+#if   L==1
+	"No hi ha enquestes.";
+#elif L==2
+	"Keine Umfragen.";
+#elif L==3
+	"No surveys.";
+#elif L==4
+	"No hay encuestas.";
+#elif L==5
+	"Il n'y a pas de sondages.";
+#elif L==6
+	"No hay encuestas.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono sondaggi.";
+#elif L==8
+	"Brak badania.";
+#elif L==9
+	"N&atilde;o h&aacute; inqu&eacute;ritos.";
 #endif
 
 const char *Txt_no_tags =		// Tags used in test

@@ -180,7 +180,7 @@ a:hover						/* Default ==> underlined */
 		{
 		display:inline-block;
 		box-sizing:border-box;
-		max-width:220px;
+		max-width:200px;
 		padding:0 4px;
 		color:#B0B0B0;
 		font-size:11pt;

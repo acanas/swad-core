@@ -92,14 +92,14 @@ struct SurveyQuestion
 
 static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst);
 static bool Svy_CheckIfICanCreateSvy (void);
+static void Svy_PutIconToCreateNewSvy (void);
+static void Svy_PutButtonToCreateNewSvy (void);
+static void Svy_PutParamsToCreateNewSvy (void);
 static void Svy_PutFormToSelectWhichGroupsToShow (void);
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool ShowOnlyThisSvyComplete);
 static void Svy_WriteAuthor (struct Survey *Svy);
 static void Svy_WriteStatus (struct Survey *Svy);
 static void Svy_GetParamSvyOrderType (void);
-
-static void Svy_PutFormToCreateNewSvy (void);
-static void Svy_PutFormToCreateNewSvyParams (void);
 
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
 static void Svy_PutParams (void);
@@ -173,13 +173,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
+   extern const char *Txt_No_surveys;
    tSvysOrderType Order;
    struct Pagination Pagination;
    unsigned NumSvy;
-
-   /***** Put link (form) to create new survey *****/
-   if (Svy_CheckIfICanCreateSvy ())
-      Svy_PutFormToCreateNewSvy ();
 
    /***** Get number of groups in current course *****/
    if (!Gbl.CurrentCrs.Grps.NumGrps)
@@ -198,58 +195,66 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Pagination.MoreThanOnePage)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Surveys);
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("100%",Txt_Surveys,
+                        Svy_CheckIfICanCreateSvy () ? Svy_PutIconToCreateNewSvy :
+                                                      NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"4\">");
       Svy_PutFormToSelectWhichGroupsToShow ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
 
-   /***** Table head *****/
-   fprintf (Gbl.F.Out,"<tr>");
-   for (Order = Svy_ORDER_BY_START_DATE;
-	Order <= Svy_ORDER_BY_END_DATE;
-	Order++)
+   if (Gbl.Asgs.Num)
      {
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActSeeAllSvy);
-      Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
-      if (Order == Gbl.Svys.SelectedOrderType)
-	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
-      if (Order == Gbl.Svys.SelectedOrderType)
-	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</th>");
+      /***** Table head *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+			 "<tr>");
+      for (Order = Svy_ORDER_BY_START_DATE;
+	   Order <= Svy_ORDER_BY_END_DATE;
+	   Order++)
+	{
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+	 Act_FormStart (ActSeeAllSvy);
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+	 if (Order == Gbl.Svys.SelectedOrderType)
+	    fprintf (Gbl.F.Out,"<u>");
+	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+	 if (Order == Gbl.Svys.SelectedOrderType)
+	    fprintf (Gbl.F.Out,"</u>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</th>");
+	}
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "</tr>",
+	       Txt_Survey,
+	       Txt_Status);
+
+      /***** Write all the surveys *****/
+      for (NumSvy = Pagination.FirstItemVisible;
+	   NumSvy <= Pagination.LastItemVisible;
+	   NumSvy++)
+	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
+
+      /***** Table end *****/
+      fprintf (Gbl.F.Out,"</table>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "</tr>",
-	    Txt_Survey,
-	    Txt_Status);
+   else	// No assignments created
+      Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
 
-   /***** Write all the surveys *****/
-   for (NumSvy = Pagination.FirstItemVisible;
-	NumSvy <= Pagination.LastItemVisible;
-	NumSvy++)
-      Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
+   /***** Button to create a new survey *****/
+   Svy_PutButtonToCreateNewSvy ();
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -277,6 +282,43 @@ static bool Svy_CheckIfICanCreateSvy (void)
          return false;
      }
    return false;
+  }
+
+/*****************************************************************************/
+/********************** Put icon to create a new survey **********************/
+/*****************************************************************************/
+
+static void Svy_PutIconToCreateNewSvy (void)
+  {
+   extern const char *Txt_New_survey;
+
+   Lay_PutContextualLink (ActFrmNewSvy,Svy_PutParamsToCreateNewSvy,
+                          "plus64x64.png",Txt_New_survey,NULL);
+  }
+
+/*****************************************************************************/
+/********************* Put button to create a new survey *********************/
+/*****************************************************************************/
+
+static void Svy_PutButtonToCreateNewSvy (void)
+  {
+   extern const char *Txt_New_survey;
+
+   Act_FormStart (ActFrmNewSvy);
+   Svy_PutParamsToCreateNewSvy ();
+   Lay_PutConfirmButton (Txt_New_survey);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/******************* Put parameters to create a new survey *******************/
+/*****************************************************************************/
+
+static void Svy_PutParamsToCreateNewSvy (void)
+  {
+   Svy_PutHiddenParamSvyOrderType ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -693,28 +735,6 @@ static void Svy_GetParamSvyOrderType (void)
 void Svy_PutHiddenParamSvyOrderType (void)
   {
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Svys.SelectedOrderType);
-  }
-
-/*****************************************************************************/
-/********************* Put a link (form) to edit surveys *********************/
-/*****************************************************************************/
-
-static void Svy_PutFormToCreateNewSvy (void)
-  {
-   extern const char *Txt_New_survey;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActFrmNewSvy,Svy_PutFormToCreateNewSvyParams,
-                          "plus64x64.png",
-                          Txt_New_survey,Txt_New_survey);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-static void Svy_PutFormToCreateNewSvyParams (void)
-  {
-   Svy_PutHiddenParamSvyOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
