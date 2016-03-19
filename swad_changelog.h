@@ -127,21 +127,21 @@
 
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
-// TODO: Show tagline at top, near logo
-// TODO: Show big header h1 when no country specified
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.152 (2016-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.153 (2016-03-19)"
 #define CSS_FILE		"swad15.152.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.152:   Mar 19, 2016	Changes in layout of head. Not finished. (? lines)
+        Version 15.153:   Mar 19, 2016	Icon to add new assignment integrated in frame.
+					Changes in layout of assignments. (195984 lines)
+        Version 15.152:   Mar 19, 2016	Changes in layout of head. Not finished. (195949 lines)
         Version 15.151.5: Mar 19, 2016	Icon to edit holidays integrated in frame. (195931 lines)
         Version 15.151.4: Mar 19, 2016	Icon to edit plugins integrated in frame. (195933 lines)
         Version 15.151.3: Mar 19, 2016	Icon to edit mail domains integrated in frame. (195934 lines)

@@ -1298,7 +1298,7 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	box-sizing:border-box;
 	margin:5px 0;
-	padding:8px 12px 12px 12px;
+	padding:8px 12px 20px 12px;
 	background-color:white;
 	border-radius:4px;
 	box-shadow:1px 1px 2px #CCC;
@@ -1336,7 +1336,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:100%;
 	margin:0 auto;
-	padding:0 12px 20px 12px;
+	padding:0 12px 12px 12px;
 	color:#808080;
 	font-size:20pt;
 	font-weight:bold;

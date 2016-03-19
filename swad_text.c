@@ -23366,7 +23366,7 @@ const char *Txt_No =
 
 const char *Txt_No_announcements =
 #if   L==1
-	"No hay anuncis";
+	"No hi ha anuncis";
 #elif L==2
 	"Keine Bekanntmachungen";
 #elif L==3
@@ -23404,6 +23404,27 @@ const char *Txt_No_announcements_of_exams_of_X =	// Warning: it is very importan
 	"Brak ogloszen egzamin&oacute;w <strong>%s</strong>.";
 #elif L==9
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
+#endif
+
+const char *Txt_No_assignments =
+#if   L==1
+	"No hi ha activitats";
+#elif L==2
+	"Keine Aufgaben";
+#elif L==3
+	"No assignments";
+#elif L==4
+	"No hay actividades";
+#elif L==5
+	"Il n'y a pas d'activit&eacute;s";
+#elif L==6
+	"No hay actividades";	// Okoteve traducción
+#elif L==7
+	"Non ci sono attivit&agrave;";
+#elif L==8
+	"Brak zadania";
+#elif L==9
+	"N&atilde;o h&aacute; atividades";
 #endif
 
 const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
@@ -23534,7 +23555,7 @@ const char *Txt_No_enrollment_requests =
 
 const char *Txt_No_events =
 #if   L==1
-	"No hay esdeveniments.";
+	"No hi ha esdeveniments.";
 #elif L==2
 	"Keine Ereignisse.";
 #elif L==3

@@ -313,7 +313,7 @@ void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
    if (IdInputText)
       fprintf (Gbl.F.Out," id=\"%s\"",IdInputText);
    fprintf (Gbl.F.Out," type=\"text\" name=\"Search\""
-	              " size=\"30\" maxlength=\"%u\" value=\"%s\"",
+	              " size=\"20\" maxlength=\"%u\" value=\"%s\"",
 	    Sch_MAX_LENGTH_STRING_TO_FIND,
             Gbl.Search.Str);
    if (!Gbl.Search.Str[0])

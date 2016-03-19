@@ -63,14 +63,14 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_ShowAllAssignments (void);
+static void Asg_PutIconToCreateNewAsg (void);
+static void Asg_PutButtonToCreateNewAsg (void);
+static void Asg_PutParamsToCreateNewAsg (void);
 static void Asg_PutFormToSelectWhichGroupsToShow (void);
 static void Asg_ShowOneAssignment (long AsgCod);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg);
 static void Asg_GetParamAsgOrderType (void);
-
-static void Asg_PutFormToCreateNewAsg (void);
-static void Asg_PutFormToCreateNewAsgParams (void);
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_PutParams (void);
@@ -99,16 +99,8 @@ void Asg_SeeAssignments (void)
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
-   /***** Put link (form) to create a bew assignment *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         Asg_PutFormToCreateNewAsg ();
-         break;
-      default:
-         break;
-     }
+   /***** Get list of assignments *****/
+   Asg_GetListAssignments ();
 
    /***** Show all the assignments *****/
    Asg_ShowAllAssignments ();
@@ -126,12 +118,10 @@ static void Asg_ShowAllAssignments (void)
    extern const char *Txt_Assignment;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
+   extern const char *Txt_No_assignments;
    tAsgsOrderType Order;
    struct Pagination Pagination;
    unsigned NumAsg;
-
-   /***** Get list of assignments *****/
-   Asg_GetListAssignments ();
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Asgs.Num;
@@ -143,62 +133,71 @@ static void Asg_ShowAllAssignments (void)
    if (Pagination.MoreThanOnePage)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Assignments);
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("100%",Txt_Assignments,
+                        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ? Asg_PutIconToCreateNewAsg :
+                                                                  NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\">");
       Asg_PutFormToSelectWhichGroupsToShow ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
 
-   /***** Table head *****/
-   fprintf (Gbl.F.Out,"<tr>");
-   for (Order = Asg_ORDER_BY_START_DATE;
-	Order <= Asg_ORDER_BY_END_DATE;
-	Order++)
+   if (Gbl.Asgs.Num)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-      Act_FormStart (ActSeeAsg);
-      Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
-      if (Order == Gbl.Asgs.SelectedOrderType)
-	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
-      if (Order == Gbl.Asgs.SelectedOrderType)
-	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</th>");
+      /***** Table head *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                         "<tr>");
+      for (Order = Asg_ORDER_BY_START_DATE;
+	   Order <= Asg_ORDER_BY_END_DATE;
+	   Order++)
+	{
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 Act_FormStart (ActSeeAsg);
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+	 if (Order == Gbl.Asgs.SelectedOrderType)
+	    fprintf (Gbl.F.Out,"<u>");
+	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+	 if (Order == Gbl.Asgs.SelectedOrderType)
+	    fprintf (Gbl.F.Out,"</u>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</th>");
+	}
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>"
+			 "</tr>",
+	       Txt_Assignment,
+	       Txt_Upload_files_QUESTION,
+	       Txt_Folder);
+
+      /***** Write all the assignments *****/
+      for (NumAsg = Pagination.FirstItemVisible;
+	   NumAsg <= Pagination.LastItemVisible;
+	   NumAsg++)
+	 Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg - 1]);
+
+      /***** Table end *****/
+      fprintf (Gbl.F.Out,"</table>");
      }
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "</tr>",
-	    Txt_Assignment,
-	    Txt_Upload_files_QUESTION,
-	    Txt_Folder);
+   else	// No assignments created
+      Lay_ShowAlert (Lay_INFO,Txt_No_assignments);
 
-   /***** Write all the assignments *****/
-   for (NumAsg = Pagination.FirstItemVisible;
-	NumAsg <= Pagination.LastItemVisible;
-	NumAsg++)
-      Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg-1]);
+   /***** Button to create a new assignment *****/
+   Asg_PutButtonToCreateNewAsg ();
 
-   /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -206,6 +205,46 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Free list of assignments *****/
    Asg_FreeListAssignments ();
+  }
+
+/*****************************************************************************/
+/******************* Put icon to create a new assignment *********************/
+/*****************************************************************************/
+
+static void Asg_PutIconToCreateNewAsg (void)
+  {
+   extern const char *Txt_New_assignment;
+
+   /***** Put form to create a new assignment *****/
+   Lay_PutContextualLink (ActFrmNewAsg,Asg_PutParamsToCreateNewAsg,
+                          "plus64x64.png",Txt_New_assignment,NULL);
+  }
+
+/*****************************************************************************/
+/******************* Put button to create a new assignment *******************/
+/*****************************************************************************/
+
+static void Asg_PutButtonToCreateNewAsg (void)
+  {
+   extern const char *Txt_New_assignment;
+   extern const char *Txt_Create_assignment;
+
+   Act_FormStart (ActFrmNewAsg);
+   Asg_PutParamsToCreateNewAsg ();
+   Lay_PutConfirmButton (Gbl.Asgs.Num ? Txt_New_assignment :
+	                                Txt_Create_assignment);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/***************** Put parameters to create a new assignment *****************/
+/*****************************************************************************/
+
+static void Asg_PutParamsToCreateNewAsg (void)
+  {
+   Asg_PutHiddenParamAsgOrderType ();
+   Grp_PutParamWhichGrps ();
+   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -459,29 +498,6 @@ static void Asg_GetParamAsgOrderType (void)
 void Asg_PutHiddenParamAsgOrderType (void)
   {
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Asgs.SelectedOrderType);
-  }
-
-/*****************************************************************************/
-/************** Put a link (form) to create a new assignment *****************/
-/*****************************************************************************/
-
-static void Asg_PutFormToCreateNewAsg (void)
-  {
-   extern const char *Txt_New_assignment;
-
-   /***** Put form to create a new assignment *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActFrmNewAsg,Asg_PutFormToCreateNewAsgParams,
-                          "plus64x64.png",
-                          Txt_New_assignment,Txt_New_assignment);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-static void Asg_PutFormToCreateNewAsgParams (void)
-  {
-   Asg_PutHiddenParamAsgOrderType ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -1125,8 +1141,12 @@ void Asg_RequestCreatOrEditAsg (void)
       Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
-   /***** Show current assignments *****/
-   Asg_ShowAllAssignments ();
+   /***** Get list of assignments *****/
+   Asg_GetListAssignments ();
+
+   /***** Show current assignments, if any *****/
+   if (Gbl.Asgs.Num)
+      Asg_ShowAllAssignments ();
   }
 
 /*****************************************************************************/
