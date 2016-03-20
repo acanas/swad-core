@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.155.3 (2016-03-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.155.4 (2016-03-20)"
 #define CSS_FILE		"swad15.152.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.155.4: Mar 20, 2016	Changes in layout of listing of courses. (196059 lines)
         Version 15.155.3: Mar 20, 2016	Changes in some help messages. (196062 lines)
         Version 15.155.2: Mar 20, 2016	Fixed bug in surveys.
 					Changes in edition of questions of surveys. (196060 lines)

@@ -80,10 +80,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
-static void Crs_EditCourses (void);
-static void Crs_ListCoursesForSeeing (bool ICanEdit);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
+
+static void Crs_EditCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
 static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status);
@@ -1116,16 +1116,40 @@ void Crs_WriteSelectorMyCourses (void)
 
 static void Crs_ListCourses (void)
   {
+   extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_No_courses_have_been_created_in_this_degree;
    extern const char *Txt_Create_another_course;
    extern const char *Txt_Create_course;
+   unsigned Year;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Crs_PutIconToEditCourses :
+				                  NULL);
+
    if (Gbl.CurrentDeg.Deg.NumCrss)	// There are courses in the current degree
-      Crs_ListCoursesForSeeing (ICanEdit);
-   else					// No courses created in the current degree
+     {
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
+	                 " style=\"margin-bottom:20px;\">");
+      Crs_PutHeadCoursesForSeeing ();
+
+      /***** List the courses *****/
+      for (Year = 1;
+	   Year <= Deg_MAX_YEARS_PER_DEGREE;
+	   Year++)
+	 if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
+	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;	// ==> change color for the next year
+      Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+   else	// No courses created in the current degree
       Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
 
+   /***** Button to create course *****/
    if (ICanEdit)
      {
       Act_FormStart (ActEdiCrs);
@@ -1133,50 +1157,8 @@ static void Crs_ListCourses (void)
 	                                                 Txt_Create_course);
       Act_FormEnd ();
      }
-  }
 
-/*****************************************************************************/
-/****************** Put forms to edit courses in this degree *****************/
-/*****************************************************************************/
-
-static void Crs_EditCourses (void)
-  {
-   /***** Put a form to create or request a new course *****/
-   Crs_PutFormToCreateCourse ();
-
-   /***** Forms to edit current courses *****/
-   if (Gbl.CurrentDeg.Deg.NumCrss)
-      Crs_ListCoursesForEdition ();
-  }
-
-/*****************************************************************************/
-/********************** List current courses for seeing **********************/
-/*****************************************************************************/
-
-static void Crs_ListCoursesForSeeing (bool ICanEdit)
-  {
-   extern const char *Txt_Courses_of_DEGREE_X;
-   unsigned Year;
-
-   /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Crs_PutIconToEditCourses :
-                                   NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   Crs_PutHeadCoursesForSeeing ();
-
-   /***** List the courses *****/
-   for (Year = 1;
-	Year <= Deg_MAX_YEARS_PER_DEGREE;
-	Year++)
-      if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
-	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;		// ==> change color for the next year
-   Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
-
-   /***** Table end *****/
-   fprintf (Gbl.F.Out,"</table>");
+   /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
@@ -1298,6 +1280,20 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
      }
 
    return ThisYearHasCourses;
+  }
+
+/*****************************************************************************/
+/****************** Put forms to edit courses in this degree *****************/
+/*****************************************************************************/
+
+static void Crs_EditCourses (void)
+  {
+   /***** Put a form to create or request a new course *****/
+   Crs_PutFormToCreateCourse ();
+
+   /***** Forms to edit current courses *****/
+   if (Gbl.CurrentDeg.Deg.NumCrss)
+      Crs_ListCoursesForEdition ();
   }
 
 /*****************************************************************************/
