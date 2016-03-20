@@ -863,7 +863,7 @@ static void Lay_WritePageTopHeading (void)
 static void Lay_WriteBreadcrumb (void)
   {
    fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
-   Deg_WriteCtyInsCtrDeg ();
+   Deg_WriteHierarchyBreadcrumb ();
    Crs_WriteSelectorMyCourses ();
    fprintf (Gbl.F.Out,"</div>");
   }

@@ -23490,46 +23490,46 @@ const char *Txt_No_countries_have_been_created =
 	"No countries have been created.";	// Necessita de tradução
 #endif
 
-const char *Txt_No_courses_have_been_created_in_this_degree =
+const char *Txt_No_courses =
 #if   L==1
-	"No se han creado asignaturas en esta titulaci&oacute;n.";	// Necessita traduccio
+	"No hi ha assignatures.";
 #elif L==2
-	"No courses have been created in this degree.";			// Need Übersetzung
+	"Keine Kursen.";
 #elif L==3
-	"No courses have been created in this degree.";
+	"No courses.";
 #elif L==4
-	"No se han creado asignaturas en esta titulaci&oacute;n.";
+	"No hay asignaturas.";
 #elif L==5
-	"No courses have been created in this degree.";			// Besoin de traduction
+	"Il n'y a pas de mati&egrave;res.";
 #elif L==6
-	"No se han creado asignaturas en esta titulaci&oacute;n.";	// Okoteve traducción
+	"No hay asignaturas.";	// Okoteve traducción
 #elif L==7
-	"No courses have been created in this degree.";			// Bisogno di traduzione
+	"Non ci sono laurea.";
 #elif L==8
-	"No courses have been created in this degree.";			// Potrzebujesz tlumaczenie
+	"Brak kurs&oacute;w.";
 #elif L==9
-	"No courses have been created in this degree.";			// Necessita de tradução
+	"N&atilde;o h&aacute; disciplinas.";
 #endif
 
-const char *Txt_No_degrees_have_been_created_in_this_centre =
+const char *Txt_No_degrees =
 #if   L==1
-	"No se han creado titulaciones en este centro.";	// Necessita traduccio
+	"No hi ha titulacions.";
 #elif L==2
-	"No degrees have been created in this centre.";		// Need Übersetzung
+	"Keine Studieng&auml;nge.";
 #elif L==3
-	"No degrees have been created in this centre.";
+	"No degrees.";
 #elif L==4
-	"No se han creado titulaciones en este centro.";
+	"No hay titulaciones.";
 #elif L==5
-	"No degrees have been created in this centre.";		// Besoin de traduction
+	"Il n'y a pas d'&eacute;tudes.";
 #elif L==6
-	"No se han creado titulaciones en este centro.";	// Okoteve traducción
+	"No hay titulaciones.";	// Okoteve traducción
 #elif L==7
-	"No degrees have been created in this centre.";		// Bisogno di traduzione
+	"Non ci sono corsi.";
 #elif L==8
-	"No degrees have been created in this centre.";		// Potrzebujesz tlumaczenie
+	"Brak stopni.";
 #elif L==9
-	"No degrees have been created in this centre.";		// Necessita de tradução
+	"N&atilde;o h&aacute; titula&ccedil;oes.";
 #endif
 
 const char *Txt_No_enrollment_requests =
@@ -30525,7 +30525,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==6
 	"administradores de titulaciones"	// Okoteve traducción
 #elif L==7
-	"amministratori di gradi"
+	"amministratori di laurea"
 #elif L==8
 	"Administratorzy stopni"
 #elif L==9

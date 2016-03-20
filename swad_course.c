@@ -1117,7 +1117,7 @@ void Crs_WriteSelectorMyCourses (void)
 static void Crs_ListCourses (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
-   extern const char *Txt_No_courses_have_been_created_in_this_degree;
+   extern const char *Txt_No_courses;
    extern const char *Txt_Create_another_course;
    extern const char *Txt_Create_course;
    unsigned Year;
@@ -1147,7 +1147,7 @@ static void Crs_ListCourses (void)
       fprintf (Gbl.F.Out,"</table>");
      }
    else	// No courses created in the current degree
-      Lay_ShowAlert (Lay_INFO,Txt_No_courses_have_been_created_in_this_degree);
+      Lay_ShowAlert (Lay_INFO,Txt_No_courses);
 
    /***** Button to create course *****/
    if (ICanEdit)

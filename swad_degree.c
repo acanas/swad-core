@@ -91,11 +91,9 @@ static void Deg_ListDegreeTypes (void);
 static void Deg_WriteSelectorOfDegree (void);
 static void Deg_EditDegreeTypes (void);
 static void Deg_ListDegreeTypesForSeeing (void);
-static void Deg_ListDegreeTypesForEdition (void);
-static void Deg_ListDegreesForSeeing (bool ICanEdit);
 static void Deg_PutIconToEditDegTypes (void);
-static void Deg_PutIconToEditDegrees (void);
-static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
+static void Deg_ListDegreeTypesForEdition (void);
+
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEdit (struct Degree *Deg);
 static Deg_StatusTxt_t Deg_GetStatusTxtFromStatusBits (Deg_Status_t Status);
@@ -108,7 +106,11 @@ static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_CreateDegreeType (struct DegreeType *DegTyp);
 static void Deg_CreateDegree (struct Degree *Deg,unsigned Status);
+
 static void Deg_ListDegrees (void);
+static void Deg_PutIconToEditDegrees (void);
+static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
+
 static void Deg_GetListDegTypes (void);
 static void Deg_GetListDegsOfCurrentCtr (void);
 static void Deg_FreeListDegsOfCurrentCtr (void);
@@ -654,10 +656,10 @@ static void Deg_WriteSelectorOfDegree (void)
   }
 
 /*****************************************************************************/
-/**************** Write degree full name in the top of the page **************/
+/************* Write hierarchy breadcrumb in the top of the page *************/
 /*****************************************************************************/
 
-void Deg_WriteCtyInsCtrDeg (void)
+void Deg_WriteHierarchyBreadcrumb (void)
   {
    extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
    extern const char *Txt_System;
@@ -687,8 +689,8 @@ void Deg_WriteCtyInsCtrDeg (void)
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
-      /***** Form to go to select institutions *****/
-      Act_FormGoToStart (ActSeeCtyInf);
+      /***** Form to go to see institutions of this country *****/
+      Act_FormGoToStart (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
       Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
@@ -712,8 +714,8 @@ void Deg_WriteCtyInsCtrDeg (void)
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
-      /***** Form to go to select centres *****/
-      Act_FormGoToStart (ActSeeInsInf);
+      /***** Form to see centres of this institution *****/
+      Act_FormGoToStart (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
       Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
@@ -741,8 +743,8 @@ void Deg_WriteCtyInsCtrDeg (void)
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
-      /***** Form to go to the centre *****/
-      Act_FormGoToStart (ActSeeCtrInf);
+      /***** Form to see degrees of this centre *****/
+      Act_FormGoToStart (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
       Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn);
       fprintf (Gbl.F.Out,"%s</a>",
@@ -770,8 +772,8 @@ void Deg_WriteCtyInsCtrDeg (void)
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
-      /***** Form to go to the degree *****/
-      Act_FormGoToStart (ActSeeDegInf);
+      /***** Form to go see courses of this degree *****/
+      Act_FormGoToStart (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
       Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn);
       strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
@@ -1201,6 +1203,17 @@ static void Deg_ListDegreeTypesForSeeing (void)
   }
 
 /*****************************************************************************/
+/******************* Put link (form) to edit degree types ********************/
+/*****************************************************************************/
+
+static void Deg_PutIconToEditDegTypes (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiDegTyp,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
 /******************* List current degree types for edition *******************/
 /*****************************************************************************/
 
@@ -1260,142 +1273,6 @@ static void Deg_ListDegreeTypesForEdition (void)
      }
 
    Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/********************** List current degrees for seeing **********************/
-/*****************************************************************************/
-
-static void Deg_ListDegreesForSeeing (bool ICanEdit)
-  {
-   extern const char *Txt_Degrees_of_CENTRE_X;
-   unsigned NumDeg;
-
-   /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShortName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Deg_PutIconToEditDegrees :
-                                   NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   Deg_PutHeadDegreesForSeeing ();
-
-   /***** List the degrees *****/
-   for (NumDeg = 0;
-	NumDeg < Gbl.CurrentCtr.Ctr.NumDegs;
-	NumDeg++)
-      Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
-
-   /***** Table end *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/******************* Put link (form) to edit degree types ********************/
-/*****************************************************************************/
-
-static void Deg_PutIconToEditDegTypes (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiDegTyp,NULL,"edit64x64.png",Txt_Edit,NULL);
-  }
-
-/*****************************************************************************/
-/********************** Put link (form) to edit degrees **********************/
-/*****************************************************************************/
-
-static void Deg_PutIconToEditDegrees (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiDeg,NULL,"edit64x64.png",Txt_Edit,NULL);
-  }
-
-/*****************************************************************************/
-/************************ List one degree for seeing *************************/
-/*****************************************************************************/
-
-static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
-  {
-   extern const char *Txt_DEGREE_With_courses;
-   extern const char *Txt_DEGREE_Without_courses;
-   extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
-   struct DegreeType DegTyp;
-   const char *TxtClassNormal;
-   const char *TxtClassStrong;
-   const char *BgColor;
-   Crs_StatusTxt_t StatusTxt;
-
-   /***** Get data of type of degree of this degree *****/
-   DegTyp.DegTypCod = Deg->DegTypCod;
-   if (!Deg_GetDataOfDegreeTypeByCod (&DegTyp))
-      Lay_ShowErrorAndExit ("Code of type of degree not found.");
-
-   if (Deg->Status & Deg_STATUS_BIT_PENDING)
-     {
-      TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "DAT_LIGHT";
-     }
-   else
-     {
-      TxtClassNormal = "DAT";
-      TxtClassStrong = "DAT_N";
-     }
-   BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
-                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
-
-   /***** Put green tip if degree has courses *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"CENTER_MIDDLE %s\">"
-		      "<img src=\"%s/%s16x16.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />"
-		      "</td>",
-	    BgColor,
-	    Gbl.Prefs.IconsURL,
-	    Deg->NumCrss ? "ok_green" :
-		           "tr",
-	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			   Txt_DEGREE_Without_courses,
-	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			   Txt_DEGREE_Without_courses);
-
-   /***** Number of degree in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-                      "%u"
-                      "</td>",
-	    TxtClassNormal,BgColor,
-            NumDeg);
-
-   /***** Degree logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
-   Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
-                                      TxtClassStrong,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Type of degree *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-	              "%s"
-	              "</td>",
-	    TxtClassNormal,BgColor,DegTyp.DegTypName);
-
-   /***** Current number of courses in this degree *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
-	    TxtClassNormal,BgColor,Deg->NumCrss);
-
-   /***** Degree status *****/
-   StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-	              "%s"
-	              "</td>"
-		      "</tr>",
-	    TxtClassNormal,BgColor,Txt_DEGREE_STATUS[StatusTxt]);
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
@@ -2058,16 +1935,38 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
 
 static void Deg_ListDegrees (void)
   {
-   extern const char *Txt_No_degrees_have_been_created_in_this_centre;
+   extern const char *Txt_Degrees_of_CENTRE_X;
+   extern const char *Txt_No_degrees;
    extern const char *Txt_Create_another_degree;
    extern const char *Txt_Create_degree;
+   unsigned NumDeg;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
-      Deg_ListDegreesForSeeing (ICanEdit);
-   else					// No degrees created in the current centre
-      Lay_ShowAlert (Lay_INFO,Txt_No_degrees_have_been_created_in_this_centre);
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShortName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Deg_PutIconToEditDegrees :
+                                                  NULL);
 
+   if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
+     {
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
+	                 " style=\"margin-bottom:20px;\">");
+      Deg_PutHeadDegreesForSeeing ();
+
+      /***** List the degrees *****/
+      for (NumDeg = 0;
+	   NumDeg < Gbl.CurrentCtr.Ctr.NumDegs;
+	   NumDeg++)
+	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+   else	// No degrees created in the current centre
+      Lay_ShowAlert (Lay_INFO,Txt_No_degrees);
+
+   /***** Button to create degree *****/
    if (ICanEdit)
      {
       Act_FormStart (ActEdiDeg);
@@ -2075,6 +1974,105 @@ static void Deg_ListDegrees (void)
 	                                                 Txt_Create_degree);
       Act_FormEnd ();
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Put link (form) to edit degrees **********************/
+/*****************************************************************************/
+
+static void Deg_PutIconToEditDegrees (void)
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (ActEdiDeg,NULL,"edit64x64.png",Txt_Edit,NULL);
+  }
+
+/*****************************************************************************/
+/************************ List one degree for seeing *************************/
+/*****************************************************************************/
+
+static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
+  {
+   extern const char *Txt_DEGREE_With_courses;
+   extern const char *Txt_DEGREE_Without_courses;
+   extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
+   struct DegreeType DegTyp;
+   const char *TxtClassNormal;
+   const char *TxtClassStrong;
+   const char *BgColor;
+   Crs_StatusTxt_t StatusTxt;
+
+   /***** Get data of type of degree of this degree *****/
+   DegTyp.DegTypCod = Deg->DegTypCod;
+   if (!Deg_GetDataOfDegreeTypeByCod (&DegTyp))
+      Lay_ShowErrorAndExit ("Code of type of degree not found.");
+
+   if (Deg->Status & Deg_STATUS_BIT_PENDING)
+     {
+      TxtClassNormal = "DAT_LIGHT";
+      TxtClassStrong = "DAT_LIGHT";
+     }
+   else
+     {
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_N";
+     }
+   BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
+                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
+
+   /***** Put green tip if degree has courses *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"CENTER_MIDDLE %s\">"
+		      "<img src=\"%s/%s16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON20x20\" />"
+		      "</td>",
+	    BgColor,
+	    Gbl.Prefs.IconsURL,
+	    Deg->NumCrss ? "ok_green" :
+		           "tr",
+	    Deg->NumCrss ? Txt_DEGREE_With_courses :
+			   Txt_DEGREE_Without_courses,
+	    Deg->NumCrss ? Txt_DEGREE_With_courses :
+			   Txt_DEGREE_Without_courses);
+
+   /***** Number of degree in this list *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+                      "%u"
+                      "</td>",
+	    TxtClassNormal,BgColor,
+            NumDeg);
+
+   /***** Degree logo and name *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
+                                      TxtClassStrong,"CENTER_MIDDLE");
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Type of degree *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
+	              "%s"
+	              "</td>",
+	    TxtClassNormal,BgColor,DegTyp.DegTypName);
+
+   /***** Current number of courses in this degree *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
+	              "%u"
+	              "</td>",
+	    TxtClassNormal,BgColor,Deg->NumCrss);
+
+   /***** Degree status *****/
+   StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
+	              "%s"
+	              "</td>"
+		      "</tr>",
+	    TxtClassNormal,BgColor,Txt_DEGREE_STATUS[StatusTxt]);
+
+   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/

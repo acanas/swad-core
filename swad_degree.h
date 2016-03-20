@@ -101,7 +101,7 @@ void Deg_ShowConfiguration (void);
 void Deg_PrintConfiguration (void);
 
 void Deg_WriteMenuAllCourses (void);
-void Deg_WriteCtyInsCtrDeg (void);
+void Deg_WriteHierarchyBreadcrumb (void);
 void Deg_WriteBigNameCtyInsCtrDegCrs (void);
 void Deg_InitCurrentCourse (void);
 
