@@ -67,7 +67,6 @@ static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconToPrint (void);
 
 static void Ins_ListInstitutions (void);
-static void Ins_ListInstitutionsForSeeing (bool ICanEdit);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
@@ -536,16 +535,38 @@ void Ins_ShowInssOfCurrentCty (void)
 
 static void Ins_ListInstitutions (void)
   {
-   extern const char *Txt_No_institutions_have_been_created_in_this_country;
+   extern const char *Txt_Institutions_of_COUNTRY_X;
+   extern const char *Txt_No_institutions;
    extern const char *Txt_Create_another_institution;
    extern const char *Txt_Create_institution;
+   unsigned NumIns;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.Inss.Num)	// There are institutions in the current country
-      Ins_ListInstitutionsForSeeing (ICanEdit);
-   else			// No insrtitutions created in the current country
-      Lay_ShowAlert (Lay_INFO,Txt_No_institutions_have_been_created_in_this_country);
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Ins_PutIconToEditInstitutions :
+                                                  NULL);
 
+   if (Gbl.Inss.Num)	// There are institutions in the current country
+     {
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
+	                 " style=\"margin-bottom:20px;\">");
+      Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
+
+      /***** Write all the institutions and their nuber of users *****/
+      for (NumIns = 0;
+	   NumIns < Gbl.Inss.Num;
+	   NumIns++)
+	 Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+   else	// No insrtitutions created in the current country
+      Lay_ShowAlert (Lay_INFO,Txt_No_institutions);
+
+   /***** Button to create institution *****/
    if (ICanEdit)
      {
       Act_FormStart (ActEdiIns);
@@ -553,34 +574,7 @@ static void Ins_ListInstitutions (void)
 	                                   Txt_Create_institution);
       Act_FormEnd ();
      }
-  }
 
-/*****************************************************************************/
-/*************** List the institutions of the current country ****************/
-/*****************************************************************************/
-
-static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
-  {
-   extern const char *Txt_Institutions_of_COUNTRY_X;
-   unsigned NumIns;
-
-   /***** Table head *****/
-   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
-            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Ins_PutIconToEditInstitutions :
-                                   NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
-
-   /***** Write all the institutions and their nuber of users *****/
-   for (NumIns = 0;
-	NumIns < Gbl.Inss.Num;
-	NumIns++)
-      Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
-
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
   }
 

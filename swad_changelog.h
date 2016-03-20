@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.155.6 (2016-03-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.155.7 (2016-03-20)"
 #define CSS_FILE		"swad15.152.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.155.7: Mar 20, 2016	Changes in layout of listing of institutions. (196051 lines)
         Version 15.155.6: Mar 20, 2016	Changes in layout of listing of centres. (196055 lines)
         Version 15.155.5: Mar 20, 2016	Changes in behaviour of hierarchy breadcrumb.
 					Changes in layout of listing of degrees. (196057 lines)

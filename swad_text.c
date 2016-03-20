@@ -23697,25 +23697,25 @@ const char *Txt_No_information =
 	"N&atilde;o h&aacute; informa&ccedil;&atilde;o.";
 #endif
 
-const char *Txt_No_institutions_have_been_created_in_this_country =
+const char *Txt_No_institutions =
 #if   L==1
-	"No se han creado instituciones en este pa&iacute;s.";	// Necessita traduccio
+	"No hi ha institucions.";
 #elif L==2
-	"No institutions have been created in this country.";	// Need Übersetzung
+	"Keine Hochschulen.";
 #elif L==3
-	"No institutions have been created in this country.";
+	"No institutions.";
 #elif L==4
-	"No se han creado instituciones en este pa&iacute;s.";
+	"No hay instituciones.";
 #elif L==5
-	"No institutions have been created in this country.";	// Besoin de traduction
+	"Il n'y a pas d'&eacute;tablissements.";
 #elif L==6
-	"No se han creado instituciones en este pa&iacute;s.";	// Okoteve traducción
+	"No hay instituciones.";	// Okoteve traducción
 #elif L==7
-	"No institutions have been created in this country.";	// Bisogno di traduzione
+	"Non ci sono istituzioni.";
 #elif L==8
-	"No institutions have been created in this country.";	// Potrzebujesz tlumaczenie
+	"Brak instytucje.";
 #elif L==9
-	"No institutions have been created in this country.";	// Necessita de tradução
+	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_No_BR_msgs =
