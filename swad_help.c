@@ -82,17 +82,17 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Remove_me_from_the_course_X;
    extern const char *Txt_Remove_me;
    extern const char *Txt_Register_me_in_the_course_X;
-   extern const char *Txt_Select_or_create_another_course_in_the_degree_X;
-   extern const char *Txt_Select_or_create_one_course_in_the_degree_X;
+   extern const char *Txt_Select_or_create_another_course_in_X;
+   extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Courses;
-   extern const char *Txt_Select_or_create_another_degree_in_the_centre_X;
-   extern const char *Txt_Select_or_create_one_degree_in_the_centre_X;
+   extern const char *Txt_Select_or_create_another_degree_in_X;
+   extern const char *Txt_Select_or_create_one_degree_in_X;
    extern const char *Txt_Degrees;
-   extern const char *Txt_Select_or_create_another_centre_in_the_institution_X;
-   extern const char *Txt_Select_or_create_one_centre_in_the_institution_X;
+   extern const char *Txt_Select_or_create_another_centre_in_X;
+   extern const char *Txt_Select_or_create_one_centre_in_X;
    extern const char *Txt_Centres;
-   extern const char *Txt_Select_or_create_another_institution_in_COUNTRY_X;
-   extern const char *Txt_Select_or_create_one_institution_in_COUNTRY_X;
+   extern const char *Txt_Select_or_create_another_institution_in_X;
+   extern const char *Txt_Select_or_create_one_institution_in_X;
    extern const char *Txt_Institutions;
    extern const char *Txt_Select_another_country;
    extern const char *Txt_Select_one_country;
@@ -144,8 +144,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
 	{
 	 /* Select a course */
-	 sprintf (Gbl.Title,Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_or_create_another_course_in_the_degree_X :
-							    Txt_Select_or_create_one_course_in_the_degree_X,
+	 sprintf (Gbl.Title,Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_or_create_another_course_in_X :
+							    Txt_Select_or_create_one_course_in_X,
 		  Gbl.CurrentDeg.Deg.ShortName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCrs,
@@ -154,8 +154,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
 	{
 	 /* Select a degree */
-	 sprintf (Gbl.Title,Gbl.CurrentDeg.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_the_centre_X :
-							    Txt_Select_or_create_one_degree_in_the_centre_X,
+	 sprintf (Gbl.Title,Gbl.CurrentDeg.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
+							    Txt_Select_or_create_one_degree_in_X,
 		  Gbl.CurrentCtr.Ctr.ShortName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeDeg,
@@ -164,8 +164,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
 	{
 	 /* Select a centre */
-	 sprintf (Gbl.Title,Gbl.CurrentCtr.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_the_institution_X :
-							    Txt_Select_or_create_one_centre_in_the_institution_X,
+	 sprintf (Gbl.Title,Gbl.CurrentCtr.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_X :
+							    Txt_Select_or_create_one_centre_in_X,
 		  Gbl.CurrentIns.Ins.ShortName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCtr,
@@ -174,8 +174,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
 	{
 	 /* Select an institution */
-	 sprintf (Gbl.Title,Gbl.CurrentIns.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_COUNTRY_X :
-							    Txt_Select_or_create_one_institution_in_COUNTRY_X,
+	 sprintf (Gbl.Title,Gbl.CurrentIns.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
+							    Txt_Select_or_create_one_institution_in_X,
 		  Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeIns,
