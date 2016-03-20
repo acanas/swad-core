@@ -40,7 +40,6 @@
 
 #define Deg_MAX_DEGREES_PER_USR		 20 // Used in list of my degrees
 
-#define Deg_MAX_LENGTH_DEGREE_TYPE_NAME		 32
 #define Deg_MAX_LENGTH_DEGREE_SHORT_NAME	 32
 #define Deg_MAX_LENGTH_DEGREE_FULL_NAME		127
 
@@ -80,12 +79,6 @@ struct Degree
    unsigned NumCrss;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
   };
-struct DegreeType
-  {
-   long DegTypCod;					// Degree type code
-   char DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME+1];	// Degree type name
-   unsigned NumDegs;					// Number of degrees of this type
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -105,9 +98,6 @@ void Deg_WriteHierarchyBreadcrumb (void);
 void Deg_WriteBigNameCtyInsCtrDegCrs (void);
 void Deg_InitCurrentCourse (void);
 
-void Deg_WriteSelectorDegTypes (void);
-void Deg_SeeDegTypes (void);
-void Deg_ReqEditDegreeTypes (void);
 void Deg_ShowDegsOfCurrentCtr (void);
 
 unsigned Deg_ConvStrToYear (const char *StrYear);
@@ -116,33 +106,29 @@ void Deg_EditDegrees (void);
 
 void Deg_GetListAllDegs (void);
 void Deg_FreeListAllDegs (void);
-void Deg_FreeListDegTypes (void);
 void Deg_GetListDegsAdminByMe (void);
 void Deg_FreeListMyAdminDegs (void);
 
-void Deg_RecFormNewDegTyp (void);
 void Deg_RecFormReqDeg (void);
 void Deg_RecFormNewDeg (void);
-void Deg_RemoveDegreeType (void);
 void Deg_RemoveDegree (void);
 
 void Deg_PutParamDegCod (long DegCod);
-long Deg_GetParamOtherDegTypCod (void);
 long Deg_GetParamOtherDegCod (void);
 
-bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg);
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg);
 long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
-void Deg_RenameDegreeType (void);
+void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegreeCtr (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
+
+void Deg_PutButtonToGoToDeg (struct Degree *Deg);
 
 void Deg_RequestLogo (void);
 void Deg_ReceiveLogo (void);

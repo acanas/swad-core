@@ -42,6 +42,7 @@
 #include "swad_course.h"
 #include "swad_cryptography.h"
 #include "swad_department.h"
+#include "swad_degree_type.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"

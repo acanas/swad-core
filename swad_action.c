@@ -41,6 +41,7 @@
 #include "swad_course.h"
 #include "swad_chat.h"
 #include "swad_database.h"
+#include "swad_degree_type.h"
 #include "swad_exam.h"
 #include "swad_enrollment.h"
 #include "swad_follow.h"
