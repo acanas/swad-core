@@ -23030,17 +23030,17 @@ const char *Txt_New_plugin =
 
 const char *Txt_New_question =
 #if   L==1
-	"Pregunta nova";
+	"Nova pregunta";
 #elif L==2
 	"Neuer Frage";
 #elif L==3
 	"New question";
 #elif L==4
-	"Pregunta nueva";
+	"Nueva pregunta";
 #elif L==5
 	"Nouvelle question";
 #elif L==6
-	"Pregunta nueva";	// Okoteve traducción
+	"Nueva pregunta";	// Okoteve traducción
 #elif L==7
 	"Nuova domanda";
 #elif L==8
@@ -45728,23 +45728,23 @@ const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_
 
 const char *Txt_This_survey_has_no_questions =
 #if   L==1
-	"Aquesta enquesta no t&eacute; preguntes";
+	"Aquesta enquesta no t&eacute; preguntes.";
 #elif L==2
-	"Diese Umfrage hat keine Fragen";
+	"Diese Umfrage hat keine Fragen.";
 #elif L==3
-	"This survey has no questions";
+	"This survey has no questions.";
 #elif L==4
-	"Esta encuesta no tiene preguntas";
+	"Esta encuesta no tiene preguntas.";
 #elif L==5
-	"Ce sondage n'a pas de questions";
+	"Ce sondage n'a pas de questions.";
 #elif L==6
-	"Esta encuesta no tiene preguntas";	// Okoteve traducción
+	"Esta encuesta no tiene preguntas.";	// Okoteve traducción
 #elif L==7
-	"Questo sondaggio non ha domande";
+	"Questo sondaggio non ha domande.";
 #elif L==8
-	"Badanie to nie ma pytania";
+	"Badanie to nie ma pytania.";
 #elif L==9
-	"Este inqu&eacute;rito n&atilde;o tem perguntas";
+	"Este inqu&eacute;rito n&atilde;o tem perguntas.";
 #endif
 
 const char *Txt_Thread =

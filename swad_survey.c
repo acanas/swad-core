@@ -106,6 +106,9 @@ static void Svy_PutParams (void);
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt);
 static void Svy_PutParamSvyCod (long SvyCod);
 static long Svy_GetParamSvyCod (void);
+
+static void Svy_PutButtonToResetSurvey (void);
+
 static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy);
 static bool Svy_SetDefaultAndAllowedForEdition (void);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
@@ -135,6 +138,8 @@ static void Svy_FreeTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned Num
 static unsigned Svy_GetQstIndFromQstCod (long QstCod);
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
+static void Svy_PutIconToAddNewQuestion (void);
+static void Svy_PutButtonToCreateNewQuestion (void);
 static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey);
@@ -205,7 +210,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Svy_PutFormToSelectWhichGroupsToShow ();
 
-   if (Gbl.Asgs.Num)
+   if (Gbl.Svys.Num)
      {
       /***** Table head *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
@@ -1186,7 +1191,7 @@ static void Svy_PutParamSvyCod (long SvyCod)
 /******************** Get parameter with code of survey **********************/
 /*****************************************************************************/
 
-long Svy_GetParamSvyCod (void)
+static long Svy_GetParamSvyCod (void)
   {
    char LongStr[1+10+1];
 
@@ -1300,7 +1305,6 @@ void Svy_RemoveSurvey (void)
 void Svy_AskResetSurvey (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_survey_X;
-   extern const char *Txt_Reset_survey;
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1325,13 +1329,24 @@ void Svy_AskResetSurvey (void)
 
    /***** Button of confirmation of reset *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Svy_PutButtonToResetSurvey ();
+
+   /***** Show surveys again *****/
+   Svy_ListAllSurveys (&SvyQst);
+  }
+
+/*****************************************************************************/
+/************************* Put button to reset survey ************************/
+/*****************************************************************************/
+
+static void Svy_PutButtonToResetSurvey (void)
+  {
+   extern const char *Txt_Reset_survey;
+
    Act_FormStart (ActRstSvy);
    Svy_PutParams ();
    Lay_PutConfirmButton (Txt_Reset_survey);
    Act_FormEnd ();
-
-   /***** Show surveys again *****/
-   Svy_ListAllSurveys (&SvyQst);
   }
 
 /*****************************************************************************/
@@ -2797,7 +2812,6 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    extern const char *Txt_This_survey_has_no_questions;
    extern const char *Txt_Send_survey;
    extern const char *Txt_Edit_question;
-   extern const char *Txt_New_question;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2814,20 +2828,22 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
-   if (PutFormAnswerSurvey)
-     {
-      /***** Start form to send answers to survey *****/
-      Act_FormStart (ActAnsSvy);
-      Svy_PutParamSvyCod (Svy->SvyCod);
-     }
-
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Questions);
+   Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
+   Lay_StartRoundFrame (NULL,Txt_Questions,Svy_PutIconToAddNewQuestion);
 
    if (NumQsts)
      {
+      if (PutFormAnswerSurvey)
+	{
+	 /***** Start form to send answers to survey *****/
+	 Act_FormStart (ActAnsSvy);
+	 Svy_PutParamSvyCod (Svy->SvyCod);
+	}
+
       /***** Write the heading *****/
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                         "<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
       fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
@@ -2911,45 +2927,57 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
         }
+
+      fprintf (Gbl.F.Out,"</table>");
+
+      if (PutFormAnswerSurvey)
+	{
+	 /***** Button to create/modify survey *****/
+	 Lay_PutConfirmButton (Txt_Send_survey);
+
+	 /***** End form *****/
+	 Act_FormEnd ();
+	}
      }
    else	// This survey has no questions
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"ASG_GRP CENTER_TOP\">"
-	                 "(%s)"
-	                 "</td>"
-	                 "</tr>",
-               Txt_This_survey_has_no_questions);
+      Lay_ShowAlert (Lay_INFO,Txt_This_survey_has_no_questions);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (PutFormAnswerSurvey)
-     {
-      /***** Button to create/modify survey *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\">");
-      Lay_PutConfirmButton (Txt_Send_survey);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
-   else if (Svy->Status.ICanEdit && Editing)
-     {
-      /***** Put form to add a new question in this survey *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\">");
-      Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
-      Lay_PutContextualLink (ActEdiOneSvyQst,Svy_PutParams,"plus64x64.png",
-                             Txt_New_question,Txt_New_question);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
+   if (Svy->Status.ICanEdit && Editing)
+      /***** Put button to add a new question in this survey *****/
+      Svy_PutButtonToCreateNewQuestion ();
 
    /***** Table end *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
+  }
 
-   if (PutFormAnswerSurvey)
-      /***** End form *****/
-      Act_FormEnd ();
+/*****************************************************************************/
+/***************** Put icon to add a new question to survey ******************/
+/*****************************************************************************/
+
+static void Svy_PutIconToAddNewQuestion (void)
+  {
+   extern const char *Txt_New_question;
+
+   /***** Put form to create a new question *****/
+   Lay_PutContextualLink (ActEdiOneSvyQst,Svy_PutParams,
+                          "plus64x64.png",Txt_New_question,NULL);
+  }
+
+/*****************************************************************************/
+/**************** Put button to add a new question to survey *****************/
+/*****************************************************************************/
+
+static void Svy_PutButtonToCreateNewQuestion (void)
+  {
+   extern const char *Txt_New_question;
+
+   Act_FormStart (ActEdiOneSvyQst);
+   Svy_PutParams ();
+   Lay_PutConfirmButton (Txt_New_question);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
