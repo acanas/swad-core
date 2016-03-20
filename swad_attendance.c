@@ -57,7 +57,8 @@ extern struct Globals Gbl;
 
 typedef enum
   {
-   Att_NORMAL_VIEW,
+   Att_NORMAL_VIEW_ONLY_ME,
+   Att_NORMAL_VIEW_STUDENTS,
    Att_PRINT_VIEW,
   } Att_TypeOfView_t;
 
@@ -112,14 +113,16 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelectedUsrCods);
 static void Att_GetListSelectedAttCods (char **StrAttCodsSelected);
 
-static void Att_PutFormToPrintMyList (void);
+static void Att_PutIconToPrintMyList (void);
 static void Att_PutFormToPrintMyListParams (void);
-static void Att_PutFormToPrintStdsList (void);
-static void Att_PutFormToPrintStdsListParams (void);
+static void Att_PutIconToPrintStdsList (void);
+static void Att_PutParamsToPrintStdsList (void);
 
 static void Att_PutButtonToShowDetails (void);
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView);
-static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,unsigned NumStdsInList,long *LstSelectedUsrCods);
+static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
+                                         unsigned NumStdsInList,
+                                         long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
 static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods);
@@ -186,6 +189,8 @@ static void Att_ShowAllAttEvents (void)
    Att_EventsOrderType_t Order;
    struct Pagination Pagination;
    unsigned NumAttEvent;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.AttEvents.Num;
@@ -199,9 +204,8 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Events,
-			(Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-			 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ? Att_PutIconToCreateNewAttEvent :
-								  NULL);
+			ICanEdit ? Att_PutIconToCreateNewAttEvent :
+				   NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -254,7 +258,8 @@ static void Att_ShowAllAttEvents (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_events);
 
    /***** Button to create a new attendance event *****/
-   Att_PutButtonToCreateNewAttEvent ();
+   if (ICanEdit)
+      Att_PutButtonToCreateNewAttEvent ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -2585,7 +2590,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
 void Usr_ListMyAttendanceCrs (void)
   {
-   Usr_ListOrPrintMyAttendanceCrs (Att_NORMAL_VIEW);
+   Usr_ListOrPrintMyAttendanceCrs (Att_NORMAL_VIEW_ONLY_ME);
   }
 
 void Usr_PrintMyAttendanceCrs (void)
@@ -2619,10 +2624,6 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    /***** Get list of attendance events selected *****/
    Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
-   /***** Put link to print *****/
-   if (TypeOfView == Att_NORMAL_VIEW)
-      Att_PutFormToPrintMyList ();
-
    /***** List events to select *****/
    Att_ListEventsToSelect (TypeOfView);
 
@@ -2652,7 +2653,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
 void Usr_ListStdsAttendanceCrs (void)
   {
-   Usr_ListOrPrintStdsAttendanceCrs (Att_NORMAL_VIEW);
+   Usr_ListOrPrintStdsAttendanceCrs (Att_NORMAL_VIEW_STUDENTS);
   }
 
 void Usr_PrintStdsAttendanceCrs (void)
@@ -2697,10 +2698,6 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
       /***** Get list of attendance events selected *****/
       Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
-
-      /***** Put link to print *****/
-      if (TypeOfView == Att_NORMAL_VIEW)
-	 Att_PutFormToPrintStdsList ();
 
       /***** List events to select *****/
       Att_ListEventsToSelect (TypeOfView);
@@ -2879,19 +2876,16 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
   }
 
 /*****************************************************************************/
-/** Put a link (form) to print my assistance (as student) to several events **/
+/****** Put icon to print my assistance (as student) to several events *******/
 /*****************************************************************************/
 
-static void Att_PutFormToPrintMyList (void)
+static void Att_PutIconToPrintMyList (void)
   {
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
-                          "print64x64.png",
-                          Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</div>");
+                          "print64x64.png",Txt_Print,NULL);
   }
 
 static void Att_PutFormToPrintMyListParams (void)
@@ -2903,22 +2897,19 @@ static void Att_PutFormToPrintMyListParams (void)
   }
 
 /*****************************************************************************/
-/**** Put a link (form) to print assistance of students to several events ****/
+/******** Put icon to print assistance of students to several events *********/
 /*****************************************************************************/
 
-static void Att_PutFormToPrintStdsList (void)
+static void Att_PutIconToPrintStdsList (void)
   {
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActPrnLstStdAtt,Att_PutFormToPrintStdsListParams,
-                          "print64x64.png",
-                          Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList,
+                          "print64x64.png",Txt_Print,NULL);
   }
 
-static void Att_PutFormToPrintStdsListParams (void)
+static void Att_PutParamsToPrintStdsList (void)
   {
    if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
@@ -2967,7 +2958,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
    /***** Start form to update the attendance
 	  depending on the events selected *****/
-   if (TypeOfView == Att_NORMAL_VIEW)
+   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
      {
       Act_FormStart (Gbl.Action.Act);
       Grp_PutParamsCodGrps ();
@@ -3033,7 +3025,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Put button to refresh *****/
-   if (TypeOfView == Att_NORMAL_VIEW)
+   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
      {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
@@ -3049,7 +3042,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    Lay_EndRoundFrameTable ();
 
    /***** End form *****/
-   if (TypeOfView == Att_NORMAL_VIEW)
+   if (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+       TypeOfView == Att_NORMAL_VIEW_STUDENTS)
       Act_FormEnd ();
   }
 
@@ -3057,7 +3051,9 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 /*********** Show table with attendances for every student in list ***********/
 /*****************************************************************************/
 
-static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,unsigned NumStdsInList,long *LstSelectedUsrCods)
+static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
+                                         unsigned NumStdsInList,
+                                         long *LstSelectedUsrCods)
   {
    extern const char *Txt_Attendance;
    extern const char *Txt_Number_of_students;
@@ -3070,7 +3066,11 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,unsigned Nu
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Attendance);
+   Lay_StartRoundFrame (NULL,Txt_Attendance,
+                         (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
+                        ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
+                        	                                    NULL));
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3118,19 +3118,17 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,unsigned Nu
 	       Total);
      }
 
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
    /***** Button to show more details *****/
-   if (TypeOfView == Att_NORMAL_VIEW && !Gbl.AttEvents.ShowDetails)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"%u\">",
-	       4 + Gbl.AttEvents.Num + 1);
+   if (!Gbl.AttEvents.ShowDetails &&
+       (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+	TypeOfView == Att_NORMAL_VIEW_STUDENTS))
       Att_PutButtonToShowDetails ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-     }
 
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

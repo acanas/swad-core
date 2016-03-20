@@ -177,6 +177,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    tSvysOrderType Order;
    struct Pagination Pagination;
    unsigned NumSvy;
+   bool ICanEdit = Svy_CheckIfICanCreateSvy ();
 
    /***** Get number of groups in current course *****/
    if (!Gbl.CurrentCrs.Grps.NumGrps)
@@ -197,8 +198,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Surveys,
-                        Svy_CheckIfICanCreateSvy () ? Svy_PutIconToCreateNewSvy :
-                                                      NULL);
+                        ICanEdit ? Svy_PutIconToCreateNewSvy :
+                                   NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -251,7 +252,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
 
    /***** Button to create a new survey *****/
-   Svy_PutButtonToCreateNewSvy ();
+   if (ICanEdit)
+      Svy_PutButtonToCreateNewSvy ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

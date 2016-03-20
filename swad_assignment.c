@@ -119,6 +119,8 @@ static void Asg_ShowAllAssignments (void)
    tAsgsOrderType Order;
    struct Pagination Pagination;
    unsigned NumAsg;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get list of assignments *****/
    Asg_GetListAssignments ();
@@ -135,9 +137,8 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Assignments,
-                        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ? Asg_PutIconToCreateNewAsg :
-                                                                  NULL);
+                        ICanEdit ? Asg_PutIconToCreateNewAsg :
+                                   NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -194,7 +195,8 @@ static void Asg_ShowAllAssignments (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_assignments);
 
    /***** Button to create a new assignment *****/
-   Asg_PutButtonToCreateNewAsg ();
+   if (ICanEdit)
+      Asg_PutButtonToCreateNewAsg ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
