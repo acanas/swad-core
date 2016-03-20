@@ -447,7 +447,7 @@ void Gbl_Cleanup (void)
    Crs_FreeListCoursesInDegree (&Gbl.Degs.EditingDeg);
    Deg_FreeListMyAdminDegs ();
    Deg_FreeListAllDegs ();
-   Deg_FreeListDegTypes ();
+   DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();
    Cty_FreeListCountries ();

@@ -122,7 +122,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_degree);
-   Deg_WriteSelectorDegTypes ();
+   DT_WriteSelectorDegreeTypes ();
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
             Cfg_PLATFORM_SHORT_NAME);
@@ -223,7 +223,7 @@ void Ind_ShowIndicatorsCourses (void)
    Sco_GetScope ();
 
    /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Deg_GetParamOtherDegTypCod () :
+   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
                                                                     -1L;
 
    /***** Get department code *****/

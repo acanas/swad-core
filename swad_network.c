@@ -201,7 +201,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 
    /***** Show link to public profile *****/
    Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
-                            "swad64x64.gif",Cfg_PLATFORM_PAGE_TITLE);
+                            "swad64x64.gif",Cfg_PLATFORM_SHORT_NAME);
 
    /***** Show the rest of webs / social networks *****/
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;

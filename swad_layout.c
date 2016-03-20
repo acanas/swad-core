@@ -372,7 +372,7 @@ static void Lay_WritePageTitle (void)
    if (Gbl.GetMethod && Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       fprintf (Gbl.F.Out,"%s &gt; %s",
-	       Cfg_PLATFORM_PAGE_TITLE,
+	       Cfg_PLATFORM_SHORT_NAME,
 	       Gbl.CurrentDeg.Deg.ShortName);
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          fprintf (Gbl.F.Out," &gt; %s",
@@ -380,7 +380,7 @@ static void Lay_WritePageTitle (void)
      }
    else
       fprintf (Gbl.F.Out,"%s: %s",
-	       Cfg_PLATFORM_PAGE_TITLE,Txt_TAGLINE);
+	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
 
    fprintf (Gbl.F.Out,"</title>\n");
   }

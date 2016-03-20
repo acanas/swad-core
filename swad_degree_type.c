@@ -62,37 +62,37 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Deg_ListDegreeTypes (void);
-static void Deg_EditDegreeTypes (void);
-static void Deg_ListDegreeTypesForSeeing (void);
-static void Deg_PutIconToEditDegTypes (void);
-static void Deg_ListDegreeTypesForEdition (void);
+static void DT_ListDegreeTypes (void);
+static void DT_EditDegreeTypes (void);
+static void DT_ListDegreeTypesForSeeing (void);
+static void DT_PutIconToEditDegTypes (void);
+static void DT_ListDegreeTypesForEdition (void);
 
-static void Deg_PutFormToCreateDegType (void);
-static void Deg_PutHeadDegreeTypesForSeeing (void);
-static void Deg_PutHeadDegreeTypesForEdition (void);
-static void Deg_CreateDegreeType (struct DegreeType *DegTyp);
+static void DT_PutFormToCreateDegreeType (void);
+static void DT_PutHeadDegreeTypesForSeeing (void);
+static void DT_PutHeadDegreeTypesForEdition (void);
+static void DT_CreateDegreeType (struct DegreeType *DegTyp);
 
-static void Deg_PutParamOtherDegTypCod (long DegTypCod);
+static void DT_PutParamOtherDegTypCod (long DegTypCod);
 
-static unsigned Deg_CountNumDegsOfType (long DegTypCod);
-static void Deg_RemoveDegreeTypeCompletely (long DegTypCod);
-static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
+static unsigned DT_CountNumDegsOfType (long DegTypCod);
+static void DT_RemoveDegreeTypeCompletely (long DegTypCod);
+static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 
 /*****************************************************************************/
 /************** Show selector of degree types for statistics *****************/
 /*****************************************************************************/
 
-void Deg_WriteSelectorDegTypes (void)
+void DT_WriteSelectorDegreeTypes (void)
   {
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
 
    /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = Deg_GetParamOtherDegTypCod ();
+   Gbl.Stat.DegTypCod = DT_GetParamOtherDegTypCod ();
 
    /***** Get list of degree types *****/
-   Deg_GetListDegTypes ();
+   DT_GetListDegreeTypes ();
 
    /***** List degree types *****/
    fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\">"
@@ -112,51 +112,51 @@ void Deg_WriteSelectorDegTypes (void)
    fprintf (Gbl.F.Out,"</select>");
 
    /***** Free list of degree types *****/
-   Deg_FreeListDegTypes ();
+   DT_FreeListDegreeTypes ();
   }
 
 /*****************************************************************************/
 /***************************** Show degree types *****************************/
 /*****************************************************************************/
 
-void Deg_SeeDegTypes (void)
+void DT_SeeDegreeTypes (void)
   {
    /***** Get list of degree types *****/
-   Deg_GetListDegTypes ();
+   DT_GetListDegreeTypes ();
 
    /***** List degree types *****/
-   Deg_ListDegreeTypes ();
+   DT_ListDegreeTypes ();
 
    /***** Free list of degree types *****/
-   Deg_FreeListDegTypes ();
+   DT_FreeListDegreeTypes ();
   }
 
 /*****************************************************************************/
 /********************** Request edition of degree types **********************/
 /*****************************************************************************/
 
-void Deg_ReqEditDegreeTypes (void)
+void DT_ReqEditDegreeTypes (void)
   {
    /***** Get list of degree types *****/
-   Deg_GetListDegTypes ();
+   DT_GetListDegreeTypes ();
 
    /***** Put form to edit degree types *****/
-   Deg_EditDegreeTypes ();
+   DT_EditDegreeTypes ();
 
    /***** Free list of degree types *****/
-   Deg_FreeListDegTypes ();
+   DT_FreeListDegreeTypes ();
   }
 
 /*****************************************************************************/
 /***************************** List degree types *****************************/
 /*****************************************************************************/
 
-static void Deg_ListDegreeTypes (void)
+static void DT_ListDegreeTypes (void)
   {
    extern const char *Txt_There_are_no_types_of_degree;
 
    if (Gbl.Degs.DegTypes.Num)
-      Deg_ListDegreeTypesForSeeing ();
+      DT_ListDegreeTypesForSeeing ();
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
   }
@@ -165,7 +165,7 @@ static void Deg_ListDegreeTypes (void)
 /************************ Put forms to edit degree types *********************/
 /*****************************************************************************/
 
-static void Deg_EditDegreeTypes (void)
+static void DT_EditDegreeTypes (void)
   {
    extern const char *Txt_There_are_no_types_of_degree;
 
@@ -174,18 +174,18 @@ static void Deg_EditDegreeTypes (void)
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
 
    /***** Put a form to create a new degree type *****/
-   Deg_PutFormToCreateDegType ();
+   DT_PutFormToCreateDegreeType ();
 
    /***** Forms to edit current degree types *****/
    if (Gbl.Degs.DegTypes.Num)
-      Deg_ListDegreeTypesForEdition ();
+      DT_ListDegreeTypesForEdition ();
   }
 
 /*****************************************************************************/
 /******************* List current degree types for seeing ********************/
 /*****************************************************************************/
 
-static void Deg_ListDegreeTypesForSeeing (void)
+static void DT_ListDegreeTypesForSeeing (void)
   {
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_TYPES_OF_DEGREE_With_degrees;
@@ -195,10 +195,10 @@ static void Deg_ListDegreeTypesForSeeing (void)
 
    /***** Write heading *****/
    Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Deg_PutIconToEditDegTypes :
+                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
                                                                 NULL);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   Deg_PutHeadDegreeTypesForSeeing ();
+   DT_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
@@ -250,7 +250,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
-static void Deg_PutIconToEditDegTypes (void)
+static void DT_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
 
@@ -261,14 +261,14 @@ static void Deg_PutIconToEditDegTypes (void)
 /******************* List current degree types for edition *******************/
 /*****************************************************************************/
 
-static void Deg_ListDegreeTypesForEdition (void)
+static void DT_ListDegreeTypesForEdition (void)
   {
    extern const char *Txt_Types_of_degree;
    unsigned NumDegTyp;
 
    /***** Write heading *****/
    Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
-   Deg_PutHeadDegreeTypesForEdition ();
+   DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
@@ -283,7 +283,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       else
         {
          Act_FormStart (ActRemDegTyp);
-         Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+         DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
          Lay_PutIconRemove ();
          Act_FormEnd ();
         }
@@ -298,7 +298,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       /* Name of degree type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActRenDegTyp);
-      Deg_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+      DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
 	                 " size=\"25\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
@@ -323,7 +323,7 @@ static void Deg_ListDegreeTypesForEdition (void)
 /******************** Put a form to create a new degree type *****************/
 /*****************************************************************************/
 
-static void Deg_PutFormToCreateDegType (void)
+static void DT_PutFormToCreateDegreeType (void)
   {
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Type_of_degree;
@@ -362,7 +362,7 @@ static void Deg_PutFormToCreateDegType (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void Deg_PutHeadDegreeTypesForSeeing (void)
+static void DT_PutHeadDegreeTypesForSeeing (void)
   {
    extern const char *Txt_Type_of_degree;
    extern const char *Txt_Degrees;
@@ -384,7 +384,7 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void Deg_PutHeadDegreeTypesForEdition (void)
+static void DT_PutHeadDegreeTypesForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Type_of_degree;
@@ -411,7 +411,7 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
 /************************** Create a new degree type *************************/
 /*****************************************************************************/
 
-static void Deg_CreateDegreeType (struct DegreeType *DegTyp)
+static void DT_CreateDegreeType (struct DegreeType *DegTyp)
   {
    extern const char *Txt_Created_new_type_of_degree_X;
    char Query[128+Deg_MAX_LENGTH_DEGREE_TYPE_NAME];
@@ -431,7 +431,7 @@ static void Deg_CreateDegreeType (struct DegreeType *DegTyp)
 /**************** Create a list with all the degree types ********************/
 /*****************************************************************************/
 
-void Deg_GetListDegTypes (void)
+void DT_GetListDegreeTypes (void)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -486,7 +486,7 @@ void Deg_GetListDegTypes (void)
 /********* Free list of degree types and list of degrees of each type ********/
 /*****************************************************************************/
 
-void Deg_FreeListDegTypes (void)
+void DT_FreeListDegreeTypes (void)
   {
    /***** Free memory used by the list of degree types *****/
    if (Gbl.Degs.DegTypes.Lst)
@@ -501,7 +501,7 @@ void Deg_FreeListDegTypes (void)
 /***************** Receive form to create a new degree type ******************/
 /*****************************************************************************/
 
-void Deg_RecFormNewDegTyp (void)
+void DT_RecFormNewDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree;
@@ -516,14 +516,14 @@ void Deg_RecFormNewDegTyp (void)
    if (DegTyp->DegTypName[0])	// If there's a degree type name
      {
       /***** If name of degree type was in database... *****/
-      if (Deg_CheckIfDegreeTypeNameExists (DegTyp->DegTypName,-1L))
+      if (DT_CheckIfDegreeTypeNameExists (DegTyp->DegTypName,-1L))
         {
          sprintf (Gbl.Message,Txt_The_type_of_degree_X_already_exists,
                   DegTyp->DegTypName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
       else	// Add new degree type to database
-         Deg_CreateDegreeType (DegTyp);
+         DT_CreateDegreeType (DegTyp);
      }
    else	// If there is not a degree type name
      {
@@ -532,25 +532,25 @@ void Deg_RecFormNewDegTyp (void)
      }
 
    /***** Show the form again *****/
-   Deg_ReqEditDegreeTypes ();
+   DT_ReqEditDegreeTypes ();
   }
 
 /*****************************************************************************/
 /**************************** Remove a degree type ***************************/
 /*****************************************************************************/
 
-void Deg_RemoveDegreeType (void)
+void DT_RemoveDegreeType (void)
   {
    extern const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type;
    extern const char *Txt_Type_of_degree_X_removed;
    struct DegreeType DegTyp;
 
    /***** Get the code of the degree type *****/
-   if ((DegTyp.DegTypCod = Deg_GetParamOtherDegTypCod ()) == -1L)
+   if ((DegTyp.DegTypCod = DT_GetParamOtherDegTypCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of type of degree is missing.");
 
    /***** Get data of the degree type from database *****/
-   if (!Deg_GetDataOfDegreeTypeByCod (&DegTyp))
+   if (!DT_GetDataOfDegreeTypeByCod (&DegTyp))
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    /***** Check if this degree type has degrees *****/
@@ -559,7 +559,7 @@ void Deg_RemoveDegreeType (void)
    else	// Degree type has no degrees ==> remove it
      {
       /***** Remove degree type *****/
-      Deg_RemoveDegreeTypeCompletely (DegTyp.DegTypCod);
+      DT_RemoveDegreeTypeCompletely (DegTyp.DegTypCod);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_Type_of_degree_X_removed,
@@ -568,14 +568,14 @@ void Deg_RemoveDegreeType (void)
      }
 
    /***** Show the form again *****/
-   Deg_ReqEditDegreeTypes ();
+   DT_ReqEditDegreeTypes ();
   }
 
 /*****************************************************************************/
 /***************** Write parameter with code of degree type ******************/
 /*****************************************************************************/
 
-static void Deg_PutParamOtherDegTypCod (long DegTypCod)
+static void DT_PutParamOtherDegTypCod (long DegTypCod)
   {
    Par_PutHiddenParamLong ("OthDegTypCod",DegTypCod);
   }
@@ -584,7 +584,7 @@ static void Deg_PutParamOtherDegTypCod (long DegTypCod)
 /******************* Get parameter with code of degree type ******************/
 /*****************************************************************************/
 
-long Deg_GetParamOtherDegTypCod (void)
+long DT_GetParamOtherDegTypCod (void)
   {
    char LongStr[1+10+1];
 
@@ -597,7 +597,7 @@ long Deg_GetParamOtherDegTypCod (void)
 /**************** Count number of degrees in a degree type ******************/
 /*****************************************************************************/
 
-static unsigned Deg_CountNumDegsOfType (long DegTypCod)
+static unsigned DT_CountNumDegsOfType (long DegTypCod)
   {
    char Query[512];
 
@@ -611,7 +611,7 @@ static unsigned Deg_CountNumDegsOfType (long DegTypCod)
 /****************** Get data of a degree type from its code ******************/
 /*****************************************************************************/
 
-bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
+bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -641,7 +641,7 @@ bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       strcpy (DegTyp->DegTypName,row[0]);
 
       /* Count number of degrees of this type */
-      DegTyp->NumDegs = Deg_CountNumDegsOfType (DegTyp->DegTypCod);
+      DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
 
       /* Set return value */
       DegTypFound = true;
@@ -666,7 +666,7 @@ bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 /******************** Remove a degree type and its degrees *******************/
 /*****************************************************************************/
 
-static void Deg_RemoveDegreeTypeCompletely (long DegTypCod)
+static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -707,7 +707,7 @@ static void Deg_RemoveDegreeTypeCompletely (long DegTypCod)
 /**************************** Rename a degree type ***************************/
 /*****************************************************************************/
 
-void Deg_RenameDegreeType (void)
+void DT_RenameDegreeType (void)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty;
    extern const char *Txt_The_type_of_degree_X_already_exists;
@@ -721,14 +721,14 @@ void Deg_RenameDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
-   if ((DegTyp->DegTypCod = Deg_GetParamOtherDegTypCod ()) == -1L)
+   if ((DegTyp->DegTypCod = DT_GetParamOtherDegTypCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of type of degree is missing.");
 
    /* Get the new name for the degree type */
    Par_GetParToText ("DegTypName",NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
-   if (!Deg_GetDataOfDegreeTypeByCod (DegTyp))
+   if (!DT_GetDataOfDegreeTypeByCod (DegTyp))
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    /***** Check if new name is empty *****/
@@ -744,7 +744,7 @@ void Deg_RenameDegreeType (void)
       if (strcmp (DegTyp->DegTypName,NewNameDegTyp))	// Different names
         {
          /***** If degree type was in database... *****/
-         if (Deg_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp->DegTypCod))
+         if (DT_CheckIfDegreeTypeNameExists (NewNameDegTyp,DegTyp->DegTypCod))
            {
             sprintf (Gbl.Message,Txt_The_type_of_degree_X_already_exists,
                      NewNameDegTyp);
@@ -774,14 +774,14 @@ void Deg_RenameDegreeType (void)
 
    /***** Show the form again *****/
    strcpy (DegTyp->DegTypName,NewNameDegTyp);
-   Deg_ReqEditDegreeTypes ();
+   DT_ReqEditDegreeTypes ();
   }
 
 /*****************************************************************************/
 /****************** Check if name of degree type exists **********************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
+static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
    char Query[512];
 
@@ -796,7 +796,7 @@ static bool Deg_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypC
 /************************ Change the type of a degree ************************/
 /*****************************************************************************/
 
-void Deg_ChangeDegreeType (void)
+void DT_ChangeDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    struct Degree *Deg;
@@ -811,7 +811,7 @@ void Deg_ChangeDegreeType (void)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    /* Get the new degree type */
-   NewDegTypCod = Deg_GetParamOtherDegTypCod ();
+   NewDegTypCod = DT_GetParamOtherDegTypCod ();
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg);

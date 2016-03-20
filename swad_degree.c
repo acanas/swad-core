@@ -798,6 +798,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
 void Deg_WriteBigNameCtyInsCtrDegCrs (void)
   {
    extern const char *The_ClassCourse[The_NUM_THEMES];
+   extern const char *Txt_TAGLINE;
 
    fprintf (Gbl.F.Out,"<h1 id=\"main_title\" class=\"%s\">",
 	    The_ClassCourse[Gbl.Prefs.Theme]);
@@ -823,31 +824,41 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
                Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
 
    /***** Text *****/
-   fprintf (Gbl.F.Out,"<div id=\"big_name_container\">"
-		      "<div id=\"big_full_name\">"
-		      "%s"	// Full name
-		      "</div>"
-		      "<div class=\"NOT_SHOWN\">"
-		      " / "	// To separate
-		      "</div>"
-		      "<div id=\"big_short_name\">"
-		      "%s"	// Short name
-		      "</div>"
-		      "</div>",
-	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
-	    ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
-	    ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
-	    ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
-	    ((Gbl.CurrentCty.Cty.CtyCod > 0) ? Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language] :
-					       Cfg_PLATFORM_FULL_NAME)))),
-	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
-	    ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
-	    ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
-	    ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
-	    ((Gbl.CurrentCty.Cty.CtyCod > 0) ? Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language] :
-					       Cfg_PLATFORM_SHORT_NAME)))));
-
-   fprintf (Gbl.F.Out,"</h1>");
+   fprintf (Gbl.F.Out,"<div id=\"big_name_container\">");
+   if (Gbl.CurrentCty.Cty.CtyCod > 0)
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+			 "%s"	// Full name
+			 "</div>"
+			 "<div class=\"NOT_SHOWN\">"
+			 " / "	// To separate
+			 "</div>"
+			 "<div id=\"big_short_name\">"
+			 "%s"	// Short name
+			 "</div>",
+		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
+	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
+	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
+	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
+	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
+		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
+	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
+	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
+	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
+	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))));
+   else	// No country specified ==> home page
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
+			 "%s: %s"	// Full name
+			 "</div>"
+			 "<div class=\"NOT_SHOWN\">"
+			 " / "		// To separate
+			 "</div>"
+			 "<div id=\"big_short_name\">"
+			 "%s"		// Short name
+			 "</div>",
+	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE,
+	       Cfg_PLATFORM_SHORT_NAME);
+   fprintf (Gbl.F.Out,"</div>"
+	              "</h1>");
   }
 
 /*****************************************************************************/
@@ -886,7 +897,7 @@ void Deg_InitCurrentCourse (void)
          Gbl.CurrentIns.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.CurrentDeg.Deg.DegCod);
 
          /***** Degree type is available, so get degree type data *****/
-         if (!Deg_GetDataOfDegreeTypeByCod (&Gbl.CurrentDegTyp.DegTyp))	// Degree type not found
+         if (!DT_GetDataOfDegreeTypeByCod (&Gbl.CurrentDegTyp.DegTyp))	// Degree type not found
            {
 	    Gbl.YearOK = false;
 	    Gbl.CurrentIns.Ins.InsCod =
@@ -1644,7 +1655,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
-   if (!Deg_GetDataOfDegreeTypeByCod (&DegTyp))
+   if (!DT_GetDataOfDegreeTypeByCod (&DegTyp))
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    if (Deg->Status & Deg_STATUS_BIT_PENDING)
@@ -1732,7 +1743,7 @@ void Deg_EditDegrees (void)
    if (Gbl.Ctrs.Num)
      {
       /***** Get list of degree types *****/
-      Deg_GetListDegTypes ();
+      DT_GetListDegreeTypes ();
 
       if (Gbl.Degs.DegTypes.Num)
 	{
@@ -1755,7 +1766,7 @@ void Deg_EditDegrees (void)
 	}
 
       /***** Free list of degree types *****/
-      Deg_FreeListDegTypes ();
+      DT_FreeListDegreeTypes ();
      }
    else	// No centres
      {
@@ -1993,7 +2004,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
    Par_GetParToText ("FullName",Deg->FullName,Deg_MAX_LENGTH_DEGREE_FULL_NAME);
 
    /* Get degree type */
-   if ((Deg->DegTypCod = Deg_GetParamOtherDegTypCod ()) <= 0)
+   if ((Deg->DegTypCod = DT_GetParamOtherDegTypCod ()) <= 0)
       Lay_ShowAlert (Lay_ERROR,"Wrong type of degree.");
 
    /* Get degree WWW */

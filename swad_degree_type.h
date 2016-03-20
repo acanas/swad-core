@@ -31,7 +31,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_LENGTH_DEGREE_TYPE_NAME		 32
+#define Deg_MAX_LENGTH_DEGREE_TYPE_NAME	32
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -48,20 +48,21 @@ struct DegreeType
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Deg_WriteSelectorDegTypes (void);
-void Deg_SeeDegTypes (void);
-void Deg_ReqEditDegreeTypes (void);
+void DT_WriteSelectorDegreeTypes (void);
+void DT_SeeDegreeTypes (void);
+void DT_ReqEditDegreeTypes (void);
 
-void Deg_GetListDegTypes (void);
-void Deg_FreeListDegTypes (void);
+void DT_GetListDegreeTypes (void);
+void DT_FreeListDegreeTypes (void);
 
-void Deg_RecFormNewDegTyp (void);
-void Deg_RemoveDegreeType (void);
+void DT_RecFormNewDegreeType (void);
 
-long Deg_GetParamOtherDegTypCod (void);
+void DT_RemoveDegreeType (void);
 
-bool Deg_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
-void Deg_RenameDegreeType (void);
-void Deg_ChangeDegreeType (void);
+long DT_GetParamOtherDegTypCod (void);
+
+bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
+void DT_RenameDegreeType (void);
+void DT_ChangeDegreeType (void);
 
 #endif
