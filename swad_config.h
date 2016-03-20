@@ -102,7 +102,7 @@
 
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
 #define Cfg_PLATFORM_FULL_NAME			"OpenSWAD (Open Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD (free platform for learning & educational management)"				// This title will appear on browser top
+#define Cfg_PLATFORM_PAGE_TITLE			"OpenSWAD"				// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://openswad.org/swad"		// Without ending slash
@@ -171,7 +171,7 @@
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_PAGE_TITLE			"SWAD UGR"				// This title will appear on browser top
+#define Cfg_PLATFORM_PAGE_TITLE			"SWAD"					// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://swad.ugr.es/swad"		// Without ending slash
@@ -226,11 +226,11 @@
 "  ga('send', 'pageview');" \
 "</script>"
 
-#elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad ******************
+#elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad **************
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_PAGE_TITLE			"SWAD UNA"				// This title will appear on browser top
+#define Cfg_PLATFORM_PAGE_TITLE			"SWAD"					// This title will appear on browser top
 #define Cfg_PLATFORM_SERVER			"www.cevuna.una.py"			// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://www.cevuna.una.py/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://www.cevuna.una.py/swad"	// Without ending slash

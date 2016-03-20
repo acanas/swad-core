@@ -194,7 +194,7 @@ a:hover						/* Default ==> underlined */
 #head_row_1_search
 	{
 	display:inline-block;
-	padding:0 20px;
+	padding-right:20px;
 	}
 @media only screen and (max-width: 1279px)
 	{	/* For mobile phones and tablets */

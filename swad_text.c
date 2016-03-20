@@ -68,6 +68,7 @@
 
 #include "swad_assignment.h"
 #include "swad_attendance.h"
+#include "swad_config.h"
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_degree.h"
@@ -39703,6 +39704,100 @@ const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very imp
 	"Tag %s not allowed. Click to allow it.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Tag %s not allowed. Click to allow it.";		// Necessita de tradução
+#endif
+
+#if defined LOCALHOST_UBUNTU			// localhost (Ubuntu) ******************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma de suport a la doc&egrave;ncia";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung der Lehre";
+# elif L==3
+	"platform to support teaching";
+# elif L==4
+	"plataforma de apoyo a la docencia";
+# elif L==5
+	"plate-forme pour appuyer l'enseignement";
+# elif L==6
+	"plataforma de apoyo a la docencia";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere l'insegnamento";
+# elif L==8
+	"platforma do wspierania nauczania";
+# elif L==9
+	"plataforma de apoio ao ensino";
+# endif
+
+#elif defined OPENSWAD_ORG			// openswad.org ************************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma gratuïta de suport a la doc&egrave;ncia";
+# elif L==2
+	"kostenlose Plattform zur Unterst&uuml;tzung der Lehre";
+# elif L==3
+	"free platform to support teaching";
+# elif L==4
+	"plataforma gratuita de apoyo a la docencia";
+# elif L==5
+	"plate-forme gratuite pour appuyer l'enseignement";
+# elif L==6
+	"plataforma gratuita de apoyo a la docencia";	// Okoteve traducción
+# elif L==7
+	"piattaforma gratuita per sostenere l'insegnamento";
+# elif L==8
+	"wolna platforma do wspierania nauczania";
+# elif L==9
+	"plataforma gratuita de apoio ao ensino";
+# endif
+
+#elif defined SWAD_UGR_ES			// swad.ugr.es *************************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma de suport a la doc&egrave;ncia (UGR)";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung der Lehre (UGR)";
+# elif L==3
+	"platform to support teaching (UGR)";
+# elif L==4
+	"plataforma de apoyo a la docencia (UGR)";
+# elif L==5
+	"plate-forme pour appuyer l'enseignement (UGR)";
+# elif L==6
+	"plataforma de apoyo a la docencia (UGR)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere l'insegnamento (UGR)";
+# elif L==8
+	"platforma do wspierania nauczania (UGR)";
+# elif L==9
+	"plataforma de apoio ao ensino (UGR)";
+# endif
+
+#elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad **************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma de suport a la doc&egrave;ncia (UNA)";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung der Lehre (UNA)";
+# elif L==3
+	"platform to support teaching (UNA)";
+# elif L==4
+	"plataforma de apoyo a la docencia (UNA)";
+# elif L==5
+	"plate-forme pour appuyer l'enseignement (UNA)";
+# elif L==6
+	"plataforma de apoyo a la docencia (UNA)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere l'insegnamento (UNA)";
+# elif L==8
+	"platforma do wspierania nauczania (UNA)";
+# elif L==9
+	"plataforma de apoio ao ensino (UNA)";
+# endif
+
 #endif
 
 const char *Txt_Tags =		// Tags used in test
