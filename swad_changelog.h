@@ -125,7 +125,7 @@
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
 // TODO: Change icon to reset survey (distinct from recycle, color red)
-// TODO: Button to see result of a survey in listing odf surveys should be smaller
+// TODO: Button to see result of a survey in listing of surveys should be smaller
 
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.157.1 (2016-03-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.157.2 (2016-03-20)"
 #define CSS_FILE		"swad15.157.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.157.2: Mar 20, 2016	Fixed bug in surveys. (196241 lines)
         Version 15.157.1: Mar 20, 2016	Changed names of functions related to degree types. (196237 lines)
         Version 15.157:   Mar 20, 2016	Changes in tagline and title. (196227 lines)
         Version 15.156.1: Mar 20, 2016	Change in layout of banners.

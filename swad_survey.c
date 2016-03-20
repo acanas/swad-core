@@ -2821,6 +2821,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
 	           Gbl.Action.Act == ActRcvSvyQst);
    bool PutFormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
+   bool ICanEdit = Svy_CheckIfICanCreateSvy ();
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
@@ -2830,7 +2831,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
    /***** Start frame *****/
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
-   Lay_StartRoundFrame (NULL,Txt_Questions,Svy_PutIconToAddNewQuestion);
+   Lay_StartRoundFrame (NULL,Txt_Questions,
+                        ICanEdit ? Svy_PutIconToAddNewQuestion :
+                                   NULL);
 
    if (NumQsts)
      {
