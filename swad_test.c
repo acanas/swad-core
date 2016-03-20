@@ -132,7 +132,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Tst_PutFormToSeeResultsOfUsersTests (void);
-static void Tst_PutFormToEdit (void);
+static void Tst_PutIconToEdit (void);
 static void Tst_PutFormToConfigure (void);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
@@ -243,26 +243,31 @@ static void Tst_GetExamQuestionsFromDB (long TstCod);
 void Tst_ShowFormAskTst (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Test;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Generate_exam;
    extern const char *Txt_No_test_questions_in_X;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
    /***** Put form to go to test edition and configuration *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (ICanEdit)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
-      Tst_PutFormToEdit ();
       Tst_PutFormToConfigure ();
       fprintf (Gbl.F.Out,"</div>");
      }
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Test,ICanEdit ? Tst_PutIconToEdit :
+	                                         NULL);
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
@@ -306,6 +311,9 @@ void Tst_ShowFormAskTst (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
@@ -325,15 +333,14 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
   }
 
 /*****************************************************************************/
-/************** Write a form to go to edition of test questions **************/
+/*************** Write icon to go to edition of test questions ***************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEdit (void)
+static void Tst_PutIconToEdit (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",
-                          Txt_Edit,Txt_Edit);
+   Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",Txt_Edit,NULL);
   }
 
 /*****************************************************************************/

@@ -2952,7 +2952,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       /***** Put button to add a new question in this survey *****/
       Svy_PutButtonToCreateNewQuestion ();
 
-   /***** End table *****/
+   /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
