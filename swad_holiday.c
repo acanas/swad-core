@@ -164,7 +164,7 @@ void Hld_SeeHolidays (void)
 		  Gbl.Hlds.Lst[NumHld].Name);
 	}
 
-      /***** Table end *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 

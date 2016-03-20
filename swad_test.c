@@ -2650,7 +2650,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	                 "</tr>");
      }
 
-   /***** Table end *****/
+   /***** End table *****/
    Lay_EndRoundFrameTable ();
   }
 

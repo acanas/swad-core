@@ -659,7 +659,7 @@ void Cty_ListCountries2 (void)
             Deg_GetNumDegsInCty (-1L),
             Crs_GetNumCrssInCty (-1L));
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
 

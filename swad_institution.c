@@ -579,7 +579,7 @@ static void Ins_ListInstitutionsForSeeing (bool ICanEdit)
 	NumIns++)
       Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
   }
@@ -2298,7 +2298,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);
 	}
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
 

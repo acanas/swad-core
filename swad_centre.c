@@ -73,7 +73,6 @@ static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconToPrint (void);
 
 static void Ctr_ListCentres (void);
-static void Ctr_ListCentresForSeeing (bool ICanEdit);
 static void Ctr_PutIconToEditFrames (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrderType (void);
@@ -593,16 +592,38 @@ void Ctr_ShowCtrsOfCurrentIns (void)
 
 static void Ctr_ListCentres (void)
   {
-   extern const char *Txt_No_centres_have_been_created_in_this_institution;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
+   extern const char *Txt_No_centres;
    extern const char *Txt_Create_another_centre;
    extern const char *Txt_Create_centre;
+   unsigned NumCtr;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
-   if (Gbl.Ctrs.Num)	// There are centres in the current institution
-      Ctr_ListCentresForSeeing (ICanEdit);
-   else			// No centres created in the current institution
-      Lay_ShowAlert (Lay_INFO,Txt_No_centres_have_been_created_in_this_institution);
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Ctr_PutIconToEditFrames :
+                                                  NULL);
 
+   if (Gbl.Ctrs.Num)	// There are centres in the current institution
+     {
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
+	                 " style=\"margin-bottom:20px;\">");
+      Ctr_PutHeadCentresForSeeing (true);	// Order selectable
+
+      /***** Write all the centres and their nuber of teachers *****/
+      for (NumCtr = 0;
+	   NumCtr < Gbl.Ctrs.Num;
+	   NumCtr++)
+	 Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+     }
+   else	// No centres created in the current institution
+      Lay_ShowAlert (Lay_INFO,Txt_No_centres);
+
+   /***** Button to create centre *****/
    if (ICanEdit)
      {
       Act_FormStart (ActEdiCtr);
@@ -610,34 +631,8 @@ static void Ctr_ListCentres (void)
 	                                   Txt_Create_centre);
       Act_FormEnd ();
      }
-  }
 
-/*****************************************************************************/
-/*************** List the centres of the current institution *****************/
-/*****************************************************************************/
-
-static void Ctr_ListCentresForSeeing (bool ICanEdit)
-  {
-   extern const char *Txt_Centres_of_INSTITUTION_X;
-   unsigned NumCtr;
-
-   /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,
-                        ICanEdit ? Ctr_PutIconToEditFrames :
-                                   NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   Ctr_PutHeadCentresForSeeing (true);	// Order selectable
-
-   /***** Write all the centres and their nuber of teachers *****/
-   for (NumCtr = 0;
-	NumCtr < Gbl.Ctrs.Num;
-	NumCtr++)
-      Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
-
-   /***** Table end *****/
-   fprintf (Gbl.F.Out,"</table>");
+   /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
@@ -2674,7 +2669,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
 	 Ctr_ListOneCentreForSeeing (&Ctr,NumCtr);
 	}
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
 

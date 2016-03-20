@@ -169,7 +169,7 @@ void Plc_SeePlaces (void)
 	       Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod) -
 	       NumCtrsWithPlc);
 
-      /***** Table end *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 

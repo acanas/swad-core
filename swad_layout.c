@@ -1627,7 +1627,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"
 	              "</table>");
   }

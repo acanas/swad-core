@@ -1197,7 +1197,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
   }
@@ -3789,7 +3789,7 @@ unsigned Deg_ListDegsFound (const char *Query)
 	 Deg_ListOneDegreeForSeeing (&Deg,NumDeg);
 	}
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
 

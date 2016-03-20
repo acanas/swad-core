@@ -3035,7 +3035,7 @@ unsigned Crs_ListCrssFound (const char *Query)
 	 Crs_WriteRowCrsData (NumCrs,row,false);
 	}
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
 

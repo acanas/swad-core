@@ -23448,25 +23448,25 @@ const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
 	"no course of origin";		// Necessita de tradução
 #endif
 
-const char *Txt_No_centres_have_been_created_in_this_institution =
+const char *Txt_No_centres =
 #if   L==1
-	"No se han creado centros en esta instituci&oacute;n.";	// Necessita traduccio
+	"No hi ha centres.";
 #elif L==2
-	"No centres have been created in this institution.";	// Need Übersetzung
+	"Keine Lehrinstitute.";
 #elif L==3
-	"No centres have been created in this institution.";
+	"No centres.";
 #elif L==4
-	"No se han creado centros en esta instituci&oacute;n.";
+	"No hay centros.";
 #elif L==5
-	"No centres have been created in this institution.";	// Besoin de traduction
+	"Il n'y a pas de centres.";
 #elif L==6
-	"No se han creado centros en esta instituci&oacute;n.";	// Okoteve traducción
+	"No hay centros.";	// Okoteve traducción
 #elif L==7
-	"No centres have been created in this institution.";	// Bisogno di traduzione
+	"Non ci sono centri.";
 #elif L==8
-	"No centres have been created in this institution.";	// Potrzebujesz tlumaczenie
+	"Brak centra.";
 #elif L==9
-	"No centres have been created in this institution.";	// Necessita de tradução
+	"N&atilde;o h&aacute; centros.";
 #endif
 
 const char *Txt_No_countries_have_been_created =

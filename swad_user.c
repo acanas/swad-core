@@ -6092,7 +6092,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
 

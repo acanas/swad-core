@@ -143,7 +143,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].Info,
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrame ();
 

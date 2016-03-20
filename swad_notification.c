@@ -606,7 +606,7 @@ void Ntf_ShowMyNotifications (void)
            }
         }
 
-      /***** Table end *****/
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
 
       /***** Free memory used for user's data *****/

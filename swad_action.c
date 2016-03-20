@@ -4913,7 +4913,7 @@ void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions)
         }
      }
 
-   /***** Table end *****/
+   /***** End table *****/
    Lay_EndRoundFrameTable ();
   }
 

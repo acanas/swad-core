@@ -11211,7 +11211,7 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
 	                 "</th>"
 			 "</tr>");
 
-      /* Table end */
+      /* End table */
       Lay_EndRoundFrameTable ();
      }
 

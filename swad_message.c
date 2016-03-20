@@ -2475,7 +2475,7 @@ void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages)
             Txt_MSG_Message,
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
-   /***** Table end *****/
+   /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
   }
 

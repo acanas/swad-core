@@ -178,7 +178,7 @@ void Dpt_SeeDepts (void)
 	       Sta_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
-      /***** Table end *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrame ();
 

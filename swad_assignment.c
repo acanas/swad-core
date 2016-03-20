@@ -188,7 +188,7 @@ static void Asg_ShowAllAssignments (void)
 	   NumAsg++)
 	 Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg - 1]);
 
-      /***** Table end *****/
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
    else	// No assignments created
