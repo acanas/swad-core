@@ -86,7 +86,7 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Frame head *****/
-   Lay_StartRoundFrame ("300px",Txt_Banners,Ban_PutFormToEditBanners);
+   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutFormToEditBanners);
 
    /***** Write all the banners *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");

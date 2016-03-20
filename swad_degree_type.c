@@ -232,7 +232,7 @@ static void Deg_ListDegreeTypesForSeeing (void)
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE %s\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -309,7 +309,7 @@ static void Deg_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"</td>");
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -326,7 +326,7 @@ static void Deg_ListDegreeTypesForEdition (void)
 static void Deg_PutFormToCreateDegType (void)
   {
    extern const char *Txt_New_type_of_degree;
-   extern const char *Txt_Type_of_BR_degree;
+   extern const char *Txt_Type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
    /***** Start form *****/
@@ -341,7 +341,7 @@ static void Deg_PutFormToCreateDegType (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Type_of_BR_degree);
+            Txt_Type_of_degree);
 
    /***** Degree type name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -364,19 +364,19 @@ static void Deg_PutFormToCreateDegType (void)
 
 static void Deg_PutHeadDegreeTypesForSeeing (void)
   {
-   extern const char *Txt_Type_of_BR_degree;
+   extern const char *Txt_Type_of_degree;
    extern const char *Txt_Degrees;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
-                      "<th class=\"CENTER_MIDDLE\">"
+                      "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Type_of_BR_degree,
+            Txt_Type_of_degree,
             Txt_Degrees);
   }
 
@@ -387,7 +387,7 @@ static void Deg_PutHeadDegreeTypesForSeeing (void)
 static void Deg_PutHeadDegreeTypesForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Type_of_BR_degree;
+   extern const char *Txt_Type_of_degree;
    extern const char *Txt_Degrees;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -403,7 +403,7 @@ static void Deg_PutHeadDegreeTypesForEdition (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_Type_of_BR_degree,
+            Txt_Type_of_degree,
             Txt_Degrees);
   }
 

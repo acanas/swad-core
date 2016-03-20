@@ -47169,25 +47169,25 @@ const char *Txt_Type_of_BR_answers =		// Answers of a test
 	"Tipo de<br />respostas";
 #endif
 
-const char *Txt_Type_of_BR_degree =
+const char *Txt_Type_of_degree =
 #if   L==1
-	"Tipo de<br />titulaci&oacute;n";	// Necessita traduccio
+	"Tipo de titulaci&oacute;n";	// Necessita traduccio
 #elif L==2
 	"Abschlussart";
 #elif L==3
-	"Type of<br />degree";
+	"Type of degree";
 #elif L==4
-	"Tipo de<br />titulaci&oacute;n";
+	"Tipo de titulaci&oacute;n";
 #elif L==5
-	"Type<br />d'&eacute;tude";
+	"Type d'&eacute;tude";
 #elif L==6
-	"Tipo de<br />titulaci&oacute;n";	// Okoteve traducción
+	"Tipo de titulaci&oacute;n";	// Okoteve traducción
 #elif L==7
-	"Tipo di<br />laurea";
+	"Tipo di laurea";
 #elif L==8
-	"Type of<br />degree";			// Potrzebujesz tlumaczenie
+	"Type of degree";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"Tipo de<br />titula&ccedil;&atilde;o";
+	"Tipo de titula&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Type_of_degree_X_removed =	// Warning: it is very important to include %s in the following sentences
