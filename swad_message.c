@@ -75,6 +75,12 @@ static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery);
+
+static void Msg_PutIconToRemoveOneRcvMsg (void);
+static void Msg_PutIconToRemoveSevRcvMsgs (void);
+static void Msg_PutIconToRemoveOneSntMsg (void);
+static void Msg_PutIconToRemoveSevSntMsgs (void);
+
 static void Msg_ShowFormToShowOnlyUnreadMessages (void);
 static void Msg_GetParamOnlyUnreadMsgs (void);
 static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,long MsgNum,long MsgCod);
@@ -1714,7 +1720,12 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
    Lay_StartRoundFrame ("97%",
                         TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
 								  Txt_Messages_sent,
-			NULL);
+			TypeOfMessages == Msg_MESSAGES_RECEIVED ? ((NumMsgs == 1) ? Msg_PutIconToRemoveOneRcvMsg  :
+			                                           ((NumMsgs > 1) ? Msg_PutIconToRemoveSevRcvMsgs :
+			                                                            NULL)) :
+			                                          ((NumMsgs == 1) ? Msg_PutIconToRemoveOneSntMsg :
+			                                           ((NumMsgs > 1) ? Msg_PutIconToRemoveSevSntMsgs :
+			                                                            NULL)));
 
    /* Write number of messages and number of new messages */
    fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">");
@@ -1723,9 +1734,6 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    if (NumMsgs)		// If there are messages...
      {
-      /***** Show form to delete all messages *****/
-      Msg_ShowFormDelSentOrRecMsgs (TypeOfMessages,NumMsgs);
-
       if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
 						// from a notification of received message, so show the page where the message is inside
         {
@@ -2297,26 +2305,51 @@ void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs)
   }
 
 /*****************************************************************************/
-/*************** Show form to delete sent or received messages ***************/
+/***************** Put icon to remove one received message *******************/
 /*****************************************************************************/
 
-void Msg_ShowFormDelSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages,unsigned NumMsgs)
+static void Msg_PutIconToRemoveOneRcvMsg (void)
   {
    extern const char *Txt_Remove_this_message;
-   extern const char *Txt_Remove_these_X_messages;
 
-   /***** Put link to request deletion of all sent or received messages *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   if (NumMsgs == 1)
-      strcpy (Gbl.Title,Txt_Remove_this_message);
-   else
-      sprintf (Gbl.Title,Txt_Remove_these_X_messages,NumMsgs);
-   Lay_PutContextualLink ((TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
-	                                                              ActReqDelAllSntMsg,
-	                  Msg_PutHiddenParamsMsgsFilters,
-	                  "remove-on64x64.png",
-	                  Gbl.Title,Gbl.Title);
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualLink (ActReqDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
+			  "remove-on64x64.png",Txt_Remove_this_message,NULL);
+  }
+
+/*****************************************************************************/
+/*************** Put icon to remove several received messages ****************/
+/*****************************************************************************/
+
+static void Msg_PutIconToRemoveSevRcvMsgs (void)
+  {
+   extern const char *Txt_Remove_these_messages;
+
+   Lay_PutContextualLink (ActReqDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
+			  "remove-on64x64.png",Txt_Remove_these_messages,NULL);
+  }
+
+/*****************************************************************************/
+/******************** Put icon to remove one sent message ********************/
+/*****************************************************************************/
+
+static void Msg_PutIconToRemoveOneSntMsg (void)
+  {
+   extern const char *Txt_Remove_this_message;
+
+   Lay_PutContextualLink (ActReqDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
+			  "remove-on64x64.png",Txt_Remove_this_message,NULL);
+  }
+
+/*****************************************************************************/
+/***************** Put icon to remove several sent messages ******************/
+/*****************************************************************************/
+
+static void Msg_PutIconToRemoveSevSntMsgs (void)
+  {
+   extern const char *Txt_Remove_these_messages;
+
+   Lay_PutContextualLink (ActReqDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
+			  "remove-on64x64.png",Txt_Remove_these_messages,NULL);
   }
 
 /*****************************************************************************/

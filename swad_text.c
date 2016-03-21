@@ -30026,25 +30026,25 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 	"Tirar os utilizadores que est&atilde;o na lista";
 #endif
 
-const char *Txt_Remove_these_X_messages =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_Remove_these_messages =
 #if   L==1
-	"Eliminar aquests %u missatges";
+	"Eliminar aquests missatges";
 #elif L==2
-	"Diese %u Nachrichten entfernen";
+	"Diese Nachrichten entfernen";
 #elif L==3
-	"Remove these %u messages";
+	"Remove these messages";
 #elif L==4
-	"Eliminar estos %u mensajes";
+	"Eliminar estos mensajes";
 #elif L==5
-	"Supprimer ces %u messages";
+	"Supprimer ces messages";
 #elif L==6
-	"Eliminar estos %u mensajes";	// Okoteve traducción
+	"Eliminar estos mensajes";	// Okoteve traducción
 #elif L==7
-	"Rimuovere questi %u messaggi";
+	"Rimuovere questi messaggi";
 #elif L==8
-	"Usu&nacute; te %u wiadomo&sacute;ci";
+	"Usu&nacute; te wiadomo&sacute;ci";
 #elif L==9
-	"Remover estas %u mensagens";
+	"Remover estas mensagens";
 #endif
 
 const char *Txt_Remove_type_of_group =
