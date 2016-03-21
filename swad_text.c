@@ -24349,25 +24349,25 @@ const char *Txt_No_teachers_or_students_found =
 	"Nenhum professor ou estudante encontrado.";
 #endif
 
-const char *Txt_No_test_questions_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_No_test_questions =
 #if   L==1
-	"No hay preguntas de test en <strong>%s</strong>.";	// Necessita traduccio
+	"No hay preguntas de test.";	// Necessita traduccio
 #elif L==2
-	"Keine Testfragen im <strong>%s</strong>.";
+	"Keine Testfragen.";
 #elif L==3
-	"No test questions in <strong>%s</strong>.";
+	"No test questions.";
 #elif L==4
-	"No hay preguntas de test en <strong>%s</strong>.";
+	"No hay preguntas de test.";
 #elif L==5
-	"Il n'y a pas de questions de test dans <strong>%s</strong>.";
+	"Il n'y a pas de questions de test.";
 #elif L==6
-	"No hay preguntas de test en <strong>%s</strong>.";	// Okoteve traducción
+	"No hay preguntas de test.";	// Okoteve traducción
 #elif L==7
-	"Non ci sono domande di test in <strong>%s</strong>.";
+	"Non ci sono domande di test.";
 #elif L==8
-	"Brak pyta&nacute; testowych <strong>%s</strong>.";
+	"Brak pyta&nacute; testowych.";
 #elif L==9
-	"N&atilde;o existem quest&otilde;es de test em <strong>%s</strong>.";
+	"N&atilde;o existem quest&otilde;es de test.";
 #endif
 
 const char *Txt_No_user_has_been_eliminated =

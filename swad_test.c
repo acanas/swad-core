@@ -149,6 +149,7 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
 static void Tst_PutFormToCreateNewTstQst (void);
+static void Tst_PutButtonToAddQuestion (void);
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
@@ -245,7 +246,7 @@ void Tst_ShowFormAskTst (void)
    extern const char *Txt_Test;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Generate_exam;
-   extern const char *Txt_No_test_questions_in_X;
+   extern const char *Txt_No_test_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
@@ -309,9 +310,11 @@ void Tst_ShowFormAskTst (void)
      }
    else
      {
-      sprintf (Gbl.Message,Txt_No_test_questions_in_X,
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+      /***** Warning message *****/
+      Lay_ShowAlert (Lay_INFO,Txt_No_test_questions);
+
+      /***** Button to create a new question *****/
+      Tst_PutButtonToAddQuestion ();
      }
 
    /***** End frame *****/
@@ -1107,7 +1110,7 @@ void Tst_SetIniEndDates (void)
 
 void Tst_ShowFormAskEditTsts (void)
   {
-   extern const char *Txt_No_test_questions_in_X;
+   extern const char *Txt_No_test_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
@@ -1120,18 +1123,12 @@ void Tst_ShowFormAskEditTsts (void)
    Tst_PutFormToConfigure ();		// Put form to go to test configuration
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Get tags already present in the table of questions *****/
-   if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)) == 0)
-     {
-      sprintf (Gbl.Message,Txt_No_test_questions_in_X,
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
-     }
-   else
-     {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Questions,NULL);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Questions,NULL);
 
+   /***** Get tags already present in the table of questions *****/
+   if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
+     {
       Act_FormStart (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
@@ -1150,10 +1147,18 @@ void Tst_ShowFormAskEditTsts (void)
       /***** Send button *****/
       Lay_PutConfirmButton (Txt_Show_questions);
       Act_FormEnd ();
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
      }
+   else	// No test questions
+     {
+      /***** Warning message *****/
+      Lay_ShowAlert (Lay_INFO,Txt_No_test_questions);
+
+      /***** Button to create a new question *****/
+      Tst_PutButtonToAddQuestion ();
+     }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -1170,6 +1175,19 @@ static void Tst_PutFormToCreateNewTstQst (void)
    /***** Put form to create a new test question *****/
    Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
                           Txt_New_question,Txt_New_question);
+  }
+
+/*****************************************************************************/
+/**************** Put button to create a new test question *******************/
+/*****************************************************************************/
+
+static void Tst_PutButtonToAddQuestion (void)
+  {
+   extern const char *Txt_New_question;
+
+   Act_FormStart (ActEdiOneTstQst);
+   Lay_PutConfirmButton (Txt_New_question);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -1490,7 +1508,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
 static void Tst_ShowFormEditTags (void)
   {
-   extern const char *Txt_No_test_questions_in_X;
+   extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1498,13 +1516,7 @@ static void Tst_ShowFormEditTags (void)
    long TagCod;
 
    /***** Get current tags in current course *****/
-   if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)) == 0)
-     {
-      sprintf (Gbl.Message,Txt_No_test_questions_in_X,
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
-     }
-   else
+   if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Start table *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Tags);
@@ -1542,6 +1554,8 @@ static void Tst_ShowFormEditTags (void)
       /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
+   else
+      Lay_ShowAlert (Lay_INFO,Txt_No_test_questions);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
