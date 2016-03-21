@@ -58,11 +58,13 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Ann_PutIconToAddNewAnnouncement (void);
+static void Ann_PutButtonToAddNewAnnouncement (void);
 static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
                                     unsigned Roles,
                                     bool ShowAllAnnouncements,
-                                    bool ICanEditAnnouncements);
+                                    bool ICanEdit);
 static void Ann_PutHiddenParamAnnCod (long AnnCod);
 static long Ann_GetParamAnnCod (void);
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content);
@@ -73,7 +75,6 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_ShowAllAnnouncements (void)
   {
-   extern const char *Txt_New_announcement;
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
    char Query[256];
@@ -87,19 +88,10 @@ void Ann_ShowAllAnnouncements (void)
    char Content[Cns_MAX_BYTES_TEXT+1];
    unsigned UnsignedNum;
    Ann_Status_t Status;
-   bool ICanEditAnnouncements = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
-
-   /***** Put link (form) to create a new announcement *****/
-   if (ICanEditAnnouncements)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Lay_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",
-                             Txt_New_announcement,Txt_New_announcement);
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get announcements from database *****/
-   if (ICanEditAnnouncements)
+   if (ICanEdit)
       /* Select all announcements */
       sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
 		     " FROM announcements"
@@ -122,10 +114,12 @@ void Ann_ShowAllAnnouncements (void)
             (unsigned) (1 << Rol_UNKNOWN));
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
-   if (NumAnnouncements)
-      /***** Start frame *****/
-      Lay_StartRoundFrame ("550px",Txt_Announcements,NULL);
-   else
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("550px",Txt_Announcements,
+                        ICanEdit ? Ann_PutIconToAddNewAnnouncement :
+				   NULL);
+
+   if (!NumAnnouncements)
       Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
 
    /***** Show the announcements *****/
@@ -160,15 +154,43 @@ void Ann_ShowAllAnnouncements (void)
 
       /* Show the announcement */
       Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
-                              Roles,true,ICanEditAnnouncements);
+                              Roles,true,ICanEdit);
      }
 
+   /***** Button to add new announcement *****/
+   if (ICanEdit)
+      Ann_PutButtonToAddNewAnnouncement ();
+
    /***** End frame *****/
-   if (NumAnnouncements)
-      Lay_EndRoundFrame ();
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Put icon to add a new announcement *********************/
+/*****************************************************************************/
+
+static void Ann_PutIconToAddNewAnnouncement (void)
+  {
+   extern const char *Txt_New_announcement;
+
+   Lay_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",
+                          Txt_New_announcement,NULL);
+  }
+
+/*****************************************************************************/
+/******************* Put button to add a new announcement ********************/
+/*****************************************************************************/
+
+static void Ann_PutButtonToAddNewAnnouncement (void)
+  {
+   extern const char *Txt_New_announcement;
+
+   Act_FormStart (ActWriAnn);
+   Lay_PutConfirmButton (Txt_New_announcement);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -239,7 +261,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     const char *Subject,const char *Content,
                                     unsigned Roles,
                                     bool ShowAllAnnouncements,
-                                    bool ICanEditAnnouncements)
+                                    bool ICanEdit)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Users;
@@ -275,7 +297,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:500px;\">",
 	    ContainerClass[Status]);
 
-   if (ICanEditAnnouncements)
+   if (ICanEdit)
      {
       /* Form to remove announcement */
       Act_FormStart (ActRemAnn);
