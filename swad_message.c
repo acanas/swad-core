@@ -76,6 +76,8 @@ static void Msg_PutLinkToViewBannedUsers(void);
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery);
 
+static char *Msg_WriteNumMsgs (Msg_TypeOfMessages_t TypeOfMessages,
+                               unsigned NumMsgs,unsigned NumUnreadMsgs);
 static void Msg_PutIconToRemoveOneRcvMsg (void);
 static void Msg_PutIconToRemoveSevRcvMsgs (void);
 static void Msg_PutIconToRemoveOneSntMsg (void);
@@ -1665,16 +1667,15 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update_messages;
-   extern const char *Txt_Messages_received;
-   extern const char *Txt_Messages_sent;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    unsigned long NumMsg = 0;		// Initialized to avoid warning
    unsigned NumMsgs;
-   unsigned NumUnreadMsgs = 0;
+   unsigned NumUnreadMsgs;
    struct Pagination Pagination;
    long MsgCod;
 
@@ -1709,6 +1710,8 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    if (TypeOfMessages == Msg_MESSAGES_RECEIVED)
       NumUnreadMsgs = Msg_GetNumUnreadMsgs (Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
+   else
+      NumUnreadMsgs = 0;
 
    /***** Get messages from database *****/
    Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,TypeOfMessages,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
@@ -1718,19 +1721,13 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
 
    /***** Start frame with messages *****/
    Lay_StartRoundFrame ("97%",
-                        TypeOfMessages == Msg_MESSAGES_RECEIVED ? Txt_Messages_received :
-								  Txt_Messages_sent,
+                        Msg_WriteNumMsgs (TypeOfMessages,NumMsgs,NumUnreadMsgs),
 			TypeOfMessages == Msg_MESSAGES_RECEIVED ? ((NumMsgs == 1) ? Msg_PutIconToRemoveOneRcvMsg  :
 			                                           ((NumMsgs > 1) ? Msg_PutIconToRemoveSevRcvMsgs :
 			                                                            NULL)) :
 			                                          ((NumMsgs == 1) ? Msg_PutIconToRemoveOneSntMsg :
 			                                           ((NumMsgs > 1) ? Msg_PutIconToRemoveSevSntMsgs :
 			                                                            NULL)));
-
-   /* Write number of messages and number of new messages */
-   fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">");
-   Msg_WriteNumMsgs (NumMsgs,NumUnreadMsgs);
-   fprintf (Gbl.F.Out,"</div>");
 
    if (NumMsgs)		// If there are messages...
      {
@@ -2274,34 +2271,57 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
   }
 
 /*****************************************************************************/
-/*********** Write number of messages and number of new messages *************/
+/********* Write number of messages and number of unread messages ************/
 /*****************************************************************************/
+// Fill Gbl.Title
 
-void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs)
+static char *Msg_WriteNumMsgs (Msg_TypeOfMessages_t TypeOfMessages,
+                               unsigned NumMsgs,unsigned NumUnreadMsgs)
   {
-   extern const char *Txt_message;
-   extern const char *Txt_messages;
+   extern const char *Txt_message_received;
+   extern const char *Txt_message_sent;
+   extern const char *Txt_messages_received;
+   extern const char *Txt_messages_sent;
    extern const char *Txt_unread_MESSAGE;
    extern const char *Txt_unread_MESSAGES;
 
-   fprintf (Gbl.F.Out,"[");
-
-   /***** Write total number of messages *****/
-   if (NumMsgs == 1)
-      fprintf (Gbl.F.Out,"1 %s",Txt_message);
-   else
-      fprintf (Gbl.F.Out,"%u %s",NumMsgs,Txt_messages);
-
-   /***** Write number of unread messages *****/
-   if (NumUnreadMsgs)
+   if (TypeOfMessages == Msg_MESSAGES_RECEIVED)
      {
-      if (NumUnreadMsgs == 1)
-         fprintf (Gbl.F.Out,", 1 %s",Txt_unread_MESSAGE);
+      if (NumMsgs == 1)
+	{
+	 if (NumUnreadMsgs)
+            sprintf (Gbl.Title,"1 %s, 1 %s",
+                     Txt_message_received,Txt_unread_MESSAGE);
+	 else
+	    sprintf (Gbl.Title,"1 %s",
+	             Txt_message_received);
+	}
       else
-         fprintf (Gbl.F.Out,", %u %s",NumUnreadMsgs,Txt_unread_MESSAGES);
+	{
+	 if (NumUnreadMsgs == 0)
+            sprintf (Gbl.Title,"%u %s",
+                     NumMsgs,Txt_messages_received);
+	 else if (NumUnreadMsgs == 1)
+            sprintf (Gbl.Title,"%u %s, 1 %s",
+                     NumMsgs,Txt_messages_received,
+                     Txt_unread_MESSAGE);
+	 else
+            sprintf (Gbl.Title,"%u %s, %u %s",
+                     NumMsgs,Txt_messages_received,
+                     NumUnreadMsgs,Txt_unread_MESSAGES);
+	}
+     }
+   else	// TypeOfMessages == Msg_MESSAGES_SENT
+     {
+      if (NumMsgs == 1)
+	 sprintf (Gbl.Title,"1 %s",
+	          Txt_message_sent);
+      else
+	 sprintf (Gbl.Title,"%u %s",
+	          NumMsgs,Txt_messages_sent);
      }
 
-   fprintf (Gbl.F.Out,"]");
+   return Gbl.Title;
   }
 
 /*****************************************************************************/

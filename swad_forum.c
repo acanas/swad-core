@@ -277,6 +277,7 @@ static void For_WriteThrSubject (long ThrCod);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
+static void For_WriteNumPsts (unsigned NumPsts);
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
                                 bool LastPst,char *LastSubject,
                                 bool NewPst,bool ICanModerateForum);
@@ -952,7 +953,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    /* Write number of posts and number of new posts */
    fprintf (Gbl.F.Out," ");
-   Msg_WriteNumMsgs (NumPsts,0);
+   For_WriteNumPsts (NumPsts);
 
    fprintf (Gbl.F.Out,"</li>"
 	              "</ul>"
@@ -1051,6 +1052,26 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*************************** Write number of posts ***************************/
+/*****************************************************************************/
+
+static void For_WriteNumPsts (unsigned NumPsts)
+  {
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
+
+   fprintf (Gbl.F.Out,"[");
+
+   /***** Write total number of posts *****/
+   if (NumPsts == 1)
+      fprintf (Gbl.F.Out,"1 %s",Txt_post);
+   else
+      fprintf (Gbl.F.Out,"%u %s",NumPsts,Txt_posts);
+
+   fprintf (Gbl.F.Out,"]");
   }
 
 /*****************************************************************************/

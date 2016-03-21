@@ -88,7 +88,7 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod);
 unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod);
 unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus);
-void Msg_WriteNumMsgs (unsigned NumMsgs,unsigned NumUnreadMsgs);
+
 void Msg_PutHiddenParamsMsgsFilters (void);
 void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages);

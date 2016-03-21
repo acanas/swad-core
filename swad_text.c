@@ -20914,25 +20914,46 @@ const char *Txt_Messages_of_THE_USER_X_have_been_deleted =	// Warning: it is ver
 	"Messages of <strong>%s</strong> have been deleted.";	// Necessita de tradução
 #endif
 
-const char *Txt_Messages_received =
+const char *Txt_message_received =
 #if   L==1
-	"Missatges rebuts";
+	"missatge rebut";
 #elif L==2
-	"Empfangene Nachrichten";
+	"Nachricht empfangen";
 #elif L==3
-	"Messages received";
+	"message received";
 #elif L==4
-	"Mensajes recibidos";
+	"mensaje recibido";
 #elif L==5
-	"Messages re&ccedil;us";
+	"message re&ccedil;u";
 #elif L==6
-	"Mensajes recibidos";	// Okoteve traducción
+	"mensaje recibido";	// Okoteve traducción
 #elif L==7
-	"Messaggi ricevuti";
+	"messaggio ricevuto";
 #elif L==8
-	"Wiadomo&sacute;ci odebrane";
+	"odebranej wiadomo&sacute;ci";
 #elif L==9
-	"Mensagens recebidas";
+	"mensagem recebida";
+#endif
+
+const char *Txt_messages_received =
+#if   L==1
+	"missatges rebuts";
+#elif L==2
+	"empfangene Nachrichten";
+#elif L==3
+	"messages received";
+#elif L==4
+	"mensajes recibidos";
+#elif L==5
+	"messages re&ccedil;us";
+#elif L==6
+	"mensajes recibidos";	// Okoteve traducción
+#elif L==7
+	"messaggi ricevuti";
+#elif L==8
+	"wiadomo&sacute;ci odebrane";
+#elif L==9
+	"mensagens recebidas";
 #endif
 
 const char *Txt_Messages_received_from_A_COURSE =
@@ -20956,25 +20977,46 @@ const char *Txt_Messages_received_from_A_COURSE =
 	"Mensagens recebidas de";
 #endif
 
-const char *Txt_Messages_sent =
+const char *Txt_message_sent =
 #if   L==1
-	"Missatges enviats";
+	"missatge enviat";
 #elif L==2
-	"Gesendete Nachrichten";
+	"Nachricht gesendet";
 #elif L==3
-	"Messages sent";
+	"message sent";
 #elif L==4
-	"Mensajes enviados";
+	"mensaje enviado";
 #elif L==5
-	"Messages envoy&eacute;s";
+	"message envoy&eacute;";
 #elif L==6
-	"Mensajes enviados";	// Okoteve traducción
+	"mensaje enviado";	// Okoteve traducción
 #elif L==7
-	"Messaggi inviati";
+	"messaggio inviato";
 #elif L==8
-	"Wiadomo&sacute;ci wysylane";
+	"wiadomo&sacute;&cacute; wys&lstrok;ana";
 #elif L==9
-	"Mensagens enviadas";
+	"mensagem enviada";
+#endif
+
+const char *Txt_messages_sent =
+#if   L==1
+	"missatges enviats";
+#elif L==2
+	"gesendete Nachrichten";
+#elif L==3
+	"messages sent";
+#elif L==4
+	"mensajes enviados";
+#elif L==5
+	"messages envoy&eacute;s";
+#elif L==6
+	"mensajes enviados";	// Okoteve traducción
+#elif L==7
+	"messaggi inviati";
+#elif L==8
+	"wiadomo&sacute;ci wysylane";
+#elif L==9
+	"mensagens enviadas";
 #endif
 
 const char *Txt_Messages_sent_by_teachers =

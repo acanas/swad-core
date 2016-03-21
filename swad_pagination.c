@@ -191,12 +191,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">"
                          "<tr>"
                          "<td class=\"%s LEFT_MIDDLE\">"
-                         "["
-                         "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
                          "%s"
                          "</td>",
-               Font,Font,Txt_Page);
+               Font,Txt_Page);
 
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
@@ -502,12 +499,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
         }
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-	                 "]"
-	                 "</td>"
-	                 "</tr>"
-	                 "</table>",
-	       Font);
+      fprintf (Gbl.F.Out,"</tr>"
+	                 "</table>");
      }
   }
 
