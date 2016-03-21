@@ -148,7 +148,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
-static void Tst_PutFormToCreateNewTstQst (void);
+static void Tst_PutIconToCreateNewTstQst (void);
 static void Tst_PutButtonToAddQuestion (void);
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
@@ -1116,15 +1116,14 @@ void Tst_ShowFormAskEditTsts (void)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   /***** Buttons for edition *****/
+   /***** Contextual menu *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
    Tst_PutFormToConfigure ();		// Put form to go to test configuration
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconToCreateNewTstQst);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1165,16 +1164,16 @@ void Tst_ShowFormAskEditTsts (void)
   }
 
 /*****************************************************************************/
-/************ Put a link (form) to create a new test question ****************/
+/***************** Put icon to create a new test question ********************/
 /*****************************************************************************/
 
-static void Tst_PutFormToCreateNewTstQst (void)
+static void Tst_PutIconToCreateNewTstQst (void)
   {
    extern const char *Txt_New_question;
 
    /***** Put form to create a new test question *****/
    Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
-                          Txt_New_question,Txt_New_question);
+                          Txt_New_question,NULL);
   }
 
 /*****************************************************************************/
@@ -2113,7 +2112,6 @@ void Tst_ListQuestionsToEdit (void)
         {
 	 /***** Buttons for edition *****/
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
 	 if (Gbl.Test.XML.CreateXML)
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file for exporting questions and put a link to download it
          else
@@ -2390,15 +2388,8 @@ static void Tst_ListOneQstToEdit (void)
 
    /***** Query database *****/
    if (Tst_GetOneQuestionByCod (Gbl.Test.QstCod,&mysql_res))
-     {
-      /***** Button to create a new question *****/
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Tst_PutFormToCreateNewTstQst ();	// Put link (form) to create a new test question
-      fprintf (Gbl.F.Out,"</div>");
-
       /***** Show the question ready to edit it *****/
       Tst_ListOneOrMoreQuestionsToEdit (1,mysql_res);
-     }
    else
       Lay_ShowErrorAndExit ("Can not get question.");
 
@@ -2465,10 +2456,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Questions);
+   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconToCreateNewTstQst);
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
+	              " style=\"margin-bottom:20px;\">"
+	              "<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
@@ -2685,7 +2678,13 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** Button to add a new question *****/
+   Tst_PutButtonToAddQuestion ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
