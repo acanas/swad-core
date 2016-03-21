@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.157.3 (2016-03-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.158 (2016-03-21)"
 #define CSS_FILE		"swad15.157.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.158:   Mar 21, 2016	Changes in layout of tests. (196274 lines)
         Version 15.157.3: Mar 20, 2016	Changes in layout of tests. (196247 lines)
         Version 15.157.2: Mar 20, 2016	Fixed bug in surveys. (196241 lines)
         Version 15.157.1: Mar 20, 2016	Changed names of functions related to degree types. (196237 lines)

@@ -141,8 +141,6 @@ static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
-static void Tst_WriteTestHead (unsigned NumTst);
-static void Tst_WriteTestFoot (void);
 static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
@@ -155,7 +153,8 @@ static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
-static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool ShowOnlyEnabledTags);
+static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
+                                 bool ShowOnlyEnabledTags,unsigned NumCols);
 static void Tst_ShowFormEditTags (void);
 static void Tst_PutIconEnable (long TagCod,const char *TagTxt);
 static void Tst_PutIconDisable (long TagCod,const char *TagTxt);
@@ -164,7 +163,7 @@ static void Tst_GetConfigTstFromDB (void);
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
-static void Tst_ShowFormAnswerTypes (void);
+static void Tst_ShowFormAnswerTypes (unsigned NumCols);
 static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res);
 static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
@@ -276,19 +275,22 @@ void Tst_ShowFormAskTst (void)
       if (Tst_CheckIfNextTstAllowed ())
         {
          Act_FormStart (ActSeeTst);
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
          /***** Selection of tags *****/
-         Tst_ShowFormSelTags (NumRows,mysql_res,true);
+         Tst_ShowFormSelTags (NumRows,mysql_res,true,1);
 
          /***** Selection of types of answers *****/
-         Tst_ShowFormAnswerTypes ();
+         Tst_ShowFormAnswerTypes (1);
 
          /***** Number of questions to generate ****/
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"RIGHT_MIDDLE\">"
                             "<label class=\"%s\">"
-                            "%s:&nbsp;"
+                            "%s:"
                             "</label>"
+                            "</td>"
+                            "<td class=\"LEFT_MIDDLE\">"
                             "<input type=\"text\" name=\"NumQst\""
                             " size=\"3\" maxlength=\"3\" value=\"%u\"",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_questions,
@@ -296,8 +298,9 @@ void Tst_ShowFormAskTst (void)
          if (Gbl.Test.Config.Min == Gbl.Test.Config.Max)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
          fprintf (Gbl.F.Out," />"
-                            "</div>"
-                            "</div>");
+                            "</td>"
+                            "</tr>"
+                            "</table>");
 
          /***** Send button *****/
          Lay_PutConfirmButton (Txt_Generate_exam);
@@ -363,6 +366,7 @@ void Tst_ShowNewTestExam (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
+   extern const char *Txt_Test;
    extern const char *Txt_Allow_teachers_to_consult_this_exam;
    extern const char *Txt_Done_assess_exam;
    MYSQL_RES *mysql_res;
@@ -390,24 +394,27 @@ void Tst_ShowNewTestExam (void)
             if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
-            /***** List the questions *****/
-            /* Start form */
+	    /***** Start frame *****/
+	    Lay_StartRoundFrame (NULL,Txt_Test,NULL);
+	    Lay_WriteHeaderClassPhoto (false,false,
+				       Gbl.CurrentIns.Ins.InsCod,
+				       Gbl.CurrentDeg.Deg.DegCod,
+				       Gbl.CurrentCrs.Crs.CrsCod);
+
+            /***** Start form *****/
             Act_FormStart (ActAssTst);
   	    Gbl.Test.NumQsts = (unsigned) NumRows;
             Par_PutHiddenParamUnsigned ("NumTst",NumAccessesTst);
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
-            /* Write test heading */
-            Tst_WriteTestHead (NumAccessesTst);
-
-            /* Write the questions */
+            /***** List the questions *****/
+	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
+	    fprintf (Gbl.F.Out,"</table>");
 
-            /* End of table */
-            Tst_WriteTestFoot ();
-
-	    /* Exam will be saved? */
-	    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
+	    /***** Exam will be saved? *****/
+	    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
+		               " style=\"margin-top:20px;\">"
 			       "<input type=\"checkbox\" name=\"Save\" value=\"Y\"",
 		     The_ClassForm[Gbl.Prefs.Theme]);
 	    if (Gbl.Test.AllowTeachers)
@@ -416,9 +423,12 @@ void Tst_ShowNewTestExam (void)
 			       "</div>",
 		     Txt_Allow_teachers_to_consult_this_exam);
 
-            /* End form */
+            /***** End form *****/
             Lay_PutConfirmButton (Txt_Done_assess_exam);
             Act_FormEnd ();
+
+            /***** End frame *****/
+	    Lay_EndRoundFrame ();
 
             /***** Set test status *****/
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
@@ -445,6 +455,8 @@ void Tst_ShowNewTestExam (void)
 
 void Tst_AssessTestExam (void)
   {
+   extern const char *Txt_Test_result;
+   extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
@@ -477,18 +489,32 @@ void Tst_AssessTestExam (void)
 	 /***** Create new test exam in database to store the result *****/
 	 TstCod = Tst_CreateTestExamInDB ();
 
-	 /***** Write head of test *****/
-	 Tst_WriteTestHead (NumTst);
+	 /***** Start frame *****/
+	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL);
+	 Lay_WriteHeaderClassPhoto (false,false,
+				    Gbl.CurrentIns.Ins.InsCod,
+				    Gbl.CurrentDeg.Deg.DegCod,
+				    Gbl.CurrentCrs.Crs.CrsCod);
+
+	 /***** Header *****/
+	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	   {
+	    fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+	    fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
+	    fprintf (Gbl.F.Out,"</div>");
+	   }
 
 	 /***** Write answers and solutions *****/
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 	 Tst_ShowTstResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
+	 fprintf (Gbl.F.Out,"</table>");
 
 	 /***** Write total mark of test *****/
 	 if (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING)
 	    Tst_ShowTstTotalMark (TotalScore);
 
-	 /***** End of table *****/
-	 Tst_WriteTestFoot ();
+	 /***** End frame *****/
+	 Lay_EndRoundFrame ();
 
 	 /***** Store test result in database *****/
 	 Tst_StoreScoreOfTestExamInDB (TstCod,
@@ -552,11 +578,10 @@ static void Tst_ShowTstTotalMark (double TotalScore)
    double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts;
 
    /***** Write total mark ****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" class=\"DAT CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\""
+	              " style=\"margin-top:20px;\">"
 		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
-		      "</td>"
-		      "</tr>",
+		      "</div>",
 	    Txt_Score,
 	    (TotalScoreOverSCORE_MAX >= (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
 					                                          "ANS_BAD",
@@ -731,47 +756,6 @@ static unsigned Tst_GetNumAccessesTst (void)
      }
 
    return NumAccessesTst;
-  }
-
-/*****************************************************************************/
-/***************** Write the head of the table with the test *****************/
-/*****************************************************************************/
-
-static void Tst_WriteTestHead (unsigned NumTst)
-  {
-   extern const char *Txt_Test;
-   extern const char *Txt_Test_result;
-   extern const char *Txt_Test_No_X_that_you_make_in_this_course;
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Gbl.Action.Act == ActSeeTst ? Txt_Test :
-                                                           Txt_Test_result,NULL);
-   Lay_WriteHeaderClassPhoto (false,false,
-                              Gbl.CurrentIns.Ins.InsCod,
-                              Gbl.CurrentDeg.Deg.DegCod,
-                              Gbl.CurrentCrs.Crs.CrsCod);
-
-   /***** Header *****/
-   if (Gbl.Action.Act == ActAssTst &&
-       Gbl.Usrs.Me.IBelongToCurrentCrs)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
-      fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-  }
-
-/*****************************************************************************/
-/******************* Write the foot of the table with the test ***************/
-/*****************************************************************************/
-
-static void Tst_WriteTestFoot (void)
-  {
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1124,6 +1108,7 @@ void Tst_SetIniEndDates (void)
 void Tst_ShowFormAskEditTsts (void)
   {
    extern const char *Txt_No_test_questions_in_X;
+   extern const char *Txt_Questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -1144,27 +1129,30 @@ void Tst_ShowFormAskEditTsts (void)
      }
    else
      {
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Questions,NULL);
+
       Act_FormStart (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
       /***** Selection of tags *****/
-      Tst_ShowFormSelTags (NumRows,mysql_res,false);
+      Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
 
       /***** Selection of types of answers *****/
-      Tst_ShowFormAnswerTypes ();
+      Tst_ShowFormAnswerTypes (2);
 
       /***** Starting and ending dates in the search *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"margin:0 auto;\">");
       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
-      fprintf (Gbl.F.Out,"</table>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Send button *****/
       Lay_PutConfirmButton (Txt_Show_questions);
       Act_FormEnd ();
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
 
    /* Free structure that stores the query result */
@@ -1404,7 +1392,8 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 /********************* Show a form to select test tags ***********************/
 /*****************************************************************************/
 
-static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool ShowOnlyEnabledTags)
+static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
+                                 bool ShowOnlyEnabledTags,unsigned NumCols)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Tags;
@@ -1417,11 +1406,22 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG+1];
 
-   /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_Tags);
+   /***** Label *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_TOP\">"
+		      "<label class=\"%s\">"
+		      "%s:"
+		      "</label>"
+                      "</td>",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
 
    /***** Select all tags *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<td");
+   if (NumCols > 1)
+      fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP\">"
+	              "<table>"
+                      "<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
@@ -1479,8 +1479,9 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,bool
 	       row[1]);
      }
 
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>"
+	              "</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/
@@ -2017,7 +2018,7 @@ static void Tst_CheckAndCorrectNumbersQst (void)
 /***************** Show form for select the types of answers *****************/
 /*****************************************************************************/
 
-static void Tst_ShowFormAnswerTypes (void)
+static void Tst_ShowFormAnswerTypes (unsigned NumCols)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
@@ -2027,11 +2028,22 @@ static void Tst_ShowFormAnswerTypes (void)
    char UnsignedStr[10+1];
    const char *Ptr;
 
-   /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_Types_of_answers);
+   /***** Label *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_TOP\">"
+		      "<label class=\"%s\">"
+		      "%s:"
+		      "</label>"
+                      "</td>",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_answers);
 
    /***** Select all types of answers *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<td");
+   if (NumCols > 1)
+      fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP\">"
+	              "<table>"
+                      "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
@@ -2066,8 +2078,9 @@ static void Tst_ShowFormAnswerTypes (void)
                Txt_TST_STR_ANSWER_TYPES[AnsType]);
      }
 
-   /***** End of table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>"
+	              "</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/
@@ -6525,6 +6538,7 @@ static long Tst_GetParamTstCod (void)
 
 void Tst_ShowOneTestExam (void)
   {
+   extern const char *Txt_Test_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
    extern const char *Txt_Today;
@@ -6573,8 +6587,15 @@ void Tst_ShowOneTestExam (void)
    /***** Get questions and user's answers of the test exam from database *****/
    Tst_GetExamQuestionsFromDB (TstCod);
 
-   /***** Write head of test *****/
-   Tst_WriteTestHead (0);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL);
+   Lay_WriteHeaderClassPhoto (false,false,
+                              Gbl.CurrentIns.Ins.InsCod,
+                              Gbl.CurrentDeg.Deg.DegCod,
+                              Gbl.CurrentCrs.Crs.CrsCod);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Header row *****/
    /* Get data of the user who made the exam */
@@ -6671,8 +6692,11 @@ void Tst_ShowOneTestExam (void)
    if (ICanViewScore)
       Tst_ShowTstTotalMark (TotalScore);
 
-   /***** End of table *****/
-   Tst_WriteTestFoot ();
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
