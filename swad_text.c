@@ -53123,34 +53123,34 @@ const char *Txt_You_must_type_the_stem_of_the_question =
 	"You must type the stem of the question.";	// Necessita de tradução
 #endif
 
-const char *Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import =
+const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
 #if   L==1
 	"Es necesario un archivo XML"
-	" que contenga una lista de preguntas a importar.";	// Necessita traduccio
+	" que contenga una lista de preguntas.";	// Necessita traduccio
 #elif L==2
 	"You need an XML file"
-	" containing a list of questions to import.";		// Need Übersetzung
+	" containing a list of questions.";		// Need Übersetzung
 #elif L==3
 	"You need an XML file"
-	" containing a list of questions to import.";
+	" containing a list of questions.";
 #elif L==4
 	"Es necesario un archivo XML"
-	" que contenga una lista de preguntas a importar.";
+	" que contenga una lista de preguntas.";
 #elif L==5
 	"You need an XML file"
-	" containing a list of questions to import.";		// Besoin de traduction
+	" containing a list of questions.";		// Besoin de traduction
 #elif L==6
 	"Es necesario un archivo XML"
-	" que contenga una lista de preguntas a importar.";	// Okoteve traducción
+	" que contenga una lista de preguntas.";	// Okoteve traducción
 #elif L==7
 	"You need an XML file"
-	" containing a list of questions to import.";		// Bisogno di traduzione
+	" containing a list of questions.";		// Bisogno di traduzione
 #elif L==8
 	"You need an XML file"
-	" containing a list of questions to import.";		// Potrzebujesz tlumaczenie
+	" containing a list of questions.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"You need an XML file"
-	" containing a list of questions to import.";		// Necessita de tradução
+	" containing a list of questions.";		// Necessita de tradução
 #endif
 
 const char *Txt_You_should_read_the_following_information_on_the_course_X =	// Warning: it is very important to include %s in the following sentences

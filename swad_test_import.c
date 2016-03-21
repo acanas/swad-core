@@ -128,38 +128,32 @@ void TsI_PutFormToImportQuestions (void)
 void TsI_ShowFormImportQstsFromXML (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import;
+   extern const char *Txt_Import_questions;
+   extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_Upload_file;
    extern const char *Txt_XML_file;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL);
 
    /***** Write help message *****/
-   Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions_to_import);
+   Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
 
    /***** Write a form to import questions *****/
    Act_FormStart (ActImpTstQst);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-	              "<input type=\"file\" name=\"%s\""
-	              " size=\"40\" maxlength=\"100\" value=\"\" />"
-	              "</td>"
-                      "</tr>"
-                      "<tr>"
-	              "<td colspan=\"2\" class=\"CENTER_MIDDLE\">",
+                      "</label>"
+                      "<input type=\"file\" name=\"%s\""
+	              " size=\"40\" maxlength=\"100\" value=\"\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
    Lay_PutCreateButton (Txt_Upload_file);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-                      "</table>");
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

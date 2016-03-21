@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.158.2 (2016-03-21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.158.3 (2016-03-21)"
 #define CSS_FILE		"swad15.157.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.158.3: Mar 21, 2016	Change in layout of form to import test questions. (? lines)
         Version 15.158.2: Mar 21, 2016	Icon to add new test question integrated in frame. (196283 lines)
         Version 15.158.1: Mar 21, 2016	Button to add new test question. (196284 lines)
         Version 15.158:   Mar 21, 2016	Changes in layout of tests. (196274 lines)
