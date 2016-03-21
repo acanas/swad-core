@@ -67,6 +67,7 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /*****************************************************************************/
 
 static void Not_PutIconToAddNewNotice (void);
+static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod,bool ICanEdit);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long NotCod,
@@ -463,6 +464,10 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 		     Gbl.Prefs.IconsURL);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
+	    /***** Button to add new notice *****/
+	    if (ICanEdit)
+	       Not_PutButtonToAddNewNotice ();
+
 	    /***** End frame *****/
 	    Lay_EndRoundFrame ();
 	    break;
@@ -487,6 +492,19 @@ static void Not_PutIconToAddNewNotice (void)
    extern const char *Txt_New_notice;
 
    Lay_PutContextualLink (ActWriNot,NULL,"plus64x64.png",Txt_New_notice,NULL);
+  }
+
+/*****************************************************************************/
+/********************** Put button to add a new notice ***********************/
+/*****************************************************************************/
+
+static void Not_PutButtonToAddNewNotice (void)
+  {
+   extern const char *Txt_New_notice;
+
+   Act_FormStart (ActWriNot);
+   Lay_PutConfirmButton (Txt_New_notice);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
