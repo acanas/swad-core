@@ -733,7 +733,7 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeading (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
-   extern const char *Txt_TAGLINE;
+   extern const char *Txt_TAGLINE_BR;
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
       "HEAD_ROW_1_WHITE",	// The_THEME_WHITE
@@ -790,7 +790,7 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_tagline\">"
                       "%s"
                       "</div>",	// head_row_1_logo_small
-            Txt_TAGLINE);
+            Txt_TAGLINE_BR);
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :

@@ -39813,27 +39813,69 @@ const char *Txt_TAGLINE =
 	"plataforma de apoio ao ensino";
 # endif
 
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport<br />a la doc&egrave;ncia";
+# elif L==2
+	"Plattform zur<br />Unterst&uuml;tzung der Lehre";
+# elif L==3
+	"platform to<br />support teaching";
+# elif L==4
+	"plataforma de apoyo<br />a la docencia";
+# elif L==5
+	"plate-forme pour<br />appuyer l'enseignement";
+# elif L==6
+	"plataforma de apoyo<br />a la docencia";	// Okoteve traducción
+# elif L==7
+	"piattaforma per<br />sostenere l'insegnamento";
+# elif L==8
+	"platforma do<br />wspierania nauczania";
+# elif L==9
+	"plataforma de<br />apoio ao ensino";
+# endif
+
 #elif defined OPENSWAD_ORG			// openswad.org ************************
 
 const char *Txt_TAGLINE =
 # if   L==1
-	"plataforma gratuïta de suport a la doc&egrave;ncia";
+	"plataforma de suport a la doc&egrave;ncia";
 # elif L==2
-	"kostenlose Plattform zur Unterst&uuml;tzung der Lehre";
+	"Plattform zur Unterst&uuml;tzung der Lehre";
 # elif L==3
-	"free platform to support teaching";
+	"platform to support teaching";
 # elif L==4
-	"plataforma gratuita de apoyo a la docencia";
+	"plataforma de apoyo a la docencia";
 # elif L==5
-	"plate-forme gratuite pour appuyer l'enseignement";
+	"plate-forme pour appuyer l'enseignement";
 # elif L==6
-	"plataforma gratuita de apoyo a la docencia";	// Okoteve traducción
+	"plataforma de apoyo a la docencia";	// Okoteve traducción
 # elif L==7
-	"piattaforma gratuita per sostenere l'insegnamento";
+	"piattaforma per sostenere l'insegnamento";
 # elif L==8
-	"wolna platforma do wspierania nauczania";
+	"platforma do wspierania nauczania";
 # elif L==9
-	"plataforma gratuita de apoio ao ensino";
+	"plataforma de apoio ao ensino";
+# endif
+
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport<br />a la doc&egrave;ncia";
+# elif L==2
+	"Plattform zur<br />Unterst&uuml;tzung der Lehre";
+# elif L==3
+	"platform to<br />support teaching";
+# elif L==4
+	"plataforma de apoyo<br />a la docencia";
+# elif L==5
+	"plate-forme pour<br />appuyer l'enseignement";
+# elif L==6
+	"plataforma de apoyo<br />a la docencia";	// Okoteve traducción
+# elif L==7
+	"piattaforma per<br />sostenere l'insegnamento";
+# elif L==8
+	"platforma do<br />wspierania nauczania";
+# elif L==9
+	"plataforma de<br />apoio ao ensino";
 # endif
 
 #elif defined SWAD_UGR_ES			// swad.ugr.es *************************
@@ -39859,6 +39901,27 @@ const char *Txt_TAGLINE =
 	"plataforma de apoio ao ensino (UGR)";
 # endif
 
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport a<br />la doc&egrave;ncia (UGR)";
+# elif L==2
+	"Plattform zur<br />Unterst&uuml;tzung der Lehre (UGR)";
+# elif L==3
+	"platform to support<br />teaching (UGR)";
+# elif L==4
+	"plataforma de apoyo a<br />la docencia (UGR)";
+# elif L==5
+	"plate-forme pourappuyer<br />l'enseignement (UGR)";
+# elif L==6
+	"plataforma de apoyo a<br />la docencia (UGR)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere<br />l'insegnamento (UGR)";
+# elif L==8
+	"platforma do wspierania<br />nauczania (UGR)";
+# elif L==9
+	"plataforma de apoio<br />ao ensino (UGR)";
+# endif
+
 #elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad **************
 
 const char *Txt_TAGLINE =
@@ -39880,6 +39943,27 @@ const char *Txt_TAGLINE =
 	"platforma do wspierania nauczania (UNA)";
 # elif L==9
 	"plataforma de apoio ao ensino (UNA)";
+# endif
+
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport a<br />la doc&egrave;ncia (UNA)";
+# elif L==2
+	"Plattform zur<br />Unterst&uuml;tzung der Lehre (UNA)";
+# elif L==3
+	"platform to support<br />teaching (UNA)";
+# elif L==4
+	"plataforma de apoyo a<br />la docencia (UNA)";
+# elif L==5
+	"plate-forme pourappuyer<br />l'enseignement (UNA)";
+# elif L==6
+	"plataforma de apoyo a<br />la docencia (UNA)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere<br />l'insegnamento (UNA)";
+# elif L==8
+	"platforma do wspierania<br />nauczania (UNA)";
+# elif L==9
+	"plataforma de apoio<br />ao ensino (UNA)";
 # endif
 
 #endif

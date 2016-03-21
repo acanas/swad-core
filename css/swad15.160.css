@@ -180,7 +180,7 @@ a:hover						/* Default ==> underlined */
 		{
 		display:inline-block;
 		box-sizing:border-box;
-		max-width:200px;
+		/* max-width:200px; */
 		padding:0 4px;
 		color:#B0B0B0;
 		font-size:11pt;
@@ -194,7 +194,7 @@ a:hover						/* Default ==> underlined */
 #head_row_1_search
 	{
 	display:inline-block;
-	padding-right:20px;
+	padding:0 10px;
 	}
 @media only screen and (max-width: 1279px)
 	{	/* For mobile phones and tablets */
