@@ -121,17 +121,8 @@ void Acc_ShowFormAccount (void)
       Pre_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
-      Acc_ShowFormRequestNewAccount ();
+      Acc_ShowFormRequestNewAccountWithParams ("","");
      }
-  }
-
-/*****************************************************************************/
-/********************* Show form to create a new account *********************/
-/*****************************************************************************/
-
-void Acc_ShowFormRequestNewAccount (void)
-  {
-   Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
@@ -199,6 +190,28 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Send button and form end *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_account);
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/********* Show form to go to request the creation of a new account **********/
+/*****************************************************************************/
+
+void Acc_ShowFormGoToRequestNewAccount (void)
+  {
+   extern const char *Txt_New_on_PLATFORM_Sign_up;
+   extern const char *Txt_Create_new_account;
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
+
+   /***** Button to go to request the creation of a new account *****/
+   Act_FormStart (ActFrmUsrAcc);
+   Lay_PutCreateButton (Txt_Create_new_account);
+   Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -356,15 +369,19 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 
    /***** Step 1/3: Get new nickname from form *****/
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+
+   /* Remove arrobas at the beginning */
    strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
    NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+   Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
+
+   /* Create a new version of the nickname with arroba */
+   sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
 
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
-      /***** Remove arrobas at the beginning *****/
-      Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
-
-      /***** Check if the new nickname matches any of the nicknames of other users *****/
+      /* Check if the new nickname
+         matches any of the nicknames of other users */
       sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
 		     " WHERE Nickname='%s' AND UsrCod<>'%ld'",
 	       NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -391,7 +408,8 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
      {
-      /***** Check if the new e-mail matches any of the confirmed e-mails of other users *****/
+      /* Check if the new e-mail matches
+         any of the confirmed e-mails of other users */
       sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
 		     " WHERE E_mail='%s' AND Confirmed='Y'",
 	       NewEmail);

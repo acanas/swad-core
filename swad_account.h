@@ -46,7 +46,7 @@
 
 void Acc_PutLinkToCreateAccount (void);
 void Acc_ShowFormAccount (void);
-void Acc_ShowFormRequestNewAccount (void);
+void Acc_ShowFormGoToRequestNewAccount (void);
 void Acc_ShowFormChangeMyAccount (void);
 bool Acc_CreateNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct UsrData *UsrDat);

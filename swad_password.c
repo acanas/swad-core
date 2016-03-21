@@ -316,7 +316,6 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-      Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
       if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
 	{
 	 /***** Allocate space for the list *****/
@@ -324,6 +323,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 
 	 // User has typed a user's ID
 	 strcpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin);
+         Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Get users' codes for this ID */
 	 if (!ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Only confirmed IDs

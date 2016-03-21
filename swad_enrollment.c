@@ -1425,12 +1425,12 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		 {
 		  // Users' IDs are always stored internally in capitals and without leading zeros
 		  Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
-		  Str_ConvertToUpperText (UsrDat.UsrIDNickOrEmail);
 		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
 		    {
 		     /***** Find users for this user's ID *****/
 		     ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
 		     strcpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail);
+		     Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		     ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		    }
 		 }
@@ -1567,7 +1567,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	      {
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
-	       Str_ConvertToUpperText (UsrDat.UsrIDNickOrEmail);
 	       if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
 		 {
 		  ItLooksLikeAUsrID = true;
@@ -1575,6 +1574,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		  /* Find users for this user's ID */
 		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
 		  strcpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail);
+	          Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		  ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		 }
 	      }

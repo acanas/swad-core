@@ -5702,7 +5702,7 @@ const char *Txt_Create_account =
 #elif L==7
 	"Registrati";
 #elif L==8
-	"Za&lstrok;&oacute;&zdot; nowe konto";
+	"Za&lstrok;&oacute;&zdot; konto";
 #elif L==9
 	"Criar conta";
 #endif
@@ -6125,6 +6125,27 @@ const char *Txt_Create_mail_domain =
 	"Tworzenie domeny mail";
 #elif L==9
 	"Criar dom&iacute;nio de email";
+#endif
+
+const char *Txt_Create_new_account =
+#if   L==1
+	"Crear nou compte";
+#elif L==2
+	"Neuen Account erstellen";
+#elif L==3
+	"Create new account";
+#elif L==4
+	"Crear nueva cuenta";
+#elif L==5
+	"Cr&eacute;er un nouveau compte";
+#elif L==6
+	"Crear nueva cuenta";		// Okoteve traducción
+#elif L==7
+	"Crea nuovo account";
+#elif L==8
+	"Za&lstrok;&oacute;&zdot; nowe konto";
+#elif L==9
+	"Criar nova conta";
 #endif
 
 const char *Txt_Create_notice =
@@ -23337,7 +23358,7 @@ const char *Txt_Nickname =
 #elif L==6
 	"Apodo";	// Okoteve traducción
 #elif L==7
-	"Nome utente";
+	"Nome-utente";
 #elif L==8
 	"Pseudonim";
 #elif L==9
@@ -42832,67 +42853,49 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 
 const char *Txt_The_nickname_entered_X_is_not_valid_ =	// Warning: it is very important to include %s and two %u in the following sentences
 #if   L==1
-	"El apodo introducido"
-	" <strong>%s</strong> no es v&aacute;lido.<br />"
-	"El apodo debe comenzar por @"
-	" y tener una longitud entre %u y %u caracteres (sin contar la @).<br />"
-	"Cada car&aacute;cter puede ser una letra (a-z, A-Z),"
+	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
+	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";	// Necessita traduccio
 #elif L==2
-	"The nickname entered"
-	" <strong>%s</strong> is not valid.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br />"
-	"Each character can be a letter (a-z, A-Z),"
+	"The nickname <strong>%s</strong> is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Need Übersetzung
 #elif L==3
-	"The nickname entered"
-	" <strong>%s</strong> is not valid.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br />"
-	"Each character can be a letter (a-z, A-Z),"
+	"The nickname <strong>%s</strong> is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";
 #elif L==4
-	"El apodo introducido"
-	" <strong>%s</strong> no es v&aacute;lido.<br />"
-	"El apodo debe comenzar por @"
-	" y tener una longitud entre %u y %u caracteres (sin contar la @).<br />"
-	"Cada car&aacute;cter puede ser una letra (a-z, A-Z),"
+	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
+	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";
 #elif L==5
-	"The nickname entered"
-	" <strong>%s</strong> is not valid.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br />"
-	"Each character can be a letter (a-z, A-Z),"
+	"The nickname <strong>%s</strong> is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including initial the @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Besoin de traduction
 #elif L==6
-	"El apodo introducido"
-	" <strong>%s</strong> no es v&aacute;lido.<br />"
-	"El apodo debe comenzar por @"
-	" y tener una longitud entre %u y %u caracteres (sin contar la @).<br />"
-	"Cada car&aacute;cter puede ser una letra (a-z, A-Z),"
+	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
+	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";	// Okoteve traducción
 #elif L==7
-	"Il nome utente immesso"
-	" <strong>%s</strong> non &egrave; valido.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br /> "
-	"Each character can be a letter (a-z, A-Z),"
+	"Il nome utente <strong>%s</strong> non &egrave; valido.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br /> "
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Bisogno di traduzione
 #elif L==8
-	"The nickname entered"
-	" <strong>%s</strong> is not valid.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br />"
-	"Each character can be a letter (a-z, A-Z),"
+	"The nickname <strong>%s</strong> is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"The nickname entered"
-	" <strong>%s</strong> is not valid.<br />"
-	"Your nickname must start with @"
-	" and must have a length between %u and %u characters (not including the @).<br />"
-	"Each character can be a letter (a-z, A-Z),"
+	"The nickname <strong>%s</strong> is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Necessita de tradução
 #endif
 

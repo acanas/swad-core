@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.159.5 (2016-03-21)"
-#define CSS_FILE		"swad15.159.5.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.160 (2016-03-21)"
+#define CSS_FILE		"swad15.160.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.160:   Mar 21, 2016	Changes in forms to login and to create new account. (196423 lines)
         Version 15.159.5: Mar 21, 2016	Changes in CSS related to tables. (196423 lines)
         Version 15.159.4: Mar 21, 2016	Icon to print stats on degrees integrated in frame. (196426 lines)
         Version 15.159.3: Mar 21, 2016	Icon to add new announcement integrated in frame.

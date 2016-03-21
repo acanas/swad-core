@@ -1425,8 +1425,8 @@ void Usr_WriteLandingPage (void)
    /***** Form to log in *****/
    Usr_WriteFormLogin ();
 
-   /***** Form to create a new account *****/
-   Acc_ShowFormRequestNewAccount ();
+   /***** Form to go to request the creation of a new account *****/
+   Acc_ShowFormGoToRequestNewAccount ();
   }
 
 /*****************************************************************************/
@@ -1468,8 +1468,7 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLink (ActFrmLogIn,NULL,
-                          "login-green64x64.png",
+   Lay_PutContextualLink (ActFrmLogIn,NULL,"login-green64x64.png",
                           Txt_Log_in,Txt_Log_in);
   }
 
@@ -1764,7 +1763,7 @@ void Usr_GetParamUsrIdLogin (void)
    Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Usr_MAX_BYTES_USR_LOGIN);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-   Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
+   // Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/
@@ -1781,7 +1780,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
+      // Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
      }
   }
 
@@ -1828,20 +1827,17 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	{
 	 // Users' IDs are always stored internally in capitals and without leading zeros
 	 Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-	 Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
 	 if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))
 	   {
-	    if (strlen (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) <= ID_MAX_LENGTH_USR_ID)
-	      {
-	       /* Allocate space for the list */
-	       ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
+	    /* Allocate space for the list */
+	    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
 
-	       strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-	       Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+	    strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
+	    Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+	    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
-	       /* Check if user's ID exists in database */
-	       ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
-	      }
+	    /* Check if user's ID exists in database */
+	    ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
 	   }
 	 else	// Not a valid user's nickname, e-mail or ID
 	    Wrong = true;
@@ -2113,16 +2109,8 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-      Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
       if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
 	{
-	 // User is trying to log using his/her ID
-	 if (strlen (Gbl.Usrs.Me.UsrIdLogin) > ID_MAX_LENGTH_USR_ID)        // User's ID too long
-	   {
-	    Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-	    return false;
-	   }
-
 	 /***** Allocate space for the list *****/
 	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
@@ -2246,23 +2234,16 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
    Gbl.Usrs.Me.UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN] = '\0';
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-   Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Check if user's ID is valid *****/
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
      {
-      // User is trying to log using his/her ID
-      if (strlen (Gbl.Usrs.Me.UsrIdLogin) > ID_MAX_LENGTH_USR_ID)        // User's ID too long
-	{
-	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-	 return false;
-	}
-
       /***** Allocate space for the list *****/
       ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
       strncpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,ID_MAX_LENGTH_USR_ID);
       Gbl.Usrs.Me.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+      Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
       /* Check if user's ID exists in database, and get user's data */
       if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Try first only confirmed IDs
