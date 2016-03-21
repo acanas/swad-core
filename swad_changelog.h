@@ -134,14 +134,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.158.5 (2016-03-21)"
+#define Log_PLATFORM_VERSION	"SWAD 15.159.1 (2016-03-21)"
 #define CSS_FILE		"swad15.157.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.158.5: Mar 21, 2016	Number of sent/received messages integrated in frame title. (? lines)
+        Version 15.159.1: Mar 21, 2016	Icon to add new notice integrated in frame. (196395 lines)
+        Version 15.159:   Mar 21, 2016	Number of sent/received messages integrated in frame title. (196372 lines)
         Version 15.158.4: Mar 21, 2016	Icon to remove sent/received messages integrated in frame. (196300 lines)
         Version 15.158.3: Mar 21, 2016	Change in layout of form to import test questions. (196277 lines)
         Version 15.158.2: Mar 21, 2016	Icon to add new test question integrated in frame. (196283 lines)

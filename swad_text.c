@@ -25033,6 +25033,27 @@ const char *Txt_Notice_removed =
 	"Aviso removido.";
 #endif
 
+const char *Txt_Notices =
+#if   L==1
+	 "Avisos";
+#elif L==2
+	 "Ank&uuml;ndigungen";
+#elif L==3
+	 "Notices";
+#elif L==4
+	 "Avisos";
+#elif L==5
+	 "Avis";
+#elif L==6
+	 "Marandu";
+#elif L==7
+	 "Avvisi";
+#elif L==8
+	 "Ogloszenia";
+#elif L==9
+	 "Avisos";
+#endif
+
 const char *Txt_NOTIF_new_SINGULAR =
 #if   L==1
 	"nueva";	// Necessita traduccio
@@ -38017,7 +38038,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #elif L==7
 	 "Avvisi"
 #elif L==8
-	 "Notices"	// Potrzebujesz tlumaczenie
+	 "Ogloszenia"
 #elif L==9
 	 "Avisos"
 #endif
