@@ -105,7 +105,7 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
 static void Pho_PutSelectorForHowOrderDegrees (void);
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
 
-static void Pho_PutLinkToPrintViewOfDegreeStats (void);
+static void Pho_PutIconToPrintDegreeStats (void);
 static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void);
 
 static void Pho_PutLinkToCalculateDegreeStats (void);
@@ -1526,9 +1526,6 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       fprintf (Gbl.F.Out,"</table>");
 
-      /***** Link to print view *****/
-      Pho_PutLinkToPrintViewOfDegreeStats ();
-
       /***** Link to computation of average photos *****/
       Pho_PutLinkToCalculateDegreeStats ();
      }
@@ -1756,18 +1753,15 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   }
 
 /*****************************************************************************/
-/*************** Put a link to print view the stats of degrees ***************/
+/*************** Put icon to print view the stats of degrees ***************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToPrintViewOfDegreeStats (void)
+static void Pho_PutIconToPrintDegreeStats (void)
   {
    extern const char *Txt_Print;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
-                          "print64x64.png",
-                          Txt_Print,Txt_Print);
-   fprintf (Gbl.F.Out,"</div>");
+                          "print64x64.png",Txt_Print,NULL);
   }
 
 static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
@@ -1921,11 +1915,13 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Degrees,
+                        SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
+                                                        NULL);
+
    if (NumRows)	// Degrees with students found
      {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Degrees,NULL);
-
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
@@ -1973,12 +1969,12 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	 fprintf (Gbl.F.Out,"</tr>");
 
       fprintf (Gbl.F.Out,"</table>");
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
      }
    else	// No degrees with students found
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2011,16 +2007,17 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Degrees,
+                        SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
+                                                        NULL);
+
    if (NumRows)	// Degrees with students found
      {
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	{
-	 Lay_StartRoundFrame (NULL,Txt_Degrees,NULL);
-
 	 /***** Form to select type of list used to display degree photos *****/
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
-	}
 
       /***** Write heading *****/
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
@@ -2097,11 +2094,12 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       /***** Photos end *****/
       fprintf (Gbl.F.Out,"</table>");
-      if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Lay_EndRoundFrame ();
      }
    else	// No degrees with students found!
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
