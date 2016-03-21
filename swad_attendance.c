@@ -214,7 +214,7 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Att_ORDER_BY_START_DATE;
 	   Order <= Att_ORDER_BY_END_DATE;
@@ -2928,7 +2928,6 @@ static void Att_PutButtonToShowDetails (void)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
@@ -2937,7 +2936,6 @@ static void Att_PutButtonToShowDetails (void)
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Lay_PutConfirmButton (Txt_Show_more_details);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3061,6 +3059,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    unsigned NumStd;
    unsigned NumAttEvent;
    unsigned Total;
+   bool PutButtonShowDetails = (!Gbl.AttEvents.ShowDetails &&
+                                (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
+	                         TypeOfView == Att_NORMAL_VIEW_STUDENTS));
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -3070,7 +3071,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                          (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
                         ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
                         	                                    NULL));
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
+            PutButtonShowDetails ? "FRAME_TABLE_MARGIN" :
+        	                   "FRAME_TABLE");
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3122,9 +3125,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Button to show more details *****/
-   if (!Gbl.AttEvents.ShowDetails &&
-       (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
-	TypeOfView == Att_NORMAL_VIEW_STUDENTS))
+   if (PutButtonShowDetails)
       Att_PutButtonToShowDetails ();
 
    /***** End frame *****/

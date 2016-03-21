@@ -2459,8 +2459,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconToCreateNewTstQst);
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
-	              " style=\"margin-bottom:20px;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
 	              "<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"

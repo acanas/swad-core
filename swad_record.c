@@ -1854,12 +1854,10 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActSignUp);
    Rec_ShowSharedUsrRecord (Rec_FORM_SIGN_UP,&Gbl.Usrs.Me.UsrDat);
    Lay_PutConfirmButton (Txt_Sign_up);
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

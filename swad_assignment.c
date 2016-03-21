@@ -147,7 +147,7 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Asg_ORDER_BY_START_DATE;
 	   Order <= Asg_ORDER_BY_END_DATE;

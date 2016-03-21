@@ -213,8 +213,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
-	                 " style=\"margin-bottom:20px;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;

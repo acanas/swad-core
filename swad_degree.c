@@ -1598,8 +1598,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
-	                 " style=\"margin-bottom:20px;\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/

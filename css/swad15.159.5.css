@@ -1330,6 +1330,12 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:100%;
 	}
+.FRAME_TABLE_MARGIN
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin-bottom:20px;
+	}
 .FRAME_TABLE_TITLE
 	{
 	display:table;
@@ -1620,6 +1626,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BROWSER_TITLE		{color:#94745C; font-size:13pt; font-weight:bold;}
 .BROWSER_TITLE_LIGHT	{color:#D5C6BB; font-size:13pt; font-weight:bold;}
 .BROWSER_SUBTITLE	{color:#94745C; font-size:12pt;}
+.BROWSER_TABLE
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
 
 .T1			{color:#404040; font-size:15pt;}
 .T2			{color:#404040; font-size:13pt;}

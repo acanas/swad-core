@@ -990,13 +990,8 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
-   /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-
-   /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit);
-
-   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -1008,13 +1003,8 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
-   /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-
-   /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit_plain_text);
-
-   /***** End form *****/
    Act_FormEnd ();
   }
 
@@ -1026,13 +1016,8 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
-   /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
-
-   /***** Send button *****/
    Lay_PutConfirmButton (Txt_Edit_rich_text);
-
-   /***** End form *****/
    Act_FormEnd ();
   }
 

@@ -550,8 +550,7 @@ static void Ins_ListInstitutions (void)
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\""
-	                 " style=\"margin-bottom:20px;\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
       /***** Write all the institutions and their nuber of users *****/
