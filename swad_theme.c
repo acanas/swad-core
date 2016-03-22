@@ -95,6 +95,14 @@ const char *The_ClassHead[The_NUM_THEMES] =
    "YELLOW_HEAD",
   };
 
+const char *The_ClassTagline[The_NUM_THEMES] =
+  {
+   "WHITE_TAGLINE",
+   "GREY_TAGLINE",
+   "BLUE_TAGLINE",
+   "YELLOW_TAGLINE",
+  };
+
 const char *The_ClassCurrentTime[The_NUM_THEMES] =
   {
    "WHITE_CUR_TIME",

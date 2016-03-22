@@ -733,6 +733,9 @@ static void Lay_WriteScriptCustomDropzone (void)
 static void Lay_WritePageTopHeading (void)
   {
    extern const char *The_ClassHead[The_NUM_THEMES];
+   extern const char *The_ClassTagline[The_NUM_THEMES];
+   extern const char *Txt_System;
+   extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
@@ -764,33 +767,39 @@ static void Lay_WritePageTopHeading (void)
    /* 1st. row, 1st. column: logo, tagline and search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
 
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">"
-                      "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+   /* Start form to go to home page */
+   Act_FormGoToStart (ActMnu);
+   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
+
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
+   Act_LinkFormSubmit (Txt_System,NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>"
-                      "</div>",	// head_row_1_logo_small
-            Cfg_HTTPS_URL_SWAD_CGI,
+                      "</a>",	// head_row_1_logo_small
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\">"
-                      "<a href=\"%s\" target=\"_blank\">"
-	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div id=\"head_row_1_logo_big\">");
+   Act_LinkFormSubmit (Txt_System,NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>"
-                      "</div>",	// head_row_1_logo_big
-            Cfg_HTTPS_URL_SWAD_CGI,
+                      "</a>",	// head_row_1_logo_big
             Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
-
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_tagline\">"
-                      "%s"
-                      "</div>",	// head_row_1_logo_small
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div id=\"head_row_1_tagline\">");
+   Act_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s"
+	              "</a>"
+                      "</div>",	// head_row_1_tagline
             Txt_TAGLINE_BR);
+
+   /* End form to go to home page */
+   Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
