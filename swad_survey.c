@@ -461,6 +461,37 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    Svy_WriteStatus (&Svy);
+
+   if (!ShowOnlyThisSvyComplete)
+     {
+      /* Possible button to answer this survey */
+      if (Svy.Status.ICanAnswer)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+	 Act_FormStart (ActSeeOneSvy);
+	 Svy_PutParamSvyCod (Svy.SvyCod);
+	 Svy_PutHiddenParamSvyOrderType ();
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Lay_PutCreateButtonInline (Txt_Answer_survey);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+      /* Possible button to see the result of the survey */
+      else if (Svy.Status.ICanViewResults)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+	 Act_FormStart (ActSeeOneSvy);
+	 Svy_PutParamSvyCod (Svy.SvyCod);
+	 Svy_PutHiddenParamSvyOrderType ();
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Lay_PutConfirmButtonInline (Txt_View_survey_results);
+	 Act_FormEnd ();
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+     }
+
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -530,44 +561,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
             Txt);
 
    /***** Write questions of this survey *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"4\"");
    if (ShowOnlyThisSvyComplete)
      {
-      fprintf (Gbl.F.Out,">");
-
-      /* Write questions of this survey **/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"4\">");
       Svy_ListSvyQuestions (&Svy,SvyQst);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
-   else
-     {
-      fprintf (Gbl.F.Out," class=\"COLOR%u\">",Gbl.RowEvenOdd);
-
-      /* Possible button to answer this survey */
-      if (Svy.Status.ICanAnswer)
-        {
-         Act_FormStart (ActSeeOneSvy);
-         Svy_PutParamSvyCod (Svy.SvyCod);
-         Svy_PutHiddenParamSvyOrderType ();
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutConfirmButton (Txt_Answer_survey);
-         Act_FormEnd ();
-        }
-      /* Possible button to see the result of the survey */
-      else if (Svy.Status.ICanViewResults)
-        {
-	 Act_FormStart (ActSeeOneSvy);
-         Svy_PutParamSvyCod (Svy.SvyCod);
-         Svy_PutHiddenParamSvyOrderType ();
-         Grp_PutParamWhichGrps ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-         Lay_PutConfirmButton (Txt_View_survey_results);
-         Act_FormEnd ();
-        }
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -2798,7 +2799,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    extern const char *Txt_Question;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_This_survey_has_no_questions;
-   extern const char *Txt_Send_survey;
+   extern const char *Txt_Done;
    extern const char *Txt_Edit_question;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2809,7 +2810,6 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
 	           Gbl.Action.Act == ActRcvSvyQst);
    bool PutFormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
-   bool ICanEdit = Svy_CheckIfICanCreateSvy ();
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
@@ -2820,8 +2820,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    /***** Start frame *****/
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
    Lay_StartRoundFrame (NULL,Txt_Questions,
-                        ICanEdit ? Svy_PutIconToAddNewQuestion :
-                                   NULL);
+                        Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
+                                               NULL);
 
    if (NumQsts)
      {
@@ -2924,7 +2924,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
       if (PutFormAnswerSurvey)
 	{
 	 /***** Button to create/modify survey *****/
-	 Lay_PutConfirmButton (Txt_Send_survey);
+	 Lay_PutConfirmButton (Txt_Done);
 
 	 /***** End form *****/
 	 Act_FormEnd ();
