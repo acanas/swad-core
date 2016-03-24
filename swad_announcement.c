@@ -482,7 +482,7 @@ void Ann_ShowFormAnnouncement (void)
                            1 << Rol__GUEST_ |
                            1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
-                           false);
+                           false,false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -513,7 +513,7 @@ void Ann_ReceiveAnnouncement (void)
                               Str_TO_RIGOROUS_HTML,true);
 
    /* Get users who can view this announcement */
-   Rol_GetSelectedRoles (&Roles);
+   Roles = Rol_GetSelectedRoles ();
 
    /***** Create a new announcement in database *****/
    Ann_CreateAnnouncement (Roles,Subject,Content);

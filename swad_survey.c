@@ -378,13 +378,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Users;
-   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Answer_survey;
    extern const char *Txt_View_survey_results;
    static unsigned UniqueId = 0;
    struct Survey Svy;
-   Rol_Role_t Role;
-   bool RolesSelected;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Start frame *****/
@@ -503,24 +500,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    fprintf (Gbl.F.Out,"</div>");
 
    /* Users' roles who can answer the survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s:",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s:<br />",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Users);
-   for (Role = Rol_STUDENT, RolesSelected = false;
-	Role <= Rol_TEACHER;
-	Role++)
-     {
-      if (RolesSelected)
-         fprintf (Gbl.F.Out,",");
-      else
-         RolesSelected = true;
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\" disabled=\"disabled\"",
-               (unsigned) Role);
-      if (Svy.Roles & (1 << Role))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
-     }
+   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
+			   1 << Rol_TEACHER,
+			   Svy.Roles,
+			   true,false);
    fprintf (Gbl.F.Out,"</div>");
 
    /* Groups whose users can answer this survey */
@@ -1605,7 +1592,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
                            Svy.Roles,
-                           false);
+                           false,false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -1805,7 +1792,7 @@ void Svy_RecFormSurvey (void)
       NewSvy.TimeUTC[Svy_END_TIME] = NewSvy.TimeUTC[Svy_START_TIME] + 24*60*60;	// +24 hours
 
    /***** Get users who can answer this survey *****/
-   Rol_GetSelectedRoles (&(NewSvy.Roles));
+   NewSvy.Roles = Rol_GetSelectedRoles ();
 
    /***** Check if title is correct *****/
    if (NewSvy.Title[0])	// If there's a survey title

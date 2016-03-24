@@ -79,9 +79,9 @@ void Rol_PutFormToChangeMyRole (bool FormInHead);
 void Rol_ChangeMyRole (void);
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool SendOnChange);
+                             bool Disabled,bool SendOnChange);
 void Rol_PutHiddenParamRoles (unsigned Role);
-void Rol_GetSelectedRoles (unsigned *Roles);
+unsigned Rol_GetSelectedRoles (void);
 
 Rol_Role_t Rol_GetRequestedRole (long UsrCod);
 

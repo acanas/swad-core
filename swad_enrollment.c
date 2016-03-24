@@ -102,7 +102,8 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
-static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected);
+static void Enr_ShowEnrollmentRequestsGivenRoles (void);
+static void Enr_PutIconToUpdateEnrollmentRequests (void);
 
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
 
@@ -2159,14 +2160,16 @@ void Enr_ShowEnrollmentRequests (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 Enr_ShowEnrollmentRequestsGivenRoles ((1 << Rol_STUDENT) |
-			                       (1 << Rol_TEACHER));
+	 Gbl.EnrollmentRequests.RolesSelected = (1 << Rol_STUDENT) |
+			                        (1 << Rol_TEACHER);
+	 Enr_ShowEnrollmentRequestsGivenRoles ();
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 Enr_ShowEnrollmentRequestsGivenRoles (1 << Rol_TEACHER);
+	 Gbl.EnrollmentRequests.RolesSelected = (1 << Rol_TEACHER);
+	 Enr_ShowEnrollmentRequestsGivenRoles ();
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2180,27 +2183,24 @@ void Enr_ShowEnrollmentRequests (void)
 
 void Enr_UpdateEnrollmentRequests (void)
   {
-   unsigned RolesSelected;
-
    /***** Get selected roles *****/
-   Rol_GetSelectedRoles (&RolesSelected);
+   Gbl.EnrollmentRequests.RolesSelected = Rol_GetSelectedRoles ();
 
    /***** Update enrollment requests *****/
-   Enr_ShowEnrollmentRequestsGivenRoles (RolesSelected);
+   Enr_ShowEnrollmentRequestsGivenRoles ();
   }
 
 /*****************************************************************************/
 /************* Show pending requests for enrollment given roles **************/
 /*****************************************************************************/
+// Gbl.EnrollmentRequests.RolesSelected must be set
 
-static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
+static void Enr_ShowEnrollmentRequestsGivenRoles (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Enrollment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
-   extern const char *Txt_Update;
    extern const char *Txt_Course;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Requester;
@@ -2226,8 +2226,18 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    char PhotoURL[PATH_MAX+1];
    Rol_Role_t DesiredRole;
 
+   /***** Get scope *****/
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
+                       1 << Sco_SCOPE_INS |
+                       1 << Sco_SCOPE_CTR |
+                       1 << Sco_SCOPE_DEG |
+                       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Sco_GetScope ();
+
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrollment_requests,NULL);
+   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,Enr_PutIconToUpdateEnrollmentRequests);
 
    /***** Selection of scope and roles *****/
    /* Start form */
@@ -2242,14 +2252,6 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-                       1 << Sco_SCOPE_INS |
-                       1 << Sco_SCOPE_CTR |
-                       1 << Sco_SCOPE_DEG |
-                       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
    Sco_PutSelectorScope (true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -2264,17 +2266,13 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
-                           RolesSelected,
-                           true);
+                           Gbl.EnrollmentRequests.RolesSelected,
+                           false,true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
                       "</table>");
 
-   /* Send button */
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-   fprintf (Gbl.F.Out,"</div>");
+   /* End form */
    Act_FormEnd ();
 
    /***** Build query *****/
@@ -2298,7 +2296,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_DEG_ADM:
                	// Requests in all degrees administrated by me
@@ -2314,7 +2312,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_CTR_ADM:
                	// Requests in all centres administrated by me
@@ -2331,7 +2329,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_INS_ADM:
                	// Requests in all institutions administrated by me
@@ -2349,7 +2347,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
            case Rol_SYS_ADM:
                	// All requests
@@ -2361,7 +2359,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " FROM crs_usr_requests"
                               " WHERE ((1<<Role)&%u)<>0"
                               " ORDER BY RequestTime DESC",
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2392,7 +2390,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER,
                         Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_DEG_ADM:
                	// Requests in degrees of this country administrated by me
@@ -2413,7 +2411,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_CTR_ADM:
                	// Requests in centres of this country administrated by me
@@ -2434,7 +2432,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_INS_ADM:
                	// Requests in institutions of this country administrated by me
@@ -2455,7 +2453,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_SYS_ADM:
                	// Requests in any course of this country
@@ -2473,7 +2471,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.CurrentCty.Cty.CtyCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2503,7 +2501,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER,
                         Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_DEG_ADM:
                	// Requests in degrees of this institution administrated by me
@@ -2523,7 +2521,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_CTR_ADM:
                	// Requests in centres of this institution administrated by me
@@ -2543,7 +2541,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this institution
             case Rol_SYS_ADM:
@@ -2561,7 +2559,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.CurrentIns.Ins.InsCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2590,7 +2588,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER,
                         Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_DEG_ADM:
                	// Requests in degrees of this centre administrated by me
@@ -2609,7 +2607,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this centre
             case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this centre
@@ -2627,7 +2625,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.CurrentCtr.Ctr.CtrCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2655,7 +2653,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER,
                         Gbl.CurrentDeg.Deg.DegCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this degree
             case Rol_CTR_ADM:	// If I am logged as admin of this centre     , I can view all the requesters from this degree
@@ -2673,7 +2671,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
                         Gbl.CurrentDeg.Deg.DegCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2696,7 +2694,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND ((1<<Role)&%u)<>0"
                               " ORDER BY RequestTime DESC",
                         Gbl.CurrentCrs.Crs.CrsCod,
-                        RolesSelected);
+                        Gbl.EnrollmentRequests.RolesSelected);
                break;
             default:
                Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2866,6 +2864,24 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/***************** Put icon to update enrollment requests ********************/
+/*****************************************************************************/
+
+static void Enr_PutIconToUpdateEnrollmentRequests (void)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Update;
+
+   Act_FormStart (ActUpdSignUpReq);
+   Sco_PutParamScope (Gbl.Scope.Current);
+   Rol_PutHiddenParamRoles (Gbl.EnrollmentRequests.RolesSelected);
+   Par_PutHiddenParamUnsigned ("Roles",Gbl.EnrollmentRequests.RolesSelected);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

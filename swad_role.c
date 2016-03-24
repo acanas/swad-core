@@ -343,7 +343,7 @@ void Rol_ChangeMyRole (void)
 /*****************************************************************************/
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool SendOnChange)
+                             bool Disabled,bool SendOnChange)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
@@ -353,11 +353,14 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
         Role++)
       if ((RolesAllowed & (1 << Role)))
 	{
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
 		  (unsigned) Role);
 
 	 if ((RolesSelected & (1 << Role)))
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
+
+	 if (Disabled)
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
 
 	 if (SendOnChange)
 	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
@@ -372,33 +375,44 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 /******************** Put hidden param with users' roles *********************/
 /*****************************************************************************/
 
-void Rol_PutHiddenParamRoles (unsigned Role)
+void Rol_PutHiddenParamRoles (unsigned Roles)
   {
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Roles\" value=\"%u\" />",
-	    Role);
+	    Roles);
   }
 
 /*****************************************************************************/
 /************************* Get selected users' roles *************************/
 /*****************************************************************************/
 
-void Rol_GetSelectedRoles (unsigned *Roles)
+unsigned Rol_GetSelectedRoles (void)
   {
    char StrRoles[(10+1)*2];
    const char *Ptr;
    char UnsignedStr[10+1];
+   unsigned UnsignedNum;
    Rol_Role_t Role;
+   unsigned Roles;
 
-   Par_GetParMultiToText ("Roles",StrRoles,(10+1)*2);
-   *Roles = 0;
+   /***** Try to get param "Roles" with multiple roles *****/
+   Par_GetParToText ("Roles",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      Roles = UnsignedNum;
+   else
+      Roles = 0;
+
+   /***** Try to get multiple param "Role" *****/
+   Par_GetParMultiToText ("Role",StrRoles,(10+1)*2);
    for (Ptr = StrRoles;
         *Ptr;)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
       if (sscanf (UnsignedStr,"%u",&Role) != 1)
          Lay_ShowErrorAndExit ("can not get user's role");
-      *Roles |= (1 << Role);
+      Roles |= (1 << Role);
      }
+
+   return Roles;
   }
 
 /*****************************************************************************/

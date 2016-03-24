@@ -397,6 +397,10 @@ struct Globals
      } Scope;
    struct
      {
+      unsigned RolesSelected;
+     } EnrollmentRequests;
+   struct
+     {
       struct Country Cty;
      } CurrentCty;
    struct
