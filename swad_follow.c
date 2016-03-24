@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Fol_UpdateWhoToFollow (void);
+static void Fol_PutIconToUpdateWhoToFollow (void);
 
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   unsigned NumUsrs,
@@ -209,7 +209,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_UpdateWhoToFollow);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconToUpdateWhoToFollow);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -257,7 +257,7 @@ void Fol_SuggestWhoToFollow (void)
 /********************* Put icon to update who to follow **********************/
 /*****************************************************************************/
 
-static void Fol_UpdateWhoToFollow (void)
+static void Fol_PutIconToUpdateWhoToFollow (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update;

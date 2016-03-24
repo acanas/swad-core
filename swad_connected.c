@@ -52,6 +52,8 @@ extern struct Globals Gbl;
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
+static void Con_PutIconToUpdateConnected (void);
+
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsBelongingToLocation (void);
 
@@ -73,10 +75,8 @@ static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 
 void Con_ShowConnectedUsrs (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
-   extern const char *Txt_Update;
 
    /***** Link to show last clicks in real time *****/
    if (Gbl.Usrs.Me.Logged)
@@ -98,16 +98,7 @@ void Con_ShowConnectedUsrs (void)
             Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
-
-   /***** Put form to update connected users *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_FormStart (ActLstCon);
-   Sco_PutParamScope (Gbl.Scope.Current);
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_StartRoundFrame (NULL,Gbl.Title,Con_PutIconToUpdateConnected);
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
@@ -117,6 +108,22 @@ void Con_ShowConnectedUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/******************** Put icon to update connected users *********************/
+/*****************************************************************************/
+
+static void Con_PutIconToUpdateConnected (void)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Update;
+
+   Act_FormStart (ActLstCon);
+   Sco_PutParamScope (Gbl.Scope.Current);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
