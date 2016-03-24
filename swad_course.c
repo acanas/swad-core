@@ -2733,6 +2733,8 @@ void Crs_ContEditAfterChgCrs (void)
       /***** Write success message showing the change made *****/
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
+      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+
       /***** Put button to go to course changed *****/
       Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
 
@@ -2761,6 +2763,8 @@ void Crs_ContEditAfterChgCrs (void)
         }
       if (PutButtonToRequestRegistration)
 	 Crs_PutButtonToRegisterInCrs (&Gbl.Degs.EditingCrs);
+
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Show the form again *****/
@@ -2781,7 +2785,7 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs)
       Act_FormStart (ActSeeCrsInf);
       Crs_PutParamCrsCod (Crs->CrsCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
-      Lay_PutConfirmButton (Gbl.Title);
+      Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
      }
   }
@@ -2798,7 +2802,7 @@ static void Crs_PutButtonToRegisterInCrs (struct Course *Crs)
    if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If the course is different to the current one...
       Crs_PutParamCrsCod (Crs->CrsCod);
    sprintf (Gbl.Title,Txt_Register_me_in_X,Crs->ShortName);
-   Lay_PutCreateButton (Gbl.Title);
+   Lay_PutCreateButtonInline (Gbl.Title);
    Act_FormEnd ();
   }
 

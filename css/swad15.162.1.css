@@ -1118,6 +1118,12 @@ a:hover						/* Default ==> underlined */
 	{
 	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
 	}
+.BUTTONS_AFTER_ALERT
+	{
+	text-align:center;
+	vertical-align:middle;
+	padding:8px 0 16px 0;
+	}
 
 /********************************** Notice ***********************************/
 .NOTICE_CONTAINER_ACTIVE
