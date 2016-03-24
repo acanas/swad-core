@@ -99,6 +99,7 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 static void Crs_EmptyCourseCompletely (long CrsCod);
 static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
+static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
 
 static void Crs_PutLinkToSearchCourses (void);
 static void Crs_PutLinkToSearchCoursesParams (void);
@@ -1849,14 +1850,14 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 	 if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,"ShortName",Crs->ShortName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
-		     Crs->ShortName);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	             Crs->ShortName);
+            Gbl.Error = true;
 	   }
 	 else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,"FullName",Crs->FullName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
 		     Crs->FullName);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
 	   }
 	 else	// Add new requested course to database
 	    Crs_CreateCourse (Crs,Status);
@@ -1864,17 +1865,14 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
       else	// If there is not a course name
 	{
 	 sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Gbl.Error = true;
 	}
      }
    else	// Year not valid
      {
       sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Gbl.Error = true;
      }
-
-   /***** Show the form again *****/
-   Crs_ReqEditCourses ();
   }
 
 /*****************************************************************************/
@@ -1936,13 +1934,8 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
             Crs->ShortName,Crs->FullName);
    Crs->CrsCod = DB_QueryINSERTandReturnCode (Query,"can not create a new course");
 
-   /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_course_X,
-            Crs->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Put button to go to course created *****/
-   Crs_PutButtonToGoToCrs (Crs);
+   /***** Create success message *****/
+   sprintf (Gbl.Message,Txt_Created_new_course_X,Crs->FullName);
   }
 
 /*****************************************************************************/
@@ -1980,7 +1973,7 @@ void Crs_RemoveCourse (void)
         }
      }
    else
-      Lay_ShowAlert (Lay_WARNING, Txt_You_dont_have_permission_to_edit_this_course);
+      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
 
    /***** Show the form again *****/
    Crs_ReqEditCourses ();
@@ -2357,23 +2350,16 @@ void Crs_ChangeInsCrsCod (void)
          Crs_UpdateInstitutionalCrsCod (Crs,NewInstitutionalCrsCod);
          sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
                   Crs->ShortName,NewInstitutionalCrsCod);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
         }
       else	// The same institutional code
-        {
          sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
                   Crs->ShortName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
-        }
-
-      /***** Put button to go to course changed *****/
-      Crs_PutButtonToGoToCrs (Crs);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
-
-   /***** Show the form again *****/
-   Crs_ReqEditCourses ();
+     {
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Error = true;
+     }
   }
 
 /*****************************************************************************/
@@ -2428,13 +2414,13 @@ void Crs_ChangeCrsDegree (void)
            {
             sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
                      Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,"FullName",Crs->FullName,-1L))
            {
             sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
                      Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else	// Update degree in database
            {
@@ -2444,30 +2430,23 @@ void Crs_ChangeCrsDegree (void)
             DB_QueryUPDATE (Query,"can not move course to another degree");
             Crs->DegCod = NewDeg.DegCod;
 
-            /***** Write message to show the change made *****/
+            /***** Create message to show the change made *****/
             sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
                      Crs->FullName,NewDeg.FullName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-            /***** Put button to go to course changed *****/
-            Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// New degree has no current course year
         {
          sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Gbl.Error = true;
         }
      }
    else	// I have no permission to change course to this new degree
      {
       sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
                NewDeg.FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Gbl.Error = true;
      }
-
-   /***** Show the form again *****/
-   Crs_ReqEditCourses ();
   }
 
 /*****************************************************************************/
@@ -2512,13 +2491,13 @@ void Crs_ChangeCrsYear (void)
            {
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,NewYear,"FullName",Crs->FullName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->FullName,Txt_YEAR_OF_DEGREE[NewYear]);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Gbl.Error = true;
            }
          else	// Update year in database
            {
@@ -2529,26 +2508,22 @@ void Crs_ChangeCrsYear (void)
 
             Crs->Year = NewYear;
 
-            /***** Write message to show the change made *****/
+            /***** Create message to show the change made *****/
             sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
                      Crs->ShortName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-            /***** Put button to go to course changed *****/
-            Crs_PutButtonToGoToCrs (Crs);
            }
         }
       else	// Year not valid
         {
          sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Gbl.Error = true;
         }
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
-
-   /***** Show the form again *****/
-   Crs_ReqEditCourses ();
+     {
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Error = true;
+     }
   }
 
 /*****************************************************************************/
@@ -2675,7 +2650,7 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
                         FieldName,NewCrsName,Crs->CrsCod);
                DB_QueryUPDATE (Query,"can not update the name of a course");
 
-               /* Write message to show the change made */
+               /* Create message to show the change made */
                sprintf (Gbl.Message,Txt_The_name_of_the_course_X_has_changed_to_Y,
                         CurrentCrsName,NewCrsName);
 
@@ -2737,16 +2712,9 @@ void Crs_ChangeCrsStatus (void)
 
    Crs->Status = Status;
 
-   /***** Write message to show the change made *****/
+   /***** Create message to show the change made *****/
    sprintf (Gbl.Message,Txt_The_status_of_the_course_X_has_changed,
             Crs->ShortName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Put button to go to course changed *****/
-   Crs_PutButtonToGoToCrs (Crs);
-
-   /***** Show the form again *****/
-   Crs_ReqEditCourses ();
   }
 
 /*****************************************************************************/
@@ -2755,16 +2723,44 @@ void Crs_ChangeCrsStatus (void)
 
 void Crs_ContEditAfterChgCrs (void)
   {
+   bool PutButtonToRequestRegistration;
+
    if (Gbl.Error)
       /***** Write error message *****/
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    else
      {
       /***** Write success message showing the change made *****/
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Put button to go to course changed *****/
       Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
+
+      /***** Put button to request my registration in course *****/
+      PutButtonToRequestRegistration = false;
+      switch (Gbl.Usrs.Me.LoggedRole)
+        {
+	 case Rol__GUEST_:	// I do not belong to any course
+	    PutButtonToRequestRegistration = true;
+	    break;
+	 case Rol_VISITOR:
+	    PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+					                                  Gbl.Degs.EditingCrs.CrsCod,
+					                                  false);
+            break;
+	 case Rol_STUDENT:
+	 case Rol_TEACHER:
+	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+									     Gbl.Degs.EditingCrs.CrsCod,
+									     false);
+	    break;
+	 default:
+	    break;
+
+        }
+      if (PutButtonToRequestRegistration)
+	 Crs_PutButtonToRegisterInCrs (&Gbl.Degs.EditingCrs);
      }
 
    /***** Show the form again *****/
@@ -2788,6 +2784,22 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs)
       Lay_PutConfirmButton (Gbl.Title);
       Act_FormEnd ();
      }
+  }
+
+/*****************************************************************************/
+/************************ Put button to go to course *************************/
+/*****************************************************************************/
+
+static void Crs_PutButtonToRegisterInCrs (struct Course *Crs)
+  {
+   extern const char *Txt_Register_me_in_X;
+
+   Act_FormStart (ActReqSignUp);
+   if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If the course is different to the current one...
+      Crs_PutParamCrsCod (Crs->CrsCod);
+   sprintf (Gbl.Title,Txt_Register_me_in_X,Crs->ShortName);
+   Lay_PutCreateButton (Gbl.Title);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

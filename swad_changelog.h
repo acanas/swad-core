@@ -123,8 +123,8 @@
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Important!!!! E-mail should not be visible for not logged users
 // TODO: Fix bug in marks reported by Francisco Ocaña
-// TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
-// TODO: Button to see result of a survey in listing of surveys should be smaller
+// TODO:
+// TODO: Button to see result of a survey in listing of surveys should be smaller?
 
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
@@ -133,13 +133,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.161.4 (2016-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.162 (2016-03-24)"
 #define CSS_FILE		"swad15.160.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.162:   Mar 24, 2016	Code refactoring in edition of courses.
+					When a user creates or edits a course, put button to register him/her. (196576 lines)
         Version 15.161.4: Mar 24, 2016	In MESSAGES > Announcements, any user can see obsolete announcements, not only system admins. (196576 lines)
         Version 15.161.3: Mar 24, 2016	Changed icon to reset survey. (196577 lines)
 Copy file recycle64x64.png to icon directory

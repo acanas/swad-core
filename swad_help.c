@@ -81,7 +81,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Sign_up;
    extern const char *Txt_Remove_me_from_the_course_X;
    extern const char *Txt_Remove_me;
-   extern const char *Txt_Register_me_in_the_course_X;
+   extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Select_or_create_another_course_in_X;
    extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Courses;
@@ -120,6 +120,33 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	{
+	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
+	   {
+	    if (Gbl.Action.Act != ActAutUsrInt &&
+		Gbl.Action.Act != ActAutUsrExt &&
+                Gbl.Action.Act != ActAutUsrChgLan)	// I am not just logged
+	      {
+	       /* Request my removing from this course */
+	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
+			Gbl.CurrentCrs.Crs.ShortName);
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
+						    ActReqMdfOneStd,
+						    "BT_REMOVE",Txt_Remove_me);
+	      }
+	   }
+	 else					// I do not belong to this course
+	   {
+	    /* Request my registration in this course */
+	    sprintf (Gbl.Title,Txt_Register_me_in_X,
+		     Gbl.CurrentCrs.Crs.ShortName);
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
+						 ActReqSignUp,
+						 "BT_CREATE",Txt_Sign_up);
+	   }
+	}
+
       if (Gbl.Usrs.Me.MyCourses.Num)	// I am enrolled in some courses
 	{
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
@@ -187,33 +214,6 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						                              Txt_Select_one_country,
 				              ActSeeCty,
 				              "BT_CONFIRM",Txt_Countries);
-
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-	{
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
-	   {
-	    if (Gbl.Action.Act != ActAutUsrInt &&
-		Gbl.Action.Act != ActAutUsrExt &&
-                Gbl.Action.Act != ActAutUsrChgLan)	// I am not just logged
-	      {
-	       /* Request my removing from this course */
-	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
-			Gbl.CurrentCrs.Crs.ShortName);
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
-						    ActReqMdfOneStd,
-						    "BT_REMOVE",Txt_Remove_me);
-	      }
-	   }
-	 else					// I do not belong to this course
-	   {
-	    /* Request my registration in this course */
-	    sprintf (Gbl.Title,Txt_Register_me_in_the_course_X,
-		     Gbl.CurrentCrs.Crs.ShortName);
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
-						 ActReqSignUp,
-						 "BT_CREATE",Txt_Sign_up);
-	   }
-	}
 
       if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,

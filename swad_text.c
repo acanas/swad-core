@@ -29279,25 +29279,25 @@ const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
 	"Registrar utilizador";
 #endif
 
-const char *Txt_Register_me_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Register_me_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Inscriureme en l'assignatura <strong>%s</strong>";
+	"Inscriureme en <strong>%s</strong>";
 #elif L==2
-	"Anmeldung Sie mir im Kurs <strong>%s</strong>";
+	"Anmeldung Sie mir im <strong>%s</strong>";
 #elif L==3
-	"Register me in the course <strong>%s</strong>";
+	"Register me in <strong>%s</strong>";
 #elif L==4
-	"Inscribirme en la asignatura <strong>%s</strong>";
+	"Inscribirme en <strong>%s</strong>";
 #elif L==5
-	"Inscrire-moi dans la mati&egrave;re <strong>%s</strong>";
+	"Inscrire-moi dans <strong>%s</strong>";
 #elif L==6
-	"Inscribirme en la asignatura <strong>%s</strong>";	// Okoteve traducción
+	"Inscribirme en <strong>%s</strong>";	// Okoteve traducción
 #elif L==7
-	"Registrami utente nel corso <strong>%s</strong>";
+	"Registrami in <strong>%s</strong>";
 #elif L==8
-	"Rejestracja mnie w kurs <strong>%s</strong>";
+	"Rejestracja mnie w <strong>%s</strong>";
 #elif L==9
-	"Registrar me na disciplina <strong>%s</strong>";
+	"Registrar me em <strong>%s</strong>";
 #endif
 
 const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences

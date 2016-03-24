@@ -857,7 +857,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
-   extern const char *Txt_Register_me_in_the_course_X;
+   extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
@@ -919,7 +919,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      {
       sprintf (Gbl.Message,UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
 		                                      Txt_Modify_user_in_the_course_X) :
-	                                     (ItsMe ? Txt_Register_me_in_the_course_X :
+	                                     (ItsMe ? Txt_Register_me_in_X :
 		                                      Txt_Register_USER_in_the_course_X),
 	       Gbl.CurrentCrs.Crs.ShortName);
       fprintf (Gbl.F.Out,"<li>"
