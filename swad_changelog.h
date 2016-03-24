@@ -133,14 +133,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.162.1 (2016-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.162.2 (2016-03-24)"
 #define CSS_FILE		"swad15.162.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.162.1: Mar 24, 2016	Changes in button shown after editing courses. (196603 lines)
+        Version 15.162.2: Mar 24, 2016	Changes in button shown after editing degrees. (? lines)
+        Version 15.162.1: Mar 24, 2016	Changes in buttons shown after editing courses. (196603 lines)
         Version 15.162:   Mar 24, 2016	Code refactoring in edition of courses.
 					When a user creates or edits a course, put button to register him/her. (196593 lines)
         Version 15.161.4: Mar 24, 2016	In MESSAGES > Announcements, any user can see obsolete announcements, not only system admins. (196576 lines)
