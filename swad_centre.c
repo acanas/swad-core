@@ -1935,11 +1935,13 @@ static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
    // If the centre is different to the current one...
    if (Ctr->CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
      {
+      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
       Act_FormStart (ActSeeDeg);
       Ctr_PutParamCtrCod (Ctr->CtrCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
-      Lay_PutConfirmButton (Gbl.Title);
+      Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
   }
 
