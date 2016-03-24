@@ -481,7 +481,8 @@ void Ann_ShowFormAnnouncement (void)
 	                   1 << Rol_UNKNOWN |
                            1 << Rol__GUEST_ |
                            1 << Rol_STUDENT |
-                           1 << Rol_TEACHER);
+                           1 << Rol_TEACHER,
+                           false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

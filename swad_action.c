@@ -917,6 +917,7 @@ Users:
 	763. ActRecAttMe		Save my comments as student in an attendance event
 
 	764. ActSignUp			Apply for my enrollment
+New!	700. ActUpdSignUpReq		Update pending requests for inscription in the current course
 	765. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
 	766. ActRejSignUp		Reject the enrollment of a user in a course
 
@@ -2238,6 +2239,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRecAttMe	*/{1076,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RegisterMeAsStdInAttEvent	,NULL},
 
    /* ActSignUp		*/{1056,-1,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_SignUpInCrs		,NULL},
+   /* ActUpdSignUpReq	*/{1522,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_UpdateEnrollmentRequests	,NULL},
    /* ActReqRejSignUp	*/{1058,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRejectSignUp		,NULL},
    /* ActRejSignUp	*/{1059,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RejectSignUp		,NULL},
 
@@ -4235,6 +4237,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUnfSocComUsr,	// #1519
 	ActSeeSocPrf,		// #1520
 	ActFrmLogIn,		// #1521
+	ActUpdSignUpReq,	// #1522
 	};
 
 /*****************************************************************************/

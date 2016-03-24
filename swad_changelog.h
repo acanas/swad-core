@@ -137,13 +137,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.160.4 (2016-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.161 (2016-03-24)"
 #define CSS_FILE		"swad15.160.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.161:   Mar 24, 2016	Changes related to enrollments requests. (196581 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1522','es','N','Actualizar inscripciones pendientes');
+
         Version 15.160.4: Mar 24, 2016	Put contextual icon "update" integrated in frame in "Connected users". (196543 lines)
         Version 15.160.3: Mar 24, 2016	Put contextual icon "update" integrated in frame in "Who to follow". (196538 lines)
         Version 15.160.2: Mar 22, 2016	Changes in layout of tagline. (196512 lines)

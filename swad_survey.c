@@ -1604,7 +1604,8 @@ void Svy_RequestCreatOrEditSvy (void)
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
-                           Svy.Roles);
+                           Svy.Roles,
+                           false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

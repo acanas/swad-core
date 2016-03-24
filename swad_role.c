@@ -342,8 +342,8 @@ void Rol_ChangeMyRole (void)
 /********************* Write selector of users' roles ************************/
 /*****************************************************************************/
 
-void Rol_WriteSelectorRoles (unsigned RolesAllowed,
-                             unsigned RolesSelected)
+void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
+                             bool SendOnChange)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
@@ -355,11 +355,27 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,
 	{
 	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Roles\" value=\"%u\"",
 		  (unsigned) Role);
+
 	 if ((RolesSelected & (1 << Role)))
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
+
+	 if (SendOnChange)
+	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+		     Gbl.Form.Id);
+
 	 fprintf (Gbl.F.Out," />%s<br />",
 		  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
         }
+  }
+
+/*****************************************************************************/
+/******************** Put hidden param with users' roles *********************/
+/*****************************************************************************/
+
+void Rol_PutHiddenParamRoles (unsigned Role)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Roles\" value=\"%u\" />",
+	    Role);
   }
 
 /*****************************************************************************/

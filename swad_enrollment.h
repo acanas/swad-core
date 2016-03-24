@@ -111,6 +111,7 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
 void Enr_AskIfRejectSignUp (void);
 void Enr_RejectSignUp (void);
 void Enr_ShowEnrollmentRequests (void);
+void Enr_UpdateEnrollmentRequests (void);
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction);
 

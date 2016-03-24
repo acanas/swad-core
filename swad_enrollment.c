@@ -102,6 +102,8 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
+static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected);
+
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
@@ -2153,6 +2155,46 @@ void Enr_RejectSignUp (void)
 
 void Enr_ShowEnrollmentRequests (void)
   {
+   /***** Show enrollment request (default roles depend on my logged role) *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+	 Enr_ShowEnrollmentRequestsGivenRoles ((1 << Rol_STUDENT) |
+			                       (1 << Rol_TEACHER));
+	 break;
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 Enr_ShowEnrollmentRequestsGivenRoles (1 << Rol_TEACHER);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/******* Update pending requests for enrollment in the current course ********/
+/*****************************************************************************/
+
+void Enr_UpdateEnrollmentRequests (void)
+  {
+   unsigned RolesSelected;
+
+   /***** Get selected roles *****/
+   Rol_GetSelectedRoles (&RolesSelected);
+
+   /***** Update enrollment requests *****/
+   Enr_ShowEnrollmentRequestsGivenRoles (RolesSelected);
+  }
+
+/*****************************************************************************/
+/************* Show pending requests for enrollment given roles **************/
+/*****************************************************************************/
+
+static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
+  {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Enrollment_requests;
@@ -2169,7 +2211,6 @@ void Enr_ShowEnrollmentRequests (void)
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrollment_requests;
-   unsigned RolesSelected;
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2190,7 +2231,7 @@ void Enr_ShowEnrollmentRequests (void)
 
    /***** Selection of scope and roles *****/
    /* Start form */
-   Act_FormStart (ActSeeSignUpReq);
+   Act_FormStart (ActUpdSignUpReq);
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:5px;\">");
 
    /* Scope (whole platform, current centre, current degree or current course) */
@@ -2209,7 +2250,7 @@ void Enr_ShowEnrollmentRequests (void)
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
-   Sco_PutSelectorScope (false);
+   Sco_PutSelectorScope (true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -2221,28 +2262,10 @@ void Enr_ShowEnrollmentRequests (void)
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_GetSelectedRoles (&RolesSelected);
-   if (!RolesSelected)
-      /* Set default roles */
-      switch (Gbl.Usrs.Me.LoggedRole)
-        {
-         case Rol_TEACHER:
-            RolesSelected = (1 << Rol_STUDENT) |
-                            (1 << Rol_TEACHER);
-            break;
-         case Rol_DEG_ADM:
-         case Rol_CTR_ADM:
-         case Rol_INS_ADM:
-         case Rol_SYS_ADM:
-            RolesSelected = (1 << Rol_TEACHER);
-            break;
-         default:
-            Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
-            break;
-        }
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
-                           RolesSelected);
+                           RolesSelected,
+                           true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
                       "</table>");
