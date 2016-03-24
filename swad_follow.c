@@ -66,6 +66,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Fol_UpdateWhoToFollow (void);
+
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   unsigned NumUsrs,
                                                   Act_Action_t Action,
@@ -94,9 +96,7 @@ void Fol_PutLinkWhoToFollow (void)
 void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Who_to_follow;
-   extern const char *Txt_Update;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    char Query[2048];
    MYSQL_RES *mysql_res;
@@ -209,15 +209,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,NULL);
-
-      /***** Put form to update connected users *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Act_FormStart (ActSeeSocPrf);
-      Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
-      Lay_PutCalculateIconWithText (Txt_Update,Txt_Update);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_UpdateWhoToFollow);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -259,6 +251,21 @@ void Fol_SuggestWhoToFollow (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Put icon to update who to follow **********************/
+/*****************************************************************************/
+
+static void Fol_UpdateWhoToFollow (void)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Update;
+
+   Act_FormStart (ActSeeSocPrf);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Lay_PutCalculateIcon (Txt_Update);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/

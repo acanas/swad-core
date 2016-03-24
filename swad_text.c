@@ -39903,17 +39903,17 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 # if   L==1
-	"plataforma de suport a<br />la doc&egrave;ncia (UGR)";
+	"plataforma de suport<br />a la doc&egrave;ncia (UGR)";
 # elif L==2
-	"Plattform zur<br />Unterst&uuml;tzung der Lehre (UGR)";
+	"Plattform zur Unterst&uuml;tzung<br />der Lehre (UGR)";
 # elif L==3
 	"platform to support<br />teaching (UGR)";
 # elif L==4
-	"plataforma de apoyo a<br />la docencia (UGR)";
+	"plataforma de apoyo<br />a la docencia (UGR)";
 # elif L==5
-	"plate-forme pourappuyer<br />l'enseignement (UGR)";
+	"plate-forme pour appuyer<br />l'enseignement (UGR)";
 # elif L==6
-	"plataforma de apoyo a<br />la docencia (UGR)";	// Okoteve traducción
+	"plataforma de apoyo<br />a la docencia (UGR)";	// Okoteve traducción
 # elif L==7
 	"piattaforma per sostenere<br />l'insegnamento (UGR)";
 # elif L==8
@@ -39947,17 +39947,17 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 # if   L==1
-	"plataforma de suport a<br />la doc&egrave;ncia (UNA)";
+	"plataforma de suport<br />a la doc&egrave;ncia (UNA)";
 # elif L==2
-	"Plattform zur<br />Unterst&uuml;tzung der Lehre (UNA)";
+	"Plattform zur Unterst&uuml;tzung<br />der Lehre (UNA)";
 # elif L==3
 	"platform to support<br />teaching (UNA)";
 # elif L==4
-	"plataforma de apoyo a<br />la docencia (UNA)";
+	"plataforma de apoyo<br />a la docencia (UNA)";
 # elif L==5
-	"plate-forme pourappuyer<br />l'enseignement (UNA)";
+	"plate-forme pour appuyer<br />l'enseignement (UNA)";
 # elif L==6
-	"plataforma de apoyo a<br />la docencia (UNA)";	// Okoteve traducción
+	"plataforma de apoyo<br />a la docencia (UNA)";	// Okoteve traducción
 # elif L==7
 	"piattaforma per sostenere<br />l'insegnamento (UNA)";
 # elif L==8

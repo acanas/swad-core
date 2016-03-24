@@ -124,23 +124,27 @@
 // TODO: Important!!!! E-mail should not be visible for not logged users
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: When a new user (a guest not registered in any course) creates a new course ==> register him/her automatically as a teacher in the course just created
-// TODO: Change icon to reset survey (distinct from recycle, color red)
 // TODO: Button to see result of a survey in listing of surveys should be smaller
 
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
 
+// TODO: In MESSAGES > Announcements, any user should see obsolete announcements, not only system admins
+// TODO: Change icon to reset survey (distinct from recycle, color red)
+// TODO: Put contextual icon "update" integrate in frame in other options
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.160.2 (2016-03-22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.160.3 (2016-03-24)"
 #define CSS_FILE		"swad15.160.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.160.3: Mar 24, 2016	Put contextual icon "update" integrate in frame in "Who to follow". (196538 lines)
         Version 15.160.2: Mar 22, 2016	Changes in layout of tagline. (196512 lines)
         Version 15.160.1: Mar 21, 2016	Changes in layout of tagline. (196504 lines)
         Version 15.160:   Mar 21, 2016	Changes in forms to login and to create new account. (196423 lines)
