@@ -130,20 +130,21 @@
 // TODO: Move info about number of files to bottom of file browsers
 
 // TODO: In MESSAGES > Announcements, any user should see obsolete announcements, not only system admins
-// TODO: Change icon to reset survey (distinct from recycle, color red)
-// TODO: Put contextual icon "update" integrate in frame in other options
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.161.2 (2016-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.161.3 (2016-03-24)"
 #define CSS_FILE		"swad15.160.2.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.161.3: Mar 24, 2016	Changed icon to reset survey. (196577 lines)
+Copy file recycle64x64.png to icon directory
+
         Version 15.161.2: Mar 24, 2016	Removed contextual icon "update" integrated in frame in "enrollment requests". (196577 lines)
         Version 15.161.1: Mar 24, 2016	Code refactoring in forms to select roles.
 					Put contextual icon "update" integrated in frame in "enrollment requests". (196598 lines)

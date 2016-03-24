@@ -752,7 +752,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
                           Txt_Remove,NULL);
 
    /***** Put form to reset survey *****/
-   Lay_PutContextualLink (ActReqRstSvy,Svy_PutParams,"reset16x16.gif",
+   Lay_PutContextualLink (ActReqRstSvy,Svy_PutParams,"recycle64x64.png",
                           Txt_Reset,NULL);
 
    /***** Put form to hide/show survey *****/
@@ -1332,7 +1332,7 @@ static void Svy_PutButtonToResetSurvey (void)
 
    Act_FormStart (ActRstSvy);
    Svy_PutParams ();
-   Lay_PutConfirmButton (Txt_Reset_survey);
+   Lay_PutRemoveButton (Txt_Reset_survey);
    Act_FormEnd ();
   }
 

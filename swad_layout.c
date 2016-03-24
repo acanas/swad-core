@@ -1077,10 +1077,10 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
 void Lay_PutCalculateIcon (const char *Alt)
   {
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
-	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
+	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" />"
-		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
+		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON20x20\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
