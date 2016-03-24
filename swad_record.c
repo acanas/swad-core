@@ -2510,8 +2510,10 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	    switch (TypeOfView)
 	      {
 	       case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
-		  DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_TEACHER)) ? Rol_TEACHER :
-										   Rol_STUDENT;
+		  DefaultRoleInCurrentCrs = ((UsrDat->Roles & (1 << Rol_TEACHER)) ||			// I am teacher in other courses
+		                             UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod) ?	// I am the creator of the course
+		                            Rol_TEACHER :
+		                            Rol_STUDENT;
 		  fprintf (Gbl.F.Out,"<select name=\"Role\">");
 		  for (Role = Rol_STUDENT;
 		       Role <= Rol_TEACHER;
