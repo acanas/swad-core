@@ -97,12 +97,11 @@ void Ann_ShowAllAnnouncements (void)
 		     " FROM announcements"
 		     " ORDER BY AnnCod DESC");
    else if (Gbl.Usrs.Me.Logged)
-      /* Select only active announcements I can see */
+      /* Select only announcements I can see */
       sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
 		     " FROM announcements"
-                     " WHERE Status='%u' AND (Roles&%u)<>0 "
+                     " WHERE (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
-            (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
             Gbl.Usrs.Me.UsrDat.Roles);	// All my roles in different courses
    else // No user logged
       /* Select only active announcements for unknown users */
