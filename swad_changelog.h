@@ -131,13 +131,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.162.6 (2016-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.162.7 (2016-03-25)"
 #define CSS_FILE		"swad15.162.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.162.7: Mar 25, 2016	Changed message after enrollment request. (196625 lines)
         Version 15.162.6: Mar 24, 2016	Smaller buttons to see results of surveys.
 					Fix bug in surveys. (196615 lines)
         Version 15.162.5: Mar 24, 2016	Default role in registration form will be teacher for the creator of a course. (196615 lines)

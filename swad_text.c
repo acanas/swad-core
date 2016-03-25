@@ -53569,41 +53569,50 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 
 const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"Su petici&oacute;n de inscripci&oacute;n como <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>"
-	" ha sido realizada.";				// Necessita traduccio
+	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"
+	" en l'assignatura <strong>%s</strong> ha estat realitzada."
+	" La petici&oacute; ser&agrave; revisada per un professor o un administrador."
+	" Vost&egrave; rebr&agrave; una notificaci&oacute; quan s'accepti la seva inscripci&oacute;.";
 #elif L==2
-	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";		// Need Übersetzung
+	"Sein Antrag auf Registrierung als <strong>%s</strong>"
+	" in Kurs <strong>%s</strong> gemacht wurde."
+	" Ihre Anfrage wird durch einen Lehrer oder Administrator &uuml;berpr&uuml;ft werden."
+	" Sie werden benachrichtigt, sobald die Anmeldung akzeptiert wird.";
 #elif L==3
 	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";
+	" in the course <strong>%s</strong> has been accepted for processing."
+	" Your request will be reviewed by a teacher or administrator."
+	" You will be notified when registration is accepted.";
 #elif L==4
 	"Su petici&oacute;n de inscripci&oacute;n como <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>"
-	" ha sido realizada.";
+	" en la asignatura <strong>%s</strong> ha sido realizada."
+	" La petici&oacute;n ser&aacute; revisada por un/a profesor/a o un/a administrador/a."
+	" Usted recibir&aacute; una notificaci&oacute;n cuando se acepte su inscripci&oacute;n.";
 #elif L==5
-	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";		// Besoin de traduction
+	"Votre demande d'enregistrement en tant que <strong>%s</strong>"
+	" dans la mati&egrave;re <strong>%s</strong> a &eacute;t&eacute; fait."
+	" Votre demande sera examin&eacute;e par un enseignant ou un administrateur."
+	" Vous serez avis&eacute; lorsque l'enregistrement est accept&eacute;e.";
 #elif L==6
 	"Su petici&oacute;n de inscripci&oacute;n como <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>"
-	" ha sido realizada.";				// Okoteve traducción
+	" en la asignatura <strong>%s</strong> ha sido realizada."
+	" La petici&oacute;n ser&aacute; revisada por un/a profesor/a o un/a administrador/a."
+	" Usted recibir&aacute; una notificaci&oacute;n cuando se acepte su inscripci&oacute;n.";	// Okoteve traducción
 #elif L==7
-	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";		// Bisogno di traduzione
+	"&Egrave; stato fatto la sua domanda di registrazione come <strong>%s</strong>"
+	" nel corso <strong>%s</strong>."
+	" La richiesta verr&agrave; esaminata da un insegnante o un amministratore."
+	" Riceverai una notifica quando la registrazione &egrave; stata accettata.";
 #elif L==8
-	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";		// Potrzebujesz tlumaczenie
+	"Jego wniosek o rejestracj&eogon; jako <strong>%s</strong>"
+	" w <strong>%s</strong> przedmiotu zosta&lstrok;a dokonana."
+	" Twoja pro&sacute;ba zostanie poddane przegl&aogon;dowi przez nauczyciela lub administratora."
+	" Zostaniesz powiadomiony, gdy rejestracja zostanie zaakceptowana.";
 #elif L==9
-	"Your request for enrollment as <strong>%s</strong>"
-	" in the course <strong>%s</strong>"
-	" has been accepted for processing.";		// Necessita de tradução
+	"Seu pedido de registo como <strong>%s</strong>"
+	" na disciplina <strong>%s</strong> tem sido feito."
+	" O pedido ser&aacute; analisado por um professor ou administrador."
+	" Voc&ecirc; ser&aacute; notificado quando o registro &eacute; aceito.";
 #endif
 
 const char *Txt_ZIP_file =
