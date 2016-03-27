@@ -143,7 +143,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.163.1: Mar 27, 2016	Added label HTML directives for scope and other form fields. (196654 lines)
+        Version 15.163.2: Mar 27, 2016	Scope selector inside frame in listing of guests. (196655 lines)
+        Version 15.163.1: Mar 27, 2016	Added HTML directives "label" for scope and other form fields. (196654 lines)
         Version 15.163:   Mar 27, 2016	Requests for enrollment older than one month are automatically removed. (196656 lines)
         Version 15.162.7: Mar 25, 2016	Changed message after enrollment request. (196625 lines)
         Version 15.162.6: Mar 24, 2016	Smaller buttons to see results of surveys.

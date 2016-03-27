@@ -6586,8 +6586,8 @@ static void Usr_PutLinkToSeeGuests (void)
 void Usr_SeeGuests (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Scope;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
 
    /***** Put contextual links *****/
@@ -6614,42 +6614,42 @@ void Usr_SeeGuests (void)
    Sco_SetScopesForListingGuests ();
    Sco_GetScope ();
 
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-         /***** Form to select range of guests *****/
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-         Act_FormStart (ActLstGst);
-         Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-         Usr_PutParamColsClassPhoto ();
-         Usr_PutParamListWithPhotos ();
-         fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-         Sco_PutSelectorScope (true);
-         Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</div>");
-         break;
-      default:
-         break;
-     }
-
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstGsts.NumUsrs)
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstGsts.NumUsrs))
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstGsts.NumUsrs))
+      /***** Get list of selected users *****/
+      Usr_GetListsSelectedUsrs ();
+
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintGsts :
+								       Usr_PutIconToShowGstsAllData);
+
+      /***** Form to select range of guests *****/
+      switch (Gbl.Usrs.Me.LoggedRole)
 	{
-         /***** Get list of selected users *****/
-         Usr_GetListsSelectedUsrs ();
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	 case Rol_SYS_ADM:
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	    Act_FormStart (ActLstGst);
+	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+	    Usr_PutParamColsClassPhoto ();
+	    Usr_PutParamListWithPhotos ();
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+	    Sco_PutSelectorScope (true);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</div>");
+	    break;
+	 default:
+	    break;
+	}
 
-	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintGsts :
-                                                                          Usr_PutIconToShowGstsAllData);
-
+      if (Gbl.Usrs.LstGsts.NumUsrs)
+	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
 
@@ -6692,13 +6692,13 @@ void Usr_SeeGuests (void)
 
          /* End form */
          Act_FormEnd ();
-
-         /* End frame */
-         Lay_EndRoundFrame ();
 	}
+      else
+	 Usr_ShowWarningNoUsersFound (Rol__GUEST_);
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
-   else
-      Usr_ShowWarningNoUsersFound (Rol__GUEST_);
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
