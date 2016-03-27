@@ -98,7 +98,6 @@
 // TODO: Put headers Content-type and Content-disposition when redirecting with Location:
 // TODO: When a new assignment/attendance/survey is incorrect, the second time the form is shown, it should be filled with partial data, now is always empty
 // TODO: Show message indicating that mail could be in SPAM folder?
-// TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Show nicknames of users in lists?
 // TODO: Form to register and remove system admins
 // TODO: Fix this bug: when an admin clicks on "Use this email" in the email of another user the email was confirmed, the email becomes unconfirmed
@@ -120,24 +119,31 @@
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
 // TODO: Change links from external degrees to internal degrees in STATS > Degrees
 
-// TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
-// TODO: Important!!!! E-mail should not be visible for not logged users
-// TODO: Fix bug in marks reported by Francisco Ocaña
-
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
+
+// TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
+// TODO: Filtering email addresses --> an email address can not finish in "."
+
+// TODO: Use libjpeg or similar to check size of uploaded image of a centre
+// TODO: Upload an image in social posts, in test questions, in forum posts, in private messages, etc.
+
+// TODO: Important!!!! E-mail should not be visible for not logged users
+// TODO: Do not show e-mails of administrators and teachers in lists openly
+// TODO: Fix bug in marks reported by Francisco Ocaña
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.162.7 (2016-03-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.163 (2016-03-27)"
 #define CSS_FILE		"swad15.162.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.163:   Mar 27, 2016	Requests for enrollment older than one month are automatically removed. (196656 lines)
         Version 15.162.7: Mar 25, 2016	Changed message after enrollment request. (196625 lines)
         Version 15.162.6: Mar 24, 2016	Smaller buttons to see results of surveys.
 					Fix bug in surveys. (196615 lines)

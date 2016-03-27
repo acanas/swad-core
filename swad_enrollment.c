@@ -105,6 +105,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void);
 static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected);
 
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
+static void Enr_RemoveExpiredEnrollmentRequests (void);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
 static bool Enr_CheckIfICanAdminOtherUsrs (void);
@@ -2224,6 +2225,9 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    char PhotoURL[PATH_MAX+1];
    Rol_Role_t DesiredRole;
 
+   /***** Remove expired enrollment requests *****/
+   Enr_RemoveExpiredEnrollmentRequests ();
+
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
@@ -2865,7 +2869,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
   }
 
 /*****************************************************************************/
-/******************** Remove a request for inscription ***********************/
+/********************* Remove a request for enrollment ***********************/
 /*****************************************************************************/
 
 static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
@@ -2898,6 +2902,33 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
                   " WHERE CrsCod='%ld' AND UsrCod='%ld'",
             CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a request for enrollment");
+  }
+
+/*****************************************************************************/
+/******************* Remove expired requests for enrollment ******************/
+/*****************************************************************************/
+
+static void Enr_RemoveExpiredEnrollmentRequests (void)
+  {
+   char Query[512];
+
+   /***** Mark possible notifications as removed
+          Important: do this before removing the request *****/
+   sprintf (Query,"UPDATE notif,crs_usr_requests"
+	          " SET notif.Status=(notif.Status | %u)"
+                  " WHERE notif.NotifyEvent='%u'"
+                  " AND notif.Cod=crs_usr_requests.ReqCod"
+                  " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+            (unsigned) Ntf_STATUS_BIT_REMOVED,
+            (unsigned) Ntf_EVENT_ENROLLMENT_REQUEST,
+            Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS);
+   DB_QueryUPDATE (Query,"can not set notification(s) as removed");
+
+   /***** Remove expired requests for enrollment *****/
+   sprintf (Query,"DELETE FROM crs_usr_requests"
+                  " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
+            Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS);
+   DB_QueryDELETE (Query,"can not remove expired requests for enrollment");
   }
 
 /*****************************************************************************/
