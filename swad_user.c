@@ -6707,8 +6707,8 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Scope;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
    bool ICanViewRecords;
 
@@ -6756,26 +6756,6 @@ void Usr_SeeStudents (void)
                        Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_DEG_ADM:
-      case Rol_SYS_ADM:
-         /***** Form to select range of students *****/
-         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-         Act_FormStart (ActLstStd);
-         Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-         Usr_PutParamColsClassPhoto ();
-         Usr_PutParamListWithPhotos ();
-         fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-         Sco_PutSelectorScope (true);
-         Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</div>");
-         break;
-      default:
-         break;
-     }
-
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
@@ -6783,20 +6763,40 @@ void Usr_SeeStudents (void)
    /***** Get and order list of students *****/
    Usr_GetUsrsLst (Rol_STUDENT,Gbl.Scope.Current,NULL,false);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
+      /***** Get list of selected users *****/
+      Usr_GetListsSelectedUsrs ();
+
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstStds.NumUsrs ? Usr_PutIconToPrintStds :
+												   NULL) :
+			    ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
+								       NULL));
+
+      /***** Form to select range of students *****/
+      switch (Gbl.Usrs.Me.LoggedRole)
 	{
-         /***** Get list of selected users *****/
-         Usr_GetListsSelectedUsrs ();
+	 case Rol_DEG_ADM:
+	 case Rol_SYS_ADM:
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	    Act_FormStart (ActLstStd);
+	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+	    Usr_PutParamColsClassPhoto ();
+	    Usr_PutParamListWithPhotos ();
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+	    Sco_PutSelectorScope (true);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</div>");
+	    break;
+	 default:
+	    break;
+	}
 
-	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstStds.NumUsrs ? Usr_PutIconToPrintStds :
-                        	                                                                      NULL) :
-                               ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
-                        	                                          NULL));
-
+      if (Gbl.Usrs.LstStds.NumUsrs)
+	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
 
@@ -6852,19 +6852,20 @@ void Usr_SeeStudents (void)
 	    /* End form */
 	    Act_FormEnd ();
            }
-
-         /* End frame */
-         Lay_EndRoundFrame ();
 	}
-     }
-   else
-     {
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      else
+	{
+	 /***** Show warning indicating no students found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
-      /***** Form to enroll several students *****/
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
-	  Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)		// I am a teacher in current course
-         Enr_PutButtonToEnrollStudents ();
+	 /***** Form to enroll several students *****/
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
+	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)		// I am a teacher in current course
+	    Enr_PutButtonToEnrollStudents ();
+	}
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
 
    /***** Free memory for students list *****/

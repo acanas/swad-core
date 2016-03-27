@@ -1532,18 +1532,8 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 
 void Grp_ReqRegisterInGrps (void)
   {
-   extern const char *Txt_No_groups_have_been_created_in_the_course_X;
-
-   /***** Check if this course has groups *****/
-   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
-      /***** Show list of groups to register/remove me *****/
-      Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
-   else	// This course has not groups
-     {
-      sprintf (Gbl.Message,Txt_No_groups_have_been_created_in_the_course_X,
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
-     }
+   /***** Show list of groups to register/remove me *****/
+   Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
   }
 
 /*****************************************************************************/
@@ -1555,6 +1545,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    extern const char *Txt_My_groups;
    extern const char *Txt_Change_my_groups;
    extern const char *Txt_Enroll_in_groups;
+   extern const char *Txt_No_groups_have_been_created_in_the_course_X;
    unsigned NumGrpTyp;
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
@@ -1562,45 +1553,58 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	           (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
+     {
+      /***** Get list of groups types and groups in this course *****/
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Show warnings to students *****/
-   // Students are required to join groups with mandatory enrollment; teachers don't
-   if (ShowWarningsToStudents)
-      Grp_ShowWarningToStdsToChangeGrps ();
+      /***** Show warnings to students *****/
+      // Students are required to join groups with mandatory enrollment; teachers don't
+      if (ShowWarningsToStudents)
+	 Grp_ShowWarningToStdsToChangeGrps ();
+     }
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_My_groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL);
 
-   /***** Start form *****/
-   if (PutFormToChangeGrps)
-      Act_FormStart (ActChgGrp);
-
-   /***** List the groups the user belongs to for change *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-   for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
-	NumGrpTyp++)
-      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
-	 NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
-   fprintf (Gbl.F.Out,"</table>");
-
-   /***** End form *****/
-   if (PutFormToChangeGrps)
+   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
-      Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-	                                     Txt_Enroll_in_groups);
-      Act_FormEnd ();
+      /***** Start form *****/
+      if (PutFormToChangeGrps)
+	 Act_FormStart (ActChgGrp);
+
+      /***** List the groups the user belongs to for change *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      for (NumGrpTyp = 0;
+	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
+	   NumGrpTyp++)
+	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
+	    NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** End form *****/
+      if (PutFormToChangeGrps)
+	{
+	 Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+						Txt_Enroll_in_groups);
+	 Act_FormEnd ();
+	}
+     }
+   else	// This course has no groups
+     {
+      sprintf (Gbl.Message,Txt_No_groups_have_been_created_in_the_course_X,
+               Gbl.CurrentCrs.Crs.FullName);
+      Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
 
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
+   if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
+      /***** Free list of groups types and groups in this course *****/
+      Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/
