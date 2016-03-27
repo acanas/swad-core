@@ -6091,6 +6091,7 @@ void Usr_ListDataAdms (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Scope;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Photo;
    extern const char *Txt_ID;
@@ -6099,9 +6100,7 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Email;
    extern const char *Txt_Institution;
-   extern const char *Txt_Scope;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   unsigned NumColumns;
    unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -6148,27 +6147,24 @@ void Usr_ListDataAdms (void)
    Gbl.Scope.Default = Sco_SCOPE_DEG;
    Sco_GetScope ();
 
+   /***** Get and order list of administrators *****/
+   Usr_GetAdmsLst (Gbl.Scope.Current);
+
+   /***** Start table with list of administrators *****/
+   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
+
    /***** Form to select range of administrators *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	              "<label class=\"%s\">%s: </label>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+		      "<label class=\"%s\">%s: </label>",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Act_FormStart (ActLstOth);
    Sco_PutSelectorScope (true);
    Usr_PutParamListWithPhotos ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Get and order list of administrators *****/
-   Usr_GetAdmsLst (Gbl.Scope.Current);
-
    if (Gbl.Usrs.LstAdms.NumUsrs)
      {
-      /***** Initialize number of columns *****/
-      NumColumns = Usr_NUM_MAIN_FIELDS_DATA_ADM;
-
-      /***** Start table with list of administrators *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
-
       /****** Show photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                 " style=\"margin-bottom:8px;\">");
@@ -6179,19 +6175,16 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
-      /* Start row */
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
 	                 "<tr>");
       for (NumCol = 0;
-           NumCol < NumColumns;
+           NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
             fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
         	               "%s&nbsp;"
         	               "</th>",
                      FieldNames[NumCol]);
-
-      /* End row */
       fprintf (Gbl.F.Out,"</tr>");
 
       /***** Initialize structure with user's data *****/
@@ -6214,10 +6207,12 @@ void Usr_ListDataAdms (void)
 
       /***** End of table *****/
       fprintf (Gbl.F.Out,"</table>");
-      Lay_EndRoundFrame ();
      }
    else        // Gbl.Usrs.LstAdms.NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
+
+   /***** End of frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstAdms);
