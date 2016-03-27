@@ -136,14 +136,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.163.3 (2016-03-27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.163.4 (2016-03-28)"
 #define CSS_FILE		"swad15.162.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.163.3: Mar 27, 2016	Scope selector inside frame in listing of admins. (196652 lines)
+        Version 15.163.4: Mar 28, 2016	Scope selector inside frame in listing of teachers. (196656 lines)
+        Version 15.163.3: Mar 28, 2016	Scope selector inside frame in listing of admins. (196652 lines)
         Version 15.163.2: Mar 27, 2016	Scope selector inside frame in listing of guests. (196655 lines)
         Version 15.163.1: Mar 27, 2016	Added HTML directives "label" for scope and other form fields. (196654 lines)
         Version 15.163:   Mar 27, 2016	Requests for enrollment older than one month are automatically removed. (196656 lines)

@@ -6619,7 +6619,8 @@ void Usr_SeeGuests (void)
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintGsts :
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstGsts.NumUsrs ? Usr_PutIconToPrintGsts :
+				                                                                   NULL) :
 								       Usr_PutIconToShowGstsAllData);
 
       /***** Form to select range of guests *****/
@@ -6791,7 +6792,8 @@ void Usr_SeeStudents (void)
 
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintStds :
+                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstStds.NumUsrs ? Usr_PutIconToPrintStds :
+                        	                                                                      NULL) :
                                ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
                         	                                          NULL));
 
@@ -6879,8 +6881,8 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Scope;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    bool ICanViewRecords;
@@ -6917,30 +6919,32 @@ void Usr_SeeTeachers (void)
    Sco_GetScope ();
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
-   /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActLstTch);
-   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Usr_PutParamColsClassPhoto ();
-   Usr_PutParamListWithPhotos ();
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Sco_PutSelectorScope (true);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
-
    /***** Get and order list of teachers *****/
    Usr_GetUsrsLst (Rol_TEACHER,Gbl.Scope.Current,NULL,false);
 
-   if (Gbl.Usrs.LstTchs.NumUsrs)
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs))
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs))
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstTchs.NumUsrs ? Usr_PutIconToPrintTchs :
+				                                                                   NULL) :
+			    ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
+								       NULL));
+
+      /***** Form to select scope *****/
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      Act_FormStart (ActLstTch);
+      Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+      Usr_PutParamColsClassPhoto ();
+      Usr_PutParamListWithPhotos ();
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+      Sco_PutSelectorScope (true);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+
+      if (Gbl.Usrs.LstTchs.NumUsrs)
 	{
-	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-                              (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Usr_PutIconToPrintTchs :
-                               ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
-                        	                                          NULL));
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
 
@@ -6993,13 +6997,13 @@ void Usr_SeeTeachers (void)
 	    /* End form */
 	    Act_FormEnd ();
            }
-
-         /* End frame */
-         Lay_EndRoundFrame ();
 	}
+      else
+	 Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
      }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
@@ -7120,7 +7124,7 @@ void Usr_SeeGstClassPhotoPrn (void)
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-                                                                                -1L,
+                                                                        -1L,
 				 -1L,-1L);
       fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
