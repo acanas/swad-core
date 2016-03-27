@@ -6149,8 +6149,8 @@ void Usr_ListDataAdms (void)
    Sco_GetScope ();
 
    /***** Form to select range of administrators *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-	              "%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<label class=\"%s\">%s: </label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Act_FormStart (ActLstOth);
    Sco_PutSelectorScope (true);
@@ -6620,13 +6620,13 @@ void Usr_SeeGuests (void)
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
          /***** Form to select range of guests *****/
-         fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme]);
+         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActLstGst);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();
-         fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
+         fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
          Sco_PutSelectorScope (true);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
@@ -6765,13 +6765,13 @@ void Usr_SeeStudents (void)
       case Rol_DEG_ADM:
       case Rol_SYS_ADM:
          /***** Form to select range of students *****/
-         fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme]);
+         fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
          Act_FormStart (ActLstStd);
          Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
          Usr_PutParamColsClassPhoto ();
          Usr_PutParamListWithPhotos ();
-         fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
+         fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
          Sco_PutSelectorScope (true);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</div>");
@@ -6923,13 +6923,13 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActLstTch);
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
    Usr_PutParamListWithPhotos ();
-   fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope (true);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");

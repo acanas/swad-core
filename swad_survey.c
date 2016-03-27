@@ -1537,8 +1537,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Survey for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -1552,8 +1552,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Survey title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"Title\""
@@ -1569,8 +1569,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Survey text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
@@ -1584,8 +1584,8 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Users' roles who can answer the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],

@@ -205,8 +205,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
 
    /***** Start date-time *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -233,8 +233,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
 
    /***** End date-time *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -277,15 +277,14 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 	StartOrEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+	                 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label class=\"%s\">%s:</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Dates[StartOrEndTime]);
+               The_ClassForm[Gbl.Prefs.Theme],Dates[StartOrEndTime]);
 
       /* Date-time */
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartOrEndTime],

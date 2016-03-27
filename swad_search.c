@@ -235,8 +235,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Lay_StartRoundFrame (NULL,Txt_Search,NULL);
 
    /***** Scope (whole platform, current centre, current degree or current course) *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-	              "%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<label class=\"%s\">%s: </label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |

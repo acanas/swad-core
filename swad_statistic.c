@@ -449,8 +449,8 @@ void Sta_AskShowCrsHits (void)
          fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
                             " style=\"margin:0 auto;\">"
                             "<tr>"
-			    "<td class=\"%s RIGHT_TOP\">"
-			    "%s:"
+			    "<td class=\"RIGHT_TOP\">"
+			    "<label class=\"%s\">%s:</label>"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
                             "<table>",
@@ -470,12 +470,11 @@ void Sta_AskShowCrsHits (void)
 
          /***** Option a) Listing of clicks distributed by some metric *****/
          fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_TOP\">"
-			    "%s:"
+			    "<td class=\"RIGHT_TOP\">"
+			    "<label class=\"%s\">%s:</label>"
 			    "</td>"
-			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
-                  The_ClassForm[Gbl.Prefs.Theme]);
+			    "<td colspan=\"2\" class=\"LEFT_TOP\">",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
 
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
               Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
@@ -491,8 +490,9 @@ void Sta_AskShowCrsHits (void)
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
          Sta_WriteSelectorCountType ();
 
-         fprintf (Gbl.F.Out," %s <select id=\"GroupedBy\" name=\"GroupedBy\">",
-                  Txt_distributed_by);
+         fprintf (Gbl.F.Out,"<label class=\"%s\"> %s </label>"
+                            "<select id=\"GroupedBy\" name=\"GroupedBy\">",
+                  The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
               ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
               ClicksGroupedBy++)
@@ -611,8 +611,8 @@ void Sta_AskShowGblHits (void)
 
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
                       "<select name=\"Role\">",
@@ -635,8 +635,8 @@ void Sta_AskShowGblHits (void)
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
@@ -654,16 +654,16 @@ void Sta_AskShowGblHits (void)
 
    /***** Count type for the statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s:"
+                      "<td class=\"RIGHT_TOP\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Show,
-            The_ClassForm[Gbl.Prefs.Theme]);
+                      "<td colspan=\"2\" class=\"LEFT_TOP\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
-   fprintf (Gbl.F.Out," %s ",Txt_distributed_by);
+   fprintf (Gbl.F.Out,"<label class=\"%s\"> %s </label>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
 
    if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAYS ||
        Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
@@ -735,8 +735,8 @@ static void Sta_WriteSelectorAction (void)
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s:"
+                      "<td class=\"RIGHT_TOP\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP\">"
                       "<select name=\"StatAct\" id=\"StatAct\""

@@ -98,8 +98,8 @@ void Ind_ReqIndicatorsCourses (void)
 
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
@@ -117,8 +117,8 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for a type of degree */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_degree);
@@ -131,8 +131,8 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
@@ -143,8 +143,8 @@ void Ind_ReqIndicatorsCourses (void)
    /* Show only courses with a number of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"Indicators\">",

@@ -2248,24 +2248,22 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Scope);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope (true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
    /* Users' roles in listing */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s:"
+                      "<td class=\"RIGHT_TOP\">"
+                      "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Users);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STUDENT |
                            1 << Rol_TEACHER,
                            RolesSelected,
