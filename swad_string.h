@@ -100,7 +100,7 @@ void Str_ReplaceSpecialCharByCodes (char *Str,unsigned long MaxLengthStr);
 void Str_ReplaceSeveralSpacesForOne (char *Str);
 void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithoutSpaces,unsigned MaxLength);
 long Str_ConvertStrCodToLongCod (const char *Str);
-int  Str_GetLengthRootFileName (const char *FileName);
+size_t Str_GetLengthRootFileName (const char *FileName);
 void Str_SplitFullPathIntoPathAndFileName (const char *FullPath,
                                            char *PathWithoutFileName,char *FileName);
 bool Str_FileIs (const char *FileName,const char *Extension);

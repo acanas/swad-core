@@ -27451,6 +27451,27 @@ const char *Txt_photos =
 	"fotos";
 #endif
 
+const char *Txt_XxY_pixels_or_higher =
+#if   L==1
+	"p&iacute;xels o m&eacute;s gran";
+#elif L==2
+	"Pixel oder h&ouml;her";
+#elif L==3
+	"pixels or higher";
+#elif L==4
+	"p&iacute;xeles o mayor";
+#elif L==5
+	"pixels ou plus";
+#elif L==6
+	"p&iacute;xeles o mayor";	// Okoteve traducción
+#elif L==7
+	"pixel o superiore";
+#elif L==8
+	"pikseli lub wy&zdot;szej";
+#elif L==9
+	"pixels ou superior";
+#endif
+
 const char *Txt_Place =		// A particular spot or area
 #if   L==1
 	"Lloc";
@@ -28821,6 +28842,48 @@ const char *Txt_Real_number_between_A_and_B_2 =
 	"i";
 #elif L==9
 	"e";
+#endif
+
+const char *Txt_Recommended_aspect_ratio =
+#if   L==1
+	"Relaci&oacute; d'aspecte recomanada";
+#elif L==2
+	"Empfohlene Seitenverh&auml;ltnisr";
+#elif L==3
+	"Recommended aspect ratio";
+#elif L==4
+	"Relaci&oacute;n de aspecto recomendada";
+#elif L==5
+	"Rapport d'aspect recommand&eacute;";
+#elif L==6
+	"Relaci&oacute;n de aspecto recomendada";	// Okoteve traducción
+#elif L==7
+	"Rapporto aspetto consigliato";
+#elif L==8
+	"Zalecane proporcje obrazu";
+#elif L==9
+	"Propor&ccedil;&atilde;o recomendada";
+#endif
+
+const char *Txt_Recommended_resolution =
+#if   L==1
+	"Resoluci&oacute; recomanada";
+#elif L==2
+	"Empfohlene Aufl&ouml;sung";
+#elif L==3
+	"Recommended resolution";
+#elif L==4
+	"Resoluci&oacute;n recomendada";
+#elif L==5
+	"R&eacute;solution recommand&eacute;e";
+#elif L==6
+	"Resoluci&oacute;n recomendada";	// Okoteve traducción
+#elif L==7
+	"Risoluzione consigliata";
+#elif L==8
+	"Zalecana rozdzielczo&sacute;&cacute;";
+#elif L==9
+	"Resolu&ccedil;&atilde;o recomendada";
 #endif
 
 const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -49938,6 +50001,27 @@ const char *Txt_Write_a_message_to_X =	// Warning: it is very important to inclu
 	"Escrever uma mensagem para %s";
 #endif
 
+const char *Txt_Wrong_file_type =
+#if   L==1
+	"Tipus d'arxiu incorrecte.";
+#elif L==2
+	"Falsche Dateityp.";
+#elif L==3
+	"Wrong file type.";
+#elif L==4
+	"Tipo de archivo incorrecto.";
+#elif L==5
+	"Mauvais type de fichier.";
+#elif L==6
+	"Tipo de archivo incorrecto.";		// Okoteve traducción
+#elif L==7
+	"Tipo di file sbagliato.";
+#elif L==8
+	"Nieprawid&lstrok;owy typ pliku.";
+#elif L==9
+	"Tipo de arquivo errado.";
+#endif
+
 const char *Txt_WWW =		// World Wide Web
 #if   L==1
 	"WWW";
@@ -51668,36 +51752,6 @@ const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_ =
 	"You can send a file with an image in <em>jpg</em> format.<br />"
 	"The image must contain at least one face in front position,"
 	" and the background must be white or very light.";		// Necessita de tradução
-#endif
-
-const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
-#if   L==1
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>"
-	" y tama&ntilde;o %u&times;%u p&iacute;xeles.";		// Necessita traduccio
-#elif L==2
-	"You can send a file with an image in <em>jpg</em> format"
-	" and size %u&times;%u pixels.";			// Need Übersetzung
-#elif L==3
-	"You can send a file with an image in <em>jpg</em> format"
-	" and size %u&times;%u pixels.";
-#elif L==4
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>"
-	" y tama&ntilde;o %u&times;%u p&iacute;xeles.";
-#elif L==5
-	"You can send a file with an image in <em>jpg</em> format"
-	" and size %u&times;%u pixels.";			// Besoin de traduction
-#elif L==6
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>"
-	" y tama&ntilde;o %u&times;%u p&iacute;xeles.";		// Okoteve traducción
-#elif L==7
-	"Puoi inviare un file con un'immagine in formato <em>jpg</em>"
-	" e di dimensione %u&times;%u pixel.";
-#elif L==8
-	"You can send a file with an image in <em>jpg</em> format"
-	" and size %u&times;%u pixels.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"You can send a file with an image in <em>jpg</em> format"
-	" and size %u&times;%u pixels.";			// Necessita de tradução
 #endif
 
 const char *Txt_You_dont_follow_any_user =

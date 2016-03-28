@@ -29,6 +29,7 @@
 #include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
+#include <unistd.h>		// For unlink
 
 #include "swad_centre.h"
 #include "swad_constant.h"
@@ -52,10 +53,14 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-// Centre photo must be stored in Ctr_PHOTO_REAL_WIDTH x Ctr_PHOTO_REAL_HEIGHT
-// Aspect ratio: 3:2 (1.5)
-#define Ctr_PHOTO_REAL_WIDTH	768
-#define Ctr_PHOTO_REAL_HEIGHT	512
+// Centre photo will be saved with:
+// - maximum width of Ctr_PHOTO_SAVED_MAX_HEIGHT
+// - maximum height of Ctr_PHOTO_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define Ctr_RECOMMENDED_ASPECT_RATIO	"3:2"
+#define Ctr_PHOTO_SAVED_MAX_WIDTH	768
+#define Ctr_PHOTO_SAVED_MAX_HEIGHT	512
+#define Ctr_PHOTO_SAVED_QUALITY		 75	// 1 to 100
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -339,7 +344,8 @@ static void Ctr_Configuration (bool PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtrPhoAtt);
-	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
+	    fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
+		               " name=\"Attribution\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
             if (PhotoAttribution)
@@ -1998,7 +2004,9 @@ void Ctr_RequestPhoto (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
-   extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y;
+   extern const char *Txt_Recommended_aspect_ratio;
+   extern const char *Txt_Recommended_resolution;
+   extern const char *Txt_XxY_pixels_or_higher;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
 
@@ -2011,9 +2019,14 @@ void Ctr_RequestPhoto (void)
                       "<td class=\"CENTER_MIDDLE\">");
 
    /***** Write help message *****/
-   sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_jpg_format_and_size_X_Y,
-	    Ctr_PHOTO_REAL_WIDTH,
-	    Ctr_PHOTO_REAL_HEIGHT);
+   sprintf (Gbl.Message,"%s: %s<br />"
+                        "%s: %u&times;%u %s",
+            Txt_Recommended_aspect_ratio,
+            Ctr_RECOMMENDED_ASPECT_RATIO,
+            Txt_Recommended_resolution,
+            Ctr_PHOTO_SAVED_MAX_WIDTH,
+            Ctr_PHOTO_SAVED_MAX_HEIGHT,
+            Txt_XxY_pixels_or_higher);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
    /***** Upload photo *****/
@@ -2041,14 +2054,70 @@ void Ctr_RequestPhoto (void)
 
 void Ctr_ReceivePhoto (void)
   {
-   extern const char *Txt_The_file_is_not_X;
+   extern const char *Txt_Wrong_file_type;
    char Path[PATH_MAX+1];
    char FileNamePhotoSrc[PATH_MAX+1];
+   char *PtrExtension;
+   size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
-   char FileNamePhoto[PATH_MAX+1];        // Full name (including path and .jpg) of the destination file
+   char PathPhotosPriv[PATH_MAX+1];
+   char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNamePhoto[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
+   char Command[1024+PATH_MAX*2];
+   int ReturnCode;
 
-   /***** Creates directories if not exist *****/
+   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
+
+   /* Check if the file type is image/ or application/octet-stream */
+   if (strncmp (MIMEType,"image/",strlen ("image/")))
+      if (strcmp (MIMEType,"application/octet-stream"))
+	 if (strcmp (MIMEType,"application/octetstream"))
+	    if (strcmp (MIMEType,"application/octet"))
+	       WrongType = true;
+   if (WrongType)
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_Wrong_file_type);
+      return;
+     }
+
+   /***** Creates private directories if not exist *****/
+   /* Create private directory for photos if it does not exist */
+   sprintf (PathPhotosPriv,"%s/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO);
+   Fil_CreateDirIfNotExists (PathPhotosPriv);
+
+   /* Create temporary private directory for photos if it does not exist */
+   sprintf (PathPhotosPriv,"%s/%s/%s",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
+   Fil_CreateDirIfNotExists (PathPhotosPriv);
+
+   /* Get filename extension */
+   if ((PtrExtension = strrchr (FileNamePhotoSrc,(int) '.')) == NULL)
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_Wrong_file_type);
+      return;
+     }
+   LengthExtension = strlen (PtrExtension);
+   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_Wrong_file_type);
+      return;
+     }
+
+   /* End the reception of photo in a temporary file */
+   sprintf (FileNamePhotoTmp,"%s/%s/%s/%s.%s",
+            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+            Gbl.UniqueNameEncrypted,PtrExtension);
+   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp))
+     {
+      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+      return;
+     }
+
+   /***** Creates public directories if not exist *****/
    sprintf (Path,"%s/%s",
 	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
    Fil_CreateDirIfNotExists (Path);
@@ -2062,34 +2131,36 @@ void Ctr_ReceivePhoto (void)
 	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
    Fil_CreateDirIfNotExists (Path);
 
-   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
-
-   /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
-   if (strcmp (MIMEType,"image/jpeg"))
-      if (strcmp (MIMEType,"image/pjpeg"))
-         if (strcmp (MIMEType,"application/octet-stream"))
-            if (strcmp (MIMEType,"application/octetstream"))
-               if (strcmp (MIMEType,"application/octet"))
-                  WrongType = true;
-   if (WrongType)
-     {
-      sprintf (Gbl.Message,Txt_The_file_is_not_X,"jpg");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      return;
-     }
-
-   /* End the reception of photo in a temporary file */
+   /***** Convert temporary file to public JPEG file *****/
    sprintf (FileNamePhoto,"%s/%s/%02u/%u/%u.jpg",
 	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-   if (!Fil_EndReceptionOfFile (FileNamePhoto))
+
+   /* Call to program that makes the conversion */
+   sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
+            FileNamePhotoTmp,
+            Ctr_PHOTO_SAVED_MAX_WIDTH,
+            Ctr_PHOTO_SAVED_MAX_HEIGHT,
+            Ctr_PHOTO_SAVED_QUALITY,
+            FileNamePhoto);
+   ReturnCode = system (Command);
+   if (ReturnCode == -1)
+      Lay_ShowErrorAndExit ("Error when running command to process photo.");
+
+   /***** Write message depending on return code *****/
+   ReturnCode = WEXITSTATUS(ReturnCode);
+   if (ReturnCode != 0)
      {
-      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
-      return;
+      sprintf (Gbl.Message,"Photo could not be processed successfully.<br />"
+			   "Error code returned by the program of processing: %d",
+	       ReturnCode);
+      Lay_ShowErrorAndExit (Gbl.Message);
      }
+
+   /***** Remove temporary file *****/
+   unlink (FileNamePhotoTmp);
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();

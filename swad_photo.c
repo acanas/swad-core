@@ -456,7 +456,6 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    extern const char *Txt_Faces_detected;
    char PathPhotosPriv[PATH_MAX+1];
    char PathPhotosPubl[PATH_MAX+1];
-   char PathPhotosTmpPubl[PATH_MAX+1];
    char FileNamePhotoSrc[PATH_MAX+1];
    char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
    char FileNamePhotoMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the original image with faces
@@ -488,15 +487,20 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
 	    (unsigned) (UsrDat->UsrCod % 100));
    Fil_CreateDirIfNotExists (PathPhotosPriv);
 
+   /***** Create directories if not exists
+          and remove old temporary files *****/
+   /* Create public directory for photos */
    sprintf (PathPhotosPubl,"%s/%s",
 	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO);
    Fil_CreateDirIfNotExists (PathPhotosPubl);
-   sprintf (PathPhotosTmpPubl,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
-   Fil_CreateDirIfNotExists (PathPhotosTmpPubl);
 
-   /***** Remove old files *****/
-   Fil_RemoveOldTmpFiles (PathPhotosTmpPubl,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,false);
+   /* Create temporary directory for photos */
+   sprintf (PathPhotosPubl,"%s/%s/%s",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
+   Fil_CreateDirIfNotExists (PathPhotosPubl);
+
+   /* Remove old temporary files */
+   Fil_RemoveOldTmpFiles (PathPhotosPubl,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,false);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
    Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
@@ -579,8 +583,8 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
          break;
       default:        // Error
          sprintf (Gbl.Message,"Photo could not be processed successfully.<br />"
-                              "Error code returned by the program of processing: %d getuid() = %u geteuid() = %u",
-                  ReturnCode,(unsigned) getuid(), (unsigned) geteuid());
+                              "Error code returned by the program of processing: %d",
+                  ReturnCode);
          Lay_ShowErrorAndExit (Gbl.Message);
          break;
      }

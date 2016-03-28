@@ -1416,8 +1416,7 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	width:480px;
-	height:320px;
-	padding:6px; margin:10px;
+	padding:6px; margin:9px;
 	border:solid 1px #EEE;
 	}
 a:hover img.CENTRE_PHOTO_SHOW
@@ -1428,18 +1427,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CENTRE_PHOTO_PRINT
 	{
 	box-sizing:border-box;
-	width:720px;
-	height:480px;
-	padding:15px; margin:18px;
+	width:768px;
+	padding:10px; margin:15px;
 	border:solid 1px #EEE;
         box-shadow:1px 1px 6px #999;
 	}
 	
 /**************** Attribution (author and license) of images *****************/
+#AttributionArea
+	{
+	box-sizing:border-box;
+	width:480px;
+	}
 .ATTRIBUTION
 	{
 	box-sizing:border-box;
-	max-width:500px;
+	margin-bottom:15px;
 	color:#A0A0A0;
 	font-size:8pt;
 	text-align:center;

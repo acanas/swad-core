@@ -8417,7 +8417,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
             if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))	// Gbl.Message contains feedback text
               {
                /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
-               sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
+               sprintf (Path,"%s/%s",
+                        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                        Gbl.FileBrowser.Priv.FullPathInTree);
                if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) + strlen (".tmp") > PATH_MAX)
 	          Lay_ShowErrorAndExit ("Path is too long.");
                strcat (Path,"/");
@@ -8721,14 +8723,16 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 if ((ExtensionIsAllowed = Str_FileIsHTML (Gbl.FileBrowser.NewFilFolLnkName)))
 	   {
 	    /* Check MIME type*/
-	    if (strcmp (MIMEType,"text/html") &&
-		strcmp (MIMEType,"text/plain") &&
-		strcmp (MIMEType,"application/octet-stream"))	// MIME type forbidden
-	      {
-	       sprintf (Gbl.Message,Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-			Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
-	       return false;
-	      }
+	    if (strcmp (MIMEType,"text/html"))
+	       if (strcmp (MIMEType,"text/plain"))
+		  if (strcmp (MIMEType,"application/octet-stream"))
+	             if (strcmp (MIMEType,"application/octetstream"))
+	                if (strcmp (MIMEType,"application/octet"))
+			  {	// MIME type forbidden
+			   sprintf (Gbl.Message,Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
+				    Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
+			   return false;
+			  }
 	   }
 	 else
 	   {

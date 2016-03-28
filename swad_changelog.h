@@ -125,7 +125,8 @@
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Filtering email addresses --> an email address can not finish in "."
 
-// TODO: Use libjpeg or similar to check size of uploaded image of a centre
+// TODO: Use convert after uploading an image of a centre
+// convert original-file -resize '768x512>' -quality 75 output-jpeg-file
 // TODO: Upload an image in social posts, in test questions, in forum posts, in private messages, etc.
 
 // TODO: Important!!!! E-mail should not be visible for not logged users
@@ -136,13 +137,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.164 (2016-03-28)"
-#define CSS_FILE		"swad15.162.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.165 (2016-03-28)"
+#define CSS_FILE		"swad15.165.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.165:   Mar 28, 2016	Use ImageMagick 'convert' after uploading an image of a centre. (? lines)
         Version 15.164:   Mar 28, 2016	Scope selector inside frame in listing of students.
 					Fix bug in edition of groups. (196664 lines)
         Version 15.163.4: Mar 28, 2016	Scope selector inside frame in listing of teachers. (196656 lines)

@@ -389,7 +389,7 @@ void TsI_ImportQstsFromXML (void)
    char FileNameXMLSrc[PATH_MAX+1];
    char FileNameXMLTmp[PATH_MAX+1];	// Full name (including path and .xml) of the destination temporary file
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
-   bool CorrectType;
+   bool WrongType = false;
 
    /***** Creates directory if not exists *****/
    sprintf (PathTestPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_TEST);
@@ -402,28 +402,27 @@ void TsI_ImportQstsFromXML (void)
    Fil_StartReceptionOfFile (FileNameXMLSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
-   CorrectType = true;
    if (strcmp (MIMEType,"text/xml"))
       if (strcmp (MIMEType,"application/xml"))
 	 if (strcmp (MIMEType,"application/octet-stream"))
 	    if (strcmp (MIMEType,"application/octetstream"))
 	       if (strcmp (MIMEType,"application/octet"))
-                  CorrectType = false;
+                  WrongType = true;
 
-   if (CorrectType)
+   if (WrongType)
+     {
+      sprintf (Gbl.Message,Txt_The_file_is_not_X,"xml");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+     }
+   else
      {
       /* End the reception of XML in a temporary file */
-      sprintf (FileNameXMLTmp,"%s/%s.jpg",PathTestPriv,Gbl.UniqueNameEncrypted);
+      sprintf (FileNameXMLTmp,"%s/%s.xml",PathTestPriv,Gbl.UniqueNameEncrypted);
       if (Fil_EndReceptionOfFile (FileNameXMLTmp))
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
       else
          Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
-     }
-   else
-     {
-      sprintf (Gbl.Message,Txt_The_file_is_not_X,"xml");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
   }
 

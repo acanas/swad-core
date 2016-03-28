@@ -2301,9 +2301,15 @@ long Str_ConvertStrCodToLongCod (const char *Str)
 /**** Compute length of root (all except extension) of the name of a file ****/
 /*****************************************************************************/
 
-int Str_GetLengthRootFileName (const char *FileName)
+size_t Str_GetLengthRootFileName (const char *FileName)
   {
-   return strlen (FileName) - strlen (strrchr (FileName,(int) '.'));
+   char *PtrToDot = strrchr (FileName,(int) '.');
+   size_t LengthFileName = strlen (FileName);
+
+   if (PtrToDot)
+      return LengthFileName - strlen (PtrToDot);
+   else
+      return LengthFileName;
   }
 
 /*****************************************************************************/
@@ -2359,14 +2365,17 @@ void Str_SplitFullPathIntoPathAndFileName (const char *FullPath,
 
 bool Str_FileIs (const char *FileName,const char *Extension)
   {
-   int i,j;
+   int i;
+   int j;
+   size_t LengthExtension = strlen (Extension);
 
-   /***** Only extensiones of 5 or less characters are valid. For example "zip", "html", "mhtml" *****/
-   if (strlen (Extension) > 5)
+   /***** Check length of extension. Extension valid are, for example "zip", "html", "mhtml" *****/
+   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
       return false;
 
    /***** Check the extension *****/
-   for (i = strlen (FileName) - 1, j = strlen (Extension) - 1;
+   for (i = strlen (FileName) - 1, j = LengthExtension - 1;
 	i > 0 && j >= 0;
 	i--, j--)
       if (Str_ConvertToLowerLetter (FileName[i]) != Str_ConvertToLowerLetter (Extension[j]))

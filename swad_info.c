@@ -2011,6 +2011,7 @@ void Inf_ReceivePagInfo (void)
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    char StrUnzip[100+PATH_MAX*2+1];
    char *PathWebPage;
+   bool WrongType = false;
    bool FileIsOK = false;
 
    /***** Set info type *****/
@@ -2020,12 +2021,16 @@ void Inf_ReceivePagInfo (void)
    Fil_StartReceptionOfFile (SourceFileName,MIMEType);
 
    /***** Check that MIME type is HTML or ZIP *****/
-   if (strcmp (MIMEType,"text/html") &&
-       strcmp (MIMEType,"text/plain") &&
-       strcmp (MIMEType,"application/x-zip-compressed") &&
-       strcmp (MIMEType,"application/zip") &&
-       strcmp (MIMEType,"application/octet-stream") &&
-       strcmp (MIMEType,"application/x-download"))
+   if (strcmp (MIMEType,"text/html"))
+      if (strcmp (MIMEType,"text/plain"))
+         if (strcmp (MIMEType,"application/x-zip-compressed"))
+            if (strcmp (MIMEType,"application/zip"))
+               if (strcmp (MIMEType,"application/x-download"))
+		  if (strcmp (MIMEType,"application/octet-stream"))
+	             if (strcmp (MIMEType,"application/octetstream"))
+	                if (strcmp (MIMEType,"application/octet"))
+                           WrongType = true;
+   if (WrongType)
      {
       sprintf (Gbl.Message,Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
                MIMEType);

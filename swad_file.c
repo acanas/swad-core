@@ -303,10 +303,10 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp)
 
 void Fil_CreateUpdateFile (const char *CurrentName,const char *ExtensionOldName,char *OldName,char *NewName,FILE **NewFile)
   {
-   int LongRaizFich = Str_GetLengthRootFileName (CurrentName);
+   size_t LengthFileRoot = Str_GetLengthRootFileName (CurrentName);
 
-   strncpy (NewName,CurrentName,LongRaizFich);
-   NewName[LongRaizFich] = '\0';
+   strncpy (NewName,CurrentName,LengthFileRoot);
+   NewName[LengthFileRoot] = '\0';
    sprintf (OldName,"%s%s",NewName,ExtensionOldName);
    strcat (NewName,".new");
 
