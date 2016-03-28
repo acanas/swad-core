@@ -250,7 +250,7 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:&nbsp;"
+	              "%s: "
                       "</label>"
                       "<input type=\"text\" name=\"UsrId\""
                       " size=\"8\" maxlength=\"%u\" value=\"%s\" />",

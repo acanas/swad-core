@@ -323,7 +323,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
    /***** Form to request user's ID, @nickname or e-mail address *****/
    Act_FormStart (NextAction);
    fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
-                      "%s:&nbsp;"
+                      "%s: "
                       "</label>"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
                       " size=\"20\" maxlength=\"%u\" />",
@@ -834,7 +834,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
                       "<tr>"
                       "<td class=\"%s RIGHT_TOP\">"
-                      "%s:&nbsp;"
+                      "%s: "
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"UsrsIDs\" cols=\"72\" rows=\"10\">",

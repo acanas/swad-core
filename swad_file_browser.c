@@ -7856,7 +7856,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /***** Folder *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:&nbsp;"
+	              "%s: "
 	              "</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"32\" maxlength=\"40\" value=\"\" />",
@@ -8095,7 +8095,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label class=\"%s\">%s:&nbsp;</label>"
+	              "<label class=\"%s\">"
+	              "%s: "
+	              "</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewLinkURL\""

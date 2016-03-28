@@ -306,35 +306,29 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Photo);
+   Lay_StartRoundFrame (NULL,Txt_Photo,NULL);
 
    /***** Show current photo and help message *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\">");
    // if (PhotoExists)
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,
                      "PHOTO186x248",Pho_NO_ZOOM,false);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
 
    /***** Form to upload photo *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+                      "%s: "
+                      "</label>"
                       "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\" />"
-                      "</td>"
-                      "</tr>",
+                      " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\""
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
-            UsrDat->UsrCod);
+            UsrDat->UsrCod,
+            Gbl.Form.Id);
 
    /***** End frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Upload_photo);
+   Lay_EndRoundFrame ();
 
    /***** End form *****/
    Act_FormEnd ();

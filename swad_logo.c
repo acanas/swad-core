@@ -294,7 +294,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
    /***** Upload logo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:&nbsp;"
+	              "%s: "
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"\""

@@ -2028,7 +2028,7 @@ void Ctr_RequestPhoto (void)
 
    /***** Upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:&nbsp;"
+	              "%s: "
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"\""
