@@ -137,13 +137,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.165.1 (2016-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.165.2 (2016-03-29)"
 #define CSS_FILE		"swad15.165.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.165.2: Mar 29, 2016	Changes in forms to upload logos. (196805 lines)
         Version 15.165.1: Mar 29, 2016	Changes in form to upload photo of centre. (196803 lines)
         Version 15.165:   Mar 28, 2016	Use ImageMagick 'convert' after uploading an image of a centre. (196805 lines)
         Version 15.164:   Mar 28, 2016	Scope selector inside frame in listing of students.

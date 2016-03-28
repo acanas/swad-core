@@ -235,7 +235,6 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
-   extern const char *Txt_Upload_logo;
    long Cod;
    const char *Folder;
    Act_Action_t ActionRec;
@@ -298,13 +297,15 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 	              "%s:&nbsp;"
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"\" />",
+                      " size=\"40\" maxlength=\"100\" value=\"\""
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
+            Fil_NAME_OF_PARAM_FILENAME_ORG,
+            Gbl.Form.Id);
 
-   /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Upload_logo);
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** End form *****/
    Act_FormEnd ();
