@@ -2008,15 +2008,12 @@ void Ctr_RequestPhoto (void)
    extern const char *Txt_Recommended_resolution;
    extern const char *Txt_XxY_pixels_or_higher;
    extern const char *Txt_File_with_the_photo;
-   extern const char *Txt_Upload_photo;
 
    /***** Start form to upload photo *****/
    Act_FormStart (ActRecCtrPho);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Photo);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">");
+   Lay_StartRoundFrame (NULL,Txt_Photo,NULL);
 
    /***** Write help message *****/
    sprintf (Gbl.Message,"%s: %s<br />"
@@ -2034,15 +2031,15 @@ void Ctr_RequestPhoto (void)
 	              "%s:&nbsp;"
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"\" />"
-                      "</td>"
-                      "</tr>",
+                      " size=\"40\" maxlength=\"100\" value=\"\""
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
+            Fil_NAME_OF_PARAM_FILENAME_ORG,
+            Gbl.Form.Id);
 
-   /***** Button to create announcement and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Upload_photo);
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** End form *****/
    Act_FormEnd ();

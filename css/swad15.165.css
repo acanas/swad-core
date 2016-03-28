@@ -1427,7 +1427,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CENTRE_PHOTO_PRINT
 	{
 	box-sizing:border-box;
-	width:768px;
+	width:600px;
 	padding:10px; margin:15px;
 	border:solid 1px #EEE;
         box-shadow:1px 1px 6px #999;
