@@ -125,8 +125,6 @@
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Filtering email addresses --> an email address can not finish in "."
 
-// TODO: Use convert after uploading an image of a centre
-// convert original-file -resize '768x512>' -quality 75 output-jpeg-file
 // TODO: Upload an image in social posts, in test questions, in forum posts, in private messages, etc.
 
 // TODO: Important!!!! E-mail should not be visible for not logged users
@@ -137,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.165.5 (2016-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.165.6 (2016-03-29)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.165.6: Mar 29, 2016	Changes in temporary directories for images. (196846 lines)
         Version 15.165.5: Mar 29, 2016	Changes in form to edit a test question. (196843 lines)
         Version 15.165.4: Mar 29, 2016	Changes in form to upload XML file to import questions. (196813 lines)
         Version 15.165.3: Mar 29, 2016	Changes in form to upload user's photo. (196811 lines)

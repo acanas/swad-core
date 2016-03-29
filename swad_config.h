@@ -394,9 +394,13 @@
 /* Folder for compression of assignments and works into a zip files, inside private swad directory */
 #define Cfg_FOLDER_ZIP				"zip"			// Created automatically the first time it is accessed
 
+/* Folders for images inside public and private swad directories */
+#define Cfg_FOLDER_IMG				"img"			// Created automatically the first time it is accessed
+/* Folders for temporary users' photos inside photos directories */
+#define Cfg_FOLDER_IMG_TMP			"tmp"			// Created automatically the first time it is accessed
+
 /* Folders for users' photos inside public and private swad directories */
 #define Cfg_FOLDER_PHOTO			"photo"			// Created automatically the first time it is accessed
-
 /* Folders for temporary users' photos inside photos directories */
 #define Cfg_FOLDER_PHOTO_TMP			"tmp"			// Created automatically the first time it is accessed
 

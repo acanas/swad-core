@@ -2054,19 +2054,19 @@ void Ctr_ReceivePhoto (void)
   {
    extern const char *Txt_Wrong_file_type;
    char Path[PATH_MAX+1];
-   char FileNamePhotoSrc[PATH_MAX+1];
+   char FileNameImgSrc[PATH_MAX+1];
    char *PtrExtension;
    size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
-   char PathPhotosPriv[PATH_MAX+1];
-   char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNamePhoto[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
+   char PathImgPriv[PATH_MAX+1];
+   char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNameImg[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
    char Command[1024+PATH_MAX*2];
    int ReturnCode;
 
    /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
+   Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */
    if (strncmp (MIMEType,"image/",strlen ("image/")))
@@ -2080,19 +2080,19 @@ void Ctr_ReceivePhoto (void)
       return;
      }
 
-   /***** Creates private directories if not exist *****/
-   /* Create private directory for photos if it does not exist */
-   sprintf (PathPhotosPriv,"%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO);
-   Fil_CreateDirIfNotExists (PathPhotosPriv);
+   /***** Create private directories if not exist *****/
+   /* Create private directory for images if it does not exist */
+   sprintf (PathImgPriv,"%s/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
+   Fil_CreateDirIfNotExists (PathImgPriv);
 
-   /* Create temporary private directory for photos if it does not exist */
-   sprintf (PathPhotosPriv,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP);
-   Fil_CreateDirIfNotExists (PathPhotosPriv);
+   /* Create temporary private directory for images if it does not exist */
+   sprintf (PathImgPriv,"%s/%s/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
+   Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Get filename extension */
-   if ((PtrExtension = strrchr (FileNamePhotoSrc,(int) '.')) == NULL)
+   if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Wrong_file_type);
       return;
@@ -2105,11 +2105,11 @@ void Ctr_ReceivePhoto (void)
       return;
      }
 
-   /* End the reception of photo in a temporary file */
-   sprintf (FileNamePhotoTmp,"%s/%s/%s/%s.%s",
-            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+   /* End the reception of image in a temporary file */
+   sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
+            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
             Gbl.UniqueNameEncrypted,PtrExtension);
-   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp))
+   if (!Fil_EndReceptionOfFile (FileNameImgTmp))
      {
       Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
       return;
@@ -2130,7 +2130,7 @@ void Ctr_ReceivePhoto (void)
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
-   sprintf (FileNamePhoto,"%s/%s/%02u/%u/%u.jpg",
+   sprintf (FileNameImg,"%s/%s/%02u/%u/%u.jpg",
 	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	    (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
@@ -2138,27 +2138,27 @@ void Ctr_ReceivePhoto (void)
 
    /* Call to program that makes the conversion */
    sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
-            FileNamePhotoTmp,
+            FileNameImgTmp,
             Ctr_PHOTO_SAVED_MAX_WIDTH,
             Ctr_PHOTO_SAVED_MAX_HEIGHT,
             Ctr_PHOTO_SAVED_QUALITY,
-            FileNamePhoto);
+            FileNameImg);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process photo.");
+      Lay_ShowErrorAndExit ("Error when running command to process image.");
 
    /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      sprintf (Gbl.Message,"Photo could not be processed successfully.<br />"
+      sprintf (Gbl.Message,"Image could not be processed successfully.<br />"
 			   "Error code returned by the program of processing: %d",
 	       ReturnCode);
       Lay_ShowErrorAndExit (Gbl.Message);
      }
 
    /***** Remove temporary file *****/
-   unlink (FileNamePhotoTmp);
+   unlink (FileNameImgTmp);
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();
