@@ -145,6 +145,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
+static void Tst_WriteQstImage (const char *Image);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
@@ -966,6 +967,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
+   Tst_WriteQstImage (row[5]);
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
    else	// Assessing exam / Viewing old exam
@@ -979,7 +981,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
   }
 
 /*****************************************************************************/
-/******************* Write the heading of a test question ********************/
+/********************* Write the stem of a test question *********************/
 /*****************************************************************************/
 
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
@@ -1004,6 +1006,21 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Free memory allocated for the stem *****/
    free ((void *) StemRigorousHTML);
+  }
+
+/*****************************************************************************/
+/******************** Write the image of a test question *********************/
+/*****************************************************************************/
+
+static void Tst_WriteQstImage (const char *Image)
+  {
+   if (Image)
+      if (Image[0])
+	 /***** Write the image *****/
+	 fprintf (Gbl.F.Out,"<div>"
+			    "%s"
+			    "</div>",
+		  Image);
   }
 
 /*****************************************************************************/
@@ -2644,6 +2661,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
+      Tst_WriteQstImage (row[5]);
       Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
       fprintf (Gbl.F.Out,"</td>");
