@@ -137,13 +137,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.165.3 (2016-03-29)"
-#define CSS_FILE		"swad15.165.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.165.5 (2016-03-29)"
+#define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.165.5: Mar 29, 2016	Changes in form to edit a test question. (196843 lines)
+        Version 15.165.4: Mar 29, 2016	Changes in form to upload XML file to import questions. (196813 lines)
         Version 15.165.3: Mar 29, 2016	Changes in form to upload user's photo. (196811 lines)
         Version 15.165.2: Mar 29, 2016	Changes in forms to upload logos. (196805 lines)
         Version 15.165.1: Mar 29, 2016	Changes in form to upload photo of centre. (196803 lines)

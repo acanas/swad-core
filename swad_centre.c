@@ -29,6 +29,7 @@
 #include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
+#include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
 #include "swad_centre.h"

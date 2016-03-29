@@ -130,7 +130,6 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Import_questions;
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
-   extern const char *Txt_Upload_file;
    extern const char *Txt_XML_file;
 
    /***** Start frame *****/
@@ -142,14 +141,15 @@ void TsI_ShowFormImportQstsFromXML (void)
    /***** Write a form to import questions *****/
    Act_FormStart (ActImpTstQst);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:"
+                      "%s: "
                       "</label>"
                       "<input type=\"file\" name=\"%s\""
-	              " size=\"40\" maxlength=\"100\" value=\"\" />",
+	              " size=\"40\" maxlength=\"100\" value=\"\""
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
-   Lay_PutCreateButton (Txt_Upload_file);
+            Fil_NAME_OF_PARAM_FILENAME_ORG,
+            Gbl.Form.Id);
    Act_FormEnd ();
 
    /***** End frame *****/

@@ -4099,6 +4099,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Tags;
    extern const char *Txt_new_tag;
    extern const char *Txt_Stem;
+   extern const char *Txt_Image;
    extern const char *Txt_Feedback;
    extern const char *Txt_Type;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -4253,8 +4254,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Write the tags *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
+                      "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">"
                       "%s:"
+                      "</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<table>",
@@ -4268,7 +4271,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       /***** Write the tags already existing in a selector *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	                 "<select id=\"SelDesc%u\" name=\"SelDesc%u\""
-	                 " style=\"width:288px;\" onchange=\"changeTxtTag('%u')\">",
+	                 " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\">",
                NumTag,NumTag,NumTag);
       fprintf (Gbl.F.Out,"<option value=\"\">&nbsp;</option>");
       mysql_data_seek (mysql_res, 0);
@@ -4299,7 +4302,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       /***** Input of a new tag *****/
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                          "<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\""
-                         " size=\"36\" maxlength=\"%u\" value=\"%s\""
+                         " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
 	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.TagText[NumTag],NumTag);
@@ -4315,11 +4318,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">"
 	              "%s:"
+                      "</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Stem\" cols=\"70\" rows=\"8\">"
+                      "<textarea name=\"Stem\" class=\"STEM\" rows=\"5\">"
                       "%s"
                       "</textarea>"
                       "</td>"
@@ -4328,13 +4333,29 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Txt_Stem,
             Stem);
 
+   /***** Image *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"RIGHT_TOP\">"
+			 "<label class=\"%s\">"
+			 "%s:"
+                         "</label>"
+			 "</td>"
+			 "<td class=\"LEFT_TOP\">"
+			 "</td>"
+			 "</tr>",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Image);
+
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">"
 	              "%s:"
+                      "</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Feedback\" cols=\"70\" rows=\"8\">",
+                      "<textarea name=\"Feedback\" class=\"STEM\" rows=\"3\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Feedback);
    if (Feedback)
@@ -4346,8 +4367,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Type of answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">"
 	              "%s:"
+                      "</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -4370,8 +4393,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Answers *****/
    /* Integer answer */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
+                      "<td class=\"RIGHT_TOP\">"
+	              "<label class=\"%s\">"
                       "%s:"
+                      "</label>"
                       "</td>"
                       "<td class=\"%s LEFT_TOP\">"
                       "%s: "
@@ -4492,7 +4517,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	                 "<textarea name=\"AnsStr%u\" cols=\"30\" rows=\"5\"",
+	                 "<textarea name=\"AnsStr%u\" class=\"ANS_STR\" rows=\"5\"",
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -4504,7 +4529,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /* Feedback */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	                 "<textarea name=\"FbStr%u\" cols=\"30\" rows=\"5\"",
+	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"5\"",
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
