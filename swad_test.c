@@ -875,10 +875,11 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 	 row[2] AnsType
 	 row[3] Shuffle
 	 row[4] Stem
-	 row[5] Feedback
-	 row[6] NumHits
-	 row[7] NumHitsNotBlank
-	 row[8] Score
+	 row[5] Image
+	 row[6] Feedback
+	 row[7] NumHits
+	 row[8] NumHitsNotBlank
+	 row[9] Score
 	 */
 
 	 /***** Get the code of question (row[0]) *****/
@@ -938,10 +939,11 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
-   row[5] Feedback
-   row[6] NumHits
-   row[7] NumHitsNotBlank
-   row[8] Score
+   row[5] Image
+   row[6] Feedback
+   row[7] NumHits
+   row[8] NumHitsNotBlank
+   row[9] Score
    */
 
    /***** Write number of question *****/
@@ -960,7 +962,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
             Gbl.RowEvenOdd,
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
-   /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[5]) *****/
+   /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[6]) *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
@@ -970,7 +972,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
      {
       Tst_WriteAnswersOfAQstAssessExam (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
-         Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
+         Tst_WriteQstFeedback (row[6],"TEST_EXA_LIGHT");
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -2160,14 +2162,19 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
-   row[5] Feedback
-   row[6] NumHits
-   row[7] NumHitsNotBlank
-   row[8] Score
+   row[5] Image
+   row[6] Feedback
+   row[7] NumHits
+   row[8] NumHitsNotBlank
+   row[9] Score
    */
-   sprintf (Query,"SELECT tst_questions.QstCod,UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
-                  "tst_questions.AnsType,tst_questions.Shuffle,tst_questions.Stem,tst_questions.Feedback,"
-                  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,tst_questions.Score"
+   sprintf (Query,"SELECT tst_questions.QstCod,"
+	          "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
+                  "tst_questions.AnsType,tst_questions.Shuffle,"
+                  "tst_questions.Stem,tst_questions.Image,"
+                  "tst_questions.Feedback,"
+                  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
+                  "tst_questions.Score"
                  " FROM tst_questions");
    if (!Gbl.Test.AllTags)
       strcat (Query,",tst_question_tags,tst_tags");
@@ -2292,10 +2299,11 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
-   row[5] Feedback
-   row[6] NumHits
-   row[7] NumHitsNotBlank
-   row[8] Score
+   row[5] Image
+   row[6] Feedback
+   row[7] NumHits
+   row[8] NumHitsNotBlank
+   row[9] Score
    */
    /* Start query */
    // Reject questions with any tag hidden
@@ -2304,7 +2312,8 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
 	          "UNIX_TIMESTAMP(tst_questions.EditTime),"
 		  "tst_questions.AnsType,tst_questions.Shuffle,"
-		  "tst_questions.Stem,tst_questions.Feedback,"
+		  "tst_questions.Stem,tst_questions.Image,"
+		  "tst_questions.Feedback,"
 		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
 		  "tst_questions.Score"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
@@ -2407,19 +2416,20 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
    char Query[512];
 
    /***** Get data of a question from database *****/
-    /*
+   /*
    row[0] QstCod
    row[1] UNIX_TIMESTAMP(EditTime)
    row[2] AnsType
    row[3] Shuffle
    row[4] Stem
-   row[5] Feedback
-   row[6] NumHits
-   row[7] NumHitsNotBlank
-   row[8] Score
+   row[5] Image
+   row[6] Feedback
+   row[7] NumHits
+   row[8] NumHitsNotBlank
+   row[9] Score
    */
    sprintf (Query,"SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
-	          "AnsType,Shuffle,Stem,Feedback,"
+	          "AnsType,Shuffle,Stem,Image,Feedback,"
 	          "NumHits,NumHitsNotBlank,Score"
                   " FROM tst_questions"
                   " WHERE QstCod='%ld'",
@@ -2527,7 +2537,18 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Gbl.RowEvenOdd = NumRow % 2;
 
       row = mysql_fetch_row (mysql_res);
-
+      /*
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Image
+      row[6] Feedback
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
+      */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
@@ -2619,25 +2640,29 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
         }
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[4]), the feedback (row[5]) and the answers */
+      /* Write the stem (row[4]), the feedback (row[6]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Get number of hits (number of times that the question has been answered, including blank answers) (row[6]) */
-      if (sscanf (row[6],"%lu",&NumHitsThisQst) != 1)
+      /* Get number of hits
+         (number of times that the question has been answered,
+         including blank answers) (row[7]) */
+      if (sscanf (row[7],"%lu",&NumHitsThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
 
-      /* Get number of hits not blank (number of times that the question has been answered with a not blank answer) (row[7]) */
-      if (sscanf (row[7],"%lu",&NumHitsNotBlankThisQst) != 1)
+      /* Get number of hits not blank
+         (number of times that the question has been answered
+         with a not blank answer) (row[8]) */
+      if (sscanf (row[8],"%lu",&NumHitsNotBlankThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
-      /* Get the acumulated score of the question (row[8]) */
+      /* Get the acumulated score of the question (row[9]) */
       setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
-      if (sscanf (row[8],"%lf",&TotalScoreThisQst) != 1)
+      if (sscanf (row[9],"%lf",&TotalScoreThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong score of a question.");
       setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
@@ -6770,10 +6795,11 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	 row[2] AnsType
 	 row[3] Shuffle
 	 row[4] Stem
-	 row[5] Feedback
-	 row[6] NumHits
-	 row[7] NumHitsNotBlank
-	 row[8] Score
+	 row[5] Image
+	 row[6] Feedback
+	 row[7] NumHits
+	 row[8] NumHitsNotBlank
+	 row[9] Score
 	 */
 	 /***** If this question has been edited later than test exam time ==> don't show question ****/
 	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);

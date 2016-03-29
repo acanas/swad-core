@@ -1143,6 +1143,7 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,
 	Shuffle ENUM('N','Y') NOT NULL,
 	Stem TEXT NOT NULL,
+	Image CHAR(43) NOT NULL,
 	Feedback TEXT NOT NULL,
 	NumHits INT NOT NULL DEFAULT 0,
 	NumHitsNotBlank INT NOT NULL DEFAULT 0,

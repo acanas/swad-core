@@ -2418,12 +2418,13 @@ mysql> DESCRIBE tst_questions;
 | AnsType         | enum('int','float','true_false','unique_choice','multiple_choice','text') | NO   |     | NULL    |                |
 | Shuffle         | enum('N','Y')                                                             | NO   |     | NULL    |                |
 | Stem            | text                                                                      | NO   |     | NULL    |                |
+| Image           | char(43)                                                                  | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-10 rows in set (0.01 sec)
+11 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
                    "QstCod INT NOT NULL AUTO_INCREMENT,"
@@ -2432,6 +2433,7 @@ mysql> DESCRIBE tst_questions;
                    "AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
                    "Shuffle ENUM('N','Y') NOT NULL,"
                    "Stem TEXT NOT NULL,"
+                   "Image CHAR(43) NOT NULL,"
                    "Feedback TEXT NOT NULL,"
                    "NumHits INT NOT NULL DEFAULT 0,"
                    "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
