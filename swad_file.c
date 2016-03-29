@@ -163,6 +163,21 @@ bool Fil_ReadStdinIntoTmpFile (void)
      }
    rewind (Gbl.F.Tmp);
 
+/*    For debug
+      FILE *FileTgt;
+
+      ***** Open destination file *****
+      if ((FileTgt = fopen ("/tmp/borrame.txt","wb")) == NULL)
+	 Lay_ShowErrorAndExit ("Can not open target file.");
+
+      ***** Copy source file into destination file *****
+      Fil_FastCopyOfOpenFiles (Gbl.F.Tmp,FileTgt);
+
+      ***** Close the files *****
+      rewind (Gbl.F.Tmp);
+      fclose (FileTgt);
+*/
+
    return true;
   }
 
@@ -460,7 +475,8 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt)
   {
-   FILE *FileSrc,*FileTgt;
+   FILE *FileSrc;
+   FILE *FileTgt;
 
    /***** Open source file *****/
    if ((FileSrc = fopen (PathSrc,"rb")) == NULL)

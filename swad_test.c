@@ -146,6 +146,7 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_WriteQstImage (const char *Image);
+static void Tst_PutFormToUploadNewQstImage (void);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
@@ -1021,6 +1022,17 @@ static void Tst_WriteQstImage (const char *Image)
 			    "%s"
 			    "</div>",
 		  Image);
+  }
+
+/*****************************************************************************/
+/************* Put form to upload a new image for a test question ************/
+/*****************************************************************************/
+
+static void Tst_PutFormToUploadNewQstImage (void)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
+                      " size=\"40\" maxlength=\"100\" value=\"\" />",
+            Fil_NAME_OF_PARAM_FILENAME_ORG);
   }
 
 /*****************************************************************************/
@@ -4174,7 +4186,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
         {
          /***** Get the type of answer and the stem from the database *****/
          /* Get the question from database */
-         sprintf (Query,"SELECT AnsType,Shuffle,Stem,Feedback"
+         sprintf (Query,"SELECT AnsType,Shuffle,Stem,Image,Feedback"
                         " FROM tst_questions"
                         " WHERE QstCod='%ld' AND CrsCod='%ld'",
                   Gbl.Test.QstCod,
@@ -4193,12 +4205,16 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
          Stem[Cns_MAX_BYTES_TEXT] = '\0';
 
-         /* Get the feedback of the question from the database (row[3]) */
+         /* Get the image of the question from the database (row[3]) */
+         strncpy (Gbl.Test.Image,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+         Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+
+         /* Get the feedback of the question from the database (row[4]) */
          Feedback[0] = '\0';
-         if (row[3])
-            if (row[3][0])
+         if (row[4])
+            if (row[4][0])
               {
-	       strncpy (Feedback,row[3],Cns_MAX_BYTES_TEXT);
+	       strncpy (Feedback,row[4],Cns_MAX_BYTES_TEXT);
 	       Feedback[Cns_MAX_BYTES_TEXT] = '\0';
               }
 
@@ -4378,17 +4394,21 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Image *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_TOP\">"
 			 "<label class=\"%s\">"
 			 "%s:"
                          "</label>"
 			 "</td>"
-			 "<td class=\"LEFT_TOP\">"
-			 "</td>"
-			 "</tr>",
+			 "<td class=\"LEFT_TOP\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Image);
+      Tst_WriteQstImage (Gbl.Test.Image);
+      Tst_PutFormToUploadNewQstImage ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4735,6 +4755,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
      {
       sprintf (TagStr,"TagTxt%u",NumTag);
       Par_GetParToText (TagStr,Gbl.Test.TagText[NumTag],Tst_MAX_BYTES_TAG);
+
       if (Gbl.Test.TagText[NumTag][0])
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,

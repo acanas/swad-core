@@ -135,13 +135,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.165.8 (2016-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.166 (2016-03-29)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.166:   Mar 30, 2016	Changes in form to edit a test question.
+					Fixed bug while reading a parameter. (196943 lines)
         Version 15.165.8: Mar 30, 2016	Changes related to image in test questions. (196896 lines)
         Version 15.165.7: Mar 29, 2016	New field for image in database table of test questions. (196879 lines)
 					1 change necessary in database:

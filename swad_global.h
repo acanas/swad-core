@@ -642,6 +642,7 @@ struct Globals
          char *Text;
          size_t Length;
         } Stem, Feedback;
+      char Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
       bool Shuffle;
       struct
         {

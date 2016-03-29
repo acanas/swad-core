@@ -59,6 +59,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Par_ShowErrorReadingParam (const char *ParamName,const char *ExpectedChar,int Ch);
+
 /*****************************************************************************/
 /*** Read all parameters passed to this CGI and store for later processing ***/
 /*****************************************************************************/
@@ -420,6 +422,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    size_t BytesToCopy;
    size_t BytesAlreadyCopied = 0;
    int Ch;
+   unsigned i;
    char *PtrSrc;
    char *PtrDst;
    char *PtrStartOfParam;
@@ -511,6 +514,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
          break;
       case Act_CONTENT_DATA:
          rewind (Gbl.F.Tmp);
+
          while (ContinueSearching)
            {
             Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,NULL,StrAux,Gbl.DelimiterString,(unsigned long long) Par_MAX_BYTES_STR_AUX);
@@ -531,24 +535,26 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                      if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,Par_LENGTH_OF_STR_BEFORE_PARAM-1),StringBeforeParam+1)) // Start of a parameter
                         if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,ParamNameLength),ParamName)) // Parameter found
                           {
- 	                   /* Skip "'" symbol after parameter name */
+ 	                   /* Skip quote after parameter name */
 	                   Ch = fgetc (Gbl.F.Tmp);
 	                   if (Ch != (int) '\"')
-                             {
-                              sprintf (Gbl.Message,"Error reading parameter <strong>%s</strong>."
-                                                   " A <strong>&quot;</strong> character was expected, but a <strong>%c</strong> (ASCII code %d) has been found.",
-                                       ParamName,(char) Ch,Ch);
-	                      Lay_ShowErrorAndExit (Gbl.Message);
-                             }
+	                      Par_ShowErrorReadingParam (ParamName,"&quot;",Ch);
 
-	                   /* Skip carriage returns, spaces, etc. */
-	                   do
-	                      Ch = fgetc (Gbl.F.Tmp);
-	                   while (isspace (Ch) && Ch != EOF);
+	                   /* Skip two CR-LF (0x0D 0x0A) */
+	                   for (i = 0;
+	                	i < 2;
+	                	i++)
+	                     {
+			      Ch = fgetc (Gbl.F.Tmp);
+			      if (Ch != 0x0D)	// '\r'
+				 Par_ShowErrorReadingParam (ParamName,"0x0D",Ch);
+			      Ch = fgetc (Gbl.F.Tmp);
+			      if (Ch != 0x0A)	// '\n'
+				 Par_ShowErrorReadingParam (ParamName,"0x0A",Ch);
+	                     }
 
 	                   /* Get the parameter */
-	                   ParamValue[0] = Ch;
-	                   Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,(FILE *) NULL,&ParamValue[1],Gbl.DelimiterStringIncludingInitialRet,(unsigned long long) MaxBytes);
+	                   Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,(FILE *) NULL,ParamValue,Gbl.DelimiterStringIncludingInitialRet,(unsigned long long) MaxBytes);
 
 	                   /* Depending on the result... */
                            switch (Result)
@@ -577,6 +583,19 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
      }
 
    return NumTimes;
+  }
+
+/*****************************************************************************/
+/********************** Write error reading parameter ************************/
+/*****************************************************************************/
+
+static void Par_ShowErrorReadingParam (const char *ParamName,const char *ExpectedChar,int Ch)
+  {
+   sprintf (Gbl.Message,"Error reading parameter <strong>%s</strong>."
+			" A <strong>%s</strong> character was expected,"
+			" but a character with code %X has been found.",
+	    ParamName,ExpectedChar,Ch);
+   Lay_ShowErrorAndExit (Gbl.Message);
   }
 
 /*****************************************************************************/
