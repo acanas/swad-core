@@ -60,6 +60,9 @@ typedef enum
 
 bool Par_GetQueryString (void);
 void Par_FreeParams (void);
+unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
+                           char *ParamValue,size_t MaxBytes);
+
 void Par_GetMainParameters (void);
 
 unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
@@ -67,8 +70,6 @@ unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxByte
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
 unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces);
-unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
-                           char *ParamValue,size_t MaxBytes);
 
 bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst);
