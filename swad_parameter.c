@@ -59,6 +59,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Par_GetParameters (void);
+
 static void Par_ShowErrorReadingParam (const char *ParamName,const char *ExpectedChar,int Ch);
 
 /*****************************************************************************/
@@ -76,18 +78,18 @@ bool Par_GetQueryString (void)
    if (!strcmp (Method,"GET"))
      {
       /***** GET method *****/
-      Gbl.GetMethod = true;
+      Gbl.Params.GetMethod = true;
       Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
 
       /* Get content length */
-      Gbl.ContentLength = strlen (getenv ("QUERY_STRING"));
+      Gbl.Params.ContentLength = strlen (getenv ("QUERY_STRING"));
 
       /* Allocate memory for query string */
-      if ((Gbl.QueryString = (char *) malloc (Gbl.ContentLength + 1)) == NULL)
+      if ((Gbl.Params.QueryString = (char *) malloc (Gbl.Params.ContentLength + 1)) == NULL)
 	 return false;
 
       /* Copy query string from environment variable */
-      strcpy (Gbl.QueryString,getenv ("QUERY_STRING"));
+      strcpy (Gbl.Params.QueryString,getenv ("QUERY_STRING"));
      }
    else
      {
@@ -96,7 +98,7 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_LENGTH"))
 	{
          strcpy (UnsignedLongStr,getenv ("CONTENT_LENGTH"));
-         if (sscanf (UnsignedLongStr,"%lu",&Gbl.ContentLength) != 1)
+         if (sscanf (UnsignedLongStr,"%lu",&Gbl.Params.ContentLength) != 1)
             return false;
 	}
       else
@@ -132,18 +134,22 @@ bool Par_GetQueryString (void)
          Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
 
 	 /* Allocate memory for query string */
-	 if ((Gbl.QueryString = (char *) malloc (Gbl.ContentLength + 1)) == NULL)
+	 if ((Gbl.Params.QueryString = (char *) malloc (Gbl.Params.ContentLength + 1)) == NULL)
 	    return false;
 
 	 /* Copy query string from stdin */
-         if (fread ((void *) Gbl.QueryString,sizeof (char),Gbl.ContentLength,stdin) != Gbl.ContentLength)
+         if (fread ((void *) Gbl.Params.QueryString,sizeof (char),Gbl.Params.ContentLength,stdin) != Gbl.Params.ContentLength)
            {
-            Gbl.QueryString[0] = '\0';
+            Gbl.Params.QueryString[0] = '\0';
             return false;
            }
-	 Gbl.QueryString[Gbl.ContentLength] = '\0';
+	 Gbl.Params.QueryString[Gbl.Params.ContentLength] = '\0';
         }
      }
+
+   if (Gbl.ContentReceivedByCGI == Act_CONTENT_NORM)
+      Par_GetParameters ();
+
    return true;
   }
 
@@ -153,8 +159,8 @@ bool Par_GetQueryString (void)
 
 void Par_FreeQueryString (void)
   {
-   if (Gbl.QueryString)
-      free ((void *) Gbl.QueryString);
+   if (Gbl.Params.QueryString)
+      free ((void *) Gbl.Params.QueryString);
   }
 
 /*****************************************************************************/
@@ -447,6 +453,95 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
    return NumTimes;
   }
 
+
+/*****************************************************************************/
+/************************* Get the value of a parameter **********************/
+/*****************************************************************************/
+// Return the number of parameters found
+
+#define Par_LENGTH_OF_STR_BEFORE_PARAM	  38	// Length of "CONTENT-DISPOSITION: FORM-DATA; NAME=\""
+#define Par_MAX_BYTES_STR_AUX		1024
+
+static void Par_GetParameters (void)
+  {
+   unsigned long i;
+   struct Param *Param;
+   struct Param *NewParam;
+
+   switch (Gbl.ContentReceivedByCGI)
+     {
+      case Act_CONTENT_NORM:
+	 if (Gbl.Params.QueryString == NULL)
+	   {
+	    Gbl.Params.List = NULL;
+	    return;
+	   }
+	 if (!Gbl.Params.QueryString[0])
+	   {
+	    Gbl.Params.List = NULL;
+	    return;
+	   }
+
+         for (i = 0;
+              i < Gbl.Params.ContentLength;
+              )
+           {
+            /* Allocate space for parameter */
+            if ((NewParam = (struct Param *) malloc (sizeof (struct Param))) == NULL)
+               Lay_ShowErrorAndExit ("Error allocating memory for parameter");
+
+            /* Point last element in list to this */
+            if (i == 0)
+               Gbl.Params.List = NewParam;
+            else
+               Param->Next = NewParam;
+
+            /* Point current element to the new just created */
+            Param = NewParam;
+            Param->Next = NULL;
+
+            /* Get parameter name */
+            Param->Name.Start = i;
+            Param->Name.Length = strcspn (&Gbl.Params.QueryString[i],"=");
+
+            /* Get parameter value */
+            i += Param->Name.Length;
+            if (i < Gbl.Params.ContentLength)
+              {
+               if (Gbl.Params.QueryString[i] == '=')
+		 {
+		  i++;	// Skip '='
+		  Param->Value.Start = i;
+		  if (i < Gbl.Params.ContentLength)
+		    {
+                     Param->Value.Length = strcspn (&Gbl.Params.QueryString[i],"&");
+                     i += Param->Value.Length;
+                     if (i < Gbl.Params.ContentLength)
+			if (Gbl.Params.QueryString[i] == '&')
+			   i++;	// Skip '&'
+		    }
+		  else
+                     Param->Value.Length = 0;
+		 }
+               else
+        	 {
+		  Param->Value.Start = i;
+                  Param->Value.Length = 0;
+        	 }
+              }
+            else
+	      {
+	       Param->Value.Start = i;
+	       Param->Value.Length = 0;
+	      }
+           }
+         break;
+      case Act_CONTENT_DATA:
+	 // TODO: Implement
+         break;
+     }
+  }
+
 /*****************************************************************************/
 /************************* Get the value of a parameter **********************/
 /*****************************************************************************/
@@ -463,9 +558,9 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    size_t BytesAlreadyCopied = 0;
    int Ch;
    unsigned i;
-   char *PtrSrc;
+   struct Param *Param;
    char *PtrDst;
-   char *PtrStartOfParam;
+   const char *PtrSrc = NULL;
    int Result;
    unsigned NumTimes = 0;
    bool ParamFound = false;
@@ -479,7 +574,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    switch (Gbl.ContentReceivedByCGI)
      {
       case Act_CONTENT_NORM:
-         if (Gbl.GetMethod)			// Only some selected parameters can be passed by GET method
+         if (Gbl.Params.GetMethod)			// Only some selected parameters can be passed by GET method
            {
             if (strcmp (ParamName,"cty") &&	// To enter directly to a country
                 strcmp (ParamName,"ins") &&	// To enter directly to an institution
@@ -493,38 +588,28 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                 strcmp (ParamName,"key"))	// To verify an email address
 	       return 0;	// Return no-parameters-found when method is GET and parameter name is not one of these
            }
-         PtrSrc = Gbl.QueryString;
+
          PtrDst = ParamValue;
+         Param = Gbl.Params.List;
          for (NumTimes = 0;
               NumTimes < 1 || ParamType == Par_PARAM_MULTIPLE;
               NumTimes++)
 	   {
-            ParamFound = false;
-            do
-              {
-               /* If method is GET ==> do case insensitive comparison */
-               PtrStartOfParam = strstr (PtrSrc,ParamName);
-               if (PtrStartOfParam)
-                 {
-	          // String ParamName found inside Gbl.QueryString
-                  if (*(PtrStartOfParam + ParamNameLength) == '=')
+            for (ParamFound = false;
+        	 Param != NULL && !ParamFound;
+        	 Param = Param->Next)
+               if (ParamNameLength == Param->Name.Length)
+                  if (!strncmp (ParamName,&Gbl.Params.QueryString[Param->Name.Start],
+                                Param->Name.Length))
                     {
-		     // Just after the name of the parameter, must be found a '=' symbol
-                     if (PtrStartOfParam == Gbl.QueryString)	// The parameter is just at start
-                        ParamFound = true;
-                     else if (*(PtrStartOfParam - 1) == '&')	// The parameter is not at start, but just after an "&" separator
-                        ParamFound = true;
-                     else					// String has been found at the end of another parameter
-                        PtrSrc = PtrStartOfParam + ParamNameLength;
+        	     ParamFound = true;
+                     if ((BytesToCopy = Param->Value.Length))
+                        PtrSrc = &Gbl.Params.QueryString[Param->Value.Start];
                     }
-                  else						// String has been found, but it is not a parameter
-                     PtrSrc = PtrStartOfParam + ParamNameLength;
-                 }
-              }
-            while (PtrStartOfParam != NULL && !ParamFound);
-            if (!ParamFound)	// Not found ==> PtrStartOfParam == NULL
+
+            if (!ParamFound)
                break;
-            PtrSrc = PtrStartOfParam + ParamNameLength + 1;	// Add 1 due to the '=' symbol
+
 	    if (NumTimes)
 	      {
 	       if (BytesAlreadyCopied + 1 > MaxBytes)
@@ -537,7 +622,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	       *PtrDst++ = Par_SEPARATOR_PARAM_MULTIPLE;		// Separator in the destination string
 	       BytesAlreadyCopied++;
 	      }
-	    BytesToCopy = strcspn (PtrSrc,"&");	// The & charecter is the separator of two parameters
+
 	    if (BytesAlreadyCopied + BytesToCopy > MaxBytes)
               {
                sprintf (Gbl.Message,"Parameter <strong>%s</strong> too large,"
@@ -545,10 +630,12 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                         ParamName,(unsigned long) MaxBytes);
 	       Lay_ShowErrorAndExit (Gbl.Message);
               }
-	    strncpy (PtrDst,PtrSrc,BytesToCopy);
-	    BytesAlreadyCopied += BytesToCopy;
-	    PtrDst += BytesToCopy;
-            PtrSrc += BytesToCopy;
+	    if (BytesToCopy)
+	      {
+	       strncpy (PtrDst,PtrSrc,BytesToCopy);
+	       BytesAlreadyCopied += BytesToCopy;
+	       PtrDst += BytesToCopy;
+	      }
            }
          *PtrDst = '\0'; // strncpy() does not add the final NULL
          break;

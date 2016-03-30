@@ -105,8 +105,10 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.WebService.IsWebService = false;
 
-   Gbl.ContentLength = 0;
-   Gbl.QueryString = NULL;
+   Gbl.Params.ContentLength = 0;
+   Gbl.Params.QueryString = NULL;
+   Gbl.Params.List = NULL;
+   Gbl.Params.GetMethod = false;
 
    Gbl.F.Out = stdout;
    Gbl.F.Tmp = NULL;
@@ -117,7 +119,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Error = false;
 
-   Gbl.GetMethod = false;
 
    Gbl.Layout.WritingHTMLStart =
    Gbl.Layout.HTMLStartWritten =

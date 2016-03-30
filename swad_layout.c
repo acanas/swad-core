@@ -369,7 +369,7 @@ static void Lay_WritePageTitle (void)
 
    fprintf (Gbl.F.Out,"<title>");
 
-   if (Gbl.GetMethod && Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Gbl.Params.GetMethod && Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       fprintf (Gbl.F.Out,"%s &gt; %s",
 	       Cfg_PLATFORM_SHORT_NAME,

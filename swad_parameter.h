@@ -34,6 +34,18 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+struct StartLength
+  {
+   unsigned long Start;
+   size_t Length;
+  };
+struct Param
+  {
+   struct StartLength Name;
+   struct StartLength Value;
+   struct Param *Next;
+  };
+
 typedef enum
   {
    Par_PARAM_SINGLE,
