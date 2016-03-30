@@ -157,6 +157,19 @@ bool Par_GetQueryString (void)
 /*****************************************************************************/
 /************************ Create list of parameters **************************/
 /*****************************************************************************/
+/*        Parameter #1                Parameter #2               Parameter #3
+        +-------------+             +-------------+             +-------------+
+List -> | Name.Start  |         --> | Name.Start  |         --> | Name.Start  |
+        +-------------+        /    +-------------+        /    +-------------+
+        | Name.Length |       /     | Name.Length |       /     | Name.Length |
+        +-------------+      /      +-------------+      /      +-------------+
+        | Value.Start |     /       | Value.Start |     /       | Value.Start |
+        +-------------+    /        +-------------+    /        +-------------+
+        | Value.Lengh |   /         | Value.Lengh |   /         | Value.Lengh |
+        +-------------+  /          +-------------+  /          +-------------+
+        |    Next   -----           |    Next   -----           |     NULL    |
+        +-------------+             +-------------+             +-------------+
+*/
 
 static void Par_CreateListOfParams (void)
   {
@@ -174,19 +187,7 @@ static void Par_CreateListOfParams (void)
 /*****************************************************************************/
 /**************** Create list of parameters from query string ****************/
 /*****************************************************************************/
-/*
-        +-------------+             +-------------+             +-------------+
-List -> | Name.Start  |         --> | Name.Start  |         --> | Name.Start  |
-        +-------------+        /    +-------------+        /    +-------------+
-        | Name.Length |       /     | Name.Length |       /     | Name.Length |
-        +-------------+      /      +-------------+      /      +-------------+
-        | Value.Start |     /       | Value.Start |     /       | Value.Start |
-        +-------------+    /        +-------------+    /        +-------------+
-        | Value.Lengh |   /         | Value.Lengh |   /         | Value.Lengh |
-        +-------------+  /          +-------------+  /          +-------------+
-        |    Next   -----           |    Next   -----           |     NULL    |
-        +-------------+             +-------------+             +-------------+
-*/
+
 static void Par_CreateListOfParamsFromQueryString (void)
   {
    unsigned long CurPos;	// Current position in query string
@@ -194,16 +195,11 @@ static void Par_CreateListOfParamsFromQueryString (void)
    struct Param *NewParam;
 
    /***** Check if query string is empty *****/
+   Gbl.Params.List = NULL;
    if (Gbl.Params.QueryString == NULL)
-     {
-      Gbl.Params.List = NULL;
       return;
-     }
    if (!Gbl.Params.QueryString[0])
-     {
-      Gbl.Params.List = NULL;
       return;
-     }
 
    /***** Go over the query string
           getting start positions and lengths of parameters *****/
@@ -217,9 +213,9 @@ static void Par_CreateListOfParamsFromQueryString (void)
 
       /* Link the previous element in list with the current element */
       if (CurPos == 0)
-	 Gbl.Params.List = NewParam;
+	 Gbl.Params.List = NewParam;	// Pointer to first param
       else
-	 Param->Next = NewParam;
+	 Param->Next = NewParam;	// Pointer from former param to new param
 
       /* Make the current element to be the just created */
       Param = NewParam;
