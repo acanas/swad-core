@@ -33,8 +33,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Cns_MAX_LENGTH_ARGS_SENT_TO_CGI   (1024UL*1024UL-1)     // Very big space for arguments
-
 #define Cns_MAX_LENGTH_WWW	255	// Max. length of a URL
 
 #define Cns_MAX_LENGTH_IP	 15	// Max. bytes of an IP address

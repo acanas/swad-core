@@ -69,17 +69,39 @@ bool Par_GetQueryString (void)
   {
    char Method[256];
    char ContentType[512];
+   char UnsignedLongStr[10+1];
 
    strcpy (Method,getenv ("REQUEST_METHOD"));
 
    if (!strcmp (Method,"GET"))
      {
+      /***** GET method *****/
       Gbl.GetMethod = true;
       Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
+
+      /* Get content length */
+      Gbl.ContentLength = strlen (getenv ("QUERY_STRING"));
+
+      /* Allocate memory for query string */
+      if ((Gbl.QueryString = (char *) malloc (Gbl.ContentLength + 1)) == NULL)
+	 return false;
+
+      /* Copy query string from environment variable */
       strcpy (Gbl.QueryString,getenv ("QUERY_STRING"));
      }
    else
      {
+      /***** PUSH method *****/
+      /* Get content length */
+      if (getenv ("CONTENT_LENGTH"))
+	{
+         strcpy (UnsignedLongStr,getenv ("CONTENT_LENGTH"));
+         if (sscanf (UnsignedLongStr,"%lu",&Gbl.ContentLength) != 1)
+            return false;
+	}
+      else
+         return false;
+
       /* If data are received ==> the environment variable CONTENT_TYPE will hold:
       multipart/form-data; boundary=---------------------------7d13ca2e948
       */
@@ -109,12 +131,30 @@ bool Par_GetQueryString (void)
         {
          Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
 
-         /***** Get the string sent by form *****/
-         if (fgets (Gbl.QueryString,Cns_MAX_LENGTH_ARGS_SENT_TO_CGI,stdin) == NULL)
+	 /* Allocate memory for query string */
+	 if ((Gbl.QueryString = (char *) malloc (Gbl.ContentLength + 1)) == NULL)
+	    return false;
+
+	 /* Copy query string from stdin */
+         if (fread ((void *) Gbl.QueryString,sizeof (char),Gbl.ContentLength,stdin) != Gbl.ContentLength)
+           {
             Gbl.QueryString[0] = '\0';
+            return false;
+           }
+	 Gbl.QueryString[Gbl.ContentLength] = '\0';
         }
      }
    return true;
+  }
+
+/*****************************************************************************/
+/***************** Free memory allocated for query string ********************/
+/*****************************************************************************/
+
+void Par_FreeQueryString (void)
+  {
+   if (Gbl.QueryString)
+      free ((void *) Gbl.QueryString);
   }
 
 /*****************************************************************************/
@@ -418,7 +458,7 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes)
   {
-   static const char *StringBeforeParam = "CONTENT-DISPOSITION: FORM-DATA; NAME=\"";
+   static const char *StringBeforeParam = "Content-Disposition: form-data; name=\"";
    size_t BytesToCopy;
    size_t BytesAlreadyCopied = 0;
    int Ch;
@@ -472,9 +512,9 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		     // Just after the name of the parameter, must be found a '=' symbol
                      if (PtrStartOfParam == Gbl.QueryString)	// The parameter is just at start
                         ParamFound = true;
-                     else if (*(PtrStartOfParam - 1) == '&')		// The parameter is not at start, but just after an "&" separator
+                     else if (*(PtrStartOfParam - 1) == '&')	// The parameter is not at start, but just after an "&" separator
                         ParamFound = true;
-                     else						// String has been found at the end of another parameter
+                     else					// String has been found at the end of another parameter
                         PtrSrc = PtrStartOfParam + ParamNameLength;
                     }
                   else						// String has been found, but it is not a parameter
@@ -517,7 +557,10 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 
          while (ContinueSearching)
            {
-            Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,NULL,StrAux,Gbl.DelimiterString,(unsigned long long) Par_MAX_BYTES_STR_AUX);
+            Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,
+                                                     (FILE *) NULL,(char *) NULL,
+                                                     Gbl.DelimiterString,
+                                                     Fil_MAX_FILE_SIZE);
             switch (Result)
               {
                case -1:	// Delimiter string not found
@@ -531,9 +574,15 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	          do
 	             Ch = fgetc (Gbl.F.Tmp);
 	          while (isspace (Ch) && Ch != EOF);
+
                   if (Ch == (int) StringBeforeParam[0])
-                     if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,Par_LENGTH_OF_STR_BEFORE_PARAM-1),StringBeforeParam+1)) // Start of a parameter
-                        if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,ParamNameLength),ParamName)) // Parameter found
+                    {
+                     Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,Par_LENGTH_OF_STR_BEFORE_PARAM-1);
+                     if (!strcasecmp (StrAux,StringBeforeParam+1)) // Start of a parameter
+                       {
+                	/* Check if parameter is the parameter that we are looking for */
+                	Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,ParamNameLength);
+                        if (!strcasecmp (StrAux,ParamName)) // Parameter found
                           {
  	                   /* Skip quote after parameter name */
 	                   Ch = fgetc (Gbl.F.Tmp);
@@ -554,7 +603,10 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	                     }
 
 	                   /* Get the parameter */
-	                   Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,(FILE *) NULL,ParamValue,Gbl.DelimiterStringIncludingInitialRet,(unsigned long long) MaxBytes);
+	                   Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,
+	                                                            (FILE *) NULL,ParamValue,
+	                                                            Gbl.DelimiterStringIncludingInitialRet,
+	                                                            (unsigned long long) MaxBytes);
 
 	                   /* Depending on the result... */
                            switch (Result)
@@ -576,6 +628,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                                  break;
 	                     }
                           }
+                       }
+                    }
                break;
               }
            }

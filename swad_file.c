@@ -163,7 +163,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
      }
    rewind (Gbl.F.Tmp);
 
-/*    For debug
+/*
       FILE *FileTgt;
 
       ***** Open destination file *****

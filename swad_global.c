@@ -41,6 +41,7 @@
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_icon.h"
+#include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
@@ -103,6 +104,9 @@ void Gbl_InitializeGlobals (void)
    srand ((unsigned int) Gbl.StartExecutionTimeUTC);	// Initialize seed for rand()
 
    Gbl.WebService.IsWebService = false;
+
+   Gbl.ContentLength = 0;
+   Gbl.QueryString = NULL;
 
    Gbl.F.Out = stdout;
    Gbl.F.Tmp = NULL;
@@ -468,4 +472,5 @@ void Gbl_Cleanup (void)
    if (Gbl.F.Tmp)
       fclose (Gbl.F.Tmp);
    Fil_CloseXMLFile ();
+   Par_FreeQueryString ();
   }

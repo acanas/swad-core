@@ -702,7 +702,8 @@ struct Globals
          float MaxPercent;
         } DegPhotos;
      } Stat;
-   char QueryString[Cns_MAX_LENGTH_ARGS_SENT_TO_CGI+1]; // String with the arguments sent to the CGI
+   size_t ContentLength;
+   char *QueryString; // String allocated dynamically with the arguments sent to the CGI
   };
 
 /*****************************************************************************/

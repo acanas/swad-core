@@ -131,17 +131,22 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Fix bug in marks reported by Francisco Ocaña
 
+// TODO: Optimize reading of parameters by doing one unique pass creating a dynamic list of parameters and their values
+//       This is very important when there is a big file in the middle of the list of parameters
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.166 (2016-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.167 (2016-03-29)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.167:   Mar 30, 2016	Query string is allocated to the exact needed size to optimize memory. (196998 lines)
+        Version 15.166.1: Mar 30, 2016	Fixed bug while reading a parameter. (196959 lines)
         Version 15.166:   Mar 30, 2016	Changes in form to edit a test question.
 					Fixed bug while reading a parameter. (196943 lines)
         Version 15.165.8: Mar 30, 2016	Changes related to image in test questions. (196896 lines)

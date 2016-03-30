@@ -47,6 +47,7 @@ typedef enum
 /*****************************************************************************/
 
 bool Par_GetQueryString (void);
+void Par_FreeQueryString (void);
 void Par_GetMainParameters (void);
 
 unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
