@@ -157,8 +157,21 @@ bool Par_GetQueryString (void)
 /***************** Free memory allocated for query string ********************/
 /*****************************************************************************/
 
-void Par_FreeQueryString (void)
+void Par_FreeParams (void)
   {
+   struct Param *Param;
+   struct Param *NextParam;
+
+   /***** Free list of parameters *****/
+   for (Param = Gbl.Params.List;
+	Param != NULL;
+	Param = NextParam)
+     {
+      NextParam = Param->Next;
+      free ((void *) Param);
+     }
+
+   /***** Free query string *****/
    if (Gbl.Params.QueryString)
       free ((void *) Gbl.Params.QueryString);
   }

@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.168 (2016-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.168.1 (2016-03-30)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.168.1: Mar 30, 2016	Fixed bug in list o parameters. (197097 lines)
         Version 15.168:   Mar 30, 2016	When content is normal, all parameters are retrieved in a list. (197085 lines)
         Version 15.167:   Mar 30, 2016	Query string is allocated to the exact needed size to optimize memory. (196998 lines)
         Version 15.166.1: Mar 30, 2016	Fixed bug while reading a parameter. (196959 lines)

@@ -473,5 +473,5 @@ void Gbl_Cleanup (void)
    if (Gbl.F.Tmp)
       fclose (Gbl.F.Tmp);
    Fil_CloseXMLFile ();
-   Par_FreeQueryString ();
+   Par_FreeParams ();
   }
