@@ -236,8 +236,13 @@ etc, etc.
 void Fil_StartReceptionOfFile (char *SrcFileName,char *MIMEType)
   {
    char *Ptr;
-   int Ch,i;
-
+   int Ch;
+   int i;
+/*
+   struct Param *Param;
+   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,SrcFileName,
+                     PATH_MAX,Param);
+*/
    /* At this point, a heading has been read from Gbl.F.Tmp
       with all the variables passed by form */
    rewind (Gbl.F.Tmp);

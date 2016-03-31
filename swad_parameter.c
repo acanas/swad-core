@@ -534,6 +534,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    unsigned NumTimes;
    bool ParamFound = false;
    unsigned ParamNameLength;
+   struct StartLength CopyValueFrom;
 
    /***** Default values returned *****/
    ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
@@ -623,9 +624,23 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 				 Param->Value.Length);
 			break;
 		     case Act_CONTENT_DATA:
-			fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
-			if (fread (PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) != Param->Value.Length)
+			if (Param->Filename.Start)	// It's a file
+			  {
+			   /* Copy filename in ParamValue */
+			   CopyValueFrom.Start  = Param->Filename.Start;
+			   CopyValueFrom.Length = Param->Filename.Length;
+			  }
+			else				// It's a normal parameter
+			  {
+			   /* Copy value in ParamValue */
+			   CopyValueFrom.Start  = Param->Value.Start;
+			   CopyValueFrom.Length = Param->Value.Length;
+			  }
+			fseek (Gbl.F.Tmp,CopyValueFrom.Start,SEEK_SET);
+			if (fread (PtrDst,sizeof (char),CopyValueFrom.Length,Gbl.F.Tmp) !=
+			    CopyValueFrom.Length)
 			   Lay_ShowErrorAndExit ("Error while getting value of parameter.");
+
 			break;
 		    }
 		  BytesAlreadyCopied += Param->Value.Length;
