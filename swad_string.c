@@ -2502,6 +2502,7 @@ If StrDelimit is not found, return -1.
 */
 
 #define MAX_LENGTH_STR_DELIMIT 100
+
 int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, const char *StrDelimit, unsigned long long MaxLength)
   {
    int NumBytesIdentical,		// Number of characters identical in each iteration of the loop
@@ -2574,55 +2575,6 @@ int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, 
       if (StrDst != NULL)
 	 *Ptr++ = (char) Buffer[StartIndex];
       LengthDst++;
-      NumBytesReadButNoWritten--;
-      StartIndex = (StartIndex+1) % LengthStrDelimit;
-     }
-
-   return 0;	// Not reached
-  }
-
-int Str_SkipFileUntilDelimitStr (FILE *FileSrc, const char *StrDelimit)
-  {
-   int NumBytesIdentical;		// Number of characters identical in each iteration of the loop
-   int NumBytesReadButNoWritten = 0;	// Number of characters read from the source file
-					// and not written in the destination file
-   int LengthStrDelimit = strlen (StrDelimit);
-   int Buffer[MAX_LENGTH_STR_DELIMIT+1];
-   int StartIndex = 0;
-   int i;
-
-   if (LengthStrDelimit == 0 ||
-       LengthStrDelimit > MAX_LENGTH_STR_DELIMIT)
-      Lay_ShowErrorAndExit ("Wrong delimiter string.");
-
-   for (;;)
-     {
-      if (!NumBytesReadButNoWritten)
-	{      // Read next character
-	 Buffer[StartIndex] = fgetc (FileSrc);
-	 if (feof (FileSrc))
-	    return -1;
-	 NumBytesReadButNoWritten++;
-	}
-      if (Buffer[StartIndex] == (int) StrDelimit[0]) // First character identical
-	{
-	 for (NumBytesIdentical = 1, i = (StartIndex + 1) % LengthStrDelimit;
-	      NumBytesIdentical < LengthStrDelimit;
-	      NumBytesIdentical++, i = (i + 1) % LengthStrDelimit)
-	   {
-	    if (NumBytesReadButNoWritten == NumBytesIdentical) // Next character identical
-	      {
-	       Buffer[i] = fgetc (FileSrc);  // Read next character
-	       if (feof (FileSrc))
-		  return -1;
-	       NumBytesReadButNoWritten++;
-	      }
-	    if (Buffer[i] != (int) StrDelimit[NumBytesIdentical])  // Next different character
-	       break;
-	   }
-	 if (NumBytesIdentical == LengthStrDelimit) // Str found
-	    return 1;
-	}
       NumBytesReadButNoWritten--;
       StartIndex = (StartIndex+1) % LengthStrDelimit;
      }

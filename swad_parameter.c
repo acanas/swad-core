@@ -62,6 +62,7 @@ extern struct Globals Gbl;
 static void Par_CreateListOfParams (void);
 static void Par_CreateListOfParamsFromQueryString (void);
 static void Par_CreateListOfParamsFromTmpFile (void);
+static bool Par_ReadTmpFileUntilDelimitStr (void);
 static int Par_ReadTmpFileUntilQuote (void);
 static int Par_ReadTmpFileUntilReturn (void);
 
@@ -125,8 +126,15 @@ bool Par_GetQueryString (void)
 			        "\r\n-----------------------------7d13ca2e948"
          I.e. 0x0D, 0x0A, '-', '-', and boundary.
          */
-         sprintf (Gbl.DelimiterString,"--%s",strstr (getenv ("CONTENT_TYPE"),"boundary=") + strlen ("boundary="));
+         sprintf (Gbl.DelimiterString,"--%s",
+                  strstr (getenv ("CONTENT_TYPE"),"boundary=") + strlen ("boundary="));
+         Gbl.LengthDelimiterString = strlen (Gbl.DelimiterString);
+         if (Gbl.LengthDelimiterString == 0 ||
+             Gbl.LengthDelimiterString > Par_MAX_LENGTH_STR_DELIMIT)
+            Lay_ShowErrorAndExit ("Wrong delimiter string.");
+
          sprintf (Gbl.DelimiterStringIncludingInitialRet,"%c%c%s",0x0D,0x0A,Gbl.DelimiterString);
+
          return Fil_ReadStdinIntoTmpFile ();
         }
       else if (!strncmp (ContentType,"text/xml",strlen ("text/xml")))
@@ -151,11 +159,12 @@ bool Par_GetQueryString (void)
         }
      }
 
-   if (Gbl.ContentReceivedByCGI == Act_CONTENT_NORM)
-      Par_CreateListOfParams ();
+   /***** Create list of parameters *****/
+   Par_CreateListOfParams ();
 
    return true;
   }
+
 /*****************************************************************************/
 /************************ Create list of parameters **************************/
 /*****************************************************************************/
@@ -184,15 +193,20 @@ List --> |Name.Start        |    -> |Name.Start        |
 
 static void Par_CreateListOfParams (void)
   {
-   switch (Gbl.ContentReceivedByCGI)
-     {
-      case Act_CONTENT_NORM:
-	 Par_CreateListOfParamsFromQueryString ();
-         break;
-      case Act_CONTENT_DATA:
-	 Par_CreateListOfParamsFromTmpFile ();
-         break;
-     }
+   /***** Initialize empty list of parameters *****/
+   Gbl.Params.List = NULL;
+
+   /***** Get list *****/
+   if (Gbl.Params.ContentLength)
+      switch (Gbl.ContentReceivedByCGI)
+	{
+	 case Act_CONTENT_NORM:
+	    Par_CreateListOfParamsFromQueryString ();
+	    break;
+	 case Act_CONTENT_DATA:
+	    Par_CreateListOfParamsFromTmpFile ();
+	    break;
+	}
   }
 
 /*****************************************************************************/
@@ -206,13 +220,8 @@ static void Par_CreateListOfParamsFromQueryString (void)
    struct Param *NewParam;
 
    /***** Check if query string is empty *****/
-   Gbl.Params.List = NULL;
-   if (!Gbl.Params.ContentLength)
-      return;
-   if (Gbl.Params.QueryString == NULL)
-      return;
-   if (!Gbl.Params.QueryString[0])
-      return;
+   if (!Gbl.Params.QueryString)    return;
+   if (!Gbl.Params.QueryString[0]) return;
 
    /***** Go over the query string
           getting start positions and lengths of parameters *****/
@@ -262,41 +271,31 @@ static void Par_CreateListOfParamsFromQueryString (void)
 // TODO: Rename Gbl.F.Tmp to Gbl.F.In (InFile, QueryFile)?
 
 #define Par_MAX_BYTES_STR_AUX		1024
+#define Par_LENGTH_OF_STR_BEFORE_PARAM	  38	// Length of "Content-Disposition: form-data; name=\""
+#define Par_LENGTH_OF_STR_FILENAME	  12	// Length of "; filename=\""
+#define Par_LENGTH_OF_STR_CONTENT_TYPE	  14	// Length of "Content-Type: "
 
 static void Par_CreateListOfParamsFromTmpFile (void)
   {
    static const char *StringBeforeParam = "Content-Disposition: form-data; name=\"";
-#define Par_LENGTH_OF_STR_BEFORE_PARAM	  38	// Length of "Content-Disposition: form-data; name=\""
    static const char *StringFilename = "; filename=\"";
-#define Par_LENGTH_OF_STR_FILENAME	  12	// Length of "; filename=\""
    static const char *StringContentType = "Content-Type: ";
-#define Par_LENGTH_OF_STR_CONTENT_TYPE	  14	// Length of "Content-Type: "
-
-   unsigned long CurPos;	// Current position in query string
+   unsigned long CurPos;	// Current position in temporal file
    struct Param *Param;
    struct Param *NewParam;
-   int Result;
    int Ch;
    char StrAux[Par_MAX_BYTES_STR_AUX+1];
 
-   /***** Check if file is empty *****/
-   Gbl.Params.List = NULL;
-   if (!Gbl.Params.ContentLength)
-      return;
-
    /***** Go over the file
           getting start positions and lengths of parameters *****/
-   Result = Str_SkipFileUntilDelimitStr (Gbl.F.Tmp,Gbl.DelimiterString);
-   if (Result == 1)	// Delimiter string found
+   if (Par_ReadTmpFileUntilDelimitStr ())	// Delimiter string found
       for (CurPos = 0;
 	   CurPos < Gbl.Params.ContentLength;
 	   )
 	{
 	 /***** Skip \r\n after delimiter string *****/
-	 if (fgetc (Gbl.F.Tmp) != 0x0D)	// '\r'
-	    break;
-	 if (fgetc (Gbl.F.Tmp) != 0x0A)	// '\n'
-	    break;
+	 if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
+	 if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
 
 	 Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
 	                                          Par_LENGTH_OF_STR_BEFORE_PARAM);
@@ -323,8 +322,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    Param->Name.Length = CurPos - Param->Name.Start;
 
 	    /* Check if last character read after parameter name is a quote */
-	    if (Ch != (int) '\"')
-	       break;
+	    if (Ch != (int) '\"') break;		// '\"'
 
 	    /* Get next char after parameter name */
 	    Ch = fgetc (Gbl.F.Tmp);
@@ -344,14 +342,11 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 		  Param->Filename.Length = CurPos - Param->Filename.Start;
 
 		  /* Check if last character read after filename is a quote */
-		  if (Ch != (int) '\"')
-		     break;
+		  if (Ch != (int) '\"') break;		// '\"'
 
 		  /* Skip \r\n */
-		  if (fgetc (Gbl.F.Tmp) != 0x0D)	// '\r'
-		     break;
-		  if (fgetc (Gbl.F.Tmp) != 0x0A)	// '\n'
-		     break;
+		  if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
+		  if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
 
 		  /* Check if Content-Type is present */
 		  Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
@@ -370,29 +365,74 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
 	    /***** Now \r\n\r\n is expected just before parameter value or file content *****/
 	    /* Check if last character read is '\r' */
-	    if (Ch != 0x0D)
-	       break;
+	    if (Ch != 0x0D) break;			// '\r'
 
 	    /* Skip \n\r\n */
-	    if (fgetc (Gbl.F.Tmp) != 0x0A)	// '\n'
-	       break;
-	    if (fgetc (Gbl.F.Tmp) != 0x0D)	// '\r'
-	       break;
-	    if (fgetc (Gbl.F.Tmp) != 0x0A)	// '\n'
-	       break;
+	    if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
+	    if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
+	    if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
 
 	    /***** Get parameter value or file content *****/
 	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);
-	    Result = Str_SkipFileUntilDelimitStr (Gbl.F.Tmp,Gbl.DelimiterString);
-	    if (Result != 1)	// Delimiter string not found
-	       break;
+	    if (!Par_ReadTmpFileUntilDelimitStr ()) break;	// Delimiter string not found
 
 	    // Delimiter string found
 	    Param->Value.Start = CurPos;
-	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);
-	    Param->Value.Length = CurPos - Param->Filename.Start;
+	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after delimiter string
+	    Param->Value.Length = CurPos - Gbl.LengthDelimiterString -
+		                  Param->Filename.Start;
 	   }
         }
+  }
+
+/*****************************************************************************/
+/******************** Read from file until quote '\"' ************************/
+/*****************************************************************************/
+// Return true if delimiter string is found.
+// File is positioned just after the last character in delimiter string
+
+static bool Par_ReadTmpFileUntilDelimitStr (void)
+  {
+   unsigned NumBytesIdentical;		// Number of characters identical in each iteration of the loop
+   unsigned NumBytesReadButNoWritten = 0;	// Number of characters read from the source file
+					// and not written in the destination file
+   int Buffer[Par_MAX_LENGTH_STR_DELIMIT+1];
+   unsigned StartIndex = 0;
+   unsigned i;
+
+   for (;;)
+     {
+      if (!NumBytesReadButNoWritten)
+	{      // Read next character
+	 Buffer[StartIndex] = fgetc (Gbl.F.Tmp);
+	 if (feof (Gbl.F.Tmp))
+	    return false;
+	 NumBytesReadButNoWritten++;
+	}
+      if (Buffer[StartIndex] == (int) Gbl.DelimiterString[0]) // First character identical
+	{
+	 for (NumBytesIdentical = 1, i = (StartIndex + 1) % Gbl.LengthDelimiterString;
+	      NumBytesIdentical < Gbl.LengthDelimiterString;
+	      NumBytesIdentical++, i = (i + 1) % Gbl.LengthDelimiterString)
+	   {
+	    if (NumBytesReadButNoWritten == NumBytesIdentical) // Next character identical
+	      {
+	       Buffer[i] = fgetc (Gbl.F.Tmp);  // Read next character
+	       if (feof (Gbl.F.Tmp))
+		  return false;
+	       NumBytesReadButNoWritten++;
+	      }
+	    if (Buffer[i] != (int) Gbl.DelimiterString[NumBytesIdentical])  // Next different character
+	       break;
+	   }
+	 if (NumBytesIdentical == Gbl.LengthDelimiterString) // Str found
+	    return true;
+	}
+      NumBytesReadButNoWritten--;
+      StartIndex = (StartIndex + 1) % Gbl.LengthDelimiterString;
+     }
+
+   return false;	// Not reached
   }
 
 /*****************************************************************************/

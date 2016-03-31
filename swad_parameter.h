@@ -34,6 +34,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+#define Par_MAX_LENGTH_STR_DELIMIT 100
+
 struct StartLength
   {
    unsigned long Start;

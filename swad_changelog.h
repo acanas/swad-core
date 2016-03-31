@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.169 (2016-03-31)"
+#define Log_PLATFORM_VERSION	"SWAD 15.169.1 (2016-03-31)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.169.1: Mar 31, 2016	Code refactoring in list of parameters. (197298 lines)
         Version 15.169:   Mar 31, 2016	When content is data, all parameters are retrieved in a list. (197306 lines)
         Version 15.168.3: Mar 30, 2016	Code refactoring in list of parameters. (197124 lines)
         Version 15.168.2: Mar 30, 2016	Code refactoring in list of parameters. (197128 lines)
