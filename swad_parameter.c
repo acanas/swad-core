@@ -67,6 +67,8 @@ static bool Par_ReadTmpFileUntilDelimitStr (const char *BoundaryStr,unsigned Len
 static int Par_ReadTmpFileUntilQuote (void);
 static int Par_ReadTmpFileUntilReturn (void);
 
+static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
+
 /*****************************************************************************/
 /*** Read all parameters passed to this CGI and store for later processing ***/
 /*****************************************************************************/
@@ -301,20 +303,6 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    int Ch;
    char StrAux[Par_MAX_BYTES_STR_AUX+1];
 
-
-
-   char Aux[1024*1024];
-   unsigned long i;
-   rewind (Gbl.F.Tmp);	// !!!!!!!!!!!!!!!
-   for (i=0; i<Gbl.Params.ContentLength; i++)
-      Aux[i] = fgetc (Gbl.F.Tmp);
-   Aux[Gbl.Params.ContentLength] = '\0';
-   rewind (Gbl.F.Tmp);	// !!!!!!!!!!!!!!!
-   Lay_ShowAlert (Lay_INFO,Aux);
-
-
-
-
    /***** Go over the file
           getting start positions and lengths of parameters *****/
    if (Par_ReadTmpFileUntilDelimitStr (Gbl.Boundary.StrWithoutCRLF,
@@ -350,11 +338,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    Ch = Par_ReadTmpFileUntilQuote ();
 	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after quote
 	    Param->Name.Length = CurPos - 1 - Param->Name.Start;
-/*
-	    sprintf (Gbl.Message,"Param->Name.Start = %ld Param->Name.Length = %ld",
-	             Param->Name.Start,Param->Name.Length);
-	    Lay_ShowAlert (Lay_INFO,Gbl.Message);	// !!!!!!!!!!!!!!!!!!!
-*/
+
 	    /* Check if last character read after parameter name is a quote */
 	    if (Ch != (int) '\"') break;		// '\"'
 
@@ -543,23 +527,12 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    bool ParamFound = false;
    unsigned ParamNameLength;
 
-   char Ch;
-
    ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
 
    /***** Only some selected parameters can be passed by GET method *****/
    if (Gbl.Params.GetMethod)
-      if (strcmp (ParamName,"cty") &&	// To enter directly to a country
-	  strcmp (ParamName,"ins") &&	// To enter directly to an institution
-	  strcmp (ParamName,"ctr") &&	// To enter directly to a centre
-	  strcmp (ParamName,"deg") &&	// To enter directly to a degree
-	  strcmp (ParamName,"crs") &&	// To enter directly to a course
-	  // strcmp (ParamName,"CrsCod") &&	// To enter directly to a course (allowed for compatibility with old links, to be removed in 2016)
-	  strcmp (ParamName,"usr") &&	// To enter directly to a user
-	  strcmp (ParamName,"act") &&	// To execute directly an action (allowed only for fully public actions)
-	  strcmp (ParamName,"ses") &&	// To use an open session when redirecting from one language to another
-	  strcmp (ParamName,"key"))	// To verify an email address
-	 return 0;	// Return no-parameters-found when method is GET and parameter name is not one of these
+      if (!Par_CheckIsParamCanBeUsedInGETMethod (ParamName))
+	 return 0;	// Return no-parameters-found
 
    ParamNameLength = strlen (ParamName);
 
@@ -575,24 +548,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	   Param != NULL && !ParamFound;
 	   Param = Param->Next)
 	{
-	    if (Gbl.ContentReceivedByCGI == Act_CONTENT_DATA)
-	      {
-	       sprintf (Gbl.Message,"ParamName = %s Param->Name.Length = %lu",
-	                ParamName,Param->Name.Length);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-	      }
-
 	 if (Param->Name.Length == ParamNameLength)
 	   {
-
-
-	    if (Gbl.ContentReceivedByCGI == Act_CONTENT_DATA)
-	      {
-	       sprintf (Gbl.Message,"Param->Name.Length == ParamNameLength = %lu",Param->Name.Length);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-	      }
-
-
 	    // The current element in the list has the length of the searched parameter
 	    // Check if the name of the parameter is the same
 	    switch (Gbl.ContentReceivedByCGI)
@@ -603,35 +560,11 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  break;
 	       case Act_CONTENT_DATA:
 		  fseek (Gbl.F.Tmp,Param->Name.Start,SEEK_SET);
-
-		     sprintf (Gbl.Message,"Param->Name.Start = %lu",
-		              Param->Name.Start);
-		     Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-
 		  for (i = 0, ParamFound = true;
 		       i < Param->Name.Length && ParamFound;
 		       i++)
-		    {
-		     sprintf (Gbl.Message,"ParamName[%u] = %c",
-		              i,ParamName[i]);
-		     Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-
-		     Ch = (char) fgetc (Gbl.F.Tmp);
-
-		     sprintf (Gbl.Message,"(char) fgetc (Gbl.F.Tmp) = %c",
-		              Ch);
-		     Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-
-		     // if (ParamName[i] != (char) fgetc (Gbl.F.Tmp))
-		     if (ParamName[i] != Ch)
+		     if (ParamName[i] != (char) fgetc (Gbl.F.Tmp))
 			ParamFound = false;
-		    }
-
-		  if (ParamFound)
-		    {
-		     sprintf (Gbl.Message,"Found! ParamName = %s",ParamName);
-		     Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-		    }
 		  break;
 	      }
 
@@ -677,11 +610,6 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 			fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
 			if (fread (PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) != Param->Value.Length)
 			   Lay_ShowErrorAndExit ("Error while getting value of parameter.");
-
-		  sprintf (Gbl.Message,"ParamName = %s Param->Value.Start = %lu Param->Value.Length = %lu",
-			   ParamName,Param->Value.Start,Param->Value.Length);
-		  Lay_ShowAlert (Lay_INFO,Gbl.Message);	// Remove !!!!!!!!!!!
-
 			break;
 		    }
 		  BytesAlreadyCopied += Param->Value.Length;
@@ -695,6 +623,35 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    *PtrDst = '\0'; // Add the final NULL
 
    return NumTimes;
+  }
+
+/*****************************************************************************/
+/*************** Check if parameter can be used in GET method ****************/
+/*****************************************************************************/
+
+static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
+  {
+   static const char *ValidParamsInGETMethod[] =
+     {
+      "cty",	// To enter directly to a country
+      "ins",	// To enter directly to an institution
+      "ctr",	// To enter directly to a centre
+      "deg",	// To enter directly to a degree
+      "crs",	// To enter directly to a course
+      "usr",	// To enter directly to a user
+      "act",	// To execute directly an action (allowed only for fully public actions)
+      "ses",	// To use an open session when redirecting from one language to another
+      "key",	// To verify an email address
+     };
+#define NUM_VALID_PARAMS (sizeof (ValidParamsInGETMethod) / sizeof (ValidParamsInGETMethod[0]))
+   unsigned i;
+
+   for (i = 0;
+	i < NUM_VALID_PARAMS;
+	i++)
+      if (!strcmp (ParamName,ValidParamsInGETMethod[i]))
+         return true;
+   return false;
   }
 
 /*****************************************************************************/
