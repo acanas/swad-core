@@ -321,6 +321,7 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    long Cod;
    const char *Folder;
    char Path[PATH_MAX+1];
+   struct Param *Param;
    char FileNameLogoSrc[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
@@ -365,7 +366,7 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNameLogoSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (FileNameLogoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"image/png"))
@@ -387,8 +388,8 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
 	       (unsigned) (Cod % 100),
 	       (unsigned) Cod,
 	       (unsigned) Cod);
-      if (!Fil_EndReceptionOfFile (FileNameLogo))
-	 Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+      if (!Fil_EndReceptionOfFile (FileNameLogo,Param))
+	 Lay_ShowAlert (Lay_WARNING,"Error copying file.");
      }
   }
 

@@ -2008,6 +2008,7 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_Found_an_index_htm_file;
    extern const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
+   struct Param *Param;
    char SourceFileName[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
@@ -2020,7 +2021,7 @@ void Inf_ReceivePagInfo (void)
    Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** First of all, store in disk the file from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (SourceFileName,MIMEType);
+   Param = Fil_StartReceptionOfFile (SourceFileName,MIMEType);
 
    /***** Check that MIME type is HTML or ZIP *****/
    if (strcmp (MIMEType,"text/html"))
@@ -2048,7 +2049,7 @@ void Inf_ReceivePagInfo (void)
          Brw_RemoveTree (PathWebPage);
          Fil_CreateDirIfNotExists (PathWebPage);
          sprintf (PathRelFileHTML,"%s/index.html",PathWebPage);
-         if (Fil_EndReceptionOfFile (PathRelFileHTML))
+         if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
            {
             Lay_ShowAlert (Lay_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
             FileIsOK = true;
@@ -2060,7 +2061,7 @@ void Inf_ReceivePagInfo (void)
         {
          Brw_RemoveTree (PathWebPage);
          Fil_CreateDirIfNotExists (PathWebPage);
-         if (Fil_EndReceptionOfFile (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP))
+         if (Fil_EndReceptionOfFile (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP,Param))
            {
             Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 

@@ -8380,6 +8380,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    extern const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML;
+   struct Param *Param;
    char SrcFileName[PATH_MAX+1];
    char PathUntilFileName[PATH_MAX+1];
    char Path[PATH_MAX+1];
@@ -8404,7 +8405,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** First, we save in disk the file from stdin (really from Gbl.F.Tmp) *****/
-      Fil_StartReceptionOfFile (SrcFileName,MIMEType);
+      Param = Fil_StartReceptionOfFile (SrcFileName,MIMEType);
 
       /***** Get filename from path *****/
       // Spaces at start or end are allowed
@@ -8437,7 +8438,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                  {
                   /* End receiving the file */
                   sprintf (PathTmp,"%s.tmp",Path);
-                  FileIsValid = Fil_EndReceptionOfFile (PathTmp);	// Gbl.Message contains feedback text
+                  FileIsValid = Fil_EndReceptionOfFile (PathTmp,Param);	// Gbl.Message contains feedback text
 
                   /* Check if the content of the file of marks is valid */
                   if (FileIsValid)

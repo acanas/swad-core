@@ -192,9 +192,9 @@ List --> |Name.Start        |    -> |Name.Start        |
          +------------------+   /   +------------------+
          |Name.Length       |  |    |Name.Length       |
          +------------------+  |    +------------------+
-         |Filename.Start    |  |    |Filename.Start    |
+         |FileName.Start    |  |    |FileName.Start    |
          +------------------+  |    +------------------+
-         |Filename.Lenght   |  |    |Filename.Lenght   |
+         |FileName.Lenght   |  |    |FileName.Lenght   |
          +------------------+  .    +------------------+
          |ContentType.Start |  .    |ContentType.Start |
          +------------------+  .    +------------------+
@@ -354,10 +354,10 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 		 {
 		  /* Get filename */
 		  CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of filename
-		  Param->Filename.Start = CurPos;
+		  Param->FileName.Start = CurPos;
 		  Ch = Par_ReadTmpFileUntilQuote ();
 		  CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after quote
-		  Param->Filename.Length = CurPos - 1 - Param->Filename.Start;
+		  Param->FileName.Length = CurPos - 1 - Param->FileName.Start;
 
 		  /* Check if last character read after filename is a quote */
 		  if (Ch != (int) '\"') break;		// '\"'
@@ -525,7 +525,7 @@ void Par_FreeParams (void)
 
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes,
-                           struct Param *ParamPtr)	// NULL is not used
+                           struct Param **ParamPtr)	// NULL if not used
   {
    size_t BytesAlreadyCopied = 0;
    unsigned i;
@@ -534,7 +534,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    unsigned NumTimes;
    bool ParamFound = false;
    unsigned ParamNameLength;
-   struct StartLength CopyValueFrom;
+   struct StartLength Copy;
+   bool FindMoreThanOneOcurrence;
 
    /***** Default values returned *****/
    ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
@@ -547,12 +548,12 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    /***** Initializations *****/
    ParamNameLength = strlen (ParamName);
    PtrDst = ParamValue;
+   FindMoreThanOneOcurrence = (ParamType == Par_PARAM_MULTIPLE);
 
    /***** For multiple parameters, loop for any ocurrence of the parameter
           For unique parameter, find only the first ocurrence *****/
    for (Param = Gbl.Params.List, NumTimes = 0;
-	Param != NULL &&
-	(ParamType == Par_PARAM_MULTIPLE || NumTimes < 1);
+	Param != NULL && (FindMoreThanOneOcurrence || NumTimes < 1);
 	NumTimes++)
       /***** Find next ocurrence of parameter in list of parameters *****/
       for (ParamFound = false;
@@ -585,7 +586,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		 {
 		  /***** Get the first ocurrence of this parameter in list *****/
 		  if (ParamPtr)
-		     ParamPtr = Param;
+		     *ParamPtr = Param;
 		 }
 	       else			// Not the first ocurrence of this parameter
 		 {
@@ -607,8 +608,21 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	       /***** Copy parameter value *****/
 	       if (Param->Value.Length)
 		 {
+		  if (Param->FileName.Start != 0)	// It's a file
+		    {
+		     /* Copy filename into ParamValue */
+		     Copy.Start  = Param->FileName.Start;
+		     Copy.Length = Param->FileName.Length;
+		    }
+		  else					// It's a normal parameter
+		    {
+		     /* Copy value into ParamValue */
+		     Copy.Start  = Param->Value.Start;
+		     Copy.Length = Param->Value.Length;
+		    }
+
 		  /* Check if there is space to copy the parameter value */
-		  if (BytesAlreadyCopied + Param->Value.Length > MaxBytes)
+		  if (BytesAlreadyCopied + Copy.Length > MaxBytes)
 		    {
 		     sprintf (Gbl.Message,"Parameter <strong>%s</strong> too large,"
 					  " it exceed the maximum allowed size (%lu bytes).",
@@ -620,31 +634,19 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  switch (Gbl.ContentReceivedByCGI)
 		    {
 		     case Act_CONTENT_NORM:
-			strncpy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
-				 Param->Value.Length);
+			strncpy (PtrDst,&Gbl.Params.QueryString[Copy.Start],
+				 Copy.Length);
 			break;
 		     case Act_CONTENT_DATA:
-			if (Param->Filename.Start)	// It's a file
-			  {
-			   /* Copy filename in ParamValue */
-			   CopyValueFrom.Start  = Param->Filename.Start;
-			   CopyValueFrom.Length = Param->Filename.Length;
-			  }
-			else				// It's a normal parameter
-			  {
-			   /* Copy value in ParamValue */
-			   CopyValueFrom.Start  = Param->Value.Start;
-			   CopyValueFrom.Length = Param->Value.Length;
-			  }
-			fseek (Gbl.F.Tmp,CopyValueFrom.Start,SEEK_SET);
-			if (fread (PtrDst,sizeof (char),CopyValueFrom.Length,Gbl.F.Tmp) !=
-			    CopyValueFrom.Length)
+			fseek (Gbl.F.Tmp,Copy.Start,SEEK_SET);
+			if (fread ((void *) PtrDst,sizeof (char),Copy.Length,Gbl.F.Tmp) !=
+			    Copy.Length)
 			   Lay_ShowErrorAndExit ("Error while getting value of parameter.");
 
 			break;
 		    }
-		  BytesAlreadyCopied += Param->Value.Length;
-		  PtrDst += Param->Value.Length;
+		  BytesAlreadyCopied += Copy.Length;
+		  PtrDst += Copy.Length;
 		 }
 	      }
 	   }

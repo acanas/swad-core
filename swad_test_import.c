@@ -386,6 +386,7 @@ void TsI_ImportQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
    char PathTestPriv[PATH_MAX+1];
+   struct Param *Param;
    char FileNameXMLSrc[PATH_MAX+1];
    char FileNameXMLTmp[PATH_MAX+1];	// Full name (including path and .xml) of the destination temporary file
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
@@ -399,7 +400,7 @@ void TsI_ImportQstsFromXML (void)
    Fil_RemoveOldTmpFiles (PathTestPriv,Cfg_TIME_TO_DELETE_TEST_TMP_FILES,false);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNameXMLSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (FileNameXMLSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"text/xml"))
@@ -418,11 +419,11 @@ void TsI_ImportQstsFromXML (void)
      {
       /* End the reception of XML in a temporary file */
       sprintf (FileNameXMLTmp,"%s/%s.xml",PathTestPriv,Gbl.UniqueNameEncrypted);
-      if (Fil_EndReceptionOfFile (FileNameXMLTmp))
+      if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
       else
-         Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+         Lay_ShowAlert (Lay_WARNING,"Error copying file.");
      }
   }
 

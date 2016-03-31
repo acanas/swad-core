@@ -2054,6 +2054,7 @@ void Ctr_ReceivePhoto (void)
   {
    extern const char *Txt_Wrong_file_type;
    char Path[PATH_MAX+1];
+   struct Param *Param;
    char FileNameImgSrc[PATH_MAX+1];
    char *PtrExtension;
    size_t LengthExtension;
@@ -2066,7 +2067,7 @@ void Ctr_ReceivePhoto (void)
    int ReturnCode;
 
    /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */
    if (strncmp (MIMEType,"image/",strlen ("image/")))
@@ -2109,9 +2110,9 @@ void Ctr_ReceivePhoto (void)
    sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
             Gbl.UniqueNameEncrypted,PtrExtension);
-   if (!Fil_EndReceptionOfFile (FileNameImgTmp))
+   if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
      {
-      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+      Lay_ShowAlert (Lay_WARNING,"Error copying file.");
       return;
      }
 

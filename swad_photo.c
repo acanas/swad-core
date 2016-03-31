@@ -450,6 +450,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    extern const char *Txt_Faces_detected;
    char PathPhotosPriv[PATH_MAX+1];
    char PathPhotosPubl[PATH_MAX+1];
+   struct Param *Param;
    char FileNamePhotoSrc[PATH_MAX+1];
    char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
    char FileNamePhotoMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the original image with faces
@@ -497,7 +498,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    Fil_RemoveOldTmpFiles (PathPhotosPubl,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,false);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"image/jpeg"))
@@ -517,9 +518,9 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    sprintf (FileNamePhotoTmp,"%s/%s/%s/%s.jpg",
             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
             Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
-   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp))
+   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
-      Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+      Lay_ShowAlert (Lay_WARNING,"Error copying file.");
       return;
      }
 

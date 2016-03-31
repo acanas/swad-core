@@ -44,8 +44,8 @@ struct StartLength
 struct Param
   {
    struct StartLength Name;		// Parameter name
-   struct StartLength Filename;		// optional
-   struct StartLength ContentType;	// optional
+   struct StartLength FileName;		// optional, present only when uploading files
+   struct StartLength ContentType;	// optional, present only when uploading files
    struct StartLength Value;		// Parameter value or file content
    struct Param *Next;
   };
@@ -67,7 +67,7 @@ void Par_CreateListOfParams (void);
 void Par_FreeParams (void);
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes,
-                           struct Param *ParamPtr);
+                           struct Param **ParamPtr);
 
 void Par_GetMainParameters (void);
 

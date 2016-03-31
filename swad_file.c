@@ -54,6 +54,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define NUM_BYTES_PER_CHUNK 4096
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -233,85 +235,75 @@ Content-Type: image/pjpeg
 000020  03030304 03030405 08050504 04050A07  ················
 etc, etc.
 */
-void Fil_StartReceptionOfFile (char *SrcFileName,char *MIMEType)
+struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
   {
-   char *Ptr;
-   int Ch;
-   int i;
-/*
    struct Param *Param;
-   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,SrcFileName,
-                     PATH_MAX,Param);
-*/
-   /* At this point, a heading has been read from Gbl.F.Tmp
-      with all the variables passed by form */
-   rewind (Gbl.F.Tmp);
-   if (!Str_FindStrInFile (Gbl.F.Tmp,Fil_NAME_OF_PARAM_FILENAME_ORG,Str_NO_SKIP_HTML_COMMENTS))
-     {
-      sprintf (Gbl.Message,"Error uploading file: parameter <strong>%s</strong> not found.",
-               Fil_NAME_OF_PARAM_FILENAME_ORG);
-      Lay_ShowErrorAndExit (Gbl.Message);
-     }
 
-   /* Go to the name of the source file */
-   if (!Str_FindStrInFile (Gbl.F.Tmp,"filename=\"",Str_NO_SKIP_HTML_COMMENTS))
-      Lay_ShowErrorAndExit ("Error uploading file: parameter &quot;filename&quot; not found.");
+   /***** Get filename *****/
+   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,FileName,
+                     PATH_MAX,&Param);
 
-   /* Get the name of the source file */
-   Ptr = SrcFileName;
-   while ((Ch = fgetc (Gbl.F.Tmp)) != (int) '\"')
-      *Ptr++ = Ch;
-   *Ptr = '\0';
+   /***** Get MIME type *****/
+   /* Check if MIME type exists */
+   if (Param->ContentType.Start == 0 ||
+       Param->ContentType.Length == 0 ||
+       Param->ContentType.Length > Brw_MAX_BYTES_MIME_TYPE)
+      Lay_ShowErrorAndExit ("Error while getting content type.");
 
-   /* Get and check the type of data */
-   if (!Str_FindStrInFile (Gbl.F.Tmp,"Content-Type:",Str_NO_SKIP_HTML_COMMENTS))
-      Lay_ShowErrorAndExit ("Error uploading file: &quot;Content-Type&quot; not found.");
+   /* Copy MIME type */
+   fseek (Gbl.F.Tmp,Param->ContentType.Start,SEEK_SET);
+   if (fread (MIMEType,sizeof (char),Param->ContentType.Length,Gbl.F.Tmp) !=
+       Param->ContentType.Length)
+      Lay_ShowErrorAndExit ("Error while getting content type.");
 
-   /* Skip spaces and get the type of file */
-   while (isspace (Ch = fgetc (Gbl.F.Tmp)));
-   for (i=0, Ptr = MIMEType;
-	!isspace (Ch) && i < Brw_MAX_BYTES_MIME_TYPE;
-	i++)
-     {
-      *Ptr++ = Str_ConvertToLowerLetter ((char) Ch);
-      Ch = fgetc (Gbl.F.Tmp);
-     }
-   *Ptr = '\0';
+   return Param;
   }
 
 /*****************************************************************************/
 /****************** End the reception of data of a file **********************/
 /*****************************************************************************/
 
-bool Fil_EndReceptionOfFile (char *FileNameDataTmp)
+bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
   {
    extern const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML;
    FILE *FileDataTmp;
-   int Result;  // Result of the reception of the file
+   unsigned char Bytes[NUM_BYTES_PER_CHUNK];
+   size_t RemainingBytesToCopy;
+   size_t BytesToCopy;
 
-   /***** Open a new file temporary *****/
+   /***** Open destination file *****/
    if ((FileDataTmp = fopen (FileNameDataTmp,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open temporary file.");
 
-   /***** Skip carriage returns, spaces, etc. *****/
-   Str_SkipSpacesInFile (Gbl.F.Tmp);
+   /***** Copy file *****/
+   /* Go to start of source */
+   if (Param->Value.Start == 0)
+      Lay_ShowErrorAndExit ("Error while copying file.");
+   fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
 
-   /* At this point, the data of the file begin */
-
-   /***** Write the file *****/
-   Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,FileDataTmp,(char *) NULL,
-	                                    Gbl.Boundary.StrWithCRLF,
-	                                    Fil_MAX_FILE_SIZE);
-   fclose (FileDataTmp);
-   if (Result != 1)
-     /* 0 ==> File too large; -1 ==> Unfinished transmission */
+   /* Copy part of Gbl.F.Tmp to FileDataTmp */
+   for (RemainingBytesToCopy = Param->Value.Length;
+	RemainingBytesToCopy != 0;
+	RemainingBytesToCopy -= BytesToCopy)
      {
-      unlink (FileNameDataTmp);
-      sprintf (Gbl.Message,Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML,
-               (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL)));
-      return false;	// Error
+      BytesToCopy = (RemainingBytesToCopy >= NUM_BYTES_PER_CHUNK) ? NUM_BYTES_PER_CHUNK :
+	                                                            RemainingBytesToCopy;
+      if (fread ((void *) Bytes,1,BytesToCopy,Gbl.F.Tmp) != BytesToCopy)
+	{
+         fclose (FileDataTmp);
+	 return false;
+	}
+      if (fwrite ((void *) Bytes,sizeof (Bytes[0]),BytesToCopy,FileDataTmp) != BytesToCopy)
+	{
+         fclose (FileDataTmp);
+	 return false;
+	}
      }
-   return true;		// Success
+
+   /***** Close destination file *****/
+   fclose (FileDataTmp);
+
+   return true;
   }
 
 /*****************************************************************************/
@@ -503,14 +495,12 @@ void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt)
 /************************* Fast copy of open files ***************************/
 /*****************************************************************************/
 
-#define NUM_BYTES_PER_COPY 4096
-
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt)
   {
-   unsigned char Bytes[NUM_BYTES_PER_COPY];
+   unsigned char Bytes[NUM_BYTES_PER_CHUNK];
    size_t NumBytesRead;
 
-   while ((NumBytesRead = fread ((void *) Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_COPY,FileSrc)))
+   while ((NumBytesRead = fread ((void *) Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_CHUNK,FileSrc)))
       fwrite ((void *) Bytes,sizeof (Bytes[0]),NumBytesRead,FileTgt);
   }
 
