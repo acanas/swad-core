@@ -111,6 +111,7 @@ int main (int argc, char *argv[])
    /***** Read parameters *****/
    if (Par_GetQueryString ())
      {
+      Par_CreateListOfParams ();
       Par_GetMainParameters ();
       Deg_InitCurrentCourse ();
 

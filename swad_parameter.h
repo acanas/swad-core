@@ -34,7 +34,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Par_MAX_LENGTH_STR_DELIMIT 100
+#define Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF 100
 
 struct StartLength
   {
@@ -56,13 +56,14 @@ typedef enum
    Par_PARAM_MULTIPLE,
   } tParamType; // Parameter is present only one time / multiple times
 
-#define Par_SEPARATOR_PARAM_MULTIPLE	10	// Must be 1 <= character <= 31
+#define Par_SEPARATOR_PARAM_MULTIPLE	((char) 0x0A)		// Must be 1 <= character <= 31
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 bool Par_GetQueryString (void);
+void Par_CreateListOfParams (void);
 void Par_FreeParams (void);
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes);

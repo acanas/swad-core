@@ -56,6 +56,7 @@
 #include "swad_mark.h"
 #include "swad_message.h"
 #include "swad_menu.h"
+#include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_photo.h"
 #include "swad_place.h"
@@ -107,9 +108,13 @@ struct Globals
    Act_Content_t ContentReceivedByCGI;	/* Content send by the form and received by the CGI:
 						Act_CONTENT_NORM (if CONTENT_TYPE==text/plain) or
 						Act_CONTENT_DATA (if CONTENT_TYPE==multipart/form-data) */
-   char DelimiterString[1000];
-   size_t LengthDelimiterString;
-   char DelimiterStringIncludingInitialRet[2+1000];
+   struct
+     {
+      char StrWithoutCRLF[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
+      char StrWithCRLF   [Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
+      size_t LengthWithoutCRLF;
+      size_t LengthWithCRLF;
+     } Boundary;
 
    struct soap *soap;	// gSOAP runtime environment
 

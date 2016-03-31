@@ -295,7 +295,7 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp)
 
    /***** Write the file *****/
    Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.Tmp,FileDataTmp,(char *) NULL,
-	                                    Gbl.DelimiterStringIncludingInitialRet,
+	                                    Gbl.Boundary.StrWithCRLF,
 	                                    Fil_MAX_FILE_SIZE);
    fclose (FileDataTmp);
    if (Result != 1)
