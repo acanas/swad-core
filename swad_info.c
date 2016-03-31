@@ -1885,7 +1885,8 @@ void Inf_RecAndChangePlainTxtInfo (void)
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
-   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
+                     Cns_MAX_BYTES_LONG_TEXT,NULL);
    strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
@@ -1919,7 +1920,8 @@ void Inf_RecAndChangeRichTxtInfo (void)
    Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
-   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
+                     Cns_MAX_BYTES_LONG_TEXT,NULL);
    strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)

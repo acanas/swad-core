@@ -521,9 +521,11 @@ void Par_FreeParams (void)
 /************************* Get the value of a parameter **********************/
 /*****************************************************************************/
 // Return the number of parameters found
+// If ParamPtr is not null, on return it will point to the first ocurrence in list of parameters
 
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
-                           char *ParamValue,size_t MaxBytes)
+                           char *ParamValue,size_t MaxBytes,
+                           struct Param *ParamPtr)	// NULL is not used
   {
    size_t BytesAlreadyCopied = 0;
    unsigned i;
@@ -578,9 +580,15 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 
 	    if (ParamFound)
 	      {
-	       /***** Add separator when param multiple *****/
-	       if (NumTimes)	// Not the first ocurrence of this parameter
+	       if (NumTimes == 0)	// The first ocurrence of this parameter
 		 {
+		  /***** Get the first ocurrence of this parameter in list *****/
+		  if (ParamPtr)
+		     ParamPtr = Param;
+		 }
+	       else			// Not the first ocurrence of this parameter
+		 {
+	          /***** Add separator when param multiple *****/
 		  /* Check if there is space to copy separator */
 		  if (BytesAlreadyCopied + 1 > MaxBytes)
 		    {
@@ -930,7 +938,7 @@ unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxByte
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes)
   {
    unsigned NumTimes = Par_GetParameter (Par_PARAM_MULTIPLE,ParamName,
-                                         ParamValue,MaxBytes);
+                                         ParamValue,MaxBytes,NULL);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
                      ParamValue,MaxBytes,true);
    return NumTimes;
@@ -945,7 +953,7 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces)
   {
    unsigned NumTimes = Par_GetParameter (Par_PARAM_SINGLE,ParamName,
-                                         ParamValue,MaxBytes);
+                                         ParamValue,MaxBytes,NULL);
    Str_ChangeFormat (Str_FROM_FORM,ChangeTo,
                      ParamValue,MaxBytes,RemoveLeadingAndTrailingSpaces);
    return NumTimes;

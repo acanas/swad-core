@@ -66,7 +66,8 @@ bool Par_GetQueryString (void);
 void Par_CreateListOfParams (void);
 void Par_FreeParams (void);
 unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
-                           char *ParamValue,size_t MaxBytes);
+                           char *ParamValue,size_t MaxBytes,
+                           struct Param *ParamPtr);
 
 void Par_GetMainParameters (void);
 
