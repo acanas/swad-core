@@ -407,51 +407,57 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 /*****************************************************************************/
 /******************** Read from file until quote '\"' ************************/
 /*****************************************************************************/
-// Return true if delimiter string is found.
-// File is positioned just after the last character in delimiter string
+// Return true if boundary string is found.
+// File is positioned just after the last character in boundary string
 
 static bool Par_ReadTmpFileUntilDelimitStr (const char *BoundaryStr,unsigned LengthBoundaryStr)
   {
    unsigned NumBytesIdentical;		// Number of characters identical in each iteration of the loop
-   unsigned NumBytesReadButNoWritten = 0;	// Number of characters read from the source file
-					// and not written in the destination file
+   unsigned NumBytesReadButNoDiscarded;	// Number of characters read from the source file...
+					// ...and not fully discarded in search
    int Buffer[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
-   unsigned StartIndex = 0;
+   unsigned StartIndex;
    unsigned i;
+   bool Found;
 
-   for (;;)
+   for (StartIndex = 0,
+	NumBytesReadButNoDiscarded = 0,
+	Found = false;
+	!Found;
+	StartIndex = (StartIndex + 1) % LengthBoundaryStr,
+	NumBytesReadButNoDiscarded--)
      {
-      if (!NumBytesReadButNoWritten)
+      if (!NumBytesReadButNoDiscarded)
 	{      // Read next character
 	 Buffer[StartIndex] = fgetc (Gbl.F.Tmp);
 	 if (feof (Gbl.F.Tmp))
 	    return false;
-	 NumBytesReadButNoWritten++;
+	 NumBytesReadButNoDiscarded++;
 	}
       if (Buffer[StartIndex] == (int) BoundaryStr[0]) // First character identical
 	{
-	 for (NumBytesIdentical = 1, i = (StartIndex + 1) % LengthBoundaryStr;
+	 for (NumBytesIdentical = 1,
+	      i = (StartIndex + 1) % LengthBoundaryStr;
 	      NumBytesIdentical < LengthBoundaryStr;
-	      NumBytesIdentical++, i = (i + 1) % LengthBoundaryStr)
+	      NumBytesIdentical++,
+	      i = (i + 1) % LengthBoundaryStr)
 	   {
-	    if (NumBytesReadButNoWritten == NumBytesIdentical) // Next character identical
+	    if (NumBytesReadButNoDiscarded == NumBytesIdentical)	// Last character is identical
 	      {
 	       Buffer[i] = fgetc (Gbl.F.Tmp);  // Read next character
 	       if (feof (Gbl.F.Tmp))
 		  return false;
-	       NumBytesReadButNoWritten++;
+	       NumBytesReadButNoDiscarded++;
 	      }
-	    if (Buffer[i] != (int) BoundaryStr[NumBytesIdentical])  // Next different character
+	    if (Buffer[i] != (int) BoundaryStr[NumBytesIdentical])	// Next character is different
 	       break;
 	   }
-	 if (NumBytesIdentical == LengthBoundaryStr) // Str found
-	    return true;
+	 if (NumBytesIdentical == LengthBoundaryStr) // Boundary found
+	    Found = true;
 	}
-      NumBytesReadButNoWritten--;
-      StartIndex = (StartIndex + 1) % LengthBoundaryStr;
      }
 
-   return false;	// Not reached
+   return true;
   }
 
 /*****************************************************************************/
@@ -523,10 +529,11 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    unsigned i;
    struct Param *Param;
    char *PtrDst;
-   unsigned NumTimes = 0;
+   unsigned NumTimes;
    bool ParamFound = false;
    unsigned ParamNameLength;
 
+   /***** Default values returned *****/
    ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
 
    /***** Only some selected parameters can be passed by GET method *****/
@@ -534,15 +541,16 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
       if (!Par_CheckIsParamCanBeUsedInGETMethod (ParamName))
 	 return 0;	// Return no-parameters-found
 
+   /***** Initializations *****/
    ParamNameLength = strlen (ParamName);
-
    PtrDst = ParamValue;
 
+   /***** For multiple parameters, loop for any ocurrence of the parameter
+          For unique parameter, find only the first ocurrence *****/
    for (Param = Gbl.Params.List, NumTimes = 0;
 	Param != NULL &&
-	(NumTimes < 1 || ParamType == Par_PARAM_MULTIPLE);
+	(ParamType == Par_PARAM_MULTIPLE || NumTimes < 1);
 	NumTimes++)
-     {
       /***** Find next ocurrence of parameter in list of parameters *****/
       for (ParamFound = false;
 	   Param != NULL && !ParamFound;
@@ -618,7 +626,6 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	      }
 	   }
 	}
-     }
 
    *PtrDst = '\0'; // Add the final NULL
 
