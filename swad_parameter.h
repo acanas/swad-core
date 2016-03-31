@@ -41,8 +41,10 @@ struct StartLength
   };
 struct Param
   {
-   struct StartLength Name;
-   struct StartLength Value;
+   struct StartLength Name;		// Parameter name
+   struct StartLength Filename;		// optional
+   struct StartLength ContentType;	// optional
+   struct StartLength Value;		// Parameter value or file content
    struct Param *Next;
   };
 
