@@ -6663,7 +6663,7 @@ void Usr_SeeGuests (void)
 				       -1L);
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
 
 	 /* Put a row to select all users */
          Usr_PutCheckboxToSelectAllTheUsers (Rol__GUEST_);
@@ -6822,7 +6822,7 @@ void Usr_SeeStudents (void)
 					                                        -1L);
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -6968,7 +6968,7 @@ void Usr_SeeTeachers (void)
 					                                        -1L);
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -7127,7 +7127,7 @@ void Usr_SeeGstClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
                                                                         -1L,
 				 -1L,-1L);
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrame ();
@@ -7175,7 +7175,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                   -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrame ();
@@ -7231,7 +7231,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 					                                   -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                  -1L);
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
       fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrame ();
