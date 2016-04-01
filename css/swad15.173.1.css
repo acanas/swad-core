@@ -1745,11 +1745,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_IMG_SHOW
 	{
 	width:600px;
-	margin:10px;
+	margin:10px 0;
 	}
 .TEST_IMG_EDIT_LIST
 	{
-	width:256px;
+	width:300px;
+	margin:5px 0;
 	}
 .TEST_IMG_EDIT_ONE
 	{

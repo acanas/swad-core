@@ -2266,6 +2266,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
             CrsCod);
    DB_QueryDELETE (Query,"can not remove answers of tests of a course");
 
+   /* Remove files with images associated to test questions in the course */
+   Tst_RemoveImageFilesFromQstsInCrs (CrsCod,
+                                      -1L);	// All questions in the course
+
    /* Remove test questions in the course */
    sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod='%ld'",
 	    CrsCod);

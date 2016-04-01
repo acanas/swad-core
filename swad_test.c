@@ -222,7 +222,6 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 static int Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
-static void Tst_RemoveImageFileCurrentQst (void);
 static void Tst_InsertTagsIntoDB (void);
 static void Tst_InsertAnswersIntoDB (void);
 
@@ -5343,6 +5342,9 @@ void Tst_RemoveQst (void)
    Par_GetParToText ("OnlyThisQst",YN,1);
    EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
+   /***** Remove image associated to question *****/
+   Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
    Tst_RemAnsFromQst ();
@@ -5462,10 +5464,9 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                         Gbl.Test.Feedback.Length)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
-   /***** Make database query *****/
    if (Gbl.Test.QstCod < 0)	// It's a new question
      {
-      /* Insert question in the table of questions */
+      /***** Insert question in the table of questions *****/
       sprintf (Query,"INSERT INTO tst_questions"
 	             " (CrsCod,EditTime,AnsType,Shuffle,Stem,Image,Feedback,NumHits,Score)"
                      " VALUES ('%ld',NOW(),'%s','%c','%s','%s','%s','0','0')",
@@ -5480,11 +5481,12 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
      }
    else				// It's an existing question
      {
-      /* Update question */
+      /***** Update existing question *****/
       if (Gbl.Test.ChangeImage)
 	{
-	 /* Remove file with the current image */
-	 Tst_RemoveImageFileCurrentQst ();
+	 /* Remove file with the previous image
+	    (the file with the new image is already created) */
+	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
 	 /* Update question in database */
 	 sprintf (Query,"UPDATE tst_questions"
@@ -5499,7 +5501,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 	}
-      else
+      else	// Do not change image
 	 sprintf (Query,"UPDATE tst_questions"
 			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
 			"Stem='%s',Feedback='%s'"
@@ -5522,33 +5524,50 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
   }
 
 /*****************************************************************************/
-/**************** Remove the current image of a test question ****************/
+/******** Remove one or more image files associated to test questions ********/
 /*****************************************************************************/
+// Use question code <= 0 to remove all images associated to questions in course
 
-static void Tst_RemoveImageFileCurrentQst (void)
+void Tst_RemoveImageFilesFromQstsInCrs (long CrsCod,
+                                        long QstCod)	// <= 0 ==> all questions in course
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumImages;
+   unsigned NumImg;
    char FullPathImgPriv[PATH_MAX+1];
 
-   /***** Get name of image associated to test question from database *****/
-   sprintf (Query,"SELECT Image FROM tst_questions"
-		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
-            Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get test image"))
+   /***** Get names of images associated to test questions from database *****/
+   if (QstCod > 0)	// Only one question
+      sprintf (Query,"SELECT Image FROM tst_questions"
+		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	       QstCod,CrsCod);
+   else			// All questions in the course
+      sprintf (Query,"SELECT Image FROM tst_questions"
+	             " WHERE CrsCod='%ld'",
+	       CrsCod);
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+
+   /***** Go over result removing image files *****/
+   for (NumImg = 0;
+	NumImg < NumImages;
+	NumImg++)
      {
+      /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
 
-      /***** Get image name (row[0]) *****/
+      /***** Build path to private file *****/
       sprintf (FullPathImgPriv,"%s/%s/%c%c/%s.jpg",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
 	       row[0][0],
 	       row[0][1],
 	       row[0]);
 
-      /***** Remove file *****/
+      /***** Remove private file *****/
       unlink (FullPathImgPriv);
+
+      // Public links are removed automatically after a period
      }
 
    /***** Free structure that stores the query result *****/

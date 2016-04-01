@@ -150,6 +150,9 @@ double Tst_GetFloatAnsFromStr (char *Str);
 void Tst_RemoveQst (void);
 void Tst_ChangeShuffleQst (void);
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (void);
+
+void Tst_RemoveImageFilesFromQstsInCrs (long CrsCod,long QstCod);
+
 int Tst_AllocateTextChoiceAnswer (unsigned NumOpt);
 void Tst_FreeTextChoiceAnswers (void);
 void Tst_FreeTagsList (void);
