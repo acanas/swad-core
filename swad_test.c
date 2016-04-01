@@ -222,6 +222,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 static int Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
+static void Tst_RemoveImageFileCurrentQst (void);
 static void Tst_InsertTagsIntoDB (void);
 static void Tst_InsertAnswersIntoDB (void);
 
@@ -4814,7 +4815,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
-   /***** Get image *****/
+   /***** Get new image (if present ==> create file) *****/
    Gbl.Test.ChangeImage = Tst_GetImageFromForm ();
 
    /***** Get answers *****/
@@ -5481,6 +5482,11 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
      {
       /* Update question */
       if (Gbl.Test.ChangeImage)
+	{
+	 /* Remove file with the current image */
+	 Tst_RemoveImageFileCurrentQst ();
+
+	 /* Update question in database */
 	 sprintf (Query,"UPDATE tst_questions"
 			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
 			"Stem='%s',Image='%s',Feedback='%s'"
@@ -5492,6 +5498,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		  Gbl.Test.Image,
 		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+	}
       else
 	 sprintf (Query,"UPDATE tst_questions"
 			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
@@ -5512,6 +5519,40 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 
    /***** Free space user for query *****/
    free ((void *) Query);
+  }
+
+/*****************************************************************************/
+/**************** Remove the current image of a test question ****************/
+/*****************************************************************************/
+
+static void Tst_RemoveImageFileCurrentQst (void)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   char FullPathImgPriv[PATH_MAX+1];
+
+   /***** Get name of image associated to test question from database *****/
+   sprintf (Query,"SELECT Image FROM tst_questions"
+		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+            Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get test image"))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Get image name (row[0]) *****/
+      sprintf (FullPathImgPriv,"%s/%s/%c%c/%s.jpg",
+	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	       row[0][0],
+	       row[0][1],
+	       row[0]);
+
+      /***** Remove file *****/
+      unlink (FullPathImgPriv);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

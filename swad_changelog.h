@@ -144,14 +144,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.173.3 (2016-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.173.4 (2016-04-01)"
 #define CSS_FILE		"swad15.173.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.173.4: Apr 01, 2016	Old image in test question is removed when replaced by a new one. (? lines)
+        Version 15.173.4: Apr 01, 2016	Old image in test question is removed when replaced by a new one. (197481 lines)
         Version 15.173.3: Apr 01, 2016	Changes in layout of class photo. (197447 lines)
         Version 15.173.2: Apr 01, 2016	Changes in CSS related to tests. (197446 lines)
         Version 15.173.1: Apr 01, 2016	Changes in CSS related to tests. (197452 lines)
