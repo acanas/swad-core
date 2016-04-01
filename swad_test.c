@@ -919,8 +919,8 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
-	                    "%u.&nbsp;"
+	                    "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+	                    "%u"
 	                    "</td>"
 	                    "<td class=\"COLOR%u\">"
 	                    "</td>"
@@ -960,18 +960,15 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
 
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP COLOR%u\">"
-	              "%u.&nbsp;"
-	              "</td>",
+	              "<td class=\"RIGHT_TOP COLOR%u\">"
+	              "<div class=\"TEST_NUM_QST\">%u</div>",
             Gbl.RowEvenOdd,
             NumQst + 1);
 
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">"
-	              "%s&nbsp;"
+   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>"
 	              "</td>",
-            Gbl.RowEvenOdd,
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
    /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[6]) *****/
@@ -6866,7 +6863,6 @@ void Tst_ShowOneTestExam (void)
 
    /* User */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
@@ -6891,7 +6887,6 @@ void Tst_ShowOneTestExam (void)
 
    /* Exam date */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
@@ -6905,7 +6900,6 @@ void Tst_ShowOneTestExam (void)
 
    /* Number of questions */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
@@ -6918,7 +6912,6 @@ void Tst_ShowOneTestExam (void)
 
    /* Score */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
@@ -6937,7 +6930,6 @@ void Tst_ShowOneTestExam (void)
 
    /* Tags present in this exam */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td></td>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
@@ -7011,8 +7003,8 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	 if (ThisQuestionHasBeenEdited)
 	    /***** Question has been edited *****/
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
-			       "%u.&nbsp;"
+			       "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+			       "%u"
 			       "</td>"
 			       "<td class=\"COLOR%u\"></td>"
 			       "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
@@ -7037,8 +7029,8 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
       else
 	 /***** Question does not exists *****/
          fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"DAT_LIGHT RIGHT_TOP COLOR%u\">"
-	                    "%u.&nbsp;"
+	                    "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
+	                    "%u"
 	                    "</td>"
 	                    "<td class=\"COLOR%u\"></td>"
 	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
