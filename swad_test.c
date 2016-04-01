@@ -423,7 +423,7 @@ void Tst_ShowNewTestExam (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
 	    fprintf (Gbl.F.Out,"</table>");
 
@@ -514,13 +514,13 @@ void Tst_AssessTestExam (void)
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	   {
-	    fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+	    fprintf (Gbl.F.Out,"<div class=\"TEST_SUBTITLE\">");
 	    fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
 	    fprintf (Gbl.F.Out,"</div>");
 	   }
 
 	 /***** Write answers and solutions *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
 	 Tst_ShowTstResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 fprintf (Gbl.F.Out,"</table>");
 
@@ -1505,7 +1505,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">"
-	              "<table>"
+	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
@@ -2123,7 +2123,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">"
-	              "<table>"
+	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 	              "<td class=\"%s LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
@@ -3093,7 +3093,7 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
                       "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3151,7 +3151,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    char ParamName[3+6+1];
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
@@ -3311,7 +3311,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
         }
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"<td></td>"
@@ -3508,7 +3508,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3557,7 +3557,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
        Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">"
-                         "<table>");
+                         "<table class=\"CELLS_PAD_2\">");
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
@@ -3659,7 +3659,7 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3777,7 +3777,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    /***** Header with the title of each column *****/
-   fprintf (Gbl.F.Out,"<table>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
 	              "<tr>");
    Tst_WriteHeadUserCorrect ();
    fprintf (Gbl.F.Out,"</tr>");
@@ -3941,7 +3941,7 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<table>");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
@@ -4356,7 +4356,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                       "</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<table>",
+                      "<table class=\"CELLS_PAD_2\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
@@ -4535,7 +4535,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<table>"
+                      "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 	              "<td class=\"%s LEFT_TOP\">"
                       "<input type=\"radio\" name=\"AnsTF\" value=\"T\"",
@@ -4576,7 +4576,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
 	              "<td class=\"LEFT_TOP\">"
-	              "<table>"
+	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
 	              "<td></td>"
 	              "<td class=\"%s LEFT_MIDDLE\">"
@@ -6247,7 +6247,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
-                            "<table>",
+                            "<table class=\"CELLS_PAD_2\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
          Usr_ListUsersToSelect (Rol_TEACHER);
@@ -6857,7 +6857,7 @@ void Tst_ShowOneTestExam (void)
                               Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
 
    /***** Header row *****/
    /* Get data of the user who made the exam */

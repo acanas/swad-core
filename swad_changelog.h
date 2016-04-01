@@ -134,17 +134,25 @@
 // TODO: Optimize reading of parameters by doing one unique pass creating a dynamic list of parameters and their values
 //       This is very important when there is a big file in the middle of the list of parameters
 
+// TODO: In Statistics > Degrees, show only degrees with students
+
+// TODO: Put radio button to remove image when editing one test question
+// TODO: Put icon to remove image when editing a list of test questions (similar to shuffle icon)
+// TODO: Image in a test question is removed when the test question is removed
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.173 (2016-04-01)"
-#define CSS_FILE		"swad15.173.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.173.1 (2016-04-01)"
+#define CSS_FILE		"swad15.173.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.173.2: Apr 01, 2016	Old image in test question is removed when replaced by a new one. (? lines)
+        Version 15.173.1: Apr 01, 2016	Changes in CSS related to tests. (197452 lines)
         Version 15.173:   Apr 01, 2016	Show image in test question, if present. (197435 lines)
         Version 15.172.1: Apr 01, 2016	Reception of test image. (197398 lines)
         Version 15.172:   Apr 01, 2016	Reception of test image. Not finished. (197339 lines)

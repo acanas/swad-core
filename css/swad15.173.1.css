@@ -1345,14 +1345,15 @@ a:hover						/* Default ==> underlined */
 	font-weight:bold;
 	}
 
-.CELLS_PAD_1 th {padding:1px;}
-.CELLS_PAD_1 td {padding:1px;}
-
-.CELLS_PAD_2 th {padding:2px;}
-.CELLS_PAD_2 td {padding:2px;}
-
-.CELLS_PAD_5 th {padding:5px;}
-.CELLS_PAD_5 td {padding:5px;}
+/* Apply only to the first level of th and td */
+table.CELLS_PAD_1	> tbody > tr > th {padding: 1px;}
+table.CELLS_PAD_1	> tbody > tr > td {padding: 1px;}
+table.CELLS_PAD_2	> tbody > tr > th {padding: 2px;}
+table.CELLS_PAD_2	> tbody > tr > td {padding: 2px;}
+table.CELLS_PAD_5	> tbody > tr > th {padding: 5px;}
+table.CELLS_PAD_5	> tbody > tr > td {padding: 5px;}
+table.CELLS_PAD_10	> tbody > tr > th {padding:10px;}
+table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /*********************************** Title ***********************************/
 .TIT
@@ -1727,6 +1728,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ANS_OK		{color:#008000; font-size:13pt; font-weight:bold;}
 .ANS_BAD	{color:red;     font-size:13pt; font-weight:bold;}
 .ANS_STR	{width:308px;}
+.TEST_SUBTITLE
+	{
+	margin:10px;
+	color:#404040;
+	font-size:13pt;
+	text-align:center;
+	vertical-align:middle;
+	}
 .TEST		{color:#404040; font-size:12pt;}
 .TEST_EXA	{color:#404040; font-size:12pt;}
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
@@ -1735,7 +1744,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_IMG_SHOW
 	{
 	width:600px;
-	margin:10px 0;
+	margin:10px;
 	}
 .TEST_IMG_EDIT_LIST
 	{
