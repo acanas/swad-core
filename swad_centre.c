@@ -2066,7 +2066,7 @@ void Ctr_ReceivePhoto (void)
    char Command[1024+PATH_MAX*2];
    int ReturnCode;
 
-   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   /***** Copy in disk the file received *****/
    Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */

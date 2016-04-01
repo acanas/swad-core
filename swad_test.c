@@ -36,6 +36,7 @@
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
+#include <unistd.h>		// For unlink
 
 #include "swad_action.h"
 #include "swad_database.h"
@@ -206,6 +207,7 @@ static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
+static bool Tst_GetImageFromForm (void);
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
@@ -4641,6 +4643,7 @@ void Tst_InitQst (void)
    Gbl.Test.Stem.Length = 0;
    Gbl.Test.Feedback.Text = NULL;
    Gbl.Test.Feedback.Length = 0;
+   Gbl.Test.Image[0] = '\0';
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
    Gbl.Test.Answer.TF = ' ';
@@ -4778,6 +4781,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
+   /***** Get image *****/
+   if (Tst_GetImageFromForm ())
+      Lay_ShowAlert (Lay_INFO,"Image present.");
+
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
    switch (Gbl.Test.AnswerType)
@@ -4874,6 +4881,71 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Stem.Length = strlen (Gbl.Test.Stem.Text);
    Gbl.Test.Feedback.Text = Feedback;
    Gbl.Test.Feedback.Length = strlen (Gbl.Test.Feedback.Text);
+  }
+
+/*****************************************************************************/
+/****************** Get image of a test question from form *******************/
+/*****************************************************************************/
+// Return true if image is created
+
+static bool Tst_GetImageFromForm (void)
+  {
+   struct Param *Param;
+   char FileNameImgSrc[PATH_MAX+1];
+   char *PtrExtension;
+   size_t LengthExtension;
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char PathImgPriv[PATH_MAX+1];
+   char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
+   bool WrongType = false;
+
+   /***** Get filename and MIME type *****/
+   Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
+   if (!FileNameImgSrc[0])	// No file present
+      return false;
+
+   /* Check if the file type is image/ or application/octet-stream */
+   if (strncmp (MIMEType,"image/",strlen ("image/")))
+      if (strcmp (MIMEType,"application/octet-stream"))
+	 if (strcmp (MIMEType,"application/octetstream"))
+	    if (strcmp (MIMEType,"application/octet"))
+	       WrongType = true;
+   if (WrongType)
+      return false;
+
+   /***** Create private directories if not exist *****/
+   /* Create private directory for images if it does not exist */
+   sprintf (PathImgPriv,"%s/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
+   Fil_CreateDirIfNotExists (PathImgPriv);
+
+   /* Create temporary private directory for images if it does not exist */
+   sprintf (PathImgPriv,"%s/%s/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
+   Fil_CreateDirIfNotExists (PathImgPriv);
+
+   /* Get filename extension */
+   if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
+      return false;
+   LengthExtension = strlen (PtrExtension);
+   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
+      return false;
+
+   /* End the reception of image in a temporary file */
+   strcpy (Gbl.Test.Image,Gbl.UniqueNameEncrypted);
+   sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
+            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+            Gbl.Test.Image,PtrExtension);
+   if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
+      return false;
+
+   /***** TODO: Copy and process the file *****/
+
+   /***** Remove temporary file *****/
+   unlink (FileNameImgTmp);
+
+   return true;
   }
 
 /*****************************************************************************/

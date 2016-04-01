@@ -224,6 +224,9 @@ struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
   {
    struct Param *Param;
 
+   /***** Set default values *****/
+   FileName[0] = 0;
+
    /***** Get parameter *****/
    Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,NULL,
                      Fil_MAX_FILE_SIZE,&Param);
@@ -231,8 +234,12 @@ struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
    /***** Get filename *****/
    /* Check if filename exists */
    if (Param->FileName.Start == 0 ||
-       Param->FileName.Length == 0 ||
-       Param->FileName.Length > PATH_MAX)
+       Param->FileName.Length == 0)
+     {
+      FileName[0] = MIMEType[0] = '\0';
+      return Param;
+     }
+   if (Param->FileName.Length > PATH_MAX)
       Lay_ShowErrorAndExit ("Error while getting filename.");
 
    /* Copy filename */
