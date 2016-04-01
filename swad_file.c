@@ -224,9 +224,22 @@ struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
   {
    struct Param *Param;
 
+   /***** Get parameter *****/
+   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,NULL,
+                     Fil_MAX_FILE_SIZE,&Param);
+
    /***** Get filename *****/
-   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,FileName,
-                     PATH_MAX,&Param);
+   /* Check if filename exists */
+   if (Param->FileName.Start == 0 ||
+       Param->FileName.Length == 0 ||
+       Param->FileName.Length > PATH_MAX)
+      Lay_ShowErrorAndExit ("Error while getting filename.");
+
+   /* Copy filename */
+   fseek (Gbl.F.Tmp,Param->FileName.Start,SEEK_SET);
+   if (fread (FileName,sizeof (char),Param->FileName.Length,Gbl.F.Tmp) !=
+       Param->FileName.Length)
+      Lay_ShowErrorAndExit ("Error while getting filename.");
 
    /***** Get MIME type *****/
    /* Check if MIME type exists */
