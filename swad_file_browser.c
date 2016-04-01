@@ -1444,7 +1444,6 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
 static void Brw_GetFileNameToShow (Brw_FileBrowser_t FileBrowser,unsigned Level,Brw_FileType_t FileType,
                                    const char *FileName,char *FileNameToShow);
 static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,const char *FileName,char *FileNameToShow);
-static void Brw_CreateTmpLinkToDownloadFileBrowser (const char *FullPathIncludingFile,const char *FileName);
 static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
@@ -5864,19 +5863,20 @@ static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,const char *F
   }
 
 /*****************************************************************************/
-/****** Create a link in public temporary directory to download a file *******/
+/****** Create a link in public temporary directory to a private file ********/
 /*****************************************************************************/
 
-static void Brw_CreateTmpLinkToDownloadFileBrowser (const char *FullPathIncludingFile,const char *FileName)
+void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
+                                           const char *FileName)
   {
    char Link[PATH_MAX+1];
 
-   /***** Create, into temporary download directory, a symbolic link to file *****/
+   /***** Create, into temporary public directory, a symbolic link to file *****/
    sprintf (Link,"%s/%s/%s/%s",
             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
-      Lay_ShowErrorAndExit ("Can not create temporary link for download.");
+      Lay_ShowErrorAndExit ("Can not create temporary link.");
   }
 
 /*****************************************************************************/
@@ -9681,7 +9681,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
       Brw_CreateDirDownloadTmp ();
 
       /***** Create symbolic link from temporary public directory to private file in order to gain access to it for downloading *****/
-      Brw_CreateTmpLinkToDownloadFileBrowser (FullPathIncludingFile,FileName);
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathIncludingFile,FileName);
 
       /***** Create URL pointing to symbolic link *****/
       sprintf (URLWithSpaces,"%s/%s/%s/%s",

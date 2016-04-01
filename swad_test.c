@@ -154,7 +154,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteQstImage (const char *Image);
+static void Tst_WriteQstImage (const char *Image,const char *ClassImg);
 static void Tst_PutFormToUploadNewQstImage (void);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -978,7 +978,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   Tst_WriteQstImage (row[5]);
+   Tst_WriteQstImage (row[5],"TEST_IMG_SHOW");
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
    else	// Assessing exam / Viewing old exam
@@ -1023,15 +1023,42 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /******************** Write the image of a test question *********************/
 /*****************************************************************************/
 
-static void Tst_WriteQstImage (const char *Image)
+static void Tst_WriteQstImage (const char *Image,const char *ClassImg)
   {
-   if (Image)
-      if (Image[0])
-	 /***** Write the image *****/
-	 fprintf (Gbl.F.Out,"<div>"
-			    "%s"
-			    "</div>",
-		  Image);
+   char FileNameImgPriv[PATH_MAX+1];
+   char FullPathImgPriv[PATH_MAX+1];
+   char URL[PATH_MAX+1];
+
+   if (!Image)
+      return;
+   if (!Image[0])
+      return;
+
+   /***** Create a temporary public directory
+	  used to download the zip file *****/
+   Brw_CreateDirDownloadTmp ();
+
+   /***** Create symbolic link from temporary public directory to private file in order to gain access to it for downloading *****/
+   /* Private path to image */
+   sprintf (FileNameImgPriv,"%s.jpg",
+            Image);
+   sprintf (FullPathImgPriv,"%s/%s/%c%c/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	    Image[0],
+	    Image[1],
+	    FileNameImgPriv);
+   Brw_CreateTmpPublicLinkToPrivateFile (FullPathImgPriv,FileNameImgPriv);
+
+   /***** Create URL pointing to symbolic link *****/
+   sprintf (URL,"%s/%s/%s/%s",
+	    Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	    Gbl.FileBrowser.TmpPubDir,
+	    FileNameImgPriv);
+
+   /***** Show image *****/
+   fprintf (Gbl.F.Out,"<img src=\"%s\" alt=\"\" class=\"%s\"/>"
+	              "<br />",
+            URL,ClassImg);
   }
 
 /*****************************************************************************/
@@ -2683,7 +2710,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Tst_WriteQstImage (row[5]);
+      Tst_WriteQstImage (row[5],"TEST_IMG_EDIT_LIST");
       Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
       fprintf (Gbl.F.Out,"</td>");
@@ -4414,7 +4441,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 			 "<td class=\"LEFT_TOP\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Image);
-      Tst_WriteQstImage (Gbl.Test.Image);
+      Tst_WriteQstImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
       Tst_PutFormToUploadNewQstImage ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

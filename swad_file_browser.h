@@ -214,6 +214,9 @@ void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *FilFolLnkName);
 
+void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
+                                           const char *FileName);
+
 void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const char *FileName);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);

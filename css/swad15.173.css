@@ -1432,7 +1432,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border:solid 1px #EEE;
         box-shadow:1px 1px 6px #999;
 	}
-	
+
 /**************** Attribution (author and license) of images *****************/
 #AttributionArea
 	{
@@ -1732,6 +1732,19 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
 .TEST_EDI	{color:#404040; font-size:12pt;}
 .TEST_EDI_LIGHT	{color:#A0A0A0; font-size:12pt;}
+.TEST_IMG_SHOW
+	{
+	width:600px;
+	margin:10px 0;
+	}
+.TEST_IMG_EDIT_LIST
+	{
+	width:256px;
+	}
+.TEST_IMG_EDIT_ONE
+	{
+	width:600px;
+	}
 
 /******************************* Time table **********************************/
 #timetable
