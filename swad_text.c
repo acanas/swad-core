@@ -1336,70 +1336,70 @@ const char *Txt_Users_NO_HTML =
 const char *Txt_A_face_marked_in_green_has_been_detected_ =
 #if   L==1
 	"S'ha detectat un rostre (senyalat en verd) en posici&oacute; frontal"
-	" i amb el fons darrere del cap prou clar.<br />"
+	" i amb el fons prou clar.<br />"
 	"Premeu sobre ell per confirmar la actualizaci&oacute; de la fotografia.";
 #elif L==2
-	"A face (marked in green) has been detected in front position"
-	" and the background behind the head is light enough.<br />"
-	"Click on it to confirm the update of the picture.";						// Need Übersetzung
+	"Ein Gesicht (gr&uuml;n markiert) wurde vor Position erfasst"
+	" und der Hintergrund ist genug hell.<br />"
+	"Klicken Sie darauf, um das Update des Bildes zu best&auml;tigen.";
 #elif L==3
 	"A face (marked in green) has been detected in front position"
-	" and the background behind the head is light enough.<br />"
+	" and the background is light enough.<br />"
 	"Click on it to confirm the update of the picture.";
 #elif L==4
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
-	" y con el fondo detr&aacute;s de la cabeza suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br />"
 	"Pulse sobre &eacute;l para confirmar la actualizaci&oacute;n de la fotograf&iacute;a.";
 #elif L==5
-	"A face (marked in green) has been detected in front position"
-	" and the background behind the head is light enough.<br />"
-	"Click on it to confirm the update of the picture.";						// Besoin de traduction
+	"Un visage (marqu&eacute; en vert) a &eacute;t&eacute; d&eacute;tect&eacute; en position avant"
+	" et l'arri&egrave;re-plan est assez clair.<br />"
+	 "Cliquez sur pour confirmer la mise &agrave; jour de l'image.";
 #elif L==6
 	"Se ha detectado un rostro (se&ntilde;alado en verde) en posici&oacute;n frontal"
-	" y con el fondo detr&aacute;s de la cabeza suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br />"
 	"Pulse sobre &eacute;l para confirmar la actualizaci&oacute;n de la fotograf&iacute;a.";	// Okoteve traducción
 #elif L==7
 	"Un viso (segnato in verde) &egrave; stato individuato nella posizione centrale"
-	" e lo sfondo dietro la testa &egrave; abbastanza chiaro.<br />"
+	" e lo sfondo &egrave; abbastanza chiaro.<br />"
 	"Clicca su di esso per confermare l'aggiornamento dell'immagine.";
 #elif L==8
-	"twarzy (zaznaczone na zielono) zostal wykryty w prz&oacute;d w pozycji "
-	"a tlo z tylu glowy jest wystarczajaco lekki.<br />"
-	"Kliknij na nia, aby potwierdzic aktualizacje obrazu.";
+	"Twarz (zaznaczone na zielono) zosta&lstrok; wykryty w przednim po&lstrok;o&zdot;eniu,"
+	" a t&lstrok;o jest wystarczaj&aogon;co du&zdot;o &sacute;wiat&lstrok;a.<br />"
+	"Kliknij go, aby potwierdzi&cacute; aktualizacj&eogon; obrazu.";
 #elif L==9
-	"A face (marked in green) has been detected in front position"
-	" and the background behind the head is light enough.<br />"
-	"Click on it to confirm the update of the picture.";						// Necessita de tradução
+	"Um rosto (marcados em verde) foi detectado em posi&ccedil;&atilde;o frontal"
+	" eo fundo &eacute; claro o suficiente.<br />"
+	"Clique nele para confirmar a atualiza&ccedil;&atilde;o da imagem.";
 #endif
 
 const char *Txt_A_face_marked_in_red_has_been_detected_ =
 #if   L==1
 	"S'ha detectat un rostre (senyalat en vermell) en posici&oacute; frontal,"
-	" per&ograve; el fons darrere del cap és massa fosc.";
+	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2
-	"A face (marked in green) has been detected in front position,"
-	" but the background behind the head is too dark.";			// Need Übersetzung
+	"Ein Gesicht (rot markiert) wurde vor Position erkannt,"
+	" aber der Hintergrund ist zu dunkel.";
 #elif L==3
-	"A face (marked in green) has been detected in front position,"
-	" but the background behind the head is too dark.";
+	"A face (marked in red) has been detected in front position,"
+	" but the background is too dark.";
 #elif L==4
 	"Se ha detectado un rostro (se&ntilde;alado en rojo) en posici&oacute;n frontal,"
-	" pero el fondo detr&aacute;s de la cabeza es demasiado oscuro.";
+	" pero el fondo es demasiado oscuro.";
 #elif L==5
-	"A face (marked in green) has been detected in front position,"
-	" but the background behind the head is too dark.";			// Besoin de traduction
+	"Un visage (marqu&eacute; en rouge) a &eacute;t&eacute; d&eacute;tect&eacute; en position avant,"
+	" mais le fond est trop sombre.";
 #elif L==6
 	"Se ha detectado un rostro (se&ntilde;alado en rojo) en posici&oacute;n frontal,"
-	" pero el fondo detr&aacute;s de la cabeza es demasiado oscuro.";	// Okoteve traducción
+	" pero el fondo es demasiado oscuro.";	// Okoteve traducción
 #elif L==7
-	"Un viso (segnato in verde) &egrave; stato individuato nella posizione centrale,"
-	" ma lo sfondo dietro la testa &egrave; troppo scuro.";
+	"Un viso (segnato in rosso) &egrave; stato individuato nella posizione centrale,"
+	" ma lo sfondo &egrave; troppo scuro.";
 #elif L==8
-	"twarzy (zaznaczone na zielono) zostal wykryty w przednim"
-	"Ale w tle z tylu glowy jest zbyt ciemny.";
+	"Twarz (zaznaczone na czerwono) zosta&lstrok; wykryty w przednim po&lstrok;o&zdot;eniu,"
+	" ale t&lstrok;o jest zbyt ciemne.";
 #elif L==9
-	"A face (marked in green) has been detected in front position,"
-	" but the background behind the head is too dark.";			// Necessita de tradução
+	"Uma face (marcada a vermelho) foi detectada na posi&ccedil;&atilde;o da frente,"
+	" mas o plano de fundo &eacute; demasiado escuro.";
 #endif
 
 const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address =	// Warning: it is very important to include %s in the following sentences
@@ -11020,71 +11020,71 @@ const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: 
 
 const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Se han detectado %u rostros (se&ntilde;alados en verde) en posici&oacute;n frontal"
-	" y con el fondo detr&aacute;s de las cabezas suficientemente claro.<br />"
-	"Si desea elegir uno de esos rostros, pulse sobre &eacute;l.";	// Necessita traduccio
+	"S'han detectat %u cares (assenyalats en verd) en posici&oacute; frontal"
+	" i amb el fons prou clar.<br />"
+	"Si voleu triar un d'aquests rostres, premi sobre ell.";
 #elif L==2
-	"%u faces (marked in green) have been detected in front position,"
-	" and the background behind the heads is light enough.<br />"
-	"If you want to choose one of those faces, click on it.";	// Need Übersetzung
+	"%u Fl&auml;chen (gr&uuml;n markiert) wurden vor Position erfasst,"
+	" und der Hintergrund ist leicht genug.<br />"
+	"Wenn Sie eine dieser Fl&auml;chen zu w&auml;hlen, klicken Sie darauf.";
 #elif L==3
 	"%u faces (marked in green) have been detected in front position,"
-	" and the background behind the heads is light enough.<br />"
+	" and the background is light enough.<br />"
 	"If you want to choose one of those faces, click on it.";
 #elif L==4
 	"Se han detectado %u rostros (se&ntilde;alados en verde) en posici&oacute;n frontal"
-	" y con el fondo detr&aacute;s de las cabezas suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br />"
 	"Si desea elegir uno de esos rostros, pulse sobre &eacute;l.";
 #elif L==5
-	"%u faces (marked in green) have been detected in front position,"
-	" and the background behind the heads is light enough.<br />"
-	"If you want to choose one of those faces, click on it.";	// Besoin de traduction
+	"%u visages ont &eacute;t&eacute; d&eacute;tect&eacute;s (indiqu&eacute;s en vert) dans la position avant"
+	" et avec un fond suffisamment claire.<br />"
+	"Si vous voulez choisir un de ces visages, cliquez dessus.";
 #elif L==6
 	"Se han detectado %u rostros (se&ntilde;alados en verde) en posici&oacute;n frontal"
-	" y con el fondo detr&aacute;s de las cabezas suficientemente claro.<br />"
+	" y con el fondo suficientemente claro.<br />"
 	"Si desea elegir uno de esos rostros, pulse sobre &eacute;l.";	// Okoteve traducción
 #elif L==7
 	"%u visi (segnati in verde) sono stati individuati in posizione frontale,"
-	" e lo sfondo dietro la testa &egrave; abbastanza chiaro.<br />"
+	" e lo sfondo &egrave; abbastanza chiaro.<br />"
 	"Se vuoi scegliere uno di questi visi, clicca su di esso.";
 #elif L==8
-	"%u twarze (zaznaczone na zielono) wykryto w przodu,"
-	" i tlo znajdujace sie za glowy jest wystarczajaco lekki,.<br />"
-	"Jesli chcesz wybrac jedno z tych twarzy, kliknij na nia.";
+	"%u powierzchnie zosta&lstrok;y wykryte (oznaczony na zielono) w po&lstrok;o&zdot;eniu przednim,"
+	" o dostatecznie jasne t&lstrok;o.<br />"
+	"Je&zdot;eli chcesz wybra&cacute; jedn&aogon; z tych twarzy, kliknij na ni&aogon;.";
 #elif L==9
-	"%u faces (marked in green) have been detected in front position,"
-	" and the background behind the heads is light enough.<br />"
-	"If you want to choose one of those faces, click on it.";	// Necessita de tradução
+	"%u faces foram detectados (indicado em verde) na posi&ccedil;&atilde;o frontal"
+	" e com fundo suficientemente claro.<br />"
+	"Se voc&ecirc; quer escolher um daqueles rostos, clique sobre ele.";
 #endif
 
 const char *Txt_X_faces_marked_in_red_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Se han detectado %u rostros (se&ntilde;alados en rojo) en posici&oacute;n frontal,"
-	" pero el fondo detr&aacute;s de las cabezas es demasiado oscuro.";	// Necessita traduccio
+	"S'han detectat %u cares (assenyalats en vermell) en posici&oacute; frontal,"
+	" per&ograve; el fons &eacute;s massa fosc.";
 #elif L==2
-	"%u faces (marked in green) have been detected in front position,"
-	" but the background behind the heads is too dark.";			// Need Übersetzung
+	"%u wurden Fl&auml;chen (in rot abgebildet) in der vorderen Position erkannt,"
+	" aber der Hintergrund ist zu dunkel.";
 #elif L==3
-	"%u faces (marked in green) have been detected in front position,"
-	" but the background behind the heads is too dark.";
+	"%u faces (marked in red) have been detected in front position,"
+	" but the background is too dark.";
 #elif L==4
 	"Se han detectado %u rostros (se&ntilde;alados en rojo) en posici&oacute;n frontal,"
-	" pero el fondo detr&aacute;s de las cabezas es demasiado oscuro.";
+	" pero el fondo es demasiado oscuro.";
 #elif L==5
-	"%u faces (marked in green) have been detected in front position,"
-	" but the background behind the heads is too dark.";			// Besoin de traduction
+	"%u faces (en rouge) ont &eacute;t&eacute; d&eacute;tect&eacute;s dans la position avant,"
+	" mais le fond est trop sombre.";
 #elif L==6
 	"Se han detectado %u rostros (se&ntilde;alados en rojo) en posici&oacute;n frontal,"
-	" pero el fondo detr&aacute;s de las cabezas es demasiado oscuro.";	// Okoteve traducción
+	" pero el fondo es demasiado oscuro.";	// Okoteve traducción
 #elif L==7
-	"%u visi (segnati in verde) sono stati individuati in posizione centrale,"
-	" ma lo sfondo dietro la testa &egrave; troppo scuro.";
+	"%u visi (segnati in rosso) sono stati individuati in posizione centrale,"
+	" ma lo sfondo &egrave; troppo scuro.";
 #elif L==8
-	"%u twarze (zaznaczone na zielono) wykryto w przodu,"
-	" ale w tle za glowy jest zbyt ciemny.";
+	"%u wykryto twarze (pokazane na czerwono) w przednim po&lstrok;o&ztot;eniu,"
+	" ale t&lstrok;o jest zbyt ciemne.";
 #elif L==9
-	"%u faces (marked in green) have been detected in front position,"
-	" but the background behind the heads is too dark.";			// Necessita de tradução
+	"%u rostos foram detectados (mostrados em vermelho) na posi&ccedil;&atilde;o frontal,"
+	" mas o fundo &eacute; muito escuro.";
 #endif
 
 const char *Txt_Faces_detected =
@@ -46855,32 +46855,32 @@ const char *Txt_Total_BR_score =
 
 const char *Txt_Try_sending_another_image_where_the_face_appears_in_front_position_ =
 #if   L==1
-	"Pruebe a enviar otra imagen donde el rostro aparezca de frente"
-	" y el fondo detr&aacute;s de la cabeza sea blanco o muy claro.";	// Necessita traduccio
+	"Provi a enviar una altra imatge on la cara aparegui de front"
+	" i el fons sigui blanc o molt clar.";
 #elif L==2
-	"Try sending another image where the face appears in front position"
-	" and the background behind of the head is white or very light.";	// Need Übersetzung
+	"Versuchen Sie ein anderes Bild zu senden, wo das Gesicht vor Position erscheint,"
+	" und der Hintergrund ist wei&szlig; oder sehr leicht.";
 #elif L==3
 	"Try sending another image where the face appears in front position"
-	" and the background behind of the head is white or very light.";
+	" and the background is white or very light.";
 #elif L==4
 	"Pruebe a enviar otra imagen donde el rostro aparezca de frente"
-	" y el fondo detr&aacute;s de la cabeza sea blanco o muy claro.";
+	" y el fondo sea blanco o muy claro.";
 #elif L==5
-	"Try sending another image where the face appears in front position"
-	" and the background behind of the head is white or very light.";	// Besoin de traduction
+	"Essayez d'envoyer une autre image o&ugrave; le visage appara&icirc;t en position avant"
+	" et l'arri&egrave;re-plan est blanc ou tr&egrave;s clair.";
 #elif L==6
 	"Pruebe a enviar otra imagen donde el rostro aparezca de frente"
-	" y el fondo detr&aacute;s de la cabeza sea blanco o muy claro.";	// Okoteve traducción
+	" y el fondo sea blanco o muy claro.";	// Okoteve traducción
 #elif L==7
 	"Prova a inviare un'altra immagine dove il viso appare in posizione frontale"
-	" e lo sfondo dietro della testa &egrave; bianco o molto chiaro.";
+	" e lo sfondo &egrave; bianco o molto chiaro.";
 #elif L==8
-	"Try sending another image where the face appears in front position"
-	" and the background behind of the head is white or very light.";	// Potrzebujesz tlumaczenie
+	"Spr&oacute;buj wys&lstrok;a&cacute; inny obraz, gdzie pojawia si&eogon; twarz&aogon; w przednim po&lstrok;o&zdot;eniu,"
+	" a t&lstrok;o jest bia&lstrok;e lub bardzo jasne.";
 #elif L==9
-	"Try sending another image where the face appears in front position"
-	" and the background behind of the head is white or very light.";	// Necessita de tradução
+	"Tente enviar outra imagem onde o rosto aparece na posi&ccedil;&atilde;o dianteira"
+	" eo fundo &eacute; branco ou muito claro.";
 #endif
 
 const char *Txt_TST_Correct_ANSWER =
