@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.172 (2016-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.172.1 (2016-04-01)"
 #define CSS_FILE		"swad15.165.5.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.172.1: Apr 01, 2016	Reception of test image. Not finished. (197398 lines)
         Version 15.172:   Apr 01, 2016	Reception of test image. Not finished. (197339 lines)
         Version 15.171.2: Apr 01, 2016	Change in message related to user photo. (197272 lines)
         Version 15.171.1: Apr 01, 2016	Code refactoring in functions to get a parameter and to receive file. (197271 lines)
@@ -242,7 +243,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1522','es','N','Actu
 					Changes in layout of attendance events. (196038 lines)
         Version 15.154:   Mar 19, 2016	Icon to add new survey integrated in frame.
 					Changes in layout of surveys. (196018 lines)
-        Version 15.153.1: Mar 19, 2016	Fixed layout in edition of assignments. (195980 lines)
+        Version 15.153.1: Mar 19, 2016	Fixed bug in edition of assignments. (195980 lines)
         Version 15.153:   Mar 19, 2016	Icon to add new assignment integrated in frame.
 					Changes in layout of assignments. (195984 lines)
         Version 15.152:   Mar 19, 2016	Changes in layout of head. Not finished. (195949 lines)

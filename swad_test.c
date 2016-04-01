@@ -106,6 +106,14 @@ const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
    "text",
   };
 
+// Test photo will be saved with:
+// - maximum width of Tst_PHOTO_SAVED_MAX_HEIGHT
+// - maximum height of Tst_PHOTO_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define Tst_PHOTO_SAVED_MAX_WIDTH	768
+#define Tst_PHOTO_SAVED_MAX_HEIGHT	512
+#define Tst_PHOTO_SAVED_QUALITY		 75	// 1 to 100
+
 /*****************************************************************************/
 /******************************* Internal types ******************************/
 /*****************************************************************************/
@@ -4644,6 +4652,7 @@ void Tst_InitQst (void)
    Gbl.Test.Feedback.Text = NULL;
    Gbl.Test.Feedback.Length = 0;
    Gbl.Test.Image[0] = '\0';
+   Gbl.Test.ChangeImage = false;
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
    Gbl.Test.Answer.TF = ' ';
@@ -4782,8 +4791,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get image *****/
-   if (Tst_GetImageFromForm ())
-      Lay_ShowAlert (Lay_INFO,"Image present.");
+   Gbl.Test.ChangeImage = Tst_GetImageFromForm ();
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -4897,11 +4905,22 @@ static bool Tst_GetImageFromForm (void)
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    char PathImgPriv[PATH_MAX+1];
    char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNameImg[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
+   char Command[1024+PATH_MAX*2];
+   int ReturnCode;
 
    /***** Get filename and MIME type *****/
    Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
    if (!FileNameImgSrc[0])	// No file present
+      return false;
+
+   /* Get filename extension */
+   if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
+      return false;
+   LengthExtension = strlen (PtrExtension);
+   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
       return false;
 
    /* Check if the file type is image/ or application/octet-stream */
@@ -4912,6 +4931,9 @@ static bool Tst_GetImageFromForm (void)
 	       WrongType = true;
    if (WrongType)
       return false;
+
+   /***** Assign a unique name for the image *****/
+   strcpy (Gbl.Test.Image,Gbl.UniqueNameEncrypted);
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images if it does not exist */
@@ -4924,23 +4946,47 @@ static bool Tst_GetImageFromForm (void)
 	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
-   /* Get filename extension */
-   if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
-      return false;
-   LengthExtension = strlen (PtrExtension);
-   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
-       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
-      return false;
+   /* Create subdirectory if it does not exist */
+   sprintf (PathImgPriv,"%s/%s/%c%c",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	    Gbl.Test.Image[0],
+	    Gbl.Test.Image[1]);
+   Fil_CreateDirIfNotExists (PathImgPriv);
 
-   /* End the reception of image in a temporary file */
-   strcpy (Gbl.Test.Image,Gbl.UniqueNameEncrypted);
+   /***** End the reception of image in a temporary file *****/
    sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
             Gbl.Test.Image,PtrExtension);
    if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
       return false;
 
-   /***** TODO: Copy and process the file *****/
+   /***** Convert temporary file to public JPEG file *****/
+   sprintf (FileNameImg,"%s/%s/%c%c/%s.jpg",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	    Gbl.Test.Image[0],
+	    Gbl.Test.Image[1],
+	    Gbl.Test.Image);
+
+   /* Call to program that makes the conversion */
+   sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
+            FileNameImgTmp,
+            Tst_PHOTO_SAVED_MAX_WIDTH,
+            Tst_PHOTO_SAVED_MAX_HEIGHT,
+            Tst_PHOTO_SAVED_QUALITY,
+            FileNameImg);
+   ReturnCode = system (Command);
+   if (ReturnCode == -1)
+      Lay_ShowErrorAndExit ("Error when running command to process image.");
+
+   /***** Write message depending on return code *****/
+   ReturnCode = WEXITSTATUS(ReturnCode);
+   if (ReturnCode != 0)
+     {
+      sprintf (Gbl.Message,"Image could not be processed successfully.<br />"
+			   "Error code returned by the program of processing: %d",
+	       ReturnCode);
+      Lay_ShowErrorAndExit (Gbl.Message);
+     }
 
    /***** Remove temporary file *****/
    unlink (FileNameImgTmp);
@@ -5395,28 +5441,44 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    if (Gbl.Test.QstCod < 0)	// It's a new question
      {
       /* Insert question in the table of questions */
-      sprintf (Query,"INSERT INTO tst_questions (CrsCod,EditTime,AnsType,Shuffle,Stem,Feedback,NumHits,Score)"
-                     " VALUES ('%ld',NOW(),'%s','%c','%s','%s','0','0')",
+      sprintf (Query,"INSERT INTO tst_questions"
+	             " (CrsCod,EditTime,AnsType,Shuffle,Stem,Image,Feedback,NumHits,Score)"
+                     " VALUES ('%ld',NOW(),'%s','%c','%s','%s','%s','0','0')",
                Gbl.CurrentCrs.Crs.CrsCod,
                Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
                Gbl.Test.Shuffle ? 'Y' :
         	                  'N',
                Gbl.Test.Stem.Text,
+               Gbl.Test.Image,
                Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "");
       Gbl.Test.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
      }
    else				// It's an existing question
      {
       /* Update question */
-      sprintf (Query,"UPDATE tst_questions"
-                     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',Stem='%s',Feedback='%s'"
-                     " WHERE QstCod='%ld' AND CrsCod='%ld'",
-               Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-               Gbl.Test.Shuffle ? 'Y' :
-        	                  'N',
-               Gbl.Test.Stem.Text,
-               Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-               Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      if (Gbl.Test.ChangeImage)
+	 sprintf (Query,"UPDATE tst_questions"
+			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
+			"Stem='%s',Image='%s',Feedback='%s'"
+			" WHERE QstCod='%ld' AND CrsCod='%ld'",
+		  Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+		  Gbl.Test.Shuffle ? 'Y' :
+				     'N',
+		  Gbl.Test.Stem.Text,
+		  Gbl.Test.Image,
+		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      else
+	 sprintf (Query,"UPDATE tst_questions"
+			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
+			"Stem='%s',Feedback='%s'"
+			" WHERE QstCod='%ld' AND CrsCod='%ld'",
+		  Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+		  Gbl.Test.Shuffle ? 'Y' :
+				     'N',
+		  Gbl.Test.Stem.Text,
+		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryUPDATE (Query,"can not update question");
 
       /* Remove answers and tags from this test question */

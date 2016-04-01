@@ -659,6 +659,7 @@ struct Globals
          size_t Length;
         } Stem, Feedback;
       char Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+      bool ChangeImage;	// Change image only when teacher uploads a new image
       bool Shuffle;
       struct
         {
