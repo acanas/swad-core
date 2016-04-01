@@ -165,21 +165,6 @@ bool Fil_ReadStdinIntoTmpFile (void)
      }
    rewind (Gbl.F.Tmp);
 
-/*
-      FILE *FileTgt;
-
-      ***** Open destination file *****
-      if ((FileTgt = fopen ("/tmp/borrame.txt","wb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open target file.");
-
-      ***** Copy source file into destination file *****
-      Fil_FastCopyOfOpenFiles (Gbl.F.Tmp,FileTgt);
-
-      ***** Close the files *****
-      rewind (Gbl.F.Tmp);
-      fclose (FileTgt);
-*/
-
    return true;
   }
 

@@ -108,8 +108,10 @@ bool Str_FileIsHTML (const char *FileName);
 bool Str_Path1BeginsByPath2 (const char *Path1,const char *Path2);
 void Str_SkipSpacesInFile (FILE *FileSrc);
 void Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FILE *FileTgt,const char *Str);
-int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, const char *StrDelimit, unsigned long long MaxLength);
-int Str_SkipFileUntilDelimitStr (FILE *FileSrc, const char *StrDelimit);
+int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
+                                  const char *BoundaryStr,
+                                  unsigned LengthBoundaryStr,
+                                  unsigned long long MaxLength);
 bool Str_ConvertFilFolLnkNameToValid (char *FileName);
 void Str_ConvertToValidFileName (char *Str);
 void Str_WriteSizeInBytesBrief (double SizeInBytes);

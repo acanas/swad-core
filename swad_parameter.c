@@ -63,7 +63,6 @@ static void Par_GetBoundary (void);
 
 static void Par_CreateListOfParamsFromQueryString (void);
 static void Par_CreateListOfParamsFromTmpFile (void);
-static bool Par_ReadTmpFileUntilDelimitStr (const char *BoundaryStr,unsigned LengthBoundaryStr);
 static int Par_ReadTmpFileUntilQuote (void);
 static int Par_ReadTmpFileUntilReturn (void);
 
@@ -305,8 +304,11 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
    /***** Go over the file
           getting start positions and lengths of parameters *****/
-   if (Par_ReadTmpFileUntilDelimitStr (Gbl.Boundary.StrWithoutCRLF,
-                                       Gbl.Boundary.LengthWithoutCRLF))	// Delimiter string found
+   if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
+                                     Gbl.Boundary.StrWithoutCRLF,
+                                     Gbl.Boundary.LengthWithoutCRLF,
+                                     Fil_MAX_FILE_SIZE) == 1)	// Delimiter string found
+
       for (CurPos = 0;
 	   CurPos < Gbl.Params.ContentLength;
 	   )
@@ -392,8 +394,10 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
 	    /***** Get parameter value or file content *****/
 	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of value or file content
-	    if (!Par_ReadTmpFileUntilDelimitStr (Gbl.Boundary.StrWithCRLF,
-	                                         Gbl.Boundary.LengthWithCRLF)) break;	// Delimiter string not found
+	    if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
+					      Gbl.Boundary.StrWithCRLF,
+					      Gbl.Boundary.LengthWithCRLF,
+					      Fil_MAX_FILE_SIZE) != 1) break;	// Boundary string not found
 
 	    // Delimiter string found
 	    Param->Value.Start = CurPos;
@@ -402,62 +406,6 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 		                  Param->Value.Start;
 	   }
         }
-  }
-
-/*****************************************************************************/
-/******************** Read from file until quote '\"' ************************/
-/*****************************************************************************/
-// Return true if boundary string is found.
-// File is positioned just after the last character in boundary string
-
-static bool Par_ReadTmpFileUntilDelimitStr (const char *BoundaryStr,unsigned LengthBoundaryStr)
-  {
-   unsigned NumBytesIdentical;		// Number of characters identical in each iteration of the loop
-   unsigned NumBytesReadButNoDiscarded;	// Number of characters read from the source file...
-					// ...and not fully discarded in search
-   int Buffer[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
-   unsigned StartIndex;
-   unsigned i;
-   bool Found;
-
-   for (StartIndex = 0,
-	NumBytesReadButNoDiscarded = 0,
-	Found = false;
-	!Found;
-	StartIndex = (StartIndex + 1) % LengthBoundaryStr,
-	NumBytesReadButNoDiscarded--)
-     {
-      if (!NumBytesReadButNoDiscarded)
-	{      // Read next character
-	 Buffer[StartIndex] = fgetc (Gbl.F.Tmp);
-	 if (feof (Gbl.F.Tmp))
-	    return false;
-	 NumBytesReadButNoDiscarded++;
-	}
-      if (Buffer[StartIndex] == (int) BoundaryStr[0]) // First character identical
-	{
-	 for (NumBytesIdentical = 1,
-	      i = (StartIndex + 1) % LengthBoundaryStr;
-	      NumBytesIdentical < LengthBoundaryStr;
-	      NumBytesIdentical++,
-	      i = (i + 1) % LengthBoundaryStr)
-	   {
-	    if (NumBytesReadButNoDiscarded == NumBytesIdentical)	// Last character is identical
-	      {
-	       Buffer[i] = fgetc (Gbl.F.Tmp);  // Read next character
-	       if (feof (Gbl.F.Tmp))
-		  return false;
-	       NumBytesReadButNoDiscarded++;
-	      }
-	    if (Buffer[i] != (int) BoundaryStr[NumBytesIdentical])	// Next character is different
-	       break;
-	   }
-	 if (NumBytesIdentical == LengthBoundaryStr) // Boundary found
-	    Found = true;
-	}
-     }
-
-   return true;
   }
 
 /*****************************************************************************/

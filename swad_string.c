@@ -2495,38 +2495,46 @@ void Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FILE *FileTgt,const char *St
 /*
 Search in the file FileSrc the string StrDelimit.
 Write in the file FileTgt and/or StrDst the characters read from FileSrc, not including StrDelimit!.
-FileTgt and StrDst can be NULL if you don't want to use them.
+StrDst can be NULL if you don't want to use them.
 If StrDelimit is found, return 1.
 If what is read exceed MaxLength, abort and return 0.
 If StrDelimit is not found, return -1.
 */
 
-#define MAX_LENGTH_STR_DELIMIT 100
+#define MAX_LENGTH_BOUNDARY_STR 100
 
-int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, const char *StrDelimit, unsigned long long MaxLength)
+int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
+                                  const char *BoundaryStr,
+                                  unsigned LengthBoundaryStr,
+                                  unsigned long long MaxLength)
   {
-   int NumBytesIdentical,		// Number of characters identical in each iteration of the loop
-       NumBytesReadButNoWritten = 0,	// Number of characters read from the source file
-					// and not written in the destination file
-       LengthStrDelimit = strlen (StrDelimit);
-   int Buffer[MAX_LENGTH_STR_DELIMIT+1];
-   unsigned long long LengthDst = 0;
-   int StartIndex = 0, i;
+   unsigned NumBytesIdentical;			// Number of characters identical in each iteration of the loop
+   unsigned NumBytesReadButNotDiscarded;	// Number of characters read from the source file...
+						// ...and not fully discarded in search
+   int Buffer[MAX_LENGTH_BOUNDARY_STR+1];
+   unsigned StartIndex;
+   unsigned i;
    char *Ptr; // Pointer used to go through StrDst writing characters
+   unsigned long long LengthDst;
 
-   if (!LengthStrDelimit)
+   /***** Checkings on boundary string *****/
+   if (!LengthBoundaryStr)
      {
       if (StrDst != NULL)
 	 *StrDst = '\0';
       return 1;
      }
-   if (strlen (StrDelimit) > MAX_LENGTH_STR_DELIMIT)
+   if (LengthBoundaryStr > MAX_LENGTH_BOUNDARY_STR)
       Lay_ShowErrorAndExit ("Delimiter string too large.");
    Ptr = StrDst;
 
+   StartIndex = 0;
+   NumBytesReadButNotDiscarded = 0;
+   LengthDst = 0;
+
    for (;;)
      {
-      if (!NumBytesReadButNoWritten)
+      if (!NumBytesReadButNotDiscarded)
 	{      // Read next character
 	 Buffer[StartIndex] = fgetc (FileSrc);
 	 if (feof (FileSrc))
@@ -2535,15 +2543,16 @@ int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, 
 	       *Ptr = '\0';
 	    return -1;
 	   }
-	 NumBytesReadButNoWritten++;
+	 NumBytesReadButNotDiscarded++;
 	}
-      if (Buffer[StartIndex] == (int) StrDelimit[0]) // First character identical
+
+      if (Buffer[StartIndex] == (int) BoundaryStr[0]) // First character identical
 	{
-	 for (NumBytesIdentical = 1, i = (StartIndex + 1) % LengthStrDelimit;
-	      NumBytesIdentical < LengthStrDelimit;
-	      NumBytesIdentical++, i = (i + 1) % LengthStrDelimit)
+	 for (NumBytesIdentical = 1, i = (StartIndex + 1) % LengthBoundaryStr;
+	      NumBytesIdentical < LengthBoundaryStr;
+	      NumBytesIdentical++, i = (i + 1) % LengthBoundaryStr)
 	   {
-	    if (NumBytesReadButNoWritten == NumBytesIdentical) // Next character identical
+	    if (NumBytesReadButNotDiscarded == NumBytesIdentical) // Last character is identical
 	      {
 	       Buffer[i] = fgetc (FileSrc);  // Read next character
 	       if (feof (FileSrc))
@@ -2552,31 +2561,32 @@ int Str_ReceiveFileUntilDelimitStr (FILE *FileSrc, FILE *FileTgt, char *StrDst, 
 		     *Ptr = '\0';
 		  return -1;
 		 }
-	       NumBytesReadButNoWritten++;
+	       NumBytesReadButNotDiscarded++;
 	      }
-	    if (Buffer[i] != (int) StrDelimit[NumBytesIdentical])  // Next different character
+	    if (Buffer[i] != (int) BoundaryStr[NumBytesIdentical])  // Next character is different
 	       break;
 	   }
-	 if (NumBytesIdentical == LengthStrDelimit) // Str found
+	 if (NumBytesIdentical == LengthBoundaryStr) // Boundary found
 	   {
 	    if (StrDst != NULL)
 	       *Ptr = '\0';
 	    return 1;
 	   }
 	}
+
       if (LengthDst == MaxLength)
 	{
 	 if (StrDst != NULL)
 	    *Ptr = '\0';
 	 return 0;
 	}
-      if (FileTgt != NULL)
-	 fputc (Buffer[StartIndex],FileTgt);  // Add the first character to the destination file
+
       if (StrDst != NULL)
 	 *Ptr++ = (char) Buffer[StartIndex];
+
+      StartIndex = (StartIndex + 1) % LengthBoundaryStr;
+      NumBytesReadButNotDiscarded--;
       LengthDst++;
-      NumBytesReadButNoWritten--;
-      StartIndex = (StartIndex+1) % LengthStrDelimit;
      }
 
    return 0;	// Not reached

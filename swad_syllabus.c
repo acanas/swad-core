@@ -399,8 +399,9 @@ static void Syl_LoadToMemory (void)
 	    LstItemsSyllabus.Lst[NumItem].CodItem[N] = CodItem[N];
 
 	 /* Get the text of the item */
-	 Result = Str_ReceiveFileUntilDelimitStr (Gbl.F.XML, NULL, LstItemsSyllabus.Lst[NumItem].Text,"</item>",
-	                                          (unsigned long long) Syl_MAX_BYTES_TEXT_ITEM);
+	 Result = Str_ReadFileUntilBoundaryStr (Gbl.F.XML,LstItemsSyllabus.Lst[NumItem].Text,
+	                                        "</item>",strlen ("</item>"),
+	                                        (unsigned long long) Syl_MAX_BYTES_TEXT_ITEM);
 	 if (Result == 0) // Str too long
 	   {
 	    if (!Str_FindStrInFile (Gbl.F.XML,"</item>",Str_NO_SKIP_HTML_COMMENTS)) // End the search
@@ -459,8 +460,8 @@ int Syl_ReadLevelItemSyllabus (void)
 
    if (!Str_FindStrInFile (Gbl.F.XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
-   if (Str_ReceiveFileUntilDelimitStr (Gbl.F.XML,NULL,StrlLevel,"\"",
-   	                               (unsigned long long) (11+1)) != 1)
+   if (Str_ReadFileUntilBoundaryStr (Gbl.F.XML,StrlLevel,"\"",1,
+   	                             (unsigned long long) (11+1)) != 1)
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
    if (sscanf (StrlLevel,"%d",&Level) != 1)
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
