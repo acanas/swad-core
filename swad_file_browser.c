@@ -2723,12 +2723,12 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 		     UsrCod,	// User's code
                      Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
                      NewFolderName);
-            if (rename (PathOldFolder,PathNewFolder))
+            if (rename (PathOldFolder,PathNewFolder))	// Fail
 	      {
                Lay_ShowAlert (Lay_ERROR,Txt_Can_not_rename_a_folder_of_assignment);
                NumUsrsError++;
 	      }
-            else
+            else					// Success
               {
                /* Remove affected clipboards */
                Brw_RemoveAffectedClipboards (Brw_ADMI_ASSIG_USR,UsrCod,-1L);
@@ -8259,7 +8259,26 @@ void Brw_RenFolderFileBrowser (void)
 	       but we leave this work to the system */
 
             /* Rename the directory. If a empty folder existed with the name new, overwrite it! */
-            if (rename (OldPath,NewPath) == 0)
+            if (rename (OldPath,NewPath))	// Fail
+	      {
+	       switch (errno)
+	         {
+	          case ENOTEMPTY:
+	          case EEXIST:
+	          case ENOTDIR:
+	             sprintf (Gbl.Message,Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
+			      Gbl.FileBrowser.FilFolLnkName,Gbl.FileBrowser.NewFilFolLnkName);
+	             break;
+	          case EACCES:
+	             Lay_ShowErrorAndExit ("Write forbidden.");
+	             break;
+	          default:
+	             Lay_ShowErrorAndExit ("Can not rename folder.");
+	             break;
+	         }
+               Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	      }
+            else				// Success
               {
 	       /* If a folder is renamed,
                   it is necessary to rename all the entries in the tables of files
@@ -8287,25 +8306,7 @@ void Brw_RenFolderFileBrowser (void)
                         Gbl.FileBrowser.NewFilFolLnkName);
                Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
               }
-            else
-	      {
-	       switch (errno)
-	         {
-	          case ENOTEMPTY:
-	          case EEXIST:
-	          case ENOTDIR:
-	             sprintf (Gbl.Message,Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
-			      Gbl.FileBrowser.FilFolLnkName,Gbl.FileBrowser.NewFilFolLnkName);
-	             break;
-	          case EACCES:
-	             Lay_ShowErrorAndExit ("Write forbidden.");
-	             break;
-	          default:
-	             Lay_ShowErrorAndExit ("Can not rename folder.");
-	             break;
-	         }
-               Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-	      }
+
            }
          else	// Names are equal. This may happens if we have press INTRO without changing the name
            {
@@ -8449,13 +8450,13 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                   if (FileIsValid)
                     {
                      /* Rename the temporary */
-                     if (rename (PathTmp,Path))
+                     if (rename (PathTmp,Path))	// Fail
 	               {
 	                Brw_RemoveTree (PathTmp);
                         sprintf (Gbl.Message,Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
                                  Gbl.FileBrowser.NewFilFolLnkName);
 	               }
-                     else
+                     else			// Success
 	               {
 	                /* Check if quota has been exceeded */
 	                Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);

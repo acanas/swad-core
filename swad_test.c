@@ -42,6 +42,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_image.h"
 #include "swad_parameter.h"
 #include "swad_theme.h"
 #include "swad_test.h"
@@ -154,7 +155,6 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteQstImage (const char *Image,const char *ClassImg);
 static void Tst_PutFormToUploadNewQstImage (void);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -213,13 +213,16 @@ static bool Tst_GetCreateXMLFromForm (void);
 static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
+
+static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
+static void Tst_GetImageNameFromDB (void);
+
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
-static bool Tst_GetImageFromForm (void);
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
-static int Tst_GetQstCod (void);
+static bool Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
 static void Tst_InsertTagsIntoDB (void);
@@ -975,7 +978,11 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   Tst_WriteQstImage (row[5],"TEST_IMG_SHOW");
+   if (row[5][0])
+     {
+      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      Img_ShowImage (row[5],"TEST_IMG_SHOW");
+     }
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
    else	// Assessing exam / Viewing old exam
@@ -1014,48 +1021,6 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Free memory allocated for the stem *****/
    free ((void *) StemRigorousHTML);
-  }
-
-/*****************************************************************************/
-/******************** Write the image of a test question *********************/
-/*****************************************************************************/
-
-static void Tst_WriteQstImage (const char *Image,const char *ClassImg)
-  {
-   char FileNameImgPriv[PATH_MAX+1];
-   char FullPathImgPriv[PATH_MAX+1];
-   char URL[PATH_MAX+1];
-
-   if (!Image)
-      return;
-   if (!Image[0])
-      return;
-
-   /***** Create a temporary public directory
-	  used to download the zip file *****/
-   Brw_CreateDirDownloadTmp ();
-
-   /***** Create symbolic link from temporary public directory to private file in order to gain access to it for downloading *****/
-   /* Private path to image */
-   sprintf (FileNameImgPriv,"%s.jpg",
-            Image);
-   sprintf (FullPathImgPriv,"%s/%s/%c%c/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Image[0],
-	    Image[1],
-	    FileNameImgPriv);
-   Brw_CreateTmpPublicLinkToPrivateFile (FullPathImgPriv,FileNameImgPriv);
-
-   /***** Create URL pointing to symbolic link *****/
-   sprintf (URL,"%s/%s/%s/%s",
-	    Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-	    Gbl.FileBrowser.TmpPubDir,
-	    FileNameImgPriv);
-
-   /***** Show image *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s\" alt=\"\" class=\"%s\"/>"
-	              "<br />",
-            URL,ClassImg);
   }
 
 /*****************************************************************************/
@@ -2707,7 +2672,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Tst_WriteQstImage (row[5],"TEST_IMG_EDIT_LIST");
+      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      if (row[5][0])
+	{
+	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+	 Img_ShowImage (row[5],"TEST_IMG_EDIT_LIST");
+	}
       Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
       fprintf (Gbl.F.Out,"</td>");
@@ -4202,125 +4172,24 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Save;
    extern const char *Txt_Create_question;
    char Title[512];
-   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRows;
+   unsigned long NumRow;
    unsigned NumOpt;
    Tst_AnswerType_t AnsType;
-   bool Shuffle = false;
    unsigned NumTag;
    bool TagNotFound;
    bool OptionsDisabled;
 
-   if (Gbl.Action.Act == ActEdiOneTstQst) // If no receiving the question, but editing a new or existing question
+   /***** If no receiving the question, but editing a new or existing question
+          ==> init or edit data of question *****/
+   if (Gbl.Action.Act == ActEdiOneTstQst)
      {
       Tst_InitQst ();
-      if (Tst_GetQstCod ())	// If parameter QstCod received ==> question already exists in the database
-        {
-         /***** Get the type of answer and the stem from the database *****/
-         /* Get the question from database */
-         sprintf (Query,"SELECT AnsType,Shuffle,Stem,Image,Feedback"
-                        " FROM tst_questions"
-                        " WHERE QstCod='%ld' AND CrsCod='%ld'",
-                  Gbl.Test.QstCod,
-                  Gbl.CurrentCrs.Crs.CrsCod);
-         DB_QuerySELECT (Query,&mysql_res,"can not get a question");
-
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get the type of answer */
-         Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-
-         /* Get shuffle (row[1]) */
-         Shuffle = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
-
-         /* Get the stem of the question from the database (row[2]) */
-         strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
-         Stem[Cns_MAX_BYTES_TEXT] = '\0';
-
-         /* Get the image of the question from the database (row[3]) */
-         strncpy (Gbl.Test.Image,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-         Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
-
-         /* Get the feedback of the question from the database (row[4]) */
-         Feedback[0] = '\0';
-         if (row[4])
-            if (row[4][0])
-              {
-	       strncpy (Feedback,row[4],Cns_MAX_BYTES_TEXT);
-	       Feedback[Cns_MAX_BYTES_TEXT] = '\0';
-              }
-
-         /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-
-         /***** Get the tags from the database *****/
-         NumRows = Tst_GetTagsQst (Gbl.Test.QstCod,&mysql_res);
-         for (NumRow = 0;
-              NumRow < NumRows;
-              NumRow++)
-           {
-            row = mysql_fetch_row (mysql_res);
-            strncpy (Gbl.Test.TagText[NumRow],row[0],Tst_MAX_BYTES_TAG);
-            Gbl.Test.TagText[NumRow][Tst_MAX_BYTES_TAG] = '\0';
-           }
-
-         /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-
-         /***** Get the answers from the database *****/
-         Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct,Feedback
-         for (NumOpt = 0;
-              NumOpt < Gbl.Test.Answer.NumOptions;
-              NumOpt++)
-           {
-            row = mysql_fetch_row (mysql_res);
-            switch (Gbl.Test.AnswerType)
-              {
-               case Tst_ANS_INT:
-                  if (Gbl.Test.Answer.NumOptions != 1)
-                     Lay_ShowErrorAndExit ("Wrong answer.");
-                  Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
-                  break;
-               case Tst_ANS_FLOAT:
-                  if (Gbl.Test.Answer.NumOptions != 2)
-                     Lay_ShowErrorAndExit ("Wrong answer.");
-                  Gbl.Test.Answer.FloatingPoint[NumOpt] = Tst_GetFloatAnsFromStr (row[1]);
-                  break;
-               case Tst_ANS_TRUE_FALSE:
-                  if (Gbl.Test.Answer.NumOptions != 1)
-                     Lay_ShowErrorAndExit ("Wrong answer.");
-                  Gbl.Test.Answer.TF = row[1][0];
-                  break;
-               case Tst_ANS_UNIQUE_CHOICE:
-               case Tst_ANS_MULTIPLE_CHOICE:
-               case Tst_ANS_TEXT:
-                  if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
-                     Lay_ShowErrorAndExit ("Wrong answer.");
-                  if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-                     Lay_ShowErrorAndExit (Gbl.Message);
-
-                  strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-                  Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-
-                  // Feedback is initialized to empty string
-                  if (row[3])
-                     if (row[3][0])
-                       {
-			strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[3],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-			Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-                       }
-
-                  Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-                  break;
-               default:
-                  break;
-              }
-           }
-         /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
-        }
+      if (Tst_GetQstCod ())	// If parameter QstCod received ==>
+				// ==> question already exists in the database
+         Tst_GetQstDataFromDB (Stem,Feedback);
      }
 
    /***** Start form and table *****/
@@ -4438,7 +4307,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 			 "<td class=\"LEFT_TOP\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Image);
-      Tst_WriteQstImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
+      if (Gbl.Test.Image[0])
+         Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
       Tst_PutFormToUploadNewQstImage ();
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
@@ -4560,7 +4430,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                       "<td class=\"%s LEFT_TOP\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
-   if (Shuffle)
+   if (Gbl.Test.Shuffle)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
        Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE)
@@ -4676,7 +4546,7 @@ void Tst_InitQst (void)
    Gbl.Test.Feedback.Text = NULL;
    Gbl.Test.Feedback.Length = 0;
    Gbl.Test.Image[0] = '\0';
-   Gbl.Test.ChangeImage = false;
+   Gbl.Test.Shuffle = false;
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
    Gbl.Test.Answer.TF = ' ';
@@ -4690,6 +4560,159 @@ void Tst_InitQst (void)
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
    Gbl.Test.Answer.FloatingPoint[1] = 0.0;
+  }
+
+/*****************************************************************************/
+/****************** Get data of a question from database *********************/
+/*****************************************************************************/
+
+static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned long NumRow;
+   unsigned NumOpt;
+
+   /***** Get the type of answer and the stem from the database *****/
+   /* Get the question from database */
+   sprintf (Query,"SELECT AnsType,Shuffle,Stem,Image,Feedback"
+		  " FROM tst_questions"
+		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get a question");
+
+   row = mysql_fetch_row (mysql_res);
+
+   /* Get the type of answer */
+   Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+
+   /* Get shuffle (row[1]) */
+   Gbl.Test.Shuffle = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+
+   /* Get the stem of the question from the database (row[2]) */
+   strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
+   Stem[Cns_MAX_BYTES_TEXT] = '\0';
+
+   /* Get the image of the question from the database (row[3]) */
+   if (row[3][0])
+     {
+      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      strncpy (Gbl.Test.Image,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+     }
+   else
+      Gbl.Image.Status = Img_NONE;
+
+   /* Get the feedback of the question from the database (row[4]) */
+   Feedback[0] = '\0';
+   if (row[4])
+      if (row[4][0])
+	{
+	 strncpy (Feedback,row[4],Cns_MAX_BYTES_TEXT);
+	 Feedback[Cns_MAX_BYTES_TEXT] = '\0';
+	}
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get the tags from the database *****/
+   NumRows = Tst_GetTagsQst (Gbl.Test.QstCod,&mysql_res);
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      strncpy (Gbl.Test.TagText[NumRow],row[0],Tst_MAX_BYTES_TAG);
+      Gbl.Test.TagText[NumRow][Tst_MAX_BYTES_TAG] = '\0';
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get the answers from the database *****/
+   Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct,Feedback
+   for (NumOpt = 0;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      switch (Gbl.Test.AnswerType)
+	{
+	 case Tst_ANS_INT:
+	    if (Gbl.Test.Answer.NumOptions != 1)
+	       Lay_ShowErrorAndExit ("Wrong answer.");
+	    Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
+	    break;
+	 case Tst_ANS_FLOAT:
+	    if (Gbl.Test.Answer.NumOptions != 2)
+	       Lay_ShowErrorAndExit ("Wrong answer.");
+	    Gbl.Test.Answer.FloatingPoint[NumOpt] = Tst_GetFloatAnsFromStr (row[1]);
+	    break;
+	 case Tst_ANS_TRUE_FALSE:
+	    if (Gbl.Test.Answer.NumOptions != 1)
+	       Lay_ShowErrorAndExit ("Wrong answer.");
+	    Gbl.Test.Answer.TF = row[1][0];
+	    break;
+	 case Tst_ANS_UNIQUE_CHOICE:
+	 case Tst_ANS_MULTIPLE_CHOICE:
+	 case Tst_ANS_TEXT:
+	    if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
+	       Lay_ShowErrorAndExit ("Wrong answer.");
+	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
+	       Lay_ShowErrorAndExit (Gbl.Message);
+
+	    strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	    Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+
+	    // Feedback is initialized to empty string
+	    if (row[3])
+	       if (row[3][0])
+		 {
+		  strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[3],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+		  Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+		 }
+
+	    Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+	    break;
+	 default:
+	    break;
+	}
+     }
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/***** Get possible image associated with a test question from database ******/
+/*****************************************************************************/
+
+static void Tst_GetImageNameFromDB (void)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get possible image associated with a test question from database *****/
+   sprintf (Query,"SELECT Image FROM tst_questions"
+		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get a question");
+   row = mysql_fetch_row (mysql_res);
+
+   /* Get the image of the question from the database (row[0]) */
+   if (row[0][0])	// Image name stored in database
+     {
+      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      strncpy (Gbl.Test.Image,row[0],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+     }
+   else		// No image in this question
+      Gbl.Image.Status = Img_NONE;
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4746,6 +4769,10 @@ void Tst_ReceiveQst (void)
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
       /***** Form is received OK ==> insert or update question and answer in the database *****/
+      if (Gbl.Image.Status == Img_FILE_PROCESSED)
+	 /* Move processed image to definitive directory */
+	 Img_MoveImageToDefinitiveDirectory ();
+
       /* Insert or update question, tags and answer in the database */
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
 
@@ -4753,6 +4780,7 @@ void Tst_ReceiveQst (void)
       Tst_ListOneQstToEdit ();
      }
    else	// Question is wrong
+      /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
 
    /***** Free answers *****/
@@ -4815,7 +4843,17 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get new image (if present ==> create file) *****/
-   Gbl.Test.ChangeImage = Tst_GetImageFromForm ();
+   Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
+                         Tst_PHOTO_SAVED_MAX_HEIGHT,
+                         Tst_PHOTO_SAVED_QUALITY);
+   if (Gbl.Image.Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
+       Gbl.Test.QstCod > 0)				// Question exists
+     {
+      /***** Get possible image from database *****/
+      Tst_GetImageNameFromDB ();
+      Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
+	                                      Img_NONE);
+     }
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -4913,109 +4951,6 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Stem.Length = strlen (Gbl.Test.Stem.Text);
    Gbl.Test.Feedback.Text = Feedback;
    Gbl.Test.Feedback.Length = strlen (Gbl.Test.Feedback.Text);
-  }
-
-/*****************************************************************************/
-/****************** Get image of a test question from form *******************/
-/*****************************************************************************/
-// Return true if image is created
-
-static bool Tst_GetImageFromForm (void)
-  {
-   struct Param *Param;
-   char FileNameImgSrc[PATH_MAX+1];
-   char *PtrExtension;
-   size_t LengthExtension;
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
-   char PathImgPriv[PATH_MAX+1];
-   char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNameImg[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
-   bool WrongType = false;
-   char Command[1024+PATH_MAX*2];
-   int ReturnCode;
-
-   /***** Get filename and MIME type *****/
-   Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
-   if (!FileNameImgSrc[0])	// No file present
-      return false;
-
-   /* Get filename extension */
-   if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
-      return false;
-   LengthExtension = strlen (PtrExtension);
-   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
-       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
-      return false;
-
-   /* Check if the file type is image/ or application/octet-stream */
-   if (strncmp (MIMEType,"image/",strlen ("image/")))
-      if (strcmp (MIMEType,"application/octet-stream"))
-	 if (strcmp (MIMEType,"application/octetstream"))
-	    if (strcmp (MIMEType,"application/octet"))
-	       WrongType = true;
-   if (WrongType)
-      return false;
-
-   /***** Assign a unique name for the image *****/
-   strcpy (Gbl.Test.Image,Gbl.UniqueNameEncrypted);
-
-   /***** Create private directories if not exist *****/
-   /* Create private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
-   Fil_CreateDirIfNotExists (PathImgPriv);
-
-   /* Create temporary private directory for images if it does not exist */
-   sprintf (PathImgPriv,"%s/%s/%s",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
-   Fil_CreateDirIfNotExists (PathImgPriv);
-
-   /* Create subdirectory if it does not exist */
-   sprintf (PathImgPriv,"%s/%s/%c%c",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Gbl.Test.Image[0],
-	    Gbl.Test.Image[1]);
-   Fil_CreateDirIfNotExists (PathImgPriv);
-
-   /***** End the reception of image in a temporary file *****/
-   sprintf (FileNameImgTmp,"%s/%s/%s/%s.%s",
-            Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
-            Gbl.Test.Image,PtrExtension);
-   if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
-      return false;
-
-   /***** Convert temporary file to public JPEG file *****/
-   sprintf (FileNameImg,"%s/%s/%c%c/%s.jpg",
-	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Gbl.Test.Image[0],
-	    Gbl.Test.Image[1],
-	    Gbl.Test.Image);
-
-   /* Call to program that makes the conversion */
-   sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
-            FileNameImgTmp,
-            Tst_PHOTO_SAVED_MAX_WIDTH,
-            Tst_PHOTO_SAVED_MAX_HEIGHT,
-            Tst_PHOTO_SAVED_QUALITY,
-            FileNameImg);
-   ReturnCode = system (Command);
-   if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running command to process image.");
-
-   /***** Write message depending on return code *****/
-   ReturnCode = WEXITSTATUS(ReturnCode);
-   if (ReturnCode != 0)
-     {
-      sprintf (Gbl.Message,"Image could not be processed successfully.<br />"
-			   "Error code returned by the program of processing: %d",
-	       ReturnCode);
-      Lay_ShowErrorAndExit (Gbl.Message);
-     }
-
-   /***** Remove temporary file *****/
-   unlink (FileNameImgTmp);
-
-   return true;
   }
 
 /*****************************************************************************/
@@ -5419,16 +5354,15 @@ void Tst_ChangeShuffleQst (void)
 /*****************************************************************************/
 /************ Get the parameter with the code of a test question *************/
 /*****************************************************************************/
-// Return 1 if parameter exists; 0 if not found
 
-static int Tst_GetQstCod (void)
+static bool Tst_GetQstCod (void)
   {
    char LongStr[1+10+1];
 
    Par_GetParToText ("QstCod",LongStr,1+10);
    if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
-      return 0;
-   return 1;
+      return false;
+   return true;
   }
 
 /*****************************************************************************/
@@ -5478,14 +5412,19 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                Gbl.Test.Image,
                Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "");
       Gbl.Test.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
+
+      /* Update image status */
+      if (Gbl.Test.Image[0])
+	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
      }
    else				// It's an existing question
      {
       /***** Update existing question *****/
-      if (Gbl.Test.ChangeImage)
+      if (Gbl.Image.Status == Img_FILE_MOVED)
 	{
-	 /* Remove file with the previous image
-	    (the file with the new image is already created) */
+	 /* Remove possible file with the old image
+	    (the new image file is already processed
+	     and moved to the definitive directory) */
 	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
 	 /* Update question in database */
@@ -5500,6 +5439,10 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		  Gbl.Test.Image,
 		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+
+	 /* Update image status */
+	 if (Gbl.Test.Image[0])
+	    Gbl.Image.Status = Img_NAME_STORED_IN_DB;
 	}
       else	// Do not change image
 	 sprintf (Query,"UPDATE tst_questions"

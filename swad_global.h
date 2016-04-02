@@ -47,8 +47,9 @@
 #include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_holiday.h"
-#include "swad_icon.h"
+#include "swad_image.h"
 #include "swad_import.h"
+#include "swad_icon.h"
 #include "swad_institution.h"
 #include "swad_layout.h"
 #include "swad_link.h"
@@ -659,7 +660,6 @@ struct Globals
          size_t Length;
         } Stem, Feedback;
       char Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
-      bool ChangeImage;	// Change image only when teacher uploads a new image
       bool Shuffle;
       struct
         {
@@ -719,6 +719,10 @@ struct Globals
          float MaxPercent;
         } DegPhotos;
      } Stat;
+   struct
+     {
+      Img_Status_t Status;
+     } Image;
   };
 
 /*****************************************************************************/

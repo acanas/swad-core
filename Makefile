@@ -26,23 +26,29 @@
 #                                                                             #
 ###############################################################################
 
-OBJS = swad_account.o swad_action.o swad_announcement.o swad_assignment.o swad_attendance.o \
+OBJS = swad_account.o swad_action.o swad_announcement.o swad_assignment.o \
+       swad_attendance.o \
        swad_banner.o \
-       swad_calendar.o swad_centre.o swad_chat.o swad_config.o swad_connected.o swad_country.o swad_course.o swad_cryptography.o \
-       swad_database.o swad_date.o swad_degree.o swad_degree_type.o swad_department.o \
+       swad_calendar.o swad_centre.o swad_chat.o swad_config.o \
+       swad_connected.o swad_country.o swad_course.o swad_cryptography.o \
+       swad_database.o swad_date.o swad_degree.o swad_degree_type.o \
+       swad_department.o \
        swad_enrollment.o swad_exam.o \
        swad_file.o swad_file_browser.o swad_follow.o swad_forum.o \
        swad_global.o swad_group.o \
        swad_help.o swad_holiday.o \
-       swad_icon.o swad_ID.o swad_import.o swad_indicator.o swad_info.o swad_institution.o \
+       swad_icon.o swad_ID.o swad_image.o swad_import.o swad_indicator.o \
+       swad_info.o swad_institution.o \
        swad_layout.o swad_link.o swad_logo.o \
        swad_mail.o swad_main.o swad_mark.o swad_menu.o swad_message.o \
        swad_network.o swad_nickname.o swad_notice.o swad_notification.o \
        swad_pagination.o swad_parameter.o swad_password.o swad_photo.o \
-       swad_place.o swad_plugin.o swad_preference.o swad_profile.o swad_privacy.o \
+       swad_place.o swad_plugin.o swad_preference.o swad_profile.o \
+       swad_privacy.o \
        swad_QR.o \
        swad_record.o swad_role.o swad_RSS.o \
-       swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
+       swad_scope.o swad_search.o swad_session.o swad_setup.o swad_social.o \
+       swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_tab.o swad_test.o swad_test_import.o swad_theme.o swad_timetable.o \
        swad_user.o \
        swad_web_service.o \

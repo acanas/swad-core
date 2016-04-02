@@ -41499,21 +41499,21 @@ const char *Txt_The_file_is_not_X =	// Warning: it is very important to include 
 #if   L==1
 	"El archivo no es <em>%s</em>.";	// Necessita traduccio
 #elif L==2
-	"The file is not <em>%s</em>.";	// Need Übersetzung
+	"The file is not <em>%s</em>.";		// Need Übersetzung
 #elif L==3
 	"The file is not <em>%s</em>.";
 #elif L==4
 	"El archivo no es <em>%s</em>.";
 #elif L==5
-	"The file is not <em>%s</em>.";	// Besoin de traduction
+	"The file is not <em>%s</em>.";		// Besoin de traduction
 #elif L==6
 	"El archivo no es <em>%s</em>.";	// Okoteve traducción
 #elif L==7
 	"IL file non &egrave; <em>%s</em>.";
 #elif L==8
-	"The file is not <em>%s</em>.";	// Potrzebujesz tlumaczenie
+	"The file is not <em>%s</em>.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"The file is not <em>%s</em>.";	// Necessita de tradução
+	"The file is not <em>%s</em>.";		// Necessita de tradução
 #endif
 
 const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =

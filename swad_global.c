@@ -430,6 +430,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Imported.ExternalSesId[0] = '\0';
    Gbl.Imported.ExternalRole = Rol_UNKNOWN;
 
+   /* Related to images uploaded in a form */
+   Gbl.Image.Status = Img_NONE;
+
    Gbl.WebService.Function = Svc_unknown;
   }
 

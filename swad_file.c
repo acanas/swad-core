@@ -374,9 +374,7 @@ bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew)
    extern const char *Txt_There_is_already_a_file_named_X;
 
    /* Rename the file or directory */
-   if (rename (PathOld,PathNew) == 0)
-      return true;
-   else
+   if (rename (PathOld,PathNew))	// Fail
      {
       switch (errno)
         {
@@ -398,6 +396,8 @@ bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew)
 	}
       return false;
      }
+   else					// Success
+      return true;
   }
 
 /*****************************************************************************/

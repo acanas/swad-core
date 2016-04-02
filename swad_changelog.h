@@ -144,13 +144,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.174 (2016-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.175 (2016-04-03)"
 #define CSS_FILE		"swad15.173.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.175:   Apr 03, 2016	Fixed bug when editing a test question.
+					Lot of code refactoring related to edition of questions.
+					New module swad_image for edition of images. (197754 lines)
         Version 15.174:   Apr 01, 2016	Image in a test question is removed when the test question is removed.
 					All images in test questions of a course are removed when course is removed. (197504 lines)
         Version 15.173.4: Apr 01, 2016	Old image in test question is removed when replaced by a new one. (197481 lines)
