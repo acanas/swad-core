@@ -68,7 +68,24 @@ static void Img_ProcessImage (const char *FileNameImgOriginal,
                               unsigned Width,unsigned Height,unsigned Quality);
 
 /*****************************************************************************/
-/****************** Get image of a test question from form *******************/
+/************************* Get image action from form ************************/
+/*****************************************************************************/
+
+Img_Action_t Img_GetImageActionFromForm (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+
+   Par_GetParToText ("ImgAct",UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
+      Lay_ShowErrorAndExit ("Wrong action to perform on image.");
+   if (UnsignedNum >= Img_NUM_ACTIONS)
+      Lay_ShowErrorAndExit ("Wrong action to perform on image.");
+   return (Img_Action_t) UnsignedNum;
+  }
+
+/*****************************************************************************/
+/**************************** Get image from form ****************************/
 /*****************************************************************************/
 // Return true if image is created
 

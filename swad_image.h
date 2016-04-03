@@ -68,6 +68,7 @@ typedef enum
   } Img_Status_t;
 
 /***** Action to perform when editing a form with an image *****/
+#define Img_NUM_ACTIONS	3
 typedef enum
   {
    Img_ACTION_NONE,	// Do not use image (remove current image if exists)
@@ -79,7 +80,9 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+Img_Action_t Img_GetImageActionFromForm (void);
 void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
+
 void Img_MoveImageToDefinitiveDirectory (void);
 void Img_ShowImage (const char *Image,const char *ClassImg);
 void Img_RemoveImageFile (const char *ImageName);

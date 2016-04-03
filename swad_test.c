@@ -1036,7 +1036,7 @@ static void Tst_PutFormToEditQstImage (void)
    extern const char *Txt_New_image;
 
    /***** No image *****/
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Image\" value=\"%u\"",
+   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ImgAct\" value=\"%u\"",
 	    Img_ACTION_NONE);
    if (!Gbl.Test.Image[0])
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1050,7 +1050,7 @@ static void Tst_PutFormToEditQstImage (void)
    /***** Current image *****/
    if (Gbl.Test.Image[0])
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Image\" value=\"%u\" checked=\"checked\" />"
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ImgAct\" value=\"%u\" checked=\"checked\" />"
 			 "<label class=\"%s\">"
 			 "%s"
 			 "</label><br />",
@@ -1061,7 +1061,7 @@ static void Tst_PutFormToEditQstImage (void)
      }
 
    /***** New image *****/
-   fprintf (Gbl.F.Out,"<input id=\"change_image\" type=\"radio\" name=\"Image\" value=\"%u\">",
+   fprintf (Gbl.F.Out,"<input id=\"change_image\" type=\"radio\" name=\"ImgAct\" value=\"%u\">",
 	    Img_ACTION_CHANGE);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s: "
@@ -4830,6 +4830,7 @@ void Tst_ReceiveQst (void)
 static void Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
    char UnsignedStr[10+1];
+   Img_Action_t ImageAction;
    char YN[1+1];
    unsigned NumTag;
    unsigned NumTagRead;
@@ -4878,17 +4879,34 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
-   /***** Get new image (if present ==> create file) *****/
-   Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
-                         Tst_PHOTO_SAVED_MAX_HEIGHT,
-                         Tst_PHOTO_SAVED_QUALITY);
-   if (Gbl.Image.Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
-       Gbl.Test.QstCod > 0)				// Question exists
+   /***** Get type of image *****/
+   ImageAction = Img_GetImageActionFromForm ();
+   switch (ImageAction)
      {
-      /***** Get possible image from database *****/
-      Tst_GetImageNameFromDB ();
-      Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
-	                                      Img_NONE);
+      case Img_ACTION_NONE:	// Do not use image (remove current image if exists)
+
+	 // TODO: Remove image
+
+      case Img_ACTION_KEEP:	// Keep current image unchanged
+	 /***** Get image from database *****/
+	 Tst_GetImageNameFromDB ();
+	 Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
+						 Img_NONE);
+	 break;
+      case Img_ACTION_CHANGE:	// Upload new image (remove current image if exists)
+         /***** Get new image (if present ==> create file) *****/
+	 Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
+			       Tst_PHOTO_SAVED_MAX_HEIGHT,
+			       Tst_PHOTO_SAVED_QUALITY);
+	 if (Gbl.Image.Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
+	     Gbl.Test.QstCod > 0)			// Question exists
+	   {
+	    /* Get possible image from database */
+	    Tst_GetImageNameFromDB ();
+	    Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
+						    Img_NONE);
+	   }
+	 break;
      }
 
    /***** Get answers *****/
