@@ -166,6 +166,8 @@ void Tst_ShowMyTestResults (void);
 void Tst_ShowOneTestExam (void);
 void Tst_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
 void Tst_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_RemoveAllExamsMadeInCrs (long CrsCod);
+void Tst_RemoveCrsExams (long CrsCod);
+
+void Tst_RemoveCrsTests (long CrsCod);
 
 #endif

@@ -4296,23 +4296,20 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Stem);
 
    /***** Image *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_TOP\">"
-			 "<label class=\"%s\">"
-			 "%s:"
-                         "</label>"
-			 "</td>"
-			 "<td class=\"LEFT_TOP\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
-	       Txt_Image);
-      if (Gbl.Test.Image[0])
-         Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
-      Tst_PutFormToUploadNewQstImage ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_TOP\">"
+		      "<label class=\"%s\">"
+		      "%s:"
+		      "</label>"
+		      "</td>"
+		      "<td class=\"LEFT_TOP\">",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_Image);
+   if (Gbl.Test.Image[0])
+      Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
+   Tst_PutFormToUploadNewQstImage ();
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7224,11 +7221,11 @@ void Tst_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod)
 /******************* Remove all test exams made in a course ******************/
 /*****************************************************************************/
 
-void Tst_RemoveAllExamsMadeInCrs (long CrsCod)
+void Tst_RemoveCrsExams (long CrsCod)
   {
    char Query[512];
 
-   /***** Remove exams made by the specified user *****/
+   /***** Remove questions of exams made in the course *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.CrsCod='%ld'"
@@ -7236,8 +7233,58 @@ void Tst_RemoveAllExamsMadeInCrs (long CrsCod)
             CrsCod);
    DB_QueryDELETE (Query,"can not remove exams made in a course");
 
+   /***** Remove exams made in the course *****/
    sprintf (Query,"DELETE FROM tst_exams"
 	          " WHERE CrsCod='%ld'",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove exams made in a course");
+  }
+
+/*****************************************************************************/
+/******************* Remove all test exams made in a course ******************/
+/*****************************************************************************/
+
+void Tst_RemoveCrsTests (long CrsCod)
+  {
+   char Query[512];
+
+   /***** Remove tests status in the course *****/
+   sprintf (Query,"DELETE FROM tst_status WHERE CrsCod='%ld'",CrsCod);
+   DB_QueryDELETE (Query,"can not remove status of tests of a course");
+
+   /***** Remove test configuration of the course *****/
+   sprintf (Query,"DELETE FROM tst_config WHERE CrsCod='%ld'",
+	    CrsCod);
+   DB_QueryDELETE (Query,"can not remove configuration of tests of a course");
+
+   /***** Remove associations between test questions
+          and test tags in the course *****/
+   sprintf (Query,"DELETE FROM tst_question_tags"
+	          " USING tst_questions,tst_question_tags"
+                  " WHERE tst_questions.CrsCod='%ld'"
+                  " AND tst_questions.QstCod=tst_question_tags.QstCod",
+            CrsCod);
+   DB_QueryDELETE (Query,"can not remove tags associated to questions of tests of a course");
+
+   /***** Remove test tags in the course *****/
+   sprintf (Query,"DELETE FROM tst_tags WHERE CrsCod='%ld'",
+	    CrsCod);
+   DB_QueryDELETE (Query,"can not remove tags of test of a course");
+
+   /***** Remove test answers in the course *****/
+   sprintf (Query,"DELETE FROM tst_answers USING tst_questions,tst_answers"
+                  " WHERE tst_questions.CrsCod='%ld'"
+                  " AND tst_questions.QstCod=tst_answers.QstCod",
+            CrsCod);
+   DB_QueryDELETE (Query,"can not remove answers of tests of a course");
+
+   /***** Remove files with images associated
+          to test questions in the course *****/
+   Tst_RemoveImageFilesFromQstsInCrs (CrsCod,
+                                      -1L);	// All questions in the course
+
+   /***** Remove test questions in the course *****/
+   sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod='%ld'",
+	    CrsCod);
+   DB_QueryDELETE (Query,"can not remove test questions of a course");
   }
