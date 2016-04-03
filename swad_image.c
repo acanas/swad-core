@@ -265,3 +265,23 @@ void Img_ShowImage (const char *Image,const char *ClassImg)
             URL,ClassImg);
   }
 
+/*****************************************************************************/
+/** Remove private file with an image, given the image name (without .jpg) ***/
+/*****************************************************************************/
+
+void Img_RemoveImageFile (const char *ImageName)
+  {
+   char FullPathImgPriv[PATH_MAX+1];
+
+   /***** Build path to private file *****/
+   sprintf (FullPathImgPriv,"%s/%s/%c%c/%s.jpg",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
+	    ImageName[0],
+	    ImageName[1],
+	    ImageName);
+
+   /***** Remove private file *****/
+   unlink (FullPathImgPriv);
+
+   // Public links are removed automatically after a period
+  }

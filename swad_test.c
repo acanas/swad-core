@@ -5476,7 +5476,6 @@ void Tst_RemoveImageFilesFromQstsInCrs (long CrsCod,
    MYSQL_ROW row;
    unsigned NumImages;
    unsigned NumImg;
-   char FullPathImgPriv[PATH_MAX+1];
 
    /***** Get names of images associated to test questions from database *****/
    if (QstCod > 0)	// Only one question
@@ -5497,17 +5496,8 @@ void Tst_RemoveImageFilesFromQstsInCrs (long CrsCod,
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
 
-      /***** Build path to private file *****/
-      sprintf (FullPathImgPriv,"%s/%s/%c%c/%s.jpg",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	       row[0][0],
-	       row[0][1],
-	       row[0]);
-
-      /***** Remove private file *****/
-      unlink (FullPathImgPriv);
-
-      // Public links are removed automatically after a period
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
      }
 
    /***** Free structure that stores the query result *****/

@@ -74,5 +74,6 @@ typedef enum
 void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
 void Img_MoveImageToDefinitiveDirectory (void);
 void Img_ShowImage (const char *Image,const char *ClassImg);
+void Img_RemoveImageFile (const char *ImageName);
 
 #endif
