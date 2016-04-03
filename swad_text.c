@@ -4236,6 +4236,27 @@ const char *Txt_Change_IDs =
 	"Alterar n&ordm;s. identif.";
 #endif
 
+const char *Txt_Change_image =
+#if   L==1
+	"Canviar imatge";
+#elif L==2
+	"Abbild &auml;ndern";
+#elif L==3
+	"Change image";
+#elif L==4
+	"Cambiar imagen";
+#elif L==5
+	"Changer image";
+#elif L==6
+	"Moambue ta'&atilde;nga";
+#elif L==7
+	"Cambiare immagine";
+#elif L==8
+	"Zmie&nacute; obraz";
+#elif L==9
+	"Alterar imagem";
+#endif
+
 const char *Txt_Change_logo =
 #if   L==1
 	"Canviar logo";
@@ -4248,7 +4269,7 @@ const char *Txt_Change_logo =
 #elif L==5
 	"Changer logo";
 #elif L==6
-	"Cambiar logo";		// Okoteve traducción
+	"Moambue logo";
 #elif L==7
 	"Cambiare logo";
 #elif L==8

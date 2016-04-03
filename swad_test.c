@@ -1029,6 +1029,17 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
 static void Tst_PutFormToUploadNewQstImage (void)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Change_image;
+
+   /***** If an image exists, put label *****/
+   if (Gbl.Test.Image[0])
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	                 "%s: "
+                         "</label>",
+               The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image);
+
+   /****** Form field to upload a new image *****/
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
@@ -4308,6 +4319,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.Image[0])
       Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
    Tst_PutFormToUploadNewQstImage ();
+   if (Gbl.Test.Image[0])
+
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
