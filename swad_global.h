@@ -721,6 +721,7 @@ struct Globals
      } Stat;
    struct
      {
+      Img_Action_t Action;
       Img_Status_t Status;
      } Image;
   };

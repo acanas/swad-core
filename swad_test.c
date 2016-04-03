@@ -1037,7 +1037,7 @@ static void Tst_PutFormToEditQstImage (void)
 
    /***** No image *****/
    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ImgAct\" value=\"%u\"",
-	    Img_ACTION_NONE);
+	    Img_ACTION_NO_IMAGE);
    if (!Gbl.Test.Image[0])
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
@@ -1054,7 +1054,7 @@ static void Tst_PutFormToEditQstImage (void)
 			 "<label class=\"%s\">"
 			 "%s"
 			 "</label><br />",
-	       Img_ACTION_KEEP,
+	       Img_ACTION_KEEP_IMAGE,
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
       Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
@@ -1062,7 +1062,7 @@ static void Tst_PutFormToEditQstImage (void)
 
    /***** New image *****/
    fprintf (Gbl.F.Out,"<input id=\"change_image\" type=\"radio\" name=\"ImgAct\" value=\"%u\">",
-	    Img_ACTION_CHANGE);
+	    Img_ACTION_CHANGE_IMAGE);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s: "
 		      "</label>",
@@ -4804,25 +4804,18 @@ void Tst_ReceiveQst (void)
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
-      switch (Gbl.Image.Status)
-        {
-	 case Img_NONE:
-	 case Img_FILE_PROCESSED:
-	 case Img_FILE_MOVED:
-	    /* Remove possible file with the old image
-	       (the new image file is already processed
-		and moved to the definitive directory) */
-	    Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+      if (Gbl.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+	 /* Remove possible file with the old image
+	    (the new image file is already processed
+	     and moved to the definitive directory) */
+	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-	    if (Gbl.Image.Status == Img_FILE_PROCESSED)	// A new image has been received and processed
-	       /* Move processed image to definitive directory */
-	       Img_MoveImageToDefinitiveDirectory ();
-	    break;
-	 case Img_NAME_STORED_IN_DB:	// Keep image unchanged
-	    break;
-	}
+      if (Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE &&	// Upload new image (remove current image if exists)
+	  Gbl.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+	 /* Move processed image to definitive directory */
+	 Img_MoveImageToDefinitiveDirectory ();
 
-      /* Insert or update question, tags and answer in the database */
+      /***** Insert or update question, tags and answer in the database *****/
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
 
       /***** Show the question just inserted in the database *****/
@@ -4843,7 +4836,6 @@ void Tst_ReceiveQst (void)
 static void Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
    char UnsignedStr[10+1];
-   Img_Action_t ImageAction;
    char YN[1+1];
    unsigned NumTag;
    unsigned NumTagRead;
@@ -4893,21 +4885,21 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get type of image *****/
-   ImageAction = Img_GetImageActionFromForm ();
-   switch (ImageAction)
+   Gbl.Image.Action = Img_GetImageActionFromForm ();
+   switch (Gbl.Image.Action)
      {
-      case Img_ACTION_NONE:	// Do not use image (remove current image if exists)
+      case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
 	 /***** Reset image name *****/
 	 Gbl.Test.Image[0] = '\0';
 	 Gbl.Image.Status = Img_NONE;
          break;
-      case Img_ACTION_KEEP:	// Keep current image unchanged
+      case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
 	 /***** Get image from database *****/
 	 Tst_GetImageNameFromDB ();
 	 Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
 						 Img_NONE);
 	 break;
-      case Img_ACTION_CHANGE:	// Upload new image (remove current image if exists)
+      case Img_ACTION_CHANGE_IMAGE:	// Upload new image (remove current image if exists)
          /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
 			       Tst_PHOTO_SAVED_MAX_HEIGHT,

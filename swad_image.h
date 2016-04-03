@@ -70,9 +70,9 @@ typedef enum
 #define Img_NUM_ACTIONS	3
 typedef enum
   {
-   Img_ACTION_NONE,	// Do not use image (remove current image if exists)
-   Img_ACTION_KEEP,	// Keep current image unchanged
-   Img_ACTION_CHANGE,	// Upload new image (remove current image if exists)
+   Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
+   Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
+   Img_ACTION_CHANGE_IMAGE,	// Upload new image (remove current image if exists)
   } Img_Action_t;
 
 /*****************************************************************************/
