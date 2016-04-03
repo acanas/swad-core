@@ -38,7 +38,7 @@
 No image  Original file               Temporary          Definitive         Name of the image
 uploaded  uploaded by user            processed image    processed image    stored in database
 --------- --------------------------- ------------------ ------------------ ---------------------
-Img_NONE  Img_FILE_RECEIVED           Img_FILE_PROCESSED Img_FILE_MOVED     Img_NAME_STORED_IN_DB
+Img_NONE  Img_NONE                    Img_FILE_PROCESSED Img_FILE_MOVED     Img_NAME_STORED_IN_DB
 --------- --------------------------- ------------------ ------------------ ---------------------
 -> upload-file ->          -> process-file ->  b -> move-file ->  -> insert-name ->
 --------- --------------------------- ------------------ ------------------ ---------------------
@@ -61,7 +61,6 @@ xx-unique-name: a unique name encrypted starting by two random chars xx
 typedef enum
   {
    Img_NONE,
-   Img_FILE_RECEIVED,
    Img_FILE_PROCESSED,
    Img_FILE_MOVED,
    Img_NAME_STORED_IN_DB,

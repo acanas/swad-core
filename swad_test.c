@@ -4804,10 +4804,23 @@ void Tst_ReceiveQst (void)
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
-      /***** Form is received OK ==> insert or update question and answer in the database *****/
-      if (Gbl.Image.Status == Img_FILE_PROCESSED)
-	 /* Move processed image to definitive directory */
-	 Img_MoveImageToDefinitiveDirectory ();
+      switch (Gbl.Image.Status)
+        {
+	 case Img_NONE:
+	 case Img_FILE_PROCESSED:
+	 case Img_FILE_MOVED:
+	    /* Remove possible file with the old image
+	       (the new image file is already processed
+		and moved to the definitive directory) */
+	    Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+
+	    if (Gbl.Image.Status == Img_FILE_PROCESSED)	// A new image has been received and processed
+	       /* Move processed image to definitive directory */
+	       Img_MoveImageToDefinitiveDirectory ();
+	    break;
+	 case Img_NAME_STORED_IN_DB:	// Keep image unchanged
+	    break;
+	}
 
       /* Insert or update question, tags and answer in the database */
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
@@ -4884,9 +4897,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    switch (ImageAction)
      {
       case Img_ACTION_NONE:	// Do not use image (remove current image if exists)
-
-	 // TODO: Remove image
-
+	 /***** Reset image name *****/
+	 Gbl.Test.Image[0] = '\0';
+	 Gbl.Image.Status = Img_NONE;
+         break;
       case Img_ACTION_KEEP:	// Keep current image unchanged
 	 /***** Get image from database *****/
 	 Tst_GetImageNameFromDB ();
@@ -4894,7 +4908,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 						 Img_NONE);
 	 break;
       case Img_ACTION_CHANGE:	// Upload new image (remove current image if exists)
-         /***** Get new image (if present ==> create file) *****/
+         /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
 			       Tst_PHOTO_SAVED_MAX_HEIGHT,
 			       Tst_PHOTO_SAVED_QUALITY);
@@ -5474,41 +5488,22 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    else				// It's an existing question
      {
       /***** Update existing question *****/
-      if (Gbl.Image.Status == Img_FILE_MOVED)
-	{
-	 /* Remove possible file with the old image
-	    (the new image file is already processed
-	     and moved to the definitive directory) */
-	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+      /* Update question in database */
+      sprintf (Query,"UPDATE tst_questions"
+		     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
+		     "Stem='%s',Image='%s',Feedback='%s'"
+		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	       Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
+	       Gbl.Test.Shuffle ? 'Y' :
+				  'N',
+	       Gbl.Test.Stem.Text,
+	       Gbl.Test.Image,
+	       Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-	 /* Update question in database */
-	 sprintf (Query,"UPDATE tst_questions"
-			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
-			"Stem='%s',Image='%s',Feedback='%s'"
-			" WHERE QstCod='%ld' AND CrsCod='%ld'",
-		  Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-		  Gbl.Test.Shuffle ? 'Y' :
-				     'N',
-		  Gbl.Test.Stem.Text,
-		  Gbl.Test.Image,
-		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-
-	 /* Update image status */
-	 if (Gbl.Test.Image[0])
-	    Gbl.Image.Status = Img_NAME_STORED_IN_DB;
-	}
-      else	// Do not change image
-	 sprintf (Query,"UPDATE tst_questions"
-			" SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
-			"Stem='%s',Feedback='%s'"
-			" WHERE QstCod='%ld' AND CrsCod='%ld'",
-		  Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
-		  Gbl.Test.Shuffle ? 'Y' :
-				     'N',
-		  Gbl.Test.Stem.Text,
-		  Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		  Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      /* Update image status */
+      if (Gbl.Test.Image[0])
+	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
       DB_QueryUPDATE (Query,"can not update question");
 
       /* Remove answers and tags from this test question */

@@ -154,8 +154,6 @@ void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
             Gbl.Test.Image,PtrExtension);
    if (Fil_EndReceptionOfFile (FileNameImgOrig,Param))	// Success
      {
-      Gbl.Image.Status = Img_FILE_RECEIVED;
-
       /***** Convert original image to temporary JPEG processed file *****/
       sprintf (FileNameImgTmp,"%s/%s/%s/%s.jpg",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
