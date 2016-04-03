@@ -6904,6 +6904,27 @@ const char *Txt_Current_email =
 	"E-mail atual";
 #endif
 
+const char *Txt_Current_image =
+#if   L==1
+	"Imatge actual";
+#elif L==2
+	"Aktuelles Abbild";
+#elif L==3
+	"Current image";
+#elif L==4
+	"Imagen actual";
+#elif L==5
+	"Image actuelle";
+#elif L==6
+	"Imagen actual";	// Okoteve traducción
+#elif L==7
+	"Immagine corrente";
+#elif L==8
+	"Bie&zdot;&aogon;cy obraz";
+#elif L==9
+	"Imagem atual";
+#endif
+
 const char *Txt_Current_nickname =
 #if   L==1
 	"Sobrenom actual";
@@ -22884,7 +22905,7 @@ const char *Txt_New_group =
 
 const char *Txt_New_holiday =
 #if   L==1
-	"Nueva festividad";	// Necessita traduccio
+	"Nova festivitat";
 #elif L==2
 	"Neue Feiertag";
 #elif L==3
@@ -22901,6 +22922,27 @@ const char *Txt_New_holiday =
 	"Nowe swieto";
 #elif L==9
 	"Nova f&eacute;ria";
+#endif
+
+const char *Txt_New_image =
+#if   L==1
+	"Nova imatge";
+#elif L==2
+	"Neue Abbild";
+#elif L==3
+	"New image";
+#elif L==4
+	"Nueva imagen";
+#elif L==5
+	"Nouvelle image";
+#elif L==6
+	"Pyahu ta'&atilde;nga";
+#elif L==7
+	"Nuova immagine";
+#elif L==8
+	"Nowe obraz";
+#elif L==9
+	"Nova imagem";
 #endif
 
 const char *Txt_New_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
@@ -23738,6 +23780,27 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 #elif L==9
 	"No groups have been created in the course <strong>%s</strong>."
 	"Therefore, the specified users will be enrolled/removed in/from the course.";				// Necessita de tradução
+#endif
+
+const char *Txt_No_image =	// Without any image
+#if   L==1
+	"Sense imatge";
+#elif L==2
+	"Ohne Abbild";
+#elif L==3
+	"No image";
+#elif L==4
+	"Sin imagen";
+#elif L==5
+	"Pas d'image";
+#elif L==6
+	"Sin imagen";	// Okoteve traducción
+#elif L==7
+	"Nessuna immagine";
+#elif L==8
+	"Brak obrazka";
+#elif L==9
+	"Sem imagem";
 #endif
 
 const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...

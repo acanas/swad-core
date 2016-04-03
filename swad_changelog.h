@@ -140,14 +140,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.175.3 (2016-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.175.4 (2016-04-03)"
 #define CSS_FILE		"swad15.173.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.175.4: Apr 03, 2016	Check button to remove image when editing one test question. (? lines)
+        Version 15.175.4: Apr 03, 2016	Changes in form to edit one test question. (197897 lines)
         Version 15.175.3: Apr 03, 2016	Change in edition of test question. (197804 lines)
         Version 15.175.2: Apr 03, 2016	Code refactoring related to deleting image file. (197773 lines)
         Version 15.175.1: Apr 03, 2016	Code refactoring related to deleting tests of a course. (197763 lines)

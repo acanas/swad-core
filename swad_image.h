@@ -67,6 +67,14 @@ typedef enum
    Img_NAME_STORED_IN_DB,
   } Img_Status_t;
 
+/***** Action to perform when editing a form with an image *****/
+typedef enum
+  {
+   Img_ACTION_NONE,	// Do not use image (remove current image if exists)
+   Img_ACTION_KEEP,	// Keep current image unchanged
+   Img_ACTION_CHANGE,	// Upload new image (remove current image if exists)
+  } Img_Action_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
