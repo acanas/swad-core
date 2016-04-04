@@ -670,6 +670,7 @@ struct Globals
             bool Correct;
             char *Text;
             char *Feedback;
+            char Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
            } Options[Tst_MAX_OPTIONS_PER_QUESTION];
          long Integer;
          double FloatingPoint[2];

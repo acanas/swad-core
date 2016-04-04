@@ -155,7 +155,9 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_PutFormToEditQstImage (void);
+static void Tst_PutFormToEditQstImage (const char *ImageName,
+                                       const char *ParamRadio,
+                                       const char *ParamFile);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
@@ -1027,18 +1029,21 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstImage (void)
+static void Tst_PutFormToEditQstImage (const char *ImageName,
+                                       const char *ParamRadio,
+                                       const char *ParamFile)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
    extern const char *Txt_New_image;
+   static unsigned UniqueId = 0;
 
    /***** No image *****/
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ImgAct\" value=\"%u\"",
-	    Img_ACTION_NO_IMAGE);
-   if (!Gbl.Test.Image[0])
+   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
+            ParamRadio,Img_ACTION_NO_IMAGE);
+   if (!ImageName[0])
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
 	              "<label class=\"%s\">"
@@ -1048,31 +1053,34 @@ static void Tst_PutFormToEditQstImage (void)
             Txt_No_image);
 
    /***** Current image *****/
-   if (Gbl.Test.Image[0])
+   if (ImageName[0])
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ImgAct\" value=\"%u\" checked=\"checked\" />"
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\" />"
 			 "<label class=\"%s\">"
 			 "%s"
 			 "</label><br />",
-	       Img_ACTION_KEEP_IMAGE,
+	       ParamRadio,Img_ACTION_KEEP_IMAGE,
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
-      Img_ShowImage (Gbl.Test.Image,"TEST_IMG_EDIT_ONE");
+      Img_ShowImage (ImageName,"TEST_IMG_EDIT_ONE");
      }
 
    /***** New image *****/
-   fprintf (Gbl.F.Out,"<input id=\"change_image\" type=\"radio\" name=\"ImgAct\" value=\"%u\">",
-	    Img_ACTION_CHANGE_IMAGE);
+   UniqueId++;
+   fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
+	              " value=\"%u\">",
+            UniqueId,ParamRadio,Img_ACTION_CHANGE_IMAGE);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s: "
 		      "</label>",
 	    The_ClassForm[Gbl.Prefs.Theme],
-	    Gbl.Test.Image[0] ? Txt_Change_image :
-				Txt_New_image);
+	    ImageName[0] ? Txt_Change_image :
+			   Txt_New_image);
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
                       " size=\"40\" maxlength=\"100\" value=\"\""
-                      " onchange=\"document.getElementById('change_image').checked = true;\" />",
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
+                      " onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
+            ParamFile,
+            UniqueId);
   }
 
 /*****************************************************************************/
@@ -4199,7 +4207,6 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Tags;
    extern const char *Txt_new_tag;
    extern const char *Txt_Stem;
-   extern const char *Txt_Image;
    extern const char *Txt_Feedback;
    extern const char *Txt_Type;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -4222,6 +4229,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    unsigned NumTag;
    bool TagNotFound;
    bool OptionsDisabled;
+   char ParamRadio[32];
+   char ParamFile[32];
 
    /***** If no receiving the question, but editing a new or existing question
           ==> init or edit data of question *****/
@@ -4319,7 +4328,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Stem *****/
+   /***** Stem and image *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
 	              "<label class=\"%s\">"
@@ -4329,26 +4338,14 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Stem\" class=\"STEM\" rows=\"5\">"
                       "%s"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
+                      "</textarea><br />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Stem,
             Stem);
-
-   /***** Image *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_TOP\">"
-		      "<label class=\"%s\">"
-		      "%s:"
-		      "</label>"
-		      "</td>"
-		      "<td class=\"LEFT_TOP\">",
-	    The_ClassForm[Gbl.Prefs.Theme],
-	    Txt_Image);
-   Tst_PutFormToEditQstImage ();
+   Tst_PutFormToEditQstImage (Gbl.Test.Image,
+                              "ImgAct",Fil_NAME_OF_PARAM_FILENAME_ORG);
    fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+                      "</tr>");
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4500,7 +4497,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
      {
       /* Selectors and label with the letter of the answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s LEFT_TOP\">"
+	                 "<td rowspan=\"2\" class=\"%s LEFT_TOP\">"
 	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       NumOpt);
@@ -4542,6 +4539,17 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
       fprintf (Gbl.F.Out,"</textarea>"
 	                 "</td>"
+	                 "</tr>");
+
+      /* Image */
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"2\" class=\"LEFT_TOP\">");
+      sprintf (ParamRadio,"ImgAct%u",NumOpt);
+      sprintf (ParamFile,"FileImg%u",NumOpt);
+      Tst_PutFormToEditQstImage (Gbl.Test.Answer.Options[NumOpt].Image,ParamRadio,ParamFile);
+      // if (OptionsDisabled)
+      //    fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
    fprintf (Gbl.F.Out,"</table>"
@@ -4590,8 +4598,10 @@ void Tst_InitQst (void)
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
-      Gbl.Test.Answer.Options[NumOpt].Correct = false;
-      Gbl.Test.Answer.Options[NumOpt].Text    = NULL;
+      Gbl.Test.Answer.Options[NumOpt].Correct  = false;
+      Gbl.Test.Answer.Options[NumOpt].Text     = NULL;
+      Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
+      Gbl.Test.Answer.Options[NumOpt].Image[0] = '\0';
      }
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
@@ -4893,7 +4903,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get type of image *****/
-   Gbl.Image.Action = Img_GetImageActionFromForm ();
+   Gbl.Image.Action = Img_GetImageActionFromForm ("ImgAct");
    switch (Gbl.Image.Action)
      {
       case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)

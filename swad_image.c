@@ -71,12 +71,12 @@ static void Img_ProcessImage (const char *FileNameImgOriginal,
 /************************* Get image action from form ************************/
 /*****************************************************************************/
 
-Img_Action_t Img_GetImageActionFromForm (void)
+Img_Action_t Img_GetImageActionFromForm (const char *ParamRadio)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
-   Par_GetParToText ("ImgAct",UnsignedStr,10);
+   Par_GetParToText (ParamRadio,UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
       Lay_ShowErrorAndExit ("Wrong action to perform on image.");
    if (UnsignedNum >= Img_NUM_ACTIONS)

@@ -80,7 +80,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-Img_Action_t Img_GetImageActionFromForm (void);
+Img_Action_t Img_GetImageActionFromForm (const char *ParamRadio);
 void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
 
 void Img_MoveImageToDefinitiveDirectory (void);
