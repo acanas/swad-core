@@ -2297,15 +2297,17 @@ mysql> DESCRIBE tst_answers;
 | AnsInd   | tinyint(4)    | NO   |     | NULL    |       |
 | Answer   | text          | NO   |     | NULL    |       |
 | Feedback | text          | NO   |     | NULL    |       |
+| Image    | varchar(43)   | NO   |     | NULL    |       |
 | Correct  | enum('N','Y') | NO   |     | NULL    |       |
 +----------+---------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
                    "QstCod INT NOT NULL,"
                    "AnsInd TINYINT NOT NULL,"
                    "Answer TEXT NOT NULL,"
                    "Feedback TEXT NOT NULL,"
+                   "Image VARCHAR(43) NOT NULL,"
                    "Correct ENUM('N','Y') NOT NULL,"
                    "INDEX(QstCod))");
 
@@ -2418,13 +2420,13 @@ mysql> DESCRIBE tst_questions;
 | AnsType         | enum('int','float','true_false','unique_choice','multiple_choice','text') | NO   |     | NULL    |                |
 | Shuffle         | enum('N','Y')                                                             | NO   |     | NULL    |                |
 | Stem            | text                                                                      | NO   |     | NULL    |                |
-| Image           | char(43)                                                                  | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
+| Image           | varchar(43)                                                               | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-11 rows in set (0.01 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
                    "QstCod INT NOT NULL AUTO_INCREMENT,"
@@ -2433,8 +2435,8 @@ mysql> DESCRIBE tst_questions;
                    "AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
                    "Shuffle ENUM('N','Y') NOT NULL,"
                    "Stem TEXT NOT NULL,"
-                   "Image CHAR(43) NOT NULL,"
                    "Feedback TEXT NOT NULL,"
+                   "Image VARCHAR(43) NOT NULL,"
                    "NumHits INT NOT NULL DEFAULT 0,"
                    "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
                    "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"

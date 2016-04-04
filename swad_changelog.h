@@ -108,7 +108,6 @@
 // TODO: When page is refreshed in course works, prevent users to be duplicated
 // TODO: Reply to all
 // TODO: Hour in exam announcement should start at six a.m.
-
 // TODO: Forum SWAD should be always named "SWAD"?
 // TODO: Enable chat for guests?
 // TODO: Go to forum post (or at least to forum thread) from social timeline and notifications?
@@ -118,34 +117,38 @@
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
 // TODO: Change links from external degrees to internal degrees in STATS > Degrees
-
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
-
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Filtering email addresses --> an email address can not finish in "."
-
 // TODO: Upload an image in social posts, in test questions, in forum posts, in private messages, etc.
-
 // TODO: Important!!!! E-mail should not be visible for not logged users
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Fix bug in marks reported by Francisco Ocaña
-
 // TODO: In Statistics > Degrees, show only degrees with students
+// TODO: Change layout of confirm / reject incription. Use green and red buttons
 
-// TODO: Ask for confirmation when removing a test question?
+// TODO: Ask for confirmation when removing a test question
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.177 (2016-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.178 (2016-04-04)"
 #define CSS_FILE		"swad15.175.10.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.178:   Apr 04, 2016	Code refactoring related to images in test questions. (198244 lines)
+					5 changes necessary in database:
+ALTER TABLE tst_questions CHANGE COLUMN Image ImageOld CHAR(43) NOT NULL;
+ALTER TABLE tst_questions ADD COLUMN Image VARCHAR(43) NOT NULL AFTER Feedback;
+UPDATE tst_questions SET Image=ImageOld;
+ALTER TABLE tst_questions DROP COLUMN ImageOld;
+ALTER TABLE tst_answers ADD COLUMN Image VARCHAR(43) NOT NULL AFTER Feedback;
+
         Version 15.177:   Apr 04, 2016	Code refactoring related to images. (198083 lines)
         Version 15.176:   Apr 04, 2016	Code refactoring related to images. (198019 lines)
         Version 15.175.11:Apr 04, 2016	Code refactoring related to image associated to a test question.

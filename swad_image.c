@@ -321,8 +321,9 @@ void Img_ShowImage (struct Image *Image,const char *ClassImg)
 	    FileNameImgPriv);
 
    /***** Show image *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s\" alt=\"\" class=\"%s\"/>"
-	              "<br />",
+   fprintf (Gbl.F.Out,"<div>"
+	              "<img src=\"%s\" alt=\"\" class=\"%s\"/>"
+	              "</div>",
             URL,ClassImg);
   }
 

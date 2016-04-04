@@ -216,11 +216,15 @@ static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 
+static void Tst_InitImagesOfQuestion (void);
+
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
 static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
+static void Tst_MoveImagesToDefinitiveDirectories (void);
+
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
@@ -233,6 +237,10 @@ static void Tst_InsertAnswersIntoDB (void);
 static void Tst_RemAnsFromQst (void);
 static void Tst_RemTagsFromQst (void);
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
+
+static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,long QstCod);
+static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,long QstCod,unsigned AnsInd);
+
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
@@ -2728,7 +2736,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
         }
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[4]), the feedback (row[6]) and the answers */
+      /* Write the stem (row[4]), the image (row[5],vthe feedback (row[6]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
@@ -2834,7 +2842,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT AnsInd,Answer,Correct,Feedback"
+   sprintf (Query,"SELECT AnsInd,Answer,Correct,Feedback,Image"
 	          " FROM tst_answers"
                   " WHERE QstCod='%ld' ORDER BY %s",
             QstCod,
@@ -2929,9 +2937,18 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
                                     Feedback,LengthFeedback,false);
         	 }
 
+            /* Copy image */
+	    if (row[4][0])
+	      {
+	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
+	       strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	       Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	      }
+
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+        	               "<td class=\"BT%u\">",
+        	     Gbl.RowEvenOdd);
             if (Str_ConvertToUpperLetter (row[2][0]) == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
@@ -2947,17 +2964,21 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               "</td>",
                      'a' + (char) NumOpt);
 
-            /* Write the text of the answer */
-            fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">"
-        	               "%s"
-        	               "</td>",
+            /* Write the text of the answer and the image (row[4]) */
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+        	               "<div class=\"TEST_EDI\">"
+        	               "%s",
                      Answer);
+	    if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
+	       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_EDIT_LIST");
+            fprintf (Gbl.F.Out,"</div>");
 
             /* Write the text of the feedback */
-            fprintf (Gbl.F.Out,"<td class=\"TEST_EDI_LIGHT LEFT_TOP\">");
+            fprintf (Gbl.F.Out,"<div class=\"TEST_EDI_LIGHT\">");
             if (LengthFeedback)
 	       fprintf (Gbl.F.Out,"%s",Feedback);
-            fprintf (Gbl.F.Out,"</td>"
+            fprintf (Gbl.F.Out,"</div>"
+        	               "</td>"
         	               "</tr>");
 
 	    /* Free memory allocated for the answer and the feedback */
@@ -3212,6 +3233,14 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
+      /***** Copy image *****/
+      if (row[4][0])
+	{
+	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
+	 strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	}
+
       /***** Write selectors and letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP\">");
@@ -3231,10 +3260,12 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
 
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"TEST_EXA LEFT_TOP\">"
-	                 "%s"
-	                 "</td>"
-	                 "</tr>",
+	                 "%s",
                Gbl.Test.Answer.Options[NumOpt].Text);
+      if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
+	 Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_SHOW");
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
      }
 
    /***** End of table *****/
@@ -3275,6 +3306,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    row[1] Answer
    row[2] Correct
    row[3] Feedback
+   row[4] Image
    */
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3305,6 +3337,14 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 	                         Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
+
+      /***** Copy image *****/
+      if (row[4][0])
+	{
+	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
+	 strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	}
 
       /***** Assign correctness (row[2]) of this answer (this option) *****/
       Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
@@ -3394,9 +3434,11 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       /* Answer text and feedback */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
 	                 "<div class=\"TEST_EXA\">"
-	                 "%s"
-	                 "</div>",
+	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Image.Name[0])
+	 Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,"TEST_IMG_SHOW");
+      fprintf (Gbl.F.Out,"</div>");
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
@@ -4601,9 +4643,6 @@ void Tst_InitQst (void)
    Gbl.Test.Stem.Length = 0;
    Gbl.Test.Feedback.Text = NULL;
    Gbl.Test.Feedback.Length = 0;
-   Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
-   Gbl.Test.Image.Status = Img_FILE_NONE;
-   Gbl.Test.Image.Name[0] = '\0';
    Gbl.Test.Shuffle = false;
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
@@ -4615,13 +4654,33 @@ void Tst_InitQst (void)
       Gbl.Test.Answer.Options[NumOpt].Correct  = false;
       Gbl.Test.Answer.Options[NumOpt].Text     = NULL;
       Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
-      Gbl.Test.Answer.Options[NumOpt].Image.Action = Img_ACTION_NO_IMAGE;
-      Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_FILE_NONE;
-      Gbl.Test.Answer.Options[NumOpt].Image.Name[0] = '\0';
      }
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
    Gbl.Test.Answer.FloatingPoint[1] = 0.0;
+
+   Tst_InitImagesOfQuestion ();
+  }
+
+/*****************************************************************************/
+/***************** Initialize images of a question to zero *******************/
+/*****************************************************************************/
+
+static void Tst_InitImagesOfQuestion (void)
+  {
+   unsigned NumOpt;
+
+   Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
+   Gbl.Test.Image.Status = Img_FILE_NONE;
+   Gbl.Test.Image.Name[0] = '\0';
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+     {
+      Gbl.Test.Answer.Options[NumOpt].Image.Action = Img_ACTION_NO_IMAGE;
+      Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_FILE_NONE;
+      Gbl.Test.Answer.Options[NumOpt].Image.Name[0] = '\0';
+     }
   }
 
 /*****************************************************************************/
@@ -4736,6 +4795,14 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 		  Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
 		 }
 
+	    /* Copy image */
+	    if (row[4][0])
+	      {
+	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
+	       strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	       Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	      }
+
 	    Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
 	    break;
 	 default:
@@ -4840,17 +4907,8 @@ void Tst_ReceiveQst (void)
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
-      if (Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
-	 /* Remove possible file with the old image
-	    (the new image file is already processed
-	     and moved to the definitive directory) */
-	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-
-      if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
-           Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-	  Gbl.Test.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
-	 /* Move processed image to definitive directory */
-	 Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Image);
+      /***** Move images to definitive directories *****/
+      Tst_MoveImagesToDefinitiveDirectories ();
 
       /***** Insert or update question, tags and answer in the database *****/
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
@@ -4860,11 +4918,8 @@ void Tst_ReceiveQst (void)
      }
    else	// Question is wrong
      {
-      /***** Whether an image has been received or not,
-             reset status and image *****/
-      Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
-      Gbl.Test.Image.Status = Img_FILE_NONE;
-      Gbl.Test.Image.Name[0] = '\0';
+      /***** Whether images has been received or not, reset images *****/
+      Tst_InitImagesOfQuestion ();
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
@@ -5243,6 +5298,51 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    }
 
 /*****************************************************************************/
+/* Move images associates to a test question to their definitive directories */
+/*****************************************************************************/
+
+static void Tst_MoveImagesToDefinitiveDirectories (void)
+  {
+   unsigned NumOpt;
+
+   /****** Move image associated to question stem *****/
+   if (Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+      /* Remove possible file with the old image
+	 (the new image file is already processed
+	  and moved to the definitive directory) */
+      Tst_RemoveImgFilesFromStemOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
+                                        Gbl.Test.QstCod);
+
+   if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
+	Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
+        Gbl.Test.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+      /* Move processed image to definitive directory */
+      Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Image);
+
+   /****** Move images associated to answers *****/
+   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+       Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+      for (NumOpt = 0;
+	   NumOpt < Gbl.Test.Answer.NumOptions;
+	   NumOpt++)
+	{
+	 if (Gbl.Test.Answer.Options[NumOpt].Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+	    /* Remove possible file with the old image
+	       (the new image file is already processed
+		and moved to the definitive directory) */
+	    Tst_RemoveImgFilesFromAnsOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
+					     Gbl.Test.QstCod,
+					     NumOpt);
+
+	 if ((Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
+	      Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
+	      Gbl.Test.Answer.Options[NumOpt].Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+	    /* Move processed image to definitive directory */
+	    Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Answer.Options[NumOpt].Image);
+	}
+  }
+
+/*****************************************************************************/
 /******************** Get a integer number from a string *********************/
 /*****************************************************************************/
 
@@ -5384,8 +5484,12 @@ void Tst_RemoveQst (void)
    Par_GetParToText ("OnlyThisQst",YN,1);
    EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
-   /***** Remove image associated to question *****/
-   Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   /***** Remove images associated to question *****/
+   Tst_RemoveImgFilesFromAnsOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
+                                    Gbl.Test.QstCod,
+                                    Tst_MAX_OPTIONS_PER_QUESTION);	// All answers
+   Tst_RemoveImgFilesFromStemOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
+                                     Gbl.Test.QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -5539,11 +5643,11 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 	       Gbl.Test.Image.Name,
 	       Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      DB_QueryUPDATE (Query,"can not update question");
 
       /* Update image status */
       if (Gbl.Test.Image.Name[0])
 	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-      DB_QueryUPDATE (Query,"can not update question");
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst ();
@@ -5552,47 +5656,6 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 
    /***** Free space user for query *****/
    free ((void *) Query);
-  }
-
-/*****************************************************************************/
-/******** Remove one or more image files associated to test questions ********/
-/*****************************************************************************/
-// Use question code <= 0 to remove all images associated to questions in course
-
-void Tst_RemoveImageFilesFromQstsInCrs (long CrsCod,
-                                        long QstCod)	// <= 0 ==> all questions in course
-  {
-   char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumImages;
-   unsigned NumImg;
-
-   /***** Get names of images associated to test questions from database *****/
-   if (QstCod > 0)	// Only one question
-      sprintf (Query,"SELECT Image FROM tst_questions"
-		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
-	       QstCod,CrsCod);
-   else			// All questions in the course
-      sprintf (Query,"SELECT Image FROM tst_questions"
-	             " WHERE CrsCod='%ld'",
-	       CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
-
-   /***** Go over result removing image files *****/
-   for (NumImg = 0;
-	NumImg < NumImages;
-	NumImg++)
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -5680,14 +5743,20 @@ static void Tst_InsertAnswersIntoDB (void)
               NumOpt++)
             if (Gbl.Test.Answer.Options[NumOpt].Text[0])
               {
-               sprintf (Query,"INSERT INTO tst_answers (QstCod,AnsInd,Answer,Feedback,Correct)"
-                              " VALUES (%ld,%u,'%s','%s','%c')",
+               sprintf (Query,"INSERT INTO tst_answers"
+        	              " (QstCod,AnsInd,Answer,Feedback,Image,Correct)"
+                              " VALUES (%ld,%u,'%s','%s','%s','%c')",
                         Gbl.Test.QstCod,NumOpt,
                         Gbl.Test.Answer.Options[NumOpt].Text,
                         Gbl.Test.Answer.Options[NumOpt].Feedback,
+                        Gbl.Test.Answer.Options[NumOpt].Image.Name,
                         Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
                                                                   'N');
                DB_QueryINSERT (Query,"can not create answer");
+
+               /* Update image status */
+	       if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
+		  Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
               }
 	 break;
       default:
@@ -5740,6 +5809,108 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
                   " WHERE tst_questions.CrsCod='%ld' AND tst_questions.QstCod=tst_question_tags.QstCod)",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove unused tags");
+  }
+
+/*****************************************************************************/
+/**** Remove one or more image files associated to stems of test questions ***/
+/*****************************************************************************/
+// Use question code <= 0 to remove all images associated to stems of questions in course
+
+static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,
+                                              long QstCod)	// <= 0 ==> all questions in course
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumImages;
+   unsigned NumImg;
+
+   /***** Get names of images associated to stems of test questions from database *****/
+   if (QstCod > 0)	// Only one question
+      sprintf (Query,"SELECT Image FROM tst_questions"
+		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	       QstCod,CrsCod);
+   else			// All questions in the course
+      sprintf (Query,"SELECT Image FROM tst_questions"
+	             " WHERE CrsCod='%ld'",
+	       CrsCod);
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+
+   /***** Go over result removing image files *****/
+   for (NumImg = 0;
+	NumImg < NumImages;
+	NumImg++)
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/** Remove one or more image files associated to answers of test questions ***/
+/*****************************************************************************/
+// Use question code <= 0 to remove all images associated to answers of questions in course
+// Use AnsInd == Tst_MAX_OPTIONS_PER_QUESTION to remove all images associated to answers of a question
+
+static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
+                                             long QstCod,	// <= 0 ==> all questions in course
+                                             unsigned AnsInd)	// == Tst_MAX_OPTIONS_PER_QUESTION ==> all answers of a question
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumImages;
+   unsigned NumImg;
+
+   /***** Get names of images associated to answers of test questions from database *****/
+   if (QstCod > 0)	// Only one question
+     {
+      if (AnsInd < Tst_MAX_OPTIONS_PER_QUESTION)	// Only one answer
+	 sprintf (Query,"SELECT tst_answers.Image"
+	                " FROM tst_questions,tst_answers"
+			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
+			" AND tst_questions.QstCod='%ld'"	// Extra check
+	                " AND tst_questions.QstCod=tst_answers.QstCod"
+	                " AND tst_answers.QstCod='%ld'"
+	                " AND tst_answers.AnsInd='%u'",
+		  CrsCod,QstCod,QstCod,AnsInd);
+      else					// All answers of a question
+	 sprintf (Query,"SELECT tst_answers.Image"
+	                " FROM tst_questions,tst_answers"
+			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
+			" AND tst_questions.QstCod='%ld'"	// Extra check
+			" AND tst_questions.QstCod=tst_answers.QstCod"
+	                " AND tst_answers.QstCod='%ld'",
+		  CrsCod,QstCod,QstCod);
+     }
+   else				// All answers of all questions in the course
+      sprintf (Query,"SELECT tst_answers.Image"
+	             " FROM tst_questions,tst_answers"
+	             " WHERE tst_questions.CrsCod='%ld'"
+	             " AND tst_questions.QstCod=tst_answers.QstCod",
+	       CrsCod);
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+
+   /***** Go over result removing image files *****/
+   for (NumImg = 0;
+	NumImg < NumImages;
+	NumImg++)
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -7361,8 +7532,11 @@ void Tst_RemoveCrsTests (long CrsCod)
 
    /***** Remove files with images associated
           to test questions in the course *****/
-   Tst_RemoveImageFilesFromQstsInCrs (CrsCod,
-                                      -1L);	// All questions in the course
+   Tst_RemoveImgFilesFromAnsOfQsts (CrsCod,
+                                    -1L,	// All answers of questions in the course
+                                    Tst_MAX_OPTIONS_PER_QUESTION);	// does not matter
+   Tst_RemoveImgFilesFromStemOfQsts (CrsCod,
+                                     -1L);	// All questions in the course
 
    /***** Remove test questions in the course *****/
    sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod='%ld'",
