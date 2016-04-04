@@ -134,7 +134,6 @@
 // TODO: In Statistics > Degrees, show only degrees with students
 
 // TODO: Ask for confirmation when removing a test question?
-// TODO: Fix bug when clicking on Export test questions
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -147,7 +146,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.175.7: Apr 03, 2016	Code refactoring related to image associated to a test question. (? lines)
+        Version 15.175.7: Apr 03, 2016	Code refactoring related to image associated to a test question.
+					Fixed bug while exporting test questions. (197923 lines)
         Version 15.175.6: Apr 03, 2016	Remove image associated to a test question. (197926 lines)
         Version 15.175.5: Apr 03, 2016	Changes in reception of form to edit one test question. (197930 lines)
         Version 15.175.4: Apr 03, 2016	Changes in form to edit one test question. (197897 lines)

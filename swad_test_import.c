@@ -166,32 +166,19 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
-   char PathFileBrowserTmp[PATH_MAX+1];
-   char PathPubDirTmp[PATH_MAX+1];
    char PathPubFile[PATH_MAX+1];
    unsigned long NumRow;
    MYSQL_ROW row;
    long QstCod;
 
-   /***** Create a temporary public directory used to download the XML file *****/
-   /* If the public directory does not exist, create it */
-   sprintf (PathFileBrowserTmp,"%s/%s",Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP);
-   Fil_CreateDirIfNotExists (PathFileBrowserTmp);
-
-   /* First of all, we remove the oldest temporary directories.
-      Such temporary directories have been created by me or by other users.
-      This is a bit sloppy, but they must be removed by someone.
-      Here "oldest" means more than x time from their creation */
-   Fil_RemoveOldTmpFiles (PathFileBrowserTmp,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,false);
-
-   /* Create a new temporary directory */
-   strcpy (Gbl.FileBrowser.TmpPubDir,Gbl.UniqueNameEncrypted);
-   sprintf (PathPubDirTmp,"%s/%s",PathFileBrowserTmp,Gbl.FileBrowser.TmpPubDir);
-   if (mkdir (PathPubDirTmp,(mode_t) 0xFFF))
-      Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
+   /***** Create a temporary public directory
+	  used to download the XML file *****/
+   Brw_CreateDirDownloadTmp ();
 
    /***** Create public XML file with the questions *****/
-   sprintf (PathPubFile,"%s/test.xml",PathPubDirTmp);
+   sprintf (PathPubFile,"%s/%s/%s/test.xml",
+            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+            Gbl.FileBrowser.TmpPubDir);
    if ((Gbl.Test.XML.FileXML = fopen (PathPubFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open target file.");
 
@@ -205,7 +192,18 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-
+      /*
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Image
+      row[6] Feedback
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
+      */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
@@ -224,11 +222,11 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       fprintf (Gbl.Test.XML.FileXML,"<stem>%s</stem>%s",
                row[4],Txt_NEW_LINE);
 
-      /* Write the feedback (row[5]), that is in HTML format */
-      if (row[5])
-	 if (row[5][0])
+      /* Write the feedback (row[6]), that is in HTML format */
+      if (row[6])
+	 if (row[6][0])
 	    fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
-		     row[5],Txt_NEW_LINE);
+		     row[6],Txt_NEW_LINE);
 
       /* Write the answers of this question.
          Shuffle can be enabled or disabled (row[3]) */
@@ -243,7 +241,8 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       fprintf (Gbl.Test.XML.FileXML,"</answer>%s",Txt_NEW_LINE);
 
       /* End question */
-      fprintf (Gbl.Test.XML.FileXML,"</question>%s%s",Txt_NEW_LINE,Txt_NEW_LINE);
+      fprintf (Gbl.Test.XML.FileXML,"</question>%s%s",
+               Txt_NEW_LINE,Txt_NEW_LINE);
      }
 
    /***** End XML file *****/
