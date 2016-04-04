@@ -722,7 +722,7 @@ struct Globals
    struct
      {
       Img_Action_t Action;
-      Img_Status_t Status;
+      Img_FileStatus_t Status;
      } Image;
   };
 

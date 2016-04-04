@@ -432,7 +432,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Related to images uploaded in a form */
    Gbl.Image.Action = Img_ACTION_NO_IMAGE;
-   Gbl.Image.Status = Img_NONE;
+   Gbl.Image.Status = Img_FILE_NONE;
 
    Gbl.WebService.Function = Svc_unknown;
   }

@@ -10376,6 +10376,27 @@ const char *Txt_Error_getting_data_from_a_recipient =
 	"Error getting data from a recipient.";		// Necessita de tradução
 #endif
 
+const char *Txt_Error_receiving_or_processing_image =
+#if   L==1
+	"Error rebent o processant imatge.";
+#elif L==2
+	"Fehler beim Empfangen oder Verarbeiten von Abbild.";
+#elif L==3
+	"Error receiving or processing image.";
+#elif L==4
+	"Error recibiendo o procesando imagen.";
+#elif L==5
+	"Erreur de r&eacute;ception ou de traitement d'image.";
+#elif L==6
+	"Error recibiendo o procesando imagen.";	// Okoteve traducción
+#elif L==7
+	"Errore durante la ricezione o la elaborazione delle immagini.";
+#elif L==8
+	"B&lstrok;&aogon;d odbioru lub przetwarzania obrazu.";
+#elif L==9
+	"Erro no recebimento ou processamento de imagem.";
+#endif
+
 const char *Txt_Event =
 #if   L==1
 	"Esdeveniment";

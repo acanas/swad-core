@@ -139,14 +139,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.175.7 (2016-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.175.9 (2016-04-04)"
 #define CSS_FILE		"swad15.173.1.css"
 #define JS_FILE			"swad15.131.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.175.7: Apr 03, 2016	Code refactoring related to image associated to a test question.
+        Version 15.175.9: Apr 04, 2016	Fixed bug in edition of a test question. (197953 lines)
+        Version 15.175.8: Apr 04, 2016	Code refactoring related to receiving and processing image file. (197945 lines)
+        Version 15.175.7: Apr 04, 2016	Code refactoring related to image associated to a test question.
 					Fixed bug while exporting test questions. (197923 lines)
         Version 15.175.6: Apr 03, 2016	Remove image associated to a test question. (197926 lines)
         Version 15.175.5: Apr 03, 2016	Changes in reception of form to edit one test question. (197930 lines)

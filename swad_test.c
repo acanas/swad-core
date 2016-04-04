@@ -4639,7 +4639,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
       Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
      }
    else
-      Gbl.Image.Status = Img_NONE;
+      Gbl.Image.Status = Img_FILE_NONE;
 
    /* Get the feedback of the question from the database (row[4]) */
    Feedback[0] = '\0';
@@ -4745,7 +4745,7 @@ static void Tst_GetImageNameFromDB (void)
       Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
      }
    else		// No image in this question
-      Gbl.Image.Status = Img_NONE;
+      Gbl.Image.Status = Img_FILE_NONE;
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -4822,8 +4822,16 @@ void Tst_ReceiveQst (void)
       Tst_ListOneQstToEdit ();
      }
    else	// Question is wrong
+     {
+      /***** Whether an image has been received or not,
+             reset status and image *****/
+      Gbl.Image.Action = Img_ACTION_NO_IMAGE;
+      Gbl.Image.Status = Img_FILE_NONE;
+      Gbl.Test.Image[0] = '\0';
+
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
+     }
 
    /***** Free answers *****/
    Tst_FreeTextChoiceAnswers ();
@@ -4891,17 +4899,17 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
       case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
 	 /***** Reset image name *****/
 	 Gbl.Test.Image[0] = '\0';
-	 Gbl.Image.Status = Img_NONE;
+	 Gbl.Image.Status = Img_FILE_NONE;
          break;
       case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
 	 /***** Get image from database *****/
 	 Tst_GetImageNameFromDB ();
 	 Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
-						 Img_NONE);
+						 Img_FILE_NONE);
 	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Upload new image (remove current image if exists)
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
+	 Img_GetAndProcessImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
 			       Tst_PHOTO_SAVED_MAX_HEIGHT,
 			       Tst_PHOTO_SAVED_QUALITY);
 	 if (Gbl.Image.Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
@@ -4910,7 +4918,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	    /* Get possible image from database */
 	    Tst_GetImageNameFromDB ();
 	    Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
-						    Img_NONE);
+						    Img_FILE_NONE);
 	   }
 	 break;
      }
@@ -5022,6 +5030,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
   {
+   extern const char *Txt_Error_receiving_or_processing_image;
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_stem_of_the_question;
    extern const char *Txt_You_must_select_a_T_F_answer;
@@ -5036,6 +5045,13 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    unsigned NumLastOpt;
    bool ThereIsEndOfAnswers;
    unsigned i;
+
+   if (Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE &&
+       Gbl.Image.Status != Img_FILE_PROCESSED)
+     {
+      Lay_ShowAlert (Lay_WARNING,Txt_Error_receiving_or_processing_image);
+      return false;
+     }
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
    Gbl.Test.Answer.NumOptions = 0;

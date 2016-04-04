@@ -60,11 +60,12 @@ xx-unique-name: a unique name encrypted starting by two random chars xx
 */
 typedef enum
   {
-   Img_NONE,
+   Img_FILE_NONE,
+   Img_FILE_RECEIVED,
    Img_FILE_PROCESSED,
    Img_FILE_MOVED,
    Img_NAME_STORED_IN_DB,
-  } Img_Status_t;
+  } Img_FileStatus_t;
 
 /***** Action to perform when editing a form with an image *****/
 #define Img_NUM_ACTIONS	3
@@ -80,7 +81,7 @@ typedef enum
 /*****************************************************************************/
 
 Img_Action_t Img_GetImageActionFromForm (void);
-void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
+void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
 
 void Img_MoveImageToDefinitiveDirectory (void);
 void Img_ShowImage (const char *Image,const char *ClassImg);

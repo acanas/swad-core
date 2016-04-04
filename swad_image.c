@@ -89,7 +89,7 @@ Img_Action_t Img_GetImageActionFromForm (void)
 /*****************************************************************************/
 // Return true if image is created
 
-void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
+void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX+1];
@@ -102,7 +102,7 @@ void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
    bool WrongType = false;
 
    /***** Reset image status *****/
-   Gbl.Image.Status = Img_NONE;
+   Gbl.Image.Status = Img_FILE_NONE;
 
    /***** Get filename and MIME type *****/
    Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
@@ -111,16 +111,13 @@ void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
 
    /* Get filename extension */
    if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
-     {
-      Lay_ShowAlert (Lay_WARNING,"El tipo de archivo no es correcto.");	// TODO: Need translation!!!!
       return;
-     }   LengthExtension = strlen (PtrExtension);
+
+   LengthExtension = strlen (PtrExtension);
    if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
        LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
-     {
-      Lay_ShowAlert (Lay_WARNING,"El tipo de archivo no es correcto.");	// TODO: Need translation!!!!
       return;
-     }
+
    /* Check if the file type is image/ or application/octet-stream */
    if (strncmp (MIMEType,"image/",strlen ("image/")))
       if (strcmp (MIMEType,"application/octet-stream"))
@@ -128,10 +125,7 @@ void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
 	    if (strcmp (MIMEType,"application/octet"))
 	       WrongType = true;
    if (WrongType)
-     {
-      Lay_ShowAlert (Lay_WARNING,"El tipo de archivo no es correcto.");	// TODO: Need translation!!!!
       return;
-     }
 
    /***** Assign a unique name for the image *****/
    strcpy (Gbl.Test.Image,Gbl.UniqueNameEncrypted);
@@ -154,6 +148,8 @@ void Img_GetImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
             Gbl.Test.Image,PtrExtension);
    if (Fil_EndReceptionOfFile (FileNameImgOrig,Param))	// Success
      {
+      Gbl.Image.Status = Img_FILE_RECEIVED;
+
       /***** Convert original image to temporary JPEG processed file *****/
       sprintf (FileNameImgTmp,"%s/%s/%s/%s.jpg",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
