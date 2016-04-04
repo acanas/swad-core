@@ -1065,22 +1065,36 @@ static void Tst_PutFormToEditQstImage (const char *ImageName,
       Img_ShowImage (ImageName,"TEST_IMG_EDIT_ONE");
      }
 
-   /***** New image *****/
+   /***** Change/new image *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-	              " value=\"%u\">",
-            UniqueId,ParamRadio,Img_ACTION_CHANGE_IMAGE);
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-		      "%s: "
-		      "</label>",
-	    The_ClassForm[Gbl.Prefs.Theme],
-	    ImageName[0] ? Txt_Change_image :
-			   Txt_New_image);
+   if (ImageName[0])	// Image exists
+     {
+      /***** Change image *****/
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
+			 " value=\"%u\">",
+	       UniqueId,ParamRadio,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+			 "%s: "
+			 "</label>",
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image);
+
+     }
+   else			// Image does not exist
+     {
+      /***** New image *****/
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
+			 " value=\"%u\">",
+	       UniqueId,ParamRadio,Img_ACTION_NEW_IMAGE);	// Upload new image
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+			 "%s: "
+			 "</label>",
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_New_image);
+     }
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"\""
-                      " onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
-            ParamFile,
-            UniqueId);
+		      " size=\"40\" maxlength=\"100\" value=\"\""
+		      " onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
+	    ParamFile,
+	    UniqueId);
   }
 
 /*****************************************************************************/
@@ -4820,7 +4834,8 @@ void Tst_ReceiveQst (void)
 	     and moved to the definitive directory) */
 	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-      if (Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE &&	// Upload new image (remove current image if exists)
+      if ((Gbl.Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
+           Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
 	  Gbl.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
 	 /* Move processed image to definitive directory */
 	 Img_MoveImageToDefinitiveDirectory ();
@@ -4899,39 +4914,15 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question stem *****/
    Par_GetParToHTML ("Stem",Stem,Cns_MAX_BYTES_TEXT);
 
+   /***** Get image associated to stem *****/
+   Img_GetImageFromForm (Gbl.Test.Image,Tst_GetImageNameFromDB,
+                         Fil_NAME_OF_PARAM_FILENAME_ORG,
+	                 Tst_PHOTO_SAVED_MAX_WIDTH,
+	                 Tst_PHOTO_SAVED_MAX_HEIGHT,
+	                 Tst_PHOTO_SAVED_QUALITY);
+
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
-
-   /***** Get type of image *****/
-   Gbl.Image.Action = Img_GetImageActionFromForm ("ImgAct");
-   switch (Gbl.Image.Action)
-     {
-      case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
-	 /***** Reset image name *****/
-	 Gbl.Test.Image[0] = '\0';
-	 Gbl.Image.Status = Img_FILE_NONE;
-         break;
-      case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
-	 /***** Get image from database *****/
-	 Tst_GetImageNameFromDB ();
-	 Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
-						 Img_FILE_NONE);
-	 break;
-      case Img_ACTION_CHANGE_IMAGE:	// Upload new image (remove current image if exists)
-         /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFromForm (Tst_PHOTO_SAVED_MAX_WIDTH,
-			       Tst_PHOTO_SAVED_MAX_HEIGHT,
-			       Tst_PHOTO_SAVED_QUALITY);
-	 if (Gbl.Image.Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
-	     Gbl.Test.QstCod > 0)			// Question exists
-	   {
-	    /* Get possible image from database */
-	    Tst_GetImageNameFromDB ();
-	    Gbl.Image.Status = (Gbl.Test.Image[0] ? Img_NAME_STORED_IN_DB :
-						    Img_FILE_NONE);
-	   }
-	 break;
-     }
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5056,7 +5047,8 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    bool ThereIsEndOfAnswers;
    unsigned i;
 
-   if (Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE &&
+   if ((Gbl.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
+        Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
        Gbl.Image.Status != Img_FILE_PROCESSED)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Error_receiving_or_processing_image);

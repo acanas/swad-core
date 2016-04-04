@@ -498,7 +498,8 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    Fil_RemoveOldTmpFiles (PathPhotosPubl,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,false);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Param = Fil_StartReceptionOfFile (FileNamePhotoSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                     FileNamePhotoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"image/jpeg"))

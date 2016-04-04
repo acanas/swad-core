@@ -68,6 +68,52 @@ static void Img_ProcessImage (const char *FileNameImgOriginal,
                               unsigned Width,unsigned Height,unsigned Quality);
 
 /*****************************************************************************/
+/***************************** Get image from form ***************************/
+/*****************************************************************************/
+
+void Img_GetImageFromForm (char *ImageName,void (*GetImageName) (void),
+                           const char *ParamFile,
+                           unsigned Width,unsigned Height,unsigned Quality)
+  {
+   Gbl.Image.Action = Img_GetImageActionFromForm ("ImgAct");
+   switch (Gbl.Image.Action)
+     {
+      case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
+	 /***** Reset image name *****/
+	 ImageName[0] = '\0';
+	 Gbl.Image.Status = Img_FILE_NONE;
+         break;
+      case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
+	 /***** Get image name *****/
+	 GetImageName ();
+	 Gbl.Image.Status = (ImageName[0] ? Img_NAME_STORED_IN_DB :
+					    Img_FILE_NONE);
+	 break;
+      case Img_ACTION_NEW_IMAGE:	// Upload new image
+         /***** Get new image (if present ==> process and create temporary file) *****/
+	 Img_GetAndProcessImageFileFromForm (ParamFile,Width,Height,Quality);
+	 if (Gbl.Image.Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
+	   {
+	    /* Reset image name */
+	    ImageName[0] = '\0';
+	    Gbl.Image.Status = Img_FILE_NONE;
+	   }
+	 break;
+      case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
+         /***** Get new image (if present ==> process and create temporary file) *****/
+	 Img_GetAndProcessImageFileFromForm (ParamFile,Width,Height,Quality);
+	 if (Gbl.Image.Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
+	   {
+	    /* Get image name */
+	    GetImageName ();
+	    Gbl.Image.Status = (ImageName[0] ? Img_NAME_STORED_IN_DB :
+					       Img_FILE_NONE);
+	   }
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /************************* Get image action from form ************************/
 /*****************************************************************************/
 
@@ -89,7 +135,9 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamRadio)
 /*****************************************************************************/
 // Return true if image is created
 
-void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Quality)
+void Img_GetAndProcessImageFileFromForm (const char *ParamFile,
+                                         unsigned Width,unsigned Height,
+                                         unsigned Quality)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX+1];
@@ -105,7 +153,7 @@ void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Qua
    Gbl.Image.Status = Img_FILE_NONE;
 
    /***** Get filename and MIME type *****/
-   Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (ParamFile,FileNameImgSrc,MIMEType);
    if (!FileNameImgSrc[0])	// No file present
       return;
 
@@ -234,16 +282,16 @@ void Img_MoveImageToDefinitiveDirectory (void)
 /******************** Write the image of a test question *********************/
 /*****************************************************************************/
 
-void Img_ShowImage (const char *Image,const char *ClassImg)
+void Img_ShowImage (const char *ImageName,const char *ClassImg)
   {
    char FileNameImgPriv[PATH_MAX+1];
    char FullPathImgPriv[PATH_MAX+1];
    char URL[PATH_MAX+1];
 
    /***** If no image to show ==> nothing to do *****/
-   if (!Image)
+   if (!ImageName)
       return;
-   if (!Image[0])
+   if (!ImageName[0])
       return;
    if (Gbl.Image.Status != Img_NAME_STORED_IN_DB)
       return;
@@ -253,11 +301,11 @@ void Img_ShowImage (const char *Image,const char *ClassImg)
    Brw_CreateDirDownloadTmp ();
 
    /***** Build private path to image *****/
-   sprintf (FileNameImgPriv,"%s.jpg",Image);
+   sprintf (FileNameImgPriv,"%s.jpg",ImageName);
    sprintf (FullPathImgPriv,"%s/%s/%c%c/%s",
 	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,
-	    Image[0],
-	    Image[1],
+	    ImageName[0],
+	    ImageName[1],
 	    FileNameImgPriv);
 
    /***** Create symbolic link from temporary public directory to private file

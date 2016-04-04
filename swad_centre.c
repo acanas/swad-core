@@ -2067,7 +2067,8 @@ void Ctr_ReceivePhoto (void)
    int ReturnCode;
 
    /***** Copy in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (FileNameImgSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                     FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */
    if (strncmp (MIMEType,"image/",strlen ("image/")))

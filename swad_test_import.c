@@ -399,7 +399,8 @@ void TsI_ImportQstsFromXML (void)
    Fil_RemoveOldTmpFiles (PathTestPriv,Cfg_TIME_TO_DELETE_TEST_TMP_FILES,false);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Param = Fil_StartReceptionOfFile (FileNameXMLSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                     FileNameXMLSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"text/xml"))

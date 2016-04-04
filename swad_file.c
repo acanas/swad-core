@@ -220,7 +220,8 @@ Content-Type: image/pjpeg
 000020  03030304 03030405 08050504 04050A07  ················
 etc, etc.
 */
-struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
+struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
+                                        char *FileName,char *MIMEType)
   {
    struct Param *Param;
 
@@ -228,8 +229,7 @@ struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType)
    FileName[0] = 0;
 
    /***** Get parameter *****/
-   Par_GetParameter (Par_PARAM_SINGLE,Fil_NAME_OF_PARAM_FILENAME_ORG,NULL,
-                     Fil_MAX_FILE_SIZE,&Param);
+   Par_GetParameter (Par_PARAM_SINGLE,ParamFile,NULL,Fil_MAX_FILE_SIZE,&Param);
 
    /***** Get filename *****/
    /* Check if filename exists */

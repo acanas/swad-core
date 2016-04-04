@@ -68,23 +68,29 @@ typedef enum
   } Img_FileStatus_t;
 
 /***** Action to perform when editing a form with an image *****/
-#define Img_NUM_ACTIONS	3
+#define Img_NUM_ACTIONS	4
 typedef enum
   {
    Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
    Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
-   Img_ACTION_CHANGE_IMAGE,	// Upload new image (remove current image if exists)
+   Img_ACTION_NEW_IMAGE,	// Upload new image
+   Img_ACTION_CHANGE_IMAGE,	// Change existing image by a new image
   } Img_Action_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Img_GetImageFromForm (char *ImageName,void (*GetImageName) (void),
+                           const char *ParamFile,
+                           unsigned Width,unsigned Height,unsigned Quality);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamRadio);
-void Img_GetAndProcessImageFromForm (unsigned Width,unsigned Height,unsigned Quality);
+void Img_GetAndProcessImageFileFromForm (const char *ParamFile,
+                                         unsigned Width,unsigned Height,
+                                         unsigned Quality);
 
 void Img_MoveImageToDefinitiveDirectory (void);
-void Img_ShowImage (const char *Image,const char *ClassImg);
+void Img_ShowImage (const char *ImageName,const char *ClassImg);
 void Img_RemoveImageFile (const char *ImageName);
 
 #endif

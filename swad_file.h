@@ -60,7 +60,8 @@ void Fil_CreateFileForHTMLOutput (void);
 void Fil_CloseAndRemoveFileForHTMLOutput (void);
 bool Fil_ReadStdinIntoTmpFile (void);
 void Fil_EndOfReadingStdin (void);
-struct Param *Fil_StartReceptionOfFile (char *FileName,char *MIMEType);
+struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
+                                        char *FileName,char *MIMEType);
 bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param);
 void Fil_CreateUpdateFile  (const char *CurrentName,const char *ExtensionOldName,char *OldName,char *NewName,FILE **NewFile);
 void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char *NewName,FILE *NewFile);

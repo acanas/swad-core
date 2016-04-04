@@ -366,7 +366,8 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
-   Param = Fil_StartReceptionOfFile (FileNameLogoSrc,MIMEType);
+   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                     FileNameLogoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
    if (strcmp (MIMEType,"image/png"))

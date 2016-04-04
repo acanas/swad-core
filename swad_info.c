@@ -2021,7 +2021,8 @@ void Inf_ReceivePagInfo (void)
    Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** First of all, store in disk the file from stdin (really from Gbl.F.Tmp) *****/
-   Param = Fil_StartReceptionOfFile (SourceFileName,MIMEType);
+   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                     SourceFileName,MIMEType);
 
    /***** Check that MIME type is HTML or ZIP *****/
    if (strcmp (MIMEType,"text/html"))

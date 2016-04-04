@@ -8406,7 +8406,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** First, we save in disk the file from stdin (really from Gbl.F.Tmp) *****/
-      Param = Fil_StartReceptionOfFile (SrcFileName,MIMEType);
+      Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                        SrcFileName,MIMEType);
 
       /***** Get filename from path *****/
       // Spaces at start or end are allowed
