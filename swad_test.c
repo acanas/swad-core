@@ -155,7 +155,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_PutFormToEditQstImage (struct Image *Image,
+static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
                                        const char *ParamAction,
                                        const char *ParamFile);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
@@ -993,7 +993,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
       Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
       strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
       Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
-      Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW");
+      Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW_STEM");
      }
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
@@ -1039,7 +1039,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstImage (struct Image *Image,
+static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
                                        const char *ParamAction,
                                        const char *ParamFile)
   {
@@ -1072,7 +1072,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
 	       ParamAction,Img_ACTION_KEEP_IMAGE,
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
-      Img_ShowImage (Image,"TEST_IMG_EDIT_ONE");
+      Img_ShowImage (Image,ClassImg);
      }
 
    /***** Change/new image *****/
@@ -2745,7 +2745,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
 	 strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	 Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
-	 Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST");
+	 Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST_STEM");
 	}
       Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
@@ -2970,7 +2970,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               "%s",
                      Answer);
 	    if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
-	       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_EDIT_LIST");
+	       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_EDIT_LIST_ANS");
             fprintf (Gbl.F.Out,"</div>");
 
             /* Write the text of the feedback */
@@ -3263,7 +3263,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
 	                 "%s",
                Gbl.Test.Answer.Options[NumOpt].Text);
       if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
-	 Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_SHOW");
+	 Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -3437,7 +3437,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Image.Name[0])
-	 Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,"TEST_IMG_SHOW");
+	 Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,"TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</div>");
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
@@ -4397,6 +4397,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Txt_Stem,
             Stem);
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,
+                              "TEST_IMG_EDIT_ONE_STEM",
                               "ImgAct","FileImg");
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -4600,7 +4601,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	                 "<td colspan=\"2\" class=\"LEFT_TOP\">");
       sprintf (ParamAction,"ImgAct%u",NumOpt);
       sprintf (ParamFile,"FileImg%u",NumOpt);
-      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,ParamAction,ParamFile);
+      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+                                 "TEST_IMG_EDIT_ONE_ANS",
+                                 ParamAction,ParamFile);
       // if (OptionsDisabled)
       //    fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out,"</td>"
