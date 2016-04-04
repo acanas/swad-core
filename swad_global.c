@@ -83,7 +83,6 @@ void Gbl_InitializeGlobals (void)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   char UniqueNamePlain[Cns_MAX_LENGTH_IP+1+10+1+10+1];
    Txt_Language_t Lan;
 
    setlocale (LC_ALL,"es_ES.utf8");
@@ -98,8 +97,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.TimeGenerationInMicroseconds = Gbl.TimeSendInMicroseconds = 0L;
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
-   sprintf (UniqueNamePlain,"%s-%lx-%x",Gbl.IP,Gbl.StartExecutionTimeUTC,Gbl.PID);
-   Cry_EncryptSHA256Base64 (UniqueNamePlain,Gbl.UniqueNameEncrypted);	// Make difficult to guess a unique name
+   Cry_CreateUniqueNameEncrypted (Gbl.UniqueNameEncrypted);
 
    srand ((unsigned int) Gbl.StartExecutionTimeUTC);	// Initialize seed for rand()
 
@@ -429,10 +427,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Imported.ExternalUsrId[0] = '\0';
    Gbl.Imported.ExternalSesId[0] = '\0';
    Gbl.Imported.ExternalRole = Rol_UNKNOWN;
-
-   /* Related to images uploaded in a form */
-   Gbl.Image.Action = Img_ACTION_NO_IMAGE;
-   Gbl.Image.Status = Img_FILE_NONE;
 
    Gbl.WebService.Function = Svc_unknown;
   }

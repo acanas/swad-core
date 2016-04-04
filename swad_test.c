@@ -155,8 +155,8 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_PutFormToEditQstImage (const char *ImageName,
-                                       const char *ParamRadio,
+static void Tst_PutFormToEditQstImage (struct Image *Image,
+                                       const char *ParamAction,
                                        const char *ParamFile);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -217,7 +217,7 @@ static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
-static void Tst_GetImageNameFromDB (void);
+static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
@@ -982,8 +982,10 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    Tst_WriteQstStem (row[4],"TEST_EXA");
    if (row[5][0])
      {
-      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
-      Img_ShowImage (row[5],"TEST_IMG_SHOW");
+      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+      strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+      Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW");
      }
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
@@ -1029,8 +1031,8 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstImage (const char *ImageName,
-                                       const char *ParamRadio,
+static void Tst_PutFormToEditQstImage (struct Image *Image,
+                                       const char *ParamAction,
                                        const char *ParamFile)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -1042,8 +1044,8 @@ static void Tst_PutFormToEditQstImage (const char *ImageName,
 
    /***** No image *****/
    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
-            ParamRadio,Img_ACTION_NO_IMAGE);
-   if (!ImageName[0])
+            ParamAction,Img_ACTION_NO_IMAGE);
+   if (!Image->Name[0])
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
 	              "<label class=\"%s\">"
@@ -1053,43 +1055,38 @@ static void Tst_PutFormToEditQstImage (const char *ImageName,
             Txt_No_image);
 
    /***** Current image *****/
-   if (ImageName[0])
+   if (Image->Name[0])
      {
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\" />"
 			 "<label class=\"%s\">"
 			 "%s"
 			 "</label><br />",
-	       ParamRadio,Img_ACTION_KEEP_IMAGE,
+	       ParamAction,Img_ACTION_KEEP_IMAGE,
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
-      Img_ShowImage (ImageName,"TEST_IMG_EDIT_ONE");
+      Img_ShowImage (Image,"TEST_IMG_EDIT_ONE");
      }
 
    /***** Change/new image *****/
    UniqueId++;
-   if (ImageName[0])	// Image exists
-     {
+   if (Image->Name[0])	// Image exists
       /***** Change image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\">",
-	       UniqueId,ParamRadio,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+			 " value=\"%u\">"
+                         "<label class=\"%s\">"
 			 "%s: "
 			 "</label>",
+	       UniqueId,ParamAction,Img_ACTION_CHANGE_IMAGE,	// Replace existing image by new image
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image);
-
-     }
    else			// Image does not exist
-     {
       /***** New image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\">",
-	       UniqueId,ParamRadio,Img_ACTION_NEW_IMAGE);	// Upload new image
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+			 " value=\"%u\">"
+                         "<label class=\"%s\">"
 			 "%s: "
 			 "</label>",
+	       UniqueId,ParamAction,Img_ACTION_NEW_IMAGE,	// Upload new image
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_New_image);
-     }
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
 		      " size=\"40\" maxlength=\"100\" value=\"\""
 		      " onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
@@ -2735,11 +2732,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
       if (row[5][0])
 	{
-	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
-	 Img_ShowImage (row[5],"TEST_IMG_EDIT_LIST");
+	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+	 strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	 Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST");
 	}
       Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
@@ -4243,7 +4241,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    unsigned NumTag;
    bool TagNotFound;
    bool OptionsDisabled;
-   char ParamRadio[32];
+   char ParamAction[32];
    char ParamFile[32];
 
    /***** If no receiving the question, but editing a new or existing question
@@ -4356,8 +4354,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Stem,
             Stem);
-   Tst_PutFormToEditQstImage (Gbl.Test.Image,
-                              "ImgAct",Fil_NAME_OF_PARAM_FILENAME_ORG);
+   Tst_PutFormToEditQstImage (&Gbl.Test.Image,
+                              "ImgAct","FileImg");
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -4558,9 +4556,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       /* Image */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\" class=\"LEFT_TOP\">");
-      sprintf (ParamRadio,"ImgAct%u",NumOpt);
+      sprintf (ParamAction,"ImgAct%u",NumOpt);
       sprintf (ParamFile,"FileImg%u",NumOpt);
-      Tst_PutFormToEditQstImage (Gbl.Test.Answer.Options[NumOpt].Image,ParamRadio,ParamFile);
+      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,ParamAction,ParamFile);
       // if (OptionsDisabled)
       //    fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out,"</td>"
@@ -4603,7 +4601,9 @@ void Tst_InitQst (void)
    Gbl.Test.Stem.Length = 0;
    Gbl.Test.Feedback.Text = NULL;
    Gbl.Test.Feedback.Length = 0;
-   Gbl.Test.Image[0] = '\0';
+   Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
+   Gbl.Test.Image.Status = Img_FILE_NONE;
+   Gbl.Test.Image.Name[0] = '\0';
    Gbl.Test.Shuffle = false;
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
@@ -4615,7 +4615,9 @@ void Tst_InitQst (void)
       Gbl.Test.Answer.Options[NumOpt].Correct  = false;
       Gbl.Test.Answer.Options[NumOpt].Text     = NULL;
       Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
-      Gbl.Test.Answer.Options[NumOpt].Image[0] = '\0';
+      Gbl.Test.Answer.Options[NumOpt].Image.Action = Img_ACTION_NO_IMAGE;
+      Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_FILE_NONE;
+      Gbl.Test.Answer.Options[NumOpt].Image.Name[0] = '\0';
      }
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
@@ -4658,12 +4660,12 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
    /* Get the image of the question from the database (row[3]) */
    if (row[3][0])
      {
-      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
-      strncpy (Gbl.Test.Image,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+      strncpy (Gbl.Test.Image.Name,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
      }
    else
-      Gbl.Image.Status = Img_FILE_NONE;
+      Gbl.Test.Image.Status = Img_FILE_NONE;
 
    /* Get the feedback of the question from the database (row[4]) */
    Feedback[0] = '\0';
@@ -4747,31 +4749,41 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 /*****************************************************************************/
 /***** Get possible image associated with a test question from database ******/
 /*****************************************************************************/
+//      NumOpt >= Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to stem
+// 0 <= NumOpt <  Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to answer
 
-static void Tst_GetImageNameFromDB (void)
+static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get possible image associated with a test question from database *****/
-   sprintf (Query,"SELECT Image FROM tst_questions"
-		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
-	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get a question");
+   /***** Build query depending on NumOpt *****/
+   if (NumOpt < Tst_MAX_OPTIONS_PER_QUESTION)
+      // Get image associated to answer
+      sprintf (Query,"SELECT Image FROM tst_answers"
+		     " WHERE QstCod='%ld' AND AnsInd='%u'",
+	       Gbl.Test.QstCod,NumOpt);
+   else
+      // Get image associated to stem
+      sprintf (Query,"SELECT Image FROM tst_questions"
+		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+
+   /***** Query database *****/
+   DB_QuerySELECT (Query,&mysql_res,"can not get image name");
    row = mysql_fetch_row (mysql_res);
 
-   /* Get the image of the question from the database (row[0]) */
+   /***** Get the image of the question from the database (row[0]) *****/
    if (row[0][0])	// Image name stored in database
      {
-      Gbl.Image.Status = Img_NAME_STORED_IN_DB;
-      strncpy (Gbl.Test.Image,row[0],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      Gbl.Test.Image[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+      strncpy (ImageName,row[0],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      ImageName[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
      }
    else		// No image in this question
-      Gbl.Image.Status = Img_FILE_NONE;
+      ImageName[0] = '\0';
 
-   /* Free structure that stores the query result */
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
@@ -4828,17 +4840,17 @@ void Tst_ReceiveQst (void)
    /***** Make sure that tags, text and answer are not empty *****/
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
-      if (Gbl.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+      if (Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
 	 /* Remove possible file with the old image
 	    (the new image file is already processed
 	     and moved to the definitive directory) */
 	 Tst_RemoveImageFilesFromQstsInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-      if ((Gbl.Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
-           Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-	  Gbl.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+      if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
+           Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
+	  Gbl.Test.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
 	 /* Move processed image to definitive directory */
-	 Img_MoveImageToDefinitiveDirectory ();
+	 Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Image);
 
       /***** Insert or update question, tags and answer in the database *****/
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
@@ -4850,9 +4862,9 @@ void Tst_ReceiveQst (void)
      {
       /***** Whether an image has been received or not,
              reset status and image *****/
-      Gbl.Image.Action = Img_ACTION_NO_IMAGE;
-      Gbl.Image.Status = Img_FILE_NONE;
-      Gbl.Test.Image[0] = '\0';
+      Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
+      Gbl.Test.Image.Status = Img_FILE_NONE;
+      Gbl.Test.Image.Name[0] = '\0';
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
@@ -4879,6 +4891,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    char StrMultiAns[Tst_MAX_SIZE_ANSWERS_ONE_QST+1];
    const char *Ptr;
    unsigned NumCorrectAns;
+   char ParamAction[32];
+   char ParamFile[32];
 
    /***** Get question code *****/
    Tst_GetQstCod ();
@@ -4914,9 +4928,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question stem *****/
    Par_GetParToHTML ("Stem",Stem,Cns_MAX_BYTES_TEXT);
 
-   /***** Get image associated to stem *****/
-   Img_GetImageFromForm (Gbl.Test.Image,Tst_GetImageNameFromDB,
-                         Fil_NAME_OF_PARAM_FILENAME_ORG,
+   /***** Get image associated to the stem *****/
+   Img_GetImageFromForm (Tst_MAX_OPTIONS_PER_QUESTION,&Gbl.Test.Image,
+                         Tst_GetImageNameFromDB,
+                         "ImgAct","FileImg",
 	                 Tst_PHOTO_SAVED_MAX_WIDTH,
 	                 Tst_PHOTO_SAVED_MAX_HEIGHT,
 	                 Tst_PHOTO_SAVED_QUALITY);
@@ -4970,6 +4985,20 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
             /* Get feedback */
             sprintf (FbStr,"FbStr%u",NumOpt);
 	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+
+	    /* Get image associated to the answer */
+	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+	      {
+	       sprintf (ParamAction,"ImgAct%u",NumOpt);
+	       sprintf (ParamFile,"FileImg%u",NumOpt);
+	       Img_GetImageFromForm (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
+				     Tst_GetImageNameFromDB,
+				     ParamAction,ParamFile,
+				     Tst_PHOTO_SAVED_MAX_WIDTH,
+				     Tst_PHOTO_SAVED_MAX_HEIGHT,
+				     Tst_PHOTO_SAVED_QUALITY);
+	      }
            }
 
          /* Get the numbers of correct answers */
@@ -5047,9 +5076,9 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    bool ThereIsEndOfAnswers;
    unsigned i;
 
-   if ((Gbl.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
-        Gbl.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-       Gbl.Image.Status != Img_FILE_PROCESSED)
+   if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
+        Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
+       Gbl.Test.Image.Status != Img_FILE_PROCESSED)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Error_receiving_or_processing_image);
       return false;
@@ -5487,13 +5516,13 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                Gbl.Test.Shuffle ? 'Y' :
         	                  'N',
                Gbl.Test.Stem.Text,
-               Gbl.Test.Image,
+               Gbl.Test.Image.Name,
                Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "");
       Gbl.Test.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
 
       /* Update image status */
-      if (Gbl.Test.Image[0])
-	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      if (Gbl.Test.Image.Name[0])
+	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
      }
    else				// It's an existing question
      {
@@ -5507,13 +5536,13 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 	       Gbl.Test.Shuffle ? 'Y' :
 				  'N',
 	       Gbl.Test.Stem.Text,
-	       Gbl.Test.Image,
+	       Gbl.Test.Image.Name,
 	       Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /* Update image status */
-      if (Gbl.Test.Image[0])
-	 Gbl.Image.Status = Img_NAME_STORED_IN_DB;
+      if (Gbl.Test.Image.Name[0])
+	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
       DB_QueryUPDATE (Query,"can not update question");
 
       /* Remove answers and tags from this test question */

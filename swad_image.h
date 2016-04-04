@@ -34,11 +34,23 @@
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
+
+/***** Action to perform when editing a form with an image *****/
+#define Img_NUM_ACTIONS	4
+typedef enum
+  {
+   Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
+   Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
+   Img_ACTION_NEW_IMAGE,	// Upload new image
+   Img_ACTION_CHANGE_IMAGE,	// Change existing image by a new image
+  } Img_Action_t;
+
+/***** Status of an image file *****/
 /*
 No image  Original file               Temporary          Definitive         Name of the image
 uploaded  uploaded by user            processed image    processed image    stored in database
 --------- --------------------------- ------------------ ------------------ ---------------------
-Img_NONE  Img_NONE                    Img_FILE_PROCESSED Img_FILE_MOVED     Img_NAME_STORED_IN_DB
+Img_NONE  Img_FILE_RECEIVED           Img_FILE_PROCESSED Img_FILE_MOVED     Img_NAME_STORED_IN_DB
 --------- --------------------------- ------------------ ------------------ ---------------------
 -> upload-file ->          -> process-file ->  b -> move-file ->  -> insert-name ->
 --------- --------------------------- ------------------ ------------------ ---------------------
@@ -67,30 +79,30 @@ typedef enum
    Img_NAME_STORED_IN_DB,
   } Img_FileStatus_t;
 
-/***** Action to perform when editing a form with an image *****/
-#define Img_NUM_ACTIONS	4
-typedef enum
+/***** Struct used to get images from forms *****/
+struct Image
   {
-   Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
-   Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
-   Img_ACTION_NEW_IMAGE,	// Upload new image
-   Img_ACTION_CHANGE_IMAGE,	// Change existing image by a new image
-  } Img_Action_t;
+   Img_Action_t Action;
+   Img_FileStatus_t Status;
+   char Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Img_GetImageFromForm (char *ImageName,void (*GetImageName) (void),
-                           const char *ParamFile,
+void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
+                           void (*GetImageName) (unsigned NumOpt,char *ImageName),
+                           const char *ParamAction,const char *ParamFile,
                            unsigned Width,unsigned Height,unsigned Quality);
-Img_Action_t Img_GetImageActionFromForm (const char *ParamRadio);
-void Img_GetAndProcessImageFileFromForm (const char *ParamFile,
+Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
+void Img_GetAndProcessImageFileFromForm (struct Image *Image,
+                                         const char *ParamFile,
                                          unsigned Width,unsigned Height,
                                          unsigned Quality);
 
-void Img_MoveImageToDefinitiveDirectory (void);
-void Img_ShowImage (const char *ImageName,const char *ClassImg);
+void Img_MoveImageToDefinitiveDirectory (struct Image *Image);
+void Img_ShowImage (struct Image *Image,const char *ClassImg);
 void Img_RemoveImageFile (const char *ImageName);
 
 #endif

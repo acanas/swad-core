@@ -30,12 +30,27 @@
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 
 #include "sha2/sha2.h"		// For sha-256 and sha-512 algorithms
+#include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_global.h"
+
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/***************************** Internal constants ****************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/****************************** Internal types *******************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
+extern struct Globals Gbl;
 extern const char Str_BIN_TO_BASE64URL[64];
 
 /*****************************************************************************/
@@ -119,4 +134,19 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,char EncryptedText[Cry_LENGT
         }
      }
    EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64] = '\0';
+  }
+
+/*****************************************************************************/
+/*** Create a unique name encrypted, different each time function is called **/
+/*****************************************************************************/
+
+void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+  {
+   static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
+   char UniqueNamePlain[Cns_MAX_LENGTH_IP+1+10+1+10+1+10+1];
+
+   NumCall++;
+   sprintf (UniqueNamePlain,"%s-%lx-%x-%x",
+            Gbl.IP,Gbl.StartExecutionTimeUTC,Gbl.PID,NumCall);
+   Cry_EncryptSHA256Base64 (UniqueNamePlain,UniqueNameEncrypted);	// Make difficult to guess a unique name
   }

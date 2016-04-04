@@ -45,4 +45,6 @@
 void Cry_EncryptSHA256Base64 (const char *PlainText,char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
 void Cry_EncryptSHA512Base64 (const char *PlainText,char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1]);
 
+void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
+
 #endif
