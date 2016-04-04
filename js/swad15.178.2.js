@@ -762,89 +762,115 @@ function enableDisableAns (Formul) {
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsInt')
 				Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsMulti'		||
+			else if (Formul.elements[i].name == 'AnsMulti'	||
 				Formul.elements[i].name == 'AnsFloatMin'	||
 				Formul.elements[i].name == 'AnsFloatMax'	||
 				Formul.elements[i].name == 'AnsTF'			||
-				Formul.elements[i].name == 'AnsUni'		||
+				Formul.elements[i].name == 'AnsUni'			||
 				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],true);
+			else {
+				enableDisableStrAns(Formul.elements[i],true);
+				enableDisableImgAns(Formul.elements[i],true);
+			}
 	}
 	else if (Formul.AnswerType[Tst_ANS_FLOAT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsFloatMin' ||
+			if (Formul.elements[i].name == 'AnsFloatMin'	||
 				Formul.elements[i].name == 'AnsFloatMax')
 				Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsInt'   ||
-				Formul.elements[i].name == 'AnsTF'    ||
-				Formul.elements[i].name == 'AnsUni'   ||
-				Formul.elements[i].name == 'AnsMulti' ||
+			else if (Formul.elements[i].name == 'AnsInt'	||
+				Formul.elements[i].name == 'AnsTF'			||
+				Formul.elements[i].name == 'AnsUni'			||
+				Formul.elements[i].name == 'AnsMulti'		||
 				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],true);
+			else {
+				enableDisableStrAns(Formul.elements[i],true);
+				enableDisableImgAns(Formul.elements[i],true);
+			}
 	}
 	else if (Formul.AnswerType[Tst_ANS_TRUE_FALSE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
 			if (Formul.elements[i].name == 'AnsTF')
 				Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsInt' ||
-				Formul.elements[i].name == 'AnsFloatMin' ||
-				Formul.elements[i].name == 'AnsFloatMax' ||
-				Formul.elements[i].name == 'AnsUni' ||
-				Formul.elements[i].name == 'AnsMulti' ||
+			else if (Formul.elements[i].name == 'AnsInt'	||
+				Formul.elements[i].name == 'AnsFloatMin'	||
+				Formul.elements[i].name == 'AnsFloatMax'	||
+				Formul.elements[i].name == 'AnsUni'			||
+				Formul.elements[i].name == 'AnsMulti'		||
 				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],true);
+			else {
+				enableDisableStrAns(Formul.elements[i],true);
+				enableDisableImgAns(Formul.elements[i],true);
+			}
 	}
 	else if (Formul.AnswerType[Tst_ANS_UNIQUE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsUni' ||
+			if (Formul.elements[i].name == 'AnsUni'	||
 				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsInt' ||
-					 Formul.elements[i].name == 'AnsFloatMin' ||
-					 Formul.elements[i].name == 'AnsFloatMax' ||
-					 Formul.elements[i].name == 'AnsTF' ||
+			else if (Formul.elements[i].name == 'AnsInt'		||
+					 Formul.elements[i].name == 'AnsFloatMin'	||
+					 Formul.elements[i].name == 'AnsFloatMax'	||
+					 Formul.elements[i].name == 'AnsTF'			||
 					 Formul.elements[i].name == 'AnsMulti')
 				Formul.elements[i].disabled = true;
-			else enableDisableContAns(Formul.elements[i],false);
+			else {
+				enableDisableStrAns(Formul.elements[i],false);
+				enableDisableImgAns(Formul.elements[i],false);
+			}
 	}
 	else if (Formul.AnswerType[Tst_ANS_MULTIPLE_CHOICE].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsMulti' ||
+			if (Formul.elements[i].name == 'AnsMulti'	||
 				Formul.elements[i].name == 'Shuffle')
 				Formul.elements[i].disabled = false;
-			else if (Formul.elements[i].name == 'AnsInt' ||
-					 Formul.elements[i].name == 'AnsFloatMin' ||
-					 Formul.elements[i].name == 'AnsFloatMax' ||
-					 Formul.elements[i].name == 'AnsTF' ||
+			else if (Formul.elements[i].name == 'AnsInt'		||
+					 Formul.elements[i].name == 'AnsFloatMin'	||
+					 Formul.elements[i].name == 'AnsFloatMax'	||
+					 Formul.elements[i].name == 'AnsTF'			||
 					 Formul.elements[i].name == 'AnsUni')
 				Formul.elements[i].disabled = true;
-			else
-				enableDisableContAns(Formul.elements[i],false);
+			else {
+				enableDisableStrAns(Formul.elements[i],false);
+				enableDisableImgAns(Formul.elements[i],false);
+			}
 	}
 	else if (Formul.AnswerType[Tst_ANS_TEXT].checked){
 		for (var i=0; i<Formul.elements.length; i++)
-			if (Formul.elements[i].name == 'AnsInt' ||
-				Formul.elements[i].name == 'AnsFloatMin' ||
-				Formul.elements[i].name == 'AnsFloatMax' ||
-				Formul.elements[i].name == 'AnsTF' ||
-				Formul.elements[i].name == 'AnsUni' ||
+			if (Formul.elements[i].name == 'AnsInt'			||
+				Formul.elements[i].name == 'AnsFloatMin'	||
+				Formul.elements[i].name == 'AnsFloatMax'	||
+				Formul.elements[i].name == 'AnsTF'			||
+				Formul.elements[i].name == 'AnsUni'			||
 				Formul.elements[i].name == 'AnsMulti')
 				Formul.elements[i].disabled = true;
-			else
-				enableDisableContAns(Formul.elements[i],false);
+			else {
+				enableDisableStrAns(Formul.elements[i],false);
+				enableDisableImgAns(Formul.elements[i],true);
+			}
 	}
 }
 
-// Activate or deactivate response contents of a test question
-function enableDisableContAns (elem, isDisabled) {
+// Activate or deactivate answer strings and feedback of a test question
+function enableDisableStrAns (elem, isDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
 
-	for ( var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (elem.name == ('AnsStr' + i) ||
-			elem.name == ('FbStr'  + i))
+	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
+		if (elem.name == ('AnsStr'  + i) ||
+			elem.name == ('FbStr'   + i))
+			elem.disabled = isDisabled;
+}
+
+//Activate or deactivate answer images of a test question
+function enableDisableImgAns (elem, isDisabled) {
+	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
+
+	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
+		if (elem.name == ('ImgAct'  + i) ||
+			elem.name == ('FileImg' + i))
 			elem.disabled = isDisabled;
 }
 

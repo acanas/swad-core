@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.178.1 (2016-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.178.2 (2016-04-05)"
 #define CSS_FILE		"swad15.178.1.css"
-#define JS_FILE			"swad15.131.3.js"
+#define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.178.2: Apr 04, 2016	Changes in JavaScript related to images in test questions. (198265 lines)
         Version 15.178.1: Apr 04, 2016	Changes in CSS related to images in test questions. (198240 lines)
         Version 15.178:   Apr 04, 2016	Code refactoring related to images in test questions. (198244 lines)
 					5 changes necessary in database:
