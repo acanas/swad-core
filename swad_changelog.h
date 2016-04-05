@@ -128,19 +128,20 @@
 // TODO: In Statistics > Degrees, show only degrees with students
 // TODO: Change layout of confirm / reject registration. Use green and red buttons
 
-// TODO: When editing an existing question, put upper left contextual link to remove the question
+// TODO: Ask for confirmation when removing a survey question.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.179 (2016-04-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.179.1 (2016-04-05)"
 #define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.179.1: Apr 05, 2016	Contextual link to remove one test question. (198384 lines)
         Version 15.179:   Apr 05, 2016	Fixed bug when getting a parameter.
 					Ask for confirmation when removing a test question. (198355 lines)
 					1 change necessary in database:

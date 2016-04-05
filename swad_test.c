@@ -228,6 +228,10 @@ static void Tst_MoveImagesToDefinitiveDirectories (void);
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
+
+static void Tst_PutIconToRemove (void);
+static void Tst_PutParamsRemoveOneQst (void);
+
 static bool Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
@@ -4292,17 +4296,22 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          Tst_GetQstDataFromDB (Stem,Feedback);
      }
 
-   /***** Start form and table *****/
-   Act_FormStart (ActRcvTstQst);
+   /***** Start frame *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
-      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
-
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrameTable (NULL,2,Title);
+      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemove);
      }
    else
-      Lay_StartRoundFrameTable (NULL,2,Txt_New_question);
+      Lay_StartRoundFrame (NULL,Txt_New_question,NULL);
+
+   /***** Start form *****/
+   Act_FormStart (ActRcvTstQst);
+   if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
+      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
    /***** Help for text editor *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4609,14 +4618,20 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** Send button *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_PutConfirmButton (Txt_Save);
    else
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_question);
+      Lay_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for answers *****/
    Tst_FreeTextChoiceAnswers ();
@@ -5465,6 +5480,28 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
   }
 
 /*****************************************************************************/
+/********************* Put icon to remove one question ***********************/
+/*****************************************************************************/
+
+static void Tst_PutIconToRemove (void)
+  {
+   extern const char *Txt_Remove;
+
+   Lay_PutContextualLink (ActReqRemTstQst,Tst_PutParamsRemoveOneQst,
+                          "remove-on64x64.png",Txt_Remove,NULL);
+  }
+
+/*****************************************************************************/
+/****************** Put parameter to remove one question *********************/
+/*****************************************************************************/
+
+static void Tst_PutParamsRemoveOneQst (void)
+  {
+   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+   Par_PutHiddenParamChar ("OnlyThisQst",'Y');
+  }
+
+/*****************************************************************************/
 /******************** Request the removal of a question **********************/
 /*****************************************************************************/
 
@@ -5489,9 +5526,10 @@ void Tst_RequestRemoveQst (void)
    Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
    if (EditingOnlyThisQst)
       Par_PutHiddenParamChar ("OnlyThisQst",'Y');
-   else
+   else	// Editing a list of questions
      {
-      if (Tst_GetParamsTst ())	// Get other parameters from the form
+      /* Get and write other parameters related to the listing of questions */
+      if (Tst_GetParamsTst ())
 	{
 	 Sta_WriteParamsDatesSeeAccesses ();
 	 Tst_WriteParamEditQst ();
