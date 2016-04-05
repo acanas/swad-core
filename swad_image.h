@@ -85,19 +85,24 @@ struct Image
    Img_Action_t Action;
    Img_FileStatus_t Status;
    char Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char *Title;	// Title/attribution
   };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Img_ResetImageTitle (struct Image *Image);
+void Img_GetImageNameTitle (const char *Name,const char *Title,
+                            struct Image *Image);
+
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
-                           void (*GetImageName) (unsigned NumOpt,char *ImageName),
-                           const char *ParamAction,const char *ParamFile,
+                           void (*GetImageNameFromDB) (unsigned NumOpt,struct Image *Image),
+                           const char *ParamAction,const char *ParamFile,const char *ParamTitle,
                            unsigned Width,unsigned Height,unsigned Quality);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
 void Img_GetAndProcessImageFileFromForm (struct Image *Image,
-                                         const char *ParamFile,
+                                         const char *ParamFile,const char *ParamTitle,
                                          unsigned Width,unsigned Height,
                                          unsigned Quality);
 

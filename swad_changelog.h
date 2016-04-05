@@ -131,13 +131,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.181 (2016-04-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.182 (2016-04-06)"
 #define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.182:   Apr 06, 2016	Get fields title/attribution of images from form. (198610 lines)
+					4 changes necessary in database:
+ALTER TABLE tst_questions CHANGE COLUMN Image ImageName VARCHAR(43) NOT NULL;
+ALTER TABLE tst_questions ADD COLUMN ImageTitle TEXT NOT NULL AFTER ImageName;
+ALTER TABLE tst_answers CHANGE COLUMN Image ImageName VARCHAR(43) NOT NULL;
+ALTER TABLE tst_answers ADD COLUMN ImageTitle TEXT NOT NULL AFTER ImageName;
+
         Version 15.181:   Apr 05, 2016	New fields in test questions with the title/attribution of images. (198515 lines)
         Version 15.180.7: Apr 05, 2016	Changes in layout of editor of question. (198473 lines)
         Version 15.180.6: Apr 05, 2016	Changes in layout of editor of question. (198490 lines)

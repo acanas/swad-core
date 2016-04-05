@@ -2290,24 +2290,26 @@ mysql> DESCRIBE timetable_tut;
    /***** Table tst_answers *****/
 /*
 mysql> DESCRIBE tst_answers;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| QstCod   | int(11)       | NO   | MUL | NULL    |       |
-| AnsInd   | tinyint(4)    | NO   |     | NULL    |       |
-| Answer   | text          | NO   |     | NULL    |       |
-| Feedback | text          | NO   |     | NULL    |       |
-| Image    | varchar(43)   | NO   |     | NULL    |       |
-| Correct  | enum('N','Y') | NO   |     | NULL    |       |
-+----------+---------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| QstCod     | int(11)       | NO   | MUL | NULL    |       |
+| AnsInd     | tinyint(4)    | NO   |     | NULL    |       |
+| Answer     | text          | NO   |     | NULL    |       |
+| Feedback   | text          | NO   |     | NULL    |       |
+| ImageName  | varchar(43)   | NO   |     | NULL    |       |
+| ImageTitle | text          | NO   |     | NULL    |       |
+| Correct    | enum('N','Y') | NO   |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
                    "QstCod INT NOT NULL,"
                    "AnsInd TINYINT NOT NULL,"
                    "Answer TEXT NOT NULL,"
                    "Feedback TEXT NOT NULL,"
-                   "Image VARCHAR(43) NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle TEXT NOT NULL,"
                    "Correct ENUM('N','Y') NOT NULL,"
                    "INDEX(QstCod))");
 
@@ -2421,12 +2423,13 @@ mysql> DESCRIBE tst_questions;
 | Shuffle         | enum('N','Y')                                                             | NO   |     | NULL    |                |
 | Stem            | text                                                                      | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
-| Image           | varchar(43)                                                               | NO   |     | NULL    |                |
+| ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
+| ImageTitle      | text                                                                      | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
+12 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
                    "QstCod INT NOT NULL AUTO_INCREMENT,"
@@ -2436,7 +2439,8 @@ mysql> DESCRIBE tst_questions;
                    "Shuffle ENUM('N','Y') NOT NULL,"
                    "Stem TEXT NOT NULL,"
                    "Feedback TEXT NOT NULL,"
-                   "Image VARCHAR(43) NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle TEXT NOT NULL,"
                    "NumHits INT NOT NULL DEFAULT 0,"
                    "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
                    "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"

@@ -220,9 +220,10 @@ static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 
 static void Tst_InitImagesOfQuestion (void);
+static void Tst_FreeImagesOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
-static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName);
+static void Tst_GetImageFromDB (unsigned NumOpt,struct Image *Image);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
@@ -902,16 +903,17 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
 	 /*
-	 row[0] QstCod
-	 row[1] UNIX_TIMESTAMP(EditTime)
-	 row[2] AnsType
-	 row[3] Shuffle
-	 row[4] Stem
-	 row[5] Image
-	 row[6] Feedback
-	 row[7] NumHits
-	 row[8] NumHitsNotBlank
-	 row[9] Score
+	 row[ 0] QstCod
+	 row[ 1] UNIX_TIMESTAMP(EditTime)
+	 row[ 2] AnsType
+	 row[ 3] Shuffle
+	 row[ 4] Stem
+	 row[ 5] Feedback
+	 row[ 6] ImageName
+	 row[ 7] ImageTitle
+	 row[ 8] NumHits
+	 row[ 9] NumHitsNotBlank
+	 row[10] Score
 	 */
 
 	 /***** Get the code of question (row[0]) *****/
@@ -966,16 +968,17 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Image
-   row[6] Feedback
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
+   row[ 0] QstCod
+   row[ 1] UNIX_TIMESTAMP(EditTime)
+   row[ 2] AnsType
+   row[ 3] Shuffle
+   row[ 4] Stem
+   row[ 5] Feedback
+   row[ 6] ImageName
+   row[ 7] ImageTitle
+   row[ 8] NumHits
+   row[ 9] NumHitsNotBlank
+   row[10] Score
    */
 
    /***** Write number of question *****/
@@ -991,15 +994,15 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
 	              "</td>",
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
-   /***** Write stem (row[4]), answers depending on shuffle (row[3]) and feedback (row[6]) *****/
+   /***** Write stem (row[4]), image (row[6], row[7]),
+          answers depending on shuffle (row[3]) and feedback (row[5])  *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   if (row[5][0])
+   if (row[6][0])
      {
       Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-      strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+      Img_GetImageNameTitle (row[6],row[7],&Gbl.Test.Image);
       Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW_STEM");
      }
    if (Gbl.Action.Act == ActSeeTst)
@@ -1012,6 +1015,10 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
+
+   /***** Free answers and images of this test question *****/
+   Tst_FreeTextChoiceAnswers ();
+   Tst_FreeImagesOfQuestion ();
   }
 
 /*****************************************************************************/
@@ -2304,22 +2311,23 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    /***** Select questions *****/
    /* Start query */
    /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Image
-   row[6] Feedback
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
+   row[ 0] QstCod
+   row[ 1] UNIX_TIMESTAMP(EditTime)
+   row[ 2] AnsType
+   row[ 3] Shuffle
+   row[ 4] Stem
+   row[ 5] Feedback
+   row[ 6] ImageName
+   row[ 7] ImageTitle
+   row[ 8] NumHits
+   row[ 9] NumHitsNotBlank
+   row[10] Score
    */
    sprintf (Query,"SELECT tst_questions.QstCod,"
 	          "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
                   "tst_questions.AnsType,tst_questions.Shuffle,"
-                  "tst_questions.Stem,tst_questions.Image,"
-                  "tst_questions.Feedback,"
+                  "tst_questions.Stem,tst_questions.Feedback,"
+                  "tst_questions.ImageName,tst_questions.ImageTitle,"
                   "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
                   "tst_questions.Score"
                  " FROM tst_questions");
@@ -2441,16 +2449,17 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
 
    /***** Select questions without hidden tags *****/
    /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Image
-   row[6] Feedback
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
+   row[ 0] QstCod
+   row[ 1] UNIX_TIMESTAMP(EditTime)
+   row[ 2] AnsType
+   row[ 3] Shuffle
+   row[ 4] Stem
+   row[ 5] Feedback
+   row[ 6] ImageName
+   row[ 7] ImageTitle
+   row[ 8] NumHits
+   row[ 9] NumHitsNotBlank
+   row[10] Score
    */
    /* Start query */
    // Reject questions with any tag hidden
@@ -2459,8 +2468,8 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
 	          "UNIX_TIMESTAMP(tst_questions.EditTime),"
 		  "tst_questions.AnsType,tst_questions.Shuffle,"
-		  "tst_questions.Stem,tst_questions.Image,"
-		  "tst_questions.Feedback,"
+		  "tst_questions.Stem,tst_questions.Feedback,"
+		  "tst_questions.ImageName,tst_questions.ImageTitle,"
 		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
 		  "tst_questions.Score"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
@@ -2564,19 +2573,20 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Get data of a question from database *****/
    /*
-   row[0] QstCod
-   row[1] UNIX_TIMESTAMP(EditTime)
-   row[2] AnsType
-   row[3] Shuffle
-   row[4] Stem
-   row[5] Image
-   row[6] Feedback
-   row[7] NumHits
-   row[8] NumHitsNotBlank
-   row[9] Score
+   row[ 0] QstCod
+   row[ 1] UNIX_TIMESTAMP(EditTime)
+   row[ 2] AnsType
+   row[ 3] Shuffle
+   row[ 4] Stem
+   row[ 5] Feedback
+   row[ 6] ImageName
+   row[ 7] ImageTitle
+   row[ 8] NumHits
+   row[ 9] NumHitsNotBlank
+   row[10] Score
    */
    sprintf (Query,"SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
-	          "AnsType,Shuffle,Stem,Image,Feedback,"
+	          "AnsType,Shuffle,Stem,Feedback,ImageName,ImageTitle,"
 	          "NumHits,NumHitsNotBlank,Score"
                   " FROM tst_questions"
                   " WHERE QstCod='%ld'",
@@ -2684,16 +2694,17 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] Image
-      row[6] Feedback
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[ 0] QstCod
+      row[ 1] UNIX_TIMESTAMP(EditTime)
+      row[ 2] AnsType
+      row[ 3] Shuffle
+      row[ 4] Stem
+      row[ 5] Feedback
+      row[ 6] ImageName
+      row[ 7] ImageTitle
+      row[ 8] NumHits
+      row[ 9] NumHitsNotBlank
+      row[10] Score
       */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -2784,36 +2795,40 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
         }
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[4]), the image (row[5],vthe feedback (row[6]) and the answers */
+      /* Write the stem (row[4]), the image (row[6], row[7]),
+         the feedback (row[5]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      if (row[5][0])
+      if (row[6][0])
 	{
 	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-	 strncpy (Gbl.Test.Image.Name,row[5],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	 Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	 Img_GetImageNameTitle (row[6],row[7],&Gbl.Test.Image);
 	 Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST_STEM");
 	}
-      Tst_WriteQstFeedback (row[6],"TEST_EDI_LIGHT");
+      Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
       Tst_WriteAnswersOfAQstEdit (QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
+      /* Free answers and images of this test question */
+      Tst_FreeTextChoiceAnswers ();
+      Tst_FreeImagesOfQuestion ();
+
       /* Get number of hits
          (number of times that the question has been answered,
-         including blank answers) (row[7]) */
-      if (sscanf (row[7],"%lu",&NumHitsThisQst) != 1)
+         including blank answers) (row[8]) */
+      if (sscanf (row[8],"%lu",&NumHitsThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
 
       /* Get number of hits not blank
          (number of times that the question has been answered
-         with a not blank answer) (row[8]) */
-      if (sscanf (row[8],"%lu",&NumHitsNotBlankThisQst) != 1)
+         with a not blank answer) (row[9]) */
+      if (sscanf (row[9],"%lu",&NumHitsNotBlankThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
-      /* Get the acumulated score of the question (row[9]) */
+      /* Get the acumulated score of the question (row[10]) */
       setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
-      if (sscanf (row[9],"%lf",&TotalScoreThisQst) != 1)
+      if (sscanf (row[10],"%lf",&TotalScoreThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong score of a question.");
       setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
 
@@ -2890,7 +2905,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
-   sprintf (Query,"SELECT AnsInd,Answer,Correct,Feedback,Image"
+   sprintf (Query,"SELECT AnsInd,Answer,Correct,Feedback,ImageName,ImageTitle"
 	          " FROM tst_answers"
                   " WHERE QstCod='%ld' ORDER BY %s",
             QstCod,
@@ -2989,8 +3004,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 	    if (row[4][0])
 	      {
 	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	       strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	       Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	       Img_GetImageNameTitle (row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
 	      }
 
             /* Put an icon that indicates whether the answer is correct or wrong */
@@ -3285,8 +3299,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       if (row[4][0])
 	{
 	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	 strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	 Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	 Img_GetImageNameTitle (row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
 	}
 
       /***** Write selectors and letter of this option *****/
@@ -3319,8 +3332,9 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
 
-   /***** Free answers *****/
+   /***** Free answers and images of this test question *****/
    Tst_FreeTextChoiceAnswers ();
+   Tst_FreeImagesOfQuestion ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3354,7 +3368,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    row[1] Answer
    row[2] Correct
    row[3] Feedback
-   row[4] Image
+   row[4] ImageName
    */
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3390,8 +3404,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       if (row[4][0])
 	{
 	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	 strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	 Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+	 Img_GetImageNameTitle (row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
 	}
 
       /***** Assign correctness (row[2]) of this answer (this option) *****/
@@ -3565,8 +3578,9 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
 
-   /***** Free answers *****/
+   /***** Free answers and images of this test question *****/
    Tst_FreeTextChoiceAnswers ();
+   Tst_FreeImagesOfQuestion ();
   }
 
 /*****************************************************************************/
@@ -4451,7 +4465,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Stem);
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,"TEST_IMG_EDIT_ONE_STEM",
                               NULL,"STEM",	// Title / attribution
-                              "ImgAct","FileImg","TitImg",false);
+                              "ImgAct","FilImg","TitImg",false);
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -4626,9 +4640,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      sprintf (ParamAction,"ImgAct%u" ,NumOpt);
-      sprintf (ParamFile  ,"FileImg%u",NumOpt);
-      sprintf (ParamTitle ,"TitImg%u" ,NumOpt);
+      sprintf (ParamAction,"ImgAct%u",NumOpt);
+      sprintf (ParamFile  ,"FilImg%u",NumOpt);
+      sprintf (ParamTitle ,"TitImg%u",NumOpt);
       Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                                  "TEST_IMG_EDIT_ONE_ANS",
                                  NULL,"ANS_STR",	// Title / attribution
@@ -4728,6 +4742,7 @@ static void Tst_InitImagesOfQuestion (void)
    Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
    Gbl.Test.Image.Status = Img_FILE_NONE;
    Gbl.Test.Image.Name[0] = '\0';
+   Gbl.Test.Image.Title = NULL;
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
@@ -4735,7 +4750,23 @@ static void Tst_InitImagesOfQuestion (void)
       Gbl.Test.Answer.Options[NumOpt].Image.Action = Img_ACTION_NO_IMAGE;
       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_FILE_NONE;
       Gbl.Test.Answer.Options[NumOpt].Image.Name[0] = '\0';
+      Gbl.Test.Answer.Options[NumOpt].Image.Title = NULL;
      }
+  }
+
+/*****************************************************************************/
+/*********************** Free images of a question ***************************/
+/*****************************************************************************/
+
+static void Tst_FreeImagesOfQuestion (void)
+  {
+   unsigned NumOpt;
+
+   Img_ResetImageTitle (&Gbl.Test.Image);
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      Img_ResetImageTitle (&Gbl.Test.Answer.Options[NumOpt].Image);
   }
 
 /*****************************************************************************/
@@ -4753,7 +4784,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 
    /***** Get the type of answer and the stem from the database *****/
    /* Get the question from database */
-   sprintf (Query,"SELECT AnsType,Shuffle,Stem,Image,Feedback"
+   sprintf (Query,"SELECT AnsType,Shuffle,Stem,Feedback,ImageName,ImageTitle"
 		  " FROM tst_questions"
 		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
 	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
@@ -4771,24 +4802,23 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
    strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
    Stem[Cns_MAX_BYTES_TEXT] = '\0';
 
-   /* Get the image of the question from the database (row[3]) */
-   if (row[3][0])
-     {
-      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-      strncpy (Gbl.Test.Image.Name,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      Gbl.Test.Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
-     }
-   else
-      Gbl.Test.Image.Status = Img_FILE_NONE;
-
-   /* Get the feedback of the question from the database (row[4]) */
+   /* Get the feedback of the question from the database (row[3]) */
    Feedback[0] = '\0';
-   if (row[4])
-      if (row[4][0])
+   if (row[3])
+      if (row[3][0])
 	{
 	 strncpy (Feedback,row[4],Cns_MAX_BYTES_TEXT);
 	 Feedback[Cns_MAX_BYTES_TEXT] = '\0';
 	}
+
+   /* Get the image name of the question from the database (row[4]) */
+   if (row[4][0])
+     {
+      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+      Img_GetImageNameTitle (row[4],row[5],&Gbl.Test.Image);
+     }
+   else
+      Gbl.Test.Image.Status = Img_FILE_NONE;
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -4854,8 +4884,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	    if (row[4][0])
 	      {
 	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	       strncpy (Gbl.Test.Answer.Options[NumOpt].Image.Name,row[4],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	       Gbl.Test.Answer.Options[NumOpt].Image.Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+               Img_GetImageNameTitle (row[4],row[5],&Gbl.Test.Image);
 	      }
 
 	    Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
@@ -4874,7 +4903,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 //      NumOpt >= Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to stem
 // 0 <= NumOpt <  Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to answer
 
-static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName)
+static void Tst_GetImageFromDB (unsigned NumOpt,struct Image *Image)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -4883,12 +4912,12 @@ static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName)
    /***** Build query depending on NumOpt *****/
    if (NumOpt < Tst_MAX_OPTIONS_PER_QUESTION)
       // Get image associated to answer
-      sprintf (Query,"SELECT Image FROM tst_answers"
+      sprintf (Query,"SELECT ImageName,ImageTitle FROM tst_answers"
 		     " WHERE QstCod='%ld' AND AnsInd='%u'",
 	       Gbl.Test.QstCod,NumOpt);
    else
       // Get image associated to stem
-      sprintf (Query,"SELECT Image FROM tst_questions"
+      sprintf (Query,"SELECT ImageName,ImageTitle FROM tst_questions"
 		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
 	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
@@ -4896,14 +4925,8 @@ static void Tst_GetImageNameFromDB (unsigned NumOpt,char *ImageName)
    DB_QuerySELECT (Query,&mysql_res,"can not get image name");
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get the image of the question from the database (row[0]) *****/
-   if (row[0][0])	// Image name stored in database
-     {
-      strncpy (ImageName,row[0],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      ImageName[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
-     }
-   else		// No image in this question
-      ImageName[0] = '\0';
+   /***** Get the image name (row[0]) *****/
+   Img_GetImageNameTitle (row[0],row[1],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5003,6 +5026,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    unsigned NumCorrectAns;
    char ParamAction[32];
    char ParamFile[32];
+   char ParamTitle[32];
 
    /***** Get question code *****/
    Tst_GetQstCod ();
@@ -5038,16 +5062,16 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question stem *****/
    Par_GetParToHTML ("Stem",Stem,Cns_MAX_BYTES_TEXT);
 
+   /***** Get question feedback *****/
+   Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
+
    /***** Get image associated to the stem *****/
    Img_GetImageFromForm (Tst_MAX_OPTIONS_PER_QUESTION,&Gbl.Test.Image,
-                         Tst_GetImageNameFromDB,
-                         "ImgAct","FileImg",
+                         Tst_GetImageFromDB,
+                         "ImgAct","FilImg","TitImg",
 	                 Tst_PHOTO_SAVED_MAX_WIDTH,
 	                 Tst_PHOTO_SAVED_MAX_HEIGHT,
 	                 Tst_PHOTO_SAVED_QUALITY);
-
-   /***** Get question feedback *****/
-   Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5101,10 +5125,11 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
 	       sprintf (ParamAction,"ImgAct%u",NumOpt);
-	       sprintf (ParamFile,"FileImg%u",NumOpt);
+	       sprintf (ParamFile  ,"FilImg%u",NumOpt);
+	       sprintf (ParamFile  ,"TitImg%u",NumOpt);
 	       Img_GetImageFromForm (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
-				     Tst_GetImageNameFromDB,
-				     ParamAction,ParamFile,
+				     Tst_GetImageFromDB,
+				     ParamAction,ParamFile,ParamTitle,
 				     Tst_PHOTO_SAVED_MAX_WIDTH,
 				     Tst_PHOTO_SAVED_MAX_HEIGHT,
 				     Tst_PHOTO_SAVED_QUALITY);
@@ -5744,15 +5769,20 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
      {
       /***** Insert question in the table of questions *****/
       sprintf (Query,"INSERT INTO tst_questions"
-	             " (CrsCod,EditTime,AnsType,Shuffle,Stem,Image,Feedback,NumHits,Score)"
-                     " VALUES ('%ld',NOW(),'%s','%c','%s','%s','%s','0','0')",
+	             " (CrsCod,EditTime,AnsType,Shuffle,"
+	             "Stem,Feedback,ImageName,ImageTitle,"
+	             "NumHits,Score)"
+                     " VALUES ('%ld',NOW(),'%s','%c',"
+                     "'%s','%s','%s','%s',"
+                     "'0','0')",
                Gbl.CurrentCrs.Crs.CrsCod,
                Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
                Gbl.Test.Shuffle ? 'Y' :
         	                  'N',
                Gbl.Test.Stem.Text,
+               Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
                Gbl.Test.Image.Name,
-               Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "");
+               Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "");
       Gbl.Test.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
 
       /* Update image status */
@@ -5765,14 +5795,15 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
       /* Update question in database */
       sprintf (Query,"UPDATE tst_questions"
 		     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
-		     "Stem='%s',Image='%s',Feedback='%s'"
+		     "Stem='%s',Feedback='%s',ImageName='%s',ImageTitle='%s'"
 		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
 	       Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
 	       Gbl.Test.Shuffle ? 'Y' :
 				  'N',
 	       Gbl.Test.Stem.Text,
-	       Gbl.Test.Image.Name,
 	       Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
+	       Gbl.Test.Image.Name,
+	       Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
 	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryUPDATE (Query,"can not update question");
 
@@ -5874,13 +5905,15 @@ static void Tst_InsertAnswersIntoDB (void)
               NumOpt++)
             if (Gbl.Test.Answer.Options[NumOpt].Text[0])
               {
-               sprintf (Query,"INSERT INTO tst_answers"
-        	              " (QstCod,AnsInd,Answer,Feedback,Image,Correct)"
-                              " VALUES (%ld,%u,'%s','%s','%s','%c')",
+               sprintf (Query,"INSERT INTO tst_answers (QstCod,AnsInd,"
+        	              "Answer,Feedback,ImageName,ImageTitle,Correct)"
+                              " VALUES ('%ld','%u',"
+                              "'%s','%s','%s','%s','%c')",
                         Gbl.Test.QstCod,NumOpt,
                         Gbl.Test.Answer.Options[NumOpt].Text,
-                        Gbl.Test.Answer.Options[NumOpt].Feedback,
+                        Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
                         Gbl.Test.Answer.Options[NumOpt].Image.Name,
+                        Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
                         Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
                                                                   'N');
                DB_QueryINSERT (Query,"can not create answer");
@@ -5958,11 +5991,11 @@ static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,
 
    /***** Get names of images associated to stems of test questions from database *****/
    if (QstCod > 0)	// Only one question
-      sprintf (Query,"SELECT Image FROM tst_questions"
+      sprintf (Query,"SELECT ImageName FROM tst_questions"
 		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
 	       QstCod,CrsCod);
    else			// All questions in the course
-      sprintf (Query,"SELECT Image FROM tst_questions"
+      sprintf (Query,"SELECT ImageName FROM tst_questions"
 	             " WHERE CrsCod='%ld'",
 	       CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
@@ -6003,7 +6036,7 @@ static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
    if (QstCod > 0)	// Only one question
      {
       if (AnsInd < Tst_MAX_OPTIONS_PER_QUESTION)	// Only one answer
-	 sprintf (Query,"SELECT tst_answers.Image"
+	 sprintf (Query,"SELECT tst_answers.ImageName"
 	                " FROM tst_questions,tst_answers"
 			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
 			" AND tst_questions.QstCod='%ld'"	// Extra check
@@ -6012,7 +6045,7 @@ static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
 	                " AND tst_answers.AnsInd='%u'",
 		  CrsCod,QstCod,QstCod,AnsInd);
       else					// All answers of a question
-	 sprintf (Query,"SELECT tst_answers.Image"
+	 sprintf (Query,"SELECT tst_answers.ImageName"
 	                " FROM tst_questions,tst_answers"
 			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
 			" AND tst_questions.QstCod='%ld'"	// Extra check
@@ -6021,7 +6054,7 @@ static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
 		  CrsCod,QstCod,QstCod);
      }
    else				// All answers of all questions in the course
-      sprintf (Query,"SELECT tst_answers.Image"
+      sprintf (Query,"SELECT tst_answers.ImageName"
 	             " FROM tst_questions,tst_answers"
 	             " WHERE tst_questions.CrsCod='%ld'"
 	             " AND tst_questions.QstCod=tst_answers.QstCod",
@@ -7365,16 +7398,17 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	 /***** Get row of the result of the query *****/
 	 row = mysql_fetch_row (mysql_res);
 	 /*
-	 row[0] QstCod
-	 row[1] UNIX_TIMESTAMP(EditTime)
-	 row[2] AnsType
-	 row[3] Shuffle
-	 row[4] Stem
-	 row[5] Image
-	 row[6] Feedback
-	 row[7] NumHits
-	 row[8] NumHitsNotBlank
-	 row[9] Score
+	 row[ 0] QstCod
+	 row[ 1] UNIX_TIMESTAMP(EditTime)
+	 row[ 2] AnsType
+	 row[ 3] Shuffle
+	 row[ 4] Stem
+	 row[ 5] Feedback
+	 row[ 6] ImageName
+	 row[ 7] ImageTitle
+	 row[ 8] NumHits
+	 row[ 9] NumHitsNotBlank
+	 row[10] Score
 	 */
 	 /***** If this question has been edited later than test exam time ==> don't show question ****/
 	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);

@@ -1087,7 +1087,8 @@ CREATE TABLE IF NOT EXISTS tst_answers (
 	AnsInd TINYINT NOT NULL,
 	Answer TEXT NOT NULL,
         Feedback TEXT NOT NULL,
-	Image VARCHAR(43) NOT NULL,
+	ImageName VARCHAR(43) NOT NULL,
+        ImageTitle TEXT NOT NULL,
 	Correct ENUM('N','Y') NOT NULL,
 	INDEX(QstCod));
 --
@@ -1145,7 +1146,8 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	Shuffle ENUM('N','Y') NOT NULL,
 	Stem TEXT NOT NULL,
 	Feedback TEXT NOT NULL,
-	Image VARCHAR(43) NOT NULL,
+	ImageName VARCHAR(43) NOT NULL,
+        ImageTitle TEXT NOT NULL,
 	NumHits INT NOT NULL DEFAULT 0,
 	NumHitsNotBlank INT NOT NULL DEFAULT 0,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,

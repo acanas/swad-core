@@ -198,7 +198,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       row[2] AnsType
       row[3] Shuffle
       row[4] Stem
-      row[5] Image
+      row[5] ImageName
       row[6] Feedback
       row[7] NumHits
       row[8] NumHitsNotBlank
