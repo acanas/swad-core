@@ -1236,7 +1236,8 @@ Statistics:
        1060. ActShoSvy			Show survey
        1061. ActEdiOneSvyQst		Edit a new question for a survey
        1062. ActRcvSvyQst		Receive a question of a survey
-       1063. ActRemSvyQst		Remove a question of a survey
+NEW    1063. ActReqRemSvyQst		Request the removal of a question of a survey
+       1063. ActRemSvyQst		Confirm the removal of a question of a survey
        1064. ActSeeUseGbl		Show use of the platform
        1065. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
        1066. ActCalPhoDeg		Compute the average photos of the students of each degree
@@ -2597,6 +2598,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoSvy		*/{ 978,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_UnhideSurvey		,NULL},
    /* ActEdiOneSvyQst	*/{ 979,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestEditQuestion	,NULL},
    /* ActRcvSvyQst	*/{ 980,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_ReceiveQst			,NULL},
+   /* ActReqRemSvyQst	*/{1524,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestRemoveQst		,NULL},
    /* ActRemSvyQst	*/{ 981,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RemoveQst			,NULL},
 
    /* ActSeeUseGbl	*/{  84,-1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_ShowUseOfPlatform		,NULL},
@@ -4241,6 +4243,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActFrmLogIn,		// #1521
 	ActUpdSignUpReq,	// #1522
 	ActReqRemTstQst,	// #1523
+	ActReqRemSvyQst,	// #1524
 	};
 
 /*****************************************************************************/

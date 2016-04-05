@@ -140,7 +140,6 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst);
 static void Svy_PutIconToAddNewQuestion (void);
 static void Svy_PutButtonToCreateNewQuestion (void);
-static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
@@ -2806,7 +2805,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   bool Editing = (Gbl.Action.Act == ActEdiOneSvy ||
+   bool Editing = (Gbl.Action.Act == ActEdiOneSvy    ||
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
 	           Gbl.Action.Act == ActRcvSvyQst);
    bool PutFormAnswerSurvey = Svy->Status.ICanAnswer && !Editing;
@@ -2870,11 +2869,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
            {
             /* Write icon to remove the question */
             fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
-            Act_FormStart (ActRemSvyQst);
+            Act_FormStart (ActReqRemSvyQst);
             Svy_PutParamSvyCod (Svy->SvyCod);
             Svy_PutParamQstCod (SvyQst->QstCod);
-            Sta_WriteParamsDatesSeeAccesses ();
-            Svy_WriteParamEditQst (SvyQst);
             Lay_PutIconRemove ();
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
@@ -2969,18 +2966,6 @@ static void Svy_PutButtonToCreateNewQuestion (void)
    Svy_PutParams ();
    Lay_PutConfirmButton (Txt_New_question);
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/********* Write hidden parameters for edition of survey questions ***********/
-/*****************************************************************************/
-
-static void Svy_WriteParamEditQst (struct SurveyQuestion *SvyQst)
-  {
-   Par_PutHiddenParamChar ("AllAnsTypes",
-                           SvyQst->AllAnsTypes ? 'Y' :
-                        	                 'N');
-   Par_PutHiddenParamString ("AnswerType",SvyQst->ListAnsTypes);
   }
 
 /*****************************************************************************/
@@ -3129,6 +3114,47 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    fprintf (Gbl.F.Out,"%s</td>"
 	              "</tr>",
             Gbl.Title);
+  }
+
+/*****************************************************************************/
+/********************** Request the removal of a question ********************/
+/*****************************************************************************/
+
+void Svy_RequestRemoveQst (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
+   extern const char *Txt_Remove_question;
+   long SvyCod;
+   struct SurveyQuestion SvyQst;
+
+   /***** Get parameters from form *****/
+   /* Get survey code */
+   if ((SvyCod = Svy_GetParamSvyCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of survey is missing.");
+
+   /* Get question code */
+   if ((SvyQst.QstCod = Svy_GetParamQstCod ()) < 0)
+      Lay_ShowErrorAndExit ("Wrong code of question.");
+
+   /* Get question index */
+   SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
+
+   /***** Start form *****/
+   Act_FormStart (ActRemSvyQst);
+   Svy_PutParamSvyCod (SvyCod);
+   Svy_PutParamQstCod (SvyQst.QstCod);
+
+   /***** Ask for confirmation of removing *****/
+   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
+	    (unsigned long) (SvyQst.QstInd + 1));
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_PutRemoveButton (Txt_Remove_question);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** Show current survey *****/
+   Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
   }
 
 /*****************************************************************************/

@@ -71,9 +71,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+205+184+144+172+36+27+83)
+#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+205+184+144+172+36+28+83)
 
-#define Act_MAX_ACTION_COD 1523
+#define Act_MAX_ACTION_COD 1524
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1287,15 +1287,16 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActShoSvy		(ActUnbUsrLst+ 17)
 #define ActEdiOneSvyQst		(ActUnbUsrLst+ 18)
 #define ActRcvSvyQst		(ActUnbUsrLst+ 19)
-#define ActRemSvyQst		(ActUnbUsrLst+ 20)
+#define ActReqRemSvyQst		(ActUnbUsrLst+ 20)
+#define ActRemSvyQst		(ActUnbUsrLst+ 21)
 
-#define ActSeeUseGbl		(ActUnbUsrLst+ 21)
-#define ActPrnPhoDeg		(ActUnbUsrLst+ 22)
-#define ActCalPhoDeg		(ActUnbUsrLst+ 23)
-#define ActSeeAccGbl		(ActUnbUsrLst+ 24)
-#define ActReqAccCrs		(ActUnbUsrLst+ 25)
-#define ActSeeAccCrs		(ActUnbUsrLst+ 26)
-#define ActSeeAllStaCrs		(ActUnbUsrLst+ 27)
+#define ActSeeUseGbl		(ActUnbUsrLst+ 22)
+#define ActPrnPhoDeg		(ActUnbUsrLst+ 23)
+#define ActCalPhoDeg		(ActUnbUsrLst+ 24)
+#define ActSeeAccGbl		(ActUnbUsrLst+ 25)
+#define ActReqAccCrs		(ActUnbUsrLst+ 26)
+#define ActSeeAccCrs		(ActUnbUsrLst+ 27)
+#define ActSeeAllStaCrs		(ActUnbUsrLst+ 28)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

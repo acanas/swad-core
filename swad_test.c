@@ -157,7 +157,8 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
                                        const char *ParamAction,
-                                       const char *ParamFile);
+                                       const char *ParamFile,
+                                       bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
@@ -1045,7 +1046,8 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
 static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
                                        const char *ParamAction,
-                                       const char *ParamFile)
+                                       const char *ParamFile,
+                                       bool OptionsDisabled)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_No_image;
@@ -1059,6 +1061,8 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
             ParamAction,Img_ACTION_NO_IMAGE);
    if (!Image->Name[0])
       fprintf (Gbl.F.Out," checked=\"checked\"");
+   if (OptionsDisabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," />"
 	              "<label class=\"%s\">"
 		      "%s"
@@ -1069,11 +1073,14 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
    /***** Current image *****/
    if (Image->Name[0])
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\" />"
-			 "<label class=\"%s\">"
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\"",
+	       ParamAction,Img_ACTION_KEEP_IMAGE);
+      if (OptionsDisabled)
+         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," />"
+	                 "<label class=\"%s\">"
 			 "%s"
 			 "</label><br />",
-	       ParamAction,Img_ACTION_KEEP_IMAGE,
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
       Img_ShowImage (Image,ClassImg);
@@ -1082,27 +1089,39 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
    /***** Change/new image *****/
    UniqueId++;
    if (Image->Name[0])	// Image exists
+     {
       /***** Change image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\">"
-                         "<label class=\"%s\">"
+			 " value=\"%u\"",
+	       UniqueId,ParamAction,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
+      if (OptionsDisabled)
+         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," />"
+	                 "<label class=\"%s\">"
 			 "%s: "
 			 "</label>",
-	       UniqueId,ParamAction,Img_ACTION_CHANGE_IMAGE,	// Replace existing image by new image
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image);
+     }
    else			// Image does not exist
+     {
       /***** New image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\">"
+			 " value=\"%u\">",
+	       UniqueId,ParamAction,Img_ACTION_NEW_IMAGE);	// Upload new image
+      if (OptionsDisabled)
+         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," />"
                          "<label class=\"%s\">"
 			 "%s: "
 			 "</label>",
-	       UniqueId,ParamAction,Img_ACTION_NEW_IMAGE,	// Upload new image
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_New_image);
+     }
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
-		      " size=\"40\" maxlength=\"100\" value=\"\""
-		      " onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
-	    ParamFile,
+		      " size=\"40\" maxlength=\"100\" value=\"\"",
+	    ParamFile);
+   if (OptionsDisabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
 	    UniqueId);
   }
 
@@ -4403,7 +4422,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Stem);
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,
                               "TEST_IMG_EDIT_ONE_STEM",
-                              "ImgAct","FileImg");
+                              "ImgAct","FileImg",false);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 
@@ -4608,9 +4627,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       sprintf (ParamFile,"FileImg%u",NumOpt);
       Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                                  "TEST_IMG_EDIT_ONE_ANS",
-                                 ParamAction,ParamFile);
-      // if (OptionsDisabled)
-      //    fprintf (Gbl.F.Out," disabled=\"disabled\"");
+                                 ParamAction,ParamFile,OptionsDisabled);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -5512,12 +5529,13 @@ void Tst_RequestRemoveQst (void)
    char YN[1+1];
    bool EditingOnlyThisQst;
 
-   /***** Get the question code *****/
+   /***** Get main parameters from form *****/
+   /* Get the question code */
    if (!Tst_GetQstCod ())
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
-   /***** Get a parameter that indicates whether it's necessary
-	  to continue listing the rest of questions ******/
+   /* Get a parameter that indicates whether it's necessary
+      to continue listing the rest of questions */
    Par_GetParToText ("OnlyThisQst",YN,1);
    EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
@@ -5539,7 +5557,7 @@ void Tst_RequestRemoveQst (void)
 
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
-	    Gbl.Test.QstCod);
+	    (unsigned long) Gbl.Test.QstCod);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    Lay_PutRemoveButton (Txt_Remove_question);
 

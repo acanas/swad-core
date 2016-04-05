@@ -102,6 +102,8 @@ void Svy_RemoveCrsSurveys (long CrsCod);
 
 void Svy_RequestEditQuestion (void);
 void Svy_ReceiveQst (void);
+
+void Svy_RequestRemoveQst (void);
 void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);

@@ -9003,25 +9003,25 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Doing so will remove %u students from that group.";			// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %lu in the following sentences
 #if   L==1
-	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Necessita traduccio
+	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";	// Necessita traduccio
 #elif L==2
-	"Wollen Sie die Frage <strong>%ld</strong> wirklich entfernen?";
+	"Wollen Sie die Frage <strong>%lu</strong> wirklich entfernen?";
 #elif L==3
-	"Do you really want to remove the question <strong>%ld</strong>?";
+	"Do you really want to remove the question <strong>%lu</strong>?";
 #elif L==4
-	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";
+	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";
 #elif L==5
-	"Voulez-vous vraiment supprimer la question <strong>%ld</strong>?";
+	"Voulez-vous vraiment supprimer la question <strong>%lu</strong>?";
 #elif L==6
-	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";	// Okoteve traducción
 #elif L==7
-	"Vuoi realmente rimuovere la domanda <strong>%ld</strong>?";
+	"Vuoi realmente rimuovere la domanda <strong>%lu</strong>?";
 #elif L==8
-	"Czy na pewno chcesz usunac pytanie <strong>%ld</strong>?";
+	"Czy na pewno chcesz usunac pytanie <strong>%lu</strong>?";
 #elif L==9
-	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%ld</strong>?";
+	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%lu</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
