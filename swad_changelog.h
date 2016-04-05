@@ -131,13 +131,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.180.4 (2016-04-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.180.5 (2016-04-05)"
 #define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.180.5: Apr 05, 2016	Changes in layout of editor of question. (198512 lines)
         Version 15.180.4: Apr 05, 2016	Fixed bug in images in test questions. (198512 lines)
         Version 15.180.3: Apr 05, 2016	Changed layout of confirm / reject registration. (198482 lines)
         Version 15.180.2: Apr 05, 2016	Contextual link to remove one survey question. (198459 lines)

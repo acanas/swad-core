@@ -4555,18 +4555,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
 	              "<td class=\"LEFT_TOP\">"
-	              "<table class=\"CELLS_PAD_2\">"
-                      "<tr>"
-	              "<td></td>"
-	              "<td class=\"%s LEFT_MIDDLE\">"
-	              "%s"
-	              "</td>"
-	              "<td class=\"%s LEFT_MIDDLE\">"
-	              "%s"
-	              "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Answer,
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback);
+	              "<table class=\"CELLS_PAD_2\">");
    OptionsDisabled = Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
                      Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE &&
 	             Gbl.Test.AnswerType != Tst_ANS_TEXT;
@@ -4574,11 +4563,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
+      Gbl.RowEvenOdd = NumOpt % 2;
+
       /* Selectors and label with the letter of the answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td rowspan=\"2\" class=\"%s LEFT_TOP\">"
+	                 "<td rowspan=\"3\" class=\"%s LEFT_TOP COLOR%u\">"
 	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassForm[Gbl.Prefs.Theme],Gbl.RowEvenOdd,
 	       NumOpt);
       if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -4595,8 +4586,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                'a' + (char) NumOpt);
 
       /* Answer text */
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
+                         "<div class=\"%s\">%s:</div>"
 	                 "<textarea name=\"AnsStr%u\" class=\"ANS_STR\" rows=\"5\"",
+	       Gbl.RowEvenOdd,
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Answer,
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -4604,11 +4598,28 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       if (Gbl.Test.Answer.Options[NumOpt].Text)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
       fprintf (Gbl.F.Out,"</textarea>"
-	                 "</td>");
+	                 "</td>"
+	                 "</tr>");
+
+      /* Image */
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+      sprintf (ParamAction,"ImgAct%u",NumOpt);
+      sprintf (ParamFile,"FileImg%u",NumOpt);
+      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+                                 "TEST_IMG_EDIT_ONE_ANS",
+                                 ParamAction,ParamFile,OptionsDisabled);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td class=\"LEFT_TOP COLOR%u\">"
+                         "<div class=\"%s\">%s:</div>"
 	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"5\"",
+	       Gbl.RowEvenOdd,
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -4618,17 +4629,6 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
       fprintf (Gbl.F.Out,"</textarea>"
 	                 "</td>"
-	                 "</tr>");
-
-      /* Image */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"2\" class=\"LEFT_TOP\">");
-      sprintf (ParamAction,"ImgAct%u",NumOpt);
-      sprintf (ParamFile,"FileImg%u",NumOpt);
-      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
-                                 "TEST_IMG_EDIT_ONE_ANS",
-                                 ParamAction,ParamFile,OptionsDisabled);
-      fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
    fprintf (Gbl.F.Out,"</table>"
