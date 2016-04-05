@@ -9003,6 +9003,27 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Doing so will remove %u students from that group.";			// Necessita de tradução
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
+#if   L==1
+	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Necessita traduccio
+#elif L==2
+	"Wollen Sie die Frage <strong>%ld</strong> wirklich entfernen?";
+#elif L==3
+	"Do you really want to remove the question <strong>%ld</strong>?";
+#elif L==4
+	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";
+#elif L==5
+	"Voulez-vous vraiment supprimer la question <strong>%ld</strong>?";
+#elif L==6
+	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere la domanda <strong>%ld</strong>?";
+#elif L==8
+	"Czy na pewno chcesz usunac pytanie <strong>%ld</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%ld</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar la encuesta <strong>%s</strong>?";	// Necessita traduccio
@@ -30131,6 +30152,27 @@ const char *Txt_Remove_photo =
 	"Remover foto";
 #endif
 
+const char *Txt_Remove_question =
+#if   L==1
+	"Eliminar pregunta";
+#elif L==2
+	"Entfernen Frage";
+#elif L==3
+	"Remove question";
+#elif L==4
+	"Eliminar pregunta";
+#elif L==5
+	"Supprimer question";
+#elif L==6
+	"Eliminar pregunta";	// Okoteve traducción
+#elif L==7
+	"Rimuovere domanda";
+#elif L==8
+	"Usu&nacute; pytanie";
+#elif L==9
+	"Remover quest&atilde;o";
+#endif
+
 const char *Txt_Remove_record_field =
 #if   L==1
 	"Eliminar campo de ficha";	// Necessita traduccio
@@ -47397,7 +47439,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	 {
 #if   L==1	// Tst_ORDER_STEM
-	   "Pregunta"	// Necessita traduccio
+	   "Pregunta"
 #elif L==2
 	   "Frage"
 #elif L==3
@@ -47411,7 +47453,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 #elif L==7
 	   "Domanda"
 #elif L==8
-	   "Question"	// Potrzebujesz tlumaczenie
+	   "Pytanie"
 #elif L==9
 	   "Quest&atilde;o"
 #endif

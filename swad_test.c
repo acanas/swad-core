@@ -208,7 +208,7 @@ static void Tst_WriteScoreStart (unsigned ColSpan);
 static void Tst_WriteScoreEnd (void);
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
 static void Tst_GetAndWriteTagsQst (long QstCod);
-static int Tst_GetParamsTst (void);
+static bool Tst_GetParamsTst (void);
 static unsigned Tst_GetAndCheckParamNumTst (void);
 static void Tst_GetParamNumQst (void);
 static bool Tst_GetCreateXMLFromForm (void);
@@ -2606,7 +2606,6 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Act_FormStart (ActLstTstQst);
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
-         Par_PutHiddenParamChar ("OnlyThisQst",'N');
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
          Act_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL");
          if (Order == Gbl.Test.SelectedOrderType)
@@ -2652,13 +2651,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       /* Write icon to remove the question */
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
-      Act_FormStart (ActRemTstQst);
+      Act_FormStart (ActReqRemTstQst);
       Sta_WriteParamsDatesSeeAccesses ();
       Tst_WriteParamEditQst ();
       Par_PutHiddenParamLong ("QstCod",QstCod);
-      Par_PutHiddenParamChar ("OnlyThisQst",
-                              NumRows == 1 ? 'Y' :
-                        	             'N'); // If there are only one row, don't list again after removing
+      if (NumRows == 1)
+         Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -2723,9 +2721,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Par_PutHiddenParamLong ("QstCod",QstCod);
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
-         Par_PutHiddenParamChar ("OnlyThisQst",
-                                 NumRows == 1 ? 'Y' :
-                                                'N'); // If editing only one question, don't edit others
+         if (NumRows == 1)
+	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrderType);
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
          if (Str_ConvertToUpperLetter (row[3][0]) == 'Y')
@@ -4040,9 +4037,9 @@ static void Tst_GetAndWriteTagsQst (long QstCod)
 /*****************************************************************************/
 /************ Get parameters for the selection of test questions *************/
 /*****************************************************************************/
-// Return 1 (OK) if all parameters are found, or 0 (error) if any necessary parameter is not found
+// Return true (OK) if all parameters are found, or false (error) if any necessary parameter is not found
 
-static int Tst_GetParamsTst (void)
+static bool Tst_GetParamsTst (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
@@ -4114,8 +4111,7 @@ static int Tst_GetParamsTst (void)
       Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();
      }
 
-   return Error ? 0 :
-	          1;
+   return !Error;
   }
 
 /*****************************************************************************/
@@ -5469,7 +5465,58 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
   }
 
 /*****************************************************************************/
-/******************************* Remove a question ***************************/
+/******************** Request the removal of a question **********************/
+/*****************************************************************************/
+
+void Tst_RequestRemoveQst (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
+   extern const char *Txt_Remove_question;
+   char YN[1+1];
+   bool EditingOnlyThisQst;
+
+   /***** Get the question code *****/
+   if (!Tst_GetQstCod ())
+      Lay_ShowErrorAndExit ("Wrong code of question.");
+
+   /***** Get a parameter that indicates whether it's necessary
+	  to continue listing the rest of questions ******/
+   Par_GetParToText ("OnlyThisQst",YN,1);
+   EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+
+   /***** Start form *****/
+   Act_FormStart (ActRemTstQst);
+   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+   if (EditingOnlyThisQst)
+      Par_PutHiddenParamChar ("OnlyThisQst",'Y');
+   else
+     {
+      if (Tst_GetParamsTst ())	// Get other parameters from the form
+	{
+	 Sta_WriteParamsDatesSeeAccesses ();
+	 Tst_WriteParamEditQst ();
+	}
+      Tst_FreeTagsList ();
+     }
+
+   /***** Ask for confirmation of removing *****/
+   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
+	    Gbl.Test.QstCod);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_PutRemoveButton (Txt_Remove_question);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** Continue editing questions *****/
+   if (EditingOnlyThisQst)
+      Tst_ListOneQstToEdit ();
+   else
+      Tst_ListQuestionsToEdit ();
+  }
+
+/*****************************************************************************/
+/***************************** Remove a question *****************************/
 /*****************************************************************************/
 
 void Tst_RemoveQst (void)
@@ -5483,7 +5530,8 @@ void Tst_RemoveQst (void)
    if (!Tst_GetQstCod ())
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
-   /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
+   /***** Get a parameter that indicates whether it's necessary
+          to continue listing the rest of questions ******/
    Par_GetParToText ("OnlyThisQst",YN,1);
    EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 

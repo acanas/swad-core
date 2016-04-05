@@ -2074,7 +2074,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatBrf:
       case ActChgDatBrf:
       case ActDowBrf:
-      case ActAskRemOldBrf:	// Ask for removing old files in briefcase
+      case ActReqRemOldBrf:	// Ask for removing old files in briefcase
       case ActRemOldBrf:	// Remove old files in briefcase
          Gbl.FileBrowser.Type = Brw_ADMI_BRIEF_USR;
          break;
@@ -2346,7 +2346,6 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
 	{
 	 if (strstr (Gbl.FileBrowser.FilFolLnkName,".."))	// ".." is not allowed in the path
 	    Lay_ShowErrorAndExit ("Wrong path.");
-
 	 Gbl.FileBrowser.FileType = FileType;
 	 break;
 	}
@@ -3542,7 +3541,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 
    /***** Write contextual links *****/
    if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR &&
-       Gbl.Action.Act != ActAskRemOldBrf)
+       Gbl.Action.Act != ActReqRemOldBrf)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Brw_PutFormToAskRemOldFiles ();
@@ -11462,7 +11461,7 @@ static void Brw_PutFormToAskRemOldFiles (void)
   {
    extern const char *Txt_Remove_old_files;
 
-   Lay_PutContextualLink (ActAskRemOldBrf,Brw_PutParamsContextualLink,
+   Lay_PutContextualLink (ActReqRemOldBrf,Brw_PutParamsContextualLink,
 			  "remove-on64x64.png",
 			  Txt_Remove_old_files,Txt_Remove_old_files);
   }

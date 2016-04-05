@@ -126,22 +126,27 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: In Statistics > Degrees, show only degrees with students
-// TODO: Change layout of confirm / reject incription. Use green and red buttons
+// TODO: Change layout of confirm / reject registration. Use green and red buttons
 
-// TODO: Ask for confirmation when removing a test question
+// TODO: When editing an existing question, put upper left contextual link to remove the question
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.178.2 (2016-04-05)"
-#define CSS_FILE		"swad15.178.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.179 (2016-04-05)"
+#define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.178.2: Apr 04, 2016	Changes in JavaScript related to images in test questions. (198265 lines)
+        Version 15.179:   Apr 05, 2016	Fixed bug when getting a parameter.
+					Ask for confirmation when removing a test question. (198355 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1523','es','N','Preguntar si eliminar pregunta test');
+
+        Version 15.178.2: Apr 05, 2016	Changes in JavaScript related to images in test questions. (198265 lines)
         Version 15.178.1: Apr 04, 2016	Changes in CSS related to images in test questions. (198240 lines)
         Version 15.178:   Apr 04, 2016	Code refactoring related to images in test questions. (198244 lines)
 					5 changes necessary in database:

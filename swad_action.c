@@ -755,7 +755,8 @@ Assessment:
 	617. ActLstTstQst		List for edition several self-assessment test questions
 	618. ActRcvTstQst		Receive a question of self-assessment
 	619. ActShfTstQst		Change shuffle of of a question of self-assessment
-	620. ActRemTstQst		Remove a question of self-assessment
+NEW	620. ActReqRemTstQst		Request removing a self-assesment test question
+	620. ActRemTstQst		Remove a self-assesment test question
 	621. ActCfgTst			Request renaming of tags of questions of self-assesment
 	622. ActEnableTag		Enable a tag
 	623. ActDisableTag		Disable a tag
@@ -1336,7 +1337,7 @@ NEW    1071. ActFrmLogIn		Show landing page (forms to log in and to create a new
        1148. ActReqDatBrf		Ask for metadata of a file in the briefcase
        1149. ActChgDatBrf		Change metadata of a file in the briefcase
        1150. ActDowBrf			Download a file in the briefcase
-       1151. ActAskRemOldBrf		Ask for removing old files in the briefcase
+       1151. ActReqRemOldBrf		Ask for removing old files in the briefcase
        1152. ActRemOldBrf		Remove old files in the briefcase
 */
 
@@ -2066,6 +2067,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActImpTstQst	*/{1008,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,TsI_ImportQstsFromXML		,NULL},
    /* ActLstTstQst	*/{ 132,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ListQuestionsToEdit	,NULL},
    /* ActRcvTstQst	*/{ 126,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Tst_ReceiveQst			,NULL},
+   /* ActReqRemTstQst	*/{1523,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RequestRemoveQst		,NULL},
    /* ActRemTstQst	*/{ 133,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RemoveQst			,NULL},
    /* ActShfTstQst	*/{ 455,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ChangeShuffleQst		,NULL},
 
@@ -2706,7 +2708,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqDatBrf	*/{1047,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
    /* ActChgDatBrf	*/{1048,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
    /* ActDowBrf         */{1123,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   /* ActAskRemOldBrf   */{1488,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemoveOldFiles		,NULL},
+   /* ActReqRemOldBrf   */{1488,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemoveOldFiles		,NULL},
    /* ActRemOldBrf      */{1489,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemoveOldFiles		,NULL},
   };
 
@@ -4203,7 +4205,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgCal1stDay,	// #1485
 	ActChgCrsTT1stDay,	// #1486
 	ActChgMyTT1stDay,	// #1487
-	ActAskRemOldBrf,	// #1488
+	ActReqRemOldBrf,	// #1488
 	ActRemOldBrf,		// #1489
 	ActSeeSocTmlGbl,	// #1490
 	-1,			// #1491 (obsolete action)
@@ -4238,6 +4240,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeSocPrf,		// #1520
 	ActFrmLogIn,		// #1521
 	ActUpdSignUpReq,	// #1522
+	ActReqRemTstQst,	// #1523
 	};
 
 /*****************************************************************************/

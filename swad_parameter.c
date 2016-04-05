@@ -502,8 +502,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
    /***** For multiple parameters, loop for any ocurrence of the parameter
           For unique parameter, find only the first ocurrence *****/
    for (Param = Gbl.Params.List, NumTimes = 0;
-	Param != NULL && (FindMoreThanOneOcurrence || NumTimes < 1);
-	NumTimes++)
+	Param != NULL && (FindMoreThanOneOcurrence || NumTimes == 0);
+	)
       /***** Find next ocurrence of parameter in list of parameters *****/
       for (ParamFound = false;
 	   Param != NULL && !ParamFound;
@@ -531,7 +531,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 
 	    if (ParamFound)
 	      {
-	       if (NumTimes == 0)	// The first ocurrence of this parameter
+	       NumTimes++;
+	       if (NumTimes == 1)	// NumTimes == 1 ==> the first ocurrence of this parameter
 		 {
 		  /***** Get the first ocurrence of this parameter in list *****/
 		  if (ParamPtr)
@@ -541,7 +542,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  if (Param->FileName.Start != 0)	// It's a file
 		     FindMoreThanOneOcurrence = false;
 		 }
-	       else			// Not the first ocurrence of this parameter
+	       else			// NumTimes > 1 ==> not the first ocurrence of this parameter
 		 {
 	          /***** Add separator when param multiple *****/
 		  /* Check if there is space to copy separator */
