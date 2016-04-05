@@ -2644,27 +2644,6 @@ const char *Txt_Another_place =
 	"Outra localiza&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Answer =
-#if   L==1
-	"Resposta";
-#elif L==2
-	"Answer";		// Need Übersetzung
-#elif L==3
-	"Answer";
-#elif L==4
-	"Respuesta";
-#elif L==5
-	"Answer";		// Besoin de traduction
-#elif L==6
-	"Respuesta";		// Okoteve traducción
-#elif L==7
-	"Risposta";
-#elif L==8
-	"Odpowiedz";
-#elif L==9
-	"Answer";		// Necessita de tradução
-#endif
-
 const char *Txt_Answer_survey =
 #if   L==1
 	"Respondre enquesta";

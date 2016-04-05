@@ -4288,7 +4288,6 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Real_number_between_A_and_B_1;
    extern const char *Txt_Real_number_between_A_and_B_2;
    extern const char *Txt_TF_QST[2];
-   extern const char *Txt_Answer;
    extern const char *Txt_Shuffle;
    extern const char *Txt_Save;
    extern const char *Txt_Create_question;
@@ -4587,10 +4586,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
-                         "<div class=\"%s\">%s:</div>"
-	                 "<textarea name=\"AnsStr%u\" class=\"ANS_STR\" rows=\"5\"",
+	                 "<textarea name=\"AnsStr%u\" class=\"ANS_STR\" rows=\"4\"",
 	       Gbl.RowEvenOdd,
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Answer,
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -4617,7 +4614,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP COLOR%u\">"
                          "<div class=\"%s\">%s:</div>"
-	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"5\"",
+	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
 	       Gbl.RowEvenOdd,
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,
 	       NumOpt);
