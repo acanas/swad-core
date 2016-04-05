@@ -696,6 +696,7 @@ struct Globals
       long *LstSvyCods;	// List of survey codes
       tSvysOrderType SelectedOrderType;
       long SvyCodToEdit;	// Used as parameter in contextual links
+      long SvyQstCodToEdit;	// Used as parameter in contextual links
      } Svys;
    struct
      {

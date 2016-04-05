@@ -143,6 +143,10 @@ static void Svy_PutButtonToCreateNewQuestion (void);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
+
+static void Svy_PutIconToRemoveOneQst (void);
+static void Svy_PutParamsRemoveOneQst (void);
+
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
 static void Svy_RegisterIHaveAnsweredSvy (long SvyCod);
@@ -1523,16 +1527,14 @@ void Svy_RequestCreatOrEditSvy (void)
      }
 
    /***** Start form *****/
-   Gbl.Svys.SvyCodToEdit = ItsANewSurvey ? -1L :
-	                                   Svy.SvyCod;
+   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
    Act_FormStart (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
    Svy_PutParams ();
 
-   /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,
-                             ItsANewSurvey ? Txt_New_survey :
-                                             Txt_Edit_survey);
+   /***** Start frame and table *****/
+   Lay_StartRoundFrameTable (NULL,2,ItsANewSurvey ? Txt_New_survey :
+	                                            Txt_Edit_survey);
 
    /***** Survey for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2299,21 +2301,28 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
         }
      }
 
+   /***** Start frame *****/
+   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
+     {
+      /* Parameters for contextual icon */
+      Gbl.Svys.SvyCodToEdit = SvyCod;
+      Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
+
+      sprintf (Gbl.Title,"%s %u",
+               Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
+      Lay_StartRoundFrame (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst);
+     }
+   else
+      Lay_StartRoundFrame (NULL,Txt_New_question,NULL);
+
    /***** Start form *****/
    Act_FormStart (ActRcvSvyQst);
    Svy_PutParamSvyCod (SvyCod);
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
 
-   /***** Start frame *****/
-   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-     {
-      sprintf (Gbl.Title,"%s %u",
-               Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
-     }
-   else
-      Lay_StartRoundFrameTable (NULL,2,Txt_New_question);
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2383,15 +2392,22 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	              "</td>"
 	              "</tr>");
 
-   /***** Send button and end frame *****/
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** Send button *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      Lay_PutConfirmButton (Txt_Save);
    else
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_question);
+      Lay_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
    Act_FormEnd ();
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Free memory for answers *****/
    Svy_FreeTextChoiceAnswers (SvyQst,NumAnswers);
   }
 
@@ -3114,6 +3130,28 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    fprintf (Gbl.F.Out,"%s</td>"
 	              "</tr>",
             Gbl.Title);
+  }
+
+/*****************************************************************************/
+/********************* Put icon to remove one question ***********************/
+/*****************************************************************************/
+
+static void Svy_PutIconToRemoveOneQst (void)
+  {
+   extern const char *Txt_Remove;
+
+   Lay_PutContextualLink (ActReqRemSvyQst,Svy_PutParamsRemoveOneQst,
+                          "remove-on64x64.png",Txt_Remove,NULL);
+  }
+
+/*****************************************************************************/
+/****************** Put parameter to remove one question *********************/
+/*****************************************************************************/
+
+static void Svy_PutParamsRemoveOneQst (void)
+  {
+   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
+   Svy_PutParamQstCod (Gbl.Svys.SvyQstCodToEdit);
   }
 
 /*****************************************************************************/

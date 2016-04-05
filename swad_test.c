@@ -230,7 +230,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
 static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
-static void Tst_PutIconToRemove (void);
+static void Tst_PutIconToRemoveOneQst (void);
 static void Tst_PutParamsRemoveOneQst (void);
 
 static bool Tst_GetQstCod (void);
@@ -4319,7 +4319,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemove);
+      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemoveOneQst);
      }
    else
       Lay_StartRoundFrame (NULL,Txt_New_question,NULL);
@@ -5500,7 +5500,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToRemove (void)
+static void Tst_PutIconToRemoveOneQst (void)
   {
    extern const char *Txt_Remove;
 
