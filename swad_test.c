@@ -1106,7 +1106,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
      {
       /***** New image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\">",
+			 " value=\"%u\"",
 	       UniqueId,ParamAction,Img_ACTION_NEW_IMAGE);	// Upload new image
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
