@@ -14306,6 +14306,27 @@ const char *Txt_Image =
 	"Imagem";
 #endif
 
+const char *Txt_Image_title_attribution =
+#if   L==1
+	"T&iacute;tol/reconeixement de la imatge";
+#elif L==2
+	"Bildtitel / Namensnennung";
+#elif L==3
+	"Image title/attribution";
+#elif L==4
+	"T&iacute;tulo/reconocimiento de la imagen";
+#elif L==5
+	"Titre/attribution de l'image";
+#elif L==6
+	"T&iacute;tulo/reconocimiento de la imagen";	// Okoteve traducción
+#elif L==7
+	"Titolo/attribuzione delle immagine";
+#elif L==8
+	"Tytu&lstrok;/przypisanie obrazu";
+#elif L==9
+	"T&iacute;tulo/atribui&ccedil;&atilde;o da imagem";
+#endif
+
 const char *Txt_Image_not_found =
 #if   L==1
 	"Imatge no trobat";
