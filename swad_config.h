@@ -508,9 +508,10 @@
 
 #define Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS		((time_t)(              15UL*60UL))  	// Temporary files with params to commands are deleted after these seconds
 
-#define Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES		((time_t)(          1UL*60UL*60UL))  	// Temporary files related to photos after these seconds
+#define Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to images after these seconds
+#define Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to photos after these seconds
 
-#define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(          1UL*60UL*60UL))  	// Temporary files related to imported test questions after these seconds
+#define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to imported test questions after these seconds
 
 #define Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS		((time_t)(    30UL*24UL*60UL*60UL))	// Past these seconds, remove expired enrollment requests
 

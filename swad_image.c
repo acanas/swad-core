@@ -191,6 +191,9 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,
 	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
+   /***** Remove old temporary private files *****/
+   Fil_RemoveOldTmpFiles (PathImgPriv,Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES,false);
+
    /***** End the reception of original not processed image
           (it can be very big) into a temporary file *****/
    Image->Status = Img_FILE_NONE;
@@ -286,6 +289,7 @@ void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
 
 void Img_ShowImage (struct Image *Image,const char *ClassImg)
   {
+   extern const char *Txt_Image_not_found;
    char FileNameImgPriv[PATH_MAX+1];
    char FullPathImgPriv[PATH_MAX+1];
    char URL[PATH_MAX+1];
@@ -298,8 +302,7 @@ void Img_ShowImage (struct Image *Image,const char *ClassImg)
    if (Image->Status != Img_NAME_STORED_IN_DB)
       return;
 
-   /***** Create a temporary public directory
-	  used to download the zip file *****/
+   /***** Create a temporary public directory used to show the image *****/
    Brw_CreateDirDownloadTmp ();
 
    /***** Build private path to image *****/
@@ -310,21 +313,27 @@ void Img_ShowImage (struct Image *Image,const char *ClassImg)
 	    Image->Name[1],
 	    FileNameImgPriv);
 
-   /***** Create symbolic link from temporary public directory to private file
-          in order to gain access to it for showing/downloading *****/
-   Brw_CreateTmpPublicLinkToPrivateFile (FullPathImgPriv,FileNameImgPriv);
+   /***** Check if private image file exists *****/
+   if (Fil_CheckIfPathExists (FullPathImgPriv))
+     {
+      /***** Create symbolic link from temporary public directory to private file
+	     in order to gain access to it for showing/downloading *****/
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathImgPriv,FileNameImgPriv);
 
-   /***** Create URL pointing to symbolic link *****/
-   sprintf (URL,"%s/%s/%s/%s",
-	    Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-	    Gbl.FileBrowser.TmpPubDir,
-	    FileNameImgPriv);
+      /***** Create URL pointing to symbolic link *****/
+      sprintf (URL,"%s/%s/%s/%s",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	       Gbl.FileBrowser.TmpPubDir,
+	       FileNameImgPriv);
 
-   /***** Show image *****/
-   fprintf (Gbl.F.Out,"<div>"
-	              "<img src=\"%s\" alt=\"\" class=\"%s\"/>"
-	              "</div>",
-            URL,ClassImg);
+      /***** Show image *****/
+      fprintf (Gbl.F.Out,"<div>"
+			 "<img src=\"%s\" alt=\"\" class=\"%s\"/>"
+			 "</div>",
+	       URL,ClassImg);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_Image_not_found);
   }
 
 /*****************************************************************************/

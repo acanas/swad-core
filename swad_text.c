@@ -10229,6 +10229,27 @@ const char *Txt_Enroll_in_groups =
 	"Inscreva-me em grupos ";
 #endif
 
+const char *Txt_Enrollment =
+#if   L==1
+	"Inscripci&oacute;";
+#elif L==2
+	"Einschreibung";
+#elif L==3
+	"Enrollment";
+#elif L==4
+	"Inscripci&oacute;n";
+#elif L==5
+	"Inscription";
+#elif L==6
+	"Inscripci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Registrazione";
+#elif L==8
+	"Rejestracja";
+#elif L==9
+	"Inscri&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Enrollment_confirmed =
 #if   L==1
 	"Inscripci&oacute;n confirmada";	// Necessita traduccio
@@ -14304,6 +14325,27 @@ const char *Txt_Image =
 	"Obraz";
 #elif L==9
 	"Imagem";
+#endif
+
+const char *Txt_Image_not_found =
+#if   L==1
+	"Imatge no trobat";
+#elif L==2
+	"Abbild nicht gefunden";
+#elif L==3
+	"Image not found";
+#elif L==4
+	"Imagen no encontrada";
+#elif L==5
+	"Image non trouv&eacute;e";
+#elif L==6
+	"Ta'&atilde;nga nah&aacute;niri juhupapyre";
+#elif L==7
+	"Immagine non trovata";
+#elif L==8
+	"Obraz nie znaleziono";
+#elif L==9
+	"Imagem n&atilde;o encontrada";
 #endif
 
 const char *Txt_Import_questions =

@@ -342,36 +342,39 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
 void Enr_ReqAcceptRegisterInCrs (void)
   {
+   extern const char *Txt_Enrollment;
    extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_;
    extern const char *Txt_Confirm_my_enrollment;
    extern const char *Txt_Remove_me_from_this_course;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Enrollment,NULL);
 
    /***** Show message *****/
    sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_,
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
    /***** Send button to accept register in the current course *****/
-   Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
-	                                                                         ActAccEnrTch,
-	                  NULL,"ok_green16x16.gif",
-	                  Txt_Confirm_my_enrollment,Txt_Confirm_my_enrollment);
+   Act_FormStart (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
+	                                                                 ActAccEnrTch);
+   Lay_PutCreateButtonInline (Txt_Confirm_my_enrollment);
+   Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
-   Lay_PutContextualLink (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
-	                                                                         ActRemMe_Tch,
-                          NULL,"remove-on64x64.png",
-                          Txt_Remove_me_from_this_course,Txt_Remove_me_from_this_course);
+   Act_FormStart (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMe_Std :
+	                                                                 ActRemMe_Tch);
+   Lay_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
+   Act_FormEnd ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
-	                                                                      Ntf_EVENT_ENROLLMENT_TEACHER,
-                       -1L,Gbl.CurrentCrs.Crs.CrsCod,
-                       Gbl.Usrs.Me.UsrDat.UsrCod);
+	                                                                       Ntf_EVENT_ENROLLMENT_TEACHER,
+                        -1L,Gbl.CurrentCrs.Crs.CrsCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
