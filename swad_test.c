@@ -1053,7 +1053,8 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
-   extern const char *Txt_New_image;
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
    static unsigned UniqueId = 0;
 
    /***** No image *****/
@@ -1112,9 +1113,9 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,const char *ClassImg,
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
                          "<label class=\"%s\">"
-			 "%s: "
+			 "%s (%s): "
 			 "</label>",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_New_image);
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Image,Txt_optional);
      }
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
 		      " size=\"40\" maxlength=\"100\" value=\"\"",
@@ -4281,6 +4282,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_new_tag;
    extern const char *Txt_Stem;
    extern const char *Txt_Feedback;
+   extern const char *Txt_optional;
    extern const char *Txt_Type;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Answers;
@@ -4429,13 +4431,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
 	              "<label class=\"%s\">"
-	              "%s:"
+	              "%s (%s):"
                       "</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea name=\"Feedback\" class=\"STEM\" rows=\"3\">",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Feedback);
+            Txt_Feedback,Txt_optional);
    if (Feedback)
       if (Feedback[0])
 	 fprintf (Gbl.F.Out,"%s",Feedback);
@@ -4613,10 +4615,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       /* Feedback */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_TOP COLOR%u\">"
-                         "<div class=\"%s\">%s:</div>"
+                         "<div class=\"%s\">%s (%s):</div>"
 	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
 	       Gbl.RowEvenOdd,
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");

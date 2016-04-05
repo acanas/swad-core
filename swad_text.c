@@ -22987,27 +22987,6 @@ const char *Txt_New_holiday =
 	"Nova f&eacute;ria";
 #endif
 
-const char *Txt_New_image =
-#if   L==1
-	"Nova imatge";
-#elif L==2
-	"Neue Abbild";
-#elif L==3
-	"New image";
-#elif L==4
-	"Nueva imagen";
-#elif L==5
-	"Nouvelle image";
-#elif L==6
-	"Pyahu ta'&atilde;nga";
-#elif L==7
-	"Nuova immagine";
-#elif L==8
-	"Nowe obraz";
-#elif L==9
-	"Nova imagem";
-#endif
-
 const char *Txt_New_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Nova instituci&oacute;n (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...) de %s";
