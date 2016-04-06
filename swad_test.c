@@ -7484,13 +7484,11 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	                    "<td class=\"TEST_NUM_QST RIGHT_TOP COLOR%u\">"
 	                    "%u"
 	                    "</td>"
-	                    "<td class=\"COLOR%u\"></td>"
 	                    "<td class=\"DAT_LIGHT LEFT_TOP COLOR%u\">"
 	                    "%s"
 	                    "</td>"
 	                    "</tr>",
                   Gbl.RowEvenOdd,NumQst + 1,
-                  Gbl.RowEvenOdd,
                   Gbl.RowEvenOdd,Txt_Question_removed);
 
       /***** Free structure that stores the query result *****/
