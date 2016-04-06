@@ -71,45 +71,47 @@ static void Img_ProcessImage (const char *FileNameImgOriginal,
 /*************************** Reset image title *******************************/
 /*****************************************************************************/
 
-void Img_ResetImageTitle (struct Image *Image)
+void Img_FreeImageTitle (struct Image *Image)
   {
+   // Image->Title must be initialized to NULL
    if (Image->Title)
+     {
       free ((void *) Image->Title);
-   Image->Title = NULL;
+      Image->Title = NULL;
+     }
   }
 
 /*****************************************************************************/
-/********* Get image name and title from strings and copy to struct **********/
+/****** Get image name and title from a query result and copy to struct ******/
 /*****************************************************************************/
 
-void Img_GetImageNameAndTitle (const char *Name,const char *Title,
-                               struct Image *Image)
+void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
+                                      struct Image *Image)
   {
    size_t Length;
 
-   Img_ResetImageTitle (Image);
+   /***** Copy image name to struct *****/
+   strncpy (Image->Name,Name,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+   Image->Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
 
-   if (Name[0])
+   /***** Set status of image file *****/
+   Image->Status = Image->Name[0] ? Img_NAME_STORED_IN_DB :
+	                            Img_FILE_NONE;
+
+   /***** Copy image title to struct *****/
+   Img_FreeImageTitle (Image);
+   if (Title[0])
      {
-      strncpy (Image->Name,Name,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-      Image->Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+      /* Get and limit length of the title */
+      Length = strlen (Title);
+      if (Length > Img_MAX_BYTES_TITLE)
+	 Length = Img_MAX_BYTES_TITLE;
 
-      if (Image->Name[0])	// There is an image
-	 if (Title[0])
-	   {
-	    /* Get and limit length of the title */
-	    Length = strlen (Title);
-	    if (Length > Img_MAX_BYTES_TITLE)
-	       Length = Img_MAX_BYTES_TITLE;
-
-	    if ((Image->Title = (char *) malloc (Length+1)) == NULL)
-	       Lay_ShowErrorAndExit ("Error allocating memory for image title.");
-	    strncpy (Image->Title,Title,Length);
-	    Image->Title[Length] = '\0';
-	   }
+      if ((Image->Title = (char *) malloc (Length+1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
+      strncpy (Image->Title,Title,Length);
+      Image->Title[Length] = '\0';
      }
-   else		// No image in this question
-      Image->Name[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -117,49 +119,59 @@ void Img_GetImageNameAndTitle (const char *Name,const char *Title,
 /*****************************************************************************/
 
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
-                           void (*GetImageNameFromDB) (unsigned NumOpt,struct Image *Image),
+                           void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
                            const char *ParamAction,const char *ParamFile,const char *ParamTitle,
                            unsigned Width,unsigned Height,unsigned Quality)
   {
+   char Title[Img_MAX_BYTES_TITLE+1];
+   size_t Length;
+
    Image->Action = Img_GetImageActionFromForm (ParamAction);
    Image->Status = Img_FILE_NONE;
+   Img_FreeImageTitle (Image);	// Reset to NULL
+
    switch (Image->Action)
      {
       case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
 	 /***** Reset image name *****/
 	 Image->Name[0] = '\0';
-	 Img_ResetImageTitle (Image);
          break;
       case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
 	 /***** Get image name *****/
-	 GetImageNameFromDB (NumOpt,Image);
-	 if (Image->Name[0])
-	    Image->Status = Img_NAME_STORED_IN_DB;
+	 GetImageFromDB (NumOpt,Image);
 	 break;
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,ParamTitle,
+	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
 	                                     Width,Height,Quality);
 	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
 	   {
 	    /* Reset image name */
 	    Image->Status = Img_FILE_NONE;
 	    Image->Name[0] = '\0';
-	    Img_ResetImageTitle (Image);
 	   }
 	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,ParamTitle,
+	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
 	                                     Width,Height,Quality);
 	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
-	   {
 	    /* Get image name */
-	    GetImageNameFromDB (NumOpt,Image);
-	    Image->Status = (Image->Name[0] ? Img_NAME_STORED_IN_DB :
-			                      Img_FILE_NONE);
-	   }
+	    GetImageFromDB (NumOpt,Image);
 	 break;
+     }
+
+   /***** Get image title from form *****/
+   Par_GetParToHTML (ParamTitle,Title,Img_MAX_BYTES_TITLE);
+   if ((Length = strlen (Title)) > 0) // If title comming from the form is not empty
+     {
+      /* Overwrite current title (empty or coming from database)
+         with the title coming from the form */
+      Img_FreeImageTitle (Image);
+      if ((Image->Title = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
+      strncpy (Image->Title,Title,Length);
+      Image->Title[Length] = '\0';
      }
   }
 
@@ -183,12 +195,9 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
 /*****************************************************************************/
 /**************************** Get image from form ****************************/
 /*****************************************************************************/
-// Return true if image is created
 
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,
-                                         const char *ParamFile,const char *ParamTitle,
-                                         unsigned Width,unsigned Height,
-                                         unsigned Quality)
+void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile,
+                                         unsigned Width,unsigned Height,unsigned Quality)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX+1];
@@ -199,8 +208,6 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,
    char FileNameImgOrig[PATH_MAX+1];	// Full name of original uploaded file
    char FileNameImgTmp[PATH_MAX+1];	// Full name of temporary processed file
    bool WrongType = false;
-   char Title[Img_MAX_BYTES_TITLE+1];
-   size_t Length;
 
    /***** Rest image file status *****/
    Image->Status = Img_FILE_NONE;
@@ -265,17 +272,6 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,
 
       /***** Remove temporary original file *****/
       unlink (FileNameImgOrig);
-
-      /***** Get image title from form *****/
-      Par_GetParToHTML (ParamTitle,Title,Img_MAX_BYTES_TITLE);	// TODO: Create a function to get only the length of a parameter
-      Length = strlen (Title);
-      if (Length > 0)
-	{
-	 if ((Image->Title = (char *) malloc (Length+1)) == NULL)
-	    Lay_ShowErrorAndExit ("Error allocating memory for image title.");
-	 strncpy (Image->Title,Title,Length);
-	 Image->Title[Length] = '\0';
-	}
      }
   }
 

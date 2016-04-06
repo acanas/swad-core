@@ -533,8 +533,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
      {
       if (!strcmp (QuestionElem->TagName,"question"))
         {
-         /***** Initialize new question to zero *****/
-         Tst_InitQst ();
+         /***** Create test question *****/
+         Tst_QstConstructor ();
 
          /* Get type of questions (in mandatory attribute "type") */
          AnswerTypeFound = false;
@@ -653,8 +653,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
               }
            }
 
-         /***** Free answers *****/
-         Tst_FreeTextChoiceAnswers ();
+	 /***** Destroy test question *****/
+	 Tst_QstDestructor ();
         }
      }
 

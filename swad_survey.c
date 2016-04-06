@@ -2527,7 +2527,7 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Count number of rows of result *****/
    if (NumRows == 0)
-      Lay_ShowErrorAndExit ("Error when getting answers of a question.");
+      Lay_ShowAlert (Lay_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
   }
@@ -3024,64 +3024,67 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"width:100%%;\">");
-   for (NumAns = 0;
-	NumAns < NumAnswers;
-	NumAns++)
+   if (NumAnswers)
      {
-      row = mysql_fetch_row (mysql_res);
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"width:100%%;\">");
+      for (NumAns = 0;
+	   NumAns < NumAnswers;
+	   NumAns++)
+	{
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get number of users who have marked this answer (row[1]) */
-      if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
+	 /* Get number of users who have marked this answer (row[1]) */
+	 if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
+	    Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
-      /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
-      AnsLength = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-      if ((Answer = malloc (AnsLength+1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-      strcpy (Answer,row[2]);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Answer,AnsLength,false);
+	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
+	 AnsLength = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+	 if ((Answer = malloc (AnsLength+1)) == NULL)
+	    Lay_ShowErrorAndExit ("Not enough memory to store answer.");
+	 strcpy (Answer,row[2]);
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Answer,AnsLength,false);
 
-      /* Selectors and label with the letter of the answer */
-      fprintf (Gbl.F.Out,"<tr>");
+	 /* Selectors and label with the letter of the answer */
+	 fprintf (Gbl.F.Out,"<tr>");
 
-      if (PutFormAnswerSurvey)
-        {
-         /* Write selector to choice this answer */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                            "<input type=\"");
-         if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-            fprintf (Gbl.F.Out,"radio\""
-        	               " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-                     (unsigned) SvyQst->QstCod,NumAnswers);
-         else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
-            fprintf (Gbl.F.Out,"checkbox\"");
-         fprintf (Gbl.F.Out," name=\"Ans%010u\" value=\"%u\" />"
-                            "</td>",
-                  (unsigned) SvyQst->QstCod,NumAns);
-        }
+	 if (PutFormAnswerSurvey)
+	   {
+	    /* Write selector to choice this answer */
+	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+			       "<input type=\"");
+	    if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
+	       fprintf (Gbl.F.Out,"radio\""
+				  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+			(unsigned) SvyQst->QstCod,NumAnswers);
+	    else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
+	       fprintf (Gbl.F.Out,"checkbox\"");
+	    fprintf (Gbl.F.Out," name=\"Ans%010u\" value=\"%u\" />"
+			       "</td>",
+		     (unsigned) SvyQst->QstCod,NumAns);
+	   }
 
-      /* Write the number of option */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:50px;\">"
-	                 "%u)"
-	                 "</td>",
-               NumAns + 1);
+	 /* Write the number of option */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:50px;\">"
+			    "%u)"
+			    "</td>",
+		  NumAns + 1);
 
-      /* Write the text of the answer */
-      fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">%s</td>",
-               Answer);
+	 /* Write the text of the answer */
+	 fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">%s</td>",
+		  Answer);
 
-      /* Show stats of this answer */
-      if (Svy->Status.ICanViewResults)
-         Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
+	 /* Show stats of this answer */
+	 if (Svy->Status.ICanViewResults)
+	    Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
 
-      fprintf (Gbl.F.Out,"</tr>");
+	 fprintf (Gbl.F.Out,"</tr>");
 
-      /* Free memory allocated for the answer */
-      free ((void *) Answer);
+	 /* Free memory allocated for the answer */
+	 free ((void *) Answer);
+	}
+      fprintf (Gbl.F.Out,"</table>");
      }
-   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

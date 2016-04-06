@@ -219,6 +219,9 @@ static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 
+static void Tst_FreeTextChoiceAnswers (void);
+static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
+
 static void Tst_InitImagesOfQuestion (void);
 static void Tst_FreeImagesOfQuestion (void);
 
@@ -236,7 +239,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 static void Tst_PutIconToRemoveOneQst (void);
 static void Tst_PutParamsRemoveOneQst (void);
 
-static bool Tst_GetQstCod (void);
+static long Tst_GetQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
 static void Tst_InsertTagsIntoDB (void);
@@ -248,8 +251,6 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
 
 static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,long QstCod);
 static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,long QstCod,unsigned AnsInd);
-
-static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
@@ -981,6 +982,10 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    row[10] Score
    */
 
+   /***** Create test question *****/
+   Tst_QstConstructor ();
+   Gbl.Test.QstCod = QstCod;
+
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP COLOR%u\">"
@@ -999,12 +1004,9 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   if (row[6][0])
-     {
-      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-      Img_GetImageNameAndTitle (row[6],row[7],&Gbl.Test.Image);
-      Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW_STEM");
-     }
+   Img_GetImageNameAndTitleFromRow (row[6],row[7],&Gbl.Test.Image);
+   Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_SHOW_STEM");
+
    if (Gbl.Action.Act == ActSeeTst)
       Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
    else	// Assessing exam / Viewing old exam
@@ -1018,9 +1020,8 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** Free answers and images of this test question *****/
-   Tst_FreeTextChoiceAnswers ();
-   Tst_FreeImagesOfQuestion ();
+   /***** Destroy test question *****/
+   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -2615,7 +2616,6 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
    MYSQL_ROW row;
-   long QstCod;
    unsigned UniqueId;
    time_t TimeUTC;
    unsigned long NumHitsThisQst;
@@ -2706,8 +2706,11 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       row[ 9] NumHitsNotBlank
       row[10] Score
       */
+      /***** Create test question *****/
+      Tst_QstConstructor ();
+
       /* row[0] holds the code of the question */
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Write icon to remove the question */
@@ -2716,7 +2719,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Act_FormStart (ActReqRemTstQst);
       Sta_WriteParamsDatesSeeAccesses ();
       Tst_WriteParamEditQst ();
-      Par_PutHiddenParamLong ("QstCod",QstCod);
+      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
       if (NumRows == 1)
          Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Lay_PutIconRemove ();
@@ -2726,7 +2729,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       /* Write icon to edit the question */
       fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActEdiOneTstQst);
-      Par_PutHiddenParamLong ("QstCod",QstCod);
+      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON20x20\" />",
@@ -2746,7 +2749,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
-               Gbl.RowEvenOdd,QstCod);
+               Gbl.RowEvenOdd,Gbl.Test.QstCod);
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
@@ -2762,7 +2765,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       /* Write the question tags */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
                Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (QstCod);
+      Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the question type (row[2]) */
@@ -2780,7 +2783,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
         {
          Act_FormStart (ActShfTstQst);
-         Par_PutHiddenParamLong ("QstCod",QstCod);
+         Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
          if (NumRows == 1)
@@ -2800,19 +2803,11 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      if (row[6][0])
-	{
-	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-	 Img_GetImageNameAndTitle (row[6],row[7],&Gbl.Test.Image);
-	 Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST_STEM");
-	}
+      Img_GetImageNameAndTitleFromRow (row[6],row[7],&Gbl.Test.Image);
+      Img_ShowImage (&Gbl.Test.Image,"TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
-      Tst_WriteAnswersOfAQstEdit (QstCod);
+      Tst_WriteAnswersOfAQstEdit (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
-
-      /* Free answers and images of this test question */
-      Tst_FreeTextChoiceAnswers ();
-      Tst_FreeImagesOfQuestion ();
 
       /* Get number of hits
          (number of times that the question has been answered,
@@ -2865,6 +2860,9 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          fprintf (Gbl.F.Out,"N.A.");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
+
+      /***** Destroy test question *****/
+      Tst_QstDestructor ();
      }
 
    /***** End table *****/
@@ -2901,7 +2899,7 @@ void Tst_WriteParamEditQst (void)
 
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
   {
-   char Query[256];
+   char Query[512];
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
@@ -2911,7 +2909,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
             Shuffle ? "RAND(NOW())" :
         	      "AnsInd");
    if (!(NumRows = DB_QuerySELECT (Query,mysql_res,"can not get answers of a question")))
-      Lay_ShowErrorAndExit ("Error when getting answers of a question.");
+      Lay_ShowAlert (Lay_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
   }
@@ -3007,11 +3005,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	 }
 
             /* Copy image */
-	    if (row[3][0])
-	      {
-	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	       Img_GetImageNameAndTitle (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
-	      }
+	    Img_GetImageNameAndTitleFromRow (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
@@ -3037,8 +3031,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
         	               "<div class=\"TEST_EDI\">"
         	               "%s",
                      Answer);
-	    if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
-	       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_EDIT_LIST_ANS");
+	    Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_EDIT_LIST_ANS");
             fprintf (Gbl.F.Out,"</div>");
 
             /* Write the text of the feedback */
@@ -3106,6 +3099,10 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
   {
    MYSQL_RES *mysql_res;
 
+   /***** Create test question *****/
+   Tst_QstConstructor ();
+   Gbl.Test.QstCod = QstCod;
+
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
    /*
@@ -3141,6 +3138,9 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -3281,8 +3281,9 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    bool ErrorInIndex = false;
    char ParamName[3+6+1];
 
-   /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+   /***** Create test question *****/
+   Tst_QstConstructor ();
+   Gbl.Test.QstCod = QstCod;
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
@@ -3294,6 +3295,10 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    row[ 4] ImageTitle
    row[ 5] Correct
    */
+
+   /***** Start of table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
@@ -3324,11 +3329,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
                         Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy image *****/
-      if (row[3][0])
-	{
-	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	 Img_GetImageNameAndTitle (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
-	}
+      Img_GetImageNameAndTitleFromRow (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
 
       /***** Write selectors and letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3351,8 +3352,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       fprintf (Gbl.F.Out,"<td class=\"TEST_EXA LEFT_TOP\">"
 	                 "%s",
                Gbl.Test.Answer.Options[NumOpt].Text);
-      if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
-	 Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_SHOW_ANS");
+      Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,"TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -3360,12 +3360,11 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
 
-   /***** Free answers and images of this test question *****/
-   Tst_FreeTextChoiceAnswers ();
-   Tst_FreeImagesOfQuestion ();
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -3430,11 +3429,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	      }
 
       /***** Copy image *****/
-      if (row[3][0])
-	{
-	 Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-	 Img_GetImageNameAndTitle (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
-	}
+      Img_GetImageNameAndTitleFromRow (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
 
       /***** Assign correctness (row[5]) of this answer (this option) *****/
       Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
@@ -3526,8 +3521,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	                 "<div class=\"TEST_EXA\">"
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
-      if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Image.Name[0])
-	 Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,"TEST_IMG_SHOW_ANS");
+      Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,"TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</div>");
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
@@ -3606,10 +3600,6 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
    /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
-
-   /***** Free answers and images of this test question *****/
-   Tst_FreeTextChoiceAnswers ();
-   Tst_FreeImagesOfQuestion ();
   }
 
 /*****************************************************************************/
@@ -3791,9 +3781,6 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      }
 
    fprintf (Gbl.F.Out,"</table>");
-
-   /***** Free answers *****/
-   Tst_FreeTextChoiceAnswers ();
   }
 
 /*****************************************************************************/
@@ -4351,8 +4338,18 @@ void Tst_ShowFormEditOneQst (void)
    char Stem[Cns_MAX_BYTES_TEXT+1];
    char Feedback[Cns_MAX_BYTES_TEXT+1];
 
+   /***** Create test question *****/
+   Tst_QstConstructor ();
+   Gbl.Test.QstCod = Tst_GetQstCod ();
    Stem[0] = Feedback[0] = '\0';
+   if (Gbl.Test.QstCod > 0)	// If question already exists in the database
+      Tst_GetQstDataFromDB (Stem,Feedback);
+
+   /***** Put form to edit question *****/
    Tst_PutFormEditOneQst (Stem,Feedback);
+
+   /***** Destroy test question *****/
+   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -4397,16 +4394,6 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    char ParamAction[32];
    char ParamFile[32];
    char ParamTitle[32];
-
-   /***** If no receiving the question, but editing a new or existing question
-          ==> init or edit data of question *****/
-   if (Gbl.Action.Act == ActEdiOneTstQst)
-     {
-      Tst_InitQst ();
-      if (Tst_GetQstCod ())	// If parameter QstCod received ==>
-				// ==> question already exists in the database
-         Tst_GetQstDataFromDB (Stem,Feedback);
-     }
 
    /***** Start frame *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -4737,21 +4724,18 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-
-   /***** Free memory for answers *****/
-   Tst_FreeTextChoiceAnswers ();
   }
 
 /*****************************************************************************/
 /********************* Initialize a new question to zero *********************/
 /*****************************************************************************/
 
-void Tst_InitQst (void)
+void Tst_QstConstructor (void)
   {
    unsigned NumOpt;
    unsigned NumTag;
 
-   Gbl.Test.QstCod = -1;
+   Gbl.Test.QstCod = -1L;
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
 	NumTag++)
@@ -4779,6 +4763,74 @@ void Tst_InitQst (void)
    Gbl.Test.Answer.FloatingPoint[1] = 0.0;
 
    Tst_InitImagesOfQuestion ();
+  }
+
+/*****************************************************************************/
+/***************** Free memory allocated for test question *******************/
+/*****************************************************************************/
+
+void Tst_QstDestructor (void)
+  {
+   Tst_FreeTextChoiceAnswers ();
+   Tst_FreeImagesOfQuestion ();
+  }
+
+/*****************************************************************************/
+/******************* Allocate memory for a choice answer *********************/
+/*****************************************************************************/
+
+int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
+  {
+   Tst_FreeTextChoiceAnswer (NumOpt);
+
+   if ((Gbl.Test.Answer.Options[NumOpt].Text =
+	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+     {
+      sprintf (Gbl.Message,"Not enough memory to store answer.");
+      return 0;
+     }
+   if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
+	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+     {
+      sprintf (Gbl.Message,"Not enough memory to store feedback.");
+      return 0;
+     }
+
+   Gbl.Test.Answer.Options[NumOpt].Text[0] =
+   Gbl.Test.Answer.Options[NumOpt].Feedback[0] = '\0';
+   return 1;
+  }
+
+/*****************************************************************************/
+/******************** Free memory of all choice answers **********************/
+/*****************************************************************************/
+
+static void Tst_FreeTextChoiceAnswers (void)
+  {
+   unsigned NumOpt;
+
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      Tst_FreeTextChoiceAnswer (NumOpt);
+  }
+
+/*****************************************************************************/
+/********************** Free memory of a choice answer ***********************/
+/*****************************************************************************/
+
+static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
+  {
+   if (Gbl.Test.Answer.Options[NumOpt].Text)
+     {
+      free ((void *) Gbl.Test.Answer.Options[NumOpt].Text);
+      Gbl.Test.Answer.Options[NumOpt].Text = NULL;
+     }
+   if (Gbl.Test.Answer.Options[NumOpt].Feedback)
+     {
+      free ((void *) Gbl.Test.Answer.Options[NumOpt].Feedback);
+      Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
+     }
   }
 
 /*****************************************************************************/
@@ -4812,11 +4864,11 @@ static void Tst_FreeImagesOfQuestion (void)
   {
    unsigned NumOpt;
 
-   Img_ResetImageTitle (&Gbl.Test.Image);
+   Img_FreeImageTitle (&Gbl.Test.Image);
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Img_ResetImageTitle (&Gbl.Test.Answer.Options[NumOpt].Image);
+      Img_FreeImageTitle (&Gbl.Test.Answer.Options[NumOpt].Image);
   }
 
 /*****************************************************************************/
@@ -4869,13 +4921,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	}
 
    /* Get the image name of the question from the database (row[4]) */
-   if (row[4][0])
-     {
-      Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
-      Img_GetImageNameAndTitle (row[4],row[5],&Gbl.Test.Image);
-     }
-   else
-      Gbl.Test.Image.Status = Img_FILE_NONE;
+   Img_GetImageNameAndTitleFromRow (row[4],row[5],&Gbl.Test.Image);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -4946,11 +4992,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 		 }
 
 	    /* Copy image */
-	    if (row[3][0])
-	      {
-	       Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
-               Img_GetImageNameAndTitle (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
-	      }
+            Img_GetImageNameAndTitleFromRow (row[3],row[4],&Gbl.Test.Answer.Options[NumOpt].Image);
 
 	    Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
 	    break;
@@ -4991,7 +5033,7 @@ static void Tst_GetImageFromDB (unsigned NumOpt,struct Image *Image)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the image name (row[0]) *****/
-   Img_GetImageNameAndTitle (row[0],row[1],Image);
+   Img_GetImageNameAndTitleFromRow (row[0],row[1],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5040,11 +5082,11 @@ void Tst_ReceiveQst (void)
    char Stem[Cns_MAX_BYTES_TEXT+1];
    char Feedback[Cns_MAX_BYTES_TEXT+1];
 
-   /***** Initialize new question to zero *****/
-   Tst_InitQst ();
-   Stem[0] = Feedback[0] = '\0';
+   /***** Create test question *****/
+   Tst_QstConstructor ();
 
    /***** Get parameters of the question from form *****/
+   Stem[0] = Feedback[0] = '\0';
    Tst_GetQstFromForm (Stem,Feedback);
 
    /***** Make sure that tags, text and answer are not empty *****/
@@ -5068,8 +5110,8 @@ void Tst_ReceiveQst (void)
       Tst_PutFormEditOneQst (Stem,Feedback);
      }
 
-   /***** Free answers *****/
-   Tst_FreeTextChoiceAnswers ();
+   /***** Destroy test question *****/
+   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -5094,7 +5136,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    char ParamTitle[32];
 
    /***** Get question code *****/
-   Tst_GetQstCod ();
+   Gbl.Test.QstCod = Tst_GetQstCod ();
 
    /***** Get answer type *****/
    Par_GetParToText ("AnswerType",UnsignedStr,10);
@@ -5645,7 +5687,8 @@ void Tst_RequestRemoveQst (void)
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   if (!Tst_GetQstCod ())
+   Gbl.Test.QstCod = Tst_GetQstCod ();
+   if (Gbl.Test.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /* Get a parameter that indicates whether it's necessary
@@ -5697,7 +5740,8 @@ void Tst_RemoveQst (void)
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
-   if (!Tst_GetQstCod ())
+   Gbl.Test.QstCod = Tst_GetQstCod ();
+   if (Gbl.Test.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary
@@ -5749,7 +5793,8 @@ void Tst_ChangeShuffleQst (void)
    bool Shuffle;
 
    /***** Get the question code *****/
-   if (!Tst_GetQstCod ())
+   Gbl.Test.QstCod = Tst_GetQstCod ();
+   if (Gbl.Test.QstCod <= 0)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
@@ -5787,14 +5832,12 @@ void Tst_ChangeShuffleQst (void)
 /************ Get the parameter with the code of a test question *************/
 /*****************************************************************************/
 
-static bool Tst_GetQstCod (void)
+static long Tst_GetQstCod (void)
   {
    char LongStr[1+10+1];
 
    Par_GetParToText ("QstCod",LongStr,1+10);
-   if ((Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
-      return false;
-   return true;
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
@@ -5825,9 +5868,10 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    char *Query;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (256 +
+   if ((Query = malloc (512 +
                         Gbl.Test.Stem.Length +
-                        Gbl.Test.Feedback.Length)) == NULL)
+                        Gbl.Test.Feedback.Length +
+                        Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    if (Gbl.Test.QstCod < 0)	// It's a new question
@@ -6142,64 +6186,6 @@ static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************* Allocate memory for a choice answer *********************/
-/*****************************************************************************/
-
-int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
-  {
-   Tst_FreeTextChoiceAnswer (NumOpt);
-
-   if ((Gbl.Test.Answer.Options[NumOpt].Text =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
-     {
-      sprintf (Gbl.Message,"Not enough memory to store answer.");
-      return 0;
-     }
-   if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
-     {
-      sprintf (Gbl.Message,"Not enough memory to store feedback.");
-      return 0;
-     }
-
-   Gbl.Test.Answer.Options[NumOpt].Text[0] =
-   Gbl.Test.Answer.Options[NumOpt].Feedback[0] = '\0';
-   return 1;
-  }
-
-/*****************************************************************************/
-/******************** Free memory of all choice answers **********************/
-/*****************************************************************************/
-
-void Tst_FreeTextChoiceAnswers (void)
-  {
-   unsigned NumOpt;
-
-   for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      Tst_FreeTextChoiceAnswer (NumOpt);
-  }
-
-/*****************************************************************************/
-/********************** Free memory of a choice answer ***********************/
-/*****************************************************************************/
-
-static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
-  {
-   if (Gbl.Test.Answer.Options[NumOpt].Text)
-     {
-      free ((void *) Gbl.Test.Answer.Options[NumOpt].Text);
-      Gbl.Test.Answer.Options[NumOpt].Text = NULL;
-     }
-   if (Gbl.Test.Answer.Options[NumOpt].Feedback)
-     {
-      free ((void *) Gbl.Test.Answer.Options[NumOpt].Feedback);
-      Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
-     }
   }
 
 /*****************************************************************************/

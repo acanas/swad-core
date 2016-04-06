@@ -141,7 +141,12 @@ void Tst_GetConfigFromRow (MYSQL_ROW row);
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 void Tst_ReceiveConfigTst (void);
 void Tst_ShowFormEditOneQst (void);
-void Tst_InitQst (void);
+
+void Tst_QstConstructor (void);
+void Tst_QstDestructor (void);
+
+int Tst_AllocateTextChoiceAnswer (unsigned NumOpt);
+
 Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 void Tst_ReceiveQst (void);
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void);
@@ -152,8 +157,6 @@ void Tst_RemoveQst (void);
 void Tst_ChangeShuffleQst (void);
 void Tst_InsertOrUpdateQstTagsAnsIntoDB (void);
 
-int Tst_AllocateTextChoiceAnswer (unsigned NumOpt);
-void Tst_FreeTextChoiceAnswers (void);
 void Tst_FreeTagsList (void);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);

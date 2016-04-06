@@ -94,19 +94,17 @@ struct Image
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Img_ResetImageTitle (struct Image *Image);
-void Img_GetImageNameAndTitle (const char *Name,const char *Title,
-                               struct Image *Image);
+void Img_FreeImageTitle (struct Image *Image);
+void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
+                                      struct Image *Image);
 
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
-                           void (*GetImageNameFromDB) (unsigned NumOpt,struct Image *Image),
+                           void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
                            const char *ParamAction,const char *ParamFile,const char *ParamTitle,
                            unsigned Width,unsigned Height,unsigned Quality);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,
-                                         const char *ParamFile,const char *ParamTitle,
-                                         unsigned Width,unsigned Height,
-                                         unsigned Quality);
+void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile,
+                                         unsigned Width,unsigned Height,unsigned Quality);
 
 void Img_MoveImageToDefinitiveDirectory (struct Image *Image);
 void Img_ShowImage (struct Image *Image,const char *ClassImg);
