@@ -2298,10 +2298,10 @@ mysql> DESCRIBE tst_answers;
 | Answer     | text          | NO   |     | NULL    |       |
 | Feedback   | text          | NO   |     | NULL    |       |
 | ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | text          | NO   |     | NULL    |       |
+| ImageTitle | varchar(255)  | NO   |     | NULL    |       |
 | Correct    | enum('N','Y') | NO   |     | NULL    |       |
 +------------+---------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
+7 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
                    "QstCod INT NOT NULL,"
@@ -2309,7 +2309,7 @@ mysql> DESCRIBE tst_answers;
                    "Answer TEXT NOT NULL,"
                    "Feedback TEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle TEXT NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "Correct ENUM('N','Y') NOT NULL,"
                    "INDEX(QstCod))");
 
@@ -2424,7 +2424,7 @@ mysql> DESCRIBE tst_questions;
 | Stem            | text                                                                      | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
 | ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
-| ImageTitle      | text                                                                      | NO   |     | NULL    |                |
+| ImageTitle      | varchar(255)                                                              | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
@@ -2440,7 +2440,7 @@ mysql> DESCRIBE tst_questions;
                    "Stem TEXT NOT NULL,"
                    "Feedback TEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle TEXT NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "NumHits INT NOT NULL DEFAULT 0,"
                    "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
                    "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"

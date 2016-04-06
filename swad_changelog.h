@@ -126,18 +126,24 @@
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Fix bug in marks reported by Francisco Ocaña
 // TODO: In Statistics > Degrees, show only degrees with students
+// TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.182 (2016-04-06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.183 (2016-04-06)"
 #define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.183:   Apr 06, 2016	Change in length of title/attribution of images. (198704 lines)
+					2 changes necessary in database:
+ALTER TABLE tst_questions CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL;
+ALTER TABLE tst_answers CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL;
+
         Version 15.182:   Apr 06, 2016	Get fields title/attribution of images from form. (198610 lines)
 					4 changes necessary in database:
 ALTER TABLE tst_questions CHANGE COLUMN Image ImageName VARCHAR(43) NOT NULL;

@@ -306,7 +306,14 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
    double FloatNum[2];
 
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
-
+   /*
+   row[ 0] AnsInd
+   row[ 1] Answer
+   row[ 2] Feedback
+   row[ 3] ImageName
+   row[ 4] ImageTitle
+   row[ 5] Correct
+   */
    /***** Write the answers *****/
    switch (Gbl.Test.AnswerType)
      {
@@ -355,16 +362,18 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             fprintf (Gbl.Test.XML.FileXML,"<option");
             if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
                fprintf (Gbl.Test.XML.FileXML," correct=\"%s\"",
-                        Str_ConvertToUpperLetter (row[2][0]) == 'Y' ? "yes" :
+                        Str_ConvertToUpperLetter (row[5][0]) == 'Y' ? "yes" :
                                                                       "no");
             fprintf (Gbl.Test.XML.FileXML,">%s"
         	                          "<text>%s</text>%s",
                      Txt_NEW_LINE,
                      row[1],Txt_NEW_LINE);
-            if (row[3])
-	       if (row[3][0])
+
+            /* Write the feedback (row[2]) */
+            if (row[2])
+	       if (row[2][0])
 		  fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
-			   row[3],Txt_NEW_LINE);
+			   row[2],Txt_NEW_LINE);
             fprintf (Gbl.Test.XML.FileXML,"</option>%s",
                      Txt_NEW_LINE);
            }

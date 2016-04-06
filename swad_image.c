@@ -79,11 +79,11 @@ void Img_ResetImageTitle (struct Image *Image)
   }
 
 /*****************************************************************************/
-/************ Get image title from a string and copy to struct ***************/
+/********* Get image name and title from strings and copy to struct **********/
 /*****************************************************************************/
 
-void Img_GetImageNameTitle (const char *Name,const char *Title,
-                            struct Image *Image)
+void Img_GetImageNameAndTitle (const char *Name,const char *Title,
+                               struct Image *Image)
   {
    size_t Length;
 
@@ -97,7 +97,11 @@ void Img_GetImageNameTitle (const char *Name,const char *Title,
       if (Image->Name[0])	// There is an image
 	 if (Title[0])
 	   {
+	    /* Get and limit length of the title */
 	    Length = strlen (Title);
+	    if (Length > Img_MAX_BYTES_TITLE)
+	       Length = Img_MAX_BYTES_TITLE;
+
 	    if ((Image->Title = (char *) malloc (Length+1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for image title.");
 	    strncpy (Image->Title,Title,Length);
@@ -195,7 +199,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,
    char FileNameImgOrig[PATH_MAX+1];	// Full name of original uploaded file
    char FileNameImgTmp[PATH_MAX+1];	// Full name of temporary processed file
    bool WrongType = false;
-   char Title[Cns_MAX_BYTES_TEXT+1];
+   char Title[Img_MAX_BYTES_TITLE+1];
    size_t Length;
 
    /***** Rest image file status *****/
@@ -263,7 +267,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,
       unlink (FileNameImgOrig);
 
       /***** Get image title from form *****/
-      Par_GetParToHTML (ParamTitle,Title,Cns_MAX_BYTES_TEXT);	// TODO: Create a function to get only the length of a parameter
+      Par_GetParToHTML (ParamTitle,Title,Img_MAX_BYTES_TITLE);	// TODO: Create a function to get only the length of a parameter
       Length = strlen (Title);
       if (Length > 0)
 	{
@@ -386,9 +390,13 @@ void Img_ShowImage (struct Image *Image,const char *ClassImg)
 
       /***** Show image *****/
       fprintf (Gbl.F.Out,"<div>"
-			 "<img src=\"%s\" alt=\"\" class=\"%s\"/>"
-			 "</div>",
+			 "<img src=\"%s\" class=\"%s\" alt=\"\"",
 	       URL,ClassImg);
+      if (Image->Title)
+         if (Image->Title[0])
+	    fprintf (Gbl.F.Out," title=\"%s\"",Image->Title);
+      fprintf (Gbl.F.Out," />"
+			 "</div>");
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_Image_not_found);

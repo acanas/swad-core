@@ -31,6 +31,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+#define Img_MAX_BYTES_TITLE 255
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -93,8 +95,8 @@ struct Image
 /*****************************************************************************/
 
 void Img_ResetImageTitle (struct Image *Image);
-void Img_GetImageNameTitle (const char *Name,const char *Title,
-                            struct Image *Image);
+void Img_GetImageNameAndTitle (const char *Name,const char *Title,
+                               struct Image *Image);
 
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
                            void (*GetImageNameFromDB) (unsigned NumOpt,struct Image *Image),
