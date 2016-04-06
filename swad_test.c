@@ -1010,8 +1010,10 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
    else	// Assessing exam / Viewing old exam
      {
       Tst_WriteAnswersOfAQstAssessExam (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
+
+      /* Write question feedback (row[5]) */
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
-         Tst_WriteQstFeedback (row[6],"TEST_EXA_LIGHT");
+         Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
      }
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
