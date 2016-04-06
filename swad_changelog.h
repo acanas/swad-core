@@ -132,13 +132,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.184.2 (2016-04-06)"
+#define Log_PLATFORM_VERSION	"SWAD 15.184.3 (2016-04-06)"
 #define CSS_FILE		"swad15.178.2.css"
 #define JS_FILE			"swad15.178.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.184.3: Apr 06, 2016	Fixed minor bug in layout of test exam. (198677 lines)
         Version 15.184.2: Apr 06, 2016	Fixed minor bug in layout of test exam. (198679 lines)
         Version 15.184.1: Apr 06, 2016	Fixed bug when removing a test question.
 					Code refactoring in tests. (198680 lines)
