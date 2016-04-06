@@ -260,6 +260,7 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
    if (fread (MIMEType,sizeof (char),Param->ContentType.Length,Gbl.F.Tmp) !=
        Param->ContentType.Length)
       Lay_ShowErrorAndExit ("Error while getting content type.");
+   MIMEType[Param->ContentType.Length] = '\0';
 
    return Param;
   }

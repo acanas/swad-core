@@ -193,16 +193,17 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
      {
       row = mysql_fetch_row (mysql_res);
       /*
-      row[0] QstCod
-      row[1] UNIX_TIMESTAMP(EditTime)
-      row[2] AnsType
-      row[3] Shuffle
-      row[4] Stem
-      row[5] ImageName
-      row[6] Feedback
-      row[7] NumHits
-      row[8] NumHitsNotBlank
-      row[9] Score
+      row[ 0] QstCod
+      row[ 1] UNIX_TIMESTAMP(EditTime)
+      row[ 2] AnsType
+      row[ 3] Shuffle
+      row[ 4] Stem
+      row[ 5] Feedback
+      row[ 6] ImageName
+      row[ 7] ImageTitle
+      row[ 8] NumHits
+      row[ 9] NumHitsNotBlank
+      row[10] Score
       */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -222,11 +223,11 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       fprintf (Gbl.Test.XML.FileXML,"<stem>%s</stem>%s",
                row[4],Txt_NEW_LINE);
 
-      /* Write the feedback (row[6]), that is in HTML format */
-      if (row[6])
-	 if (row[6][0])
+      /* Write the feedback (row[5]), that is in HTML format */
+      if (row[5])
+	 if (row[5][0])
 	    fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
-		     row[6],Txt_NEW_LINE);
+		     row[5],Txt_NEW_LINE);
 
       /* Write the answers of this question.
          Shuffle can be enabled or disabled (row[3]) */
@@ -411,7 +412,7 @@ void TsI_ImportQstsFromXML (void)
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNameXMLSrc,MIMEType);
 
-   /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
+   /* Check if the file type is XML */
    if (strcmp (MIMEType,"text/xml"))
       if (strcmp (MIMEType,"application/xml"))
 	 if (strcmp (MIMEType,"application/octet-stream"))
