@@ -551,22 +551,21 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
             Lay_ShowErrorAndExit ("Wrong type of answer.");
 
          /* Get tags */
-         Gbl.Test.NumTags = 0;
-         for (TagsElem = QuestionElem->FirstChild;
+         for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
               TagsElem != NULL;
               TagsElem = TagsElem->NextBrother)
             if (!strcmp (TagsElem->TagName,"tags"))
               {
                for (TagElem = TagsElem->FirstChild;
-                    TagElem != NULL && Gbl.Test.NumTags < Tst_MAX_TAGS_PER_QUESTION;
+                    TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
                     TagElem = TagElem->NextBrother)
                   if (!strcmp (TagElem->TagName,"tag"))
                     {
                      if (TagElem->Content)
                        {
-                        strncpy (Gbl.Test.TagText[Gbl.Test.NumTags],TagElem->Content,Tst_MAX_BYTES_TAG);
-                        Gbl.Test.TagText[Gbl.Test.NumTags][Tst_MAX_BYTES_TAG] = '\0';
-                        Gbl.Test.NumTags++;
+                        strncpy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],TagElem->Content,Tst_MAX_BYTES_TAG);
+                        Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num][Tst_MAX_BYTES_TAG] = '\0';
+                        Gbl.Test.Tags.Num++;
                        }
                     }
                break;	// Only first element "tags"
@@ -1051,12 +1050,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    /***** Write the question tags *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
-   if (Gbl.Test.NumTags)
+   if (Gbl.Test.Tags.Num)
      {
       /***** Write the tags *****/
       fprintf (Gbl.F.Out,"<table>");
       for (NumTag = 0;
-	   NumTag < Gbl.Test.NumTags;
+	   NumTag < Gbl.Test.Tags.Num;
 	   NumTag++)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"%s LEFT_TOP\">"
@@ -1067,7 +1066,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                             "</td>"
                             "</tr>",
                   ClassData,
-                  ClassData,Gbl.Test.TagText[NumTag]);
+                  ClassData,Gbl.Test.Tags.Txt[NumTag]);
       fprintf (Gbl.F.Out,"</table>");
      }
    else	// no tags for this question

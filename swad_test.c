@@ -1601,7 +1601,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
-   if (Gbl.Test.AllTags)
+   if (Gbl.Test.Tags.All)
     fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag')\" />"
                       " %s"
@@ -1636,9 +1636,9 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 	                 "<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
 	       row[1]);
-      if (Gbl.Test.TagsList)
+      if (Gbl.Test.Tags.List)
         {
-         Ptr = Gbl.Test.TagsList;
+         Ptr = Gbl.Test.Tags.List;
          while (*Ptr)
            {
             Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
@@ -2332,7 +2332,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
                   "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
                   "tst_questions.Score"
                  " FROM tst_questions");
-   if (!Gbl.Test.AllTags)
+   if (!Gbl.Test.Tags.All)
       strcat (Query,",tst_question_tags,tst_tags");
 
    strcat (Query," WHERE tst_questions.CrsCod='");
@@ -2347,7 +2347,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    strcat (Query,"')");
 
    /* Add the tags selected */
-   if (!Gbl.Test.AllTags)
+   if (!Gbl.Test.Tags.All)
      {
       strcat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	            " AND tst_question_tags.TagCod=tst_tags.TagCod"
@@ -2356,7 +2356,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
       strcat (Query,"'");
       LengthQuery = strlen (Query);
       NumItemInList = 0;
-      Ptr = Gbl.Test.TagsList;
+      Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
@@ -2487,12 +2487,12 @@ static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
 	    Gbl.CurrentCrs.Crs.CrsCod,
 	    Gbl.CurrentCrs.Crs.CrsCod);
 
-   if (!Gbl.Test.AllTags) // User has not selected all the tags
+   if (!Gbl.Test.Tags.All) // User has not selected all the tags
      {
       /* Add selected tags */
       LengthQuery = strlen (Query);
       NumItemInList = 0;
-      Ptr = Gbl.Test.TagsList;
+      Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
@@ -2882,10 +2882,10 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 void Tst_WriteParamEditQst (void)
   {
    Par_PutHiddenParamChar   ("AllTags",
-                             Gbl.Test.AllTags ? 'Y' :
+                             Gbl.Test.Tags.All ? 'Y' :
                         	                'N');
    Par_PutHiddenParamString ("ChkTag",
-                             Gbl.Test.TagsList ? Gbl.Test.TagsList :
+                             Gbl.Test.Tags.List ? Gbl.Test.Tags.List :
                         	                 "");
    Par_PutHiddenParamChar   ("AllAnsTypes",
                              Gbl.Test.AllAnsTypes ? 'Y' :
@@ -3099,10 +3099,6 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
   {
    MYSQL_RES *mysql_res;
 
-   /***** Create test question *****/
-   Tst_QstConstructor ();
-   Gbl.Test.QstCod = QstCod;
-
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
    /*
@@ -3138,9 +3134,6 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
@@ -4154,12 +4147,12 @@ static bool Tst_GetParamsTst (void)
    /***** Tags *****/
    /* Get parameter that indicates whether all tags are selected */
    Par_GetParToText ("AllTags",YN,1);
-   Gbl.Test.AllTags = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Test.Tags.All = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /* Get the tags */
-   if ((Gbl.Test.TagsList = malloc (Tst_MAX_BYTES_TAGS_LIST+1)) == NULL)
+   if ((Gbl.Test.Tags.List = malloc (Tst_MAX_BYTES_TAGS_LIST+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store tags.");
-   Par_GetParMultiToText ("ChkTag",Gbl.Test.TagsList,Tst_MAX_BYTES_TAGS_LIST);
+   Par_GetParMultiToText ("ChkTag",Gbl.Test.Tags.List,Tst_MAX_BYTES_TAGS_LIST);
 
    /* Check number of tags selected */
    if (Tst_CountNumTagsInList () == 0)	// If no tags selected...
@@ -4282,10 +4275,10 @@ static int Tst_CountNumTagsInList (void)
    int NumTags = 0;
    char TagText[Tst_MAX_BYTES_TAG+1];
 
-   /***** Go over the list Gbl.Test.TagsList counting the number of tags *****/
-   if (Gbl.Test.TagsList)
+   /***** Go over the list Gbl.Test.Tags.List counting the number of tags *****/
+   if (Gbl.Test.Tags.List)
      {
-      Ptr = Gbl.Test.TagsList;
+      Ptr = Gbl.Test.Tags.List;
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
@@ -4322,10 +4315,11 @@ static int Tst_CountNumAnswerTypesInList (void)
 
 void Tst_FreeTagsList (void)
   {
-   if (Gbl.Test.TagsList)
+   if (Gbl.Test.Tags.List)
      {
-      free ((void *) Gbl.Test.TagsList);
-      Gbl.Test.TagsList = NULL;
+      free ((void *) Gbl.Test.Tags.List);
+      Gbl.Test.Tags.List = NULL;
+      Gbl.Test.Tags.Num = 0;
      }
   }
 
@@ -4453,7 +4447,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          row = mysql_fetch_row (mysql_res);
 
          fprintf (Gbl.F.Out,"<option value=\"%s\"",row[1]);
-         if (!strcasecmp (Gbl.Test.TagText[NumTag],row[1]))
+         if (!strcasecmp (Gbl.Test.Tags.Txt[NumTag],row[1]))
            {
   	    fprintf (Gbl.F.Out," selected=\"selected\"");
             TagNotFound = false;
@@ -4461,9 +4455,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          fprintf (Gbl.F.Out,">%s</option>",row[1]);
         }
       /* If it's a new tag received from the form */
-      if (TagNotFound && Gbl.Test.TagText[NumTag][0])
+      if (TagNotFound && Gbl.Test.Tags.Txt[NumTag][0])
          fprintf (Gbl.F.Out,"<option value=\"%s\" selected=\"selected\">%s</option>",
-                  Gbl.Test.TagText[NumTag],Gbl.Test.TagText[NumTag]);
+                  Gbl.Test.Tags.Txt[NumTag],Gbl.Test.Tags.Txt[NumTag]);
       fprintf (Gbl.F.Out,"<option value=\"\">[%s]</option>"
 	                 "</select>"
 	                 "</td>",
@@ -4475,7 +4469,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                          " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
-	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.TagText[NumTag],NumTag);
+	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.Tags.Txt[NumTag],NumTag);
 
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -4733,15 +4727,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 void Tst_QstConstructor (void)
   {
    unsigned NumOpt;
-   unsigned NumTag;
 
    Gbl.Test.QstCod = -1L;
-   for (NumTag = 0;
-	NumTag < Tst_MAX_TAGS_PER_QUESTION;
-	NumTag++)
-      Gbl.Test.TagText[NumTag][0] = '\0';
-   Gbl.Test.NumTags = 0;
-   Gbl.Test.TagsList = NULL;
    Gbl.Test.Stem.Text = NULL;
    Gbl.Test.Stem.Length = 0;
    Gbl.Test.Feedback.Text = NULL;
@@ -4933,8 +4920,8 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      strncpy (Gbl.Test.TagText[NumRow],row[0],Tst_MAX_BYTES_TAG);
-      Gbl.Test.TagText[NumRow][Tst_MAX_BYTES_TAG] = '\0';
+      strncpy (Gbl.Test.Tags.Txt[NumRow],row[0],Tst_MAX_BYTES_TAG);
+      Gbl.Test.Tags.Txt[NumRow][Tst_MAX_BYTES_TAG] = '\0';
      }
 
    /* Free structure that stores the query result */
@@ -5148,19 +5135,19 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	NumTag++)
      {
       sprintf (TagStr,"TagTxt%u",NumTag);
-      Par_GetParToText (TagStr,Gbl.Test.TagText[NumTag],Tst_MAX_BYTES_TAG);
+      Par_GetParToText (TagStr,Gbl.Test.Tags.Txt[NumTag],Tst_MAX_BYTES_TAG);
 
-      if (Gbl.Test.TagText[NumTag][0])
+      if (Gbl.Test.Tags.Txt[NumTag][0])
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           Gbl.Test.TagText[NumTag],Tst_MAX_BYTES_TAG,true);
+                           Gbl.Test.Tags.Txt[NumTag],Tst_MAX_BYTES_TAG,true);
          /* Check if not repeated */
          for (NumTagRead = 0;
               NumTagRead < NumTag;
               NumTagRead++)
-            if (!strcmp (Gbl.Test.TagText[NumTagRead],Gbl.Test.TagText[NumTag]))
+            if (!strcmp (Gbl.Test.Tags.Txt[NumTagRead],Gbl.Test.Tags.Txt[NumTag]))
               {
-               Gbl.Test.TagText[NumTag][0] = '\0';
+               Gbl.Test.Tags.Txt[NumTag][0] = '\0';
                break;
               }
         }
@@ -5282,11 +5269,11 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
      }
 
    /***** Adjust global variables related to this test question *****/
-   for (NumTag = 0, Gbl.Test.NumTags = 0;
+   for (NumTag = 0, Gbl.Test.Tags.Num = 0;
         NumTag < Tst_MAX_TAGS_PER_QUESTION;
         NumTag++)
-      if (Gbl.Test.TagText[NumTag][0])
-         Gbl.Test.NumTags++;
+      if (Gbl.Test.Tags.Txt[NumTag][0])
+         Gbl.Test.Tags.Num++;
    Gbl.Test.Stem.Text = Stem;
    Gbl.Test.Stem.Length = strlen (Gbl.Test.Stem.Text);
    Gbl.Test.Feedback.Text = Feedback;
@@ -5330,7 +5317,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    Gbl.Test.Answer.NumOptions = 0;
 
    /***** A question must have at least one tag *****/
-   if (!Gbl.Test.NumTags) // There are no tags with text
+   if (!Gbl.Test.Tags.Num) // There are no tags with text
      {
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_type_at_least_one_tag_for_the_question);
       return false;
@@ -5942,14 +5929,14 @@ static void Tst_InsertTagsIntoDB (void)
 
    /***** For each tag... *****/
    for (NumTag = 0, TagIdx = 0;
-        TagIdx < Gbl.Test.NumTags;
+        TagIdx < Gbl.Test.Tags.Num;
         NumTag++)
-      if (Gbl.Test.TagText[NumTag][0])
+      if (Gbl.Test.Tags.Txt[NumTag][0])
         {
          /***** Check if this tag exists for current course *****/
-         if ((TagCod = Tst_GetTagCodFromTagTxt (Gbl.Test.TagText[NumTag])) < 0)
+         if ((TagCod = Tst_GetTagCodFromTagTxt (Gbl.Test.Tags.Txt[NumTag])) < 0)
             /* This tag is new for current course. Add it to tags table */
-            TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.TagText[NumTag]);
+            TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
          sprintf (Query,"INSERT INTO tst_question_tags (QstCod,TagCod,TagInd)"

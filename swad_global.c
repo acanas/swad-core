@@ -386,6 +386,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
+   /* Statistics */
    Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
    Gbl.Stat.CountType   = Sta_TOTAL_CLICKS;
    Gbl.Stat.Role        = Sta_IDENTIFIED_USRS;
@@ -397,19 +398,24 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
+   /* Tests */
    Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
    Gbl.Test.NumQsts = Tst_CONFIG_DEFAULT_DEF_QUESTIONS;
    Gbl.Test.AllowTeachers = false;	// Must the exam be saved?
-   Gbl.Test.AllTags = Gbl.Test.AllAnsTypes = false;
-   Gbl.Test.TagsList = NULL;
+   Gbl.Test.AllAnsTypes = false;
    Gbl.Test.ListAnsTypes[0] = '\0';
 
+   Gbl.Test.Tags.Num  = 0;
+   Gbl.Test.Tags.All  = false;
+   Gbl.Test.Tags.List = NULL;
+
+   /* Forums */
    Gbl.Forum.ForumType = (For_ForumType_t) 0;
    Gbl.Forum.WhichForums = For_DEFAULT_WHICH_FORUMS;
    Gbl.Forum.SelectedOrderType = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
 
-   /* Related to user nickname */
+   /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';
 
    /* File browser */
@@ -423,7 +429,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.ColorRows[0] = "COLOR0";	// Darker
    Gbl.ColorRows[1] = "COLOR1";	// Lighter
 
-   /* Related to imported data from external site */
+   /* Imported data from external site */
    Gbl.Imported.ExternalUsrId[0] = '\0';
    Gbl.Imported.ExternalSesId[0] = '\0';
    Gbl.Imported.ExternalRole = Rol_UNKNOWN;

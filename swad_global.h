@@ -643,17 +643,20 @@ struct Globals
      {
       struct Tst_Config Config;
       long QstCod;
+      struct
+        {
+         unsigned Num;
+         bool All;
+         char *List;
+         char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG+1];
+        } Tags;
       Tst_AnswerType_t AnswerType;
-      char TagText[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG+1];
       unsigned NumQsts;
       long QstCodes[Tst_MAX_QUESTIONS_PER_EXAM];	// Codes of the sent/received questions in a test
       char StrIndexesOneQst[Tst_MAX_QUESTIONS_PER_EXAM][Tst_MAX_SIZE_INDEXES_ONE_QST+1];	// 0 1 2 3, 3 0 2 1, etc.
       char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_EXAM][Tst_MAX_SIZE_ANSWERS_ONE_QST+1];	// Answers selected by user
       bool AllowTeachers;	// Can teachers of this course see the exam?
-      bool AllTags;
       bool AllAnsTypes;
-      unsigned NumTags;
-      char *TagsList;
       struct
         {
          char *Text;
