@@ -132,13 +132,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.187.1 (2016-04-08)"
-#define CSS_FILE		"swad15.186.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.187.2 (2016-04-08)"
+#define CSS_FILE		"swad15.187.2.css"
 #define JS_FILE			"swad15.186.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.187.2: Apr 08, 2016	Changed CSS of alerts. (198873 lines)
         Version 15.187.1: Apr 08, 2016	Code optimization in function to change format of string. (198872 lines)
         Version 15.187:   Apr 07, 2016	Fixed bug in forms sent using content type multipart/form-data. (198938 lines)
         Version 15.186:   Apr 07, 2016	Changes in edition of a test question. (198840 lines)
