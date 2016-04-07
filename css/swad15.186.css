@@ -1728,7 +1728,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ANS		{color:#404040; font-size:13pt; font-weight:bold;}
 .ANS_OK		{color:#008000; font-size:13pt; font-weight:bold;}
 .ANS_BAD	{color:red;     font-size:13pt; font-weight:bold;}
-.ANS_STR	{box-sizing:border-box; width:625px;}
+.ANS_STR	{box-sizing:border-box; width:600px;}
 .TEST_SUBTITLE
 	{
 	margin:10px;
@@ -1752,14 +1752,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EDI_ANS_LEFT_COL
 	{
 	box-sizing:border-box;
-	width:74px;
+	width:50px;
 	text-align:left;
+	vertical-align:top;
+	}
+.TEST_EDI_ANS_CENTER_COL
+	{
+	box-sizing:border-box;
+	width:50px;
+	text-align:right;
 	vertical-align:top;
 	}
 .TEST_EDI_ANS_RIGHT_COL
 	{
 	box-sizing:border-box;
-	width:630px;
+	width:604px;
 	text-align:left;
 	vertical-align:top;
 	}

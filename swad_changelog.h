@@ -132,14 +132,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.185.4 (2016-04-07)"
-#define CSS_FILE		"swad15.184.7.css"
-#define JS_FILE			"swad15.184.8.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.186 (2016-04-07)"
+#define CSS_FILE		"swad15.186.css"
+#define JS_FILE			"swad15.186.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.185.4: Apr 07, 2016	Change in edition of a test question. (198832 lines)
+        Version 15.186:   Apr 07, 2016	Changes in edition of a test question. (198840 lines)
+        Version 15.185.4: Apr 07, 2016	Changes in edition of a test question. (198832 lines)
         Version 15.185.3: Apr 07, 2016	Changed icons to expand / contract. (198801 lines)
 Copy file icon/expand64x64.png to icon directory
 Copy file icon/contract64x64.png to icon directory

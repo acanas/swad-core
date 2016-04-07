@@ -642,7 +642,14 @@ function contractTextarea (textareaElem,idButton,rows) {
 	}
 }
 
-//Change display of a element (hidden or visible)
+// Change display of a test answer
+function toggleAnswer (option) {
+	toggleDisplay('ans_' + option);
+	toggleDisplay('con_' + option);
+	toggleDisplay('exp_' + option);
+}
+
+// Change display of a element (hidden or visible)
 function toggleDisplay (elementID) {
 	var stl = document.getElementById (elementID).style;
 	stl.display = (stl.display === 'none') ? '' : 'none';
