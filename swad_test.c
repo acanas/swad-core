@@ -4382,6 +4382,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    unsigned NumTag;
    bool TagNotFound;
    bool OptionsDisabled;
+   bool AnswerHasContent;
    char ParamAction[32];
    char ParamFile[32];
    char ParamTitle[32];
@@ -4630,9 +4631,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
      {
       Gbl.RowEvenOdd = NumOpt % 2;
 
-      /* Selectors and label with the letter of the answer */
+      /***** Left column: selectors and letter of the answer *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s LEFT_TOP COLOR%u\">"
+	                 "<td class=\"%s TEST_EDI_ANS_LEFT_COL COLOR%u\">"
 	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
 	       The_ClassForm[Gbl.Prefs.Theme],Gbl.RowEvenOdd,
 	       NumOpt);
@@ -4647,18 +4648,38 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       if (Gbl.Test.Answer.Options[NumOpt].Correct)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />&nbsp;%c)&nbsp;</td>",
+      fprintf (Gbl.F.Out," />"
+	                 "&nbsp;"
+                         "<a href=\"\" class=\"%s\""
+                         " onclick=\"toggleDisplay('answer_%u');return false;\" />"
+	                 "%c)"
+	                 "</a>"
+                         "</td>",
+               The_ClassForm[Gbl.Prefs.Theme],
+               NumOpt,
                'a' + (char) NumOpt);
 
-      /* Answer text */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
-	                 "<textarea name=\"AnsStr%u\" class=\"ANS_STR\" rows=\"5\"",
+      /***** Right column: content of the answer *****/
+      AnswerHasContent = false;
+      if (Gbl.Test.Answer.Options[NumOpt].Text)
+	 if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+	    AnswerHasContent = true;
+
+      fprintf (Gbl.F.Out,"<td class=\"TEST_EDI_ANS_RIGHT_COL COLOR%u\">"
+	                 "<div id=\"answer_%u\"",
 	       Gbl.RowEvenOdd,
 	       NumOpt);
+      if (!AnswerHasContent)	// Answer does not have content
+	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide column
+      fprintf (Gbl.F.Out,">");
+
+      /* Answer text */
+      fprintf (Gbl.F.Out,"<textarea name=\"AnsStr%u\""
+	                 " class=\"ANS_STR\" rows=\"5\"",NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out,">");
-      if (Gbl.Test.Answer.Options[NumOpt].Text)
+      if (AnswerHasContent)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
       fprintf (Gbl.F.Out,"</textarea>");
 
@@ -4683,8 +4704,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       if (Gbl.Test.Answer.Options[NumOpt].Feedback)
          if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
             fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
-      fprintf (Gbl.F.Out,"</textarea>"
-	                 "</td>"
+      fprintf (Gbl.F.Out,"</textarea>");
+
+      /* End of right column */
+      fprintf (Gbl.F.Out,"</div>"
+                         "</td>"
 	                 "</tr>");
      }
    fprintf (Gbl.F.Out,"</table>"

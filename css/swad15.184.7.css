@@ -1722,13 +1722,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .STATUS_RED_LIGHT	{color:#F98A8A; font-size:12pt;}
 
 /********************************** Tests ************************************/
-.TAG_SEL	{width:347px;}
-.TAG_TXT	{width:347px;}
-.STEM		{width:700px;}
+.TAG_SEL	{box-sizing:border-box; width:346px;}
+.TAG_TXT	{box-sizing:border-box; width:346px;}
+.STEM		{box-sizing:border-box; width:700px;}
 .ANS		{color:#404040; font-size:13pt; font-weight:bold;}
 .ANS_OK		{color:#008000; font-size:13pt; font-weight:bold;}
 .ANS_BAD	{color:red;     font-size:13pt; font-weight:bold;}
-.ANS_STR	{width:630px;}
+.ANS_STR	{box-sizing:border-box; width:625px;}
 .TEST_SUBTITLE
 	{
 	margin:10px;
@@ -1749,6 +1749,20 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_IMG_EDIT_LIST_ANS		{width:225px; border-radius:2px; margin:5px 0;}
 .TEST_IMG_EDIT_ONE_STEM		{width:600px; border-radius:4px;}
 .TEST_IMG_EDIT_ONE_ANS		{width:450px; border-radius:4px;}
+.TEST_EDI_ANS_LEFT_COL
+	{
+	box-sizing:border-box;
+	width:74px;
+	text-align:left;
+	vertical-align:top;
+	}
+.TEST_EDI_ANS_RIGHT_COL
+	{
+	box-sizing:border-box;
+	width:630px;
+	text-align:left;
+	vertical-align:top;
+	}
 
 /******************************* Time table **********************************/
 #timetable
