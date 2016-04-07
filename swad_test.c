@@ -4632,7 +4632,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /* Selectors and label with the letter of the answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td rowspan=\"3\" class=\"%s LEFT_TOP COLOR%u\">"
+	                 "<td class=\"%s LEFT_TOP COLOR%u\">"
 	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
 	       The_ClassForm[Gbl.Prefs.Theme],Gbl.RowEvenOdd,
 	       NumOpt);
@@ -4660,14 +4660,9 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       fprintf (Gbl.F.Out,">");
       if (Gbl.Test.Answer.Options[NumOpt].Text)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
-      fprintf (Gbl.F.Out,"</textarea>"
-	                 "</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</textarea>");
 
       /* Image */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_TOP COLOR%u\">",
-	       Gbl.RowEvenOdd);
       sprintf (ParamAction,"ImgAct%u",NumOpt);
       sprintf (ParamFile  ,"FilImg%u",NumOpt);
       sprintf (ParamTitle ,"TitImg%u",NumOpt);
@@ -4676,15 +4671,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                                  "ANS_STR",	// Title / attribution
                                  ParamAction,ParamFile,ParamTitle,
                                  OptionsDisabled);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_TOP COLOR%u\">"
-                         "<div class=\"%s\">%s (%s):</div>"
+      fprintf (Gbl.F.Out,"<div class=\"%s\">%s (%s):</div>"
 	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
-	       Gbl.RowEvenOdd,
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
 	       NumOpt);
       if (OptionsDisabled)
