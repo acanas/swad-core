@@ -1601,7 +1601,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Test.Tags.All)
-    fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag')\" />"
                       " %s"
                       "</td>"
@@ -4372,6 +4372,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    extern const char *Txt_Real_number_between_A_and_B_2;
    extern const char *Txt_TF_QST[2];
    extern const char *Txt_Shuffle;
+   extern const char *Txt_Expand;
+   extern const char *Txt_Contract;
    extern const char *Txt_Save;
    extern const char *Txt_Create_question;
    char Title[512];
@@ -4633,6 +4635,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
      {
       Gbl.RowEvenOdd = NumOpt % 2;
 
+      AnswerHasContent = false;
+      if (Gbl.Test.Answer.Options[NumOpt].Text)
+	 if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+	    AnswerHasContent = true;
+
       /***** Left column: selectors and letter of the answer *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s TEST_EDI_ANS_LEFT_COL COLOR%u\">"
@@ -4650,23 +4657,50 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       if (Gbl.Test.Answer.Options[NumOpt].Correct)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "&nbsp;"
-                         "<a href=\"\" class=\"%s\""
-                         " onclick=\"toggleDisplay('answer_%u');return false;\" />"
-	                 "%c)"
-	                 "</a>"
-                         "</td>",
-               The_ClassForm[Gbl.Prefs.Theme],
-               NumOpt,
+      fprintf (Gbl.F.Out," />&nbsp;%c)&nbsp;",
                'a' + (char) NumOpt);
 
-      /***** Right column: content of the answer *****/
-      AnswerHasContent = false;
-      if (Gbl.Test.Answer.Options[NumOpt].Text)
-	 if (Gbl.Test.Answer.Options[NumOpt].Text[0])
-	    AnswerHasContent = true;
+      // Icon to expand
+      sprintf (Gbl.Title,"%s %c",Txt_Expand,'a' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"<div id=\"expand_%u\"",
+               NumOpt);
+      if (AnswerHasContent)	// Answer does not have content
+	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
+      fprintf (Gbl.F.Out,">"
+	                 "<a href=\"\""
+                         " onclick=\"toggleDisplay('answer_%u');toggleDisplay('expand_%u');toggleDisplay('contract_%u');return false;\" />"
+                         "<img src=\"%s/expand64x64.png\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON20x20B\" />"
+	                 "</a>"
+	                 "</div>",
+               NumOpt,NumOpt,NumOpt,
+	       Gbl.Prefs.IconsURL,
+	       Gbl.Title,
+	       Gbl.Title);
 
+      // Icon to contract
+      sprintf (Gbl.Title,"%s %c",Txt_Contract,'a' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"<div id=\"contract_%u\"",
+               NumOpt);
+      if (!AnswerHasContent)	// Answer does not have content
+	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
+      fprintf (Gbl.F.Out,">"
+	                 "<a href=\"\""
+                         " onclick=\"toggleDisplay('answer_%u');toggleDisplay('contract_%u');toggleDisplay('expand_%u');return false;\" />"
+                         "<img src=\"%s/contract64x64.png\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICON20x20B\" />"
+	                 "</a>"
+	                 "</div>",
+               NumOpt,NumOpt,NumOpt,
+	       Gbl.Prefs.IconsURL,
+	       Gbl.Title,
+	       Gbl.Title);
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Right column: content of the answer *****/
       fprintf (Gbl.F.Out,"<td class=\"TEST_EDI_ANS_RIGHT_COL COLOR%u\">"
 	                 "<div id=\"answer_%u\"",
 	       Gbl.RowEvenOdd,

@@ -5339,8 +5339,8 @@ static void Brw_PutIconPasteOff (void)
 static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_t ExpandTree,
                                                   const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
-   extern const char *Txt_Expand_FOLDER_X;
-   extern const char *Txt_Contract_FOLDER_X;
+   extern const char *Txt_Expand;
+   extern const char *Txt_Contract;
    char Anchor[32];
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -5379,8 +5379,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                break;
            }
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
-         sprintf (Gbl.Title,Txt_Expand_FOLDER_X,FileNameToShow);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand16x16.gif\""
+         sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON20x20B\" />",
                   Gbl.Prefs.IconsURL,
@@ -5411,8 +5411,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                break;
            }
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
-         sprintf (Gbl.Title,Txt_Contract_FOLDER_X,FileNameToShow);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract16x16.gif\""
+         sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICON20x20B\" />",
                   Gbl.Prefs.IconsURL,

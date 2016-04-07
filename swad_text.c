@@ -4995,25 +4995,25 @@ const char *Txt_Continue =
 	"Continuar";
 #endif
 
-const char *Txt_Contract_FOLDER_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Contract =	// As a verb
 #if   L==1
-	"Contreure %s";
+	"Contreure";
 #elif L==2
-	"Zusammenziehen %s";
+	"Zusammenziehen";
 #elif L==3
-	"Contract %s";
+	"Contract";
 #elif L==4
-	"Contraer %s";
+	"Contraer";
 #elif L==5
-	"Contracter %s";
+	"Contracter";
 #elif L==6
-	"Contraer %s";	// Okoteve traducción
+	"Contraer";	// Okoteve traducción
 #elif L==7
-	"Contratto %s";
+	"Contratto";
 #elif L==8
-	"Umowy %s";
+	"Umowy";
 #elif L==9
-	"Contrair %s";
+	"Contrair";
 #endif
 
 const char *Txt_Control_of_class_attendance =
@@ -10943,25 +10943,25 @@ const char *Txt_Existing_question =
 	"Quest&atilde;o existente";
 #endif
 
-const char *Txt_Expand_FOLDER_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Expand =
 #if   L==1
-	"Expandir %s";
+	"Expandir";
 #elif L==2
-	"Erweitern %s";
+	"Erweitern";
 #elif L==3
-	"Expand %s";
+	"Expand";
 #elif L==4
-	"Expandir %s";
+	"Expandir";
 #elif L==5
-	"&Eacute;largir %s";
+	"&Eacute;largir";
 #elif L==6
-	"Expandir %s";	// Okoteve traducción
+	"Expandir";	// Okoteve traducción
 #elif L==7
-	"Espandere %s";
+	"Espandere";
 #elif L==8
-	"Rozwin %s";
+	"Rozwin";
 #elif L==9
-	"Expandir %s";
+	"Expandir";
 #endif
 
 const char *Txt_Export_questions =
