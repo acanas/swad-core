@@ -969,50 +969,146 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
          switch (ChangeFrom)
            {
             case Str_FROM_FORM:
-               switch ((unsigned char) *PtrSrc)
-                 {
-                  case '+':        /***** Change every '+' to a space *****/
-                     IsSpecialChar = true;
-                     LengthSpecStrSrc = 1;
-                     SpecialChar = 0x20;
-                     break;
-                  case '%':        /***** Change "%XX" --> "&#decimal_number;" *****/
-                     IsSpecialChar = true;
-                     sscanf (PtrSrc+1,"%2X",&SpecialChar);
-                     LengthSpecStrSrc = 3;
-                     break;
-                  case '\'':       /***** Change "'" --> "&#39;" to avoid SQL code injection *****/
-                     IsSpecialChar = true;
-                     LengthSpecStrSrc = 1;
-                     SpecialChar = 0x27;
-                     break;
-                  case '\\':
-                     IsSpecialChar = true;
-                     LengthSpecStrSrc = 1;
-                     SpecialChar = 0x5C;
-                     break;
-                  default:
-                     IsSpecialChar = false;
-                     NumPrintableCharsFromReturn++;
-                     ThereIsSpaceChar = false;
-                     break;
+               if (Gbl.ContentReceivedByCGI == Act_CONTENT_DATA)
+        	 {
+        	  // The form contained data and was sent with content type multipart/form-data
+		  switch ((unsigned char) *PtrSrc)
+		    {
+		     case 0x20:	/* Space */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x20;
+			break;
+		     case 0x22:	/* Change double comilla --> "&#34;" */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x22;
+			break;
+		     case 0x23:	/* '#' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x23;
+			break;
+		     case 0x26:	/* Change '&' --> "&#38;" */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x26;
+			break;
+		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x27;
+			break;
+		     case 0x2C:	/* ',' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x2C;
+			break;
+		     case 0x2F:	/* '/' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x2F;
+			break;
+		     case 0x3A:	/* ':' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x3A;
+			break;
+		     case 0x3B:	/* ';' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x3B;
+			break;
+		     case 0x3C:	/* '<' --> "&#60;" */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x3C;
+			break;
+		     case 0x3E:	/* '>' --> "&#62;" */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x3E;
+			break;
+		     case 0x3F:	/* '?' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x3F;
+			break;
+		     case 0x40:	/* '@' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x40;
+			break;
+		     case 0x5C:	/* '\\' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x5C;
+			break;
+		     default:
+			if ((unsigned char) *PtrSrc < 0x20 ||
+			    (unsigned char) *PtrSrc > 0x7F)
+			  {
+			   IsSpecialChar = true;
+			   LengthSpecStrSrc = 1;
+			   SpecialChar = (unsigned int) (unsigned char) *PtrSrc;
+			  }
+			else
+			  {
+			   IsSpecialChar = false;
+			   NumPrintableCharsFromReturn++;
+			   ThereIsSpaceChar = false;
+			  }
+			break;
+		    }
+        	 }
+               else // Gbl.ContentReceivedByCGI == Act_CONTENT_NORM
+        	 {
+        	  // The form contained text and was sent with content type application/x-www-form-urlencoded
+		  switch ((unsigned char) *PtrSrc)
+		    {
+		     case '+':	/* Change every '+' to a space */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x20;
+			break;
+		     case '%':	/* Change "%XX" --> "&#decimal_number;" */
+			IsSpecialChar = true;
+			sscanf (PtrSrc+1,"%2X",&SpecialChar);
+			LengthSpecStrSrc = 3;
+			break;
+		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x27;
+			break;
+		     case 0x5C:	/* '\\' */
+			IsSpecialChar = true;
+			LengthSpecStrSrc = 1;
+			SpecialChar = 0x5C;
+			break;
+		     default:
+			IsSpecialChar = false;
+			NumPrintableCharsFromReturn++;
+			ThereIsSpaceChar = false;
+			break;
+		    }
                  }
                break;
             case Str_FROM_HTML:
             case Str_FROM_TEXT:
                switch ((unsigned char) *PtrSrc)
                  {
-                  case 0x20:       /***** Change every ' ' to a space *****/
+                  case 0x20:	/* Space */
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
                      SpecialChar = 0x20;
                      break;
-                  case '\'':       /***** Change "'" --> "&#39;" to avoid SQL code injection *****/
+                  case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
                      SpecialChar = 0x27;
                      break;
-                  case '\\':
+                  case 0x5C:	/* '\\' */
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
                      SpecialChar = 0x5C;

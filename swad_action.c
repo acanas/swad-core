@@ -4416,7 +4416,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
 	}
       if (Act_Actions[NextAction].ContentType == Act_CONTENT_DATA)
 	 fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
-      fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out," accept-charset=\"windows-1252\">");
 
       /* Put basic form parameters */
       Act_SetParamsForm (Params,NextAction,PutParameterLocationIfNoSesion);
