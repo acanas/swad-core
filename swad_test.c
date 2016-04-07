@@ -36,7 +36,6 @@
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
-#include <unistd.h>		// For unlink
 
 #include "swad_action.h"
 #include "swad_database.h"
@@ -249,8 +248,11 @@ static void Tst_RemAnsFromQst (void);
 static void Tst_RemTagsFromQst (void);
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
 
-static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,long QstCod);
-static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,long QstCod,unsigned AnsInd);
+static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod);
+static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
+static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
@@ -5491,12 +5493,12 @@ static void Tst_MoveImagesToDefinitiveDirectories (void)
    unsigned NumOpt;
 
    /****** Move image associated to question stem *****/
-   if (Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+   if (Gbl.Test.QstCod > 0 &&				// Question already exists
+       Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
       /* Remove possible file with the old image
 	 (the new image file is already processed
 	  and moved to the definitive directory) */
-      Tst_RemoveImgFilesFromStemOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
-                                        Gbl.Test.QstCod);
+      Tst_RemoveImgFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
 	Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
@@ -5511,13 +5513,12 @@ static void Tst_MoveImagesToDefinitiveDirectories (void)
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
 	{
-	 if (Gbl.Test.Answer.Options[NumOpt].Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+	 if (Gbl.Test.QstCod > 0 &&							// Question already exists
+             Gbl.Test.Answer.Options[NumOpt].Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
 	    /* Remove possible file with the old image
 	       (the new image file is already processed
 		and moved to the definitive directory) */
-	    Tst_RemoveImgFilesFromAnsOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
-					     Gbl.Test.QstCod,
-					     NumOpt);
+	    Tst_RemoveImgFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
 	 if ((Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
 	      Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
@@ -5748,11 +5749,8 @@ void Tst_RemoveQst (void)
    EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /***** Remove images associated to question *****/
-   Tst_RemoveImgFilesFromAnsOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
-                                    Gbl.Test.QstCod,
-                                    Tst_MAX_OPTIONS_PER_QUESTION);	// All answers
-   Tst_RemoveImgFilesFromStemOfQsts (Gbl.CurrentCrs.Crs.CrsCod,
-                                     Gbl.Test.QstCod);
+   Tst_RemoveAllImgFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   Tst_RemoveImgFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -6085,12 +6083,38 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/**** Remove one or more image files associated to stems of test questions ***/
+/******** Remove one file associated to one stem of one test question ********/
 /*****************************************************************************/
-// Use question code <= 0 to remove all images associated to stems of questions in course
 
-static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,
-                                              long QstCod)	// <= 0 ==> all questions in course
+static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
+  {
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get names of images associated to stems of test questions from database *****/
+   sprintf (Query,"SELECT ImageName FROM tst_questions"
+		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+	    QstCod,CrsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get test images"))
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****** Remove all image files associated to stems of all test questions *****/
+/****** in a course                                                      *****/
+/*****************************************************************************/
+
+static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -6099,14 +6123,9 @@ static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,
    unsigned NumImg;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   if (QstCod > 0)	// Only one question
-      sprintf (Query,"SELECT ImageName FROM tst_questions"
-		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
-	       QstCod,CrsCod);
-   else			// All questions in the course
-      sprintf (Query,"SELECT ImageName FROM tst_questions"
-	             " WHERE CrsCod='%ld'",
-	       CrsCod);
+   sprintf (Query,"SELECT ImageName FROM tst_questions"
+		  " WHERE CrsCod='%ld'",
+	    CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
 
    /***** Go over result removing image files *****/
@@ -6126,14 +6145,42 @@ static void Tst_RemoveImgFilesFromStemOfQsts (long CrsCod,
   }
 
 /*****************************************************************************/
-/** Remove one or more image files associated to answers of test questions ***/
+/**** Remove one image file associated to one answer of one test question ****/
 /*****************************************************************************/
-// Use question code <= 0 to remove all images associated to answers of questions in course
-// Use AnsInd == Tst_MAX_OPTIONS_PER_QUESTION to remove all images associated to answers of a question
 
-static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
-                                             long QstCod,	// <= 0 ==> all questions in course
-                                             unsigned AnsInd)	// == Tst_MAX_OPTIONS_PER_QUESTION ==> all answers of a question
+static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get names of images associated to answers of test questions from database *****/
+   sprintf (Query,"SELECT tst_answers.ImageName"
+		  " FROM tst_questions,tst_answers"
+		  " WHERE tst_questions.CrsCod='%ld'"	// Extra check
+		  " AND tst_questions.QstCod='%ld'"	// Extra check
+		  " AND tst_questions.QstCod=tst_answers.QstCod"
+		  " AND tst_answers.QstCod='%ld'"
+		  " AND tst_answers.AnsInd='%u'",
+	    CrsCod,QstCod,QstCod,AnsInd);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get test images"))
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*** Remove all image files associated to all answers of one test question ***/
+/*****************************************************************************/
+
+static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -6142,32 +6189,50 @@ static void Tst_RemoveImgFilesFromAnsOfQsts (long CrsCod,
    unsigned NumImg;
 
    /***** Get names of images associated to answers of test questions from database *****/
-   if (QstCod > 0)	// Only one question
+   sprintf (Query,"SELECT tst_answers.ImageName"
+		  " FROM tst_questions,tst_answers"
+		  " WHERE tst_questions.CrsCod='%ld'"	// Extra check
+		  " AND tst_questions.QstCod='%ld'"	// Extra check
+		  " AND tst_questions.QstCod=tst_answers.QstCod"
+		  " AND tst_answers.QstCod='%ld'",
+	    CrsCod,QstCod,QstCod);
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+
+   /***** Go over result removing image files *****/
+   for (NumImg = 0;
+	NumImg < NumImages;
+	NumImg++)
      {
-      if (AnsInd < Tst_MAX_OPTIONS_PER_QUESTION)	// Only one answer
-	 sprintf (Query,"SELECT tst_answers.ImageName"
-	                " FROM tst_questions,tst_answers"
-			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
-			" AND tst_questions.QstCod='%ld'"	// Extra check
-	                " AND tst_questions.QstCod=tst_answers.QstCod"
-	                " AND tst_answers.QstCod='%ld'"
-	                " AND tst_answers.AnsInd='%u'",
-		  CrsCod,QstCod,QstCod,AnsInd);
-      else					// All answers of a question
-	 sprintf (Query,"SELECT tst_answers.ImageName"
-	                " FROM tst_questions,tst_answers"
-			" WHERE tst_questions.CrsCod='%ld'"	// Extra check
-			" AND tst_questions.QstCod='%ld'"	// Extra check
-			" AND tst_questions.QstCod=tst_answers.QstCod"
-	                " AND tst_answers.QstCod='%ld'",
-		  CrsCod,QstCod,QstCod);
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
      }
-   else				// All answers of all questions in the course
-      sprintf (Query,"SELECT tst_answers.ImageName"
-	             " FROM tst_questions,tst_answers"
-	             " WHERE tst_questions.CrsCod='%ld'"
-	             " AND tst_questions.QstCod=tst_answers.QstCod",
-	       CrsCod);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/** Remove all image files associated to all answers of all test questions ***/
+/** in a course                                                            ***/
+/*****************************************************************************/
+
+static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumImages;
+   unsigned NumImg;
+
+   /***** Get names of images associated to answers of test questions from database *****/
+   sprintf (Query,"SELECT tst_answers.ImageName"
+		  " FROM tst_questions,tst_answers"
+		  " WHERE tst_questions.CrsCod='%ld'"
+		  " AND tst_questions.QstCod=tst_answers.QstCod",
+	    CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
 
    /***** Go over result removing image files *****/
@@ -7744,11 +7809,8 @@ void Tst_RemoveCrsTests (long CrsCod)
 
    /***** Remove files with images associated
           to test questions in the course *****/
-   Tst_RemoveImgFilesFromAnsOfQsts (CrsCod,
-                                    -1L,	// All answers of questions in the course
-                                    Tst_MAX_OPTIONS_PER_QUESTION);	// does not matter
-   Tst_RemoveImgFilesFromStemOfQsts (CrsCod,
-                                     -1L);	// All questions in the course
+   Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
    sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod='%ld'",

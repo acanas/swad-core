@@ -859,8 +859,8 @@ function enableDisableStrAns (elem, isDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
 
 	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (elem.name == ('AnsStr'  + i) ||
-			elem.name == ('FbStr'   + i))
+		if (elem.name == ('AnsStr' + i) ||
+			elem.name == ('FbStr'  + i))
 			elem.disabled = isDisabled;
 }
 
@@ -869,8 +869,9 @@ function enableDisableImgAns (elem, isDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
 
 	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (elem.name == ('ImgAct'  + i) ||
-			elem.name == ('FileImg' + i))
+		if (elem.name == ('ImgAct' + i) ||
+			elem.name == ('FilImg' + i) ||
+			elem.name == ('TitImg' + i))
 			elem.disabled = isDisabled;
 }
 
