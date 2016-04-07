@@ -40241,6 +40241,27 @@ const char *Txt_Tags =		// Tags used in test
 	"Descritores";
 #endif
 
+const char *Txt_Take_a_test =
+#if   L==1
+	"Fer un test";
+#elif L==2
+	"F&uuml;hren Sie einen Test";
+#elif L==3
+	"Take a test";
+#elif L==4
+	"Hacer un test";
+#elif L==5
+	"Passer un test";
+#elif L==6
+	"Hacer un test";	// Okoteve traducción
+#elif L==7
+	"Fare un test";
+#elif L==8
+	"Zr&oacute;b test";
+#elif L==9
+	"Fazer um teste";
+#endif
+
 const char *Txt_Teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #if   L==1
 	"Prof.";

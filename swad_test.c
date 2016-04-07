@@ -279,7 +279,7 @@ static void Tst_GetExamQuestionsFromDB (long TstCod);
 void Tst_ShowFormAskTst (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Test;
+   extern const char *Txt_Take_a_test;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Generate_exam;
    extern const char *Txt_No_test_questions;
@@ -302,8 +302,8 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test,ICanEdit ? Tst_PutIconToEdit :
-	                                         NULL);
+   Lay_StartRoundFrame (NULL,Txt_Take_a_test,ICanEdit ? Tst_PutIconToEdit :
+	                                                NULL);
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
