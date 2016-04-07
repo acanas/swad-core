@@ -1267,7 +1267,7 @@ void Tst_SetIniEndDates (void)
 void Tst_ShowFormAskEditTsts (void)
   {
    extern const char *Txt_No_test_questions;
-   extern const char *Txt_Questions;
+   extern const char *Txt_List_edit_questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -1279,7 +1279,7 @@ void Tst_ShowFormAskEditTsts (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconToCreateNewTstQst);
+   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconToCreateNewTstQst);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))

@@ -16185,6 +16185,27 @@ const char *Txt_Link_to_announcement_of_exam =
 	"Link para chamada para exame";
 #endif
 
+const char *Txt_List_edit_questions =
+#if   L==1
+	"Llistar / editar preguntes";
+#elif L==2
+	"Liste / bearbeiten Fragen";
+#elif L==3
+	"List / edit questions";
+#elif L==4
+	"Listar / editar preguntas";
+#elif L==5
+	"Lister / modifier questions";
+#elif L==6
+	"Listar / editar preguntas";	// Okoteve traducción
+#elif L==7
+	"Elencare / modificare domande";
+#elif L==8
+	"Wy&sacute;wietli&cacute; / edytowa&cacute; pytania";
+#elif L==9
+	"listar / editar quest&otilde;es";
+#endif
+
 const char *Txt_List_of_detailed_clicks =
 #if   L==1
 	"Listado de clics detallados";		// Necessita traduccio
