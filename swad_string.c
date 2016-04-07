@@ -937,6 +937,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    char *StrDst;
    char *PtrSrc;
    char *PtrDst;
+   unsigned char Ch;
    unsigned int SpecialChar;
    size_t LengthSpecStrSrc = 0;
    size_t LengthSpecStrDst;
@@ -966,91 +967,38 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
       for (PtrSrc = Str, PtrDst = StrDst;
 	   *PtrSrc;)
         {
+         Ch = (unsigned char) *PtrSrc;
          switch (ChangeFrom)
            {
             case Str_FROM_FORM:
                if (Gbl.ContentReceivedByCGI == Act_CONTENT_DATA)
-        	 {
         	  // The form contained data and was sent with content type multipart/form-data
-		  switch ((unsigned char) *PtrSrc)
+		  switch (Ch)
 		    {
 		     case 0x20:	/* Space */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x20;
-			break;
 		     case 0x22:	/* Change double comilla --> "&#34;" */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x22;
-			break;
 		     case 0x23:	/* '#' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x23;
-			break;
 		     case 0x26:	/* Change '&' --> "&#38;" */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x26;
-			break;
 		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x27;
-			break;
 		     case 0x2C:	/* ',' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x2C;
-			break;
 		     case 0x2F:	/* '/' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x2F;
-			break;
 		     case 0x3A:	/* ':' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x3A;
-			break;
 		     case 0x3B:	/* ';' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x3B;
-			break;
 		     case 0x3C:	/* '<' --> "&#60;" */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x3C;
-			break;
 		     case 0x3E:	/* '>' --> "&#62;" */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x3E;
-			break;
 		     case 0x3F:	/* '?' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x3F;
-			break;
 		     case 0x40:	/* '@' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x40;
-			break;
 		     case 0x5C:	/* '\\' */
 			IsSpecialChar = true;
 			LengthSpecStrSrc = 1;
-			SpecialChar = 0x5C;
-			break;
+			SpecialChar = (unsigned int) Ch;
+                        break;
 		     default:
-			if ((unsigned char) *PtrSrc < 0x20 ||
-			    (unsigned char) *PtrSrc > 0x7F)
+			if (Ch < 0x20 || Ch > 0x7F)
 			  {
 			   IsSpecialChar = true;
 			   LengthSpecStrSrc = 1;
-			   SpecialChar = (unsigned int) (unsigned char) *PtrSrc;
+			   SpecialChar = (unsigned int) Ch;
 			  }
 			else
 			  {
@@ -1060,11 +1008,9 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			  }
 			break;
 		    }
-        	 }
                else // Gbl.ContentReceivedByCGI == Act_CONTENT_NORM
-        	 {
         	  // The form contained text and was sent with content type application/x-www-form-urlencoded
-		  switch ((unsigned char) *PtrSrc)
+		  switch (Ch)
 		    {
 		     case '+':	/* Change every '+' to a space */
 			IsSpecialChar = true;
@@ -1077,14 +1023,10 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			LengthSpecStrSrc = 3;
 			break;
 		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x27;
-			break;
 		     case 0x5C:	/* '\\' */
 			IsSpecialChar = true;
 			LengthSpecStrSrc = 1;
-			SpecialChar = 0x5C;
+			SpecialChar = (unsigned int) Ch;
 			break;
 		     default:
 			IsSpecialChar = false;
@@ -1092,33 +1034,24 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			ThereIsSpaceChar = false;
 			break;
 		    }
-                 }
                break;
             case Str_FROM_HTML:
             case Str_FROM_TEXT:
-               switch ((unsigned char) *PtrSrc)
+               switch (Ch)
                  {
                   case 0x20:	/* Space */
-                     IsSpecialChar = true;
-                     LengthSpecStrSrc = 1;
-                     SpecialChar = 0x20;
-                     break;
                   case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
-                     IsSpecialChar = true;
-                     LengthSpecStrSrc = 1;
-                     SpecialChar = 0x27;
-                     break;
                   case 0x5C:	/* '\\' */
                      IsSpecialChar = true;
                      LengthSpecStrSrc = 1;
-                     SpecialChar = 0x5C;
+                     SpecialChar = (unsigned int) Ch;
                      break;
                   default:
-                     if ((unsigned char) *PtrSrc < 0x20)
+                     if (Ch < 0x20)
                        {
                         IsSpecialChar = true;
                         LengthSpecStrSrc = 1;
-                        SpecialChar = (unsigned int) (unsigned char) *PtrSrc;
+                        SpecialChar = (unsigned int) Ch;
                        }
                      else
                        {
@@ -1130,6 +1063,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                  }
                break;
            }
+
          if (IsSpecialChar)
            {
             switch (SpecialChar)
