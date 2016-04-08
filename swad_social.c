@@ -2013,11 +2013,9 @@ static void Soc_PutTextarea (const char *Placeholder,
                       " placeholder=\"%s&hellip;\""
 	              " class=\"%s\""
 	              " onfocus=\"expandTextarea(this,'%s','5');\">"
-	              // " onblur=\"contractTextarea(this,'%s','1');\">"
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
-            // IdDivImgButton,
             IdDivImgButton);
 
    /***** Start concealable div *****/
