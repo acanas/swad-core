@@ -133,19 +133,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.189 (2016-04-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.189.1 (2016-04-08)"
 #define CSS_FILE		"swad15.188.css"
 #define JS_FILE			"swad15.186.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.189:   Apr 08, 2016	Get image atttached to a social post or comment. (198991 lines)
+        Version 15.189.2: Apr 08, 2016	Remove file of the image attached to a social post when the post is removed. (? lines)
+        Version 15.189.1: Apr 08, 2016	Change in layout of form to write a new social post. (198997 lines)
+        Version 15.189:   Apr 08, 2016	Get image attached to a social post. (198991 lines)
 					2 changes necessary in database:
 ALTER TABLE social_posts ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;
 ALTER TABLE social_posts ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
 
-        Version 15.188:   Apr 08, 2016	Form to attach an image to a social post or comment. Not finished. (198904 lines)
+        Version 15.188:   Apr 08, 2016	Form to attach an image to a social post. Not finished. (198904 lines)
         Version 15.187.2: Apr 08, 2016	Changed CSS of alerts. (198873 lines)
         Version 15.187.1: Apr 08, 2016	Code optimization in function to change format of string. (198872 lines)
         Version 15.187:   Apr 07, 2016	Fixed bug in forms sent using content type multipart/form-data. (198938 lines)

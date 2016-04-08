@@ -2003,10 +2003,10 @@ static void Soc_PutTextarea (const char *Placeholder,
    extern const char *Txt_optional;
    extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Post;
-   char IdButton[Soc_MAX_LENGTH_ID];
+   char IdDivImgButton[Soc_MAX_LENGTH_ID];
 
-   /***** Set unique id for the button *****/
-   Soc_SetUniqueId (IdButton);
+   /***** Set unique id for the hidden div *****/
+   Soc_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
@@ -2017,7 +2017,14 @@ static void Soc_PutTextarea (const char *Placeholder,
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
-            IdButton,IdButton);
+            IdDivImgButton,IdDivImgButton);
+
+   /***** Start concealable div *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
+            IdDivImgButton);
+
+   /***** Help on editor *****/
+   Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
    /* Action to perform on image */
@@ -2042,16 +2049,16 @@ static void Soc_PutTextarea (const char *Placeholder,
             Txt_Image_title_attribution,Txt_optional,
             ClassImgTit,Img_MAX_BYTES_TITLE);
 
-   /***** Help on editor and submit button *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
-            IdButton);
-   Lay_HelpPlainEditor ();
+   /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""
 	              " class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 		      "%s"
 		      "</button>"
 		      "</div>",
 	    Txt_Post);
+
+   /***** End hidden div *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
