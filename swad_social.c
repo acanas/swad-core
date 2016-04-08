@@ -160,7 +160,8 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
-static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea);
+static void Soc_PutTextarea (const char *Placeholder,
+                             const char *ClassTextArea,const char *ClassImgTit);
 
 static long Soc_ReceiveSocialPost (void);
 
@@ -1950,7 +1951,8 @@ static void Soc_PutFormToWriteNewPost (void)
       Act_FormStart (ActRcvSocPstGbl);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea (Txt_New_SOCIAL_post,"SOCIAL_TEXTAREA_POST");
+   Soc_PutTextarea (Txt_New_SOCIAL_post,
+                    "SOCIAL_TEXTAREA_POST","SOCIAL_IMG_TIT_POST");
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1967,8 +1969,12 @@ static void Soc_PutFormToWriteNewPost (void)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea)
+static void Soc_PutTextarea (const char *Placeholder,
+                             const char *ClassTextArea,const char *ClassImgTit)
   {
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
+   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Post;
    char IdButton[Soc_MAX_LENGTH_ID];
 
@@ -1985,6 +1991,25 @@ static void Soc_PutTextarea (const char *Placeholder,const char *ClassTextArea)
             Soc_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
             IdButton,IdButton);
+
+   /***** Image file *****/
+   fprintf (Gbl.F.Out,"<label>"
+	              "<img src=\"%s/photo64x64.gif\""
+	              " alt=\"%s\" title=\"%s (%s)\""
+	              " class=\"ICON20x20\" />"
+	              "</label>"
+	              "<input type=\"file\" name=\"ImgFil\""
+		      " size=\"40\" maxlength=\"100\" value=\"\" />"
+	              "<br />",
+            Gbl.Prefs.IconsURL,
+            Txt_Image,Txt_Image,Txt_optional);
+
+   /***** Image title/attribution *****/
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
+                      " placeholder=\"%s (%s)&hellip;\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\">",
+            Txt_Image_title_attribution,Txt_optional,
+            ClassImgTit,Img_MAX_BYTES_TITLE);
 
    /***** Help on editor and submit button *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
@@ -2148,7 +2173,8 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    Soc_PutHiddenParamNotCod (NotCod);
 
    /***** Textarea and button *****/
-   Soc_PutTextarea (Txt_New_SOCIAL_comment,"SOCIAL_TEXTAREA_COMMENT");
+   Soc_PutTextarea (Txt_New_SOCIAL_comment,
+                    "SOCIAL_TEXTAREA_COMMENT","SOCIAL_IMG_TIT_COMMENT");
 
    /***** End form *****/
    Act_FormEnd ();

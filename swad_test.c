@@ -1146,15 +1146,11 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
 	    UniqueId);
 
    /***** Image title/attribution *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-		      "%s (%s):"
-		      "</label><br />"
-                      "<input type=\"text\" name=\"%s\" class=\"%s\""
-                      " maxlength=\"%u\" value=\"%s\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Image_title_attribution,Txt_optional,
-            ParamTitle,ClassTitle,
-            Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
+                      " placeholder=\"%s (%s)&hellip;\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
+            ParamTitle,Txt_Image_title_attribution,Txt_optional,
+            ClassTitle,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

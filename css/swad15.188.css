@@ -1942,6 +1942,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
+.SOCIAL_IMG_TIT_POST
+	{
+	box-sizing:border-box;
+	width:480px;
+	}
 .SOCIAL_TXT
 	{
 	padding:5px 0;
@@ -2045,6 +2050,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:440px;
 	margin:0;
 	resize:none;
+	}
+.SOCIAL_IMG_TIT_COMMENT
+	{
+	box-sizing:border-box;
+	width:440px;
 	}
 
 /*********************************** Messages ********************************/
