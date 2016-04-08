@@ -218,6 +218,7 @@ static long Soc_UnfavSocialComment (void);
 
 static void Soc_RequestRemovalSocialNote (void);
 static void Soc_RemoveSocialNote (void);
+static void Soc_RemoveImgFileFromSocialPost (long PstCod);
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
 
 static long Soc_GetNotCodOfSocialPublishing (long PubCod);
@@ -2012,12 +2013,13 @@ static void Soc_PutTextarea (const char *Placeholder,
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
                       " placeholder=\"%s&hellip;\""
 	              " class=\"%s\""
-	              " onfocus=\"expandTextarea(this,'%s','5');\""
-	              " onblur=\"contractTextarea(this,'%s','1');\">"
+	              " onfocus=\"expandTextarea(this,'%s','5');\">"
+	              // " onblur=\"contractTextarea(this,'%s','1');\">"
 		      "</textarea>",
             Soc_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
-            IdDivImgButton,IdDivImgButton);
+            // IdDivImgButton,
+            IdDivImgButton);
 
    /***** Start concealable div *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
@@ -2053,8 +2055,7 @@ static void Soc_PutTextarea (const char *Placeholder,
    fprintf (Gbl.F.Out,"<button type=\"submit\""
 	              " class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 		      "%s"
-		      "</button>"
-		      "</div>",
+		      "</button>",
 	    Txt_Post);
 
    /***** End hidden div *****/
@@ -3553,7 +3554,11 @@ static void Soc_RemoveSocialNote (void)
       if (Gbl.Usrs.Me.Logged &&
 	  SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this note
 	{
-	 /***** Delete social publishing from database *****/
+	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
+            /***** Remove image file associated to social post *****/
+            Soc_RemoveImgFileFromSocialPost (SocNot.Cod);
+
+	 /***** Delete social note from database *****/
 	 Soc_RemoveASocialNoteFromDB (&SocNot);
 
 	 /***** Message of success *****/
@@ -3562,6 +3567,32 @@ static void Soc_RemoveSocialNote (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
+  }
+
+/*****************************************************************************/
+/************** Remove one file associated to a social post ******************/
+/*****************************************************************************/
+
+static void Soc_RemoveImgFileFromSocialPost (long PstCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get name of image associated to a social post from database *****/
+   sprintf (Query,"SELECT ImageName FROM social_posts WHERE PstCod='%ld'",
+	    PstCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

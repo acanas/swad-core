@@ -635,13 +635,14 @@ function expandTextarea (textareaElem,idButton,rows) {
 }
 
 // Contract textarea when focus. Called from a textarea onblur
+/*
 function contractTextarea (textareaElem,idButton,rows) {
 	if (textareaElem.value == '') {
 		document.getElementById(idButton).style.display = 'none';
 		textareaElem.rows = rows;
 	}
 }
-
+*/
 // Change display of a test answer
 function toggleAnswer (option) {
 	toggleDisplay('ans_' + option);

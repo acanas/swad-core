@@ -231,14 +231,6 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
    /***** Get parameter *****/
    Par_GetParameter (Par_PARAM_SINGLE,ParamFile,NULL,Fil_MAX_FILE_SIZE,&Param);
 
-            Lay_ShowAlert (Lay_ERROR,ParamFile);	// !!!!!!!!!!!!!!
-
-      	    Lay_ShowAlert (Lay_ERROR,"Fil_StartReceptionOfFile () - 0");	// !!!!!!!!!!!!!!
-
-      	    sprintf (Gbl.Message,"Param->FileName.Start = %lu Param->FileName.Length = %lu",
-      	             Param->FileName.Start,Param->FileName.Length);
-      	    Lay_ShowAlert (Lay_ERROR,Gbl.Message);	// !!!!!!!!!!!!!!
-
    /***** Get filename *****/
    /* Check if filename exists */
    if (Param->FileName.Start == 0 ||
@@ -249,14 +241,12 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
      }
    if (Param->FileName.Length > PATH_MAX)
       Lay_ShowErrorAndExit ("Error while getting filename.");
-      	    Lay_ShowAlert (Lay_ERROR,"Fil_StartReceptionOfFile () - 1");	// !!!!!!!!!!!!!!
 
    /* Copy filename */
    fseek (Gbl.F.Tmp,Param->FileName.Start,SEEK_SET);
    if (fread (FileName,sizeof (char),Param->FileName.Length,Gbl.F.Tmp) !=
        Param->FileName.Length)
       Lay_ShowErrorAndExit ("Error while getting filename.");
-      	    Lay_ShowAlert (Lay_ERROR,"Fil_StartReceptionOfFile () - 2");	// !!!!!!!!!!!!!!
 
    /***** Get MIME type *****/
    /* Check if MIME type exists */
@@ -264,7 +254,6 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
        Param->ContentType.Length == 0 ||
        Param->ContentType.Length > Brw_MAX_BYTES_MIME_TYPE)
       Lay_ShowErrorAndExit ("Error while getting content type.");
-      	    Lay_ShowAlert (Lay_ERROR,"Fil_StartReceptionOfFile () - 3");	// !!!!!!!!!!!!!!
 
    /* Copy MIME type */
    fseek (Gbl.F.Tmp,Param->ContentType.Start,SEEK_SET);
@@ -272,7 +261,6 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
        Param->ContentType.Length)
       Lay_ShowErrorAndExit ("Error while getting content type.");
    MIMEType[Param->ContentType.Length] = '\0';
-      	    Lay_ShowAlert (Lay_ERROR,"Fil_StartReceptionOfFile () - 4");	// !!!!!!!!!!!!!!
 
    return Param;
   }

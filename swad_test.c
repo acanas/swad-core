@@ -6122,7 +6122,7 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
    sprintf (Query,"SELECT ImageName FROM tst_questions"
 		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
 	    QstCod,CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get test images"))
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6152,7 +6152,7 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
    sprintf (Query,"SELECT ImageName FROM tst_questions"
 		  " WHERE CrsCod='%ld'",
 	    CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6189,7 +6189,7 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 		  " AND tst_answers.QstCod='%ld'"
 		  " AND tst_answers.AnsInd='%u'",
 	    CrsCod,QstCod,QstCod,AnsInd);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get test images"))
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get images"))
      {
       /***** Get image name (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -6222,7 +6222,7 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
 		  " AND tst_questions.QstCod=tst_answers.QstCod"
 		  " AND tst_answers.QstCod='%ld'",
 	    CrsCod,QstCod,QstCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
@@ -6259,7 +6259,7 @@ static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
 		  " WHERE tst_questions.CrsCod='%ld'"
 		  " AND tst_questions.QstCod=tst_answers.QstCod",
 	    CrsCod);
-   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test images");
+   NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
    /***** Go over result removing image files *****/
    for (NumImg = 0;
