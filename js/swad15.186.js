@@ -877,8 +877,8 @@ function enableDisableImgAns (elem, isDisabled) {
 
 	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
 		if (elem.name == ('ImgAct' + i) ||
-			elem.name == ('FilImg' + i) ||
-			elem.name == ('TitImg' + i))
+			elem.name == ('ImgFil' + i) ||
+			elem.name == ('ImgTit' + i))
 			elem.disabled = isDisabled;
 }
 

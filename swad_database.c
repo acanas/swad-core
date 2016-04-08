@@ -2025,17 +2025,21 @@ mysql> DESCRIBE social_notes_fav;
    /***** Table social_posts *****/
 /*
 mysql> DESCRIBE social_posts;
-+---------+----------+------+-----+---------+----------------+
-| Field   | Type     | Null | Key | Default | Extra          |
-+---------+----------+------+-----+---------+----------------+
-| PubCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
-| Content | longtext | NO   | MUL | NULL    |                |
-+---------+----------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| PstCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Content    | longtext     | NO   | MUL | NULL    |                |
+| ImageName  | varchar(43)  | NO   |     | NULL    |                |
+| ImageTitle | varchar(255) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
                    "PubCod INT NOT NULL AUTO_INCREMENT,"
                    "Content LONGTEXT NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 

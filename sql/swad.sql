@@ -961,6 +961,8 @@ CREATE TABLE IF NOT EXISTS social_notes_fav (
 CREATE TABLE IF NOT EXISTS social_posts (
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	Content LONGTEXT NOT NULL,
+	ImageName VARCHAR(43) NOT NULL,
+	ImageTitle VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(PstCod),
 	FULLTEXT(Content)) ENGINE = MYISAM;
 --
@@ -1088,7 +1090,7 @@ CREATE TABLE IF NOT EXISTS tst_answers (
 	Answer TEXT NOT NULL,
         Feedback TEXT NOT NULL,
 	ImageName VARCHAR(43) NOT NULL,
-        ImageTitle TEXT NOT NULL,
+        ImageTitle VARCHAR(255) NOT NULL,
 	Correct ENUM('N','Y') NOT NULL,
 	INDEX(QstCod));
 --
@@ -1147,7 +1149,7 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	Stem TEXT NOT NULL,
 	Feedback TEXT NOT NULL,
 	ImageName VARCHAR(43) NOT NULL,
-        ImageTitle TEXT NOT NULL,
+        ImageTitle VARCHAR(255) NOT NULL,
 	NumHits INT NOT NULL DEFAULT 0,
 	NumHitsNotBlank INT NOT NULL DEFAULT 0,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,

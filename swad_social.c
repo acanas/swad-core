@@ -35,6 +35,7 @@
 #include "swad_exam.h"
 #include "swad_follow.h"
 #include "swad_global.h"
+#include "swad_image.h"
 #include "swad_layout.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -80,6 +81,14 @@ typedef enum
    Soc_GET_ONLY_OLD_PUBS,	// Old publishings are retrieved via AJAX
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
+
+// Social images will be saved with:
+// - maximum width of Soc_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of Soc_IMAGE_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define Soc_IMAGE_SAVED_MAX_WIDTH	768
+#define Soc_IMAGE_SAVED_MAX_HEIGHT	512
+#define Soc_IMAGE_SAVED_QUALITY		 75	// 1 to 100
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -1442,24 +1451,36 @@ static void Soc_WriteDateTime (time_t TimeUTC)
 
 static void Soc_GetAndWriteSocialPost (long PstCod)
   {
-   char Query[128];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
+
+   /***** Initialize image *****/
+   Image.Action = Img_ACTION_NO_IMAGE;
+   Image.Status = Img_FILE_NONE;
+   Image.Name[0] = '\0';
+   Image.Title = NULL;
 
    /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content FROM social_posts WHERE PstCod='%ld'",
+   sprintf (Query,"SELECT Content,ImageName,ImageTitle"
+	          " FROM social_posts WHERE PstCod='%ld'",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
 
    /***** Result should have a unique row *****/
    if (NumRows == 1)
      {
-      /****** Get content (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
+
+      /****** Get content (row[0]) *****/
       strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
+      /****** Get image name (row[1]) and title (row[2]) *****/
+      Img_GetImageNameAndTitleFromRow (row[1],row[2],&Image);
      }
    else
       Content[0] = '\0';
@@ -1469,6 +1490,12 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 
    /***** Write content *****/
    Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+
+   /***** Show image *****/
+   Img_ShowImage (&Image,"SOCIAL_IMG");
+
+   /***** Free allocated memory for the title/attribution of the image *****/
+   Img_FreeImageTitle (&Image);
   }
 
 /*****************************************************************************/
@@ -1992,7 +2019,11 @@ static void Soc_PutTextarea (const char *Placeholder,
             Placeholder,ClassTextArea,
             IdButton,IdButton);
 
-   /***** Image file *****/
+   /***** Attached image (optional) *****/
+   /* Action to perform on image */
+   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+
+   /* Image file */
    fprintf (Gbl.F.Out,"<label>"
 	              "<img src=\"%s/photo64x64.gif\""
 	              " alt=\"%s\" title=\"%s (%s)\""
@@ -2004,7 +2035,7 @@ static void Soc_PutTextarea (const char *Placeholder,
             Gbl.Prefs.IconsURL,
             Txt_Image,Txt_Image,Txt_optional);
 
-   /***** Image title/attribution *****/
+   /* Image title/attribution */
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
                       " placeholder=\"%s (%s)&hellip;\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\">",
@@ -2065,7 +2096,8 @@ void Soc_ReceiveSocialPostUsr (void)
 static long Soc_ReceiveSocialPost (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   struct Image Image;
+   char *Query;
    long PstCod;
    struct SocialPublishing SocPub;
 
@@ -2073,22 +2105,58 @@ static long Soc_ReceiveSocialPost (void)
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
-   if (Content[0])
+   /***** Get attached image (action, file and title) *****/
+   /* Initialize to zero */
+   // Image.Name[0] = '\0';
+   // Image.Title = NULL;	// Initialized to NULL in order to not trying
+			// to free it when no memory allocated
+   Img_GetImageFromForm (0,&Image,NULL,
+                         "ImgAct","ImgFil","ImgTit",
+	                 Soc_IMAGE_SAVED_MAX_WIDTH,
+	                 Soc_IMAGE_SAVED_MAX_HEIGHT,
+	                 Soc_IMAGE_SAVED_QUALITY);
+
+   if (Content[0] ||	// Text not empty
+       Image.Name[0])	// An image is attached
      {
+      /***** Allocate space for query *****/
+      if ((Query = malloc (256 +
+			   strlen (Content) +
+			   Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			   Img_MAX_BYTES_TITLE)) == NULL)
+	 Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+
+      /***** Check if image is received and processed *****/
+      if (Image.Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
+	  Image.Status == Img_FILE_PROCESSED)	// The new image received has been processed
+	 /* Move processed image to definitive directory */
+	 Img_MoveImageToDefinitiveDirectory (&Image);
+
       /***** Publish *****/
       /* Insert post content in the database */
-      sprintf (Query,"INSERT INTO social_posts (Content) VALUES ('%s')",
-	       Content);
+      sprintf (Query,"INSERT INTO social_posts (Content,ImageName,ImageTitle)"
+	             " VALUES ('%s','%s','%s')",
+	       Content,
+	       Image.Name,
+	       (Image.Name[0] &&	// Save image title only if image attached
+		Image.Title) ? Image.Title : "");
       PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
       /* Insert post in social notes */
       Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
 
+      /***** Free space used for query *****/
+      free ((void *) Query);
+
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
+
      }
    else
       SocPub.NotCod = -1L;
+
+   /***** Free allocated memory for the title/attribution of the image *****/
+   Img_FreeImageTitle (&Image);
 
    return SocPub.NotCod;
   }
@@ -3407,6 +3475,7 @@ static void Soc_RequestRemovalSocialNote (void)
 	 Soc_WriteSocialNote (&SocNot,
 			      Soc_TOP_MESSAGE_NONE,-1L,
 			      false,true);
+
 
 	 /***** Form to ask for confirmation to remove this social post *****/
 	 /* Start form */

@@ -126,19 +126,20 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
    char Title[Img_MAX_BYTES_TITLE+1];
    size_t Length;
 
+   /***** Reset image *****/
    Image->Action = Img_GetImageActionFromForm (ParamAction);
    Image->Status = Img_FILE_NONE;
+   Image->Name[0] = '\0';
    Img_FreeImageTitle (Image);	// Reset to NULL
 
    switch (Image->Action)
      {
-      case Img_ACTION_NO_IMAGE:	// Do not use image (remove current image if exists)
-	 /***** Reset image name *****/
-	 Image->Name[0] = '\0';
+      case Img_ACTION_NO_IMAGE:		// Do not use image (remove current image if exists)
          break;
       case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
 	 /***** Get image name *****/
-	 GetImageFromDB (NumOpt,Image);
+	 if (GetImageFromDB)
+	    GetImageFromDB (NumOpt,Image);
 	 break;
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
@@ -155,7 +156,8 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
          /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
 	                                     Width,Height,Quality);
-	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
+	 if (Image->Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
+	     GetImageFromDB)
 	    /* Get image name */
 	    GetImageFromDB (NumOpt,Image);
 	 break;
@@ -184,12 +186,15 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
+   /***** Get parameter with the action to perform on image *****/
    Par_GetParToText (ParamAction,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Wrong action to perform on image.");
-   if (UnsignedNum >= Img_NUM_ACTIONS)
-      Lay_ShowErrorAndExit ("Wrong action to perform on image.");
-   return (Img_Action_t) UnsignedNum;
+   if (UnsignedStr[0])
+      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Img_NUM_ACTIONS)
+	    return (Img_Action_t) UnsignedNum;
+
+   /***** Default action if none supplied *****/
+   return Img_ACTION_NO_IMAGE;
   }
 
 /*****************************************************************************/

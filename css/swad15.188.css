@@ -1953,6 +1953,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#404040;
 	font-size:13pt;
 	}
+.SOCIAL_IMG
+	{
+	width:480px;
+	border-radius:4px;
+	margin:10px 0;
+	}
 .SOCIAL_ICON_COMMENT
 	{
 	display:inline-block;

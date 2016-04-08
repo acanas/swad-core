@@ -106,13 +106,13 @@ const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
    "text",
   };
 
-// Test photo will be saved with:
-// - maximum width of Tst_PHOTO_SAVED_MAX_HEIGHT
-// - maximum height of Tst_PHOTO_SAVED_MAX_HEIGHT
+// Test images will be saved with:
+// - maximum width of Tst_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of Tst_IMAGE_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
-#define Tst_PHOTO_SAVED_MAX_WIDTH	768
-#define Tst_PHOTO_SAVED_MAX_HEIGHT	512
-#define Tst_PHOTO_SAVED_QUALITY		 75	// 1 to 100
+#define Tst_IMAGE_SAVED_MAX_WIDTH	768
+#define Tst_IMAGE_SAVED_MAX_HEIGHT	512
+#define Tst_IMAGE_SAVED_QUALITY		 75	// 1 to 100
 
 /*****************************************************************************/
 /******************************* Internal types ******************************/
@@ -4495,7 +4495,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Stem);
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,"TEST_IMG_EDIT_ONE_STEM",
                               "STEM",	// Title / attribution
-                              "ImgAct","FilImg","TitImg",false);
+                              "ImgAct","ImgFil","ImgTit",false);
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -4712,8 +4712,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
       /* Image */
       sprintf (ParamAction,"ImgAct%u",NumOpt);
-      sprintf (ParamFile  ,"FilImg%u",NumOpt);
-      sprintf (ParamTitle ,"TitImg%u",NumOpt);
+      sprintf (ParamFile  ,"ImgFil%u",NumOpt);
+      sprintf (ParamTitle ,"ImgTit%u",NumOpt);
       Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                                  "TEST_IMG_EDIT_ONE_ANS",
                                  "ANS_STR",	// Title / attribution
@@ -5197,13 +5197,13 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
-   /***** Get image associated to the stem *****/
+   /***** Get image associated to the stem (action, file and title) *****/
    Img_GetImageFromForm (Tst_MAX_OPTIONS_PER_QUESTION,&Gbl.Test.Image,
                          Tst_GetImageFromDB,
-                         "ImgAct","FilImg","TitImg",
-	                 Tst_PHOTO_SAVED_MAX_WIDTH,
-	                 Tst_PHOTO_SAVED_MAX_HEIGHT,
-	                 Tst_PHOTO_SAVED_QUALITY);
+                         "ImgAct","ImgFil","ImgTit",
+	                 Tst_IMAGE_SAVED_MAX_WIDTH,
+	                 Tst_IMAGE_SAVED_MAX_HEIGHT,
+	                 Tst_IMAGE_SAVED_QUALITY);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5252,19 +5252,19 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
             sprintf (FbStr,"FbStr%u",NumOpt);
 	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
-	    /* Get image associated to the answer */
+	    /* Get image associated to the answer (action, file and title) */
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
 	       sprintf (ParamAction,"ImgAct%u",NumOpt);
-	       sprintf (ParamFile  ,"FilImg%u",NumOpt);
-	       sprintf (ParamTitle ,"TitImg%u",NumOpt);
+	       sprintf (ParamFile  ,"ImgFil%u",NumOpt);
+	       sprintf (ParamTitle ,"ImgTit%u",NumOpt);
 	       Img_GetImageFromForm (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
 				     Tst_GetImageFromDB,
 				     ParamAction,ParamFile,ParamTitle,
-				     Tst_PHOTO_SAVED_MAX_WIDTH,
-				     Tst_PHOTO_SAVED_MAX_HEIGHT,
-				     Tst_PHOTO_SAVED_QUALITY);
+				     Tst_IMAGE_SAVED_MAX_WIDTH,
+				     Tst_IMAGE_SAVED_MAX_HEIGHT,
+				     Tst_IMAGE_SAVED_QUALITY);
 	      }
            }
 
@@ -5892,6 +5892,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    if ((Query = malloc (512 +
                         Gbl.Test.Stem.Length +
                         Gbl.Test.Feedback.Length +
+                        Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
                         Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -5946,7 +5947,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
       Tst_RemTagsFromQst ();
      }
 
-   /***** Free space user for query *****/
+   /***** Free space used for query *****/
    free ((void *) Query);
   }
 
