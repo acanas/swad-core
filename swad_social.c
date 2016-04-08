@@ -115,6 +115,7 @@ struct SocialComment
    time_t DateTimeUTC;
    unsigned NumFavs;	// Number of times (users) this comment has been favourited
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
   };
 
 /*****************************************************************************/
@@ -226,6 +227,7 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
 
 static void Soc_RequestRemovalSocialComment (void);
 static void Soc_RemoveSocialComment (void);
+static void Soc_RemoveImgFileFromSocialComment (long PubCod);
 static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
 
 static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
@@ -1153,12 +1155,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /* Write content of the note */
       if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
-	{
 	 /* Write post content */
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
 	 Soc_GetAndWriteSocialPost (SocNot->Cod);
-	 fprintf (Gbl.F.Out,"</div>");
-	}
       else
 	{
 	 /* Get location in hierarchy */
@@ -1210,9 +1208,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	      }
 
 	 /* Write note type */
-	 fprintf (Gbl.F.Out,"<div>");
 	 Soc_PutFormGoToAction (SocNot);
-	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Write location in hierarchy */
 	 if (!SocNot->Unavailable)
@@ -1460,10 +1456,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    struct Image Image;
 
    /***** Initialize image *****/
-   Image.Action = Img_ACTION_NO_IMAGE;
-   Image.Status = Img_FILE_NONE;
-   Image.Name[0] = '\0';
-   Image.Title = NULL;
+   Img_ImageConstructor (&Image);
 
    /***** Get social post from database *****/
    sprintf (Query,"SELECT Content,ImageName,ImageTitle"
@@ -1490,13 +1483,15 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Write content *****/
+   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
    Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Show image *****/
-   Img_ShowImage (&Image,"SOCIAL_IMG");
+   Img_ShowImage (&Image,"SOCIAL_IMG_POST");
 
-   /***** Free allocated memory for the title/attribution of the image *****/
-   Img_FreeImageTitle (&Image);
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
   }
 
 /*****************************************************************************/
@@ -1590,14 +1585,16 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
-      fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s",
+      fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s",
                Txt_SOCIAL_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
-      fprintf (Gbl.F.Out,"</span>");
+      fprintf (Gbl.F.Out,"</div>");
      }
    else			// Not inside another form
      {
+      fprintf (Gbl.F.Out,"<div>");
+
       /***** Parameters depending on the type of note *****/
       switch (SocNot->NoteType)
 	{
@@ -1666,6 +1663,8 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
             Txt_SOCIAL_NOTE[SocNot->NoteType],
             Txt_SOCIAL_NOTE[SocNot->NoteType]);
       Act_FormEnd ();
+
+      fprintf (Gbl.F.Out,"</div>");
      }
   }
 
@@ -2113,11 +2112,10 @@ static long Soc_ReceiveSocialPost (void)
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,true);
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&Image);
+
    /***** Get attached image (action, file and title) *****/
-   /* Initialize to zero */
-   // Image.Name[0] = '\0';
-   // Image.Title = NULL;	// Initialized to NULL in order to not trying
-			// to free it when no memory allocated
    Img_GetImageFromForm (0,&Image,NULL,
                          "ImgAct","ImgFil","ImgTit",
 	                 Soc_IMAGE_SAVED_MAX_WIDTH,
@@ -2158,13 +2156,12 @@ static long Soc_ReceiveSocialPost (void)
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
-
      }
-   else
+   else	// Text and image are empty
       SocPub.NotCod = -1L;
 
-   /***** Free allocated memory for the title/attribution of the image *****/
-   Img_FreeImageTitle (&Image);
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
 
    return SocPub.NotCod;
   }
@@ -2294,7 +2291,8 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		  "social_pubs.NotCod,"
 		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		  "social_comments.Content"
+		  "social_comments.Content,"
+		  "social_comments.ImageName,social_comments.ImageTitle"
 		  " FROM social_pubs,social_comments"
 		  " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
@@ -2314,6 +2312,9 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 	   NumCom < NumComments;
 	   NumCom++)
 	{
+	 /* Initialize image */
+	 Img_ImageConstructor (&SocCom.Image);
+
 	 /* Get data of social comment */
 	 row = mysql_fetch_row (mysql_res);
 	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
@@ -2322,6 +2323,9 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 	 Soc_WriteSocialComment (&SocCom,
 	                         Soc_TOP_MESSAGE_NONE,-1L,
 	                         false);
+
+	 /* Free image */
+	 Img_ImageDestructor (&SocCom.Image);
 	}
 
       /***** End list *****/
@@ -2395,7 +2399,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Right: author's name, time, summary and buttons *****/
+      /***** Right: author's name, time, content, image and buttons *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
       /* Write author's full name and nickname */
@@ -2408,6 +2412,9 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
+
+      /* Show image */
+      Img_ShowImage (&SocCom->Image,"SOCIAL_IMG_COMMENT");
 
       /* Put icon to mark this social comment as favourite */
       if (IAmTheAuthor)				// I am the author
@@ -2846,7 +2853,8 @@ static long Soc_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Query[128+Cns_MAX_BYTES_LONG_TEXT];
+   struct Image Image;
+   char *Query;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
 
@@ -2860,8 +2868,32 @@ static long Soc_ReceiveComment (void)
       Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
 				 Str_TO_RIGOROUS_HTML,true);
 
-      if (Content[0])
+      /***** Initialize image *****/
+      Img_ImageConstructor (&Image);
+
+      /***** Get attached image (action, file and title) *****/
+      Img_GetImageFromForm (0,&Image,NULL,
+			    "ImgAct","ImgFil","ImgTit",
+			    Soc_IMAGE_SAVED_MAX_WIDTH,
+			    Soc_IMAGE_SAVED_MAX_HEIGHT,
+			    Soc_IMAGE_SAVED_QUALITY);
+
+      if (Content[0] ||		// Text not empty
+	  Image.Name[0])	// An image is attached
 	{
+	 /***** Allocate space for query *****/
+	 if ((Query = malloc (256 +
+			      strlen (Content) +
+			      Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			      Img_MAX_BYTES_TITLE)) == NULL)
+	    Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+
+	 /***** Check if image is received and processed *****/
+	 if (Image.Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
+	     Image.Status == Img_FILE_PROCESSED)	// The new image received has been processed
+	    /* Move processed image to definitive directory */
+	    Img_MoveImageToDefinitiveDirectory (&Image);
+
 	 /***** Publish *****/
 	 /* Insert into publishings */
 	 SocPub.NotCod       = SocNot.NotCod;
@@ -2870,11 +2902,18 @@ static long Soc_ReceiveComment (void)
 	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	 /* Insert comment content in the database */
-	 sprintf (Query,"INSERT INTO social_comments (PubCod,Content)"
-			" VALUES ('%ld','%s')",
+	 sprintf (Query,"INSERT INTO social_comments"
+	                " (PubCod,Content,ImageName,ImageTitle)"
+			" VALUES ('%ld','%s','%s','%s')",
 		  SocPub.PubCod,
-		  Content);
+		  Content,
+		  Image.Name,
+		  (Image.Name[0] &&	// Save image title only if image attached
+		   Image.Title) ? Image.Title : "");
 	 DB_QueryINSERT (Query,"can not store comment content");
+
+	 /***** Free space used for query *****/
+	 free ((void *) Query);
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
@@ -2887,6 +2926,9 @@ static long Soc_ReceiveComment (void)
 	                      Soc_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                      true,true);
 	}
+
+      /***** Free image *****/
+      Img_ImageDestructor (&Image);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
@@ -3100,6 +3142,9 @@ static long Soc_FavSocialComment (void)
    struct SocialComment SocCom;
    char Query[256];
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&SocCom.Image);
+
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
@@ -3133,6 +3178,9 @@ static long Soc_FavSocialComment (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_comment_no_longer_exists);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&SocCom.Image);
 
    return SocCom.NotCod;
   }
@@ -3388,6 +3436,9 @@ static long Soc_UnfavSocialComment (void)
    struct SocialComment SocCom;
    char Query[256];
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&SocCom.Image);
+
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
@@ -3421,6 +3472,9 @@ static long Soc_UnfavSocialComment (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_comment_no_longer_exists);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&SocCom.Image);
 
    return SocCom.NotCod;
   }
@@ -3793,6 +3847,9 @@ static void Soc_RequestRemovalSocialComment (void)
    extern const char *Txt_Remove;
    struct SocialComment SocCom;
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&SocCom.Image);
+
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
@@ -3829,6 +3886,9 @@ static void Soc_RequestRemovalSocialComment (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_comment_no_longer_exists);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&SocCom.Image);
   }
 
 /*****************************************************************************/
@@ -3871,6 +3931,9 @@ static void Soc_RemoveSocialComment (void)
    extern const char *Txt_Comment_removed;
    struct SocialComment SocCom;
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&SocCom.Image);
+
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
    Soc_GetDataOfSocialComByCod (&SocCom);
@@ -3880,6 +3943,9 @@ static void Soc_RemoveSocialComment (void)
       if (Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
 	{
+	 /***** Remove image file associated to social post *****/
+	 Soc_RemoveImgFileFromSocialComment (SocCom.PubCod);
+
 	 /***** Delete social comment from database *****/
 	 Soc_RemoveASocialCommentFromDB (&SocCom);
 
@@ -3889,6 +3955,35 @@ static void Soc_RemoveSocialComment (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_comment_no_longer_exists);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&SocCom.Image);
+  }
+
+/*****************************************************************************/
+/************* Remove one file associated to a social comment ****************/
+/*****************************************************************************/
+
+static void Soc_RemoveImgFileFromSocialComment (long PubCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get name of image associated to a social post from database *****/
+   sprintf (Query,"SELECT ImageName FROM social_comments WHERE PubCod='%ld'",
+	    PubCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
+     {
+      /***** Get image name (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Remove image file *****/
+      Img_RemoveImageFile (row[0]);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4309,7 +4404,8 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
       sprintf (Query,"SELECT social_pubs.PubCod,social_pubs.PublisherCod,"
 		     "social_pubs.NotCod,"
 		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
-		     "social_comments.Content"
+		     "social_comments.Content,"
+		     "social_comments.ImageName,social_comments.ImageTitle"
 		     " FROM social_pubs,social_comments"
 		     " WHERE social_pubs.PubCod='%ld'"
                      " AND social_pubs.PubType='%u'"
@@ -4434,6 +4530,15 @@ static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
 
 static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom)
   {
+   /*
+   row[0]: PubCod
+   row[1]: PublisherCod
+   row[2]: NotCod
+   row[3]: TimePublish
+   row[4]: Content
+   row[5]: ImageName
+   row[6]: ImageTitle
+    */
    /***** Get code of social comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -4452,6 +4557,9 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
 
    /***** Get number of times this comment has been favourited *****/
    SocCom->NumFavs     = Soc_GetNumTimesACommHasBeenFav (SocCom);
+
+   /****** Get image name (row[5]) and title (row[6]) *****/
+   Img_GetImageNameAndTitleFromRow (row[5],row[6],&SocCom->Image);
   }
 
 /*****************************************************************************/
@@ -4591,6 +4699,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
 	   {
 	    /***** Get content of social post from database *****/
+	    // TODO: What happens if content is empty and an image is attached?
 	    sprintf (Query,"SELECT Content FROM social_posts"
 			   " WHERE PstCod='%ld'",
 		     SocNot.Cod);
@@ -4624,6 +4733,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	 break;
       case Soc_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of social post from database *****/
+	 // TODO: What happens if content is empty and an image is attached?
 	 sprintf (Query,"SELECT Content FROM social_comments"
 			" WHERE PubCod='%ld'",
 		  SocPub.PubCod);

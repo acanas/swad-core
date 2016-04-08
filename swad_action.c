@@ -2344,7 +2344,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
    /* ActRcvSocPstGbl	*/{1492,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ReceiveSocialPostGbl	,NULL},
-   /* ActRcvSocComGbl	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ReceiveCommentGbl		,NULL},
+   /* ActRcvSocComGbl	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ReceiveCommentGbl		,NULL},
    /* ActShaSocNotGbl	*/{1495,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ShareSocialNoteGbl		,NULL},
    /* ActUnsSocNotGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_UnshareSocialNoteGbl	,NULL},
    /* ActFavSocNotGbl	*/{1512,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_FavSocialNoteGbl		,NULL},
@@ -2359,7 +2359,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqPubPrf	*/{1401,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,NULL},
 
    /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
+   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
    /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
    /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
    /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},

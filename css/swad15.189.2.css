@@ -1954,7 +1954,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#404040;
 	font-size:13pt;
 	}
-.SOCIAL_IMG
+.SOCIAL_IMG_POST
 	{
 	width:480px;
 	border-radius:4px;
@@ -2057,6 +2057,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:440px;
 	margin:0;
 	resize:none;
+	}
+.SOCIAL_IMG_COMMENT
+	{
+	width:440px;
+	border-radius:4px;
+	margin:10px 0;
 	}
 .SOCIAL_IMG_TIT_COMMENT
 	{

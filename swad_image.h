@@ -95,7 +95,9 @@ struct Image
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Img_FreeImageTitle (struct Image *Image);
+void Img_ImageConstructor (struct Image *Image);
+void Img_ImageDestructor (struct Image *Image);
+
 void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
                                       struct Image *Image);
 

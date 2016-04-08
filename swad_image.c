@@ -63,17 +63,42 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Img_FreeImageTitle (struct Image *Image);
+
 static void Img_ProcessImage (const char *FileNameImgOriginal,
                               const char *FileNameImgProcessed,
                               unsigned Width,unsigned Height,unsigned Quality);
 
 /*****************************************************************************/
+/*************************** Reset image fields ******************************/
+/*****************************************************************************/
+// Every struct Image must be initialized to zero where it is declared
+// Every call to Img_InitImage must have a call to Img_FreeImage
+
+void Img_ImageConstructor (struct Image *Image)
+  {
+   Image->Action = Img_ACTION_NO_IMAGE;
+   Image->Status = Img_FILE_NONE;
+   Image->Name[0] = '\0';
+   Image->Title = NULL;
+  }
+
+/*****************************************************************************/
+/******************************** Free image *********************************/
+/*****************************************************************************/
+
+void Img_ImageDestructor (struct Image *Image)
+  {
+   Img_FreeImageTitle (Image);
+  }
+
+/*****************************************************************************/
 /*************************** Reset image title *******************************/
 /*****************************************************************************/
 
-void Img_FreeImageTitle (struct Image *Image)
+static void Img_FreeImageTitle (struct Image *Image)
   {
-   // Image->Title must be initialized to NULL
+   // Image->Title must be initialized to NULL after declaration
    if (Image->Title)
      {
       free ((void *) Image->Title);
@@ -99,7 +124,10 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
 	                            Img_FILE_NONE;
 
    /***** Copy image title to struct *****/
+   // Image->Title can be empty or filled with a previous title
+   // If filled  ==> free it
    Img_FreeImageTitle (Image);
+
    if (Title[0])
      {
       /* Get and limit length of the title */
@@ -126,12 +154,13 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
    char Title[Img_MAX_BYTES_TITLE+1];
    size_t Length;
 
-   /***** Reset image *****/
+   /***** First, get action and initialize image
+          (except title, that will be get after the image file) *****/
    Image->Action = Img_GetImageActionFromForm (ParamAction);
    Image->Status = Img_FILE_NONE;
    Image->Name[0] = '\0';
-   Img_FreeImageTitle (Image);	// Reset to NULL
 
+   /***** Secondly, get the image name and the file *****/
    switch (Image->Action)
      {
       case Img_ACTION_NO_IMAGE:		// Do not use image (remove current image if exists)
@@ -163,9 +192,11 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
 	 break;
      }
 
-   /***** Get image title from form *****/
+   /***** By last, get image title from form *****/
    Par_GetParToHTML (ParamTitle,Title,Img_MAX_BYTES_TITLE);
-   if ((Length = strlen (Title)) > 0) // If title comming from the form is not empty
+   /* If the title coming from the form is empty, keep current image title unchanged
+      If not empty, copy it to current image title */
+   if ((Length = strlen (Title)) > 0)
      {
       /* Overwrite current title (empty or coming from database)
          with the title coming from the form */

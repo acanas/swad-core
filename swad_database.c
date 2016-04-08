@@ -1935,17 +1935,21 @@ mysql> DESCRIBE sessions;
    /***** Table social_comments *****/
 /*
 mysql> DESCRIBE social_comments;
-+---------+------------+------+-----+---------+-------+
-| Field   | Type       | Null | Key | Default | Extra |
-+---------+------------+------+-----+---------+-------+
-| PubCod  | bigint(20) | NO   | PRI | NULL    |       |
-| Content | longtext   | NO   | MUL | NULL    |       |
-+---------+------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| PubCod     | bigint(20)   | NO   | PRI | NULL    |       |
+| Content    | longtext     | NO   | MUL | NULL    |       |
+| ImageName  | varchar(43)  | NO   |     | NULL    |       |
+| ImageTitle | varchar(255) | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 	           "PubCod BIGINT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 

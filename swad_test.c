@@ -221,7 +221,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
-static void Tst_InitImagesOfQuestion (void);
+// static void Tst_InitImagesOfQuestion (void);
 static void Tst_FreeImagesOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
@@ -4775,6 +4775,10 @@ void Tst_QstConstructor (void)
    Gbl.Test.AnswerType = Tst_ANS_UNIQUE_CHOICE;
    Gbl.Test.Answer.NumOptions = 0;
    Gbl.Test.Answer.TF = ' ';
+
+   /***** Initialize image attached to stem *****/
+   Img_ImageConstructor (&Gbl.Test.Image);
+
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
@@ -4782,12 +4786,13 @@ void Tst_QstConstructor (void)
       Gbl.Test.Answer.Options[NumOpt].Correct  = false;
       Gbl.Test.Answer.Options[NumOpt].Text     = NULL;
       Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
+
+      /***** Initialize image attached to option *****/
+      Img_ImageConstructor (&Gbl.Test.Answer.Options[NumOpt].Image);
      }
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
    Gbl.Test.Answer.FloatingPoint[1] = 0.0;
-
-   Tst_InitImagesOfQuestion ();
   }
 
 /*****************************************************************************/
@@ -4861,26 +4866,21 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
 /*****************************************************************************/
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
-
+/*
 static void Tst_InitImagesOfQuestion (void)
   {
    unsigned NumOpt;
 
-   Gbl.Test.Image.Action = Img_ACTION_NO_IMAGE;
-   Gbl.Test.Image.Status = Img_FILE_NONE;
-   Gbl.Test.Image.Name[0] = '\0';
-   Gbl.Test.Image.Title = NULL;
+   ***** Initialize image *****
+   Img_ResetImage (&Gbl.Test.Image);
+
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-     {
-      Gbl.Test.Answer.Options[NumOpt].Image.Action = Img_ACTION_NO_IMAGE;
-      Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_FILE_NONE;
-      Gbl.Test.Answer.Options[NumOpt].Image.Name[0] = '\0';
-      Gbl.Test.Answer.Options[NumOpt].Image.Title = NULL;
-     }
+      ***** Initialize image *****
+      Img_ResetImage (&Gbl.Test.Answer.Options[NumOpt].Image);
   }
-
+*/
 /*****************************************************************************/
 /*********************** Free images of a question ***************************/
 /*****************************************************************************/
@@ -4889,11 +4889,11 @@ static void Tst_FreeImagesOfQuestion (void)
   {
    unsigned NumOpt;
 
-   Img_FreeImageTitle (&Gbl.Test.Image);
+   Img_ImageDestructor (&Gbl.Test.Image);
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Img_FreeImageTitle (&Gbl.Test.Answer.Options[NumOpt].Image);
+      Img_ImageDestructor (&Gbl.Test.Answer.Options[NumOpt].Image);
   }
 
 /*****************************************************************************/
@@ -5129,7 +5129,7 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      Tst_InitImagesOfQuestion ();
+      // Tst_InitImagesOfQuestion ();
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
