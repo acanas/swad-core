@@ -201,7 +201,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
      }
 
    /***** By last, get image title from form *****/
-   Par_GetParToHTML (ParamTitle,Title,Img_MAX_BYTES_TITLE);
+   Par_GetParToText (ParamTitle,Title,Img_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current image title unchanged
       If not empty, copy it to current image title */
    if ((Length = strlen (Title)) > 0)
