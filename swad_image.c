@@ -63,8 +63,6 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Img_FreeImageTitle (struct Image *Image);
-
 static void Img_ProcessImage (const char *FileNameImgOriginal,
                               const char *FileNameImgProcessed,
                               unsigned Width,unsigned Height,unsigned Quality);
@@ -72,20 +70,30 @@ static void Img_ProcessImage (const char *FileNameImgOriginal,
 /*****************************************************************************/
 /*************************** Reset image fields ******************************/
 /*****************************************************************************/
-// Every struct Image must be initialized to zero where it is declared
-// Every call to Img_InitImage must have a call to Img_FreeImage
+// Every struct Image must be initialized with this function Img_ImageConstructor after it is declared
+// Every call to Img_ImageConstructor must have a call to Img_ImageDestructor
 
 void Img_ImageConstructor (struct Image *Image)
+  {
+   Img_ResetImageExceptTitle (Image);
+   Image->Title = NULL;
+  }
+
+/*****************************************************************************/
+/********************* Reset image fields except title ***********************/
+/*****************************************************************************/
+
+void Img_ResetImageExceptTitle (struct Image *Image)
   {
    Image->Action = Img_ACTION_NO_IMAGE;
    Image->Status = Img_FILE_NONE;
    Image->Name[0] = '\0';
-   Image->Title = NULL;
   }
 
 /*****************************************************************************/
 /******************************** Free image *********************************/
 /*****************************************************************************/
+// Every call to Img_ImageConstructor must have a call to Img_ImageDestructor
 
 void Img_ImageDestructor (struct Image *Image)
   {
@@ -96,7 +104,7 @@ void Img_ImageDestructor (struct Image *Image)
 /*************************** Reset image title *******************************/
 /*****************************************************************************/
 
-static void Img_FreeImageTitle (struct Image *Image)
+void Img_FreeImageTitle (struct Image *Image)
   {
    // Image->Title must be initialized to NULL after declaration
    if (Image->Title)

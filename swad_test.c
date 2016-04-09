@@ -221,7 +221,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
-// static void Tst_InitImagesOfQuestion (void);
+static void Tst_InitImagesOfQuestion (void);
 static void Tst_FreeImagesOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
@@ -4866,21 +4866,25 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
 /*****************************************************************************/
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
-/*
+
 static void Tst_InitImagesOfQuestion (void)
   {
    unsigned NumOpt;
 
-   ***** Initialize image *****
-   Img_ResetImage (&Gbl.Test.Image);
+   /***** Initialize image *****/
+   Img_ResetImageExceptTitle (&Gbl.Test.Image);
+   Img_FreeImageTitle (&Gbl.Test.Image);
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      ***** Initialize image *****
-      Img_ResetImage (&Gbl.Test.Answer.Options[NumOpt].Image);
+     {
+      /***** Initialize image *****/
+      Img_ResetImageExceptTitle (&Gbl.Test.Answer.Options[NumOpt].Image);
+      Img_FreeImageTitle (&Gbl.Test.Image);
+     }
   }
-*/
+
 /*****************************************************************************/
 /*********************** Free images of a question ***************************/
 /*****************************************************************************/
@@ -5129,7 +5133,7 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      // Tst_InitImagesOfQuestion ();
+      Tst_InitImagesOfQuestion ();
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
