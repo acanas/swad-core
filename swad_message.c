@@ -362,7 +362,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
       /***** "To:" section (recipients) *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -402,15 +402,11 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Subject and content sections *****/
       Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
-      /***** Help for text editor and send button *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"2\">");
-      Lay_HelpPlainEditor ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
+
+      /***** Help for text editor and send button *****/
+      Lay_HelpPlainEditor ();
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -527,16 +523,16 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    else
       fprintf (Gbl.F.Out," >%s:",
 	       Txt_Recipients);
-   fprintf (Gbl.F.Out,"<span class=\"DAT\"> (%s)</span>"
-	              "</th>"
+   fprintf (Gbl.F.Out,"</th>"
 	              "</tr>"
                       "<tr>"
-                      "<td",
-            Txt_nicks_emails_or_IDs_separated_by_commas);
+                      "<td");
    if (PutColspan)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
-	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\">");
+	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\""
+	              " placeholder=\"%s&hellip;\">",
+            Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
 //   else if (Gbl.Msg.Reply.IsReply)	// If this is a reply message
