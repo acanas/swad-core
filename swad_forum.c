@@ -3703,6 +3703,13 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Send_message;
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,
+                        IsReply ? Txt_New_message :
+        	                  Txt_New_thread,
+        	        NULL);
+
+   /***** Start form *****/
    if (IsReply)	// Form to write a reply to a message of an existing thread
      {
       Act_FormStart (For_ActionsRecRepFor[Gbl.Forum.ForumType]);
@@ -3712,12 +3719,6 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    else		// Form to write the first message of a new thread
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,
-                        IsReply ? Txt_New_message :
-        	                  Txt_New_thread,
-        	        NULL);
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
@@ -3756,11 +3757,14 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /***** Help for text editor *****/
    Lay_HelpPlainEditor ();
 
-   /***** Send button and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
+   /***** Send button *****/
+   Lay_PutCreateButton (Txt_Send_message);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

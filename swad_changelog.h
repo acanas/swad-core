@@ -133,7 +133,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.190.4 (2016-04-09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.190.5 (2016-04-09)"
 #define CSS_FILE		"swad15.190.1.css"
 #define JS_FILE			"swad15.190.1.js"
 
@@ -141,6 +141,8 @@
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
         Version 15.191:   Apr 09, 2016	Form to attach an image to a forum post. Not finished. (? lines)
+        Version 15.190.6: Apr 09, 2016	Changes in layout of form to write a new message. (? lines)
+        Version 15.190.5: Apr 09, 2016	Changes in layout of form to write a new forum post. (199156 lines)
         Version 15.190.4: Apr 09, 2016	Changes in layout of form to write a new forum post. (199152 lines)
         Version 15.190.3: Apr 09, 2016	Change in format of image title/attribution. (199145 lines)
         Version 15.190.2: Apr 09, 2016	Fixed bug in test images. (199144 lines)
