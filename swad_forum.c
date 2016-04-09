@@ -3714,8 +3714,15 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    For_PutAllHiddenParamsForum ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,IsReply ? Txt_New_message :
-        	                              Txt_New_thread);
+   Lay_StartRoundFrame (NULL,
+                        IsReply ? Txt_New_message :
+        	                  Txt_New_thread,
+        	        NULL);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+
+   /***** Subject *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
@@ -3728,8 +3735,10 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
       fprintf (Gbl.F.Out,"%s",Subject);
    fprintf (Gbl.F.Out,"</textarea>"
 	              "</td>"
-	              "</tr>"
-	              "<tr>"
+	              "</tr>");
+
+   /***** Post *****/
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s: "
 	              "</td>"
@@ -3741,15 +3750,14 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message);
 
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
    /***** Help for text editor *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\">");
    Lay_HelpPlainEditor ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
+   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Send_message);
 
    /***** End form *****/
    Act_FormEnd ();
