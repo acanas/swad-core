@@ -259,7 +259,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod);
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
                                 struct Image *Image);
-static bool For_RemoveForumPst (long PstCod);
+static bool For_RemoveForumPst (long PstCod,struct Image *Image);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
 static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod);
@@ -478,11 +478,14 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 /*****************************************************************************/
 // Return true if the post thread is deleted
 
-static bool For_RemoveForumPst (long PstCod)
+static bool For_RemoveForumPst (long PstCod,struct Image *Image)
   {
    char Query[512];
    long ThrCod;
    bool ThreadDeleted = false;
+
+   /***** Remove image file attached to forum post *****/
+   Img_RemoveImageFile (Image->Name);
 
    /***** If the post is the only one in its thread, delete that thread *****/
    if (For_NumPstsInThrWithPstCod (PstCod,&ThrCod) < 2)
@@ -1312,7 +1315,6 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 /*****************************************************************************/
 /*************************** Get data of a forum post ************************/
 /*****************************************************************************/
-// If pointer to Image is NULL ==> do not get image
 
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char *Subject, char *Content,struct Image *Image)
@@ -1351,8 +1353,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
    /****** Get image name (row[4]) and title (row[5]) *****/
-   if (Image)
-      Img_GetImageNameAndTitleFromRow (row[4],row[5],Image);
+   Img_GetImageNameAndTitleFromRow (row[4],row[5],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4018,26 +4019,35 @@ void For_DelPst (void)
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char OriginalContent[Cns_MAX_BYTES_TEXT+1];
+   struct Image Image;
    bool ThreadDeleted = false;
 
-   /***** Get the code of the message to delete *****/
+   /***** Get parameters *****/
+   /* Get the code of the message to remove */
    PstCod = For_GetParamPstCod ();
 
-   /***** Delete the message *****/
    /* Get order type, degree and course of the forum */
    For_GetParamsForum ();
+
    /* Set forum type */
    For_SetForumTypeAndRestrictAccess ();
+
    /* Get the thread number */
    ThrCod = For_GetParamThrCod ();
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&Image);
+
+   /***** Get forum post data *****/
+   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
+                   Subject,OriginalContent,&Image);
+
+   /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
    if (!For_GetIfForumPstExists (PstCod))
       Lay_ShowErrorAndExit ("The post to remove no longer exists.");
 
    /* Check if I am the author of the message */
-   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
-                   Subject,OriginalContent,NULL);
    if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)
       Lay_ShowErrorAndExit ("You can not remove post because you aren't the author.");
 
@@ -4045,8 +4055,11 @@ void For_DelPst (void)
    if (PstCod != For_GetLastPstCod (ThrCod))
       Lay_ShowErrorAndExit ("You can not remove post because it is not the last of the thread.");
 
-   /* Remove the message */
-   ThreadDeleted = For_RemoveForumPst (PstCod);
+   /***** Remove the post *****/
+   ThreadDeleted = For_RemoveForumPst (PstCod,&Image);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,PstCod);

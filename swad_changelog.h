@@ -133,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.192 (2016-04-10)"
+#define Log_PLATFORM_VERSION	"SWAD 15.192.1 (2016-04-10)"
 #define CSS_FILE		"swad15.192.css"
 #define JS_FILE			"swad15.190.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.192.1: Apr 10, 2016	Remove image attached to forum post when the post is removed. (199340 lines)
         Version 15.192:   Apr 10, 2016	Get image attached to forum post / message. (199332 lines)
 					6 changes necessary in database:
 ALTER TABLE forum_post ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;
