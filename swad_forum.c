@@ -4018,7 +4018,7 @@ void For_DelPst (void)
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char OriginalContent[Cns_MAX_BYTES_TEXT+1];
+   char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
    struct Image Image;
    bool ThreadDeleted = false;
 
