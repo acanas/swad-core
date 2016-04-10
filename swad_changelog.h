@@ -133,14 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.190.6 (2016-04-09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.191 (2016-04-10)"
 #define CSS_FILE		"swad15.190.1.css"
 #define JS_FILE			"swad15.190.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.191:   Apr 09, 2016	Form to attach an image to a forum post. Not finished. (? lines)
+        Version 15.191:   Apr 10, 2016	Forms to attach an image to a forum posts and messages. Not finished. (? lines)
         Version 15.190.6: Apr 09, 2016	Changes in layout of form to write a new message. (199152 lines)
         Version 15.190.5: Apr 09, 2016	Changes in layout of form to write a new forum post. (199156 lines)
         Version 15.190.4: Apr 09, 2016	Changes in layout of form to write a new forum post. (199152 lines)

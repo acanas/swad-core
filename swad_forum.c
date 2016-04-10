@@ -238,6 +238,14 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
    ActDisPstForSWATch,
   };
 
+// Forum images will be saved with:
+// - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of For_IMAGE_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define For_IMAGE_SAVED_MAX_WIDTH	768
+#define For_IMAGE_SAVED_MAX_HEIGHT	512
+#define For_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+
 /*****************************************************************************/
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -3701,6 +3709,9 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
+   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Send_message;
 
    /***** Start frame *****/
@@ -3757,6 +3768,29 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /***** Help for text editor *****/
    Lay_HelpPlainEditor ();
 
+   /***** Attached image (optional) *****/
+   /* Action to perform on image */
+   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+
+   /* Image file */
+   fprintf (Gbl.F.Out,"<label>"
+	              "<img src=\"%s/photo64x64.gif\""
+	              " alt=\"%s\" title=\"%s (%s)\""
+	              " class=\"ICON20x20\" />"
+	              "</label>"
+	              "<input type=\"file\" name=\"ImgFil\""
+		      " size=\"40\" maxlength=\"100\" value=\"\" />"
+	              "<br />",
+            Gbl.Prefs.IconsURL,
+            Txt_Image,Txt_Image,Txt_optional);
+
+   /* Image title/attribution */
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
+                      " placeholder=\"%s (%s)&hellip;\""
+                      " class=\"FOR_IMG\" maxlength=\"%u\" value=\"\">",
+            Txt_Image_title_attribution,Txt_optional,
+            Img_MAX_BYTES_TITLE);
+
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_message);
 
@@ -3781,6 +3815,7 @@ void For_RecForumPst (void)
    unsigned NumUsrsToBeNotifiedByEMail;
    struct SocialPublishing SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -3812,6 +3847,16 @@ void For_RecForumPst (void)
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,false);
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&Image);
+
+   /***** Get attached image (action, file and title) *****/
+   Img_GetImageFromForm (0,&Image,NULL,
+                         "ImgAct","ImgFil","ImgTit",
+	                 For_IMAGE_SAVED_MAX_WIDTH,
+	                 For_IMAGE_SAVED_MAX_HEIGHT,
+	                 For_IMAGE_SAVED_QUALITY);
+
    /***** Create a new message *****/
    if (PstIsAReply)
      {
@@ -3834,6 +3879,9 @@ void For_RecForumPst (void)
       /***** Update first and last posts of new thread *****/
       For_UpdateThrFirstAndLastPst (ThrCod,PstCod,PstCod);
      }
+
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
 
    /***** Increment number of forum posts in my user's figures *****/
    Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);

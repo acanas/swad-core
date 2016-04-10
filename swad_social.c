@@ -51,11 +51,11 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_WIDTH_TIMELINE	    "560px"
-#define Soc_MAX_SHARERS_FAVERS_SHOWN	  7	// Maximum number of users shown who have share/fav a social note
+#define Soc_WIDTH_TIMELINE		"560px"
+#define Soc_MAX_SHARERS_FAVERS_SHOWN	7	// Maximum number of users shown who have share/fav a social note
 
-#define Soc_MAX_BYTES_SUMMARY	       1000
-#define Soc_MAX_CHARS_IN_POST	       1000
+#define Soc_MAX_BYTES_SUMMARY	1000
+#define Soc_MAX_CHARS_IN_POST	1000
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited

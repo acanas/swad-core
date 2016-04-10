@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2015 Antonio Cañas Vargas
+    Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -2071,6 +2071,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin-bottom:10px;
 	}
 
+/************************************ Forum **********************************/
+.FOR_IMG
+	{
+	width:480px;
+	border-radius:4px;
+	margin:10px 0;
+	}
+
 /*********************************** Messages ********************************/
 .MSG_TO_ONE_RCP
 	{
@@ -2078,6 +2086,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-left:4px;
 	text-align:left;
 	vertical-align:middle;
+	}
+.MSG_IMG
+	{
+	width:480px;
+	border-radius:4px;
+	margin:10px 0;
 	}
 .MSG_TXT	{color:#404040; font-size:13pt;}
 .MSG_TIT	{color:#4D88A1; font-size:13pt;}

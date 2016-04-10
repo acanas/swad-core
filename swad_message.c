@@ -60,6 +60,14 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 #define Msg_MAX_LENGTH_MESSAGES_QUERY 4096
 #define Msg_MAX_LENGTH_STR_ADDR (32*5000)
 
+// Forum images will be saved with:
+// - maximum width of Msg_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of Msg_IMAGE_SAVED_MAX_HEIGHT
+// - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
+#define Msg_IMAGE_SAVED_MAX_WIDTH	768
+#define Msg_IMAGE_SAVED_MAX_HEIGHT	512
+#define Msg_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+
 /*****************************************************************************/
 /******************************** Private types ******************************/
 /*****************************************************************************/
@@ -275,6 +283,9 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
+   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Send_message;
    char YN[1+1];
 
@@ -407,6 +418,29 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 
       /***** Help for text editor and send button *****/
       Lay_HelpPlainEditor ();
+
+      /***** Attached image (optional) *****/
+      /* Action to perform on image */
+      Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+
+      /* Image file */
+      fprintf (Gbl.F.Out,"<label>"
+			 "<img src=\"%s/photo64x64.gif\""
+			 " alt=\"%s\" title=\"%s (%s)\""
+			 " class=\"ICON20x20\" />"
+			 "</label>"
+			 "<input type=\"file\" name=\"ImgFil\""
+			 " size=\"40\" maxlength=\"100\" value=\"\" />"
+			 "<br />",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Image,Txt_Image,Txt_optional);
+
+      /* Image title/attribution */
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
+			 " placeholder=\"%s (%s)&hellip;\""
+			 " class=\"MSG_IMG\" maxlength=\"%u\" value=\"\">",
+	       Txt_Image_title_attribution,Txt_optional,
+	       Img_MAX_BYTES_TITLE);
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -693,6 +727,7 @@ void Msg_RecMsgFromUsr (void)
    bool CreateNotif;
    bool NotifyByEmail;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
    bool Error = false;
 
    /***** Get data from form *****/
@@ -754,6 +789,16 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDstData);
+
+   /***** Initialize image *****/
+   Img_ImageConstructor (&Image);
+
+   /***** Get attached image (action, file and title) *****/
+   Img_GetImageFromForm (0,&Image,NULL,
+                         "ImgAct","ImgFil","ImgTit",
+	                 Msg_IMAGE_SAVED_MAX_WIDTH,
+	                 Msg_IMAGE_SAVED_MAX_HEIGHT,
+	                 Msg_IMAGE_SAVED_QUALITY);
 
    /***** Loop over the list Gbl.Usrs.Select.All, that holds the list of the
 	  recipients, creating a received message for each recipient *****/
@@ -826,6 +871,9 @@ void Msg_RecMsgFromUsr (void)
          NumErrors++;
         }
      }
+
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDstData);
