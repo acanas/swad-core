@@ -133,14 +133,23 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.191 (2016-04-10)"
-#define CSS_FILE		"swad15.190.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.192 (2016-04-10)"
+#define CSS_FILE		"swad15.192.css"
 #define JS_FILE			"swad15.190.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.191:   Apr 10, 2016	Forms to attach an image to a forum posts and messages. Not finished. (? lines)
+        Version 15.192:   Apr 10, 2016	Get image attached to forum post / message. (199332 lines)
+					6 changes necessary in database:
+ALTER TABLE forum_post ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;
+ALTER TABLE forum_post ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+ALTER TABLE msg_content ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;
+ALTER TABLE msg_content ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+ALTER TABLE msg_content_deleted ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;
+ALTER TABLE msg_content_deleted ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+
+        Version 15.191:   Apr 10, 2016	Forms to attach an image to a forum posts and messages. Not finished. (199247 lines)
         Version 15.190.6: Apr 09, 2016	Changes in layout of form to write a new message. (199152 lines)
         Version 15.190.5: Apr 09, 2016	Changes in layout of form to write a new forum post. (199156 lines)
         Version 15.190.4: Apr 09, 2016	Changes in layout of form to write a new forum post. (199152 lines)

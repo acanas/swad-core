@@ -250,6 +250,26 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
 
+static bool For_GetIfForumPstExists (long PstCod);
+
+static bool For_GetIfPstIsEnabled (long PstCod);
+static void For_DeletePstFromDisabledPstTable (long PstCod);
+static void For_InsertPstIntoBannedPstTable (long PstCod);
+
+static long For_InsertForumPst (long ThrCod,long UsrCod,
+                                const char *Subject,const char *Content,
+                                struct Image *Image);
+static bool For_RemoveForumPst (long PstCod);
+static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
+
+static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod);
+static void For_RemoveThreadOnly (long ThrCod);
+static void For_RemoveThreadAndItsPsts (long ThrCod);
+static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize);
+static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
+static void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
+static long For_GetLastPstCod (long ThrCod);
+
 static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC);
 static unsigned For_GetNumOfReadersOfThr (long ThrCod);
 static unsigned For_GetNumOfWritersInThr (long ThrCod);
@@ -290,7 +310,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                                 bool LastPst,char *LastSubject,
                                 bool NewPst,bool ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char *Subject, char *Content);
+                            char *Subject,char *Content,struct Image *Image);
 static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 
 /*****************************************************************************/
@@ -361,7 +381,7 @@ void For_DisPst (void)
 /******************** Get if a forum post exists in database *****************/
 /*****************************************************************************/
 
-bool For_GetIfForumPstExists (long PstCod)
+static bool For_GetIfForumPstExists (long PstCod)
   {
    char Query[512];
 
@@ -376,7 +396,7 @@ bool For_GetIfForumPstExists (long PstCod)
 /*********************** Get if a forum post is enabled **********************/
 /*****************************************************************************/
 
-bool For_GetIfPstIsEnabled (long PstCod)
+static bool For_GetIfPstIsEnabled (long PstCod)
   {
    char Query[512];
 
@@ -391,7 +411,7 @@ bool For_GetIfPstIsEnabled (long PstCod)
 /****************** Delete post from table of disabled posts *****************/
 /*****************************************************************************/
 
-void For_DeletePstFromDisabledPstTable (long PstCod)
+static void For_DeletePstFromDisabledPstTable (long PstCod)
   {
    char Query[512];
 
@@ -406,7 +426,7 @@ void For_DeletePstFromDisabledPstTable (long PstCod)
 /****************** Insert post into table of banned posts *******************/
 /*****************************************************************************/
 
-void For_InsertPstIntoBannedPstTable (long PstCod)
+static void For_InsertPstIntoBannedPstTable (long PstCod)
   {
    char Query[512];
 
@@ -422,16 +442,35 @@ void For_InsertPstIntoBannedPstTable (long PstCod)
 /************** Insert a post new in the table of posts of forums ************/
 /*****************************************************************************/
 
-long For_InsertForumPst (long ThrCod,long UsrCod,const char *Subject,const char *Content)
+static long For_InsertForumPst (long ThrCod,long UsrCod,
+                                const char *Subject,const char *Content,
+                                struct Image *Image)
   {
-   char Query[256+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_LONG_TEXT];
+   char *Query;
+   long PstCod;
+
+   /***** Allocate space for query *****/
+   if ((Query = malloc (512 +
+                        strlen (Subject) +
+			strlen (Content) +
+			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			Img_MAX_BYTES_TITLE)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Insert forum post in the database *****/
    sprintf (Query,"INSERT INTO forum_post"
-	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,Subject,Content)"
-                  " VALUES ('%ld','%ld',NOW(),NOW(),'0','%s','%s')",
-            ThrCod,UsrCod,Subject,Content);
-   return DB_QueryINSERTandReturnCode (Query,"can not create a new post in a forum");
+	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
+	          "Subject,Content,ImageName,ImageTitle)"
+                  " VALUES ('%ld','%ld',NOW(),NOW(),'0',"
+                  "'%s','%s','%s','%s')",
+            ThrCod,UsrCod,
+            Subject,Content,Image->Name,Image->Title ? Image->Title : "");
+   PstCod = DB_QueryINSERTandReturnCode (Query,"can not create a new post in a forum");
+
+   /***** Free space used for query *****/
+   free ((void *) Query);
+
+   return PstCod;
   }
 
 /*****************************************************************************/
@@ -439,7 +478,7 @@ long For_InsertForumPst (long ThrCod,long UsrCod,const char *Subject,const char 
 /*****************************************************************************/
 // Return true if the post thread is deleted
 
-bool For_RemoveForumPst (long PstCod)
+static bool For_RemoveForumPst (long PstCod)
   {
    char Query[512];
    long ThrCod;
@@ -471,7 +510,7 @@ bool For_RemoveForumPst (long PstCod)
 /*********** Get the number of posts in the thread than holds a post *********/
 /*****************************************************************************/
 
-unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
+static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -501,7 +540,7 @@ unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
 /*****************************************************************************/
 // Returns the code of the new inserted thread
 
-long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
+static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
   {
    char Query[512];
 
@@ -553,7 +592,7 @@ long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
 /*************** Delete a thread from the forum thread table *****************/
 /*****************************************************************************/
 
-void For_RemoveThreadOnly (long ThrCod)
+static void For_RemoveThreadOnly (long ThrCod)
   {
    char Query[512];
 
@@ -573,7 +612,7 @@ void For_RemoveThreadOnly (long ThrCod)
 /*************** Delete a thread from the forum thread table *****************/
 /*****************************************************************************/
 
-void For_RemoveThreadAndItsPsts (long ThrCod)
+static void For_RemoveThreadAndItsPsts (long ThrCod)
   {
    char Query[512];
 
@@ -598,7 +637,7 @@ void For_RemoveThreadAndItsPsts (long ThrCod)
 /********************* Get the thread subject from a thread ******************/
 /*****************************************************************************/
 
-void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
+static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -661,7 +700,7 @@ For_ForumType_t For_GetForumTypeOfAPost (long PstCod)
 /********* Modify the codes of the first and last posts of a thread **********/
 /*****************************************************************************/
 
-void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
+static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
   {
    char Query[512];
 
@@ -676,7 +715,7 @@ void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
 /************** Modify the code of the last post of a thread *****************/
 /*****************************************************************************/
 
-void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
+static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
   {
    char Query[512];
 
@@ -690,7 +729,7 @@ void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
 /**************** Get the code of the last post of a thread ******************/
 /*****************************************************************************/
 
-long For_GetLastPstCod (long ThrCod)
+static long For_GetLastPstCod (long ThrCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1104,16 +1143,21 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
    bool Enabled;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
+   /***** Initialize image *****/
+   Img_ImageConstructor (&Image);
+
    /***** Check if post is enabled *****/
    Enabled = For_GetIfPstIsEnabled (PstCod);
 
    /***** Get data of post *****/
-   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,OriginalContent);
+   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
+                   Subject,OriginalContent,&Image);
    if (Enabled)
      {
       /* Return this subject as last subject */
@@ -1248,12 +1292,18 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       strncpy (Content,OriginalContent,Cns_MAX_BYTES_LONG_TEXT);
       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+
+      /***** Show image *****/
+      Img_ShowImage (&Image,"FOR_IMG");
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
    fprintf (Gbl.F.Out,"<br />&nbsp;"
 	              "</td>"
 	              "</tr>");
+
+   /***** Free image *****/
+   Img_ImageDestructor (&Image);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1262,9 +1312,10 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 /*****************************************************************************/
 /*************************** Get data of a forum post ************************/
 /*****************************************************************************/
+// If pointer to Image is NULL ==> do not get image
 
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char *Subject, char *Content)
+                            char *Subject, char *Content,struct Image *Image)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1272,7 +1323,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    unsigned NumRows;
 
    /***** Get data of a post from database *****/
-   sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),Subject,Content"
+   sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),"
+	          "Subject,Content,ImageName,ImageTitle"
                   " FROM forum_post WHERE PstCod='%ld'",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a post");
@@ -1291,10 +1343,16 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
    /****** Get subject (row[2]) *****/
-   strcpy (Subject,row[2]);
+   strncpy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
+   Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
 
    /****** Get location (row[3]) *****/
-   strcpy (Content,row[3]);
+   strncpy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
+   Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
+   /****** Get image name (row[4]) and title (row[5]) *****/
+   if (Image)
+      Img_GetImageNameAndTitleFromRow (row[4],row[5],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2461,14 +2519,16 @@ void For_ShowForumThrs (void)
    switch (Gbl.Forum.SelectedOrderType)
      {
       case For_FIRST_MSG:
-         sprintf (Query,"SELECT forum_thread.ThrCod FROM forum_thread,forum_post"
+         sprintf (Query,"SELECT forum_thread.ThrCod"
+                        " FROM forum_thread,forum_post"
                         " WHERE forum_thread.ForumType='%u'%s"
                         " AND forum_thread.FirstPstCod=forum_post.PstCod"
                         " ORDER BY forum_post.CreatTime DESC",
                   (unsigned) Gbl.Forum.ForumType,SubQuery);
          break;
       case For_LAST_MSG:
-         sprintf (Query,"SELECT forum_thread.ThrCod FROM forum_thread,forum_post"
+         sprintf (Query,"SELECT forum_thread.ThrCod"
+                        " FROM forum_thread,forum_post"
                         " WHERE forum_thread.ForumType='%u'%s"
                         " AND forum_thread.LastPstCod=forum_post.PstCod"
                         " ORDER BY forum_post.CreatTime DESC",
@@ -3533,8 +3593,10 @@ static void For_WriteThrSubject (long ThrCod)
    long FirstPstCod;
 
    /***** Get subject of a thread from database *****/
-   sprintf (Query,"SELECT forum_post.PstCod,forum_post.Subject FROM forum_thread,forum_post"
-                  " WHERE forum_thread.ThrCod='%ld' AND forum_thread.FirstPstCod=forum_post.PstCod",
+   sprintf (Query,"SELECT forum_post.PstCod,forum_post.Subject"
+	          " FROM forum_thread,forum_post"
+                  " WHERE forum_thread.ThrCod='%ld'"
+                  " AND forum_thread.FirstPstCod=forum_post.PstCod",
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a thread");
 
@@ -3858,23 +3920,25 @@ void For_RecForumPst (void)
 	                 For_IMAGE_SAVED_QUALITY);
 
    /***** Create a new message *****/
-   if (PstIsAReply)
+   if (PstIsAReply)	// This post is a reply to another posts in the thread
      {
       // ThrCod has been received from form
 
       /***** Create last message of the thread *****/
-      PstCod = For_InsertForumPst (ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.Subject,Content);
+      PstCod = For_InsertForumPst (ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                   Gbl.Msg.Subject,Content,&Image);
 
       /***** Modify last message of the thread *****/
       For_UpdateThrLastPst (ThrCod,PstCod);
      }
-   else	// New thread
+   else			// This post is the first of a new thread
      {
       /***** Create new thread with unknown first and last message codes *****/
       ThrCod = For_InsertForumThread (Gbl.Forum.ForumType,-1L);
 
       /***** Create first (and last) message of the thread *****/
-      PstCod = For_InsertForumPst (ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.Subject,Content);
+      PstCod = For_InsertForumPst (ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                   Gbl.Msg.Subject,Content,&Image);
 
       /***** Update first and last posts of new thread *****/
       For_UpdateThrFirstAndLastPst (ThrCod,PstCod,PstCod);
@@ -3972,7 +4036,8 @@ void For_DelPst (void)
       Lay_ShowErrorAndExit ("The post to remove no longer exists.");
 
    /* Check if I am the author of the message */
-   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,OriginalContent);
+   For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
+                   Subject,OriginalContent,NULL);
    if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)
       Lay_ShowErrorAndExit ("You can not remove post because you aren't the author.");
 

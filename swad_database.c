@@ -1100,19 +1100,21 @@ mysql> DESCRIBE forum_disabled_post;
    /***** Table forum_post *****/
 /*
 mysql> DESCRIBE forum_post;
-+-----------+----------+------+-----+---------------------+----------------+
-| Field     | Type     | Null | Key | Default             | Extra          |
-+-----------+----------+------+-----+---------------------+----------------+
-| PstCod    | int(11)  | NO   | PRI | NULL                | auto_increment |
-| ThrCod    | int(11)  | NO   | MUL | NULL                |                |
-| UsrCod    | int(11)  | NO   | MUL | NULL                |                |
-| CreatTime | datetime | NO   | MUL | NULL                |                |
-| ModifTime | datetime | NO   | MUL | 0000-00-00 00:00:00 |                |
-| NumNotif  | int(11)  | NO   |     | 0                   |                |
-| Subject   | text     | NO   |     | NULL                |                |
-| Content   | longtext | NO   |     | NULL                |                |
-+-----------+----------+------+-----+---------------------+----------------+
-8 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| PstCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| ThrCod     | int(11)      | NO   | MUL | NULL    |                |
+| UsrCod     | int(11)      | NO   | MUL | NULL    |                |
+| CreatTime  | datetime     | NO   | MUL | NULL    |                |
+| ModifTime  | datetime     | NO   | MUL | NULL    |                |
+| NumNotif   | int(11)      | NO   |     | 0       |                |
+| Subject    | text         | NO   |     | NULL    |                |
+| Content    | longtext     | NO   |     | NULL    |                |
+| ImageName  | varchar(43)  | NO   |     | NULL    |                |
+| ImageTitle | varchar(255) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_post ("
                    "PstCod INT NOT NULL AUTO_INCREMENT,"
@@ -1123,6 +1125,8 @@ mysql> DESCRIBE forum_post;
                    "NumNotif INT NOT NULL DEFAULT 0,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PstCod),"
                    "INDEX(ThrCod),"
                    "INDEX(UsrCod),"
@@ -1570,38 +1574,46 @@ mysql> DESCRIBE msg_banned;
    /***** Table msg_content *****/
 /*
 mysql> DESCRIBE msg_content;
-+---------+----------+------+-----+---------+----------------+
-| Field   | Type     | Null | Key | Default | Extra          |
-+---------+----------+------+-----+---------+----------------+
-| MsgCod  | int(11)  | NO   | PRI | NULL    | auto_increment |
-| Subject | text     | NO   | MUL | NULL    |                |
-| Content | longtext | NO   |     | NULL    |                |
-+---------+----------+------+-----+---------+----------------+
-3 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| MsgCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Subject    | text         | NO   | MUL | NULL    |                |
+| Content    | longtext     | NO   |     | NULL    |                |
+| ImageName  | varchar(43)  | NO   |     | NULL    |                |
+| ImageTitle | varchar(255) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content ("
                    "MsgCod INT NOT NULL AUTO_INCREMENT,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_content_deleted *****/
 /*
 mysql> DESCRIBE msg_content_deleted;
-+---------+----------+------+-----+---------+-------+
-| Field   | Type     | Null | Key | Default | Extra |
-+---------+----------+------+-----+---------+-------+
-| MsgCod  | int(11)  | NO   | PRI | NULL    |       |
-| Subject | text     | NO   | MUL | NULL    |       |
-| Content | longtext | NO   |     | NULL    |       |
-+---------+----------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| MsgCod     | int(11)      | NO   | PRI | NULL    |       |
+| Subject    | text         | NO   | MUL | NULL    |       |
+| Content    | longtext     | NO   |     | NULL    |       |
+| ImageName  | varchar(43)  | NO   |     | NULL    |       |
+| ImageTitle | varchar(255) | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content_deleted ("
                    "MsgCod INT NOT NULL,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL,"
+                   "ImageTitle VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 

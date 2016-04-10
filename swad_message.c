@@ -111,7 +111,8 @@ static void Msg_ExpandReceivedMsg (long MsgCod);
 static void Msg_ContractSentMsg (long MsgCod);
 static void Msg_ContractReceivedMsg (long MsgCod);
 
-static long Msg_InsertNewMsg (const char *Subject,const char *Content);
+static long Msg_InsertNewMsg (const char *Subject,const char *Content,
+                              struct Image *Image);
 
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery);
@@ -126,7 +127,7 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,char *Subject,bool *Deleted);
-static void Msg_GetMsgContent (long MsgCod,char *Content);
+static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image);
 
 static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod,const char *Subject,bool Open,bool Expanded);
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
@@ -828,7 +829,7 @@ void Msg_RecMsgFromUsr (void)
             if (!MsgAlreadyInserted)
               {
                // The message is inserted only once in the table of messages sent
-               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content);
+               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content,&Image);
                MsgAlreadyInserted = true;
               }
 
@@ -1356,15 +1357,25 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 /*****************************************************************************/
 // Return the code of the new inserted message
 
-static long Msg_InsertNewMsg (const char *Subject,const char *Content)
+static long Msg_InsertNewMsg (const char *Subject,const char *Content,
+                              struct Image *Image)
   {
-   char Query[128+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_LONG_TEXT];
+   char *Query;
    long MsgCod;
 
+   /***** Allocate space for query *****/
+   if ((Query = malloc (512 +
+                        strlen (Subject) +
+			strlen (Content) +
+			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			Img_MAX_BYTES_TITLE)) == NULL)
+      Lay_ShowErrorAndExit ("Not enough memory to store database query.");
+
    /***** Insert message subject and content in the database *****/
-   sprintf (Query,"INSERT INTO msg_content (Subject,Content)"
-                  " VALUES ('%s','%s')",
-            Subject,Content);
+   sprintf (Query,"INSERT INTO msg_content"
+	          " (Subject,Content,ImageName,ImageTitle)"
+                  " VALUES ('%s','%s','%s','%s')",
+            Subject,Content,Image->Name,Image->Title ? Image->Title : "");
    MsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
 
    /***** Insert message in sent messages *****/
@@ -1374,6 +1385,9 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content)
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not create message");
+
+   /***** Free space used for query *****/
+   free ((void *) Query);
 
    /***** Increment number of messages sent by me *****/
    Prf_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1465,7 +1479,8 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
    char Query[512];
 
    /***** Insert message received in the database *****/
-   sprintf (Query,"INSERT INTO msg_rcv (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+   sprintf (Query,"INSERT INTO msg_rcv"
+	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
                   " VALUES ('%ld','%ld','%c','N','N','N')",
             MsgCod,UsrCod,
             NotifyByEmail ? 'Y' :
@@ -2683,7 +2698,8 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
      {
       /***** Get subject *****/
       row = mysql_fetch_row (mysql_res);
-      strcpy (Subject,row[0]);
+      strncpy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
+      Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
      }
    else
       Subject[0] = '\0';
@@ -2693,18 +2709,19 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
   }
 
 /*****************************************************************************/
-/************************** Get content of a message *************************/
+/*************** Get content and optional image of a message *****************/
 /*****************************************************************************/
 
-static void Msg_GetMsgContent (long MsgCod,char *Content)
+static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
   {
-   char Query[128];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get content of message from database *****/
-   sprintf (Query,"SELECT Content FROM msg_content WHERE MsgCod='%ld'",
+   sprintf (Query,"SELECT Content,ImageName,ImageTitle"
+	          " FROM msg_content WHERE MsgCod='%ld'",
             MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a message");
 
@@ -2718,6 +2735,9 @@ static void Msg_GetMsgContent (long MsgCod,char *Content)
    /****** Get content (row[0]) *****/
    strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
+   /****** Get image name (row[1]) and title (row[2]) *****/
+   Img_GetImageNameAndTitleFromRow (row[1],row[2],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2811,6 +2831,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
    long CrsCod;
    char Subject[Cns_MAX_BYTES_SUBJECT+1];
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   struct Image Image;
    bool Deleted;
    bool Open = true;
    bool Replied = false;	// Initialized to avoid warning
@@ -2936,17 +2957,28 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
                          "<label class=\"MSG_TIT\">"
 	                 "%s: "
                          "</label>"
-	                 "</td>"
-                         "<td colspan=\"2\" class=\"MSG_TXT LEFT_TOP\">",
+	                 "</td>",
                Txt_MSG_Message);
-      Msg_GetMsgContent (MsgCod,Content);
+
+      /***** Initialize image *****/
+      Img_ImageConstructor (&Image);
+
+      /***** Get message content and optional image *****/
+      Msg_GetMsgContent (MsgCod,Content,&Image);
+
+      /***** Show content and image *****/
+      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_TXT LEFT_TOP\">");
       if (Content[0])
         {
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-         fprintf (Gbl.F.Out,"<br />&nbsp;");
+         // fprintf (Gbl.F.Out,"<br />&nbsp;");
         }
+      Img_ShowImage (&Image,"MSG_IMG");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
+
+      /***** Free image *****/
+      Img_ImageDestructor (&Image);
      }
 
    /***** Free memory used for user's data *****/

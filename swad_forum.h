@@ -89,22 +89,9 @@ typedef enum
 
 void For_EnbPst (void);
 void For_DisPst (void);
-bool For_GetIfForumPstExists (long PstCod);
-bool For_GetIfPstIsEnabled (long PstCod);
-void For_DeletePstFromDisabledPstTable (long PstCod);
-void For_InsertPstIntoBannedPstTable (long PstCod);
 
-long For_InsertForumPst (long ThrCod,long UsrCod,const char *Subject,const char *Content);
-bool For_RemoveForumPst (long PstCod);
-unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
-long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod);
-void For_RemoveThreadOnly (long ThrCod);
-void For_RemoveThreadAndItsPsts (long ThrCod);
-void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize);
 For_ForumType_t For_GetForumTypeOfAPost (long PstCod);
-void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
-void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
-long For_GetLastPstCod (long ThrCod);
+
 unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
