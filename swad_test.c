@@ -285,8 +285,7 @@ void Tst_ShowFormAskTst (void)
    extern const char *Txt_No_test_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Read test configuration from database *****/
