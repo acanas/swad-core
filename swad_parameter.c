@@ -232,7 +232,7 @@ void Par_CreateListOfParams (void)
 static void Par_CreateListOfParamsFromQueryString (void)
   {
    unsigned long CurPos;	// Current position in query string
-   struct Param *Param;
+   struct Param *Param = NULL;	// Initialized to avoid warning
    struct Param *NewParam;
 
    /***** Check if query string is empty *****/
@@ -297,7 +297,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    static const char *StringFilename = "; filename=\"";
    static const char *StringContentType = "Content-Type: ";
    unsigned long CurPos;	// Current position in temporal file
-   struct Param *Param;
+   struct Param *Param = NULL;	// Initialized to avoid warning
    struct Param *NewParam;
    int Ch;
    char StrAux[Par_MAX_BYTES_STR_AUX+1];

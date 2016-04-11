@@ -1076,7 +1076,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
    if (!Image->Name[0])
      {
       /* Action to perform on image */
-      Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+      Par_PutHiddenParamUnsigned (ParamAction,(unsigned) Img_ACTION_NEW_IMAGE);
 
       /* File */
       fprintf (Gbl.F.Out,"<label>"
