@@ -457,6 +457,12 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
+   /***** Check if image is received and processed *****/
+   if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
+       Image->Status == Img_FILE_PROCESSED)	// The new image received has been processed
+      /* Move processed image to definitive directory */
+      Img_MoveImageToDefinitiveDirectory (Image);
+
    /***** Insert forum post in the database *****/
    sprintf (Query,"INSERT INTO forum_post"
 	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
@@ -1161,6 +1167,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /***** Get data of post *****/
    For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Image);
+
    if (Enabled)
      {
       /* Return this subject as last subject */

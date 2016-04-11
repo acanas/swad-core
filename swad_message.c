@@ -1371,6 +1371,12 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
+   /***** Check if image is received and processed *****/
+   if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
+       Image->Status == Img_FILE_PROCESSED)	// The new image received has been processed
+      /* Move processed image to definitive directory */
+      Img_MoveImageToDefinitiveDirectory (Image);
+
    /***** Insert message subject and content in the database *****/
    sprintf (Query,"INSERT INTO msg_content"
 	          " (Subject,Content,ImageName,ImageTitle)"
