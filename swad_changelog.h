@@ -129,21 +129,20 @@
 // TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
-
 // TODO: Request confirmation to remove user's photo
-// TODO: Put contextual icon to remove user's photo
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.192.7 (2016-04-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.192.8 (2016-04-11)"
 #define CSS_FILE		"swad15.192.6.css"
 #define JS_FILE			"swad15.190.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.192.8: Apr 11, 2016	Contextual icon to remove user's photo. (199331 lines)
         Version 15.192.7: Apr 11, 2016	Changes in forms to upload user's photo. (199340 lines)
         Version 15.192.6: Apr 11, 2016	Changes in layout of test edition.
 					Changes in forms to upload files. (199359 lines)
