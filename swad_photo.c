@@ -86,7 +86,14 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /*****************************************************************************/
 
 static void Pho_PutLinkToRemoveMyPhoto (void);
-static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat);
+static void Pho_PutLinkToRemoveOtherUsrPhoto (void);
+static void Pho_ReqMyPhoto (void);
+static void Pho_ReqOtherUsrPhotoWithContextualLinks (void);
+static void Pho_ReqOtherUsrPhoto (void);
+
+static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL);
+
+static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat);
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
@@ -227,14 +234,14 @@ static void Pho_PutLinkToRemoveMyPhoto (void)
 /********************* Put a link to remove user's photo *********************/
 /*****************************************************************************/
 
-static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
+static void Pho_PutLinkToRemoveOtherUsrPhoto (void)
   {
    extern const char *Txt_Remove_photo;
 
    /***** Link for removing the photo *****/
-   Lay_PutContextualLink ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
-	                  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
-	                                                               ActRemOthPho),	// Guest, visitor or admin
+   Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+	                  (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
+	                                                                             ActRemOthPho),	// Guest, visitor or admin
                           Usr_PutParamOtherUsrCodEncrypted,
                           "remove-on64x64.png",
                           Txt_Remove_photo,Txt_Remove_photo);
@@ -244,58 +251,73 @@ static void Pho_PutLinkToRemoveOtherUsrPhoto (const struct UsrData *UsrDat)
 /************************ Form for sending my photo **************************/
 /*****************************************************************************/
 
-void Pho_ReqMyPhoto (void)
+void Pho_ReqMyPhotoWithContextualLinks (void)
   {
-   /* Show the form for sending the photo */
-   Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.MyPhotoExists,Gbl.Usrs.Me.PhotoURL);
+   /***** Contextual links to remove photo and change privacy *****/
+   if (Gbl.Usrs.Me.MyPhotoExists)	// I have photo
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Pho_PutLinkToRemoveMyPhoto ();
+      Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
+   /***** Show the form to send my photo *****/
+   Pho_ReqMyPhoto ();
+  }
+
+static void Pho_ReqMyPhoto (void)
+  {
+   /***** Show the form for sending the photo *****/
+   Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
   }
 
 /*****************************************************************************/
 /******************* Form for sending other user's photo *********************/
 /*****************************************************************************/
 
-void Pho_ReqUsrPhoto (struct UsrData *UsrDat)
+static void Pho_ReqOtherUsrPhotoWithContextualLinks (void)
   {
-   bool PhotoExists;
    char PhotoURL[PATH_MAX+1];
 
-   /* Check if user's photo exists and create a link to it */
-   PhotoExists = Pho_BuildLinkToPhoto (UsrDat,PhotoURL,true);
+   /***** Check if user's photo exists and create a link to it *****/
+   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true))	// User has photo
+     {
+      /***** Forms to remove photo and change privacy *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Pho_PutLinkToRemoveOtherUsrPhoto ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
-   /* Show the form for sending the photo */
-   Pho_ReqPhoto (UsrDat,PhotoExists,PhotoURL);
+   /***** Show the form to send another user's photo *****/
+   Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+  }
+
+static void Pho_ReqOtherUsrPhoto (void)
+  {
+   char PhotoURL[PATH_MAX+1];
+
+   /***** Get photo URL *****/
+   Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+
+   /***** Show the form to send another user's photo *****/
+   Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
   }
 
 /*****************************************************************************/
 /****************** Show a form for sending an user's photo ******************/
 /*****************************************************************************/
 
-void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *PhotoURL)
+static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Write message about photo presence or ausence *****/
-   if (PhotoExists)	// User has photo
-     {
-      /***** Forms to remove photo and change privacy *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      if (ItsMe)
-	{
-         Pho_PutLinkToRemoveMyPhoto ();
-         Pri_PutLinkToChangeMyPrivacy ();	// Put link (form) to change my privacy
-	}
-      else
-         Pho_PutLinkToRemoveOtherUsrPhoto (UsrDat);
-      fprintf (Gbl.F.Out,"</div>");
-     }
 
    /***** Start form *****/
-   if (ItsMe)
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Act_FormStart (ActDetMyPho);
    else
      {
@@ -309,7 +331,6 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    Lay_StartRoundFrame (NULL,Txt_Photo,NULL);
 
    /***** Show current photo and help message *****/
-   // if (PhotoExists)
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,
                      "PHOTO186x248",Pho_NO_ZOOM,false);
    Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
@@ -348,7 +369,12 @@ void Pho_SendPhotoUsr (void)
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
 	                                                              Gbl.CurrentCrs.Crs.CrsCod,
 	                                                              true);
-	 Pho_ReqUsrPhoto (&Gbl.Usrs.Other.UsrDat);        // Request user's photograph
+         if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+	    /***** Form to send my photo *****/
+	    Pho_ReqMyPhotoWithContextualLinks ();
+	 else
+	    /***** Form to send another user's photo *****/
+	    Pho_ReqOtherUsrPhotoWithContextualLinks ();
 	}
       else
          Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -364,14 +390,15 @@ void Pho_SendPhotoUsr (void)
 void Pho_RecMyPhotoDetFaces (void)
   {
    /***** Receive my photo and detect faces on it *****/
-   Pho_ReceivePhotoAndDetectFaces (true,&Gbl.Usrs.Me.UsrDat);
+   if (!Pho_ReceivePhotoAndDetectFaces (true,&Gbl.Usrs.Me.UsrDat))
+      Pho_ReqMyPhoto ();	// Request my photograph again
   }
 
 /*****************************************************************************/
 /********** Receive another user's photo and detect faces on it **************/
 /*****************************************************************************/
 
-void Pho_RecUsrPhotoDetFaces (void)
+void Pho_RecOtherUsrPhotoDetFaces (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
@@ -380,8 +407,11 @@ void Pho_RecUsrPhotoDetFaces (void)
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+     {
       /***** Receive photo *****/
-      Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat);
+      if (!Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat))
+	 Pho_ReqOtherUsrPhoto ();	// Request user's photograph again
+     }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
@@ -433,14 +463,14 @@ void Pho_RemoveUsrPhoto (void)
 /*****************************************************************************/
 /***************** Receive a photo and detect faces on it ********************/
 /*****************************************************************************/
+// Return false if no "green" faces detected
 
-void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
+static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
   {
    extern const char *Txt_The_file_is_not_X;
    extern const char *Txt_Could_not_detect_any_face_in_front_position_;
    extern const char *Txt_A_face_marked_in_green_has_been_detected_;
    extern const char *Txt_A_face_marked_in_red_has_been_detected_;
-   extern const char *Txt_Try_sending_another_image_where_the_face_appears_in_front_position_;
    extern const char *Txt_X_faces_marked_in_green_have_been_detected_;
    extern const char *Txt_X_faces_marked_in_red_have_been_detected_;
    extern const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_;
@@ -510,7 +540,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
      {
       sprintf (Gbl.Message,Txt_The_file_is_not_X,"jpg");
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-      return;
+      return false;
      }
 
    /* End the reception of photo in a temporary file */
@@ -520,7 +550,7 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
       Lay_ShowAlert (Lay_WARNING,"Error copying file.");
-      return;
+      return false;
      }
 
    /* Copy the original photo received to private directory.
@@ -585,19 +615,13 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
 
    /***** Message to the user about the number of faces detected in the image*****/
    if (NumFacesTotal == 0)
-     {
       Lay_ShowAlert (Lay_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
-      Lay_ShowAlert (Lay_INFO,Txt_Try_sending_another_image_where_the_face_appears_in_front_position_);
-     }
    else if (NumFacesTotal == 1)
      {
       if (NumFacesGreen == 1)
          Lay_ShowAlert (Lay_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
       else
-        {
          Lay_ShowAlert (Lay_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
-         Lay_ShowAlert (Lay_INFO,Txt_Try_sending_another_image_where_the_face_appears_in_front_position_);
-        }
      }
    else        // NumFacesTotal > 1
      {
@@ -612,7 +636,6 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
          sprintf (Gbl.Message,Txt_X_faces_marked_in_red_have_been_detected_,
                   NumFacesRed);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         Lay_ShowAlert (Lay_INFO,Txt_Try_sending_another_image_where_the_face_appears_in_front_position_);
         }
       else        // NumFacesGreen > 0
         {
@@ -624,17 +647,6 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
                      NumFacesTotal,NumFacesGreen,NumFacesRed);
          Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
         }
-     }
-
-   /***** Button to send another photo *****/
-   if (NumFacesGreen == 0)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
-         Pho_PutLinkToChangeMyPhoto ();
-      else if (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-         Pho_PutLinkToChangeOtherUsrPhoto ();
-      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Create map *****/
@@ -673,6 +685,9 @@ void Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
             Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
             Gbl.UniqueNameEncrypted,
             Txt_Faces_detected,Txt_Faces_detected);
+
+   /***** Button to send another photo *****/
+   return (NumFacesGreen != 0);
   }
 
 /*****************************************************************************/

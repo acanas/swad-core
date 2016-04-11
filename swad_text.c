@@ -47063,36 +47063,6 @@ const char *Txt_Total_BR_score =
 	"Pontua&ccedil;&atilde;o<br />total";
 #endif
 
-const char *Txt_Try_sending_another_image_where_the_face_appears_in_front_position_ =
-#if   L==1
-	"Provi a enviar una altra imatge on la cara aparegui de front"
-	" i el fons sigui blanc o molt clar.";
-#elif L==2
-	"Versuchen Sie ein anderes Bild zu senden, wo das Gesicht vor Position erscheint,"
-	" und der Hintergrund ist wei&szlig; oder sehr leicht.";
-#elif L==3
-	"Try sending another image where the face appears in front position"
-	" and the background is white or very light.";
-#elif L==4
-	"Pruebe a enviar otra imagen donde el rostro aparezca de frente"
-	" y el fondo sea blanco o muy claro.";
-#elif L==5
-	"Essayez d'envoyer une autre image o&ugrave; le visage appara&icirc;t en position avant"
-	" et l'arri&egrave;re-plan est blanc ou tr&egrave;s clair.";
-#elif L==6
-	"Pruebe a enviar otra imagen donde el rostro aparezca de frente"
-	" y el fondo sea blanco o muy claro.";	// Okoteve traducción
-#elif L==7
-	"Prova a inviare un'altra immagine dove il viso appare in posizione frontale"
-	" e lo sfondo &egrave; bianco o molto chiaro.";
-#elif L==8
-	"Spr&oacute;buj wys&lstrok;a&cacute; inny obraz, gdzie pojawia si&eogon; twarz&aogon; w przednim po&lstrok;o&zdot;eniu,"
-	" a t&lstrok;o jest bia&lstrok;e lub bardzo jasne.";
-#elif L==9
-	"Tente enviar outra imagem onde o rosto aparece na posi&ccedil;&atilde;o dianteira"
-	" eo fundo &eacute; branco ou muito claro.";
-#endif
-
 const char *Txt_TST_Correct_ANSWER =
 #if   L==1
 	"Correcta";
