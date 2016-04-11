@@ -171,13 +171,6 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
    /***** Secondly, get the image name and the file *****/
    switch (Image->Action)
      {
-      case Img_ACTION_NO_IMAGE:		// Do not use image (remove current image if exists)
-         break;
-      case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
-	 /***** Get image name *****/
-	 if (GetImageFromDB)
-	    GetImageFromDB (NumOpt,Image);
-	 break;
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
@@ -189,15 +182,22 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
 	    Image->Name[0] = '\0';
 	   }
 	 break;
+      case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
+	 /***** Get image name *****/
+	 if (GetImageFromDB != NULL)
+	    GetImageFromDB (NumOpt,Image);
+	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
          /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
 	                                     Width,Height,Quality);
 	 if (Image->Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
-	     GetImageFromDB)
+	     GetImageFromDB != NULL)
 	    /* Get image name */
 	    GetImageFromDB (NumOpt,Image);
 	 break;
+      case Img_ACTION_NO_IMAGE:		// Do not use image (remove current image if exists)
+         break;
      }
 
    /***** By last, get image title from form *****/

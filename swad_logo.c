@@ -297,7 +297,6 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 	              "%s: "
 	              "</label>"
                       "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,

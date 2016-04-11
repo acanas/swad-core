@@ -41,10 +41,10 @@
 #define Img_NUM_ACTIONS	4
 typedef enum
   {
-   Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
-   Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
    Img_ACTION_NEW_IMAGE,	// Upload new image
+   Img_ACTION_KEEP_IMAGE,	// Keep current image unchanged
    Img_ACTION_CHANGE_IMAGE,	// Change existing image by a new image
+   Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
   } Img_Action_t;
 
 /***** Status of an image file *****/

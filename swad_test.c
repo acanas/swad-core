@@ -1062,90 +1062,87 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
-   extern const char *Txt_Image;
-   extern const char *Txt_optional;
    extern const char *Txt_Image_title_attribution;
    static unsigned UniqueId = 0;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<div class=\"TEST_IMG_EDIT_ONE_CONTAINER\">");
 
-   /***** Choice 1: No image *****/
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
-            ParamAction,Img_ACTION_NO_IMAGE);
    if (!Image->Name[0])
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (OptionsDisabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />"
-	              "<label class=\"%s\">"
-		      "%s"
-		      "</label><br />",
-	    The_ClassForm[Gbl.Prefs.Theme],
-            Txt_No_image);
-
-   /***** Choice 2: Current image *****/
-   if (Image->Name[0])
      {
+      /* Action to perform on image */
+      Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+
+      /* File */
+      fprintf (Gbl.F.Out,"<label>"
+			 "<img src=\"%s/photo64x64.gif\""
+			 " alt=\"%s\" title=\"%s (%s)\""
+			 " class=\"ICON20x20\" />"
+			 "</label>"
+                         "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
+	       Gbl.Prefs.IconsURL,
+	       Txt_Image,Txt_Image,Txt_optional,
+	       ParamFile);
+      if (OptionsDisabled)
+	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," />");
+     }
+   else
+     {
+      /***** Choice 1: No image *****/
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
+	       ParamAction,Img_ACTION_NO_IMAGE);
+      if (OptionsDisabled)
+	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," />"
+			 "<label class=\"%s\">"
+			 "%s"
+			 "</label>"
+			 "<br />",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_No_image);
+
+      /***** Choice 2: Current image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\"",
 	       ParamAction,Img_ACTION_KEEP_IMAGE);
       if (OptionsDisabled)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
-	                 "<label class=\"%s\">"
+			 "<label class=\"%s\">"
 			 "%s"
-			 "</label><br />",
+			 "</label>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
       Img_ShowImage (Image,ClassImg);
-     }
 
-   /***** Choice 3: Change/new image *****/
-   UniqueId++;
-   if (Image->Name[0])	// Image exists
-     {
-      /***** Change image *****/
+      /***** Choice 3: Change/new image *****/
+      UniqueId++;
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
 	       UniqueId,ParamAction,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
       if (OptionsDisabled)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
+	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
-	                 "<label class=\"%s\">"
+			 "<label class=\"%s\">"
 			 "%s: "
-			 "</label>",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image);
-     }
-   else			// Image does not exist
-     {
-      /***** New image *****/
-      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\"",
-	       UniqueId,ParamAction,Img_ACTION_NEW_IMAGE);	// Upload new image
+			 "</label>"
+                         "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image,
+	       ParamFile);
       if (OptionsDisabled)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />"
-                         "<label class=\"%s\">"
-			 "%s (%s): "
-			 "</label>",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Image,Txt_optional);
+	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
+	       UniqueId);
      }
-
-   /***** Image file *****/
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
-		      " size=\"40\" maxlength=\"100\" value=\"\"",
-	    ParamFile);
-   if (OptionsDisabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />"
-	              "<br />",
-	    UniqueId);
 
    /***** Image title/attribution *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
+   fprintf (Gbl.F.Out,"<br />"
+	              "<input type=\"text\" name=\"%s\""
                       " placeholder=\"%s (%s)&hellip;\""
                       " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
             ParamTitle,Txt_Image_title_attribution,Txt_optional,

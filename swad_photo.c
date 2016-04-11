@@ -318,13 +318,11 @@ void Pho_ReqPhoto (const struct UsrData *UsrDat,bool PhotoExists,const char *Pho
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"%ld.jpg\""
+                      "<input type=\"file\" name=\"%s\" accept=\"image/*\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
-            UsrDat->UsrCod,
             Gbl.Form.Id);
 
    /***** End frame *****/

@@ -2031,8 +2031,7 @@ void Ctr_RequestPhoto (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s: "
 	              "</label>"
-                      "<input type=\"file\" name=\"%s\""
-                      " size=\"40\" maxlength=\"100\" value=\"\""
+                      "<input type=\"file\" name=\"%s\" accept=\"image/*\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,

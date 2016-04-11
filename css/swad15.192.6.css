@@ -1743,12 +1743,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
 .TEST_EDI	{color:#404040; font-size:12pt;}
 .TEST_EDI_LIGHT	{color:#A0A0A0; font-size:12pt;}
-.TEST_IMG_SHOW_STEM		{width:600px; border-radius:4px; margin:10px 0;}
-.TEST_IMG_SHOW_ANS		{width:450px; border-radius:4px; margin:10px 0;}
-.TEST_IMG_EDIT_LIST_STEM	{width:300px; border-radius:2px; margin:5px 0;}
-.TEST_IMG_EDIT_LIST_ANS		{width:225px; border-radius:2px; margin:5px 0;}
-.TEST_IMG_EDIT_ONE_STEM		{width:600px; border-radius:4px;}
-.TEST_IMG_EDIT_ONE_ANS		{width:450px; border-radius:4px;}
+.TEST_IMG_SHOW_STEM		{width:100%; border-radius:4px; margin:10px 0;}
+.TEST_IMG_SHOW_ANS		{width:100%; border-radius:4px; margin:10px 0;}
+.TEST_IMG_EDIT_LIST_STEM	{width:100%; border-radius:2px; margin:5px 0;}
+.TEST_IMG_EDIT_LIST_ANS		{width:100%; border-radius:2px; margin:5px 0;}
+.TEST_IMG_EDIT_ONE_CONTAINER	{margin:15px 0; text-align:left; vertical-align:top;}
+.TEST_IMG_EDIT_ONE_STEM		{width:100%; border-radius:4px;}
+.TEST_IMG_EDIT_ONE_ANS		{width:100%; border-radius:4px;}
 .TEST_EDI_ANS_LEFT_COL
 	{
 	box-sizing:border-box;

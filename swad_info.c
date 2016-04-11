@@ -1041,8 +1041,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"file\" name=\"%s\""
-                      " size=\"50\" maxlength=\"100\" value=\"\" />"
+                      "<input type=\"file\" name=\"%s\" />"
                       "</td>"
                       "</tr>"
                       "</table>",

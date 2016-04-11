@@ -2035,8 +2035,7 @@ static void Soc_PutTextarea (const char *Placeholder,
 	              " alt=\"%s\" title=\"%s (%s)\""
 	              " class=\"ICON20x20\" />"
 	              "</label>"
-	              "<input type=\"file\" name=\"ImgFil\""
-		      " size=\"40\" maxlength=\"100\" value=\"\" />"
+	              "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\" />"
 	              "<br />",
             Gbl.Prefs.IconsURL,
             Txt_Image,Txt_Image,Txt_optional);

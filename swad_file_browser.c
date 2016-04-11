@@ -7994,8 +7994,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
          break;
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\""
-	              " size=\"50\" maxlength=\"100\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /* Button to send */

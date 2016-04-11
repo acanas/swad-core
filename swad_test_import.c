@@ -143,8 +143,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "<input type=\"file\" name=\"%s\""
-	              " size=\"40\" maxlength=\"100\" value=\"\""
+                      "<input type=\"file\" name=\"%s\" accept=\".xml\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
