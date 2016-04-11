@@ -2082,7 +2082,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .FOR_IMG_TIT
 	{
 	width:480px;
-	margin:10px 0;
+	margin-bottom:10px;
 	}
 
 /*********************************** Messages ********************************/
@@ -2102,7 +2102,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSG_IMG_TIT
 	{
 	width:480px;
-	margin:10px 0;
+	margin-bottom:10px;
 	}
 .MSG_TXT	{color:#404040; font-size:13pt;}
 .MSG_TIT	{color:#4D88A1; font-size:13pt;}
