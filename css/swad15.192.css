@@ -2074,8 +2074,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 /************************************ Forum **********************************/
 .FOR_IMG
 	{
-	width:480px;
+	width:100%;
 	border-radius:4px;
+	margin:10px 0;
+	}
+.FOR_IMG_TIT
+	{
+	width:480px;
 	margin:10px 0;
 	}
 
@@ -2089,8 +2094,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .MSG_IMG
 	{
-	width:480px;
+	width:100%;
 	border-radius:4px;
+	margin:10px 0;
+	}
+.MSG_IMG_TIT
+	{
+	width:480px;
 	margin:10px 0;
 	}
 .MSG_TXT	{color:#404040; font-size:13pt;}

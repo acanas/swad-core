@@ -439,7 +439,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /* Image title/attribution */
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
 			 " placeholder=\"%s (%s)&hellip;\""
-			 " class=\"MSG_IMG\" maxlength=\"%u\" value=\"\">",
+			 " class=\"MSG_IMG_TIT\" maxlength=\"%u\" value=\"\">",
 	       Txt_Image_title_attribution,Txt_optional,
 	       Img_MAX_BYTES_TITLE);
 
@@ -1573,12 +1573,14 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
 
    /***** Move message from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_content_deleted (MsgCod,Subject,Content)"
-                  " SELECT MsgCod,Subject,Content FROM msg_content WHERE MsgCod='%ld'",
+   sprintf (Query,"INSERT IGNORE INTO msg_content_deleted"
+	          " (MsgCod,Subject,Content,ImageName,ImageTitle)"
+                  " SELECT MsgCod,Subject,Content,ImageName,ImageTitle"
+                  " FROM msg_content WHERE MsgCod='%ld'",
             MsgCod);
    DB_QueryINSERT (Query,"can not remove the content of a message");
 
-   /* Messages in msg_content_deleted older than a certain time
+   /* TODO: Messages in msg_content_deleted older than a certain time
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/

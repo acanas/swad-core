@@ -3857,7 +3857,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /* Image title/attribution */
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
                       " placeholder=\"%s (%s)&hellip;\""
-                      " class=\"FOR_IMG\" maxlength=\"%u\" value=\"\">",
+                      " class=\"FOR_IMG_TIT\" maxlength=\"%u\" value=\"\">",
             Txt_Image_title_attribution,Txt_optional,
             Img_MAX_BYTES_TITLE);
 
