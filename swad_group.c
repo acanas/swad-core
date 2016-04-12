@@ -2727,7 +2727,7 @@ bool Grp_CheckIfGroupExists (long GrpCod)
 
 bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Get if a group exists from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp,crs_grp_types"

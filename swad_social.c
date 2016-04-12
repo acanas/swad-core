@@ -88,7 +88,8 @@ typedef enum
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define Soc_IMAGE_SAVED_MAX_WIDTH	768
 #define Soc_IMAGE_SAVED_MAX_HEIGHT	512
-#define Soc_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+#define Soc_IMAGE_SAVED_QUALITY		 50	// 1 to 100
+// in social posts, the quality is low in order to speed up the loading of images
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/

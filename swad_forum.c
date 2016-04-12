@@ -1308,8 +1308,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-   fprintf (Gbl.F.Out,"<br />&nbsp;"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Free image *****/
