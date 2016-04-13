@@ -247,6 +247,7 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
    if (fread (FileName,sizeof (char),Param->FileName.Length,Gbl.F.Tmp) !=
        Param->FileName.Length)
       Lay_ShowErrorAndExit ("Error while getting filename.");
+   FileName[Param->FileName.Length] = '\0';
 
    /***** Get MIME type *****/
    /* Check if MIME type exists */
