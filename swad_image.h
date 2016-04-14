@@ -94,11 +94,12 @@ struct Image
    unsigned Quality;
   };
 
+/***** Parameters used in a form to upload an image *****/
 struct ParamUploadImg
   {
-   char *Action;
-   char *File;
-   char *Title;
+   char Action[16];
+   char File[16];
+   char Title[16];
   };
 
 /*****************************************************************************/
@@ -113,11 +114,10 @@ void Img_FreeImageTitle (struct Image *Image);
 void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
                                       struct Image *Image);
 
-void Img_PutImageUploader (const char *ClassImgTit,
-                           struct ParamUploadImg *ParamUploadImg);
-void Img_GetImageFromForm (int NumOpt,struct Image *Image,
-                           void (*GetImageFromDB) (int NumOpt,struct Image *Image),
-                           struct ParamUploadImg *ParamUploadImg);
+void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit);
+void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
+                           void (*GetImageFromDB) (int NumImgInForm,struct Image *Image));
+void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
 void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile);
 

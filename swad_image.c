@@ -155,13 +155,16 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
 /************ Draw input fields to upload an image inside a form *************/
 /*****************************************************************************/
 
-void Img_PutImageUploader (const char *ClassImgTit,
-                           struct ParamUploadImg *ParamUploadImg)
+void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit)
   {
    extern const char *Txt_Image;
    extern const char *Txt_optional;
    extern const char *Txt_Image_title_attribution;
+   struct ParamUploadImg ParamUploadImg;
    char Id[Act_MAX_LENGTH_ID];
+
+   /***** Set names of parameters depending on number of image in form *****/
+   Img_SetParamNames (&ParamUploadImg,NumImgInForm);
 
    /***** Create unique id for this image uploader *****/
    Act_SetUniqueId (Id);
@@ -170,7 +173,7 @@ void Img_PutImageUploader (const char *ClassImgTit,
    fprintf (Gbl.F.Out,"<div class=\"IMG_UPLOAD_CONTAINER\">");
 
    /***** Action to perform on image *****/
-   Par_PutHiddenParamUnsigned (ParamUploadImg->Action,(unsigned) Img_ACTION_NEW_IMAGE);
+   Par_PutHiddenParamUnsigned (ParamUploadImg.Action,(unsigned) Img_ACTION_NEW_IMAGE);
 
    /***** Image file *****/
    fprintf (Gbl.F.Out,"<label class=\"IMG_UPLOAD_BUTTON\">"
@@ -186,7 +189,7 @@ void Img_PutImageUploader (const char *ClassImgTit,
 	              "<br />",
             Gbl.Prefs.IconsURL,
             Txt_Image,Txt_Image,Txt_optional,
-            ParamUploadImg->File,
+            ParamUploadImg.File,
             Id,Id);
 
    /***** Image title/attribution *****/
@@ -194,7 +197,7 @@ void Img_PutImageUploader (const char *ClassImgTit,
                       " placeholder=\"%s (%s)&hellip;\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
                       " style=\"display:none;\" />",
-            Id,ParamUploadImg->Title,
+            Id,ParamUploadImg.Title,
             Txt_Image_title_attribution,Txt_optional,
             ClassImgTit,Img_MAX_BYTES_TITLE);
 
@@ -206,16 +209,19 @@ void Img_PutImageUploader (const char *ClassImgTit,
 /***************************** Get image from form ***************************/
 /*****************************************************************************/
 
-void Img_GetImageFromForm (int NumOpt,struct Image *Image,
-                           void (*GetImageFromDB) (int NumOpt,struct Image *Image),
-                           struct ParamUploadImg *ParamUploadImg)
+void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
+                           void (*GetImageFromDB) (int NumImgInForm,struct Image *Image))
   {
+   struct ParamUploadImg ParamUploadImg;
    char Title[Img_MAX_BYTES_TITLE+1];
    size_t Length;
 
+   /***** Set names of parameters depending on number of image in form *****/
+   Img_SetParamNames (&ParamUploadImg,NumImgInForm);
+
    /***** First, get action and initialize image
           (except title, that will be get after the image file) *****/
-   Image->Action = Img_GetImageActionFromForm (ParamUploadImg->Action);
+   Image->Action = Img_GetImageActionFromForm (ParamUploadImg.Action);
    Image->Status = Img_FILE_NONE;
    Image->Name[0] = '\0';
 
@@ -224,7 +230,7 @@ void Img_GetImageFromForm (int NumOpt,struct Image *Image,
      {
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File);
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg.File);
 	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
 	   {
 	    /* Reset image name */
@@ -235,22 +241,22 @@ void Img_GetImageFromForm (int NumOpt,struct Image *Image,
       case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
 	 /***** Get image name *****/
 	 if (GetImageFromDB != NULL)
-	    GetImageFromDB (NumOpt,Image);
+	    GetImageFromDB (NumImgInForm,Image);
 	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File);
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg.File);
 	 if (Image->Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
 	     GetImageFromDB != NULL)
 	    /* Get image name */
-	    GetImageFromDB (NumOpt,Image);
+	    GetImageFromDB (NumImgInForm,Image);
 	 break;
       case Img_ACTION_NO_IMAGE:		// Do not use image (remove current image if exists)
          break;
      }
 
    /***** By last, get image title from form *****/
-   Par_GetParToText (ParamUploadImg->Title,Title,Img_MAX_BYTES_TITLE);
+   Par_GetParToText (ParamUploadImg.Title,Title,Img_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current image title unchanged
       If not empty, copy it to current image title */
    if ((Length = strlen (Title)) > 0)
@@ -262,6 +268,26 @@ void Img_GetImageFromForm (int NumOpt,struct Image *Image,
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
       strncpy (Image->Title,Title,Length);
       Image->Title[Length] = '\0';
+     }
+  }
+
+/*****************************************************************************/
+/********* Set parameters names depending on number of image in form *********/
+/*****************************************************************************/
+
+void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
+  {
+   if (NumImgInForm < 0)	// One unique image in form ==> no suffix needed
+     {
+      strcpy (ParamUploadImg->Action,"ImgAct");
+      strcpy (ParamUploadImg->File  ,"ImgFil");
+      strcpy (ParamUploadImg->Title ,"ImgTit");
+     }
+   else				// Several images in form ==> add suffix
+     {
+      sprintf (ParamUploadImg->Action,"ImgAct%u",NumImgInForm);
+      sprintf (ParamUploadImg->File  ,"ImgFil%u",NumImgInForm);
+      sprintf (ParamUploadImg->Title ,"ImgTit%u",NumImgInForm);
      }
   }
 

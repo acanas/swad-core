@@ -285,7 +285,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
-   struct ParamUploadImg ParamUploadImg;
    char YN[1+1];
 
    Gbl.Usrs.LstTchs.NumUsrs =
@@ -419,10 +418,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      ParamUploadImg.Action = "ImgAct";
-      ParamUploadImg.File   = "ImgFil";
-      ParamUploadImg.Title  = "ImgTit";
-      Img_PutImageUploader ("MSG_IMG_TIT",&ParamUploadImg);
+      Img_PutImageUploader (-1,"MSG_IMG_TIT");
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -710,7 +706,6 @@ void Msg_RecMsgFromUsr (void)
    bool NotifyByEmail;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    struct Image Image;
-   struct ParamUploadImg ParamUploadImg;
    bool Error = false;
 
    /***** Get data from form *****/
@@ -777,13 +772,10 @@ void Msg_RecMsgFromUsr (void)
    Img_ImageConstructor (&Image);
 
    /***** Get attached image (action, file and title) *****/
-   ParamUploadImg.Action = "ImgAct";
-   ParamUploadImg.File   = "ImgFil";
-   ParamUploadImg.Title  = "ImgTit";
    Image.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
    Image.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
    Image.Quality = Msg_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
+   Img_GetImageFromForm (-1,&Image,NULL);
 
    /***** Loop over the list Gbl.Usrs.Select.All, that holds the list of the
 	  recipients, creating a received message for each recipient *****/

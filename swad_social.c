@@ -1997,7 +1997,6 @@ static void Soc_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
-   struct ParamUploadImg ParamUploadImg;
    char IdDivImgButton[Act_MAX_LENGTH_ID];
 
    /***** Set unique id for the hidden div *****/
@@ -2021,10 +2020,7 @@ static void Soc_PutTextarea (const char *Placeholder,
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   ParamUploadImg.Action = "ImgAct";
-   ParamUploadImg.File   = "ImgFil";
-   ParamUploadImg.Title  = "ImgTit";
-   Img_PutImageUploader (ClassImgTit,&ParamUploadImg);
+   Img_PutImageUploader (-1,ClassImgTit);
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""
@@ -2083,7 +2079,6 @@ static long Soc_ReceiveSocialPost (void)
    char *Query;
    long PstCod;
    struct SocialPublishing SocPub;
-   struct ParamUploadImg ParamUploadImg;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -2093,13 +2088,10 @@ static long Soc_ReceiveSocialPost (void)
    Img_ImageConstructor (&Image);
 
    /***** Get attached image (action, file and title) *****/
-   ParamUploadImg.Action = "ImgAct";
-   ParamUploadImg.File   = "ImgFil";
-   ParamUploadImg.Title  = "ImgTit";
    Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
    Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
    Image.Quality = Soc_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
+   Img_GetImageFromForm (-1,&Image,NULL);
 
    if (Content[0] ||	// Text not empty
        Image.Name[0])	// An image is attached
@@ -2836,7 +2828,6 @@ static long Soc_ReceiveComment (void)
    char *Query;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
-   struct ParamUploadImg ParamUploadImg;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -2852,13 +2843,10 @@ static long Soc_ReceiveComment (void)
       Img_ImageConstructor (&Image);
 
       /***** Get attached image (action, file and title) *****/
-      ParamUploadImg.Action = "ImgAct";
-      ParamUploadImg.File   = "ImgFil";
-      ParamUploadImg.Title  = "ImgTit";
       Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
       Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
       Image.Quality = Soc_IMAGE_SAVED_QUALITY;
-      Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
+      Img_GetImageFromForm (-1,&Image,NULL);
 
       if (Content[0] ||		// Text not empty
 	  Image.Name[0])	// An image is attached

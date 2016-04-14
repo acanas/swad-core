@@ -3779,7 +3779,6 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
    extern const char *Txt_Send_message;
-   struct ParamUploadImg ParamUploadImg;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
@@ -3836,10 +3835,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   ParamUploadImg.Action = "ImgAct";
-   ParamUploadImg.File   = "ImgFil";
-   ParamUploadImg.Title  = "ImgTit";
-   Img_PutImageUploader ("FOR_IMG_TIT",&ParamUploadImg);
+   Img_PutImageUploader (-1,"FOR_IMG_TIT");
 
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_message);
@@ -3866,7 +3862,6 @@ void For_RecForumPst (void)
    struct SocialPublishing SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    struct Image Image;
-   struct ParamUploadImg ParamUploadImg;
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -3902,13 +3897,10 @@ void For_RecForumPst (void)
    Img_ImageConstructor (&Image);
 
    /***** Get attached image (action, file and title) *****/
-   ParamUploadImg.Action = "ImgAct";
-   ParamUploadImg.File   = "ImgFil";
-   ParamUploadImg.Title  = "ImgTit";
    Image.Width   = For_IMAGE_SAVED_MAX_WIDTH;
    Image.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
    Image.Quality = For_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
+   Img_GetImageFromForm (-1,&Image,NULL);
 
    /***** Create a new message *****/
    if (PstIsAReply)	// This post is a reply to another posts in the thread
