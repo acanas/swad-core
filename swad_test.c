@@ -5189,12 +5189,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (-1,&Gbl.Test.Image,
-                         Tst_GetImageFromDB,
-                         &ParamUploadImg,
-	                 Tst_IMAGE_SAVED_MAX_WIDTH,
-	                 Tst_IMAGE_SAVED_MAX_HEIGHT,
-	                 Tst_IMAGE_SAVED_QUALITY);
+   Gbl.Test.Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+   Gbl.Test.Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+   Gbl.Test.Image.Quality = Tst_IMAGE_SAVED_QUALITY;
+   Img_GetImageFromForm (-1,&Gbl.Test.Image,Tst_GetImageFromDB,&ParamUploadImg);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5253,12 +5251,11 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       ParamUploadImg.Action = ParamAction;
 	       ParamUploadImg.File   = ParamFile;
 	       ParamUploadImg.Title  = ParamTitle;
+	       Gbl.Test.Answer.Options[NumOpt].Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+	       Gbl.Test.Answer.Options[NumOpt].Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+	       Gbl.Test.Answer.Options[NumOpt].Image.Quality = Tst_IMAGE_SAVED_QUALITY;
 	       Img_GetImageFromForm ((int) NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
-				     Tst_GetImageFromDB,
-				     &ParamUploadImg,
-				     Tst_IMAGE_SAVED_MAX_WIDTH,
-				     Tst_IMAGE_SAVED_MAX_HEIGHT,
-				     Tst_IMAGE_SAVED_QUALITY);
+				     Tst_GetImageFromDB,&ParamUploadImg);
 	      }
            }
 

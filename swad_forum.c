@@ -3905,11 +3905,10 @@ void For_RecForumPst (void)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (-1,&Image,NULL,
-                         &ParamUploadImg,
-	                 For_IMAGE_SAVED_MAX_WIDTH,
-	                 For_IMAGE_SAVED_MAX_HEIGHT,
-	                 For_IMAGE_SAVED_QUALITY);
+   Image.Width   = For_IMAGE_SAVED_MAX_WIDTH;
+   Image.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
+   Image.Quality = For_IMAGE_SAVED_QUALITY;
+   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
 
    /***** Create a new message *****/
    if (PstIsAReply)	// This post is a reply to another posts in the thread

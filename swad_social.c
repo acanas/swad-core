@@ -2096,11 +2096,10 @@ static long Soc_ReceiveSocialPost (void)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (-1,&Image,NULL,
-                         &ParamUploadImg,
-	                 Soc_IMAGE_SAVED_MAX_WIDTH,
-	                 Soc_IMAGE_SAVED_MAX_HEIGHT,
-	                 Soc_IMAGE_SAVED_QUALITY);
+   Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
+   Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
+   Image.Quality = Soc_IMAGE_SAVED_QUALITY;
+   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
 
    if (Content[0] ||	// Text not empty
        Image.Name[0])	// An image is attached
@@ -2856,11 +2855,10 @@ static long Soc_ReceiveComment (void)
       ParamUploadImg.Action = "ImgAct";
       ParamUploadImg.File   = "ImgFil";
       ParamUploadImg.Title  = "ImgTit";
-      Img_GetImageFromForm (-1,&Image,NULL,
-			    &ParamUploadImg,
-			    Soc_IMAGE_SAVED_MAX_WIDTH,
-			    Soc_IMAGE_SAVED_MAX_HEIGHT,
-			    Soc_IMAGE_SAVED_QUALITY);
+      Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
+      Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
+      Image.Quality = Soc_IMAGE_SAVED_QUALITY;
+      Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
 
       if (Content[0] ||		// Text not empty
 	  Image.Name[0])	// An image is attached

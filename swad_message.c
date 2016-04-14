@@ -780,11 +780,10 @@ void Msg_RecMsgFromUsr (void)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (-1,&Image,NULL,
-                         &ParamUploadImg,
-	                 Msg_IMAGE_SAVED_MAX_WIDTH,
-	                 Msg_IMAGE_SAVED_MAX_HEIGHT,
-	                 Msg_IMAGE_SAVED_QUALITY);
+   Image.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
+   Image.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
+   Image.Quality = Msg_IMAGE_SAVED_QUALITY;
+   Img_GetImageFromForm (-1,&Image,NULL,&ParamUploadImg);
 
    /***** Loop over the list Gbl.Usrs.Select.All, that holds the list of the
 	  recipients, creating a received message for each recipient *****/

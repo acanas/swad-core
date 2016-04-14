@@ -89,6 +89,9 @@ struct Image
    char Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
    char *Title;	// Title/attribution (it must be initialized to NULL
 		// in order to not trying to free it when no memory allocated)
+   unsigned Width;
+   unsigned Height;
+   unsigned Quality;
   };
 
 struct ParamUploadImg
@@ -113,12 +116,10 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
 void Img_PutImageUploader (const char *ClassImgTit,
                            struct ParamUploadImg *ParamUploadImg);
 void Img_GetImageFromForm (int NumOpt,struct Image *Image,
-                           void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
-                           struct ParamUploadImg *ParamUploadImg,
-                           unsigned Width,unsigned Height,unsigned Quality);
+                           void (*GetImageFromDB) (int NumOpt,struct Image *Image),
+                           struct ParamUploadImg *ParamUploadImg);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile,
-                                         unsigned Width,unsigned Height,unsigned Quality);
+void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile);
 
 void Img_MoveImageToDefinitiveDirectory (struct Image *Image);
 void Img_ShowImage (struct Image *Image,const char *ClassImg);

@@ -64,9 +64,9 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Img_ProcessImage (const char *FileNameImgOriginal,
-                              const char *FileNameImgProcessed,
-                              unsigned Width,unsigned Height,unsigned Quality);
+static void Img_ProcessImage (struct Image *Image,
+                              const char *FileNameImgOriginal,
+                              const char *FileNameImgProcessed);
 
 /*****************************************************************************/
 /*************************** Reset image fields ******************************/
@@ -206,10 +206,9 @@ void Img_PutImageUploader (const char *ClassImgTit,
 /***************************** Get image from form ***************************/
 /*****************************************************************************/
 
-void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
+void Img_GetImageFromForm (int NumOpt,struct Image *Image,
                            void (*GetImageFromDB) (int NumOpt,struct Image *Image),
-                           struct ParamUploadImg *ParamUploadImg,
-                           unsigned Width,unsigned Height,unsigned Quality)
+                           struct ParamUploadImg *ParamUploadImg)
   {
    char Title[Img_MAX_BYTES_TITLE+1];
    size_t Length;
@@ -225,8 +224,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
      {
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File,
-	                                     Width,Height,Quality);
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File);
 	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
 	   {
 	    /* Reset image name */
@@ -241,8 +239,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
 	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File,
-	                                     Width,Height,Quality);
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File);
 	 if (Image->Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
 	     GetImageFromDB != NULL)
 	    /* Get image name */
@@ -292,8 +289,7 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
 /**************************** Get image from form ****************************/
 /*****************************************************************************/
 
-void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile,
-                                         unsigned Width,unsigned Height,unsigned Quality)
+void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX+1];
@@ -363,7 +359,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
       sprintf (FileNameImgTmp,"%s/%s/%s/%s.jpg",
 	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
 	       Image->Name);
-      Img_ProcessImage (FileNameImgOrig,FileNameImgTmp,Width,Height,Quality);
+      Img_ProcessImage (Image,FileNameImgOrig,FileNameImgTmp);
       Image->Status = Img_FILE_PROCESSED;
 
       /***** Remove temporary original file *****/
@@ -375,16 +371,18 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
 /************ Process original image generating processed image **************/
 /*****************************************************************************/
 
-static void Img_ProcessImage (const char *FileNameImgOriginal,
-                              const char *FileNameImgProcessed,
-                              unsigned Width,unsigned Height,unsigned Quality)
+static void Img_ProcessImage (struct Image *Image,
+                              const char *FileNameImgOriginal,
+                              const char *FileNameImgProcessed)
   {
    char Command[1024+PATH_MAX*2];
    int ReturnCode;
 
    sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
             FileNameImgOriginal,
-            Width,Height,Quality,
+            Image->Width,
+            Image->Height,
+            Image->Quality,
             FileNameImgProcessed);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
