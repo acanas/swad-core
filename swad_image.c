@@ -207,7 +207,7 @@ void Img_PutImageUploader (const char *ClassImgTit,
 /*****************************************************************************/
 
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
-                           void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
+                           void (*GetImageFromDB) (int NumOpt,struct Image *Image),
                            struct ParamUploadImg *ParamUploadImg,
                            unsigned Width,unsigned Height,unsigned Quality)
   {

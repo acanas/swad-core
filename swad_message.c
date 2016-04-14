@@ -780,7 +780,7 @@ void Msg_RecMsgFromUsr (void)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (0,&Image,NULL,
+   Img_GetImageFromForm (-1,&Image,NULL,
                          &ParamUploadImg,
 	                 Msg_IMAGE_SAVED_MAX_WIDTH,
 	                 Msg_IMAGE_SAVED_MAX_HEIGHT,

@@ -224,7 +224,7 @@ static void Tst_InitImagesOfQuestion (void);
 static void Tst_FreeImagesOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
-static void Tst_GetImageFromDB (unsigned NumOpt,struct Image *Image);
+static void Tst_GetImageFromDB (int NumOpt,struct Image *Image);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
@@ -5020,26 +5020,25 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 /*****************************************************************************/
 /***** Get possible image associated with a test question from database ******/
 /*****************************************************************************/
-//      NumOpt >= Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to stem
-// 0 <= NumOpt <  Tst_MAX_OPTIONS_PER_QUESTION ==> image associated to answer
+// NumOpt <  0 ==> image associated to stem
+// NumOpt >= 0 ==> image associated to answer
 
-static void Tst_GetImageFromDB (unsigned NumOpt,struct Image *Image)
+static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Build query depending on NumOpt *****/
-   if (NumOpt < Tst_MAX_OPTIONS_PER_QUESTION)
-      // Get image associated to answer
-      sprintf (Query,"SELECT ImageName,ImageTitle FROM tst_answers"
-		     " WHERE QstCod='%ld' AND AnsInd='%u'",
-	       Gbl.Test.QstCod,NumOpt);
-   else
+   if (NumOpt < 0)
       // Get image associated to stem
       sprintf (Query,"SELECT ImageName,ImageTitle FROM tst_questions"
 		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
-	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);      // Get image associated to answer
+   else
+      sprintf (Query,"SELECT ImageName,ImageTitle FROM tst_answers"
+		     " WHERE QstCod='%ld' AND AnsInd='%u'",
+	       Gbl.Test.QstCod,(unsigned) NumOpt);
 
    /***** Query database *****/
    DB_QuerySELECT (Query,&mysql_res,"can not get image name");
@@ -5190,7 +5189,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    ParamUploadImg.Action = "ImgAct";
    ParamUploadImg.File   = "ImgFil";
    ParamUploadImg.Title  = "ImgTit";
-   Img_GetImageFromForm (Tst_MAX_OPTIONS_PER_QUESTION,&Gbl.Test.Image,
+   Img_GetImageFromForm (-1,&Gbl.Test.Image,
                          Tst_GetImageFromDB,
                          &ParamUploadImg,
 	                 Tst_IMAGE_SAVED_MAX_WIDTH,
@@ -5254,7 +5253,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       ParamUploadImg.Action = ParamAction;
 	       ParamUploadImg.File   = ParamFile;
 	       ParamUploadImg.Title  = ParamTitle;
-	       Img_GetImageFromForm (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
+	       Img_GetImageFromForm ((int) NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
 				     Tst_GetImageFromDB,
 				     &ParamUploadImg,
 				     Tst_IMAGE_SAVED_MAX_WIDTH,

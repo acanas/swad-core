@@ -112,7 +112,7 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
 
 void Img_PutImageUploader (const char *ClassImgTit,
                            struct ParamUploadImg *ParamUploadImg);
-void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
+void Img_GetImageFromForm (int NumOpt,struct Image *Image,
                            void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
                            struct ParamUploadImg *ParamUploadImg,
                            unsigned Width,unsigned Height,unsigned Quality);
