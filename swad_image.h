@@ -91,6 +91,13 @@ struct Image
 		// in order to not trying to free it when no memory allocated)
   };
 
+struct ParamUploadImg
+  {
+   char *Action;
+   char *File;
+   char *Title;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -103,10 +110,11 @@ void Img_FreeImageTitle (struct Image *Image);
 void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
                                       struct Image *Image);
 
-void Img_PutImageUploader (const char *ClassImgTit);
+void Img_PutImageUploader (const char *ClassImgTit,
+                           struct ParamUploadImg *ParamUploadImg);
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
                            void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
-                           const char *ParamAction,const char *ParamFile,const char *ParamTitle,
+                           struct ParamUploadImg *ParamUploadImg,
                            unsigned Width,unsigned Height,unsigned Quality);
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
 void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile,

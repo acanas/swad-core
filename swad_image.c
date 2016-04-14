@@ -155,7 +155,8 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
 /************ Draw input fields to upload an image inside a form *************/
 /*****************************************************************************/
 
-void Img_PutImageUploader (const char *ClassImgTit)
+void Img_PutImageUploader (const char *ClassImgTit,
+                           struct ParamUploadImg *ParamUploadImg)
   {
    extern const char *Txt_Image;
    extern const char *Txt_optional;
@@ -169,14 +170,14 @@ void Img_PutImageUploader (const char *ClassImgTit)
    fprintf (Gbl.F.Out,"<div class=\"IMG_UPLOAD_CONTAINER\">");
 
    /***** Action to perform on image *****/
-   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+   Par_PutHiddenParamUnsigned (ParamUploadImg->Action,(unsigned) Img_ACTION_NEW_IMAGE);
 
    /***** Image file *****/
    fprintf (Gbl.F.Out,"<label class=\"IMG_UPLOAD_BUTTON\">"
 	              "<img src=\"%s/photo64x64.gif\""
 	              " alt=\"%s\" title=\"%s (%s)\""
 	              " class=\"IMG_UPLOAD_ICON\" />"
-	              "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\""
+	              "<input type=\"file\" name=\"%s\" accept=\"image/*\""
 	              " class=\"IMG_UPLOAD_FILE\""
 	              " onchange=\"imageUploadOnSelectFile (this,'%s');\" />"
                       "<span id=\"%s_fil\" class=\"IMG_UPLOAD_FILENAME\" />"
@@ -185,14 +186,15 @@ void Img_PutImageUploader (const char *ClassImgTit)
 	              "<br />",
             Gbl.Prefs.IconsURL,
             Txt_Image,Txt_Image,Txt_optional,
+            ParamUploadImg->File,
             Id,Id);
 
    /***** Image title/attribution *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"%s_tit\" name=\"ImgTit\""
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"%s_tit\" name=\"%s\""
                       " placeholder=\"%s (%s)&hellip;\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
                       " style=\"display:none;\" />",
-            Id,
+            Id,ParamUploadImg->Title,
             Txt_Image_title_attribution,Txt_optional,
             ClassImgTit,Img_MAX_BYTES_TITLE);
 
@@ -206,7 +208,7 @@ void Img_PutImageUploader (const char *ClassImgTit)
 
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
                            void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
-                           const char *ParamAction,const char *ParamFile,const char *ParamTitle,
+                           struct ParamUploadImg *ParamUploadImg,
                            unsigned Width,unsigned Height,unsigned Quality)
   {
    char Title[Img_MAX_BYTES_TITLE+1];
@@ -214,7 +216,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
 
    /***** First, get action and initialize image
           (except title, that will be get after the image file) *****/
-   Image->Action = Img_GetImageActionFromForm (ParamAction);
+   Image->Action = Img_GetImageActionFromForm (ParamUploadImg->Action);
    Image->Status = Img_FILE_NONE;
    Image->Name[0] = '\0';
 
@@ -223,7 +225,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
      {
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File,
 	                                     Width,Height,Quality);
 	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
 	   {
@@ -239,7 +241,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
 	 break;
       case Img_ACTION_CHANGE_IMAGE:	// Replace old image by new image
          /***** Get new image (if present ==> process and create temporary file) *****/
-	 Img_GetAndProcessImageFileFromForm (Image,ParamFile,
+	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg->File,
 	                                     Width,Height,Quality);
 	 if (Image->Status != Img_FILE_PROCESSED &&	// No new image received-processed successfully
 	     GetImageFromDB != NULL)
@@ -251,7 +253,7 @@ void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
      }
 
    /***** By last, get image title from form *****/
-   Par_GetParToText (ParamTitle,Title,Img_MAX_BYTES_TITLE);
+   Par_GetParToText (ParamUploadImg->Title,Title,Img_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current image title unchanged
       If not empty, copy it to current image title */
    if ((Length = strlen (Title)) > 0)

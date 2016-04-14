@@ -285,6 +285,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
+   struct ParamUploadImg ParamUploadImg;
    char YN[1+1];
 
    Gbl.Usrs.LstTchs.NumUsrs =
@@ -418,7 +419,10 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Img_PutImageUploader ("MSG_IMG_TIT");
+      ParamUploadImg.Action = "ImgAct";
+      ParamUploadImg.File   = "ImgFil";
+      ParamUploadImg.Title  = "ImgTit";
+      Img_PutImageUploader ("MSG_IMG_TIT",&ParamUploadImg);
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -706,6 +710,7 @@ void Msg_RecMsgFromUsr (void)
    bool NotifyByEmail;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
    struct Image Image;
+   struct ParamUploadImg ParamUploadImg;
    bool Error = false;
 
    /***** Get data from form *****/
@@ -772,8 +777,11 @@ void Msg_RecMsgFromUsr (void)
    Img_ImageConstructor (&Image);
 
    /***** Get attached image (action, file and title) *****/
+   ParamUploadImg.Action = "ImgAct";
+   ParamUploadImg.File   = "ImgFil";
+   ParamUploadImg.Title  = "ImgTit";
    Img_GetImageFromForm (0,&Image,NULL,
-                         "ImgAct","ImgFil","ImgTit",
+                         &ParamUploadImg,
 	                 Msg_IMAGE_SAVED_MAX_WIDTH,
 	                 Msg_IMAGE_SAVED_MAX_HEIGHT,
 	                 Msg_IMAGE_SAVED_QUALITY);

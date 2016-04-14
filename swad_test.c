@@ -155,10 +155,9 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstImage (struct Image *Image,
-                                       const char *ClassImg,const char *ClassTitle,
-                                       const char *ParamAction,
-                                       const char *ParamFile,
-                                       const char *ParamTitle,
+                                       const char *ClassImg,
+                                       const char *ClassImgTit,
+                                       struct ParamUploadImg *ParamUploadImg,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -1055,48 +1054,27 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /*****************************************************************************/
 
 static void Tst_PutFormToEditQstImage (struct Image *Image,
-                                       const char *ClassImg,const char *ClassTitle,
-                                       const char *ParamAction,
-                                       const char *ParamFile,
-                                       const char *ParamTitle,
+                                       const char *ClassImg,
+                                       const char *ClassImgTit,
+                                       struct ParamUploadImg *ParamUploadImg,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Image;
-   extern const char *Txt_optional;
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
    extern const char *Txt_Image_title_attribution;
+   extern const char *Txt_optional;
    static unsigned UniqueId = 0;
 
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"TEST_IMG_EDIT_ONE_CONTAINER\">");
-
-   if (!Image->Name[0])
+   if (Image->Name[0])
      {
-      /* Action to perform on image */
-      Par_PutHiddenParamUnsigned (ParamAction,(unsigned) Img_ACTION_NEW_IMAGE);
+      /***** Start container *****/
+      fprintf (Gbl.F.Out,"<div class=\"TEST_IMG_EDIT_ONE_CONTAINER\">");
 
-      /* File */
-      fprintf (Gbl.F.Out,"<label>"
-			 "<img src=\"%s/photo64x64.gif\""
-			 " alt=\"%s\" title=\"%s (%s)\""
-			 " class=\"ICON20x20\" />"
-			 "</label>"
-                         "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Image,Txt_Image,Txt_optional,
-	       ParamFile);
-      if (OptionsDisabled)
-	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />");
-     }
-   else
-     {
       /***** Choice 1: No image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
-	       ParamAction,Img_ACTION_NO_IMAGE);
+	       ParamUploadImg->Action,Img_ACTION_NO_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -1109,7 +1087,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
 
       /***** Choice 2: Current image *****/
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\"",
-	       ParamAction,Img_ACTION_KEEP_IMAGE);
+	       ParamUploadImg->Action,Img_ACTION_KEEP_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -1124,7 +1102,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
       UniqueId++;
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
-	       UniqueId,ParamAction,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
+	       UniqueId,ParamUploadImg->Action,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -1133,23 +1111,26 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,
 			 "</label>"
                          "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image,
-	       ParamFile);
+	       ParamUploadImg->File);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
 	       UniqueId);
+
+      /***** Image title/attribution *****/
+      fprintf (Gbl.F.Out,"<br />"
+			 "<input type=\"text\" name=\"%s\""
+			 " placeholder=\"%s (%s)&hellip;\""
+			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
+	       ParamUploadImg->Title,Txt_Image_title_attribution,Txt_optional,
+	       ClassImgTit,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
+
+      /***** End container *****/
+      fprintf (Gbl.F.Out,"</div>");
      }
-
-   /***** Image title/attribution *****/
-   fprintf (Gbl.F.Out,"<br />"
-	              "<input type=\"text\" name=\"%s\""
-                      " placeholder=\"%s (%s)&hellip;\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-            ParamTitle,Txt_Image_title_attribution,Txt_optional,
-            ClassTitle,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
-
-   /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   else	// No current image
+      /***** Attached image (optional) *****/
+      Img_PutImageUploader (ClassImgTit,ParamUploadImg);
   }
 
 /*****************************************************************************/
@@ -4383,6 +4364,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    char ParamAction[32];
    char ParamFile[32];
    char ParamTitle[32];
+   struct ParamUploadImg ParamUploadImg;
 
    /***** Start frame *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -4489,9 +4471,12 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Stem,
             Stem);
+   ParamUploadImg.Action = "ImgAct";
+   ParamUploadImg.File   = "ImgFil";
+   ParamUploadImg.Title  = "ImgTit";
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,"TEST_IMG_EDIT_ONE_STEM",
                               "STEM",	// Title / attribution
-                              "ImgAct","ImgFil","ImgTit",false);
+                              &ParamUploadImg,false);
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -4710,10 +4695,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       sprintf (ParamAction,"ImgAct%u",NumOpt);
       sprintf (ParamFile  ,"ImgFil%u",NumOpt);
       sprintf (ParamTitle ,"ImgTit%u",NumOpt);
+      ParamUploadImg.Action = ParamAction;
+      ParamUploadImg.File   = ParamFile;
+      ParamUploadImg.Title  = ParamTitle;
       Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                                  "TEST_IMG_EDIT_ONE_ANS",
                                  "ANS_STR",	// Title / attribution
-                                 ParamAction,ParamFile,ParamTitle,
+                                 &ParamUploadImg,
                                  OptionsDisabled);
 
       /* Feedback */
@@ -5159,6 +5147,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    char ParamAction[32];
    char ParamFile[32];
    char ParamTitle[32];
+   struct ParamUploadImg ParamUploadImg;
 
    /***** Get question code *****/
    Gbl.Test.QstCod = Tst_GetQstCod ();
@@ -5198,9 +5187,12 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get image associated to the stem (action, file and title) *****/
+   ParamUploadImg.Action = "ImgAct";
+   ParamUploadImg.File   = "ImgFil";
+   ParamUploadImg.Title  = "ImgTit";
    Img_GetImageFromForm (Tst_MAX_OPTIONS_PER_QUESTION,&Gbl.Test.Image,
                          Tst_GetImageFromDB,
-                         "ImgAct","ImgFil","ImgTit",
+                         &ParamUploadImg,
 	                 Tst_IMAGE_SAVED_MAX_WIDTH,
 	                 Tst_IMAGE_SAVED_MAX_HEIGHT,
 	                 Tst_IMAGE_SAVED_QUALITY);
@@ -5259,9 +5251,12 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       sprintf (ParamAction,"ImgAct%u",NumOpt);
 	       sprintf (ParamFile  ,"ImgFil%u",NumOpt);
 	       sprintf (ParamTitle ,"ImgTit%u",NumOpt);
+	       ParamUploadImg.Action = ParamAction;
+	       ParamUploadImg.File   = ParamFile;
+	       ParamUploadImg.Title  = ParamTitle;
 	       Img_GetImageFromForm (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
 				     Tst_GetImageFromDB,
-				     ParamAction,ParamFile,ParamTitle,
+				     &ParamUploadImg,
 				     Tst_IMAGE_SAVED_MAX_WIDTH,
 				     Tst_IMAGE_SAVED_MAX_HEIGHT,
 				     Tst_IMAGE_SAVED_QUALITY);

@@ -137,13 +137,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.193 (2016-04-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.194 (2016-04-14)"
 #define CSS_FILE		"swad15.193.css"
 #define JS_FILE			"swad15.193.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.194:   Apr 14, 2016	Code refactoring related to uploading images. (199391 lines)
         Version 15.193:   Apr 14, 2016	New layout of button used to upload images. (199357 lines)
         Version 15.192.13:Apr 13, 2016	Fixed bug in file upload, reported by Christian Morillas Gutiérrez. (199341 lines)
         Version 15.192.12:Apr 12, 2016	Fixed bug in groups reported by user raistmaj in GitHub. (199339 lines)
