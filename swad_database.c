@@ -1113,8 +1113,9 @@ mysql> DESCRIBE forum_post;
 | Content    | longtext     | NO   |     | NULL    |                |
 | ImageName  | varchar(43)  | NO   |     | NULL    |                |
 | ImageTitle | varchar(255) | NO   |     | NULL    |                |
+| ImageURL   | varchar(255) | NO   |     | NULL    |                |
 +------------+--------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_post ("
                    "PstCod INT NOT NULL AUTO_INCREMENT,"
@@ -1127,6 +1128,7 @@ mysql> DESCRIBE forum_post;
                    "Content LONGTEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PstCod),"
                    "INDEX(ThrCod),"
                    "INDEX(UsrCod),"
@@ -1582,8 +1584,9 @@ mysql> DESCRIBE msg_content;
 | Content    | longtext     | NO   |     | NULL    |                |
 | ImageName  | varchar(43)  | NO   |     | NULL    |                |
 | ImageTitle | varchar(255) | NO   |     | NULL    |                |
+| ImageURL   | varchar(255) | NO   |     | NULL    |                |
 +------------+--------------+------+-----+---------+----------------+
-5 rows in set (0.01 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content ("
                    "MsgCod INT NOT NULL AUTO_INCREMENT,"
@@ -1591,6 +1594,7 @@ mysql> DESCRIBE msg_content;
                    "Content LONGTEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
@@ -1605,8 +1609,9 @@ mysql> DESCRIBE msg_content_deleted;
 | Content    | longtext     | NO   |     | NULL    |       |
 | ImageName  | varchar(43)  | NO   |     | NULL    |       |
 | ImageTitle | varchar(255) | NO   |     | NULL    |       |
+| ImageURL   | varchar(255) | NO   |     | NULL    |       |
 +------------+--------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content_deleted ("
                    "MsgCod INT NOT NULL,"
@@ -1614,6 +1619,7 @@ mysql> DESCRIBE msg_content_deleted;
                    "Content LONGTEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
@@ -1954,14 +1960,16 @@ mysql> DESCRIBE social_comments;
 | Content    | longtext     | NO   | MUL | NULL    |       |
 | ImageName  | varchar(43)  | NO   |     | NULL    |       |
 | ImageTitle | varchar(255) | NO   |     | NULL    |       |
+| ImageURL   | varchar(255) | NO   |     | NULL    |       |
 +------------+--------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 	           "PubCod BIGINT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
@@ -2048,14 +2056,16 @@ mysql> DESCRIBE social_posts;
 | Content    | longtext     | NO   | MUL | NULL    |                |
 | ImageName  | varchar(43)  | NO   |     | NULL    |                |
 | ImageTitle | varchar(255) | NO   |     | NULL    |                |
+| ImageURL   | varchar(255) | NO   |     | NULL    |                |
 +------------+--------------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
                    "PubCod INT NOT NULL AUTO_INCREMENT,"
                    "Content LONGTEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(PubCod),"
                    "FULLTEXT(Content)) ENGINE = MYISAM;");
 
@@ -2319,9 +2329,10 @@ mysql> DESCRIBE tst_answers;
 | Feedback   | text          | NO   |     | NULL    |       |
 | ImageName  | varchar(43)   | NO   |     | NULL    |       |
 | ImageTitle | varchar(255)  | NO   |     | NULL    |       |
+| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
 | Correct    | enum('N','Y') | NO   |     | NULL    |       |
 +------------+---------------+------+-----+---------+-------+
-7 rows in set (0.01 sec)
+8 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
                    "QstCod INT NOT NULL,"
@@ -2330,6 +2341,7 @@ mysql> DESCRIBE tst_answers;
                    "Feedback TEXT NOT NULL,"
                    "ImageName VARCHAR(43) NOT NULL,"
                    "ImageTitle VARCHAR(255) NOT NULL,"
+                   "ImageURL VARCHAR(255) NOT NULL,"
                    "Correct ENUM('N','Y') NOT NULL,"
                    "INDEX(QstCod))");
 
@@ -2445,11 +2457,12 @@ mysql> DESCRIBE tst_questions;
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
 | ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
 | ImageTitle      | varchar(255)                                                              | NO   |     | NULL    |                |
+| ImageURL        | varchar(255)                                                              | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-12 rows in set (0.00 sec)
+13 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
                    "QstCod INT NOT NULL AUTO_INCREMENT,"

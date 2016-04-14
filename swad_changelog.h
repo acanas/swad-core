@@ -137,13 +137,23 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.195 (2016-04-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.195.1 (2016-04-15)"
 #define CSS_FILE		"swad15.193.css"
 #define JS_FILE			"swad15.193.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.195.1: Apr 15, 2016	New fields in images to store URL when a user click in the image. (199390 lines)
+					7 changes necessary in database:
+ALTER TABLE tst_questions ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE tst_answers ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE social_posts ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE social_comments ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE forum_post ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE msg_content ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+ALTER TABLE msg_content_deleted ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+
         Version 15.195:   Apr 14, 2016	Code refactoring related to uploading images. (199355 lines)
         Version 15.194.2: Apr 14, 2016	Code refactoring related to uploading images. (199384 lines)
         Version 15.194.1: Apr 14, 2016	Code refactoring related to uploading images. (199391 lines)
