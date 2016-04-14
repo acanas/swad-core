@@ -131,18 +131,20 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
 // TODO: Optional link in images to original file
+// TODO: FIX BUG: In Statistics > Indicators, if we select only 5 indicators, the message "The list is too big..." is shown.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.192.13 (2016-04-13)"
-#define CSS_FILE		"swad15.192.9.css"
-#define JS_FILE			"swad15.190.1.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.193 (2016-04-14)"
+#define CSS_FILE		"swad15.193.css"
+#define JS_FILE			"swad15.193.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.193:   Apr 14, 2016	New layout of button used to upload images. (199357 lines)
         Version 15.192.13:Apr 13, 2016	Fixed bug in file upload, reported by Christian Morillas Gutiérrez. (199341 lines)
         Version 15.192.12:Apr 12, 2016	Fixed bug in groups reported by user raistmaj in GitHub. (199339 lines)
         Version 15.192.11:Apr 12, 2016	Image quality in social posts reduced to 50 in order to speed up page loading.

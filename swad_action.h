@@ -29,6 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
+#include "swad_cryptography.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -76,6 +77,8 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define Act_MAX_ACTION_COD 1524
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
+
+#define Act_MAX_LENGTH_ID	(32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
 
 /*****************************************************************************/
 /************************* Not asociates with tabs ***************************/
@@ -1450,6 +1453,8 @@ void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle);
+
+void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);

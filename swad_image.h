@@ -103,6 +103,7 @@ void Img_FreeImageTitle (struct Image *Image);
 void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
                                       struct Image *Image);
 
+void Img_PutImageUploader (const char *ClassImgTit);
 void Img_GetImageFromForm (unsigned NumOpt,struct Image *Image,
                            void (*GetImageFromDB) (unsigned NumOpt,struct Image *Image),
                            const char *ParamAction,const char *ParamFile,const char *ParamTitle,

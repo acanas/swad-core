@@ -284,9 +284,6 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
-   extern const char *Txt_Image;
-   extern const char *Txt_optional;
-   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Send_message;
    char YN[1+1];
 
@@ -421,26 +418,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      /* Action to perform on image */
-      Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
-
-      /* Image file */
-      fprintf (Gbl.F.Out,"<label>"
-			 "<img src=\"%s/photo64x64.gif\""
-			 " alt=\"%s\" title=\"%s (%s)\""
-			 " class=\"ICON20x20\" />"
-			 "</label>"
-			 "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\" />"
-			 "<br />",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Image,Txt_Image,Txt_optional);
-
-      /* Image title/attribution */
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
-			 " placeholder=\"%s (%s)&hellip;\""
-			 " class=\"MSG_IMG_TIT\" maxlength=\"%u\" value=\"\">",
-	       Txt_Image_title_attribution,Txt_optional,
-	       Img_MAX_BYTES_TITLE);
+      Img_PutImageUploader ("MSG_IMG_TIT");
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);

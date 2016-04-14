@@ -3778,9 +3778,6 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
-   extern const char *Txt_Image;
-   extern const char *Txt_optional;
-   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Send_message;
 
    /***** Start frame *****/
@@ -3838,26 +3835,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   /* Action to perform on image */
-   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
-
-   /* Image file */
-   fprintf (Gbl.F.Out,"<label>"
-	              "<img src=\"%s/photo64x64.gif\""
-	              " alt=\"%s\" title=\"%s (%s)\""
-	              " class=\"ICON20x20\" />"
-	              "</label>"
-	              "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\" />"
-	              "<br />",
-            Gbl.Prefs.IconsURL,
-            Txt_Image,Txt_Image,Txt_optional);
-
-   /* Image title/attribution */
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
-                      " placeholder=\"%s (%s)&hellip;\""
-                      " class=\"FOR_IMG_TIT\" maxlength=\"%u\" value=\"\">",
-            Txt_Image_title_attribution,Txt_optional,
-            Img_MAX_BYTES_TITLE);
+   Img_PutImageUploader ("FOR_IMG_TIT");
 
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_message);

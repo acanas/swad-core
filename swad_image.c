@@ -152,6 +152,55 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
   }
 
 /*****************************************************************************/
+/************ Draw input fields to upload an image inside a form *************/
+/*****************************************************************************/
+
+void Img_PutImageUploader (const char *ClassImgTit)
+  {
+   extern const char *Txt_Image;
+   extern const char *Txt_optional;
+   extern const char *Txt_Image_title_attribution;
+   char Id[Act_MAX_LENGTH_ID];
+
+   /***** Create unique id for this image uploader *****/
+   Act_SetUniqueId (Id);
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"IMG_UPLOAD_CONTAINER\">");
+
+   /***** Action to perform on image *****/
+   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
+
+   /***** Image file *****/
+   fprintf (Gbl.F.Out,"<label class=\"IMG_UPLOAD_BUTTON\">"
+	              "<img src=\"%s/photo64x64.gif\""
+	              " alt=\"%s\" title=\"%s (%s)\""
+	              " class=\"IMG_UPLOAD_ICON\" />"
+	              "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\""
+	              " class=\"IMG_UPLOAD_FILE\""
+	              " onchange=\"imageUploadOnSelectFile (this,'%s');\" />"
+                      "<span id=\"%s_fil\" class=\"IMG_UPLOAD_FILENAME\" />"
+                      "</span>"
+	              "</label>"
+	              "<br />",
+            Gbl.Prefs.IconsURL,
+            Txt_Image,Txt_Image,Txt_optional,
+            Id,Id);
+
+   /***** Image title/attribution *****/
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"%s_tit\" name=\"ImgTit\""
+                      " placeholder=\"%s (%s)&hellip;\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\""
+                      " style=\"display:none;\" />",
+            Id,
+            Txt_Image_title_attribution,Txt_optional,
+            ClassImgTit,Img_MAX_BYTES_TITLE);
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /***************************** Get image from form ***************************/
 /*****************************************************************************/
 

@@ -64,8 +64,6 @@
 							// set also this constant to the new value
 							// in JavaScript function readOldTimelineData
 
-#define Soc_MAX_LENGTH_ID	(32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1)
-
 typedef enum
   {
    Soc_TIMELINE_USR,	// Show the timeline of a user
@@ -176,10 +174,10 @@ static void Soc_PutTextarea (const char *Placeholder,
 
 static long Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID]);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_LENGTH_ID]);
 static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Soc_MAX_LENGTH_ID]);
+                                                            const char IdNewComment[Act_MAX_LENGTH_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
@@ -255,8 +253,6 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
 
 static void Soc_ResetSocialNote (struct SocialNote *SocNot);
 static void Soc_ResetSocialComment (struct SocialComment *SocCom);
-
-static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID]);
 
 static void Soc_ClearTimelineThisSession (void);
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void);
@@ -1082,7 +1078,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char ForumName[512];
    char SummaryStr[Cns_MAX_BYTES_TEXT+1];
    unsigned NumComments;
-   char IdNewComment[Soc_MAX_LENGTH_ID];
+   char IdNewComment[Act_MAX_LENGTH_ID];
 
    /***** Start frame ****/
    if (ShowNoteAlone)
@@ -1261,7 +1257,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_LEFT\">");
 
       /* Create unique id for new comment */
-      Soc_SetUniqueId (IdNewComment);
+      Act_SetUniqueId (IdNewComment);
 
       /* Get number of comments in this social note */
       NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
@@ -1424,10 +1420,10 @@ static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
 static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
-   char IdDateTime[Soc_MAX_LENGTH_ID];
+   char IdDateTime[Act_MAX_LENGTH_ID];
 
    /***** Create unique Id *****/
-   Soc_SetUniqueId (IdDateTime);
+   Act_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\">"
@@ -2000,14 +1996,11 @@ static void Soc_PutFormToWriteNewPost (void)
 static void Soc_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
-   extern const char *Txt_Image;
-   extern const char *Txt_optional;
-   extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Post;
-   char IdDivImgButton[Soc_MAX_LENGTH_ID];
+   char IdDivImgButton[Act_MAX_LENGTH_ID];
 
    /***** Set unique id for the hidden div *****/
-   Soc_SetUniqueId (IdDivImgButton);
+   Act_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
@@ -2027,26 +2020,7 @@ static void Soc_PutTextarea (const char *Placeholder,
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   /* Action to perform on image */
-   Par_PutHiddenParamUnsigned ("ImgAct",(unsigned) Img_ACTION_NEW_IMAGE);
-
-   /* Image file */
-   fprintf (Gbl.F.Out,"<label>"
-	              "<img src=\"%s/photo64x64.gif\""
-	              " alt=\"%s\" title=\"%s (%s)\""
-	              " class=\"ICON20x20\" />"
-	              "</label>"
-	              "<input type=\"file\" name=\"ImgFil\" accept=\"image/*\" />"
-	              "<br />",
-            Gbl.Prefs.IconsURL,
-            Txt_Image,Txt_Image,Txt_optional);
-
-   /* Image title/attribution */
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ImgTit\""
-                      " placeholder=\"%s (%s)&hellip;\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\">",
-            Txt_Image_title_attribution,Txt_optional,
-            ClassImgTit,Img_MAX_BYTES_TITLE);
+   Img_PutImageUploader (ClassImgTit);
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""
@@ -2168,7 +2142,7 @@ static long Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Soc_MAX_LENGTH_ID])
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_LENGTH_ID])
   {
    extern const char *Txt_Comment;
 
@@ -2210,7 +2184,7 @@ static void Soc_PutIconCommentDisabled (void)
 // All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Soc_MAX_LENGTH_ID])
+                                                            const char IdNewComment[Act_MAX_LENGTH_ID])
   {
    extern const char *Txt_New_SOCIAL_comment;
    bool ShowPhoto = false;
@@ -4587,24 +4561,6 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom)
    SocCom->NotCod      = -1L;
    SocCom->DateTimeUTC = (time_t) 0;
    SocCom->Content[0]  = '\0';
-  }
-
-/*****************************************************************************/
-/***************************** Get unique Id *********************************/
-/*****************************************************************************/
-
-static void Soc_SetUniqueId (char UniqueId[Soc_MAX_LENGTH_ID])
-  {
-   static unsigned CountForThisExecution = 0;
-
-   /***** Create Id. The id must be unique in timeline,
-          but the timeline is updated via AJAX.
-          So, Id uses:
-          - a name for this execution (Gbl.UniqueNameEncrypted)
-          - a number for each element in this execution (CountForThisExecution) *****/
-   sprintf (UniqueId,"id_%s_%u",
-            Gbl.UniqueNameEncrypted,
-            ++CountForThisExecution);
   }
 
 /*****************************************************************************/

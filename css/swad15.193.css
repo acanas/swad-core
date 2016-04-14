@@ -1831,6 +1831,33 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
 .LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
+/******************************** Image uploading ****************************/
+.IMG_UPLOAD_CONTAINER
+	{
+	vertical-align:top;
+	margin-bottom:10px;
+	}
+.IMG_UPLOAD_BUTTON
+	{
+	cursor:pointer;
+	}
+.IMG_UPLOAD_ICON
+	{
+	width:20px;
+	height:20px;
+	margin:0 5px;
+	vertical-align:middle;
+	}
+.IMG_UPLOAD_FILE
+	{
+	display:none;
+	}
+.IMG_UPLOAD_FILENAME
+	{
+	color:#808080;
+	font-size:12pt;
+	}
+
 /******************************** Social activity ****************************/
 #view_new_posts_container,#view_old_posts_container
 	{
@@ -1947,7 +1974,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:440px;
-	margin-bottom:10px;
 	}
 .SOCIAL_TXT
 	{
@@ -2069,7 +2095,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:440px;
-	margin-bottom:10px;
 	}
 
 /************************************ Forum **********************************/

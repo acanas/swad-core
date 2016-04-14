@@ -888,6 +888,15 @@ function disableDetailedClicks () {
 }
 
 /*****************************************************************************/
+/************************** Upload images in a form **************************/
+/*****************************************************************************/
+
+function imageUploadOnSelectFile (inputFile,id) {
+	document.getElementById(id + '_fil').innerHTML = inputFile.value;	// Display filename
+	document.getElementById(id + '_tit').style.display = '';				// Show hidden field to enter title/attribution
+}
+
+/*****************************************************************************/
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
 

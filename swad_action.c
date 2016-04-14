@@ -4530,6 +4530,24 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
   }
 
 /*****************************************************************************/
+/***************************** Get unique Id *********************************/
+/*****************************************************************************/
+
+void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID])
+  {
+   static unsigned CountForThisExecution = 0;
+
+   /***** Create Id. The id must be unique in timeline,
+          but the timeline is updated via AJAX.
+          So, Id uses:
+          - a name for this execution (Gbl.UniqueNameEncrypted)
+          - a number for each element in this execution (CountForThisExecution) *****/
+   sprintf (UniqueId,"id_%s_%u",
+            Gbl.UniqueNameEncrypted,
+            ++CountForThisExecution);
+  }
+
+/*****************************************************************************/
 /***************** Adjust current action when no user's logged ***************/
 /*****************************************************************************/
 
