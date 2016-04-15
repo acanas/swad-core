@@ -130,20 +130,20 @@
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
-// TODO: Optional link in images to original file
 // TODO: FIX BUG: In Statistics > Indicators, if we select only 5 indicators, the message "The list is too big..." is shown.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.196 (2016-04-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.197 (2016-04-15)"
 #define CSS_FILE		"swad15.193.css"
-#define JS_FILE			"swad15.193.js"
+#define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.197:   Apr 15, 2016	Input field to enter image URL. (199518 lines)
         Version 15.196:   Apr 15, 2016	Changes related to image URL. (199467 lines)
         Version 15.195.1: Apr 15, 2016	New fields in images to store URL when a user click in the image. (199390 lines)
 					7 changes necessary in database:

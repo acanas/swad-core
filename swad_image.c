@@ -99,14 +99,15 @@ void Img_ResetImageExceptTitleAndURL (struct Image *Image)
 
 void Img_ImageDestructor (struct Image *Image)
   {
-   Img_FreeImageTitleAndURL (Image);
+   Img_FreeImageTitle (Image);
+   Img_FreeImageURL (Image);
   }
 
 /*****************************************************************************/
-/*********************** Reset image title and URL ***************************/
+/****************************** Free image title *****************************/
 /*****************************************************************************/
 
-void Img_FreeImageTitleAndURL (struct Image *Image)
+void Img_FreeImageTitle (struct Image *Image)
   {
    // Image->Title must be initialized to NULL after declaration
    if (Image->Title)
@@ -114,6 +115,14 @@ void Img_FreeImageTitleAndURL (struct Image *Image)
       free ((void *) Image->Title);
       Image->Title = NULL;
      }
+  }
+
+/*****************************************************************************/
+/******************************* Free image URL ******************************/
+/*****************************************************************************/
+
+void Img_FreeImageURL (struct Image *Image)
+  {
    // Image->URL must be initialized to NULL after declaration
    if (Image->URL)
      {
@@ -142,11 +151,10 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 	                            Img_FILE_NONE;
 
 
-   /***** Copy image title and URL to struct *****/
-   // Image->Title and Image->URL can be empty or filled with previous values
+   /***** Copy image title to struct *****/
+   // Image->Title can be empty or filled with previous value
    // If filled  ==> free it
-   Img_FreeImageTitleAndURL (Image);
-
+   Img_FreeImageTitle (Image);
    if (Title[0])
      {
       /* Get and limit length of the title */
@@ -160,6 +168,10 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
       Image->Title[Length] = '\0';
      }
 
+   /***** Copy image URL to struct *****/
+   // Image->URL can be empty or filled with previous value
+   // If filled  ==> free it
+   Img_FreeImageURL (Image);
    if (URL[0])
      {
       /* Get and limit length of the URL */
@@ -178,11 +190,12 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 /************ Draw input fields to upload an image inside a form *************/
 /*****************************************************************************/
 
-void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit)
+void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
   {
    extern const char *Txt_Image;
    extern const char *Txt_optional;
    extern const char *Txt_Image_title_attribution;
+   extern const char *Txt_Link;
    struct ParamUploadImg ParamUploadImg;
    char Id[Act_MAX_LENGTH_ID];
 
@@ -208,21 +221,29 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit)
 	              " onchange=\"imageUploadOnSelectFile (this,'%s');\" />"
                       "<span id=\"%s_fil\" class=\"IMG_UPLOAD_FILENAME\" />"
                       "</span>"
-	              "</label>"
-	              "<br />",
+	              "</label>",
             Gbl.Prefs.IconsURL,
             Txt_Image,Txt_Image,Txt_optional,
             ParamUploadImg.File,
             Id,Id);
 
-   /***** Image title/attribution *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"%s_tit\" name=\"%s\""
-                      " placeholder=\"%s (%s)&hellip;\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\""
-                      " style=\"display:none;\" />",
-            Id,ParamUploadImg.Title,
+   /***** Image title/attribution and URL *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_tit_url\" style=\"display:none;\">",
+            Id);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
+                      " placeholder=\"%s (%s)\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
+            ParamUploadImg.Title,
             Txt_Image_title_attribution,Txt_optional,
-            ClassImgTit,Img_MAX_BYTES_TITLE);
+            ClassImgTitURL,Img_MAX_BYTES_TITLE);
+   fprintf (Gbl.F.Out,"<br />"
+                      "<input type=\"text\" name=\"%s\""
+                      " placeholder=\"%s (%s)\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
+            ParamUploadImg.URL,
+            Txt_Link,Txt_optional,
+            ClassImgTitURL,Img_MAX_BYTES_URL);
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -237,6 +258,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
   {
    struct ParamUploadImg ParamUploadImg;
    char Title[Img_MAX_BYTES_TITLE+1];
+   char URL[Img_MAX_BYTES_URL+1];
    size_t Length;
 
    /***** Set names of parameters depending on number of image in form *****/
@@ -278,7 +300,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
          break;
      }
 
-   /***** By last, get image title from form *****/
+   /***** Third, get image title from form *****/
    Par_GetParToText (ParamUploadImg.Title,Title,Img_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current image title unchanged
       If not empty, copy it to current image title */
@@ -286,11 +308,26 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
      {
       /* Overwrite current title (empty or coming from database)
          with the title coming from the form */
-      Img_FreeImageTitleAndURL (Image);
+      Img_FreeImageTitle (Image);
       if ((Image->Title = (char *) malloc (Length + 1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
       strncpy (Image->Title,Title,Length);
       Image->Title[Length] = '\0';
+     }
+
+   /***** By last, get image URL from form *****/
+   Par_GetParToText (ParamUploadImg.URL,URL,Img_MAX_BYTES_URL);
+   /* If the URL coming from the form is empty, keep current image URL unchanged
+      If not empty, copy it to current image URL */
+   if ((Length = strlen (URL)) > 0)
+     {
+      /* Overwrite current URL (empty or coming from database)
+         with the URL coming from the form */
+      Img_FreeImageURL (Image);
+      if ((Image->URL = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
+      strncpy (Image->URL,URL,Length);
+      Image->URL[Length] = '\0';
      }
   }
 
@@ -305,12 +342,14 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
       strcpy (ParamUploadImg->Action,"ImgAct");
       strcpy (ParamUploadImg->File  ,"ImgFil");
       strcpy (ParamUploadImg->Title ,"ImgTit");
+      strcpy (ParamUploadImg->URL   ,"ImgURL");
      }
    else				// Several images in form ==> add suffix
      {
       sprintf (ParamUploadImg->Action,"ImgAct%u",NumImgInForm);
       sprintf (ParamUploadImg->File  ,"ImgFil%u",NumImgInForm);
       sprintf (ParamUploadImg->Title ,"ImgTit%u",NumImgInForm);
+      sprintf (ParamUploadImg->URL   ,"ImgURL%u",NumImgInForm);
      }
   }
 

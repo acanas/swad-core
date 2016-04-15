@@ -32,6 +32,7 @@
 /*****************************************************************************/
 
 #define Img_MAX_BYTES_TITLE 255
+#define Img_MAX_BYTES_URL   255
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -103,6 +104,7 @@ struct ParamUploadImg
    char Action[16];
    char File[16];
    char Title[16];
+   char URL[16];
   };
 
 /*****************************************************************************/
@@ -112,14 +114,15 @@ struct ParamUploadImg
 void Img_ImageConstructor (struct Image *Image);
 void Img_ResetImageExceptTitleAndURL (struct Image *Image);
 void Img_ImageDestructor (struct Image *Image);
-void Img_FreeImageTitleAndURL (struct Image *Image);
+void Img_FreeImageTitle (struct Image *Image);
+void Img_FreeImageURL (struct Image *Image);
 
 void Img_GetImageNameTitleAndURLFromRow (const char *Name,
                                          const char *Title,
                                          const char *URL,
                                          struct Image *Image);
 
-void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit);
+void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL);
 void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
                            void (*GetImageFromDB) (int NumImgInForm,struct Image *Image));
 void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm);

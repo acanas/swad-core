@@ -156,7 +156,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
                                        const char *ClassImg,
-                                       const char *ClassImgTit,
+                                       const char *ClassImgTitURL,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -1056,7 +1056,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
 static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
                                        const char *ClassImg,
-                                       const char *ClassImgTit,
+                                       const char *ClassImgTitURL,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -1064,6 +1064,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
    extern const char *Txt_Image_title_attribution;
+   extern const char *Txt_Link;
    extern const char *Txt_optional;
    static unsigned UniqueId = 0;
    struct ParamUploadImg ParamUploadImg;
@@ -1124,17 +1125,25 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       /***** Image title/attribution *****/
       fprintf (Gbl.F.Out,"<br />"
 			 "<input type=\"text\" name=\"%s\""
-			 " placeholder=\"%s (%s)&hellip;\""
+			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
 	       ParamUploadImg.Title,Txt_Image_title_attribution,Txt_optional,
-	       ClassImgTit,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
+	       ClassImgTitURL,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
+
+      /***** Image URL *****/
+      fprintf (Gbl.F.Out,"<br />"
+			 "<input type=\"text\" name=\"%s\""
+			 " placeholder=\"%s (%s)\""
+			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
+	       ParamUploadImg.URL,Txt_Link,Txt_optional,
+	       ClassImgTitURL,Img_MAX_BYTES_URL,Image->URL ? Image->URL : "");
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
    else	// No current image
       /***** Attached image (optional) *****/
-      Img_PutImageUploader (NumImgInForm,ClassImgTit);
+      Img_PutImageUploader (NumImgInForm,ClassImgTitURL);
   }
 
 /*****************************************************************************/
@@ -4867,7 +4876,8 @@ static void Tst_InitImagesOfQuestion (void)
 
    /***** Initialize image *****/
    Img_ResetImageExceptTitleAndURL (&Gbl.Test.Image);
-   Img_FreeImageTitleAndURL (&Gbl.Test.Image);
+   Img_FreeImageTitle (&Gbl.Test.Image);
+   Img_FreeImageURL (&Gbl.Test.Image);
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
@@ -4875,7 +4885,8 @@ static void Tst_InitImagesOfQuestion (void)
      {
       /***** Initialize image *****/
       Img_ResetImageExceptTitleAndURL (&Gbl.Test.Answer.Options[NumOpt].Image);
-      Img_FreeImageTitleAndURL (&Gbl.Test.Image);
+      Img_FreeImageTitle (&Gbl.Test.Image);
+      Img_FreeImageURL (&Gbl.Test.Image);
      }
   }
 

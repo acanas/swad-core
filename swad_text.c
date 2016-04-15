@@ -14308,17 +14308,17 @@ const char *Txt_Image =
 
 const char *Txt_Image_title_attribution =
 #if   L==1
-	"T&iacute;tol/reconeixement de la imatge";
+	"T&iacute;tol/atribuci&oacute; de la imatge";
 #elif L==2
 	"Bildtitel / Namensnennung";
 #elif L==3
 	"Image title/attribution";
 #elif L==4
-	"T&iacute;tulo/reconocimiento de la imagen";
+	"T&iacute;tulo/atribuci&oacute;n de la imagen";
 #elif L==5
 	"Titre/attribution de l'image";
 #elif L==6
-	"T&iacute;tulo/reconocimiento de la imagen";	// Okoteve traducción
+	"T&iacute;tulo/atribuci&oacute;n de la imagen";	// Okoteve traducción
 #elif L==7
 	"Titolo/attribuzione delle immagine";
 #elif L==8

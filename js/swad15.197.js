@@ -870,7 +870,8 @@ function enableDisableImgAns (elem, isDisabled) {
 	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
 		if (elem.name == ('ImgAct' + i) ||
 			elem.name == ('ImgFil' + i) ||
-			elem.name == ('ImgTit' + i))
+			elem.name == ('ImgTit' + i) ||
+			elem.name == ('ImgURL' + i))
 			elem.disabled = isDisabled;
 }
 
@@ -892,12 +893,12 @@ function disableDetailedClicks () {
 /*****************************************************************************/
 
 function imageUploadOnSelectFile (inputFile,id) {
-	document.getElementById(id + '_fil').innerHTML = inputFile.value;	// Display filename
-	document.getElementById(id + '_tit').style.display = '';				// Show hidden field to enter title/attribution
+	document.getElementById(id + '_fil').innerHTML = inputFile.value;	// Display image filename
+	document.getElementById(id + '_tit_url').style.display = '';		// Show hidden fields
 }
 
 /*****************************************************************************/
-/************************ Draw an academic calendar **************************/
+/************************* Draw an academic calendar *************************/
 /*****************************************************************************/
 
 function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
