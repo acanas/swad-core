@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.197 (2016-04-15)"
-#define CSS_FILE		"swad15.193.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.198 (2016-04-15)"
+#define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.198:   Apr 15, 2016	Changes in layout related to image URL. (199646 lines)
         Version 15.197:   Apr 15, 2016	Input field to enter image URL. (199518 lines)
         Version 15.196:   Apr 15, 2016	Changes related to image URL. (199467 lines)
         Version 15.195.1: Apr 15, 2016	New fields in images to store URL when a user click in the image. (199390 lines)

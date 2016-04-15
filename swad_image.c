@@ -527,12 +527,14 @@ void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
 /******************** Write the image of a test question *********************/
 /*****************************************************************************/
 
-void Img_ShowImage (struct Image *Image,const char *ClassImg)
+void Img_ShowImage (struct Image *Image,
+                    const char *ClassContainer,const char *ClassImg)
   {
    extern const char *Txt_Image_not_found;
    char FileNameImgPriv[PATH_MAX+1];
    char FullPathImgPriv[PATH_MAX+1];
    char URL[PATH_MAX+1];
+   bool PutLink;
 
    /***** If no image to show ==> nothing to do *****/
    if (!Image->Name)
@@ -567,14 +569,32 @@ void Img_ShowImage (struct Image *Image,const char *ClassImg)
 	       FileNameImgPriv);
 
       /***** Show image *****/
-      fprintf (Gbl.F.Out,"<div>"
-			 "<img src=\"%s\" class=\"%s\" alt=\"\"",
-	       URL,ClassImg);
+      /* Check if optional link is present */
+      PutLink = false;
+      if (Image->URL)
+         if (Image->URL[0])
+            PutLink = true;
+
+      /* Start image container */
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
+
+      /* Start optional link to external URL */
+      if (PutLink)
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Image->URL);
+
+      /* Image */
+      fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL,ClassImg);
       if (Image->Title)
          if (Image->Title[0])
 	    fprintf (Gbl.F.Out," title=\"%s\"",Image->Title);
-      fprintf (Gbl.F.Out," />"
-			 "</div>");
+      fprintf (Gbl.F.Out," />");
+
+      /* End optional link to external URL */
+      if (PutLink)
+         fprintf (Gbl.F.Out,"</a>");
+
+      /* End image container */
+      fprintf (Gbl.F.Out,"</div>");
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_Image_not_found);

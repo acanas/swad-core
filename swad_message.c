@@ -418,7 +418,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Img_PutImageUploader (-1,"MSG_IMG_TIT");
+      Img_PutImageUploader (-1,"MSG_IMG_TIT_URL");
 
       /***** Send button *****/
       Lay_PutCreateButton (Txt_Send_message);
@@ -2960,7 +2960,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
          // fprintf (Gbl.F.Out,"<br />&nbsp;");
         }
-      Img_ShowImage (&Image,"MSG_IMG");
+      Img_ShowImage (&Image,"MSG_IMG_CONTAINER","MSG_IMG");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 

@@ -1307,7 +1307,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
-      Img_ShowImage (&Image,"FOR_IMG");
+      Img_ShowImage (&Image,"FOR_IMG_CONTAINER","FOR_IMG");
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
@@ -3838,7 +3838,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Img_PutImageUploader (-1,"FOR_IMG_TIT");
+   Img_PutImageUploader (-1,"FOR_IMG_TIT_URL");
 
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_message);

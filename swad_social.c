@@ -1480,12 +1480,15 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Write content *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
-   Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-   fprintf (Gbl.F.Out,"</div>");
+   if (Content[0])
+     {
+      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
+      Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /***** Show image *****/
-   Img_ShowImage (&Image,"SOCIAL_IMG_POST");
+   Img_ShowImage (&Image,"SOCIAL_POST_IMG_CONTAINER","SOCIAL_POST_IMG");
 
    /***** Free image *****/
    Img_ImageDestructor (&Image);
@@ -1976,7 +1979,7 @@ static void Soc_PutFormToWriteNewPost (void)
 
    /***** Textarea and button *****/
    Soc_PutTextarea (Txt_New_SOCIAL_post,
-                    "SOCIAL_TEXTAREA_POST","SOCIAL_IMG_TIT_POST");
+                    "SOCIAL_TEXTAREA_POST","SOCIAL_POST_IMG_TIT_URL");
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2220,7 +2223,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
    /***** Textarea and button *****/
    Soc_PutTextarea (Txt_New_SOCIAL_comment,
-                    "SOCIAL_TEXTAREA_COMMENT","SOCIAL_IMG_TIT_COMMENT");
+                    "SOCIAL_TEXTAREA_COMMENT","SOCIAL_COMMENT_IMG_TIT_URL");
 
    /***** End form *****/
    Act_FormEnd ();
@@ -2389,7 +2392,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show image */
-      Img_ShowImage (&SocCom->Image,"SOCIAL_IMG_COMMENT");
+      Img_ShowImage (&SocCom->Image,"SOCIAL_COMMENT_IMG_CONTAINER","SOCIAL_COMMENT_IMG");
 
       /* Put icon to mark this social comment as favourite */
       if (IAmTheAuthor)				// I am the author

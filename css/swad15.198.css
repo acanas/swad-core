@@ -1743,13 +1743,87 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EXA_LIGHT	{color:#A0A0A0; font-size:12pt;}
 .TEST_EDI	{color:#404040; font-size:12pt;}
 .TEST_EDI_LIGHT	{color:#A0A0A0; font-size:12pt;}
-.TEST_IMG_SHOW_STEM		{width:100%; border-radius:4px; margin:10px 0;}
-.TEST_IMG_SHOW_ANS		{width:100%; border-radius:4px; margin:10px 0;}
-.TEST_IMG_EDIT_LIST_STEM	{width:100%; border-radius:2px; margin:5px 0;}
-.TEST_IMG_EDIT_LIST_ANS		{width:100%; border-radius:2px; margin:5px 0;}
-.TEST_IMG_EDIT_ONE_CONTAINER	{margin:15px 0; text-align:left; vertical-align:top;}
-.TEST_IMG_EDIT_ONE_STEM		{width:100%; border-radius:4px;}
-.TEST_IMG_EDIT_ONE_ANS		{width:100%; border-radius:4px;}
+
+.TEST_IMG_SHOW_STEM_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:10px 0;
+	}
+.TEST_IMG_SHOW_STEM
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:4px;
+	}
+.TEST_IMG_SHOW_ANS_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:10px 0;
+	}
+.TEST_IMG_SHOW_ANS
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:4px;
+	}
+.TEST_IMG_EDIT_LIST_STEM_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:5px 0;
+	}
+.TEST_IMG_EDIT_LIST_STEM
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:2px;
+	}
+.TEST_IMG_EDIT_LIST_ANS_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:5px 0;
+	}
+.TEST_IMG_EDIT_LIST_ANS
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:2px;
+	}
+
+.TEST_FORM_EDIT_IMG
+	{
+	box-sizing:border-box;
+	margin:15px 0;
+	text-align:left;
+	vertical-align:top;
+	}
+
+.TEST_IMG_EDIT_ONE_STEM_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
+.TEST_IMG_EDIT_ONE_STEM
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:4px;
+	}
+.TEST_IMG_EDIT_ONE_ANS_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
+.TEST_IMG_EDIT_ONE_ANS
+	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:4px;
+	}
+
 .TEST_EDI_ANS_LEFT_COL
 	{
 	box-sizing:border-box;
@@ -1970,22 +2044,28 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
-.SOCIAL_IMG_TIT_POST
-	{
-	box-sizing:border-box;
-	width:440px;
-	}
 .SOCIAL_TXT
 	{
 	padding:5px 0;
 	color:#404040;
 	font-size:13pt;
 	}
-.SOCIAL_IMG_POST
+.SOCIAL_POST_IMG_CONTAINER
 	{
+	box-sizing:border-box;
+	width:480px;
+	margin:10px 0;
+	}
+.SOCIAL_POST_IMG
+	{
+	box-sizing:border-box;
 	width:480px;
 	border-radius:4px;
-	margin:10px 0;
+	}
+.SOCIAL_POST_IMG_TIT_URL
+	{
+	box-sizing:border-box;
+	width:440px;
 	}
 .SOCIAL_ICON_COMMENT
 	{
@@ -2085,29 +2165,41 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
-.SOCIAL_IMG_COMMENT
+.SOCIAL_COMMENT_IMG_CONTAINER
 	{
+	box-sizing:border-box;
 	width:440px;
-	border-radius:4px;
 	margin:10px 0;
 	}
-.SOCIAL_IMG_TIT_COMMENT
+.SOCIAL_COMMENT_IMG
+	{
+	box-sizing:border-box;
+	width:440px;
+	border-radius:4px;
+	}
+.SOCIAL_COMMENT_IMG_TIT_URL
 	{
 	box-sizing:border-box;
 	width:440px;
 	}
 
 /************************************ Forum **********************************/
+.FOR_IMG_CONTAINER
+	{
+	box-sizing:border-box;
+	width:100%;
+	margin:10px 0;
+	}
 .FOR_IMG
 	{
+	box-sizing:border-box;
 	width:100%;
 	border-radius:4px;
-	margin:20px 0;
 	}
-.FOR_IMG_TIT
+.FOR_IMG_TIT_URL
 	{
+	box-sizing:border-box;
 	width:480px;
-	margin-bottom:10px;
 	}
 
 /*********************************** Messages ********************************/
@@ -2118,16 +2210,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-.MSG_IMG
+.MSG_IMG_CONTAINER
 	{
+	box-sizing:border-box;
 	width:100%;
-	border-radius:4px;
 	margin:10px 0;
 	}
-.MSG_IMG_TIT
+.MSG_IMG
 	{
+	box-sizing:border-box;
+	width:100%;
+	border-radius:4px;
+	}
+.MSG_IMG_TIT_URL
+	{
+	box-sizing:border-box;
 	width:480px;
-	margin-bottom:10px;
 	}
 .MSG_TXT	{color:#404040; font-size:13pt;}
 .MSG_TIT	{color:#4D88A1; font-size:13pt;}

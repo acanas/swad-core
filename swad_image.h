@@ -130,7 +130,8 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction);
 void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile);
 
 void Img_MoveImageToDefinitiveDirectory (struct Image *Image);
-void Img_ShowImage (struct Image *Image,const char *ClassImg);
+void Img_ShowImage (struct Image *Image,
+                    const char *ClassContainer,const char *ClassImg);
 void Img_RemoveImageFile (const char *ImageName);
 
 #endif
