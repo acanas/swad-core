@@ -89,6 +89,9 @@ struct Image
    char Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
    char *Title;	// Title/attribution (it must be initialized to NULL
 		// in order to not trying to free it when no memory allocated)
+   char *URL;	// URL, i.e. link to original big photo or video
+		// (it must be initialized to NULL
+		// in order to not trying to free it when no memory allocated)
    unsigned Width;
    unsigned Height;
    unsigned Quality;
@@ -107,12 +110,14 @@ struct ParamUploadImg
 /*****************************************************************************/
 
 void Img_ImageConstructor (struct Image *Image);
-void Img_ResetImageExceptTitle (struct Image *Image);
+void Img_ResetImageExceptTitleAndURL (struct Image *Image);
 void Img_ImageDestructor (struct Image *Image);
-void Img_FreeImageTitle (struct Image *Image);
+void Img_FreeImageTitleAndURL (struct Image *Image);
 
-void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
-                                      struct Image *Image);
+void Img_GetImageNameTitleAndURLFromRow (const char *Name,
+                                         const char *Title,
+                                         const char *URL,
+                                         struct Image *Image);
 
 void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTit);
 void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,

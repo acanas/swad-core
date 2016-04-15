@@ -1456,7 +1456,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    Img_ImageConstructor (&Image);
 
    /***** Get social post from database *****/
-   sprintf (Query,"SELECT Content,ImageName,ImageTitle"
+   sprintf (Query,"SELECT Content,ImageName,ImageTitle,ImageURL"
 	          " FROM social_posts WHERE PstCod='%ld'",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a social post");
@@ -1470,8 +1470,8 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
       strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
-      /****** Get image name (row[1]) and title (row[2]) *****/
-      Img_GetImageNameAndTitleFromRow (row[1],row[2],&Image);
+      /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
+      Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],&Image);
      }
    else
       Content[0] = '\0';
@@ -2111,12 +2111,14 @@ static long Soc_ReceiveSocialPost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      sprintf (Query,"INSERT INTO social_posts (Content,ImageName,ImageTitle)"
-	             " VALUES ('%s','%s','%s')",
+      sprintf (Query,"INSERT INTO social_posts (Content,ImageName,ImageTitle,ImageURL)"
+	             " VALUES ('%s','%s','%s','%s')",
 	       Content,
 	       Image.Name,
 	       (Image.Name[0] &&	// Save image title only if image attached
-		Image.Title) ? Image.Title : "");
+		Image.Title) ? Image.Title : "",
+	       (Image.Name[0] &&	// Save image URL   only if image attached
+		Image.URL  ) ? Image.URL   : "");
       PstCod = DB_QueryINSERTandReturnCode (Query,"can not create post");
 
       /* Insert post in social notes */
@@ -2263,7 +2265,9 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 		  "social_pubs.NotCod,"
 		  "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		  "social_comments.Content,"
-		  "social_comments.ImageName,social_comments.ImageTitle"
+		  "social_comments.ImageName,"
+		  "social_comments.ImageTitle,"
+		  "social_comments.ImageURL"
 		  " FROM social_pubs,social_comments"
 		  " WHERE social_pubs.NotCod='%ld'"
                   " AND social_pubs.PubType='%u'"
@@ -2873,13 +2877,15 @@ static long Soc_ReceiveComment (void)
 
 	 /* Insert comment content in the database */
 	 sprintf (Query,"INSERT INTO social_comments"
-	                " (PubCod,Content,ImageName,ImageTitle)"
-			" VALUES ('%ld','%s','%s','%s')",
+	                " (PubCod,Content,ImageName,ImageTitle,ImageURL)"
+			" VALUES ('%ld','%s','%s','%s','%s')",
 		  SocPub.PubCod,
 		  Content,
 		  Image.Name,
 		  (Image.Name[0] &&	// Save image title only if image attached
-		   Image.Title) ? Image.Title : "");
+		   Image.Title) ? Image.Title : "",
+		  (Image.Name[0] &&	// Save image URL   only if image attached
+		   Image.URL  ) ? Image.URL   : "");
 	 DB_QueryINSERT (Query,"can not store comment content");
 
 	 /***** Free space used for query *****/
@@ -4375,7 +4381,9 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 		     "social_pubs.NotCod,"
 		     "UNIX_TIMESTAMP(social_pubs.TimePublish),"
 		     "social_comments.Content,"
-		     "social_comments.ImageName,social_comments.ImageTitle"
+		     "social_comments.ImageName,"
+		     "social_comments.ImageTitle,"
+		     "social_comments.ImageURL,"
 		     " FROM social_pubs,social_comments"
 		     " WHERE social_pubs.PubCod='%ld'"
                      " AND social_pubs.PubType='%u'"
@@ -4508,6 +4516,7 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    row[4]: Content
    row[5]: ImageName
    row[6]: ImageTitle
+   row[7]: ImageURL
     */
    /***** Get code of social comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
@@ -4528,8 +4537,8 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    /***** Get number of times this comment has been favourited *****/
    SocCom->NumFavs     = Soc_GetNumTimesACommHasBeenFav (SocCom);
 
-   /****** Get image name (row[5]) and title (row[6]) *****/
-   Img_GetImageNameAndTitleFromRow (row[5],row[6],&SocCom->Image);
+   /****** Get image name (row[5]), title (row[6]) and URL (row[7]) *****/
+   Img_GetImageNameTitleAndURLFromRow (row[5],row[6],row[7],&SocCom->Image);
   }
 
 /*****************************************************************************/

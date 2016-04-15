@@ -466,11 +466,14 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    /***** Insert forum post in the database *****/
    sprintf (Query,"INSERT INTO forum_post"
 	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-	          "Subject,Content,ImageName,ImageTitle)"
+	          "Subject,Content,ImageName,ImageTitle,ImageURL)"
                   " VALUES ('%ld','%ld',NOW(),NOW(),'0',"
-                  "'%s','%s','%s','%s')",
+                  "'%s','%s','%s','%s','%s')",
             ThrCod,UsrCod,
-            Subject,Content,Image->Name,Image->Title ? Image->Title : "");
+            Subject,Content,
+            Image->Name,
+            Image->Title ? Image->Title : "",
+            Image->URL   ? Image->URL   : "");
    PstCod = DB_QueryINSERTandReturnCode (Query,"can not create a new post in a forum");
 
    /***** Free space used for query *****/
@@ -1332,7 +1335,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 
    /***** Get data of a post from database *****/
    sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),"
-	          "Subject,Content,ImageName,ImageTitle"
+	          "Subject,Content,ImageName,ImageTitle,ImageURL"
                   " FROM forum_post WHERE PstCod='%ld'",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a post");
@@ -1358,8 +1361,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    strncpy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
-   /****** Get image name (row[4]) and title (row[5]) *****/
-   Img_GetImageNameAndTitleFromRow (row[4],row[5],Image);
+   /****** Get image name (row[4]), title (row[5]) and URL (row[6]) *****/
+   Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

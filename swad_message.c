@@ -1355,9 +1355,12 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 
    /***** Insert message subject and content in the database *****/
    sprintf (Query,"INSERT INTO msg_content"
-	          " (Subject,Content,ImageName,ImageTitle)"
-                  " VALUES ('%s','%s','%s','%s')",
-            Subject,Content,Image->Name,Image->Title ? Image->Title : "");
+	          " (Subject,Content,ImageName,ImageTitle,ImageURL)"
+                  " VALUES ('%s','%s','%s','%s','%s')",
+            Subject,Content,
+            Image->Name,
+            Image->Title ? Image->Title : "",
+            Image->URL   ? Image->URL   : "");
    MsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
 
    /***** Insert message in sent messages *****/
@@ -1550,8 +1553,8 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
    /***** Move message from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
    sprintf (Query,"INSERT IGNORE INTO msg_content_deleted"
-	          " (MsgCod,Subject,Content,ImageName,ImageTitle)"
-                  " SELECT MsgCod,Subject,Content,ImageName,ImageTitle"
+	          " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
+                  " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
                   " FROM msg_content WHERE MsgCod='%ld'",
             MsgCod);
    DB_QueryINSERT (Query,"can not remove the content of a message");
@@ -2704,7 +2707,7 @@ static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
    unsigned long NumRows;
 
    /***** Get content of message from database *****/
-   sprintf (Query,"SELECT Content,ImageName,ImageTitle"
+   sprintf (Query,"SELECT Content,ImageName,ImageTitle,ImageURL"
 	          " FROM msg_content WHERE MsgCod='%ld'",
             MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a message");
@@ -2720,8 +2723,8 @@ static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
    strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
-   /****** Get image name (row[1]) and title (row[2]) *****/
-   Img_GetImageNameAndTitleFromRow (row[1],row[2],Image);
+   /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
+   Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],Image);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

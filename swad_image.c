@@ -76,15 +76,16 @@ static void Img_ProcessImage (struct Image *Image,
 
 void Img_ImageConstructor (struct Image *Image)
   {
-   Img_ResetImageExceptTitle (Image);
+   Img_ResetImageExceptTitleAndURL (Image);
    Image->Title = NULL;
+   Image->URL   = NULL;
   }
 
 /*****************************************************************************/
-/********************* Reset image fields except title ***********************/
+/***************** Reset image fields except title and URL *******************/
 /*****************************************************************************/
 
-void Img_ResetImageExceptTitle (struct Image *Image)
+void Img_ResetImageExceptTitleAndURL (struct Image *Image)
   {
    Image->Action = Img_ACTION_NO_IMAGE;
    Image->Status = Img_FILE_NONE;
@@ -98,14 +99,14 @@ void Img_ResetImageExceptTitle (struct Image *Image)
 
 void Img_ImageDestructor (struct Image *Image)
   {
-   Img_FreeImageTitle (Image);
+   Img_FreeImageTitleAndURL (Image);
   }
 
 /*****************************************************************************/
-/*************************** Reset image title *******************************/
+/*********************** Reset image title and URL ***************************/
 /*****************************************************************************/
 
-void Img_FreeImageTitle (struct Image *Image)
+void Img_FreeImageTitleAndURL (struct Image *Image)
   {
    // Image->Title must be initialized to NULL after declaration
    if (Image->Title)
@@ -113,14 +114,22 @@ void Img_FreeImageTitle (struct Image *Image)
       free ((void *) Image->Title);
       Image->Title = NULL;
      }
+   // Image->URL must be initialized to NULL after declaration
+   if (Image->URL)
+     {
+      free ((void *) Image->URL);
+      Image->URL = NULL;
+     }
   }
 
 /*****************************************************************************/
-/****** Get image name and title from a query result and copy to struct ******/
+/**** Get image name, title and URL from a query result and copy to struct ***/
 /*****************************************************************************/
 
-void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
-                                      struct Image *Image)
+void Img_GetImageNameTitleAndURLFromRow (const char *Name,
+                                         const char *Title,
+                                         const char *URL,
+                                         struct Image *Image)
   {
    size_t Length;
 
@@ -132,22 +141,36 @@ void Img_GetImageNameAndTitleFromRow (const char *Name,const char *Title,
    Image->Status = Image->Name[0] ? Img_NAME_STORED_IN_DB :
 	                            Img_FILE_NONE;
 
-   /***** Copy image title to struct *****/
-   // Image->Title can be empty or filled with a previous title
+
+   /***** Copy image title and URL to struct *****/
+   // Image->Title and Image->URL can be empty or filled with previous values
    // If filled  ==> free it
-   Img_FreeImageTitle (Image);
+   Img_FreeImageTitleAndURL (Image);
 
    if (Title[0])
      {
       /* Get and limit length of the title */
       Length = strlen (Title);
       if (Length > Img_MAX_BYTES_TITLE)
-	 Length = Img_MAX_BYTES_TITLE;
+	  Length = Img_MAX_BYTES_TITLE;
 
       if ((Image->Title = (char *) malloc (Length+1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
       strncpy (Image->Title,Title,Length);
       Image->Title[Length] = '\0';
+     }
+
+   if (URL[0])
+     {
+      /* Get and limit length of the URL */
+      Length = strlen (URL);
+      if (Length > Img_MAX_BYTES_TITLE)
+	  Length = Img_MAX_BYTES_TITLE;
+
+      if ((Image->URL = (char *) malloc (Length+1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
+      strncpy (Image->URL,URL,Length);
+      Image->URL[Length] = '\0';
      }
   }
 
@@ -263,7 +286,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
      {
       /* Overwrite current title (empty or coming from database)
          with the title coming from the form */
-      Img_FreeImageTitle (Image);
+      Img_FreeImageTitleAndURL (Image);
       if ((Image->Title = (char *) malloc (Length + 1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
       strncpy (Image->Title,Title,Length);

@@ -137,13 +137,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.195.1 (2016-04-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.196 (2016-04-15)"
 #define CSS_FILE		"swad15.193.css"
 #define JS_FILE			"swad15.193.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.196:   Apr 15, 2016	Changes related to image URL. (199467 lines)
         Version 15.195.1: Apr 15, 2016	New fields in images to store URL when a user click in the image. (199390 lines)
 					7 changes necessary in database:
 ALTER TABLE tst_questions ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
