@@ -1237,7 +1237,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    /* Get one degree with students not yet computed */
    sprintf (Query,"SELECT DISTINCT degrees.DegCod"
 	          " FROM degrees,courses,crs_usr"
-                  " WHERE degrees.DegCod=courses.CrsCod"
+                  " WHERE degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
                   " AND crs_usr.Role='%u'"
 	          " AND degrees.DegCod NOT IN"
@@ -1267,7 +1267,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       sprintf (Query,"SELECT sta_degrees.DegCod"
 	             " FROM sta_degrees,courses,crs_usr"
                      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-                     " AND sta_degrees.DegCod=courses.CrsCod"
+                     " AND sta_degrees.DegCod=courses.DegCod"
                      " AND courses.CrsCod=crs_usr.CrsCod"
                      " AND crs_usr.Role='%u'"
 	             " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",

@@ -1803,7 +1803,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
 	          "degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
                   "degrees.ShortName,degrees.FullName,degrees.WWW"
                   " FROM degrees,courses,crs_usr"
-                  " WHERE degrees.DegCod=courses.CrsCod"
+                  " WHERE degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
                   " AND crs_usr.Role='%u'"
                   " ORDER BY degrees.ShortName",

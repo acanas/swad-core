@@ -4386,7 +4386,7 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 		     "social_comments.Content,"
 		     "social_comments.ImageName,"
 		     "social_comments.ImageTitle,"
-		     "social_comments.ImageURL,"
+		     "social_comments.ImageURL"
 		     " FROM social_pubs,social_comments"
 		     " WHERE social_pubs.PubCod='%ld'"
                      " AND social_pubs.PubType='%u'"
