@@ -297,9 +297,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.DegTypes.Num = 0;
    Gbl.Degs.DegTypes.Lst = NULL;
 
-   Gbl.Degs.AllDegs.Num = 0;
-   Gbl.Degs.AllDegs.Lst = NULL;
-
    Gbl.Degs.EditingDegTyp.DegTypCod     = -1L;
    Gbl.Degs.EditingDegTyp.DegTypName[0] = '\0';
 
@@ -307,7 +304,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingDeg.ShortName[0] = '\0';
    Gbl.Degs.EditingDeg.FullName[0]  = '\0';
    Gbl.Degs.EditingDeg.WWW[0]       = '\0';
-   Gbl.Degs.EditingDeg.NumCrss      = 0;
    Gbl.Degs.EditingDeg.LstCrss      = NULL;
 
    Gbl.Degs.EditingCrs.CrsCod       = -1L;
@@ -455,7 +451,6 @@ void Gbl_Cleanup (void)
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInDegree (&Gbl.Degs.EditingDeg);
    Deg_FreeListMyAdminDegs ();
-   Deg_FreeListAllDegs ();
    DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();

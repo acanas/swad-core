@@ -125,7 +125,6 @@
 // TODO: Important!!!! E-mail should not be visible for not logged users
 // TODO: Do not show e-mails of administrators and teachers in lists openly
 // TODO: Fix bug in marks reported by Francisco Ocaña
-// TODO: In Statistics > Degrees, show only degrees with students
 // TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
@@ -136,13 +135,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.198 (2016-04-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.199 (2016-04-16)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.199:   Apr 16, 2016	In Statistics > Degrees, show only degrees with students.
+                                        Code optimization in number of courses in a degree. (199665 lines)
         Version 15.198:   Apr 15, 2016	Changes in layout related to image URL. (199646 lines)
         Version 15.197:   Apr 15, 2016	Input field to enter image URL. (199518 lines)
         Version 15.196:   Apr 15, 2016	Changes related to image URL. (199467 lines)

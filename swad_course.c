@@ -465,11 +465,16 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    MYSQL_RES *mysql_resDeg;
    MYSQL_RES *mysql_resCrs;
    MYSQL_ROW row;
-   unsigned NumCty,NumCtys;
-   unsigned NumIns,NumInss;
-   unsigned NumCtr,NumCtrs;
-   unsigned NumDeg,NumDegs;
-   unsigned NumCrs,NumCrss;
+   unsigned NumCty;
+   unsigned NumCtys;
+   unsigned NumIns;
+   unsigned NumInss;
+   unsigned NumCtr;
+   unsigned NumCtrs;
+   unsigned NumDeg;
+   unsigned NumDegs;
+   unsigned NumCrs;
+   unsigned NumCrss;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    char PathRelRSSFile[PATH_MAX+1];
    char ClassNormal[64];
@@ -943,7 +948,7 @@ void Crs_ReqEditCourses (void)
   }
 
 /*****************************************************************************/
-/**************** Create a list with courses in this degree ******************/
+/*************** Create a list with courses in current degree ****************/
 /*****************************************************************************/
 
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
@@ -951,7 +956,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
+   unsigned NumCrss;
    unsigned NumCrs;
    struct Course *Crs;
 
@@ -974,20 +979,17 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
       default:
 	 break;
      }
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the courses of a degree");
+   NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the courses of a degree");
 
-   if (NumRows) // Courses found...
+   if (NumCrss) // Courses found...
      {
-      // NumRows should be equal to Deg->NumCrss
-      Gbl.CurrentDeg.Deg.NumCrss = (unsigned) NumRows;
-
       /***** Create list with courses in degree *****/
-      if ((Gbl.CurrentDeg.Deg.LstCrss = (struct Course *) calloc (NumRows,sizeof (struct Course))) == NULL)
+      if ((Gbl.CurrentDeg.Deg.LstCrss = (struct Course *) calloc ((size_t) NumCrss,sizeof (struct Course))) == NULL)
           Lay_ShowErrorAndExit ("Not enough memory to store the courses of a degree.");
 
       /***** Get the courses in degree *****/
       for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
+	   NumCrs < NumCrss;
 	   NumCrs++)
         {
          Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
@@ -997,8 +999,8 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
          Crs_GetDataOfCourseFromRow (Crs,row);
         }
      }
-   else
-      Gbl.CurrentDeg.Deg.NumCrss = 0;
+
+   Gbl.CurrentDeg.NumCrss = NumCrss;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1015,7 +1017,6 @@ void Crs_FreeListCoursesInDegree (struct Degree *Deg)
       /***** Free memory used by the list of courses in degree *****/
       free ((void *) Deg->LstCrss);
       Deg->LstCrss = NULL;
-      Deg->NumCrss = 0;
      }
   }
 
@@ -1129,7 +1130,7 @@ static void Crs_ListCourses (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Crs_PutIconToEditCourses :
 				                  NULL);
 
-   if (Gbl.CurrentDeg.Deg.NumCrss)	// There are courses in the current degree
+   if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
@@ -1153,8 +1154,8 @@ static void Crs_ListCourses (void)
    if (ICanEdit)
      {
       Act_FormStart (ActEdiCrs);
-      Lay_PutConfirmButton (Gbl.CurrentDeg.Deg.NumCrss ? Txt_Create_another_course :
-	                                                 Txt_Create_course);
+      Lay_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
+	                                             Txt_Create_course);
       Act_FormEnd ();
      }
 
@@ -1195,7 +1196,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
    /***** Write all the courses of this year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
+	NumCrs < Gbl.CurrentDeg.NumCrss;
 	NumCrs++)
      {
       Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
@@ -1292,7 +1293,7 @@ static void Crs_EditCourses (void)
    Crs_PutFormToCreateCourse ();
 
    /***** Forms to edit current courses *****/
-   if (Gbl.CurrentDeg.Deg.NumCrss)
+   if (Gbl.CurrentDeg.NumCrss)
       Crs_ListCoursesForEdition ();
   }
 
@@ -1328,7 +1329,7 @@ static void Crs_ListCoursesForEdition (void)
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
 	Year++)
       for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.Deg.NumCrss;
+	   NumCrs < Gbl.CurrentDeg.NumCrss;
 	   NumCrs++)
         {
          Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);

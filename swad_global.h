@@ -261,11 +261,6 @@ struct Globals
          unsigned Num;			// Number of degree types
          struct DegreeType *Lst;	// List of degree types
         } DegTypes;
-      struct
-        {
-         unsigned Num;			// Number of degrees
-         struct Degree *Lst;		// List of degrees
-        } AllDegs;
       struct DegreeType EditingDegTyp;
       struct Degree EditingDeg;
       struct Course EditingCrs;
@@ -432,6 +427,7 @@ struct Globals
    struct
      {
       struct Degree Deg;
+      unsigned NumCrss;
      } CurrentDeg;
    struct
      {

@@ -1232,11 +1232,18 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
    Pho_RemoveObsoleteStatDegrees ();
 
-   /***** 1. If any degree is not in table, choose it as least recently updated *****/
-   /* Get degrees from database */
-   sprintf (Query,"SELECT DegCod FROM degrees"
-	          " WHERE DegCod NOT IN (SELECT DISTINCT DegCod FROM sta_degrees)"
-	          " LIMIT 1");
+   /***** 1. If a degree is not in table of computed degrees,
+             choose it as least recently updated *****/
+   /* Get one degree with students not yet computed */
+   sprintf (Query,"SELECT DISTINCT degrees.DegCod"
+	          " FROM degrees,courses,crs_usr"
+                  " WHERE degrees.DegCod=courses.CrsCod"
+                  " AND courses.CrsCod=crs_usr.CrsCod"
+                  " AND crs_usr.Role='%u'"
+	          " AND degrees.DegCod NOT IN"
+	          " (SELECT DISTINCT DegCod FROM sta_degrees)"
+	          " LIMIT 1",
+            (unsigned) Rol_STUDENT);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
    /* If number of rows is 1, then get the degree code */
@@ -1254,19 +1261,25 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** 2. If all the degrees are in table, choose the least recently updated *****/
+      /***** 2. If all the degrees are in table,
+                choose the least recently updated that has students *****/
       /* Get degrees from database */
-      sprintf (Query,"SELECT DegCod FROM sta_degrees"
-                     " WHERE TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
-	             " ORDER BY TimeAvgPhoto LIMIT 1",
-               Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO);
+      sprintf (Query,"SELECT sta_degrees.DegCod"
+	             " FROM sta_degrees,courses,crs_usr"
+                     " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
+                     " AND sta_degrees.DegCod=courses.CrsCod"
+                     " AND courses.CrsCod=crs_usr.CrsCod"
+                     " AND crs_usr.Role='%u'"
+	             " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
+               Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
+               (unsigned) Rol_STUDENT);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
       /* If number of rows is 1, then get the degree code */
       if (NumRows == 1)
         {
          /* Get row */
-        row = mysql_fetch_row (mysql_res);
+         row = mysql_fetch_row (mysql_res);
 
          /* Get degree code (row[0]) */
          if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -1787,6 +1800,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
+   struct ListDegrees Degs;
    unsigned NumDeg;
    struct Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
@@ -1795,7 +1809,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
       /***** Get list of all the degrees *****/
-      Deg_GetListAllDegs ();
+      Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
       Deg_GetDataOfDegreeByCod (&Deg);
@@ -1814,26 +1828,26 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormBold[Gbl.Prefs.Theme]);
       Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
-      /***** Put selector with all the degrees *****/
+      /***** Put selector with all the degrees with students *****/
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");
       for (NumDeg = 0;
-	   NumDeg < Gbl.Degs.AllDegs.Num;
+	   NumDeg < Degs.Num;
 	   NumDeg++)
         {
          /* Get time to compute average photo of this degree */
-         EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Gbl.Degs.AllDegs.Lst[NumDeg].DegCod);
+         EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
          if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
             strcpy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME);
          else
             Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
          fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s (%s: %s)</option>",
-                  Gbl.Degs.AllDegs.Lst[NumDeg].DegCod,
-                  Gbl.Degs.AllDegs.Lst[NumDeg].DegCod == Deg.DegCod ? " selected=\"selected\"" :
-                                                                      ((Pho_GetTimeAvgPhotoWasComputed (Gbl.Degs.AllDegs.Lst[NumDeg].DegCod) >=
-                                                                	Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
-                                                                	                                                                ""),
-                  Gbl.Degs.AllDegs.Lst[NumDeg].ShortName,
+                  Degs.Lst[NumDeg].DegCod,
+                  Degs.Lst[NumDeg].DegCod == Deg.DegCod ? " selected=\"selected\"" :
+                                                          ((Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
+                                                          Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
+                                                                	                                                     ""),
+                  Degs.Lst[NumDeg].ShortName,
                   Txt_time,
                   StrEstimatedTimeToComputeAvgPhoto);
         }
@@ -1843,8 +1857,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Free list of all the degrees *****/
-      Deg_FreeListAllDegs ();
+      /***** Free list of all the degrees with students *****/
+      Deg_FreeListDegs (&Degs);
      }
   }
 

@@ -76,8 +76,13 @@ struct Degree
    char ShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
    char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
    char WWW[Cns_MAX_LENGTH_WWW+1];
-   unsigned NumCrss;					// Number of courses in the degree
    struct Course *LstCrss;				// List of courses in this degree
+  };
+
+struct ListDegrees
+  {
+   unsigned Num;			// Number of degrees
+   struct Degree *Lst;		// List of degrees
   };
 
 /*****************************************************************************/
@@ -104,8 +109,8 @@ unsigned Deg_ConvStrToYear (const char *StrYear);
 
 void Deg_EditDegrees (void);
 
-void Deg_GetListAllDegs (void);
-void Deg_FreeListAllDegs (void);
+void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs);
+void Deg_FreeListDegs (struct ListDegrees *Degs);
 void Deg_GetListDegsAdminByMe (void);
 void Deg_FreeListMyAdminDegs (void);
 

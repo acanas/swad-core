@@ -433,7 +433,7 @@ static void Deg_Configuration (bool PrintView)
 	                    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Courses,Gbl.CurrentDeg.Deg.NumCrss);
+		  Txt_Courses,Gbl.CurrentDeg.NumCrss);
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -890,7 +890,7 @@ void Deg_InitCurrentCourse (void)
    /***** If numerical degree code is available, get degree data *****/
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
-      if (Deg_GetDataOfDegreeByCod (&Gbl.CurrentDeg.Deg))		// Degree found
+      if (Deg_GetDataOfDegreeByCod (&Gbl.CurrentDeg.Deg))	// Degree found
 	{
 	 Gbl.CurrentCtr.Ctr.CtrCod          = Gbl.CurrentDeg.Deg.CtrCod;
          Gbl.CurrentDegTyp.DegTyp.DegTypCod = Gbl.CurrentDeg.Deg.DegTypCod;
@@ -1050,6 +1050,7 @@ static void Deg_ListDegreesForEdition (void)
    struct UsrData UsrDat;
    bool ICanEdit;
    Deg_StatusTxt_t StatusTxt;
+   unsigned NumCrss;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1067,12 +1068,14 @@ static void Deg_ListDegreesForEdition (void)
      {
       Deg = &(Gbl.CurrentCtr.LstDegs[NumDeg]);
 
+      NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
+
       ICanEdit = Deg_CheckIfICanEdit (Deg);
 
       /* Put icon to remove degree */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Deg->NumCrss ||	// Degree has courses ==> deletion forbidden
+      if (NumCrss ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
          Lay_PutIconRemovalNotAllowed ();
       else
@@ -1216,7 +1219,7 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
-               Deg->NumCrss);
+               NumCrss);
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -1651,6 +1654,10 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    const char *TxtClassStrong;
    const char *BgColor;
    Crs_StatusTxt_t StatusTxt;
+   unsigned NumCrss;
+
+   /***** Get number of courses in this degree *****/
+   NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
@@ -1679,12 +1686,12 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
-	    Deg->NumCrss ? "ok_green" :
-		           "tr",
-	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			   Txt_DEGREE_Without_courses,
-	    Deg->NumCrss ? Txt_DEGREE_With_courses :
-			   Txt_DEGREE_Without_courses);
+	    NumCrss ? "ok_green" :
+		      "tr",
+	    NumCrss ? Txt_DEGREE_With_courses :
+		      Txt_DEGREE_Without_courses,
+	    NumCrss ? Txt_DEGREE_With_courses :
+		      Txt_DEGREE_Without_courses);
 
    /***** Number of degree in this list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -1709,7 +1716,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClassNormal,BgColor,Deg->NumCrss);
+	    TxtClassNormal,BgColor,NumCrss);
 
    /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -1781,10 +1788,10 @@ void Deg_EditDegrees (void)
   }
 
 /*****************************************************************************/
-/********************* Create a list with all the degrees ********************/
+/********** Create a list with all the degrees that have students ************/
 /*****************************************************************************/
 
-void Deg_GetListAllDegs (void)
+void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -1792,29 +1799,35 @@ void Deg_GetListAllDegs (void)
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
-   sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,WWW"
-                  " FROM degrees ORDER BY FullName");
-   Gbl.Degs.AllDegs.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
+   sprintf (Query,"SELECT DISTINCTROW degrees.DegCod,degrees.CtrCod,"
+	          "degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
+                  "degrees.ShortName,degrees.FullName,degrees.WWW"
+                  " FROM degrees,courses,crs_usr"
+                  " WHERE degrees.DegCod=courses.CrsCod"
+                  " AND courses.CrsCod=crs_usr.CrsCod"
+                  " AND crs_usr.Role='%u'"
+                  " ORDER BY degrees.ShortName",
+            (unsigned) Rol_STUDENT);
+   Degs->Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
 
-   if (Gbl.Degs.AllDegs.Num) // Degrees found...
+   if (Degs->Num) // Degrees found...
      {
       /***** Create list with degrees *****/
-      if ((Gbl.Degs.AllDegs.Lst = (struct Degree *) calloc (Gbl.Degs.AllDegs.Num,sizeof (struct Degree))) == NULL)
+      if ((Degs->Lst = (struct Degree *) calloc (Degs->Num,sizeof (struct Degree))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store degrees admin by you.");
 
       /***** Get the degrees *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.Degs.AllDegs.Num;
+	   NumDeg < Degs->Num;
 	   NumDeg++)
         {
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&(Gbl.Degs.AllDegs.Lst[NumDeg]),row);
+         Deg_GetDataOfDegreeFromRow (&(Degs->Lst[NumDeg]),row);
         }
      }
    else
-      Gbl.Degs.AllDegs.Lst = NULL;
+      Degs->Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1824,13 +1837,13 @@ void Deg_GetListAllDegs (void)
 /*********************** Free list of all the degrees ************************/
 /*****************************************************************************/
 
-void Deg_FreeListAllDegs (void)
+void Deg_FreeListDegs (struct ListDegrees *Degs)
   {
-   if (Gbl.Degs.AllDegs.Lst)
+   if (Degs->Lst)
      {
-      free ((void *) Gbl.Degs.AllDegs.Lst);
-      Gbl.Degs.AllDegs.Lst = NULL;
-      Gbl.Degs.AllDegs.Num = 0;
+      free ((void *) Degs->Lst);
+      Degs->Lst = NULL;
+      Degs->Num = 0;
      }
   }
 
@@ -2063,7 +2076,7 @@ void Deg_RemoveDegree (void)
    Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Check if this degree has courses *****/
-   if (Deg.NumCrss)	// Degree has courses ==> don't remove
+   if (Crs_GetNumCrssInDeg (Deg.DegCod))	// Degree has courses ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
@@ -2134,7 +2147,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->ShortName[0] = '\0';
       Deg->FullName[0] = '\0';
       Deg->WWW[0] = '\0';
-      Deg->NumCrss = 0;
       Deg->LstCrss = NULL;
       return false;
      }
@@ -2164,7 +2176,6 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->ShortName[0] = '\0';
       Deg->FullName[0] = '\0';
       Deg->WWW[0] = '\0';
-      Deg->NumCrss = 0;
       Deg->LstCrss = NULL;
       return false;
      }
@@ -2208,9 +2219,6 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
    /***** Get WWW (row[7]) *****/
    strcpy (Deg->WWW,row[7]);
-
-   /***** Get number of courses *****/
-   Deg->NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
   }
 
 /*****************************************************************************/

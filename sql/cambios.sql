@@ -11516,3 +11516,8 @@ OPTIMIZE TABLE msg_snt_deleted;
 
 
 SELECT COUNT(*) FROM social_notes WHERE NoteType='10';
+
+
+----- SWAD 15.199 (2016/04/16) -----
+
+SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,degrees.ShortName,degrees.FullName,degrees.WWW FROM degrees,courses,crs_usr WHERE degrees.DegCod=courses.CrsCod AND courses.CrsCod=crs_usr.CrsCod AND crs_usr.Role='3' ORDER BY degrees.ShortName;
