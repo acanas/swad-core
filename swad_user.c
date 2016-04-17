@@ -6004,22 +6004,12 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
    if ((NumUsrs = LstUsrs->NumUsrs))
      {
       /***** Write heading *****/
-      Sex = Usr_GetSexOfUsrsLst (LstUsrs);
-      Lay_StartRoundFrameTable (NULL,2,Txt_ROLES_PLURAL_Abc[Role][Sex]);
-
       /* Number of users found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"%u\" class=\"CENTER_MIDDLE\">",
-	       Usr_NUM_MAIN_FIELDS_DATA_USR);
-      if (NumUsrs == 1)
-	 fprintf (Gbl.F.Out,"1 %s",
-		  Txt_ROLES_SINGUL_abc[Role][Sex]);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",
-		  NumUsrs,
-		  Txt_ROLES_PLURAL_abc[Role][Sex]);
-      fprintf (Gbl.F.Out,"</th>"
-			 "</tr>");
+      Sex = Usr_GetSexOfUsrsLst (LstUsrs);
+      sprintf (Gbl.Title,"%u %s",
+	       NumUsrs,(NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+		                        Txt_ROLES_PLURAL_abc[Role][Sex]);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       /***** Heading row with column names *****/
       /* Start row */
