@@ -2261,17 +2261,12 @@ unsigned Ins_ListInssFound (const char *Query)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Institutions);
-
       /* Number of institutions found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"9\" class=\"CENTER_MIDDLE\">");
-      if (NumInss == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_institution);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",NumInss,Txt_institutions);
-      fprintf (Gbl.F.Out,"</th>"
-			 "</tr>");
+      sprintf (Gbl.Title,"%u %s",
+               NumInss,NumInss == 1 ? Txt_institution :
+				      Txt_institutions);
+
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 

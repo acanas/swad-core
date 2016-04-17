@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.199.2 (2016-04-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.199.3 (2016-04-17)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.199.3: Apr 17, 2016	Changes in title of results of searching institutions. (199663 lines)
         Version 15.199.2: Apr 16, 2016	Fixed bug in social comments, reported by Javier Fernández Baldomero. (199666 lines)
         Version 15.199.1: Apr 16, 2016	Fixed bug in Statistics > Degrees. (199665 lines)
         Version 15.199:   Apr 16, 2016	In Statistics > Degrees, show only degrees with students.
