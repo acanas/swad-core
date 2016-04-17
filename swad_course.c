@@ -2951,7 +2951,6 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
 
 unsigned Crs_ListCrssFound (const char *Query)
   {
-   extern const char *Txt_Courses;
    extern const char *Txt_course;
    extern const char *Txt_courses;
    extern const char *Txt_Degree;
@@ -2971,17 +2970,11 @@ unsigned Crs_ListCrssFound (const char *Query)
    if (NumCrss)
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Courses);
-
       /* Number of courses found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"6\" class=\"CENTER_MIDDLE\">");
-      if (NumCrss == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_course);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",NumCrss,Txt_courses);
-      fprintf (Gbl.F.Out,"</th>"
-			 "</tr>");
+      sprintf (Gbl.Title,"%u %s",
+               NumCrss,(NumCrss == 1) ? Txt_course :
+	                                Txt_courses);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
