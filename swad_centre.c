@@ -2695,7 +2695,6 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 
 unsigned Ctr_ListCtrsFound (const char *Query)
   {
-   extern const char *Txt_Centres;
    extern const char *Txt_centre;
    extern const char *Txt_centres;
    MYSQL_RES *mysql_res;
@@ -2708,18 +2707,11 @@ unsigned Ctr_ListCtrsFound (const char *Query)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Centres);
-
       /* Number of centres found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"8\" class=\"CENTER_MIDDLE\">");
-      if (NumCtrs == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_centre);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",NumCtrs,Txt_centres);
-      fprintf (Gbl.F.Out,"</th>"
-			 "</tr>");
-
+      sprintf (Gbl.Title,"%u %s",
+               NumCtrs,(NumCtrs == 1) ? Txt_centre :
+	                                Txt_centres);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable
 
       /***** List the centres (one row per centre) *****/

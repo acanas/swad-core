@@ -2248,7 +2248,6 @@ unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
 
 unsigned Ins_ListInssFound (const char *Query)
   {
-   extern const char *Txt_Institutions;
    extern const char *Txt_institution;
    extern const char *Txt_institutions;
    MYSQL_RES *mysql_res;
@@ -2265,9 +2264,7 @@ unsigned Ins_ListInssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
-
       Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
-
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per centre) *****/
