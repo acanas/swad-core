@@ -2994,7 +2994,6 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
 unsigned Deg_ListDegsFound (const char *Query)
   {
-   extern const char *Txt_Degrees;
    extern const char *Txt_degree;
    extern const char *Txt_degrees;
    MYSQL_RES *mysql_res;
@@ -3007,18 +3006,11 @@ unsigned Deg_ListDegsFound (const char *Query)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Degrees);
-
       /* Number of degrees found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"8\" class=\"CENTER_MIDDLE\"\">");
-      if (NumDegs == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_degree);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",NumDegs,Txt_degrees);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
+      sprintf (Gbl.Title,"%u %s",
+               NumDegs,(NumDegs == 1) ? Txt_degree :
+        	                        Txt_degrees);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees (one row per degree) *****/
