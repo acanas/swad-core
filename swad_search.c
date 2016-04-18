@@ -210,7 +210,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_My_documents;
-   extern const char *Txt_DOCUM_in_my_courses;
+   extern const char *Txt_Documents_in_my_courses;
    extern const char *Txt_Open_documents;
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
@@ -220,11 +220,11 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_Centres,						// Sch_SEARCH_CENTRES
 	Txt_Degrees,						// Sch_SEARCH_DEGREES
 	Txt_Courses,						// Sch_SEARCH_COURSES
-	Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],// Sch_SEARCH_TEACHERS
-	Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_Abc[Rol__GUEST_  ][Usr_SEX_UNKNOWN],// Sch_SEARCH_GUESTS
+	Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
+	Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
+        Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
 	Txt_Open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
-	Txt_DOCUM_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
+	Txt_Documents_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
 	Txt_My_documents,					// Sch_SEARCH_MY_DOCUMENTS
      };
    Sch_WhatToSearch_t WhatToSearch;
@@ -745,7 +745,8 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
 
 static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
   {
-   extern const char *Txt_Open_documents;
+   extern const char *Txt_open_document;
+   extern const char *Txt_open_documents;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
    char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*4];
 
@@ -842,7 +843,9 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 return Brw_ListDocsFound (Query,Txt_Open_documents);
+	 return Brw_ListDocsFound (Query,
+	                           Txt_open_document,
+	                           Txt_open_documents);
 	}
 
    return 0;
@@ -854,7 +857,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
   {
-   extern const char *Txt_DOCUM_in_my_courses;
+   extern const char *Txt_document_in_my_courses;
+   extern const char *Txt_documents_in_my_courses;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
    char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*2];
    unsigned NumDocs;
@@ -952,7 +956,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 NumDocs = Brw_ListDocsFound (Query,Txt_DOCUM_in_my_courses);
+	 NumDocs = Brw_ListDocsFound (Query,
+	                              Txt_document_in_my_courses,
+	                              Txt_documents_in_my_courses);
 
 	 /***** Drop temporary table *****/
 	 sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_files_crs,my_files_grp");
@@ -971,7 +977,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
   {
-   extern const char *Txt_My_documents;
+   extern const char *Txt_document_from_me;
+   extern const char *Txt_documents_from_me;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
    char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*5];
 
@@ -1106,7 +1113,9 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	 /***** Query database and list documents found *****/
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
-	 return Brw_ListDocsFound (Query,Txt_My_documents);
+	 return Brw_ListDocsFound (Query,
+	                           Txt_document_from_me,
+	                           Txt_documents_from_me);
 	}
 
    return 0;

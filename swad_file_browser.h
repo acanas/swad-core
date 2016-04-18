@@ -229,7 +229,8 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 void Brw_GetSummaryAndContentOrSharedFile (char *SummaryStr,char **ContentStr,
                                            long FilCod,unsigned MaxChars,bool GetContent);
 
-unsigned Brw_ListDocsFound (const char *Query,const char *Title);
+unsigned Brw_ListDocsFound (const char *Query,
+                            const char *TitleSingular,const char *TitlePlural);
 
 void Brw_AskRemoveOldFiles (void);
 void Brw_RemoveOldFiles (void);

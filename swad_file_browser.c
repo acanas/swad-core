@@ -11127,10 +11127,9 @@ void Brw_GetSummaryAndContentOrSharedFile (char *SummaryStr,char **ContentStr,
 /*****************************************************************************/
 // Returns the number of documents found
 
-unsigned Brw_ListDocsFound (const char *Query,const char *Title)
+unsigned Brw_ListDocsFound (const char *Query,
+                            const char *TitleSingular,const char *TitlePlural)
   {
-   extern const char *Txt_document;
-   extern const char *Txt_documents;
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
@@ -11150,18 +11149,11 @@ unsigned Brw_ListDocsFound (const char *Query,const char *Title)
    if ((NumDocs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get files")))
      {
       /***** Write heading *****/
-      /* Table start */
-      Lay_StartRoundFrameTable (NULL,2,Title);
-
       /* Write header with number of documents found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
-      if (NumDocs == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_document);
-      else
-	 fprintf (Gbl.F.Out,"%u %s",NumDocs,Txt_documents);
-      fprintf (Gbl.F.Out,"</th>"
-			 "</tr>");
+      sprintf (Gbl.Title,"%u %s",
+               NumDocs,(NumDocs == 1) ? TitleSingular :
+        	                        TitlePlural);
+      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"

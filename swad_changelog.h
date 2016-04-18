@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.199.7 (2016-04-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.199.8 (2016-04-18)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.199.8: Apr 18, 2016	Changes in title of results of searching documents. (199723 lines)
         Version 15.199.7: Apr 17, 2016	Changes in title of results of searching users. (199639 lines)
         Version 15.199.6: Apr 17, 2016	Changes in title of results of searching courses. (199647 lines)
         Version 15.199.5: Apr 17, 2016	Changes in title of results of searching degrees. (199652 lines)

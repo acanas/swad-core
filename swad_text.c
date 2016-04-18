@@ -9105,27 +9105,6 @@ const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is ver
 	"Voc&ecirc; realmente deseja reiniciar o inqu&eacute;rito <strong>%s</strong>?";
 #endif
 
-const char *Txt_document =
-#if   L==1
-	"document";
-#elif L==2
-	"Dokument";
-#elif L==3
-	"document";
-#elif L==4
-	"documento";
-#elif L==5
-	"document";
-#elif L==6
-	"documento";	// Okoteve traducción
-#elif L==7
-	"documento";
-#elif L==8
-	"document";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"documento";
-#endif
-
 const char *Txt_Document =
 #if   L==1
 	"Document";
@@ -9153,7 +9132,7 @@ const char *Txt_document_hidden =
 #elif L==2
 	"Dokument verborgen";
 #elif L==3
-	"documen hidden";
+	"document hidden";
 #elif L==4
 	"documento oculto";
 #elif L==5
@@ -9166,6 +9145,27 @@ const char *Txt_document_hidden =
 	"document hidden";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"documento oculto";
+#endif
+
+const char *Txt_document_in_my_courses =
+#if   L==1
+	"document en les meves assignatures";
+#elif L==2
+	"Dokument in meinen Kursen";
+#elif L==3
+	"document in my courses";
+#elif L==4
+	"documento en mis asignaturas";
+#elif L==5
+	"document &agrave; mes mati&egrave;res";
+#elif L==6
+	"documento en mis asignaturas";	// Okoteve traducción
+#elif L==7
+	"documento in miei corsi";
+#elif L==8
+	"dokument w moich kursach";
+#elif L==9
+	"documento em minha disciplinas";
 #endif
 
 const char *Txt_Documents =
@@ -9189,28 +9189,49 @@ const char *Txt_Documents =
 	"Documentos";
 #endif
 
-const char *Txt_documents =
+const char *Txt_document_from_me =
 #if   L==1
-	"documents";
+	"document meu";
 #elif L==2
-	"Dokumente";
+	"Dokument von mir";
 #elif L==3
-	"documents";
+	"document from me";
 #elif L==4
-	"documentos";
+	"documento m&iacute;o";
 #elif L==5
-	"documents";
+	"document de moi";
 #elif L==6
-	"documentos";	// Okoteve traducción
+	"documento m&iacute;o";	// Okoteve traducción
 #elif L==7
-	"documenti";
+	"documento da me";
 #elif L==8
-	"documents";	// Potrzebujesz tlumaczenie
+	"dokument ode mnie";
 #elif L==9
-	"documentos";
+	"documento de mim";
 #endif
 
-const char *Txt_DOCUM_in_my_courses =
+const char *Txt_documents_from_me =
+#if   L==1
+	"documents meus";
+#elif L==2
+	"Dokumente von mir";
+#elif L==3
+	"documents from me";
+#elif L==4
+	"documentos m&iacute;os";
+#elif L==5
+	"documents de moi";
+#elif L==6
+	"documentos m&iacute;os";	// Okoteve traducción
+#elif L==7
+	"documenti da me";
+#elif L==8
+	"dokumenty ode mnie";
+#elif L==9
+	"documentos de mim";
+#endif
+
+const char *Txt_Documents_in_my_courses =
 #if   L==1
 	"Documents en les meves assignatures";
 #elif L==2
@@ -9229,6 +9250,27 @@ const char *Txt_DOCUM_in_my_courses =
 	"Dokumenty w moich kursach";
 #elif L==9
 	"Documentos em minha disciplinas";
+#endif
+
+const char *Txt_documents_in_my_courses =
+#if   L==1
+	"documents en les meves assignatures";
+#elif L==2
+	"Dokumente in meinen Kursen";
+#elif L==3
+	"documents in my courses";
+#elif L==4
+	"documentos en mis asignaturas";
+#elif L==5
+	"documents &agrave; mes mati&egrave;res";
+#elif L==6
+	"documentos en mis asignaturas";	// Okoteve traducción
+#elif L==7
+	"documenti in miei corsi";
+#elif L==8
+	"dokumenty w moich kursach";
+#elif L==9
+	"documentos em minha disciplinas";
 #endif
 
 const char *Txt_DOCUM_hidden =
@@ -26743,6 +26785,27 @@ const char *Txt_only_teachers =
 	", professores";
 #endif
 
+const char *Txt_open_document =
+#if   L==1
+	"document obert";
+#elif L==2
+	"ge&ouml;ffnet Dokumente";
+#elif L==3
+	"open document";
+#elif L==4
+	"documento abierto";
+#elif L==5
+	"document ouvert";
+#elif L==6
+	"documento abierto";	// Okoteve traducción
+#elif L==7
+	"documento aperto";
+#elif L==8
+	"otwarty dokument";
+#elif L==9
+	"documento aberto";
+#endif
+
 const char *Txt_Open_documents =
 #if   L==1
 	"Documents oberts";
@@ -26762,6 +26825,27 @@ const char *Txt_Open_documents =
 	"Otwarte dokumenty";
 #elif L==9
 	"Documentos abertos";
+#endif
+
+const char *Txt_open_documents =
+#if   L==1
+	"documents oberts";
+#elif L==2
+	"ge&ouml;ffnete Dokumente";
+#elif L==3
+	"open documents";
+#elif L==4
+	"documentos abiertos";
+#elif L==5
+	"documents ouverts";
+#elif L==6
+	"documentos abiertos";	// Okoteve traducción
+#elif L==7
+	"documenti aperti";
+#elif L==8
+	"otwarte dokumenty";
+#elif L==9
+	"documentos abertos";
 #endif
 
 const char *Txt_Open_survey =
