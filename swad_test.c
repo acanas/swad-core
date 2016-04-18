@@ -5224,7 +5224,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
    Gbl.Test.Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
    Gbl.Test.Image.Quality = Tst_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Gbl.Test.Image,Tst_GetImageFromDB);
+   Img_GetImageFromForm (-1,	// < 0 ==> the image associated to the stem
+                         &Gbl.Test.Image,Tst_GetImageFromDB);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5280,7 +5281,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       Gbl.Test.Answer.Options[NumOpt].Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
 	       Gbl.Test.Answer.Options[NumOpt].Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
 	       Gbl.Test.Answer.Options[NumOpt].Image.Quality = Tst_IMAGE_SAVED_QUALITY;
-	       Img_GetImageFromForm ((int) NumOpt,&Gbl.Test.Answer.Options[NumOpt].Image,
+	       Img_GetImageFromForm ((int) NumOpt,	// >= 0 ==> the image associated to an answer
+	                             &Gbl.Test.Answer.Options[NumOpt].Image,
 				     Tst_GetImageFromDB);
 	      }
            }

@@ -252,6 +252,8 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
 /*****************************************************************************/
 /***************************** Get image from form ***************************/
 /*****************************************************************************/
+// If NumImgInForm < 0, params have no suffix
+// If NumImgInForm >= 0, the number is a suffix of the params
 
 void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
                            void (*GetImageFromDB) (int NumImgInForm,struct Image *Image))
@@ -276,11 +278,18 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
       case Img_ACTION_NEW_IMAGE:	// Upload new image
          /***** Get new image (if present ==> process and create temporary file) *****/
 	 Img_GetAndProcessImageFileFromForm (Image,ParamUploadImg.File);
-	 if (Image->Status != Img_FILE_PROCESSED)	// No new image received-processed successfully
+	 switch (Image->Status)
 	   {
-	    /* Reset image name */
-	    Image->Status = Img_FILE_NONE;
-	    Image->Name[0] = '\0';
+	    case Img_FILE_NONE:		// No new image received
+	       Image->Action = Img_ACTION_NO_IMAGE;
+               Image->Name[0] = '\0';
+	       break;
+	    case Img_FILE_RECEIVED:	// New image received, but not processed
+	       Image->Status = Img_FILE_NONE;
+	       Image->Name[0] = '\0';
+	       break;
+	    default:
+	       break;
 	   }
 	 break;
       case Img_ACTION_KEEP_IMAGE:	// Keep current image unchanged
@@ -334,6 +343,8 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
 /*****************************************************************************/
 /********* Set parameters names depending on number of image in form *********/
 /*****************************************************************************/
+// If NumImgInForm < 0, params have no suffix
+// If NumImgInForm >= 0, the number is a suffix of the params
 
 void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
   {
