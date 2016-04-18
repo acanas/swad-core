@@ -84,8 +84,7 @@
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
-#define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
+#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
 #define Cfg_EXTERNAL_LOGIN_URL			""
 #define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
 #define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
@@ -134,8 +133,7 @@
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
-#define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
+#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
 #define Cfg_EXTERNAL_LOGIN_URL			""
 #define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
 #define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
@@ -201,8 +199,7 @@
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	"PRADO"
-#define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
+#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
 #define Cfg_EXTERNAL_LOGIN_URL			"https://oficinavirtual.ugr.es/"
 #define Cfg_NAME_PARAM_IMPORTED_USR_ID		"pradouser"
 #define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	"pradosession"
@@ -258,8 +255,7 @@
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME	""
-#define Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME	""
+#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
 #define Cfg_EXTERNAL_LOGIN_URL			""
 #define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
 #define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""

@@ -420,7 +420,7 @@ static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
                   sprintf (Gbl.Message,Txt_Could_not_get_the_official_list_of_your_groups_and_students_,
                            Cfg_PLATFORM_SHORT_NAME,
                            Cfg_EXTERNAL_LOGIN_URL,
-                           Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME);
+                           Cfg_EXTERNAL_LOGIN_SERVICE_NAME);
                   Lay_ShowAlert (Lay_ERROR,Gbl.Message);
                  }
                break;
@@ -435,7 +435,7 @@ static void Imp_ListMyImpGrpsAndStds (bool ItsAFormToRegRemStds)
          sprintf (Gbl.Message,Txt_To_get_the_official_list_of_your_groups_and_students_,
                   Cfg_PLATFORM_SHORT_NAME,
                   Cfg_EXTERNAL_LOGIN_URL,
-                  Cfg_EXTERNAL_LOGIN_SERVICE_FULL_NAME);
+                  Cfg_EXTERNAL_LOGIN_SERVICE_NAME);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }

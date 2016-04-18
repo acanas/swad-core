@@ -1478,8 +1478,6 @@ void Usr_PutLinkToLogin (void)
 
 void Usr_WriteFormLogin (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Enter_from_X;
    extern const char *Txt_Log_in;
    extern const char *Txt_User;
    extern const char *Txt_nick_email_or_ID;
@@ -1489,25 +1487,7 @@ void Usr_WriteFormLogin (void)
    /***** Links to other actions *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /* Links to create a new account */
    Acc_PutLinkToCreateAccount ();
-
-   /* Link to enter from external site */
-   if (Cfg_EXTERNAL_LOGIN_URL[0] &&
-       Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME[0])
-     {
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\">",
-               Cfg_EXTERNAL_LOGIN_URL,
-               The_ClassFormBold[Gbl.Prefs.Theme]);
-      sprintf (Gbl.Title,Txt_Enter_from_X,
-               Cfg_EXTERNAL_LOGIN_SERVICE_SHORT_NAME);
-      Lay_PutIconWithText ("login64x64.png",
-                           Gbl.Title,
-                           Gbl.Title);
-      fprintf (Gbl.F.Out,"</a>");
-     }
-
-   /* Links to send a new password and to change language */
    Pwd_PutLinkToSendNewPasswd ();
    Pre_PutLinkToChangeLanguage ();
 
