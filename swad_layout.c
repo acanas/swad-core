@@ -1466,11 +1466,11 @@ static void Lay_WriteAboutZone (void)
 	    Cfg_ABOUT_NAME);
 
    /***** Questions and problems *****/
-   fprintf (Gbl.F.Out,"<div>"
-		      "<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">%s:</a> "
+   fprintf (Gbl.F.Out,"<div class=\"ABOUT\">"
+		      "%s: "
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>"
 		      "</div>",
-	    Cfg_HELP_WEB,Txt_Questions_and_problems,
+	    Txt_Questions_and_problems,
 	    Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
 
    /***** About and time to generate and send page *****/

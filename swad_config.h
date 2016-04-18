@@ -67,7 +67,6 @@
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"	// Main responsible for the platform
-#define Cfg_HELP_WEB				"http://cevug.ugr.es/contactar/contactar_multilang_simple_.php?amb=tic"	// Web to solve questions and problems
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"openswad.org"			// SMTP server for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"				// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"		// E-mail address from where automatic e-mails will be sent
@@ -118,7 +117,6 @@
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"		// Main responsible for the platform
-#define Cfg_HELP_WEB				"http://openswad.org/SWAD-sheet.pdf"	// Web to solve questions and problems
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"mail.openswad.org"			// SMTP server for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// E-mail address from where automatic e-mails will be sent
@@ -184,9 +182,8 @@
 #define Cfg_PLATFORM_LOGO_BIG_WIDTH		140
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"CEVUG"					// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"sctecnico@ugr.es"			// Main responsible for the platform
-#define Cfg_HELP_WEB				"http://cevug.ugr.es/contactar/contactar_multilang_simple_.php?amb=tic"	// Web to solve questions and problems
+#define Cfg_PLATFORM_RESPONSIBLE_NAME		"UGR"					// Main responsible for the platform
+#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"swad@ugr.es"				// Main responsible for the platform
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// E-mail address from where automatic e-mails will be sent
@@ -195,9 +192,9 @@
 #define Cfg_LOG_START_YEAR			2005					// Year when the log started in the database
 
 // Footer of page with info about the institution where this platform is installed
-#define Cfg_ABOUT_NAME				"Centro de Ense&ntilde;anzas Virtuales de la Universidad de Granada"
-#define Cfg_ABOUT_URL				"http://cevug.ugr.es/"
-#define Cfg_ABOUT_LOGO				"cevug100x32.png"
+#define Cfg_ABOUT_NAME				"Universidad de Granada"
+#define Cfg_ABOUT_URL				"http://www.ugr.es/"
+#define Cfg_ABOUT_LOGO				"ugr100x32.png"
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
@@ -244,7 +241,6 @@
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Carmen Varela B&aacute;ez"		// Main responsible for the platform
 #define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"cevuna@rec.una.py"			// Main responsible for the platform
-#define Cfg_HELP_WEB				"http://www.cevuna.una.py/"		// Web to solve questions and problems
 #define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"server.rec.una.py"			// SMTP server for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
 #define Cfg_AUTOMATIC_EMAIL_FROM		"cevuna@rec.una.py"			// E-mail address from where automatic e-mails will be sent
