@@ -5697,7 +5697,7 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
 	          Size,Size);
      }
-   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"ICON20x20B\"/>" :
+   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"ICON20x20\"/>" :
 	                             " class=\"ICON40x40\"/>");
   }
 
@@ -11414,29 +11414,36 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_FormStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);
       if (GrpCod > 0)
 	 Grp_PutParamGrpCod (GrpCod);
-      Brw_PutParamsPathAndFile (FileMetadata.FileType,
-                                FileMetadata.PathInTreeUntilFilFolLnk,
-                                FileMetadata.FilFolLnkName);
 
-      Act_LinkFormSubmit (FileNameToShow,"DAT_N");
+      /* Parameters to go to file / folder */
+      if (FileMetadata.FileType == Brw_IS_FOLDER)
+	 /* Params path and folder */
+	 Brw_PutParamsPathAndFile (FileMetadata.FileType,
+				   FileMetadata.PathInTreeUntilFilFolLnk,
+				   FileMetadata.FilFolLnkName);
+      else
+	 /* Param with file code */
+         Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 
       /* File or folder icon */
+      Act_LinkFormSubmit (FileNameToShow,"DAT_N");
       if (FileMetadata.FileType == Brw_IS_FOLDER)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20B\" />",
+			    " class=\"ICON20x20\" />",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Folder,Txt_Folder);
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FileType,FileMetadata.FilFolLnkName);
-
-      /* File name and end of form */
-      fprintf (Gbl.F.Out,"%s"
+      fprintf (Gbl.F.Out,"&nbsp;%s"
 	                 "</a>",
 	       FileNameToShow);
+
+      /* End form */
       Act_FormEnd ();
+
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 

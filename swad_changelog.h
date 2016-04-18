@@ -130,18 +130,20 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: In Statistics > Indicators, if we select only 5 indicators, the message "The list is too big..." is shown.
+// TODO: FIX BUG: A theacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.200 (2016-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.200.1 (2016-04-18)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.200.1: Apr 18, 2016	Fixed bug in searching for documents. (199726 lines)
         Version 15.200:   Apr 18, 2016	New layout of search form. (199718 lines)
         Version 15.199.8: Apr 18, 2016	Changes in title of results of searching documents. (199723 lines)
         Version 15.199.7: Apr 17, 2016	Changes in title of results of searching users. (199639 lines)
