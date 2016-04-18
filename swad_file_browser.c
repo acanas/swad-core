@@ -133,6 +133,35 @@ const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
    Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
   };
+// Browsers viewable shown in search for documents
+const Brw_FileBrowser_t Brw_FileBrowserForFoundDocs[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   Brw_UNKNOWN,		// Brw_UNKNOWN        =  0
+   Brw_SHOW_DOCUM_CRS,	// Brw_SHOW_DOCUM_CRS =  1
+   Brw_SHOW_MARKS_CRS,	// Brw_SHOW_MARKS_CRS =  2
+   Brw_SHOW_DOCUM_CRS,	// Brw_ADMI_DOCUM_CRS =  3
+   Brw_ADMI_SHARE_CRS,	// Brw_ADMI_SHARE_CRS =  4
+   Brw_ADMI_SHARE_GRP,	// Brw_ADMI_SHARE_GRP =  5
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_USR =  6
+   Brw_ADMI_WORKS_USR,	// Brw_ADMI_WORKS_CRS =  7
+   Brw_ADMI_MARKS_CRS,	// Brw_ADMI_MARKS_CRS =  8
+   Brw_ADMI_BRIEF_USR,	// Brw_ADMI_BRIEF_USR =  9
+   Brw_SHOW_DOCUM_GRP,	// Brw_SHOW_DOCUM_GRP = 10
+   Brw_SHOW_DOCUM_GRP,	// Brw_ADMI_DOCUM_GRP = 11
+   Brw_SHOW_MARKS_GRP,	// Brw_SHOW_MARKS_GRP = 12
+   Brw_SHOW_MARKS_GRP,	// Brw_ADMI_MARKS_GRP = 13
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_USR = 14
+   Brw_ADMI_ASSIG_USR,	// Brw_ADMI_ASSIG_CRS = 15
+   Brw_SHOW_DOCUM_DEG,	// Brw_SHOW_DOCUM_DEG = 16
+   Brw_SHOW_DOCUM_DEG,	// Brw_ADMI_DOCUM_DEG = 17
+   Brw_SHOW_DOCUM_CTR,	// Brw_SHOW_DOCUM_CTR = 18
+   Brw_SHOW_DOCUM_CTR,	// Brw_ADMI_DOCUM_CTR = 19
+   Brw_SHOW_DOCUM_INS,	// Brw_SHOW_DOCUM_INS = 20
+   Brw_SHOW_DOCUM_INS,	// Brw_ADMI_DOCUM_INS = 21
+   Brw_ADMI_SHARE_DEG,	// Brw_ADMI_SHARE_DEG = 22
+   Brw_ADMI_SHARE_CTR,	// Brw_ADMI_SHARE_CTR = 23
+   Brw_ADMI_SHARE_INS,	// Brw_ADMI_SHARE_INS = 24
+  };
 // Browsers types for database "clipboard" table
 static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -11240,6 +11269,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    long DegCod;
    long CrsCod;
    long GrpCod;
+   Act_Action_t Action;
    const char *InsShortName;
    const char *CtrShortName;
    const char *DegShortName;
@@ -11405,13 +11435,30 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       BgColor);
 
       /* Start form */
-      if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+      Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
+
+      if (CrsCod > 0 && CrsCod != Gbl.CurrentCrs.Crs.CrsCod)		// Not the current course
 	{
-         Act_FormGoToStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);	// Go to another course
-	 Crs_PutParamCrsCod (CrsCod);
+         Act_FormGoToStart (Action);
+	 Crs_PutParamCrsCod (CrsCod);	// Go to another course
+	}
+      else if (DegCod > 0 && DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	{
+         Act_FormGoToStart (Action);
+	 Deg_PutParamDegCod (DegCod);	// Go to another degree
+	}
+      else if (CtrCod > 0 && CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	{
+         Act_FormGoToStart (Action);
+	 Ctr_PutParamCtrCod (CtrCod);	// Go to another centre
+	}
+      else if (InsCod > 0 && InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	{
+         Act_FormGoToStart (Action);
+	 Ins_PutParamInsCod (InsCod);	// Go to another institution
 	}
       else
-         Act_FormStart (Brw_ActReqDatFile[FileMetadata.FileBrowser]);
+         Act_FormStart (Action);
       if (GrpCod > 0)
 	 Grp_PutParamGrpCod (GrpCod);
 
