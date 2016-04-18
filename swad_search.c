@@ -203,29 +203,30 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
-   extern const char *Txt_All;
-   extern const char *Txt_Institutions;
-   extern const char *Txt_Centres;
-   extern const char *Txt_Degrees;
-   extern const char *Txt_Courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_My_documents;
-   extern const char *Txt_Documents_in_my_courses;
-   extern const char *Txt_Open_documents;
+   extern const char *Txt_SEARCH_X_in_Y;
+   extern const char *Txt_all;
+   extern const char *Txt_institutions;
+   extern const char *Txt_centres;
+   extern const char *Txt_degrees;
+   extern const char *Txt_courses;
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_my_documents;
+   extern const char *Txt_documents_in_my_courses;
+   extern const char *Txt_open_documents;
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
-	Txt_All,						// Sch_SEARCH_ALL
-	Txt_Institutions,					// Sch_SEARCH_INSTITUTIONS
-	Txt_Centres,						// Sch_SEARCH_CENTRES
-	Txt_Degrees,						// Sch_SEARCH_DEGREES
-	Txt_Courses,						// Sch_SEARCH_COURSES
-	Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
-	Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
-	Txt_Open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
-	Txt_Documents_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
-	Txt_My_documents,					// Sch_SEARCH_MY_DOCUMENTS
+	Txt_all,						// Sch_SEARCH_ALL
+	Txt_institutions,					// Sch_SEARCH_INSTITUTIONS
+	Txt_centres,						// Sch_SEARCH_CENTRES
+	Txt_degrees,						// Sch_SEARCH_DEGREES
+	Txt_courses,						// Sch_SEARCH_COURSES
+	Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
+	Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
+        Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
+	Txt_open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
+	Txt_documents_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
+	Txt_my_documents,					// Sch_SEARCH_MY_DOCUMENTS
      };
    Sch_WhatToSearch_t WhatToSearch;
 
@@ -249,7 +250,12 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** String to find *****/
+   Sch_PutInputStringToSearch (NULL);
+
    /***** What to search? *****/
+   fprintf (Gbl.F.Out,"<span class=\"%s\"> %s </span>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_SEARCH_X_in_Y);
    fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:186px;\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;
         WhatToSearch < Sch_NUM_WHAT_TO_SEARCH;
@@ -265,8 +271,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
         }
    fprintf (Gbl.F.Out,"</select>");
 
-   /***** String to find *****/
-   Sch_PutFormToSearch ("search64x64.png",NULL);
+   /***** Magnifying glass icon *****/
+   Sch_PutMagnifyingGlassButton ("search64x64.png");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Search);
@@ -301,10 +307,10 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
   }
 
 /*****************************************************************************/
-/*********** Put form to search courses, teachers, documents... **************/
+/********************* Put string to search inside form **********************/
 /*****************************************************************************/
 
-void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
+void Sch_PutInputStringToSearch (const char *IdInputText)
   {
    extern const char *Txt_Search;
 
@@ -320,6 +326,15 @@ void Sch_PutFormToSearch (const char *Icon,const char *IdInputText)
       fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
 	       Txt_Search);
    fprintf (Gbl.F.Out," style=\"margin:0;\" />");
+  }
+
+/*****************************************************************************/
+/******************* Put magnifying glass button inside form *****************/
+/*****************************************************************************/
+
+void Sch_PutMagnifyingGlassButton (const char *Icon)
+  {
+   extern const char *Txt_Search;
 
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""

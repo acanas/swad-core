@@ -2077,25 +2077,25 @@ const char *Txt_Admin_several_teachers =
 	"Gerenciar v&aacute;rios professores";
 #endif
 
-const char *Txt_All =
+const char *Txt_all =
 #if   L==1
-	"Tot";
+	"tot";
 #elif L==2
-	"Alle";
+	"alle";
 #elif L==3
-	"All";
+	"all";
 #elif L==4
-	"Todo";
+	"todo";
 #elif L==5
-	"Tout";
+	"tout";
 #elif L==6
-	"Opakatu";
+	"opakatu";
 #elif L==7
-	"Tutto";
+	"tutto";
 #elif L==8
-	"Wszystko";
+	"wszystko";
 #elif L==9
-	"Tudo";
+	"tudo";
 #endif
 
 const char *Txt_all_degrees =
@@ -9126,27 +9126,6 @@ const char *Txt_Document =
 	"Documento";
 #endif
 
-const char *Txt_document_hidden =
-#if   L==1
-	"document ocult";
-#elif L==2
-	"Dokument verborgen";
-#elif L==3
-	"document hidden";
-#elif L==4
-	"documento oculto";
-#elif L==5
-	"document cach&eacute;";
-#elif L==6
-	"documento oculto";	// Okoteve traducción
-#elif L==7
-	"documento nascosto";
-#elif L==8
-	"document hidden";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"documento oculto";
-#endif
-
 const char *Txt_document_in_my_courses =
 #if   L==1
 	"document en les meves assignatures";
@@ -9231,27 +9210,6 @@ const char *Txt_documents_from_me =
 	"documentos de mim";
 #endif
 
-const char *Txt_Documents_in_my_courses =
-#if   L==1
-	"Documents en les meves assignatures";
-#elif L==2
-	"Dokumente in meinen Kursen";
-#elif L==3
-	"Documents in my courses";
-#elif L==4
-	"Documentos en mis asignaturas";
-#elif L==5
-	"Documents &agrave; mes mati&egrave;res";
-#elif L==6
-	"Documentos en mis asignaturas";	// Okoteve traducción
-#elif L==7
-	"Documenti in miei corsi";
-#elif L==8
-	"Dokumenty w moich kursach";
-#elif L==9
-	"Documentos em minha disciplinas";
-#endif
-
 const char *Txt_documents_in_my_courses =
 #if   L==1
 	"documents en les meves assignatures";
@@ -9271,27 +9229,6 @@ const char *Txt_documents_in_my_courses =
 	"dokumenty w moich kursach";
 #elif L==9
 	"documentos em minha disciplinas";
-#endif
-
-const char *Txt_DOCUM_hidden =
-#if   L==1
-	"documents ocults";
-#elif L==2
-	"Dokumente verborgen";
-#elif L==3
-	"documents hidden";
-#elif L==4
-	"documentos ocultos";
-#elif L==5
-	"documents cach&eacute;s";
-#elif L==6
-	"documentos ocultos";	// Okoteve traducción
-#elif L==7
-	"documenti nascosti";
-#elif L==8
-	"documents hidden";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"documentos ocultos";
 #endif
 
 const char *Txt_Documents_area =
@@ -13572,6 +13509,48 @@ const char *Txt_Hidden_MALE_PLURAL =
 	"Ocultos";
 #endif
 
+const char *Txt_hidden_document =
+#if   L==1
+	"document ocult";
+#elif L==2
+	"Dokument verborgen";
+#elif L==3
+	"hidden document";
+#elif L==4
+	"documento oculto";
+#elif L==5
+	"document cach&eacute;";
+#elif L==6
+	"documento oculto";	// Okoteve traducción
+#elif L==7
+	"documento nascosto";
+#elif L==8
+	"hidden document";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"documento oculto";
+#endif
+
+const char *Txt_hidden_documents =
+#if   L==1
+	"documents ocults";
+#elif L==2
+	"Dokumente verborgen";
+#elif L==3
+	"hidden documents";
+#elif L==4
+	"documentos ocultos";
+#elif L==5
+	"documents cach&eacute;s";
+#elif L==6
+	"documentos ocultos";	// Okoteve traducción
+#elif L==7
+	"documenti nascosti";
+#elif L==8
+	"hidden documents";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"documentos ocultos";
+#endif
+
 const char *Txt_Hidden_survey =
 #if   L==1
 	"Encuesta oculta";	// Necessita traduccio
@@ -14451,6 +14430,27 @@ const char *Txt_Imported_questions =
 	"Imported questions";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"Imported questions";	// Necessita de tradução
+#endif
+
+const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
+#if   L==1
+	"en";
+#elif L==2
+	"im";
+#elif L==3
+	"in";
+#elif L==4
+	"en";
+#elif L==5
+	"dans";
+#elif L==6
+	"en";	// Okoteve traducción
+#elif L==7
+	"in";
+#elif L==8
+	"w";
+#elif L==9
+	"em";
 #endif
 
 const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group =
@@ -22693,25 +22693,25 @@ const char *Txt_My_courses =
 	"As minha disciplinas";
 #endif
 
-const char *Txt_My_documents =
+const char *Txt_my_documents =
 #if   L==1
-	"Els meus documents";
+	"els meus documents";
 #elif L==2
-	"Meine Dokumente";
+	"meine Dokumente";
 #elif L==3
-	"My documents";
+	"my documents";
 #elif L==4
-	"Mis documentos";
+	"mis documentos";
 #elif L==5
-	"Mes documents";
+	"mes documents";
 #elif L==6
-	"Mis documentos";	// Okoteve traducción
+	"mis documentos";	// Okoteve traducción
 #elif L==7
-	"I miei documenti";
+	"i miei documenti";
 #elif L==8
-	"Moje dokumenty";
+	"moje dokumenty";
 #elif L==9
-	"Meus documentos";
+	"meus documentos";
 #endif
 
 const char *Txt_My_groups =
@@ -26804,27 +26804,6 @@ const char *Txt_open_document =
 	"otwarty dokument";
 #elif L==9
 	"documento aberto";
-#endif
-
-const char *Txt_Open_documents =
-#if   L==1
-	"Documents oberts";
-#elif L==2
-	"Ge&ouml;ffnete Dokumente";
-#elif L==3
-	"Open documents";
-#elif L==4
-	"Documentos abiertos";
-#elif L==5
-	"Documents ouverts";
-#elif L==6
-	"Documentos abiertos";	// Okoteve traducción
-#elif L==7
-	"Documenti aperti";
-#elif L==8
-	"Otwarte dokumenty";
-#elif L==9
-	"Documentos abertos";
 #endif
 
 const char *Txt_open_documents =

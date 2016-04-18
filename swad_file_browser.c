@@ -11136,8 +11136,8 @@ unsigned Brw_ListDocsFound (const char *Query,
    extern const char *Txt_Course;
    extern const char *Txt_File_zone;
    extern const char *Txt_Document;
-   extern const char *Txt_document_hidden;
-   extern const char *Txt_DOCUM_hidden;
+   extern const char *Txt_hidden_document;
+   extern const char *Txt_hidden_documents;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDocs;
@@ -11203,9 +11203,9 @@ unsigned Brw_ListDocsFound (const char *Query,
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
-	 fprintf (Gbl.F.Out,"1 %s",Txt_document_hidden);
+	 fprintf (Gbl.F.Out,"1 %s",Txt_hidden_document);
       else
-	 fprintf (Gbl.F.Out,"%u %s",NumDocsHidden,Txt_DOCUM_hidden);
+	 fprintf (Gbl.F.Out,"%u %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")"
 	                 "</th>"
 			 "</tr>");
