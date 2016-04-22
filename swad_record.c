@@ -91,6 +91,7 @@ static void Rec_ShowCommands (struct UsrData *UsrDat,
                               bool PutFormLinks);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
+static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -2094,13 +2095,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    Rec_ShowNickname (UsrDat,PutFormLinks);
 
    /***** Country *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_DAT_BOLD LEFT_TOP\" style=\"width:%upx;\">",
-	    Rec_C2_TOP);
-   if (ShowData && UsrDat->CtyCod > 0)
-      /* Link to see country information */
-      Cty_WriteCountryName (UsrDat->CtyCod,"REC_DAT_BOLD");
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"<tr>");
+   Rec_ShowCountry (UsrDat,ShowData);
 
    /***** User's web and social networks *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",
@@ -3176,7 +3172,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*********************** Write a link to netiquette rules ********************/
+/*************************** Show user's nickname ****************************/
 /*****************************************************************************/
 
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
@@ -3210,6 +3206,21 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
    fprintf (Gbl.F.Out,"</div>"
 	              "</td>"
 	              "</tr>");
+  }
+
+/*****************************************************************************/
+/**************************** Show user's country ****************************/
+/*****************************************************************************/
+
+static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData)
+  {
+   fprintf (Gbl.F.Out,"<td class=\"REC_DAT_BOLD LEFT_TOP\""
+	              " style=\"width:%upx;\">",
+	    Rec_C2_TOP);
+   if (ShowData && UsrDat->CtyCod > 0)
+      /* Link to see country information */
+      Cty_WriteCountryName (UsrDat->CtyCod,"REC_DAT_BOLD");
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
