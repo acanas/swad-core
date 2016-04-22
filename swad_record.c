@@ -60,7 +60,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 #define Rec_INSTITUTION_LOGO_SIZE	64
 #define Rec_DEGREE_LOGO_SIZE		64
 
-#define Rec_USR_MIN_AGE  16	// years old
+#define Rec_USR_MIN_AGE  12	// years old
 #define Rec_USR_MAX_AGE 120	// years old
 
 #define Rec_SHOW_OFFICE_HOURS_DEFAULT	true
@@ -83,6 +83,9 @@ static bool Rec_GetParamShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *UsrDat,
                                const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
+
+static void Rec_ShowInstitution (struct Institution *Ins,bool PutFormLinks);
+
 static void Rec_WriteLinkToDataProtectionClause (void);
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
@@ -2083,51 +2086,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Institution *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\""
-                      " style=\"width:%upx; height:%upx;\">",
-	    Rec_C1_TOP,Rec_C1_TOP);
-   if (UsrDat->InsCod > 0)
-     {
-      Ins.InsCod = UsrDat->InsCod;
+   fprintf (Gbl.F.Out,"<tr>");
+   Ins.InsCod = UsrDat->InsCod;
+   if (Ins.InsCod > 0)
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-
-      /* Form to go to the institution */
-      if (PutFormLinks)
-	{
-	 Act_FormGoToStart (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins.InsCod);
-	 Act_LinkFormSubmit (Ins.FullName,NULL);
-	}
-      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
-                    Rec_INSTITUTION_LOGO_SIZE,NULL,true);
-      if (PutFormLinks)
-	{
-         fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-	}
-     }
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td class=\"REC_HEAD LEFT_MIDDLE\""
-		      " style=\"width:%upx; height:%upx;\">",
-	    Rec_C2_TOP,Rec_C1_TOP);
-   if (UsrDat->InsCod > 0)
-     {
-      /* Form to go to the institution */
-      if (PutFormLinks)
-	{
-	 Act_FormGoToStart (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins.InsCod);
-	 Act_LinkFormSubmit (Ins.FullName,"REC_HEAD");
-	}
-      fprintf (Gbl.F.Out,"%s",Ins.FullName);
-      if (PutFormLinks)
-	{
-         fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-	}
-     }
-   fprintf (Gbl.F.Out,"</td>");
+   Rec_ShowInstitution (&Ins,PutFormLinks);
 
    /***** Photo *****/
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -3145,6 +3108,55 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** End frame *****/
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/*********************** Show institution in record card *********************/
+/*****************************************************************************/
+
+static void Rec_ShowInstitution (struct Institution *Ins,bool PutFormLinks)
+  {
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
+                      " style=\"width:%upx; height:%upx;\">",
+	    Rec_C1_TOP,Rec_C1_TOP);
+   if (Ins->InsCod > 0)
+     {
+      /* Form to go to the institution */
+      if (PutFormLinks)
+	{
+	 Act_FormGoToStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Ins->InsCod);
+	 Act_LinkFormSubmit (Ins->FullName,NULL);
+	}
+      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
+                    Rec_INSTITUTION_LOGO_SIZE,NULL,true);
+      if (PutFormLinks)
+	{
+         fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td class=\"REC_HEAD LEFT_MIDDLE\""
+		      " style=\"width:%upx; height:%upx;\">",
+	    Rec_C2_TOP,Rec_C1_TOP);
+   if (Ins->InsCod > 0)
+     {
+      /* Form to go to the institution */
+      if (PutFormLinks)
+	{
+	 Act_FormGoToStart (ActSeeInsInf);
+	 Ins_PutParamInsCod (Ins->InsCod);
+	 Act_LinkFormSubmit (Ins->FullName,"REC_HEAD");
+	}
+      fprintf (Gbl.F.Out,"%s",Ins->FullName);
+      if (PutFormLinks)
+	{
+         fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
