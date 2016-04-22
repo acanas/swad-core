@@ -89,6 +89,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowCommands (struct UsrData *UsrDat,
                               Rec_RecordViewType_t TypeOfView,
                               bool PutFormLinks);
+static void Rec_ShowFullName (struct UsrData *UsrDat);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1979,7 +1980,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Confirm;
    char StrRecordWidth[10+1];
    const char *ClassForm = "REC_DAT";
-   char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
@@ -2047,6 +2047,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    struct Centre Ctr;
    struct Department Dpt;
 
+   /***** Initializations *****/
    switch (TypeOfView)
      {
       case Rec_FORM_SIGN_UP:
@@ -2069,55 +2070,25 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
+   Ins.InsCod = UsrDat->InsCod;
+   if (Ins.InsCod > 0)
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");
-
-   /* Institution */
-   Ins.InsCod = UsrDat->InsCod;
-   if (Ins.InsCod > 0)
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Rec_ShowInstitution (&Ins,PutFormLinks);
-
-   /* User's photo */
    Rec_ShowPhoto (UsrDat);
-
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Commands and full name *****/
    fprintf (Gbl.F.Out,"<tr>");
-
-   /* Commands */
    Rec_ShowCommands (UsrDat,TypeOfView,PutFormLinks);
-
-   /* Full name */
-   fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_TOP\""
-	              " style=\"width:%upx;\">",
-	    Rec_C2_TOP);
-
-   /* First name */
-   strncpy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s<br />",Name);
-
-   /* Surname 1 */
-   strncpy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s<br />",Name);
-
-   /* Surname 2 */
-   strncpy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s",Name);
-
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   Rec_ShowFullName (UsrDat);
+   fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's nickname *****/
    fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_BOTTOM\""
@@ -3193,6 +3164,39 @@ static void Rec_ShowCommands (struct UsrData *UsrDat,
 
       fprintf (Gbl.F.Out,"</div>");
      }
+   fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/*************************** Show user's full name ***************************/
+/*****************************************************************************/
+
+static void Rec_ShowFullName (struct UsrData *UsrDat)
+  {
+   char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
+
+   fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_TOP\""
+	              " style=\"width:%upx;\">",
+	    Rec_C2_TOP);
+
+   /***** First name *****/
+   strncpy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s<br />",Name);
+
+   /***** Surname 1 *****/
+   strncpy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s<br />",Name);
+
+   /***** Surname 2 *****/
+   strncpy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
+   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_LimitLengthHTMLStr (Name,20);
+   fprintf (Gbl.F.Out,"%s",Name);
+
    fprintf (Gbl.F.Out,"</td>");
   }
 
