@@ -98,6 +98,10 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,
                            Rec_RecordViewType_t TypeOfView,
                            bool DataForm,
                            const char *ClassForm);
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,
+                           Rec_RecordViewType_t TypeOfView,
+                           bool DataForm,
+                           const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1961,7 +1965,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_ID;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -1989,7 +1992,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
-   bool HeIsTeacherInAnyCourse = (UsrDat->Roles & (1 << Rol_TEACHER));	// He/she already is a teacher in any course
    bool CountryForm = (TypeOfView == Rec_FORM_MY_COMMON_RECORD);
    bool RoleForm = (TypeOfView == Rec_FORM_SIGN_UP ||
                     TypeOfView == Rec_FORM_NEW_RECORD_OTHER_NEW_USR ||
@@ -2000,19 +2002,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                    (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM));
    bool PutFormLinks;	// Put links (forms) inside record card
-   bool ShowID = (ItsMe ||
-	          Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
-	          DataForm ||
-	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-		  TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
-		  TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
-                  (UsrDat->Accepted &&
-		   ((TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD &&
-                     !(IAmLoggedAsTeacher && HeIsTeacherInAnyCourse)) ||	// A teacher can not see another teacher's ID
-		    ((TypeOfView == Rec_RECORD_LIST ||
-	              TypeOfView == Rec_RECORD_PRINT) &&
-		     IAmLoggedAsTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
    bool ShowData = (ItsMe ||
 	            Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	            UsrDat->Accepted);
@@ -2121,7 +2110,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
             break;
         }
 
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       if (ShowIDRows)
 	{
@@ -2129,18 +2118,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Rec_ShowEmail (UsrDat,TypeOfView,DataForm,ClassForm);
 
 	 /***** User's ID *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_TOP\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_TOP\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_ID,
-		  Rec_C2_BOTTOM);
-	 ID_WriteUsrIDs (UsrDat,ShowID);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 Rec_ShowUsrIDs (UsrDat,TypeOfView,DataForm,ClassForm);
 
 	 /***** User's role or sex *****/
 	 if (RoleForm)
@@ -3250,6 +3228,48 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,
       else
 	 fprintf (Gbl.F.Out,"********");
      }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/******************************* Show user's IDs *****************************/
+/*****************************************************************************/
+
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,
+                           Rec_RecordViewType_t TypeOfView,
+                           bool DataForm,
+                           const char *ClassForm)
+  {
+   extern const char *Txt_ID;
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   bool HeIsTeacherInThisCourse = (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);	// He/she is a teacher in this course
+   bool ShowID = (ItsMe ||
+	          Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
+	          DataForm ||
+	          TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
+		  TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+		  TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+		  TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
+                  (UsrDat->Accepted &&
+		   (((TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR ||
+		      TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD) &&
+                     !(IAmLoggedAsTeacher && HeIsTeacherInThisCourse)) ||	// A teacher can not see another teacher's ID
+		    ((TypeOfView == Rec_RECORD_LIST ||
+	              TypeOfView == Rec_RECORD_PRINT) &&
+		     IAmLoggedAsTeacher && Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS))));
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_TOP\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_TOP\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_ID,
+	    Rec_C2_BOTTOM);
+   ID_WriteUsrIDs (UsrDat,ShowID);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }
