@@ -1693,8 +1693,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:180px;
 	margin:0 auto;
 	}
-.REC_DAT	{color:#808080; font-size:11pt; line-height:110%;}
-.REC_DAT_BOLD	{color:black;   font-size:11pt; line-height:110%;}
+.REC_DAT	{color:#808080; font-size:13pt; line-height:110%;}
+.REC_DAT_BOLD	{color:black;   font-size:13pt; line-height:110%;}
 
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}

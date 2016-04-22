@@ -137,13 +137,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.201.6 (2016-04-22)"
+#define Log_PLATFORM_VERSION	"SWAD 15.201.7 (2016-04-22)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.201.7: Apr 22, 2016	Code refactoring in record card.
+					Fixed bugs in record cards. (200862 lines)
         Version 15.201.6: Apr 22, 2016	Code refactoring in record card. (200842 lines)
         Version 15.201.5: Apr 22, 2016	Code refactoring in record card. (200832 lines)
         Version 15.201.4: Apr 22, 2016	Code refactoring in record card. (200822 lines)

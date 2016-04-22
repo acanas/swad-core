@@ -94,6 +94,10 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_RecordViewType_t TypeOfView);
+static void Rec_ShowEmail (struct UsrData *UsrDat,
+                           Rec_RecordViewType_t TypeOfView,
+                           bool DataForm,
+                           const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1958,7 +1962,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
-   extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -1997,18 +2000,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                    (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR &&
                     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM));
    bool PutFormLinks;	// Put links (forms) inside record card
-   bool ShowEmail = (ItsMe ||
-	             Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
-	             DataForm ||
-	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-		     TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
-		     TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
-                     (UsrDat->Accepted &&
-		      (TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD ||
-		       ((TypeOfView == Rec_RECORD_LIST ||
-		         TypeOfView == Rec_RECORD_PRINT) &&
-		        (IAmLoggedAsTeacher || Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS)))));
    bool ShowID = (ItsMe ||
 	          Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	          DataForm ||
@@ -2135,30 +2126,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (ShowIDRows)
 	{
 	 /***** User's e-mail *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Email,
-		  Rec_C2_BOTTOM);
-	 if (UsrDat->Email[0])
-	   {
-	    if (ShowEmail)
-	      {
-	       fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
-			UsrDat->Email);
-	       Str_LimitLengthHTMLStr (UsrDat->Email,36);
-	       fprintf (Gbl.F.Out," class=\"REC_DAT_BOLD\">%s</a>",
-			UsrDat->Email);
-	      }
-	    else
-	       fprintf (Gbl.F.Out,"********");
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 Rec_ShowEmail (UsrDat,TypeOfView,DataForm,ClassForm);
 
 	 /***** User's ID *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3231,6 +3199,59 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
    if (TypeOfView != Rec_RECORD_PRINT)
       Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/***************************** Show user's e-mail ****************************/
+/*****************************************************************************/
+
+static void Rec_ShowEmail (struct UsrData *UsrDat,
+                           Rec_RecordViewType_t TypeOfView,
+                           bool DataForm,
+                           const char *ClassForm)
+  {
+   extern const char *Txt_Email;
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   bool ShowEmail = (ItsMe ||
+	             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+	             DataForm ||
+	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
+		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
+		     TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
+		     TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
+                     (UsrDat->Accepted &&
+		      (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR ||
+		       TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD ||
+		       ((TypeOfView == Rec_RECORD_LIST ||
+		         TypeOfView == Rec_RECORD_PRINT) &&
+		        (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER ||
+		         (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+		          Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS))))));
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Email,
+	    Rec_C2_BOTTOM);
+   if (UsrDat->Email[0])
+     {
+      if (ShowEmail)
+	{
+	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
+		  UsrDat->Email);
+	 Str_LimitLengthHTMLStr (UsrDat->Email,36);
+	 fprintf (Gbl.F.Out," class=\"REC_DAT_BOLD\">%s</a>",
+		  UsrDat->Email);
+	}
+      else
+	 fprintf (Gbl.F.Out,"********");
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
   }
 
 /*****************************************************************************/
