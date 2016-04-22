@@ -90,6 +90,7 @@ static void Rec_ShowCommands (struct UsrData *UsrDat,
                               Rec_RecordViewType_t TypeOfView,
                               bool PutFormLinks);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
+static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1954,7 +1955,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
-   extern const char *Txt_View_public_profile;
    extern const char *Txt_Email;
    extern const char *Txt_Sex;
    extern const char *Txt_Role;
@@ -2091,32 +2091,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's nickname *****/
-   fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_BOTTOM\""
-	              " style=\"width:%upx;\">"
-	              "<div class=\"REC_NICK\">",
-	    Rec_C2_TOP);
-   if (UsrDat->Nickname[0])
-     {
-      if (PutFormLinks)
-	{
-	 /* Put form to go to public profile */
-	 Act_FormStart (ActSeePubPrf);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
-	}
-      fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
-      if (PutFormLinks)
-	{
-	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-
-         /* Link to QR code */
-	 QR_PutLinkToPrintQRCode (UsrDat->Nickname,false);
-	}
-     }
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>"
-	              "</tr>");
+   Rec_ShowNickname (UsrDat,PutFormLinks);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3198,6 +3173,43 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"%s",Name);
 
    fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/*********************** Write a link to netiquette rules ********************/
+/*****************************************************************************/
+
+static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
+  {
+   extern const char *Txt_View_public_profile;
+
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"REC_NAME LEFT_BOTTOM\""
+	              " style=\"width:%upx;\">"
+	              "<div class=\"REC_NICK\">",
+	    Rec_C2_TOP);
+   if (UsrDat->Nickname[0])
+     {
+      if (PutFormLinks)
+	{
+	 /* Put form to go to public profile */
+	 Act_FormStart (ActSeePubPrf);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
+	}
+      fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
+      if (PutFormLinks)
+	{
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+
+         /* Link to QR code */
+	 QR_PutLinkToPrintQRCode (UsrDat->Nickname,false);
+	}
+     }
+   fprintf (Gbl.F.Out,"</div>"
+	              "</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/
