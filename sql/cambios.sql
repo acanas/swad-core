@@ -11521,3 +11521,22 @@ SELECT COUNT(*) FROM social_notes WHERE NoteType='10';
 ----- SWAD 15.199 (2016/04/16) -----
 
 SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,degrees.ShortName,degrees.FullName,degrees.WWW FROM degrees,courses,crs_usr WHERE degrees.DegCod=courses.CrsCod AND courses.CrsCod=crs_usr.CrsCod AND crs_usr.Role='3' ORDER BY degrees.ShortName;
+
+----- SWAD 15.201 (2016/04/21) -----
+
+CREATE TABLE notif_backup LIKE notif;
+INSERT INTO notif_backup SELECT * FROM notif;
+
+CREATE TABLE sta_notif_backup LIKE sta_notif;
+INSERT INTO sta_notif_backup SELECT * FROM sta_notif;
+
+CREATE TABLE usr_data_backup LIKE usr_data;
+INSERT INTO usr_data_backup SELECT * FROM usr_data;
+
+UPDATE notif     SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
+UPDATE sta_notif SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
+UPDATE usr_data  SET NotifNtfEvents = (((NotifNtfEvents & ~0x3) << 1) | (NotifNtfEvents & 0x3) | 0x04);
+UPDATE usr_data  SET EmailNtfEvents = (((EmailNtfEvents & ~0x3) << 1) | (EmailNtfEvents & 0x3));
+
+
+

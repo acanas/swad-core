@@ -77,7 +77,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1153 actions in one CGI:
+1193 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -252,22 +252,22 @@ Institution:
 
 	148. ActReqRemFilShaIns		Request removal of a shared file of the institution
 	149. ActRemFilShaIns		Remove a shared file of the institution
-	150. ActRemFolShaIns		Remove a folder empty común of the institution
-	151. ActCopShaIns		Set source of copy in common zone of the institution
-	152. ActPasShaIns		Paste a folder or file in common zone of the institution
-	153. ActRemTreShaIns		Remove a folder no empty of common zone of the institution
-	154. ActFrmCreShaIns		Form to crear a folder or file in common zone of the institution
-	155. ActCreFolShaIns		Create a new folder in common zone of the institution
-	156. ActCreLnkShaIns		Create a new link in common zone of the institution
-	157. ActRenFolShaIns		Rename a folder in common zone of the institution
-	158. ActRcvFilShaInsDZ		Receive a file in common zone of the institution using Dropzone.js
-	159. ActRcvFilShaInsCla		Receive a file in common zone of the institution using the classic way
-	160. ActExpShaIns		Expand a folder in common zone of the institution
-	161. ActConShaIns		Contract a folder in common zone of the institution
-	162. ActZIPShaIns		Compress a folder in common zone of the institution
-	163. ActReqDatShaIns		Ask for metadata of a file of the common zone of the institution
-	164. ActChgDatShaIns		Change metadata of a file of the common zone of the institution
-	165. ActDowShaIns		Download a file of the common zone of the institution
+	150. ActRemFolShaIns		Remove an empty shared folder of the institution
+	151. ActCopShaIns		Set source of copy in shared zone of the institution
+	152. ActPasShaIns		Paste a folder or file in shared zone of the institution
+	153. ActRemTreShaIns		Remove a folder no empty of shared zone of the institution
+	154. ActFrmCreShaIns		Form to crear a folder or file in shared zone of the institution
+	155. ActCreFolShaIns		Create a new folder in shared zone of the institution
+	156. ActCreLnkShaIns		Create a new link in shared zone of the institution
+	157. ActRenFolShaIns		Rename a folder in shared zone of the institution
+	158. ActRcvFilShaInsDZ		Receive a file in shared zone of the institution using Dropzone.js
+	159. ActRcvFilShaInsCla		Receive a file in shared zone of the institution using the classic way
+	160. ActExpShaIns		Expand a folder in shared zone of the institution
+	161. ActConShaIns		Contract a folder in shared zone of the institution
+	162. ActZIPShaIns		Compress a folder in shared zone of the institution
+	163. ActReqDatShaIns		Ask for metadata of a file of the shared zone of the institution
+	164. ActChgDatShaIns		Change metadata of a file of the shared zone of the institution
+	165. ActDowShaIns		Download a file of the shared zone of the institution
 Centre:
 	166. ActCtrReqSch		Request search in centre tab
 
@@ -332,22 +332,22 @@ Centre:
 
 	218. ActReqRemFilShaCtr		Request removal of a shared file of the centre
 	219. ActRemFilShaCtr		Remove a shared file of the centre
-	220. ActRemFolShaCtr		Remove a folder empty común of the centre
-	221. ActCopShaCtr		Set source of copy in common zone of the centre
-	222. ActPasShaCtr		Paste a folder or file in common zone of the centre
-	223. ActRemTreShaCtr		Remove a folder no empty of common zone of the centre
-	224. ActFrmCreShaCtr		Form to crear a folder or file in common zone of the centre
-	225. ActCreFolShaCtr		Create a new folder in common zone of the centre
-	226. ActCreLnkShaCtr		Create a new link in common zone of the centre
-	227. ActRenFolShaCtr		Rename a folder in common zone of the centre
-	228. ActRcvFilShaCtrDZ		Receive a file in common zone of the centre using Dropzone.js
-	229. ActRcvFilShaCtrCla		Receive a file in common zone of the centre using the classic way
-	230. ActExpShaCtr		Expand a folder in common zone of the centre
-	231. ActConShaCtr		Contract a folder in common zone of the centre
-	232. ActZIPShaCtr		Compress a folder in common zone of the centre
-	233. ActReqDatShaCtr		Ask for metadata of a file of the common zone of the centre
-	234. ActChgDatShaCtr		Change metadata of a file of the common zone of the centre
-	235. ActDowShaCtr		Download a file of the common zone of the centre
+	220. ActRemFolShaCtr		Remove an empty shared folder of the centre
+	221. ActCopShaCtr		Set source of copy in shared zone of the centre
+	222. ActPasShaCtr		Paste a folder or file in shared zone of the centre
+	223. ActRemTreShaCtr		Remove a folder no empty of shared zone of the centre
+	224. ActFrmCreShaCtr		Form to crear a folder or file in shared zone of the centre
+	225. ActCreFolShaCtr		Create a new folder in shared zone of the centre
+	226. ActCreLnkShaCtr		Create a new link in shared zone of the centre
+	227. ActRenFolShaCtr		Rename a folder in shared zone of the centre
+	228. ActRcvFilShaCtrDZ		Receive a file in shared zone of the centre using Dropzone.js
+	229. ActRcvFilShaCtrCla		Receive a file in shared zone of the centre using the classic way
+	230. ActExpShaCtr		Expand a folder in shared zone of the centre
+	231. ActConShaCtr		Contract a folder in shared zone of the centre
+	232. ActZIPShaCtr		Compress a folder in shared zone of the centre
+	233. ActReqDatShaCtr		Ask for metadata of a file of the shared zone of the centre
+	234. ActChgDatShaCtr		Change metadata of a file of the shared zone of the centre
+	235. ActDowShaCtr		Download a file of the shared zone of the centre
 Degree:
 	236. ActDegReqSch		Request search in degree tab
 
@@ -409,22 +409,22 @@ Degree:
 
 	285. ActReqRemFilShaDeg		Request removal of a shared file of the degree
 	286. ActRemFilShaDeg		Remove a shared file of the degree
-	287. ActRemFolShaDeg		Remove a folder empty común of the degree
-	288. ActCopShaDeg		Set source of copy in common zone of the degree
-	289. ActPasShaDeg		Paste a folder or file in common zone of the degree
-	290. ActRemTreShaDeg		Remove a folder no empty of common zone of the degree
-	291. ActFrmCreShaDeg		Form to crear a folder or file in common zone of the degree
-	292. ActCreFolShaDeg		Create a new folder in common zone of the degree
-	293. ActCreLnkShaDeg		Create a new link in common zone of the degree
-	294. ActRenFolShaDeg		Rename a folder in common zone of the degree
-	295. ActRcvFilShaDegDZ		Receive a file in common zone of the degree using Dropzone.js
-	296. ActRcvFilShaDegCla		Receive a file in common zone of the degree using the classic way
-	297. ActExpShaDeg		Expand a folder in common zone of the degree
-	298. ActConShaDeg		Contract a folder in common zone of the degree
-	299. ActZIPShaDeg		Compress a folder in common zone of the degree
-	300. ActReqDatShaDeg		Ask for metadata of a file of the common zone of the degree
-	301. ActChgDatShaDeg		Change metadata of a file of the common zone of the degree
-	302. ActDowShaDeg		Download a file of the common zone of the degree
+	287. ActRemFolShaDeg		Remove an empty shared folder of the degree
+	288. ActCopShaDeg		Set source of copy in shared zone of the degree
+	289. ActPasShaDeg		Paste a folder or file in shared zone of the degree
+	290. ActRemTreShaDeg		Remove a folder no empty of shared zone of the degree
+	291. ActFrmCreShaDeg		Form to crear a folder or file in shared zone of the degree
+	292. ActCreFolShaDeg		Create a new folder in shared zone of the degree
+	293. ActCreLnkShaDeg		Create a new link in shared zone of the degree
+	294. ActRenFolShaDeg		Rename a folder in shared zone of the degree
+	295. ActRcvFilShaDegDZ		Receive a file in shared zone of the degree using Dropzone.js
+	296. ActRcvFilShaDegCla		Receive a file in shared zone of the degree using the classic way
+	297. ActExpShaDeg		Expand a folder in shared zone of the degree
+	298. ActConShaDeg		Contract a folder in shared zone of the degree
+	299. ActZIPShaDeg		Compress a folder in shared zone of the degree
+	300. ActReqDatShaDeg		Ask for metadata of a file of the shared zone of the degree
+	301. ActChgDatShaDeg		Change metadata of a file of the shared zone of the degree
+	302. ActDowShaDeg		Download a file of the shared zone of the degree
 Course:
 	303. ActCrsReqSch		Request search in course tab
 
@@ -434,912 +434,956 @@ Course:
 	307. ActSeeSylLec		Show the syllabus of lectures
 	308. ActSeeSylPra		Show the syllabus of practicals
 	309. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
-	310. ActAdmShaCrsGrp		Request the administration of the files of the common zone of the course or of a group
-	311. ActSeeCrsTT		Show the timetable
-	312. ActSeeBib			Show the bibliography
-	313. ActSeeFAQ			Show the FAQ
-	314. ActSeeCrsLnk		Show links related to the course
 
-	315. ActCrsSch			Search for courses, teachers, documents...
+	310. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
+	311. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
+	312. ActSeeCrsTT		Show the timetable
+	313. ActSeeBib			Show the bibliography
+	314. ActSeeFAQ			Show the FAQ
+	315. ActSeeCrsLnk		Show links related to the course
 
-	316. ActPrnCrsInf		Print information on the course
-	317. ActChgCrsLog		Change log in method for this course
-	318. ActEdiCrsInf		Edit general information about the course
-	319. ActEdiTchGui		Edit teaching guide of the course
-	320. ActPrnCrsTT		Show print view of the timetable
-	321. ActEdiCrsTT		Edit the timetable
-	322. ActChgCrsTT		Modify the timetable of the course
-        323. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
-	324. ActEdiSylLec		Edit the syllabus of lectures
-	325. ActEdiSylPra		Edit the syllabus of practicals
-	326. ActDelItmSylLec		Remove a item from syllabus of lectures
-	327. ActDelItmSylPra		Remove a item from syllabus of practicals
-	328. ActUp_IteSylLec		Subir the posición of a subtree of the syllabus of lectures
-	329. ActUp_IteSylPra		Subir the posición of a subtree of the syllabus of practicals
-	330. ActDwnIteSylLec		Bajar the posición of a subtree of the syllabus of lectures
-	331. ActDwnIteSylPra		Bajar the posición of a subtree of the syllabus of practicals
-	332. ActRgtIteSylLec		Aumentar the level of a item of the syllabus of lectures
-	333. ActRgtIteSylPra		Aumentar the level of a item of the syllabus of practicals
-	334. ActLftIteSylLec		Disminuir the level of a item of the syllabus of lectures
-	335. ActLftIteSylPra		Disminuir the level of a item of the syllabus of practicals
-	336. ActInsIteSylLec		Insertar a new item in the syllabus of lectures
-	337. ActInsIteSylPra		Insertar a new item in the syllabus of practicals
-	338. ActModIteSylLec		Modify a item of the syllabus of lectures
-	339. ActModIteSylPra		Modify a item of the syllabus of practicals
+	316. ActCrsSch			Search for courses, teachers, documents...
 
-	340. ActChgToSeeDocCrs		Change to see course/group documents
+	317. ActPrnCrsInf		Print information on the course
+	318. ActChgCrsLog		Change log in method for this course
+	319. ActEdiCrsInf		Edit general information about the course
+	320. ActEdiTchGui		Edit teaching guide of the course
+	321. ActPrnCrsTT		Show print view of the timetable
+	322. ActEdiCrsTT		Edit the timetable
+	323. ActChgCrsTT		Modify the timetable of the course
+        324. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
+	325. ActEdiSylLec		Edit the syllabus of lectures
+	326. ActEdiSylPra		Edit the syllabus of practicals
+	327. ActDelItmSylLec		Remove a item from syllabus of lectures
+	328. ActDelItmSylPra		Remove a item from syllabus of practicals
+	329. ActUp_IteSylLec		Subir the posición of a subtree of the syllabus of lectures
+	330. ActUp_IteSylPra		Subir the posición of a subtree of the syllabus of practicals
+	331. ActDwnIteSylLec		Bajar the posición of a subtree of the syllabus of lectures
+	332. ActDwnIteSylPra		Bajar the posición of a subtree of the syllabus of practicals
+	333. ActRgtIteSylLec		Aumentar the level of a item of the syllabus of lectures
+	334. ActRgtIteSylPra		Aumentar the level of a item of the syllabus of practicals
+	335. ActLftIteSylLec		Disminuir the level of a item of the syllabus of lectures
+	336. ActLftIteSylPra		Disminuir the level of a item of the syllabus of practicals
+	337. ActInsIteSylLec		Insertar a new item in the syllabus of lectures
+	338. ActInsIteSylPra		Insertar a new item in the syllabus of practicals
+	339. ActModIteSylLec		Modify a item of the syllabus of lectures
+	340. ActModIteSylPra		Modify a item of the syllabus of practicals
 
-	341. ActSeeDocCrs		See the files of the documents zone of the course
-	342. ActExpSeeDocCrs		Expand a folder in course documents
-	343. ActConSeeDocCrs		Contract a folder in course documents
-	344. ActZIPSeeDocCrs		Compress a folder in course documents
-	345. ActReqDatSeeDocCrs		Ask for metadata of a file of the documents zone of the course
-	346. ActDowSeeDocCrs		Download a file in documents zone of the course
+	341. ActChgToSeeDocCrs		Change to see course/group documents
 
-	347. ActSeeDocGrp		See the files of the documents zone of a group
-	348. ActExpSeeDocGrp		Expand a folder in group documents
-	349. ActConSeeDocGrp		Contract a folder in group documents
-	350. ActZIPSeeDocGrp		Compress a folder in group documents
-	351. ActReqDatSeeDocGrp		Ask for metadata of a file of the documents zone of a group
-	352. ActDowSeeDocGrp		Download a file of the documents zone of a group
+	342. ActSeeDocCrs		See the files of the documents zone of the course
+	343. ActExpSeeDocCrs		Expand a folder in course documents
+	344. ActConSeeDocCrs		Contract a folder in course documents
+	345. ActZIPSeeDocCrs		Compress a folder in course documents
+	346. ActReqDatSeeDocCrs		Ask for metadata of a file of the documents zone of the course
+	347. ActDowSeeDocCrs		Download a file in documents zone of the course
 
-	353. ActChgToAdmDocCrs		Change to administrate course/group documents
+	348. ActSeeDocGrp		See the files of the documents zone of a group
+	349. ActExpSeeDocGrp		Expand a folder in group documents
+	350. ActConSeeDocGrp		Contract a folder in group documents
+	351. ActZIPSeeDocGrp		Compress a folder in group documents
+	352. ActReqDatSeeDocGrp		Ask for metadata of a file of the documents zone of a group
+	353. ActDowSeeDocGrp		Download a file of the documents zone of a group
 
-	354. ActAdmDocCrs		Admin the files of the documents zone of the course
-	355. ActReqRemFilDocCrs		Request removal of a file in the documents zone of the course
-	356. ActRemFilDocCrs		Remove a file in the documents zone of the course
-	357. ActRemFolDocCrs		Remove a folder empty the documents zone of the course
-	358. ActCopDocCrs		Set source of copy in the documents zone of the course
-	359. ActPasDocCrs		Paste a folder or file in the documents zone of the course
-	360. ActRemTreDocCrs		Remove a folder no empty in the documents zone of the course
-	361. ActFrmCreDocCrs		Form to crear a folder or file in the documents zone of the course
-	362. ActCreFolDocCrs		Create a new folder in the documents zone of the course
-	363. ActCreLnkDocCrs		Create a new link in the documents zone of the course
-	364. ActRenFolDocCrs		Rename a folder in the documents zone of the course
-	365. ActRcvFilDocCrsDZ		Receive a file in the documents zone of the course using Dropzone.js
-	366. ActRcvFilDocCrsCla		Receive a file in the documents zone of the course using the classic way
-	367. ActExpAdmDocCrs		Expand a folder when administrating the documents zone of the course
-	368. ActConAdmDocCrs		Contract a folder when administrating the documents zone of the course
-	369. ActZIPAdmDocCrs		Compress a folder when administrating the documents zone of the course
-	370. ActShoDocCrs		Show hidden folder or file of the documents zone
-	371. ActHidDocCrs		Hide folder or file of the documents zone
-	372. ActReqDatAdmDocCrs		Ask for metadata of a file of the documents zone
-	373. ActChgDatAdmDocCrs		Change metadata of a file of the documents zone
-	374. ActDowAdmDocCrs		Download a file of the documents zone
+	354. ActChgToAdmDocCrs		Change to administrate course/group documents
 
-	375. ActAdmDocGrp		Admin the files of the documents zone of a group
-	376. ActReqRemFilDocGrp		Request removal of a file in the documents zone of a group
-	377. ActRemFilDocGrp		Remove a file in the documents zone of a group
-	378. ActRemFolDocGrp		Remove a folder empty in the documents zone of a group
-	379. ActCopDocGrp		Set source of copy in the documents zone of a group
-	380. ActPasDocGrp		Paste a folder or file in the documents zone of a group
-	381. ActRemTreDocGrp		Remove a folder no empty in the documents zone of a group
-	382. ActFrmCreDocGrp		Form to crear a folder or file in the documents zone of a group
-	383. ActCreFolDocGrp		Create a new folder in the documents zone of a group
-	384. ActCreLnkDocGrp		Create a new link in the documents zone of a group
-	385. ActRenFolDocGrp		Rename a folder in the documents zone of a group
-	386. ActRcvFilDocGrpDZ		Receive a file in the documents zone of a group using Dropzone.js
-	387. ActRcvFilDocGrpCla		Receive a file in the documents zone of a group using the classic way
-	388. ActExpAdmDocGrp		Expand a folder when administrating the documents zone of a group
-	389. ActConAdmDocGrp		Contract a folder when administrating the documents zone of a group
-	390. ActZIPAdmDocGrp		Compress a folder when administrating the documents zone of a group
-	391. ActShoDocGrp		Show hidden folder or file of download
-	392. ActHidDocGrp		Hide folder or file of download
-	393. ActReqDatAdmDocGrp		Ask for metadata of a file of the documents zone of a group
-	394. ActChgDatAdmDocGrp		Change metadata of a file of the documents zone of a group
-	395. ActDowAdmDocGrp		Download a file of the documents zone of a group
+	355. ActAdmDocCrs		Admin the files of the documents zone of the course
+	356. ActReqRemFilDocCrs		Request removal of a file in the documents zone of the course
+	357. ActRemFilDocCrs		Remove a file in the documents zone of the course
+	358. ActRemFolDocCrs		Remove a folder empty the documents zone of the course
+	359. ActCopDocCrs		Set source of copy in the documents zone of the course
+	360. ActPasDocCrs		Paste a folder or file in the documents zone of the course
+	361. ActRemTreDocCrs		Remove a folder no empty in the documents zone of the course
+	362. ActFrmCreDocCrs		Form to crear a folder or file in the documents zone of the course
+	363. ActCreFolDocCrs		Create a new folder in the documents zone of the course
+	364. ActCreLnkDocCrs		Create a new link in the documents zone of the course
+	365. ActRenFolDocCrs		Rename a folder in the documents zone of the course
+	366. ActRcvFilDocCrsDZ		Receive a file in the documents zone of the course using Dropzone.js
+	367. ActRcvFilDocCrsCla		Receive a file in the documents zone of the course using the classic way
+	368. ActExpAdmDocCrs		Expand a folder when administrating the documents zone of the course
+	369. ActConAdmDocCrs		Contract a folder when administrating the documents zone of the course
+	370. ActZIPAdmDocCrs		Compress a folder when administrating the documents zone of the course
+	371. ActShoDocCrs		Show hidden folder or file of the documents zone
+	372. ActHidDocCrs		Hide folder or file of the documents zone
+	373. ActReqDatAdmDocCrs		Ask for metadata of a file of the documents zone
+	374. ActChgDatAdmDocCrs		Change metadata of a file of the documents zone
+	375. ActDowAdmDocCrs		Download a file of the documents zone
 
-	396. ActChgToAdmSha		Change to administrate shared files of the course/group
+	376. ActAdmDocGrp		Admin the files of the documents zone of a group
+	377. ActReqRemFilDocGrp		Request removal of a file in the documents zone of a group
+	378. ActRemFilDocGrp		Remove a file in the documents zone of a group
+	379. ActRemFolDocGrp		Remove a folder empty in the documents zone of a group
+	380. ActCopDocGrp		Set source of copy in the documents zone of a group
+	381. ActPasDocGrp		Paste a folder or file in the documents zone of a group
+	382. ActRemTreDocGrp		Remove a folder no empty in the documents zone of a group
+	383. ActFrmCreDocGrp		Form to crear a folder or file in the documents zone of a group
+	384. ActCreFolDocGrp		Create a new folder in the documents zone of a group
+	385. ActCreLnkDocGrp		Create a new link in the documents zone of a group
+	386. ActRenFolDocGrp		Rename a folder in the documents zone of a group
+	387. ActRcvFilDocGrpDZ		Receive a file in the documents zone of a group using Dropzone.js
+	388. ActRcvFilDocGrpCla		Receive a file in the documents zone of a group using the classic way
+	389. ActExpAdmDocGrp		Expand a folder when administrating the documents zone of a group
+	390. ActConAdmDocGrp		Contract a folder when administrating the documents zone of a group
+	391. ActZIPAdmDocGrp		Compress a folder when administrating the documents zone of a group
+	392. ActShoDocGrp		Show hidden folder or file of download
+	393. ActHidDocGrp		Hide folder or file of download
+	394. ActReqDatAdmDocGrp		Ask for metadata of a file of the documents zone of a group
+	395. ActChgDatAdmDocGrp		Change metadata of a file of the documents zone of a group
+	396. ActDowAdmDocGrp		Download a file of the documents zone of a group
 
-	397. ActAdmShaCrs		Admin the shared files zone of the course
-	398. ActReqRemFilShaCrs		Request removal of a shared file of the course
-	399. ActRemFilShaCrs		Remove a shared file of the course
-	400. ActRemFolShaCrs		Remove a folder empty común of the course
-	401. ActCopShaCrs		Set source of copy in common zone of the course
-	402. ActPasShaCrs		Paste a folder or file in common zone of the course
-	403. ActRemTreShaCrs		Remove a folder no empty of common zone of the course
-	404. ActFrmCreShaCrs		Form to crear a folder or file in common zone of the course
-	405. ActCreFolShaCrs		Create a new folder in common zone of the course
-	406. ActCreLnkShaCrs		Create a new link in common zone of the course
-	407. ActRenFolShaCrs		Rename a folder in common zone of the course
-	408. ActRcvFilShaCrsDZ		Receive a file in common zone of the course using Dropzone.js
-	409. ActRcvFilShaCrsCla		Receive a file in common zone of the course using the classic way
-	410. ActExpShaCrs		Expand a folder in common zone of the course
-	411. ActConShaCrs		Contract a folder in common zone of the course
-	412. ActZIPShaCrs		Compress a folder in common zone of the course
-	413. ActReqDatShaCrs		Ask for metadata of a file of the common zone of the course
-	414. ActChgDatShaCrs		Change metadata of a file of the common zone of the course
-	415. ActDowShaCrs		Download a file of the common zone of the course
+	397. ActChgToAdmTch		Change to administrate teachers' files of the course/group
 
-	416. ActAdmShaGrp		Admin the shared files zone of a group
-	417. ActReqRemFilShaGrp		Request removal of a shared file of a group
-	418. ActRemFilShaGrp		Remove a shared file of a group
-	419. ActRemFolShaGrp		Remove a folder empty común of a group
-	420. ActCopShaGrp		Set source of copy in common zone of a group
-	421. ActPasShaGrp		Paste a folder or file in common zone of a group
-	422. ActRemTreShaGrp		Remove a folder no empty of common zone of a group
-	423. ActFrmCreShaGrp		Form to crear a folder or file in common zone of a group
-	424. ActCreFolShaGrp		Create a new folder in common zone of a group
-	425. ActCreLnkShaGrp		Create a new link in common zone of a group
-	426. ActRenFolShaGrp		Rename a folder in common zone of a group
-	427. ActRcvFilShaGrpDZ		Receive a file in common zone of a group using Dropzone.js
-	428. ActRcvFilShaGrpCla		Receive a file in common zone of a group using the classic way
-	429. ActExpShaGrp		Expand a folder in common zone of a group
-	430. ActConShaGrp		Contract a folder in common zone of a group
-	431. ActZIPShaGrp		Compress a folder in common zone of a group
-	432. ActReqDatShaGrp		Ask for metadata of a file of the common zone of a group
-	433. ActChgDatShaGrp		Change metadata of a file of the common zone of a group
-	434. ActDowShaGrp		Download a file of the common zone of a group
+	398. ActAdmTchCrs		Admin the teachers' files zone of the course
+	399. ActReqRemFilTchCrs		Request removal of a teachers' file of the course
+	400. ActRemFilTchCrs		Remove a teachers' file of the course
+	401. ActRemFolTchCrs		Remove an empty teachers' folder of the course
+	402. ActCopTchCrs		Set source of teachers' zone of the course
+	403. ActPasTchCrs		Paste a folder or file in teachers' zone of the course
+	404. ActRemTreTchCrs		Remove a folder no empty of teachers' zone of the course
+	405. ActFrmCreTchCrs		Form to crear a folder or file in teachers' zone of the course
+	406. ActCreFolTchCrs		Create a new folder in teachers' zone of the course
+	407. ActCreLnkTchCrs		Create a new link in teachers' zone of the course
+	408. ActRenFolTchCrs		Rename a folder in teachers' zone of the course
+	409. ActRcvFilTchCrsDZ		Receive a file in teachers' zone of the course using Dropzone.js
+	410. ActRcvFilTchCrsCla		Receive a file in teachers' zone of the course using the classic way
+	411. ActExpTchCrs		Expand a folder in teachers' zone of the course
+	412. ActConTchCrs		Contract a folder in teachers' zone of the course
+	413. ActZIPTchCrs		Compress a folder in teachers' zone of the course
+	414. ActReqDatTchCrs		Ask for metadata of a file of the teachers' zone of the course
+	415. ActChgDatTchCrs		Change metadata of a file of the teachers' zone of the course
+	416. ActDowTchCrs		Download a file of the teachers' zone of the course
 
-	435. ActEdiBib			Edit the bibliography
-	436. ActEdiFAQ			Edit the FAQ
-	437. ActEdiCrsLnk		Edit the links relacionados with the course
-	438. ActChgFrcReaCrsInf		Change force students to read course info
-	439. ActChgFrcReaTchGui		Change force students to read teaching guide
-	440. ActChgFrcReaSylLec		Change force students to read lectures syllabus
-	441. ActChgFrcReaSylPra		Change force students to read practicals syllabus
-	442. ActChgFrcReaBib		Change force students to read bibliography
-	443. ActChgFrcReaFAQ		Change force students to read FAQ
-	444. ActChgFrcReaCrsLnk		Change force students to read links
-	445. ActChgHavReaCrsInf		Change if I have read course info
-	446. ActChgHavReaTchGui		Change if I have read teaching guide
-	447. ActChgHavReaSylLec		Change if I have read lectures syllabus
-	448. ActChgHavReaSylPra		Change if I have read practicals syllabus
-	449. ActChgHavReaBib		Change if I have read bibliography
-	450. ActChgHavReaFAQ		Change if I have read FAQ
-	451. ActChgHavReaCrsLnk		Change if I have read links
-	452. ActSelInfSrcCrsInf		Select the type of info shown in the general information about the course
-	453. ActSelInfSrcTchGui		Select the type of info shown in the teaching guide
-	454. ActSelInfSrcSylLec		Select the type of info shown in the lectures syllabus
-	455. ActSelInfSrcSylPra		Select the type of info shown in the practicals syllabus
-	456. ActSelInfSrcBib		Select the type of info shown in the bibliography
-	457. ActSelInfSrcFAQ		Select the type of info shown in the FAQ
-	458. ActSelInfSrcCrsLnk		Select the type of info shown in the links
-	459. ActRcvURLCrsInf		Receive a link a the general information about the course
-	460. ActRcvURLTchGui		Receive a link a the teaching guide
-	461. ActRcvURLSylLec		Receive a link al syllabus of lectures
-	462. ActRcvURLSylPra		Receive a link al syllabus of practicals
-	463. ActRcvURLBib		Receive a link a bibliography
-	464. ActRcvURLFAQ		Receive a link a FAQ
-	465. ActRcvURLCrsLnk		Receive a link a links
-	466. ActRcvPagCrsInf		Receive a page with the general information about the course
-	467. ActRcvPagTchGui		Receive a page with the teaching guide
-	468. ActRcvPagSylLec		Receive a page with the syllabus of lectures
-	469. ActRcvPagSylPra		Receive a page with the syllabus of practicals
-	470. ActRcvPagBib		Receive a page with bibliography
-	471. ActRcvPagFAQ		Receive a page with FAQ
-	472. ActRcvPagCrsLnk		Receive a page with links
-	473. ActEditorCrsInf		Integrated editor of the general information about the course
-	474. ActEditorTchGui		Integrated editor of the teaching guide
-	475. ActEditorSylLec		Integrated editor of the syllabus of lectures
-	476. ActEditorSylPra		Integrated editor of the syllabus of practicals
-	477. ActEditorBib		Integrated editor of bibliography
-	478. ActEditorFAQ		Integrated editor of FAQ
-	479. ActEditorCrsLnk		Integrated editor of links
-	480. ActPlaTxtEdiCrsInf		Editor of plain text of the general information about the course
-	481. ActPlaTxtEdiTchGui		Editor of plain text of the teaching guide
-	482. ActPlaTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	483. ActPlaTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	484. ActPlaTxtEdiBib		Editor of plain text of the bibliography
-	485. ActPlaTxtEdiFAQ		Editor of plain text of the FAQ
-	486. ActPlaTxtEdiCrsLnk		Editor of plain text of the links
-	487. ActRchTxtEdiCrsInf		Editor of plain text of the general information about the course
-	488. ActRchTxtEdiTchGui		Editor of plain text of the teaching guide
-	489. ActRchTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	490. ActRchTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	491. ActRchTxtEdiBib		Editor of plain text of the bibliography
-	492. ActRchTxtEdiFAQ		Editor of plain text of the FAQ
-	493. ActRchTxtEdiCrsLnk		Editor of plain text of the links
-	494. ActRcvPlaTxtCrsInf		Receive and change the plain text of the general information about the course
-	495. ActRcvPlaTxtTchGui		Receive and change the plain text of the teaching guide
-	496. ActRcvPlaTxtSylLec		Receive and change the plain text of the syllabus of lectures
-	497. ActRcvPlaTxtSylPra		Receive and change the plain text of the syllabus of practicals
-	498. ActRcvPlaTxtBib		Receive and change the plain text of the bibliography
-	499. ActRcvPlaTxtFAQ		Receive and change the plain text of the FAQ
-	500. ActRcvPlaTxtCrsLnk		Receive and change the plain text of the links
-	501. ActRcvPlaTxtCrsInf		Receive and change the rich text of the general information about the course
-	502. ActRcvPlaTxtTchGui		Receive and change the rich text of the teaching guide
-	503. ActRcvPlaTxtSylLec		Receive and change the rich text of the syllabus of lectures
-	504. ActRcvPlaTxtSylPra		Receive and change the rich text of the syllabus of practicals
-	505. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
-	506. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
-	507. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
+	417. ActAdmTchGrp		Admin the teachers' files zone of a group
+	418. ActReqRemFilTchGrp		Request removal of a teachers' file of a group
+	419. ActRemFilTchGrp		Remove a teachers' file of a group
+	420. ActRemFolTchGrp		Remove an empty teachers' folder of a group
+	421. ActCopTchGrp		Set source of copy in teachers' zone of a group
+	422. ActPasTchGrp		Paste a folder or file in teachers' zone of a group
+	423. ActRemTreTchGrp		Remove a folder no empty of teachers' zone of a group
+	424. ActFrmCreTchGrp		Form to crear a folder or file in teachers' zone of a group
+	425. ActCreFolTchGrp		Create a new folder in teachers' zone of a group
+	426. ActCreLnkTchGrp		Create a new link in teachers' zone of a group
+	427. ActRenFolTchGrp		Rename a folder in teachers' zone of a group
+	428. ActRcvFilTchGrpDZ		Receive a file in teachers' zone of a group using Dropzone.js
+	429. ActRcvFilTchGrpCla		Receive a file in teachers' zone of a group using the classic way
+	430. ActExpTchGrp		Expand a folder in teachers' zone of a group
+	431. ActConTchGrp		Contract a folder in teachers' zone of a group
+	432. ActZIPTchGrp		Compress a folder in teachers' zone of a group
+	433. ActReqDatTchGrp		Ask for metadata of a file of the teachers' zone of a group
+	434. ActChgDatTchGrp		Change metadata of a file of the teachers' zone of a group
+	435. ActDowTchGrp		Download a file of the teachers' zone of a group
+
+	436. ActChgToAdmSha		Change to administrate shared files of the course/group
+
+	437. ActAdmShaCrs		Admin the shared files zone of the course
+	438. ActReqRemFilShaCrs		Request removal of a shared file of the course
+	439. ActRemFilShaCrs		Remove a shared file of the course
+	440. ActRemFolShaCrs		Remove a empty shared folder of the course
+	441. ActCopShaCrs		Set source of copy in shared zone of the course
+	442. ActPasShaCrs		Paste a folder or file in shared zone of the course
+	443. ActRemTreShaCrs		Remove a folder no empty of shared zone of the course
+	444. ActFrmCreShaCrs		Form to crear a folder or file in shared zone of the course
+	445. ActCreFolShaCrs		Create a new folder in shared zone of the course
+	446. ActCreLnkShaCrs		Create a new link in shared zone of the course
+	447. ActRenFolShaCrs		Rename a folder in shared zone of the course
+	448. ActRcvFilShaCrsDZ		Receive a file in shared zone of the course using Dropzone.js
+	449. ActRcvFilShaCrsCla		Receive a file in shared zone of the course using the classic way
+	450. ActExpShaCrs		Expand a folder in shared zone of the course
+	451. ActConShaCrs		Contract a folder in shared zone of the course
+	452. ActZIPShaCrs		Compress a folder in shared zone of the course
+	453. ActReqDatShaCrs		Ask for metadata of a file of the shared zone of the course
+	454. ActChgDatShaCrs		Change metadata of a file of the shared zone of the course
+	455. ActDowShaCrs		Download a file of the shared zone of the course
+
+	456. ActAdmShaGrp		Admin the shared files zone of a group
+	457. ActReqRemFilShaGrp		Request removal of a shared file of a group
+	458. ActRemFilShaGrp		Remove a shared file of a group
+	459. ActRemFolShaGrp		Remove a folder empty común of a group
+	460. ActCopShaGrp		Set source of copy in shared zone of a group
+	461. ActPasShaGrp		Paste a folder or file in shared zone of a group
+	462. ActRemTreShaGrp		Remove a folder no empty of shared zone of a group
+	463. ActFrmCreShaGrp		Form to crear a folder or file in shared zone of a group
+	464. ActCreFolShaGrp		Create a new folder in shared zone of a group
+	465. ActCreLnkShaGrp		Create a new link in shared zone of a group
+	466. ActRenFolShaGrp		Rename a folder in shared zone of a group
+	467. ActRcvFilShaGrpDZ		Receive a file in shared zone of a group using Dropzone.js
+	468. ActRcvFilShaGrpCla		Receive a file in shared zone of a group using the classic way
+	469. ActExpShaGrp		Expand a folder in shared zone of a group
+	470. ActConShaGrp		Contract a folder in shared zone of a group
+	471. ActZIPShaGrp		Compress a folder in shared zone of a group
+	472. ActReqDatShaGrp		Ask for metadata of a file of the shared zone of a group
+	473. ActChgDatShaGrp		Change metadata of a file of the shared zone of a group
+	474. ActDowShaGrp		Download a file of the shared zone of a group
+
+	475. ActEdiBib			Edit the bibliography
+	476. ActEdiFAQ			Edit the FAQ
+	477. ActEdiCrsLnk		Edit the links relacionados with the course
+	478. ActChgFrcReaCrsInf		Change force students to read course info
+	479. ActChgFrcReaTchGui		Change force students to read teaching guide
+	480. ActChgFrcReaSylLec		Change force students to read lectures syllabus
+	481. ActChgFrcReaSylPra		Change force students to read practicals syllabus
+	482. ActChgFrcReaBib		Change force students to read bibliography
+	483. ActChgFrcReaFAQ		Change force students to read FAQ
+	484. ActChgFrcReaCrsLnk		Change force students to read links
+	485. ActChgHavReaCrsInf		Change if I have read course info
+	486. ActChgHavReaTchGui		Change if I have read teaching guide
+	487. ActChgHavReaSylLec		Change if I have read lectures syllabus
+	488. ActChgHavReaSylPra		Change if I have read practicals syllabus
+	489. ActChgHavReaBib		Change if I have read bibliography
+	490. ActChgHavReaFAQ		Change if I have read FAQ
+	491. ActChgHavReaCrsLnk		Change if I have read links
+	492. ActSelInfSrcCrsInf		Select the type of info shown in the general information about the course
+	493. ActSelInfSrcTchGui		Select the type of info shown in the teaching guide
+	494. ActSelInfSrcSylLec		Select the type of info shown in the lectures syllabus
+	495. ActSelInfSrcSylPra		Select the type of info shown in the practicals syllabus
+	496. ActSelInfSrcBib		Select the type of info shown in the bibliography
+	497. ActSelInfSrcFAQ		Select the type of info shown in the FAQ
+	498. ActSelInfSrcCrsLnk		Select the type of info shown in the links
+	499. ActRcvURLCrsInf		Receive a link a the general information about the course
+	500. ActRcvURLTchGui		Receive a link a the teaching guide
+	501. ActRcvURLSylLec		Receive a link al syllabus of lectures
+	502. ActRcvURLSylPra		Receive a link al syllabus of practicals
+	503. ActRcvURLBib		Receive a link a bibliography
+	504. ActRcvURLFAQ		Receive a link a FAQ
+	505. ActRcvURLCrsLnk		Receive a link a links
+	506. ActRcvPagCrsInf		Receive a page with the general information about the course
+	507. ActRcvPagTchGui		Receive a page with the teaching guide
+	508. ActRcvPagSylLec		Receive a page with the syllabus of lectures
+	509. ActRcvPagSylPra		Receive a page with the syllabus of practicals
+	510. ActRcvPagBib		Receive a page with bibliography
+	511. ActRcvPagFAQ		Receive a page with FAQ
+	512. ActRcvPagCrsLnk		Receive a page with links
+	513. ActEditorCrsInf		Integrated editor of the general information about the course
+	514. ActEditorTchGui		Integrated editor of the teaching guide
+	515. ActEditorSylLec		Integrated editor of the syllabus of lectures
+	516. ActEditorSylPra		Integrated editor of the syllabus of practicals
+	517. ActEditorBib		Integrated editor of bibliography
+	518. ActEditorFAQ		Integrated editor of FAQ
+	519. ActEditorCrsLnk		Integrated editor of links
+	520. ActPlaTxtEdiCrsInf		Editor of plain text of the general information about the course
+	521. ActPlaTxtEdiTchGui		Editor of plain text of the teaching guide
+	522. ActPlaTxtEdiSylLec		Editor of plain text of the syllabus of lectures
+	523. ActPlaTxtEdiSylPra		Editor of plain text of the syllabus of practicals
+	524. ActPlaTxtEdiBib		Editor of plain text of the bibliography
+	525. ActPlaTxtEdiFAQ		Editor of plain text of the FAQ
+	526. ActPlaTxtEdiCrsLnk		Editor of plain text of the links
+	527. ActRchTxtEdiCrsInf		Editor of plain text of the general information about the course
+	528. ActRchTxtEdiTchGui		Editor of plain text of the teaching guide
+	529. ActRchTxtEdiSylLec		Editor of plain text of the syllabus of lectures
+	530. ActRchTxtEdiSylPra		Editor of plain text of the syllabus of practicals
+	531. ActRchTxtEdiBib		Editor of plain text of the bibliography
+	532. ActRchTxtEdiFAQ		Editor of plain text of the FAQ
+	533. ActRchTxtEdiCrsLnk		Editor of plain text of the links
+	534. ActRcvPlaTxtCrsInf		Receive and change the plain text of the general information about the course
+	535. ActRcvPlaTxtTchGui		Receive and change the plain text of the teaching guide
+	536. ActRcvPlaTxtSylLec		Receive and change the plain text of the syllabus of lectures
+	537. ActRcvPlaTxtSylPra		Receive and change the plain text of the syllabus of practicals
+	538. ActRcvPlaTxtBib		Receive and change the plain text of the bibliography
+	539. ActRcvPlaTxtFAQ		Receive and change the plain text of the FAQ
+	540. ActRcvPlaTxtCrsLnk		Receive and change the plain text of the links
+	541. ActRcvPlaTxtCrsInf		Receive and change the rich text of the general information about the course
+	542. ActRcvPlaTxtTchGui		Receive and change the rich text of the teaching guide
+	543. ActRcvPlaTxtSylLec		Receive and change the rich text of the syllabus of lectures
+	544. ActRcvPlaTxtSylPra		Receive and change the rich text of the syllabus of practicals
+	545. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
+	546. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
+	547. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
 Assessment:
-	508. ActSeeAss			Show the assessment system
-	509. ActSeeAsg			Show assignments
-        510. ActAdmAsgWrkUsr		One user sends works of the course
-        511. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
-	512. ActReqTst			Request a test of self-assesment
-	513. ActSeeCal			Show the academic calendar of the course with exam announcements
-	514. ActSeeExaAnn		Show the exam announcements
-	515. ActSeeAdmMrk		Marks zone (see or admin)
+	548. ActSeeAss			Show the assessment system
+	549. ActSeeAsg			Show assignments
+        550. ActAdmAsgWrkUsr		One user sends works of the course
+        551. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
+	552. ActReqTst			Request a test of self-assesment
+	553. ActSeeCal			Show the academic calendar of the course with exam announcements
+	554. ActSeeExaAnn		Show the exam announcements
+	555. ActSeeAdmMrk		Marks zone (see or admin)
 
-	516. ActEdiAss			Edit the assessment system
-	517. ActChgFrcReaAss		Change force students to read assessment system
-	518. ActChgHavReaAss		Change if I have read assessment system
-	519. ActSelInfSrcAss		Selec. type of assessment
-	520. ActRcvURLAss		Receive a link a assessment
-	521. ActRcvPagAss		Receive a page with assessment
-	522. ActEditorAss		Integrated editor of assessment
-	523. ActPlaTxtEdiAss		Editor of plain text of assessment
-	524. ActRchTxtEdiAss		Editor of rich text of assessment
-	525. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
-	526. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
-	527. ActFrmNewAsg		Form to create a new assignment
-	528. ActEdiOneAsg		Edit one assignment
-	529. ActNewAsg			Create new assignment
-	530. ActChgAsg			Modify data of an existing assignment
-	531. ActReqRemAsg		Request the removal of an assignment
-	532. ActRemAsg			Remove assignment
-	533. ActHidAsg			Hide assignment
-	534. ActShoAsg			Show assignment
-        535. ActAdmAsgWrkCrs		Edit all the works sent to the course
-	536. ActReqRemFilAsgUsr		Request removal of a file of assignments from a user
-	537. ActRemFilAsgUsr		Remove a file of assignments from a user
-	538. ActRemFolAsgUsr		Remove an empty folder of assignments of a user
-	539. ActCopAsgUsr		Set origin of copy in assignments of a user
-	540. ActPasAsgUsr		Paste a file or folder of assignments of a user
-	541. ActRemTreAsgUsr		Remove a not empty folder of assignments of a user
-	542. ActFrmCreAsgUsr		Form to create a new folder or file of assignments of a user
-	543. ActCreFolAsgUsr		Create a new folder of assignments of a user
-	544. ActCreLnkAsgUsr		Create a new link of assignments of a user
-	545. ActRenFolAsgUsr		Rename a folder of assignments of a user
-	546. ActRcvFilAsgUsrDZ		Receive a new file of assignments of a user using Dropzone.js
-	547. ActRcvFilAsgUsrCla		Receive a new file of assignments of a user using the classic way
-	548. ActExpAsgUsr		Expand a folder of assignments of a user
-	549. ActConAsgUsr		Contract a folder of assignments of a user
-	550. ActZIPAsgUsr		Compress a folder of assignments of a user
-	551. ActReqDatAsgUsr		Ask for metadata of a file of assignments of a user
-	552. ActChgDatAsgUsr		Change metadata of a file of assignments of a user
-	553. ActDowAsgUsr		Download a file of assignments of a user
-	554. ActReqRemFilWrkUsr		Request removal of a file of works from a user
-	555. ActRemFilWrkUsr		Remove a file of works from a user
-	556. ActRemFolWrkUsr		Remove an empty folder of works of a user
-	557. ActCopWrkUsr		Set origin of copy in works of a user
-	558. ActPasWrkUsr		Paste a file or folder of works of a user
-	559. ActRemTreWrkUsr		Remove a not empty folder of works of a user
-	560. ActFrmCreWrkUsr		Form to create a new folder or file of works of a user
-	561. ActCreFolWrkUsr		Create a new folder of works of a user
-	562. ActCreLnkWrkUsr		Create a new link of works of a user
-	563. ActRenFolWrkUsr		Rename a folder of works of a user
-	564. ActRcvFilWrkUsrDZ		Receive a new file of works of a user using Dropzone.js
-	565. ActRcvFilWrkUsrCla		Receive a new file of works of a user using the classic way
-	566. ActExpWrkUsr		Expand a folder of works of a user
-	567. ActConWrkUsr		Contract a folder of works of a user
-	568. ActZIPWrkUsr		Compress a folder of works of a user
-	569. ActReqDatWrkUsr		Ask for metadata of a file of works of a user
-	570. ActChgDatWrkUsr		Change metadata of a file of works of a user
-	571. ActDowWrkUsr		Download a file of works of a user
-	572. ActReqRemFilAsgCrs		Request removal of a file of assignments in the course
-	573. ActRemFilAsgCrs		Remove a file of assignments in the course
-	574. ActRemFolAsgCrs		Remove an empty folder of assignments in the course
-	575. ActCopAsgCrs		Set origin of copy in assignments in the course
-	576. ActPasAsgCrs		Paste a file or folder of assignments in the course
-	577. ActRemTreAsgCrs		Remove a not empty folder of assignments in the course
-	578. ActFrmCreAsgCrs		Form to create a new folder or file of assignments in the course
-	579. ActCreFolAsgCrs		Create a new folder of assignments in the course
-	580. ActCreLnkAsgCrs		Create a new link of assignments in the course
-	581. ActRenFolAsgCrs		Rename a folder of assignments in the course
-	582. ActRcvFilAsgCrsDZ		Receive a file of assignments in the course using Dropzone.js
-	583. ActRcvFilAsgCrsCla		Receive a file of assignments in the course using the classic way
-	584. ActExpAsgCrs		Expand a folder of assignments in a course
-	585. ActConAsgCrs		Contract a folder of assignments in a course
-	586. ActZIPAsgCrs		Compress a folder of assignments in a course
-	587. ActReqDatAsgCrs		Ask for metadata of a file of assignments in a course
-	588. ActChgDatAsgCrs		Change metadata of a file of assignments in a course
-	589. ActDowAsgCrs		Download a file of assignments in a course
-	590. ActReqRemFilWrkCrs		Request removal of a file of works in the course
-	591. ActRemFilWrkCrs		Remove a file of works in the course
-	592. ActRemFolWrkCrs		Remove an empty folder of works in the course
-	593. ActCopWrkCrs		Set origin of copy in works in the course
-	594. ActPasWrkCrs		Paste a file or folder of works in the course
-	595. ActRemTreWrkCrs		Remove a not empty folder of works in the course
-	596. ActFrmCreWrkCrs		Form to create a new folder or file of works in the course
-	597. ActCreFolWrkCrs		Create a new folder of works in the course
-	598. ActCreLnkWrkCrs		Create a new link of works in the course
-	599. ActRenFolWrkCrs		Rename a folder of works in the course
-	600. ActRcvFilWrkCrsDZ		Receive a file of works in the course using Dropzone.js
-	601. ActRcvFilWrkCrsCla		Receive a file of works in the course using the classic way
-	602. ActExpWrkCrs		Expand a folder of works in a course
-	603. ActConWrkCrs		Contract a folder of works in a course
-	604. ActZIPWrkCrs		Compress a folder of works in a course
-	605. ActReqDatWrkCrs		Ask for metadata of a file of works in a course
-	606. ActChgDatWrkCrs		Change metadata of a file of works in a course
-	607. ActDowWrkCrs		Download a file of works in a course
-	608. ActSeeTst			Show the seft-assessment test
-	609. ActAssTst			Assess a self-assessment test
-	610. ActEdiTstQst		Request the edition of self-assessment questions
-	611. ActEdiOneTstQst		Edit one self-assesment test question
-	612. ActReqImpTstQst		Put form to ask for an XML with test questions to import
-	613. ActImpTstQst		Import test questions from XML file
-	614. ActLstTstQst		List for edition several self-assessment test questions
-	615. ActRcvTstQst		Receive a question of self-assessment
-	616. ActShfTstQst		Change shuffle of of a question of self-assessment
-	617. ActReqRemTstQst		Request removing a self-assesment test question
-	618. ActRemTstQst		Remove a self-assesment test question
-	619. ActCfgTst			Request renaming of tags of questions of self-assesment
-	620. ActEnableTag		Enable a tag
-	621. ActDisableTag		Disable a tag
-	622. ActRenTag			Rename a tag
-	623. ActRcvCfgTst		Receive configuration of test
-	624. ActReqSeeMyTstExa		Select range of dates to see my results of test exams
-	625. ActSeeMyTstExa		Show my test results
-	626. ActReqSeeUsrTstExa		Select users and range of dates to see results of test exams
-	627. ActSeeUsrTstExa		Show test results of several users
-	628. ActSeeOneTstExaMe		Show one test exam of me as student
-	629. ActSeeOneTstExaOth		Show one test exam of other user
+	556. ActEdiAss			Edit the assessment system
+	557. ActChgFrcReaAss		Change force students to read assessment system
+	558. ActChgHavReaAss		Change if I have read assessment system
+	559. ActSelInfSrcAss		Selec. type of assessment
+	560. ActRcvURLAss		Receive a link a assessment
+	561. ActRcvPagAss		Receive a page with assessment
+	562. ActEditorAss		Integrated editor of assessment
+	563. ActPlaTxtEdiAss		Editor of plain text of assessment
+	564. ActRchTxtEdiAss		Editor of rich text of assessment
+	565. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
+	566. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
+	567. ActFrmNewAsg		Form to create a new assignment
+	568. ActEdiOneAsg		Edit one assignment
+	569. ActNewAsg			Create new assignment
+	570. ActChgAsg			Modify data of an existing assignment
+	571. ActReqRemAsg		Request the removal of an assignment
+	572. ActRemAsg			Remove assignment
+	573. ActHidAsg			Hide assignment
+	574. ActShoAsg			Show assignment
+        575. ActAdmAsgWrkCrs		Edit all the works sent to the course
+	576. ActReqRemFilAsgUsr		Request removal of a file of assignments from a user
+	577. ActRemFilAsgUsr		Remove a file of assignments from a user
+	578. ActRemFolAsgUsr		Remove an empty folder of assignments of a user
+	579. ActCopAsgUsr		Set origin of copy in assignments of a user
+	580. ActPasAsgUsr		Paste a file or folder of assignments of a user
+	581. ActRemTreAsgUsr		Remove a not empty folder of assignments of a user
+	582. ActFrmCreAsgUsr		Form to create a new folder or file of assignments of a user
+	583. ActCreFolAsgUsr		Create a new folder of assignments of a user
+	584. ActCreLnkAsgUsr		Create a new link of assignments of a user
+	585. ActRenFolAsgUsr		Rename a folder of assignments of a user
+	586. ActRcvFilAsgUsrDZ		Receive a new file of assignments of a user using Dropzone.js
+	587. ActRcvFilAsgUsrCla		Receive a new file of assignments of a user using the classic way
+	588. ActExpAsgUsr		Expand a folder of assignments of a user
+	589. ActConAsgUsr		Contract a folder of assignments of a user
+	590. ActZIPAsgUsr		Compress a folder of assignments of a user
+	591. ActReqDatAsgUsr		Ask for metadata of a file of assignments of a user
+	592. ActChgDatAsgUsr		Change metadata of a file of assignments of a user
+	593. ActDowAsgUsr		Download a file of assignments of a user
+	594. ActReqRemFilWrkUsr		Request removal of a file of works from a user
+	595. ActRemFilWrkUsr		Remove a file of works from a user
+	596. ActRemFolWrkUsr		Remove an empty folder of works of a user
+	597. ActCopWrkUsr		Set origin of copy in works of a user
+	598. ActPasWrkUsr		Paste a file or folder of works of a user
+	599. ActRemTreWrkUsr		Remove a not empty folder of works of a user
+	600. ActFrmCreWrkUsr		Form to create a new folder or file of works of a user
+	601. ActCreFolWrkUsr		Create a new folder of works of a user
+	602. ActCreLnkWrkUsr		Create a new link of works of a user
+	603. ActRenFolWrkUsr		Rename a folder of works of a user
+	604. ActRcvFilWrkUsrDZ		Receive a new file of works of a user using Dropzone.js
+	605. ActRcvFilWrkUsrCla		Receive a new file of works of a user using the classic way
+	606. ActExpWrkUsr		Expand a folder of works of a user
+	607. ActConWrkUsr		Contract a folder of works of a user
+	608. ActZIPWrkUsr		Compress a folder of works of a user
+	609. ActReqDatWrkUsr		Ask for metadata of a file of works of a user
+	610. ActChgDatWrkUsr		Change metadata of a file of works of a user
+	611. ActDowWrkUsr		Download a file of works of a user
+	612. ActReqRemFilAsgCrs		Request removal of a file of assignments in the course
+	613. ActRemFilAsgCrs		Remove a file of assignments in the course
+	614. ActRemFolAsgCrs		Remove an empty folder of assignments in the course
+	615. ActCopAsgCrs		Set origin of copy in assignments in the course
+	616. ActPasAsgCrs		Paste a file or folder of assignments in the course
+	617. ActRemTreAsgCrs		Remove a not empty folder of assignments in the course
+	618. ActFrmCreAsgCrs		Form to create a new folder or file of assignments in the course
+	619. ActCreFolAsgCrs		Create a new folder of assignments in the course
+	620. ActCreLnkAsgCrs		Create a new link of assignments in the course
+	621. ActRenFolAsgCrs		Rename a folder of assignments in the course
+	622. ActRcvFilAsgCrsDZ		Receive a file of assignments in the course using Dropzone.js
+	623. ActRcvFilAsgCrsCla		Receive a file of assignments in the course using the classic way
+	624. ActExpAsgCrs		Expand a folder of assignments in a course
+	625. ActConAsgCrs		Contract a folder of assignments in a course
+	626. ActZIPAsgCrs		Compress a folder of assignments in a course
+	627. ActReqDatAsgCrs		Ask for metadata of a file of assignments in a course
+	628. ActChgDatAsgCrs		Change metadata of a file of assignments in a course
+	629. ActDowAsgCrs		Download a file of assignments in a course
+	630. ActReqRemFilWrkCrs		Request removal of a file of works in the course
+	631. ActRemFilWrkCrs		Remove a file of works in the course
+	632. ActRemFolWrkCrs		Remove an empty folder of works in the course
+	633. ActCopWrkCrs		Set origin of copy in works in the course
+	634. ActPasWrkCrs		Paste a file or folder of works in the course
+	635. ActRemTreWrkCrs		Remove a not empty folder of works in the course
+	636. ActFrmCreWrkCrs		Form to create a new folder or file of works in the course
+	637. ActCreFolWrkCrs		Create a new folder of works in the course
+	638. ActCreLnkWrkCrs		Create a new link of works in the course
+	639. ActRenFolWrkCrs		Rename a folder of works in the course
+	640. ActRcvFilWrkCrsDZ		Receive a file of works in the course using Dropzone.js
+	641. ActRcvFilWrkCrsCla		Receive a file of works in the course using the classic way
+	642. ActExpWrkCrs		Expand a folder of works in a course
+	643. ActConWrkCrs		Contract a folder of works in a course
+	644. ActZIPWrkCrs		Compress a folder of works in a course
+	645. ActReqDatWrkCrs		Ask for metadata of a file of works in a course
+	646. ActChgDatWrkCrs		Change metadata of a file of works in a course
+	647. ActDowWrkCrs		Download a file of works in a course
+	648. ActSeeTst			Show the seft-assessment test
+	649. ActAssTst			Assess a self-assessment test
+	650. ActEdiTstQst		Request the edition of self-assessment questions
+	651. ActEdiOneTstQst		Edit one self-assesment test question
+	652. ActReqImpTstQst		Put form to ask for an XML with test questions to import
+	653. ActImpTstQst		Import test questions from XML file
+	654. ActLstTstQst		List for edition several self-assessment test questions
+	655. ActRcvTstQst		Receive a question of self-assessment
+	656. ActShfTstQst		Change shuffle of of a question of self-assessment
+	657. ActReqRemTstQst		Request removing a self-assesment test question
+	658. ActRemTstQst		Remove a self-assesment test question
+	659. ActCfgTst			Request renaming of tags of questions of self-assesment
+	660. ActEnableTag		Enable a tag
+	661. ActDisableTag		Disable a tag
+	662. ActRenTag			Rename a tag
+	663. ActRcvCfgTst		Receive configuration of test
+	664. ActReqSeeMyTstExa		Select range of dates to see my results of test exams
+	665. ActSeeMyTstExa		Show my test results
+	666. ActReqSeeUsrTstExa		Select users and range of dates to see results of test exams
+	667. ActSeeUsrTstExa		Show test results of several users
+	668. ActSeeOneTstExaMe		Show one test exam of me as student
+	669. ActSeeOneTstExaOth		Show one test exam of other user
 
-	630. ActPrnCal			Show print view of the academic calendar of the course
-	631. ActChgCal1stDay		Change first day of week and show academic calendar of the course
+	670. ActPrnCal			Show print view of the academic calendar of the course
+	671. ActChgCal1stDay		Change first day of week and show academic calendar of the course
 
-	632. ActEdiExaAnn		Edit an exam announcement
-	633. ActRcvExaAnn		Receive an exam announcement
-	634. ActPrnExaAnn		Show an exam announcement ready to be printed
-	635. ActRemExaAnn		Remove an exam announcement
+	672. ActEdiExaAnn		Edit an exam announcement
+	673. ActRcvExaAnn		Receive an exam announcement
+	674. ActPrnExaAnn		Show an exam announcement ready to be printed
+	675. ActRemExaAnn		Remove an exam announcement
 
-	636. ActChgToSeeMrk		Change to see marks in course/group
+	676. ActChgToSeeMrk		Change to see marks in course/group
 
-	637. ActSeeMrkCrs		See marks in course
-	638. ActExpSeeMrkCrs		Expand a folder in marks in course
-	639. ActConSeeMrkCrs		Contract a folder in marks in course
-	640. ActReqDatSeeMrkCrs		Ask for metadata of a file of the marks zone of the course
-	641. ActSeeMyMrkCrs		Individualized access to marks in course
+	677. ActSeeMrkCrs		See marks in course
+	678. ActExpSeeMrkCrs		Expand a folder in marks in course
+	679. ActConSeeMrkCrs		Contract a folder in marks in course
+	680. ActReqDatSeeMrkCrs		Ask for metadata of a file of the marks zone of the course
+	681. ActSeeMyMrkCrs		Individualized access to marks in course
 
-	642. ActSeeMrkGrp		See marks in group
-	643. ActExpSeeMrkGrp		Expand a folder in marks in group
-	644. ActConSeeMrkGrp		Contract a folder in marks in group
-	645. ActReqDatSeeMrkGrp		Ask for metadata of a file of the marks zone of a group
-	646. ActSeeMyMrkGrp		Individualized access to marks in group
+	682. ActSeeMrkGrp		See marks in group
+	683. ActExpSeeMrkGrp		Expand a folder in marks in group
+	684. ActConSeeMrkGrp		Contract a folder in marks in group
+	685. ActReqDatSeeMrkGrp		Ask for metadata of a file of the marks zone of a group
+	686. ActSeeMyMrkGrp		Individualized access to marks in group
 
-	647. ActChgToAdmMrk		Change to admin marks in course/group
+	687. ActChgToAdmMrk		Change to admin marks in course/group
 
-	648. ActAdmMrkCrs		Admin the files of the zone of marks in course
-	649. ActReqRemFilMrkCrs		Request removal of a file of marks in course
-	650. ActRemFilMrkCrs		Remove a file of marks in course
-	651. ActRemFolMrkCrs		Remove a folder empty of marks in course
-	652. ActCopMrkCrs		Set source of copy in marks in course
-	653. ActPasMrkCrs		Paste a folder or file in marks in course
-	654. ActRemTreMrkCrs		Remove a folder no empty of marks in course
-	655. ActFrmCreMrkCrs		Form to crear a folder or file in marks in course
-	656. ActCreFolMrkCrs		Create a new folder in marks in course
-	657. ActRenFolMrkCrs		Rename a folder in marks in course
-	658. ActRcvFilMrkCrsDZ		Receive a file of marks in course using Dropzone.js
-	659. ActRcvFilMrkCrsCla		Receive a file of marks in course using the classic way
-	660. ActExpAdmMrkCrs		Expand a folder in marks administration in course
-	661. ActConAdmMrkCrs		Contract a folder in marks administration in course
-	662. ActZIPAdmMrkCrs		Compress a folder in marks administration in course
-	663. ActShoMrkCrs		Show hidden folder or file of the marks administration in course
-	664. ActHidMrkCrs		Hide folder or file of the marks administration in course
-	665. ActReqDatAdmMrkCrs		Ask for metadata of a file in marks administration in course
-	666. ActChgDatAdmMrkCrs		Change metadata of a file in marks administration in course
-	667. ActDowAdmMrkCrs		Download a file in marks administration in course
-	668. ActChgNumRowHeaCrs		Change the number of rows of cabecera of a file of marks in course
-	669. ActChgNumRowFooCrs		Change the number of rows of pie of a file of marks in course
+	688. ActAdmMrkCrs		Admin the files of the zone of marks in course
+	689. ActReqRemFilMrkCrs		Request removal of a file of marks in course
+	690. ActRemFilMrkCrs		Remove a file of marks in course
+	691. ActRemFolMrkCrs		Remove a folder empty of marks in course
+	692. ActCopMrkCrs		Set source of copy in marks in course
+	693. ActPasMrkCrs		Paste a folder or file in marks in course
+	694. ActRemTreMrkCrs		Remove a folder no empty of marks in course
+	695. ActFrmCreMrkCrs		Form to crear a folder or file in marks in course
+	696. ActCreFolMrkCrs		Create a new folder in marks in course
+	697. ActRenFolMrkCrs		Rename a folder in marks in course
+	698. ActRcvFilMrkCrsDZ		Receive a file of marks in course using Dropzone.js
+	699. ActRcvFilMrkCrsCla		Receive a file of marks in course using the classic way
+	700. ActExpAdmMrkCrs		Expand a folder in marks administration in course
+	701. ActConAdmMrkCrs		Contract a folder in marks administration in course
+	702. ActZIPAdmMrkCrs		Compress a folder in marks administration in course
+	703. ActShoMrkCrs		Show hidden folder or file of the marks administration in course
+	704. ActHidMrkCrs		Hide folder or file of the marks administration in course
+	705. ActReqDatAdmMrkCrs		Ask for metadata of a file in marks administration in course
+	706. ActChgDatAdmMrkCrs		Change metadata of a file in marks administration in course
+	707. ActDowAdmMrkCrs		Download a file in marks administration in course
+	708. ActChgNumRowHeaCrs		Change the number of rows of cabecera of a file of marks in course
+	709. ActChgNumRowFooCrs		Change the number of rows of pie of a file of marks in course
 
-	670. ActAdmMrkGrp		Admin the files of the zone of marks in group
-	671. ActReqRemFilMrkGrp		Request removal of a file of marks in group
-	672. ActRemFilMrkGrp		Remove a file of marks in group
-	673. ActRemFolMrkGrp		Remove a folder empty of marks in group
-	674. ActCopMrkGrp		Set source of copy in marks in group
-	675. ActPasMrkGrp		Paste a folder or file in marks in group
-	676. ActRemTreMrkGrp		Remove a folder no empty of marks in group
-	677. ActFrmCreMrkGrp		Form to crear a folder or file in marks in group
-	678. ActCreFolMrkGrp		Create a new folder in marks in group
-	679. ActRenFolMrkGrp		Rename a folder in marks in group
-	680. ActRcvFilMrkGrpDZ		Receive a file to marks in group using Dropzone.js
-	681. ActRcvFilMrkGrpCla		Receive a file to marks in group using the classic way
-	682. ActExpAdmMrkGrp		Expand a folder in marks administration in group
-	683. ActConAdmMrkGrp		Contract a folder in marks administration in group
-	684. ActZIPAdmMrkGrp		Compress a folder in marks administration in group
-	685. ActShoMrkGrp		Show hidden folder or file of the marks administration in group
-	686. ActHidMrkGrp		Hide folder or file of the marks administration in group
-	687. ActReqDatAdmMrkGrp		Ask for metadata of a file in marks administration in group
-	688. ActChgDatAdmMrkGrp		Change metadata of a file in marks administration in group
-	689. ActDowAdmMrkGrp		Download a file in marks administration in group
-	690. ActChgNumRowHeaGrp		Change the number of rows of cabecera of a file of marks in group
-	691. ActChgNumRowFooGrp		Change the number of rows of pie of a file of marks in group
+	710. ActAdmMrkGrp		Admin the files of the zone of marks in group
+	711. ActReqRemFilMrkGrp		Request removal of a file of marks in group
+	712. ActRemFilMrkGrp		Remove a file of marks in group
+	713. ActRemFolMrkGrp		Remove a folder empty of marks in group
+	714. ActCopMrkGrp		Set source of copy in marks in group
+	715. ActPasMrkGrp		Paste a folder or file in marks in group
+	716. ActRemTreMrkGrp		Remove a folder no empty of marks in group
+	717. ActFrmCreMrkGrp		Form to crear a folder or file in marks in group
+	718. ActCreFolMrkGrp		Create a new folder in marks in group
+	719. ActRenFolMrkGrp		Rename a folder in marks in group
+	720. ActRcvFilMrkGrpDZ		Receive a file to marks in group using Dropzone.js
+	721. ActRcvFilMrkGrpCla		Receive a file to marks in group using the classic way
+	722. ActExpAdmMrkGrp		Expand a folder in marks administration in group
+	723. ActConAdmMrkGrp		Contract a folder in marks administration in group
+	724. ActZIPAdmMrkGrp		Compress a folder in marks administration in group
+	725. ActShoMrkGrp		Show hidden folder or file of the marks administration in group
+	726. ActHidMrkGrp		Hide folder or file of the marks administration in group
+	727. ActReqDatAdmMrkGrp		Ask for metadata of a file in marks administration in group
+	728. ActChgDatAdmMrkGrp		Change metadata of a file in marks administration in group
+	729. ActDowAdmMrkGrp		Download a file in marks administration in group
+	730. ActChgNumRowHeaGrp		Change the number of rows of cabecera of a file of marks in group
+	731. ActChgNumRowFooGrp		Change the number of rows of pie of a file of marks in group
 Users:
-	692. ActReqSelGrp		Request the selection of groups of students
-	693. ActLstStd			Show class photo or list of students
-	694. ActLstTch			Show class photo or list of teachers
-	695. ActLstOth			Show class photo or list of guests
-	696. ActSeeAtt			Show attendance events
-	697. ActReqSignUp		Apply for my enrollment
-	698. ActSeeSignUpReq		Show pending requests for inscription in the current course
-	699. ActLstCon			List connected users
+	732. ActReqSelGrp		Request the selection of groups of students
+	733. ActLstStd			Show class photo or list of students
+	734. ActLstTch			Show class photo or list of teachers
+	735. ActLstOth			Show class photo or list of guests
+	736. ActSeeAtt			Show attendance events
+	737. ActReqSignUp		Apply for my enrollment
+	738. ActSeeSignUpReq		Show pending requests for inscription in the current course
+	739. ActLstCon			List connected users
 
-	700. ActChgGrp			Change my groups
-	701. ActReqEdiGrp		Request the edition of groups
-	702. ActNewGrpTyp		Request the creation of a type of group of students
-	703. ActReqRemGrpTyp		Request the removal of a type of group of students
-	704. ActRemGrpTyp		Remove a type of group of students
-	705. ActRenGrpTyp		Request renaming of a type of group of students
-	706. ActChgMdtGrpTyp		Request change if it is mandatory to register in groups of a type
-	707. ActChgMulGrpTyp		Request change if it is possible to register in multiple groups of a type
-	708. ActChgTimGrpTyp		Request change when the groups of a type will be open
-	709. ActNewGrp			Request the creation of a group of students
-	710. ActReqRemGrp		Request the removal of a group of students
-	711. ActRemGrp			Remove a group of students
-	712. ActOpeGrp			Abrir a group of students
-	713. ActCloGrp			Cerrar a group of students
-	714. ActEnaFilZonGrp		Enable zonas of files of a group
-	715. ActDisFilZonGrp		Disable zonas of files of a group
-	716. ActChgGrpTyp		Request change in the type of group of students
-	717. ActRenGrp			Request renaming of a group of students
-	718. ActChgMaxStdGrp		Request change in the number máximo of students of a group
+	740. ActChgGrp			Change my groups
+	741. ActReqEdiGrp		Request the edition of groups
+	742. ActNewGrpTyp		Request the creation of a type of group of students
+	743. ActReqRemGrpTyp		Request the removal of a type of group of students
+	744. ActRemGrpTyp		Remove a type of group of students
+	745. ActRenGrpTyp		Request renaming of a type of group of students
+	746. ActChgMdtGrpTyp		Request change if it is mandatory to register in groups of a type
+	747. ActChgMulGrpTyp		Request change if it is possible to register in multiple groups of a type
+	748. ActChgTimGrpTyp		Request change when the groups of a type will be open
+	749. ActNewGrp			Request the creation of a group of students
+	750. ActReqRemGrp		Request the removal of a group of students
+	751. ActRemGrp			Remove a group of students
+	752. ActOpeGrp			Abrir a group of students
+	753. ActCloGrp			Cerrar a group of students
+	754. ActEnaFilZonGrp		Enable zonas of files of a group
+	755. ActDisFilZonGrp		Disable zonas of files of a group
+	756. ActChgGrpTyp		Request change in the type of group of students
+	757. ActRenGrp			Request renaming of a group of students
+	758. ActChgMaxStdGrp		Request change in the number máximo of students of a group
 
-	719. ActGetExtLstStd		Get external lists of students
+	759. ActGetExtLstStd		Get external lists of students
 
-	720. ActLstGst			List main data of administrators
+	760. ActLstGst			List main data of administrators
 
-	721. ActPrnGstPho		Show the class photo of guests ready to be printed
-	722. ActPrnStdPho		Show the class photo of students ready to be printed
-	723. ActPrnTchPho		Show the class photo of teachers ready to be printed
-	724. ActLstGstAll		List in another window the full data of guests
-	725. ActLstStdAll		List in another window the full data of students
-	726. ActLstTchAll		List in another window the full data of teachers
+	761. ActPrnGstPho		Show the class photo of guests ready to be printed
+	762. ActPrnStdPho		Show the class photo of students ready to be printed
+	763. ActPrnTchPho		Show the class photo of teachers ready to be printed
+	764. ActLstGstAll		List in another window the full data of guests
+	765. ActLstStdAll		List in another window the full data of students
+	766. ActLstTchAll		List in another window the full data of teachers
 
-	727. ActSeeRecOneStd		Show record of one selected student
-	728. ActSeeRecOneTch		Show record of one selected teacher
-	729. ActSeeRecSevGst		Show records of several selected guests
-	730. ActSeeRecSevStd		Show records of several selected students
-	731. ActSeeRecSevTch		Show records of several selected teachers
-	732. ActPrnRecSevGst		Show records of several selected guests ready to be printed
-	733. ActPrnRecSevStd		Show records of several selected students ready to be printed
-	734. ActPrnRecSevTch		Show records of several selected teachers ready to be printed
-	735. ActRcvRecOthUsr		Update record fields of a student in this course
-	736. ActEdiRecFie		Request the edition of record fields of students
-	737. ActNewFie			Request the creation of a record field
-	738. ActReqRemFie		Request the removal of record field
-	739. ActRemFie			Remove a record field
-	740. ActRenFie			Request renaming of record field
-	741. ActChgRowFie		Request change in number of lines of form of a record field
-	742. ActChgVisFie		Request change in visibility of a record field
-        743. ActRcvRecCrs		Receive and update fields of my record in this course
+	767. ActSeeRecOneStd		Show record of one selected student
+	768. ActSeeRecOneTch		Show record of one selected teacher
+	769. ActSeeRecSevGst		Show records of several selected guests
+	770. ActSeeRecSevStd		Show records of several selected students
+	771. ActSeeRecSevTch		Show records of several selected teachers
+	772. ActPrnRecSevGst		Show records of several selected guests ready to be printed
+	773. ActPrnRecSevStd		Show records of several selected students ready to be printed
+	774. ActPrnRecSevTch		Show records of several selected teachers ready to be printed
+	775. ActRcvRecOthUsr		Update record fields of a student in this course
+	776. ActEdiRecFie		Request the edition of record fields of students
+	777. ActNewFie			Request the creation of a record field
+	778. ActReqRemFie		Request the removal of record field
+	779. ActRemFie			Remove a record field
+	780. ActRenFie			Request renaming of record field
+	781. ActChgRowFie		Request change in number of lines of form of a record field
+	782. ActChgVisFie		Request change in visibility of a record field
+        783. ActRcvRecCrs		Receive and update fields of my record in this course
 
-	744. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
-	745. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
+	784. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
+	785. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
 
-	746. ActReqLstStdAtt		Request listing of attendance of several students to several events
-	747. ActSeeLstMyAtt		List my attendance as student to several events
-	748. ActPrnLstMyAtt		Print my attendance as student to several events
-	749. ActSeeLstStdAtt		List attendance of several students to several events
-	750. ActPrnLstStdAtt		Print attendance of several students to several events
-	751. ActFrmNewAtt		Form to create a new attendance event
-	752. ActEdiOneAtt		Edit one attendance event
-	753. ActNewAtt			Create new attendance event
-	754. ActChgAtt			Modify data of an existing attendance event
-	755. ActReqRemAtt		Request the removal of an attendance event
-	756. ActRemAtt			Remove attendance event
-	757. ActHidAtt			Hide attendance event
-	758. ActShoAtt			Show attendance event
-	759. ActSeeOneAtt		List students who attended to an event
-	760. ActRecAttStd		Save students who attended to an event and comments
-	761. ActRecAttMe		Save my comments as student in an attendance event
+	786. ActReqLstStdAtt		Request listing of attendance of several students to several events
+	787. ActSeeLstMyAtt		List my attendance as student to several events
+	788. ActPrnLstMyAtt		Print my attendance as student to several events
+	789. ActSeeLstStdAtt		List attendance of several students to several events
+	790. ActPrnLstStdAtt		Print attendance of several students to several events
+	791. ActFrmNewAtt		Form to create a new attendance event
+	792. ActEdiOneAtt		Edit one attendance event
+	793. ActNewAtt			Create new attendance event
+	794. ActChgAtt			Modify data of an existing attendance event
+	795. ActReqRemAtt		Request the removal of an attendance event
+	796. ActRemAtt			Remove attendance event
+	797. ActHidAtt			Hide attendance event
+	798. ActShoAtt			Show attendance event
+	799. ActSeeOneAtt		List students who attended to an event
+	800. ActRecAttStd		Save students who attended to an event and comments
+	801. ActRecAttMe		Save my comments as student in an attendance event
 
-	762. ActSignUp			Apply for my enrollment
-	763. ActUpdSignUpReq		Update pending requests for inscription in the current course
-	764. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
-	765. ActRejSignUp		Reject the enrollment of a user in a course
+	802. ActSignUp			Apply for my enrollment
+	803. ActUpdSignUpReq		Update pending requests for inscription in the current course
+	804. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
+	805. ActRejSignUp		Reject the enrollment of a user in a course
 
-	766. ActReqMdfOneOth		Request a user's ID for enrollment/removing
-	767. ActReqMdfOneStd		Request a user's ID for enrollment/removing
-	768. ActReqMdfOneTch		Request a user's ID for enrollment/removing
-	769. ActReqMdfOth		Request enrollment/removing of a user
-	770. ActReqMdfStd		Request enrollment/removing of a user
-	771. ActReqMdfTch		Request enrollment/removing of a user
-	772. ActReqOthPho		Show form to send the photo of another user
-	773. ActReqStdPho		Show form to send the photo of another user
-	774. ActReqTchPho		Show form to send the photo of another user
-	775. ActDetOthPho		Receive other user's photo and detect faces on it
-	776. ActDetStdPho		Receive other user's photo and detect faces on it
-	777. ActDetTchPho		Receive other user's photo and detect faces on it
-	778. ActUpdOthPho		Update other user's photo
-	779. ActUpdStdPho		Update other user's photo
-	780. ActUpdTchPho		Update other user's photo
-	781. ActRemOthPho		Remove other user's photo
-	782. ActRemStdPho		Remove other user's photo
-	783. ActRemTchPho		Remove other user's photo
-	784. ActCreOth			Create a new user
-	785. ActCreStd			Create a new user
-	786. ActCreTch			Create a new user
-	787. ActUpdOth			Update another user's data and groups
-	788. ActUpdStd			Update another user's data and groups
-	789. ActUpdTch			Update another user's data and groups
-	790. ActReqAccEnrStd		Confirm acceptation / refusion of enrollment as student in current course
-	791. ActReqAccEnrTch		Confirm acceptation / refusion of enrollment as teacher in current course
-	792. ActAccEnrStd		Accept enrollment as student in current course
-	793. ActAccEnrTch		Accept enrollment as teacher in current course
-	794. ActRemMe_Std		Reject enrollment as student in current course
-	795. ActRemMe_Tch		Reject enrollment as teacher in current course
+	806. ActReqMdfOneOth		Request a user's ID for enrollment/removing
+	807. ActReqMdfOneStd		Request a user's ID for enrollment/removing
+	808. ActReqMdfOneTch		Request a user's ID for enrollment/removing
+	809. ActReqMdfOth		Request enrollment/removing of a user
+	810. ActReqMdfStd		Request enrollment/removing of a user
+	811. ActReqMdfTch		Request enrollment/removing of a user
+	812. ActReqOthPho		Show form to send the photo of another user
+	813. ActReqStdPho		Show form to send the photo of another user
+	814. ActReqTchPho		Show form to send the photo of another user
+	815. ActDetOthPho		Receive other user's photo and detect faces on it
+	816. ActDetStdPho		Receive other user's photo and detect faces on it
+	817. ActDetTchPho		Receive other user's photo and detect faces on it
+	818. ActUpdOthPho		Update other user's photo
+	819. ActUpdStdPho		Update other user's photo
+	820. ActUpdTchPho		Update other user's photo
+	821. ActRemOthPho		Remove other user's photo
+	822. ActRemStdPho		Remove other user's photo
+	823. ActRemTchPho		Remove other user's photo
+	824. ActCreOth			Create a new user
+	825. ActCreStd			Create a new user
+	826. ActCreTch			Create a new user
+	827. ActUpdOth			Update another user's data and groups
+	828. ActUpdStd			Update another user's data and groups
+	829. ActUpdTch			Update another user's data and groups
+	830. ActReqAccEnrStd		Confirm acceptation / refusion of enrollment as student in current course
+	831. ActReqAccEnrTch		Confirm acceptation / refusion of enrollment as teacher in current course
+	832. ActAccEnrStd		Accept enrollment as student in current course
+	833. ActAccEnrTch		Accept enrollment as teacher in current course
+	834. ActRemMe_Std		Reject enrollment as student in current course
+	835. ActRemMe_Tch		Reject enrollment as teacher in current course
 
-	796. ActNewAdmIns		Register an administrador in this institution
-	797. ActRemAdmIns		Remove an administrador of this institution
-	798. ActNewAdmCtr		Register an administrador in this centre
-	799. ActRemAdmCtr		Remove an administrador of this centre
-	800. ActNewAdmDeg		Register an administrador in this degree
-	801. ActRemAdmDeg		Remove an administrador of this degree
+	836. ActNewAdmIns		Register an administrador in this institution
+	837. ActRemAdmIns		Remove an administrador of this institution
+	838. ActNewAdmCtr		Register an administrador in this centre
+	839. ActRemAdmCtr		Remove an administrador of this centre
+	840. ActNewAdmDeg		Register an administrador in this degree
+	841. ActRemAdmDeg		Remove an administrador of this degree
 
-	802. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
-	803. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
+	842. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
+	843. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
 
-	804. ActFrmIDsOth		Show form to the change of the IDs of another user
-	805. ActFrmIDsStd		Show form to the change of the IDs of another user
-	806. ActFrmIDsTch		Show form to the change of the IDs of another user
-	807. ActRemID_Oth		Remove one of the IDs of another user
-	808. ActRemID_Std		Remove one of the IDs of another user
-	809. ActRemID_Tch		Remove one of the IDs of another user
-	810. ActNewID_Oth		Create a new user's ID for another user
-	811. ActNewID_Std		Create a new user's ID for another user
-	812. ActNewID_Tch		Create a new user's ID for another user
+	844. ActFrmIDsOth		Show form to the change of the IDs of another user
+	845. ActFrmIDsStd		Show form to the change of the IDs of another user
+	846. ActFrmIDsTch		Show form to the change of the IDs of another user
+	847. ActRemID_Oth		Remove one of the IDs of another user
+	848. ActRemID_Std		Remove one of the IDs of another user
+	849. ActRemID_Tch		Remove one of the IDs of another user
+	850. ActNewID_Oth		Create a new user's ID for another user
+	851. ActNewID_Std		Create a new user's ID for another user
+	852. ActNewID_Tch		Create a new user's ID for another user
 
-	813. ActFrmPwdOth		Show form to change the password of another user
-	814. ActFrmPwdStd		Show form to change the password of another user
-	815. ActFrmPwdTch		Show form to change the password of another user
-	816. ActChgPwdOth		Change the password of another user
-	817. ActChgPwdStd		Change the password of another user
-	818. ActChgPwdTch		Change the password of another user
+	853. ActFrmPwdOth		Show form to change the password of another user
+	854. ActFrmPwdStd		Show form to change the password of another user
+	855. ActFrmPwdTch		Show form to change the password of another user
+	856. ActChgPwdOth		Change the password of another user
+	857. ActChgPwdStd		Change the password of another user
+	858. ActChgPwdTch		Change the password of another user
 
-	819. ActFrmMaiOth		Show form to the change of the e-mail of another user
-	820. ActFrmMaiStd		Show form to the change of the e-mail of another user
-	821. ActFrmMaiTch		Show form to the change of the e-mail of another user
-	822. ActRemMaiOth		Remove one of the e-mail of another user
-	823. ActRemMaiStd		Remove one of the e-mail of another user
-	824. ActRemMaiTch		Remove one of the e-mail of another user
-	825. ActNewMaiOth		Create a new user's e-mail for another user
-	826. ActNewMaiStd		Create a new user's e-mail for another user
-	827. ActNewMaiTch		Create a new user's e-mail for another user
+	859. ActFrmMaiOth		Show form to the change of the e-mail of another user
+	860. ActFrmMaiStd		Show form to the change of the e-mail of another user
+	861. ActFrmMaiTch		Show form to the change of the e-mail of another user
+	862. ActRemMaiOth		Remove one of the e-mail of another user
+	863. ActRemMaiStd		Remove one of the e-mail of another user
+	864. ActRemMaiTch		Remove one of the e-mail of another user
+	865. ActNewMaiOth		Create a new user's e-mail for another user
+	866. ActNewMaiStd		Create a new user's e-mail for another user
+	867. ActNewMaiTch		Create a new user's e-mail for another user
 
-	828. ActRemStdCrs		Remove a student from the current course
-	829. ActRemTchCrs		Remove a teacher from the current course
-	830. ActRemUsrGbl		Eliminate completely a user from the platform
-	831. ActReqRemAllStdCrs		Request the removal of all the students from the current course
-	832. ActRemAllStdCrs		Remove all the students from the current course
-	833. ActReqRemOldUsr		Request the complete elimination of old users
-	834. ActRemOldUsr		Eliminate completely old users
+	868. ActRemStdCrs		Remove a student from the current course
+	869. ActRemTchCrs		Remove a teacher from the current course
+	870. ActRemUsrGbl		Eliminate completely a user from the platform
+	871. ActReqRemAllStdCrs		Request the removal of all the students from the current course
+	872. ActRemAllStdCrs		Remove all the students from the current course
+	873. ActReqRemOldUsr		Request the complete elimination of old users
+	874. ActRemOldUsr		Eliminate completely old users
 
-        835. ActLstClk			List last clicks in real time
+        875. ActLstClk			List last clicks in real time
 Social:
-        836. ActSeeSocTmlGbl		Show social timeline (global)
-        837. ActSeeSocPrf		Suggest list of users to follow
-	838. ActSeeFor			Show the level superior of the forums
-	839. ActSeeChtRms		Show the chat rooms
+        876. ActSeeSocTmlGbl		Show social timeline (global)
+        877. ActSeeSocPrf		Suggest list of users to follow
+	878. ActSeeFor			Show the level superior of the forums
+	879. ActSeeChtRms		Show the chat rooms
 
-	840. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
-	841. ActRcvSocComGbl		Comment a social note in the timeline (global)
-	842. ActShaSocNotGbl		Share a social note in the timeline (global)
-	843. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
-	844. ActFavSocNotGbl		Favourite a social note in the timeline (global)
-	845. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
-	846. ActFavSocComGbl		Favourite a social comment in the timeline (global)
-	847. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
-	848. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
-	849. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
-	850. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
-	851. ActRemSocComGbl		Remove of a comment in a social note (global)
+	880. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
+	881. ActRcvSocComGbl		Comment a social note in the timeline (global)
+	882. ActShaSocNotGbl		Share a social note in the timeline (global)
+	883. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
+	884. ActFavSocNotGbl		Favourite a social note in the timeline (global)
+	885. ActUnfSocNotGbl		Unfavourite a previously favourited social note in the timeline (global)
+	886. ActFavSocComGbl		Favourite a social comment in the timeline (global)
+	887. ActUnfSocComGbl		Unfavourite a previously favourited social comment in the timeline (global)
+	888. ActReqRemSocPubGbl		Request the removal of a social publishing in the timeline (global)
+	889. ActRemSocPubGbl		Remove a social publishing in the timeline (global)
+	890. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
+	891. ActRemSocComGbl		Remove of a comment in a social note (global)
 
-	852. ActReqPubPrf		Request @nickname to show a public user's profile
+	892. ActReqPubPrf		Request @nickname to show a public user's profile
 
-	853. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
-	854. ActRcvSocComUsr		Comment a social note in the timeline (user)
-	855. ActShaSocNotUsr		Share a social note in the timeline (user)
-	856. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
-	857. ActFavSocNotUsr		Favourite a social note in the timeline (user)
-	858. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
-	859. ActFavSocComUsr		Favourite a social comment in the timeline (user)
-	860. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
-	861. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
-	862. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
-	863. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
-	864. ActRemSocComUsr		Remove of a comment in a social note (user)
+	893. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
+	894. ActRcvSocComUsr		Comment a social note in the timeline (user)
+	895. ActShaSocNotUsr		Share a social note in the timeline (user)
+	896. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
+	897. ActFavSocNotUsr		Favourite a social note in the timeline (user)
+	898. ActUnfSocNotUsr		Unfavourite a previously favourited social note in the timeline (user)
+	899. ActFavSocComUsr		Favourite a social comment in the timeline (user)
+	900. ActUnfSocComUsr		Unfavourite a previously favourited social comment in the timeline (user)
+	901. ActReqRemSocPubUsr		Request the removal of a social publishing in the timeline (user)
+	902. ActRemSocPubUsr		Remove a social publishing in the timeline (user)
+	903. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
+	904. ActRemSocComUsr		Remove of a comment in a social note (user)
 
-	865. ActCal1stClkTim		Calculate first click time from log and store into user's figures
-	866. ActCalNumClk		Calculate number of clicks from log and store into user's figures
-	867. ActCalNumFileViews		Calculate number of file views and store into user's figures
-	868. ActCalNumForPst		Calculate number of forum posts and store into user's figures
-	869. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+	905. ActCal1stClkTim		Calculate first click time from log and store into user's figures
+	906. ActCalNumClk		Calculate number of clicks from log and store into user's figures
+	907. ActCalNumFileViews		Calculate number of file views and store into user's figures
+	908. ActCalNumForPst		Calculate number of forum posts and store into user's figures
+	909. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
 
-	870. ActFolUsr			Follow another user
-	871. ActUnfUsr			Unfollow another user
-	872. ActSeeFlg			Show following
-	873. ActSeeFlr			Show followers
+	910. ActFolUsr			Follow another user
+	911. ActUnfUsr			Unfollow another user
+	912. ActSeeFlg			Show following
+	913. ActSeeFlr			Show followers
 
-	874. ActSeeForCrsUsr		Show top level of forum of users of the course
-	875. ActSeeForCrsTch		Show top level of forum of teachers of the course
-	876. ActSeeForDegUsr		Show top level of forum of users of the degree
-	877. ActSeeForDegTch		Show top level of forum of teachers of the degree
-	878. ActSeeForCtrUsr		Show top level of forum of users of the centre
-	879. ActSeeForCtrTch		Show top level of forum of teachers of the centre
-	880. ActSeeForInsUsr		Show top level of forum of users of the institution
-	881. ActSeeForInsTch		Show top level of forum of teachers of the institution
-	882. ActSeeForGenUsr		Show top level of forum of users general
-	883. ActSeeForGenTch		Show top level of forum of teachers general
-	884. ActSeeForSWAUsr		Show top level of forum of users of the platform
-	885. ActSeeForSWATch		Show top level of forum of teachers of the platform
-	886. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
-	887. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
-	888. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
-	889. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
-	890. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
-	891. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
-	892. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
-	893. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
-	894. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
-	895. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
-	896. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
-	897. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
-	898. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
-	899. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
-	900. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
-	901. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
-	902. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
-	903. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
-	904. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
-	905. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
-	906. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
-	907. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
-	908. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
-	909. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
-	910. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
-	911. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
-	912. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
-	913. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
-	914. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
-	915. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
-	916. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
-	917. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
-	918. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
-	919. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
-	920. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
-	921. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
-	922. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
-	923. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
-	924. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
-	925. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
-	926. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
-	927. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
-	928. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
-	929. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
-	930. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
-	931. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
-	932. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
-	933. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
-	934. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
-	935. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
-	936. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
-	937. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
-	938. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
-	939. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
-	940. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
-	941. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
-	942. ActDelThrForGenUsr		Remove a thread of forum of users general
-	943. ActDelThrForGenTch		Remove a thread of forum of teachers general
-	944. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
-	945. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
-	946. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
-	947. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
-	948. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
-	949. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
-	950. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
-	951. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
-	952. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
-	953. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
-	954. ActCutThrForGenUsr		Cut a thread of forum of users general
-	955. ActCutThrForGenTch		Cut a thread of forum of teachers general
-	956. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-	957. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-	958. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-	959. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-	960. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-	961. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-	962. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-	963. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-	964. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
-	965. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
-	966. ActPasThrForGenUsr		Paste a thread of forum of users general
-	967. ActPasThrForGenTch		Paste a thread of forum of teachers general
-	968. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
-	969. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
-	970. ActDelPstForCrsUsr		Remove a message of forum of users of the course
-	971. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
-	972. ActDelPstForDegUsr		Remove a message of forum of users of the degree
-	973. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
-	974. ActDelPstForCtrUsr		Remove a message of forum of users of centre
-	975. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
-	976. ActDelPstForInsUsr		Remove a message of forum of users of the institution
-	977. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
-	978. ActDelPstForGenUsr		Remove a message of forum of users general
-	979. ActDelPstForGenTch		Remove a message of forum of teachers general
-	980. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
-	981. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
-	982. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
-	983. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
-	984. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
-	985. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
-	986. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
-	987. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
-	988. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
-	989. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
-	990. ActEnbPstForGenUsr		Enable a message of forum of users general
-	991. ActEnbPstForGenTch		Enable a message of forum of teachers general
-	992. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
-	993. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
-	994. ActDisPstForCrsUsr		Disable a message of forum of users of the course
-	995. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
-	996. ActDisPstForDegUsr		Disable a message of forum of users of the degree
-	997. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
-	998. ActDisPstForCtrUsr		Disable a message of forum of users of centre
-        999. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
-       1000. ActDisPstForInsUsr		Disable a message of forum of users of the institution
-       1001. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
-       1002. ActDisPstForGenUsr		Disable a message of forum of users general
-       1003. ActDisPstForGenTch		Disable a message of forum of teachers general
-       1004. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
-       1005. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
+	914. ActSeeForCrsUsr		Show top level of forum of users of the course
+	915. ActSeeForCrsTch		Show top level of forum of teachers of the course
+	916. ActSeeForDegUsr		Show top level of forum of users of the degree
+	917. ActSeeForDegTch		Show top level of forum of teachers of the degree
+	918. ActSeeForCtrUsr		Show top level of forum of users of the centre
+	919. ActSeeForCtrTch		Show top level of forum of teachers of the centre
+	920. ActSeeForInsUsr		Show top level of forum of users of the institution
+	921. ActSeeForInsTch		Show top level of forum of teachers of the institution
+	922. ActSeeForGenUsr		Show top level of forum of users general
+	923. ActSeeForGenTch		Show top level of forum of teachers general
+	924. ActSeeForSWAUsr		Show top level of forum of users of the platform
+	925. ActSeeForSWATch		Show top level of forum of teachers of the platform
+	926. ActSeePstForCrsUsr		Show the messages of a thread of the forum of users of the course
+	927. ActSeePstForCrsTch		Show the messages of a thread of the forum of teachers of the course
+	928. ActSeePstForDegUsr		Show the messages of a thread of the forum of users of the degree
+	929. ActSeePstForDegTch		Show the messages of a thread of the forum of teachers of the degree
+	930. ActSeePstForCtrUsr		Show the messages of a thread of the forum of users of the centre
+	931. ActSeePstForCtrTch		Show the messages of a thread of the forum of teachers of the centre
+	932. ActSeePstForInsUsr		Show the messages of a thread of the forum of users of the institution
+	933. ActSeePstForInsTch		Show the messages of a thread of the forum of teachers of the institution
+	934. ActSeePstForGenUsr		Show the messages of a thread of the forum of users general
+	935. ActSeePstForGenTch		Show the messages of a thread of the forum of teachers general
+	936. ActSeePstForSWAUsr		Show the messages of a thread of the forum of users of the platform
+	937. ActSeePstForSWATch		Show the messages of a thread of the forum of teachers of the platform
+	938. ActRcvThrForCrsUsr		Receive the first message of a new thread of forum of users of the course
+	939. ActRcvThrForCrsTch		Receive the first message of a new thread of forum of teachers of the course
+	940. ActRcvThrForDegUsr		Receive the first message of a new thread of forum of users of the degree
+	941. ActRcvThrForDegTch		Receive the first message of a new thread of forum of teachers of the degree
+	942. ActRcvThrForCtrUsr		Receive the first message of a new thread of forum of users of centre
+	943. ActRcvThrForCtrTch		Receive the first message of a new thread of forum of teachers of centre
+	944. ActRcvThrForInsUsr		Receive the first message of a new thread of forum of users of the institution
+	945. ActRcvThrForInsTch		Receive the first message of a new thread of forum of teachers of the institution
+	946. ActRcvThrForGenUsr		Receive the first message of a new thread of forum of users general
+	947. ActRcvThrForGenTch		Receive the first message of a new thread of forum of teachers general
+	948. ActRcvThrForSWAUsr		Receive the first message of a new thread of forum of users of the platform
+	949. ActRcvThrForSWATch		Receive the first message of a new thread of forum of teachers of the platform
+	950. ActRcvRepForCrsUsr		Receive a message of answer in a thread existente in the forum of users of the course
+	951. ActRcvRepForCrsTch		Receive a message of answer in a thread existente in the forum of teachers of the course
+	952. ActRcvRepForDegUsr		Receive a message of answer in a thread existente in the forum of users of the degree
+	953. ActRcvRepForDegTch		Receive a message of answer in a thread existente in the forum of teachers of the degree
+	954. ActRcvRepForCtrUsr		Receive a message of answer in a thread existente in the forum of users of centre
+	955. ActRcvRepForCtrTch		Receive a message of answer in a thread existente in the forum of teachers of centre
+	956. ActRcvRepForInsUsr		Receive a message of answer in a thread existente in the forum of users of the institution
+	957. ActRcvRepForInsTch		Receive a message of answer in a thread existente in the forum of teachers of the institution
+	958. ActRcvRepForGenUsr		Receive a message of answer in a thread existente in the forum of users general
+	959. ActRcvRepForGenTch		Receive a message of answer in a thread existente in the forum of teachers general
+	960. ActRcvRepForSWAUsr		Receive a message of answer in a thread existente in the forum of users of the platform
+	961. ActRcvRepForSWATch		Receive a message of answer in a thread existente in the forum of teachers of the platform
+	962. ActReqDelThrCrsUsr		Request the removal of a thread of forum of users of the course
+	963. ActReqDelThrCrsTch		Request the removal of a thread of forum of teachers of the course
+	964. ActReqDelThrDegUsr		Request the removal of a thread of forum of users of the degree
+	965. ActReqDelThrDegTch		Request the removal of a thread of forum of teachers of the degree
+	966. ActReqDelThrCtrUsr		Request the removal of a thread of forum of users of centre
+	967. ActReqDelThrCtrTch		Request the removal of a thread of forum of teachers of centre
+	968. ActReqDelThrInsUsr		Request the removal of a thread of forum of users of the institution
+	969. ActReqDelThrInsTch		Request the removal of a thread of forum of teachers of the institution
+	970. ActReqDelThrGenUsr		Request the removal of a thread of forum of users general
+	971. ActReqDelThrGenTch		Request the removal of a thread of forum of teachers general
+	972. ActReqDelThrSWAUsr		Request the removal of a thread of forum of users of the platform
+	973. ActReqDelThrSWATch		Request the removal of a thread of forum of teachers of the platform
+	974. ActDelThrForCrsUsr		Remove a thread of forum of users of the course
+	975. ActDelThrForCrsTch		Remove a thread of forum of teachers of the course
+	976. ActDelThrForDegUsr		Remove a thread of forum of users of the degree
+	977. ActDelThrForDegTch		Remove a thread of forum of teachers of the degree
+	978. ActDelThrForCtrUsr		Remove a thread of forum of users of centre
+	979. ActDelThrForCtrTch		Remove a thread of forum of teachers of centre
+	980. ActDelThrForInsUsr		Remove a thread of forum of users of the institution
+	981. ActDelThrForInsTch		Remove a thread of forum of teachers of the institution
+	982. ActDelThrForGenUsr		Remove a thread of forum of users general
+	983. ActDelThrForGenTch		Remove a thread of forum of teachers general
+	984. ActDelThrForSWAUsr		Remove a thread of forum of users of the platform
+	985. ActDelThrForSWATch		Remove a thread of forum of teachers of the platform
+	986. ActCutThrForCrsUsr		Cut a thread of forum of users of the course
+	987. ActCutThrForCrsTch		Cut a thread of forum of teachers of the course
+	988. ActCutThrForDegUsr		Cut a thread of forum of users of the degree
+	989. ActCutThrForDegTch		Cut a thread of forum of teachers of the degree
+	990. ActCutThrForCtrUsr		Cut a thread of forum of users of centre
+	991. ActCutThrForCtrTch		Cut a thread of forum of teachers of centre
+	992. ActCutThrForInsUsr		Cut a thread of forum of users of the institution
+	993. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
+	994. ActCutThrForGenUsr		Cut a thread of forum of users general
+	995. ActCutThrForGenTch		Cut a thread of forum of teachers general
+	996. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+	997. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+	998. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+	999. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+       1000. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+       1001. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+       1002. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+       1003. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+       1004. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+       1005. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
+       1006. ActPasThrForGenUsr		Paste a thread of forum of users general
+       1007. ActPasThrForGenTch		Paste a thread of forum of teachers general
+       1008. ActPasThrForSWAUsr		Paste a thread of forum of users of the platform
+       1009. ActPasThrForSWATch		Paste a thread of forum of teachers of the platform
+       1010. ActDelPstForCrsUsr		Remove a message of forum of users of the course
+       1011. ActDelPstForCrsTch		Remove a message of forum of teachers of the course
+       1012. ActDelPstForDegUsr		Remove a message of forum of users of the degree
+       1013. ActDelPstForDegTch		Remove a message of forum of teachers of the degree
+       1014. ActDelPstForCtrUsr		Remove a message of forum of users of centre
+       1015. ActDelPstForCtrTch		Remove a message of forum of teachers of centre
+       1016. ActDelPstForInsUsr		Remove a message of forum of users of the institution
+       1017. ActDelPstForInsTch		Remove a message of forum of teachers of the institution
+       1018. ActDelPstForGenUsr		Remove a message of forum of users general
+       1019. ActDelPstForGenTch		Remove a message of forum of teachers general
+       1020. ActDelPstForSWAUsr		Remove a message of forum of users of the platform
+       1021. ActDelPstForSWATch		Remove a message of forum of teachers of the platform
+       1022. ActEnbPstForCrsUsr		Enable a message of forum of users of the course
+       1023. ActEnbPstForCrsTch		Enable a message of forum of teachers of the course
+       1024. ActEnbPstForDegUsr		Enable a message of forum of users of the degree
+       1025. ActEnbPstForDegTch		Enable a message of forum of teachers of the degree
+       1026. ActEnbPstForCtrUsr		Enable a message of forum of users of centre
+       1027. ActEnbPstForCtrTch		Enable a message of forum of teachers of centre
+       1028. ActEnbPstForInsUsr		Enable a message of forum of users of the institution
+       1029. ActEnbPstForInsTch		Enable a message of forum of teachers of the institution
+       1030. ActEnbPstForGenUsr		Enable a message of forum of users general
+       1031. ActEnbPstForGenTch		Enable a message of forum of teachers general
+       1032. ActEnbPstForSWAUsr		Enable a message of forum of users of the platform
+       1033. ActEnbPstForSWATch		Enable a message of forum of teachers of the platform
+       1034. ActDisPstForCrsUsr		Disable a message of forum of users of the course
+       1035. ActDisPstForCrsTch		Disable a message of forum of teachers of the course
+       1036. ActDisPstForDegUsr		Disable a message of forum of users of the degree
+       1037. ActDisPstForDegTch		Disable a message of forum of teachers of the degree
+       1038. ActDisPstForCtrUsr		Disable a message of forum of users of centre
+       1039. ActDisPstForCtrTch		Disable a message of forum of teachers of centre
+       1040. ActDisPstForInsUsr		Disable a message of forum of users of the institution
+       1041. ActDisPstForInsTch		Disable a message of forum of teachers of the institution
+       1042. ActDisPstForGenUsr		Disable a message of forum of users general
+       1043. ActDisPstForGenTch		Disable a message of forum of teachers general
+       1044. ActDisPstForSWAUsr		Disable a message of forum of users of the platform
+       1045. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
 
-       1006. ActCht			Enter in a chat room to chat
+       1046. ActCht			Enter in a chat room to chat
 Messages:
-       1007. ActSeeNtf			Show my recent notifications
-       1008. ActSeeAnn			Show global announcements
-       1009. ActSeeNot			Show notices
-       1010. ActReqMsgUsr		Write message to several users
-       1011. ActSeeRcvMsg		Show the messages received from other users (link in menu)
-       1012. ActSeeSntMsg		Show the messages sent to other users
-       1013. ActMaiStd			Send an e-mail to students
-       1014. ActWriAnn			Show form to create a new global announcement
-       1015. ActRcvAnn			Receive and create a new global announcement
-       1016. ActHidAnn			Hide a global announcement that was active
-       1017. ActRevAnn			Reveal a global announcement that was hidden
-       1018. ActRemAnn			Remove global announcement
-       1019. ActShoNot			Show (expand) a notice
-       1020. ActWriNot			Write a new notice
-       1021. ActRcvNot			Receive and create a new notice
-       1022. ActHidNot			Hide a notice that was active
-       1023. ActRevNot			Reveal a notice that was hidden
-       1024. ActReqRemNot		Request removal of a notice
-       1025. ActRemNot			Remove a notice
-       1026. ActSeeNewNtf		Show my recent notifications (link in top heading)
-       1027. ActMrkNtfSee		Mark all my notifications as seen
-       1028. ActRcvMsgUsr		Sent/Receive a message of a user
-       1029. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
-       1030. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
-       1031. ActDelAllSntMsg		Remove todos the messages sent to other users
-       1032. ActDelAllRcvMsg		Remove todos the messages received from other users
-       1033. ActDelSntMsg		Remove a message sent to other users
-       1034. ActDelRcvMsg		Remove a message received from other user
-       1035. ActExpSntMsg		See (expand) sent message
-       1036. ActExpRcvMsg		See (expand) received message
-       1037. ActConSntMsg		Hide (contract) sent message
-       1038. ActConRcvMsg		Hide (contract) received message
-       1039. ActLstBanUsr		List banned users
-       1040. ActBanUsrMsg		Ban the sender of a message when showing received messages
-       1041. ActUnbUsrMsg		Unban the sender of a message when showing received messages
-       1042. ActUnbUsrLst		Unban a user when listing banned users
+       1047. ActSeeNtf			Show my recent notifications
+       1048. ActSeeAnn			Show global announcements
+       1049. ActSeeNot			Show notices
+       1050. ActReqMsgUsr		Write message to several users
+       1051. ActSeeRcvMsg		Show the messages received from other users (link in menu)
+       1052. ActSeeSntMsg		Show the messages sent to other users
+       1053. ActMaiStd			Send an e-mail to students
+       1054. ActWriAnn			Show form to create a new global announcement
+       1055. ActRcvAnn			Receive and create a new global announcement
+       1056. ActHidAnn			Hide a global announcement that was active
+       1057. ActRevAnn			Reveal a global announcement that was hidden
+       1058. ActRemAnn			Remove global announcement
+       1059. ActShoNot			Show (expand) a notice
+       1060. ActWriNot			Write a new notice
+       1061. ActRcvNot			Receive and create a new notice
+       1062. ActHidNot			Hide a notice that was active
+       1063. ActRevNot			Reveal a notice that was hidden
+       1064. ActReqRemNot		Request removal of a notice
+       1065. ActRemNot			Remove a notice
+       1066. ActSeeNewNtf		Show my recent notifications (link in top heading)
+       1067. ActMrkNtfSee		Mark all my notifications as seen
+       1068. ActRcvMsgUsr		Sent/Receive a message of a user
+       1069. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
+       1070. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
+       1071. ActDelAllSntMsg		Remove todos the messages sent to other users
+       1072. ActDelAllRcvMsg		Remove todos the messages received from other users
+       1073. ActDelSntMsg		Remove a message sent to other users
+       1074. ActDelRcvMsg		Remove a message received from other user
+       1075. ActExpSntMsg		See (expand) sent message
+       1076. ActExpRcvMsg		See (expand) received message
+       1077. ActConSntMsg		Hide (contract) sent message
+       1078. ActConRcvMsg		Hide (contract) received message
+       1079. ActLstBanUsr		List banned users
+       1080. ActBanUsrMsg		Ban the sender of a message when showing received messages
+       1081. ActUnbUsrMsg		Unban the sender of a message when showing received messages
+       1082. ActUnbUsrLst		Unban a user when listing banned users
 Statistics:
-       1043. ActSeeAllSvy		List all surveys in pages
-       1044. ActReqUseGbl		Request showing use of the platform
-       1045. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
-       1046. ActReqStaCrs		Request statistics of courses
-       1047. ActReqAccGbl		Request query of clicks to the complete platform
+       1083. ActSeeAllSvy		List all surveys in pages
+       1084. ActReqUseGbl		Request showing use of the platform
+       1085. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
+       1086. ActReqStaCrs		Request statistics of courses
+       1087. ActReqAccGbl		Request query of clicks to the complete platform
 
-       1048. ActSeeOneSvy		Show one survey
-       1049. ActAnsSvy			Answer a survey
-       1050. ActFrmNewSvy		Form to create a new survey
-       1051. ActEdiOneSvy		Edit one survey
-       1052. ActNewSvy			Create new survey
-       1053. ActChgSvy			Modify data of an existing survey
-       1054. ActReqRemSvy		Request the removal of a survey
-       1055. ActRemSvy			Remove survey
-       1056. ActReqRstSvy		Request the reset of answers of a survey
-       1057. ActRstSvy			Reset answers of survey
-       1058. ActHidSvy			Hide survey
-       1059. ActShoSvy			Show survey
-       1060. ActEdiOneSvyQst		Edit a new question for a survey
-       1061. ActRcvSvyQst		Receive a question of a survey
-       1062. ActReqRemSvyQst		Request the removal of a question of a survey
-       1063. ActRemSvyQst		Confirm the removal of a question of a survey
-       1064. ActSeeUseGbl		Show use of the platform
-       1065. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1066. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1067. ActSeeAccGbl		Query clicks to the complete platform
-       1068. ActReqAccCrs		Request query of clicks in the course
-       1069. ActSeeAccCrs		Query clicks to current course
-       1070. ActSeeAllStaCrs		Show statistics of courses
+       1088. ActSeeOneSvy		Show one survey
+       1089. ActAnsSvy			Answer a survey
+       1090. ActFrmNewSvy		Form to create a new survey
+       1091. ActEdiOneSvy		Edit one survey
+       1092. ActNewSvy			Create new survey
+       1093. ActChgSvy			Modify data of an existing survey
+       1094. ActReqRemSvy		Request the removal of a survey
+       1095. ActRemSvy			Remove survey
+       1096. ActReqRstSvy		Request the reset of answers of a survey
+       1097. ActRstSvy			Reset answers of survey
+       1098. ActHidSvy			Hide survey
+       1099. ActShoSvy			Show survey
+       1100. ActEdiOneSvyQst		Edit a new question for a survey
+       1101. ActRcvSvyQst		Receive a question of a survey
+       1102. ActReqRemSvyQst		Request the removal of a question of a survey
+       1103. ActRemSvyQst		Confirm the removal of a question of a survey
+       1104. ActSeeUseGbl		Show use of the platform
+       1105. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1106. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1107. ActSeeAccGbl		Query clicks to the complete platform
+       1108. ActReqAccCrs		Request query of clicks in the course
+       1109. ActSeeAccCrs		Query clicks to current course
+       1110. ActSeeAllStaCrs		Show statistics of courses
 Profile:
-       1071. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
-       1072. ActFrmRolSes		Show form to log out and to change current role in this session
-       1073. ActMyCrs			Select one of my courses
-       1074. ActSeeMyTT			Show the timetable of all courses of the logged user
-       1075. ActFrmUsrAcc		Show form to the creation or change of user's account
-       1076. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1077. ActEdiPrf			Show forms to edit preferences
-       1078. ActAdmBrf			Show the briefcase of private archives
-       1079. ActMFUAct			Show most frequently used actions
+       1111. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
+       1112. ActFrmRolSes		Show form to log out and to change current role in this session
+       1113. ActMyCrs			Select one of my courses
+       1114. ActSeeMyTT			Show the timetable of all courses of the logged user
+       1115. ActFrmUsrAcc		Show form to the creation or change of user's account
+       1116. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1117. ActEdiPrf			Show forms to edit preferences
+       1118. ActAdmBrf			Show the briefcase of private archives
+       1119. ActMFUAct			Show most frequently used actions
 
-       1080. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1081. ActSndNewPwd		Send a new password via e-mail
-       1082. ActLogOut			Close session
+       1120. ActReqSndNewPwd		Show form to send a new password via e-mail
+       1121. ActSndNewPwd		Send a new password via e-mail
+       1122. ActLogOut			Close session
 
-       1083. ActAutUsrInt		Authentify user internally (directly from the platform)
-       1084. ActAutUsrExt		Authentify user externally (remotely from an external site)
-       1085. ActAutUsrChgLan		Change language to my language just after authentication
-       1086. ActAnnSee			Mark announcement as seen
-       1087. ActChgMyRol		Change type of logged user
+       1123. ActAutUsrInt		Authentify user internally (directly from the platform)
+       1124. ActAutUsrExt		Authentify user externally (remotely from an external site)
+       1125. ActAutUsrChgLan		Change language to my language just after authentication
+       1126. ActAnnSee			Mark announcement as seen
+       1127. ActChgMyRol		Change type of logged user
 
-       1088. ActCreUsrAcc		Create new user account
-       1089. ActRemID_Me		Remove one of my user's IDs
-       1090. ActNewIDMe			Create a new user's ID for me
-       1091. ActRemOldNic		Remove one of my old nicknames
-       1092. ActChgNic			Change my nickname
-       1093. ActRemMaiMe		Remove one of my old e-mails
-       1094. ActNewMaiMe		Change my e-mail address
-       1095. ActCnfMai			Confirm e-mail address
-       1096. ActFrmChgMyPwd		Show form to the change of the password
-       1097. ActChgPwd			Change the password
-       1098. ActReqRemMyAcc		Request the removal of my account
-       1099. ActRemMyAcc		Remove my account
+       1128. ActCreUsrAcc		Create new user account
+       1129. ActRemID_Me		Remove one of my user's IDs
+       1130. ActNewIDMe			Create a new user's ID for me
+       1131. ActRemOldNic		Remove one of my old nicknames
+       1132. ActChgNic			Change my nickname
+       1133. ActRemMaiMe		Remove one of my old e-mails
+       1134. ActNewMaiMe		Change my e-mail address
+       1135. ActCnfMai			Confirm e-mail address
+       1136. ActFrmChgMyPwd		Show form to the change of the password
+       1137. ActChgPwd			Change the password
+       1138. ActReqRemMyAcc		Request the removal of my account
+       1139. ActRemMyAcc		Remove my account
 
-       1100. ActChgMyData		Update my personal data
+       1140. ActChgMyData		Update my personal data
 
-       1101. ActReqMyPho		Show form to send my photo
-       1102. ActDetMyPho		Receive my photo and detect faces on it
-       1103. ActUpdMyPho		Update my photo
-       1104. ActRemMyPho		Remove my photo
+       1141. ActReqMyPho		Show form to send my photo
+       1142. ActDetMyPho		Receive my photo and detect faces on it
+       1143. ActUpdMyPho		Update my photo
+       1144. ActRemMyPho		Remove my photo
 
-       1105. ActEdiPri			Edit my privacy
-       1106. ActChgPriPho		Change privacy of my photo
-       1107. ActChgPriPrf		Change privacy of my public profile
+       1145. ActEdiPri			Edit my privacy
+       1146. ActChgPriPho		Change privacy of my photo
+       1147. ActChgPriPrf		Change privacy of my public profile
 
-       1108. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1109. ActChgCtyMyIns		Change the country of my institution
-       1110. ActChgMyIns		Change my institution
-       1111. ActChgMyCtr		Change my centre
-       1112. ActChgMyDpt		Change my department
-       1113. ActChgMyOff		Change my office
-       1114. ActChgMyOffPho		Change my office phone
+       1158. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1159. ActChgCtyMyIns		Change the country of my institution
+       1150. ActChgMyIns		Change my institution
+       1151. ActChgMyCtr		Change my centre
+       1152. ActChgMyDpt		Change my department
+       1155. ActChgMyOff		Change my office
+       1154. ActChgMyOffPho		Change my office phone
 
-       1115. ActReqEdiMyNet		Request the edition of my social networks
-       1116. ActChgMyNet		Change my web and social networks
+       1155. ActReqEdiMyNet		Request the edition of my social networks
+       1156. ActChgMyNet		Change my web and social networks
 
-       1117. ActChgThe			Change theme
-       1118. ActReqChgLan		Ask if change language
-       1119. ActChgLan			Change language
-       1120. ActChg1stDay		Change first day of the week
-       1121. ActChgCol			Change side columns
-       1122. ActHidLftCol		Hide left side column
-       1123. ActHidRgtCol		Hide right side column
-       1124. ActShoLftCol		Show left side column
-       1125. ActShoRgtCol		Show right side column
-       1126. ActChgIco			Change icon set
-       1127. ActChgMnu			Change menu
-       1128. ActChgNtfPrf		Change whether to notify by e-mail new messages
-       1129. ActPrnUsrQR		Show my QR code ready to print
+       1157. ActChgThe			Change theme
+       1158. ActReqChgLan		Ask if change language
+       1159. ActChgLan			Change language
+       1160. ActChg1stDay		Change first day of the week
+       1161. ActChgCol			Change side columns
+       1162. ActHidLftCol		Hide left side column
+       1163. ActHidRgtCol		Hide right side column
+       1164. ActShoLftCol		Show left side column
+       1165. ActShoRgtCol		Show right side column
+       1166. ActChgIco			Change icon set
+       1167. ActChgMnu			Change menu
+       1168. ActChgNtfPrf		Change whether to notify by e-mail new messages
+       1169. ActPrnUsrQR		Show my QR code ready to print
 
-       1130. ActPrnMyTT			Show the timetable listo to impresión of all my courses
-       1131. ActEdiTut			Edit the timetable of tutorías
-       1132. ActChgTut			Modify the timetable of tutorías
-       1133. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+       1170. ActPrnMyTT			Show the timetable listo to impresión of all my courses
+       1171. ActEdiTut			Edit the timetable of tutorías
+       1172. ActChgTut			Modify the timetable of tutorías
+       1173. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 
-       1134. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1135. ActRemFilBrf		Remove a file of the briefcase
-       1136. ActRemFolBrf		Remove a folder empty of the briefcase
-       1137. ActCopBrf			Set source of copy in the briefcase
-       1138. ActPasBrf			Paste a folder or file in the briefcase
-       1139. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1140. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1141. ActCreFolBrf		Create a new folder in the briefcase
-       1142. ActCreLnkBrf		Create a new link in the briefcase
-       1143. ActRenFolBrf		Rename a folder of the briefcase
-       1144. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1145. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1146. ActExpBrf			Expand a folder in briefcase
-       1147. ActConBrf			Contract a folder in briefcase
-       1148. ActZIPBrf			Compress a folder in briefcase
-       1149. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1150. ActChgDatBrf		Change metadata of a file in the briefcase
-       1151. ActDowBrf			Download a file in the briefcase
-       1152. ActReqRemOldBrf		Ask for removing old files in the briefcase
-       1153. ActRemOldBrf		Remove old files in the briefcase
+       1174. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1175. ActRemFilBrf		Remove a file of the briefcase
+       1176. ActRemFolBrf		Remove a folder empty of the briefcase
+       1177. ActCopBrf			Set source of copy in the briefcase
+       1178. ActPasBrf			Paste a folder or file in the briefcase
+       1179. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1180. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1181. ActCreFolBrf		Create a new folder in the briefcase
+       1182. ActCreLnkBrf		Create a new link in the briefcase
+       1183. ActRenFolBrf		Rename a folder of the briefcase
+       1184. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1185. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1186. ActExpBrf			Expand a folder in briefcase
+       1187. ActConBrf			Contract a folder in briefcase
+       1188. ActZIPBrf			Compress a folder in briefcase
+       1189. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1190. ActChgDatBrf		Change metadata of a file in the briefcase
+       1191. ActDowBrf			Download a file in the briefcase
+       1192. ActReqRemOldBrf		Ask for removing old files in the briefcase
+       1193. ActRemOldBrf		Remove old files in the briefcase
 */
 
 struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
@@ -1722,11 +1766,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"guide64x64.gif"	},
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"presentation64x64.gif"},
    /* ActSeeAdmDocCrsGrp*/{   0, 4,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmShaCrsGrp	*/{ 461, 5,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
-   /* ActSeeCrsTT	*/{  25, 6,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeBib		*/{  32, 7,TabCrs,ActSeeBib		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"books64x64.gif"	},
-   /* ActSeeFAQ		*/{  54, 8,TabCrs,ActSeeFAQ		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"faq64x64.gif"		},
-   /* ActSeeCrsLnk	*/{   9, 9,TabCrs,ActSeeCrsLnk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"link64x64.gif"	},
+   /* ActAdmTchCrsGrp	*/{1525, 5,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmShaCrsGrp	*/{ 461, 6,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
+   /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
+   /* ActSeeBib		*/{  32, 8,TabCrs,ActSeeBib		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"books64x64.gif"	},
+   /* ActSeeFAQ		*/{  54, 9,TabCrs,ActSeeFAQ		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"faq64x64.gif"		},
+   /* ActSeeCrsLnk	*/{   9,10,TabCrs,ActSeeCrsLnk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"link64x64.gif"	},
 
    // Actions not in menu:
    /* ActDegSch		*/{1185,-1,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
@@ -1821,6 +1866,48 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqDatAdmDocGrp*/{1030,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
    /* ActChgDatAdmDocGrp*/{ 998,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
    /* ActDowAdmDocGrp   */{1114,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActChgToAdmTch	*/{1526,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+
+   /* ActAdmTchCrs	*/{1527,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilTchCrs*/{1528,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilTchCrs	*/{1529,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolTchCrs	*/{1530,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
+   /* ActCopTchCrs	*/{1531,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasTchCrs	*/{1532,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreTchCrs	*/{1533,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreTchCrs	*/{1534,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolTchCrs	*/{1535,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkTchCrs	*/{1536,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolTchCrs	*/{1537,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilTchCrsDZ	*/{1538,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
+   /* ActRcvFilTchCrsCla*/{1539,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpTchCrs	*/{1540,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConTchCrs	*/{1541,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPTchCrs	*/{1542,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatTchCrs	*/{1543,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatTchCrs	*/{1544,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
+   /* ActDowTchCrs      */{1545,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+
+   /* ActAdmTchGrp	*/{1546,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilTchGrp*/{1547,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilTchGrp	*/{1548,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolTchGrp	*/{1549,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
+   /* ActCopTchGrp	*/{1550,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasTchGrp	*/{1551,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreTchGrp	*/{1552,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreTchGrp	*/{1553,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolTchGrp	*/{1554,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkTchGrp	*/{1555,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolTchGrp	*/{1556,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilTchGrpDZ	*/{1557,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
+   /* ActRcvFilTchGrpCla*/{1558,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpTchGrp	*/{1559,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
+   /* ActConTchGrp	*/{1560,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
+   /* ActZIPTchGrp	*/{1561,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatTchGrp	*/{1562,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatTchGrp	*/{1563,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
+   /* ActDowTchGrp      */{1564,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    /* ActChgToAdmSha	*/{1197,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
@@ -4244,6 +4331,46 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActUpdSignUpReq,	// #1522
 	ActReqRemTstQst,	// #1523
 	ActReqRemSvyQst,	// #1524
+	ActAdmTchCrsGrp,	// #1525
+	ActChgToAdmTch,		// #1526
+	ActAdmTchCrs,		// #1527
+	ActReqRemFilTchCrs,	// #1528
+	ActRemFilTchCrs,	// #1529
+	ActRemFolTchCrs,	// #1530
+	ActCopTchCrs,		// #1531
+	ActPasTchCrs,		// #1532
+	ActRemTreTchCrs,	// #1533
+	ActFrmCreTchCrs,	// #1534
+	ActCreFolTchCrs,	// #1535
+	ActCreLnkTchCrs,	// #1536
+	ActRenFolTchCrs,	// #1537
+	ActRcvFilTchCrsDZ,	// #1538
+	ActRcvFilTchCrsCla,	// #1539
+	ActExpTchCrs,		// #1540
+	ActConTchCrs,		// #1541
+	ActZIPTchCrs,		// #1542
+	ActReqDatTchCrs,	// #1543
+	ActChgDatTchCrs,	// #1544
+	ActDowTchCrs,		// #1545
+	ActAdmTchGrp,		// #1546
+	ActReqRemFilTchGrp,	// #1547
+	ActRemFilTchGrp,	// #1548
+	ActRemFolTchGrp,	// #1549
+	ActCopTchGrp,		// #1550
+	ActPasTchGrp,		// #1551
+	ActRemTreTchGrp,	// #1552
+	ActFrmCreTchGrp,	// #1553
+	ActCreFolTchGrp,	// #1554
+	ActCreLnkTchGrp,	// #1555
+	ActRenFolTchGrp,	// #1556
+	ActRcvFilTchGrpDZ,	// #1557
+	ActRcvFilTchGrpCla,	// #1558
+	ActExpTchGrp,		// #1559
+	ActConTchGrp,		// #1560
+	ActZIPTchGrp,		// #1561
+	ActReqDatTchGrp,	// #1562
+	ActChgDatTchGrp,	// #1563
+	ActDowTchGrp,		// #1564
 	};
 
 /*****************************************************************************/

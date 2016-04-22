@@ -275,6 +275,7 @@ void Soc_ShowTimelineGbl (void)
 
       /* Course tab */
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_DOCUMENT_FILE
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_TEACHERS_FILE
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SHARED_FILE
 
       /* Assessment tab */
@@ -1689,7 +1690,7 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
       case Soc_NOTE_DEG_SHA_PUB_FILE:
       case Soc_NOTE_CRS_DOC_PUB_FILE:
       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
          break;
       case Soc_NOTE_EXAM_ANNOUNCEMENT:
          Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,MaxChars,false);

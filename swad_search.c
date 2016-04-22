@@ -875,7 +875,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
    extern const char *Txt_document_in_my_courses;
    extern const char *Txt_documents_in_my_courses;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*2];
+   char Query[(1024+Sch_MAX_LENGTH_SEARCH_QUERY)*2];
    unsigned NumDocs;
 
    /***** Check user's permission *****/
@@ -890,25 +890,31 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not remove temporary table");
 
-	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_crs (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
+	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_crs"
+	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+	                " ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_usr,files"
 			" WHERE crs_usr.UsrCod='%ld'"
 			" AND crs_usr.CrsCod=files.Cod"
-			" AND files.FileBrowser IN ('%u','%u','%u')",
+			" AND files.FileBrowser IN ('%u','%u','%u','%u')",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_TEACH_CRS,
 		  (unsigned) Brw_ADMI_SHARE_CRS,
 		  (unsigned) Brw_ADMI_MARKS_CRS);
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
 
-	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_grp (FilCod INT NOT NULL,UNIQUE INDEX(FilCod)) ENGINE=MEMORY"
+	 sprintf (Query,"CREATE TEMPORARY TABLE my_files_grp"
+	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
+	                " ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_grp_usr,files"
 			" WHERE crs_grp_usr.UsrCod='%ld'"
 			" AND crs_grp_usr.GrpCod=files.Cod"
-			" AND files.FileBrowser IN ('%u','%u','%u')",
+			" AND files.FileBrowser IN ('%u','%u','%u','%u')",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_TEACH_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP);
 	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
@@ -928,7 +934,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_crs) AND %s"
-	                " AND files.FileBrowser IN ('%u','%u','%u')"
+	                " AND files.FileBrowser IN ('%u','%u','%u','%u')"
 	                " AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -945,7 +951,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                "crs_grp.GrpCod"
 			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_grp) AND %s"
-	                " AND files.FileBrowser IN ('%u','%u','%u')"
+	                " AND files.FileBrowser IN ('%u','%u','%u','%u')"
 	                " AND files.Cod=crs_grp.GrpCod"
 	                " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 	                " AND crs_grp_types.CrsCod=courses.CrsCod"
@@ -959,11 +965,13 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_TEACH_CRS,
 		  (unsigned) Brw_ADMI_SHARE_CRS,
 		  (unsigned) Brw_ADMI_MARKS_CRS,
 		  RangeQuery,
 		  SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_TEACH_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP,
 		  RangeQuery);
@@ -1060,7 +1068,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	                "'-1' AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u','%u')"
+			" AND files.FileBrowser IN ('%u','%u','%u','%u')"
 			" AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -1077,7 +1085,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 	                "crs_grp.GrpCod"
 			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u','%u')"
+			" AND files.FileBrowser IN ('%u','%u','%u','%u')"
 			" AND files.Cod=crs_grp.GrpCod"
 			" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			" AND crs_grp_types.CrsCod=courses.CrsCod"
@@ -1114,11 +1122,13 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
+		  (unsigned) Brw_ADMI_TEACH_CRS,
 		  (unsigned) Brw_ADMI_SHARE_CRS,
 		  (unsigned) Brw_ADMI_MARKS_CRS,
 		  RangeQuery,
 		  Gbl.Usrs.Me.UsrDat.UsrCod,SearchQuery,
 		  (unsigned) Brw_ADMI_DOCUM_GRP,
+		  (unsigned) Brw_ADMI_TEACH_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP,
 		  RangeQuery,

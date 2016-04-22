@@ -201,6 +201,8 @@ void Lay_WriteStartOfPage (void)
        Gbl.Action.Act == ActFrmCreShaDeg ||	// Brw_ADMI_SHARE_DEG
        Gbl.Action.Act == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
        Gbl.Action.Act == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
+       Gbl.Action.Act == ActFrmCreTchCrs ||	// Brw_ADMI_TEACH_CRS
+       Gbl.Action.Act == ActFrmCreTchGrp ||	// Brw_ADMI_TEACH_GRP
        Gbl.Action.Act == ActFrmCreShaCrs ||	// Brw_ADMI_SHARE_CRS
        Gbl.Action.Act == ActFrmCreShaGrp ||	// Brw_ADMI_SHARE_GRP
        Gbl.Action.Act == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
@@ -539,6 +541,8 @@ static void Lay_WriteScripts (void)
       case ActFrmCreShaDeg:	// Brw_ADMI_SHARE_DEG
       case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
       case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
+      case ActFrmCreTchCrs:	// Brw_ADMI_TEACH_CRS
+      case ActFrmCreTchGrp:	// Brw_ADMI_TEACH_GRP
       case ActFrmCreShaCrs:	// Brw_ADMI_SHARE_CRS
       case ActFrmCreShaGrp:	// Brw_ADMI_SHARE_GRP
       case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR

@@ -572,6 +572,19 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Novo arquivo de documento",
 	},
 	{
+	// Ntf_EVENT_TEACHERS_FILE
+	"",
+	"Nou arxiu de professors",
+	"Neue Lehrer Datei",
+	"New teachers' file",
+	"Nuevo archivo de profesores",
+	"Nouveau fichier d'enseignants",
+	"Nuevo archivo de profesores",		// Okoteve traducción
+	"Nuovo file di professori",
+	"Nowy Nauczyciela plik",
+	"Novo arquivo dos professores",
+	},
+	{
 	// Ntf_EVENT_SHARED_FILE
 	"",
 	"Nou arxiu compartit",
@@ -17871,6 +17884,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
+	// ActAdmTchCrsGrp
+#if   L==1
+	"Privats"
+#elif L==2
+	"Private"
+#elif L==3
+	"Private"
+#elif L==4
+	"Privados"
+#elif L==5
+	"Priv&eacute;s"
+#elif L==6
+	"Privados"	// Okoteve traducción
+#elif L==7
+	"Privati"
+#elif L==8
+	"Prywatne"
+#elif L==9
+	"Privados"
+#endif
+	,
 	// ActAdmShaCrsGrp
 #if   L==1
 	"Compartits"
@@ -17976,7 +18010,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -19824,6 +19857,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
+	// ActAdmTchCrsGrp
+#if   L==1
+	"Arxius privats, nom&eacute;s per als professors de l'assignatura"
+#elif L==2
+	"Privat-Dateien, nur f&uuml;r die Lehrer des Kurses"
+#elif L==3
+	"Private files, only for teachers of the course"
+#elif L==4
+	"Archivos privados, solo para los profesores de la asignatura"
+#elif L==5
+	"Fichiers priv&eacute;s, seulement pour les enseignants du cours"
+#elif L==6
+	"Archivos privados, solo para los profesores de la asignatura"// Okoteve traducción
+#elif L==7
+	"File privati, solo per gli insegnanti del corso"
+#elif L==8
+	"Pliki prywatne, tylko dla nauczycieli przedmiotu"
+#elif L==9
+	"Arquivos privados, apenas para os professores do curso"
+#endif
+	,
 	// ActAdmShaCrsGrp
 #if   L==1
 	"Arxius compartits per professors i estudiants"
@@ -19933,7 +19987,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -25515,6 +25568,26 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos arquivos de documento"
 #endif
 	 ,
+#if   L==1	// Ntf_EVENT_TEACHERS_FILE
+	 "Nous arxiu de professors"
+#elif L==2
+	 "New Lehrer Dateien"
+#elif L==3
+	 "New teachers' files"
+#elif L==4
+	 "Nuevos archivos de profesores"
+#elif L==5
+	 "Nouveaux fichiers d'enseignants"
+#elif L==6
+	 "Nuevos archivos de profesores"	// Okoteve traducción
+#elif L==7
+	 "Nuovi file di professori"
+#elif L==8
+	 "Nowy Nauczyciela plik"
+#elif L==9
+	 "Novos arquivos dos professores"
+#endif
+	 ,
 #if   L==1	// Ntf_EVENT_SHARED_FILE
 	 "Nous arxiu compartit"
 #elif L==2
@@ -25896,6 +25969,26 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Plik dokumentu"
 #elif L==9
 	 "Arquivo de documento"
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_TEACHERS_FILE
+	 "Arxiu de professors"
+#elif L==2
+	 "Lehrer Datei"
+#elif L==3
+	 "Teachers' file"
+#elif L==4
+	 "Archivo de profesores"
+#elif L==5
+	 "Fichier d'enseignants"
+#elif L==6
+	 "Archivo de profesores"	// Okoteve traducción
+#elif L==7
+	 "File di professori"
+#elif L==8
+	 "Nauczyciela plik"
+#elif L==9
+	 "Arquivo dos professores"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_SHARED_FILE
@@ -34510,6 +34603,48 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9
 	 "comum"
 #endif
+	 ,
+	 // Brw_ADMI_TEACH_CRS
+#if   L==1
+	"privats"
+#elif L==2
+	"Private"
+#elif L==3
+	"private"
+#elif L==4
+	"privados"
+#elif L==5
+	"priv&eacute;s"
+#elif L==6
+	"privados"	// Okoteve traducción
+#elif L==7
+	"privati"
+#elif L==8
+	"prywatne"
+#elif L==9
+	"privados"
+#endif
+	 ,
+	 // Brw_ADMI_TEACH_GRP
+#if   L==1
+	"privats"
+#elif L==2
+	"Private"
+#elif L==3
+	"private"
+#elif L==4
+	"privados"
+#elif L==5
+	"priv&eacute;s"
+#elif L==6
+	"privados"	// Okoteve traducción
+#elif L==7
+	"privati"
+#elif L==8
+	"prywatne"
+#elif L==9
+	"privados"
+#endif
 	};
 
 const char *Txt_Save =
@@ -37584,6 +37719,46 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 	   "Documentos&nbsp;(grp.)"
 #endif
 	   ,
+#if   L==1	// Brw_ADMI_TEACH_CRS
+	   "Professors&nbsp;(ass.)"
+#elif L==2
+	   "Lehrkr&auml;fte&nbsp;(Ver.)"
+#elif L==3
+	   "Teachers&nbsp;(crs.)"
+#elif L==4
+	   "Profesores&nbsp;(asg.)"
+#elif L==5
+	   "Enseignants&nbsp;(mat.)"
+#elif L==6
+	   "Profesores&nbsp;(asg.)"		// Okoteve traducción
+#elif L==7
+	   "Professori&nbsp;(crs.)"
+#elif L==8
+	   "Nauczycieli&nbsp;(kurs)"
+#elif L==9
+	   "Professores&nbsp;(crs.)"
+#endif
+	   ,
+#if   L==1	// Brw_ADMI_TEACH_GRP
+	   "Professors&nbsp;(grp.)"
+#elif L==2
+	   "Lehrkr&auml;fte&nbsp;(Grp.)"
+#elif L==3
+	   "Teachers&nbsp;(grp.)"
+#elif L==4
+	   "Profesores&nbsp;(grp.)"
+#elif L==5
+	   "Enseignants&nbsp;(grp.)"
+#elif L==6
+	   "Profesores&nbsp;(grp.)"	// Okoteve traducción
+#elif L==7
+	   "Professori&nbsp;(grp.)"
+#elif L==8
+	   "Nauczycieli&nbsp;(grp.)"
+#elif L==9
+	   "Professores&nbsp;(grp.)"
+#endif
+	   ,
 #if   L==1	// Brw_ADMI_SHARE_CRS
 	   "Compartits&nbsp;(asg.)"
 #elif L==2
@@ -40365,6 +40540,48 @@ const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 	"nauc.";
 #elif L==9
 	"prof.";
+#endif
+
+const char *Txt_Teachers_files_area =
+#if   L==1
+	"Zona d'arxius de professors";
+#elif L==2
+	"Lehrer Dateien-Bereich";
+#elif L==3
+	"Teachers' files area";
+#elif L==4
+	"Zona de archivos de profesores";
+#elif L==5
+	"Zone de fichiers d'enseignants";
+#elif L==6
+	"Zona de archivos de profesores";	// Okoteve traducción
+#elif L==7
+	"Zona di file di professori";
+#elif L==8
+	"Nauczyciela udost&eogon;pnionych plik&oacute;w";
+#elif L==9
+	"Zona de arquivos dos professores";
+#endif
+
+const char *Txt_teachers_files_area =
+#if   L==1
+	"zona d'arxius de professors";
+#elif L==2
+	"Lehrer Dateien-Bereich";
+#elif L==3
+	"teachers' files area";
+#elif L==4
+	"zona de archivos de profesores";
+#elif L==5
+	"zone de fichiers d'enseignants";
+#elif L==6
+	"zona de archivos de profesores";	// Okoteve traducción
+#elif L==7
+	"zona di file di professori";
+#elif L==8
+	"nauczyciela udost&eogon;pnionych plik&oacute;w";
+#elif L==9
+	"zona de arquivos dos professores";
 #endif
 
 const char *Txt_Temporary_private_storage_area =

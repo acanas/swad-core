@@ -37,42 +37,44 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	(1+18)
+#define Ntf_NUM_NOTIFY_EVENTS	(1+19)
 // If the numbers assigned to each event type change,
-// it is necessary to change old numbers to new ones in database tables notif and sta_notif
+// it is necessary to change old numbers to new ones
+// in database tables notif, sta_notif and usr_data
 typedef enum
   {
    Ntf_EVENT_UNKNOWN		=  0,
 
    /* Course tab */
    Ntf_EVENT_DOCUMENT_FILE	=  1,
-   Ntf_EVENT_SHARED_FILE	=  2,
+   Ntf_EVENT_TEACHERS_FILE	=  2,	// TODO: Change all the numbers >= 2
+   Ntf_EVENT_SHARED_FILE	=  3,	// Old 2
 
    /* Assessment tab */
-   Ntf_EVENT_ASSIGNMENT		=  3,
-   Ntf_EVENT_EXAM_ANNOUNCEMENT	=  4,
-   Ntf_EVENT_MARKS_FILE		=  5,
+   Ntf_EVENT_ASSIGNMENT		=  4,	// Old 3
+   Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,	// Old 4
+   Ntf_EVENT_MARKS_FILE		=  6,	// Old 5
 
    /* Users tab */
-   Ntf_EVENT_ENROLLMENT_STUDENT	=  6,
-   Ntf_EVENT_ENROLLMENT_TEACHER	=  7,
-   Ntf_EVENT_ENROLLMENT_REQUEST	=  8,
+   Ntf_EVENT_ENROLLMENT_STUDENT	=  7,	// Old 6
+   Ntf_EVENT_ENROLLMENT_TEACHER	=  8,	// Old 7
+   Ntf_EVENT_ENROLLMENT_REQUEST	=  9,	// Old 8
 
    /* Social tab */
-   Ntf_EVENT_TIMELINE_COMMENT	=  9,	// Old 10	// New comment to one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_FAV	= 10,	// Old 11	// New fav of one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_SHARE	= 11,	// Old 12	// New sharing of one of my social notes
-   Ntf_EVENT_TIMELINE_MENTION	= 12,	// Old 13	// New mention
-   Ntf_EVENT_FOLLOWER		= 13,	// Old 14
-   Ntf_EVENT_FORUM_POST_COURSE	= 14,	// Old 15	// New post in forums of my courses
-   Ntf_EVENT_FORUM_REPLY	= 15,	// Old 16	// New reply to one of my posts in any forum
+   Ntf_EVENT_TIMELINE_COMMENT	= 10,	// Old 9	// New comment to one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_FAV	= 11,	// Old 10	// New fav of one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_SHARE	= 12,	// Old 11	// New sharing of one of my social notes
+   Ntf_EVENT_TIMELINE_MENTION	= 13,	// Old 12	// New mention
+   Ntf_EVENT_FOLLOWER		= 14,	// Old 13
+   Ntf_EVENT_FORUM_POST_COURSE	= 15,	// Old 14	// New post in forums of my courses
+   Ntf_EVENT_FORUM_REPLY	= 16,	// Old 15	// New reply to one of my posts in any forum
 
    /* Messages tab */
-   Ntf_EVENT_NOTICE		= 16,	// Old 17
-   Ntf_EVENT_MESSAGE		= 17,	// Old 18
+   Ntf_EVENT_NOTICE		= 17,	// Old 16
+   Ntf_EVENT_MESSAGE		= 18,	// Old 17
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY		= 18,	// Old 19
+   Ntf_EVENT_SURVEY		= 19,	// Old 18
 
    /* Profile tab */
 

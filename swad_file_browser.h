@@ -35,8 +35,9 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Brw_NUM_TYPES_FILE_BROWSER 25
-// The following types are stored in clipboard, expanded_folders, file_browser_size tables as numeric fields, so don't change numbers!
+#define Brw_NUM_TYPES_FILE_BROWSER 27
+// The following types are stored in several database tables as numeric fields,
+// so don't change numbers!
 typedef enum
   {
    Brw_UNKNOWN        =  0,
@@ -64,6 +65,8 @@ typedef enum
    Brw_ADMI_SHARE_DEG = 22,
    Brw_ADMI_SHARE_CTR = 23,
    Brw_ADMI_SHARE_INS = 24,
+   Brw_ADMI_TEACH_CRS = 25,
+   Brw_ADMI_TEACH_GRP = 26,
   } Brw_FileBrowser_t;
 
 // The following types are stored in files and clipboard tables as numeric fields, so don't change numbers!
@@ -131,6 +134,7 @@ struct FileMetadata
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES	"sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be "doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS		"tch"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED		"comun"			// TODO: It should be "sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_WORKS		"trabajos"		// TODO: It should be "wrk"
@@ -226,8 +230,8 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
 void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
 
-void Brw_GetSummaryAndContentOrSharedFile (char *SummaryStr,char **ContentStr,
-                                           long FilCod,unsigned MaxChars,bool GetContent);
+void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
+                                     long FilCod,unsigned MaxChars,bool GetContent);
 
 unsigned Brw_ListDocsFound (const char *Query,
                             const char *TitleSingular,const char *TitlePlural);

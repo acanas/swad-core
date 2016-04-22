@@ -3946,7 +3946,6 @@ int swad__getDirectoryTree (struct soap *soap,
 	                        "Tree code must be 1 (documents), 2 (shared files) or 3 (marks)");
 
    /***** Return directory tree *****/
-
    /* Get directory tree into XML file */
    if (courseCode > 0)
      {
@@ -4256,8 +4255,6 @@ int swad__getFile (struct soap *soap,
    /***** Check if file is in a valid zone *****/
    switch ((Gbl.FileBrowser.Type = FileMetadata.FileBrowser))
      {
-      // case Brw_SHOW_DOCUM_CRS:	// This type of file browser is not in database
-      // case Brw_SHOW_DOCUM_GRP:	// This type of file browser is not in database
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_SHARE_CRS:

@@ -133,7 +133,7 @@ typedef enum
    Sta_WHITE_TO_BLACK,
   } Sta_ColorType_t;
 
-#define Sta_NUM_STAT_CRS_FILE_ZONES 9
+#define Sta_NUM_STAT_CRS_FILE_ZONES 11
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

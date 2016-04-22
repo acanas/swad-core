@@ -34,12 +34,12 @@
 #define Ind_NUM_INDICATORS 5
 struct Ind_IndicatorsCrs
   {
-   unsigned long NumFilesInDownloadZones;
-   unsigned long NumFilesInDownloadZonesCrs;
-   unsigned long NumFilesInDownloadZonesGrp;
-   unsigned long NumFilesInCommonZones;
-   unsigned long NumFilesInCommonZonesCrs;
-   unsigned long NumFilesInCommonZonesGrp;
+   unsigned long NumFilesInDocumentZones;
+   unsigned long NumFilesInDocumentZonesCrs;
+   unsigned long NumFilesInDocumentZonesGrp;
+   unsigned long NumFilesInSharedZones;
+   unsigned long NumFilesInSharedZonesCrs;
+   unsigned long NumFilesInSharedZonesGrp;
    bool ThereIsSyllabus;
    Inf_InfoSrc_t TeachingGuideSrc;
    Inf_InfoSrc_t SyllabusLecSrc;

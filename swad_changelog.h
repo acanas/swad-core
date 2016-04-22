@@ -137,13 +137,70 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.200.5 (2016-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 15.201 (2016-04-21)"
 #define CSS_FILE		"swad15.198.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.201:   Apr 21, 2016	New private file zone for the teachers who belong to a course. (200768 lines)
+					50 changes necessary in database:
+CREATE TABLE notif_backup LIKE notif;
+INSERT INTO notif_backup SELECT * FROM notif;
+
+CREATE TABLE sta_notif_backup LIKE sta_notif;
+INSERT INTO sta_notif_backup SELECT * FROM sta_notif;
+
+CREATE TABLE usr_data_backup LIKE usr_data;
+INSERT INTO usr_data_backup SELECT * FROM usr_data;
+
+UPDATE notif     SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
+UPDATE sta_notif SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
+UPDATE usr_data  SET NotifNtfEvents = (((NotifNtfEvents & ~0x3) << 1) | (NotifNtfEvents & 0x3) | 0x04);
+UPDATE usr_data  SET EmailNtfEvents = (((EmailNtfEvents & ~0x3) << 1) | (EmailNtfEvents & 0x3));
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1525','es','N','Administrar zona de profesores');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1526','es','N','Cambiar a admin. archivos prof.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1527','es','N','Administrar archivos prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1528','es','N','Solicitar elim. arch. prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1529','es','N','Eliminar archivo prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1530','es','N','Eliminar carpeta prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1531','es','N','Copiar de zona prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1532','es','N','Pegar en zona prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1533','es','N','Eliminar &aacute;rbol prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1534','es','N','Solic.nuevo arch/carp prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1535','es','N','Crear carpeta prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1536','es','N','Crear enlace prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1537','es','N','Renombrar carpeta prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1538','es','N','Subir archivo prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1539','es','N','Subir archivo prof. asg. (ant.)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1540','es','N','Expandir carpeta prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1541','es','N','Contraer carpeta prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1542','es','N','Crear ZIP prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1543','es','N','Ver metadatos arch. prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1544','es','N','Cambiar metadatos arch. prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1545','es','N','Descargar arch. prof. asg.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1546','es','N','Administrar archivos prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1547','es','N','Solicitar elim. arch. prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1548','es','N','Eliminar archivo prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1549','es','N','Eliminar carpeta prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1550','es','N','Copiar de zona prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1551','es','N','Pegar en zona prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1552','es','N','Eliminar &aacute;rbol prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1553','es','N','Solic.nuevo arch/carp prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1554','es','N','Crear carpeta prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1555','es','N','Crear enlace prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1556','es','N','Renombrar carpeta prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1557','es','N','Subir archivo prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1558','es','N','Subir archivo prof. asg. (grp.)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1559','es','N','Expandir carpeta prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1560','es','N','Contraer carpeta prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1561','es','N','Crear ZIP prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1562','es','N','Ver metadatos arch. prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1563','es','N','Cambiar metadatos arch. prof. grp.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1564','es','N','Descargar arch. prof. grp.');
+
         Version 15.200.5: Apr 18, 2016	Removed link to enter from external service. (199764 lines)
         Version 15.200.4: Apr 18, 2016	Changes in configuration. (199785 lines)
         Version 15.200.3: Apr 18, 2016	Fixed bug in tests, reported by Miguel Damas Hermoso. (199788 lines)

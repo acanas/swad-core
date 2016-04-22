@@ -61,6 +61,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Course tab */
    "documentFile",		// Ntf_EVENT_DOCUMENT_FILE
+   "teachersFile",		// Ntf_EVENT_TEACHERS_FILE
    "sharedFile",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
@@ -98,6 +99,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Course tab */
    ActSeeAdmDocCrsGrp,	// Ntf_EVENT_DOCUMENT_FILE
+   ActAdmTchCrsGrp,	// Ntf_EVENT_TEACHERS_FILE
    ActAdmShaCrsGrp,	// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
@@ -140,6 +142,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Course tab */
    "NotifyNtfEventDocumentFile",	// Ntf_EVENT_DOCUMENT_FILE
+   "NotifyNtfEventTeachersFile",	// Ntf_EVENT_TEACHERS_FILE
    "NotifyNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
@@ -178,6 +181,7 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Course tab */
    "EmailNtfEventDocumentFile",		// Ntf_EVENT_DOCUMENT_FILE
+   "EmailNtfEventTeachersFile",		// Ntf_EVENT_TEACHERS_FILE
    "EmailNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
@@ -216,6 +220,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Course tab */
    "file64x64.gif",			// Ntf_EVENT_DOCUMENT_FILE
+   "file64x64.gif",			// Ntf_EVENT_TEACHERS_FILE
    "file64x64.gif",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
@@ -683,6 +688,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
    switch (NotifyEvent)
      {
       case Ntf_EVENT_DOCUMENT_FILE:
+      case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
          Action = ActUnk;
@@ -701,6 +707,10 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 			   (DegCod > 0 ? ActReqDatSeeDocDeg :
 			   (CtrCod > 0 ? ActReqDatSeeDocCtr :
 					 ActReqDatSeeDocIns))));
+		  break;
+	       case Ntf_EVENT_TEACHERS_FILE:
+		  Action = (GrpCod > 0 ? ActReqDatTchGrp :
+					 ActReqDatTchCrs);
 		  break;
 	       case Ntf_EVENT_SHARED_FILE:
 		  Action = (GrpCod > 0 ? ActReqDatShaGrp :
@@ -854,8 +864,9 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
       case Ntf_EVENT_UNKNOWN:
          break;
       case Ntf_EVENT_DOCUMENT_FILE:
+      case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
-	 Brw_GetSummaryAndContentOrSharedFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
          break;
       case Ntf_EVENT_ASSIGNMENT:
          Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
@@ -1012,6 +1023,8 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
      {
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_TEACH_CRS:
+      case Brw_ADMI_TEACH_GRP:
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_CRS:
@@ -1026,6 +1039,10 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 	       case Brw_ADMI_DOCUM_CRS:
 	       case Brw_ADMI_DOCUM_GRP:
 		  NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
+		  break;
+	       case Brw_ADMI_TEACH_CRS:
+	       case Brw_ADMI_TEACH_GRP:
+		  NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
 		  break;
 	       case Brw_ADMI_SHARE_CRS:
 	       case Brw_ADMI_SHARE_GRP:
@@ -1062,6 +1079,8 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
      {
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_TEACH_CRS:
+      case Brw_ADMI_TEACH_GRP:
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_CRS:
@@ -1072,6 +1091,10 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	    case Brw_ADMI_DOCUM_CRS:
 	    case Brw_ADMI_DOCUM_GRP:
 	       NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
+	       break;
+	    case Brw_ADMI_TEACH_CRS:
+	    case Brw_ADMI_TEACH_GRP:
+	       NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
 	       break;
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_SHARE_GRP:
@@ -1110,14 +1133,16 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 
    /***** Set notifications as removed *****/
    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                  " WHERE NotifyEvent IN ('%u','%u','%u') AND Cod IN"
+                  " WHERE NotifyEvent IN ('%u','%u','%u','%u') AND Cod IN"
                   " (SELECT FilCod FROM files"
-                  " WHERE FileBrowser IN ('%u','%u','%u') AND Cod='%ld')",
+                  " WHERE FileBrowser IN ('%u','%u','%u','%u') AND Cod='%ld')",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
             (unsigned) Ntf_EVENT_DOCUMENT_FILE,
+            (unsigned) Ntf_EVENT_TEACHERS_FILE,
             (unsigned) Ntf_EVENT_SHARED_FILE,
             (unsigned) Ntf_EVENT_MARKS_FILE,
             (unsigned) Brw_ADMI_DOCUM_GRP,
+            (unsigned) Brw_ADMI_TEACH_GRP,
             (unsigned) Brw_ADMI_SHARE_GRP,
             (unsigned) Brw_ADMI_MARKS_GRP,
             GrpCod);
@@ -1147,27 +1172,49 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_UNKNOWN:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_DOCUMENT_FILE:
+      case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
          switch (Gbl.FileBrowser.Type)
            {
             case Brw_ADMI_DOCUM_CRS:
             case Brw_ADMI_SHARE_CRS:
-            case Brw_ADMI_MARKS_CRS:
+            case Brw_ADMI_MARKS_CRS:	// Notify all users in course except me
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
                               " WHERE CrsCod='%ld'"
                               " AND UsrCod<>'%ld'",
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
+            case Brw_ADMI_TEACH_CRS:	// Notify all teachers in course except me
+               sprintf (Query,"SELECT UsrCod FROM crs_usr"
+                              " WHERE CrsCod='%ld'"
+                              " AND UsrCod<>'%ld'"
+                              " AND Role='%u'",	// Notify teachers only
+                        Gbl.CurrentCrs.Crs.CrsCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        (unsigned) Rol_TEACHER);
+               break;
             case Brw_ADMI_DOCUM_GRP:
             case Brw_ADMI_SHARE_GRP:
-            case Brw_ADMI_MARKS_GRP:
+            case Brw_ADMI_MARKS_GRP:	// Notify all users in group except me
                sprintf (Query,"SELECT UsrCod FROM crs_grp_usr"
                               " WHERE crs_grp_usr.GrpCod='%ld'"
                               " AND crs_grp_usr.UsrCod<>'%ld'",
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
+               break;
+            case Brw_ADMI_TEACH_GRP:	// Notify all teachers in group except me
+               sprintf (Query,"SELECT crs_grp_usr.UsrCod"
+        	              " FROM crs_grp_usr,crs_grp,crs_usr"
+                              " WHERE crs_grp_usr.GrpCod='%ld'"
+                              " AND crs_grp_usr.UsrCod<>'%ld'"
+                              " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
+                              " AND crs_grp.CrsCod=crs_usr.CrsCod"
+                              " AND crs_usr.Role='%u'",	// Notify teachers only
+                        Gbl.CurrentCrs.Grps.GrpCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        (unsigned) Rol_TEACHER);
                break;
             default:	// This function should not be called in other cases
                return 0;
@@ -1207,7 +1254,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 if (Gbl.CurrentCrs.Crs.NumTchs)
 	    // If this course has teachers ==> send notification to teachers
 	    sprintf (Query,"SELECT UsrCod FROM crs_usr"
-			   " WHERE CrsCod='%ld' AND UsrCod<>'%ld'"
+			   " WHERE CrsCod='%ld'"
+			   " AND UsrCod<>'%ld'"
 			   " AND Role='%u'",	// Notify teachers only
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1593,6 +1641,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_FOLLOWER:
 		  break;
 	       case Ntf_EVENT_DOCUMENT_FILE:
+	       case Ntf_EVENT_TEACHERS_FILE:
 	       case Ntf_EVENT_SHARED_FILE:
 	       case Ntf_EVENT_ASSIGNMENT:
 	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:

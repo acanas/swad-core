@@ -1139,14 +1139,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                         "DAT_SMALL_RED",Gbl.RowEvenOdd,
                         Indicators.ThereAreMaterials ? "" :
                                                        Txt_NO,
-                        (Indicators.NumFilesInDownloadZones != 0) ? "DAT_SMALL_GREEN" :
+                        (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
                                                                     "DAT_SMALL_RED",
                         Gbl.RowEvenOdd,
-                        Indicators.NumFilesInDownloadZones,
-                        (Indicators.NumFilesInCommonZones != 0) ? "DAT_SMALL_GREEN" :
+                        Indicators.NumFilesInDocumentZones,
+                        (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
                                                                   "DAT_SMALL_RED",
                         Gbl.RowEvenOdd,
-                        Indicators.NumFilesInCommonZones,
+                        Indicators.NumFilesInSharedZones,
 
                         "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
                         Indicators.ThereIsAssessment ? Txt_YES :
@@ -1225,12 +1225,14 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    Indicators->CountIndicators = 0;
 
    /* Get whether download zones are empty or not */
-   Indicators->NumFilesInDownloadZonesCrs = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_CRS,CrsCod);
-   Indicators->NumFilesInDownloadZonesGrp = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_GRP,CrsCod);
-   Indicators->NumFilesInDownloadZones    = Indicators->NumFilesInDownloadZonesCrs + Indicators->NumFilesInDownloadZonesGrp;
-   Indicators->NumFilesInCommonZonesCrs   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_CRS,CrsCod);
-   Indicators->NumFilesInCommonZonesGrp   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_GRP,CrsCod);
-   Indicators->NumFilesInCommonZones      = Indicators->NumFilesInCommonZonesCrs + Indicators->NumFilesInCommonZonesGrp;
+   Indicators->NumFilesInDocumentZonesCrs = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_CRS,CrsCod);
+   Indicators->NumFilesInDocumentZonesGrp = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_GRP,CrsCod);
+   Indicators->NumFilesInDocumentZones    = Indicators->NumFilesInDocumentZonesCrs +
+	                                    Indicators->NumFilesInDocumentZonesGrp;
+   Indicators->NumFilesInSharedZonesCrs   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_CRS,CrsCod);
+   Indicators->NumFilesInSharedZonesGrp   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_GRP,CrsCod);
+   Indicators->NumFilesInSharedZones      = Indicators->NumFilesInSharedZonesCrs +
+	                                    Indicators->NumFilesInSharedZonesGrp;
 
    /* Indicator #1: information about syllabus */
    Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES      ,&(Indicators->SyllabusLecSrc  ),&MustBeRead);
@@ -1263,8 +1265,8 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
       Indicators->CountIndicators++;
 
    /* Indicator #4: information about materials */
-   Indicators->ThereAreMaterials = (Indicators->NumFilesInDownloadZones != 0) ||
-                                   (Indicators->NumFilesInCommonZones   != 0);
+   Indicators->ThereAreMaterials = (Indicators->NumFilesInDocumentZones != 0) ||
+                                   (Indicators->NumFilesInSharedZones   != 0);
    if (Indicators->ThereAreMaterials)
       Indicators->CountIndicators++;
 
