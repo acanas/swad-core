@@ -14052,23 +14052,44 @@ const char *Txt_ID =
 
 const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"ID (DNI/c&eacute;dula) %s confirmado";		// Necessita traduccio
+	"ID (DNI/c&eacute;dula) %s confirmat";
 #elif L==2
-	"ID %s confirmed";				// Need Übersetzung
+	"ID %s best&auml;tigt";
 #elif L==3
 	"ID %s confirmed";
 #elif L==4
 	"ID (DNI/c&eacute;dula) %s confirmado";
 #elif L==5
-	"ID %s confirmed";				// Besoin de traduction
+	"ID %s confirm&eacute;";
 #elif L==6
 	"ID (DNI/c&eacute;dula) %s confirmado";		// Okoteve traducción
 #elif L==7
-	"ID %s confirmed";				// Bisogno di traduzione
+	"ID %s confermato";
 #elif L==8
-	"ID %s confirmed";				// Potrzebujesz tlumaczenie
+	"ID %s potwierdzone";
 #elif L==9
-	"ID %s confirmed";				// Necessita de tradução
+	"ID %s confirmado";
+#endif
+
+const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"ID (DNI/c&eacute;dula) %s no confirmat";
+#elif L==2
+	"ID %s nicht best&auml;tigt";
+#elif L==3
+	"ID %s not confirmed";
+#elif L==4
+	"ID (DNI/c&eacute;dula) %s no confirmado";
+#elif L==5
+	"ID %s pas confirm&eacute;";
+#elif L==6
+	"ID (DNI/c&eacute;dula) %s no confirmado";		// Okoteve traducción
+#elif L==7
+	"ID %s non confermato";
+#elif L==8
+	"ID %s nie potwierdzone";
+#elif L==9
+	"ID %s n&atilde;o confirmado";
 #endif
 
 const char *Txt_ID_X_removed =	// Warning: it is very important to include %s in the following sentences

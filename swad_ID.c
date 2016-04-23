@@ -435,6 +435,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_ID_X_confirmed;
+   extern const char *Txt_ID_X_not_confirmed;
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_If_there_are_multiple_versions_of_the_ID_;
@@ -481,8 +482,15 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	}
 
       /* User's ID */
-      fprintf (Gbl.F.Out,"<span class=\"USR_ID\">%s</span>",
-	       UsrDat->IDs.List[NumID].ID);
+      sprintf (Gbl.Title,
+               UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+                                                   Txt_ID_X_not_confirmed,
+               UsrDat->IDs.List[NumID].ID);
+      fprintf (Gbl.F.Out,"<span class=\"USR_ID %s\" title=\"%s\">%s</span>",
+               UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+                                                   "USR_ID_NC",
+               Gbl.Title,
+               UsrDat->IDs.List[NumID].ID);
 
       /* ID confirmed? */
       if (UsrDat->IDs.List[NumID].Confirmed)

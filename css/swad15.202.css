@@ -1647,8 +1647,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LST_EDIT_REC		{color:#008000; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC_HID	{color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding-top:0; padding-bottom:0; margin-top:-1px; margin-bottom:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
-.USR_ID			{color:#404040; font-size:18pt; font-weight:bold;}
-
 .DAT			{color:#404040; font-size:13pt;}
 .DAT_NOBR		{color:#404040; font-size:13pt; white-space:nowrap;}
 .DAT_BOLD		{color:#404040; font-size:13pt; font-weight:bold;}
@@ -1680,6 +1678,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_SMALL_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
 
 /******************************** User's IDs *********************************/
+.USR_ID		{font-size:18pt; font-weight:bold;}
 .USR_ID_C	{color:#408020}
 .USR_ID_NC	{color:#A02020}
 
