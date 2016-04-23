@@ -42443,32 +42443,41 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 
 const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 #if   L==1
-	"L'ID s'utilitza per tal de facilitar professors i administradors"
-	" el proc&eacute;s d'inscripci&oacute; dels usuaris en les assignatures.";
+	"L'ID s'utilitza per tal de facilitar"
+	" la inscripci&oacute; en les assignatures"
+	" i la consulta de qualificacions.";
 #elif L==2
-	"Die ID wird verwendet, um die Lehrer zu erleichtern und Administratoren"
-	" den Registrierungsprozess von Benutzern in Kursen.";
+	"Die ID wird zu erleichtern,"
+	" um die Einschreibung in Kurse"
+	" und Beratungskompetenz eingesetzt.";
 #elif L==3
-	"The ID is used in order to facilitate teachers and administrators"
-	" the enrollment process of users in courses.";
+	"The ID is used in order to facilitate"
+	" enrollment in courses"
+	" and consulting marks.";
 #elif L==4
-	"El ID se utiliza con el fin de facilitar a profesores y administradores"
-	" el proceso de inscripción de los usuarios en las asignaturas.";
+	"El ID se utiliza con el fin de facilitar"
+	" la inscripci&oacute;n en las asignaturas"
+	" y la consulta de calificaciones.";
 #elif L==5
-	"L'ID est utilis&eacute; afin de faciliter aux enseignants et administrateurs"
-	" le processus d'inscription des utilisateurs dans les mati&egrave;res.";
+	"L'ID est utilis&eacute; afin de faciliter"
+	" l'inscription &agrave; des mati&egrave;res"
+	" et la consulte des notes.";
 #elif L==6
-	"El ID se utiliza con el fin de facilitar a profesores y administradores"
-	" el proceso de inscripción de los usuarios en las asignaturas.";	// Okoteve traducción
+	"El ID se utiliza con el fin de facilitar"
+	" la inscripci&oacute;n en las asignaturas"
+	" y la consulta de calificaciones.";	// Okoteve traducción
 #elif L==7
-	"L'ID &egrave; utilizzato al fine di facilitare gli insegnanti e gli amministratori"
-	" il processo di registrazione degli utenti in corsi.";
+	"L'ID &egrave; utilizzato per agevolare"
+	" l'iscrizione ai corsi"
+	" e consultare dei risultati.";
 #elif L==8
-	"Identyfikator jest u&zdot;ywany w celu u&lstrok;atwienia nauczycielom i administratorom"
-	" proces rejestracji u&zdot;ytkownik&oacute;w w kursach.";
+	"Identyfikator jest u&zdot;ywany w celu u&lstrok;atwienia"
+	" rejestracji w kursach"
+	" i skonsultuje znak&oacute;w.";
 #elif L==9
-	"O n&ordm; de identifica&ccedil;&atilde;o &eacute; usado para facilitar a professores e administradores"
-	" o processo de inscri&ccedil;&atilde;o de usu&aacute;rios em disciplinas.";
+	"O n&ordm; de identifica&ccedil;&atilde;o &eacute; usado para facilitar"
+	" a inscri&ccedil;&atilde;o em disciplinas"
+	" e consultas de notas.";
 #endif
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences

@@ -2186,6 +2186,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Office phone *****/
          Rec_ShowOfficePhone (UsrDat,ShowData,ClassForm);
 	}
+
       fprintf (Gbl.F.Out,"</table>");
 
       switch (TypeOfView)
