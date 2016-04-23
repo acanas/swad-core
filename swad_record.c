@@ -140,6 +140,8 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
                             bool ShowData,const char *ClassForm);
 static void Rec_ShowDepartment (struct UsrData *UsrDat,
                                 bool ShowData,const char *ClassForm);
+static void Rec_ShowOffice (struct UsrData *UsrDat,
+                            bool ShowData,const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -2002,7 +2004,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Office;
    extern const char *Txt_Phone;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2178,20 +2179,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Department *****/
          Rec_ShowDepartment (UsrDat,ShowData,ClassForm);
 
-	 /* Office */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Office,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	    fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Office *****/
+         Rec_ShowOffice (UsrDat,ShowData,ClassForm);
 
 	 /* Phone */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3442,6 +3431,30 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</a>");
 	}
      }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/*************************** Show user's office ******************************/
+/*****************************************************************************/
+
+static void Rec_ShowOffice (struct UsrData *UsrDat,
+                            bool ShowData,const char *ClassForm)
+  {
+   extern const char *Txt_Office;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Office,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+      fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }
