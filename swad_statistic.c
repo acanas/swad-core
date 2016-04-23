@@ -1662,7 +1662,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the user's ID if user is a student */
       fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      ID_WriteUsrIDs (&UsrDat,(RoleFromLog == Rol_STUDENT));
+      ID_WriteUsrIDs (&UsrDat);
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the first name and the surnames */
@@ -1821,7 +1821,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       /* Write the user's ID if user is a student in current course */
       fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      ID_WriteUsrIDs (&UsrDat,(UsrDat.RoleInCurrentCrsDB == Rol_STUDENT));
+      ID_WriteUsrIDs (&UsrDat);
       fprintf (Gbl.F.Out,"&nbsp;</td>");
 
       /* Write the name and the surnames */

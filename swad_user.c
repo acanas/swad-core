@@ -129,12 +129,17 @@ static void Usr_SetUsrRoleAndPrefs (void);
 static void Usr_InsertMyLastData (void);
 
 static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat);
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr);
+static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
+                                     bool PutCheckBoxToSelectUsr);
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
-static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *BgColor,bool ShowEmail,
-                                             const char *MailLink,
-                                             const char *InstitutionName,const char *InstitutionLink);
-static void Usr_WriteUsrData (const char *BgColor,const char *Data,const char *Link,bool NonBreak,bool Accepted);
+static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat);
+static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
+                                             const char *BgColor,
+                                             const char *InstitutionName,
+                                             const char *InstitutionLink);
+static void Usr_WriteUsrData (const char *BgColor,
+                              const char *Data,const char *Link,
+                              bool NonBreak,bool Accepted);
 
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,bool Search,char *Query);
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
@@ -2686,7 +2691,6 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
 
    /***** Start row *****/
@@ -2699,7 +2703,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_PutCheckboxToSelectUser (UsrDat,false);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Student has accepted enrollment in current course? *****/
+   /***** Guest has accepted enrollment in current course? *****/
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/tr16x16.gif\""
 	              " alt=\"\" title=\"\""
@@ -2716,7 +2720,7 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      /***** Show student's photo *****/
+      /***** Show guest's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
                Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -2726,26 +2730,21 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Prepare data for brief presentation *****/
-   Usr_RestrictLengthMainData (true,UsrDat,MailLink);
-
    /****** Write user's IDs ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Write rest of main student's data *****/
+   /***** Write rest of main guest's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
-                                    UsrDat->Email[0]  ? MailLink :
-                                	                NULL,
-                                    Ins.ShortName,
-                                    Ins.WWW[0] ? Ins.WWW  :
-                                	         NULL);
+   Usr_RestrictLengthUsrName (UsrDat);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
+                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW  :
+                                	                       NULL);
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -2757,7 +2756,8 @@ static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
 /************ Write a row of a table with the data of a student **************/
 /*****************************************************************************/
 
-void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr)
+void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
+                              bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
@@ -2765,11 +2765,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = false;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
-   bool ShowEmail = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2828,26 +2824,21 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutChe
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Prepare data for brief presentation *****/
-   Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
-
    /****** Write user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
-   ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowEmail,
-                                    UsrDat->Email[0]  ? MailLink :
-                                	                NULL,
-                                    Ins.ShortName,
-                                    Ins.WWW[0] ? Ins.WWW :
-                                	         NULL);
+   Usr_RestrictLengthUsrName (UsrDat);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,
+                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
+                                	                       NULL);
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -2885,14 +2876,14 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /****** Write user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,true);
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
-                                    NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
+                                    Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the guest *****/
    if (UsrDat->Tch.CtrCod > 0)
@@ -2966,8 +2957,7 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    char Text[Cns_MAX_BYTES_TEXT+1];
    struct Institution Ins;
    bool ShowData = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+                    Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2989,13 +2979,14 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
+                                    Ins.ShortName,NULL);
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -3073,7 +3064,8 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 /************* Write a row of a table with the data of a teacher *************/
 /*****************************************************************************/
 
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckBoxToSelectUsr)
+static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
+                                     bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
@@ -3082,11 +3074,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
    struct Institution Ins;
-   bool ShowEmail = UsrDat->Accepted ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -3139,27 +3127,22 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,bool
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Prepare data for brief presentation *****/
-   Usr_RestrictLengthMainData (ShowEmail,UsrDat,MailLink);
-
    /****** Write the user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
-   ID_WriteUsrIDs (UsrDat,ID_ICanSeeUsrID (UsrDat));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,ShowEmail,
-                                    UsrDat->Email[0] ? MailLink :
-                                	               NULL,
-                                    Ins.ShortName,
-                                    Ins.WWW[0] ? Ins.WWW :
-                                	         NULL);
+   Usr_RestrictLengthUsrName (UsrDat);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,
+                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
+                                	                       NULL);
    fprintf (Gbl.F.Out,"</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -3200,13 +3183,14 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,ID_ICanSeeUsrID (UsrDat));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],ShowData,NULL,Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
+                                    Ins.ShortName,NULL);
 
    /***** Write the rest of teacher's data *****/
    if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -3242,14 +3226,13 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*** Write a row of a table with the data of a teacher or an administrator ***/
+/********** Write a row of a table with the data of an administrator *********/
 /*****************************************************************************/
 
 void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];                // mailto:mail_address
    struct Institution Ins;
 
    /***** Start row *****/
@@ -3273,26 +3256,21 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Prepare data for brief presentation *****/
-   Usr_RestrictLengthMainData (true,UsrDat,MailLink);
-
    /****** Write the user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,(Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],true,
-                                    UsrDat->Email[0] ? MailLink :
-                                	               NULL,
-                                    Ins.ShortName,
-                                    Ins.WWW[0] ? Ins.WWW :
-                                	         NULL);
+   Usr_RestrictLengthUsrName (UsrDat);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
+                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
+                                	                       NULL);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write degrees which are administrated by this administrator *****/
@@ -3304,29 +3282,28 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/************** Restrict the length of the main data of a user ***************/
+/***************** Restrict the length of the user's name ********************/
 /*****************************************************************************/
 
-void Usr_RestrictLengthMainData (bool ShowData,struct UsrData *UsrDat,char *MailLink)
+static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat)
   {
    Str_LimitLengthHTMLStr (UsrDat->FirstName,10);
    Str_LimitLengthHTMLStr (UsrDat->Surname1,10);
    Str_LimitLengthHTMLStr (UsrDat->Surname2,10);
-   if (ShowData && UsrDat->Email[0])
-     {
-      sprintf (MailLink,"mailto:%s",UsrDat->Email);
-      Str_LimitLengthHTMLStr (UsrDat->Email,10);
-     }
   }
 
 /*****************************************************************************/
 /************************* Write main data of a user *************************/
 /*****************************************************************************/
 
-static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *BgColor,bool ShowEmail,
-                                             const char *MailLink,
-                                             const char *InstitutionName,const char *InstitutionLink)
+static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
+                                             const char *BgColor,
+                                             const char *InstitutionName,
+                                             const char *InstitutionLink)
   {
+   bool ShowEmail;
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
+
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
                 	                   "&nbsp;",
@@ -3339,6 +3316,14 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *
                      UsrDat->FirstName[0] ? UsrDat->FirstName :
                 	                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
+   if (UsrDat->Email[0])
+     {
+      ShowEmail = Mai_ICanSeeEmail (UsrDat);
+      sprintf (MailLink,"mailto:%s",UsrDat->Email);
+      Str_LimitLengthHTMLStr (UsrDat->Email,10);
+     }
+   else
+      ShowEmail = false;
    Usr_WriteUsrData (BgColor,
                      UsrDat->Email[0] ? (ShowEmail ? UsrDat->Email :
                 	                             "********") :
@@ -3356,7 +3341,9 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,const char *
 /********************* Write a cell with data of a user **********************/
 /*****************************************************************************/
 
-static void Usr_WriteUsrData (const char *BgColor,const char *Data,const char *Link,bool NonBreak,bool Accepted)
+static void Usr_WriteUsrData (const char *BgColor,
+                              const char *Data,const char *Link,
+                              bool NonBreak,bool Accepted)
   {
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :

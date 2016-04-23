@@ -1679,6 +1679,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .DAT_SMALL_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
 .DAT_SMALL_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
 
+/******************************** User's IDs *********************************/
+.USR_ID_C	{color:#408020}
+.USR_ID_NC	{color:#A02020}
+
 /******************************* Record card *********************************/
 .REC_SHORTCUTS
 	{

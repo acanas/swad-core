@@ -2008,7 +2008,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,true);
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/
@@ -3217,7 +3217,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,true);
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/
@@ -3357,7 +3357,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
             Gbl.RowEvenOdd,
 	    UsrDat->Accepted ? "DAT_SMALL_N" :
 			       "DAT_SMALL");
-   ID_WriteUsrIDs (UsrDat,true);
+   ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write student's name *****/

@@ -1558,3 +1558,47 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
             Cfg_PLATFORM_SHORT_NAME,
             Cfg_HTTPS_URL_SWAD_CGI);
   }
+
+/*****************************************************************************/
+/**************** Check if I can see another user's e-mail *******************/
+/*****************************************************************************/
+
+bool Mai_ICanSeeEmail (struct UsrData *UsrDat)
+  {
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
+      return true;
+
+   /* Check if I have permission to see another user's e-mail */
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_STUDENT:
+	 /* If I am a student of current course,
+	    I only can see the user's e-mail of teachers from current course */
+	 return (UsrDat->Accepted &&
+	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
+      case Rol_TEACHER:
+	 /* If I am a teacher of current course,
+	    I only can see the user's e-mail of students or teachers from current course */
+	 return (UsrDat->Accepted &&
+	         (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
+	          UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));
+      case Rol_DEG_ADM:
+	 /* If I am an administrator of current degree,
+	    I only can see the user's e-mail of users from current degree */
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+      case Rol_CTR_ADM:
+	 /* If I am an administrator of current centre,
+	    I only can see the user's e-mail of users from current centre */
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+      case Rol_INS_ADM:
+	 /* If I am an administrator of current institution,
+	    I only can see the user's e-mail of users from current institution */
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }

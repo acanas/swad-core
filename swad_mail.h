@@ -85,4 +85,6 @@ void Mai_CreateFileNameMail (void);
 void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat);
 void Mai_WriteFootNoteEMail (Txt_Language_t Language);
 
+bool Mai_ICanSeeEmail (struct UsrData *UsrDat);
+
 #endif

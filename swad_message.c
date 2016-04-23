@@ -493,8 +493,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
             Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
         	                             "DAT_SMALL_NOBR");
-   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,
-                   ID_ICanSeeUsrID (&Gbl.Usrs.Other.UsrDat));
+   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write user's name *****/

@@ -137,13 +137,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.201.8 (2016-04-22)"
-#define CSS_FILE		"swad15.198.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.202 (2016-04-23)"
+#define CSS_FILE		"swad15.202.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.202:   Apr 23, 2016	User's IDs are show in green or red.
+					Code refactoring and bug fixing related to showing user's ID and e-mail. (200908 lines)
+        Version 15.201.9: Apr 22, 2016	Code refactoring in record card.
+					Changes in layout of record cards. (200895 lines)
         Version 15.201.8: Apr 22, 2016	Code refactoring in record card.
 					Fixed bugs in record cards. (200881 lines)
         Version 15.201.7: Apr 22, 2016	Code refactoring in record card.

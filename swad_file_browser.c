@@ -3457,9 +3457,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat,
-                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeUsrID (UsrDat) :
-                                                                    (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER));
+   ID_WriteUsrIDs (UsrDat);
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");

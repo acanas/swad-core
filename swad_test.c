@@ -7339,9 +7339,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT");
 
    /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat,
-                   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ID_ICanSeeUsrID (UsrDat) :
-                                                                     (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)));
+   ID_WriteUsrIDs (UsrDat);
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
@@ -7454,7 +7452,7 @@ void Tst_ShowOneTestExam (void)
                       "</td>"
 	              "<td class=\"DAT LEFT_TOP\">",
             Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
-   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,true);
+   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat);
    fprintf (Gbl.F.Out," %s",
             Gbl.Usrs.Other.UsrDat.Surname1);
    if (Gbl.Usrs.Other.UsrDat.Surname2[0])

@@ -64,7 +64,7 @@ void ID_GetParamOtherUsrIDPlain (void);
 bool ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID);
+void ID_WriteUsrIDs (struct UsrData *UsrDat);
 
 void ID_PutLinkToChangeUsrIDs (void);
 void ID_ShowFormOthIDs (void);

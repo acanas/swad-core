@@ -271,10 +271,10 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
-void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,bool PutCheckboxToSelectUsr);
+void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
+                              bool PutCheckboxToSelectUsr);
 void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GrpNames);
 void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
-void Usr_RestrictLengthMainData (bool ShowData,struct UsrData *UsrDat,char *MailLink);
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);

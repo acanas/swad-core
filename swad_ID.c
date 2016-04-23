@@ -345,26 +345,27 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 /*************************** Write list of user's ID *************************/
 /*****************************************************************************/
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat,bool ICanSeeUsrID)
+void ID_WriteUsrIDs (struct UsrData *UsrDat)
   {
    unsigned NumID;
+   bool ICanSeeUsrID = ID_ICanSeeUsrID (UsrDat);
 
-   if (ICanSeeUsrID)
-      for (NumID = 0;
-	   NumID < UsrDat->IDs.Num;
-	   NumID++)
-        {
-	 if (NumID)
-	    fprintf (Gbl.F.Out,"<br />");
+   for (NumID = 0;
+	NumID < UsrDat->IDs.Num;
+	NumID++)
+     {
+      if (NumID)
+	 fprintf (Gbl.F.Out,"<br />");
 
-	 if (!UsrDat->IDs.List[NumID].Confirmed)
-	    fprintf (Gbl.F.Out,"<span style=\"color:#804040;\">");
+      fprintf (Gbl.F.Out,"<span class=\"%s\">",
+	       UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+						   "USR_ID_NC");
+      if (ICanSeeUsrID)
 	 fprintf (Gbl.F.Out,"%s",UsrDat->IDs.List[NumID].ID);
-	 if (!UsrDat->IDs.List[NumID].Confirmed)
-	    fprintf (Gbl.F.Out,"</span>");
-	}
-   else
-      fprintf (Gbl.F.Out,"********");
+      else
+	 fprintf (Gbl.F.Out,"********");
+      fprintf (Gbl.F.Out,"</span>");
+     }
   }
 
 /*****************************************************************************/
@@ -824,13 +825,19 @@ void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
 
 bool ID_ICanSeeUsrID (struct UsrData *UsrDat)
   {
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   if (ItsMe)
+      return true;
+
    /* Check if I have permission to see another user's ID */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
 	 /* If I am a teacher of current course,
 	    I only can see the user's ID of students from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
+	 return (UsrDat->Accepted &&
+	         UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's ID of users from current degree */
