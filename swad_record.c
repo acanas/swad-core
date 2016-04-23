@@ -125,6 +125,9 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
                                 bool ShowData,bool DataForm,
                                 const char *ClassForm);
+static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
+                                   bool ShowData,bool DataForm,
+                                   const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1992,7 +1995,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2149,30 +2151,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Local phone *****/
          Rec_ShowLocalPhone (UsrDat,ShowData,DataForm,ClassForm);
 
-	 /* Family address */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Family_address,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (DataForm)
-	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
-				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",
-			Cns_MAX_LENGTH_STRING,
-			UsrDat->FamilyAddress,
-			Rec_C2_BOTTOM - 20);
-	    else if (UsrDat->FamilyAddress[0])
-	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Family address *****/
+         Rec_ShowFamilyAddress (UsrDat,ShowData,DataForm,ClassForm);
 
 	 /* Family phone */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3357,6 +3337,41 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 		  Rec_C2_BOTTOM - 20);
       else if (UsrDat->LocalPhone[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/*********************** Show user's family address **************************/
+/*****************************************************************************/
+
+static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
+                                   bool ShowData,bool DataForm,
+                                   const char *ClassForm)
+  {
+   extern const char *Txt_Family_address;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Family_address,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
+			    " maxlength=\"%u\" value=\"%s\""
+			    " style=\"width:%upx;\" />",
+		  Cns_MAX_LENGTH_STRING,
+		  UsrDat->FamilyAddress,
+		  Rec_C2_BOTTOM - 20);
+      else if (UsrDat->FamilyAddress[0])
+	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
