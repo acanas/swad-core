@@ -122,9 +122,6 @@
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Filtering email addresses --> an email address can not finish in "."
 // TODO: Upload an image in social posts, in test questions, in forum posts, in private messages, etc.
-// TODO: Important!!!! E-mail should not be visible for not logged users
-// TODO: Do not show e-mails of administrators and teachers in lists openly
-// TODO: FIX BUG: in marks, reported by Francisco Ocaña
 // TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
@@ -137,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.202.1 (2016-04-23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.202.2 (2016-04-23)"
 #define CSS_FILE		"swad15.202.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.202.2: Apr 23, 2016	Code refactoring in record card. (200899 lines)
         Version 15.202.1: Apr 23, 2016	Code refactoring related to showing user's e-mail. (200887 lines)
         Version 15.202:   Apr 23, 2016	User's IDs are show in green or red.
 					Code refactoring and bug fixing related to showing user's ID and e-mail. (200908 lines)
