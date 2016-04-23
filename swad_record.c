@@ -136,6 +136,8 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
                               const char *ClassForm);
 static void Rec_ShowInstitution (struct Institution *Ins,
                                  bool ShowData,const char *ClassForm);
+static void Rec_ShowCentre (struct UsrData *UsrDat,
+                            bool ShowData,const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1998,7 +2000,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Centre;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -2037,7 +2038,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
    struct Institution Ins;
-   struct Centre Ctr;
    struct Department Dpt;
 
    /***** Initializations *****/
@@ -2172,33 +2172,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Institution *****/
          Rec_ShowInstitution (&Ins,ShowData,ClassForm);
 
-	 /* Centre */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Centre,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (UsrDat->Tch.CtrCod > 0)
-	      {
-	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	       Ctr_GetDataOfCentreByCod (&Ctr);
-	       if (Ctr.WWW[0])
-		  fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			             " class=\"REC_DAT_BOLD\">",
-			   Ctr.WWW);
-	       fprintf (Gbl.F.Out,"%s",Ctr.FullName);
-	       if (Ctr.WWW[0])
-		  fprintf (Gbl.F.Out,"</a>");
-	      }
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Centre *****/
+         Rec_ShowCentre (UsrDat,ShowData,ClassForm);
 
 	 /* Department */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3413,6 +3388,44 @@ static void Rec_ShowInstitution (struct Institution *Ins,
 		     Ins->WWW);
 	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
 	 if (Ins->WWW[0])
+	    fprintf (Gbl.F.Out,"</a>");
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/*************************** Show user's centre ******************************/
+/*****************************************************************************/
+
+static void Rec_ShowCentre (struct UsrData *UsrDat,
+                            bool ShowData,const char *ClassForm)
+  {
+   extern const char *Txt_Centre;
+   struct Centre Ctr;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Centre,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (UsrDat->Tch.CtrCod > 0)
+	{
+	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&Ctr);
+	 if (Ctr.WWW[0])
+	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			       " class=\"REC_DAT_BOLD\">",
+		     Ctr.WWW);
+	 fprintf (Gbl.F.Out,"%s",Ctr.FullName);
+	 if (Ctr.WWW[0])
 	    fprintf (Gbl.F.Out,"</a>");
 	}
      }
