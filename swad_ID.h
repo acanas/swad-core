@@ -75,6 +75,4 @@ void ID_NewMyUsrID (void);
 void ID_NewOtherUsrID (void);
 void ID_ConfirmUsrID (long UsrCod,const char *UsrID);
 
-bool ID_ICanSeeUsrID (struct UsrData *UsrDat);
-
 #endif

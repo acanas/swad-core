@@ -64,6 +64,8 @@ extern struct Globals Gbl;
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
+static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat);
+
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID);
@@ -348,7 +350,21 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 void ID_WriteUsrIDs (struct UsrData *UsrDat)
   {
    unsigned NumID;
-   bool ICanSeeUsrID = ID_ICanSeeUsrID (UsrDat);
+   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   bool ICanSeeUsrID;
+   bool ICanConfirmUsrID;
+
+   if (ItsMe)
+     {
+      ICanSeeUsrID = true;
+      ICanConfirmUsrID = false;
+     }
+   else	// A user distinct than me
+     {
+      ICanSeeUsrID = ID_ICanSeeAnotherUsrID (UsrDat);
+      ICanConfirmUsrID = ICanSeeUsrID &&
+	                 !Gbl.Form.Inside;	// Not inside a form
+     }
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
@@ -365,6 +381,44 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
       else
 	 fprintf (Gbl.F.Out,"********");
       fprintf (Gbl.F.Out,"</span>");
+
+      if (ICanConfirmUsrID &&
+	  !UsrDat->IDs.List[NumID].Confirmed)
+         fprintf (Gbl.F.Out," Confirmar ID");	// TODO: Need translation!!!!
+     }
+  }
+
+/*****************************************************************************/
+/***************** Check if I can see another user's IDs *********************/
+/*****************************************************************************/
+// This function should not be called when UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod
+
+static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
+  {
+   /***** Check if I have permission to see another user's IDs *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+	 /* If I am a teacher of current course,
+	    I only can see the user's IDs of students from current course */
+	 return (UsrDat->Accepted &&
+	         UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
+      case Rol_DEG_ADM:
+	 /* If I am an administrator of current degree,
+	    I only can see the user's IDs of users from current degree */
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+      case Rol_CTR_ADM:
+	 /* If I am an administrator of current centre,
+	    I only can see the user's IDs of users from current centre */
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+      case Rol_INS_ADM:
+	 /* If I am an administrator of current institution,
+	    I only can see the user's IDs of users from current institution */
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
      }
   }
 
@@ -825,42 +879,4 @@ void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
                   " WHERE UsrCod='%ld' AND UsrID='%s' AND Confirmed<>'Y'",
             UsrCod,UsrID);
    DB_QueryINSERT (Query,"can not confirm a user's ID");
-  }
-
-/*****************************************************************************/
-/***************** Check if I can see another user's ID **********************/
-/*****************************************************************************/
-
-bool ID_ICanSeeUsrID (struct UsrData *UsrDat)
-  {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (ItsMe)
-      return true;
-
-   /* Check if I have permission to see another user's ID */
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-	 /* If I am a teacher of current course,
-	    I only can see the user's ID of students from current course */
-	 return (UsrDat->Accepted &&
-	         UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
-      case Rol_DEG_ADM:
-	 /* If I am an administrator of current degree,
-	    I only can see the user's ID of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
-      case Rol_CTR_ADM:
-	 /* If I am an administrator of current centre,
-	    I only can see the user's ID of users from current centre */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
-      case Rol_INS_ADM:
-	 /* If I am an administrator of current institution,
-	    I only can see the user's ID of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
   }
