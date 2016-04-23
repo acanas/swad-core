@@ -94,10 +94,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_RecordViewType_t TypeOfView);
-static void Rec_ShowEmail (struct UsrData *UsrDat,
-                           Rec_RecordViewType_t TypeOfView,
-                           bool DataForm,
-                           const char *ClassForm);
+static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm);
 static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm);
 static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_RecordViewType_t TypeOfView,
@@ -2103,7 +2100,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (ShowIDRows)
 	{
 	 /***** User's e-mail *****/
-	 Rec_ShowEmail (UsrDat,TypeOfView,DataForm,ClassForm);
+	 Rec_ShowEmail (UsrDat,ClassForm);
 
 	 /***** User's ID *****/
 	 Rec_ShowUsrIDs (UsrDat,ClassForm);
@@ -2986,28 +2983,9 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
 /***************************** Show user's e-mail ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowEmail (struct UsrData *UsrDat,
-                           Rec_RecordViewType_t TypeOfView,
-                           bool DataForm,
-                           const char *ClassForm)
+static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
   {
    extern const char *Txt_Email;
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   bool ShowEmail = (ItsMe ||
-	             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	             DataForm ||
-	             TypeOfView == Rec_FORM_MY_COMMON_RECORD  ||
-		     TypeOfView == Rec_MY_COMMON_RECORD_CHECK ||
-		     TypeOfView == Rec_FORM_MY_COURSE_RECORD_AS_STUDENT  ||
-		     TypeOfView == Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT ||
-                     (UsrDat->Accepted &&
-		      (TypeOfView == Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR ||
-		       TypeOfView == Rec_CHECK_OTHER_USR_COMMON_RECORD ||
-		       ((TypeOfView == Rec_RECORD_LIST ||
-		         TypeOfView == Rec_RECORD_PRINT) &&
-		        (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER ||
-		         (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
-		          Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_TEACHERS))))));
 
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s RIGHT_MIDDLE\""
@@ -3020,7 +2998,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,
 	    Rec_C2_BOTTOM);
    if (UsrDat->Email[0])
      {
-      if (ShowEmail)
+      if (Mai_ICanSeeEmail (UsrDat))
 	{
 	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
 		  UsrDat->Email);
