@@ -128,6 +128,9 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
                                    bool ShowData,bool DataForm,
                                    const char *ClassForm);
+static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
+                                 bool ShowData,bool DataForm,
+                                 const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -2154,30 +2157,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Family address *****/
          Rec_ShowFamilyAddress (UsrDat,ShowData,DataForm,ClassForm);
 
-	 /* Family phone */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Phone,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (DataForm)
-	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
-				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",
-			Usr_MAX_LENGTH_PHONE,
-			UsrDat->FamilyPhone,
-			Rec_C2_BOTTOM - 20);
-	    else if (UsrDat->FamilyPhone[0])
-	       fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Family phone *****/
+         Rec_ShowFamilyPhone (UsrDat,ShowData,DataForm,ClassForm);
 
 	 /* Common comments for all the courses */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3372,6 +3353,41 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 		  Rec_C2_BOTTOM - 20);
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/************************ Show user's family phone ***************************/
+/*****************************************************************************/
+
+static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
+                                 bool ShowData,bool DataForm,
+                                 const char *ClassForm)
+  {
+   extern const char *Txt_Phone;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Phone,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
+			    " maxlength=\"%u\" value=\"%s\""
+			    " style=\"width:%upx;\" />",
+		  Usr_MAX_LENGTH_PHONE,
+		  UsrDat->FamilyPhone,
+		  Rec_C2_BOTTOM - 20);
+      else if (UsrDat->FamilyPhone[0])
+	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
