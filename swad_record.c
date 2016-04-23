@@ -106,6 +106,10 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,
                               bool DataForm,
                               const char *ClassForm);
+static void Rec_ShowFirstName (struct UsrData *UsrDat,
+                               Rec_RecordViewType_t TypeOfView,
+                               bool DataForm,
+                               const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1968,7 +1972,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_First_name;
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
@@ -2121,28 +2124,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 Rec_ShowSurname2 (UsrDat,DataForm,ClassForm);
 
 	 /* First name */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s",
-		  ClassForm,Rec_C1_BOTTOM,Txt_First_name);
-	 if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	    fprintf (Gbl.F.Out,"*");
-	 fprintf (Gbl.F.Out,":</td>"
-			    "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  Rec_C2_BOTTOM);
-	 if (DataForm)
-	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
-			       " maxlength=\"%u\" value=\"%s\""
-			       " style=\"width:%upx;\" />",
-		     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-		     UsrDat->FirstName,
-		     Rec_C2_BOTTOM - 20);
-	 else if (UsrDat->FirstName[0])
-	    fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 Rec_ShowFirstName (UsrDat,TypeOfView,DataForm,ClassForm);
 
 	 /* Country */
 	 if (CountryForm)
@@ -3244,7 +3226,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 
 
 /*****************************************************************************/
-/*************************** Show user's surname 1 ***************************/
+/*************************** Show user's surname 2 ***************************/
 /*****************************************************************************/
 
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,
@@ -3272,6 +3254,41 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 	       Rec_C2_BOTTOM - 20);
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/************************** Show user's first name ***************************/
+/*****************************************************************************/
+
+static void Rec_ShowFirstName (struct UsrData *UsrDat,
+                               Rec_RecordViewType_t TypeOfView,
+                               bool DataForm,
+                               const char *ClassForm)
+  {
+   extern const char *Txt_First_name;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s",
+	    ClassForm,Rec_C1_BOTTOM,Txt_First_name);
+   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+      fprintf (Gbl.F.Out,"*");
+   fprintf (Gbl.F.Out,":</td>"
+		      "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    Rec_C2_BOTTOM);
+   if (DataForm)
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " style=\"width:%upx;\" />",
+	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+	       UsrDat->FirstName,
+	       Rec_C2_BOTTOM - 20);
+   else if (UsrDat->FirstName[0])
+      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }
