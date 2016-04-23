@@ -121,6 +121,10 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
                                  bool ShowData,
                                  bool DataForm,
                                  const char *ClassForm);
+static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
+                                  bool ShowData,
+                                  bool DataForm,
+                                  const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1988,7 +1992,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   extern const char *Txt_Local_address;
    extern const char *Txt_Family_address;
    extern const char *Txt_USER_comments;
    extern const char *Txt_Save_changes;
@@ -2140,30 +2143,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Date of birth *****/
          Rec_ShowDateOfBirth (UsrDat,ShowData,DataForm,ClassForm);
 
-	 /* Local address */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Local_address,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (DataForm)
-	       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
-				  " maxlength=\"%u\" value=\"%s\""
-				  " style=\"width:%upx;\" />",
-			Cns_MAX_LENGTH_STRING,
-			UsrDat->LocalAddress,
-			Rec_C2_BOTTOM - 20);
-	    else if (UsrDat->LocalAddress[0])
-	       fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Local address *****/
+         Rec_ShowLocalAddress (UsrDat,ShowData,DataForm,ClassForm);
 
 	 /* Local phone */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3265,7 +3246,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/**************************** Show user's country ****************************/
+/************************ Show user's place of origin ************************/
 /*****************************************************************************/
 
 static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
@@ -3301,7 +3282,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/**************************** Show user's country ****************************/
+/************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
@@ -3330,6 +3311,42 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
 			    false,false);
       else if (UsrDat->StrBirthday[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/************************ Show user's local address **************************/
+/*****************************************************************************/
+
+static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
+                                  bool ShowData,
+                                  bool DataForm,
+                                  const char *ClassForm)
+  {
+   extern const char *Txt_Local_address;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Local_address,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
+			    " maxlength=\"%u\" value=\"%s\""
+			    " style=\"width:%upx;\" />",
+		  Cns_MAX_LENGTH_STRING,
+		  UsrDat->LocalAddress,
+		  Rec_C2_BOTTOM - 20);
+      else if (UsrDat->LocalAddress[0])
+	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
