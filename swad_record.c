@@ -84,7 +84,7 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
                                const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
 
-static void Rec_ShowInstitution (struct Institution *Ins,bool PutFormLinks);
+static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowCommands (struct UsrData *UsrDat,
                               Rec_RecordViewType_t TypeOfView,
@@ -134,6 +134,8 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 static void Rec_ShowComments (struct UsrData *UsrDat,
                               bool ShowData,bool DataForm,
                               const char *ClassForm);
+static void Rec_ShowInstitution (struct Institution *Ins,
+                                 bool ShowData,const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1996,7 +1998,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
@@ -2072,7 +2073,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Rec_ShowInstitution (&Ins,PutFormLinks);
+   Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
    Rec_ShowPhoto (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -2169,30 +2170,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       if (ShowTeacherRows)
 	{
 	 /***** Institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Institution,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (UsrDat->InsCod > 0)
-	      {
-	       if (Ins.WWW[0])
-		  fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			             " class=\"REC_DAT_BOLD\">",
-			   Ins.WWW);
-	       fprintf (Gbl.F.Out,"%s",Ins.FullName);
-	       if (Ins.WWW[0])
-		  fprintf (Gbl.F.Out,"</a>");
-	      }
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+         Rec_ShowInstitution (&Ins,ShowData,ClassForm);
 
 	 /* Centre */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -2330,7 +2308,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 /*********************** Show institution in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Institution *Ins,bool PutFormLinks)
+static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
@@ -3369,7 +3347,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/************************ Show user's family phone ***************************/
+/************************** Show user's comments *****************************/
 /*****************************************************************************/
 
 static void Rec_ShowComments (struct UsrData *UsrDat,
@@ -3401,6 +3379,41 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
 			   UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
 	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	}
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/************************** Show user's institution **************************/
+/*****************************************************************************/
+
+static void Rec_ShowInstitution (struct Institution *Ins,
+                                 bool ShowData,const char *ClassForm)
+  {
+   extern const char *Txt_Institution;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Institution,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (Ins->InsCod > 0)
+	{
+	 if (Ins->WWW[0])
+	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			       " class=\"REC_DAT_BOLD\">",
+		     Ins->WWW);
+	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
+	 if (Ins->WWW[0])
+	    fprintf (Gbl.F.Out,"</a>");
 	}
      }
    fprintf (Gbl.F.Out,"</td>"
