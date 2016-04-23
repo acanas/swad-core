@@ -131,6 +131,9 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
                                  bool ShowData,bool DataForm,
                                  const char *ClassForm);
+static void Rec_ShowComments (struct UsrData *UsrDat,
+                              bool ShowData,bool DataForm,
+                              const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1998,7 +2001,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   extern const char *Txt_USER_comments;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
    extern const char *Txt_Confirm;
@@ -2160,40 +2162,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Family phone *****/
          Rec_ShowFamilyPhone (UsrDat,ShowData,DataForm,ClassForm);
 
-	 /* Common comments for all the courses */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_TOP\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_TOP\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_USER_comments,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (DataForm)
-	       fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"4\""
-				  " style=\"width:%upx;\">"
-				  "%s"
-				  "</textarea>",
-			Rec_C2_BOTTOM - 20,
-			UsrDat->Comments);
-	    else if (UsrDat->Comments[0])
-	      {
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);     // Convert from HTML to rigorous HTML
-	       fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
-	      }
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** User's comments *****/
+         Rec_ShowComments (UsrDat,ShowData,DataForm,ClassForm);
 	}
 
-      /***** Institution, centre, department, office, etc. *****/
       if (ShowTeacherRows)
 	{
-	 /* Institution */
+	 /***** Institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\""
 			    " style=\"width:%upx;\">"
@@ -3388,6 +3363,45 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 		  Rec_C2_BOTTOM - 20);
       else if (UsrDat->FamilyPhone[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/************************ Show user's family phone ***************************/
+/*****************************************************************************/
+
+static void Rec_ShowComments (struct UsrData *UsrDat,
+                              bool ShowData,bool DataForm,
+                              const char *ClassForm)
+  {
+   extern const char *Txt_USER_comments;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_TOP\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_TOP\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_USER_comments,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (DataForm)
+	 fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"4\""
+			    " style=\"width:%upx;\">"
+			    "%s"
+			    "</textarea>",
+		  Rec_C2_BOTTOM - 20,
+		  UsrDat->Comments);
+      else if (UsrDat->Comments[0])
+	{
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
+			   UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
+	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	}
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
