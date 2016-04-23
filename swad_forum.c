@@ -48,7 +48,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /*********************** Private constants and types *************************/
@@ -2219,6 +2218,7 @@ void For_SetForumName (For_ForumType_t ForumType,
 static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct,const char *Icon,const char *ForumName,bool ShowNumOfPosts,
                                   unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;

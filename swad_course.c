@@ -53,7 +53,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /*************************** Public constants ********************************/
@@ -142,6 +141,7 @@ void Crs_PrintConfiguration (void)
 
 static void Crs_Configuration (bool PrintView)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
@@ -443,6 +443,7 @@ void Crs_ChangeCourseConfig (void)
 
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormDark[The_NUM_THEMES];
    extern const char *Txt_My_courses;

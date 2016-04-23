@@ -8126,12 +8126,12 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_Done;
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");

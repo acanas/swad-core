@@ -52,7 +52,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -1033,6 +1032,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
    char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];

@@ -41,7 +41,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /*************************** Internal constants ******************************/
@@ -493,6 +492,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,unsigned NumCrss,MYSQL_RES *mysql_res)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Institutional_BR_code;

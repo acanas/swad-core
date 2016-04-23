@@ -44,7 +44,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -1342,6 +1341,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
 
 bool Mai_SendMailMsgToConfirmEmail (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;

@@ -49,7 +49,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /******************************* Internal types ******************************/
@@ -69,6 +68,7 @@ extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 int main (int argc, char *argv[])
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
    /*

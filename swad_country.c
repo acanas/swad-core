@@ -46,7 +46,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -1107,6 +1106,7 @@ void Cty_WriteSelectorOfCountry (void)
 
 void Cty_WriteCountryName (long CtyCod,const char *Class)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 

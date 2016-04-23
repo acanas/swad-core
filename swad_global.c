@@ -56,8 +56,6 @@ struct Globals Gbl;	// All the global parameters and variables must be in this s
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -116,7 +114,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
 
    Gbl.Error = false;
-
 
    Gbl.Layout.WritingHTMLStart =
    Gbl.Layout.HTMLStartWritten =
@@ -439,6 +436,8 @@ void Gbl_InitializeGlobals (void)
 
 void Gbl_Cleanup (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&

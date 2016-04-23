@@ -51,7 +51,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -2000,6 +1999,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
 void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;

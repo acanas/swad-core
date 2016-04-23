@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.203.1 (2016-04-23)"
+#define Log_PLATFORM_VERSION	"SWAD 15.203.2 (2016-04-23)"
 #define CSS_FILE		"swad15.203.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.203.2: Apr 23, 2016	New form to confirm another user's ID. Not finished. (201104 lines)
         Version 15.203.1: Apr 23, 2016	New form to confirm another user's ID. Not finished. (201090 lines)
         Version 15.203:   Apr 23, 2016	Changes in layout and CSS related to record card. (201076 lines)
         Version 15.202.19:Apr 23, 2016	User's ID is shown in green or red in user's account. (201120 lines)

@@ -93,7 +93,6 @@ const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-// extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /************************* Internal global variables *************************/

@@ -51,7 +51,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -3238,6 +3237,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
 
 static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];

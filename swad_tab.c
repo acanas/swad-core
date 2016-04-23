@@ -34,7 +34,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /****************************** Private constants ****************************/
@@ -202,6 +201,7 @@ static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab)
 
 void Tab_DrawBreadcrumb (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
 
@@ -273,6 +273,7 @@ static void Tab_WriteBreadcrumbTab (void)
 
 static void Tab_WriteBreadcrumbAction (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
    const char *Title = Act_GetTitleAction (Gbl.Action.Act);
 
@@ -292,6 +293,8 @@ static void Tab_WriteBreadcrumbAction (void)
 
 void Tab_SetCurrentTab (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+
    Gbl.Action.Tab = Act_Actions[Gbl.Action.Act].Tab;
 
    /***** Change action and tab if country, institution, centre or degree

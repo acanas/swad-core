@@ -53,7 +53,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /************************* Internal global variables *************************/
@@ -159,6 +158,7 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
 
 void QR_ExamAnnnouncement (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Link_to_announcement_of_exam;
 
    /***** Show QR code with direct link to the exam announcement *****/

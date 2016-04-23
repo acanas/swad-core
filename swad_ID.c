@@ -349,6 +349,7 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 
 void ID_WriteUsrIDs (struct UsrData *UsrDat)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    unsigned NumID;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    bool ICanSeeUsrID;
@@ -363,7 +364,8 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
      {
       ICanSeeUsrID = ID_ICanSeeAnotherUsrID (UsrDat);
       ICanConfirmUsrID = ICanSeeUsrID &&
-	                 !Gbl.Form.Inside;	// Not inside a form
+	                 !Gbl.Form.Inside &&						// Only if not inside another form
+                         Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
      }
 
    for (NumID = 0;

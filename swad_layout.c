@@ -52,7 +52,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -103,6 +102,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_WriteStartOfPage (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
@@ -341,6 +341,8 @@ void Lay_WriteStartOfPage (void)
 
 static void Lay_WriteEndOfPage (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+
    if (!Gbl.Layout.DivsEndWritten)
      {
       /***** End of central part of main zone *****/
@@ -393,6 +395,7 @@ static void Lay_WritePageTitle (void)
 
 static void Lay_WriteRedirectionToMyLanguage (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
@@ -409,6 +412,7 @@ static void Lay_WriteRedirectionToMyLanguage (void)
 
 static void Lay_WriteScripts (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_Exam_of_X;
@@ -640,6 +644,8 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptParamsAJAX (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+
    /***** Start script *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
@@ -891,6 +897,7 @@ static void Lay_WriteBreadcrumb (void)
 
 static void Lay_WriteTitleAction (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
    extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
@@ -1345,6 +1352,8 @@ void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton)
 
 void Lay_ShowErrorAndExit (const char *Message)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+
    /***** Unlock tables if locked *****/
    if (Gbl.DB.LockedTables)
      {

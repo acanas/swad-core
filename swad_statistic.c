@@ -58,7 +58,6 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -277,6 +276,7 @@ void Sta_GetRemoteAddr (void)
 
 void Sta_LogAccess (const char *Comments)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[2048];
    long LogCod;
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.LoggedRoleBeforeCloseSession :
@@ -728,6 +728,7 @@ static void Sta_WriteSelectorCountType (void)
 
 static void Sta_WriteSelectorAction (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
@@ -755,7 +756,8 @@ static void Sta_WriteSelectorAction (void)
       if (Txt_TABS_SHORT_TXT[Act_Actions[NumAction].Tab])
          fprintf (Gbl.F.Out,"%s &gt; ",
                   Txt_TABS_SHORT_TXT[Act_Actions[NumAction].Tab]);
-      fprintf (Gbl.F.Out,"%s",Act_GetActionTextFromDB (Act_Actions[NumAction].ActCod,ActTxt));
+      fprintf (Gbl.F.Out,"%s",
+               Act_GetActionTextFromDB (Act_Actions[NumAction].ActCod,ActTxt));
      }
 
    fprintf (Gbl.F.Out,"</select>"
@@ -796,6 +798,7 @@ void Sta_SeeCrsAccesses (void)
 
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;

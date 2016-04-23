@@ -98,7 +98,6 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
 /*****************************************************************************/
 /************************* Internal global variables *************************/
@@ -203,6 +202,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
 
 void Usr_InformAboutNumClicksBeforePhoto (void)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
    char Message[512];        // Don't use Gbl.Message here, because it may be filled with another message and such message would be overwritten
