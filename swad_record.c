@@ -117,6 +117,10 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
                                  bool ShowData,
                                  bool DataForm,
                                  const char *ClassForm);
+static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
+                                 bool ShowData,
+                                 bool DataForm,
+                                 const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1979,7 +1983,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Date_of_birth;
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Department;
@@ -2134,29 +2137,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 	 /***** Origin place *****/
          Rec_ShowOriginPlace (UsrDat,ShowData,DataForm,ClassForm);
 
-	 /* Date of birth */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\""
-			    " style=\"width:%upx;\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			    " style=\"width:%upx;\">",
-		  ClassForm,Rec_C1_BOTTOM,Txt_Date_of_birth,
-		  Rec_C2_BOTTOM);
-	 if (ShowData)
-	   {
-	    if (DataForm)
-	       Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
-				  Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
-				  "Birth",
-				  &(UsrDat->Birthday),
-				  false,false);
-	    else if (UsrDat->StrBirthday[0])
-	       fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
-	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 /***** Date of birth *****/
+         Rec_ShowDateOfBirth (UsrDat,ShowData,DataForm,ClassForm);
 
 	 /* Local address */
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -3313,6 +3295,41 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 		  Rec_C2_BOTTOM - 20);
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
+     }
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/**************************** Show user's country ****************************/
+/*****************************************************************************/
+
+static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
+                                 bool ShowData,
+                                 bool DataForm,
+                                 const char *ClassForm)
+  {
+   extern const char *Txt_Date_of_birth;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Date_of_birth,
+	    Rec_C2_BOTTOM);
+   if (ShowData)
+     {
+      if (DataForm)
+	 Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
+			    Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
+			    "Birth",
+			    &(UsrDat->Birthday),
+			    false,false);
+      else if (UsrDat->StrBirthday[0])
+	 fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
