@@ -65,6 +65,7 @@ extern struct Globals Gbl;
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
 static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat);
+static void ID_PutButtonToConfirmID (void);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -386,7 +387,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
 
       if (ICanConfirmUsrID &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
-         fprintf (Gbl.F.Out," Confirmar ID");	// TODO: Need translation!!!!
+	 ID_PutButtonToConfirmID ();
      }
   }
 
@@ -422,6 +423,15 @@ static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
       default:
 	 return false;
      }
+  }
+
+/*****************************************************************************/
+/******************* Put a button to confirm user's ID ***********************/
+/*****************************************************************************/
+
+static void ID_PutButtonToConfirmID (void)
+  {
+   fprintf (Gbl.F.Out," Confirmar ID");	// TODO: Need translation!!!!
   }
 
 /*****************************************************************************/
