@@ -91,7 +91,7 @@ static void Rec_ShowCommands (struct UsrData *UsrDat,
                               bool PutFormLinks);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
-static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_RecordViewType_t TypeOfView);
 static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm);
@@ -110,6 +110,9 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
                                Rec_RecordViewType_t TypeOfView,
                                bool DataForm,
                                const char *ClassForm);
+static void Rec_ShowCountry (struct UsrData *UsrDat,
+                             Rec_RecordViewType_t TypeOfView,
+                             const char *ClassForm);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
@@ -1972,8 +1975,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Country;
-   extern const char *Txt_Another_country;
    extern const char *Txt_Place_of_origin;
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Institution;
@@ -2018,7 +2019,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   ((TypeOfView == Rec_RECORD_LIST ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
-   unsigned NumCty;
    struct Institution Ins;
    struct Centre Ctr;
    struct Department Dpt;
@@ -2071,7 +2071,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** User's country, web and social networks *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Rec_ShowCountry (UsrDat,ShowData);
+   Rec_ShowCountryInHead (UsrDat,ShowData);
    Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -2107,72 +2107,23 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       if (ShowIDRows)
 	{
-	 /***** User's e-mail *****/
+	 /***** E-mail *****/
 	 Rec_ShowEmail (UsrDat,ClassForm);
 
 	 /***** User's ID *****/
 	 Rec_ShowUsrIDs (UsrDat,ClassForm);
 
-	 /***** User's role or sex *****/
+	 /***** Role or sex *****/
 	 Rec_ShowRole (UsrDat,TypeOfView,ClassForm);
 
 	 /***** Name *****/
-	 /* Surname 1 */
 	 Rec_ShowSurname1 (UsrDat,TypeOfView,DataForm,ClassForm);
-
-	 /* Surname 2 */
 	 Rec_ShowSurname2 (UsrDat,DataForm,ClassForm);
-
-	 /* First name */
 	 Rec_ShowFirstName (UsrDat,TypeOfView,DataForm,ClassForm);
 
-	 /* Country */
+	 /***** Country *****/
 	 if (CountryForm)
-	   {
-	    /* If list of countries is empty, try to get it */
-	    if (!Gbl.Ctys.Num)
-	      {
-	       Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-	       Cty_GetListCountries (Cty_GET_BASIC_DATA);
-	      }
-
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s RIGHT_MIDDLE\""
-			       " style=\"width:%upx;\">"
-			       "%s",
-		     ClassForm,Rec_C1_BOTTOM,Txt_Country);
-	    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
-	       fprintf (Gbl.F.Out,"*");
-	    fprintf (Gbl.F.Out,":</td>"
-			       "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			       " style=\"width:%upx;\">",
-		     Rec_C2_BOTTOM);
-
-	    /* Selector of country */
-	    fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
-		               " style=\"width:%upx;\">"
-			       "<option value=\"-1\">%s</option>"
-			       "<option value=\"0\"",
-		     Rec_C2_BOTTOM - 20,
-		     Txt_Country);
-	    if (UsrDat->CtyCod == 0)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
-	    for (NumCty = 0;
-		 NumCty < Gbl.Ctys.Num;
-		 NumCty++)
-	      {
-	       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-			Gbl.Ctys.Lst[NumCty].CtyCod);
-	       if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
-		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out,">%s</option>",
-			Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	      }
-	    fprintf (Gbl.F.Out,"</select>"
-	                       "</td>"
-			       "</tr>");
-	   }
+            Rec_ShowCountry (UsrDat,TypeOfView,ClassForm);
 	}
 
       if (ShowAddressRows)
@@ -2899,7 +2850,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountry (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
    fprintf (Gbl.F.Out,"<td class=\"REC_DAT_BOLD LEFT_TOP\""
 	              " style=\"width:%upx;\">",
@@ -3290,6 +3241,63 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    else if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
    fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+  }
+
+/*****************************************************************************/
+/**************************** Show user's country ****************************/
+/*****************************************************************************/
+
+static void Rec_ShowCountry (struct UsrData *UsrDat,
+                             Rec_RecordViewType_t TypeOfView,
+                             const char *ClassForm)
+  {
+   extern const char *Txt_Country;
+   extern const char *Txt_Another_country;
+   unsigned NumCty;
+
+   /***** If list of countries is empty, try to get it *****/
+   if (!Gbl.Ctys.Num)
+     {
+      Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+      Cty_GetListCountries (Cty_GET_BASIC_DATA);
+     }
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\""
+		      " style=\"width:%upx;\">"
+		      "%s",
+	    ClassForm,Rec_C1_BOTTOM,Txt_Country);
+   if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
+      fprintf (Gbl.F.Out,"*");
+   fprintf (Gbl.F.Out,":</td>"
+		      "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
+		      " style=\"width:%upx;\">",
+	    Rec_C2_BOTTOM);
+
+   /***** Selector of country *****/
+   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
+		      " style=\"width:%upx;\">"
+		      "<option value=\"-1\">%s</option>"
+		      "<option value=\"0\"",
+	    Rec_C2_BOTTOM - 20,
+	    Txt_Country);
+   if (UsrDat->CtyCod == 0)
+      fprintf (Gbl.F.Out," selected=\"selected\"");
+   fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
+   for (NumCty = 0;
+	NumCty < Gbl.Ctys.Num;
+	NumCty++)
+     {
+      fprintf (Gbl.F.Out,"<option value=\"%ld\"",
+	       Gbl.Ctys.Lst[NumCty].CtyCod);
+      if (Gbl.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",
+	       Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+     }
+   fprintf (Gbl.F.Out,"</select>"
+		      "</td>"
 		      "</tr>");
   }
 
