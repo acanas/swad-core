@@ -1543,7 +1543,6 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save;
    char StrRecordWidth[10+1];
-   unsigned FrameWidth = 15;
    unsigned Col1Width = 210;
    unsigned Col2Width;
    bool ItsMe;
@@ -1592,26 +1591,22 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
   	       Act_FormStart (ActRcvRecCrs);
                break;
               }
-	 FrameWidth = 10;
 	 break;
       case Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT:
-	 FrameWidth = 10;
          break;
       case Rec_RECORD_LIST:
          DataForm = true;
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
 	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 FrameWidth = 10;
 	 break;
       case Rec_RECORD_PRINT:
-	 FrameWidth = 1;
          break;
       default:
          break;
     }
 
-   Col2Width = Rec_RECORD_WIDTH - FrameWidth * 2 - Col1Width;
+   Col2Width = Rec_RECORD_WIDTH - 10 * 2 - Col1Width;
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -2101,6 +2096,16 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\">");
 
+      /***** Show e-mail and user's ID *****/
+      if (ShowIDRows)
+	{
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+	 Rec_ShowEmail (UsrDat,ClassForm);
+	 Rec_ShowUsrIDs (UsrDat,ClassForm);
+         fprintf (Gbl.F.Out,"</table>");
+	}
+
+      /***** Start form *****/
       switch (TypeOfView)
         {
 	 case Rec_FORM_MY_COMMON_RECORD:
@@ -2126,12 +2131,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       if (ShowIDRows)
 	{
-	 /***** E-mail *****/
-	 Rec_ShowEmail (UsrDat,ClassForm);
-
-	 /***** User's ID *****/
-	 Rec_ShowUsrIDs (UsrDat,ClassForm);
-
 	 /***** Role or sex *****/
 	 Rec_ShowRole (UsrDat,TypeOfView,ClassForm);
 
@@ -2189,6 +2188,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
       fprintf (Gbl.F.Out,"</table>");
 
+      /***** Button and end form *****/
       switch (TypeOfView)
         {
 	 case Rec_FORM_MY_COMMON_RECORD:
@@ -2240,9 +2240,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\""
-                      " style=\"width:%upx; height:%upx;\">",
-	    Rec_C1_TOP,Rec_C1_TOP);
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_TOP CENTER_MIDDLE\">");
    if (Ins->InsCod > 0)
      {
       /* Form to go to the institution */
@@ -2263,9 +2261,7 @@ static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution name *****/
-   fprintf (Gbl.F.Out,"<td class=\"REC_HEAD LEFT_MIDDLE\""
-		      " style=\"width:%upx; height:%upx;\">",
-	    Rec_C2_TOP,Rec_C1_TOP);
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_TOP REC_HEAD LEFT_MIDDLE\">");
    if (Ins->InsCod > 0)
      {
       /* Form to go to the institution */
@@ -2295,9 +2291,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
    bool ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
 
    /***** User's photo *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CENTER_TOP\""
-	              " style=\"width:%upx;\">",
-	    Rec_C3_TOP);
+   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"REC_C3_TOP CENTER_TOP\">");
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
 		     "PHOTO186x248",Pho_NO_ZOOM,false);
@@ -2330,9 +2324,7 @@ static void Rec_ShowCommands (struct UsrData *UsrDat,
    bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
 	                         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
 
-   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"LEFT_TOP\""
-	              " style=\"width:%upx;\">",
-	    Rec_C1_TOP);
+   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"REC_C1_MID LEFT_TOP\">");
 
    if (PutFormLinks && Gbl.Usrs.Me.Logged)
      {
@@ -2549,9 +2541,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
   {
    char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_NAME LEFT_TOP\""
-	              " style=\"width:%upx;\">",
-	    Rec_C2_TOP);
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_NAME LEFT_TOP\">");
 
    /***** First name *****/
    strncpy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
@@ -2583,10 +2573,8 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
    extern const char *Txt_View_public_profile;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"REC_NAME LEFT_BOTTOM\""
-	              " style=\"width:%upx;\">"
-	              "<div class=\"REC_NICK\">",
-	    Rec_C2_TOP);
+	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"
+	              "<div class=\"REC_NICK\">");
    if (UsrDat->Nickname[0])
      {
       if (PutFormLinks)
@@ -2617,9 +2605,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
-   fprintf (Gbl.F.Out,"<td class=\"REC_DAT_BOLD LEFT_TOP\""
-	              " style=\"width:%upx;\">",
-	    Rec_C2_TOP);
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_DAT_BOLD LEFT_TOP\">");
    if (ShowData && UsrDat->CtyCod > 0)
       /* Link to see country information */
       Cty_WriteCountryName (UsrDat->CtyCod,"REC_DAT_BOLD");
@@ -2633,8 +2619,7 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_RecordViewType_t TypeOfView)
   {
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:%upx;\">",
-	    Rec_C3_TOP);
+   fprintf (Gbl.F.Out,"<td class=\"REC_C3_MID CENTER_TOP\">");
    if (TypeOfView != Rec_RECORD_PRINT)
       Net_ShowWebsAndSocialNets (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
@@ -2649,14 +2634,11 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
    extern const char *Txt_Email;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Email,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Email);
    if (UsrDat->Email[0])
      {
       if (Mai_ICanSeeEmail (UsrDat))
@@ -2683,14 +2665,11 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm)
    extern const char *Txt_ID;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_TOP\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_TOP %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_TOP\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_ID,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP\">",
+	    ClassForm,Txt_ID);
    ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -2720,14 +2699,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    if (RoleForm)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\""
-			 " style=\"width:%upx;\">"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s:</td>"
-			 "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			 " style=\"width:%upx;\">",
-	       ClassForm,Rec_C1_BOTTOM,
-	       Txt_Role,
-	       Rec_C2_BOTTOM);
+			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	       ClassForm,Txt_Role);
       switch (TypeOfView)
 	{
 	 case Rec_FORM_SIGN_UP:			// I want to apply for enrollment
@@ -2858,14 +2833,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    else if (SexForm)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\""
-			 " style=\"width:%upx;\">"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s*:</td>"
-			 "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			 " style=\"width:%upx;\">",
-	       ClassForm,Rec_C1_BOTTOM,
-	       Txt_Sex,
-	       Rec_C2_BOTTOM);
+			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	       ClassForm,Txt_Sex);
       for (Sex = Usr_SEX_FEMALE;
 	   Sex <= Usr_SEX_MALE;
 	   Sex++)
@@ -2888,19 +2859,16 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
      }
    else	// RoleForm == false, SexForm == false
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\""
-			 " style=\"width:%upx;\">"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-			 " style=\"width:%upx;\">"
+			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
 			 "</tr>",
-	       ClassForm,Rec_C1_BOTTOM,
+	       ClassForm,
 	       TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_Sex :
 							  Txt_Role,
-	       Rec_C2_BOTTOM,
 	       TypeOfView == Rec_MY_COMMON_RECORD_CHECK ? Txt_SEX_SINGULAR_Abc[UsrDat->Sex] :
 							  Txt_ROLES_SINGUL_Abc[UsrDat->RoleInCurrentCrsDB][UsrDat->Sex]);
   }
@@ -2917,23 +2885,19 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    extern const char *Txt_Surname_1;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Surname_1);
+	    ClassForm,Txt_Surname_1);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:%upx;\" />",
+			 " class=\"REC_C2_BOT_INPUT\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-	       UsrDat->Surname1,
-	       Rec_C2_BOTTOM - 20);
+	       UsrDat->Surname1);
    else if (UsrDat->Surname1[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
    fprintf (Gbl.F.Out,"</td>"
@@ -2952,22 +2916,17 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
    extern const char *Txt_Surname_2;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,
-	    Txt_Surname_2,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Surname_2);
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:%upx;\" />",
+			 " class=\"REC_C2_BOT_INPUT\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-	       UsrDat->Surname2,
-	       Rec_C2_BOTTOM - 20);
+	       UsrDat->Surname2);
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
    fprintf (Gbl.F.Out,"</td>"
@@ -2986,23 +2945,20 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    extern const char *Txt_First_name;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s",
-	    ClassForm,Rec_C1_BOTTOM,Txt_First_name);
+	    ClassForm,Txt_First_name);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
-		      "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    Rec_C2_BOTTOM);
+		      "<td colspan=\"2\""
+		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " style=\"width:%upx;\" />",
+			 " class=\"REC_C2_BOT_INPUT\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
-	       UsrDat->FirstName,
-	       Rec_C2_BOTTOM - 20);
+	       UsrDat->FirstName);
    else if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
    fprintf (Gbl.F.Out,"</td>"
@@ -3029,23 +2985,19 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
      }
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Country);
+	    ClassForm,Txt_Country);
    if (TypeOfView == Rec_FORM_MY_COMMON_RECORD)
       fprintf (Gbl.F.Out,"*");
    fprintf (Gbl.F.Out,":</td>"
-		      "<td colspan=\"2\" class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    Rec_C2_BOTTOM);
+		      "<td colspan=\"2\""
+		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
 
    /***** Selector of country *****/
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
-		      " style=\"width:%upx;\">"
+   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" class=\"REC_C2_BOT_INPUT\">"
 		      "<option value=\"-1\">%s</option>"
 		      "<option value=\"0\"",
-	    Rec_C2_BOTTOM - 20,
 	    Txt_Country);
    if (UsrDat->CtyCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -3077,23 +3029,19 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
    extern const char *Txt_Place_of_origin;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Place_of_origin,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Place_of_origin);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
 			    " maxlength=\"%u\" value=\"%s\""
-			    " style=\"width:%upx;\" />",
+			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
-		  UsrDat->OriginPlace,
-		  Rec_C2_BOTTOM - 20);
+		  UsrDat->OriginPlace);
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
      }
@@ -3112,14 +3060,11 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
    extern const char *Txt_Date_of_birth;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Date_of_birth,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Date_of_birth);
    if (ShowData)
      {
       if (DataForm)
@@ -3146,23 +3091,19 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
    extern const char *Txt_Local_address;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Local_address,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Local_address);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
-			    " style=\"width:%upx;\" />",
+			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
-		  UsrDat->LocalAddress,
-		  Rec_C2_BOTTOM - 20);
+		  UsrDat->LocalAddress);
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
      }
@@ -3181,23 +3122,19 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
    extern const char *Txt_Phone;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Phone,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Phone);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
-			    " style=\"width:%upx;\" />",
+			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
-		  UsrDat->LocalPhone,
-		  Rec_C2_BOTTOM - 20);
+		  UsrDat->LocalPhone);
       else if (UsrDat->LocalPhone[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
      }
@@ -3216,23 +3153,19 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
    extern const char *Txt_Family_address;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Family_address,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Family_address);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
-			    " style=\"width:%upx;\" />",
+			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
-		  UsrDat->FamilyAddress,
-		  Rec_C2_BOTTOM - 20);
+		  UsrDat->FamilyAddress);
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
      }
@@ -3251,23 +3184,19 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
    extern const char *Txt_Phone;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Phone,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Phone);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
-			    " style=\"width:%upx;\" />",
+			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
-		  UsrDat->FamilyPhone,
-		  Rec_C2_BOTTOM - 20);
+		  UsrDat->FamilyPhone);
       else if (UsrDat->FamilyPhone[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
      }
@@ -3286,22 +3215,18 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
    extern const char *Txt_USER_comments;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_TOP\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_TOP %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_TOP\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_USER_comments,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP\">",
+	    ClassForm,Txt_USER_comments);
    if (ShowData)
      {
       if (DataForm)
 	 fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"4\""
-			    " style=\"width:%upx;\">"
+			    " class=\"REC_C2_BOT_INPUT\">"
 			    "%s"
 			    "</textarea>",
-		  Rec_C2_BOTTOM - 20,
 		  UsrDat->Comments);
       else if (UsrDat->Comments[0])
 	{
@@ -3324,14 +3249,11 @@ static void Rec_ShowInstitution (struct Institution *Ins,
    extern const char *Txt_Institution;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Institution,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Institution);
    if (ShowData)
      {
       if (Ins->InsCod > 0)
@@ -3360,14 +3282,11 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
    struct Centre Ctr;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Centre,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Centre);
    if (ShowData)
      {
       if (UsrDat->Tch.CtrCod > 0)
@@ -3398,14 +3317,11 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
    struct Department Dpt;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Department,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Department);
    if (ShowData)
      {
       if (UsrDat->Tch.DptCod > 0)
@@ -3435,14 +3351,11 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,
    extern const char *Txt_Office;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Office,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Office);
    if (ShowData)
       fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
    fprintf (Gbl.F.Out,"</td>"
@@ -3459,14 +3372,11 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
    extern const char *Txt_Phone;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\""
-		      " style=\"width:%upx;\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"REC_DAT_BOLD LEFT_MIDDLE\""
-		      " style=\"width:%upx;\">",
-	    ClassForm,Rec_C1_BOTTOM,Txt_Phone,
-	    Rec_C2_BOTTOM);
+		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+	    ClassForm,Txt_Phone);
    if (ShowData)
       fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
    fprintf (Gbl.F.Out,"</td>"

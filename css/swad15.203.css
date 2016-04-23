@@ -1688,6 +1688,57 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:20px;
 	margin:8px auto;
 	}
+	
+.REC_C1_TOP
+	{
+	box-sizing:border-box;
+	width:68px;
+	height:68px;
+	}
+.REC_C2_TOP
+	{
+	box-sizing:border-box;
+	width:282px;
+	height:68px;
+	}
+.REC_C3_TOP
+	{
+	box-sizing:border-box;
+	width:190px;
+	}
+
+.REC_C1_MID
+	{
+	box-sizing:border-box;
+	width:68px;
+	}
+.REC_C2_MID
+	{
+	box-sizing:border-box;
+	width:282px;
+	}
+.REC_C3_MID
+	{
+	box-sizing:border-box;
+	width:190px;
+	}
+
+.REC_C1_BOT
+	{
+	box-sizing:border-box;
+	width:170px;
+	}
+.REC_C2_BOT
+	{
+	box-sizing:border-box;
+	width:362px;
+	}
+.REC_C2_BOT_INPUT
+	{
+	box-sizing:border-box;
+	width:358px;
+	}
+
 .REC_HEAD	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:12pt;}
 .REC_NAME	{color:#808080; font-size:20pt; font-weight:bold;}
 .REC_NICK	{color:#808080; font-size:15pt; font-weight:bold;}

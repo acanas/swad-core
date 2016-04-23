@@ -36,11 +36,6 @@
 /*****************************************************************************/
 
 #define Rec_RECORD_WIDTH	560
-#define Rec_C1_TOP		 68
-#define Rec_C2_TOP		300
-#define Rec_C3_TOP		192
-#define Rec_C1_BOTTOM	    (190-2)
-#define Rec_C2_BOTTOM	    (370-2)
 
 #define Rec_MAX_LENGTH_NAME_FIELD	255
 #define Rec_MIN_LINES_IN_EDITION_FIELD	  1
