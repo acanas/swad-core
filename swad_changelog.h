@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.204 (2016-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 15.204.1 (2016-04-25)"
 #define CSS_FILE		"swad15.204.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.204.1: Apr 25, 2016	Fixed bug in changes in database necessary in version 15.201. (201359 lines)
         Version 15.204:   Apr 25, 2016	New form to confirm another user's ID. (201326 lines)
         Version 15.203.6: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201295 lines)
         Version 15.203.5: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201230 lines)
@@ -183,7 +184,7 @@
         Version 15.201.2: Apr 22, 2016	Code refactoring in record card. (200806 lines)
         Version 15.201.1: Apr 22, 2016	Code refactoring in record card. (200778 lines)
         Version 15.201:   Apr 21, 2016	New private file zone for the teachers who belong to a course. (200768 lines)
-					50 changes necessary in database:
+					82 changes necessary in database:
 CREATE TABLE notif_backup LIKE notif;
 INSERT INTO notif_backup SELECT * FROM notif;
 
@@ -193,8 +194,42 @@ INSERT INTO sta_notif_backup SELECT * FROM sta_notif;
 CREATE TABLE usr_data_backup LIKE usr_data;
 INSERT INTO usr_data_backup SELECT * FROM usr_data;
 
-UPDATE notif     SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
-UPDATE sta_notif SET NotifyEvent=NotifyEvent+1 WHERE NotifyEvent>=2;
+UPDATE notif SET NotifyEvent=19 WHERE NotifyEvent=18;
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=17;
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=16;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=15;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=14;
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE notif SET NotifyEvent=7  WHERE NotifyEvent=6;
+UPDATE notif SET NotifyEvent=6  WHERE NotifyEvent=5;
+UPDATE notif SET NotifyEvent=5  WHERE NotifyEvent=4;
+UPDATE notif SET NotifyEvent=4  WHERE NotifyEvent=3;
+UPDATE notif SET NotifyEvent=3  WHERE NotifyEvent=2;
+
+UPDATE sta_notif SET NotifyEvent=19 WHERE NotifyEvent=18;
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=17;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=16;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=15;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=14;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE sta_notif SET NotifyEvent=7  WHERE NotifyEvent=6;
+UPDATE sta_notif SET NotifyEvent=6  WHERE NotifyEvent=5;
+UPDATE sta_notif SET NotifyEvent=5  WHERE NotifyEvent=4;
+UPDATE sta_notif SET NotifyEvent=4  WHERE NotifyEvent=3;
+UPDATE sta_notif SET NotifyEvent=3  WHERE NotifyEvent=2;
+
 UPDATE usr_data  SET NotifNtfEvents = (((NotifNtfEvents & ~0x3) << 1) | (NotifNtfEvents & 0x3) | 0x04);
 UPDATE usr_data  SET EmailNtfEvents = (((EmailNtfEvents & ~0x3) << 1) | (EmailNtfEvents & 0x3));
 

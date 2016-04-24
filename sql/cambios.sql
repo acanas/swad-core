@@ -11539,4 +11539,58 @@ UPDATE usr_data  SET NotifNtfEvents = (((NotifNtfEvents & ~0x3) << 1) | (NotifNt
 UPDATE usr_data  SET EmailNtfEvents = (((EmailNtfEvents & ~0x3) << 1) | (EmailNtfEvents & 0x3));
 
 
+---------------
+
+SELECT SUM(NumEvents),SUM(NumMails) FROM sta_notif_backup WHERE NotifyEvent='0';
+
+
+---------------
+
+
+DELETE FROM sta_notif;
+INSERT INTO sta_notif SELECT * FROM sta_notif_backup;
+
+UPDATE sta_notif SET NotifyEvent=19 WHERE NotifyEvent=18;
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=17;
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=16;
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=15;
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=14;
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE sta_notif SET NotifyEvent=7  WHERE NotifyEvent=6;
+UPDATE sta_notif SET NotifyEvent=6  WHERE NotifyEvent=5;
+UPDATE sta_notif SET NotifyEvent=5  WHERE NotifyEvent=4;
+UPDATE sta_notif SET NotifyEvent=4  WHERE NotifyEvent=3;
+UPDATE sta_notif SET NotifyEvent=3  WHERE NotifyEvent=2;
+
+DELETE FROM notif;
+INSERT INTO notif SELECT * FROM notif_backup;
+
+UPDATE notif SET NotifyEvent=19 WHERE NotifyEvent=18;
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=17;
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=16;
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=15;
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=14;
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;
+UPDATE notif SET NotifyEvent=7  WHERE NotifyEvent=6;
+UPDATE notif SET NotifyEvent=6  WHERE NotifyEvent=5;
+UPDATE notif SET NotifyEvent=5  WHERE NotifyEvent=4;
+UPDATE notif SET NotifyEvent=4  WHERE NotifyEvent=3;
+UPDATE notif SET NotifyEvent=3  WHERE NotifyEvent=2;
+
+
+
+
+
 

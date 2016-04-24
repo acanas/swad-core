@@ -1100,7 +1100,7 @@ a:hover						/* Default ==> underlined */
 .BT_SUBMIT_INLINE
 	{
 	box-sizing:border-box;
-	min-width:140px;
+	min-width:160px;
 	color:white;
 	font-size:15px;
 	font-weight:bold;

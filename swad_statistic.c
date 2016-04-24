@@ -240,7 +240,6 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void);
 static void Sta_GetAndShowNoticesStats (void);
 static void Sta_GetAndShowMsgsStats (void);
 
-
 static void Sta_GetAndShowSurveysStats (void);
 static void Sta_GetAndShowNumUsrsPerPrivacy (void);
 static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);

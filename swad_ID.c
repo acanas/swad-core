@@ -828,7 +828,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    char NewID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumID;
    bool AlreadyExists;
-   unsigned NumIDFound;
+   unsigned NumIDFound = 0;	// Initialized to avoid warning
    bool Error = false;
 
    if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
@@ -949,7 +949,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    bool ICanConfirm = false;
    bool Found;
    unsigned NumID;
-   unsigned NumIDFound;
+   unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
