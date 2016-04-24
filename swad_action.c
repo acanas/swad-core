@@ -2391,12 +2391,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvFrmEnrSevStd*/{1428,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
    /* ActRcvFrmEnrSevTch*/{1429,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
 
-   /* ActReqCnfID_Oth	*/{1565,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Std	*/{1566,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Tch	*/{1567,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActCnfID_Oth	*/{1568,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Std	*/{1569,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Tch	*/{1570,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActReqCnfID_Oth	*/{1565,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Std	*/{1566,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Tch	*/{1567,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActCnfID_Oth	*/{1568,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Std	*/{1569,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Tch	*/{1570,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
 
    /* ActFrmIDsOth	*/{1447,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},

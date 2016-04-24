@@ -4837,6 +4837,27 @@ const char *Txt_Confirm_email =
 	"Confirmar e-mail";
 #endif
 
+const char *Txt_Confirm_ID =
+#if   L==1
+	"Confirmar ID";
+#elif L==2
+	"ID best&auml;tigen";
+#elif L==3
+	"Confirm ID";
+#elif L==4
+	"Confirmar ID";
+#elif L==5
+	"Confirmer ID";
+#elif L==6
+	"Confirmar ID";	// Okoteve traducción
+#elif L==7
+	"Confermare ID";
+#elif L==8
+	"Potwierdzenie ID";
+#elif L==9
+	"Confirmar ID";
+#endif
+
 const char *Txt_Confirm_my_enrollment =
 #if   L==1
 	"Confirmar la meva inscripci&oacute;";
@@ -9116,6 +9137,27 @@ const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is ver
 	"Czy na pewno chcesz zresetowac badania <strong>%s</strong>?";
 #elif L==9
 	"Voc&ecirc; realmente deseja reiniciar o inqu&eacute;rito <strong>%s</strong>?";
+#endif
+
+const char *Txt_Do_you_want_to_confirm_the_ID_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Voleu confirmar l'ID (DNI/c&egrave;dula) <strong>%s</strong>?";
+#elif L==2
+	"Wollen Sie die ID <strong>%s</strong> zu best&auml;tigen?";
+#elif L==3
+	"Do you want to confirm the ID (identity number/passport) <strong>%s</strong>?";
+#elif L==4
+	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous confirmer l'ID <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi confermare l'ID <strong>%s</strong>?";
+#elif L==8
+	"Czy chcesz potwierdzi&cacute; I <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; quer confirmar o ID <strong>%s</strong>?";
 #endif
 
 const char *Txt_Document =
@@ -14048,6 +14090,27 @@ const char *Txt_ID =
 	"Dow&oacute;d osobisty";
 #elif L==9
 	"N&ordm; identif.";
+#endif
+
+const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"El ID (DNI/c&eacute;dula) %s ja havia estat confirmat.";
+#elif L==2
+	"ID %s hatte bereits best&auml;tigt worden.";
+#elif L==3
+	"ID %s had already been confirmed.";
+#elif L==4
+	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";
+#elif L==5
+	"L'ID %s avait d&eacute;j&agrave; &eacute;t&eacute; confirm&eacute;e.";
+#elif L==6
+	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";		// Okoteve traducción
+#elif L==7
+	"L'ID %s era gi&agrave; stato confermato.";
+#elif L==8
+	"ID %s zosta&lstrok;a ju&zdot; potwierdzona.";
+#elif L==9
+	"O ID %s j&aacute; havia sido confirmada.";
 #endif
 
 const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s in the following sentences

@@ -432,7 +432,8 @@ static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
 
 static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
   {
-   extern const char *Txt_Confirm;
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Confirm_ID;
 
    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqCnfID_Std :
 		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqCnfID_Tch :
@@ -440,7 +441,8 @@ static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 	    UsrDat->IDs.List[NumID].ID);
-   Lay_PutCreateButtonInline (Txt_Confirm);
+   Lay_PutIconLink ("ok_on16x16.gif",Txt_Confirm_ID,Txt_Confirm_ID,
+                    The_ClassFormBold[Gbl.Prefs.Theme]);
    Act_FormEnd ();
   }
 
@@ -450,7 +452,7 @@ static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
 
 static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID)
   {
-   extern const char *Txt_Confirm;
+   extern const char *Txt_Confirm_ID;
 
    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
 		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
@@ -458,7 +460,7 @@ static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 	    UsrDat->IDs.List[NumID].ID);
-   Lay_PutCreateButton (Txt_Confirm);
+   Lay_PutCreateButton (Txt_Confirm_ID);
    Act_FormEnd ();
   }
 
@@ -912,6 +914,8 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
 
 void ID_RequestConfirmOtherUsrID (void)
   {
+   extern const char *Txt_ID_X_had_already_been_confirmed;
+   extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UsrID[ID_MAX_LENGTH_USR_ID+1];
    bool ICanConfirm = false;
@@ -947,14 +951,14 @@ void ID_RequestConfirmOtherUsrID (void)
 	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
 	   {
 	    /***** ID found and already confirmed *****/
-	    sprintf (Gbl.Message,"El ID %s ya hab&iacute;a sido confirmado.",	// TODO: Need translation!!!
+	    sprintf (Gbl.Message,Txt_ID_X_had_already_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	   }
 	 else
 	   {
 	    /***** Ask for confirmation *****/
-	    sprintf (Gbl.Message,"&iquest;Desea confirmar el ID %s?",	// TODO: Need translation!!!
+	    sprintf (Gbl.Message,Txt_Do_you_want_to_confirm_the_ID_X,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
