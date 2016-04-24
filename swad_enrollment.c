@@ -3367,7 +3367,7 @@ static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
       // An administrator can remove anyone
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
       ICanRemove = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ItsMe :
-                                                                 (Gbl.Usrs.Me.LoggedRole >= Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB));
+                                                            (Gbl.Usrs.Me.LoggedRole >= Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB));
       if (ICanRemove)
 	 switch (ReqDelOrDelUsr)
 	   {

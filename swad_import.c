@@ -227,7 +227,7 @@ void Imp_ImportStdsFromAnImpGrp (long ImpGrpCod,struct ListCodGrps *LstGrps,unsi
 		        Grp_RegisterUsrIntoGroups (&UsrDat,LstGrps);	// Register student in the selected groups
 
 		     /* Confirm user's ID */
-		     ID_ConfirmUsrID (UsrDat.UsrCod,ImpStd.ExternalUsrID);
+		     ID_ConfirmUsrID (&UsrDat,ImpStd.ExternalUsrID);
 
 		     (*NumUsrsRegistered)++;
 		    }

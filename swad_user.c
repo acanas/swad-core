@@ -2258,7 +2258,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
 	    Usr_FreeListUsrCods (&ListUsrCods);
 
 	    /* Mark user's ID as confirmed */
-	    ID_ConfirmUsrID (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrIdLogin);
+	    ID_ConfirmUsrID (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.UsrIdLogin);
 
 	    /* Get user's data */
 	    Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);

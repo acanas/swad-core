@@ -54,6 +54,12 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   ID_REQUEST_CONFIRM_ID,
+   ID_CONFIRM_ID,
+  } ID_ReqConfOrConfID_t;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -73,6 +79,8 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID);
 static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed);
+
+static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID);
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
@@ -820,7 +828,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    char NewID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumID;
    bool AlreadyExists;
-   bool Confirmed;
+   unsigned NumIDFound;
    bool Error = false;
 
    if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
@@ -837,14 +845,15 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 for (NumID = 0, AlreadyExists = false;
 	      NumID < UsrDat->IDs.Num && !AlreadyExists;
 	      NumID++)
-	   {
-	    AlreadyExists = !strcasecmp (UsrDat->IDs.List[NumID].ID,NewID);
-	    Confirmed = UsrDat->IDs.List[NumID].Confirmed;
-	   }
+	    if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
+	      {
+	       AlreadyExists = true;
+	       NumIDFound = NumID;
+	      }
 
 	 if (AlreadyExists)	// This new ID was already associated to this user
 	   {
-	    if (ItsMe || Confirmed)
+	    if (ItsMe || UsrDat->IDs.List[NumIDFound].Confirmed)
 	      {
 	       Error = true;
 	       sprintf (Gbl.Message,Txt_The_ID_X_matches_one_of_the_existing,
@@ -853,7 +862,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    else	// It's not me && !Confirmed
 	      {
 	       /***** Mark this ID as confirmed *****/
-	       ID_ConfirmUsrID (UsrDat->UsrCod,NewID);
+	       ID_ConfirmUsrID (UsrDat,NewID);
 	       sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
 			NewID);
 	      }
@@ -883,7 +892,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
       /***** Show message *****/
       Lay_ShowAlert (Error ? Lay_WARNING :
-			     Lay_INFO,
+			     Lay_SUCCESS,
 		     Gbl.Message);
      }
    else
@@ -914,8 +923,27 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
 
 void ID_RequestConfirmOtherUsrID (void)
   {
+   ID_ReqConfOrConfOtherUsrID (ID_REQUEST_CONFIRM_ID);
+  }
+
+/*****************************************************************************/
+/************************ Confirm another user's ID **************************/
+/*****************************************************************************/
+
+void ID_ConfirmOtherUsrID (void)
+  {
+   ID_ReqConfOrConfOtherUsrID (ID_CONFIRM_ID);
+  }
+
+/*****************************************************************************/
+/********** Request the confirmation or confirm another user's ID ************/
+/*****************************************************************************/
+
+static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
+  {
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
+   extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UsrID[ID_MAX_LENGTH_USR_ID+1];
    bool ICanConfirm = false;
@@ -940,7 +968,7 @@ void ID_RequestConfirmOtherUsrID (void)
       for (NumID = 0, Found = false;
 	   NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && !Found;
 	   NumID++)
-	 if (!strcmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
+	 if (!strcasecmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
 	   {
 	    Found = true;
 	    NumIDFound = NumID;
@@ -957,13 +985,29 @@ void ID_RequestConfirmOtherUsrID (void)
 	   }
 	 else
 	   {
-	    /***** Ask for confirmation *****/
-	    sprintf (Gbl.Message,Txt_Do_you_want_to_confirm_the_ID_X,
-		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	    switch (ReqConfOrConfID)
+	      {
+	       case ID_REQUEST_CONFIRM_ID:        // Ask if confirm ID
+		  /***** Ask for confirmation *****/
+		  sprintf (Gbl.Message,Txt_Do_you_want_to_confirm_the_ID_X,
+			   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		  Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-	    /***** Put button to confirm ID *****/
-	    ID_PutButtonToConfirmID (&Gbl.Usrs.Other.UsrDat,NumIDFound);
+		  /***** Put button to confirm ID *****/
+		  ID_PutButtonToConfirmID (&Gbl.Usrs.Other.UsrDat,NumIDFound);
+		  break;
+	       case ID_CONFIRM_ID:                // Confirm ID
+		  /***** Mark this ID as confirmed *****/
+		  ID_ConfirmUsrID (&Gbl.Usrs.Other.UsrDat,
+		                   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		  Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
+
+		  /***** Write success message *****/
+		  sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
+			   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+		  Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+		  break;
+	      }
 	   }
 	}
       else	// User's ID not found
@@ -977,25 +1021,16 @@ void ID_RequestConfirmOtherUsrID (void)
   }
 
 /*****************************************************************************/
-/************************ Confirm another user's ID **************************/
-/*****************************************************************************/
-
-void ID_ConfirmOtherUsrID (void)
-  {
-   Lay_ShowAlert (Lay_SUCCESS,"Confirmado");	// TODO: Need translation!!!!
-  }
-
-/*****************************************************************************/
 /*********************** Set a user's ID as confirmed ************************/
 /*****************************************************************************/
 
-void ID_ConfirmUsrID (long UsrCod,const char *UsrID)
+void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
    char Query[256+ID_MAX_LENGTH_USR_ID];
 
-   /***** Update my nickname in database *****/
+   /***** Update database *****/
    sprintf (Query,"UPDATE usr_IDs SET Confirmed='Y'"
                   " WHERE UsrCod='%ld' AND UsrID='%s' AND Confirmed<>'Y'",
-            UsrCod,UsrID);
+            UsrDat->UsrCod,UsrID);
    DB_QueryINSERT (Query,"can not confirm a user's ID");
   }

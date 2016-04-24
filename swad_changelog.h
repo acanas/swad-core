@@ -134,13 +134,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.203.6 (2016-04-24)"
-#define CSS_FILE		"swad15.203.css"
+#define Log_PLATFORM_VERSION	"SWAD 15.204 (2016-04-25)"
+#define CSS_FILE		"swad15.204.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.204:   Apr 25, 2016	New form to confirm another user's ID. (201326 lines)
         Version 15.203.6: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201295 lines)
         Version 15.203.5: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201230 lines)
         Version 15.203.4: Apr 23, 2016	New form to confirm another user's ID. Not finished. (201140 lines)

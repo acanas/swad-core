@@ -76,6 +76,6 @@ void ID_NewOtherUsrID (void);
 
 void ID_RequestConfirmOtherUsrID (void);
 void ID_ConfirmOtherUsrID (void);
-void ID_ConfirmUsrID (long UsrCod,const char *UsrID);
+void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID);
 
 #endif
