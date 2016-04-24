@@ -65,7 +65,8 @@ extern struct Globals Gbl;
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
 static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat);
-static void ID_PutButtonToConfirmID (void);
+static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
+static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -387,7 +388,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
 
       if (ICanConfirmUsrID &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
-	 ID_PutButtonToConfirmID ();
+	 ID_PutButtonToReqConfirmID (UsrDat,NumID);
      }
   }
 
@@ -426,12 +427,39 @@ static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/******************* Put a button to confirm user's ID ***********************/
+/******* Put a button to request the confirmation of another user's ID *******/
 /*****************************************************************************/
 
-static void ID_PutButtonToConfirmID (void)
+static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
   {
-   fprintf (Gbl.F.Out," Confirmar ID");	// TODO: Need translation!!!!
+   extern const char *Txt_Confirm;
+
+   Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqCnfID_Std :
+		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqCnfID_Tch :
+							       ActReqCnfID_Oth));	// Guest, visitor or admin
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
+	    UsrDat->IDs.List[NumID].ID);
+   Lay_PutCreateButtonInline (Txt_Confirm);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Put a button to confirm another user's ID ******************/
+/*****************************************************************************/
+
+static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID)
+  {
+   extern const char *Txt_Confirm;
+
+   Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
+		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
+							       ActCnfID_Oth));	// Guest, visitor or admin
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
+	    UsrDat->IDs.List[NumID].ID);
+   Lay_PutCreateButton (Txt_Confirm);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -674,7 +702,7 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
    if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
      {
-      /***** Get new nickname from form *****/
+      /***** Get user's ID from form *****/
       Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrID);
@@ -876,6 +904,81 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
             Confirmed ? 'Y' :
         	        'N');
    DB_QueryINSERT (Query,"can not insert a new ID");
+  }
+
+/*****************************************************************************/
+/*************** Request the confirmation of another user's ID ***************/
+/*****************************************************************************/
+
+void ID_RequestConfirmOtherUsrID (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char UsrID[ID_MAX_LENGTH_USR_ID+1];
+   bool ICanConfirm = false;
+   bool Found;
+   unsigned NumID;
+   unsigned NumIDFound;
+
+   /***** Get other user's code from form and get user's data *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
+	 if (ID_ICanSeeAnotherUsrID (&Gbl.Usrs.Other.UsrDat))
+	    ICanConfirm = true;
+
+   if (ICanConfirm)
+     {
+      /***** Get user's ID from form *****/
+      Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
+      // Users' IDs are always stored internally in capitals and without leading zeros
+      Str_RemoveLeadingZeros (UsrID);
+      Str_ConvertToUpperText (UsrID);
+
+      for (NumID = 0, Found = false;
+	   NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && !Found;
+	   NumID++)
+	 if (!strcmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
+	   {
+	    Found = true;
+	    NumIDFound = NumID;
+	   }
+
+      if (Found)	// Found
+	{
+	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
+	   {
+	    /***** ID found and already confirmed *****/
+	    sprintf (Gbl.Message,"El ID %s ya hab&iacute;a sido confirmado.",	// TODO: Need translation!!!
+		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	   }
+	 else
+	   {
+	    /***** Ask for confirmation *****/
+	    sprintf (Gbl.Message,"&iquest;Desea confirmar el ID %s?",	// TODO: Need translation!!!
+		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+	    /***** Put button to confirm ID *****/
+	    ID_PutButtonToConfirmID (&Gbl.Usrs.Other.UsrDat,NumIDFound);
+	   }
+	}
+      else	// User's ID not found
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+      /***** Show user's record *****/
+      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+     }
+   else		// User not found
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/************************ Confirm another user's ID **************************/
+/*****************************************************************************/
+
+void ID_ConfirmOtherUsrID (void)
+  {
+   Lay_ShowAlert (Lay_SUCCESS,"Confirmado");	// TODO: Need translation!!!!
   }
 
 /*****************************************************************************/

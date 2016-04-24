@@ -73,6 +73,9 @@ void ID_RemoveMyUsrID (void);
 void ID_RemoveOtherUsrID (void);
 void ID_NewMyUsrID (void);
 void ID_NewOtherUsrID (void);
+
+void ID_RequestConfirmOtherUsrID (void);
+void ID_ConfirmOtherUsrID (void);
 void ID_ConfirmUsrID (long UsrCod,const char *UsrID);
 
 #endif

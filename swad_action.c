@@ -1007,6 +1007,13 @@ Users:
 	842. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
 	843. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
 
+NEW	XXX. ActReqCnfID_Oth		Request the confirmation of another user's ID
+NEW	XXX. ActReqCnfID_Std		Request the confirmation of another user's ID
+NEW	XXX. ActReqCnfID_Tch		Request the confirmation of another user's ID
+NEW	XXX. ActCnfID_Oth		Confirm another user's ID
+NEW	XXX. ActCnfID_Std		Confirm another user's ID
+NEW	XXX. ActCnfID_Tch		Confirm another user's ID
+
 	844. ActFrmIDsOth		Show form to the change of the IDs of another user
 	845. ActFrmIDsStd		Show form to the change of the IDs of another user
 	846. ActFrmIDsTch		Show form to the change of the IDs of another user
@@ -2383,6 +2390,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActRcvFrmEnrSevStd*/{1428,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
    /* ActRcvFrmEnrSevTch*/{1429,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
+
+   /* ActReqCnfID_Oth	*/{1565,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Std	*/{1566,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Tch	*/{1567,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActCnfID_Oth	*/{1568,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Std	*/{1569,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Tch	*/{1570,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
 
    /* ActFrmIDsOth	*/{1447,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
    /* ActFrmIDsStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
@@ -4371,6 +4385,12 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqDatTchGrp,	// #1562
 	ActChgDatTchGrp,	// #1563
 	ActDowTchGrp,		// #1564
+	ActReqCnfID_Oth,	// #1565
+	ActReqCnfID_Std,	// #1566
+	ActReqCnfID_Tch,	// #1567
+	ActCnfID_Oth,		// #1568
+	ActCnfID_Std,		// #1569
+	ActCnfID_Tch,		// #1570
 	};
 
 /*****************************************************************************/

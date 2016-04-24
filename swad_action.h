@@ -72,9 +72,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+245+184+144+172+36+28+83)
+#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+245+184+150+172+36+28+83)
 
-#define Act_MAX_ACTION_COD 1564
+#define Act_MAX_ACTION_COD 1570
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1046,42 +1046,49 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActRcvFrmEnrSevStd	(ActChgNumRowFooGrp+111)
 #define ActRcvFrmEnrSevTch	(ActChgNumRowFooGrp+112)
 
-#define ActFrmIDsOth		(ActChgNumRowFooGrp+113)
-#define ActFrmIDsStd		(ActChgNumRowFooGrp+114)
-#define ActFrmIDsTch		(ActChgNumRowFooGrp+115)
-#define ActRemID_Oth		(ActChgNumRowFooGrp+116)
-#define ActRemID_Std		(ActChgNumRowFooGrp+117)
-#define ActRemID_Tch		(ActChgNumRowFooGrp+118)
-#define ActNewID_Oth		(ActChgNumRowFooGrp+119)
-#define ActNewID_Std		(ActChgNumRowFooGrp+120)
-#define ActNewID_Tch		(ActChgNumRowFooGrp+121)
-#define ActFrmPwdOth		(ActChgNumRowFooGrp+122)
-#define ActFrmPwdStd		(ActChgNumRowFooGrp+123)
-#define ActFrmPwdTch		(ActChgNumRowFooGrp+124)
-#define ActChgPwdOth		(ActChgNumRowFooGrp+125)
-#define ActChgPwdStd		(ActChgNumRowFooGrp+126)
-#define ActChgPwdTch		(ActChgNumRowFooGrp+127)
-#define ActFrmMaiOth		(ActChgNumRowFooGrp+128)
-#define ActFrmMaiStd		(ActChgNumRowFooGrp+129)
-#define ActFrmMaiTch		(ActChgNumRowFooGrp+130)
-#define ActRemMaiOth		(ActChgNumRowFooGrp+131)
-#define ActRemMaiStd		(ActChgNumRowFooGrp+132)
-#define ActRemMaiTch		(ActChgNumRowFooGrp+133)
-#define ActNewMaiOth		(ActChgNumRowFooGrp+134)
-#define ActNewMaiStd		(ActChgNumRowFooGrp+135)
-#define ActNewMaiTch		(ActChgNumRowFooGrp+136)
+#define ActReqCnfID_Oth		(ActChgNumRowFooGrp+113)
+#define ActReqCnfID_Std		(ActChgNumRowFooGrp+114)
+#define ActReqCnfID_Tch		(ActChgNumRowFooGrp+115)
+#define ActCnfID_Oth		(ActChgNumRowFooGrp+116)
+#define ActCnfID_Std		(ActChgNumRowFooGrp+117)
+#define ActCnfID_Tch		(ActChgNumRowFooGrp+118)
 
-#define ActRemStdCrs		(ActChgNumRowFooGrp+137)
-#define ActRemTchCrs		(ActChgNumRowFooGrp+138)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp+139)
+#define ActFrmIDsOth		(ActChgNumRowFooGrp+119)
+#define ActFrmIDsStd		(ActChgNumRowFooGrp+120)
+#define ActFrmIDsTch		(ActChgNumRowFooGrp+121)
+#define ActRemID_Oth		(ActChgNumRowFooGrp+122)
+#define ActRemID_Std		(ActChgNumRowFooGrp+123)
+#define ActRemID_Tch		(ActChgNumRowFooGrp+124)
+#define ActNewID_Oth		(ActChgNumRowFooGrp+125)
+#define ActNewID_Std		(ActChgNumRowFooGrp+126)
+#define ActNewID_Tch		(ActChgNumRowFooGrp+127)
+#define ActFrmPwdOth		(ActChgNumRowFooGrp+128)
+#define ActFrmPwdStd		(ActChgNumRowFooGrp+129)
+#define ActFrmPwdTch		(ActChgNumRowFooGrp+130)
+#define ActChgPwdOth		(ActChgNumRowFooGrp+131)
+#define ActChgPwdStd		(ActChgNumRowFooGrp+132)
+#define ActChgPwdTch		(ActChgNumRowFooGrp+133)
+#define ActFrmMaiOth		(ActChgNumRowFooGrp+134)
+#define ActFrmMaiStd		(ActChgNumRowFooGrp+135)
+#define ActFrmMaiTch		(ActChgNumRowFooGrp+136)
+#define ActRemMaiOth		(ActChgNumRowFooGrp+137)
+#define ActRemMaiStd		(ActChgNumRowFooGrp+138)
+#define ActRemMaiTch		(ActChgNumRowFooGrp+139)
+#define ActNewMaiOth		(ActChgNumRowFooGrp+140)
+#define ActNewMaiStd		(ActChgNumRowFooGrp+141)
+#define ActNewMaiTch		(ActChgNumRowFooGrp+142)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+140)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp+141)
+#define ActRemStdCrs		(ActChgNumRowFooGrp+143)
+#define ActRemTchCrs		(ActChgNumRowFooGrp+144)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp+145)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp+142)
-#define ActRemOldUsr		(ActChgNumRowFooGrp+143)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp+146)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp+147)
 
-#define ActLstClk		(ActChgNumRowFooGrp+144)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp+148)
+#define ActRemOldUsr		(ActChgNumRowFooGrp+149)
+
+#define ActLstClk		(ActChgNumRowFooGrp+150)
 
 /*****************************************************************************/
 /******************************** Social tab *********************************/
