@@ -135,13 +135,21 @@
 /*****************************************************************************/
 
 #define Log_PLATFORM_VERSION	"SWAD 15.204.1 (2016-04-25)"
-#define CSS_FILE		"swad15.204.css"
+#define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.204.1: Apr 25, 2016	Fixed bug in changes in database necessary in version 15.201. (201359 lines)
+        Version 15.204.1: Apr 25, 2016	Fixed bug in changes in database necessary in version 15.201. (201366 lines)
+					6 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1565','es','N','Solicitar conf. ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1566','es','N','Solicitar conf. ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1567','es','N','Solicitar conf. ID profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1568','es','N','Confirmar ID invitado');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1569','es','N','Confirmar ID estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1570','es','N','Confirmar ID profesor');
+
         Version 15.204:   Apr 25, 2016	New form to confirm another user's ID. (201326 lines)
         Version 15.203.6: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201295 lines)
         Version 15.203.5: Apr 24, 2016	New form to confirm another user's ID. Not finished. (201230 lines)
