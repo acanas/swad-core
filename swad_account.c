@@ -456,6 +456,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1];
    char Query[2048];
    char PathRelUsr[PATH_MAX+1];
    unsigned NumID;
@@ -472,6 +473,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 
    /***** Insert new user in database *****/
    /* Insert user's data */
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
    sprintf (Query,"INSERT INTO usr_data (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
 		  "Theme,IconSet,Language,FirstDayOfWeek,PhotoVisibility,ProfileVisibility,"
 		  "CtyCod,"
@@ -480,7 +482,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 		  " VALUES ('%s','%s','%s','%s','%s','%s',"
 		  "'%s','%s','%s','%u','%s','%s',"
 		  "'%ld',"
-		  "'%s','%s','%s','%s','%s','%04u-%02u-%02u','%s',"
+		  "'%s','%s','%s','%s','%s',%s,'%s',"
 		  "'%u','%u','-1','0')",
 	    UsrDat->EncryptedUsrCod,
 	    UsrDat->Password,
@@ -496,7 +498,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
 	    UsrDat->LocalAddress ,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,
 	    UsrDat->OriginPlace,
-	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
+	    BirthdayStrDB,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
             Mnu_MENU_DEFAULT,

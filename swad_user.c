@@ -560,8 +560,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    strncpy (UsrDat->OriginPlace  ,row[24],sizeof (UsrDat->OriginPlace  ) - 1);
    UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  ) - 1] = '\0';
    strcpy (StrBirthday,
-           row[25] ? row[25] :
-	             "0000-00-00");
+	   row[25] ? row[25] :
+		     "0000-00-00");
+
    Usr_GetUsrCommentsFromString (row[26] ? row[26] :
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
@@ -1614,7 +1615,25 @@ void Usr_WelcomeUsr (void)
      }
   }
 
-/******************************************************************************/
+/*****************************************************************************/
+/************ Write birthday string to insert or update database *************/
+/*****************************************************************************/
+
+void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
+                              char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1])
+  {
+   if (UsrDat->Birthday.Year  == 0 ||
+       UsrDat->Birthday.Month == 0 ||
+       UsrDat->Birthday.Day   == 0)
+      strcpy (BirthdayStrDB,"NULL");
+   else
+      sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",
+	       UsrDat->Birthday.Year,
+	       UsrDat->Birthday.Month,
+	       UsrDat->Birthday.Day);
+  }
+
+/*****************************************************************************/
 /*************** Check if my birthday is already congratulated ***************/
 /*****************************************************************************/
 
@@ -2503,7 +2522,6 @@ static void Usr_SetUsrRoleAndPrefs (void)
 	                                        Gbl.CurrentDeg.Deg.DegCod);
 	}
      }
-
 
    /***** Check if I belong to current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)

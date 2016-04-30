@@ -40364,7 +40364,7 @@ const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very imp
 	"Tag %s not allowed. Click to allow it.";		// Necessita de tradução
 #endif
 
-#if defined LOCALHOST_UBUNTU			// localhost (Ubuntu) ******************
+#if defined LOCALHOST_UBUNTU		// localhost (Ubuntu) *****************
 
 const char *Txt_TAGLINE =
 # if   L==1
@@ -40408,7 +40408,7 @@ const char *Txt_TAGLINE_BR =
 	"plataforma de<br />apoio ao ensino";
 # endif
 
-#elif defined OPENSWAD_ORG			// openswad.org ************************
+#elif defined OPENSWAD_ORG		// openswad.org ***********************
 
 const char *Txt_TAGLINE =
 # if   L==1
@@ -40452,7 +40452,7 @@ const char *Txt_TAGLINE_BR =
 	"plataforma de<br />apoio ao ensino";
 # endif
 
-#elif defined SWAD_UGR_ES			// swad.ugr.es *************************
+#elif defined SWAD_UGR_ES		// swad.ugr.es ************************
 
 const char *Txt_TAGLINE =
 # if   L==1
@@ -40496,7 +40496,51 @@ const char *Txt_TAGLINE_BR =
 	"plataforma de apoio<br />ao ensino (UGR)";
 # endif
 
-#elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad **************
+#elif defined SWADBERRY_UGR_ES		// swadberry.ugr.es *******************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma de suport a la doc&egrave;ncia (Raspberry Pi)";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung der Lehre (Raspberry Pi)";
+# elif L==3
+	"platform to support teaching (Raspberry Pi)";
+# elif L==4
+	"plataforma de apoyo a la docencia (Raspberry Pi)";
+# elif L==5
+	"plate-forme pour appuyer l'enseignement (Raspberry Pi)";
+# elif L==6
+	"plataforma de apoyo a la docencia (Raspberry Pi)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere l'insegnamento (Raspberry Pi)";
+# elif L==8
+	"platforma do wspierania nauczania (Raspberry Pi)";
+# elif L==9
+	"plataforma de apoio ao ensino (Raspberry Pi)";
+# endif
+
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport<br />a la doc&egrave;ncia (Raspberry Pi)";
+# elif L==2
+	"Plattform zur<br />Unterst&uuml;tzung der Lehre (Raspberry Pi)";
+# elif L==3
+	"platform to<br />support teaching (Raspberry Pi)";
+# elif L==4
+	"plataforma de apoyo<br />a la docencia (Raspberry Pi)";
+# elif L==5
+	"plate-forme pour<br />appuyer l'enseignement (Raspberry Pi)";
+# elif L==6
+	"plataforma de apoyo<br />a la docencia (Raspberry Pi)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per<br />sostenere l'insegnamento (Raspberry Pi)";
+# elif L==8
+	"platforma do<br />wspierania nauczania (Raspberry Pi)";
+# elif L==9
+	"plataforma de<br />apoio ao ensino (Raspberry Pi)";
+# endif
+
+#elif defined WWW_CEVUNA_UNA_PY		// www.cevuna.una.py/swad *************
 
 const char *Txt_TAGLINE =
 # if   L==1

@@ -130,20 +130,43 @@
 // TODO: FIX BUG: A theacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: FIX BUG: Txt_Save_file_properties does not have sense in briefcase, because nothing to save (license should be editable in briefcase?)
 // TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
+// TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.206 (2016-04-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.207 (2016-05-01)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.207:   May 01, 2016	Add default values for fields in users' data table. (201424 lines)
+					Birthday default value now is NULL.
+					18 changes necessary in database:
+ALTER TABLE usr_data CHANGE COLUMN EncryptedUsrCod EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Password Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Surname1 Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Surname2 Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN FirstName FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Theme Theme CHAR(16) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN IconSet IconSet CHAR(16) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Language Language CHAR(2) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Photo Photo CHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Office Office VARCHAR(127) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN OfficePhone OfficePhone CHAR(16) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN LocalAddress LocalAddress VARCHAR(127) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN LocalPhone LocalPhone CHAR(16) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN FamilyAddress FamilyAddress VARCHAR(127) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN FamilyPhone FamilyPhone CHAR(16) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN OriginPlace OriginPlace VARCHAR(127) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Birthday Birthday DATE;
+UPDATE usr_data SET Birthday=NULL WHERE Birthday='0000-00-00';
+
         Version 15.206:   Apr 30, 2016	Remove default DATETIME fields to avoid errors if 0 is not allowed in date in database. (201424 lines)
-					6 changes necessary in database:
+					7 changes necessary in database:
 ALTER TABLE connected CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;
 ALTER TABLE crs_grp_types CHANGE COLUMN OpenTime OpenTime DATETIME NOT NULL;
 ALTER TABLE crs_last CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;

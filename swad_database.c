@@ -2547,18 +2547,17 @@ mysql> DESCRIBE usr_data;
 | Field             | Type                                             | Null | Key | Default | Extra          |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
 | UsrCod            | int(11)                                          | NO   | PRI | NULL    | auto_increment |
-| EncryptedUsrCod   | char(43)                                         | NO   | UNI | NULL    |                |
-| Password          | char(86)                                         | NO   |     | NULL    |                |
-| Surname1          | varchar(32)                                      | NO   |     | NULL    |                |
-| Surname2          | varchar(32)                                      | NO   |     | NULL    |                |
-| FirstName         | varchar(32)                                      | NO   |     | NULL    |                |
+| EncryptedUsrCod   | char(43)                                         | NO   | UNI |         |                |
+| Password          | char(86)                                         | NO   |     |         |                |
+| Surname1          | varchar(32)                                      | NO   |     |         |                |
+| Surname2          | varchar(32)                                      | NO   |     |         |                |
+| FirstName         | varchar(32)                                      | NO   |     |         |                |
 | Sex               | enum('unknown','female','male')                  | NO   |     | unknown |                |
-| Layout            | tinyint(4)                                       | NO   | MUL | 0       |                |
-| Theme             | char(16)                                         | NO   | MUL | NULL    |                |
-| IconSet           | char(16)                                         | NO   | MUL | NULL    |                |
-| Language          | char(2)                                          | NO   | MUL | NULL    |                |
+| Theme             | char(16)                                         | NO   | MUL |         |                |
+| IconSet           | char(16)                                         | NO   | MUL |         |                |
+| Language          | char(2)                                          | NO   | MUL |         |                |
 | FirstDayOfWeek    | tinyint(4)                                       | NO   | MUL | 0       |                |
-| Photo             | char(43)                                         | NO   |     | NULL    |                |
+| Photo             | char(43)                                         | NO   |     |         |                |
 | PhotoVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | ProfileVisibility | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | CtyCod            | int(11)                                          | NO   | MUL | -1      |                |
@@ -2566,35 +2565,35 @@ mysql> DESCRIBE usr_data;
 | InsCod            | int(11)                                          | NO   | MUL | -1      |                |
 | DptCod            | int(11)                                          | NO   | MUL | -1      |                |
 | CtrCod            | int(11)                                          | NO   | MUL | -1      |                |
-| Office            | varchar(127)                                     | NO   |     | NULL    |                |
-| OfficePhone       | char(16)                                         | NO   |     | NULL    |                |
-| LocalAddress      | varchar(127)                                     | NO   |     | NULL    |                |
-| LocalPhone        | char(16)                                         | NO   |     | NULL    |                |
-| FamilyAddress     | varchar(127)                                     | NO   |     | NULL    |                |
-| FamilyPhone       | char(16)                                         | NO   |     | NULL    |                |
-| OriginPlace       | varchar(127)                                     | NO   |     | NULL    |                |
-| Birthday          | date                                             | NO   |     | NULL    |                |
+| Office            | varchar(127)                                     | NO   |     |         |                |
+| OfficePhone       | char(16)                                         | NO   |     |         |                |
+| LocalAddress      | varchar(127)                                     | NO   |     |         |                |
+| LocalPhone        | char(16)                                         | NO   |     |         |                |
+| FamilyAddress     | varchar(127)                                     | NO   |     |         |                |
+| FamilyPhone       | char(16)                                         | NO   |     |         |                |
+| OriginPlace       | varchar(127)                                     | NO   |     |         |                |
+| Birthday          | date                                             | YES  |     | NULL    |                |
 | Comments          | text                                             | NO   |     | NULL    |                |
 | Menu              | tinyint(4)                                       | NO   | MUL | 0       |                |
 | SideCols          | tinyint(4)                                       | NO   | MUL | 3       |                |
-| NotifNtfEvents    | int(11)                                          | NO   |     | -1      |                |
+| NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-33 rows in set (0.01 sec)
+32 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
-                   "EncryptedUsrCod CHAR(43) NOT NULL,"
-                   "Password CHAR(86) COLLATE latin1_bin NOT NULL,"
-                   "Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
-                   "Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
-                   "FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
+                   "EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '',"
+                   "Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '',"
+                   "Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
+                   "Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
+                   "FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
                    "Sex ENUM ('unknown','female','male') NOT NULL DEFAULT 'unknown',"
-                   "Theme CHAR(16) NOT NULL,"
-                   "IconSet CHAR(16) NOT NULL,"
-                   "Language CHAR(2) NOT NULL,"
+                   "Theme CHAR(16) NOT NULL DEFAULT '',"
+                   "IconSet CHAR(16) NOT NULL DEFAULT '',"
+                   "Language CHAR(2) NOT NULL DEFAULT '',"
 		   "FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-                   "Photo CHAR(43) NOT NULL,"
+                   "Photo CHAR(43) NOT NULL DEFAULT '',"
 		   "PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
 		   "ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
                    "CtyCod INT NOT NULL DEFAULT -1,"
@@ -2602,14 +2601,14 @@ mysql> DESCRIBE usr_data;
                    "InsCod INT NOT NULL DEFAULT -1,"
                    "DptCod INT NOT NULL DEFAULT -1,"
                    "CtrCod INT NOT NULL DEFAULT -1,"
-                   "Office VARCHAR(127) NOT NULL,"
-                   "OfficePhone CHAR(16) NOT NULL,"
-                   "LocalAddress VARCHAR(127) NOT NULL,"
-                   "LocalPhone CHAR(16) NOT NULL,"
-                   "FamilyAddress VARCHAR(127) NOT NULL,"
-                   "FamilyPhone CHAR(16) NOT NULL,"
-                   "OriginPlace VARCHAR(127) NOT NULL,"
-                   "Birthday DATE NOT NULL,"
+                   "Office VARCHAR(127) NOT NULL DEFAULT '',"
+                   "OfficePhone CHAR(16) NOT NULL DEFAULT '',"
+                   "LocalAddress VARCHAR(127) NOT NULL DEFAULT '',"
+                   "LocalPhone CHAR(16) NOT NULL DEFAULT '',"
+                   "FamilyAddress VARCHAR(127) NOT NULL DEFAULT '',"
+                   "FamilyPhone CHAR(16) NOT NULL DEFAULT '',"
+                   "OriginPlace VARCHAR(127) NOT NULL DEFAULT '',"
+                   "Birthday DATE,"
                    "Comments TEXT NOT NULL,"
                    "Menu TINYINT NOT NULL DEFAULT 0,"
                    "SideCols TINYINT NOT NULL DEFAULT 3,"

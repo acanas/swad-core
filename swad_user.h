@@ -61,6 +61,8 @@
 #define Usr_MAX_BYTES_NAME			 32
 #define Usr_MAX_BYTES_NAME_SPEC_CHAR		(Usr_MAX_BYTES_NAME*Str_MAX_LENGTH_SPEC_CHAR_HTML)
 
+#define Usr_BIRTHDAY_STR_DB_LENGTH (1+4+1+2+1+2+1)	// "'%04u-%02u-%02u'"
+
 #define Usr_MAX_LENGTH_PHONE	16
 #define Usr_MAX_BYTES_PHONE	16
 
@@ -251,6 +253,10 @@ void Usr_Logout (void);
 void Usr_PutLinkToLogin (void);
 void Usr_WriteFormLogin (void);
 void Usr_WelcomeUsr (void);
+
+void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
+                            char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1]);
+
 void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);
 void Usr_PutFormLogOut (void);

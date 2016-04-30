@@ -443,6 +443,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1];
    char Query[2048];
 
    /***** Check if user's code is initialized *****/
@@ -453,6 +454,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    Enr_FilterUsrDat (UsrDat);
 
    /***** Update user's common data *****/
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
@@ -461,7 +463,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 		  "CtyCod='%ld',"
 		  "LocalAddress='%s',LocalPhone='%s',"
 		  "FamilyAddress='%s',FamilyPhone='%s',"
-		  "OriginPlace='%s',Birthday='%04u-%02u-%02u',"
+		  "OriginPlace='%s',Birthday=%s,"
 		  "Comments='%s'"
 		  " WHERE UsrCod='%ld'",
 	    UsrDat->Password,
@@ -477,7 +479,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	    UsrDat->LocalAddress,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,
 	    UsrDat->OriginPlace,
-	    UsrDat->Birthday.Year,UsrDat->Birthday.Month,UsrDat->Birthday.Day,
+	    BirthdayStrDB,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
 	    UsrDat->UsrCod);
@@ -493,9 +495,9 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
    /***** Fix birthday *****/
    if (UsrDat->Birthday.Year < Gbl.Now.Date.Year-99 ||
        UsrDat->Birthday.Year > Gbl.Now.Date.Year-16)
-      UsrDat->Birthday.Year =
+      UsrDat->Birthday.Year  =
       UsrDat->Birthday.Month =
-      UsrDat->Birthday.Day = 0;
+      UsrDat->Birthday.Day   = 0;
   }
 
 /*****************************************************************************/

@@ -553,8 +553,13 @@ static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    UsrDat->Photo[sizeof (UsrDat->Photo)-1] = '\0';
 
    /* Get user's brithday */
-   strncpy (UsrDat->Birthday.YYYYMMDD,row[4],4+2+2);
-   UsrDat->Birthday.YYYYMMDD[4+2+2] = '\0';
+   if (row[4])
+     {
+      strncpy (UsrDat->Birthday.YYYYMMDD,row[4],4+2+2);
+      UsrDat->Birthday.YYYYMMDD[4+2+2] = '\0';
+     }
+   else
+      strcpy (UsrDat->Birthday.YYYYMMDD,"00000000");
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
