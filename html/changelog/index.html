@@ -58,13 +58,1172 @@
 
 	<tr>
 	<td align="center">
-		Last update: February 2, 2016
+		Last update: April 18, 2016
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.200.5: Apr 18, 2016</dt>
+							<dd>
+							Removed link to enter from external service. (199764 lines)
+							</dd>
+		<dt>Version 15.200.4: Apr 18, 2016</dt>
+							<dd>
+							Changes in configuration. (199785 lines)
+							</dd>
+		<dt>Version 15.200.3: Apr 18, 2016</dt>
+							<dd>
+							Fixed bug in tests, reported by Miguel Damas Hermoso. (199788 lines)
+							</dd>
+		<dt>Version 15.200.2: Apr 18, 2016</dt>
+							<dd>
+							Fixed bugs in searching for documents. (199774 lines)
+							</dd>
+		<dt>Version 15.200.1: Apr 18, 2016</dt>
+							<dd>
+							Fixed bug in searching for documents. (199726 lines)
+							</dd>
+		<dt>Version 15.200:   Apr 18, 2016</dt>
+							<dd>
+							New layout of search form. (199718 lines)
+							</dd>
+		<dt>Version 15.199.8: Apr 18, 2016</dt>
+							<dd>
+							Changes in title of results of searching documents. (199723 lines)
+							</dd>
+		<dt>Version 15.199.7: Apr 17, 2016</dt>
+							<dd>
+							Changes in title of results of searching users. (199639 lines)
+							</dd>
+		<dt>Version 15.199.6: Apr 17, 2016</dt>
+							<dd>
+							Changes in title of results of searching courses. (199647 lines)
+							</dd>
+		<dt>Version 15.199.5: Apr 17, 2016</dt>
+							<dd>
+							Changes in title of results of searching degrees. (199652 lines)
+							</dd>
+		<dt>Version 15.199.4: Apr 17, 2016</dt>
+							<dd>
+							Changes in title of results of searching centres. (199657 lines)
+							</dd>
+		<dt>Version 15.199.3: Apr 17, 2016</dt>
+							<dd>
+							Changes in title of results of searching institutions. (199663 lines)
+
+		<dt>Version 15.199.2: Apr 16, 2016</dt>
+							<dd>
+							Fixed bug in social comments, reported by Javier Fern&aacute;ndez Baldomero. (199666 lines)
+							</dd>
+		<dt>Version 15.199.1: Apr 16, 2016</dt>
+							<dd>
+							Fixed bug in Statistics &gt; Degrees. (199665 lines)
+							</dd>
+		<dt>Version 15.199:   Apr 16, 2016</dt>
+							<dd>
+							In Statistics &gt; Degrees, show only degrees with students.<br />
+                                       			Code optimization in number of courses in a degree. (199665 lines)
+							</dd>
+		<dt>Version 15.198:   Apr 15, 2016</dt>
+							<dd>
+							Changes in layout related to image URL. (199646 lines)
+							</dd>
+		<dt>Version 15.197:   Apr 15, 2016</dt>
+							<dd>
+							Input field to enter image URL. (199518 lines)
+							</dd>
+		<dt>Version 15.196:   Apr 15, 2016</dt>
+							<dd>
+							Changes related to image URL. (199467 lines)
+							</dd>
+		<dt> Version 15.195.1: Apr 15, 2016</dt>
+							<dd>
+							New fields in images to store URL when a user click in the image. (199390 lines)<br />
+							7 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE tst_questions ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE tst_answers ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE social_posts ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE social_comments ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE forum_post ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE msg_content ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;<br />
+ALTER TABLE msg_content_deleted ADD COLUMN ImageURL VARCHAR(255) NOT NULL AFTER ImageTitle;
+							</code></small>
+							</dd>
+		<dt>Version 15.195:   Apr 14, 2016</dt>
+							<dd>
+							Code refactoring related to uploading images. (199355 lines)
+							</dd>
+		<dt>Version 15.194.2: Apr 14, 2016</dt>
+							<dd>
+							Code refactoring related to uploading images. (199384 lines)
+							</dd>
+		<dt>Version 15.194.1: Apr 14, 2016</dt>
+							<dd>
+							Code refactoring related to uploading images. (199391 lines)
+							</dd>
+		<dt>Version 15.194:   Apr 14, 2016</dt>
+							<dd>
+							Code refactoring related to uploading images. (199391 lines)
+							</dd>
+		<dt>Version 15.193:   Apr 14, 2016</dt>
+							<dd>
+							New layout of button used to upload images. (199357 lines)
+							</dd>
+		<dt>Version 15.192.13:Apr 13, 2016</dt>
+							<dd>
+							Fixed bug in file upload, reported by Christian Morillas Guti&eacute;rrez. (199341 lines)
+							</dd>
+		<dt>Version 15.192.12:Apr 12, 2016</dt>
+							<dd>
+							Fixed bug in groups reported by user raistmaj in GitHub. (199339 lines)
+							</dd>
+		<dt>Version 15.192.11:Apr 12, 2016</dt>
+							<dd>
+							Image quality in social posts reduced to 50 in order to speed up page loading.<br />
+							Change in layout of message post. (199337 lines)
+							</dd>
+		<dt>Version 15.192.10:Apr 11, 2016</dt>
+							<dd>
+							Fixed bug in edition of test questions. (199335 lines)
+							</dd>
+		<dt>Version 15.192.9: Apr 11, 2016</dt>
+							<dd>
+							Changed layout of form to send attached image in forum posts and messages. (199333 lines)
+							</dd>
+		<dt>Version 15.192.8: Apr 11, 2016</dt>
+							<dd>
+							Contextual icon to remove user's photo. (199331 lines)
+							</dd>
+		<dt>Version 15.192.7: Apr 11, 2016</dt>
+							<dd>
+							Changes in forms to upload user's photo. (199340 lines)
+							</dd>
+		<dt>Version 15.192.6: Apr 11, 2016</dt>
+							<dd>
+							Changes in layout of test edition.<br />
+							Changes in forms to upload files. (199359 lines)
+							</dd>
+		<dt>Version 15.192.5: Apr 11, 2016</dt>
+							<dd>
+							Fixed bug in edition of tests. (199369 lines)
+							</dd>
+		<dt>Version 15.192.4: Apr 11, 2016</dt>
+							<dd>
+							Fixed bug when removing messages. (199370 lines)
+							</dd>
+		<dt>Version 15.192.3: Apr 11, 2016</dt>
+							<dd>
+							Fixed bugs when receiving forum image. (199355 lines)
+							</dd>
+		<dt>Version 15.192.2: Apr 11, 2016</dt>
+							<dd>
+							Fixed bug when getting forum post content. (199344 lines)
+							</dd>
+		<dt>Version 15.192.1: Apr 10, 2016</dt>
+							<dd>
+							Remove image attached to forum post when the post is removed. (199340 lines)
+							</dd>
+		<dt>Version 15.192:   Apr 10, 2016</dt>
+							<dd>
+							Get image attached to forum post / message. (199332 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE forum_post ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;<br />
+ALTER TABLE forum_post ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;<br />
+ALTER TABLE msg_content ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;<br />
+ALTER TABLE msg_content ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;<br />
+ALTER TABLE msg_content_deleted ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;<br />
+ALTER TABLE msg_content_deleted ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+							</code></small>
+							</dd>
+		<dt>Version 15.191:   Apr 10, 2016</dt>
+							<dd>
+							Forms to attach an image to a forum posts and messages. Not finished. (199247 lines)
+							</dd>
+		<dt>Version 15.190.6: Apr 09, 2016</dt>
+							<dd>
+							Changes in layout of form to write a new message. (199152 lines)
+							</dd>
+		<dt>Version 15.190.5: Apr 09, 2016</dt>
+							<dd>
+							Changes in layout of form to write a new forum post. (199156 lines)
+							</dd>
+		<dt>Version 15.190.4: Apr 09, 2016</dt>
+							<dd>
+							Changes in layout of form to write a new forum post. (199152 lines)
+							</dd>
+		<dt>Version 15.190.3: Apr 09, 2016</dt>
+							<dd>
+							Change in format of image title/attribution. (199145 lines)
+							</dd>
+		<dt>Version 15.190.2: Apr 09, 2016</dt>
+							<dd>
+							Fixed bug in test images. (199144 lines)
+							</dd>
+		<dt>Version 15.190.1: Apr 08, 2016</dt>
+							<dd>
+							Removed unused JavaScript code. (199132 lines)
+							</dd>
+		<dt>Version 15.190:   Apr 08, 2016</dt>
+							<dd>
+							Get image attached to a social comment. (199142 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE social_comments ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;<br />
+ALTER TABLE social_comments ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+							</code></small>
+							</dd>
+		<dt>Version 15.189.2: Apr 08, 2016</dt>
+							<dd>
+							Remove file of the image attached to a social post when the post is removed. (199017 lines)
+							</dd>
+		<dt>Version 15.189.1: Apr 08, 2016</dt>
+							<dd>
+							Change in layout of form to write a new social post. (198997 lines)
+							</dd>
+		<dt>Version 15.189:   Apr 08, 2016</dt>
+							<dd>
+							Get image attached to a social post. (198991 lines)<br />
+							2 changes necessary in database:
+							<small><code>
+ALTER TABLE social_posts ADD COLUMN ImageName VARCHAR(43) NOT NULL AFTER Content;<br />
+ALTER TABLE social_posts ADD COLUMN ImageTitle VARCHAR(255) NOT NULL AFTER ImageName;
+							</code></small>
+							</dd>
+		<dt>Version 15.188:   Apr 08, 2016</dt>
+							<dd>
+							Form to attach an image to a social post. Not finished. (198904 lines)
+							</dd>
+		<dt>Version 15.187.2: Apr 08, 2016</dt>
+							<dd>
+							Changed CSS of alerts. (198873 lines)
+							</dd>
+		<dt>Version 15.187.1: Apr 08, 2016</dt>
+							<dd>
+							Code optimization in function to change format of string. (198872 lines)
+							</dd>
+		<dt>Version 15.187:   Apr 07, 2016</dt>
+							<dd>
+							Fixed bug in forms sent using content type multipart/form-data. (198938 lines)
+							</dd>
+		<dt>Version 15.186:   Apr 07, 2016</dt>
+							<dd>
+							Changes in edition of a test question. (198840 lines)
+							</dd>
+		<dt>Version 15.185.4: Apr 07, 2016</dt>
+							<dd>
+							Changes in edition of a test question. (198832 lines)
+							</dd>
+		<dt>Version 15.185.3: Apr 07, 2016</dt>
+							<dd>
+							Changed icons to expand / contract. (198801 lines)<br />
+							<small><code>
+Copy file icon/expand64x64.png to icon directory<br />
+Copy file icon/contract64x64.png to icon directory
+							</code></small>
+							</dd>
+		<dt>Version 15.185.2: Apr 07, 2016</dt>
+							<dd>
+							Change in title of take a test. (198797 lines)
+							</dd>
+		<dt>Version 15.185.1: Apr 07, 2016</dt>
+							<dd>
+							Change in title of edition of test questions. (198776 lines)
+							</dd>
+		<dt>Version 15.185:   Apr 07, 2016</dt>
+							<dd>
+							Fixed bugs in edition of test questions. (198755 lines)
+							</dd>
+		<dt>Version 15.184.8: Apr 07, 2016</dt>
+							<dd>
+							Change in edition of a test question. (198708 lines)
+							</dd>
+		<dt>Version 15.184.7: Apr 07, 2016</dt>
+							<dd>
+							Change in layout of edition of a test question. (198706 lines)
+							</dd>
+		<dt>Version 15.184.6: Apr 07, 2016</dt>
+							<dd>
+							Change in layout of edition of a test question. (198670 lines)
+							</dd>
+		<dt>Version 15.184.5: Apr 07, 2016</dt>
+							<dd>
+							Fixed bugs exporting/importing test questions. (198679 lines)
+							</dd>
+		<dt>Version 15.184.4: Apr 06, 2016</dt>
+							<dd>
+							Fixed minor bug in layout of test exam. (198676 lines)
+							</dd>
+		<dt>Version 15.184.3: Apr 06, 2016</dt>
+							<dd>
+							Fixed minor bug in layout of test exam. (198677 lines)
+							</dd>
+		<dt>Version 15.184.2: Apr 06, 2016</dt>
+							<dd>
+							Fixed minor bug in layout of test exam. (198679 lines)
+							</dd>
+		<dt>Version 15.184.1: Apr 06, 2016</dt>
+							<dd>
+							Fixed bug when removing a test question.<br />
+							Code refactoring in tests. (198680 lines)
+							</dd>
+		<dt>Version 15.184:   Apr 06, 2016</dt>
+							<dd>
+							Code refactoring in tests and images.<br />
+                                      			Fixed bugs in test questions. (198682 lines)
+							</dd>
+		<dt>Version 15.183.1: Apr 06, 2016</dt>
+							<dd>
+							Fix bug in feedback of test question. (198706 lines)
+							</dd>
+		<dt>Version 15.183:   Apr 06, 2016</dt>
+							<dd>
+							Change in length of title/attribution of images. (198704 lines)<br />
+							2 changes necessary in database:
+							<small><code>
+ALTER TABLE tst_questions CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL;<br />
+ALTER TABLE tst_answers CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 15.182:   Apr 06, 2016</dt>
+							<dd>
+							Get fields title/attribution of images from form. (198610 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE tst_questions CHANGE COLUMN Image ImageName VARCHAR(43) NOT NULL;<br />
+ALTER TABLE tst_questions ADD COLUMN ImageTitle TEXT NOT NULL AFTER ImageName;<br />
+ALTER TABLE tst_answers CHANGE COLUMN Image ImageName VARCHAR(43) NOT NULL;<br />
+ALTER TABLE tst_answers ADD COLUMN ImageTitle TEXT NOT NULL AFTER ImageName;
+							</code></small>
+							</dd>
+		<dt>Version 15.181:   Apr 05, 2016</dt>
+							<dd>
+							New fields in test questions with the title/attribution of images. (198515 lines)
+							</dd>
+		<dt>Version 15.180.7: Apr 05, 2016</dt>
+							<dd>
+							Changes in layout of editor of question. (198473 lines)
+							</dd>
+		<dt>Version 15.180.6: Apr 05, 2016</dt>
+							<dd>
+							Changes in layout of editor of question. (198490 lines)
+							</dd>
+		<dt>Version 15.180.5: Apr 05, 2016</dt>
+							<dd>
+							Changes in layout of editor of question. (198512 lines)
+							</dd>
+		<dt>Version 15.180.4: Apr 05, 2016</dt>
+							<dd>
+							Fixed bug in images in test questions. (198512 lines)
+							</dd>
+		<dt>Version 15.180.3: Apr 05, 2016</dt>
+							<dd>
+							Changed layout of confirm / reject registration. (198482 lines)
+							</dd>
+		<dt>Version 15.180.2: Apr 05, 2016</dt>
+							<dd>
+							Contextual link to remove one survey question. (198459 lines)
+							</dd>
+		<dt>Version 15.180.1: Apr 05, 2016</dt>
+							<dd>
+							Fized minor layout bug in edition of a test question. (198430 lines)
+							</dd>
+		<dt>Version 15.180:   Apr 05, 2016</dt>
+							<dd>
+							Changes in form to edit a test question.<br />
+							Ask for confirmation when removing a survey question. (198429 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1524','es','N','Preguntar si eliminar pregunta encuesta');
+							</code></small>
+							</dd>
+		<dt>Version 15.179.1: Apr 05, 2016</dt>
+							<dd>
+							Contextual link to remove one test question. (198384 lines)
+							</dd>
+		<dt>Version 15.179:   Apr 05, 2016</dt>
+							<dd>
+							Fixed bug when getting a parameter.<br />
+							Ask for confirmation when removing a test question. (198355 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1523','es','N','Preguntar si eliminar pregunta test');
+							</code></small>
+							</dd>
+		<dt>Version 15.178.2: Apr 05, 2016</dt>
+							<dd>
+							Changes in JavaScript related to images in test questions. (198265 lines)
+							</dd>
+		<dt>Version 15.178.1: Apr 04, 2016</dt>
+							<dd>
+							Changes in CSS related to images in test questions. (198240 lines)
+							</dd>
+		<dt>Version 15.178:   Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to images in test questions. (198244 lines)<br />
+							5 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE tst_questions CHANGE COLUMN Image ImageOld CHAR(43) NOT NULL;<br />
+ALTER TABLE tst_questions ADD COLUMN Image VARCHAR(43) NOT NULL AFTER Feedback;<br />
+UPDATE tst_questions SET Image=ImageOld;<br />
+ALTER TABLE tst_questions DROP COLUMN ImageOld;<br />
+ALTER TABLE tst_answers ADD COLUMN Image VARCHAR(43) NOT NULL AFTER Feedback;
+							</code></small>
+							</dd>
+		<dt>Version 15.177:   Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to images. (198083 lines)
+							</dd>
+		<dt>Version 15.176:   Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to images. (198019 lines)
+							</dd>
+		<dt>Version 15.175.11:Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to image associated to a test question.<br />
+                                      			Forms to edit image in every unique/multiple answer. (197968 lines)
+							</dd>
+		<dt>Version 15.175.10:Apr 04, 2016</dt>
+							<dd>
+							Changes in CSS. (197955 lines)
+							</dd>
+		<dt>Version 15.175.9: Apr 04, 2016</dt>
+							<dd>
+							Fixed bug in edition of a test question. (197953 lines)
+							</dd>
+		<dt>Version 15.175.8: Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to receiving and processing image file. (197945 lines)
+							</dd>
+		<dt>Version 15.175.7: Apr 04, 2016</dt>
+							<dd>
+							Code refactoring related to image associated to a test question.<br />
+							Fixed bug while exporting test questions. (197923 lines)
+							</dd>
+		<dt>Version 15.175.6: Apr 03, 2016</dt>
+							<dd>
+							Remove image associated to a test question. (197926 lines)
+							</dd>
+		<dt>Version 15.175.5: Apr 03, 2016</dt>
+							<dd>
+							Changes in reception of form to edit one test question. (197930 lines)
+							</dd>
+		<dt>Version 15.175.4: Apr 03, 2016</dt>
+							<dd>
+							Changes in form to edit one test question. (197897 lines)
+							</dd>
+		<dt>Version 15.175.3: Apr 03, 2016</dt>
+							<dd>
+							Change in edition of test question. (197804 lines)
+							</dd>
+		<dt>Version 15.175.2: Apr 03, 2016</dt>
+							<dd>
+							Code refactoring related to deleting image file. (197773 lines)
+							</dd>
+		<dt>Version 15.175.1: Apr 03, 2016</dt>
+							<dd>
+							Code refactoring related to deleting tests of a course. (197763 lines)
+							</dd>
+		<dt>Version 15.175:   Apr 03, 2016</dt>
+							<dd>
+							Fixed bug when editing a test question.<br />
+							Lot of code refactoring related to edition of questions.<br />
+							New module swad_image for edition of images. (197754 lines)
+							</dd>
+		<dt>Version 15.174:   Apr 01, 2016</dt>
+							<dd>
+							Image in a test question is removed when the test question is removed.<br />
+							All images in test questions of a course are removed when course is removed. (197504 lines)
+							</dd>
+		<dt>Version 15.173.4: Apr 01, 2016</dt>
+							<dd>
+							Old image in test question is removed when replaced by a new one. (197481 lines)
+							</dd>
+		<dt>Version 15.173.3: Apr 01, 2016</dt>
+							<dd>
+							Changes in layout of class photo. (197447 lines)
+							</dd>
+		<dt>Version 15.173.2: Apr 01, 2016</dt>
+							<dd>
+							Changes in CSS related to tests. (197446 lines)
+							</dd>
+		<dt>Version 15.173.1: Apr 01, 2016</dt>
+							<dd>
+							Changes in CSS related to tests. (197452 lines)
+							</dd>
+		<dt>Version 15.173:   Apr 01, 2016</dt>
+							<dd>
+							Show image in test question, if present. (197435 lines)
+							</dd>
+		<dt>Version 15.172.1: Apr 01, 2016</dt>
+							<dd>
+							Reception of test image. (197398 lines)
+							</dd>
+		<dt>Version 15.172:   Apr 01, 2016</dt>
+							<dd>
+							Reception of test image. Not finished. (197339 lines)
+							</dd>
+		<dt>Version 15.171.2: Apr 01, 2016</dt>
+							<dd>
+							Change in message related to user photo. (197272 lines)
+							</dd>
+		<dt>Version 15.171.1: Apr 01, 2016</dt>
+							<dd>
+							Code refactoring in functions to get a parameter and to receive file. (197271 lines)
+							</dd>
+		<dt>Version 15.171:   Apr 01, 2016</dt>
+							<dd>
+							Code refactoring in function to get a parameter. (197259 lines)
+							</dd>
+		<dt>Version 15.170:   Apr 01, 2016</dt>
+							<dd>
+							Code refactoring in function to receive file. (197310 lines)
+							</dd>
+		<dt>Version 15.169.6: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in function to get a parameter. (197313 lines)
+							</dd>
+		<dt>Version 15.169.5: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in function to get a parameter. (197292 lines)
+							</dd>
+		<dt>Version 15.169.4: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. (197280 lines)
+							</dd>
+		<dt>Version 15.169.3: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. (197271 lines)
+							</dd>
+		<dt>Version 15.169.2: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. Not finished. (197298 lines)
+							</dd>
+		<dt>Version 15.169.1: Mar 31, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. (197298 lines)
+							</dd>
+		<dt>Version 15.169:   Mar 31, 2016</dt>
+							<dd>
+							When content is data, all parameters are retrieved in a list. (197306 lines)
+							</dd>
+		<dt>Version 15.168.3: Mar 30, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. (197124 lines)
+							</dd>
+		<dt>Version 15.168.2: Mar 30, 2016</dt>
+							<dd>
+							Code refactoring in list of parameters. (197128 lines)
+							</dd>
+		<dt>Version 15.168.1: Mar 30, 2016</dt>
+							<dd>
+							Fixed bug in list of parameters. (197097 lines)
+							</dd>
+		<dt>Version 15.168:   Mar 30, 2016</dt>
+							<dd>
+							When content is normal, all parameters are retrieved in a list. (197085 lines)
+							</dd>
+		<dt>Version 15.167:   Mar 30, 2016</dt>
+							<dd>
+							Query string is allocated to the exact needed size to optimize memory. (196998 lines)
+							</dd>
+		<dt>Version 15.166.1: Mar 30, 2016</dt>
+							<dd>
+							Fixed bug while reading a parameter. (196959 lines)
+							</dd>
+		<dt>Version 15.166:   Mar 30, 2016</dt>
+							<dd>
+							Changes in form to edit a test question.<br />
+							Fixed bug while reading a parameter. (196943 lines)
+							</dd>
+		<dt>Version 15.165.8: Mar 30, 2016</dt>
+							<dd>
+							Changes related to image in test questions. (196896 lines)
+							</dd>
+		<dt>Version 15.165.7: Mar 29, 2016</dt>
+							<dd>
+							New field for image in database table of test questions. (196879 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE tst_questions ADD COLUMN Image CHAR(43) NOT NULL AFTER Stem;
+							</code></small>
+							</dd>
+		<dt>Version 15.165.6: Mar 29, 2016</dt>
+							<dd>
+							Changes in temporary directories for images. (196846 lines)
+							</dd>
+		<dt>Version 15.165.5: Mar 29, 2016</dt>
+							<dd>
+							Changes in form to edit a test question. (196843 lines)
+							</dd>
+		<dt>Version 15.165.4: Mar 29, 2016</dt>
+							<dd>
+							Changes in form to upload XML file to import questions. (196813 lines)
+							</dd>
+		<dt>Version 15.165.3: Mar 29, 2016</dt>
+							<dd>
+							Changes in form to upload user's photo. (196811 lines)
+							</dd>
+		<dt>Version 15.165.2: Mar 29, 2016</dt>
+							<dd>
+							Changes in forms to upload logos. (196805 lines)
+							</dd>
+		<dt>Version 15.165.1: Mar 29, 2016</dt>
+							<dd>
+							Changes in form to upload photo of centre. (196803 lines)
+							</dd>
+		<dt>Version 15.165:   Mar 28, 2016</dt>
+							<dd>
+							Use ImageMagick 'convert' after uploading an image of a centre. (196805 lines)
+							</dd>
+		<dt>Version 15.164:   Mar 28, 2016</dt>
+							<dd>
+							Scope selector inside frame in listing of students.<br />
+							Fix bug in edition of groups. (196664 lines)
+							</dd>
+		<dt>Version 15.163.4: Mar 28, 2016</dt>
+							<dd>
+							Scope selector inside frame in listing of teachers. (196656 lines
+							</dd>
+		<dt>Version 15.163.3: Mar 28, 2016</dt>
+							<dd>
+							Scope selector inside frame in listing of admins. (196652 lines)
+							</dd>
+		<dt>Version 15.163.2: Mar 27, 2016</dt>
+							<dd>
+							Scope selector inside frame in listing of guests. (196655 lines)
+							</dd>
+		<dt>Version 15.163.1: Mar 27, 2016</dt>
+							<dd>
+							Added HTML directives "label" for scope and other form fields. (196654 lines)
+							</dd>
+		<dt>Version 15.163:   Mar 27, 2016</dt>
+							<dd>
+							Requests for enrollment older than one month are automatically removed. (196656 lines)
+							</dd>
+		<dt>Version 15.162.7: Mar 25, 2016</dt>
+							<dd>
+							Changed message after enrollment request. (196625 lines)
+							</dd>
+		<dt>Version 15.162.6: Mar 24, 2016</dt>
+							<dd>
+							Smaller buttons to see results of surveys.<br />
+							Fix bug in surveys. (196615 lines)
+							</dd>
+		<dt>Version 15.162.5: Mar 24, 2016</dt>
+							<dd>
+							Default role in registration form will be teacher for the creator of a course. (196615 lines)
+							</dd>
+		<dt>Version 15.162.4: Mar 24, 2016</dt>
+							<dd>
+							Changes in button shown after editing institutions. (196612 lines)
+							</dd>
+		<dt>Version 15.162.3: Mar 24, 2016</dt>
+							<dd>
+							Changes in button shown after editing centres. (196609 lines)
+							</dd>
+		<dt>Version 15.162.2: Mar 24, 2016</dt>
+							<dd>
+							Changes in button shown after editing degrees. (196606 lines)
+							</dd>
+		<dt>Version 15.162.1: Mar 24, 2016</dt>
+							<dd>
+							Changes in buttons shown after editing courses. (196603 lines)
+							</dd>
+		<dt>Version 15.162:   Mar 24, 2016</dt>
+							<dd>
+							Code refactoring in edition of courses.<br />
+							When a user creates or edits a course, put button to register him/her. (196593 lines)
+							</dd>
+		<dt>Version 15.161.4: Mar 24, 2016</dt>
+							<dd>
+							In MESSAGES &gt; Announcements, any user can see obsolete announcements, not only system admins. (196576 lines)
+							</dd>
+		<dt>Version 15.161.3: Mar 24, 2016</dt>
+							<dd>
+							Changed icon to reset survey. (196577 lines)<br />
+							<small><code>
+Copy file recycle64x64.png to icon directory
+							</code></small>
+							</dd>
+		<dt>Version 15.161.2: Mar 24, 2016</dt>
+							<dd>
+							Removed contextual icon "update" integrated in frame in "enrollment requests". (196577 lines)
+							</dd>
+		<dt>Version 15.161.1: Mar 24, 2016</dt>
+							<dd>
+							Code refactoring in forms to select roles.<br />
+							Put contextual icon "update" integrated in frame in "enrollment requests". (196598 lines)
+							</dd>
+		<dt>Version 15.161:   Mar 24, 2016</dt>
+							<dd>
+							Changes related to enrollments requests. (196581 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1522','es','N','Actualizar inscripciones pendientes');
+							</code></small>
+							</dd>
+		<dt>Version 15.160.4: Mar 24, 2016</dt>
+							<dd>
+							Put contextual icon "update" integrated in frame in "Connected users". (196543 lines)
+							</dd>
+		<dt>Version 15.160.3: Mar 24, 2016</dt>
+							<dd>
+							Put contextual icon "update" integrated in frame in "Who to follow". (196538 lines)
+							</dd>
+		<dt>Version 15.160.2: Mar 22, 2016</dt>
+							<dd>
+							Changes in layout of tagline. (196512 lines)
+							</dd>
+		<dt>Version 15.160.1: Mar 21, 2016</dt>
+							<dd>
+							Changes in layout of tagline. (196504 lines)
+							</dd>
+		<dt>Version 15.160:   Mar 21, 2016</dt>
+							<dd>
+							Changes in forms to login and to create new account. (196423 lines)
+							</dd>
+		<dt>Version 15.159.5: Mar 21, 2016</dt>
+							<dd>
+							Changes in CSS related to tables. (196423 lines)
+							</dd>
+		<dt>Version 15.159.4: Mar 21, 2016</dt>
+							<dd>
+							Icon to print stats on degrees integrated in frame. (196426 lines)
+							</dd>
+		<dt>Version 15.159.3: Mar 21, 2016</dt>
+							<dd>
+							Icon to add new announcement integrated in frame.<br />
+                                      			Button to add new announcement. (196427 lines)
+							</dd>
+		<dt>Version 15.159.2: Mar 21, 2016</dt>
+							<dd>
+							Button to add new notice. (196410 lines)
+							</dd>
+		<dt>Version 15.159.1: Mar 21, 2016</dt>
+							<dd>
+							Icon to add new notice integrated in frame. (196395 lines)
+							</dd>
+		<dt>Version 15.159:   Mar 21, 2016</dt>
+							<dd>
+							Number of sent/received messages integrated in frame title. (196372 lines)
+							</dd>
+		<dt>Version 15.158.4: Mar 21, 2016</dt>
+							<dd>
+							Icon to remove sent/received messages integrated in frame. (196300 lines)
+							</dd>
+		<dt>Version 15.158.3: Mar 21, 2016</dt>
+							<dd>
+							Change in layout of form to import test questions. (196277 lines)
+							</dd>
+		<dt>Version 15.158.2: Mar 21, 2016</dt>
+							<dd>
+							Icon to add new test question integrated in frame. (196283 lines)
+							</dd>
+		<dt>Version 15.158.1: Mar 21, 2016</dt>
+							<dd>
+							Button to add new test question. (196284 lines)
+							</dd>
+		<dt>Version 15.158:   Mar 21, 2016</dt>
+							<dd>
+							Changes in layout of tests. (196274 lines)
+							</dd>
+		<dt>Version 15.157.3: Mar 20, 2016</dt>
+							<dd>
+							Changes in layout of tests. (196247 lines)
+							</dd>
+		<dt>Version 15.157.2: Mar 20, 2016</dt>
+							<dd>
+							Fixed bug in surveys. (196241 lines)
+							</dd>
+		<dt>Version 15.157.1: Mar 20, 2016</dt>
+							<dd>
+							Changed names of functions related to degree types. (196237 lines)
+							</dd>
+		<dt>Version 15.157:   Mar 20, 2016</dt>
+							<dd>
+							Changes in tagline and title. (196227 lines)
+							</dd>
+		<dt>Version 15.156.1: Mar 20, 2016</dt>
+							<dd>
+							Change in layout of banners.<br />
+							Changes in layout of types of degree. (196139 lines)
+							</dd>
+		<dt>Version 15.156:   Mar 20, 2016</dt>
+							<dd>
+							New module swad_degree_type for degree types. (196137 lines)
+							</dd>
+		<dt>Version 15.155.7: Mar 20, 2016</dt>
+							<dd>
+							Changes in layout of listing of institutions. (196051 lines)
+							</dd>
+		<dt>Version 15.155.6: Mar 20, 2016</dt>
+							<dd>
+							Changes in layout of listing of centres. (196055 lines)
+							</dd>
+		<dt>Version 15.155.5: Mar 20, 2016</dt>
+							<dd>
+							Changes in behaviour of hierarchy breadcrumb.<br />
+							Changes in layout of listing of degrees. (196057 lines)
+							</dd>
+		<dt>Version 15.155.4: Mar 20, 2016</dt>
+							<dd>
+							Changes in layout of listing of courses. (196059 lines)
+							</dd>
+		<dt>Version 15.155.3: Mar 20, 2016</dt>
+							<dd>
+							Changes in some help messages. (196062 lines)
+							</dd>
+		<dt>Version 15.155.2: Mar 20, 2016</dt>
+							<dd>
+							Fixed bug in surveys.<br />
+							Changes in edition of questions of surveys. (196060 lines)
+							</dd>
+		<dt>Version 15.155.1: Mar 20, 2016</dt>
+							<dd>
+							Icon to print list of attendance integrated in frame. (196042 lines)
+							</dd>
+		<dt>Version 15.155:   Mar 20, 2016</dt>
+							<dd>
+							Icon to add new attendance event integrated in frame.<br />
+							Changes in layout of attendance events. (196038 lines)
+							</dd>
+		<dt>Version 15.154:   Mar 19, 2016</dt>
+							<dd>
+							Icon to add new survey integrated in frame.<br />
+							Changes in layout of surveys. (196018 lines)
+							</dd>
+		<dt>Version 15.153.1: Mar 19, 2016</dt>
+							<dd>
+							Fixed bug in edition of assignments. (195980 lines)
+							</dd>
+		<dt>Version 15.153:   Mar 19, 2016</dt>
+							<dd>
+							Icon to add new assignment integrated in frame.<br />
+							Changes in layout of assignments. (195984 lines)
+							</dd>
+		<dt>Version 15.152:   Mar 19, 2016</dt>
+							<dd>
+							Changes in layout of head. Not finished. (195949 lines)
+							</dd>
+		<dt>Version 15.151.5: Mar 19, 2016</dt>
+							<dd>
+							Icon to edit holidays integrated in frame. (195931 lines)
+							</dd>
+		<dt>Version 15.151.4: Mar 19, 2016</dt>
+							<dd>
+							Icon to edit plugins integrated in frame. (195933 lines)
+							</dd>
+		<dt>Version 15.151.3: Mar 19, 2016</dt>
+							<dd>
+							Icon to edit mail domains integrated in frame. (195934 lines)
+							</dd>
+		<dt>Version 15.151.2: Mar 19, 2016</dt>
+							<dd>
+							Changes in layout of groups. (195935 lines)
+							</dd>
+		<dt>Version 15.151.1: Mar 18, 2016</dt>
+							<dd>
+							Changes in layout of groups. (195929 lines)
+							</dd>
+		<dt>Version 15.151:   Mar 18, 2016</dt>
+							<dd>
+							Changes in layout of header class photo. (195930 lines)
+							</dd>
+		<dt>Version 15.150.10:Mar 18, 2016</dt>
+							<dd>
+							Icon to print calendar integrated in frame. (195961 lines)
+							</dd>
+		<dt>Version 15.150.9: Mar 18, 2016</dt>
+							<dd>
+							Icons to print/show-all students/teachers integrated in frame. (195957 lines)
+							</dd>
+		<dt>Version 15.150.8: Mar 18, 2016</dt>
+							<dd>
+							Icons to print/show-all guests integrated in frame. (195967 lines)
+							</dd>
+		<dt>Version 15.150.7: Mar 18, 2016</dt>
+							<dd>
+							Icon to print degree configuration integrated in frame. (195970 lines)
+							</dd>
+		<dt>Version 15.150.6: Mar 18, 2016</dt>
+							<dd>
+							Icon to print centre configuration integrated in frame. (195959 lines)
+							</dd>
+		<dt>Version 15.150.5: Mar 18, 2016</dt>
+							<dd>
+							Icon to print institution configuration integrated in frame. (195961 lines)
+							</dd>
+		<dt>Version 15.150.4: Mar 18, 2016</dt>
+							<dd>
+							Icon to print country configuration integrated in frame. (195952 lines)
+							</dd>
+		<dt>Version 15.150.3: Mar 18, 2016</dt>
+							<dd>
+							Changes in layout of course info. (195956 lines)
+							</dd>
+		<dt>Version 15.150.2: Mar 18, 2016</dt>
+							<dd>
+							Icon to print course configuration integrated in frame.<br />
+							Changes in layout of frames. (195950 lines)
+							</dd>
+		<dt>Version 15.150.1: Mar 18, 2016</dt>
+							<dd>
+							Icon to view timetable integrated in frame. (195936 lines)
+							</dd>
+		<dt>Version 15.150:   Mar 18, 2016</dt>
+							<dd>
+							Icons to edit/print timetable integrated in frame. (195923 lines)
+							</dd>
+		<dt>Version 15.149.1: Mar 18, 2016</dt>
+							<dd>
+							Button Done after internal editor of syllabus.<br />
+							Focus on new item in internal editor of syllabus.<br />
+							Removed links to view course info. (195920 lines)
+							</dd>
+		<dt>Version 15.149:   Mar 17, 2016</dt>
+							<dd>
+							Icon to edit course info integrated in frame.<br />
+							Code refacgtoring related to course info. (195949 lines)
+							</dd>
+		<dt>Version 15.148:   Mar 17, 2016</dt>
+							<dd>
+							Icon to view/edit file browser integrated in frame. (195914 lines)
+							</dd>
+		<dt>Version 15.147.6: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit departments integrated in frame. (195862 lines)
+							</dd>
+		<dt>Version 15.147.5: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit institutional links integrated in frame. (195863 lines)
+							</dd>
+		<dt>Version 15.147.4: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit places integrated in frame. (195866 lines)
+							</dd>
+		<dt>Version 15.147.3: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit groups integrated in frame. (195867 lines)
+							</dd>
+		<dt>Version 15.147.2: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit degree types integrated in frame. (195866 lines)
+							</dd>
+		<dt>Version 15.147.1: Mar 16, 2016</dt>
+							<dd>
+							Removed links to view when editing. (195854 lines)
+							</dd>
+		<dt>Version 15.147:   Mar 16, 2016</dt>
+							<dd>
+							New buttons to create another institution / centre / degree / course. (195903 lines)
+							</dd>
+		<dt>Version 15.146.6: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit courses integrated in frame. (195814 lines)
+							</dd>
+		<dt>Version 15.146.5: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit degrees integrated in frame. (195806 lines)
+							</dd>
+		<dt>Version 15.146.4: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit centres integrated in frame. (195798 lines)
+							</dd>
+		<dt>Version 15.146.3: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit institutions integrated in frame. (195790 lines)
+							</dd>
+		<dt>Version 15.146.2: Mar 16, 2016</dt>
+							<dd>
+							Icon to edit countries integrated in frame. (195781 lines)
+							</dd>
+		<dt>Version 15.146.1: Mar 16, 2016</dt>
+							<dd>
+							Icons to remove/edit/print an exam announcement integrated in frame. (195771 lines)
+							</dd>
+		<dt>Version 15.146:   Mar 16, 2016</dt>
+							<dd>
+							Now frame rectangles can have icons at top.<br />
+							Icon to edit banners integrated in frame. (195772 lines)
+							</dd>
+		<dt>Version 15.145.6: Mar 16, 2016</dt>
+							<dd>
+							Fixed bug in connected users. (195757 lines)
+							</dd>
+		<dt>Version 15.145.5: Mar 15, 2016</dt>
+							<dd>
+							Removed links in right column. (195752 lines)
+							</dd>
+		<dt>Version 15.145.4: Mar 15, 2016</dt>
+							<dd>
+							Link to RSS file is moved to the end of notices in left column. (195751 lines)<br />
+							<small><code>
+Copy file swad112x32.png to icon directory
+							</code></small>
+							</dd>
+		<dt>Version 15.145.3: Mar 15, 2016</dt>
+							<dd>
+							Changes in layout of connected users. (195746 lines)
+							</dd>
+		<dt>Version 15.145.2: Mar 15, 2016</dt>
+							<dd>
+							Changes in layout of frequent actions. (195762 lines)
+							</dd>
+		<dt>Version 15.145.1: Mar 15, 2016</dt>
+							<dd>
+							Changes in layout of frequent actions. (195751 lines)
+							</dd>
+		<dt>Version 15.145:   Mar 15, 2016</dt>
+							<dd>
+							Changes in layout of connected users. (195729 lines)
+							</dd>
+		<dt>Version 15.144.3: Mar 15, 2016</dt>
+							<dd>
+							Changes in layout of connected users (right column). (195742 lines)
+							</dd>
+		<dt>Version 15.144.2: Mar 05, 2016</dt>
+							<dd>
+							Fixed minor bugs in edition of centres. (195761 lines)
+							</dd>
+		<dt>Version 15.144.1: Mar 03, 2016</dt>
+							<dd>
+							Fixed bugs related to last chages made. (195756 lines)
+							</dd>
+		<dt>Version 15.144:   Mar 03, 2016</dt>
+							<dd>
+							Direct login always available. (195755 lines)<br />
+							3 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE courses DROP COLUMN AllowDirectLogIn;<br />
+ALTER TABLE deg_types DROP COLUMN AllowDirectLogIn;<br />
+UPDATE actions SET Obsolete='Y' WHERE ActCod='1006';
+							</code></small>
+							</dd>
+		<dt>Version 15.143.6: Mar 03, 2016</dt>
+							<dd>
+							Direct login forms unavailable when external login service unavailable. (196219 lines)
+							</dd>
+		<dt>Version 15.143.5: Mar 02, 2016</dt>
+							<dd>
+							Changed text messages related to edition of courses. (196166 lines)
+							</dd>
+		<dt>Version 15.143.4: Mar 02, 2016</dt>
+							<dd>
+							Changed text messages related to edition of degrees. (196126 lines)
+							</dd>
+		<dt>Version 15.143.3: Mar 02, 2016</dt>
+							<dd>
+							Changed text messages related to edition of centres. (196126 lines)
+							</dd>
+		<dt>Version 15.143.2: Mar 02, 2016</dt>
+							<dd>
+							Changed text messages related to edition of institutions. (196086 lines)
+							</dd>
+		<dt>Version 15.143.1: Mar 02, 2016</dt>
+							<dd>
+							Changes in actions of buttons after editing. (196042 lines)
+							</dd>
+		<dt>Version 15.143:   Mar 01, 2016</dt>
+							<dd>
+							Button to go to another institution after editing. (196041 lines)
+							</dd>
+		<dt>Version 15.142.1: Mar 01, 2016</dt>
+							<dd>
+							Changes in some help messages. (195985 lines)
+							</dd>
+		<dt>Version 15.142:   Mar 01, 2016</dt>
+							<dd>
+							Button to go to another centre after editing. (195984 lines)
+							</dd>
+		<dt>Version 15.141.1: Mar 01, 2016</dt>
+							<dd>
+							Fixed bug when creating a new degree. (195897 lines)
+							</dd>
+		<dt>Version 15.141:   Mar 01, 2016</dt>
+							<dd>
+							Button to go to another degree after editing. (195898 lines)
+							</dd>
+		<dt>Version 15.140.1: Mar 01, 2016</dt>
+							<dd>
+							The link to go to another course after editing is replaced by a button. (195817 lines)
+							</dd>
+		<dt>Version 15.140:   Mar 01, 2016</dt>
+							<dd>
+							New option "landing page". (195817 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Formularios cambiar rol y cerrar sesi&oacute;n' WHERE ActCod='843' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1521','es','N','P&aacute;gina de inicio');
+							</code></small>
+							</dd>
+		<dt>Version 15.139.2: Feb 29, 2016</dt>
+							<dd>
+							Changed message related to year/semester. (195731 lines)
+							</dd>
+		<dt>Version 15.139.1: Feb 29, 2016</dt>
+							<dd>
+							Remove fields FirstYear and LastYear from database table degrees. (195732 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE degrees DROP COLUMN FirstYear,DROP COLUMN LastYear;
+							</code></small>
+							</dd>
+		<dt>Version 15.139:   Feb 29, 2016</dt>
+							<dd>
+							Remove edition of years in edition of degrees. Every degree now have years from 1 to 12 (and N.A.) (195734 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('550','551');
+							</code></small>
+							</dd>
+		<dt>Version 15.138:   Feb 29, 2016</dt>
+							<dd>
+							Form to sign up is shown below login form. (196012 lines)
+							</dd>
+		<dt>Version 15.137.3: Feb 29, 2016</dt>
+							<dd>
+							Change in button when file uploading is done. (195986 lines)
+							</dd>
+		<dt>Version 15.137.2: Feb 13, 2016</dt>
+							<dd>
+							Fixed bug in search of my documents. (195985 lines)
+							</dd>
+		<dt>Version 15.137.1: Feb 13, 2016</dt>
+							<dd>
+							Fixed bug at the end of ranking (number too low). (195968 lines)
+							</dd>
+		<dt>Version 15.137:   Feb 07, 2016</dt>
+							<dd>
+							New figure about number of social notes. (195953 lines)
+							</dd>
+		<dt>Version 15.136.7: Feb 06, 2016</dt>
+							<dd>
+							Fixed bug in social tab when not logged. (195715 lines)
+							</dd>
+		<dt>Version 15.136.6: Feb 06, 2016</dt>
+							<dd>
+							Change in graphic with number of users per country. (195703 lines)
+							</dd>
+		<dt>Version 15.136.5: Feb 04, 2016</dt>
+							<dd>
+							Change in layout of main title (country/institution/centre/degree/course). (195702 lines)
+							</dd>
+		<dt>Version 15.136.4: Feb 04, 2016</dt>
+							<dd>
+							Change in layout of main title (country/institution/centre/degree/course). (195687 lines)
+							</dd>
+		<dt>Version 15.136.3: Feb 04, 2016</dt>
+							<dd>
+							Change in layout of main title (country/institution/centre/degree/course). (195686 lines)
+							</dd>
+		<dt>Version 15.136.2: Feb 04, 2016</dt>
+							<dd>
+							Change in layout of most frequent actions. (195689 lines)
+							</dd>
 		<dt>Version 15.136.1: Feb 02, 2016</dt>
 							<dd>
 							Change in layout of tabs and menus. (195689 lines)
@@ -2331,7 +3490,7 @@ Download JavaScript jstz script, available in:<br />
         https://bitbucket.org/pellepim/jstimezonedetect/<br />
         http://pellepim.bitbucket.org/jstz/<br />
 Create new directory jstz in public HTML directory.<br />
-Copy script jstz.js from https://bitbucket.org/pellepim/jstimezonedetect/ > Download repository > pellepim-jstimezonedetect-3a00f59861bd.zip > dist > jstz.js to /var/www/html/swad/jstz/jstz.js
+Copy script jstz.js from https://bitbucket.org/pellepim/jstimezonedetect/ &gt; Download repository &gt; pellepim-jstimezonedetect-3a00f59861bd.zip &gt; dist &gt; jstz.js to /var/www/html/swad/jstz/jstz.js
 							</code></small>
 							</dd>
 		<dt>Version 15.27:    Oct 28, 2015</dt>
@@ -9899,7 +11058,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 11.20.1: Nov 22, 2011</dt>
 							<dd>
-							Accesses to web service are highlighted in Stats > Last clicks. (124068 lines)
+							Accesses to web service are highlighted in Stats &gt; Last clicks. (124068 lines)
 							</dd>
 		<dt>Version 11.20:   Nov 22, 2011</dt>
 							<dd>
@@ -10697,7 +11856,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 10.23:   Feb 12, 2011</dt>
 							<dd>
-							All the events are listed in Messages > Notifications, even those who don't have to be sent by email. (99795 lines)
+							All the events are listed in Messages &gt; Notifications, even those who don't have to be sent by email. (99795 lines)
 							</dd>
 		<dt>Version 10.22.7: Feb 11, 2011</dt>
 							<dd>
@@ -11649,7 +12808,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 							</dd>
 		<dt>Version 9.35.5: January 23, 2010</dt>
 							<dd>
-							Changes in Stats > Courses stats. (86739 lines)
+							Changes in Stats &gt; Courses stats. (86739 lines)
 							</dd>
 		<dt>Version 9.35.4: January 22, 2010</dt>
 							<dd>
@@ -11658,7 +12817,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 		<dt>Version 9.35.3: January 22, 2010</dt>
 							<dd>
 							Changes in date-time shown above the current month.<br />
-							New criteria to assess courses in Stats > Courses stats. (86690 lines)
+							New criteria to assess courses in Stats &gt; Courses stats. (86690 lines)
 							</dd>
 		<dt>Version 9.35.2: January 21, 2010</dt>
 							<dd>
@@ -12926,7 +14085,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 8.23.2: 10/feb/2009</dt>
 						<dd>
-						En Estad&iacute;sticas > Uso de SWAD, se muestran estad&iacute;sticas de n&uacute;mero de hebras por foro, n&uacute;mero de mensajes por hebra y n&uacute;mero de mensajes por foro. (66940 l&iacute;neas)
+						En Estad&iacute;sticas &gt; Uso de SWAD, se muestran estad&iacute;sticas de n&uacute;mero de hebras por foro, n&uacute;mero de mensajes por hebra y n&uacute;mero de mensajes por foro. (66940 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 8.23.1: 10/feb/2009</dt>
 						<dd>
@@ -14050,7 +15209,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 						</dd>
 		<dt>Versi&oacute;n 7.32.3: 16/feb/2008</dt>
 						<dd>
-						En la opci&oacute;n &quot;Estad&iacute;sticas > Uso de SWAD&quot; se muestra el n&uacute;mero total de asignaturas. (50990 l&iacute;neas)
+						En la opci&oacute;n &quot;Estad&iacute;sticas &gt; Uso de SWAD&quot; se muestra el n&uacute;mero total de asignaturas. (50990 l&iacute;neas)
 						</dd>
 		<dt>Versi&oacute;n 7.32.2: 15/feb/2008</dt>
 						<dd>

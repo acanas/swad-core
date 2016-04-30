@@ -440,7 +440,8 @@
 		<code>cd release</code><br />
 		<code>cmake ..</code><br />
 		<code>make</code><br />
-		<code>make install</code>
+		<code>make install</code><br />
+ 		<code>cd ~</code>
 	</td>
 	<td width="50%" valign="top">
  		<code>cd ~</code><br />
@@ -450,7 +451,8 @@
 		<code>cd release</code><br />
 		<code>cmake ..</code><br />
 		<code>make</code><br />
-		<code>sudo make install</code>
+		<code>sudo make install</code><br />
+ 		<code>cd ~</code>
 	</td>
 	</tr>
 	</table>
@@ -561,6 +563,19 @@
 			<code>sudo a2ensite default-ssl</code><br />
 			<code>sudo service apache2 reload</code>
 		</p>
+		<p>
+		(While installing swad in a Raspberry Pi 2 with Ubuntu Mate 16.04,
+		this failed because the files:<br />
+		<code>/etc/ssl/certs/ssl-cert-snakeoil.pem</code><br />
+		<code>/etc/ssl/private/ssl-cert-snakeoil.key</code><br />
+		did not exist.
+		Following the instructions in
+		<a href="http://askubuntu.com/questions/49196/how-do-i-create-a-self-signed-ssl-certificate">
+		http://askubuntu.com/questions/49196/how-do-i-create-a-self-signed-ssl-certificate</a>
+		we created them by writing:<br />
+		<code>sudo make-ssl-cert generate-default-snakeoil --force-overwrite</code>)
+		</p>
+		
 	</td>
 	</tr>
 	</table>
@@ -724,42 +739,18 @@
 		</li>
 
 		<li>
-		To cache contents, before the options for the root directory for web pages,
-		usually <code>/var/www/html</code>,
-		insert the lines:<br />
-		<code>
-		#<br />
-		# Cache<br />
-		#<br />
-		ExpiresActive On<br />
-		ExpiresDefault &quot;access plus 1 day&quot;<br />
-		</code>
-		Also, inside the root directory for web pages,
-		usually <code>/var/www/html</code>,
-		insert the lines:<br />
-		<code>
-		#<br />
-		# Cache<br />
-		#<br />
-		    ExpiresByType text/html &quot;access plus 1 day&quot;<br />
-		    ExpiresByType text/css &quot;access plus 1 day&quot;<br />
-		    ExpiresByType text/javascript &quot;access plus 1 day&quot;<br />
-		    ExpiresByType image/gif &quot;access plus 1 year&quot;<br />
-		    ExpiresByType image/jpg &quot;access plus 1 year&quot;<br />
-		    ExpiresByType image/png &quot;access plus 1 year&quot;
-		</code>
-		</li>
-
-		<li>
 		Optionally, if we want to rewrite some URIs,
 		inside the options for the directory <code>/var/www/</code>,
 		add lines like the following before <code>&lt;/Directory&gt;</code>:<br />
+		<code>#</code><br />
+		<code># Rewrite URIs</code><br />
+		<code>#</code><br />
 		<code>RewriteEngine On</code><br />
-		<code>RewriteRule /institution/([^/]+)/?$ /swad/index.html?InsCod=$1</code><br />
-		<code>RewriteRule /centre/([^/]+)/?$ /swad/index.html?CtrCod=$1</code><br />
-		<code>RewriteRule /degree/([^/]+)/?$ /swad/index.html?DegCod=$1</code><br />
-		<code>RewriteRule /course/([^/]+)/?$ /swad/index.html?CrsCod=$1</code><br />
-		<code>RewriteRule /user/([^/]+)/?$ /swad/?Usr=$1</code>
+		<code>RewriteRule /institution/([^/]+)/?$ /swad/index.html?ins=$1</code><br />
+		<code>RewriteRule /centre/([^/]+)/?$ /swad/index.html?ctr=$1</code><br />
+		<code>RewriteRule /degree/([^/]+)/?$ /swad/index.html?deg=$1</code><br />
+		<code>RewriteRule /course/([^/]+)/?$ /swad/index.html?crs=$1</code><br />
+		<code>RewriteRule /user/([^/]+)/?$ /swad/?usr=$1</code>
 		</li>
 
 		</ul>
