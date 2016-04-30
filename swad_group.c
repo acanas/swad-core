@@ -3201,7 +3201,8 @@ static void Grp_CreateGroupType (void)
    char Query[1024];
 
    /***** Create a new group type *****/
-   sprintf (Query,"INSERT INTO crs_grp_types (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
+   sprintf (Query,"INSERT INTO crs_grp_types"
+	          " (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
                   " VALUES ('%ld','%s','%c','%c','%c',FROM_UNIXTIME('%ld'))",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
             Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment ? 'Y' :
@@ -3789,8 +3790,10 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
    Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
 
-   /***** Update of the table of types of group changing the old open time of enrollment by the new *****/
-   sprintf (Query,"UPDATE crs_grp_types SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME('%ld')"
+   /***** Update the table of types of group
+          changing the old open time of enrollment by the new *****/
+   sprintf (Query,"UPDATE crs_grp_types"
+	          " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME('%ld')"
                   " WHERE GrpTypCod='%ld'",
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                      'N',
@@ -3934,8 +3937,11 @@ void Grp_RenameGroupType (void)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE crs_grp_types SET GrpTypName='%s' WHERE GrpTypCod='%ld'",
-                     NewNameGrpTyp,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
+            sprintf (Query,"UPDATE crs_grp_types"
+        	           " SET GrpTypName='%s'"
+        	           " WHERE GrpTypCod='%ld'",
+                     NewNameGrpTyp,
+                     Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
             DB_QueryUPDATE (Query,"can not update the type of a group");
 
             /***** Write message to show the change made *****/

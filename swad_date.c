@@ -108,15 +108,12 @@ void Dat_GetAndConvertCurrentDateTime (void)
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str)
   {
-   time_t Time;
+   time_t Time = (time_t) 0;
 
-   if (Str[0])
-     {
-      if (sscanf (Str,"%ld",&Time) != 1)
-	 Time = (time_t) 0;
-     }
-   else
-      Time = (time_t) 0;
+   if (Str)
+      if (Str[0])
+         if (sscanf (Str,"%ld",&Time) != 1)
+	    Time = (time_t) 0;
 
    return Time;
   }

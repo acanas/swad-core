@@ -478,15 +478,15 @@ mysql> DESCRIBE connected;
 | UsrCod        | int(11)    | NO   | PRI | NULL    |       |
 | RoleInLastCrs | tinyint(4) | NO   |     | 0       |       |
 | LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
-| LastTime      | datetime   | YES  |     | NULL    |       |
+| LastTime      | datetime   | NO   |     | NULL    |       |
 +---------------+------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS connected ("
                    "UsrCod INT NOT NULL,"
                    "RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
                    "LastCrsCod INT NOT NULL DEFAULT -1,"
-                   "LastTime DATETIME,"
+                   "LastTime DATETIME NOT NULL,"
                    "UNIQUE INDEX(UsrCod),"
                    "INDEX(LastCrsCod))");
 
@@ -611,17 +611,17 @@ mysql> DESCRIBE crs_grp;
    /***** Table crs_grp_types *****/
 /*
 mysql> DESCRIBE crs_grp_types;
-+--------------+---------------+------+-----+---------------------+----------------+
-| Field        | Type          | Null | Key | Default             | Extra          |
-+--------------+---------------+------+-----+---------------------+----------------+
-| GrpTypCod    | int(11)       | NO   | PRI | NULL                | auto_increment |
-| CrsCod       | int(11)       | NO   | MUL | -1                  |                |
-| GrpTypName   | varchar(255)  | NO   |     | NULL                |                |
-| Mandatory    | enum('N','Y') | NO   |     | NULL                |                |
-| Multiple     | enum('N','Y') | NO   |     | NULL                |                |
-| MustBeOpened | enum('N','Y') | NO   |     | N                   |                |
-| OpenTime     | datetime      | NO   |     | 0000-00-00 00:00:00 |                |
-+--------------+---------------+------+-----+---------------------+----------------+
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| GrpTypCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod       | int(11)       | NO   | MUL | -1      |                |
+| GrpTypName   | varchar(255)  | NO   |     | NULL    |                |
+| Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
+| Multiple     | enum('N','Y') | NO   |     | NULL    |                |
+| MustBeOpened | enum('N','Y') | NO   |     | N       |                |
+| OpenTime     | datetime      | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
 7 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_types ("
@@ -631,7 +631,7 @@ mysql> DESCRIBE crs_grp_types;
                    "Mandatory ENUM('N','Y') NOT NULL,"
                    "Multiple ENUM('N','Y') NOT NULL,"
                    "MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "OpenTime DATETIME NOT NULL DEFAULT 0,"
+                   "OpenTime DATETIME NOT NULL,"
                    "UNIQUE INDEX(GrpTypCod),"
                    "INDEX(CrsCod))");
 
@@ -714,17 +714,17 @@ mysql> DESCRIBE crs_info_txt;
       /***** Table crs_last *****/
 /*
 mysql> DESCRIBE crs_last;
-+----------+----------+------+-----+---------------------+-------+
-| Field    | Type     | Null | Key | Default             | Extra |
-+----------+----------+------+-----+---------------------+-------+
-| CrsCod   | int(11)  | NO   | PRI | NULL                |       |
-| LastTime | datetime | NO   | MUL | 0000-00-00 00:00:00 |       |
-+----------+----------+------+-----+---------------------+-------+
++----------+----------+------+-----+---------+-------+
+| Field    | Type     | Null | Key | Default | Extra |
++----------+----------+------+-----+---------+-------+
+| CrsCod   | int(11)  | NO   | PRI | NULL    |       |
+| LastTime | datetime | NO   | MUL | NULL    |       |
++----------+----------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_last ("
                    "CrsCod INT NOT NULL,"
-                   "LastTime DATETIME NOT NULL DEFAULT 0,"
+                   "LastTime DATETIME NOT NULL,"
                    "UNIQUE INDEX(CrsCod),"
                    "INDEX(LastTime))");
 
@@ -1916,8 +1916,8 @@ mysql> DESCRIBE sessions;
 | CtrCod         | int(11)      | NO   |     | -1      |       |
 | DegCod         | int(11)      | NO   |     | -1      |       |
 | CrsCod         | int(11)      | NO   |     | -1      |       |
-| LastTime       | datetime     | YES  |     | NULL    |       |
-| LastRefresh    | datetime     | YES  |     | NULL    |       |
+| LastTime       | datetime     | NO   |     | NULL    |       |
+| LastRefresh    | datetime     | NO   |     | NULL    |       |
 | FirstPubCod    | bigint(20)   | NO   |     | 0       |       |
 | LastPubCod     | bigint(20)   | NO   |     | 0       |       |
 | LastPageMsgRcv | int(11)      | NO   |     | 1       |       |
@@ -1926,7 +1926,7 @@ mysql> DESCRIBE sessions;
 | SearchString   | varchar(255) | NO   |     | NULL    |       |
 | SideCols       | tinyint(4)   | NO   |     | 3       |       |
 +----------------+--------------+------+-----+---------+-------+
-18 rows in set (0.00 sec)
+18 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
                    "SessionId CHAR(43) NOT NULL,"
@@ -1938,8 +1938,8 @@ mysql> DESCRIBE sessions;
                    "CtrCod INT NOT NULL DEFAULT -1,"
                    "DegCod INT NOT NULL DEFAULT -1,"
                    "CrsCod INT NOT NULL DEFAULT -1,"
-                   "LastTime DATETIME,"
-                   "LastRefresh DATETIME,"
+                   "LastTime DATETIME NOT NULL,"
+                   "LastRefresh DATETIME NOT NULL,"
 	           "FirstPubCod BIGINT NOT NULL DEFAULT 0,"
 	           "LastPubCod BIGINT NOT NULL DEFAULT 0,"
                    "LastPageMsgRcv INT NOT NULL DEFAULT 1,"
@@ -2722,16 +2722,16 @@ mysql> DESCRIBE usr_IDs;
    /***** Table usr_last *****/
 /*
 mysql> DESCRIBE usr_last;
-+--------------+------------+------+-----+---------------------+-------+
-| Field        | Type       | Null | Key | Default             | Extra |
-+--------------+------------+------+-----+---------------------+-------+
-| UsrCod       | int(11)    | NO   | PRI | NULL                |       |
-| WhatToSearch | tinyint(4) | NO   |     | 0                   |       |
-| LastCrs      | int(11)    | NO   |     | -1                  |       |
-| LastTab      | tinyint(4) | NO   |     | NULL                |       |
-| LastTime     | datetime   | NO   | MUL | 0000-00-00 00:00:00 |       |
-| LastAccNotif | datetime   | NO   |     | 0000-00-00 00:00:00 |       |
-+--------------+------------+------+-----+---------------------+-------+
++--------------+------------+------+-----+---------+-------+
+| Field        | Type       | Null | Key | Default | Extra |
++--------------+------------+------+-----+---------+-------+
+| UsrCod       | int(11)    | NO   | PRI | NULL    |       |
+| WhatToSearch | tinyint(4) | NO   |     | 0       |       |
+| LastCrs      | int(11)    | NO   |     | -1      |       |
+| LastTab      | tinyint(4) | NO   |     | NULL    |       |
+| LastTime     | datetime   | NO   | MUL | NULL    |       |
+| LastAccNotif | datetime   | NO   |     | NULL    |       |
++--------------+------------+------+-----+---------+-------+
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
@@ -2739,8 +2739,8 @@ mysql> DESCRIBE usr_last;
                    "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
                    "LastCrs INT NOT NULL DEFAULT -1,"
                    "LastTab TINYINT NOT NULL,"
-                   "LastTime DATETIME NOT NULL DEFAULT 0,"
-                   "LastAccNotif DATETIME NOT NULL DEFAULT 0,"
+                   "LastTime DATETIME NOT NULL,"
+                   "LastAccNotif DATETIME NOT NULL,"
                    "UNIQUE INDEX(UsrCod),"
                    "INDEX(LastTime))");
 

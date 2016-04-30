@@ -2675,12 +2675,15 @@ static void Usr_InsertMyLastData (void)
    char Query[256];
 
    /***** Insert my last accessed course, tab and time of click in database *****/
-   // WhatToSearch, LastAccNotif are set to default (0)
-   sprintf (Query,"INSERT INTO usr_last (UsrCod,LastCrs,LastTab,LastTime)"
-                  " VALUES ('%ld','%ld','%u',NOW())",
+   sprintf (Query,"INSERT INTO usr_last"
+	          " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccessNotif)"
+                  " VALUES"
+                  " ('%ld','%u','%ld','%u',NOW(),FROM_UNIXTIME('%ld'))",
             Gbl.Usrs.Me.UsrDat.UsrCod,
+            (unsigned) Sch_SEARCH_ALL,
             Gbl.CurrentCrs.Crs.CrsCod,
-            (unsigned) Gbl.Action.Tab);
+            (unsigned) Gbl.Action.Tab,
+            (long) (time_t) 0);	// The user never accessed to notifications
    DB_QueryINSERT (Query,"can not insert last user's data");
   }
 /*****************************************************************************/

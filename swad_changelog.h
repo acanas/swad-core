@@ -135,13 +135,23 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.205 (2016-04-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.206 (2016-04-30)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.206:   Apr 30, 2016	Remove default DATETIME fields to avoid errors if 0 is not allowed in date in database. (201424 lines)
+					6 changes necessary in database:
+ALTER TABLE connected CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;
+ALTER TABLE crs_grp_types CHANGE COLUMN OpenTime OpenTime DATETIME NOT NULL;
+ALTER TABLE crs_last CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;
+ALTER TABLE sessions CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;
+ALTER TABLE sessions CHANGE COLUMN LastRefresh LastRefresh DATETIME NOT NULL;
+ALTER TABLE usr_last CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;
+ALTER TABLE usr_last CHANGE COLUMN LastAccNotif LastAccNotif DATETIME NOT NULL;
+
         Version 15.205:   Apr 30, 2016	New demo server added to swad_config.h: swadberry.ugr.es. (201409 lines)
         Version 15.204.1: Apr 25, 2016	Fixed bug in changes in database necessary in version 15.201. (201366 lines)
 					6 changes necessary in database:
