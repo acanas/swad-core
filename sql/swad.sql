@@ -634,9 +634,23 @@ CREATE TABLE IF NOT EXISTS links (
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(LnkCod));
 --
+-- Table log_banners: stores the log of clicked banners
+--
+CREATE TABLE IF NOT EXISTS log_banners (
+	LogCod INT NOT NULL,
+	BanCod INT NOT NULL,
+	UNIQUE INDEX(LogCod),INDEX(BanCod));
+--
+-- Table log_comments: stores the comments about errors associated to the log
+--
+CREATE TABLE IF NOT EXISTS log_comments (
+	LogCod INT NOT NULL,
+	Comments VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(LogCod));
+--
 -- Table log: stores the log of all clicks
 --
-CREATE TABLE IF NOT EXISTS log (
+CREATE TABLE IF NOT EXISTS log_full (
 	LogCod INT NOT NULL AUTO_INCREMENT,
 	ActCod INT NOT NULL DEFAULT -1,
 	CtyCod INT NOT NULL DEFAULT -1,
@@ -659,20 +673,6 @@ CREATE TABLE IF NOT EXISTS log (
 	INDEX(CrsCod),
 	INDEX(UsrCod),
 	INDEX(ClickTime,Role));
---
--- Table log_banners: stores the log of clicked banners
---
-CREATE TABLE IF NOT EXISTS log_banners (
-	LogCod INT NOT NULL,
-	BanCod INT NOT NULL,
-	UNIQUE INDEX(LogCod),INDEX(BanCod));
---
--- Table log_comments: stores the comments about errors associated to the log
---
-CREATE TABLE IF NOT EXISTS log_comments (
-	LogCod INT NOT NULL,
-	Comments VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(LogCod));
 --
 -- Table log_recent: stores the log of the most recent clicks, used to speed up queries related to log
 --

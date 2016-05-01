@@ -1369,9 +1369,43 @@ mysql> DESCRIBE links;
                    "WWW VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(LnkCod))");
 
-   /***** Table log *****/
+   /***** Table log_banners *****/
 /*
-mysql> DESCRIBE log;
+mysql> DESCRIBE log_banners;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| LogCod | int(11) | NO   | PRI | NULL    |       |
+| BanCod | int(11) | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_banners ("
+                   "LogCod INT NOT NULL,"
+                   "BanCod INT NOT NULL,"
+                   "UNIQUE INDEX(LogCod),"
+                   "INDEX(BanCod))");
+
+   /***** Table log_comments *****/
+/*
+mysql> DESCRIBE log_comments;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| LogCod   | int(11)      | NO   | PRI | NULL    |       |
+| Comments | varchar(255) | NO   |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
+                   "LogCod INT NOT NULL,"
+                   "Comments VARCHAR(255) NOT NULL,"
+                   "UNIQUE INDEX(LogCod))");
+
+   /***** Table log_full *****/
+/*
+mysql> DESCRIBE log_full;
 +----------------+------------+------+-----+---------+----------------+
 | Field          | Type       | Null | Key | Default | Extra          |
 +----------------+------------+------+-----+---------+----------------+
@@ -1415,41 +1449,6 @@ mysql> DESCRIBE log;
                    "INDEX(CrsCod),"
                    "INDEX(UsrCod),"
                    "INDEX(ClickTime,Role))");
-
-   /***** Table log_banners *****/
-/*
-mysql> DESCRIBE log_banners;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| LogCod | int(11) | NO   | PRI | NULL    |       |
-| BanCod | int(11) | NO   | MUL | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_banners ("
-                   "LogCod INT NOT NULL,"
-                   "BanCod INT NOT NULL,"
-                   "UNIQUE INDEX(LogCod),"
-                   "INDEX(BanCod))");
-
-   /***** Table log_comments *****/
-/*
-mysql> DESCRIBE log_comments;
-+----------+--------------+------+-----+---------+-------+
-| Field    | Type         | Null | Key | Default | Extra |
-+----------+--------------+------+-----+---------+-------+
-| LogCod   | int(11)      | NO   | PRI | NULL    |       |
-| Comments | varchar(255) | NO   |     | NULL    |       |
-+----------+--------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-// TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
-                   "LogCod INT NOT NULL,"
-                   "Comments VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(LogCod))");
 
    /***** Table log_recent *****/
 /*
