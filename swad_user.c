@@ -2694,7 +2694,7 @@ static void Usr_InsertMyLastData (void)
 
    /***** Insert my last accessed course, tab and time of click in database *****/
    sprintf (Query,"INSERT INTO usr_last"
-	          " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccessNotif)"
+	          " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif)"
                   " VALUES"
                   " ('%ld','%u','%ld','%u',NOW(),FROM_UNIXTIME('%ld'))",
             Gbl.Usrs.Me.UsrDat.UsrCod,
