@@ -136,14 +136,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.207 (2016-05-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.207.1 (2016-05-01)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.207:   May 01, 2016	Add default values for fields in users' data table. (201424 lines)
+        Version 15.207.1: May 01, 2016	Minor fix to avoid warning related to char type limits. (201515 lines)
+        Version 15.207:   May 01, 2016	Add default values for fields in users' data table. (201514 lines)
 					Birthday default value now is NULL.
 					18 changes necessary in database:
 ALTER TABLE usr_data CHANGE COLUMN EncryptedUsrCod EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '';

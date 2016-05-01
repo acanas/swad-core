@@ -51,7 +51,7 @@ extern struct Globals Gbl;		// Declaration in swad.c
 /*************************** Internal prototypes *****************************/
 /*****************************************************************************/
 
-static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,char *Ch);
+static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments);
 static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_SkipHTMLComments_t SkipHTMLComments);
 static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments);
@@ -150,7 +150,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    size_t NumBytesToCopy;
    size_t NumBytesToShow;		// Length of the link displayed on screen (may be shorter than actual length)
    char LimitedURL[MAX_BYTES_LIMITED_URL+1];
-   char Ch;
+   unsigned char Ch;
 
    /****** Initialize constant anchors and their lengths *****/
    TxtLength = strlen (Txt);
@@ -212,7 +212,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
               {
                NumChars1 = Str_GetNextASCIICharFromStr (PtrSrc,&Ch);
                PtrSrc += NumChars1;
-               if ((Ch >= 0 && Ch <= 32) || Ch == '<'  || Ch == '"')
+               if (Ch <= 32 || Ch == '<'  || Ch == '"')
                  {
                   Links[NumLinks].PtrEnd = PtrSrc - NumChars1 - 1;
                   break;
@@ -221,7 +221,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                  {
                   NumChars2 = Str_GetNextASCIICharFromStr (PtrSrc,&Ch);
                   PtrSrc += NumChars2;
-                  if ((Ch >= 0 && Ch <= 32) || Ch == '<' || Ch == '"')
+                  if (Ch <= 32 || Ch == '<' || Ch == '"')
                     {
                      Links[NumLinks].PtrEnd = PtrSrc - NumChars2 - NumChars1 - 1;
                      break;
@@ -480,7 +480,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 /*****************************************************************************/
 // Returns number of char analyzed
 
-static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,char *Ch)
+static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch)
   {
    unsigned NumChars;
    unsigned Num;
@@ -544,19 +544,19 @@ static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,char *Ch)
            }
          else
            {
-            *Ch = *Ptr;
+            *Ch = (unsigned char) *Ptr;
             return NumChars;
            }
         }
       else
         {
-         *Ch = *Ptr;
+         *Ch = (unsigned char) *Ptr;
          return 2;
         }
      }
    else
      {
-      *Ch = *Ptr;
+      *Ch = (unsigned char) *Ptr;
       return 1;
      }
   }
