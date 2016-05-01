@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.208 (2016-05-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.208.1 (2016-05-01)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.208.1: May 01, 2016	Minor fix to avoid warning related to size_t. (201438 lines)
         Version 15.208:   May 01, 2016	Changes in config for swadberry.ugr.es.
 					Removed cevuna.una.py from config. (201435 lines)
         Version 15.207.2: May 01, 2016	Fix bug in database table log_full. (201515 lines)

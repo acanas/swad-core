@@ -219,8 +219,8 @@
 
 #elif defined SWADBERRY_UGR_ES			// swadberry.ugr.es ******************
 
-#define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
-#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
+#define Cfg_PLATFORM_SHORT_NAME			"SWADberry"
+#define Cfg_PLATFORM_FULL_NAME			"SWADberry (Shared Workspace At a Distance on a Raspberry Pi)"
 #define Cfg_PLATFORM_SERVER			"150.214.190.151"		// Server name (main part of the URL)
 #define Cfg_HTTPS_URL_SWAD_CGI			"https://150.214.190.151/swad"	// Without ending slash
 #define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://150.214.190.151/swad"	// Without ending slash

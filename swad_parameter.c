@@ -77,6 +77,7 @@ bool Par_GetQueryString (void)
    char Method[256];
    char ContentType[512];
    char UnsignedLongStr[10+1];
+   unsigned long UnsignedLong;
 
    strcpy (Method,getenv ("REQUEST_METHOD"));
 
@@ -103,8 +104,9 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_LENGTH"))
 	{
          strcpy (UnsignedLongStr,getenv ("CONTENT_LENGTH"));
-         if (sscanf (UnsignedLongStr,"%lu",&Gbl.Params.ContentLength) != 1)
+         if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
+         Gbl.Params.ContentLength = (size_t) UnsignedLong;
 	}
       else
          return false;
