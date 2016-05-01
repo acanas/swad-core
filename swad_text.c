@@ -40540,50 +40540,6 @@ const char *Txt_TAGLINE_BR =
 	"plataforma de<br />apoio ao ensino (Raspberry Pi)";
 # endif
 
-#elif defined WWW_CEVUNA_UNA_PY		// www.cevuna.una.py/swad *************
-
-const char *Txt_TAGLINE =
-# if   L==1
-	"plataforma de suport a la doc&egrave;ncia (UNA)";
-# elif L==2
-	"Plattform zur Unterst&uuml;tzung der Lehre (UNA)";
-# elif L==3
-	"platform to support teaching (UNA)";
-# elif L==4
-	"plataforma de apoyo a la docencia (UNA)";
-# elif L==5
-	"plate-forme pour appuyer l'enseignement (UNA)";
-# elif L==6
-	"plataforma de apoyo a la docencia (UNA)";	// Okoteve traducción
-# elif L==7
-	"piattaforma per sostenere l'insegnamento (UNA)";
-# elif L==8
-	"platforma do wspierania nauczania (UNA)";
-# elif L==9
-	"plataforma de apoio ao ensino (UNA)";
-# endif
-
-const char *Txt_TAGLINE_BR =
-# if   L==1
-	"plataforma de suport<br />a la doc&egrave;ncia (UNA)";
-# elif L==2
-	"Plattform zur Unterst&uuml;tzung<br />der Lehre (UNA)";
-# elif L==3
-	"platform to support<br />teaching (UNA)";
-# elif L==4
-	"plataforma de apoyo<br />a la docencia (UNA)";
-# elif L==5
-	"plate-forme pour appuyer<br />l'enseignement (UNA)";
-# elif L==6
-	"plataforma de apoyo<br />a la docencia (UNA)";	// Okoteve traducción
-# elif L==7
-	"piattaforma per sostenere<br />l'insegnamento (UNA)";
-# elif L==8
-	"platforma do wspierania<br />nauczania (UNA)";
-# elif L==9
-	"plataforma de apoio<br />ao ensino (UNA)";
-# endif
-
 #endif
 
 const char *Txt_Tags =		// Tags used in test

@@ -32,7 +32,6 @@
 //#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
-//#define WWW_CEVUNA_UNA_PY	// Comment this line if not applicable
 
 /*****************************************************************************/
 /********************************* Headers ***********************************/
@@ -222,10 +221,10 @@
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://localhost/swad"	// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://localhost/swad"		// Without ending slash
+#define Cfg_PLATFORM_SERVER			"150.214.190.151"		// Server name (main part of the URL)
+#define Cfg_HTTPS_URL_SWAD_CGI			"https://150.214.190.151/swad"	// Without ending slash
+#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://150.214.190.151/swad"	// Without ending slash
+#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://150.214.190.151/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
@@ -251,55 +250,6 @@
 #define Cfg_ABOUT_URL				"http://atc.ugr.es/"
 #define Cfg_ABOUT_LOGO				"atc64x64.png"
 #define Cfg_ABOUT_LOGO_WIDTH			32
-#define Cfg_ABOUT_LOGO_HEIGHT			32
-
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
-#define Cfg_EXTERNAL_LOGIN_URL			""
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
-
-#define Cfg_GOOGLE_ANALYTICS			""
-
-#elif defined WWW_CEVUNA_UNA_PY			// www.cevuna.una.py/swad **************
-
-#define Cfg_PLATFORM_SHORT_NAME			"SWAD"
-#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_SERVER			"www.cevuna.una.py"			// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://www.cevuna.una.py/swad"	// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://www.cevuna.una.py/swad"	// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://www.cevuna.una.py/swad"		// Without ending slash
-#define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin/swad"			// Directory for this CGI and other commands called by it
-#define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
-#define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
-
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"				// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		140
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
-
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Carmen Varela B&aacute;ez"		// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"cevuna@rec.una.py"			// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"server.rec.una.py"			// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"cevuna@rec.una.py"			// E-mail address from where automatic e-mails will be sent
-#define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
-#define Cfg_LOG_START_YEAR			2012					// Year when the log started in the database
-
-// Footer of page with info about the institution where this platform is installed
-#define Cfg_ABOUT_NAME				"Centro de Educaci&oacute;n Virtual de la Universidad Nacional de Asunci&oacute;n"
-#define Cfg_ABOUT_URL				"http://www.cevuna.una.py/"
-#define Cfg_ABOUT_LOGO				"cevuna.una.py100x32.gif"
-#define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
