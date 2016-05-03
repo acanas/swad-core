@@ -5181,7 +5181,8 @@ void Act_UpdateMFUActions (void)
    if (Act_Actions[Gbl.Action.Act].SuperAction == ActMFUAct)
       return;
 
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To get the decimal point
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
 
    /***** Get current score *****/
    sprintf (Query,"SELECT Score FROM actions_MFU"
@@ -5220,5 +5221,6 @@ void Act_UpdateMFUActions (void)
             Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod);
    DB_QueryUPDATE (Query,"can not update most frequently used actions");
 
-   setlocale (LC_NUMERIC,"es_ES.utf8");
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
   }

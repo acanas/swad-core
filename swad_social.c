@@ -767,11 +767,11 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[256+Ses_LENGTH_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions"
-	          " SET LastPubCod=(SELECT MAX(PubCod) FROM social_pubs)"
+	          " SET LastPubCod=(SELECT IFNULL(MAX(PubCod),0) FROM social_pubs)"
 	          " WHERE SessionId='%s'",
 	    Gbl.Session.Id);
    DB_QueryUPDATE (Query,"can not update last publishing code into session");

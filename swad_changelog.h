@@ -131,23 +131,29 @@
 // TODO: FIX BUG: Txt_Save_file_properties does not have sense in briefcase, because nothing to save (license should be editable in briefcase?)
 // TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
 // TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
+// TODO: Check value returned by setlocale in all calls
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.208.2 (2016-05-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.208.3 (2016-05-03)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.208.2: May 01, 2016	Fix bug in user's last data. (201439 lines)
+        Version 15.208.3: May 03, 2016	Fixed bug in sessions database table when no social publishings available. (201446 lines)
+        Version 15.208.2: May 01, 2016	Add default values in some database fields. (201439 lines)
+					1 change necessary in database:
+ALTER TABLE sessions CHANGE COLUMN SearchString SearchString VARCHAR(255) NOT NULL DEFAULT '';
+
+        Version 15.208.2: May 01, 2016	Fixed bug in user's last data. (201439 lines)
         Version 15.208.1: May 01, 2016	Minor fix to avoid warning related to size_t. (201438 lines)
         Version 15.208:   May 01, 2016	Changes in config for swadberry.ugr.es.
 					Removed cevuna.una.py from config. (201435 lines)
-        Version 15.207.2: May 01, 2016	Fix bug in database table log_full. (201515 lines)
+        Version 15.207.2: May 01, 2016	Fixed bug in database table log_full. (201515 lines)
         Version 15.207.1: May 01, 2016	Minor fix to avoid warning related to char type limits. (201515 lines)
         Version 15.207:   May 01, 2016	Add default values for fields in users' data table. (201514 lines)
 					Birthday default value now is NULL.

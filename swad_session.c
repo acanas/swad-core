@@ -157,9 +157,9 @@ void Ses_InsertSessionInDB (void)
 
    /***** Insert session in the database *****/
    sprintf (Query,"INSERT INTO sessions (SessionId,UsrCod,Password,Role,"
-                  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,WhatToSearch,LastTime,LastRefresh)"
+                  "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                   " VALUES ('%s','%ld','%s','%u',"
-                  "'%ld','%ld','%ld','%ld','%ld','%u',NOW(),NOW())",
+                  "'%ld','%ld','%ld','%ld','%ld',NOW(),NOW(),'%u')",
             Gbl.Session.Id,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Usrs.Me.UsrDat.Password,

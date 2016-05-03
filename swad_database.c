@@ -1922,10 +1922,10 @@ mysql> DESCRIBE sessions;
 | LastPageMsgRcv | int(11)      | NO   |     | 1       |       |
 | LastPageMsgSnt | int(11)      | NO   |     | 1       |       |
 | WhatToSearch   | tinyint(4)   | NO   |     | 0       |       |
-| SearchString   | varchar(255) | NO   |     | NULL    |       |
+| SearchString   | varchar(255) | NO   |     |         |       |
 | SideCols       | tinyint(4)   | NO   |     | 3       |       |
 +----------------+--------------+------+-----+---------+-------+
-18 rows in set (0.01 sec)
+18 rows in set (1,06 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
                    "SessionId CHAR(43) NOT NULL,"
@@ -1944,7 +1944,7 @@ mysql> DESCRIBE sessions;
                    "LastPageMsgRcv INT NOT NULL DEFAULT 1,"
                    "LastPageMsgSnt INT NOT NULL DEFAULT 1,"
                    "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
-                   "SearchString VARCHAR(255) NOT NULL,"
+                   "SearchString VARCHAR(255) NOT NULL DEFAULT '',"
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
                    "UNIQUE INDEX(SessionId),"
                    "INDEX(UsrCod))");

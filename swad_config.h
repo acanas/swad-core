@@ -232,8 +232,8 @@
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		140
+#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad212x40.png"
+#define Cfg_PLATFORM_LOGO_BIG_WIDTH		212
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"ATC - UGR"				// Main responsible for the platform
