@@ -138,13 +138,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.210 (2016-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.210.1 (2016-05-05)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.210.1: May 05, 2016	New icon to change logo of institution/centre/degree. (? lines)
+					1 change necessary in icons:
+Copy file icon/logo64x64.png to public icon directory
+
         Version 15.210:   May 05, 2016	Commands/shortcuts in record are removed from left of window. (201389 lines)
         Version 15.209:   May 05, 2016	Commands/shortcuts in record are cloned to top of window. (201614 lines)
         Version 15.208.6: May 05, 2016	Integrated "Configure" link in tests at top of window, near "Edit" icon. (201463 lines)

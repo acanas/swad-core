@@ -179,7 +179,6 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    Act_Action_t Action;
    long Cod;
    const char *Folder;
-   const char *Icon;
    char PathLogo[PATH_MAX+1];
    bool LogoExists;
 
@@ -190,19 +189,16 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
 	 Action = ActReqInsLog;
 	 Cod = Gbl.CurrentIns.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
-	 Icon = "ins64x64.gif";
 	 break;
       case Sco_SCOPE_CTR:
 	 Action = ActReqCtrLog;
 	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
-	 Icon = "ctr64x64.gif";
 	 break;
       case Sco_SCOPE_DEG:
 	 Action = ActReqDegLog;
 	 Cod = Gbl.CurrentDeg.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
-	 Icon = "deg64x64.gif";
 	 break;
       default:
 	 return;	// Nothing to do
@@ -217,7 +213,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    LogoExists = Fil_CheckIfPathExists (PathLogo);
 
    /***** Link for changing / uploading the logo *****/
-   Lay_PutContextualLink (Action,NULL,Icon,
+   Lay_PutContextualLink (Action,NULL,"logo64x64.png",
                           LogoExists ? Txt_Change_logo :
 		                       Txt_Upload_logo,
                           LogoExists ? Txt_Change_logo :
