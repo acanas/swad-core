@@ -4407,7 +4407,9 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
       /***** Get the students in a degree from database *****/
       sprintf (Query,"SELECT DISTINCT crs_usr.UsrCod,'N',usr_data.Sex"
 	             " FROM courses,crs_usr,usr_data"
-                     " WHERE courses.DegCod='%ld' AND courses.CrsCod=crs_usr.CrsCod AND crs_usr.Role='%u'"
+                     " WHERE courses.DegCod='%ld'"
+                     " AND courses.CrsCod=crs_usr.CrsCod"
+                     " AND crs_usr.Role='%u'"
                      " AND crs_usr.UsrCod=usr_data.UsrCod",
                DegCod,(unsigned) Rol_STUDENT);
 

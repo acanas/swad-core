@@ -132,18 +132,21 @@
 // TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
 // TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
 // TODO: Check value returned by setlocale in all calls
+// TODO: Integrate "Configure" link in tests at top of window, near "Edit" icon.
+// TODO: Write "Tab > Action" in title of text in most frequent actions
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.208.3 (2016-05-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.208.4 (2016-05-05)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.208.4: May 05, 2016	In Statistics > Degrees, show all degrees with students. (201458 lines)
         Version 15.208.3: May 03, 2016	Fixed bug in sessions database table when no social publishings available. (201446 lines)
         Version 15.208.2: May 01, 2016	Add default values in some database fields. (201439 lines)
 					1 change necessary in database:

@@ -1426,47 +1426,46 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,struct ListUsers 
    if (Fil_CheckIfPathExists (PathRelAvgPhoto))  // If file exists
       unlink (PathRelAvgPhoto);
 
-   if (LstUsrs->NumUsrs >= Cfg_MIN_PHOTOS_TO_COMPUTE_AVERAGE)
+   /***** Build names for text file with photo paths *****/
+   sprintf (FileNamePhotoNames,"%s/%s/%s/%ld.txt",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,DegCod);
+   if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
+      Lay_ShowErrorAndExit ("Can not open file to compute average photo.");
+
+   /***** Loop writing file names in text file *****/
+   for (NumUsr = 0;
+	NumUsr < LstUsrs->NumUsrs;
+	NumUsr++)
      {
-      /***** Build names for text file with photo paths *****/
-      sprintf (FileNamePhotoNames,"%s/%s/%s/%ld.txt",
-               Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,DegCod);
-      if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
-         Lay_ShowErrorAndExit ("Can not open file to compute average photo.");
+      Gbl.Usrs.Other.UsrDat.Sex = LstUsrs->Lst[NumUsr].Sex;
+      if (Sex == Usr_SEX_ALL || Sex == Gbl.Usrs.Other.UsrDat.Sex)
+	{
+	 (*NumStds)++;
 
-      /***** Loop writing file names in text file *****/
-      for (NumUsr = 0;
-	   NumUsr < LstUsrs->NumUsrs;
-	   NumUsr++)
-        {
-         Gbl.Usrs.Other.UsrDat.Sex = LstUsrs->Lst[NumUsr].Sex;
-         if (Sex == Usr_SEX_ALL || Sex == Gbl.Usrs.Other.UsrDat.Sex)
-           {
-            (*NumStds)++;
+	 /***** Add photo to file for average face calculation *****/
+	 Gbl.Usrs.Other.UsrDat.UsrCod = LstUsrs->Lst[NumUsr].UsrCod;
+	 if (Pho_CheckIfPrivPhotoExists (Gbl.Usrs.Other.UsrDat.UsrCod,PathPrivRelPhoto))
+	   {
+	    (*NumStdsWithPhoto)++;
+	    fprintf (FilePhotoNames,"%s\n",PathPrivRelPhoto);
+	   }
+	}
+     }
+   fclose (FilePhotoNames);
 
-            /***** Add photo to file for average face calculation *****/
-            Gbl.Usrs.Other.UsrDat.UsrCod = LstUsrs->Lst[NumUsr].UsrCod;
-            if (Pho_CheckIfPrivPhotoExists (Gbl.Usrs.Other.UsrDat.UsrCod,PathPrivRelPhoto))
-              {
-               (*NumStdsWithPhoto)++;
-               fprintf (FilePhotoNames,"%s\n",PathPrivRelPhoto);
-              }
-           }
-        }
-      fclose (FilePhotoNames);
+   /***** Call to program to calculate average photo *****/
+   if (*NumStdsWithPhoto)
+     {
+      sprintf (StrCallToProgram,"%s %s %s",
+	       Pho_StrAvgPhotoPrograms[TypeOfAverage],
+	       FileNamePhotoNames,PathRelAvgPhoto);
+      ReturnCode = system (StrCallToProgram);
+      if (ReturnCode == -1)
+	 Lay_ShowErrorAndExit ("Error when running program that computes the average photo.");
 
-      /***** Call to program to calculate average photo *****/
-      if (*NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_COMPUTE_AVERAGE)
-        {
-         sprintf (StrCallToProgram,"%s %s %s",Pho_StrAvgPhotoPrograms[TypeOfAverage],FileNamePhotoNames,PathRelAvgPhoto);
-         ReturnCode = system (StrCallToProgram);
-         if (ReturnCode == -1)
-            Lay_ShowErrorAndExit ("Error when running program that computes the average photo.");
-
-         /* Write message depending on the return code */
-         if (WEXITSTATUS(ReturnCode))
-            Lay_ShowErrorAndExit ("The average photo has not been computed successfully.");
-        }
+      /* Write message depending on the return code */
+      if (WEXITSTATUS(ReturnCode))
+	 Lay_ShowErrorAndExit ("The average photo has not been computed successfully.");
      }
 
    /***** Time used to compute the stats of this degree *****/
@@ -1545,7 +1544,9 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       Pho_PutLinkToCalculateDegreeStats ();
      }
 
-   /***** Get maximum number of students and maximum number of students with photo in all degrees *****/
+   /***** Get maximum number of students
+          and maximum number of students with photo
+          in all degrees *****/
    Pho_GetMaxStdsPerDegree ();
 
    /***** Draw the classphoto/list *****/
@@ -1925,6 +1926,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
+   bool ShowDegPhoto;
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
@@ -1960,8 +1962,13 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	 /* Get number of students and number of students with photo in this degree */
 	 Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
+         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	    ShowDegPhoto = (NumStds > 0);
+	 else
+	    ShowDegPhoto = (NumStds > 0 &&
+		            NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE);
 
-	 if (NumStds > 0)
+	 if (ShowDegPhoto)
 	   {
 	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {

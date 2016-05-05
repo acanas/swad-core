@@ -232,7 +232,7 @@
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		40
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad212x40.png"
+#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"SWADberry212x40.png"
 #define Cfg_PLATFORM_LOGO_BIG_WIDTH		212
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
@@ -286,7 +286,7 @@
 /* Users */
 #define Cfg_MAX_USRS_IN_LIST			       20000	// If the number of users in a list is greater than this, don't show the list
 #define Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST       500	// If the number of users in a list is greater than this, ask me for confirmation before showing the list
-#define Cfg_MIN_PHOTOS_TO_COMPUTE_AVERAGE		  10	// If the number of students with photo in a degree is less than this, don't show average photo of the degree
+#define Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE			  10	// If the number of students with photo in a degree is less than this, don't show average photo of the degree
 #define Cfg_MAX_RECIPIENTS				 250	// A student can not send a message to more than this number of recipients
 #define Cfg_MAX_CONNECTED_SHOWN				  15	// Show (in right column) only these connected users with more recent activity
 
