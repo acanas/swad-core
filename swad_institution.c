@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ins_Configuration (bool PrintView);
-static void Ins_PutIconToPrint (void);
+static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
@@ -257,21 +257,9 @@ static void Ins_Configuration (bool PrintView)
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
-      /***** Contextual links *****/
-      if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	{
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-	 /* Link to upload logo */
-	 Log_PutFormToChangeLogo (Sco_SCOPE_INS);
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Ins_PutIconToPrint);
+	                                         Ins_PutIconsToPrintAndUpload);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -494,14 +482,35 @@ static void Ins_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/********** Put icon to print the configuration of an institution ************/
+/********* Put contextual icons in configuration of an institution ***********/
 /*****************************************************************************/
 
-static void Ins_PutIconToPrint (void)
+static void Ins_PutIconsToPrintAndUpload (void)
   {
    extern const char *Txt_Print;
+   extern const char *Txt_Change_logo;
+   extern const char *Txt_Upload_logo;
+   char PathLogo[PATH_MAX+1];
+   bool LogoExists;
 
+   /***** Link to print info about institution *****/
    Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",Txt_Print,NULL);
+
+   /***** Link to upload logo of institution *****/
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+     {
+      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	       (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
+	       (unsigned)  Gbl.CurrentIns.Ins.InsCod,
+	       (unsigned)  Gbl.CurrentIns.Ins.InsCod);
+      LogoExists = Fil_CheckIfPathExists (PathLogo);
+
+      Lay_PutContextualLink (ActReqInsLog,NULL,"logo64x64.png",
+			     LogoExists ? Txt_Change_logo :
+					  Txt_Upload_logo,
+			     NULL);
+     }
   }
 
 /*****************************************************************************/
