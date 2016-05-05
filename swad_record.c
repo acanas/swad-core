@@ -90,9 +90,6 @@ static void Rec_PutParamsStudent (void);
 static void Rec_PutParamsMsgUsr (void);
 static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
-static void Rec_ShowCommands (struct UsrData *UsrDat,
-                              Rec_RecordViewType_t TypeOfView,
-                              bool PutFormLinks);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
@@ -2086,7 +2083,6 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Commands and full name *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Rec_ShowCommands (UsrDat,TypeOfView,PutFormLinks);
    Rec_ShowFullName (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -2253,7 +2249,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 static void Rec_PutIconsCommands (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_Edit;
+   extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
@@ -2278,7 +2274,7 @@ static void Rec_PutIconsCommands (void)
       /***** Button to edit my record card *****/
       if (ItsMe)
 	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,"edit64x64.png",
-			        Txt_Edit,NULL);
+			        Txt_Edit_my_personal_data,NULL);
 
       /***** Button to view user's record card in course when:
              - a course is selected && the user belongs to it &&
@@ -2403,7 +2399,7 @@ static void Rec_PutParamsMsgUsr (void)
 static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"REC_C1_TOP CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td rowspan=\"4\" class=\"REC_C1_TOP CENTER_MIDDLE\">");
    if (Ins->InsCod > 0)
      {
       /* Form to go to the institution */
@@ -2458,241 +2454,6 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
 		     "PHOTO186x248",Pho_NO_ZOOM,false);
-   fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/*********** Show commands (icon to make actions) in record card *************/
-/*****************************************************************************/
-
-static void Rec_ShowCommands (struct UsrData *UsrDat,
-                              Rec_RecordViewType_t TypeOfView,
-                              bool PutFormLinks)
-  {
-   extern const char *Txt_Edit_my_personal_data;
-   extern const char *Txt_Edit;
-   extern const char *Txt_View_record_for_this_course;
-   extern const char *Txt_Admin_user;
-   extern const char *Txt_Write_a_message;
-   extern const char *Txt_View_works;
-   extern const char *Txt_See_exams;
-   extern const char *Txt_Attendance;
-   extern const char *Txt_Following_unfollow;
-   extern const char *Txt_Unfollow;
-   extern const char *Txt_Follow;
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
-   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
-   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
-   bool HeBelongsToCurrentCrs = (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
-	                         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
-
-   fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"REC_C1_MID LEFT_TOP\">");
-
-   if (PutFormLinks && Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"REC_SHORTCUTS\">");
-
-      /***** Button to edit my record card *****/
-      if (ItsMe)
-        {
-	 Act_FormStart (ActReqEdiRecCom);
-	 Act_LinkFormSubmit (Txt_Edit_my_personal_data,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/edit64x64.png\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_Edit,Txt_Edit);
-	 Act_FormEnd ();
-        }
-
-      /***** Button to view user's record card in course when:
-             - a course is selected && the user belongs to it &&
-             - I can view user's record card in course *****/
-      if (HeBelongsToCurrentCrs &&
-	  (IAmLoggedAsStudent ||
-	   IAmLoggedAsTeacher ||
-	   IAmLoggedAsSysAdm))
-	{
-	 Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
-								    ActSeeRecOneTch);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_record_for_this_course,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/card64x64.gif\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_View_record_for_this_course,
-		  Txt_View_record_for_this_course);
-	 Act_FormEnd ();
-	}
-
-      /***** Button to admin user *****/
-      if (ItsMe ||
-	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ||
-	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM) ||
-	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM) ||
-	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
-	                (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
-	                        	                             ActReqMdfOth));
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Admin_user,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/config64x64.gif\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_Admin_user,Txt_Admin_user);
-	 Act_FormEnd ();
-	}
-
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// A course is selected
-	  UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
-	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
-	{
-	 /***** Button to view user's assignments and works *****/
-	 if (ItsMe)	// I am a student
-	    Act_FormStart (ActAdmAsgWrkUsr);
-	 else		// I am a teacher or superuser
-	   {
-	    Act_FormStart (ActAdmAsgWrkCrs);
-	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	   }
-	 Grp_PutParamAllGroups ();
-	 Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
-	 Act_LinkFormSubmit (Txt_View_works,"REC_DAT_BOLD");
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/folder64x64.gif\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_View_works,Txt_View_works);
-	 Act_FormEnd ();
-
-	 /***** Button to view user's test exams *****/
-	 if (ItsMe)
-	    Act_FormStart (ActSeeMyTstExa);
-	 else
-	   {
-	    Act_FormStart (ActSeeUsrTstExa);
-	    Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	   }
-	 Grp_PutParamAllGroups ();
-	 Act_LinkFormSubmit (Txt_See_exams,"REC_DAT_BOLD");
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                    " style=\"display:inline;\" >"
-			    "<img src=\"%s/file64x64.gif\""
-			    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON20x20\" />"
-			    "</div>"
-			    "</a>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_See_exams,Txt_See_exams);
-	 Act_FormEnd ();
-
-	 /***** Button to view user's attendance *****/
-	 if (IAmLoggedAsStudent ||
-	     IAmLoggedAsTeacher ||
-	     IAmLoggedAsSysAdm)
-	   {
-	    if (IAmLoggedAsStudent)
-	       // As student, I can see my attendance
-	       Act_FormStart (ActSeeLstMyAtt);
-	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
-	      {
-	       // As teacher, I can see attendance of the student
-	       Act_FormStart (ActSeeLstStdAtt);
-	       Par_PutHiddenParamString ("UsrCodStd",UsrDat->EncryptedUsrCod);
-	       Grp_PutParamAllGroups ();
-	      }
-	    Act_LinkFormSubmit (Txt_Attendance,"REC_DAT_BOLD");
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/rollcall64x64.gif\""
-			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON20x20\" />"
-			       "</div>"
-			       "</a>",
-		     Gbl.Prefs.IconsURL,
-		     Txt_Attendance,Txt_Attendance);
-	    Act_FormEnd ();
-	   }
-	}
-
-      /***** Button to send a message *****/
-      Act_FormStart (ActReqMsgUsr);
-      Grp_PutParamAllGroups ();
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-      Act_LinkFormSubmit (Txt_Write_a_message,"REC_DAT_BOLD");
-      fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-	                 " style=\"display:inline;\" >"
-			 "<img src=\"%s/msg64x64.gif\""
-			 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20\" />"
-			 "</div>"
-			 "</a>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Write_a_message,Txt_Write_a_message);
-      Act_FormEnd ();
-
-      /***** Button to follow / unfollow *****/
-      if (TypeOfView == Rec_RECORD_PUBLIC &&
-	  !ItsMe)
-	{
-	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDat->UsrCod))	// I follow user
-	   {
-	    Act_FormStart (ActUnfUsr);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD");
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/following64x64.png\""
-			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON20x20\" />"
-			       "</div>"
-			       "</a>",
-		     Gbl.Prefs.IconsURL,
-		     Txt_Unfollow,Txt_Following_unfollow);
-	    Act_FormEnd ();
-	   }
-	 else	// I do not follow user
-	   {
-	    Act_FormStart (ActFolUsr);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD");
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
-		               " style=\"display:inline;\" >"
-			       "<img src=\"%s/follow64x64.png\""
-			       " alt=\"%s\" title=\"%s\""
-	                       " class=\"ICON20x20\" />"
-			       "</div>"
-			       "</a>",
-		     Gbl.Prefs.IconsURL,
-		     Txt_Follow,Txt_Follow);
-	    Act_FormEnd ();
-	   }
-	}
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
    fprintf (Gbl.F.Out,"</td>");
   }
 
