@@ -141,8 +141,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Tst_PutFormToSeeResultsOfUsersTests (void);
-static void Tst_PutIconToEdit (void);
-static void Tst_PutFormToConfigure (void);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
 static void Tst_ShowTstTotalMark (double TotalScore);
@@ -162,7 +160,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
-static void Tst_PutIconToCreateNewTstQst (void);
+static void Tst_PutIconsToEditAndConfig (void);
 static void Tst_PutButtonToAddQuestion (void);
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
@@ -295,12 +293,11 @@ void Tst_ShowFormAskTst (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Tst_PutFormToSeeResultsOfUsersTests ();
-      Tst_PutFormToConfigure ();
       fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Take_a_test,ICanEdit ? Tst_PutIconToEdit :
+   Lay_StartRoundFrame (NULL,Txt_Take_a_test,ICanEdit ? Tst_PutIconsToEditAndConfig :
 	                                                NULL);
 
    /***** Get tags *****/
@@ -370,29 +367,6 @@ static void Tst_PutFormToSeeResultsOfUsersTests (void)
 	                                                               ActReqSeeUsrTstExa,
 	                  NULL,"file64x64.gif",
 	                  Txt_Results_tests,Txt_Results_tests);
-  }
-
-/*****************************************************************************/
-/*************** Write icon to go to edition of test questions ***************/
-/*****************************************************************************/
-
-static void Tst_PutIconToEdit (void)
-  {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",Txt_Edit,NULL);
-  }
-
-/*****************************************************************************/
-/************** Write a form to go to configuration of tests *****************/
-/*****************************************************************************/
-
-static void Tst_PutFormToConfigure (void)
-  {
-   extern const char *Txt_Configure;
-
-   Lay_PutContextualLink (ActCfgTst,NULL,"config64x64.gif",
-                          Txt_Configure,Txt_Configure);
   }
 
 /*****************************************************************************/
@@ -1265,11 +1239,10 @@ void Tst_ShowFormAskEditTsts (void)
    /***** Contextual menu *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
-   Tst_PutFormToConfigure ();		// Put form to go to test configuration
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconToCreateNewTstQst);
+   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsToEditAndConfig);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1310,16 +1283,29 @@ void Tst_ShowFormAskEditTsts (void)
   }
 
 /*****************************************************************************/
-/***************** Put icon to create a new test question ********************/
+/****************** Put icons to edit and configure tests ********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToCreateNewTstQst (void)
+static void Tst_PutIconsToEditAndConfig (void)
   {
+   extern const char *Txt_Edit;
    extern const char *Txt_New_question;
+   extern const char *Txt_Configure;
+
+   /***** Put form to edit existing test questions *****/
+   if (Gbl.Action.Act != ActEdiTstQst)
+      Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",
+			     Txt_Edit,NULL);
 
    /***** Put form to create a new test question *****/
-   Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
-                          Txt_New_question,NULL);
+   if (Gbl.Action.Act != ActEdiOneTstQst)
+      Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
+			     Txt_New_question,NULL);
+
+   /***** Put form to go to test configuration *****/
+   if (Gbl.Action.Act != ActCfgTst)
+      Lay_PutContextualLink (ActCfgTst,NULL,"config64x64.gif",
+			     Txt_Configure,NULL);
   }
 
 /*****************************************************************************/
@@ -1774,12 +1760,15 @@ static void Tst_ShowFormConfigTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsToEditAndConfig);
+
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
-   Lay_StartRoundFrameTable (NULL,2,Txt_Configure_tests);
 
    /***** Tests are visible from plugins? *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+	              "<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
@@ -1882,13 +1871,17 @@ static void Tst_ShowFormConfigTst (void)
                Txt_TST_STR_FEEDBACK[FeedbTyp]);
      }
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	              "</tr>"
+	              "</table>");
 
-   /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+   /***** Send button *****/
+   Lay_PutConfirmButton (Txt_Save);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -2262,7 +2255,6 @@ void Tst_ListQuestionsToEdit (void)
             TsI_CreateXML (NumRows,mysql_res);	// Create XML file for exporting questions and put a link to download it
          else
             TsI_PutFormToExportQuestions ();	// Button to export questions
-	 Tst_PutFormToConfigure ();		// Put form to go to test configuration
 	 fprintf (Gbl.F.Out,"</div>");
 
          Tst_ListOneOrMoreQuestionsToEdit (NumRows,mysql_res);			// Show the table with the questions
@@ -2620,7 +2612,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconToCreateNewTstQst);
+   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsToEditAndConfig);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
