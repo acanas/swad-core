@@ -76,7 +76,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ctr_Configuration (bool PrintView);
-static void Ctr_PutIconToPrint (void);
+static void Ctr_PutIconsToPrintAndUpload (void);
 
 static void Ctr_ListCentres (void);
 static void Ctr_PutIconToEditFrames (void);
@@ -93,7 +93,6 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
 static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
-static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists);
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentresForEdition (void);
@@ -283,22 +282,9 @@ static void Ctr_Configuration (bool PrintView)
 	       (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-      /***** Contextual links *****/
-      if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	{
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-	 /* Links to upload logo and photo */
-	 Log_PutFormToChangeLogo (Sco_SCOPE_CTR);
-	 Ctr_PutFormToChangeCtrPhoto (PhotoExists);
-
-         fprintf (Gbl.F.Out,"</div>");
-	}
-
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Ctr_PutIconToPrint);
+	                                         Ctr_PutIconsToPrintAndUpload);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -561,11 +547,46 @@ static void Ctr_Configuration (bool PrintView)
 /************* Put icon to print the configuration of a centre ***************/
 /*****************************************************************************/
 
-static void Ctr_PutIconToPrint (void)
+static void Ctr_PutIconsToPrintAndUpload (void)
   {
    extern const char *Txt_Print;
+   extern const char *Txt_Change_logo;
+   extern const char *Txt_Upload_logo;
+   extern const char *Txt_Change_photo;
+   extern const char *Txt_Upload_photo;
+   char Path[PATH_MAX+1];
+   bool Exists;
 
+   /***** Link to print info about centre *****/
    Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print,NULL);
+
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+     {
+      /***** Link to upload logo of centre *****/
+      sprintf (Path,"%s/%s/%02u/%u/logo/%u.png",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
+	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
+      Exists = Fil_CheckIfPathExists (Path);
+      Lay_PutContextualLink (ActReqCtrLog,NULL,"logo64x64.png",
+			     Exists ? Txt_Change_logo :
+				      Txt_Upload_logo,
+			     NULL);
+
+      /***** Link to upload photo of centre *****/
+      sprintf (Path,"%s/%s/%02u/%u/%u.jpg",
+               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
+	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
+      Exists = Fil_CheckIfPathExists (Path);
+      Lay_PutContextualLink (ActReqCtrPho,NULL,
+			     "photo64x64.gif",
+			     Exists ? Txt_Change_photo :
+				      Txt_Upload_photo,
+			     NULL);
+     }
   }
 
 /*****************************************************************************/
@@ -1977,24 +1998,6 @@ void Ctr_ReceiveLogo (void)
 void Ctr_RemoveLogo (void)
   {
    Log_RemoveLogo (Sco_SCOPE_CTR);
-  }
-
-/*****************************************************************************/
-/******** Put a link to the action used to request photo of centre ***********/
-/*****************************************************************************/
-
-static void Ctr_PutFormToChangeCtrPhoto (bool PhotoExists)
-  {
-   extern const char *Txt_Change_photo;
-   extern const char *Txt_Upload_photo;
-
-   /***** Link for changing / uploading the photo *****/
-   Lay_PutContextualLink (ActReqCtrPho,NULL,
-                          "photo64x64.gif",
-                          PhotoExists ? Txt_Change_photo :
-		                        Txt_Upload_photo,
-                          PhotoExists ? Txt_Change_photo :
-		                        Txt_Upload_photo);
   }
 
 /*****************************************************************************/

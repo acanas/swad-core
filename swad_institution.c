@@ -490,25 +490,24 @@ static void Ins_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
-   char PathLogo[PATH_MAX+1];
-   bool LogoExists;
+   char Path[PATH_MAX+1];
+   bool Exists;
 
    /***** Link to print info about institution *****/
    Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",Txt_Print,NULL);
 
-   /***** Link to upload logo of institution *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
      {
-      sprintf (PathLogo,"%s/%s/%02u/%u/logo/%u.png",
+      /***** Link to upload logo of institution *****/
+      sprintf (Path,"%s/%s/%02u/%u/logo/%u.png",
 	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
 	       (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
 	       (unsigned)  Gbl.CurrentIns.Ins.InsCod,
 	       (unsigned)  Gbl.CurrentIns.Ins.InsCod);
-      LogoExists = Fil_CheckIfPathExists (PathLogo);
-
+      Exists = Fil_CheckIfPathExists (Path);
       Lay_PutContextualLink (ActReqInsLog,NULL,"logo64x64.png",
-			     LogoExists ? Txt_Change_logo :
-					  Txt_Upload_logo,
+			     Exists ? Txt_Change_logo :
+				      Txt_Upload_logo,
 			     NULL);
      }
   }
