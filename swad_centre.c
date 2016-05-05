@@ -77,6 +77,7 @@ extern struct Globals Gbl;
 
 static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconsToPrintAndUpload (void);
+static void Ctr_PutIconToChangePhoto (void);
 
 static void Ctr_ListCentres (void);
 static void Ctr_PutIconToEditFrames (void);
@@ -544,18 +545,12 @@ static void Ctr_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/************* Put icon to print the configuration of a centre ***************/
+/************ Put contextual icons in configuration of a centre **************/
 /*****************************************************************************/
 
 static void Ctr_PutIconsToPrintAndUpload (void)
   {
    extern const char *Txt_Print;
-   extern const char *Txt_Change_logo;
-   extern const char *Txt_Upload_logo;
-   extern const char *Txt_Change_photo;
-   extern const char *Txt_Upload_photo;
-   char Path[PATH_MAX+1];
-   bool Exists;
 
    /***** Link to print info about centre *****/
    Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print,NULL);
@@ -563,30 +558,36 @@ static void Ctr_PutIconsToPrintAndUpload (void)
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
       /***** Link to upload logo of centre *****/
-      sprintf (Path,"%s/%s/%02u/%u/logo/%u.png",
-	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
-	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
-      Exists = Fil_CheckIfPathExists (Path);
-      Lay_PutContextualLink (ActReqCtrLog,NULL,"logo64x64.png",
-			     Exists ? Txt_Change_logo :
-				      Txt_Upload_logo,
-			     NULL);
+      Log_PutIconToChangeLogo (Sco_SCOPE_CTR);
 
       /***** Link to upload photo of centre *****/
-      sprintf (Path,"%s/%s/%02u/%u/%u.jpg",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
-	       (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
-	       (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
-      Exists = Fil_CheckIfPathExists (Path);
-      Lay_PutContextualLink (ActReqCtrPho,NULL,
-			     "photo64x64.gif",
-			     Exists ? Txt_Change_photo :
-				      Txt_Upload_photo,
-			     NULL);
+      Ctr_PutIconToChangePhoto ();
      }
+  }
+
+/*****************************************************************************/
+/************* Put contextual icons to upload photo of centre ****************/
+/*****************************************************************************/
+
+static void Ctr_PutIconToChangePhoto (void)
+  {
+   extern const char *Txt_Change_photo;
+   extern const char *Txt_Upload_photo;
+   char PathPhoto[PATH_MAX+1];
+   bool PhotoExists;
+
+   /***** Link to upload photo of centre *****/
+   sprintf (PathPhoto,"%s/%s/%02u/%u/%u.jpg",
+	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	    (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
+	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
+	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
+   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+   Lay_PutContextualLink (ActReqCtrPho,NULL,
+			  "photo64x64.gif",
+			  PhotoExists ? Txt_Change_photo :
+				        Txt_Upload_photo,
+			  NULL);
   }
 
 /*****************************************************************************/

@@ -86,7 +86,7 @@ typedef enum
 /*****************************************************************************/
 
 static void Deg_Configuration (bool PrintView);
-static void Deg_PutIconToPrint (void);
+static void Deg_PutIconsToPrintAndUpload (void);
 
 static void Deg_WriteSelectorOfDegree (void);
 
@@ -300,21 +300,9 @@ static void Deg_Configuration (bool PrintView)
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
-      /***** Links to show courses, to print view and to upload logo *****/
-      if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	{
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-	 /* Link to upload logo */
-	 Log_PutFormToChangeLogo (Sco_SCOPE_DEG);
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Deg_PutIconToPrint);
+	                                         Deg_PutIconsToPrintAndUpload);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -471,14 +459,19 @@ static void Deg_Configuration (bool PrintView)
   }
 
 /*****************************************************************************/
-/************* Put icon to print the configuration of a degree ***************/
+/************ Put contextual icons in configuration of a degree **************/
 /*****************************************************************************/
 
-static void Deg_PutIconToPrint (void)
+static void Deg_PutIconsToPrintAndUpload (void)
   {
    extern const char *Txt_Print;
 
+   /***** Link to print info about degree *****/
    Lay_PutContextualLink (ActPrnDegInf,NULL,"print64x64.png",Txt_Print,NULL);
+
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+      /***** Link to upload logo of degree *****/
+      Log_PutIconToChangeLogo (Sco_SCOPE_DEG);
   }
 
 /*****************************************************************************/

@@ -168,11 +168,11 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
   }
 
 /*****************************************************************************/
-/*************** Put a link to the action used to request  *******************/
-/*************** the logo of institution, centre or degree *******************/
+/************* Put an icon to go to the action used to request ***************/
+/************* the logo of institution, centre or degree       ***************/
 /*****************************************************************************/
 
-void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
+void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
   {
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
@@ -216,8 +216,7 @@ void Log_PutFormToChangeLogo (Sco_Scope_t Scope)
    Lay_PutContextualLink (Action,NULL,"logo64x64.png",
                           LogoExists ? Txt_Change_logo :
 		                       Txt_Upload_logo,
-                          LogoExists ? Txt_Change_logo :
-		                       Txt_Upload_logo);
+                          NULL);
   }
 
 /*****************************************************************************/
