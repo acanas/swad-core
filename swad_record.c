@@ -83,6 +83,11 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
                                const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
 
+static void Rec_PutIconsCommands (void);
+static void Rec_PutParamUsrCodEncrypted (void);
+static void Rec_PutParamsWorks (void);
+static void Rec_PutParamsStudent (void);
+static void Rec_PutParamsMsgUsr (void);
 static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowCommands (struct UsrData *UsrDat,
@@ -2066,7 +2071,12 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
+   Gbl.Record.UsrDat = UsrDat;
+   Gbl.Record.TypeOfView = TypeOfView;
+   Lay_StartRoundFrame (StrRecordWidth,NULL,Rec_PutIconsCommands);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2229,8 +2239,161 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</tr>");
      }
 
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
    /***** End frame *****/
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*********** Show commands (icon to make actions) in record card *************/
+/*****************************************************************************/
+
+static void Rec_PutIconsCommands (void)
+  {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Edit;
+   extern const char *Txt_View_record_for_this_course;
+   extern const char *Txt_Admin_user;
+   extern const char *Txt_Write_a_message;
+   extern const char *Txt_View_works;
+   extern const char *Txt_See_exams;
+   extern const char *Txt_Attendance;
+   extern const char *Txt_Following_unfollow;
+   extern const char *Txt_Follow;
+   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
+   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
+   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
+   bool HeBelongsToCurrentCrs = (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
+	                         Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
+
+   if (!Gbl.Form.Inside &&						// Only if not inside another form
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&	// Only in main window
+       Gbl.Usrs.Me.Logged)						// Only if I am logged
+     {
+      fprintf (Gbl.F.Out,"<div class=\"REC_SHORTCUTS\">");
+
+      /***** Button to edit my record card *****/
+      if (ItsMe)
+	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,"edit64x64.png",
+			        Txt_Edit,NULL);
+
+      /***** Button to view user's record card in course when:
+             - a course is selected && the user belongs to it &&
+             - I can view user's record card in course *****/
+      if (HeBelongsToCurrentCrs &&
+	  (IAmLoggedAsStudent ||
+	   IAmLoggedAsTeacher ||
+	   IAmLoggedAsSysAdm))
+	 Lay_PutContextualLink (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
+								                       ActSeeRecOneTch,
+				Rec_PutParamUsrCodEncrypted,
+				"card64x64.gif",
+			        Txt_View_record_for_this_course,NULL);
+
+      /***** Button to admin user *****/
+      if (ItsMe ||
+	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ||
+	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM) ||
+	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM) ||
+	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 Lay_PutContextualLink ( Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
+	                        (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
+	                        	                                                ActReqMdfOth),
+				Rec_PutParamUsrCodEncrypted,
+				"config64x64.gif",
+			        Txt_Admin_user,NULL);
+
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// A course is selected
+	  Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
+	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
+	{
+	 /***** Button to view user's assignments and works *****/
+	 if (ItsMe)	// I am a student
+	    Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,
+			           "folder64x64.gif",
+			           Txt_View_works,NULL);
+	 else		// I am a teacher or superuser
+	    Lay_PutContextualLink (ActAdmAsgWrkCrs,Rec_PutParamsWorks,
+			           "folder64x64.gif",
+			           Txt_View_works,NULL);
+
+	 /***** Button to view user's test exams *****/
+	 if (ItsMe)
+	    Lay_PutContextualLink (ActSeeMyTstExa,NULL,
+			           "file64x64.gif",
+			           Txt_See_exams,NULL);
+	 else
+	    Lay_PutContextualLink (ActSeeUsrTstExa,Rec_PutParamsStudent,
+			           "file64x64.gif",
+			           Txt_See_exams,NULL);
+
+	 /***** Button to view user's attendance *****/
+	 if (IAmLoggedAsStudent ||
+	     IAmLoggedAsTeacher ||
+	     IAmLoggedAsSysAdm)
+	   {
+	    if (IAmLoggedAsStudent)
+	       // As student, I can see my attendance
+	       Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
+			              "rollcall64x64.gif",
+			              Txt_Attendance,NULL);
+	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
+	       // As teacher, I can see attendance of the student
+	       Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
+			              "rollcall64x64.gif",
+			              Txt_Attendance,NULL);
+	   }
+	}
+
+      /***** Button to send a message *****/
+      Lay_PutContextualLink (ActReqMsgUsr,Rec_PutParamsMsgUsr,
+			     "msg64x64.gif",
+			     Txt_Write_a_message,NULL);
+
+      /***** Button to follow / unfollow *****/
+      if (Gbl.Record.TypeOfView == Rec_RECORD_PUBLIC &&
+	  !ItsMe)
+	{
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Record.UsrDat->UsrCod))	// I follow user
+	    Lay_PutContextualLink (ActUnfUsr,Rec_PutParamUsrCodEncrypted,
+				   "following64x64.png",
+				   Txt_Following_unfollow,NULL);
+	 else	// I do not follow user
+	    Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
+				   "follow64x64.png",
+				   Txt_Follow,NULL);
+	}
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+  }
+
+static void Rec_PutParamUsrCodEncrypted (void)
+  {
+   Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EncryptedUsrCod);
+  }
+
+static void Rec_PutParamsWorks (void)
+  {
+   Rec_PutParamsStudent ();
+   Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+  }
+
+static void Rec_PutParamsStudent (void)
+  {
+   Par_PutHiddenParamString ("UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
+   Grp_PutParamAllGroups ();
+  }
+
+static void Rec_PutParamsMsgUsr (void)
+  {
+   Rec_PutParamUsrCodEncrypted ();
+   Grp_PutParamAllGroups ();
+   Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
   }
 
 /*****************************************************************************/

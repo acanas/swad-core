@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.208.6 (2016-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.209 (2016-05-05)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.209:   May 05, 2016	Commands/shortcuts in record are cloned to top of window. (201614 lines)
         Version 15.208.6: May 05, 2016	Integrated "Configure" link in tests at top of window, near "Edit" icon. (201463 lines)
         Version 15.208.5: May 05, 2016	Changes in Statistics > Degrees. (201469 lines)
         Version 15.208.4: May 05, 2016	In Statistics > Degrees, show all degrees with students. (201458 lines)

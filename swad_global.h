@@ -403,6 +403,11 @@ struct Globals
      } Usrs;
    struct
      {
+      struct UsrData *UsrDat;
+      Rec_RecordViewType_t TypeOfView;
+     } Record;
+   struct
+     {
       Sco_Scope_t Current;
       Sco_Scope_t Default;
       unsigned Allowed;
