@@ -139,13 +139,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.208.4 (2016-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.208.5 (2016-05-05)"
 #define CSS_FILE		"swad15.204.1.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.208.5: May 05, 2016	Changes in Statistics > Degrees. (201469 lines)
         Version 15.208.4: May 05, 2016	In Statistics > Degrees, show all degrees with students. (201458 lines)
         Version 15.208.3: May 03, 2016	Fixed bug in sessions database table when no social publishings available. (201446 lines)
         Version 15.208.2: May 01, 2016	Add default values in some database fields. (201439 lines)

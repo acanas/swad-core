@@ -121,7 +121,10 @@ static void Pho_BuildQueryOfDegrees (char *Query);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto);
+static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
+                                           Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                           Usr_Sex_t Sex,
+                                           int NumStds,int NumStdsWithPhoto);
 static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *PhotoWidth,unsigned *PhotoHeight);
 
 /*****************************************************************************/
@@ -1926,7 +1929,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   bool ShowDegPhoto;
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
@@ -1962,13 +1964,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	 /* Get number of students and number of students with photo in this degree */
 	 Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
-         if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	    ShowDegPhoto = (NumStds > 0);
-	 else
-	    ShowDegPhoto = (NumStds > 0 &&
-		            NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE);
 
-	 if (ShowDegPhoto)
+	 if (NumStds > 0)
 	   {
 	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {
@@ -2239,7 +2236,10 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
 /******************* Show the average photo of a degree **********************/
 /*****************************************************************************/
 
-static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,Usr_Sex_t Sex,int NumStds,int NumStdsWithPhoto)
+static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
+                                           Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
+                                           Usr_Sex_t Sex,
+                                           int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *Txt_students_ABBREVIATION;
@@ -2251,6 +2251,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
    char PhotoURL[PATH_MAX+1];
    char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
    char PhotoCaption[512];
+   bool ShowDegPhoto;
 
    /***** Compute photo width and height to be proportional to number of students *****/
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
@@ -2262,12 +2263,21 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
                            SeeOrPrint == Pho_DEGREES_SEE ? 10 :
                         	                           15);
 
+   /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
       fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"CLASSPHOTO\" target=\"_blank\">",
                Deg->WWW,Deg->FullName);
-   fprintf (Gbl.F.Out,"<img src=\"");
 
-   if (NumStds && NumStdsWithPhoto)
+   /***** Check if photo of degree can be shown *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      ShowDegPhoto = (NumStds > 0);
+   else
+      ShowDegPhoto = (NumStds > 0 &&
+		      NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE);
+
+   /***** Show photo *****/
+   fprintf (Gbl.F.Out,"<img src=\"");
+   if (ShowDegPhoto)
      {
       sprintf (PathRelAvgPhoto,"%s/%s/%s/%ld_%s.jpg",
                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
@@ -2308,6 +2318,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,Pho_AvgPhotoSeeOrP
    fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" />",
             Deg->ShortName,
             Deg->FullName);
+
+   /***** Caption *****/
    if (SeeOrPrint == Pho_DEGREES_PRINT)
       fprintf (Gbl.F.Out,"<span class=\"CLASSPHOTO\">");
    fprintf (Gbl.F.Out,"<br />%s<br />%d&nbsp;%s<br />%d&nbsp;%s<br />(%d%%)",
