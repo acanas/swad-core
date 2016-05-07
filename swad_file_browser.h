@@ -141,6 +141,10 @@ struct FileMetadata
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"	// TODO: It should be "mrk"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF		"maletin"		// TODO: It should be "brf"
 
+#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      6	//   6 months
+#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     12	//   1 year
+#define Brw_MAX_MONTHS_IN_BRIEFCASE	   (10*12)	//  10 years
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -237,6 +241,6 @@ unsigned Brw_ListDocsFound (const char *Query,
                             const char *TitleSingular,const char *TitlePlural);
 
 void Brw_AskRemoveOldFiles (void);
-void Brw_RemoveOldFiles (void);
+void Brw_RemoveOldFilesBriefcase (void);
 
 #endif

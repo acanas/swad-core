@@ -51,7 +51,7 @@
 /*****************************************************************************/
 
 #define ZIP_MiB (1024ULL*1024ULL)
-#define ZIP_MAX_SIZE_UNCOMPRESSED (500ULL*ZIP_MiB)
+#define ZIP_MAX_SIZE_UNCOMPRESSED (1024ULL*ZIP_MiB)
 
 const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {

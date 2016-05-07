@@ -138,13 +138,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.210.4 (2016-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 15.211 (2016-05-07)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.211:   May 07, 2016	Code refactoring related to removing old files in briefcase.
+                                        Old files in briefcase are removed automatically. (201396 lines)
         Version 15.210.4: May 05, 2016	Link to change logo of degree is moved to top of window. (201385 lines)
         Version 15.210.3: May 05, 2016	Link to change logo of centre is moved to top of window. (201407 lines)
         Version 15.210.2: May 05, 2016	Link to change logo of institution is moved to top of window. (201399 lines)

@@ -1619,8 +1619,8 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 static void Brw_PutFormToAskRemOldFiles (void);
-static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder);
-static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *Removed);
+static void Brw_ScanDirRemovingOldFiles (unsigned Level,const char *Path,
                                          const char *PathInTree,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed);
@@ -3556,6 +3556,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Temporary_private_storage_area;
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    void (*FunctionToDrawContextualIcons) (void);
+   struct Brw_NumObjects Removed;
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
@@ -3639,6 +3640,11 @@ static void Brw_ShowFileBrowser (void)
       default:
 	 break;
      }
+
+   /***** If this is the (temporary) briefcase ==> remove old files *****/
+   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
+      Brw_RemoveOldFilesInBrowser (Brw_MAX_MONTHS_IN_BRIEFCASE,
+                                   &Removed);	// Not used here
 
    /***** Check if the maximum quota has been exceeded *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -11801,10 +11807,6 @@ static void Brw_PutFormToAskRemOldFiles (void)
 /************** Write a form fo confirm removing of old files ****************/
 /*****************************************************************************/
 
-#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      6	//  6 months
-#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     24	//  2 years
-#define Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES (10*12)	// 10 years
-
 void Brw_AskRemoveOldFiles (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -11829,8 +11831,8 @@ void Brw_AskRemoveOldFiles (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
-   for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
-        Months <= Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES;
+   for (Months = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
+        Months < Brw_MAX_MONTHS_IN_BRIEFCASE;
         Months++)
      {
       fprintf (Gbl.F.Out,"<option");
@@ -11856,31 +11858,43 @@ void Brw_AskRemoveOldFiles (void)
   }
 
 /*****************************************************************************/
-/******************************* Remove old files ****************************/
+/*********************** Remove old files in briefcase ***********************/
 /*****************************************************************************/
 
-void Brw_RemoveOldFiles (void)
+void Brw_RemoveOldFilesBriefcase (void)
   {
+   extern const char *Txt_Files_removed;
+   extern const char *Txt_Links_removed;
+   extern const char *Txt_Folders_removed;
    char UnsignedStr[10+1];
    unsigned Months;
-   time_t TimeRemoveFilesOlder;
+   struct Brw_NumObjects Removed;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Get parameter with number of months without access *****/
-   Par_GetParToText ("Months",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Months) != 1)
-      Lay_ShowErrorAndExit ("Number of months is missing.");
-   if (Months < Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES ||
-       Months > Brw_MAX_MONTHS_TO_REMOVE_OLD_FILES)
-      Lay_ShowErrorAndExit ("Wrong number of months.");
-   TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
-	                  (time_t) Months * Dat_SECONDS_IN_ONE_MONTH;
-
-   /***** Remove old files *****/
    if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
-      Brw_RemoveOldFilesInBrowser (TimeRemoveFilesOlder);
+     {
+      /***** Get parameter with number of months without access *****/
+      Par_GetParToText ("Months",UnsignedStr,10);
+      if (sscanf (UnsignedStr,"%u",&Months) != 1)
+	 Lay_ShowErrorAndExit ("Number of months is missing.");
+      if (Months <  Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES ||
+	  Months >= Brw_MAX_MONTHS_IN_BRIEFCASE)
+	 Lay_ShowErrorAndExit ("Wrong number of months.");
+
+      /***** Remove old files *****/
+      Brw_RemoveOldFilesInBrowser (Months,&Removed);
+
+      /***** Success message *****/
+      sprintf (Gbl.Message,"%s: %u<br />"
+			   "%s: %u<br />"
+			   "%s: %u",
+	       Txt_Files_removed  ,Removed.NumFiles,
+	       Txt_Links_removed  ,Removed.NumLinks,
+	       Txt_Folders_removed,Removed.NumFolds);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -11890,41 +11904,34 @@ void Brw_RemoveOldFiles (void)
 /******************************* Remove old files ****************************/
 /*****************************************************************************/
 
-static void Brw_RemoveOldFilesInBrowser (time_t TimeRemoveFilesOlder)
+static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *Removed)
   {
-   extern const char *Txt_Files_removed;
-   extern const char *Txt_Links_removed;
-   extern const char *Txt_Folders_removed;
-   struct Brw_NumObjects Removed;
+   time_t TimeRemoveFilesOlder;
+
+   /***** Compute time in seconds
+          (files older than this time will be removed) *****/
+   TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
+	                  (time_t) Months * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Remove old files recursively *****/
-   Removed.NumFiles =
-   Removed.NumLinks =
-   Removed.NumFolds = 0;
-   Brw_ScanDirRemovingOlfFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,
+   Removed->NumFiles =
+   Removed->NumLinks =
+   Removed->NumFolds = 0;
+   Brw_ScanDirRemovingOldFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,
                                 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
-                                TimeRemoveFilesOlder,&Removed);
+                                TimeRemoveFilesOlder,Removed);
 
    /***** Remove affected clipboards *****/
    Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
 				 Gbl.Usrs.Me.UsrDat.UsrCod,
 				 Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Success message *****/
-   sprintf (Gbl.Message,"%s: %u<br />"
-                        "%s: %u<br />"
-	                "%s: %u",
-            Txt_Files_removed  ,Removed.NumFiles,
-            Txt_Links_removed  ,Removed.NumLinks,
-            Txt_Folders_removed,Removed.NumFolds);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
 /************* Scan a directory recursively removing old files ***************/
 /*****************************************************************************/
 
-static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
+static void Brw_ScanDirRemovingOldFiles (unsigned Level,const char *Path,
                                          const char *PathInTree,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed)
@@ -11961,7 +11968,7 @@ static void Brw_ScanDirRemovingOlfFiles (unsigned Level,const char *Path,
 	    lstat (PathFileRel,&FileStatus);
 	    if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
-	       Brw_ScanDirRemovingOlfFiles (Level + 1,PathFileRel,
+	       Brw_ScanDirRemovingOldFiles (Level + 1,PathFileRel,
 					    PathFileInExplTree,
 					    TimeRemoveFilesOlder,Removed);
 	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
