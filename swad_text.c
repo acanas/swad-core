@@ -37884,17 +37884,17 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #endif
 	   ,
 #if   L==1	// Brw_ADMI_MARKS_CRS
-	   "Qualific.&nbsp;(ass.)"
+	   "Qualificacions&nbsp;(ass.)"
 #elif L==2
 	   "Bewertungen&nbsp;(Ver.)"
 #elif L==3
 	   "Marks&nbsp;(crs.)"
 #elif L==4
-	   "Calific.&nbsp;(asg.)"
+	   "Calificaciones&nbsp;(asg.)"
 #elif L==5
 	   "Notes&nbsp;(mat.)"
 #elif L==6
-	   "Calific.&nbsp;(asg.)"		// Okoteve traducción
+	   "Calificaciones&nbsp;(asg.)"		// Okoteve traducción
 #elif L==7
 	   "Risultati&nbsp;(crs.)"
 #elif L==8
@@ -37904,17 +37904,17 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #endif
 	   ,
 #if   L==1	// Brw_ADMI_MARKS_GRP
-	   "Calific.&nbsp;(grp.)"		// Necessita traduccio
+	   "Qualificacions&nbsp;(grp.)"
 #elif L==2
 	   "Bewertungen&nbsp;(Grp.)"
 #elif L==3
 	   "Marks&nbsp;(grp.)"
 #elif L==4
-	   "Calific.&nbsp;(grp.)"
+	   "Calificaciones&nbsp;(grp.)"
 #elif L==5
 	   "Notes&nbsp;(grp.)"
 #elif L==6
-	   "Calific.&nbsp;(grp.)"		// Okoteve traducción
+	   "Calificaciones&nbsp;(grp.)"		// Okoteve traducción
 #elif L==7
 	   "Risultati&nbsp;(grp.)"
 #elif L==8

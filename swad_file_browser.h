@@ -141,9 +141,9 @@ struct FileMetadata
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_MARKS		"calificaciones"	// TODO: It should be "mrk"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_BRIEF		"maletin"		// TODO: It should be "brf"
 
-#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      6	//   6 months
-#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES     12	//   1 year
-#define Brw_MAX_MONTHS_IN_BRIEFCASE	   (10*12)	//  10 years
+#define Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES      3	// 3 months
+#define Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES      6	// 6 months
+#define Brw_MAX_MONTHS_IN_BRIEFCASE	    (1*12)	// 1 year
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
