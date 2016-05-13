@@ -3272,10 +3272,6 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
    bool ErrorInIndex = false;
    char ParamName[3+6+1];
 
-   /***** Create test question *****/
-   Tst_QstConstructor ();
-   Gbl.Test.QstCod = QstCod;
-
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
    /*
@@ -3334,7 +3330,8 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
                   NumQst,Gbl.Test.Answer.NumOptions);
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
          fprintf (Gbl.F.Out,"checkbox\"");
-      fprintf (Gbl.F.Out," name=\"Ans%06u\" value=\"%u\" /> </td>",NumQst,Index);
+      fprintf (Gbl.F.Out," name=\"Ans%06u\" value=\"%u\" /> </td>",
+               NumQst,Index);
       fprintf (Gbl.F.Out,"<td class=\"TEST LEFT_TOP\">"
 	                 "%c)&nbsp;"
 	                 "</td>",
@@ -3356,9 +3353,6 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Destroy test question *****/
-   Tst_QstDestructor ();
   }
 
 /*****************************************************************************/
