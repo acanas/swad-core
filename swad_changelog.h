@@ -140,13 +140,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212.5 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212.6 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212.6: May 30, 2016	Link to list courses of degree in degree configuration. (201539 lines)
         Version 15.212.5: May 30, 2016	Fixed bug in number of courses of a degree. (201531 lines)
         Version 15.212.4: May 30, 2016	Changed links from external degrees to internal degrees in STATS > Degrees. (201529 lines)
         Version 15.212.3: May 30, 2016	Fixed bug in test question. A student can see now his/her test results. (201522 lines)

@@ -289,6 +289,7 @@ static void Deg_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_Degree;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -416,13 +417,21 @@ static void Deg_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 	                    "%s:"
 	                    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-			    "</tr>",
+			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Courses,
+		  Txt_Courses);
+
+	 /* Form to go to see courses of this degree */
+	 Act_FormGoToStart (ActSeeCrs);
+	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
+	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
+	 Act_FormEnd ();
+
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -751,7 +760,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       /***** Separator *****/
       fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
 
-      /***** Form to go see courses of this degree *****/
+      /***** Form to go to see courses of this degree *****/
       Act_FormGoToStart (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
       Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn);
