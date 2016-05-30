@@ -137,19 +137,19 @@
 // TODO: Fix bug: Asignatura: Arquitectura de Computadores, Crear ZIP de todos los trabajos del grupo C3
 // TODO: Fix bug: se oculta el único descriptor de unas preguntas de test, y luego se renombra dicho descriptor --> el descriptor desaparece
 // TODO: Fix bug: Student cant not see their test results
-// TODO: Fix bug: button "Add a new question" in test should not be available for students
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212.1 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212.2 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212.2: May 30, 2016	Fixed bug in test question. Button "Add a new question" in tests will not be available for students. (201516 lines)
         Version 15.212.1: May 30, 2016	Fixed bug in course information. (201515 lines)
         Version 15.212:   May 30, 2016	Fixed bug in edition of syllabus, reported by Raymon Moreno Colina and Javier Fernández Baldomero.
 					Code refactoring related to course info. (201471 lines)

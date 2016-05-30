@@ -345,7 +345,8 @@ void Tst_ShowFormAskTst (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_test_questions);
 
       /***** Button to create a new question *****/
-      Tst_PutButtonToAddQuestion ();
+      if (ICanEdit)
+         Tst_PutButtonToAddQuestion ();
      }
 
    /***** End frame *****/
