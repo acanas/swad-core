@@ -265,6 +265,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Users_of_the_centre;
    extern const char *Txt_Place;
    extern const char *Txt_Degrees;
+   extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct Place Plc;
@@ -472,15 +473,23 @@ static void Ctr_Configuration (bool PrintView)
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
+	                    "%s:"
+	                    "</td>"
+			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Degrees,
+		  Txt_Degrees);
+
+	 /* Form to go to see degrees of this centre */
+	 Act_FormGoToStart (ActSeeDeg);
+	 Deg_PutParamDegCod (Gbl.CurrentCtr.Ctr.CtrCod);
+	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShortName);
+	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
+	 Act_FormEnd ();
+
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
 	 /***** Number of courses *****/
 	 fprintf (Gbl.F.Out,"<tr>"
