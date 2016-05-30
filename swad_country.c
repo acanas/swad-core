@@ -204,11 +204,12 @@ void Cty_PrintConfiguration (void)
 static void Cty_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
+   extern const char *Txt_Institutions;
+   extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_Centres;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
@@ -347,15 +348,24 @@ static void Cty_Configuration (bool PrintView)
 	 /***** Number of institutions *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
+	                    "%s:"
+	                    "</td>"
+			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Institutions,
+		  Txt_Institutions);
+
+	 /* Form to go to see institutions of this country */
+	 Act_FormGoToStart (ActSeeIns);
+	 Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
+	 sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
+	          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod));
+	 Act_FormEnd ();
+
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -1550,7 +1560,7 @@ void Cty_RemoveCountry (void)
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_Country_X_removed,
-               Cty.Name);
+               Cty.Name[Gbl.Prefs.Language]);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 

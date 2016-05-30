@@ -424,7 +424,8 @@ static void Deg_Configuration (bool PrintView)
 	 /* Form to go to see courses of this degree */
 	 Act_FormGoToStart (ActSeeCrs);
 	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
+	          Gbl.CurrentDeg.Deg.ShortName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));

@@ -392,8 +392,9 @@ static void Ins_Configuration (bool PrintView)
 
 	 /* Form to go to see centres of this institution */
 	 Act_FormGoToStart (ActSeeCtr);
-	 Deg_PutParamDegCod (Gbl.CurrentIns.Ins.InsCod);
-	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.ShortName);
+	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
+	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
+	          Gbl.CurrentIns.Ins.ShortName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));

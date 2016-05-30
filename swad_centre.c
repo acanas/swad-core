@@ -481,8 +481,9 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /* Form to go to see degrees of this centre */
 	 Act_FormGoToStart (ActSeeDeg);
-	 Deg_PutParamDegCod (Gbl.CurrentCtr.Ctr.CtrCod);
-	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShortName);
+	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
+	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
+	          Gbl.CurrentCtr.Ctr.ShortName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT");
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
