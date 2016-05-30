@@ -241,13 +241,14 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
+   extern const char *Txt_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_Departments;
@@ -383,15 +384,23 @@ static void Ins_Configuration (bool PrintView)
 	 /***** Number of centres *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
+	                    "%s:"
+	                    "</td>"
+			    "<td class=\"LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Centres,
+		  Txt_Centres);
+
+	 /* Form to go to see centres of this institution */
+	 Act_FormGoToStart (ActSeeCtr);
+	 Deg_PutParamDegCod (Gbl.CurrentIns.Ins.InsCod);
+	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.ShortName);
+	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
+	 Act_FormEnd ();
+
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 
 	 /***** Number of degrees *****/
 	 fprintf (Gbl.F.Out,"<tr>"

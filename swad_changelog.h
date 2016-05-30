@@ -140,13 +140,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212.7 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212.8 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212.8: May 30, 2016	Link to list centres of institution in institution configuration. (201555 lines)
         Version 15.212.7: May 30, 2016	Link to list degrees of centre in centre configuration. (201547 lines)
         Version 15.212.6: May 30, 2016	Link to list courses of degree in degree configuration. (201539 lines)
         Version 15.212.5: May 30, 2016	Fixed bug in number of courses of a degree. (201531 lines)
