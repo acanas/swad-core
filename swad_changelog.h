@@ -143,13 +143,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212.1 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212.1: May 30, 2016	Fixed bug in course information. (201515 lines)
         Version 15.212:   May 30, 2016	Fixed bug in edition of syllabus, reported by Raymon Moreno Colina and Javier Fernández Baldomero.
 					Code refactoring related to course info. (201471 lines)
         Version 15.211.2: May 13, 2016	Fixed bug in test questions, reported by Nuria Torres Rosell. (201394 lines)

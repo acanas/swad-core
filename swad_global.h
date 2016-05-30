@@ -461,13 +461,6 @@ struct Globals
          bool ShowMsgMustBeRead;
 	} Info;
       struct
-	{
-	 char PathDir[PATH_MAX+1];
-	 unsigned NumItem;
-	 bool EditionIsActive;
-	 Syl_WhichSyllabus_t WhichSyllabus;
-	} Syllabus;
-      struct
         {
          struct RecordField Field;
          struct LstRecordFields LstFields;
@@ -477,6 +470,13 @@ struct Globals
          long HighlightNotCod;	// Notice code of a notice to be highlighted
         } Notices;
      } CurrentCrs;
+   struct
+     {
+      char PathDir[PATH_MAX+1];
+      unsigned NumItem;
+      bool EditionIsActive;
+      Syl_WhichSyllabus_t WhichSyllabus;
+     } Syllabus;
    struct
      {
       long CrsCod;

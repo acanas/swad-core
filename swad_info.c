@@ -1129,7 +1129,7 @@ static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc)
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-               return Syl_CheckSyllabus ();
+               return Syl_CheckSyllabus (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type);
             default:
                return false;
            }
@@ -1310,7 +1310,7 @@ static Inf_InfoType_t Inf_AsignInfoType (void)
          return Inf_TEACHING_GUIDE;
       case ActSeeSyl:
 	 Syl_GetParamWhichSyllabus ();
-	 return (Gbl.CurrentCrs.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+	 return (Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
 	                                                                 Inf_PRACTICALS);
       case ActSeeSylLec:
       case ActEdiSylLec:
@@ -1324,7 +1324,7 @@ static Inf_InfoType_t Inf_AsignInfoType (void)
       case ActRchTxtEdiSylLec:
       case ActRcvPlaTxtSylLec:
       case ActRcvRchTxtSylLec:
-	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_LECTURES;
+	 Gbl.Syllabus.WhichSyllabus = Syl_LECTURES;
          return Inf_LECTURES;
       case ActSeeSylPra:
       case ActEdiSylPra:
@@ -1338,7 +1338,7 @@ static Inf_InfoType_t Inf_AsignInfoType (void)
       case ActRchTxtEdiSylPra:
       case ActRcvPlaTxtSylPra:
       case ActRcvRchTxtSylPra:
-	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_PRACTICALS;
+	 Gbl.Syllabus.WhichSyllabus = Syl_PRACTICALS;
          return Inf_PRACTICALS;
       case ActSeeBib:
       case ActEdiBib:
@@ -1508,7 +1508,7 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-               if (!Syl_CheckSyllabus ())
+               if (!Syl_CheckSyllabus (CrsCod,InfoType))
                  {
                   *InfoSrc = Inf_INFO_SRC_NONE;
                   *MustBeRead = false;

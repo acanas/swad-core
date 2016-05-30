@@ -100,8 +100,7 @@ struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Syl_SetSyllabusTypeAndLoadToMemory (void);
-static void Syl_LoadToMemory (void);
+static void Syl_SetSyllabusTypeFromAction (void);
 static void Syl_ShowSyllabus (void);
 static void Syl_ShowRowSyllabus (unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
@@ -120,9 +119,9 @@ void Syl_GetParamWhichSyllabus (void)
    /***** Get which syllabus I want to see *****/
    Par_GetParToText ("WhichSyllabus",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.CurrentCrs.Syllabus.WhichSyllabus = (Syl_WhichSyllabus_t) UnsignedNum;
+      Gbl.Syllabus.WhichSyllabus = (Syl_WhichSyllabus_t) UnsignedNum;
    else
-      Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
+      Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
   }
 
 /*****************************************************************************/
@@ -148,7 +147,7 @@ void Syl_PutFormWhichSyllabus (void)
 	                 " style=\"display:inline;\">"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
-      if (WhichSyllabus == Gbl.CurrentCrs.Syllabus.WhichSyllabus)
+      if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
@@ -169,7 +168,7 @@ void Syl_GetParamItemNumber (void)
    char UnsignedStr[10+1];
 
    Par_GetParToText ("NumI",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.CurrentCrs.Syllabus.NumItem) != 1)
+   if (sscanf (UnsignedStr,"%u",&Gbl.Syllabus.NumItem) != 1)
       Lay_ShowErrorAndExit ("Item is missing.");
   }
 
@@ -178,13 +177,33 @@ void Syl_GetParamItemNumber (void)
 /*****************************************************************************/
 // Return true if info available
 
-bool Syl_CheckSyllabus (void)
+bool Syl_CheckSyllabus (long CrsCod,Inf_InfoType_t InfoType)
   {
-   /***** Set syllabus type and load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   bool InfoAvailable;
 
-   /***** Start frame *****/
-   return (LstItemsSyllabus.NumItems != 0);
+   /***** Set syllabus type *****/
+   switch (InfoType)
+     {
+      case Inf_LECTURES:
+         Gbl.Syllabus.WhichSyllabus = Syl_LECTURES;
+         break;
+      case Inf_PRACTICALS:
+         Gbl.Syllabus.WhichSyllabus = Syl_PRACTICALS;
+         break;
+      default:
+	 return false;
+     }
+
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (CrsCod);
+
+   /***** Number of items > 0 ==> info available *****/
+   InfoAvailable = (LstItemsSyllabus.NumItems != 0);
+
+   /***** Free memory used to store items *****/
+   Syl_FreeListItemsSyllabus ();
+
+   return InfoAvailable;
   }
 
 /*****************************************************************************/
@@ -200,19 +219,22 @@ bool Syl_CheckAndEditSyllabus (void)
    bool ICanEdit;
    bool PutIconToEdit;
 
-   /***** Set syllabus type and load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
+
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
 
    if (Gbl.Action.Act == ActEditorSylLec ||
        Gbl.Action.Act == ActEditorSylPra)
-      Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+      Gbl.Syllabus.EditionIsActive = true;
 
    /***** Start frame *****/
-   if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
+   if (Gbl.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
       ICanEdit = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 		 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
-      PutIconToEdit = ICanEdit && !Gbl.CurrentCrs.Syllabus.EditionIsActive;
+      PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			   PutIconToEdit ? Inf_PutIconToEditInfo :
 					   NULL);
@@ -223,13 +245,13 @@ bool Syl_CheckAndEditSyllabus (void)
       Syl_ShowSyllabus ();
 
       /***** If the syllabus is empty ==> show form to add a iten to the end *****/
-      if (Gbl.CurrentCrs.Syllabus.EditionIsActive && LstItemsSyllabus.NumItems == 0)
+      if (Gbl.Syllabus.EditionIsActive && LstItemsSyllabus.NumItems == 0)
          Syl_ShowRowSyllabus (0,1,LstItemsSyllabus.Lst[0].CodItem,"",true);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
 
-      if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
+      if (Gbl.Syllabus.EditionIsActive)
 	{
 	 /***** Button to view *****/
          Act_FormStart (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
@@ -260,7 +282,7 @@ void Syl_EditSyllabus (void)
 /************* Set syllabus type depending on the current action *************/
 /*****************************************************************************/
 
-static void Syl_SetSyllabusTypeAndLoadToMemory (void)
+static void Syl_SetSyllabusTypeFromAction (void)
   {
    Gbl.CurrentCrs.Info.Type = Inf_LECTURES;
 
@@ -268,7 +290,7 @@ static void Syl_SetSyllabusTypeAndLoadToMemory (void)
    switch (Gbl.Action.Act)
      {
       case ActSeeSyl:
-	 Gbl.CurrentCrs.Info.Type = (Gbl.CurrentCrs.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+	 Gbl.CurrentCrs.Info.Type = (Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
 	                                                                                     Inf_PRACTICALS);
 	 break;
       case ActSeeSylLec:
@@ -290,7 +312,7 @@ static void Syl_SetSyllabusTypeAndLoadToMemory (void)
       case ActRchTxtEdiSylLec:
       case ActRcvPlaTxtSylLec:
       case ActRcvRchTxtSylLec:
-	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_LECTURES;
+	 Gbl.Syllabus.WhichSyllabus = Syl_LECTURES;
 	 Gbl.CurrentCrs.Info.Type = Inf_LECTURES;
 	 break;
       case ActSeeSylPra:
@@ -312,28 +334,20 @@ static void Syl_SetSyllabusTypeAndLoadToMemory (void)
       case ActRchTxtEdiSylPra:
       case ActRcvPlaTxtSylPra:
       case ActRcvRchTxtSylPra:
-	 Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_PRACTICALS;
+	 Gbl.Syllabus.WhichSyllabus = Syl_PRACTICALS;
 	 Gbl.CurrentCrs.Info.Type = Inf_PRACTICALS;
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
 	 break;
      }
-
-   /***** Load syllabus from XML file to memory *****/
-   Syl_LoadToMemory ();
-
-   /***** We are editing a syllabus with the internal editor,
-          so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
-	                                             Inf_INFO_SRC_NONE);
   }
 
 /*****************************************************************************/
 /*** Read from XML and load in memory a syllabus of lectures or practicals ***/
 /*****************************************************************************/
 
-static void Syl_LoadToMemory (void)
+void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
   {
    char PathFile[PATH_MAX+1];
    long PostBeginList;
@@ -344,13 +358,13 @@ static void Syl_LoadToMemory (void)
    unsigned NumItemsWithChildren = 0;
 
    /* Path of the private directory for the XML file with the syllabus */
-   sprintf (Gbl.CurrentCrs.Syllabus.PathDir,"%s/%s",
-	    Gbl.CurrentCrs.PathPriv,
-	    Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
-		                                       Cfg_SYLLABUS_FOLDER_PRACTICALS);
+   sprintf (Gbl.Syllabus.PathDir,"%s/%s/%ld/%s",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	    Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
+		                                         Cfg_SYLLABUS_FOLDER_PRACTICALS);
 
    /***** Open the file with the syllabus *****/
-   Syl_OpenSyllabusFile (Gbl.CurrentCrs.Syllabus.PathDir,PathFile);
+   Syl_OpenSyllabusFile (Gbl.Syllabus.PathDir,PathFile);
 
    /***** Go to the start of the list of items *****/
    if (!Str_FindStrInFile (Gbl.F.XML,"<lista>",Str_NO_SKIP_HTML_COMMENTS))
@@ -463,6 +477,7 @@ void Syl_FreeListItemsSyllabus (void)
      {
       free ((void *) LstItemsSyllabus.Lst);
       LstItemsSyllabus.Lst = NULL;
+      LstItemsSyllabus.NumItems = 0;
      }
   }
 
@@ -500,7 +515,7 @@ static void Syl_ShowSyllabus (void)
   {
    unsigned NumItem;
    int i;
-   int NumButtons = Gbl.CurrentCrs.Syllabus.EditionIsActive ? 5 :
+   int NumButtons = Gbl.Syllabus.EditionIsActive ? 5 :
 	                                                      0;
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
@@ -530,7 +545,7 @@ static void Syl_ShowSyllabus (void)
                            LstItemsSyllabus.Lst[NumItem].Level,
                            LstItemsSyllabus.Lst[NumItem].CodItem,
                            LstItemsSyllabus.Lst[NumItem].Text,false);
-      if (ShowRowInsertNewItem && NumItem == Gbl.CurrentCrs.Syllabus.NumItem)
+      if (ShowRowInsertNewItem && NumItem == Gbl.Syllabus.NumItem)
 	 // Mostrar a new row where se puede insert a new item
 	 Syl_ShowRowSyllabus (NumItem + 1,
 	                      LstItemsSyllabus.Lst[NumItem].Level,NULL,
@@ -566,7 +581,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
    /***** Start the row *****/
    fprintf (Gbl.F.Out,"<tr>");
 
-   if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
+   if (Gbl.Syllabus.EditionIsActive)
      {
       if (NewItem)
          fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">"
@@ -706,7 +721,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	}
      }
 
-   if (Gbl.CurrentCrs.Syllabus.EditionIsActive)
+   if (Gbl.Syllabus.EditionIsActive)
       Syl_PutFormItemSyllabus (NewItem,NumItem,Level,CodItem,Text);
    else
      {
@@ -756,7 +771,7 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadToMemory ();
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
 
    if (LstItemsSyllabus.NumItems)
      {
@@ -996,10 +1011,13 @@ void Syl_RemoveItemSyllabus (void)
    FILE *NewFile;
    unsigned NumItem;
 
-   /***** Load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+
+   Gbl.Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
    Syl_GetParamItemNumber ();
@@ -1013,12 +1031,17 @@ void Syl_RemoveItemSyllabus (void)
    for (NumItem = 0;
 	NumItem < LstItemsSyllabus.NumItems;
 	NumItem++)
-      if (NumItem != Gbl.CurrentCrs.Syllabus.NumItem)
+      if (NumItem != Gbl.Syllabus.NumItem)
 	 Syl_WriteItemFileSyllabus (NewFile,LstItemsSyllabus.Lst[NumItem].Level,LstItemsSyllabus.Lst[NumItem].Text);
    Syl_WriteEndFileSyllabus (NewFile);
 
    /***** Close the files *****/
    Fil_CloseUpdateFile (PathFile,PathOldFile,PathNewFile,NewFile);
+
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+   	                                             Inf_INFO_SRC_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1056,10 +1079,13 @@ void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    unsigned NumItem;
    struct MoveSubtrees Subtree;
 
-   /***** Load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+
+   Gbl.Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
    Syl_GetParamItemNumber ();
@@ -1068,7 +1094,7 @@ void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
    Subtree.MovAllowed = false;
 
-   if (Gbl.CurrentCrs.Syllabus.NumItem < LstItemsSyllabus.NumItems)
+   if (Gbl.Syllabus.NumItem < LstItemsSyllabus.NumItems)
      {
       /***** Create a new file where make the update *****/
       Syl_BuildPathFileSyllabus (PathFile);
@@ -1078,10 +1104,10 @@ void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
       switch (UpOrDownPos)
 	{
 	 case Syl_GET_UP:
-	    Syl_CalculateUpSubtreeSyllabus (&Subtree,Gbl.CurrentCrs.Syllabus.NumItem);
+	    Syl_CalculateUpSubtreeSyllabus (&Subtree,Gbl.Syllabus.NumItem);
 	    break;
 	 case Syl_GET_DOWN:
-	    Syl_CalculateDownSubtreeSyllabus (&Subtree,Gbl.CurrentCrs.Syllabus.NumItem);
+	    Syl_CalculateDownSubtreeSyllabus (&Subtree,Gbl.Syllabus.NumItem);
 	    break;
 	}
 
@@ -1113,6 +1139,11 @@ void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
       /***** Close the files *****/
       Fil_CloseUpdateFile (PathFile,PathOldFile,PathNewFile,NewFile);
      }
+
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+						     Inf_INFO_SRC_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1238,10 +1269,13 @@ void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
    char PathNewFile[PATH_MAX+1];
    FILE *NewFile;
 
-   /***** Load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+
+   Gbl.Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
    Syl_GetParamItemNumber ();
@@ -1254,12 +1288,12 @@ void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
    switch (IncreaseOrDecreaseLevel)
      {
       case Syl_INCREASE_LEVEL:
-	 if (LstItemsSyllabus.Lst[Gbl.CurrentCrs.Syllabus.NumItem].Level > 1)
-	    LstItemsSyllabus.Lst[Gbl.CurrentCrs.Syllabus.NumItem].Level--;
+	 if (LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Level > 1)
+	    LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Level--;
 	 break;
       case Syl_DECREASE_LEVEL:
-	 if (LstItemsSyllabus.Lst[Gbl.CurrentCrs.Syllabus.NumItem].Level < Syl_MAX_LEVELS_SYLLABUS)
-	    LstItemsSyllabus.Lst[Gbl.CurrentCrs.Syllabus.NumItem].Level++;
+	 if (LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Level < Syl_MAX_LEVELS_SYLLABUS)
+	    LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Level++;
 	 break;
      }
 
@@ -1270,6 +1304,11 @@ void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
 
    /***** Close the files *****/
    Fil_CloseUpdateFile (PathFile,PathOldFile,PathNewFile,NewFile);
+
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+   	                                             Inf_INFO_SRC_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1289,10 +1328,13 @@ void Syl_InsertItemSyllabus (void)
    unsigned NumItem;
    char Txt[Syl_MAX_BYTES_TEXT_ITEM+1];
 
-   /***** Load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+
+   Gbl.Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
    Syl_GetParamItemNumber ();
@@ -1309,7 +1351,7 @@ void Syl_InsertItemSyllabus (void)
 
    /* Write items before the one to be inserted */
    for (NumItem = 0;
-	NumItem < Gbl.CurrentCrs.Syllabus.NumItem;
+	NumItem < Gbl.Syllabus.NumItem;
 	NumItem++)
       Syl_WriteItemFileSyllabus (NewFile,LstItemsSyllabus.Lst[NumItem].Level,LstItemsSyllabus.Lst[NumItem].Text);
 
@@ -1330,6 +1372,11 @@ void Syl_InsertItemSyllabus (void)
    /***** Close the files *****/
    Fil_CloseUpdateFile (PathFile,PathOldFile,PathNewFile,NewFile);
 
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+   	                                             Inf_INFO_SRC_NONE);
+
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
    Syl_EditSyllabus ();
@@ -1346,16 +1393,19 @@ void Syl_ModifyItemSyllabus (void)
    char PathNewFile[PATH_MAX+1];
    FILE *NewFile;
 
-   /***** Load syllabus from XML file to memory *****/
-   Syl_SetSyllabusTypeAndLoadToMemory ();
+   /***** Set syllabus type depending on current action *****/
+   Syl_SetSyllabusTypeFromAction ();
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
+   /***** Load syllabus from XML file to memory *****/
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+
+   Gbl.Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
    Syl_GetParamItemNumber ();
 
    /***** Get item body *****/
-   Par_GetParToHTML ("Txt",LstItemsSyllabus.Lst[Gbl.CurrentCrs.Syllabus.NumItem].Text,Syl_MAX_BYTES_TEXT_ITEM);
+   Par_GetParToHTML ("Txt",LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Text,Syl_MAX_BYTES_TEXT_ITEM);
 
    /***** Create a new file where make the update *****/
    Syl_BuildPathFileSyllabus (PathFile);
@@ -1369,6 +1419,11 @@ void Syl_ModifyItemSyllabus (void)
    /***** Close the files *****/
    Fil_CloseUpdateFile (PathFile,PathOldFile,PathNewFile,NewFile);
 
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+   	                                             Inf_INFO_SRC_NONE);
+
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
    Syl_EditSyllabus ();
@@ -1380,7 +1435,7 @@ void Syl_ModifyItemSyllabus (void)
 
 void Syl_BuildPathFileSyllabus (char *PathFile)
   {
-   sprintf (PathFile,"%s/%s",Gbl.CurrentCrs.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
+   sprintf (PathFile,"%s/%s",Gbl.Syllabus.PathDir,Cfg_SYLLABUS_FILENAME);
   }
 
 /*****************************************************************************/

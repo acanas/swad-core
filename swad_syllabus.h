@@ -70,11 +70,13 @@ void Syl_PutFormWhichSyllabus (void);
 
 void Syl_GetParamItemNumber (void);
 
-bool Syl_CheckSyllabus (void);
+bool Syl_CheckSyllabus (long CrsCod,Inf_InfoType_t InfoType);
 bool Syl_CheckAndEditSyllabus (void);
 void Syl_EditSyllabus (void);
 
+void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod);
 void Syl_FreeListItemsSyllabus (void);
+
 int Syl_ReadLevelItemSyllabus (void);
 int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
 void Syl_PutParamNumItem (unsigned NumItem);

@@ -337,8 +337,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Records.LstFields.Num = 0;
    Gbl.CurrentCrs.Records.LstFields.NestedCalls = 0;
 
-   Gbl.CurrentCrs.Syllabus.EditionIsActive = false;
-   Gbl.CurrentCrs.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
+   Gbl.Syllabus.EditionIsActive = false;
+   Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
 
    Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;
    Gbl.Search.Str[0] = '\0';
