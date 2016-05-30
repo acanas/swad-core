@@ -2242,6 +2242,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   extern const char *Txt_Go_to_X;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2265,8 +2266,12 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 
    /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"CLASSPHOTO\" target=\"_blank\">",
-               Deg->WWW,Deg->FullName);
+     {
+      Act_FormGoToStart (ActSeeDegInf);
+      Deg_PutParamDegCod (Deg->DegCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
+      Act_LinkFormSubmit (Gbl.Title,NULL);
+     }
 
    /***** Check if photo of degree can be shown *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -2315,9 +2320,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
 	                 " style=\"width:%upx; height:%upx;\"",
 	       Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
-   fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\" />",
-            Deg->ShortName,
-            Deg->FullName);
+   fprintf (Gbl.F.Out," alt=\"%s\" />",
+            Deg->ShortName);
 
    /***** Caption *****/
    if (SeeOrPrint == Pho_DEGREES_PRINT)
@@ -2329,7 +2333,10 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
         	          0);
    if (SeeOrPrint == Pho_DEGREES_SEE)
+     {
       fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
    else
       fprintf (Gbl.F.Out,"</span>");
   }

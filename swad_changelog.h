@@ -116,7 +116,6 @@
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 // TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
-// TODO: Change links from external degrees to internal degrees in STATS > Degrees
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
@@ -127,7 +126,7 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: In Statistics > Indicators, if we select only 5 indicators, the message "The list is too big..." is shown.
-// TODO: FIX BUG: A theacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
+// TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: FIX BUG: Txt_Save_file_properties does not have sense in briefcase, because nothing to save (license should be editable in briefcase?)
 // TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
 // TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
@@ -141,13 +140,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212.3 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212.4 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212.4: May 30, 2016	Changed links from external degrees to internal degrees in STATS > Degrees. (201529 lines)
         Version 15.212.3: May 30, 2016	Fixed bug in test question. A student can see now his/her test results. (201522 lines)
         Version 15.212.2: May 30, 2016	Fixed bug in test question. Button "Add a new question" in tests will not be available for students. (201516 lines)
         Version 15.212.1: May 30, 2016	Fixed bug in course information. (201515 lines)
