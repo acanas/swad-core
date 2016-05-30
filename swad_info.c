@@ -289,15 +289,28 @@ static bool Inf_GetIfIHaveReadFromForm (void);
 static void Inf_SetForceReadIntoDB (bool MustBeRead);
 static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
-static void Inf_CheckAndShowPage (void);
-static void Inf_CheckAndShowURL (void);
+static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckAndShowPage (void);
+static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char *PathDir);
+
+static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckAndShowURL (void);
+static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile);
+
 static void Inf_ShowPage (const char *URL);
+
+static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc);
 static Inf_InfoType_t Inf_AsignInfoType (void);
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
-static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength);
-static bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType);
-static void Inf_ShowPlainTxtInfo (void);
-static void Inf_ShowRichTxtInfo (void);
+static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                                  char *InfoTxtHTML,char *InfoTxtMD,
+                                  size_t MaxLength);
+
+static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckAndShowPlainTxt (void);
+
+static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType);
+static bool Inf_CheckAndShowRichTxt (void);
 
 /*****************************************************************************/
 /******** Show course info (theory, practices, bibliography, etc.) ***********/
@@ -356,7 +369,7 @@ void Inf_ShowInfo (void)
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-               Syl_EditSyllabus ();
+               ShowWarningNoInfo = !Syl_CheckAndEditSyllabus ();
                break;
             case Inf_INTRODUCTION:
             case Inf_TEACHING_GUIDE:
@@ -369,18 +382,18 @@ void Inf_ShowInfo (void)
            }
          break;
       case Inf_INFO_SRC_PLAIN_TEXT:
-         Inf_ShowPlainTxtInfo ();
+         ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt ();
          break;
       case Inf_INFO_SRC_RICH_TEXT:
-         Inf_ShowRichTxtInfo ();
+         ShowWarningNoInfo = !Inf_CheckAndShowRichTxt ();
          break;
       case Inf_INFO_SRC_PAGE:
          /***** Open file with web page *****/
-	 Inf_CheckAndShowPage ();
+	 ShowWarningNoInfo = !Inf_CheckAndShowPage ();
          break;
       case Inf_INFO_SRC_URL:
          /***** Check if file with URL exists *****/
-	 Inf_CheckAndShowURL ();
+	 ShowWarningNoInfo = !Inf_CheckAndShowURL ();
          break;
      }
 
@@ -714,45 +727,89 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
+/************************** Check if exists a page ***************************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
+  {
+   char PathRelDirHTML[PATH_MAX+1];
+   char PathRelFileHTML[PATH_MAX+1];
+
+   // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
+   //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
+
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (CrsCod,InfoType,PathRelDirHTML);
+
+   /***** Open file with web page *****/
+   /* 1. Check if index.html exists */
+   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+      return true;
+
+   /* 2. If index.html does not exist, try index.htm */
+   sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+      return true;
+
+   return false;
+  }
+
+/*****************************************************************************/
 /**************** Check if exists and show link to a page ********************/
 /*****************************************************************************/
+// Return true if info available
 
-static void Inf_CheckAndShowPage (void)
+static bool Inf_CheckAndShowPage (void)
   {
-   extern const char *Txt_No_information;
-   const char *FileNameHTML;
+   char PathRelDirHTML[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
    char URL[PATH_MAX+1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   FileNameHTML = "index.html";
-   sprintf (PathRelFileHTML,"%s/%s",
-	    Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage,FileNameHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))
+   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      sprintf (URL,"%s/%s",
-	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].URLWebPage,FileNameHTML);
+      sprintf (URL,"%s/%s/%ld/%s/index.html",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
+
+      return true;
      }
-   else
+
+   /* 2. If index.html does not exist, try index.htm */
+   sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
-      /* 2. If index.html not exists, try index.htm */
-      FileNameHTML = "index.htm";
-      sprintf (PathRelFileHTML,"%s/%s",
-	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage,FileNameHTML);
-      if (Fil_CheckIfPathExists (PathRelFileHTML))
-	{
-	 sprintf (URL,"%s/%s",
-	          Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].URLWebPage,FileNameHTML);
-	 Inf_ShowPage (URL);
-	}
-      else
-	 Lay_ShowAlert (Lay_INFO,Txt_No_information);
+      sprintf (URL,"%s/%s/%ld/%s/index.htm",
+	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+      Inf_ShowPage (URL);
+
+      return true;
      }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/* Build path inside a course for a given a info type to store web page file */
+/*****************************************************************************/
+
+static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char *PathDir)
+  {
+   sprintf (PathDir,"%s/%s/%ld/%s",
+            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,
+            Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -762,6 +819,7 @@ static void Inf_CheckAndShowPage (void)
 
 int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
   {
+   char PathRelDirHTML[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
    FILE *FileHTML;
    bool FileExists = false;
@@ -770,18 +828,19 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
    /***** Initialize buffer *****/
    *HTMLBuffer = NULL;
 
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   sprintf (PathRelFileHTML,"%s/index.html",
-	    Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))
+   sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))		// TODO: Check if not empty?
       FileExists = true;
    else
      {
       /* 2. If index.html not exists, try index.htm */
-      sprintf (PathRelFileHTML,"%s/index.htm",
-	       Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage);
-      if (Fil_CheckIfPathExists (PathRelFileHTML))
+      sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
+      if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
          FileExists = true;
      }
 
@@ -825,28 +884,73 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
   }
 
 /*****************************************************************************/
-/**************** Check if exists and show link to a page ********************/
+/********************* Check if exists link to a page ************************/
 /*****************************************************************************/
+// Return true if info available
 
-static void Inf_CheckAndShowURL (void)
+static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
   {
-   extern const char *Txt_No_information;
+   char PathFile[PATH_MAX+1];
    FILE *FileURL;
 
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (CrsCod,InfoType,PathFile);
+
    /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL ,"rb")))
+   if ((FileURL = fopen (PathFile,"rb")))
      {
       if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_URL,FileURL) == NULL)
 	 Gbl.CurrentCrs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
+
       if (Gbl.CurrentCrs.Info.URL[0])
-	 Inf_ShowPage (Gbl.CurrentCrs.Info.URL);
-      else
-	 Lay_ShowAlert (Lay_INFO,Txt_No_information);
+         return true;
      }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information);
+
+   return false;
+  }
+
+/*****************************************************************************/
+/**************** Check if exists and show link to a page ********************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckAndShowURL (void)
+  {
+   char PathFile[PATH_MAX+1];
+   FILE *FileURL;
+
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+
+   /***** Check if file with URL exists *****/
+   if ((FileURL = fopen (PathFile,"rb")))
+     {
+      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_URL,FileURL) == NULL)
+	 Gbl.CurrentCrs.Info.URL[0] = '\0';
+      /* File is not longer needed  ==> close it */
+      fclose (FileURL);
+
+      if (Gbl.CurrentCrs.Info.URL[0])
+	{
+	 Inf_ShowPage (Gbl.CurrentCrs.Info.URL);
+         return true;
+	}
+     }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/*** Build path inside a course for a given a info type to store URL file ****/
+/*****************************************************************************/
+
+static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile)
+  {
+   sprintf (PathFile,"%s/%s/%ld/%s.url",
+	    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	    Inf_FileNamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
@@ -856,13 +960,17 @@ static void Inf_CheckAndShowURL (void)
 
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_URL+1])
   {
+   char PathFile[PATH_MAX+1];
    FILE *FileURL;
 
    /***** Initialize buffer *****/
    TxtBuffer[0] = '\0';
 
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+
    /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"rb")))
+   if ((FileURL = fopen (PathFile,"rb")))
      {
       if (fgets (TxtBuffer,Cns_MAX_BYTES_URL,FileURL) == NULL)
 	 TxtBuffer[0] = '\0';
@@ -929,13 +1037,29 @@ void Inf_FormsToSelSendInfo (void)
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
    Inf_InfoSrc_t InfoSrc;
    Inf_InfoSrc_t InfoSrcSelected;
+   bool InfoAvailable[Inf_NUM_INFO_SOURCES];
    bool MustBeRead;
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Get info source from database *****/
+   /***** Get current info source from database *****/
    Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);
+
+   /***** Check if info available *****/
+   for (InfoSrc = (Inf_InfoSrc_t) 0;
+	InfoSrc < Inf_NUM_INFO_SOURCES;
+	InfoSrc++)
+      InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
+
+   /***** Set info source to none
+          when no info available for the current source *****/
+   if (InfoSrcSelected != Inf_INFO_SRC_NONE &&
+       !InfoAvailable[InfoSrcSelected])
+     {
+      InfoSrcSelected = Inf_INFO_SRC_NONE;
+      Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_NONE);
+     }
 
    /***** Form to choice between alternatives *****/
    /* Start of table */
@@ -957,8 +1081,16 @@ void Inf_FormsToSelSendInfo (void)
 	       (unsigned) InfoSrc);
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-               Gbl.Form.Id);
+      else
+	{
+	 if (InfoSrc == Inf_INFO_SRC_NONE ||
+	     InfoAvailable[InfoSrc])	// If no info available for this source
+	    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
+		     Gbl.Form.Id);
+	 else
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
+	}
+      fprintf (Gbl.F.Out," />");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -980,6 +1112,43 @@ void Inf_FormsToSelSendInfo (void)
 
    /* End of table */
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/* Check if there is info available for current info type and a given source */
+/*****************************************************************************/
+
+static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc)
+  {
+   switch (InfoSrc)
+     {
+      case Inf_INFO_SRC_NONE:
+	 return false;
+      case Inf_INFO_SRC_EDITOR:
+         switch (Gbl.CurrentCrs.Info.Type)
+           {
+            case Inf_LECTURES:
+            case Inf_PRACTICALS:
+               return Syl_CheckSyllabus ();
+            default:
+               return false;
+           }
+         return false;	// Not reached
+      case Inf_INFO_SRC_PLAIN_TEXT:
+         return Inf_CheckPlainTxt (Gbl.CurrentCrs.Crs.CrsCod,
+                                   Gbl.CurrentCrs.Info.Type);
+      case Inf_INFO_SRC_RICH_TEXT:
+         return Inf_CheckRichTxt (Gbl.CurrentCrs.Crs.CrsCod,
+                                  Gbl.CurrentCrs.Info.Type);
+      case Inf_INFO_SRC_PAGE:
+	 return Inf_CheckPage (Gbl.CurrentCrs.Crs.CrsCod,
+                               Gbl.CurrentCrs.Info.Type);
+      case Inf_INFO_SRC_URL:
+	 return Inf_CheckURL (Gbl.CurrentCrs.Crs.CrsCod,
+                              Gbl.CurrentCrs.Info.Type);
+     }
+
+   return false;	// Not reached
   }
 
 /*****************************************************************************/
@@ -1064,7 +1233,11 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
+   char PathFile[PATH_MAX+1];
    FILE *FileURL;
+
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
 
    /***** Start form *****/
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
@@ -1079,7 +1252,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
                       "<input type=\"text\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"rb")) == NULL)
+   if ((FileURL = fopen (PathFile,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else
      {
@@ -1293,9 +1466,6 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   char PathFile[PATH_MAX+1];
-   FILE *File;
-   char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Set default values *****/
    *InfoSrc = Inf_INFO_SRC_NONE;
@@ -1338,13 +1508,7 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-               /***** Check if file exists *****/
-               sprintf (PathFile,"%s/%s/%ld/%s/%s",
-                        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
-                        InfoType == Inf_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
-                        	                   Cfg_SYLLABUS_FOLDER_PRACTICALS,
-                        Cfg_SYLLABUS_FILENAME);
-               if (!Fil_CheckIfPathExists (PathFile))	// Should be XML file checked for items!!!!
+               if (!Syl_CheckSyllabus ())
                  {
                   *InfoSrc = Inf_INFO_SRC_NONE;
                   *MustBeRead = false;
@@ -1362,57 +1526,32 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
            }
          break;
       case Inf_INFO_SRC_PLAIN_TEXT:
-         if (!Inf_CheckIfInfoTxtIsNotEmpty (CrsCod,InfoType))
+	 if (!Inf_CheckPlainTxt (CrsCod,InfoType))
            {
             *InfoSrc = Inf_INFO_SRC_NONE;
             *MustBeRead = false;
            }
          break;
       case Inf_INFO_SRC_RICH_TEXT:
-         if (!Inf_CheckIfInfoTxtIsNotEmpty (CrsCod,InfoType))
+	 if (!Inf_CheckRichTxt (CrsCod,InfoType))
            {
             *InfoSrc = Inf_INFO_SRC_NONE;
             *MustBeRead = false;
            }
          break;
       case Inf_INFO_SRC_PAGE:
-         /***** Check if file with web page exists *****/
-         sprintf (PathFile,"%s/%s/%ld/%s/index.html",
-                  Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Inf_FileNamesForInfoType[InfoType]);
-         if (!Fil_CheckIfPathExists (PathFile))
-           {
-            // If index.html not exists, try index.htm
-            sprintf (PathFile,"%s/%s/%ld/%s/index.htm",
-                     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Inf_FileNamesForInfoType[InfoType]);
-            if (!Fil_CheckIfPathExists (PathFile))
-              {
-               *InfoSrc = Inf_INFO_SRC_NONE;
-               *MustBeRead = false;
-              }
-           }
+	 if (!Inf_CheckPage (CrsCod,InfoType))
+	   {
+	    *InfoSrc = Inf_INFO_SRC_NONE;
+	    *MustBeRead = false;
+	   }
          break;
       case Inf_INFO_SRC_URL:
-         /***** Check if URL in file is empty or not *****/
-         sprintf (PathFile,"%s/%s/%ld/%s.url",
-                  Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,Inf_FileNamesForInfoType[InfoType]);
-         File = fopen (PathFile,"rb");
-         if (File)
-           {
-            if (fgets (URL,Cns_MAX_BYTES_URL,File) == NULL)
-            	 URL[0] = '\0';
-            /* File is not longer needed  ==> close it */
-            fclose (File);
-            if (!URL[0])
-              {
-               *InfoSrc = Inf_INFO_SRC_NONE;
-               *MustBeRead = false;
-              }
-           }
-         else
-           {
-            *InfoSrc = Inf_INFO_SRC_NONE;
-            *MustBeRead = false;
-           }
+	 if (!Inf_CheckURL (CrsCod,InfoType))
+	   {
+	    *InfoSrc = Inf_INFO_SRC_NONE;
+	    *MustBeRead = false;
+	   }
          break;
      }
   }
@@ -1473,7 +1612,9 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/
 
-static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLength)
+static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                                  char *InfoTxtHTML,char *InfoTxtMD,
+                                  size_t MaxLength)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1484,7 +1625,7 @@ static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLe
           (bibliography, FAQ, links or evaluation) from database *****/
    sprintf (Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
                   " WHERE CrsCod='%ld' AND InfoType='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
 
    /***** The result of the query must have one row or none *****/
@@ -1523,54 +1664,35 @@ static void Inf_GetInfoTxtFromDB (char *InfoTxtHTML,char *InfoTxtMD,size_t MaxLe
   }
 
 /*****************************************************************************/
-/*** Check if info text for a type of course info is not empty in database ***/
+/********************* Check information about the course ********************/
 /*****************************************************************************/
+// Return true if info available
 
-static bool Inf_CheckIfInfoTxtIsNotEmpty (long CrsCod,Inf_InfoType_t InfoType)
+static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   bool Result;
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Get info source for a specific type of course information
-          (bibliography, FAQ, links or evaluation) from database *****/
-   sprintf (Query,"SELECT InfoTxtHTML FROM crs_info_txt"
-                  " WHERE CrsCod='%ld' AND InfoType='%s'",
-            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
+   /***** Get info text from database *****/
+   Inf_GetInfoTxtFromDB (CrsCod,InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
-   /***** The result of the query must have one row or none *****/
-   if (NumRows == 1)
-     {
-      /* Get info text */
-      row = mysql_fetch_row (mysql_res);
-      Result = (row[0][0] != '\0');	// Is text empty?
-     }
-   else
-      Result = false;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Result;
+   return (TxtHTML[0] != '\0');
   }
 
 /*****************************************************************************/
 /********************* Show information about the course *********************/
 /*****************************************************************************/
+// Return true if info available
 
-static void Inf_ShowPlainTxtInfo (void)
+static bool Inf_CheckAndShowPlainTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_information;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtHTML[0])
      {
@@ -1596,19 +1718,38 @@ static void Inf_ShowPlainTxtInfo (void)
       /***** End frame *****/
       fprintf (Gbl.F.Out,"</div>");
       Lay_EndRoundFrame ();
+
+      return true;
      }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information);
+
+   return false;
   }
 
 /*****************************************************************************/
 /********************* Show information about the course *********************/
 /*****************************************************************************/
+// Return true if info available
 
-static void Inf_ShowRichTxtInfo (void)
+static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType)
+  {
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get info text from database *****/
+   Inf_GetInfoTxtFromDB (CrsCod,InfoType,
+                         TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
+
+   return (TxtMD[0] != '\0');
+  }
+
+/*****************************************************************************/
+/********************* Show information about the course *********************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckAndShowRichTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   extern const char *Txt_No_information;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
    char PathFileMD[PATH_MAX+1];
@@ -1622,7 +1763,8 @@ static void Inf_ShowRichTxtInfo (void)
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+                         TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtMD[0])
      {
@@ -1697,9 +1839,11 @@ static void Inf_ShowRichTxtInfo (void)
       /***** End frame *****/
       fprintf (Gbl.F.Out,"</div>");
       Lay_EndRoundFrame ();
+
+      return true;
      }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_information);
+
+   return false;
   }
 
 /*****************************************************************************/
@@ -1720,7 +1864,8 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    if (TxtHTML[0])
      {
@@ -1817,7 +1962,8 @@ void Inf_EditPlainTxtInfo (void)
       Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -1855,7 +2001,8 @@ void Inf_EditRichTxtInfo (void)
       Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -1948,6 +2095,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
 void Inf_ReceiveURLInfo (void)
   {
    extern const char *Txt_The_URL_X_has_been_updated;
+   char PathFile[PATH_MAX+1];
    FILE *FileURL;
    bool URLIsOK = false;
 
@@ -1957,8 +2105,11 @@ void Inf_ReceiveURLInfo (void)
    /***** Get parameter with URL *****/
    Par_GetParToText ("InfoSrcURL",Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_URL);
 
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+
    /***** Open file with URL *****/
-   if ((FileURL = fopen (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileURL,"wb")) != NULL)
+   if ((FileURL = fopen (PathFile,"wb")) != NULL)
      {
       /***** Write URL *****/
       fprintf (FileURL,"%s",Gbl.CurrentCrs.Info.URL);
@@ -2009,10 +2160,11 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
    struct Param *Param;
    char SourceFileName[PATH_MAX+1];
+   char PathRelDirHTML[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
+   char PathRelFileZIP[PATH_MAX+1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
    char StrUnzip[100+PATH_MAX*2+1];
-   char *PathWebPage;
    bool WrongType = false;
    bool FileIsOK = false;
 
@@ -2041,14 +2193,16 @@ void Inf_ReceivePagInfo (void)
      }
    else
      {
+      /***** Build path of directory containing web page *****/
+      Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+
       /***** End the reception of the data *****/
-      PathWebPage = Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelWebPage;
       if (Str_FileIs (SourceFileName,"html") ||
           Str_FileIs (SourceFileName,"htm" )) // .html or .htm file
         {
-         Brw_RemoveTree (PathWebPage);
-         Fil_CreateDirIfNotExists (PathWebPage);
-         sprintf (PathRelFileHTML,"%s/index.html",PathWebPage);
+         Brw_RemoveTree (PathRelDirHTML);
+         Fil_CreateDirIfNotExists (PathRelDirHTML);
+         sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
          if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
            {
             Lay_ShowAlert (Lay_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
@@ -2059,19 +2213,23 @@ void Inf_ReceivePagInfo (void)
         }
       else if (Str_FileIs (SourceFileName,"zip")) // .zip file
         {
-         Brw_RemoveTree (PathWebPage);
-         Fil_CreateDirIfNotExists (PathWebPage);
-         if (Fil_EndReceptionOfFile (Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP,Param))
+         Brw_RemoveTree (PathRelDirHTML);
+         Fil_CreateDirIfNotExists (PathRelDirHTML);
+         sprintf (PathRelFileZIP,"%s/%s.zip",
+                  Gbl.CurrentCrs.PathPriv,
+                  Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+
+         if (Fil_EndReceptionOfFile (PathRelFileZIP,Param))
            {
             Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 
             /* Uncompress ZIP */
             sprintf (StrUnzip,"unzip -qq -o %s -d %s",
-                     Gbl.CurrentCrs.Info.Links[Gbl.CurrentCrs.Info.Type].PathRelFileZIP,PathWebPage);
+                     PathRelFileZIP,PathRelDirHTML);
             if (system (StrUnzip) == 0)
               {
                /* Check if uploaded file is index.html or index.htm */
-               sprintf (PathRelFileHTML,"%s/index.html",PathWebPage);
+               sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
                if (Fil_CheckIfPathExists (PathRelFileHTML))
                  {
                   Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
@@ -2080,7 +2238,7 @@ void Inf_ReceivePagInfo (void)
                  }
 	       else
 	         {
-	          sprintf (PathRelFileHTML,"%s/index.htm",PathWebPage);
+	          sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
 	          if (Fil_CheckIfPathExists (PathRelFileHTML))
                     {
                      Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);

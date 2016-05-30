@@ -44544,48 +44544,6 @@ const char *Txt_The_survey_has_been_modified =
 	"O inqu&eacute;rito foi modificado.";
 #endif
 
-const char *Txt_The_syllabus_lectures_of_the_course_X_is_not_available =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"El programa de teor&iacute;a de la asignatura <strong>%s</strong> no est&aacute; disponible.";	// Necessita traduccio
-#elif L==2
-	"The syllabus (lectures) of the course <strong>%s</strong> is not available.";			// Need Übersetzung
-#elif L==3
-	"The syllabus (lectures) of the course <strong>%s</strong> is not available.";
-#elif L==4
-	"El programa de teor&iacute;a de la asignatura <strong>%s</strong> no est&aacute; disponible.";
-#elif L==5
-	"The syllabus (lectures) of the course <strong>%s</strong> is not available.";			// Besoin de traduction
-#elif L==6
-	"El programa de teor&iacute;a de la asignatura <strong>%s</strong> no est&aacute; disponible.";	// Okoteve traducción
-#elif L==7
-	"Il programma di teoria del corso <strong>%s</strong> non &egrave; disponibile.";
-#elif L==8
-	"The syllabus (lectures) of the course <strong>%s</strong> is not available.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"The syllabus (lectures) of the course <strong>%s</strong> is not available.";			// Necessita de tradução
-#endif
-
-const char *Txt_The_syllabus_practicals_of_the_course_X_is_not_available =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"El programa de pr&aacute;cticas de la asignatura <strong>%s</strong> no est&aacute; disponible.";	// Necessita traduccio
-#elif L==2
-	"The syllabus (practicals) of the course <strong>%s</strong> is not available.";			// Need Übersetzung
-#elif L==3
-	"The syllabus (practicals) of the course <strong>%s</strong> is not available.";
-#elif L==4
-	"El programa de pr&aacute;cticas de la asignatura <strong>%s</strong> no est&aacute; disponible.";
-#elif L==5
-	"The syllabus (practicals) of the course <strong>%s</strong> is not available.";			// Besoin de traduction
-#elif L==6
-	"El programa de pr&aacute;cticas de la asignatura <strong>%s</strong> no est&aacute; disponible.";	// Okoteve traducción
-#elif L==7
-	"Il programma della pratica <strong>%s</strong> non &egrave; disponibile.";
-#elif L==8
-	"The syllabus (practicals) of the course <strong>%s</strong> is not available.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"The syllabus (practicals) of the course <strong>%s</strong> is not available.";			// Necessita de tradução
-#endif
-
 const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"El descriptor <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio

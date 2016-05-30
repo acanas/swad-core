@@ -456,14 +456,6 @@ struct Globals
       struct
 	{
          Inf_InfoType_t Type;
-	 struct
-	   {
-	    char URL[Cns_MAX_BYTES_URL+1];	// URL
-	    char PathRelFileURL [PATH_MAX+1];	// Relative path to a text file of texto containing the URL
-	    char PathRelFileZIP [PATH_MAX+1];	// Relative path to a file ZIP with the complete web page
-	    char PathRelWebPage [PATH_MAX+1];	// Relative path to a public directory with a complete web page
-	    char URLWebPage [PATH_MAX+1];	// URL of a web page
-	   } Links[Inf_NUM_INFO_TYPES];
 	 char URL[Cns_MAX_BYTES_URL+1];
          bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
          bool ShowMsgMustBeRead;

@@ -860,8 +860,6 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 
 void Deg_InitCurrentCourse (void)
   {
-   unsigned NumInfoType;
-
    /***** If numerical course code is available, get course data *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
@@ -977,17 +975,6 @@ void Deg_InitCurrentCourse (void)
 	       Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
       sprintf (Gbl.CurrentCrs.PathURLPubl,"%s/%s/%ld",
 	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-
-      /***** Paths to files with URL or HTML for theory, practices, etc. of the course *****/
-      for (NumInfoType = 0;
-	   NumInfoType < Inf_NUM_INFO_TYPES;
-	   NumInfoType++)
-	{
-	 sprintf (Gbl.CurrentCrs.Info.Links[NumInfoType].PathRelFileURL,"%s/%s.url",Gbl.CurrentCrs.PathPriv   ,Inf_FileNamesForInfoType[NumInfoType]);
-	 sprintf (Gbl.CurrentCrs.Info.Links[NumInfoType].PathRelFileZIP,"%s/%s.zip",Gbl.CurrentCrs.PathPriv   ,Inf_FileNamesForInfoType[NumInfoType]);
-	 sprintf (Gbl.CurrentCrs.Info.Links[NumInfoType].PathRelWebPage,"%s/%s"    ,Gbl.CurrentCrs.PathRelPubl,Inf_FileNamesForInfoType[NumInfoType]);
-	 sprintf (Gbl.CurrentCrs.Info.Links[NumInfoType].URLWebPage    ,"%s/%s"    ,Gbl.CurrentCrs.PathURLPubl,Inf_FileNamesForInfoType[NumInfoType]);
-	}
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathPriv))

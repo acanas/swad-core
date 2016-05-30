@@ -174,16 +174,29 @@ void Syl_GetParamItemNumber (void)
   }
 
 /*****************************************************************************/
+/********************** Check if syllabus is not empty ***********************/
+/*****************************************************************************/
+// Return true if info available
+
+bool Syl_CheckSyllabus (void)
+  {
+   /***** Set syllabus type and load syllabus from XML file to memory *****/
+   Syl_SetSyllabusTypeAndLoadToMemory ();
+
+   /***** Start frame *****/
+   return (LstItemsSyllabus.NumItems != 0);
+  }
+
+/*****************************************************************************/
 /****************************** Edit a syllabus ******************************/
 /*****************************************************************************/
+// Return true if info available
 
-void Syl_EditSyllabus (void)
+bool Syl_CheckAndEditSyllabus (void)
   {
    extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Done;
-   extern const char *Txt_The_syllabus_lectures_of_the_course_X_is_not_available;
-   extern const char *Txt_The_syllabus_practicals_of_the_course_X_is_not_available;
    bool ICanEdit;
    bool PutIconToEdit;
 
@@ -194,15 +207,16 @@ void Syl_EditSyllabus (void)
        Gbl.Action.Act == ActEditorSylPra)
       Gbl.CurrentCrs.Syllabus.EditionIsActive = true;
 
+   /***** Start frame *****/
    if (Gbl.CurrentCrs.Syllabus.EditionIsActive || LstItemsSyllabus.NumItems)
      {
-      /***** Start frame *****/
       ICanEdit = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+		 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
       PutIconToEdit = ICanEdit && !Gbl.CurrentCrs.Syllabus.EditionIsActive;
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-                           PutIconToEdit ? Inf_PutIconToEditInfo :
-                                           NULL);
+			   PutIconToEdit ? Inf_PutIconToEditInfo :
+					   NULL);
+
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_1\">");
 
       /***** Write the current syllabus *****/
@@ -225,15 +239,21 @@ void Syl_EditSyllabus (void)
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
+
+      return true;
      }
-   else
-     {
-      sprintf (Gbl.Message,
-               Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? Txt_The_syllabus_lectures_of_the_course_X_is_not_available :
-	                                                  Txt_The_syllabus_practicals_of_the_course_X_is_not_available,
-	       Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/****************************** Edit a syllabus ******************************/
+/*****************************************************************************/
+// Return true if info available
+
+void Syl_EditSyllabus (void)
+  {
+   (void) Syl_CheckAndEditSyllabus ();
   }
 
 /*****************************************************************************/
@@ -300,12 +320,13 @@ static void Syl_SetSyllabusTypeAndLoadToMemory (void)
 	 break;
      }
 
-   /***** We are editing a syllabus with the internal editor,
-          so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Inf_INFO_SRC_EDITOR);
-
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadToMemory ();
+
+   /***** We are editing a syllabus with the internal editor,
+          so change info source to internal editor in database *****/
+   Inf_SetInfoSrcIntoDB (LstItemsSyllabus.NumItems ? Inf_INFO_SRC_EDITOR :
+	                                             Inf_INFO_SRC_NONE);
   }
 
 /*****************************************************************************/
@@ -420,7 +441,6 @@ static void Syl_LoadToMemory (void)
       for (NumItem = 0;
 	   NumItem < LstItemsSyllabus.NumItems - 1;
 	   NumItem++)
-	{
 	 if (LstItemsSyllabus.Lst[NumItem].Level < LstItemsSyllabus.Lst[NumItem + 1].Level)
 	   {
 	    LstItemsSyllabus.Lst[NumItem].HasChildren = true;
@@ -428,7 +448,6 @@ static void Syl_LoadToMemory (void)
 	   }
 	 else
 	    LstItemsSyllabus.Lst[NumItem].HasChildren = false;
-	}
       LstItemsSyllabus.Lst[LstItemsSyllabus.NumItems - 1].HasChildren = false;
      }
    LstItemsSyllabus.NumItemsWithChildren = NumItemsWithChildren;

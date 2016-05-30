@@ -1403,7 +1403,6 @@ void Tst_RenameTag (void)
 
    /***** Get old and new tags from the form *****/
    Par_GetParToText ("OldTagTxt",OldTagTxt,Tst_MAX_BYTES_TAG);
-
    Par_GetParToText ("NewTagTxt",NewTagTxt,Tst_MAX_BYTES_TAG);
 
    /***** Check that the new tag is not empty *****/
@@ -1415,12 +1414,16 @@ void Tst_RenameTag (void)
      }
    else
      {
-      /***** Check if the old tag is equal to the new one (this happens when user press INTRO without changing anything in the form) *****/
+      /***** Check if the old tag is equal to the new one
+             (this happens when user press INTRO
+             without changing anything in the form) *****/
       if (strcmp (OldTagTxt,NewTagTxt))	// The tag text has changed
         {
-         /***** Check if the new tag text is equal to any of the tag texts present in the database *****/
+         /***** Check if the new tag text is equal
+                to any of the current tag texts present in the database *****/
          if ((ExistingNewTagCod = Tst_GetTagCodFromTagTxt (NewTagTxt)) > 0)	// The new tag was already in database
            {
+            // TODO: Fix Bug: when renaming unique tag "examen" to "Examen", tag is removed!
             /***** Complex update made to not repeat tags *****/
             /* Step 1. Get tag code of the old tag */
             if ((OldTagCod =  Tst_GetTagCodFromTagTxt (OldTagTxt)) < 0)
@@ -1468,7 +1471,8 @@ void Tst_RenameTag (void)
            {
             /***** Simple update replacing each instance of the old tag by the new tag *****/
             sprintf (Query,"UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
-                           " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagTxt='%s'",
+                           " WHERE tst_tags.CrsCod='%ld'"
+                           " AND tst_tags.TagTxt='%s'",
                      NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
             DB_QueryUPDATE (Query,"can not update tag");
            }

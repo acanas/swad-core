@@ -133,18 +133,25 @@
 // TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
 // TODO: Check value returned by setlocale in all calls
 // TODO: Write "Tab > Action" in title of text in most frequent actions
+// TODO: Fix bug in copy-paste from Briefcase to another file browser
+// TODO: Fix bug: Asignatura: Arquitectura de Computadores, Crear ZIP de todos los trabajos del grupo C3
+// TODO: Fix bug: se oculta el único descriptor de unas preguntas de test, y luego se renombra dicho descriptor --> el descriptor desaparece
+// TODO: Fix bug: Student cant not see their test results
+// TODO: Fix bug: button "Add a new question" in test should not be available for students
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.211.2 (2016-05-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.212 (2016-05-30)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.197.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.212:   May 30, 2016	Fixed bug in edition of syllabus, reported by Raymon Moreno Colina and Javier Fernández Baldomero.
+					Code refactoring related to course info. (201471 lines)
         Version 15.211.2: May 13, 2016	Fixed bug in test questions, reported by Nuria Torres Rosell. (201394 lines)
         Version 15.211.1: May 07, 2016	Files in briefcase older than 1 year are removed automatically. (201397 lines)
         Version 15.211:   May 07, 2016	Code refactoring related to removing old files in briefcase.

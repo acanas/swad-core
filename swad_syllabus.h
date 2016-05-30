@@ -69,7 +69,11 @@ void Syl_GetParamWhichSyllabus (void);
 void Syl_PutFormWhichSyllabus (void);
 
 void Syl_GetParamItemNumber (void);
+
+bool Syl_CheckSyllabus (void);
+bool Syl_CheckAndEditSyllabus (void);
 void Syl_EditSyllabus (void);
+
 void Syl_FreeListItemsSyllabus (void);
 int Syl_ReadLevelItemSyllabus (void);
 int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
