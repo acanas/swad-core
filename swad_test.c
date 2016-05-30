@@ -140,7 +140,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Tst_PutFormToSeeResultsOfUsersTests (void);
+static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
 static void Tst_ShowTstTotalMark (double TotalScore);
@@ -288,12 +288,18 @@ void Tst_ShowFormAskTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
-   /***** Put form to go to test edition and configuration *****/
-   if (ICanEdit)
+   /***** Put link to view tests results (exams) *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Tst_PutFormToSeeResultsOfUsersTests ();
-      fprintf (Gbl.F.Out,"</div>");
+      case Rol_STUDENT:
+         Tst_PutFormToSeeResultsOfUsersTests (ActReqSeeMyTstExa);
+         break;
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
+         Tst_PutFormToSeeResultsOfUsersTests (ActReqSeeUsrTstExa);
+	 break;
+      default:
+	 break;
      }
 
    /***** Start frame *****/
@@ -360,14 +366,14 @@ void Tst_ShowFormAskTst (void)
 /*************** Write a form to go to result of users' tests ****************/
 /*****************************************************************************/
 
-static void Tst_PutFormToSeeResultsOfUsersTests (void)
+static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
   {
    extern const char *Txt_Results_tests;
 
-   Lay_PutContextualLink (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ? ActReqSeeMyTstExa :
-	                                                               ActReqSeeUsrTstExa,
-	                  NULL,"file64x64.gif",
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (Action,NULL,"file64x64.gif",
 	                  Txt_Results_tests,Txt_Results_tests);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -6778,7 +6784,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 /******* Select users and dates to show their results in test exams **********/
 /*****************************************************************************/
 
-void Tst_SelUsrsToSeeUsrsTstExams (void)
+void Tst_SelUsrsToSeeUsrsExams (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Exams;
@@ -6863,7 +6869,7 @@ void Tst_SelUsrsToSeeUsrsTstExams (void)
 /************** Select dates to show my results in test exams ****************/
 /*****************************************************************************/
 
-void Tst_SelDatesToSeeMyTstExams (void)
+void Tst_SelDatesToSeeMyExams (void)
   {
    extern const char *Txt_Exams;
    extern const char *Txt_See_exams;
@@ -6925,7 +6931,7 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
 /*************** Show results in test exams for several users ****************/
 /*****************************************************************************/
 
-void Tst_ShowUsrsTestResults (void)
+void Tst_ShowUsrsExams (void)
   {
    extern const char *Txt_Exams;
    extern const char *Txt_You_must_select_one_ore_more_users;
@@ -6966,7 +6972,7 @@ void Tst_ShowUsrsTestResults (void)
       // ...write warning alert
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      Tst_SelUsrsToSeeUsrsTstExams ();
+      Tst_SelUsrsToSeeUsrsExams ();
      }
 
    /***** Free the memory used for the list of users *****/
@@ -7025,7 +7031,7 @@ static void Tst_ShowHeaderTestResults (void)
 /************************ Show my results in test exams **********************/
 /*****************************************************************************/
 
-void Tst_ShowMyTestResults (void)
+void Tst_ShowMyExams (void)
   {
    extern const char *Txt_Exams;
 
@@ -7370,7 +7376,7 @@ static long Tst_GetParamTstCod (void)
 /******************* Show one test exam of another user **********************/
 /*****************************************************************************/
 
-void Tst_ShowOneTestExam (void)
+void Tst_ShowOneExam (void)
   {
    extern const char *Txt_Test_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];

@@ -161,11 +161,11 @@ void Tst_FreeTagsList (void);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
-void Tst_SelUsrsToSeeUsrsTstExams (void);
-void Tst_SelDatesToSeeMyTstExams (void);
-void Tst_ShowUsrsTestResults (void);
-void Tst_ShowMyTestResults (void);
-void Tst_ShowOneTestExam (void);
+void Tst_SelUsrsToSeeUsrsExams (void);
+void Tst_SelDatesToSeeMyExams (void);
+void Tst_ShowUsrsExams (void);
+void Tst_ShowMyExams (void);
+void Tst_ShowOneExam (void);
 void Tst_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
 void Tst_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void Tst_RemoveCrsExams (long CrsCod);
