@@ -421,7 +421,8 @@ static void Deg_Configuration (bool PrintView)
 	                    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Courses,Gbl.CurrentDeg.NumCrss);
+		  Txt_Courses,
+		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
 
 	 /***** Number of teachers *****/
 	 fprintf (Gbl.F.Out,"<tr>"
