@@ -1405,104 +1405,113 @@ void Tst_RenameTag (void)
    char OldTagTxt[Tst_MAX_BYTES_TAG+1];
    char NewTagTxt[Tst_MAX_BYTES_TAG+1];
    char Query[1024+2*Tst_MAX_BYTES_TAG];
-   long ExistingNewTagCod;
+   long ExistingTagCod;
    long OldTagCod;
+   bool ComplexRenaming;
 
    /***** Get old and new tags from the form *****/
    Par_GetParToText ("OldTagTxt",OldTagTxt,Tst_MAX_BYTES_TAG);
    Par_GetParToText ("NewTagTxt",NewTagTxt,Tst_MAX_BYTES_TAG);
 
    /***** Check that the new tag is not empty *****/
-   if (NewTagTxt[0])	// New tag not empty
+   if (!NewTagTxt[0])	// New tag empty
      {
-      /***** Check if the old tag is equal to the new one
-             (this happens when user press INTRO
-             without changing anything in the form) *****/
-      if (strcmp (OldTagTxt,NewTagTxt))	// The tag text has changed
-        {
-         /***** Check if the new tag text is equal
-                to any of the current tag texts present in the database *****/
-         if ((ExistingNewTagCod = Tst_GetTagCodFromTagTxt (NewTagTxt)) > 0)	// The new tag was already in database
-           {
-            // TODO: Fix Bug: when renaming unique tag "examen" to "Examen", tag is removed!
-            /***** Get tag code of the old tag *****/
-            if ((OldTagCod =  Tst_GetTagCodFromTagTxt (OldTagTxt)) < 0)
-               Lay_ShowErrorAndExit ("Tag does not exists.");
-
-            /***** Complex update made to not repeat tags:
-                   - If the new tag existed for a question ==>
-                     delete old tag from tst_question_tags;
-                     the new tag will remain
-                   - If the new tag did not exist for a question ==>
-                     change old tag to new tag in tst_question_tags *****/
-            /* Create a temporary table with all the question codes
-               that had the new tag as one of their tags */
-            sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-            if (mysql_query (&Gbl.mysql,Query))
-               DB_ExitOnMySQLError ("can not remove temporary table");
-            sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY"
-        	           " SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
-                     ExistingNewTagCod);
-            if (mysql_query (&Gbl.mysql,Query))
-               DB_ExitOnMySQLError ("can not create temporary table");
-
-            /* Remove old tag in questions where it would be repeated */
-            sprintf (Query,"DELETE FROM tst_question_tags"
-                           " WHERE TagCod='%ld'"
-                           " AND QstCod IN"
-                           " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag existed for a question ==> delete old tag
-                     OldTagCod);
-            DB_QueryDELETE (Query,"can not remove a tag from some questions");
-
-            /* Change old tag to new tag in questions where it would not be repeated */
-            sprintf (Query,"UPDATE tst_question_tags"
-                           " SET TagCod='%ld'"
-                           " WHERE TagCod='%ld'"
-                           " AND QstCod NOT IN"
-                           " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag did not exist for a question ==> change old tag to new tag
-                     ExistingNewTagCod,
-                     OldTagCod);
-            DB_QueryUPDATE (Query,"can not update a tag in some questions");
-
-            /* Drop temporary table, no longer necessary */
-            sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-            if (mysql_query (&Gbl.mysql,Query))
-               DB_ExitOnMySQLError ("can not remove temporary table");
-
-            /***** Delete old tag from tst_tags
-                   because it is not longer used *****/
-            sprintf (Query,"DELETE FROM tst_tags WHERE TagCod='%ld'",
-                     OldTagCod);
-            DB_QueryDELETE (Query,"can not remove old tag");
-            // Tst_RemoveUnusedTagsFromCurrentCrs ();
-           }
-         else	// Tag is not repeated. New tag text does not exists in current tags
-           {
-            /***** Simple update replacing each instance of the old tag by the new tag *****/
-            sprintf (Query,"UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
-                           " WHERE tst_tags.CrsCod='%ld'"
-                           " AND tst_tags.TagTxt='%s'",
-                     NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
-            DB_QueryUPDATE (Query,"can not update tag");
-           }
-
-         /***** Write message to show the change made *****/
-         sprintf (Gbl.Message,Txt_The_tag_X_has_been_renamed_as_Y,
-                  OldTagTxt,NewTagTxt);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-        }
-      else	// Both tags are the same
+      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
+               OldTagTxt);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+     }
+   else			// New tag not empty
+     {
+      /***** Check if the old tag is equal to the new one *****/
+      if (!strcmp (OldTagTxt,NewTagTxt))	// The old and the new tag
+						// are exactly the same (case sensitively).
+						// This happens when user press INTRO
+						// without changing anything in the form.
         {
          sprintf (Gbl.Message,Txt_The_tag_X_has_not_changed,
                   NewTagTxt);
          Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
-     }
-   else	// New tag empty
-     {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
-               OldTagTxt);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      else					// The old and the new tag
+						// are not exactly the same (case sensitively).
+	{
+	 /***** Check if renaming is complex or easy *****/
+	 ComplexRenaming = false;
+	 if (strcasecmp (OldTagTxt,NewTagTxt))	// The old and the new tag
+						// are not the same (case insensitively)
+	    /* Check if the new tag text is equal to any of the tags
+	       already present in the database */
+	    if ((ExistingTagCod = Tst_GetTagCodFromTagTxt (NewTagTxt)) > 0)
+	       // The new tag was already in database
+	       ComplexRenaming = true;
+
+	 if (ComplexRenaming)	// Renaming is not easy
+	   {
+	    /***** Complex update made to not repeat tags:
+		   - If the new tag existed for a question ==>
+		     delete old tag from tst_question_tags;
+		     the new tag will remain
+		   - If the new tag did not exist for a question ==>
+		     change old tag to new tag in tst_question_tags *****/
+	    /* Get tag code of the old tag */
+	    if ((OldTagCod =  Tst_GetTagCodFromTagTxt (OldTagTxt)) < 0)
+	       Lay_ShowErrorAndExit ("Tag does not exists.");
+
+	    /* Create a temporary table with all the question codes
+	       that had the new tag as one of their tags */
+	    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+	    if (mysql_query (&Gbl.mysql,Query))
+	       DB_ExitOnMySQLError ("can not remove temporary table");
+	    sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY"
+			   " SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
+		     ExistingTagCod);
+	    if (mysql_query (&Gbl.mysql,Query))
+	       DB_ExitOnMySQLError ("can not create temporary table");
+
+	    /* Remove old tag in questions where it would be repeated */
+	    sprintf (Query,"DELETE FROM tst_question_tags"
+			   " WHERE TagCod='%ld'"
+			   " AND QstCod IN"
+			   " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag existed for a question ==> delete old tag
+		     OldTagCod);
+	    DB_QueryDELETE (Query,"can not remove a tag from some questions");
+
+	    /* Change old tag to new tag in questions where it would not be repeated */
+	    sprintf (Query,"UPDATE tst_question_tags"
+			   " SET TagCod='%ld'"
+			   " WHERE TagCod='%ld'"
+			   " AND QstCod NOT IN"
+			   " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag did not exist for a question ==> change old tag to new tag
+		     ExistingTagCod,
+		     OldTagCod);
+	    DB_QueryUPDATE (Query,"can not update a tag in some questions");
+
+	    /* Drop temporary table, no longer necessary */
+	    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+	    if (mysql_query (&Gbl.mysql,Query))
+	       DB_ExitOnMySQLError ("can not remove temporary table");
+
+	    /***** Delete old tag from tst_tags
+		   because it is not longer used *****/
+	    sprintf (Query,"DELETE FROM tst_tags WHERE TagCod='%ld'",
+		     OldTagCod);
+	    DB_QueryDELETE (Query,"can not remove old tag");
+	   }
+	 else			// Renaming is easy
+	   {
+	    /***** Simple update replacing each instance of the old tag by the new tag *****/
+	    sprintf (Query,"UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
+			   " WHERE tst_tags.CrsCod='%ld'"
+			   " AND tst_tags.TagTxt='%s'",
+		     NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
+	    DB_QueryUPDATE (Query,"can not update tag");
+	   }
+
+	 /***** Write message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_tag_X_has_been_renamed_as_Y,
+		  OldTagTxt,NewTagTxt);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	}
      }
 
    /***** Show again the form to configure test *****/
