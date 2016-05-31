@@ -1413,13 +1413,7 @@ void Tst_RenameTag (void)
    Par_GetParToText ("NewTagTxt",NewTagTxt,Tst_MAX_BYTES_TAG);
 
    /***** Check that the new tag is not empty *****/
-   if (!NewTagTxt[0])
-     {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
-               OldTagTxt);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
-   else
+   if (NewTagTxt[0])	// New tag not empty
      {
       /***** Check if the old tag is equal to the new one
              (this happens when user press INTRO
@@ -1431,23 +1425,28 @@ void Tst_RenameTag (void)
          if ((ExistingNewTagCod = Tst_GetTagCodFromTagTxt (NewTagTxt)) > 0)	// The new tag was already in database
            {
             // TODO: Fix Bug: when renaming unique tag "examen" to "Examen", tag is removed!
-            /***** Complex update made to not repeat tags *****/
-            /* Step 1. Get tag code of the old tag */
+            /***** Get tag code of the old tag *****/
             if ((OldTagCod =  Tst_GetTagCodFromTagTxt (OldTagTxt)) < 0)
                Lay_ShowErrorAndExit ("Tag does not exists.");
 
-            /* Step 2: If the new tag existed for a question ==> delete old tag from tst_question_tags; the new tag will remain
-                       If the new tag did not exist for a question ==> change old tag to new tag in tst_question_tags */
+            /***** Complex update made to not repeat tags:
+                   - If the new tag existed for a question ==>
+                     delete old tag from tst_question_tags;
+                     the new tag will remain
+                   - If the new tag did not exist for a question ==>
+                     change old tag to new tag in tst_question_tags *****/
+            /* Create a temporary table with all the question codes
+               that had the new tag as one of their tags */
             sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not remove temporary table");
-
             sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY"
         	           " SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
                      ExistingNewTagCod);
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not create temporary table");
 
+            /* Remove old tag in questions where it would be repeated */
             sprintf (Query,"DELETE FROM tst_question_tags"
                            " WHERE TagCod='%ld'"
                            " AND QstCod IN"
@@ -1455,6 +1454,7 @@ void Tst_RenameTag (void)
                      OldTagCod);
             DB_QueryDELETE (Query,"can not remove a tag from some questions");
 
+            /* Change old tag to new tag in questions where it would not be repeated */
             sprintf (Query,"UPDATE tst_question_tags"
                            " SET TagCod='%ld'"
                            " WHERE TagCod='%ld'"
@@ -1464,11 +1464,13 @@ void Tst_RenameTag (void)
                      OldTagCod);
             DB_QueryUPDATE (Query,"can not update a tag in some questions");
 
+            /* Drop temporary table, no longer necessary */
             sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
             if (mysql_query (&Gbl.mysql,Query))
                DB_ExitOnMySQLError ("can not remove temporary table");
 
-            /* Delete old tag from tst_tags because it is not longer used */
+            /***** Delete old tag from tst_tags
+                   because it is not longer used *****/
             sprintf (Query,"DELETE FROM tst_tags WHERE TagCod='%ld'",
                      OldTagCod);
             DB_QueryDELETE (Query,"can not remove old tag");
@@ -1495,6 +1497,12 @@ void Tst_RenameTag (void)
                   NewTagTxt);
          Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
+     }
+   else	// New tag empty
+     {
+      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
+               OldTagTxt);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
    /***** Show again the form to configure test *****/
@@ -5631,7 +5639,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 
    /***** Get tag code from database *****/
    sprintf (Query,"SELECT TagCod FROM tst_tags"
-                  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagTxt='%s'",
+                  " WHERE CrsCod='%ld' AND TagTxt='%s'",
             Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tag");
 
@@ -6126,10 +6134,14 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
    char Query[1024];
 
    /***** Remove unused tags from tst_tags *****/
-   sprintf (Query,"DELETE FROM tst_tags WHERE CrsCod='%ld' AND TagCod NOT IN"
-                  " (SELECT DISTINCT tst_question_tags.TagCod FROM tst_questions,tst_question_tags"
-                  " WHERE tst_questions.CrsCod='%ld' AND tst_questions.QstCod=tst_question_tags.QstCod)",
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Crs.CrsCod);
+   sprintf (Query,"DELETE FROM tst_tags"
+	          " WHERE CrsCod='%ld' AND TagCod NOT IN"
+                  " (SELECT DISTINCT tst_question_tags.TagCod"
+                  " FROM tst_questions,tst_question_tags"
+                  " WHERE tst_questions.CrsCod='%ld'"
+                  " AND tst_questions.QstCod=tst_question_tags.QstCod)",
+            Gbl.CurrentCrs.Crs.CrsCod,
+            Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove unused tags");
   }
 

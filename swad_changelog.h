@@ -140,13 +140,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.212.9 (2016-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.213 (2016-05-31)"
 #define CSS_FILE		"swad15.210.css"
-#define JS_FILE			"swad15.197.js"
+#define JS_FILE			"swad15.213.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.213:   May 31, 2016	Code refactoring related to renaming test tags.
+					Fixed bug in dates reported by Christian A. Morillas Gutiérrez. (201581 lines)
         Version 15.212.9: May 30, 2016	Link to list institutions of country in country configuration. (201567 lines)
         Version 15.212.8: May 30, 2016	Link to list centres of institution in institution configuration. (201555 lines)
         Version 15.212.7: May 30, 2016	Link to list degrees of centre in centre configuration. (201547 lines)
