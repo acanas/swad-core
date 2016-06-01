@@ -129,7 +129,7 @@
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: FIX BUG: Txt_Save_file_properties does not have sense in briefcase, because nothing to save (license should be editable in briefcase?)
 // TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
-// TODO: List exam announcement as a list, like assignments. When clicking on an announcement, it will be shown alone, as now.
+// TODO: When clicking on an announcement, it will be shown alone, as now.
 // TODO: Check value returned by setlocale in all calls
 // TODO: Write "Tab > Action" in title of text in most frequent actions
 // TODO: Fix bug in copy-paste from Briefcase to another file browser
@@ -139,13 +139,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.214 (2016-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 15.215 (2016-06-01)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.213.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.215:   Jun 01, 2016	List exam announcements as a list, like notices. (201670 lines)
         Version 15.214:   May 31, 2016	Fixed bug in renaming test tags. (201589 lines)
         Version 15.213:   May 31, 2016	Code refactoring related to renaming test tags.
 					Fixed bug in dates reported by Christian A. Morillas Gutiérrez. (201581 lines)

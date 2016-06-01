@@ -479,28 +479,29 @@ struct Globals
      } Syllabus;
    struct
      {
-      long CrsCod;
-      char CrsFullName[Cns_MAX_BYTES_STRING+1];
-      unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
-      char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
-      struct Date CallDate;
-      struct Date ExamDate;
-      struct Hour StartTime;
-      struct Hour Duration;
-      char *Place;
-      char *Mode;
-      char *Structure;
-      char *DocRequired;
-      char *MatRequired;
-      char *MatAllowed;
-      char *OtherInfo;
-     } ExamAnnouncement;
-   struct
-     {
       struct Date *Lst;		// List of dates of announcements of exams
-      unsigned NumExamAnnounc;	// Number of announcements of exam in the list
+      unsigned NumExaAnns;	// Number of announcements of exam in the list
       long ExaCodToEdit;	// Used as parameter in contextual links
-     } LstExamAnnouncements;
+      long HighlightExaCod;	// Exam code of an exam announcement to be highlighted
+      struct
+	{
+	 long CrsCod;
+	 char CrsFullName[Cns_MAX_BYTES_STRING+1];
+	 unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
+	 char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
+	 struct Date CallDate;
+	 struct Date ExamDate;
+	 struct Hour StartTime;
+	 struct Hour Duration;
+	 char *Place;
+	 char *Mode;
+	 char *Structure;
+	 char *DocRequired;
+	 char *MatRequired;
+	 char *MatAllowed;
+	 char *OtherInfo;
+	} ExaDat;
+     } ExamAnnouncements;
    struct
      {
       unsigned Id;		// Each file browser in the page has a unique identifier

@@ -74,6 +74,9 @@ static void Exa_AllocMemExamAnnouncement (void);
 static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Exa_ListExamAnnouncementsEdit (void);
 static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
+static void Exa_PutIconToCreateNewExamAnnouncement (void);
+static void Exa_PutButtonToCreateNewExamAnnouncement (void);
+
 static long Exa_AddExamAnnouncementToDB (void);
 static void Exa_ModifyExamAnnouncementInDB (long ExaCod);
 static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
@@ -97,7 +100,7 @@ void Exa_PutFrmEditAExamAnnouncement (void)
    /***** Get the code of the exam announcement *****/
    ExaCod = Exa_GetParamsExamAnnouncement ();
 
-   if (ExaCod >= 0)	// -1 indicates that this is a new exam announcement
+   if (ExaCod > 0)	// -1 indicates that this is a new exam announcement
       /***** Read exam announcement from the database *****/
       Exa_GetDataExamAnnouncementFromDB (ExaCod);
 
@@ -124,76 +127,76 @@ static long Exa_GetParamsExamAnnouncement (void)
       ExaCod = -1;
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParToText ("CrsName",Gbl.ExamAnnouncement.CrsFullName,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("CrsName",Gbl.ExamAnnouncements.ExaDat.CrsFullName,Cns_MAX_BYTES_STRING);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
-   if (!Gbl.ExamAnnouncement.CrsFullName[0])
-      strcpy (Gbl.ExamAnnouncement.CrsFullName,Gbl.CurrentCrs.Crs.FullName);
+   if (!Gbl.ExamAnnouncements.ExaDat.CrsFullName[0])
+      strcpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName);
 
    /***** Get the year *****/
    Par_GetParToText ("Year",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncement.Year) != 1)
-      Gbl.ExamAnnouncement.Year = Gbl.CurrentCrs.Crs.Year;
-   if (Gbl.ExamAnnouncement.Year > Deg_MAX_YEARS_PER_DEGREE)
-      Gbl.ExamAnnouncement.Year = Gbl.CurrentCrs.Crs.Year;
+   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncements.ExaDat.Year) != 1)
+      Gbl.ExamAnnouncements.ExaDat.Year = Gbl.CurrentCrs.Crs.Year;
+   if (Gbl.ExamAnnouncements.ExaDat.Year > Deg_MAX_YEARS_PER_DEGREE)
+      Gbl.ExamAnnouncements.ExaDat.Year = Gbl.CurrentCrs.Crs.Year;
 
    /***** Get the type of exam announcement *****/
-   Par_GetParToText ("ExamSession",Gbl.ExamAnnouncement.Session,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("ExamSession",Gbl.ExamAnnouncements.ExaDat.Session,Cns_MAX_BYTES_STRING);
 
    /***** Get the data of the exam *****/
-   Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",&Gbl.ExamAnnouncement.ExamDate.Day,&Gbl.ExamAnnouncement.ExamDate.Month,&Gbl.ExamAnnouncement.ExamDate.Year);
-   if (Gbl.ExamAnnouncement.ExamDate.Day   == 0 ||
-       Gbl.ExamAnnouncement.ExamDate.Month == 0 ||
-       Gbl.ExamAnnouncement.ExamDate.Year  == 0)
+   Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",&Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Year);
+   if (Gbl.ExamAnnouncements.ExaDat.ExamDate.Day   == 0 ||
+       Gbl.ExamAnnouncements.ExaDat.ExamDate.Month == 0 ||
+       Gbl.ExamAnnouncements.ExaDat.ExamDate.Year  == 0)
      {
-      Gbl.ExamAnnouncement.ExamDate.Day   = Gbl.Now.Date.Day;
-      Gbl.ExamAnnouncement.ExamDate.Month = Gbl.Now.Date.Month;
-      Gbl.ExamAnnouncement.ExamDate.Year  = Gbl.Now.Date.Year;
+      Gbl.ExamAnnouncements.ExaDat.ExamDate.Day   = Gbl.Now.Date.Day;
+      Gbl.ExamAnnouncements.ExaDat.ExamDate.Month = Gbl.Now.Date.Month;
+      Gbl.ExamAnnouncements.ExaDat.ExamDate.Year  = Gbl.Now.Date.Year;
      }
 
    /***** Get the hour of the exam *****/
    Par_GetParToText ("ExamHour",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncement.StartTime.Hour) != 1)
-      Gbl.ExamAnnouncement.StartTime.Hour = 0;
-   if (Gbl.ExamAnnouncement.StartTime.Hour > 23)
-      Gbl.ExamAnnouncement.StartTime.Hour = 0;
+   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncements.ExaDat.StartTime.Hour) != 1)
+      Gbl.ExamAnnouncements.ExaDat.StartTime.Hour = 0;
+   if (Gbl.ExamAnnouncements.ExaDat.StartTime.Hour > 23)
+      Gbl.ExamAnnouncements.ExaDat.StartTime.Hour = 0;
    Par_GetParToText ("ExamMinute",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncement.StartTime.Minute) != 1)
-      Gbl.ExamAnnouncement.StartTime.Minute = 0;
-   if (Gbl.ExamAnnouncement.StartTime.Minute > 59)
-      Gbl.ExamAnnouncement.StartTime.Minute = 0;
+   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncements.ExaDat.StartTime.Minute) != 1)
+      Gbl.ExamAnnouncements.ExaDat.StartTime.Minute = 0;
+   if (Gbl.ExamAnnouncements.ExaDat.StartTime.Minute > 59)
+      Gbl.ExamAnnouncements.ExaDat.StartTime.Minute = 0;
 
    /***** Get the duration of the exam *****/
    Par_GetParToText ("DurationHour",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncement.Duration.Hour) != 1)
-      Gbl.ExamAnnouncement.Duration.Hour = 0;
-   if (Gbl.ExamAnnouncement.Duration.Hour > 23)
-      Gbl.ExamAnnouncement.Duration.Hour = 0;
+   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncements.ExaDat.Duration.Hour) != 1)
+      Gbl.ExamAnnouncements.ExaDat.Duration.Hour = 0;
+   if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour > 23)
+      Gbl.ExamAnnouncements.ExaDat.Duration.Hour = 0;
    Par_GetParToText ("DurationMinute",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncement.Duration.Minute) != 1)
-      Gbl.ExamAnnouncement.Duration.Minute = 0;
-   if (Gbl.ExamAnnouncement.Duration.Minute > 59)
-      Gbl.ExamAnnouncement.Duration.Minute = 0;
+   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnnouncements.ExaDat.Duration.Minute) != 1)
+      Gbl.ExamAnnouncements.ExaDat.Duration.Minute = 0;
+   if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute > 59)
+      Gbl.ExamAnnouncements.ExaDat.Duration.Minute = 0;
 
    /***** Get the place where the exam will happen *****/
-   Par_GetParToHTML ("Place",Gbl.ExamAnnouncement.Place,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("Place",Gbl.ExamAnnouncements.ExaDat.Place,Cns_MAX_BYTES_TEXT);
 
    /***** Get the modality of exam *****/
-   Par_GetParToHTML ("ExamMode",Gbl.ExamAnnouncement.Mode,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("ExamMode",Gbl.ExamAnnouncements.ExaDat.Mode,Cns_MAX_BYTES_TEXT);
 
    /***** Get the structure of exam *****/
-   Par_GetParToHTML ("Structure",Gbl.ExamAnnouncement.Structure,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("Structure",Gbl.ExamAnnouncements.ExaDat.Structure,Cns_MAX_BYTES_TEXT);
 
    /***** Get the mandatory documentation *****/
-   Par_GetParToHTML ("DocRequired",Gbl.ExamAnnouncement.DocRequired,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("DocRequired",Gbl.ExamAnnouncements.ExaDat.DocRequired,Cns_MAX_BYTES_TEXT);
 
    /***** Get the mandatory material *****/
-   Par_GetParToHTML ("MatRequired",Gbl.ExamAnnouncement.MatRequired,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("MatRequired",Gbl.ExamAnnouncements.ExaDat.MatRequired,Cns_MAX_BYTES_TEXT);
 
    /***** Get the allowed material *****/
-   Par_GetParToHTML ("MatAllowed",Gbl.ExamAnnouncement.MatAllowed,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("MatAllowed",Gbl.ExamAnnouncements.ExaDat.MatAllowed,Cns_MAX_BYTES_TEXT);
 
    /***** Get other information *****/
-   Par_GetParToHTML ("OtherInfo",Gbl.ExamAnnouncement.OtherInfo,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("OtherInfo",Gbl.ExamAnnouncements.ExaDat.OtherInfo,Cns_MAX_BYTES_TEXT);
 
    return ExaCod;
   }
@@ -204,25 +207,25 @@ static long Exa_GetParamsExamAnnouncement (void)
 
 static void Exa_AllocMemExamAnnouncement (void)
   {
-   if ((Gbl.ExamAnnouncement.Place       = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.Place       = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.Mode        = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.Mode        = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.Structure   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.Structure   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.DocRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.DocRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.MatRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.MatRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnnouncement.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnnouncements.ExaDat.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
   }
 
@@ -232,40 +235,40 @@ static void Exa_AllocMemExamAnnouncement (void)
 
 void Exa_FreeMemExamAnnouncement (void)
   {
-   if (Gbl.ExamAnnouncement.Place)
+   if (Gbl.ExamAnnouncements.ExaDat.Place)
      {
-      free ((void *) Gbl.ExamAnnouncement.Place);
-      Gbl.ExamAnnouncement.Place = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.Place);
+      Gbl.ExamAnnouncements.ExaDat.Place = NULL;
      }
-   if (Gbl.ExamAnnouncement.Mode)
+   if (Gbl.ExamAnnouncements.ExaDat.Mode)
      {
-      free ((void *) Gbl.ExamAnnouncement.Mode);
-      Gbl.ExamAnnouncement.Mode = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.Mode);
+      Gbl.ExamAnnouncements.ExaDat.Mode = NULL;
      }
-   if (Gbl.ExamAnnouncement.Structure)
+   if (Gbl.ExamAnnouncements.ExaDat.Structure)
      {
-      free ((void *) Gbl.ExamAnnouncement.Structure);
-      Gbl.ExamAnnouncement.Structure = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.Structure);
+      Gbl.ExamAnnouncements.ExaDat.Structure = NULL;
      }
-   if (Gbl.ExamAnnouncement.DocRequired)
+   if (Gbl.ExamAnnouncements.ExaDat.DocRequired)
      {
-      free ((void *) Gbl.ExamAnnouncement.DocRequired);
-      Gbl.ExamAnnouncement.DocRequired = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.DocRequired);
+      Gbl.ExamAnnouncements.ExaDat.DocRequired = NULL;
      }
-   if (Gbl.ExamAnnouncement.MatRequired)
+   if (Gbl.ExamAnnouncements.ExaDat.MatRequired)
      {
-      free ((void *) Gbl.ExamAnnouncement.MatRequired);
-      Gbl.ExamAnnouncement.MatRequired = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.MatRequired);
+      Gbl.ExamAnnouncements.ExaDat.MatRequired = NULL;
      }
-   if (Gbl.ExamAnnouncement.MatAllowed)
+   if (Gbl.ExamAnnouncements.ExaDat.MatAllowed)
      {
-      free ((void *) Gbl.ExamAnnouncement.MatAllowed);
-      Gbl.ExamAnnouncement.MatAllowed = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.MatAllowed);
+      Gbl.ExamAnnouncements.ExaDat.MatAllowed = NULL;
      }
-   if (Gbl.ExamAnnouncement.OtherInfo)
+   if (Gbl.ExamAnnouncements.ExaDat.OtherInfo)
      {
-      free ((void *) Gbl.ExamAnnouncement.OtherInfo);
-      Gbl.ExamAnnouncement.OtherInfo = NULL;
+      free ((void *) Gbl.ExamAnnouncements.ExaDat.OtherInfo);
+      Gbl.ExamAnnouncements.ExaDat.OtherInfo = NULL;
      }
   }
 
@@ -403,12 +406,29 @@ void Exa_RemoveExamAnnouncement (void)
 
 void Exa_ListExamAnnouncementsSee (void)
   {
+   /***** Show highlighted exam announcement *****/
+   if (Gbl.ExamAnnouncements.HighlightExaCod > 0)
+     {
+      /***** Allocate memory for the exam announcement *****/
+      Exa_AllocMemExamAnnouncement ();
+
+      /***** Read exam announcement from the database *****/
+      Exa_GetDataExamAnnouncementFromDB (Gbl.ExamAnnouncements.HighlightExaCod);
+
+      /***** Show exam announcement *****/
+      Exa_ShowExamAnnouncement (Gbl.ExamAnnouncements.HighlightExaCod,Exa_NORMAL_VIEW);
+
+      /***** Free memory of the exam announcement *****/
+      Exa_FreeMemExamAnnouncement ();
+     }
+
+   /***** List all exam announcements *****/
    Exa_ListExamAnnouncements (Exa_NORMAL_VIEW);
 
    /***** Mark possible notifications as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
-	               -1L,Gbl.CurrentCrs.Crs.CrsCod,
-	               Gbl.Usrs.Me.UsrDat.UsrCod);
+	                -1L,Gbl.CurrentCrs.Crs.CrsCod,
+	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -426,47 +446,47 @@ static void Exa_ListExamAnnouncementsEdit (void)
 
 static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
+   extern const char *Txt_All_announcements_of_exam;
+   extern const char *Txt_Announcements_of_exam;
    extern const char *Txt_No_announcements_of_exams_of_X;
-   extern const char *Txt_New_announcement_OF_EXAM;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumExaAnn;
+   unsigned long NumExaAnns;
    long ExaCod;
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   /***** Get exam announcements in current course from database *****/
-   sprintf (Query,"SELECT ExaCod,ExamDate FROM exam_announcements"
-                  " WHERE CrsCod='%ld' AND Status<>'%u' ORDER BY ExamDate",
-            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
+   /***** Get exam announcements (the most recent first)
+          in current course from database *****/
+   sprintf (Query,"SELECT ExaCod,ExamDate"
+	          " FROM exam_announcements"
+                  " WHERE CrsCod='%ld' AND Status<>'%u'"
+                  " ORDER BY ExamDate DESC",
+            Gbl.CurrentCrs.Crs.CrsCod,
+            (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
+   NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,
+			Gbl.ExamAnnouncements.HighlightExaCod > 0 ? Txt_All_announcements_of_exam :
+								    Txt_Announcements_of_exam,
+			ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
+				   NULL);
 
    /***** The result of the query may be empty *****/
-   if (NumRows == 0)
+   if (!NumExaAnns)
      {
       sprintf (Gbl.Message,Txt_No_announcements_of_exams_of_X,
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
 
-   /***** Create link for creation of a new exam announcement *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-         Lay_PutContextualLink (ActEdiExaAnn,NULL,
-                                "plus64x64.png",
-                                Txt_New_announcement_OF_EXAM,Txt_New_announcement_OF_EXAM);
-         fprintf (Gbl.F.Out,"</div>");
-         break;
-      default:
-         break;
-     }
-
    /***** List the existing exam announcements *****/
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   for (NumExaAnn = 0;
+	NumExaAnn < NumExaAnns;
+	NumExaAnn++)
      {
       /***** Get the code of the exam announcement (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
@@ -489,6 +509,37 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Button to create a new assignment *****/
+   if (ICanEdit)
+      Exa_PutButtonToCreateNewExamAnnouncement ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/***************** Put icon to create a new exam announcement ****************/
+/*****************************************************************************/
+
+static void Exa_PutIconToCreateNewExamAnnouncement (void)
+  {
+   extern const char *Txt_New_announcement_OF_EXAM;
+
+   Lay_PutContextualLink (ActEdiExaAnn,NULL,"plus64x64.png",Txt_New_announcement_OF_EXAM,NULL);
+  }
+
+/*****************************************************************************/
+/**************** Put button to create a new exam announcement ***************/
+/*****************************************************************************/
+
+static void Exa_PutButtonToCreateNewExamAnnouncement (void)
+  {
+   extern const char *Txt_New_announcement_OF_EXAM;
+
+   Act_FormStart (ActEdiExaAnn);
+   Lay_PutConfirmButton (Txt_New_announcement_OF_EXAM);
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
@@ -509,15 +560,15 @@ static long Exa_AddExamAnnouncementToDB (void)
                   "ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
                   " VALUES ('%ld','%u','0','%s','%u','%s',NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s','%s','%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_ACTIVE_EXAM_ANNOUNCEMENT,
-            Gbl.ExamAnnouncement.CrsFullName,Gbl.ExamAnnouncement.Year,Gbl.ExamAnnouncement.Session,
-            Gbl.ExamAnnouncement.ExamDate.Year,Gbl.ExamAnnouncement.ExamDate.Month,Gbl.ExamAnnouncement.ExamDate.Day,
-            Gbl.ExamAnnouncement.StartTime.Hour,Gbl.ExamAnnouncement.StartTime.Minute,
-	    Gbl.ExamAnnouncement.Duration.Hour,Gbl.ExamAnnouncement.Duration.Minute,
-            Gbl.ExamAnnouncement.Place,
-	    Gbl.ExamAnnouncement.Mode,Gbl.ExamAnnouncement.Structure,
-            Gbl.ExamAnnouncement.DocRequired,
-            Gbl.ExamAnnouncement.MatRequired,Gbl.ExamAnnouncement.MatAllowed,
-            Gbl.ExamAnnouncement.OtherInfo);
+            Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.ExamAnnouncements.ExaDat.Year,Gbl.ExamAnnouncements.ExaDat.Session,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
+            Gbl.ExamAnnouncements.ExaDat.Place,
+	    Gbl.ExamAnnouncements.ExaDat.Mode,Gbl.ExamAnnouncements.ExaDat.Structure,
+            Gbl.ExamAnnouncements.ExaDat.DocRequired,
+            Gbl.ExamAnnouncements.ExaDat.MatRequired,Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+            Gbl.ExamAnnouncements.ExaDat.OtherInfo);
    ExaCod = DB_QueryINSERTandReturnCode (Query,"can not create a new exam announcement");
    free ((void *) Query);
 
@@ -540,15 +591,15 @@ static void Exa_ModifyExamAnnouncementInDB (long ExaCod)
                   "ExamDate='%04u-%02u-%02u %02u:%02u:00',Duration='%02u:%02u:00',"
                   "Place='%s',ExamMode='%s',Structure='%s',DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'" \
                   " WHERE ExaCod='%ld'",
-            Gbl.ExamAnnouncement.CrsFullName,Gbl.ExamAnnouncement.Year,Gbl.ExamAnnouncement.Session,
-            Gbl.ExamAnnouncement.ExamDate.Year,Gbl.ExamAnnouncement.ExamDate.Month,Gbl.ExamAnnouncement.ExamDate.Day,
-            Gbl.ExamAnnouncement.StartTime.Hour,Gbl.ExamAnnouncement.StartTime.Minute,
-	    Gbl.ExamAnnouncement.Duration.Hour,Gbl.ExamAnnouncement.Duration.Minute,
-	    Gbl.ExamAnnouncement.Place,
-            Gbl.ExamAnnouncement.Mode,Gbl.ExamAnnouncement.Structure,
-            Gbl.ExamAnnouncement.DocRequired,
-            Gbl.ExamAnnouncement.MatRequired,Gbl.ExamAnnouncement.MatAllowed,
-            Gbl.ExamAnnouncement.OtherInfo,
+            Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.ExamAnnouncements.ExaDat.Year,Gbl.ExamAnnouncements.ExaDat.Session,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
+	    Gbl.ExamAnnouncements.ExaDat.Place,
+            Gbl.ExamAnnouncements.ExaDat.Mode,Gbl.ExamAnnouncements.ExaDat.Structure,
+            Gbl.ExamAnnouncements.ExaDat.DocRequired,
+            Gbl.ExamAnnouncements.ExaDat.MatRequired,Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+            Gbl.ExamAnnouncements.ExaDat.OtherInfo,
             ExaCod);
    DB_QueryUPDATE (Query,"can not update an exam announcement");
    free ((void *) Query);
@@ -563,32 +614,35 @@ void Exa_CreateListOfExamAnnouncements (void)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumExaAnn,NumExaAnns;
    long ExaCod;
    struct Date ExamDate;
    unsigned Hour,Minute,Second;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
-      /***** Get exam announcements in current course from database *****/
-      sprintf (Query,"SELECT ExaCod,ExamDate FROM exam_announcements" \
-		     " WHERE CrsCod='%ld' AND Status<>'%u' ORDER BY ExamDate",
-	       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course");
+      /***** Get exam announcements (no matter in what order)
+             in current course from database *****/
+      sprintf (Query,"SELECT ExaCod,ExamDate"
+	             " FROM exam_announcements" \
+		     " WHERE CrsCod='%ld' AND Status<>'%u'",
+	       Gbl.CurrentCrs.Crs.CrsCod,
+	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
+      NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course");
 
       /***** The result of the query may be empty *****/
-      Gbl.LstExamAnnouncements.Lst = NULL;
-      Gbl.LstExamAnnouncements.NumExamAnnounc = 0;
-      if (NumRows)
+      Gbl.ExamAnnouncements.Lst = NULL;
+      Gbl.ExamAnnouncements.NumExaAnns = 0;
+      if (NumExaAnns)
 	{
 	 /***** Allocate memory for the list *****/
-	 if ((Gbl.LstExamAnnouncements.Lst = (struct Date *) calloc (NumRows,sizeof (struct Date))) == NULL)
+	 if ((Gbl.ExamAnnouncements.Lst = (struct Date *) calloc (NumExaAnns,sizeof (struct Date))) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store dates of exam announcements.");
 
 	 /***** Get the dates of the existing exam announcements *****/
-	 for (NumRow = 0;
-	      NumRow < NumRows;
-	      NumRow++)
+	 for (NumExaAnn = 0;
+	      NumExaAnn < NumExaAnns;
+	      NumExaAnn++)
 	   {
 	    /***** Get the code of the exam announcement (row[0]) *****/
 	    row = mysql_fetch_row (mysql_res);
@@ -603,10 +657,10 @@ void Exa_CreateListOfExamAnnouncements (void)
 	       Lay_ShowErrorAndExit ("Wrong date of exam.");
 
 	    /***** Add exam announcement the list *****/
-	    Gbl.LstExamAnnouncements.Lst[Gbl.LstExamAnnouncements.NumExamAnnounc].Year  = ExamDate.Year;
-	    Gbl.LstExamAnnouncements.Lst[Gbl.LstExamAnnouncements.NumExamAnnounc].Month = ExamDate.Month;
-	    Gbl.LstExamAnnouncements.Lst[Gbl.LstExamAnnouncements.NumExamAnnounc].Day   = ExamDate.Day;
-	    Gbl.LstExamAnnouncements.NumExamAnnounc++;
+	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Year  = ExamDate.Year;
+	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Month = ExamDate.Month;
+	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Day   = ExamDate.Day;
+	    Gbl.ExamAnnouncements.NumExaAnns++;
 	   }
 	}
 
@@ -621,11 +675,11 @@ void Exa_CreateListOfExamAnnouncements (void)
 
 void Exa_FreeListExamAnnouncements (void)
   {
-   if (Gbl.LstExamAnnouncements.Lst)
+   if (Gbl.ExamAnnouncements.Lst)
      {
-      free ((void *) Gbl.LstExamAnnouncements.Lst);
-      Gbl.LstExamAnnouncements.Lst = NULL;
-      Gbl.LstExamAnnouncements.NumExamAnnounc = 0;
+      free ((void *) Gbl.ExamAnnouncements.Lst);
+      Gbl.ExamAnnouncements.Lst = NULL;
+      Gbl.ExamAnnouncements.NumExaAnns = 0;
      }
   }
 
@@ -638,80 +692,84 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned Hour,Minute,Second;
+   unsigned long NumExaAnns;
+   unsigned Hour;
+   unsigned Minute;
+   unsigned Second;
 
    /***** Get data of an exam announcement from database *****/
-   sprintf (Query,"SELECT CrsCod,CrsFullName,Year,ExamSession,CallDate,ExamDate,Duration," \
-                  "Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo" \
-                  " FROM exam_announcements WHERE ExaCod='%ld'",ExaCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of an exam announcement");
+   sprintf (Query,"SELECT CrsCod,CrsFullName,Year,ExamSession,"
+	          "CallDate,ExamDate,Duration,Place,ExamMode,"
+	          "Structure,DocRequired,MatRequired,MatAllowed,OtherInfo"
+                  " FROM exam_announcements WHERE ExaCod='%ld'",
+           ExaCod);
+   NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get data of an exam announcement");
 
    /***** The result of the query must have one row *****/
-   if (NumRows != 1)
+   if (NumExaAnns != 1)
       Lay_ShowErrorAndExit ("Error when getting data of an exam announcement.");
 
    /***** Get the data of the exam announcement *****/
    row = mysql_fetch_row (mysql_res);
 
    /* Code of the course in which the exam announcement is inserted (row[0]) */
-   Gbl.ExamAnnouncement.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+   Gbl.ExamAnnouncements.ExaDat.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /* Name of the course (row[1]) */
-   strcpy (Gbl.ExamAnnouncement.CrsFullName,row[1]);
+   strcpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,row[1]);
 
    /* Year (row[2]) */
-   if (sscanf (row[2],"%u",&Gbl.ExamAnnouncement.Year) != 1)
+   if (sscanf (row[2],"%u",&Gbl.ExamAnnouncements.ExaDat.Year) != 1)
       Lay_ShowErrorAndExit ("Wrong year.");
 
    /* Exam session (row[3]) */
-   strcpy (Gbl.ExamAnnouncement.Session,row[3]);
+   strcpy (Gbl.ExamAnnouncements.ExaDat.Session,row[3]);
 
    /* Date of exam announcement (row[4]) */
    if (sscanf (row[4],"%04u-%02u-%02u %02u:%02u:%02u",
-               &Gbl.ExamAnnouncement.CallDate.Year,
-               &Gbl.ExamAnnouncement.CallDate.Month,
-               &Gbl.ExamAnnouncement.CallDate.Day,
+               &Gbl.ExamAnnouncements.ExaDat.CallDate.Year,
+               &Gbl.ExamAnnouncements.ExaDat.CallDate.Month,
+               &Gbl.ExamAnnouncements.ExaDat.CallDate.Day,
                &Hour,&Minute,&Second) != 6)
       Lay_ShowErrorAndExit ("Wrong date of exam announcement.");
 
    /* Date of exam (row[5]) */
    if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",
-   	       &Gbl.ExamAnnouncement.ExamDate.Year,&Gbl.ExamAnnouncement.ExamDate.Month,&Gbl.ExamAnnouncement.ExamDate.Day,
-               &Gbl.ExamAnnouncement.StartTime.Hour,&Gbl.ExamAnnouncement.StartTime.Minute,&Second) != 6)
+   	       &Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+               &Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,&Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,&Second) != 6)
       Lay_ShowErrorAndExit ("Wrong date of exam.");
 
    /* Approximate duration (row[6]) */
-   if (sscanf (row[6],"%02u:%02u:%02u",&Gbl.ExamAnnouncement.Duration.Hour,&Gbl.ExamAnnouncement.Duration.Minute,&Second) != 3)
+   if (sscanf (row[6],"%02u:%02u:%02u",&Gbl.ExamAnnouncements.ExaDat.Duration.Hour,&Gbl.ExamAnnouncements.ExaDat.Duration.Minute,&Second) != 3)
       Lay_ShowErrorAndExit ("Wrong duration of exam.");
 
    /* Place (row[7]) */
-   strncpy (Gbl.ExamAnnouncement.Place,row[7],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.Place[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.Place,row[7],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.Place[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Exam mode (row[8]) */
-   strncpy (Gbl.ExamAnnouncement.Mode,row[8],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.Mode[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.Mode,row[8],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.Mode[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Structure (row[9]) */
-   strncpy (Gbl.ExamAnnouncement.Structure,row[9],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.Structure[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.Structure,row[9],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.Structure[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Documentation required (row[10]) */
-   strncpy (Gbl.ExamAnnouncement.DocRequired,row[10],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.DocRequired[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.DocRequired,row[10],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.DocRequired[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Material required (row[11]) */
-   strncpy (Gbl.ExamAnnouncement.MatRequired,row[11],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.MatRequired[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.MatRequired,row[11],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.MatRequired[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Material allowed (row[12]) */
-   strncpy (Gbl.ExamAnnouncement.MatAllowed,row[12],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.MatAllowed[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.MatAllowed,row[12],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.MatAllowed[Cns_MAX_BYTES_TEXT] = '\0';
 
    /* Other information for students (row[13]) */
-   strncpy (Gbl.ExamAnnouncement.OtherInfo,row[13],Cns_MAX_BYTES_TEXT);
-   Gbl.ExamAnnouncement.OtherInfo[Cns_MAX_BYTES_TEXT] = '\0';
+   strncpy (Gbl.ExamAnnouncements.ExaDat.OtherInfo,row[13],Cns_MAX_BYTES_TEXT);
+   Gbl.ExamAnnouncements.ExaDat.OtherInfo[Cns_MAX_BYTES_TEXT] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -771,7 +829,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
      }
 
    /***** Start frame *****/
-   Gbl.LstExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameter in contextual links
+   Gbl.ExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameter in contextual links
    Lay_StartRoundFrame ("625px",NULL,
                         TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
                                                                       NULL);
@@ -845,10 +903,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
      {
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"CrsName\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncement.CrsFullName);
+               Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncements.ExaDat.CrsFullName);
      }
    else
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",Gbl.ExamAnnouncement.CrsFullName);
+      fprintf (Gbl.F.Out,"<strong>%s</strong>",Gbl.ExamAnnouncements.ExaDat.CrsFullName);
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
@@ -869,14 +927,14 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	   Year++)
         {
 	 fprintf (Gbl.F.Out,"<option");
-	 if (Gbl.ExamAnnouncement.Year == Year)
+	 if (Gbl.ExamAnnouncements.ExaDat.Year == Year)
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out," value=\"%u\">%s</option>",Year,Txt_YEAR_OF_DEGREE[Year]);
 	}
       fprintf (Gbl.F.Out,"</select>");
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncement.Year]);
+      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year]);
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
@@ -892,9 +950,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ExamSession\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncement.Session);
+               Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncements.ExaDat.Session);
    else
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.Session);
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Session);
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
@@ -908,16 +966,16 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
-      Dat_WriteFormDate (Gbl.ExamAnnouncement.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnnouncement.ExamDate.Year :
-                                                                                  Gbl.Now.Date.Year,
+      Dat_WriteFormDate (Gbl.ExamAnnouncements.ExaDat.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnnouncements.ExaDat.ExamDate.Year :
+                                                                                          Gbl.Now.Date.Year,
                          Gbl.Now.Date.Year + 1,"Exam",
-                         &(Gbl.ExamAnnouncement.ExamDate),
+                         &(Gbl.ExamAnnouncements.ExaDat.ExamDate),
                          false,false);
       fprintf (Gbl.F.Out,"</td>");
      }
    else
      {
-      Dat_ConvDateToDateStr (&Gbl.ExamAnnouncement.ExamDate,StrExamDate);
+      Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,StrExamDate);
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
 	                 "%s"
 	                 "</td>",
@@ -937,7 +995,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<select name=\"ExamHour\"><option value=\"0\"");
-      if (Gbl.ExamAnnouncement.StartTime.Hour == 0)
+      if (Gbl.ExamAnnouncements.ExaDat.StartTime.Hour == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">-</option>");
       for (Hour = 7;
@@ -945,7 +1003,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	   Hour++)
         {
 	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
-	 if (Gbl.ExamAnnouncement.StartTime.Hour == Hour)
+	 if (Gbl.ExamAnnouncements.ExaDat.StartTime.Hour == Hour)
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
@@ -957,16 +1015,16 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	   Minute++)
         {
 	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
-	 if (Gbl.ExamAnnouncement.StartTime.Minute == Minute)
+	 if (Gbl.ExamAnnouncements.ExaDat.StartTime.Minute == Minute)
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
 	}
       fprintf (Gbl.F.Out,"</select>");
      }
-   else if (Gbl.ExamAnnouncement.StartTime.Hour)
+   else if (Gbl.ExamAnnouncements.ExaDat.StartTime.Hour)
       fprintf (Gbl.F.Out,"%2u:%02u",
-               Gbl.ExamAnnouncement.StartTime.Hour,
-               Gbl.ExamAnnouncement.StartTime.Minute);
+               Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
+               Gbl.ExamAnnouncements.ExaDat.StartTime.Minute);
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
@@ -987,7 +1045,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	   Hour++)
         {
 	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Hour);
-	 if (Gbl.ExamAnnouncement.Duration.Hour == Hour)
+	 if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour == Hour)
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
@@ -998,36 +1056,36 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 	   Minute++)
         {
 	 fprintf (Gbl.F.Out,"<option value=\"%u\"",Minute);
-	 if (Gbl.ExamAnnouncement.Duration.Minute == Minute)
+	 if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute == Minute)
             fprintf (Gbl.F.Out," selected=\"selected\"");
 	 fprintf (Gbl.F.Out,">%02u &#39;</option>",Minute);
 	}
       fprintf (Gbl.F.Out,"</select>");
      }
-   else if (Gbl.ExamAnnouncement.Duration.Hour ||
-            Gbl.ExamAnnouncement.Duration.Minute)
+   else if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour ||
+            Gbl.ExamAnnouncements.ExaDat.Duration.Minute)
      {
-      if (Gbl.ExamAnnouncement.Duration.Hour)
+      if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour)
         {
-         if (Gbl.ExamAnnouncement.Duration.Minute)
+         if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute)
             fprintf (Gbl.F.Out,"%u %s %u &#39;",
-                     Gbl.ExamAnnouncement.Duration.Hour,
+                     Gbl.ExamAnnouncements.ExaDat.Duration.Hour,
                      Txt_hours_ABBREVIATION,
-                     Gbl.ExamAnnouncement.Duration.Minute);
+                     Gbl.ExamAnnouncements.ExaDat.Duration.Minute);
          else
            {
-            if (Gbl.ExamAnnouncement.Duration.Hour == 1)
+            if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour == 1)
                fprintf (Gbl.F.Out,"1 %s",Txt_hour);
             else
-               fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncement.Duration.Hour,Txt_hours);
+               fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Txt_hours);
            }
         }
-      else if (Gbl.ExamAnnouncement.Duration.Minute)
+      else if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute)
         {
-         if (Gbl.ExamAnnouncement.Duration.Minute == 1)
+         if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute == 1)
             fprintf (Gbl.F.Out,"1 %s",Txt_minute);
          else
-            fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncement.Duration.Minute,Txt_minutes);
+            fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncements.ExaDat.Duration.Minute,Txt_minutes);
         }
      }
    fprintf (Gbl.F.Out,"</td>" \
@@ -1044,12 +1102,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"Place\" cols=\"40\" rows=\"4\">%s</textarea>",
-               Gbl.ExamAnnouncement.Place);
+               Gbl.ExamAnnouncements.ExaDat.Place);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.Place,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.Place);
+                        Gbl.ExamAnnouncements.ExaDat.Place,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Place);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1065,12 +1123,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"ExamMode\" cols=\"40\" rows=\"2\">%s</textarea>",
-               Gbl.ExamAnnouncement.Mode);
+               Gbl.ExamAnnouncements.ExaDat.Mode);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.Mode,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.Mode);
+                        Gbl.ExamAnnouncements.ExaDat.Mode,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Mode);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1086,12 +1144,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"Structure\" cols=\"40\" rows=\"8\">%s</textarea>",
-               Gbl.ExamAnnouncement.Structure);
+               Gbl.ExamAnnouncements.ExaDat.Structure);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.Structure,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.Structure);
+                        Gbl.ExamAnnouncements.ExaDat.Structure,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Structure);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1107,12 +1165,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"DocRequired\" cols=\"40\" rows=\"2\">%s</textarea>",
-               Gbl.ExamAnnouncement.DocRequired);
+               Gbl.ExamAnnouncements.ExaDat.DocRequired);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.DocRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.DocRequired);
+                        Gbl.ExamAnnouncements.ExaDat.DocRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.DocRequired);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1128,12 +1186,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"MatRequired\" cols=\"40\" rows=\"4\">%s</textarea>",
-               Gbl.ExamAnnouncement.MatRequired);
+               Gbl.ExamAnnouncements.ExaDat.MatRequired);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.MatRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.MatRequired);
+                        Gbl.ExamAnnouncements.ExaDat.MatRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.MatRequired);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1149,12 +1207,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"MatAllowed\" cols=\"40\" rows=\"4\">%s</textarea>",
-               Gbl.ExamAnnouncement.MatAllowed);
+               Gbl.ExamAnnouncements.ExaDat.MatAllowed);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.MatAllowed,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.MatAllowed);
+                        Gbl.ExamAnnouncements.ExaDat.MatAllowed,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.MatAllowed);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
@@ -1169,12 +1227,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea name=\"OtherInfo\" cols=\"40\" rows=\"5\">%s</textarea>",
-               Gbl.ExamAnnouncement.OtherInfo);
+               Gbl.ExamAnnouncements.ExaDat.OtherInfo);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncement.OtherInfo,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncement.OtherInfo);
+                        Gbl.ExamAnnouncements.ExaDat.OtherInfo,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.OtherInfo);
      }
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>" \
@@ -1225,7 +1283,7 @@ static void Exa_PutIconsExamAnnouncement (void)
 
 static void Exa_PutParamExaCod (void)
   {
-   Par_PutHiddenParamLong ("ExaCod",Gbl.LstExamAnnouncements.ExaCodToEdit);
+   Par_PutHiddenParamLong ("ExaCod",Gbl.ExamAnnouncements.ExaCodToEdit);
   }
 
 /*****************************************************************************/
@@ -1254,17 +1312,17 @@ void Exa_GetSummaryAndContentExamAnnouncement (char *SummaryStr,char **ContentSt
    /***** Summary *****/
    /* Name of the course */
    if (MaxChars)
-      Str_LimitLengthHTMLStr (Gbl.ExamAnnouncement.CrsFullName,
+      Str_LimitLengthHTMLStr (Gbl.ExamAnnouncements.ExaDat.CrsFullName,
                               MaxChars-(2+Cns_MAX_LENGTH_DATE+6));
 
    /* Date of exam */
    sprintf (SummaryStr,"%s, %04u-%02u-%02u %2u:%02u",
-            Gbl.ExamAnnouncement.CrsFullName,
-            Gbl.ExamAnnouncement.ExamDate.Year,
-            Gbl.ExamAnnouncement.ExamDate.Month,
-            Gbl.ExamAnnouncement.ExamDate.Day,
-            Gbl.ExamAnnouncement.StartTime.Hour,
-            Gbl.ExamAnnouncement.StartTime.Minute);
+            Gbl.ExamAnnouncements.ExaDat.CrsFullName,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Minute);
 
    /***** Free memory of the exam announcement *****/
    Exa_FreeMemExamAnnouncement ();
@@ -1303,7 +1361,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    (*ContentStr)[0] = '\0';	// Return nothing on error
 
    /***** Get data of course *****/
-   Crs.CrsCod = Gbl.ExamAnnouncement.CrsCod;
+   Crs.CrsCod = Gbl.ExamAnnouncements.ExaDat.CrsCod;
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Get data of degree *****/
@@ -1314,7 +1372,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Deg.DegCod);
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
-   Dat_ConvDateToDateStr (&Gbl.ExamAnnouncement.ExamDate,StrExamDate);
+   Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,StrExamDate);
 
    /***** Institution *****/
    sprintf (*ContentStr,"%s: %s<br />" \
@@ -1334,21 +1392,21 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
                         "%s: %s",
             Txt_Institution,Ins.FullName,
             Txt_Degree,Deg.FullName,
-            Txt_EXAM_ANNOUNCEMENT_Course,Gbl.ExamAnnouncement.CrsFullName,
-            Txt_EXAM_ANNOUNCEMENT_Year,Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncement.Year],
-            Txt_EXAM_ANNOUNCEMENT_Session,Gbl.ExamAnnouncement.Session,
+            Txt_EXAM_ANNOUNCEMENT_Course,Gbl.ExamAnnouncements.ExaDat.CrsFullName,
+            Txt_EXAM_ANNOUNCEMENT_Year,Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year],
+            Txt_EXAM_ANNOUNCEMENT_Session,Gbl.ExamAnnouncements.ExaDat.Session,
             Txt_EXAM_ANNOUNCEMENT_Exam_date,StrExamDate,
-            Txt_EXAM_ANNOUNCEMENT_Start_time,Gbl.ExamAnnouncement.StartTime.Hour,
-                                             Gbl.ExamAnnouncement.StartTime.Minute,
+            Txt_EXAM_ANNOUNCEMENT_Start_time,Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
+                                             Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
             Txt_hours_ABBREVIATION,
-            Txt_EXAM_ANNOUNCEMENT_Approximate_duration,Gbl.ExamAnnouncement.Duration.Hour,
-                                                       Gbl.ExamAnnouncement.Duration.Minute,
+            Txt_EXAM_ANNOUNCEMENT_Approximate_duration,Gbl.ExamAnnouncements.ExaDat.Duration.Hour,
+                                                       Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
             Txt_hours_ABBREVIATION,
-            Txt_EXAM_ANNOUNCEMENT_Place_of_exam,Gbl.ExamAnnouncement.Place,
-            Txt_EXAM_ANNOUNCEMENT_Mode,Gbl.ExamAnnouncement.Mode,
-            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,Gbl.ExamAnnouncement.Structure,
-            Txt_EXAM_ANNOUNCEMENT_Documentation_required,Gbl.ExamAnnouncement.DocRequired,
-            Txt_EXAM_ANNOUNCEMENT_Material_required,Gbl.ExamAnnouncement.MatRequired,
-            Txt_EXAM_ANNOUNCEMENT_Material_allowed,Gbl.ExamAnnouncement.MatAllowed,
-            Txt_EXAM_ANNOUNCEMENT_Other_information,Gbl.ExamAnnouncement.OtherInfo);
+            Txt_EXAM_ANNOUNCEMENT_Place_of_exam,Gbl.ExamAnnouncements.ExaDat.Place,
+            Txt_EXAM_ANNOUNCEMENT_Mode,Gbl.ExamAnnouncements.ExaDat.Mode,
+            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,Gbl.ExamAnnouncements.ExaDat.Structure,
+            Txt_EXAM_ANNOUNCEMENT_Documentation_required,Gbl.ExamAnnouncements.ExaDat.DocRequired,
+            Txt_EXAM_ANNOUNCEMENT_Material_required,Gbl.ExamAnnouncements.ExaDat.MatRequired,
+            Txt_EXAM_ANNOUNCEMENT_Material_allowed,Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+            Txt_EXAM_ANNOUNCEMENT_Other_information,Gbl.ExamAnnouncements.ExaDat.OtherInfo);
   }

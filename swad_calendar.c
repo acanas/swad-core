@@ -183,9 +183,6 @@ void Cal_DrawCurrentMonth (void)
       Hld_GetListHolidays ();
      }
 
-   /***** Create list of dates of exam announcements *****/
-   Exa_CreateListOfExamAnnouncements ();
-
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">"
@@ -205,9 +202,6 @@ void Cal_DrawCurrentMonth (void)
    Act_SetParamsForm (Params,ActSeeExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",Params);
-
-   /***** Free list of dates of exam announcements *****/
-   Exa_FreeListExamAnnouncements ();
   }
 
 /*****************************************************************************/
@@ -244,9 +238,6 @@ void Cal_DrawCalendar (void)
       Hld_GetListHolidays ();
      }
 
-   /***** Create list of calls for examination *****/
-   Exa_CreateListOfExamAnnouncements ();
-
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
 	                                      Cal_PutIconToPrintCalendar);
@@ -282,9 +273,6 @@ void Cal_DrawCalendar (void)
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",
 	    Params);
-
-   /***** Free list of dates of exam announcements *****/
-   Exa_FreeListExamAnnouncements ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

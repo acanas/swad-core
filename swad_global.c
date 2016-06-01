@@ -194,8 +194,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.LstAdms.NumUsrs = 0;
    Gbl.Usrs.LstAdms.Lst = NULL;
 
-   Gbl.LstExamAnnouncements.NumExamAnnounc = 0;
-   Gbl.LstExamAnnouncements.Lst = NULL;
+   Gbl.ExamAnnouncements.NumExaAnns = 0;
+   Gbl.ExamAnnouncements.Lst = NULL;
+   Gbl.ExamAnnouncements.HighlightExaCod = -1L;	// No exam announcement highlighted
 
    Gbl.Usrs.Select.All =
    Gbl.Usrs.Select.Std =

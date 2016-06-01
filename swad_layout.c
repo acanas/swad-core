@@ -514,14 +514,17 @@ static void Lay_WriteScripts (void)
 
       fprintf (Gbl.F.Out,"	var LstExamAnnouncements = [];\n");
       for (NumExamAnnouncement = 0;
-	   NumExamAnnouncement < Gbl.LstExamAnnouncements.NumExamAnnounc;
+	   NumExamAnnouncement < Gbl.ExamAnnouncements.NumExaAnns;
 	   NumExamAnnouncement++)
 	 fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: %u, Month: %u, Day: %u });\n",
-		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Year,
-		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Month,
-		  Gbl.LstExamAnnouncements.Lst[NumExamAnnouncement].Day);
+		  Gbl.ExamAnnouncements.Lst[NumExamAnnouncement].Year,
+		  Gbl.ExamAnnouncements.Lst[NumExamAnnouncement].Month,
+		  Gbl.ExamAnnouncements.Lst[NumExamAnnouncement].Day);
 
       fprintf (Gbl.F.Out,"</script>\n");
+
+      /***** Free list of dates of exam announcements *****/
+      Exa_FreeListExamAnnouncements ();
      }
 
    /***** Scripts depending on action *****/

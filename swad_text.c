@@ -619,7 +619,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"Nueva convocatoria de examen",
 	"Nouvelle convocation à un examen",
 	"Nueva convocatoria de examen",		// Okoteve traducción
-	"Nuova sessione d'esame",
+	"Nuovo appello d'esame",
 	"Nowe ogloszenie egzaminu",
 	"Nova chamada para exame",
 	},
@@ -2111,6 +2111,27 @@ const char *Txt_all =
 	"tudo";
 #endif
 
+const char *Txt_All_announcements_of_exam =
+#if   L==1
+	 "Totes les convocat&ograve;ries d'examen";
+#elif L==2
+	 "Alle Aufrufe f&uuml;r Pr&uuml;fung";
+#elif L==3
+	 "All announcements of exam";
+#elif L==4
+	 "Todas las convocatorias de examen";
+#elif L==5
+	 "Tous les convocations &agrave; un examen";
+#elif L==6
+	 "Todas las convocatorias de examen";	// Okoteve traducción
+#elif L==7
+	 "Tutti i appelli d'esame";
+#elif L==8
+	 "Wszystkie anonse egzamin";
+#elif L==9
+	 "Todas as chamadas para exame";
+#endif
+
 const char *Txt_all_degrees =
 #if   L==1
 	"Totes les titulacions";
@@ -2466,6 +2487,27 @@ const char *Txt_Announcement_of_exam_removed =
 	"Ogloszenie egzamin usuniete.";
 #elif L==9
 	"Chamada para exame removida.";
+#endif
+
+const char *Txt_Announcements_of_exam =
+#if   L==1
+	 "Convocat&ograve;ries d'examen";
+#elif L==2
+	 "Aufrufe f&uuml;r Pr&uuml;fung";
+#elif L==3
+	 "Announcements of exam";
+#elif L==4
+	 "Convocatorias de examen";
+#elif L==5
+	 "Convocations &agrave; un examen";
+#elif L==6
+	 "Convocatorias de examen";	// Okoteve traducción
+#elif L==7
+	 "Appelli d'esame";
+#elif L==8
+	 "Anonse egzamin";
+#elif L==9
+	 "Chamadas para exame";
 #endif
 
 const char *Txt_Another_centre =
@@ -6427,7 +6469,7 @@ const char *Txt_Created_new_announcement_of_exam =
 #elif L==6
 	"Creada nueva convocatoria de examen.";	// Okoteve traducción
 #elif L==7
-	"Creata nuova sessione d'esame.";
+	"Creato nuovo appello d'esame.";
 #elif L==8
 	"Utworzono nowe ogloszenie egzamin.";
 #elif L==9
@@ -10613,7 +10655,7 @@ const char *Txt_EXAM_ANNOUNCEMENT =
 #elif L==6
 	"CONVOCATORIA DE EXAMEN";	// Okoteve traducción
 #elif L==7
-	"SESSIONE D'ESAME";
+	"APPELLO D'ESAME";
 #elif L==8
 	"OGLOSZENIE egzaminu";
 #elif L==9
@@ -16317,7 +16359,7 @@ const char *Txt_Link_to_announcement_of_exam =
 #elif L==6
 	"Enlace a convocatoria de examen";	// Okoteve traducción
 #elif L==7
-	"Link alla sessione d'esame";
+	"Link al appello d'esame";
 #elif L==8
 	"Link do ogloszenie egzaminu";
 #elif L==9
@@ -25725,7 +25767,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==6
 	 "Nuevas convocatorias de examen"	// Okoteve traducción
 #elif L==7
-	 "Nuovo appello d'esame"
+	 "Nuovi appelli d'esame"
 #elif L==8
 	 "Nowe anonse egzamin"
 #elif L==9
@@ -26128,7 +26170,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==6
 	 "Convocatoria de examen"	// Okoteve traducción
 #elif L==7
-	 "Sessione d'esame"
+	 "Appello d'esame"
 #elif L==8
 	 "Ogloszenie egzamin"
 #elif L==9
@@ -36826,7 +36868,7 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #elif L==6
 	 "Convocatoria de examen"	// Okoteve traducción
 #elif L==7
-	 "Sessione d'esame"
+	 "Appello d'esame"
 #elif L==8
 	 "Ogloszenie egzamin"
 #elif L==9
@@ -40934,7 +40976,7 @@ const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
 #elif L==6
 	"La convocatoria de examen se ha actualizado correctamente.";	// Okoteve traducción
 #elif L==7
-	"La sessione d'esame &egrave; stata aggiornata con successo.";
+	"L'apello d'esame &egrave; stata aggiornata con successo.";
 #elif L==8
 	"The announcement of exam has been successfully updated.";	// Potrzebujesz tlumaczenie
 #elif L==9

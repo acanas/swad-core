@@ -223,7 +223,7 @@ static void Asg_PutIconToCreateNewAsg (void)
   }
 
 /*****************************************************************************/
-/******************* Put button to create a new assignment *******************/
+/****************** Put button to create a new assignment ********************/
 /*****************************************************************************/
 
 static void Asg_PutButtonToCreateNewAsg (void)
