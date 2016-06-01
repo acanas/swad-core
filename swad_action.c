@@ -695,7 +695,7 @@ Assessment:
         551. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
 	552. ActReqTst			Request a test of self-assesment
 	553. ActSeeCal			Show the academic calendar of the course with exam announcements
-	554. ActSeeExaAnn		Show the exam announcements
+	554. ActSeeAllExaAnn		Show the exam announcements
 	555. ActSeeAdmMrk		Marks zone (see or admin)
 
 	556. ActEdiAss			Edit the assessment system
@@ -816,6 +816,7 @@ Assessment:
 	670. ActPrnCal			Show print view of the academic calendar of the course
 	671. ActChgCal1stDay		Change first day of week and show academic calendar of the course
 
+	NEW. ActSeeOneExaAnn		Show one exam announcement highlighted
 	672. ActEdiExaAnn		Edit an exam announcement
 	673. ActRcvExaAnn		Receive an exam announcement
 	674. ActPrnExaAnn		Show an exam announcement ready to be printed
@@ -1232,7 +1233,7 @@ Social:
 Messages:
        1047. ActSeeNtf			Show my recent notifications
        1048. ActSeeAnn			Show global announcements
-       1049. ActSeeNot			Show notices
+       1049. ActSeeAllNot		Show all notices
        1050. ActReqMsgUsr		Write message to several users
        1051. ActSeeRcvMsg		Show the messages received from other users (link in menu)
        1052. ActSeeSntMsg		Show the messages sent to other users
@@ -1242,7 +1243,7 @@ Messages:
        1056. ActHidAnn			Hide a global announcement that was active
        1057. ActRevAnn			Reveal a global announcement that was hidden
        1058. ActRemAnn			Remove global announcement
-       1059. ActShoNot			Show (expand) a notice
+       1059. ActSeeOneNot			Show (expand) a notice
        1060. ActWriNot			Write a new notice
        1061. ActRcvNot			Receive and create a new notice
        1062. ActHidNot			Hide a notice that was active
@@ -2050,7 +2051,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqAsgWrkCrs	*/{ 899, 3,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskEditWorksCrs		,"folderusers64x64.gif"	},
    /* ActReqTst		*/{ 103, 4,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowFormAskTst		,"test64x64.gif"	},
    /* ActSeeCal		*/{  16, 5,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cal_DrawCalendar		,"date64x64.gif"	},
-   /* ActSeeExaAnn	*/{  85, 6,TabAss,ActSeeExaAnn		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActSeeAllExaAnn	*/{  85, 6,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
    /* ActSeeAdmMrk	*/{  17, 7,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"grades64x64.gif"	},
 
    // Actions not in menu:
@@ -2182,10 +2183,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnCal		*/{  71,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Cal_DrawCalendar		,NULL},
    /* ActChgCal1stDay	*/{1485,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
 
-   /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
-   /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
-   /* ActPrnExaAnn	*/{ 179,-1,TabAss,ActSeeExaAnn		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Exa_PrintExamAnnouncement	,NULL},
-   /* ActRemExaAnn	*/{ 187,-1,TabAss,ActSeeExaAnn		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_RemoveExamAnnouncement	,NULL},
+   /* ActSeeOneExaAnn	*/{1571,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetExaToShowHighlighted	,Exa_ListExamAnnouncementsSee	,NULL},
+   /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
+   /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
+   /* ActPrnExaAnn	*/{ 179,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Exa_PrintExamAnnouncement	,NULL},
+   /* ActRemExaAnn	*/{ 187,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_RemoveExamAnnouncement	,NULL},
 
    /* ActChgToSeeMrk	*/{1198,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
 
@@ -2633,7 +2635,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,"bell64x64.gif"	},
    /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
-   /* ActSeeNot		*/{ 762, 2,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note64x64.gif"	},
+   /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note64x64.gif"	},
    /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
    /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
    /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
@@ -2646,13 +2648,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRevAnn		*/{1471,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_RevealHiddenAnnouncement,Ann_ShowAllAnnouncements	,NULL},
    /* ActRemAnn		*/{1236,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_RemoveAnnouncement		,NULL},
 
-   /* ActShoNot		*/{1164,-1,TabMsg,ActSeeNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_GetNotToShowHighlighted	,Not_ListFullNotices		,NULL},
-   /* ActWriNot		*/{  59,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ShowFormNotice		,NULL},
-   /* ActRcvNot		*/{  60,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
-   /* ActHidNot		*/{ 763,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_HideActiveNotice	,Not_ListFullNotices		,NULL},
-   /* ActRevNot		*/{ 764,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RevealHiddenNotice	,Not_ListFullNotices		,NULL},
-   /* ActReqRemNot	*/{1472,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_RequestRemNotice		,NULL},
-   /* ActRemNot		*/{  73,-1,TabMsg,ActSeeNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
+   /* ActSeeOneNot	*/{1164,-1,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_GetNotToShowHighlighted	,Not_ListFullNotices		,NULL},
+   /* ActWriNot		*/{  59,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ShowFormNotice		,NULL},
+   /* ActRcvNot		*/{  60,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
+   /* ActHidNot		*/{ 763,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_HideActiveNotice	,Not_ListFullNotices		,NULL},
+   /* ActRevNot		*/{ 764,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RevealHiddenNotice	,Not_ListFullNotices		,NULL},
+   /* ActReqRemNot	*/{1472,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_RequestRemNotice		,NULL},
+   /* ActRemNot		*/{  73,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
 
    /* ActSeeNewNtf	*/{ 991,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,NULL},
    /* ActMrkNtfSee	*/{1146,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_MarkAllNotifAsSeen		,NULL},
@@ -2902,7 +2904,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #82 (obsolete action)
 	-1,			// #83 (obsolete action)
 	ActSeeUseGbl,		// #84
-	ActSeeExaAnn,		// #85
+	ActSeeAllExaAnn,		// #85
 	-1,			// #86 (obsolete action)
 	ActRemAllStdCrs,	// #87
 	ActReqRemAllStdCrs,	// #88
@@ -3579,7 +3581,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemIns,		// #759
 	-1,			// #760 (obsolete action)
 	ActReqUseGbl,		// #761
-	ActSeeNot,		// #762
+	ActSeeAllNot,		// #762
 	ActHidNot,		// #763
 	ActRevNot,		// #764
 	ActRcvThrForGenTch,	// #765
@@ -3981,7 +3983,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRecCtrPho,		// #1161
 	-1,			// #1162 (obsolete action)
 	ActCreUsrAcc,		// #1163
-	ActShoNot,		// #1164
+	ActSeeOneNot,		// #1164
 	ActReqEdiMyIns,		// #1165
 	ActChgCtyMyIns,		// #1166
 	ActChgMyIns,		// #1167
@@ -4391,6 +4393,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCnfID_Oth,		// #1568
 	ActCnfID_Std,		// #1569
 	ActCnfID_Tch,		// #1570
+	ActSeeOneExaAnn,	// #1571
 	};
 
 /*****************************************************************************/
@@ -4540,7 +4543,7 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id)
 static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
+   char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
 
    if (!Gbl.Form.Inside)
      {
@@ -4566,15 +4569,15 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
       fprintf (Gbl.F.Out," accept-charset=\"windows-1252\">");
 
       /* Put basic form parameters */
-      Act_SetParamsForm (Params,NextAction,PutParameterLocationIfNoSesion);
-      fprintf (Gbl.F.Out,"%s",Params);
+      Act_SetParamsForm (ParamsStr,NextAction,PutParameterLocationIfNoSesion);
+      fprintf (Gbl.F.Out,"%s",ParamsStr);
 
       Gbl.Form.Inside = true;
      }
   }
 
 // Params should have space for 256+256+Ses_LENGTH_SESSION_ID+256 bytes
-void Act_SetParamsForm (char *Params,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion)
+void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion)
   {
    char ParamAction[256];
    char ParamSession[256+Ses_LENGTH_SESSION_ID];
@@ -4612,7 +4615,7 @@ void Act_SetParamsForm (char *Params,Act_Action_t NextAction,bool PutParameterLo
                   Gbl.CurrentCty.Cty.CtyCod);
      }
 
-   sprintf (Params,"%s%s%s",ParamAction,ParamSession,ParamLocation);
+   sprintf (ParamsStr,"%s%s%s",ParamAction,ParamSession,ParamLocation);
   }
 
 void Act_FormEnd (void)

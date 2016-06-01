@@ -696,7 +696,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
-      Act_FormStart (ActShoNot);
+      Act_FormStart (ActSeeOneNot);
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status]);
      }
@@ -721,7 +721,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActShoNot);
+      Act_FormStart (ActSeeOneNot);
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""

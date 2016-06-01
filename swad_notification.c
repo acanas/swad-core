@@ -104,7 +104,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Assessment tab */
    ActSeeAsg,		// Ntf_EVENT_ASSIGNMENT
-   ActSeeExaAnn,	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   ActSeeAllExaAnn,	// Ntf_EVENT_EXAM_ANNOUNCEMENT
    ActSeeAdmMrk,	// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
@@ -122,7 +122,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   ActShoNot,		// Ntf_EVENT_NOTICE
+   ActSeeOneNot,		// Ntf_EVENT_NOTICE
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
@@ -759,7 +759,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 For_PutAllHiddenParamsForum ();
 	 break;
       case Ntf_EVENT_NOTICE:
-         Act_FormStart (ActShoNot);
+         Act_FormStart (ActSeeOneNot);
 	 Not_PutHiddenParamNotCod (Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:

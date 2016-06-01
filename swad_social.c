@@ -1528,7 +1528,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       ActReqDatShaCrs,		// Soc_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
-      ActSeeExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
+      ActSeeAllExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
 
       /* Users tab */
 
@@ -1537,7 +1537,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       ActSeeFor,		// Soc_NOTE_FORUM_POST
 
       /* Messages tab */
-      ActShoNot,		// Soc_NOTE_NOTICE
+      ActSeeOneNot,		// Soc_NOTE_NOTICE
 
       /* Statistics tab */
 

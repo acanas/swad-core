@@ -109,7 +109,7 @@ action="https://localhost/swad/es" method="post">
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char Params[256+256+Ses_LENGTH_SESSION_ID+256];
+   char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
    char Anchor1Nick[256+256+256+Ses_LENGTH_SESSION_ID+256+256];
    char Anchor2Nick[256+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64];
    size_t TxtLength;
@@ -303,7 +303,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	       sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
 
 	    /* Store first part of anchor */
-	    Act_SetParamsForm (Params,ActSeePubPrf,true);
+	    Act_SetParamsForm (ParamsStr,ActSeePubPrf,true);
 	    sprintf (Anchor1Nick,"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 				 "%s"
 				 "<input type=\"hidden\" name=\"usr\" value=\"",
@@ -311,7 +311,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		     Txt_STR_LANG_ID[Gbl.Prefs.Language],
 		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                  Gbl.Form.Id,
-		     Params);
+		     ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
 	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength+1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");

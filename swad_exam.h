@@ -58,6 +58,9 @@ void Exa_RemoveExamAnnouncement (void);
 void Exa_FreeMemExamAnnouncement (void);
 void Exa_FreeListExamAnnouncements (void);
 void Exa_ListExamAnnouncementsSee (void);
+
+void Exa_GetExaToShowHighlighted (void);
+
 void Exa_CreateListOfExamAnnouncements (void);
 void Exa_GetSummaryAndContentExamAnnouncement (char *SummaryStr,char **ContentStr,
                                                long ExaCod,unsigned MaxChars,bool GetContent);

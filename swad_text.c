@@ -18273,7 +18273,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	// ActSeeExaAnn
+	// ActSeeAllExaAnn
 #if   L==1
 	"Convocat&ograve;ries"
 #elif L==2
@@ -18658,7 +18658,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios"
 #endif
 	,
-	// ActSeeNot
+	// ActSeeAllNot
 #if   L==1
 	"Avisos"
 #elif L==2
@@ -20256,7 +20256,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	// ActSeeExaAnn
+	// ActSeeAllExaAnn
 #if   L==1
 	"Llistat de convocat&ograve;ries d'exàmens d'aquesta assignatura"
 #elif L==2
@@ -20657,7 +20657,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios globais vis&iacute;veis no in&iacute;cio da sess&atilde;o"
 #endif
 	,
-	// ActSeeNot
+	// ActSeeAllNot
 #if   L==1
 	"Breus avisos relacionats amb aquesta assignatura,"
 	" visibles per qualsevol visitant, encara que no estigui identificat"

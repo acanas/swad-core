@@ -1001,12 +1001,15 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	];
 	var Hld_HOLIDAY = 0;
 	var Hld_NON_SCHOOL_PERIOD = 1;
-	var Week;
-	var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
-	var Day;
-	var NumDaysInMonth;
 	var Yea = YearToDraw;
 	var Mon = MonthToDraw;
+	var Day;
+	var StrMon;
+	var StrDay;
+	var StrDate;
+	var Week;
+	var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
+	var NumDaysInMonth;
 	var YYYYMMDD;
 	var NumHld;
 	var ClassForDay; // Class of day depending on type of day
@@ -1139,11 +1142,12 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 						Mon == LstExamAnnouncements[NumExamAnnouncement].Month &&
 						Day == LstExamAnnouncements[NumExamAnnouncement].Day) {
 						ThisDayHasEvent = true;
-						if (!PrintView)
-							TextForDay = STR_EXAM + ': ' +
-										 LstExamAnnouncements[NumExamAnnouncement].Year  + '-' +
-										 LstExamAnnouncements[NumExamAnnouncement].Month + '-' +
-										 LstExamAnnouncements[NumExamAnnouncement].Day;
+						if (!PrintView) {
+							StrMon = ((Mon < 10) ? '0' : '') + Mon;
+							StrDay = ((Day < 10) ? '0' : '') + Day;
+							StrDate = Yea + '-' + StrMon + '-' + StrDay;
+							TextForDay = STR_EXAM + ': ' + StrDate;
+						}
 						break;
 					}
 
@@ -1161,11 +1165,13 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 				FormId = id + '_event_' + FormIdNum;
 				Gbl_HTMLContent +=	'<form method="post" action="' + CGI + '" id="' + FormId + '">' +
 									FormEventParams +
-									'<div class="' + ClassForDay + '"';
+									'<input type="hidden" name=\"Date\" value="' +
+									StrDate +
+									'" /><div class="' + ClassForDay + '"';
 				if (TextForDay.length)
 					Gbl_HTMLContent += ' title="' + TextForDay + '"';
-				Gbl_HTMLContent +=	'><a href="" class="' + ClassForDay + '"' +
-									' onclick="document.getElementById(\'' + FormId +
+				Gbl_HTMLContent +=	'><a href="" class="' + ClassForDay +
+									'" onclick="document.getElementById(\'' + FormId +
 									'\').submit();return false;">';
 			} else {
 				Gbl_HTMLContent += '<div class="' + ClassForDay + '"';

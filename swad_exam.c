@@ -82,7 +82,9 @@ static void Exa_ModifyExamAnnouncementInDB (long ExaCod);
 static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
 static void Exa_PutIconsExamAnnouncement (void);
-static void Exa_PutParamExaCod (void);
+static void Exa_PutParamExaCodToEdit (void);
+static void Exa_PutHiddenParamExaCod (long ExaCod);
+static long Exa_GetParamExaCod (void);
 
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
 
@@ -118,13 +120,10 @@ void Exa_PutFrmEditAExamAnnouncement (void)
 static long Exa_GetParamsExamAnnouncement (void)
   {
    char UnsignedStr[10+1];
-   char LongStr[1+10+1];
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
-   Par_GetParToText ("ExaCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&ExaCod) != 1)
-      ExaCod = -1;
+   ExaCod = Exa_GetParamExaCod ();
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
    Par_GetParToText ("CrsName",Gbl.ExamAnnouncements.ExaDat.CrsFullName,Cns_MAX_BYTES_STRING);
@@ -143,7 +142,10 @@ static long Exa_GetParamsExamAnnouncement (void)
    Par_GetParToText ("ExamSession",Gbl.ExamAnnouncements.ExaDat.Session,Cns_MAX_BYTES_STRING);
 
    /***** Get the data of the exam *****/
-   Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",&Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,&Gbl.ExamAnnouncements.ExaDat.ExamDate.Year);
+   Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",
+                        &Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+                        &Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,
+                        &Gbl.ExamAnnouncements.ExaDat.ExamDate.Year);
    if (Gbl.ExamAnnouncements.ExaDat.ExamDate.Day   == 0 ||
        Gbl.ExamAnnouncements.ExaDat.ExamDate.Month == 0 ||
        Gbl.ExamAnnouncements.ExaDat.ExamDate.Year  == 0)
@@ -341,15 +343,13 @@ static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,u
 
 void Exa_PrintExamAnnouncement (void)
   {
-   char LongStr[1+10+1];
    long ExaCod;
 
    /***** Allocate memory for the exam announcement *****/
    Exa_AllocMemExamAnnouncement ();
 
    /***** Get the code of the exam announcement *****/
-   Par_GetParToText ("ExaCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&ExaCod) != 1)
+   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Read exam announcement from the database *****/
@@ -370,12 +370,10 @@ void Exa_RemoveExamAnnouncement (void)
   {
    extern const char *Txt_Announcement_of_exam_removed;
    char Query[1024];
-   char LongStr[1+10+1];
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
-   Par_GetParToText ("ExaCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&ExaCod) != 1)
+   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as deleted in the database *****/
@@ -406,22 +404,6 @@ void Exa_RemoveExamAnnouncement (void)
 
 void Exa_ListExamAnnouncementsSee (void)
   {
-   /***** Show highlighted exam announcement *****/
-   if (Gbl.ExamAnnouncements.HighlightExaCod > 0)
-     {
-      /***** Allocate memory for the exam announcement *****/
-      Exa_AllocMemExamAnnouncement ();
-
-      /***** Read exam announcement from the database *****/
-      Exa_GetDataExamAnnouncementFromDB (Gbl.ExamAnnouncements.HighlightExaCod);
-
-      /***** Show exam announcement *****/
-      Exa_ShowExamAnnouncement (Gbl.ExamAnnouncements.HighlightExaCod,Exa_NORMAL_VIEW);
-
-      /***** Free memory of the exam announcement *****/
-      Exa_FreeMemExamAnnouncement ();
-     }
-
    /***** List all exam announcements *****/
    Exa_ListExamAnnouncements (Exa_NORMAL_VIEW);
 
@@ -438,6 +420,17 @@ void Exa_ListExamAnnouncementsSee (void)
 static void Exa_ListExamAnnouncementsEdit (void)
   {
    Exa_ListExamAnnouncements (Exa_NORMAL_VIEW);
+  }
+
+/*****************************************************************************/
+/*************** Get exam announcement to show highlighted *******************/
+/*****************************************************************************/
+
+void Exa_GetExaToShowHighlighted (void)
+  {
+   /***** Get the date (in YYYY-MM-DD format)
+          of the exam announcements to highlight *****/
+   Par_GetParToText ("Date",Gbl.ExamAnnouncements.HighlightDate,4+1+2+1+2);
   }
 
 /*****************************************************************************/
@@ -458,6 +451,46 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
+   /***** Show highlighted exam announcement *****/
+   if (Gbl.ExamAnnouncements.HighlightDate[0])
+     {
+      /***** Get exam announcements (the most recent first)
+	     in current course for a date from database *****/
+      sprintf (Query,"SELECT ExaCod,ExamDate"
+		     " FROM exam_announcements"
+		     " WHERE CrsCod='%ld' AND Status<>'%u'"
+		     " AND DATE(ExamDate)='%s'"
+		     " ORDER BY ExamDate DESC",
+	       Gbl.CurrentCrs.Crs.CrsCod,
+	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
+	       Gbl.ExamAnnouncements.HighlightDate);
+      NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
+
+      /***** List the existing exam announcements *****/
+      for (NumExaAnn = 0;
+	   NumExaAnn < NumExaAnns;
+	   NumExaAnn++)
+	{
+	 /***** Get the code of the exam announcement (row[0]) *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 if (sscanf (row[0],"%ld",&ExaCod) != 1)
+	    Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
+
+	 /***** Allocate memory for the exam announcement *****/
+	 Exa_AllocMemExamAnnouncement ();
+
+	 /***** Read the data of the exam announcement *****/
+	 Exa_GetDataExamAnnouncementFromDB (ExaCod);
+
+	 /***** Show exam announcement *****/
+	 Exa_ShowExamAnnouncement (ExaCod,TypeViewExamAnnouncement);
+
+	 /***** Free memory of the exam announcement *****/
+	 Exa_FreeMemExamAnnouncement ();
+	}
+     }
+
    /***** Get exam announcements (the most recent first)
           in current course from database *****/
    sprintf (Query,"SELECT ExaCod,ExamDate"
@@ -470,8 +503,8 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
-			Gbl.ExamAnnouncements.HighlightExaCod > 0 ? Txt_All_announcements_of_exam :
-								    Txt_Announcements_of_exam,
+			Gbl.ExamAnnouncements.HighlightDate[0] ? Txt_All_announcements_of_exam :
+								 Txt_Announcements_of_exam,
 			ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 				   NULL);
 
@@ -555,19 +588,32 @@ static long Exa_AddExamAnnouncementToDB (void)
    /***** Add exam announcement *****/
    if ((Query = malloc (512+2*Cns_MAX_BYTES_STRING+7*Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
-   sprintf (Query,"INSERT INTO exam_announcements (CrsCod,Status,NumNotif,"
-                  "CrsFullName,Year,ExamSession,CallDate,ExamDate,Duration,Place,"
+   sprintf (Query,"INSERT INTO exam_announcements "
+	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
+	          "CallDate,ExamDate,Duration,Place,"
                   "ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
-                  " VALUES ('%ld','%u','0','%s','%u','%s',NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s','%s','%s','%s','%s','%s','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_ACTIVE_EXAM_ANNOUNCEMENT,
-            Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.ExamAnnouncements.ExaDat.Year,Gbl.ExamAnnouncements.ExaDat.Session,
-            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
-            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
-	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
+                  " VALUES "
+                  "('%ld','%u','0','%s','%u','%s',"
+                  "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
+                  "'%s','%s','%s','%s','%s','%s')",
+            Gbl.CurrentCrs.Crs.CrsCod,
+            (unsigned) Exa_ACTIVE_EXAM_ANNOUNCEMENT,
+            Gbl.ExamAnnouncements.ExaDat.CrsFullName,
+            Gbl.ExamAnnouncements.ExaDat.Year,
+            Gbl.ExamAnnouncements.ExaDat.Session,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
             Gbl.ExamAnnouncements.ExaDat.Place,
-	    Gbl.ExamAnnouncements.ExaDat.Mode,Gbl.ExamAnnouncements.ExaDat.Structure,
+	    Gbl.ExamAnnouncements.ExaDat.Mode,
+	    Gbl.ExamAnnouncements.ExaDat.Structure,
             Gbl.ExamAnnouncements.ExaDat.DocRequired,
-            Gbl.ExamAnnouncements.ExaDat.MatRequired,Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+            Gbl.ExamAnnouncements.ExaDat.MatRequired,
+            Gbl.ExamAnnouncements.ExaDat.MatAllowed,
             Gbl.ExamAnnouncements.ExaDat.OtherInfo);
    ExaCod = DB_QueryINSERTandReturnCode (Query,"can not create a new exam announcement");
    free ((void *) Query);
@@ -588,17 +634,27 @@ static void Exa_ModifyExamAnnouncementInDB (long ExaCod)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"UPDATE exam_announcements"
                   " SET CrsFullName='%s',Year='%u',ExamSession='%s',"
-                  "ExamDate='%04u-%02u-%02u %02u:%02u:00',Duration='%02u:%02u:00',"
-                  "Place='%s',ExamMode='%s',Structure='%s',DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'" \
+                  "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
+                  "Duration='%02u:%02u:00',"
+                  "Place='%s',ExamMode='%s',Structure='%s',"
+                  "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'" \
                   " WHERE ExaCod='%ld'",
-            Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.ExamAnnouncements.ExaDat.Year,Gbl.ExamAnnouncements.ExaDat.Session,
-            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
-            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
-	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
+            Gbl.ExamAnnouncements.ExaDat.CrsFullName,
+            Gbl.ExamAnnouncements.ExaDat.Year,
+            Gbl.ExamAnnouncements.ExaDat.Session,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Year,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Month,
+            Gbl.ExamAnnouncements.ExaDat.ExamDate.Day,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
+            Gbl.ExamAnnouncements.ExaDat.StartTime.Minute,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Hour,
+	    Gbl.ExamAnnouncements.ExaDat.Duration.Minute,
 	    Gbl.ExamAnnouncements.ExaDat.Place,
-            Gbl.ExamAnnouncements.ExaDat.Mode,Gbl.ExamAnnouncements.ExaDat.Structure,
+            Gbl.ExamAnnouncements.ExaDat.Mode,
+            Gbl.ExamAnnouncements.ExaDat.Structure,
             Gbl.ExamAnnouncements.ExaDat.DocRequired,
-            Gbl.ExamAnnouncements.ExaDat.MatRequired,Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+            Gbl.ExamAnnouncements.ExaDat.MatRequired,
+            Gbl.ExamAnnouncements.ExaDat.MatAllowed,
             Gbl.ExamAnnouncements.ExaDat.OtherInfo,
             ExaCod);
    DB_QueryUPDATE (Query,"can not update an exam announcement");
@@ -614,16 +670,14 @@ void Exa_CreateListOfExamAnnouncements (void)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumExaAnn,NumExaAnns;
-   long ExaCod;
-   struct Date ExamDate;
-   unsigned Hour,Minute,Second;
+   unsigned long NumExaAnn;
+   unsigned long NumExaAnns;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
-      /***** Get exam announcements (no matter in what order)
+      /***** Get exam dates (no matter in what order)
              in current course from database *****/
-      sprintf (Query,"SELECT ExaCod,ExamDate"
+      sprintf (Query,"SELECT DISTINCT(DATE(ExamDate))"
 	             " FROM exam_announcements" \
 		     " WHERE CrsCod='%ld' AND Status<>'%u'",
 	       Gbl.CurrentCrs.Crs.CrsCod,
@@ -644,22 +698,17 @@ void Exa_CreateListOfExamAnnouncements (void)
 	      NumExaAnn < NumExaAnns;
 	      NumExaAnn++)
 	   {
-	    /***** Get the code of the exam announcement (row[0]) *****/
+	    /***** Get next exam announcement *****/
 	    row = mysql_fetch_row (mysql_res);
 
-	    if (sscanf (row[0],"%ld",&ExaCod) != 1)
-	       Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
-
-	    /***** Read the date of the exam (row[1]) *****/
-	    /* Date of exam (row[6]) */
-	    if (sscanf (row[1],"%04u-%02u-%02u %02u:%02u:%02u",
-			&ExamDate.Year,&ExamDate.Month,&ExamDate.Day,&Hour,&Minute,&Second) != 6)
+	    /* Read the date of the exam (row[0]) */
+	    if (sscanf (row[0],"%04u-%02u-%02u",
+			&Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Year,
+			&Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Month,
+			&Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Day) != 3)
 	       Lay_ShowErrorAndExit ("Wrong date of exam.");
 
-	    /***** Add exam announcement the list *****/
-	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Year  = ExamDate.Year;
-	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Month = ExamDate.Month;
-	    Gbl.ExamAnnouncements.Lst[Gbl.ExamAnnouncements.NumExaAnns].Day   = ExamDate.Day;
+	    /***** Increment number of elements in list *****/
 	    Gbl.ExamAnnouncements.NumExaAnns++;
 	   }
 	}
@@ -839,7 +888,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
       /***** Start form *****/
       Act_FormStart (ActRcvExaAnn);
       if (ExaCod > 0)
-	 Par_PutHiddenParamLong ("ExaCod",ExaCod);
+	 Exa_PutHiddenParamExaCod (ExaCod);
      }
 
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
@@ -1264,16 +1313,16 @@ static void Exa_PutIconsExamAnnouncement (void)
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/
-      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCod,"remove-on64x64.png",
+      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCodToEdit,"remove-on64x64.png",
 			     Txt_Remove,NULL);
 
       /***** Link to edit this exam announcement *****/
-      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCod,"edit64x64.png",
+      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCodToEdit,"edit64x64.png",
 			     Txt_Edit,NULL);
      }
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCod,"print64x64.png",
+   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCodToEdit,"print64x64.png",
 			  Txt_Print,NULL);
   }
 
@@ -1281,9 +1330,31 @@ static void Exa_PutIconsExamAnnouncement (void)
 /*************** Param with the code of an exam announcement *****************/
 /*****************************************************************************/
 
-static void Exa_PutParamExaCod (void)
+static void Exa_PutParamExaCodToEdit (void)
   {
-   Par_PutHiddenParamLong ("ExaCod",Gbl.ExamAnnouncements.ExaCodToEdit);
+   Exa_PutHiddenParamExaCod (Gbl.ExamAnnouncements.ExaCodToEdit);
+  }
+
+static void Exa_PutHiddenParamExaCod (long ExaCod)
+  {
+   Par_PutHiddenParamLong ("ExaCod",ExaCod);
+  }
+
+/*****************************************************************************/
+/********** Get parameter with the code of an exam announcement **************/
+/*****************************************************************************/
+
+static long Exa_GetParamExaCod (void)
+  {
+   char LongStr[1+10+1];	// String that holds the exam announcement code
+   long ExaCod;
+
+   /* Get notice code */
+   Par_GetParToText ("ExaCod",LongStr,1+10);
+   if (sscanf (LongStr,"%ld",&ExaCod) != 1)
+      ExaCod = -1L;
+
+   return ExaCod;
   }
 
 /*****************************************************************************/

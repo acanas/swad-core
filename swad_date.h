@@ -45,16 +45,22 @@
 
 struct Date
   {
-   unsigned Day,Month,Year,Week;
+   unsigned Day;
+   unsigned Month;
+   unsigned Year;
+   unsigned Week;
    char YYYYMMDD[4+2+2+1];
   };
 struct Time
   {
-   unsigned Hour,Minute,Second;
+   unsigned Hour;
+   unsigned Minute;
+   unsigned Second;
   };
 struct Hour
   {
-   unsigned Hour,Minute;
+   unsigned Hour;
+   unsigned Minute;
   };
 struct DateTime
   {
