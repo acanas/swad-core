@@ -568,7 +568,7 @@ a:hover						/* Default ==> underlined */
 	}
 .LEFT_RIGHT_CELL
 	{
-	padding:3px 6px;
+	padding:0 6px 6px 6px;
 	text-align:center;
 	vertical-align:top;
 	}
@@ -962,6 +962,25 @@ a:hover						/* Default ==> underlined */
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
+	}
+#MFU_actions img
+	{
+	width:20px;
+	height:20px;
+	margin:1px;
+	vertical-align:middle;
+	}
+
+#MFU_actions_big
+	{
+	padding:5px;
+	}
+#MFU_actions_big img
+	{
+	width:40px;
+	height:40px;
+	margin:1px 4px 1px 0;
+	vertical-align:middle;
 	}
 
 /*********************************** Month ***********************************/

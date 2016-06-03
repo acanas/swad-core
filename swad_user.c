@@ -46,6 +46,7 @@
 #include "swad_group.h"
 #include "swad_help.h"
 #include "swad_ID.h"
+#include "swad_MFU.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -2056,7 +2057,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	{
 	 if (Gbl.Usrs.Me.Logged)
 	   {
-	    if ((Action = Act_GetMyLastActionInCurrentTab ()) == ActUnk)
+	    if ((Action = MFU_GetMyLastActionInCurrentTab ()) == ActUnk)
 	       Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 	   }
 	 else

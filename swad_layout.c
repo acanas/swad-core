@@ -38,6 +38,7 @@
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_logo.h"
+#include "swad_MFU.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -932,7 +933,7 @@ static void Lay_WriteTitleAction (void)
 
 static void Lay_ShowLeftColumn (void)
   {
-   struct Act_ListMFUActions ListMFUActions;
+   struct MFU_ListMFUActions ListMFUActions;
 
    fprintf (Gbl.F.Out,"<div style=\"width:160px;\">");
 
@@ -940,10 +941,10 @@ static void Lay_ShowLeftColumn (void)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
-      Act_AllocateMFUActions (&ListMFUActions,6);
-      Act_GetMFUActions (&ListMFUActions,6);
-      Act_WriteSmallMFUActions (&ListMFUActions);
-      Act_FreeMFUActions (&ListMFUActions);
+      MFU_AllocateMFUActions (&ListMFUActions,6);
+      MFU_GetMFUActions (&ListMFUActions,6);
+      MFU_WriteSmallMFUActions (&ListMFUActions);
+      MFU_FreeMFUActions (&ListMFUActions);
       fprintf (Gbl.F.Out,"</div>");
      }
 

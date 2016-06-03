@@ -1477,12 +1477,6 @@ struct Act_Actions
    const char *Icon;
   };
 
-struct Act_ListMFUActions
-  {
-   unsigned NumActions;
-   Act_Action_t *Actions;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -1510,14 +1504,5 @@ void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
-
-void Act_AllocateMFUActions (struct Act_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
-void Act_FreeMFUActions (struct Act_ListMFUActions *ListMFUActions);
-void Act_GetMFUActions (struct Act_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
-Act_Action_t Act_GetMyLastActionInCurrentTab (void);
-void Act_ShowMyMFUActions (void);
-void Act_WriteBigMFUActions (struct Act_ListMFUActions *ListMFUActions);
-void Act_WriteSmallMFUActions (struct Act_ListMFUActions *ListMFUActions);
-void Act_UpdateMFUActions (void);
 
 #endif

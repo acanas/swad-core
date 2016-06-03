@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_degree.h"
 #include "swad_global.h"
+#include "swad_MFU.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_notification.h"
@@ -139,7 +140,7 @@ int main (int argc, char *argv[])
 	 Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
 
       /***** Update most frequently used actions *****/
-      Act_UpdateMFUActions ();
+      MFU_UpdateMFUActions ();
 
       /***** Execute a function depending on the action *****/
       if (Act_Actions[Gbl.Action.Act].FunctionPriori != NULL)
