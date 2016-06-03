@@ -132,27 +132,31 @@
 // TODO: Check value returned by setlocale in all calls
 // TODO: Write "Tab > Action" in title of text in most frequent actions
 // TODO: Fix bug in copy-paste from Briefcase to another file browser
-// TODO: Fix bug: Asignatura: Arquitectura de Computadores, Crear ZIP de todos los trabajos del grupo C3
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.216 (2016-06-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.217.1 (2016-06-01)"
 #define CSS_FILE		"swad15.210.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.216:   Jun 01, 2016	When clicking on an exam announcement, it will be shown alone. (201751 lines)
+        Version 15.217.1: Jun 03, 2016	Fixed bug when creating zip file for students works, reported by Francisco Barranco Expósito. (201809 lines)
+        Version 15.217:   Jun 01, 2016	When clicking on a social note associated to an exam announcement, show that exam announcement highlighted. (201801 lines)
 					1 change necessary in database:
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1571','es','N','Ver convocatoria');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1572','es','N','Ver convocatoria');
+
+        Version 15.216:   Jun 01, 2016	When clicking on a day on calendar, all exam announcements in that day are shown highlighted. (201751 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1571','es','N','Ver convocatorias de una fecha');
 
         Version 15.215:   Jun 01, 2016	List exam announcements as a list, like notices. (201670 lines)
         Version 15.214:   May 31, 2016	Fixed bug in renaming test tags. (201589 lines)
         Version 15.213:   May 31, 2016	Code refactoring related to renaming test tags.
-					Fixed bug in dates reported by Christian A. Morillas Gutiérrez. (201581 lines)
+					Fixed bug in dates, reported by Christian A. Morillas Gutiérrez. (201581 lines)
         Version 15.212.9: May 30, 2016	Link to list institutions of country in country configuration. (201567 lines)
         Version 15.212.8: May 30, 2016	Link to list centres of institution in institution configuration. (201555 lines)
         Version 15.212.7: May 30, 2016	Link to list degrees of centre in centre configuration. (201547 lines)

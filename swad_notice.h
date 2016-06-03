@@ -66,7 +66,7 @@ void Not_RevealHiddenNotice (void);
 void Not_RequestRemNotice (void);
 void Not_RemoveNotice (void);
 
-void Not_GetNotToShowHighlighted (void);
+void Not_GetNotCodToHighlight (void);
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit);
 void Not_GetSummaryAndContentNotice (char *SummaryStr,char **ContentStr,
                                      long NotCod,unsigned MaxChars,bool GetContent);

@@ -337,7 +337,7 @@ void Not_RemoveNotice (void)
 /********************* Get notice to show highlighted ************************/
 /*****************************************************************************/
 
-void Not_GetNotToShowHighlighted (void)
+void Not_GetNotCodToHighlight (void)
   {
    /***** Get the code of the notice to highlight *****/
    Gbl.CurrentCrs.Notices.HighlightNotCod = Not_GetParamNotCod ();

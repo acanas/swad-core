@@ -199,7 +199,7 @@ void Cal_DrawCurrentMonth (void)
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
    Act_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
-   Act_SetParamsForm (ParamsStr,ActSeeOneExaAnn,true);
+   Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",ParamsStr);
   }
@@ -269,7 +269,7 @@ void Cal_DrawCalendar (void)
    Act_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",
             ParamsStr);
-   Act_SetParamsForm (ParamsStr,ActSeeOneExaAnn,true);
+   Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
 	              "</script>",
 	    ParamsStr);

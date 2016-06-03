@@ -83,7 +83,6 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod);
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement);
 static void Exa_PutIconsExamAnnouncement (void);
 static void Exa_PutParamExaCodToEdit (void);
-static void Exa_PutHiddenParamExaCod (long ExaCod);
 static long Exa_GetParamExaCod (void);
 
 static void Exa_GetNotifContentExamAnnouncement (char **ContentStr);
@@ -423,10 +422,21 @@ static void Exa_ListExamAnnouncementsEdit (void)
   }
 
 /*****************************************************************************/
-/*************** Get exam announcement to show highlighted *******************/
+/*********** Get date of exam announcements to show highlighted **************/
 /*****************************************************************************/
 
-void Exa_GetExaToShowHighlighted (void)
+void Exa_GetExaCodToHighlight (void)
+  {
+   /***** Get the exam announcement code
+          of the exam announcement to highlight *****/
+   Gbl.ExamAnnouncements.HighlightExaCod = Exa_GetParamExaCod ();
+  }
+
+/*****************************************************************************/
+/*********** Get date of exam announcements to show highlighted **************/
+/*****************************************************************************/
+
+void Exa_GetDateToHighlight (void)
   {
    /***** Get the date (in YYYY-MM-DD format)
           of the exam announcements to highlight *****/
@@ -451,12 +461,49 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   /***** Show highlighted exam announcement *****/
+   /***** Show one highlighted exam announcement *****/
+   if (Gbl.ExamAnnouncements.HighlightExaCod > 0)
+     {
+      /***** Get one exam announcement from database *****/
+      sprintf (Query,"SELECT ExaCod"
+		     " FROM exam_announcements"
+		     " WHERE ExaCod='%ld' AND CrsCod='%ld' AND Status<>'%u'",
+	       Gbl.ExamAnnouncements.HighlightExaCod,
+	       Gbl.CurrentCrs.Crs.CrsCod,
+	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
+      NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
+
+      /***** List the existing exam announcements *****/
+      for (NumExaAnn = 0;
+	   NumExaAnn < NumExaAnns;
+	   NumExaAnn++)
+	{
+	 /***** Get the code of the exam announcement (row[0]) *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 if (sscanf (row[0],"%ld",&ExaCod) != 1)
+	    Lay_ShowErrorAndExit ("Wrong code of exam announcement.");
+
+	 /***** Allocate memory for the exam announcement *****/
+	 Exa_AllocMemExamAnnouncement ();
+
+	 /***** Read the data of the exam announcement *****/
+	 Exa_GetDataExamAnnouncementFromDB (ExaCod);
+
+	 /***** Show exam announcement *****/
+	 Exa_ShowExamAnnouncement (ExaCod,TypeViewExamAnnouncement);
+
+	 /***** Free memory of the exam announcement *****/
+	 Exa_FreeMemExamAnnouncement ();
+	}
+     }
+
+   /***** Show highlighted exam announcements of a date *****/
    if (Gbl.ExamAnnouncements.HighlightDate[0])
      {
       /***** Get exam announcements (the most recent first)
 	     in current course for a date from database *****/
-      sprintf (Query,"SELECT ExaCod,ExamDate"
+      sprintf (Query,"SELECT ExaCod"
 		     " FROM exam_announcements"
 		     " WHERE CrsCod='%ld' AND Status<>'%u'"
 		     " AND DATE(ExamDate)='%s'"
@@ -493,7 +540,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Get exam announcements (the most recent first)
           in current course from database *****/
-   sprintf (Query,"SELECT ExaCod,ExamDate"
+   sprintf (Query,"SELECT ExaCod"
 	          " FROM exam_announcements"
                   " WHERE CrsCod='%ld' AND Status<>'%u'"
                   " ORDER BY ExamDate DESC",
@@ -503,8 +550,9 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
-			Gbl.ExamAnnouncements.HighlightDate[0] ? Txt_All_announcements_of_exam :
-								 Txt_Announcements_of_exam,
+                        (Gbl.ExamAnnouncements.HighlightExaCod > 0 ||
+			 Gbl.ExamAnnouncements.HighlightDate[0]) ? Txt_All_announcements_of_exam :
+								   Txt_Announcements_of_exam,
 			ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 				   NULL);
 
@@ -1335,7 +1383,7 @@ static void Exa_PutParamExaCodToEdit (void)
    Exa_PutHiddenParamExaCod (Gbl.ExamAnnouncements.ExaCodToEdit);
   }
 
-static void Exa_PutHiddenParamExaCod (long ExaCod)
+void Exa_PutHiddenParamExaCod (long ExaCod)
   {
    Par_PutHiddenParamLong ("ExaCod",ExaCod);
   }

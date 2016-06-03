@@ -196,6 +196,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.ExamAnnouncements.NumExaAnns = 0;
    Gbl.ExamAnnouncements.Lst = NULL;
+   Gbl.ExamAnnouncements.HighlightExaCod = -1L;
    Gbl.ExamAnnouncements.HighlightDate[0] = '\0';	// No exam announcements highlighted
 
    Gbl.Usrs.Select.All =

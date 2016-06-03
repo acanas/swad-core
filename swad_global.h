@@ -482,6 +482,7 @@ struct Globals
       struct Date *Lst;	// List of dates of exam announcements
       unsigned NumExaAnns;	// Number of announcements of exam in the list
       long ExaCodToEdit;	// Used as parameter in contextual links
+      long HighlightExaCod;		// Exam announcement to be highlighted
       char HighlightDate[4+1+2+1+2+1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
       struct
 	{

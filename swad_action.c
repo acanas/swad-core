@@ -816,7 +816,8 @@ Assessment:
 	670. ActPrnCal			Show print view of the academic calendar of the course
 	671. ActChgCal1stDay		Change first day of week and show academic calendar of the course
 
-	NEW. ActSeeOneExaAnn		Show one exam announcement highlighted
+	NEW. ActSeeOneExaAnn		Show one exam announcement
+	NEW. ActSeeDatExaAnn		Show exam announcements of a given date
 	672. ActEdiExaAnn		Edit an exam announcement
 	673. ActRcvExaAnn		Receive an exam announcement
 	674. ActPrnExaAnn		Show an exam announcement ready to be printed
@@ -2183,7 +2184,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnCal		*/{  71,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Cal_DrawCalendar		,NULL},
    /* ActChgCal1stDay	*/{1485,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
 
-   /* ActSeeOneExaAnn	*/{1571,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetExaToShowHighlighted	,Exa_ListExamAnnouncementsSee	,NULL},
+   /* ActSeeOneExaAnn	*/{1572,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
+   /* ActSeeDatExaAnn	*/{1571,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetDateToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
    /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
    /* ActPrnExaAnn	*/{ 179,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Exa_PrintExamAnnouncement	,NULL},
@@ -2648,7 +2650,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRevAnn		*/{1471,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_RevealHiddenAnnouncement,Ann_ShowAllAnnouncements	,NULL},
    /* ActRemAnn		*/{1236,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_RemoveAnnouncement		,NULL},
 
-   /* ActSeeOneNot	*/{1164,-1,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_GetNotToShowHighlighted	,Not_ListFullNotices		,NULL},
+   /* ActSeeOneNot	*/{1164,-1,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_GetNotCodToHighlight	,Not_ListFullNotices		,NULL},
    /* ActWriNot		*/{  59,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ShowFormNotice		,NULL},
    /* ActRcvNot		*/{  60,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
    /* ActHidNot		*/{ 763,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_HideActiveNotice	,Not_ListFullNotices		,NULL},
@@ -4393,7 +4395,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActCnfID_Oth,		// #1568
 	ActCnfID_Std,		// #1569
 	ActCnfID_Tch,		// #1570
-	ActSeeOneExaAnn,	// #1571
+	ActSeeDatExaAnn,	// #1571
+	ActSeeOneExaAnn,	// #1572
 	};
 
 /*****************************************************************************/

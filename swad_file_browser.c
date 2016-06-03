@@ -3223,6 +3223,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
 	                                       Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+
+
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
 	       if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
 	                                       Gbl.CurrentCrs.Crs.CrsCod,

@@ -1528,7 +1528,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       ActReqDatShaCrs,		// Soc_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
-      ActSeeAllExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
+      ActSeeOneExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
 
       /* Users tab */
 
@@ -1629,7 +1629,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	    break;
 	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
 	    Act_FormStartUnique (Soc_DefaultActions[SocNot->NoteType]);
-	    Not_PutHiddenParamNotCod (SocNot->Cod);
+	    Exa_PutHiddenParamExaCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;

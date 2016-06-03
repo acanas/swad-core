@@ -260,20 +260,28 @@ void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    /***** Create a link in the tree of compression
           with a name that identifies the owner
           of the assignments and works *****/
-   sprintf (FullNameAndUsrID,"%s%s%s%s%s%s",
-	    UsrDat->Surname1 ,
-	    UsrDat->Surname1[0]  ? "_" :
-		                   "",
-	    UsrDat->Surname2 ,
-	    UsrDat->Surname2[0]  ? "_" :
-		                   "",
-   	    UsrDat->FirstName,
-   	    UsrDat->FirstName[0] ? "-" :
-   		                   "");
+   /* Create link name for this user */
+   strcpy (FullNameAndUsrID,UsrDat->Surname1);
+   if (UsrDat->Surname1[0] &&
+       UsrDat->Surname2[0])
+      strcat (FullNameAndUsrID,"_");	// Separation between surname 1 and surname 2
+   strcat (FullNameAndUsrID,UsrDat->Surname2);
+   if ((UsrDat->Surname1[0] ||
+	UsrDat->Surname2[0]) &&
+       UsrDat->FirstName[0])
+      strcat (FullNameAndUsrID,"_");	// Separation between surnames and first name
+   strcat (FullNameAndUsrID,UsrDat->FirstName);
+   if ((UsrDat->Surname1[0] ||
+	UsrDat->Surname2[0] ||
+	UsrDat->FirstName[0]) &&
+       UsrDat->IDs.Num)
+      strcat (FullNameAndUsrID,"-");	// Separation between name and ID
    Str_LimitLengthHTMLStr (FullNameAndUsrID,50);
-   strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// First user's ID
+   if (UsrDat->IDs.Num)	// If this user has at least one ID
+      strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// First user's ID
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
+   /* Create path to folder and link */
    sprintf (PathFolderUsrInsideCrs,"%s/usr/%02u/%ld",
 	    Gbl.CurrentCrs.PathPriv,
 	    (unsigned) (UsrDat->UsrCod % 100),
