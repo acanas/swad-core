@@ -1573,7 +1573,8 @@ static long Brw_GetCodForExpandedFolders (void);
 static long Brw_GetWorksUsrCodForExpandedFolders (void);
 
 static void Brw_RemoveExpiredClipboards (void);
-static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod);
+static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
+                                          long MyUsrCod,long WorksUsrCod);
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char *Path);
 static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
@@ -3643,8 +3644,14 @@ static void Brw_ShowFileBrowser (void)
 	 break;
      }
 
-   /***** If this is the (temporary) briefcase ==> remove old files *****/
-   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
+   /***** Every time user clicks in menu option to view
+          his/her (temporary) briefcase ==> remove old files *****/
+   if (Gbl.Action.Act == ActAdmBrf)
+      /* There are two reasons to not remove old files on any action in briefcase:
+         1) To avoid wasting time unnecessarily
+         2) To allow copying of files from briefcase,
+            because the clipboard is deleted every time file browswer changes
+      */
       Brw_RemoveOldFilesInBrowser (Brw_MAX_MONTHS_IN_BRIEFCASE,
                                    &Removed);	// Not used here
 
@@ -7472,7 +7479,8 @@ static void Brw_RemoveExpiredClipboards (void)
 /********* Remove clipboards with paths from a course or from a user *********/
 /*****************************************************************************/
 
-static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyUsrCod,long WorksUsrCod)
+static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
+                                          long MyUsrCod,long WorksUsrCod)
   {
    char Query[512];
 
@@ -7484,19 +7492,22 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
       case Brw_ADMI_SHARE_INS:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentIns.Ins.InsCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_ADMI_DOCUM_CTR:
       case Brw_ADMI_SHARE_CTR:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentCtr.Ctr.CtrCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Brw_ADMI_DOCUM_DEG:
       case Brw_ADMI_SHARE_DEG:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentDeg.Deg.DegCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_TEACH_CRS:
@@ -7504,7 +7515,8 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
       case Brw_ADMI_MARKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentCrs.Crs.CrsCod);
          break;
       case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_TEACH_GRP:
@@ -7512,19 +7524,22 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,long MyU
       case Brw_ADMI_MARKS_GRP:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentCrs.Grps.GrpCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_WORKS_USR:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
-                  MyUsrCod,(unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod);
+                  MyUsrCod,(unsigned) FileBrowser,
+                  Gbl.CurrentCrs.Crs.CrsCod);
          break;
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
                         " WHERE FileBrowser='%u' AND Cod='%ld' AND WorksUsrCod='%ld'",
-                  (unsigned) FileBrowser,Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod);
+                  (unsigned) FileBrowser,
+                  Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod);
          break;
       case Brw_ADMI_BRIEF_USR:
          sprintf (Query,"DELETE FROM clipboard"
@@ -11924,9 +11939,12 @@ static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *
                                 TimeRemoveFilesOlder,Removed);
 
    /***** Remove affected clipboards *****/
-   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				 Gbl.Usrs.Me.UsrDat.UsrCod,
-				 Gbl.Usrs.Other.UsrDat.UsrCod);
+   if (Removed->NumFiles ||
+       Removed->NumLinks ||
+       Removed->NumFolds)	// If anything has been changed
+      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Gbl.Usrs.Other.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
