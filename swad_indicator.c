@@ -64,7 +64,13 @@ static long Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
-static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,unsigned NumCrss,MYSQL_RES *mysql_res);
+
+static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+                                             unsigned NumCrss,MYSQL_RES *mysql_res);
+static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+                                              unsigned NumCrss);
+static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
+                                                  unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileBrowser,long CrsCod);
 
 /*****************************************************************************/
@@ -87,6 +93,8 @@ void Ind_ReqIndicatorsCourses (void)
    MYSQL_RES *mysql_res;
    unsigned Ind;
    unsigned NumCrss;
+   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
+   unsigned NumCrssToList;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
@@ -178,8 +186,25 @@ void Ind_ReqIndicatorsCourses (void)
    Act_FormEnd ();
 
    /***** Get courses from database *****/
+   // The result will contain courses with any number of indicators
+   // If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
+   // If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
+   //                                    with Gbl.Stat.NumIndicators set to yes
+   //                                    will be listed
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
-   if (Ind_GetIfShowBigList (NumCrss))
+
+   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
+
+   /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss);
+
+   if (Gbl.Stat.NumIndicators < 0)	// -1 means any number of indicators
+      NumCrssToList = NumCrss;
+   else
+      NumCrssToList = NumCrssWithIndicatorYes[(unsigned) Gbl.Stat.NumIndicators];
+
+   if (Ind_GetIfShowBigList (NumCrssToList))
      {
       /***** Show the stats of courses *****/
       /* Show table */
@@ -210,6 +235,7 @@ void Ind_ShowIndicatorsCourses (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
+   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
 
    /***** Get users range for statistics of courses *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
@@ -223,7 +249,7 @@ void Ind_ShowIndicatorsCourses (void)
 
    /***** Get degree type code *****/
    Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
-                                                                    -1L;
+                                                               -1L;
 
    /***** Get department code *****/
    Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
@@ -233,6 +259,12 @@ void Ind_ShowIndicatorsCourses (void)
 
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
+
+   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
+
+   /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss);
 
    /***** Show the stats of courses *****/
    Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_FULL,NumCrss,mysql_res);
@@ -487,10 +519,105 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
   }
 
 /*****************************************************************************/
+/** Get vector with numbers of courses with 0, 1, 2... indicators set to yes */
+/*****************************************************************************/
+
+static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+                                             unsigned NumCrss,MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   unsigned NumCrs;
+   long CrsCod;
+   unsigned Ind;
+   struct Ind_IndicatorsCrs Indicators;
+
+   /***** Reset counters of courses with each number of indicators *****/
+   for (Ind = 0;
+	Ind <= Ind_NUM_INDICATORS;
+	Ind++)
+      NumCrssWithIndicatorYes[Ind] = 0;
+
+   /***** List courses *****/
+   for (Gbl.RowEvenOdd = 1, NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+     {
+      /* Get next course */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get course code (row[2]) */
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
+         Lay_ShowErrorAndExit ("Wrong code of course.");
+
+      /* Get indicators of this course */
+      Ind_GetIndicatorsCrs (CrsCod,&Indicators);
+      NumCrssWithIndicatorYes[Indicators.CountIndicators]++;
+     }
+  }
+
+/*****************************************************************************/
+/** Show table with numbers of courses with 0, 1, 2... indicators set to yes */
+/*****************************************************************************/
+
+static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+                                              unsigned NumCrss)
+  {
+   extern const char *Txt_No_of_indicators;
+   extern const char *Txt_Courses;
+   extern const char *Txt_Total;
+   unsigned Ind;
+
+   /***** Write number of courses with each number of indicators valid *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	              " style=\"margin:0 auto;\">"
+                      "<tr>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_No_of_indicators,
+            Txt_Courses);
+   for (Ind = 0;
+	Ind <= Ind_NUM_INDICATORS;
+	Ind++)
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "(%.1f%%)"
+                         "</td>"
+                         "</tr>",
+               Ind,NumCrssWithIndicatorYes[Ind],
+               NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
+        	         0.0);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "(%.1f%%)"
+                      "</td>"
+                      "</tr>"
+                      "</table>",
+            Txt_Total,NumCrss,100.0);
+  }
+
+/*****************************************************************************/
 /****************** Get and show total number of courses *********************/
 /*****************************************************************************/
 
-static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,unsigned NumCrss,MYSQL_RES *mysql_res)
+static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
+                                                  unsigned NumCrss,MYSQL_RES *mysql_res)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Degree;
@@ -524,8 +651,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    MYSQL_ROW row;
    unsigned NumCrs;
    long CrsCod;
-   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
-   unsigned Ind;
    unsigned NumTchs;
    unsigned NumStds;
    struct Ind_IndicatorsCrs Indicators;
@@ -794,13 +919,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       break;
      }
 
-   /***** Reset counters of courses with each number of indicators *****/
-   for (Ind = 0;
-	Ind <= Ind_NUM_INDICATORS;
-	Ind++)
-      NumCrssWithIndicatorYes[Ind] = 0;
-
    /***** List courses *****/
+   mysql_data_seek (mysql_res, 0);
    for (Gbl.RowEvenOdd = 1, NumCrs = 0;
 	NumCrs < NumCrss;
 	NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
@@ -814,7 +934,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
       /* Get indicators of this course */
       Ind_GetIndicatorsCrs (CrsCod,&Indicators);
-      NumCrssWithIndicatorYes[Indicators.CountIndicators]++;
 
       if (Gbl.Stat.NumIndicators < 0 ||		// -1 means any number of indicators
           Gbl.Stat.NumIndicators == (long) Indicators.CountIndicators)
@@ -1169,50 +1288,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
-
-   /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_No_of_indicators,
-            Txt_Courses);
-   for (Ind = 0;
-	Ind <= Ind_NUM_INDICATORS;
-	Ind++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "(%.1f%%)"
-                         "</td>"
-                         "</tr>",
-               Ind,NumCrssWithIndicatorYes[Ind],
-               NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
-        	         0.0);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "(%.1f%%)"
-                      "</td>"
-                      "</tr>"
-                      "</table>",
-            Txt_Total,NumCrss,100.0);
   }
 
 /*****************************************************************************/
