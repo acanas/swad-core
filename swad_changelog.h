@@ -128,20 +128,20 @@
 // TODO: FIX BUG: In Statistics > Indicators, if we select only 5 indicators, the message "The list is too big..." is shown.
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, the he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: FIX BUG: Txt_Save_file_properties does not have sense in briefcase, because nothing to save (license should be editable in briefcase?)
-// TODO: In listing of courses, teachers column is before than students column. In edition of courses, students column is before teachers column.
-// TODO: Check value returned by setlocale in all calls
+// TODO: Check value returned by setlocale in all calls.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.218 (2016-06-03)"
+#define Log_PLATFORM_VERSION	"SWAD 15.218.1 (2016-06-04)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.218.1: Jun 04, 2016	Change in listing of courses. (201934 lines)
         Version 15.218:   Jun 03, 2016	New module swad_MFU for most frequently used actions.
 					Change in layout of most frequent actions. (201934 lines)
         Version 15.217.2: Jun 03, 2016	Fixed bug in copy-paste from briefcase to another file browser. (201827 lines)

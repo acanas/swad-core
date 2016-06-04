@@ -1143,7 +1143,7 @@ static void Crs_ListCourses (void)
 	   Year++)
 	 if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;	// ==> change color for the next year
-      Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
+      Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
@@ -1464,17 +1464,17 @@ static void Crs_ListCoursesForEdition (void)
                fprintf (Gbl.F.Out,"%s",Crs->FullName);
             fprintf (Gbl.F.Out,"</td>");
 
-            /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-        	               "%u"
-        	               "</td>",
-                     Crs->NumStds);
-
             /* Current number of teachers in this course */
             fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
         	               "%u"
         	               "</td>",
                      Crs->NumTchs);
+
+            /* Current number of students in this course */
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+        	               "%u"
+        	               "</td>",
+                     Crs->NumStds);
 
             /* Course status */
             StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1663,12 +1663,12 @@ static void Crs_PutFormToCreateCourse (void)
                       "</td>",
             Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
 
-   /***** Current number of students in this course *****/
+   /***** Current number of teachers in this course *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
 
-   /***** Current number of teachers in this course *****/
+   /***** Current number of students in this course *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
@@ -1705,8 +1705,8 @@ static void Crs_PutHeadCoursesForSeeing (void)
    extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -1751,8 +1751,8 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Short_name_of_the_course;
    extern const char *Txt_Full_name_of_the_course;
-   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
@@ -1795,8 +1795,8 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Year_OF_A_DEGREE,
             Txt_Short_name_of_the_course,
             Txt_Full_name_of_the_course,
-            Txt_Students_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,
+            Txt_Students_ABBREVIATION,
             Txt_Status,
             Txt_Requester);
   }
@@ -2079,11 +2079,11 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    strncpy (Crs->FullName,row[7],Crs_MAX_LENGTH_COURSE_FULL_NAME);
    Crs->FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
 
-   /***** Get number of students *****/
-   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs->CrsCod);
-
    /***** Get number of teachers *****/
    Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
+
+   /***** Get number of students *****/
+   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs->CrsCod);
 
    Crs->NumUsrs = Crs->NumStds + Crs->NumTchs;
   }
@@ -2879,8 +2879,8 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2925,8 +2925,8 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
                Txt_Degree,
                Txt_Year_OF_A_DEGREE,
                Txt_Course,
-               Txt_Students_ABBREVIATION,
-               Txt_Teachers_ABBREVIATION);
+               Txt_Teachers_ABBREVIATION,
+               Txt_Students_ABBREVIATION);
 
       /* Write courses */
       for (NumCrs = 1;
@@ -3036,8 +3036,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    struct Degree Deg;
    long CrsCod;
-   unsigned NumStds;
    unsigned NumTchs;
+   unsigned NumStds;
    const char *Style;
    const char *StyleNoBR;
    const char *BgColor;
@@ -3063,10 +3063,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
-   /***** Get number of students and teachers in this course *****/
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+   /***** Get number of teachers and students in this course *****/
    NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
-   if (NumStds + NumTchs)
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+   if (NumTchs + NumStds)
      {
       Style = "DAT_N";
       StyleNoBR = "DAT_NOBR_N";
@@ -3139,18 +3139,18 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Write number of students in course *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
-	              "%u"
-	              "</td>",
-            Style,BgColor,NumStds);
-
    /***** Write number of teachers in course *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
 	              "</td>"
 	              "</tr>",
             Style,BgColor,NumTchs);
+
+   /***** Write number of students in course *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
+	              "%u"
+	              "</td>",
+            Style,BgColor,NumStds);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
