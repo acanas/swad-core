@@ -3736,7 +3736,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                        "lowerScore or upperScore values not valid");
 
    /***** Start query *****/
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
  	          "tst_questions.AnsType,tst_questions.Shuffle,"
  	          "tst_questions.Stem,tst_questions.Feedback,"
@@ -3757,7 +3758,8 @@ int swad__getTrivialQuestion (struct soap *soap,
                   " ORDER BY RAND(NOW()) LIMIT 1",
             DegreesStr,DegreesStr,
             lowerScore,upperScore);
-   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
 
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test questions");
 

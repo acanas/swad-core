@@ -1172,7 +1172,8 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
    char Query[512];
 
    /***** Update number of clicks and score of the question *****/
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    if (AnswerIsNotBlank)
       sprintf (Query,"UPDATE tst_questions"
 	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,Score=Score+(%lf)"
@@ -1183,7 +1184,8 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 	             " SET NumHits=NumHits+1"
                      " WHERE QstCod='%ld'",
                QstCod);
-   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
    DB_QueryUPDATE (Query,"can not update the score of a question");
   }
 
@@ -2842,10 +2844,12 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
       /* Get the acumulated score of the question (row[11]) */
-      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
+      if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
       if (sscanf (row[11],"%lf",&TotalScoreThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong score of a question.");
-      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
 
       /* Write number of times this question has been answered */
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
@@ -5622,13 +5626,15 @@ double Tst_GetFloatAnsFromStr (char *Str)
    Str_ConvertStrFloatCommaToStrFloatPoint (Str);
 
    /***** The string is "scanned" in floating point (it must have a point, not a colon as decimal separator) *****/
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    if (sscanf (Str,"%lg",&DoubleNum) != 1)	// If the string does not hold a valid floating point number...
      {
       DoubleNum = 0.0;	// ...the number is reset to 0
       Str[0] = '\0';	// ...and the string is reset to ""
      }
-   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
 
    return DoubleNum;
   }
@@ -6046,7 +6052,8 @@ static void Tst_InsertAnswersIntoDB (void)
          DB_QueryINSERT (Query,"can not create answer");
          break;
       case Tst_ANS_FLOAT:
-         setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+	 if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
+	    Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    	 for (i = 0;
    	      i < 2;
    	      i++)
@@ -6059,7 +6066,8 @@ static void Tst_InsertAnswersIntoDB (void)
                      Gbl.Test.Answer.FloatingPoint[i]);
             DB_QueryINSERT (Query,"can not create answer");
            }
-         setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	 if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	    Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
          break;
       case Tst_ANS_TRUE_FALSE:
          sprintf (Query,"INSERT INTO tst_answers"
@@ -6482,10 +6490,12 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
       if (sscanf (row[1],"%lu",&(Stats->NumHits)) != 1)
          Lay_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
 
-      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
+      if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
       if (sscanf (row[2],"%lf",&(Stats->TotalScore)) != 1)
          Lay_ShowErrorAndExit ("Error when getting total score in test questions.");
-      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
      }
    else
      {
@@ -6938,13 +6948,15 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
    char Query[256];
 
    /***** Update score in test exam *****/
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    sprintf (Query,"UPDATE tst_exams"
 	          " SET NumQstsNotBlank='%u',Score='%lf'"
 	          " WHERE TstCod='%ld'",
             NumQstsNotBlank,Score,
             TstCod);
-   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
    DB_QueryUPDATE (Query,"can not update result of test exam");
   }
 
@@ -7174,7 +7186,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
             NumQstsNotBlankInThisExam = 0;
 
          /* Get score (row[5]) */
-         setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
+	 if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+	    Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
          if (sscanf (row[5],"%lf",&ScoreInThisExam) == 1)
            {
             if (Gbl.Test.AllowTeachers)
@@ -7182,7 +7195,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
            }
          else
             ScoreInThisExam = 0.0;
-         setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	 if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	    Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
 
          /* Write number of questions */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
@@ -7687,10 +7701,12 @@ static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
 	 *NumQstsNotBlank = 0;
 
       /* Get score (row[5]) */
-      setlocale (LC_NUMERIC,"en_US.utf8");	// To get decimal point
+      if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
       if (sscanf (row[5],"%lf",Score) != 1)
 	 *Score = 0.0;
-      setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
      }
 
    /***** Free structure that stores the query result *****/
@@ -7713,7 +7729,8 @@ static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,dou
    Par_ReplaceSeparatorMultipleByComma (Gbl.Test.StrAnswersOneQst[NumQst],Answers);
 
    /***** Insert question and user's answers into database *****/
-   setlocale (LC_NUMERIC,"en_US.utf8");	// To print the floating point as a dot
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    sprintf (Query,"INSERT INTO tst_exam_questions"
 		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		  " VALUES ('%ld','%ld','%u','%lf','%s','%s')",
@@ -7722,7 +7739,8 @@ static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,dou
 	    Score,
 	    Indexes,
 	    Answers);
-   setlocale (LC_NUMERIC,"es_ES.utf8");	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
+      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
    DB_QueryINSERT (Query,"can not insert a question of an exam");
   }
 

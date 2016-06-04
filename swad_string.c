@@ -867,10 +867,12 @@ float Str_GetFloatNumFromStr (const char *Str)
 
    if (Str)
      {
-      setlocale (LC_NUMERIC,"en_US.utf8");	// To get the decimal point
+      if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
       if (sscanf (Str,"%f",&Num) != 1)
          Lay_ShowErrorAndExit ("Bad floating point format.");
-      setlocale (LC_NUMERIC,"es_ES.utf8");
+      if (!setlocale (LC_NUMERIC,"es_ES.utf8"))
+	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
      }
    else // Str == NULL
       Num = 0.0;

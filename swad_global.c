@@ -83,7 +83,8 @@ void Gbl_InitializeGlobals (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    Txt_Language_t Lan;
 
-   setlocale (LC_ALL,"es_ES.utf8");
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))
+      exit (1);
 
    gettimeofday (&Gbl.tvStart, &Gbl.tz);
    Dat_GetStartExecutionTimeUTC ();
