@@ -566,10 +566,15 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    extern const char *Txt_Courses;
    extern const char *Txt_Total;
    unsigned Ind;
+   const char *Class;
+   const char *ClassNormal = "DAT RIGHT_MIDDLE";
+   const char *ClassHighlight = "DAT_N RIGHT_MIDDLE LIGHT_BLUE";
+   const char *ClassTotalNormal = "DAT_N_LINE_TOP RIGHT_MIDDLE";
+   const char *ClassTotalHighlight = "DAT_N_LINE_TOP RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"margin:0 auto;\">"
+	              " style=\"padding:10px; margin:0 auto;\">"
                       "<tr>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
@@ -583,33 +588,50 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    for (Ind = 0;
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
+     {
+      Class = (Ind == Gbl.Stat.NumIndicators) ? ClassHighlight :
+                                                ClassNormal;
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "<td class=\"%s\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "<td class=\"%s\">"
                          "%u"
                          "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "<td class=\"%s\">"
                          "(%.1f%%)"
                          "</td>"
                          "</tr>",
-               Ind,NumCrssWithIndicatorYes[Ind],
+               Class,
+               Ind,
+               Class,
+               NumCrssWithIndicatorYes[Ind],
+               Class,
                NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
         	         0.0);
+     }
+
+   /***** Write total of courses *****/
+   Class = (Gbl.Stat.NumIndicators < 0) ? ClassTotalHighlight :
+					  ClassTotalNormal;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "<td class=\"%s\">"
                       "%s"
                       "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "<td class=\"%s\">"
                       "%u"
                       "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "<td class=\"%s\">"
                       "(%.1f%%)"
                       "</td>"
                       "</tr>"
                       "</table>",
-            Txt_Total,NumCrss,100.0);
+            Class,
+            Txt_Total,
+            Class,
+            NumCrss,
+            Class,
+            100.0);
   }
 
 /*****************************************************************************/

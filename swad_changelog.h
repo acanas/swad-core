@@ -125,18 +125,20 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
+// TODO: Highlight row with number of indicators selected in blue background, as part of the form, instead of current field to select number of indicators
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.219 (2016-06-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.219.1 (2016-06-05)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.219.1: Jun 05, 2016	Highlighted row with number of indicators selected. (202023 lines)
         Version 15.219:   Jun 04, 2016	Changes in listing of indicators of courses. (202001 lines)
         Version 15.218.5: Jun 04, 2016	Fix bug in social notes, reported by Raymon Moreno Colina. (201940 lines)
 					2 changes necessary in database:

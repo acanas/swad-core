@@ -486,8 +486,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses,NULL);
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
