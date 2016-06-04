@@ -9236,7 +9236,6 @@ void Brw_ShowFileMetadata (void)
    bool ICanView = false;
    bool ICanEdit;
    bool ICanChangePublic = false;
-   bool ICanChangeLicense = false;
    bool FileHasPublisher;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
@@ -9326,6 +9325,8 @@ void Brw_ShowFileMetadata (void)
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    Act_FormStart (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
+
+	    /* Can the file be public? */
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOCUM_INS:
@@ -9336,40 +9337,27 @@ void Brw_ShowFileMetadata (void)
 	       case Brw_ADMI_SHARE_DEG:
 	       case Brw_ADMI_DOCUM_CRS:
 	       case Brw_ADMI_SHARE_CRS:
-		  ICanChangePublic  = true;
-		  ICanChangeLicense = true;
+		  ICanChangePublic = true;
 		  break;
-	       case Brw_ADMI_TEACH_CRS:
-		  ICanChangePublic  = false;	// A file in teachers' zones can not be public...
-		  ICanChangeLicense = true;	// ...but I can change its license
+	       default:
+		  ICanChangePublic = false;
 		  break;
+	      }
+
+	    /* Put extra parameters */
+	    switch (Gbl.FileBrowser.Type)
+	      {
 	       case Brw_ADMI_DOCUM_GRP:
 	       case Brw_ADMI_TEACH_GRP:
 	       case Brw_ADMI_SHARE_GRP:
 		  Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-		  ICanChangePublic  = false;	// A file in group zones can not be public...
-		  ICanChangeLicense = true;	// ...but I can change its license
-		  break;
-	       case Brw_ADMI_ASSIG_USR:
-	       case Brw_ADMI_WORKS_USR:
-		  ICanChangePublic  = false;	// A file in assignments or works zones can not be public...
-		  ICanChangeLicense = true;	// ...but I can change its license
 		  break;
 	       case Brw_ADMI_ASSIG_CRS:
 	       case Brw_ADMI_WORKS_CRS:
 		  Usr_PutHiddenParUsrCodAll (Brw_ActRecDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
 		  Usr_PutParamOtherUsrCodEncrypted ();
-		  ICanChangePublic  = false;	// A file in assignments or works zones can not be public...
-		  ICanChangeLicense = true;	// ...but I can change its license
-		  break;
-	       case Brw_ADMI_MARKS_GRP:
-		  Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-		  ICanChangePublic  = false;
-		  ICanChangeLicense = false;
 		  break;
 	       default:
-		  ICanChangePublic  = false;
-		  ICanChangeLicense = false;
 		  break;
 	      }
 	    Brw_ParamListFiles (FileMetadata.FileType,
@@ -9492,7 +9480,7 @@ void Brw_ShowFileMetadata (void)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_License);
-	 if (ICanChangeLicense)	// I can edit file properties
+	 if (ICanEdit)	// I can edit file properties
 	   {
 	    fprintf (Gbl.F.Out,"<select name=\"License\">");
 
@@ -9832,9 +9820,6 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
 
       case ActReqDatWrkCrs:		case ActChgDatWrkCrs:
       case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
-
-      case ActReqDatAdmMrkCrs:		case ActChgDatAdmMrkCrs:
-      case ActReqDatAdmMrkGrp:		case ActChgDatAdmMrkGrp:
 
       case ActReqDatBrf:		case ActChgDatBrf:
 	 if (Gbl.Usrs.Me.Logged)							// I am logged

@@ -1744,9 +1744,9 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
 
    /***** Store social note *****/
    sprintf (Query,"INSERT INTO social_notes"
-	          " (NoteType,UsrCod,HieCod,Cod,Unavailable,TimeNote)"
+	          " (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
                   " VALUES ('%u','%ld','%ld','%ld','N',NOW())",
-            (unsigned) NoteType,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod,Cod);
+            (unsigned) NoteType,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
    SocPub->NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
    /***** Publish social note in timeline *****/
@@ -4613,7 +4613,7 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
    sprintf (Query,"INSERT IGNORE INTO social_timelines (SessionId,NotCod)"
 	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
             Gbl.Session.Id);
-   DB_QueryREPLACE (Query,"can not insert social notes in timeline");
+   DB_QueryINSERT (Query,"can not insert social notes in timeline");
   }
 
 /*****************************************************************************/
