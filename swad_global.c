@@ -25,9 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <locale.h>		// For setlocale
 #include <limits.h>		// For INT_MAX, LONG_MAX
 #include <linux/stddef.h>	// For NULL
+#include <locale.h>		// For setlocale
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/time.h>		// For gettimeofday
@@ -83,7 +83,12 @@ void Gbl_InitializeGlobals (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    Txt_Language_t Lan;
 
-   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))
+   Gbl.Layout.WritingHTMLStart =
+   Gbl.Layout.HTMLStartWritten =
+   Gbl.Layout.DivsEndWritten   =
+   Gbl.Layout.HTMLEndWritten   = false;
+
+   if (!setlocale (LC_ALL,"es_ES.utf8"))   // TODO: this should be internationalized!!!!!!!
       exit (1);
 
    gettimeofday (&Gbl.tvStart, &Gbl.tz);
@@ -115,11 +120,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
 
    Gbl.Error = false;
-
-   Gbl.Layout.WritingHTMLStart =
-   Gbl.Layout.HTMLStartWritten =
-   Gbl.Layout.DivsEndWritten   =
-   Gbl.Layout.HTMLEndWritten   = false;
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;

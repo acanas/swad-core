@@ -79,6 +79,8 @@ char Str_ConvertToLowerLetter (char Ch);
 void Str_WriteFloatNum (float Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
 float Str_GetFloatNumFromStr (const char *Str);
+void Str_SetDecimalPointToUS (void);
+void Str_SetDecimalPointToLocal (void);
 
 void Str_AddStrToQuery (char *Query,const char *Str,size_t SizeOfQuery);
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,

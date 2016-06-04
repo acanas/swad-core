@@ -94,7 +94,6 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include <dirent.h>		// For scandir, etc.
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
-#include <locale.h>		// For setlocale, LC_NUMERIC...
 #include <sys/stat.h>		// For lstat
 #include <string.h>
 #include <stdsoap2.h>
@@ -3736,8 +3735,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                        "lowerScore or upperScore values not valid");
 
    /***** Start query *****/
-   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To print the floating point as a dot
-      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    sprintf (Query,"SELECT DISTINCTROW tst_questions.QstCod,"
  	          "tst_questions.AnsType,tst_questions.Shuffle,"
  	          "tst_questions.Stem,tst_questions.Feedback,"
@@ -3758,8 +3756,7 @@ int swad__getTrivialQuestion (struct soap *soap,
                   " ORDER BY RAND(NOW()) LIMIT 1",
             DegreesStr,DegreesStr,
             lowerScore,upperScore);
-   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to spanish system (TODO: this should be internationalized!!!!!!!)
-      Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
+   Str_SetDecimalPointToLocal ();	// Return to local system
 
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test questions");
 

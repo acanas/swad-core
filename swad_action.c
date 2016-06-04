@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
-#include <locale.h>		// For setlocale
 #include <stdio.h>		// For fprintf
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions

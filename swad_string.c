@@ -867,17 +867,38 @@ float Str_GetFloatNumFromStr (const char *Str)
 
    if (Str)
      {
-      if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get the decimal point
-	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
+      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
       if (sscanf (Str,"%f",&Num) != 1)
          Lay_ShowErrorAndExit ("Bad floating point format.");
-      if (!setlocale (LC_NUMERIC,"es_ES.utf8"))
-	 Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
+      Str_SetDecimalPointToLocal ();	// Return to local system
      }
    else // Str == NULL
       Num = 0.0;
 
    return Num;
+  }
+
+/*****************************************************************************/
+/**** Change decimal point to US system in order to get/print it as a dot ****/
+/*****************************************************************************/
+
+void Str_SetDecimalPointToUS (void)
+  {
+   if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get/print the floating point as a dot
+      if (Gbl.Layout.HTMLStartWritten)
+         Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
+  }
+
+/*****************************************************************************/
+/****************** Change decimal point to local system *********************/
+/*****************************************************************************/
+
+void Str_SetDecimalPointToLocal (void)
+  {
+   // TODO: this should be internationalized!!!!!!!
+   if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to local system
+      if (Gbl.Layout.HTMLStartWritten)
+         Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
   }
 
 /*****************************************************************************/
