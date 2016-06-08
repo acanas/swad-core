@@ -68,7 +68,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
 static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
-                                              unsigned NumCrss);
+                                              unsigned NumCrss,bool PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileBrowser,long CrsCod);
@@ -86,12 +86,10 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_only_if_the_scope_is_X;
    extern const char *Txt_Department;
    extern const char *Txt_No_of_indicators;
-   extern const char *Txt_Any_number;
    extern const char *Txt_Update_indicators;
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
    MYSQL_RES *mysql_res;
-   unsigned Ind;
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
    unsigned NumCrssToList;
@@ -149,33 +147,32 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Show only courses with a number of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
+
+   /***** Get courses from database *****/
+   /* The result will contain courses with any number of indicators
+      If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
+      If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
+                                         with Gbl.Stat.NumIndicators set to yes
+                                         will be listed */
+   NumCrss = Ind_GetTableOfCourses (&mysql_res);
+
+   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
+
+   /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<td class=\"RIGHT_TOP\">"
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Indicators\">",
+                      "<td class=\"LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_indicators);
-   fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Stat.NumIndicators < 0)
-      fprintf (Gbl.F.Out," selected=\"selected\"");
-   fprintf (Gbl.F.Out,">%s</option>",Txt_Any_number);
-   for (Ind = 0;
-	Ind <= Ind_NUM_INDICATORS;
-	Ind++)
-     {
-      fprintf (Gbl.F.Out,"<option");
-      if ((long) Ind == Gbl.Stat.NumIndicators)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%u</option>",Ind);
-     }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
+   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /* Send button */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
+                      "<td colspan=\"2\" class=\"CENTER_MIDDLE\" style=\"padding:10px 0\">");
    Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIconWithText (Txt_Update_indicators,Txt_Update_indicators);
    fprintf (Gbl.F.Out,"</td>"
@@ -185,28 +182,13 @@ void Ind_ReqIndicatorsCourses (void)
    /* End form */
    Act_FormEnd ();
 
-   /***** Get courses from database *****/
-   // The result will contain courses with any number of indicators
-   // If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
-   // If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
-   //                                    with Gbl.Stat.NumIndicators set to yes
-   //                                    will be listed
-   NumCrss = Ind_GetTableOfCourses (&mysql_res);
-
-   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
-
-   /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss);
-
+   /***** Show the stats of courses *****/
    if (Gbl.Stat.NumIndicators < 0)	// -1 means any number of indicators
       NumCrssToList = NumCrss;
    else
       NumCrssToList = NumCrssWithIndicatorYes[(unsigned) Gbl.Stat.NumIndicators];
-
    if (Ind_GetIfShowBigList (NumCrssToList))
      {
-      /***** Show the stats of courses *****/
       /* Show table */
       Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
 
@@ -264,7 +246,7 @@ void Ind_ShowIndicatorsCourses (void)
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss);
+   Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,false);
 
    /***** Show the stats of courses *****/
    Ind_ShowTableOfCoursesWithIndicators (Ind_INDICATORS_FULL,NumCrss,mysql_res);
@@ -560,11 +542,11 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+
 /*****************************************************************************/
 
 static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
-                                              unsigned NumCrss)
+                                              unsigned NumCrss,bool PutForm)
   {
    extern const char *Txt_No_of_indicators;
    extern const char *Txt_Courses;
-   extern const char *Txt_Total;
+   extern const char *Txt_Any_number;
    unsigned Ind;
    const char *Class;
    const char *ClassNormal = "DAT RIGHT_MIDDLE";
@@ -573,10 +555,11 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    const char *ClassTotalHighlight = "DAT_N_LINE_TOP RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"padding:10px; margin:0 auto;\">"
-                      "<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+                      "<tr>");
+   if (PutForm)
+      fprintf (Gbl.F.Out,"<th></th>");
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
@@ -591,8 +574,18 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
      {
       Class = (Ind == Gbl.Stat.NumIndicators) ? ClassHighlight :
                                                 ClassNormal;
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\">"
+      fprintf (Gbl.F.Out,"<tr>");
+      if (PutForm)
+	{
+	 fprintf (Gbl.F.Out,"<td class=\"%s\">"
+			    "<input type=\"radio\" name=\"Indicators\" value=\"%u\"",
+		  Class,Ind);
+	 if ((long) Ind == Gbl.Stat.NumIndicators)
+	    fprintf (Gbl.F.Out," checked=\"checked\"");
+	 fprintf (Gbl.F.Out," />"
+	                    "</td>");
+	}
+      fprintf (Gbl.F.Out,"<td class=\"%s\">"
                          "%u"
                          "</td>"
                          "<td class=\"%s\">"
@@ -614,8 +607,18 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    /***** Write total of courses *****/
    Class = (Gbl.Stat.NumIndicators < 0) ? ClassTotalHighlight :
 					  ClassTotalNormal;
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+   fprintf (Gbl.F.Out,"<tr>");
+   if (PutForm)
+     {
+      fprintf (Gbl.F.Out,"<td class=\"%s\">"
+			 "<input type=\"radio\" name=\"Indicators\" value=\"-1\"",
+               Class);
+      if (Gbl.Stat.NumIndicators < 0)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," />"
+			 "</td>");
+     }
+   fprintf (Gbl.F.Out,"<td class=\"%s\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s\">"
@@ -627,7 +630,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                       "</tr>"
                       "</table>",
             Class,
-            Txt_Total,
+            Txt_Any_number,
             Class,
             NumCrss,
             Class,
@@ -669,7 +672,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_No_of_indicators;
    extern const char *Txt_Courses;
-   extern const char *Txt_Total;
    MYSQL_ROW row;
    unsigned NumCrs;
    long CrsCod;
