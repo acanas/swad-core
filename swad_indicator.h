@@ -32,6 +32,8 @@
 /*****************************************************************************/
 
 #define Ind_NUM_INDICATORS 5
+#define Ind_MAX_SIZE_INDICATORS_SELECTED ((1+Ind_NUM_INDICATORS)*(10+1))
+
 struct Ind_IndicatorsCrs
   {
    unsigned long NumFilesInDocumentZones;

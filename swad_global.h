@@ -50,6 +50,7 @@
 #include "swad_image.h"
 #include "swad_import.h"
 #include "swad_icon.h"
+#include "swad_indicator.h"
 #include "swad_institution.h"
 #include "swad_layout.h"
 #include "swad_link.h"
@@ -708,7 +709,8 @@ struct Globals
       unsigned long RowsPerPage;
       long DegTypCod;
       long DptCod;
-      long NumIndicators;
+      char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED+1];
+      bool IndicatorsSelected[1+Ind_NUM_INDICATORS];
       struct
         {
          Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
@@ -719,13 +721,6 @@ struct Globals
          float MaxPercent;
         } DegPhotos;
      } Stat;
-   /*
-   struct
-     {
-      Img_Action_t Action;
-      Img_FileStatus_t Status;
-     } Image;
-   */
   };
 
 /*****************************************************************************/

@@ -60,7 +60,7 @@ typedef enum
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static long Ind_GetParamNumIndicators (void);
+static void Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
@@ -93,6 +93,7 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
    unsigned NumCrssToList;
+   unsigned Ind;
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
@@ -160,7 +161,7 @@ void Ind_ReqIndicatorsCourses (void)
 	              "</tr>");
 
    /* Selection of the number of indicators */
-   Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
+   Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label class=\"%s\">%s:</label>"
@@ -184,10 +185,11 @@ void Ind_ReqIndicatorsCourses (void)
    Act_FormEnd ();
 
    /***** Show the stats of courses *****/
-   if (Gbl.Stat.NumIndicators < 0)	// -1 means any number of indicators
-      NumCrssToList = NumCrss;
-   else
-      NumCrssToList = NumCrssWithIndicatorYes[(unsigned) Gbl.Stat.NumIndicators];
+   for (Ind = 0, NumCrssToList = 0;
+	Ind <= Ind_NUM_INDICATORS;
+	Ind++)
+      if (Gbl.Stat.IndicatorsSelected[Ind])
+         NumCrssToList += NumCrssWithIndicatorYes[Ind];
    if (Ind_GetIfShowBigList (NumCrssToList))
      {
       /* Show table */
@@ -198,7 +200,8 @@ void Ind_ReqIndicatorsCourses (void)
       Sco_PutParamScope (Gbl.Scope.Current);
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
       Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
-      Par_PutHiddenParamLong ("Indicators",Gbl.Stat.NumIndicators);
+      if (Gbl.Stat.StrIndicatorsSelected[0])
+         Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
       Lay_PutConfirmButton (Txt_Show_more_details);
       Act_FormEnd ();
      }
@@ -238,7 +241,7 @@ void Ind_ShowIndicatorsCourses (void)
    Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
 
    /***** Get number of indicators *****/
-   Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
+   Ind_GetParamNumIndicators ();
 
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
@@ -260,13 +263,48 @@ void Ind_ShowIndicatorsCourses (void)
 /*************** Get parameter with the number of indicators *****************/
 /*****************************************************************************/
 
-static long Ind_GetParamNumIndicators (void)
+static void Ind_GetParamNumIndicators (void)
   {
+   unsigned Ind;
+   const char *Ptr;
    char LongStr[1+10+1];
+   long Indicator;
 
-   /***** Get parameter with code of department *****/
-   Par_GetParToText ("Indicators",LongStr,1+10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get parameter multiple with list of indicators selected *****/
+   Par_GetParMultiToText ("Indicators",Gbl.Stat.StrIndicatorsSelected,Ind_MAX_SIZE_INDICATORS_SELECTED);
+
+   /***** Set which indicators have been selected (checkboxes on) *****/
+   if (Gbl.Stat.StrIndicatorsSelected[0])
+     {
+      /* Reset all indicators */
+      for (Ind = 0;
+	   Ind <= Ind_NUM_INDICATORS;
+	   Ind++)
+	 Gbl.Stat.IndicatorsSelected[Ind] = false;
+
+      /* Set indicators selected */
+      for (Ptr = Gbl.Stat.StrIndicatorsSelected;
+	   *Ptr;
+	   )
+	{
+	 /* Get next indicator selected */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	 Indicator = Str_ConvertStrCodToLongCod (LongStr);
+
+	 /* Set each indicator in list StrIndicatorsSelected as selected */
+	 for (Ind = 0;
+	      Ind <= Ind_NUM_INDICATORS;
+	      Ind++)
+	    if ((long) Ind == Indicator)
+	       Gbl.Stat.IndicatorsSelected[Ind] = true;
+	}
+     }
+   else
+      /* Set all indicators */
+      for (Ind = 0;
+	   Ind <= Ind_NUM_INDICATORS;
+	   Ind++)
+	 Gbl.Stat.IndicatorsSelected[Ind] = true;
   }
 
 /*****************************************************************************/
@@ -492,7 +530,8 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    Sco_PutParamScope (Gbl.Scope.Current);
    Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
    Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
-   Par_PutHiddenParamLong ("Indicators",Gbl.Stat.NumIndicators);
+   if (Gbl.Stat.StrIndicatorsSelected[0])
+      Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
 
    /***** Send button *****/
@@ -545,15 +584,13 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+
 static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
-   extern const char *Txt_No_of_indicators;
+   extern const char *Txt_Indicators;
    extern const char *Txt_Courses;
-   extern const char *Txt_Any_number;
+   extern const char *Txt_Total;
    unsigned Ind;
    const char *Class;
-   const char *ClassNormal = "DAT RIGHT_MIDDLE";
-   const char *ClassHighlight = "DAT_N RIGHT_MIDDLE LIGHT_BLUE";
-   const char *ClassTotalNormal = "DAT_N_LINE_TOP RIGHT_MIDDLE";
-   const char *ClassTotalHighlight = "DAT_N_LINE_TOP RIGHT_MIDDLE LIGHT_BLUE";
+   const char *ClassNormal = "DAT_LIGHT RIGHT_MIDDLE";
+   const char *ClassHighlight = "DAT RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
@@ -567,21 +604,21 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_No_of_indicators,
+            Txt_Indicators,
             Txt_Courses);
    for (Ind = 0;
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
      {
-      Class = (Ind == Gbl.Stat.NumIndicators) ? ClassHighlight :
-                                                ClassNormal;
+      Class = Gbl.Stat.IndicatorsSelected[Ind] ? ClassHighlight :
+                                                 ClassNormal;
       fprintf (Gbl.F.Out,"<tr>");
       if (PutForm)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">"
-			    "<input type=\"radio\" name=\"Indicators\" value=\"%u\"",
+			    "<input type=\"checkbox\" name=\"Indicators\" value=\"%u\"",
 		  Class,Ind);
-	 if ((long) Ind == Gbl.Stat.NumIndicators)
+	 if (Gbl.Stat.IndicatorsSelected[Ind])
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," />"
 	                    "</td>");
@@ -606,35 +643,23 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
      }
 
    /***** Write total of courses *****/
-   Class = (Gbl.Stat.NumIndicators < 0) ? ClassTotalHighlight :
-					  ClassTotalNormal;
    fprintf (Gbl.F.Out,"<tr>");
    if (PutForm)
-     {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">"
-			 "<input type=\"radio\" name=\"Indicators\" value=\"-1\"",
-               Class);
-      if (Gbl.Stat.NumIndicators < 0)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
+      fprintf (Gbl.F.Out,"<td>"
 			 "</td>");
-     }
-   fprintf (Gbl.F.Out,"<td class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%s"
                       "</td>"
-                      "<td class=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
-                      "<td class=\"%s\">"
+                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "(%.1f%%)"
                       "</td>"
                       "</tr>"
                       "</table>",
-            Class,
-            Txt_Any_number,
-            Class,
+            Txt_Total,
             NumCrss,
-            Class,
             100.0);
   }
 
@@ -960,8 +985,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       /* Get indicators of this course */
       Ind_GetIndicatorsCrs (CrsCod,&Indicators);
 
-      if (Gbl.Stat.NumIndicators < 0 ||		// -1 means any number of indicators
-          Gbl.Stat.NumIndicators == (long) Indicators.CountIndicators)
+      if (Gbl.Stat.IndicatorsSelected[Indicators.CountIndicators])
         {
          /* Write a row for this course */
          switch (IndicatorsLayout)

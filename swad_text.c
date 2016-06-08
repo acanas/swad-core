@@ -2804,27 +2804,6 @@ const char *Txt_Any_department =
 	"Qualquer departamento";
 #endif
 
-const char *Txt_Any_number =
-#if   L==1
-	"Qualsevol nombre";
-#elif L==2
-	"Alle Anzahl";
-#elif L==3
-	"Any number";
-#elif L==4
-	"Cualquier n&uacute;mero";
-#elif L==5
-	"Tout nombre";
-#elif L==6
-	"Cualquier n&uacute;mero";	// Okoteve traducción
-#elif L==7
-	"Qualsiasi numero";
-#elif L==8
-	"Wszystkie liczba";
-#elif L==9
-	"Qualquer n&uacute;mero";
-#endif
-
 const char *Txt_any_user =
 #if   L==1
 	"qualsevol usuari";
