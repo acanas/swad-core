@@ -71,7 +71,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                                               unsigned NumCrss,bool PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
-static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileBrowser,long CrsCod);
+static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod);
+static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod);
+static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod);
+static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod);
 
 /*****************************************************************************/
 /******************* Request showing statistics of courses *******************/
@@ -1346,14 +1349,8 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    Indicators->CountIndicators = 0;
 
    /* Get whether download zones are empty or not */
-   Indicators->NumFilesInDocumentZonesCrs = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_CRS,CrsCod);
-   Indicators->NumFilesInDocumentZonesGrp = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_DOCUM_GRP,CrsCod);
-   Indicators->NumFilesInDocumentZones    = Indicators->NumFilesInDocumentZonesCrs +
-	                                    Indicators->NumFilesInDocumentZonesGrp;
-   Indicators->NumFilesInSharedZonesCrs   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_CRS,CrsCod);
-   Indicators->NumFilesInSharedZonesGrp   = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_SHARE_GRP,CrsCod);
-   Indicators->NumFilesInSharedZones      = Indicators->NumFilesInSharedZonesCrs +
-	                                    Indicators->NumFilesInSharedZonesGrp;
+   Indicators->NumFilesInDocumentZones = Ind_GetNumFilesInDocumZonesOfCrsFromDB (CrsCod);
+   Indicators->NumFilesInSharedZones   = Ind_GetNumFilesInShareZonesOfCrsFromDB (CrsCod);
 
    /* Indicator #1: information about syllabus */
    Indicators->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
@@ -1367,8 +1364,8 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
 
    /* Indicator #2: information about assignments */
    Indicators->NumAssignments = Asg_GetNumAssignmentsInCrs (CrsCod);
-   Indicators->NumFilesAssignments = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_ASSIG_USR,CrsCod);
-   Indicators->NumFilesWorks       = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_WORKS_USR,CrsCod);
+   Indicators->NumFilesAssignments = Ind_GetNumFilesInAssigZonesOfCrsFromDB (CrsCod);
+   Indicators->NumFilesWorks       = Ind_GetNumFilesInWorksZonesOfCrsFromDB (CrsCod);
    Indicators->ThereAreAssignments = (Indicators->NumAssignments      != 0) ||
                                      (Indicators->NumFilesAssignments != 0) ||
                                      (Indicators->NumFilesWorks       != 0);
@@ -1405,23 +1402,33 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
   }
 
 /*****************************************************************************/
-/******* Get the number of files of a course file zone from database *********/
+/*********** Get the number of files in document zones of a course ***********/
 /*****************************************************************************/
 
-static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileBrowser,long CrsCod)
+static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumFiles = 0UL;
 
-   /***** Get number of files in a file browser from database *****/
-   sprintf (Query,"SELECT SUM(NumFiles)"
-                  " FROM file_browser_size"
-                  " WHERE FileBrowser='%u' AND Cod='%ld'",
-            (unsigned) Brw_FileBrowserForDB_files[FileBrowser],CrsCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files in a file browser");
+   /***** Get number of files in document zones of a course from database *****/
+   sprintf (Query,"SELECT"
+	          " (SELECT SUM(NumFiles)"
+		  " FROM file_browser_size"
+		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
+		  " (SELECT SUM(file_browser_size.NumFiles)"
+		  " FROM crs_grp_types,crs_grp,file_browser_size"
+		  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		  " AND file_browser_size.FileBrowser='%u'"
+		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOCUM_CRS],
+	    CrsCod,
+	    CrsCod,
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOCUM_GRP]);
+   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
@@ -1429,7 +1436,118 @@ static unsigned long Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_FileBrowser_t FileB
    /***** Get number of files (row[0]) *****/
    if (row[0])
       if (sscanf (row[0],"%lu",&NumFiles) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the number of files in a file browser.");
+         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumFiles;
+  }
+
+/*****************************************************************************/
+/*********** Get the number of files in shared zones of a course ***********/
+/*****************************************************************************/
+
+static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumFiles = 0UL;
+
+   /***** Get number of files in document zones of a course from database *****/
+   sprintf (Query,"SELECT"
+	          " (SELECT SUM(NumFiles)"
+		  " FROM file_browser_size"
+		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
+		  " (SELECT SUM(file_browser_size.NumFiles)"
+		  " FROM crs_grp_types,crs_grp,file_browser_size"
+		  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
+		  " AND file_browser_size.FileBrowser='%u'"
+		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHARE_CRS],
+	    CrsCod,
+	    CrsCod,
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHARE_GRP]);
+   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get number of files (row[0]) *****/
+   if (row[0])
+      if (sscanf (row[0],"%lu",&NumFiles) != 1)
+         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumFiles;
+  }
+
+/*****************************************************************************/
+/********* Get the number of files in assignment zones of a course ***********/
+/*****************************************************************************/
+
+static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumFiles = 0UL;
+
+   /***** Get number of files in document zones of a course from database *****/
+   sprintf (Query,"SELECT SUM(NumFiles)"
+		  " FROM file_browser_size"
+		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASSIG_USR],
+	    CrsCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get number of files (row[0]) *****/
+   if (row[0])
+      if (sscanf (row[0],"%lu",&NumFiles) != 1)
+         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumFiles;
+  }
+
+/*****************************************************************************/
+/************* Get the number of files in works zones of a course ************/
+/*****************************************************************************/
+
+static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   char Query[256];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumFiles = 0UL;
+
+   /***** Get number of files in document zones of a course from database *****/
+   sprintf (Query,"SELECT SUM(NumFiles)"
+		  " FROM file_browser_size"
+		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WORKS_USR],
+	    CrsCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get number of files (row[0]) *****/
+   if (row[0])
+      if (sscanf (row[0],"%lu",&NumFiles) != 1)
+         Lay_ShowErrorAndExit ("Error when getting the number of files.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -37,11 +37,7 @@
 struct Ind_IndicatorsCrs
   {
    unsigned long NumFilesInDocumentZones;
-   unsigned long NumFilesInDocumentZonesCrs;
-   unsigned long NumFilesInDocumentZonesGrp;
    unsigned long NumFilesInSharedZones;
-   unsigned long NumFilesInSharedZonesCrs;
-   unsigned long NumFilesInSharedZonesGrp;
    bool ThereIsSyllabus;
    Inf_InfoSrc_t TeachingGuideSrc;
    Inf_InfoSrc_t SyllabusLecSrc;
