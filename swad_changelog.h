@@ -134,14 +134,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.221.2 (2016-06-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.221.3 (2016-06-08)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.221.2: Jun 08, 2016	Fix bug in calculation of number of files in groups of a course.
+        Version 15.221.3: Jun 08, 2016	Fix bug in calculation of number of files in groups of a course. (202146 lines)
+        Version 15.221.2: Jun 08, 2016	Fix bug in calculation of number of files in groups of a course. (202149 lines)
         Version 15.221.1: Jun 08, 2016	Fix bug in form of indicators.
 				        Speed up database queries to get course info when getting indicators. (? lines)
         Version 15.221:   Jun 08, 2016	Single (radio) selection of number of indicators changed to multiple (checkbox) selection. (202028 lines)

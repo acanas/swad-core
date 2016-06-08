@@ -1411,14 +1411,14 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumFiles = 0UL;
+   unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
    sprintf (Query,"SELECT"
-	          " (SELECT SUM(NumFiles)"
+	          " (SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
-		  " (SELECT SUM(file_browser_size.NumFiles)"
+		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
 		  " FROM crs_grp_types,crs_grp,file_browser_size"
 		  " WHERE crs_grp_types.CrsCod='%ld'"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
@@ -1434,9 +1434,8 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get number of files (row[0]) *****/
-   if (row[0])
-      if (sscanf (row[0],"%lu",&NumFiles) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+   if (sscanf (row[0],"%lu",&NumFiles) != 1)
+      Lay_ShowErrorAndExit ("Error when getting the number of files.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1454,14 +1453,14 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumFiles = 0UL;
+   unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
    sprintf (Query,"SELECT"
-	          " (SELECT SUM(NumFiles)"
+	          " (SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
-		  " (SELECT SUM(file_browser_size.NumFiles)"
+		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
 		  " FROM crs_grp_types,crs_grp,file_browser_size"
 		  " WHERE crs_grp_types.CrsCod='%ld'"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
@@ -1477,9 +1476,8 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get number of files (row[0]) *****/
-   if (row[0])
-      if (sscanf (row[0],"%lu",&NumFiles) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+   if (sscanf (row[0],"%lu",&NumFiles) != 1)
+      Lay_ShowErrorAndExit ("Error when getting the number of files.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1497,10 +1495,10 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumFiles = 0UL;
+   unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT SUM(NumFiles)"
+   sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser='%u' AND Cod='%ld'",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASSIG_USR],
@@ -1511,9 +1509,8 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get number of files (row[0]) *****/
-   if (row[0])
-      if (sscanf (row[0],"%lu",&NumFiles) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+   if (sscanf (row[0],"%lu",&NumFiles) != 1)
+      Lay_ShowErrorAndExit ("Error when getting the number of files.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1531,10 +1528,10 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumFiles = 0UL;
+   unsigned long NumFiles;
 
    /***** Get number of files in document zones of a course from database *****/
-   sprintf (Query,"SELECT SUM(NumFiles)"
+   sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
 		  " WHERE FileBrowser='%u' AND Cod='%ld'",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WORKS_USR],
@@ -1545,9 +1542,8 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get number of files (row[0]) *****/
-   if (row[0])
-      if (sscanf (row[0],"%lu",&NumFiles) != 1)
-         Lay_ShowErrorAndExit ("Error when getting the number of files.");
+   if (sscanf (row[0],"%lu",&NumFiles) != 1)
+      Lay_ShowErrorAndExit ("Error when getting the number of files.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
