@@ -330,7 +330,7 @@ void Inf_ShowInfo (void)
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get info source from database *****/
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
 
    switch (Gbl.CurrentCrs.Info.Type)
      {
@@ -1044,7 +1044,7 @@ void Inf_FormsToSelSendInfo (void)
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get current info source from database *****/
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);
 
    /***** Check if info available *****/
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1455,12 +1455,45 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
      }
   }
 
+
 /*****************************************************************************/
-/********* Get info source for a type of course info from database ***********/
+/***** Get and check info source for a type of course info from database *****/
 /*****************************************************************************/
 
-void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                           Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
+Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
+  {
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   Inf_InfoSrc_t InfoSrc;
+
+   /***** Get info source for a specific type of info from database *****/
+   sprintf (Query,"SELECT InfoSrc FROM crs_info_src"
+	          " WHERE CrsCod='%ld' AND InfoType='%s'",
+            CrsCod,Inf_NamesInDBForInfoType[InfoType]);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get info source"))
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get info source (row[0]) */
+      InfoSrc = Inf_ConvertFromStrDBToInfoSrc (row[0]);
+     }
+   else
+      InfoSrc = Inf_INFO_SRC_NONE;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return InfoSrc;
+  }
+
+/*****************************************************************************/
+/***** Get and check info source for a type of course info from database *****/
+/*****************************************************************************/
+
+void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                                   Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1471,8 +1504,7 @@ void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
    *InfoSrc = Inf_INFO_SRC_NONE;
    *MustBeRead = false;
 
-   /***** Get info source for a specific type of course information
-          (bibliography, FAQ, links or evaluation) from database *****/
+   /***** Get info source for a specific type of info from database *****/
    sprintf (Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
 	          " WHERE CrsCod='%ld' AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
@@ -1587,7 +1619,7 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
       if (!strcmp (StrInfoSrcDB,Inf_NamesInDBForInfoSrc[InfoSrc]))
          return InfoSrc;
 
-   return (Inf_InfoSrc_t) 0;
+   return Inf_INFO_SRC_NONE;
   }
 
 /*****************************************************************************/

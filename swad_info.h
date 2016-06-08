@@ -85,8 +85,9 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc);
 void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc);
 Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void);
 void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc);
-void Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                           Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
+Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType);
+void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
+                                   Inf_InfoSrc_t *InfoSrc,bool *MustBeRead);
 Inf_InfoType_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
 Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer);

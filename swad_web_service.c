@@ -1292,7 +1292,7 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
    Gbl.CurrentCrs.Info.Type = InfoType;
-   Inf_GetInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
    getCourseInfo->infoSrc = (char *) soap_malloc (Gbl.soap,strlen (NamesInWSForInfoSrc[InfoSrc]) + 1);
    strcpy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc]);
 

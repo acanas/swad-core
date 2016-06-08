@@ -95,7 +95,21 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrssToList;
    unsigned Ind;
 
-   /***** Get scope *****/
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
+
+   /***** Form to update indicators *****/
+   /* Start form */
+   Act_FormStart (ActReqStaCrs);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+
+   /* Scope */
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label class=\"%s\">%s:</label>"
+                      "</td>"
+                      "<td class=\"LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
@@ -104,33 +118,6 @@ void Ind_ReqIndicatorsCourses (void)
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
-
-   /***** Get courses from database *****/
-   /* The result will contain courses with any number of indicators
-      If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
-      If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
-                                         with Gbl.Stat.NumIndicators set to yes
-                                         will be listed */
-   NumCrss = Ind_GetTableOfCourses (&mysql_res);
-
-   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
-
-   /***** Form to update indicators *****/
-   /* Start form */
-   Act_FormStart (ActReqStaCrs);
-
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                      "<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -159,6 +146,17 @@ void Ind_ReqIndicatorsCourses (void)
    Dpt_WriteSelectorDepartment (-1L);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
+
+   /***** Get courses from database *****/
+   /* The result will contain courses with any number of indicators
+      If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
+      If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
+                                         with Gbl.Stat.NumIndicators set to yes
+                                         will be listed */
+   NumCrss = Ind_GetTableOfCourses (&mysql_res);
+
+   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /* Selection of the number of indicators */
    Ind_GetParamNumIndicators ();
@@ -1345,7 +1343,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
 void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
   {
-   bool MustBeRead;	// Not used
    Indicators->CountIndicators = 0;
 
    /* Get whether download zones are empty or not */
@@ -1359,9 +1356,9 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
 	                                    Indicators->NumFilesInSharedZonesGrp;
 
    /* Indicator #1: information about syllabus */
-   Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES      ,&(Indicators->SyllabusLecSrc  ),&MustBeRead);
-   Inf_GetInfoSrcFromDB (CrsCod,Inf_PRACTICALS    ,&(Indicators->SyllabusPraSrc  ),&MustBeRead);
-   Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACHING_GUIDE,&(Indicators->TeachingGuideSrc),&MustBeRead);
+   Indicators->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
+   Indicators->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_PRACTICALS);
+   Indicators->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACHING_GUIDE);
    Indicators->ThereIsSyllabus = (Indicators->SyllabusLecSrc   != Inf_INFO_SRC_NONE) ||
                                  (Indicators->SyllabusPraSrc   != Inf_INFO_SRC_NONE) ||
                                  (Indicators->TeachingGuideSrc != Inf_INFO_SRC_NONE);
@@ -1371,7 +1368,7 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    /* Indicator #2: information about assignments */
    Indicators->NumAssignments = Asg_GetNumAssignmentsInCrs (CrsCod);
    Indicators->NumFilesAssignments = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_ASSIG_USR,CrsCod);
-   Indicators->NumFilesWorks       = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_WORKS_USR      ,CrsCod);
+   Indicators->NumFilesWorks       = Ind_GetNumFilesOfCrsFileZoneFromDB (Brw_ADMI_WORKS_USR,CrsCod);
    Indicators->ThereAreAssignments = (Indicators->NumAssignments      != 0) ||
                                      (Indicators->NumFilesAssignments != 0) ||
                                      (Indicators->NumFilesWorks       != 0);
@@ -1395,7 +1392,7 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
       Indicators->CountIndicators++;
 
    /* Indicator #5: information about assessment */
-   Inf_GetInfoSrcFromDB (CrsCod,Inf_ASSESSMENT,&(Indicators->AssessmentSrc),&MustBeRead);
+   Indicators->AssessmentSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_ASSESSMENT);
    Indicators->ThereIsAssessment = (Indicators->AssessmentSrc    != Inf_INFO_SRC_NONE) ||
                                    (Indicators->TeachingGuideSrc != Inf_INFO_SRC_NONE);
    if (Indicators->ThereIsAssessment)
