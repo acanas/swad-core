@@ -94,6 +94,27 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
    unsigned NumCrssToList;
 
+   /***** Get scope *****/
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Sco_GetScope ();
+
+   /***** Get courses from database *****/
+   /* The result will contain courses with any number of indicators
+      If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
+      If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
+                                         with Gbl.Stat.NumIndicators set to yes
+                                         will be listed */
+   NumCrss = Ind_GetTableOfCourses (&mysql_res);
+
+   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
+
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
 
@@ -108,14 +129,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -145,21 +159,8 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* Show only courses with a number of indicators */
+   /* Selection of the number of indicators */
    Gbl.Stat.NumIndicators = Ind_GetParamNumIndicators ();
-
-   /***** Get courses from database *****/
-   /* The result will contain courses with any number of indicators
-      If Gbl.Stat.NumIndicators <  0 ==> all courses in result will be listed
-      If Gbl.Stat.NumIndicators >= 0 ==> only those courses in result
-                                         with Gbl.Stat.NumIndicators set to yes
-                                         will be listed */
-   NumCrss = Ind_GetTableOfCourses (&mysql_res);
-
-   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
-
-   /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label class=\"%s\">%s:</label>"
