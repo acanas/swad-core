@@ -71,7 +71,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                                               unsigned NumCrss,bool PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
-static void Ind_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
+static int Ind_GetNumIndicatorsCrsFromDB (long CrsCod);
+static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators);
+static void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+                                              struct Ind_IndicatorsCrs *Indicators);
 static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod);
 static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod);
 static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod);
@@ -705,7 +708,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    long CrsCod;
    unsigned NumTchs;
    unsigned NumStds;
-   int NumIndicatorsFromDB;
+   unsigned NumIndicators;
    struct Ind_IndicatorsCrs Indicators;
 
    /***** Table start *****/
@@ -985,358 +988,363 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of course.");
 
-      /* Compute indicators of this course */
-      NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (CrsCod);
-      Ind_ComputeAndStoreIndicatorsCrs (CrsCod,NumIndicatorsFromDB,&Indicators);
+      /* Get stored number of indicators of this course */
+      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
+      if (Gbl.Stat.IndicatorsSelected[NumIndicators])
+	{
+	 /* Compute and store indicators */
+	 Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&Indicators);
 
-      if (Gbl.Stat.IndicatorsSelected[Indicators.CountIndicators])
-        {
-         /* Write a row for this course */
-         switch (IndicatorsLayout)
-           {
-            case Ind_INDICATORS_BRIEF:
-               fprintf (Gbl.F.Out,"<tr>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
-                                  "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
-                                  "%s/?crs=%ld&amp;act=%ld"
-                                  "</a>"
-                                  "</td>"
+	 /* The number of indicators may have changed */
+	 if (Gbl.Stat.IndicatorsSelected[Indicators.CountIndicators])
+	   {
+	    /* Write a row for this course */
+	    switch (IndicatorsLayout)
+	      {
+	       case Ind_INDICATORS_BRIEF:
+		  fprintf (Gbl.F.Out,"<tr>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
+				     "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
+				     "%s/?crs=%ld&amp;act=%ld"
+				     "</a>"
+				     "</td>"
 
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "</tr>",
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[0],
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[1],
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[3],
-                        Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-                                       Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "</tr>",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[0],
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[1],
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[3],
+			   Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+					  Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        Indicators.CountIndicators,
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   Indicators.CountIndicators,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsSyllabus ? Txt_YES :
-                                                     "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsSyllabus ? "" :
-                                                     Txt_NO,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsSyllabus ? Txt_YES :
+							"",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsSyllabus ? "" :
+							Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereAreAssignments ? Txt_YES :
-                                                         "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereAreAssignments ? "" :
-                                                         Txt_NO,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? Txt_YES :
+							    "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? "" :
+							    Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsOnlineTutoring ? Txt_YES :
-                                                           "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsOnlineTutoring ? "" :
-                                                           Txt_NO,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? Txt_YES :
+							      "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? "" :
+							      Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereAreMaterials ? Txt_YES :
-                                                       "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereAreMaterials ? "" :
-                                                       Txt_NO,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? Txt_YES :
+							  "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? "" :
+							  Txt_NO,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsAssessment ? Txt_YES :
-                                                       "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsAssessment ? "" :
-                                                       Txt_NO);
-               break;
-            case Ind_INDICATORS_FULL:
-               /* Get number of users */
-               NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
-               NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? Txt_YES :
+							  "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? "" :
+							  Txt_NO);
+		  break;
+	       case Ind_INDICATORS_FULL:
+		  /* Get number of users */
+		  NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+		  NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
 
-               fprintf (Gbl.F.Out,"<tr>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
-                                  "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
-                                  "%s/?crs=%ld&amp;act=%ld"
-                                  "</a>"
-                                  "</td>"
+		  fprintf (Gbl.F.Out,"<tr>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
+				     "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
+				     "%s/?crs=%ld&amp;act=%ld"
+				     "</a>"
+				     "</td>"
 
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
 
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%lu"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%lu"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%u"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%lu"
-                                  "</td>"
-                                  "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-                                  "%lu"
-                                  "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu"
+				     "</td>"
+				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu"
+				     "</td>"
 
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-                                  "%s"
-                                  "</td>"
-                                  "</tr>",
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[0],
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[1],
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        row[3],
-                        Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-                                       Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s"
+				     "</td>"
+				     "</tr>",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[0],
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[1],
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[3],
+			   Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+					  Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
-                        NumTchs != 0 ? "DAT_SMALL_GREEN" :
-                                       "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        NumTchs,
-                        NumStds != 0 ? "DAT_SMALL_GREEN" :
-                                       "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        NumStds,
+			   NumTchs != 0 ? "DAT_SMALL_GREEN" :
+					  "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   NumTchs,
+			   NumStds != 0 ? "DAT_SMALL_GREEN" :
+					  "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   NumStds,
 
-                        Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-                        (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-                                                        "DAT_SMALL_RED"),
-                        Gbl.RowEvenOdd,
-                        Indicators.CountIndicators,
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   Indicators.CountIndicators,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsSyllabus ? Txt_YES :
-                                                     "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsSyllabus ? "" :
-                                                     Txt_NO,
-                        (Indicators.SyllabusLecSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-                                                                           "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc],
-                        (Indicators.SyllabusPraSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-                                                                           "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc],
-                        (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-                                                                             "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc],
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsSyllabus ? Txt_YES :
+							"",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsSyllabus ? "" :
+							Txt_NO,
+			   (Indicators.SyllabusLecSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+									      "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc],
+			   (Indicators.SyllabusPraSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+									      "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc],
+			   (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+										"DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc],
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereAreAssignments ? Txt_YES :
-                                                         "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereAreAssignments ? "" :
-                                                         Txt_NO,
-                        (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
-                                                           "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumAssignments,
-                        (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
-                                                                "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumFilesAssignments,
-                        (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
-                                                          "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumFilesWorks,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? Txt_YES :
+							    "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? "" :
+							    Txt_NO,
+			   (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
+							      "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumAssignments,
+			   (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
+								   "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesAssignments,
+			   (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
+							     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesWorks,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsOnlineTutoring ? Txt_YES :
-                                                           "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsOnlineTutoring ? "" :
-                                                           Txt_NO,
-                        (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
-                                                       "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumThreads,
-                        (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
-                                                     "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumPosts,
-                        (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
-                                                              "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumMsgsSentByTchs,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? Txt_YES :
+							      "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? "" :
+							      Txt_NO,
+			   (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
+							  "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumThreads,
+			   (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
+							"DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumPosts,
+			   (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
+								 "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumMsgsSentByTchs,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereAreMaterials ? Txt_YES :
-                                                       "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereAreMaterials ? "" :
-                                                       Txt_NO,
-                        (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
-                                                                    "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumFilesInDocumentZones,
-                        (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
-                                                                  "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Indicators.NumFilesInSharedZones,
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? Txt_YES :
+							  "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? "" :
+							  Txt_NO,
+			   (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
+								       "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesInDocumentZones,
+			   (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
+								     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesInSharedZones,
 
-                        "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-                        Indicators.ThereIsAssessment ? Txt_YES :
-                                                       "",
-                        "DAT_SMALL_RED",Gbl.RowEvenOdd,
-                        Indicators.ThereIsAssessment ? "" :
-                                                       Txt_NO,
-                        (Indicators.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-                                                                          "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc],
-                        (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-                                                                             "DAT_SMALL_RED",
-                        Gbl.RowEvenOdd,
-                        Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
-               break;
-              }
-        }
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? Txt_YES :
+							  "",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? "" :
+							  Txt_NO,
+			   (Indicators.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+									     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc],
+			   (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+										"DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
+		  break;
+		 }
+	   }
+	}
      }
 
    /***** End table *****/
@@ -1370,7 +1378,7 @@ unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
 /************ Get number of indicators of a course from database *************/
 /*****************************************************************************/
 
-int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
+static int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
@@ -1400,7 +1408,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 /************ Store number of indicators of a course in database *************/
 /*****************************************************************************/
 
-static void Ind_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
+static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
   {
    char Query[128];
 
@@ -1416,8 +1424,8 @@ static void Ind_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
 /* If number of indicators stored in database is different
    from number of indicators just computed ==> update it into database */
 
-void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
-                                       struct Ind_IndicatorsCrs *Indicators)
+static void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+                                              struct Ind_IndicatorsCrs *Indicators)
   {
    /***** Initialize number of indicators *****/
    Indicators->CountIndicators = 0;
@@ -1477,7 +1485,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    /***** Update number of indicators into database
           if different to the stored one *****/
    if (NumIndicatorsFromDB != (int) Indicators->CountIndicators)
-      Ind_StoreIndicatorsCrs (CrsCod,Indicators->CountIndicators);
+      Ind_StoreIndicatorsCrsIntoDB (CrsCod,Indicators->CountIndicators);
   }
 
 /*****************************************************************************/
