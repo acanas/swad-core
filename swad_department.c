@@ -1106,9 +1106,6 @@ void Dpt_WriteSelectorDepartment (long InsCod)
    extern const char *Txt_Any_department;
    unsigned NumDpt;
 
-   /***** Get department code *****/
-   Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
-
    /***** Form to select department *****/
    /* Get list of departments */
    Dpt_GetListDepartments (InsCod);

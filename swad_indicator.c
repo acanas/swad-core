@@ -102,6 +102,23 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned NumCrssToList;
    unsigned Ind;
 
+   /***** Get parameters *****/
+   /* Get scope */
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
+		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Sco_GetScope ();
+
+   /* Get degree type code */
+   Gbl.Stat.DegTypCod = DT_GetParamOtherDegTypCod ();
+
+   /* Get department code */
+   Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
+
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
 
@@ -117,14 +134,6 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
    Sco_PutSelectorScope (false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

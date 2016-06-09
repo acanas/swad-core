@@ -88,9 +88,6 @@ void DT_WriteSelectorDegreeTypes (void)
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
 
-   /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = DT_GetParamOtherDegTypCod ();
-
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes ();
 

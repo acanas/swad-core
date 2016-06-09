@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.222.1 (2016-06-09)"
+#define Log_PLATFORM_VERSION	"SWAD 15.222.2 (2016-06-09)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.222.2: Jun 09, 2016	Code refactoring in indicators. (202233 lines)
         Version 15.222.1: Jun 09, 2016	Optimization in number of indicators. (202230 lines)
         Version 15.222:   Jun 09, 2016	Number of indicators is stored in table of courses. (202224 lines)
         Version 15.221.4: Jun 09, 2016	New columns in table of courses to store number of indicators. (202153 lines)
