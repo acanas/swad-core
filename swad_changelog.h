@@ -126,6 +126,7 @@
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: Do not show users without name in users to follow
+// TODO: Store number of indicators of a course in database table courses. When should this number be updated?
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -134,13 +135,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.221.3 (2016-06-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.221.4 (2016-06-09)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.221.4: Jun 09, 2016	Number of indicators is stored in table of courses. (202153 lines)
+					1 change necessary in database:
+ALTER TABLE courses ADD COLUMN NumIndicators INT NOT NULL DEFAULT -1 AFTER FullName;
+
         Version 15.221.3: Jun 08, 2016	Fix bug in calculation of number of files in groups of a course. (202146 lines)
         Version 15.221.2: Jun 08, 2016	Fix bug in calculation of number of files in groups of a course. (202149 lines)
         Version 15.221.1: Jun 08, 2016	Fix bug in form of indicators.

@@ -241,6 +241,7 @@ CREATE TABLE IF NOT EXISTS courses (
         RequesterUsrCod INT NOT NULL DEFAULT -1,
 	ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,
 	FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,
+	NumIndicators INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(CrsCod),
 	INDEX(DegCod,Year),
 	INDEX(Status));

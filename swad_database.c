@@ -567,8 +567,9 @@ mysql> DESCRIBE courses;
 | RequesterUsrCod | int(11)      | NO   |     | -1      |                |
 | ShortName       | varchar(32)  | NO   |     | NULL    |                |
 | FullName        | varchar(127) | NO   |     | NULL    |                |
+| NumIndicators   | int(11)      | NO   |     | -1      |                |
 +-----------------+--------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
                    "CrsCod INT NOT NULL AUTO_INCREMENT,"
@@ -579,6 +580,7 @@ mysql> DESCRIBE courses;
                    "RequesterUsrCod INT NOT NULL DEFAULT -1,"
                    "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
                    "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
+                   "NumIndicators INT NOT NULL DEFAULT -1,"
                    "UNIQUE INDEX(CrsCod),"
                    "INDEX(DegCod,Year),"
                    "INDEX(Status))");
