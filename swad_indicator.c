@@ -71,6 +71,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                                               unsigned NumCrss,bool PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
+static void Ind_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
 static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod);
 static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod);
 static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod);
@@ -552,7 +553,7 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+
    unsigned NumCrs;
    long CrsCod;
    unsigned Ind;
-   struct Ind_IndicatorsCrs Indicators;
+   unsigned NumIndicators;
 
    /***** Reset counters of courses with each number of indicators *****/
    for (Ind = 0;
@@ -572,9 +573,9 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of course.");
 
-      /* Get indicators of this course */
-      Ind_GetIndicatorsCrs (CrsCod,&Indicators);
-      NumCrssWithIndicatorYes[Indicators.CountIndicators]++;
+      /* Get number of indicators of this course */
+      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
+      NumCrssWithIndicatorYes[NumIndicators]++;
      }
   }
 
@@ -704,6 +705,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    long CrsCod;
    unsigned NumTchs;
    unsigned NumStds;
+   int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
 
    /***** Table start *****/
@@ -983,8 +985,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of course.");
 
-      /* Get indicators of this course */
-      Ind_GetIndicatorsCrs (CrsCod,&Indicators);
+      /* Compute indicators of this course */
+      NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (CrsCod);
+      Ind_ComputeAndStoreIndicatorsCrs (CrsCod,NumIndicatorsFromDB,&Indicators);
 
       if (Gbl.Stat.IndicatorsSelected[Indicators.CountIndicators])
         {
@@ -1341,18 +1344,89 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
   }
 
 /*****************************************************************************/
-/********************** Calculate indicators of a course *********************/
+/************ Get number of indicators of a course from database *************/
+/************ If not stored ==> compute and store it             *************/
 /*****************************************************************************/
 
-void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
+unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
   {
+   unsigned NumIndicators;
+   struct Ind_IndicatorsCrs Indicators;
+   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (CrsCod);
+
+   /***** If number of indicators is not already computed ==> compute it! *****/
+   if (NumIndicatorsFromDB >= 0)
+      NumIndicators = (unsigned) NumIndicatorsFromDB;
+   else	// Number of indicators is not already computed
+     {
+      /***** Compute and store number of indicators *****/
+      Ind_ComputeAndStoreIndicatorsCrs (CrsCod,NumIndicatorsFromDB,&Indicators);
+      NumIndicators = Indicators.CountIndicators;
+     }
+   return NumIndicators;
+  }
+
+/*****************************************************************************/
+/************ Get number of indicators of a course from database *************/
+/*****************************************************************************/
+
+int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   int NumIndicatorsFromDB;
+
+   /***** Get number of files in document zones of a course from database *****/
+   sprintf (Query,"SELECT NumIndicators FROM courses WHERE CrsCod='%ld'",
+	    CrsCod);
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get number of indicators"))
+     {
+      /***** Get row *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Get number of indicators (row[0]) *****/
+      if (sscanf (row[0],"%d",&NumIndicatorsFromDB) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting number of indicators.");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumIndicatorsFromDB;
+  }
+
+/*****************************************************************************/
+/************ Store number of indicators of a course in database *************/
+/*****************************************************************************/
+
+static void Ind_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
+  {
+   char Query[128];
+
+   /***** Store number of indicators of a course in database *****/
+   sprintf (Query,"UPDATE courses SET NumIndicators='%u' WHERE CrsCod='%ld'",
+            NumIndicators,CrsCod);
+   DB_QueryUPDATE (Query,"can not store number of indicators of a course");
+  }
+
+/*****************************************************************************/
+/********************* Compute indicators of a course ************************/
+/*****************************************************************************/
+/* If number of indicators stored in database is different
+   from number of indicators just computed ==> update it into database */
+
+void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+                                       struct Ind_IndicatorsCrs *Indicators)
+  {
+   /***** Initialize number of indicators *****/
    Indicators->CountIndicators = 0;
 
-   /* Get whether download zones are empty or not */
+   /***** Get whether download zones are empty or not *****/
    Indicators->NumFilesInDocumentZones = Ind_GetNumFilesInDocumZonesOfCrsFromDB (CrsCod);
    Indicators->NumFilesInSharedZones   = Ind_GetNumFilesInShareZonesOfCrsFromDB (CrsCod);
 
-   /* Indicator #1: information about syllabus */
+   /***** Indicator #1: information about syllabus *****/
    Indicators->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
    Indicators->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_PRACTICALS);
    Indicators->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACHING_GUIDE);
@@ -1362,7 +1436,7 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    if (Indicators->ThereIsSyllabus)
       Indicators->CountIndicators++;
 
-   /* Indicator #2: information about assignments */
+   /***** Indicator #2: information about assignments *****/
    Indicators->NumAssignments = Asg_GetNumAssignmentsInCrs (CrsCod);
    Indicators->NumFilesAssignments = Ind_GetNumFilesInAssigZonesOfCrsFromDB (CrsCod);
    Indicators->NumFilesWorks       = Ind_GetNumFilesInWorksZonesOfCrsFromDB (CrsCod);
@@ -1372,7 +1446,7 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    if (Indicators->ThereAreAssignments)
       Indicators->CountIndicators++;
 
-   /* Indicator #3: information about online tutoring */
+   /***** Indicator #3: information about online tutoring *****/
    Indicators->NumThreads = For_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod);
    Indicators->NumPosts   = For_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod,&(Indicators->NumUsrsToBeNotifiedByEMail));
    Indicators->NumMsgsSentByTchs = Msg_GetNumMsgsSentByTchsCrs (CrsCod);
@@ -1382,23 +1456,28 @@ void Ind_GetIndicatorsCrs (long CrsCod,struct Ind_IndicatorsCrs *Indicators)
    if (Indicators->ThereIsOnlineTutoring)
       Indicators->CountIndicators++;
 
-   /* Indicator #4: information about materials */
+   /***** Indicator #4: information about materials *****/
    Indicators->ThereAreMaterials = (Indicators->NumFilesInDocumentZones != 0) ||
                                    (Indicators->NumFilesInSharedZones   != 0);
    if (Indicators->ThereAreMaterials)
       Indicators->CountIndicators++;
 
-   /* Indicator #5: information about assessment */
+   /***** Indicator #5: information about assessment *****/
    Indicators->AssessmentSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_ASSESSMENT);
    Indicators->ThereIsAssessment = (Indicators->AssessmentSrc    != Inf_INFO_SRC_NONE) ||
                                    (Indicators->TeachingGuideSrc != Inf_INFO_SRC_NONE);
    if (Indicators->ThereIsAssessment)
       Indicators->CountIndicators++;
 
-   /* All the indicators are OK? */
+   /***** All the indicators are OK? *****/
    Indicators->CoursePartiallyOK = Indicators->CountIndicators >= 1 &&
 	                           Indicators->CountIndicators < Ind_NUM_INDICATORS;
    Indicators->CourseAllOK       = Indicators->CountIndicators == Ind_NUM_INDICATORS;
+
+   /***** Update number of indicators into database
+          if different to the stored one *****/
+   if (NumIndicatorsFromDB != (int) Indicators->CountIndicators)
+      Ind_StoreIndicatorsCrs (CrsCod,Indicators->CountIndicators);
   }
 
 /*****************************************************************************/

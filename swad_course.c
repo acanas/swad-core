@@ -158,7 +158,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    extern const char *Txt_Save;
    unsigned Year;
-   struct Ind_IndicatorsCrs Indicators;
+   unsigned NumIndicators;
    bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
@@ -350,7 +350,7 @@ static void Crs_Configuration (bool PrintView)
                Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
 
       /***** Indicators *****/
-      Ind_GetIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,&Indicators);
+      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
@@ -367,12 +367,12 @@ static void Crs_Configuration (bool PrintView)
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Indicators,
                Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-               Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
+               NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
                Gbl.Prefs.IconsURL,
-               (Indicators.CountIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
-        	                                                    "warning",
-               Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
-               Indicators.CountIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
+               (NumIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
+        	                                       "warning",
+               NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
+               NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
      }
 
    /***** End table *****/
@@ -2177,7 +2177,8 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
    /***** Remove exam announcements in the course *****/
    /* Mark all exam announcements in the course as deleted */
-   sprintf (Query,"UPDATE exam_announcements SET Status='%u' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET Status='%u'"
+	          " WHERE CrsCod='%ld'",
             (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
    DB_QueryUPDATE (Query,"can not remove exam announcements of a course");
 
