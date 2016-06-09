@@ -48577,27 +48577,6 @@ const char *Txt_Update_attendance_according_to_selected_events =
 	"Atualizar presen&ccedil;a de acordo com eventos selecionados";
 #endif
 
-const char *Txt_Update_indicators =
-#if   L==1
-	"Actualitzar indicadors";
-#elif L==2
-	"Update Indikatoren";
-#elif L==3
-	"Update indicators";
-#elif L==4
-	"Actualizar indicadores";
-#elif L==5
-	"Mise &agrave; jour des indicateurs";
-#elif L==6
-	"Actualizar indicadores";	// Okoteve traducción
-#elif L==7
-	"Aggiornamento indicatori";
-#elif L==8
-	"Aktualizacja wska&zacute;niki";
-#elif L==9
-	"Atualizar indocadores";
-#endif
-
 const char *Txt_Update_messages =
 #if   L==1
 	"Actualitzar missatges";

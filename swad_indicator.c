@@ -87,13 +87,11 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod);
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
    extern const char *Txt_Department;
    extern const char *Txt_No_of_indicators;
-   extern const char *Txt_Update_indicators;
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
    MYSQL_RES *mysql_res;
@@ -114,10 +112,14 @@ void Ind_ReqIndicatorsCourses (void)
    Sco_GetScope ();
 
    /* Get degree type code */
-   Gbl.Stat.DegTypCod = DT_GetParamOtherDegTypCod ();
+   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
+                                                               -1L;
 
    /* Get department code */
    Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
+
+   /* Get number of indicators */
+   Ind_GetParamNumIndicators ();
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
@@ -134,7 +136,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Sco_PutSelectorScope (false);
+   Sco_PutSelectorScope (true);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -175,7 +177,6 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /* Selection of the number of indicators */
-   Ind_GetParamNumIndicators ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label class=\"%s\">%s:</label>"
@@ -186,16 +187,8 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* Send button */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"2\" class=\"CENTER_MIDDLE\" style=\"padding:10px 0\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_indicators,The_ClassFormBold[Gbl.Prefs.Theme]);
-   Lay_PutCalculateIconWithText (Txt_Update_indicators,Txt_Update_indicators);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>");
-
    /* End form */
+   fprintf (Gbl.F.Out,"</table>");
    Act_FormEnd ();
 
    /***** Show the stats of courses *****/
@@ -238,11 +231,11 @@ void Ind_ShowIndicatorsCourses (void)
    unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
 
    /***** Get users range for statistics of courses *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               1 << Sco_SCOPE_CTY     |
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR      |
-		       1 << Sco_SCOPE_DEG      |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ();
@@ -634,8 +627,9 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 		  Class,Ind);
 	 if (Gbl.Stat.IndicatorsSelected[Ind])
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," />"
-	                    "</td>");
+	 fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />"
+	                    "</td>",
+                  Gbl.Form.Id);
 	}
       fprintf (Gbl.F.Out,"<td class=\"%s\">"
                          "%u"

@@ -1110,11 +1110,16 @@ void Dpt_WriteSelectorDepartment (long InsCod)
    /* Get list of departments */
    Dpt_GetListDepartments (InsCod);
 
-   fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:375px;\">"
-                      "<option value=\"-1\"");
+   /* List departments */
+   fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:375px;\""
+	              " onchange=\"document.getElementById('%s').submit();\">",
+            Gbl.Form.Id);
+
+   fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Stat.DptCod == -1L)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Any_department);
+
    for (NumDpt = 0;
 	NumDpt < Gbl.Dpts.Num;
 	NumDpt++)
@@ -1124,6 +1129,7 @@ void Dpt_WriteSelectorDepartment (long InsCod)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Dpts.Lst[NumDpt].FullName);
      }
+
    fprintf (Gbl.F.Out,"</select>");
 
    /* Free list of departments */

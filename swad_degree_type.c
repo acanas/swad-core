@@ -88,15 +88,20 @@ void DT_WriteSelectorDegreeTypes (void)
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
 
-   /***** Get list of degree types *****/
+   /***** Form to select degree types *****/
+   /* Get list of degree types */
    DT_GetListDegreeTypes ();
 
-   /***** List degree types *****/
-   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\">"
-                      "<option value=\"-1\"");
+   /* List degree types */
+   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
+	              " onchange=\"document.getElementById('%s').submit();\">",
+            Gbl.Form.Id);
+
+   fprintf (Gbl.F.Out,"<option value=\"-1\"");
    if (Gbl.Stat.DegTypCod == -1L)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Any_type_of_degree);
+
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.Degs.DegTypes.Num;
 	NumDegTyp++)
@@ -106,6 +111,7 @@ void DT_WriteSelectorDegreeTypes (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
      }
+
    fprintf (Gbl.F.Out,"</select>");
 
    /***** Free list of degree types *****/
