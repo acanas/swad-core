@@ -60,6 +60,7 @@ typedef enum
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Ind_GetParamsIndicators (void);
 static void Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
@@ -101,25 +102,7 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned Ind;
 
    /***** Get parameters *****/
-   /* Get scope */
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
-
-   /* Get degree type code */
-   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
-                                                               -1L;
-
-   /* Get department code */
-   Gbl.Stat.DptCod = Dpt_GetParamDptCod ();
-
-   /* Get number of indicators */
-   Ind_GetParamNumIndicators ();
+   Ind_GetParamsIndicators ();
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
@@ -221,16 +204,12 @@ void Ind_ReqIndicatorsCourses (void)
   }
 
 /*****************************************************************************/
-/*********************** Show statistics of courses **************************/
+/************* Get parameters related to indicators of courses ***************/
 /*****************************************************************************/
 
-void Ind_ShowIndicatorsCourses (void)
+static void Ind_GetParamsIndicators (void)
   {
-   MYSQL_RES *mysql_res;
-   unsigned NumCrss;
-   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
-
-   /***** Get users range for statistics of courses *****/
+   /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
@@ -249,6 +228,20 @@ void Ind_ShowIndicatorsCourses (void)
 
    /***** Get number of indicators *****/
    Ind_GetParamNumIndicators ();
+  }
+
+/*****************************************************************************/
+/*********************** Show statistics of courses **************************/
+/*****************************************************************************/
+
+void Ind_ShowIndicatorsCourses (void)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumCrss;
+   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
+
+   /***** Get parameters *****/
+   Ind_GetParamsIndicators ();
 
    /***** Get courses from database *****/
    NumCrss = Ind_GetTableOfCourses (&mysql_res);
