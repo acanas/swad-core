@@ -54,7 +54,7 @@ struct Ind_IndicatorsCrs
    bool ThereAreMaterials;
    bool ThereIsAssessment;
    Inf_InfoSrc_t AssessmentSrc;
-   unsigned CountIndicators;
+   unsigned NumIndicators;
    bool CoursePartiallyOK;
    bool CourseAllOK;
   };
@@ -65,6 +65,8 @@ struct Ind_IndicatorsCrs
 
 void Ind_ReqIndicatorsCourses (void);
 void Ind_ShowIndicatorsCourses (void);
-unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
+int Ind_GetNumIndicatorsCrsFromDB (long CrsCod);
+void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
+                                       struct Ind_IndicatorsCrs *Indicators);
 
 #endif
