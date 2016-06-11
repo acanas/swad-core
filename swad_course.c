@@ -3145,14 +3145,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Write number of teachers in course *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
-	              "</td>"
-	              "</tr>",
+	              "</td>",
             Style,BgColor,NumTchs);
 
    /***** Write number of students in course *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	              "%u"
-	              "</td>",
+	              "</td>"
+	              "</tr>",
             Style,BgColor,NumStds);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

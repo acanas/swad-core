@@ -126,6 +126,7 @@
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: Do not show users without name in users to follow
+// TODO: Link to indicators in course configuration should go to the same tab/session
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -134,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.222.5 (2016-06-10)"
+#define Log_PLATFORM_VERSION	"SWAD 15.222.6 (2016-06-11)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.222.6: Jun 11, 2016	Fixed layout in students column in result of search of teachers. (202214 lines)
         Version 15.222.5: Jun 10, 2016	Indicators of a course are always calculated and stored in course configuration. (202214 lines)
         Version 15.222.4: Jun 09, 2016	Code refactoring in indicators. (202208 lines)
         Version 15.222.3: Jun 09, 2016	Indicators form is sended automatically when any parameter changes. (202214 lines)
