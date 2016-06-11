@@ -41199,27 +41199,6 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_configuration_of_the_course_X_has_been_updated =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"La configuraci&oacute;n de la asignatura <strong>%s</strong> se ha actualizado.";	// Necessita traduccio
-#elif L==2
-	"The configuration of the course <strong>%s</strong> has been updated.";		// Need Übersetzung
-#elif L==3
-	"The configuration of the course <strong>%s</strong> has been updated.";
-#elif L==4
-	"La configuraci&oacute;n de la asignatura <strong>%s</strong> se ha actualizado.";
-#elif L==5
-	"The configuration of the course <strong>%s</strong> has been updated.";		// Besoin de traduction
-#elif L==6
-	"La configuraci&oacute;n de la asignatura <strong>%s</strong> se ha actualizado.";	// Okoteve traducción
-#elif L==7
-	"La configurazione del corso <strong>%s</strong> &egrave; stata aggiornata.";
-#elif L==8
-	"The configuration of the course <strong>%s</strong> has been updated.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"The configuration of the course <strong>%s</strong> has been updated.";		// Necessita de tradução
-#endif
-
 const char *Txt_The_contents_of_the_folder_are_too_big =
 #if   L==1
 	"El contingut de la carpeta &eacute;s massa gran.";

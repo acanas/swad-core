@@ -93,7 +93,7 @@ struct Course
 
 void Crs_ShowIntroduction (void);
 void Crs_PrintConfiguration (void);
-void Crs_ChangeCourseConfig (void);
+void Crs_ContEditAfterChgCrsInConfig (void);
 
 unsigned Crs_GetNumCrssTotal (void);
 unsigned Crs_GetNumCrssInCty (long CtyCod);
@@ -116,8 +116,10 @@ void Crs_RemoveCourse (void);
 bool Crs_GetDataOfCourseByCod (struct Course *Crs);
 void Crs_GetShortNamesByCod (long CrsCod,char *CrsShortName,char *DegShortName);
 void Crs_RemoveCourseCompletely (long CrsCod);
+void Crs_ChangeInsCrsCodInConfig (void);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsDegree (void);
+void Crs_ChangeCrsYearInConfig (void);
 void Crs_ChangeCrsYear (void);
 void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutionalCrsCod);
 void Crs_RenameCourseShort (void);

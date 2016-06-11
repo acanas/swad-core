@@ -95,6 +95,9 @@ static void Crs_GetParamsNewCourse (struct Course *Crs);
 static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,const char *FieldName,const char *Name,long CrsCod);
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
+
+static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
+
 static void Crs_EmptyCourseCompletely (long CrsCod);
 static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
@@ -141,7 +144,7 @@ void Crs_PrintConfiguration (void)
 
 static void Crs_Configuration (bool PrintView)
   {
-   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   // extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
@@ -156,7 +159,6 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
-   extern const char *Txt_Save;
    unsigned Year;
    int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
@@ -194,10 +196,6 @@ static void Crs_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"<br />%s"
                       "</div>",
             Gbl.CurrentCrs.Crs.FullName);
-
-   /***** Start form *****/
-   if (IsForm)
-      Act_FormStart (ActChgCrsLog);
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
@@ -238,7 +236,10 @@ static void Crs_Configuration (bool PrintView)
             Txt_Year_OF_A_DEGREE);
    if (IsForm)
      {
-      fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\">");
+      Act_FormStart (ActChgCrsYeaCfg);
+      fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
+	                 " onchange=\"document.getElementById('%s').submit();\">",
+               Gbl.Form.Id);
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
            Year++)
@@ -248,6 +249,7 @@ static void Crs_Configuration (bool PrintView)
 						    "",
 		  Txt_YEAR_OF_DEGREE[Year]);
       fprintf (Gbl.F.Out,"</select>");
+      Act_FormEnd ();
      }
    else
       fprintf (Gbl.F.Out,"%s",
@@ -267,11 +269,17 @@ static void Crs_Configuration (bool PrintView)
               The_ClassForm[Gbl.Prefs.Theme],
               Txt_Institutional_code);
       if (IsForm)
+	{
+         Act_FormStart (ActChgInsCrsCodCfg);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
-                            " size=\"%u\" maxlength=\"%u\" value=\"%s\" />",
+                            " size=\"%u\" maxlength=\"%u\" value=\"%s\""
+	                    " onchange=\"document.getElementById('%s').submit();\" />",
                   Crs_LENGTH_INSTITUTIONAL_CRS_COD,
                   Crs_LENGTH_INSTITUTIONAL_CRS_COD,
-               Gbl.CurrentCrs.Crs.InstitutionalCrsCod);
+                  Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
+                  Gbl.Form.Id);
+         Act_FormEnd ();
+	}
       else
          fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.InstitutionalCrsCod);
       fprintf (Gbl.F.Out,"</td>"
@@ -358,35 +366,28 @@ static void Crs_Configuration (bool PrintView)
                          "<td class=\"%s RIGHT_MIDDLE\">"
                          "%s:"
                          "</td>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
-                         "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\" class=\"DAT\">"
-                         "%u %s %u "
-                         "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"%u %s %u\" title=\"%u %s %u\""
-                         " class=\"ICON20x20\" />"
-                         "</a>"
-                         "</td>"
-                         "</tr>",
+                         "<td class=\"LEFT_MIDDLE\">",
                The_ClassForm[Gbl.Prefs.Theme],
-               Txt_Indicators,
-               Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-               Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
+               Txt_Indicators);
+      Act_FormStart (ActReqStaCrs);
+      sprintf (Gbl.Title,"%u %s %u",
+               Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
+      Act_LinkFormSubmit (Gbl.Title,"DAT");
+      fprintf (Gbl.F.Out,"%s "
+                         "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+                         " class=\"ICON20x20\" />",
+               Gbl.Title,
                Gbl.Prefs.IconsURL,
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
         	                                                  "warning",
-               Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS,
-               Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
+               Gbl.Title);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</td>"
+                         "</tr>");
      }
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
-
-   /***** Send button and end form *****/
-   if (IsForm)
-     {
-      Lay_PutConfirmButton (Txt_Save);
-      Act_FormEnd ();
-     }
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -401,41 +402,6 @@ static void Crs_PutIconToPrint (void)
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",Txt_Print,NULL);
-  }
-
-/*****************************************************************************/
-/******************** Change the configuration of a course *******************/
-/*****************************************************************************/
-
-void Crs_ChangeCourseConfig (void)
-  {
-   extern const char *Txt_The_configuration_of_the_course_X_has_been_updated;
-   char Query[512];
-   char YearStr[2+1];
-
-   /***** Get parameters from form *****/
-   /* Get institutional code */
-   Par_GetParToText ("InsCrsCod",Gbl.CurrentCrs.Crs.InstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-
-   /* Get year */
-   Par_GetParToText ("OthCrsYear",YearStr,2);
-   Gbl.CurrentCrs.Crs.Year = Deg_ConvStrToYear (YearStr);
-
-   /***** Update table of degree types *****/
-   sprintf (Query,"UPDATE courses SET InsCrsCod='%s',Year='%u'"
-                  " WHERE CrsCod='%ld'",
-            Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
-            Gbl.CurrentCrs.Crs.Year,
-            Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryUPDATE (Query,"can not update the configuration of a course");
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_configuration_of_the_course_X_has_been_updated,
-            Gbl.CurrentCrs.Crs.ShortName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Show the form again *****/
-   Crs_ShowIntroduction ();
   }
 
 /*****************************************************************************/
@@ -736,6 +702,21 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/** Show message of success after changing a course in course configuration **/
+/*****************************************************************************/
+
+void Crs_ContEditAfterChgCrsInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
+
+   /***** Show the form again *****/
+   Crs_ShowIntroduction ();
   }
 
 /*****************************************************************************/
@@ -2292,6 +2273,33 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
   }
 
 /*****************************************************************************/
+/***** Change the institutional code of a course in course configuration *****/
+/*****************************************************************************/
+
+void Crs_ChangeInsCrsCodInConfig (void)
+  {
+   extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
+   extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
+   extern const char *Txt_You_dont_have_permission_to_edit_this_course;
+   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
+
+   /***** Get institutional code from form *****/
+   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+
+   /***** Change the institutional course code *****/
+   if (strcmp (NewInstitutionalCrsCod,Gbl.CurrentCrs.Crs.InstitutionalCrsCod))
+     {
+      Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,NewInstitutionalCrsCod);
+
+      sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
+	       Gbl.CurrentCrs.Crs.ShortName,NewInstitutionalCrsCod);
+     }
+   else	// The same institutional code
+      sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
+	       Gbl.CurrentCrs.Crs.ShortName);
+  }
+
+/*****************************************************************************/
 /************** Change the institutional code of a course ********************/
 /*****************************************************************************/
 
@@ -2424,6 +2432,55 @@ void Crs_ChangeCrsDegree (void)
   }
 
 /*****************************************************************************/
+/*********** Change the year of a course in course configuration *************/
+/*****************************************************************************/
+
+void Crs_ChangeCrsYearInConfig (void)
+  {
+   extern const char *Txt_The_course_X_already_exists_in_year_Y;
+   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_The_year_of_the_course_X_has_changed;
+   extern const char *Txt_The_year_X_is_not_allowed;
+   char YearStr[2+1];
+   unsigned NewYear;
+
+   /***** Get parameter with year/semester *****/
+   Par_GetParToText ("OthCrsYear",YearStr,2);
+   NewYear = Deg_ConvStrToYear (YearStr);
+
+   if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
+     {
+      /***** If name of course was in database in the new year... *****/
+      if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,NewYear,"ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+		  Gbl.CurrentCrs.Crs.ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
+	 Gbl.Error = true;
+	}
+      else if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,NewYear,"FullName",Gbl.CurrentCrs.Crs.FullName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+		  Gbl.CurrentCrs.Crs.FullName,Txt_YEAR_OF_DEGREE[NewYear]);
+	 Gbl.Error = true;
+	}
+      else	// Update year in database
+	{
+	 /***** Update year in table of courses *****/
+         Crs_UpdateCrsYear (&Gbl.CurrentCrs.Crs,NewYear);
+
+	 /***** Create message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
+		  Gbl.CurrentCrs.Crs.ShortName);
+	}
+     }
+   else	// Year not valid
+     {
+      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
+      Gbl.Error = true;
+     }
+  }
+
+/*****************************************************************************/
 /************************ Change the year of a course ************************/
 /*****************************************************************************/
 
@@ -2436,7 +2493,6 @@ void Crs_ChangeCrsYear (void)
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    struct Course *Crs;
    struct Degree Deg;
-   char Query[512];
    char YearStr[2+1];
    unsigned NewYear;
 
@@ -2476,11 +2532,7 @@ void Crs_ChangeCrsYear (void)
          else	// Update year in database
            {
             /***** Update year in table of courses *****/
-            sprintf (Query,"UPDATE courses SET Year='%u' WHERE CrsCod='%ld'",
-                     NewYear,Crs->CrsCod);
-            DB_QueryUPDATE (Query,"can not update the year of a course");
-
-            Crs->Year = NewYear;
+            Crs_UpdateCrsYear (Crs,NewYear);
 
             /***** Create message to show the change made *****/
             sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
@@ -2498,6 +2550,23 @@ void Crs_ChangeCrsYear (void)
       strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
       Gbl.Error = true;
      }
+  }
+
+/*****************************************************************************/
+/****************** Change the year/semester of a course *********************/
+/*****************************************************************************/
+
+static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
+  {
+   char Query[128];
+
+   /***** Update year/semester in table of courses *****/
+   sprintf (Query,"UPDATE courses SET Year='%u' WHERE CrsCod='%ld'",
+	    NewYear,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryUPDATE (Query,"can not update the year of a course");
+
+   /***** Copy couese year/semester *****/
+   Crs->Year = NewYear;
   }
 
 /*****************************************************************************/

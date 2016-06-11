@@ -135,13 +135,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.222.6 (2016-06-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.223 (2016-06-12)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.223:   Jun 12, 2016	New forms to change course configuration. (202268 lines)
+					4 changes necessary in database:
+UPDATE actions SET Txt='Cambiar c&oacute;d. institucional asignatura' WHERE ActCod='1024' AND Language='es';
+UPDATE actions SET Txt='Cambiar c&oacute;d. institucional asignatura' WHERE ActCod='1025' AND Language='es';
+UPDATE actions SET Txt='Cambiar a&ntilde;o/semestre asignatura' WHERE ActCod='561' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1573','es','N','Cambiar a&ntilde;o/semestre asignatura');
+
         Version 15.222.6: Jun 11, 2016	Fixed layout in students column in result of search of teachers. (202214 lines)
         Version 15.222.5: Jun 10, 2016	Indicators of a course are always calculated and stored in course configuration. (202214 lines)
         Version 15.222.4: Jun 09, 2016	Code refactoring in indicators. (202208 lines)
