@@ -1741,10 +1741,15 @@ void For_ShowForumList (void)
    switch (Gbl.Forum.WhichForums)
      {
       case For_ONLY_CURRENT_FORUMS:
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    ICanSeeInsForum = true;
+	 if (Gbl.CurrentIns.Ins.InsCod > 0)
+	   {
+	    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	       ICanSeeInsForum = true;
+	    else
+	       ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+	   }
 	 else
-            ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+	    ICanSeeInsForum = false;
 
          /***** Links to forums about the platform *****/
          For_WriteLinksToPlatformForums (!ICanSeeInsForum,IsLastItemInLevel);
