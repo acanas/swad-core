@@ -109,6 +109,7 @@ void Fol_SuggestWhoToFollow (void)
    Prf_PutLinkRequestUserProfile ();
 
    /***** First try: build query to get users to follow *****/
+   // Get only users with surname 1 and first name
    sprintf (Query,"SELECT DISTINCT UsrCod FROM"
                   " ("
 		  /***** Likely known users *****/
@@ -126,6 +127,8 @@ void Fol_SuggestWhoToFollow (void)
                   " AND usr_follow.FollowedCod<>'%ld'"
                   " AND usr_follow.FollowedCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s')"
+		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+		  " AND usr_data.FirstName<>''"	// First name not empty
                   ")"
                   " UNION "
 		  // Users who share any course with me
@@ -141,6 +144,8 @@ void Fol_SuggestWhoToFollow (void)
                   " AND crs_usr.UsrCod<>'%ld'"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
+		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+		  " AND usr_data.FirstName<>''"	// First name not empty
                   ")"
                   " UNION "
 		  // Users who share any course with me with another role
@@ -155,6 +160,8 @@ void Fol_SuggestWhoToFollow (void)
                   " AND crs_usr.Role<>my_crs_role.Role"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility='%s'"
+		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+		  " AND usr_data.FirstName<>''"	// First name not empty
                   ")"
                   ") AS LikelyKnownUsrsToFollow"
 		  // Do not select my followed
@@ -172,6 +179,8 @@ void Fol_SuggestWhoToFollow (void)
 		  "SELECT UsrCod FROM usr_data"
 		  " WHERE UsrCod<>'%ld'"
 		  " AND ProfileVisibility IN ('%s','%s')"
+		  " AND Surname1<>''"	// Surname 1 not empty
+		  " AND FirstName<>''"	// First name not empty
 		  // Do not select my followed
 		  " AND UsrCod NOT IN"
 		  " (SELECT FollowedCod FROM usr_follow"
