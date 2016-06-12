@@ -114,7 +114,6 @@
 // TODO: Width of column for data in notifications is too short
 // TODO: Change size of DegTypName in table deg_types from VARCHAR(32) TO VARCHAR(255)
 // TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
-// TODO: FIX BUG: In results of search of students, no mark of confirmation is shown even if the student really has confirmed his/her registration in the course
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
 // TODO: Icon to the left in list of forums is not correct when scope is system
 // TODO: Move info about number of files to bottom of file browsers
@@ -133,13 +132,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.223.1 (2016-06-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.223.2 (2016-06-12)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.223.2: Jun 12, 2016	Fixed bug in results of search of students. (202277 lines)
         Version 15.223.1: Jun 12, 2016	Show only users to follow with first name and surname 1. (202276 lines)
         Version 15.223:   Jun 12, 2016	New forms to change course configuration. (202268 lines)
 					4 changes necessary in database:

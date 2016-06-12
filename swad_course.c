@@ -3116,13 +3116,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    bool Accepted;
 
    /*
-   SELECT degrees.DegCod,	0
-          courses.CrsCod,	1
-          degrees.ShortName,	2
-          degrees.FullName,	3
-          courses.Year,		4
-          courses.FullName,	5
-          centres.ShortName	6
+   SELECT degrees.DegCod	0
+	  courses.CrsCod	1
+	  degrees.ShortName	2
+	  degrees.FullName	3
+	  courses.Year		4
+	  courses.FullName	5
+	  centres.ShortName	6
+	  crs_usr.Accepted	7	(only if WriteColumnAccepted == true)
    */
 
    /***** Get degree code (row[0]) *****/
@@ -3157,7 +3158,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Teacher has accepted joining to this course/to any course in degree/to any course? *****/
    if (WriteColumnAccepted)
      {
-      Accepted = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
+      Accepted = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
       fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
 	                 "<img src=\"%s/%s16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
