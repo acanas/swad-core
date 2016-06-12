@@ -294,37 +294,6 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,	// Brw_ADMI_TEACH_GRP
   };
 
-// Number of columns of a file browser
-static const unsigned Brw_NumColumnsInExpTree[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   4,	// Brw_UNKNOWN
-   4,	// Brw_SHOW_DOCUM_CRS
-   4,	// Brw_SHOW_MARKS_CRS
-   7,	// Brw_ADMI_DOCUM_CRS
-   7,	// Brw_ADMI_SHARE_CRS
-   7,	// Brw_ADMI_SHARE_GRP
-   7,	// Brw_ADMI_WORKS_USR
-   7,	// Brw_ADMI_WORKS_CRS
-   9,	// Brw_ADMI_MARKS_CRS
-   7,	// Brw_ADMI_BRIEF_USR
-   4,	// Brw_SHOW_DOCUM_GRP
-   7,	// Brw_ADMI_DOCUM_GRP
-   4,	// Brw_SHOW_MARKS_GRP
-   9,	// Brw_ADMI_MARKS_GRP
-   7,	// Brw_ADMI_ASSIG_USR
-   7,	// Brw_ADMI_ASSIG_CRS
-   4,	// Brw_SHOW_DOCUM_DEG
-   7,	// Brw_ADMI_DOCUM_DEG
-   4,	// Brw_SHOW_DOCUM_CTR
-   7,	// Brw_ADMI_DOCUM_CTR
-   4,	// Brw_SHOW_DOCUM_INS
-   7,	// Brw_ADMI_DOCUM_INS
-   7,	// Brw_ADMI_SHARE_DEG
-   7,	// Brw_ADMI_SHARE_CTR
-   7,	// Brw_ADMI_SHARE_INS
-   7,	// Brw_ADMI_TEACH_CRS
-   7,	// Brw_ADMI_TEACH_GRP
-  };
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    false,	// Brw_UNKNOWN
@@ -3669,13 +3638,7 @@ static void Brw_ShowFileBrowser (void)
                         FunctionToDrawContextualIcons);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<table class=\"BROWSER_TABLE\">"
-	              "<tr>"
-                      "<td class=\"CENTER_MIDDLE\" colspan=\"%u\">",
-            Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type]);
    Brw_WriteSubtitleOfFileBrowser ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
 
    /***** Show and store number of documents found *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -3685,12 +3648,13 @@ static void Brw_ShowFileBrowser (void)
      }
 
    /***** List recursively the directory *****/
+   fprintf (Gbl.F.Out,"<table class=\"BROWSER_TABLE\">");
    Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
    if (Brw_WriteRowFileBrowser (0,Brw_IS_FOLDER,Brw_EXPAND_TREE_NOTHING,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],"."))
       Brw_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-
-   /***** End of table *****/
    fprintf (Gbl.F.Out,"</table>");
+
+   /***** End of frame *****/
    Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</section>");
   }
@@ -4020,10 +3984,8 @@ static void Brw_ShowSizeOfFileTree (void)
    extern const char *Txt_files;
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"%u\" class=\"DAT CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
                       "%u %s; %lu %s; %lu %s; ",
-            Brw_NumColumnsInExpTree[Gbl.FileBrowser.Type],
             Gbl.FileBrowser.Size.NumLevls,
             Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
         	                                 Txt_levels ,
@@ -4042,8 +4004,7 @@ static void Brw_ShowSizeOfFileTree (void)
       Str_WriteSizeInBytesBrief ((double) Gbl.FileBrowser.Size.MaxQuota);
       fprintf (Gbl.F.Out,")");
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
