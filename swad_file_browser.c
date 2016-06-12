@@ -3637,15 +3637,8 @@ static void Brw_ShowFileBrowser (void)
    Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                         FunctionToDrawContextualIcons);
 
-   /***** Title *****/
+   /***** Subtitle *****/
    Brw_WriteSubtitleOfFileBrowser ();
-
-   /***** Show and store number of documents found *****/
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-     {
-      Brw_ShowSizeOfFileTree ();
-      Brw_StoreSizeOfFileTreeInDB ();
-     }
 
    /***** List recursively the directory *****/
    fprintf (Gbl.F.Out,"<table class=\"BROWSER_TABLE\">");
@@ -3653,6 +3646,13 @@ static void Brw_ShowFileBrowser (void)
    if (Brw_WriteRowFileBrowser (0,Brw_IS_FOLDER,Brw_EXPAND_TREE_NOTHING,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],"."))
       Brw_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
    fprintf (Gbl.F.Out,"</table>");
+
+   /***** Show and store number of documents found *****/
+   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
+     {
+      Brw_ShowSizeOfFileTree ();
+      Brw_StoreSizeOfFileTreeInDB ();
+     }
 
    /***** End of frame *****/
    Lay_EndRoundFrame ();

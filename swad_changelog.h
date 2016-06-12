@@ -114,7 +114,6 @@
 // TODO: Width of column for data in notifications is too short
 // TODO: Change size of DegTypName in table deg_types from VARCHAR(32) TO VARCHAR(255)
 // TODO: Insert "http://" to WWW when WWW does not start with "*://"
-// TODO: Move info about number of files to bottom of file browsers
 // TODO: To avoid wrong email addresses, when a user fills his/her email address, check if the domain is in the white list of allowed domains. If not, ask for confirmation.
 // TODO: Filtering email addresses --> an email address can not finish in "."
 // TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
@@ -130,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.224.1 (2016-06-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.224.2 (2016-06-12)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.224.2: Jun 12, 2016	Info about number of files is moved to bottom of file browsers. (202266 lines)
         Version 15.224.1: Jun 12, 2016	Change in layout of file browsers. (202266 lines)
         Version 15.224:   Jun 12, 2016	Now a user can unfollow users followed by him/her whose profile is not visible.
 					Code refactoring in list of follweing/followers. (202304 lines)
