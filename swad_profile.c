@@ -216,7 +216,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    /***** Show profile and timeline *****/
    if (!Error)
       /* Show profile */
-      Error = !Prf_ShowUserProfile ();
+      Error = !Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    if (Error)
      {
@@ -250,17 +250,19 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*****************************************************************************/
 // Return false on error
 
-bool Prf_ShowUserProfile (void)
+bool Prf_ShowUserProfile (struct UsrData *UsrDat)
   {
    unsigned NumFollowing;
    unsigned NumFollowers;
    bool UsrFollowsMe;
    bool IFollowUsr;
+   bool ItsMe = (Gbl.Usrs.Me.Logged &&
+	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Contextual links *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      if (ItsMe)	// It's me
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
@@ -275,40 +277,40 @@ bool Prf_ShowUserProfile (void)
      }
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
-                          Gbl.Usrs.Other.UsrDat.UsrCod))
+   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod))
      {
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+      if (!ItsMe &&				// If not it's me...
+	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
-	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
 	 /* Get if user has accepted enrollment in current course */
-	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                                                              Gbl.CurrentCrs.Crs.CrsCod,
-	                                                              true);
+	 UsrDat->Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+	                                                Gbl.CurrentCrs.Crs.CrsCod,
+	                                                true);
 	}
 
       /***** Common record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,UsrDat);
 
       /***** Show details of user's profile *****/
-      Prf_ShowDetailsUserProfile (&Gbl.Usrs.Other.UsrDat);
+      Prf_ShowDetailsUserProfile (UsrDat);
 
       /***** Count following and followers *****/
-      NumFollowing = Fol_GetNumFollowing (Gbl.Usrs.Other.UsrDat.UsrCod);
-      NumFollowers = Fol_GetNumFollowers (Gbl.Usrs.Other.UsrDat.UsrCod);
+      NumFollowing = Fol_GetNumFollowing (UsrDat->UsrCod);
+      NumFollowers = Fol_GetNumFollowers (UsrDat->UsrCod);
       UsrFollowsMe = false;
       if (NumFollowing)
-         UsrFollowsMe = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Other.UsrDat.UsrCod,
+         UsrFollowsMe = Fol_CheckUsrIsFollowerOf (UsrDat->UsrCod,
                                                   Gbl.Usrs.Me.UsrDat.UsrCod);
       IFollowUsr   = false;
       if (NumFollowers)
          IFollowUsr   = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                  Gbl.Usrs.Other.UsrDat.UsrCod);
+                                                  UsrDat->UsrCod);
 
       /***** Show following and followers *****/
-      Fol_ShowFollowingAndFollowers (&Gbl.Usrs.Other.UsrDat,
+      Fol_ShowFollowingAndFollowers (UsrDat,
                                      NumFollowing,NumFollowers,
                                      UsrFollowsMe,IFollowUsr);
 

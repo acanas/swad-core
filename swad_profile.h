@@ -46,7 +46,7 @@ void Prf_PutLinkRequestUserProfile (void);
 void Prf_RequestUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
-bool Prf_ShowUserProfile (void);
+bool Prf_ShowUserProfile (struct UsrData *UsrDat);
 void Prf_ChangeProfileVisibility (void);
 void Prf_CalculateFirstClickTime (void);
 void Prf_CalculateNumClicks (void);

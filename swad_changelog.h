@@ -122,7 +122,6 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
-// TODO: If a follower follows a user whose profile is no longer visible ==> put icon to unfollow in list of followed
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -131,13 +130,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.223.3 (2016-06-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.224 (2016-06-12)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.224:   Jun 12, 2016	Now a user can unfollow users followed by him/her whose profile is not visible.
+					Code refactoring in list of follweing/followers. (202304 lines)
         Version 15.223.3: Jun 12, 2016	Fixed layout of list of forums. (202282 lines)
         Version 15.223.2: Jun 12, 2016	Fixed bug in results of search of students. (202277 lines)
         Version 15.223.1: Jun 12, 2016	Show only users to follow with first name and surname 1. (202276 lines)

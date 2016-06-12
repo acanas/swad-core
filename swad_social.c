@@ -2060,7 +2060,7 @@ void Soc_ReceiveSocialPostUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -2813,7 +2813,7 @@ void Soc_ReceiveCommentUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -2939,7 +2939,7 @@ void Soc_ShareSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3017,7 +3017,7 @@ void Soc_FavSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3101,7 +3101,7 @@ void Soc_FavSocialCommentUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3223,7 +3223,7 @@ void Soc_UnshareSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3311,7 +3311,7 @@ void Soc_UnfavSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3395,7 +3395,7 @@ void Soc_UnfavSocialCommentUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3478,7 +3478,7 @@ void Soc_RequestRemSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3558,7 +3558,7 @@ void Soc_RemoveSocialNoteUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3805,7 +3805,7 @@ void Soc_RequestRemSocialComUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
@@ -3890,7 +3890,7 @@ void Soc_RemoveSocialComUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile ();
+   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
