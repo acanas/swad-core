@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.224.2 (2016-06-12)"
+#define Log_PLATFORM_VERSION	"SWAD 15.224.3 (2016-06-13)"
 #define CSS_FILE		"swad15.218.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.224.3: Jun 13, 2016	Fix bug while finding cell content in file of marks. (202267 lines)
         Version 15.224.2: Jun 12, 2016	Info about number of files is moved to bottom of file browsers. (202266 lines)
         Version 15.224.1: Jun 12, 2016	Change in layout of file browsers. (202266 lines)
         Version 15.224:   Jun 12, 2016	Now a user can unfollow users followed by him/her whose profile is not visible.

@@ -487,6 +487,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 	    // Users' IDs are always stored internally in capitals and without leading zeros
 	    Str_RemoveLeadingZeros (UsrIDFromTable);
 	    Str_ConvertToUpperText (UsrIDFromTable);
+
 	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
 	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
 	       // Compare UsrIDFromTable with all the confirmed user's IDs in list

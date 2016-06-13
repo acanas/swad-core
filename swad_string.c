@@ -1949,6 +1949,8 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
    long PosTD;
    int i = 0;
    int Ch;
+   bool EndCellFound = false;
+   bool DirectiveFound;
    bool SpaceFound;
    char StrAux[1+1];  // To find next "/td>" or "nbsp;"
 
@@ -1973,87 +1975,86 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 
    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
 
-   for (;;)
+   for (EndCellFound = false;
+	!EndCellFound;
+	)
      {
       if ((Ch = Str_ReadCharAndSkipComments (FileSrc,Str_SKIP_HTML_COMMENTS)) == EOF)	// Set pointer to '<' if not comment, or to first character after comment if comment
 	 break;
 
       /***** Skip directives except </td> *****/
-      if (Ch == (int) '<')		// Start of directive, not a comment
+      DirectiveFound = (Ch == (int) '<');
+
+      if (DirectiveFound)		// Start of directive, not a comment
 	{
 	 /* Check if it's </td> */
-	 if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"/"))
-	   {	// It's not </
-	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Skip directive backward
+	 if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"/"))		// It's </
+	    if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"t"))		// It's </t
+	       if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"d"))	// It's </td
+		  if (!strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),">"))	// It's </td>
+	             EndCellFound = true;	// </td> found
+
+	 if (!EndCellFound)
+	   {
+	    /* Skip directive */
+	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);
 	    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
-	    continue;
 	   }
-	 if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"t"))
-	   {	// It's not </t
-	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Skip directive backward
-	    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
-	    continue;
-	   }
-	 if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"d"))
-	   {	// It's not </td
-	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Skip directive backward
-	    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
-	    continue;
-	   }
-	 if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),">"))
-	   {	// It's not </td>
-	    Str_FindStrInFileBack (FileSrc,"<",Str_NO_SKIP_HTML_COMMENTS);	// Skip directive backward
-	    Str_FindStrInFile (FileSrc,">",Str_NO_SKIP_HTML_COMMENTS);
-	    continue;
-	   }
-	 break; // If it's </td>
 	}
 
-      SpaceFound = false;
-
-      /***** Skip &nbsp; *****/
-      if (Ch == (int) '&')
+      if (!EndCellFound)
 	{
-	 /* Ver if no it's &nbsp; */
-	 if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"n"))
-           {	// It's not &n
-	    Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
-           }
-	 else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"b"))
-           {	// It's not &nb
-	    Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
-           }
-	 else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"s"))
-           {	// It's not &nbs
-	    Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
-           }
-	 else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"p"))
-           {	// It's not &nbsp
-	    Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
-           }
-	 else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),";"))
-           {	// It's not &nbsp;
-	    Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
-	    Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
-           }
-	 else	// It's &nbsp;
-	    SpaceFound = true;
+	 if (DirectiveFound)
+	    Ch = (int) ' ';	// Replace directive for ' ' (separator)
+	 else
+	   {
+	    /***** Check for space or &nbsp; *****/
+	    SpaceFound = false;
+
+	    if (Ch == (int) '&')
+	      {
+	       /* Check for &nbsp; (case insensitive) */
+	       if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"n"))
+		 {	// It's not &n
+		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		 }
+	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"b"))
+		 {	// It's not &nb
+		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		 }
+	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"s"))
+		 {	// It's not &nbs
+		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		 }
+	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),"p"))
+		 {	// It's not &nbsp
+		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		 }
+	       else if (strcasecmp (Str_GetNextStrFromFileConvertingToLower (FileSrc,StrAux,1),";"))
+		 {	// It's not &nbsp;
+		  Str_FindStrInFileBack (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);	// Back until &
+		  Str_FindStrInFile (FileSrc,"&",Str_NO_SKIP_HTML_COMMENTS);		// Skip &
+		 }
+	       else	// It's &nbsp;
+		  SpaceFound = true;
+	      }
+
+	    /***** Skip spaces *****/
+	    if (isspace (Ch) ||
+		Ch == 0xA0)	// Unicode translation for &nbsp;
+		SpaceFound = true;
+
+	    if (SpaceFound)
+	       Ch = (int) ' ';	// Replace any kind of space for ' ' (separator)
+	   }
+
+	 if (i < MaxLength)
+	    Str[i++] = (char) Ch;
 	}
-
-      /***** Skip spaces *****/
-      if (isspace (Ch) ||
-	  Ch == 0xA0)	// Unicode translation for &nbsp;
-	  SpaceFound = true;
-
-      if (SpaceFound)
-	 Ch = (int) ' ';
-
-      if (i < MaxLength)
-	 Str[i++] = (char) Ch;
      }
    Str[i] = '\0';
    return Str;
