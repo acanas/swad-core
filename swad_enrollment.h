@@ -49,18 +49,19 @@ typedef enum
    Enr_SET_ACCEPTED_TO_TRUE,
   } Enr_KeepOrSetAccepted_t;
 
-#define Enr_NUM_ACTIONS_REG_REM_ONE_USR 9
+#define Enr_NUM_ACTIONS_REG_REM_ONE_USR 10
 typedef enum
   {
-   Enr_REGISTER_MODIFY_ONE_USR_IN_CRS  = 0,
-   Enr_REGISTER_ONE_DEGREE_ADMIN       = 1,
-   Enr_REGISTER_ONE_CENTRE_ADMIN       = 2,
-   Enr_REGISTER_ONE_INSTITUTION_ADMIN  = 3,
-   Enr_REMOVE_ONE_USR_FROM_CRS         = 4,
-   Enr_REMOVE_ONE_DEGREE_ADMIN         = 5,
-   Enr_REMOVE_ONE_CENTRE_ADMIN         = 6,
-   Enr_REMOVE_ONE_INSTITUTION_ADMIN    = 7,
-   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM = 8,
+   Enr_REGISTER_MODIFY_ONE_USR_IN_CRS   = 0,
+   Enr_REGISTER_ONE_DEGREE_ADMIN        = 1,
+   Enr_REGISTER_ONE_CENTRE_ADMIN        = 2,
+   Enr_REGISTER_ONE_INSTITUTION_ADMIN   = 3,
+   Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE = 4,
+   Enr_REMOVE_ONE_USR_FROM_CRS          = 5,
+   Enr_REMOVE_ONE_DEGREE_ADMIN          = 6,
+   Enr_REMOVE_ONE_CENTRE_ADMIN          = 7,
+   Enr_REMOVE_ONE_INSTITUTION_ADMIN     = 8,
+   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM  = 9,
   } Enr_RegRemOneUsrAction_t;
 
 /*****************************************************************************/

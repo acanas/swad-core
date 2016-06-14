@@ -865,6 +865,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
+   extern const char *Txt_Report_possible_duplicate_user;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
@@ -1003,6 +1004,22 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
 	 NumOptionsShown++;
 	}
+     }
+
+   /***** Report user as possible duplicate *****/
+   if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+     {
+      fprintf (Gbl.F.Out,"<li>"
+			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE);
+      if (!OptionChecked)
+	{
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+	 OptionChecked = true;
+	}
+      fprintf (Gbl.F.Out," />%s</li>",Txt_Report_possible_duplicate_user);
+
+      NumOptionsShown++;
      }
 
    /***** Remove user from the course *****/
@@ -3727,6 +3744,12 @@ void Enr_ModifyUsr (void)
 		  if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 		     Enr_ReqAddAdm (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
 		                    Gbl.CurrentIns.Ins.FullName);
+		  else
+		     Error = true;
+		  break;
+	       case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
+		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+		     Lay_ShowAlert (Lay_INFO,"Option under development.");	// TODO: Program this!
 		  else
 		     Error = true;
 		  break;

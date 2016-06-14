@@ -30923,6 +30923,27 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 	"Mensagem de resposta";
 #endif
 
+const char *Txt_Report_possible_duplicate_user =
+#if   L==1
+	"Informar possible usuari duplicat";
+#elif L==2
+	"Melden Sie die doppelte Benutzer";
+#elif L==3
+	"Report possible duplicate user";
+#elif L==4
+	"Informar de posible usuario duplicado";
+#elif L==5
+	"Signaler possible utilisateur en double";
+#elif L==6
+	"Informar de posible usuario duplicado";	// Okoteve traducción
+#elif L==7
+	"Segnalare eventuali utente duplicato";
+#elif L==8
+	"Zg&lstrok;o&sacute; mo&zdot;liwy duplikat u&zdot;ytkownika";
+#elif L==9
+	"Denunciar poss&iacute;vel usu&aacute;rio duplicado";
+#endif
+
 const char *Txt_Requester =
 #if   L==1
 	"Sol&middot;licitant";
