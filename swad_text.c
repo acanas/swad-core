@@ -8974,7 +8974,7 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is ver
 #elif L==8
 	"Czy na pewno chcesz usunac grupe <strong>%s</strong>?";
 #elif L==9
-	"Do you really want to remove the group <strong>%s</strong>?";	// Necessita de tradução
+	"Do you really want to remove the group <strong>%s</strong>?";		// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning: it is very important to include %s in the following sentences
@@ -9035,6 +9035,27 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 #elif L==9
 	"Do you really want to remove the group <strong>%s</strong>?<br />"
 	"Doing so will remove %u students from that group.";			// Necessita de tradução
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"De veres voleu eliminar la foto de <strong>%s</strong>?";
+#elif L==2
+	"Wollen Sie die wirklich das Foto von <strong>%s</strong> zu entfernen?";
+#elif L==3
+	"Do you really want to remove the photo of <strong>%s</strong>?";
+#elif L==4
+	"&iquest;Realmente desea eliminar la foto de <strong>%s</strong>?";
+#elif L==5
+	"Voulez-vous vraiment supprimer la photo de <strong>%s</strong>?";
+#elif L==6
+	"&iquest;Realmente desea eliminar la foto de <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere la foto di <strong>%s</strong>?";
+#elif L==8
+	"Czy na pewno chcesz usun&aogon;&cacute; zdj&eogon;cie <strong>%s</strong>?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover la foto de <strong>%s</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %lu in the following sentences
@@ -9137,6 +9158,27 @@ const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_ =	// 
 #elif L==9
 	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
 	"Doing so will also remove %u groups of that type.";			// Necessita de tradução
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_your_photo =
+#if   L==1
+	"De veres voleu eliminar la seva foto?";
+#elif L==2
+	"Wollen Sie die Ihr Foto zu entfernen?";
+#elif L==3
+	"Do you really want to remove your photo?";
+#elif L==4
+	"&iquest;Realmente desea eliminar su foto?";
+#elif L==5
+	"Voulez-vous vraiment supprimer votre photo?";
+#elif L==6
+	"&iquest;Realmente desea eliminar su foto?";	// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere la tua foto?";
+#elif L==8
+	"Czy na pewno chcesz usun&aogon;&cacute; swoje zdj&eogon;cie?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover a sua foto?";
 #endif
 
 const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -41199,6 +41241,27 @@ const char *Txt_The_centre_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"The centre <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_comment_no_longer_exists =
+#if   L==1
+	"El comentari ja no existeix.";
+#elif L==2
+	"Der Kommentar nicht mehr existiert.";
+#elif L==3
+	"The comment no longer exists.";
+#elif L==4
+	"El comentario ya no existe.";
+#elif L==5
+	"Le commentaire a disparu.";
+#elif L==6
+	"El comentario ya no existe.";	// Okoteve traducción
+#elif L==7
+	"Il commento non esiste pi&ugrave;.";
+#elif L==8
+	"Komentarz ju&zdot; nie istnieje.";
+#elif L==9
+	"O coment&aacute;rio n&atilde;o existe mais.";
+#endif
+
 const char *Txt_The_contents_of_the_folder_are_too_big =
 #if   L==1
 	"El contingut de la carpeta &eacute;s massa gran.";
@@ -43941,25 +44004,25 @@ const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very imp
 	"The ISO 3166-1 numerical code %03ld already exists.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_comment_no_longer_exists =
+const char *Txt_The_photo_no_longer_exists =
 #if   L==1
-	"El comentari ja no existeix.";
+	"La foto ja no existeix.";
 #elif L==2
-	"Der Kommentar nicht mehr existiert.";
+	"Das Foto nicht mehr existiert.";
 #elif L==3
-	"The comment no longer exists.";
+	"The photo no longer exists.";
 #elif L==4
-	"El comentario ya no existe.";
+	"La foto ya no existe.";
 #elif L==5
-	"Le commentaire a disparu.";
+	"La photo a disparu.";
 #elif L==6
-	"El comentario ya no existe.";	// Okoteve traducción
+	"La foto ya no existe.";	// Okoteve traducción
 #elif L==7
-	"Il commento non esiste pi&ugrave;.";
+	"La foto non esiste pi&ugrave;.";
 #elif L==8
-	"Komentarz ju&zdot; nie istnieje.";
+	"Zdj&eogon;cie ju&zdot; nie istnieje.";
 #elif L==9
-	"O coment&aacute;rio n&atilde;o existe mais.";
+	"La foto n&atilde;o existe mais.";
 #endif
 
 const char *Txt_The_original_post_no_longer_exists =

@@ -83,14 +83,18 @@ typedef enum
 bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat);
 void Pho_PutLinkToChangeMyPhoto (void);
 void Pho_PutLinkToChangeOtherUsrPhoto (void);
-void Pho_ReqMyPhotoWithContextualLinks (void);
+void Pho_ReqMyPhotoWithContextLinks (void);
 void Pho_ReqUsrPhotoWithContextualLinks (struct UsrData *UsrDat);
 void Pho_SendPhotoUsr (void);
 void Pho_RecMyPhotoDetFaces (void);
 void Pho_RecOtherUsrPhotoDetFaces (void);
+
+void Pho_ReqRemoveMyPhoto (void);
 void Pho_RemoveMyPhoto1 (void);
 void Pho_RemoveMyPhoto2 (void);
+void Pho_ReqRemoveUsrPhoto (void);
 void Pho_RemoveUsrPhoto (void);
+
 void Pho_UpdateMyPhoto1 (void);
 void Pho_UpdateMyPhoto2 (void);
 void Pho_UpdateUsrPhoto1 (void);

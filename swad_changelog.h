@@ -119,8 +119,8 @@
 // TODO: Change PhotoAttribution in table centres from TEXT to VARCHAR(255) (check maximum length first)
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
-// TODO: Request confirmation to remove user's photo
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
+// TODO: Teachers should have a button to report a student as probably duplicated. System admin should view a list of users reported and, for each of them, a small list with the possible duplicated (people with the same ID, the same name, etc.)
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -129,18 +129,26 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.224.3 (2016-06-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225 (2016-06-15)"
 #define CSS_FILE		"swad15.224.3.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.225:   Jun 14, 2016	Removing a user's photo now requires confirmation. (202425 lines)
+					5 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1574','es','N','Preguntar si eliminar foto otro usr.');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1575','es','N','Preguntar si eliminar foto estudiante');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1576','es','N','Preguntar si eliminar foto profesor');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1577','es','N','Preguntar si eliminar mi foto');
+UPDATE actions SET Txt='Eliminar mi foto' WHERE ActCod='428' AND Language='es';
+
         Version 15.224.3: Jun 13, 2016	Fix bug while finding cell content in file of marks. (202266 lines)
         Version 15.224.2: Jun 12, 2016	Info about number of files is moved to bottom of file browsers. (202266 lines)
         Version 15.224.1: Jun 12, 2016	Change in layout of file browsers. (202266 lines)
         Version 15.224:   Jun 12, 2016	Now a user can unfollow users followed by him/her whose profile is not visible.
-					Code refactoring in list of follweing/followers. (202304 lines)
+					Code refactoring in list of follwing/followers. (202304 lines)
         Version 15.223.3: Jun 12, 2016	Fixed layout of list of forums. (202282 lines)
         Version 15.223.2: Jun 12, 2016	Fixed bug in results of search of students. (202277 lines)
         Version 15.223.1: Jun 12, 2016	Show only users to follow with first name and surname 1. (202276 lines)

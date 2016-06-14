@@ -984,9 +984,12 @@ Users:
 	821. ActUpdOthPho		Update other user's photo
 	822. ActUpdStdPho		Update other user's photo
 	823. ActUpdTchPho		Update other user's photo
+	NEW. ActRemOthPho		Request the removal of other user's photo
+	NEW. ActRemStdPho		Request the removal of student's photo
+	NEW. ActRemTchPho		Request the removal of teacher's photo
 	824. ActRemOthPho		Remove other user's photo
-	825. ActRemStdPho		Remove other user's photo
-	826. ActRemTchPho		Remove other user's photo
+	825. ActRemStdPho		Remove student's photo
+	826. ActRemTchPho		Remove teacher's photo
 	827. ActCreOth			Create a new user
 	828. ActCreStd			Create a new user
 	829. ActCreTch			Create a new user
@@ -1338,6 +1341,7 @@ Profile:
        1150. ActReqMyPho		Show form to send my photo
        1151. ActDetMyPho		Receive my photo and detect faces on it
        1152. ActUpdMyPho		Update my photo
+        NEW. ActReqRemMyPho		Request the removal of my photo
        1153. ActRemMyPho		Remove my photo
 
        1154. ActEdiPri			Edit my privacy
@@ -2366,6 +2370,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUpdStdPho	*/{1439,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
    /* ActUpdTchPho	*/{1440,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
 
+   /* ActRemOthPho	*/{1574,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
+   /* ActRemStdPho	*/{1575,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
+   /* ActRemTchPho	*/{1576,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
    /* ActRemOthPho	*/{1441,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
    /* ActRemStdPho	*/{1442,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
    /* ActRemTchPho	*/{1443,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
@@ -2759,9 +2766,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActChgMyData	*/{ 298,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
 
-   /* ActReqMyPho	*/{  30,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqMyPhotoWithContextualLinks			,NULL},
+   /* ActReqMyPho	*/{  30,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqMyPhotoWithContextLinks	,NULL},
    /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
    /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
+   /* ActReqRemMyPho	*/{1577,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveMyPhoto		,NULL},
    /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
 
    /* ActEdiPri		*/{1403,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pri_EditMyPrivacy		,NULL},
@@ -4400,6 +4408,10 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeDatExaAnn,	// #1571
 	ActSeeOneExaAnn,	// #1572
 	ActChgCrsYeaCfg,	// #1573
+	ActReqRemOthPho,	// #1574
+	ActReqRemStdPho,	// #1575
+	ActReqRemTchPho,	// #1576
+	ActReqRemMyPho,		// #1577
 	};
 
 /*****************************************************************************/

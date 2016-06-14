@@ -84,8 +84,8 @@ const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRemoveMyPhoto (void);
-static void Pho_PutIconToRemoveOtherUsrPhoto (void);
+static void Pho_PutIconToRequestRemoveMyPhoto (void);
+static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void);
 static void Pho_ReqMyPhoto (void);
 static void Pho_ReqOtherUsrPhoto (void);
 
@@ -219,35 +219,35 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
   }
 
 /*****************************************************************************/
-/********************* Put a link to remove user's photo *********************/
+/************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRemoveMyPhoto (void)
+static void Pho_PutIconToRequestRemoveMyPhoto (void)
   {
    extern const char *Txt_Remove_photo;
 
-   /***** Link to remove my photo *****/
+   /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
-      Lay_PutContextualLink (ActRemMyPho,NULL,"remove-on64x64.png",
+      Lay_PutContextualLink (ActReqRemMyPho,NULL,"remove-on64x64.png",
 			     Txt_Remove_photo,NULL);
   }
 
 /*****************************************************************************/
-/********************* Put a link to remove user's photo *********************/
+/********** Put a link to request the removal of a user's photo **************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRemoveOtherUsrPhoto (void)
+static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
   {
    extern const char *Txt_Remove_photo;
    char PhotoURL[PATH_MAX+1];
    bool PhotoExists;
 
-   /***** Link for removing the photo *****/
+   /***** Link to request the removal of another user's photo *****/
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
    if (PhotoExists)
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
-			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
-											ActRemOthPho),	// Guest, visitor or admin
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqRemStdPho :
+			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqRemTchPho :
+											ActReqRemOthPho),	// Guest, visitor or admin
 			     Usr_PutParamOtherUsrCodEncrypted,
 			     "remove-on64x64.png",
 			     Txt_Remove_photo,NULL);
@@ -257,7 +257,7 @@ static void Pho_PutIconToRemoveOtherUsrPhoto (void)
 /************************ Form for sending my photo **************************/
 /*****************************************************************************/
 
-void Pho_ReqMyPhotoWithContextualLinks (void)
+void Pho_ReqMyPhotoWithContextLinks (void)
   {
    /***** Contextual links to remove photo and change privacy *****/
    if (Gbl.Usrs.Me.MyPhotoExists)	// I have photo
@@ -307,8 +307,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Photo,
-                        ItsMe ? Pho_PutIconToRemoveMyPhoto :
-                                Pho_PutIconToRemoveOtherUsrPhoto);
+                        ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
+                                Pho_PutIconToRequestRemoveOtherUsrPhoto);
 
    /***** Start form *****/
    if (ItsMe)
@@ -362,7 +362,7 @@ void Pho_SendPhotoUsr (void)
 	                                                              true);
          if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
 	    /***** Form to send my photo *****/
-	    Pho_ReqMyPhotoWithContextualLinks ();
+	    Pho_ReqMyPhotoWithContextLinks ();
 	 else
 	    /***** Form to send another user's photo *****/
 	    Pho_ReqOtherUsrPhoto ();
@@ -408,6 +408,40 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
   }
 
 /*****************************************************************************/
+/********************** Request the removal of my photo **********************/
+/*****************************************************************************/
+
+void Pho_ReqRemoveMyPhoto (void)
+  {
+   extern const char *Txt_Photo;
+   extern const char *Txt_Do_you_really_want_to_remove_your_photo;
+   extern const char *Txt_Remove_photo;
+   extern const char *Txt_The_photo_no_longer_exists;
+
+   /***** Show current photo and help message *****/
+   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,true))
+     {
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveMyPhoto);
+
+      /***** Show current photo and help message *****/
+      Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
+			"PHOTO186x248",Pho_NO_ZOOM,false);
+      Lay_ShowAlert (Lay_INFO,Txt_Do_you_really_want_to_remove_your_photo);
+
+      /***** Button to remove my photo *****/
+      Act_FormStart (ActRemMyPho);
+      Lay_PutRemoveButton (Txt_Remove_photo);
+      Act_FormEnd ();
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+     }
+   else
+      Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
+  }
+
+/*****************************************************************************/
 /****************************** Remove my photo ******************************/
 /*****************************************************************************/
 
@@ -426,6 +460,59 @@ void Pho_RemoveMyPhoto2 (void)
 
    if (!Gbl.Error)
       Lay_ShowAlert (Lay_SUCCESS,Txt_Photo_removed);
+  }
+
+/*****************************************************************************/
+/**************** Request the removal of another user's photo ****************/
+/*****************************************************************************/
+
+void Pho_ReqRemoveUsrPhoto (void)
+  {
+   extern const char *Txt_Photo;
+   extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
+   extern const char *Txt_Remove_photo;
+   extern const char *Txt_The_photo_no_longer_exists;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char PhotoURL[PATH_MAX+1];
+
+   /***** Get user's code from form *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+
+   /***** Get password, user type and user's data from database *****/
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+     {
+      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+	{
+	 /***** Show current photo and help message *****/
+	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true))
+	   {
+	    /***** Start frame *****/
+	    Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveOtherUsrPhoto);
+
+	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
+			      "PHOTO186x248",Pho_NO_ZOOM,false);
+	    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_photo_of_X,Gbl.Usrs.Other.UsrDat.FullName);
+	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+	    /***** Button to remove user's photo *****/
+	    Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+			   (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
+										      ActRemOthPho));	// Guest, visitor or admin
+	    Usr_PutParamOtherUsrCodEncrypted ();
+	    Lay_PutRemoveButton (Txt_Remove_photo);
+	    Act_FormEnd ();
+
+	    /***** End frame *****/
+	    Lay_EndRoundFrame ();
+	   }
+	 else
+	    Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
+	}
+      else
+	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
