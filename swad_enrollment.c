@@ -3749,7 +3749,7 @@ void Enr_ModifyUsr (void)
 		  break;
 	       case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
-		     Lay_ShowAlert (Lay_INFO,"Option under development.");	// TODO: Program this!
+		     Usr_ReportUsrAsPossibleDuplicate ();
 		  else
 		     Error = true;
 		  break;

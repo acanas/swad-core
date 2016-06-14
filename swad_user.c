@@ -2705,6 +2705,7 @@ static void Usr_InsertMyLastData (void)
             (long) (time_t) 0);	// The user never accessed to notifications
    DB_QueryINSERT (Query,"can not insert last user's data");
   }
+
 /*****************************************************************************/
 /************* Write a row of a table with the data of a guest ***************/
 /*****************************************************************************/
@@ -7840,4 +7841,35 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
    sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod='%ld'",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user from users banned");
+  }
+
+/*****************************************************************************/
+/******************** Report a user as possible duplicate ********************/
+/*****************************************************************************/
+
+void Usr_ReportUsrAsPossibleDuplicate (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char Query[256];
+   bool ItsMe;
+
+   /***** Get user to be reported as possible duplicate *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /* Check if it's allowed to me to report users as possible duplicatedr */
+      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+      if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+	{
+         sprintf (Query,"REPLACE INTO usr_dup (UsrCod,UsrWhoReported,TimeReport)"
+                        " VALUES ('%ld','%ld',NOW())",
+                  Gbl.Usrs.Other.UsrDat.UsrCod,
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+         Lay_ShowAlert (Lay_INFO,Query);	// TODO: Remove this line, written only for debug purposes
+         // DB_QueryINSERT (Query,"can not report duplicate");
+	}
+      else
+         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
