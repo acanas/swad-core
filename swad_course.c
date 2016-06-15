@@ -2974,6 +2974,13 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
    /***** List the courses (one row per course) *****/
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
+      /* Start frame and table */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td colspan=\"2\"></td>"
+			 "<td colspan=\"%u\">",
+	       Usr_NUM_MAIN_FIELDS_DATA_USR-2);
+      Lay_StartRoundFrameTable (NULL,2,NULL);
+
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"BM\"></th>"
@@ -3011,6 +3018,11 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
          /* Write data of this course */
          Crs_WriteRowCrsData (NumCrs,row,true);
         }
+
+      /* End table and frame */
+      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
 
    /***** Free structure that stores the query result *****/

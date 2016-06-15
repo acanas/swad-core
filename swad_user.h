@@ -73,6 +73,8 @@
 
 #define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64*Cfg_MAX_USRS_IN_LIST)
 
+#define Usr_NUM_MAIN_FIELDS_DATA_USR	 9
+
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/

@@ -83,7 +83,6 @@ const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
    "list64x64.gif"
   };
 
-#define Usr_NUM_MAIN_FIELDS_DATA_USR	 9
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 8
 #define Usr_NUM_ALL_FIELDS_DATA_INV	17
 #define Usr_NUM_ALL_FIELDS_DATA_STD	13
@@ -5874,17 +5873,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
 	    /* Write all the courses this user belongs to */
             if (Role != Rol__GUEST_)
-              {
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td colspan=\"2\"></td>"
-				  "<td colspan=\"%u\">",
-			Usr_NUM_MAIN_FIELDS_DATA_USR-2);
-	       Lay_StartRoundFrameTable (NULL,2,NULL);
 	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
-	       Lay_EndRoundFrameTable ();
-	       fprintf (Gbl.F.Out,"</td>"
-				  "</tr>");
-              }
            }
         }
 
@@ -7741,17 +7730,16 @@ void Usr_ListDuplicateUsrs (void)
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Informants;
-   extern const char *Txt_Date;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumCol;
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
-   unsigned NumInformers;
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   unsigned NumInformants;
+   Rol_Role_t Role;
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
@@ -7765,29 +7753,31 @@ void Usr_ListDuplicateUsrs (void)
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
-      {
-      /* Initialize structure with user's data */
+     {
+      /***** Initialize field names *****/
+      Usr_SetUsrDatMainFieldNames ();
+
+      /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /* Start table */
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"margin:0 auto;\">"
-                         "<th></th>"
-                         "<th colspan=\"2\" class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"CENTER_TOP\">"
-                         "%s"
-                         "</th>"
-                         "</tr>",
-               Txt_User[Usr_SEX_UNKNOWN],
-               Txt_Informants,
-               Txt_Date);
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
-      /* List users */
+      /***** Heading row with column names *****/
+      /* Start row */
+      fprintf (Gbl.F.Out,"<tr>");
+      for (NumCol = 0;
+           NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
+           NumCol++)
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+                            "%s&nbsp;"
+                            "</th>",
+                  Usr_UsrDatMainFieldNames[NumCol]);
+
+      /* End row */
+      fprintf (Gbl.F.Out,"</tr>");
+
+      /***** List users *****/
       for (NumUsr = 0;
            NumUsr < NumUsrs;
            NumUsr++)
@@ -7798,49 +7788,38 @@ void Usr_ListDuplicateUsrs (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
            {
-            /***** Number *****/
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"DAT RIGHT_TOP\">"
-                               "%u"
-                               "</td>",
-                     NumUsrs - NumUsr);
+            UsrDat.Accepted = false;	// TODO: Get this from database
 
-            /***** User photo *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
-        	               " style=\"width:22px;\">");
-            ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	                  NULL,
-                              "PHOTO21x28",Pho_ZOOM,false);
-            fprintf (Gbl.F.Out,"</td>");
+            /* Write data of this user */
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
 
-            /***** User name *****/
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
-            Usr_RestrictLengthAndWriteName (&UsrDat,20);
-            fprintf (Gbl.F.Out,"</td>");
-
-            /***** Number of informers (row[1]) *****/
-	    if (sscanf (row[1],"%u",&NumInformers) != 1)
+            /* Write number of informants (row[1]) if greater than 1 */
+	    if (sscanf (row[1],"%u",&NumInformants) != 1)
 	       Lay_ShowErrorAndExit ("Wrong number of informers.");
-            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
-        	                "%u"
-                                "</td>",
-                     NumInformers);
+            if (NumInformants > 1)
+	       fprintf (Gbl.F.Out,"<tr>"
+				  "<td colspan=\"2\"></td>"
+				  "<td colspan=\"%u\" class=\"DAT\">%s: %u</td>"
+				  "</tr>",
+			Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			Txt_Informants,
+			NumInformants);
 
-            /***** Inform time (row[2]) *****/
-            Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[2]),"DAT");
-
-            fprintf (Gbl.F.Out,"</tr>");
+	    /* Write all the courses this user belongs to */
+            for (Role = Rol_STUDENT;
+        	 Role <= Rol_TEACHER;
+        	 Role++)
+	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
            }
          else        // User does not exists ==>
                      // remove user from table of possible duplicate users
             Usr_RemoveUsrFromDuplicated (UsrDat.UsrCod);
         }
 
-      /* End table */
+      /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
 
-      /* Free memory used for user's data */
+      /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
    else	// There are no users
