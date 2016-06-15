@@ -351,5 +351,7 @@ bool Usr_CheckIfUsrBanned (long UsrCod);
 void Usr_RemoveUsrFromUsrBanned (long UsrCod);
 
 void Usr_ReportUsrAsPossibleDuplicate (void);
+void Usr_PutLinkToListDupUsrs (void);
+void Usr_ListDuplicateUsrs (void);
 
 #endif

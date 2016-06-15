@@ -1055,6 +1055,8 @@ Users:
 	882. ActReqRemOldUsr		Request the complete elimination of old users
 	883. ActRemOldUsr		Eliminate completely old users
 
+	NEW. ActLstDupUsr		List possible duplicate users
+
         884. ActLstClk			List last clicks in real time
 Social:
         885. ActSeeSocTmlGbl		Show social timeline (global)
@@ -2448,6 +2450,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqRemOldUsr	*/{ 590,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemoveOldUsrs		,NULL},
    /* ActRemOldUsr	*/{ 773,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemoveOldUsrs		,NULL},
+
+   /* ActLstDupUsr	*/{1578,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListDuplicateUsrs		,NULL},
 
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
@@ -4412,6 +4416,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemStdPho,	// #1575
 	ActReqRemTchPho,	// #1576
 	ActReqRemMyPho,		// #1577
+	ActLstDupUsr,		// #1578
 	};
 
 /*****************************************************************************/

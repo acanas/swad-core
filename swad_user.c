@@ -6099,6 +6099,9 @@ void Usr_ListDataAdms (void)
       /* Put link to go to admin one user */
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
 
+      /* Put link to list possible duplicate users */
+      Usr_PutLinkToListDupUsrs ();
+
       /* Put link to remove old users */
       Enr_PutLinkToRemOldUsrs ();
 
@@ -6132,7 +6135,7 @@ void Usr_ListDataAdms (void)
    /***** Get and order list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
-   /***** Start table with list of administrators *****/
+   /***** Start frame with list of administrators *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
 
    /***** Form to select range of administrators *****/
@@ -6193,7 +6196,7 @@ void Usr_ListDataAdms (void)
    else        // Gbl.Usrs.LstAdms.NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
 
-   /***** End of frame *****/
+   /***** End frame *****/
    Lay_EndRoundFrame ();
 
    /***** Free memory for teachers list *****/
@@ -7876,4 +7879,34 @@ void Usr_ReportUsrAsPossibleDuplicate (void)
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/************ Put a link (form) to list possible duplicate users *************/
+/*****************************************************************************/
+
+void Usr_PutLinkToListDupUsrs (void)
+  {
+   extern const char *Txt_Duplicate_USERS;
+
+   /***** Put form to remove old users *****/
+   Lay_PutContextualLink (ActLstDupUsr,NULL,"usrs64x64.gif",
+                          Txt_Duplicate_USERS,Txt_Duplicate_USERS);
+  }
+
+/*****************************************************************************/
+/*********************** List possible duplicate users ***********************/
+/*****************************************************************************/
+
+void Usr_ListDuplicateUsrs (void)
+  {
+   extern const char *Txt_Possibly_duplicate_users;
+
+   /***** Start frame with list of possible duplicate users *****/
+   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
+
+   Lay_ShowAlert (Lay_INFO,"Option under development.");	// TODO: Write listing of users
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }

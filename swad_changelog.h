@@ -128,13 +128,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.3 (2016-06-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.4 (2016-06-15)"
 #define CSS_FILE		"swad15.224.3.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.225.4: Jun 15, 2016	Listing possible duplicate users. Not finished. (202623 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1578','es','N','Listar usuarios duplicados');
+
         Version 15.225.3: Jun 15, 2016	New database table to report users as possible duplicates. (202550 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS usr_duplicated (UsrCod INT NOT NULL,InformerCod INT NOT NULL,InformTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,InformerCod),INDEX(UsrCod));

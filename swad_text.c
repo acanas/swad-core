@@ -9559,6 +9559,27 @@ const char *Txt_downloads =	// As a noun
 	"downloads";
 #endif
 
+const char *Txt_Duplicate_USERS =
+#if   L==1
+	"Duplicats";
+#elif L==2
+	"Doppelte";
+#elif L==3
+	"Duplicates";
+#elif L==4
+	"Duplicados";
+#elif L==5
+	"En double";
+#elif L==6
+	"Duplicados";	// Okoteve traducción
+#elif L==7
+	"Duplicati";
+#elif L==8
+	"Duplikaty";
+#elif L==9
+	"Duplicados";
+#endif
+
 const char *Txt_Edit =
 #if   L==1
 	"Editar";
@@ -28454,6 +28475,27 @@ const char *Txt_Plugins =
 	"wtyczki";
 #elif L==9
 	"Plugins";
+#endif
+
+const char *Txt_Possibly_duplicate_users =
+#if   L==1
+	"Usuaris possiblement duplicats";
+#elif L==2
+	"M&ouml;gliche doppelte Benutzer";
+#elif L==3
+	"Possibly duplicate users";
+#elif L==4
+	"Usuarios posiblemente duplicados";
+#elif L==5
+	"Possibles utilisateurs en double";
+#elif L==6
+	"Usuarios posiblemente duplicados";	// Okoteve traducción
+#elif L==7
+	"Possibili utenti duplicati";
+#elif L==8
+	"Mo&zdot;liwe duplikaty u&zdot;ytkownik&oacute;w";
+#elif L==9
+	"Usu&aacute;rios possivelmente duplicados";
 #endif
 
 const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
