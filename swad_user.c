@@ -6539,11 +6539,12 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 
 static void Usr_PutLinkToSeeAdmins (void)
   {
-   extern const char *Txt_See_administrators;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
    Lay_PutContextualLink (ActLstOth,NULL,"adm16x16.gif",
-                          Txt_See_administrators,Txt_See_administrators);
+                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/
@@ -6552,11 +6553,12 @@ static void Usr_PutLinkToSeeAdmins (void)
 
 static void Usr_PutLinkToSeeGuests (void)
   {
-   extern const char *Txt_See_guests;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
    Lay_PutContextualLink (ActLstGst,NULL,"usrs64x64.gif",
-                          Txt_See_guests,Txt_See_guests);
+                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/

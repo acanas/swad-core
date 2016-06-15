@@ -128,13 +128,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.4 (2016-06-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.5 (2016-06-15)"
 #define CSS_FILE		"swad15.224.3.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.225.5: Jun 15, 2016	Simplification in texts (links) to view guests and admins. (202586 lines)
         Version 15.225.4: Jun 15, 2016	Listing possible duplicate users. Not finished. (202623 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1578','es','N','Listar usuarios duplicados');
