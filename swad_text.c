@@ -15299,6 +15299,27 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES] =
 #endif
 	};
 
+const char *Txt_Informants =
+#if   L==1
+	"Informadors";
+#elif L==2
+	"Informanten";
+#elif L==3
+	"Informants";
+#elif L==4
+	"Informantes";
+#elif L==5
+	"Informateurs";
+#elif L==6
+	"Informantes";	// Okoteve traducción
+#elif L==7
+	"Informatori";
+#elif L==8
+	"informator&oacute;w";
+#elif L==9
+	"Informantes";
+#endif
+
 const char *Txt_Inline_math =
 #if   L==1
 	"F&oacute;rmula";
@@ -49018,26 +49039,88 @@ const char *Txt_Use_this_nickname =
 	"Utilizar esta alcunha";
 #endif
 
-const char *Txt_User =
+const char *Txt_User[Usr_NUM_SEXS] =
+	{	// Usr_SEX_UNKNOWN
 #if   L==1
-	"Usuari";
+	"Usuari/a"
 #elif L==2
-	"Benutzer";
+	"Benutzer"
 #elif L==3
-	"User";
+	"User"
 #elif L==4
-	"Usuario";
+	"Usuario/a"
 #elif L==5
-	"Utilisateur";
+	"Utilisateur/se"
 #elif L==6
-	"Puruh&aacute;ra";
+	"Puruh&atilde;ra"
 #elif L==7
-	"Utente";
+	"Utente"
 #elif L==8
-	"User";		// Potrzebujesz tlumaczenie
+	"U&zdot;ytkownika"
 #elif L==9
-	"Utilizador";
+	"Utilizador/a"
 #endif
+	,	// Usr_SEX_FEMALE
+#if   L==1
+	"Usuaria"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"User"
+#elif L==4
+	"Usuaria"
+#elif L==5
+	"Utilisateuse"
+#elif L==6
+	"Puruh&atilde;ra"
+#elif L==7
+	"Utente"
+#elif L==8
+	"U&zdot;ytkownika"
+#elif L==9
+	"Utilizadora"
+#endif
+	,	// Usr_SEX_MALE
+#if   L==1
+	"Usuari"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"User"
+#elif L==4
+	"Usuario"
+#elif L==5
+	"Utilisateur"
+#elif L==6
+	"Puruh&atilde;ra"
+#elif L==7
+	"Utente"
+#elif L==8
+	"U&zdot;ytkownika"
+#elif L==9
+	"Utilizador"
+#endif
+	,	// Usr_SEX_ALL
+#if   L==1
+	"Usuari/a"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"User"
+#elif L==4
+	"Usuario/a"
+#elif L==5
+	"Utilisateur/se"
+#elif L==6
+	"Puruh&atilde;ra"
+#elif L==7
+	"Utente"
+#elif L==8
+	"U&zdot;ytkownika"
+#elif L==9
+	"Utilizador/a"
+#endif
+	};
 
 const char *Txt_user[Usr_NUM_SEXS] =
 	{	// Usr_SEX_UNKNOWN

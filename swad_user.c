@@ -1486,7 +1486,7 @@ void Usr_PutLinkToLogin (void)
 void Usr_WriteFormLogin (void)
   {
    extern const char *Txt_Log_in;
-   extern const char *Txt_User;
+   extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Password;
    extern const char *Txt_password;
@@ -1530,8 +1530,8 @@ void Usr_WriteFormLogin (void)
 		      "</td>"
 		      "</tr>",
             Gbl.Prefs.IconsURL,
-            Txt_User,
-            Txt_User,
+            Txt_User[Usr_SEX_UNKNOWN],
+            Txt_User[Usr_SEX_UNKNOWN],
             Usr_MAX_LENGTH_USR_LOGIN,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin,
@@ -7903,11 +7903,113 @@ void Usr_PutLinkToListDupUsrs (void)
 void Usr_ListDuplicateUsrs (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_Informants;
+   extern const char *Txt_Date;
+   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+   unsigned NumInformers;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX+1];
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
 
-   Lay_ShowAlert (Lay_INFO,"Option under development.");	// TODO: Write listing of users
+   /***** Build query *****/
+   sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
+	          " FROM usr_duplicated"
+		  " GROUP BY UsrCod"
+		  " ORDER BY N DESC,T DESC");
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrollment");
+
+   /***** List possible duplicated users *****/
+   if (NumUsrs)
+      {
+      /* Initialize structure with user's data */
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /* Start table */
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+	                 " style=\"margin:0 auto;\">"
+                         "<th></th>"
+                         "<th colspan=\"2\" class=\"LEFT_TOP\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"RIGHT_TOP\">"
+                         "%s"
+                         "</th>"
+                         "<th class=\"CENTER_TOP\">"
+                         "%s"
+                         "</th>"
+                         "</tr>",
+               Txt_User[Usr_SEX_UNKNOWN],
+               Txt_Informants,
+               Txt_Date);
+
+      /* List users */
+      for (NumUsr = 0;
+           NumUsr < NumUsrs;
+           NumUsr++)
+        {
+         row = mysql_fetch_row (mysql_res);
+
+         /* Get user code (row[0]) */
+         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+           {
+            /***** Number *****/
+            fprintf (Gbl.F.Out,"<tr>"
+                               "<td class=\"DAT RIGHT_TOP\">"
+                               "%u"
+                               "</td>",
+                     NumUsrs - NumUsr);
+
+            /***** User photo *****/
+            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
+        	               " style=\"width:22px;\">");
+            ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+            Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                        	                  NULL,
+                              "PHOTO21x28",Pho_ZOOM,false);
+            fprintf (Gbl.F.Out,"</td>");
+
+            /***** User name *****/
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
+            Usr_RestrictLengthAndWriteName (&UsrDat,20);
+            fprintf (Gbl.F.Out,"</td>");
+
+            /***** Number of informers (row[1]) *****/
+	    if (sscanf (row[1],"%u",&NumInformers) != 1)
+	       Lay_ShowErrorAndExit ("Wrong number of informers.");
+            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
+        	                "%u"
+                                "</td>",
+                     NumInformers);
+
+            /***** Inform time (row[2]) *****/
+            Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[2]),"DAT");
+
+            fprintf (Gbl.F.Out,"</tr>");
+           }
+         else        // User does not exists or user already belongs to course ==> remove user from table of possible duplicate users
+           {
+            // TODO: Remove user from table of possible duplicate users
+           }
+        }
+
+      /* End table */
+      fprintf (Gbl.F.Out,"</table>");
+
+      /* Free memory used for user's data */
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+   else	// There are no users
+      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_UNKNOWN]);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

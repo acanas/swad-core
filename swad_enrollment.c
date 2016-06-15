@@ -2836,6 +2836,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
             /***** User name *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
             Usr_RestrictLengthAndWriteName (&UsrDat,20);
+            fprintf (Gbl.F.Out,"</td>");
 
             /***** Requested role (row[3]) *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"

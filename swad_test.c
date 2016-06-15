@@ -4047,7 +4047,7 @@ static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 
 static void Tst_WriteHeadUserCorrect (void)
   {
-   extern const char *Txt_User;
+   extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_TST_Correct_ANSWER;
 
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_MIDDLE\">"
@@ -4056,7 +4056,7 @@ static void Tst_WriteHeadUserCorrect (void)
                       "<td class=\"DAT_SMALL CENTER_MIDDLE\">"
                       "&nbsp;%s&nbsp;"
                       "</td>",
-            Txt_User,Txt_TST_Correct_ANSWER);
+            Txt_User[Usr_SEX_UNKNOWN],Txt_TST_Correct_ANSWER);
   }
 
 /*****************************************************************************/
@@ -7006,7 +7006,7 @@ void Tst_ShowUsrsExams (void)
 
 static void Tst_ShowHeaderTestResults (void)
   {
-   extern const char *Txt_User;
+   extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Date;
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
@@ -7039,7 +7039,7 @@ static void Tst_ShowHeaderTestResults (void)
 		      "</th>"
 		      "<th></th>"
 		      "</tr>",
-	    Txt_User,
+	    Txt_User[Usr_SEX_UNKNOWN],
 	    Txt_Date,
 	    Txt_Questions,
 	    Txt_Non_blank_BR_questions,
