@@ -7998,7 +7998,7 @@ void Usr_ListDuplicateUsrs (void)
            }
          else        // User does not exists ==>
                      // remove user from table of possible duplicate users
-            Usr_RemoveUsrFromDuplicated (UsrDat->UsrCod);
+            Usr_RemoveUsrFromDuplicated (UsrDat.UsrCod);
         }
 
       /* End table */
