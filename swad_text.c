@@ -40941,6 +40941,27 @@ const char *Txt_TEXT_plain =
 	 "plano";
 #endif
 
+const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
+#if   L==1
+	"Gr&agrave;cies per informar d'un usuari possiblement duplicat.";
+#elif L==2
+	"Vielen Dank für eine m&ouml;gliche doppelte Benutzer berichten.";
+#elif L==3
+	"Thank you for reporting a possible duplicate user.";
+#elif L==4
+	"Gracias por informar de un usuario posiblemente duplicado.";
+#elif L==5
+	"Merci d'avoir signal&eacute; un &eacute;ventuel utilisateur en double.";
+#elif L==6
+	"Gracias por informar de un usuario posiblemente duplicado.";	// Okoteve traducción
+#elif L==7
+	"Grazie per aver segnalato un possibile utente duplicato.";
+#elif L==8
+	"Dzi&eogon;kujemy za zg&lstrok;oszenie ewentualnego duplikat u&zdot;ytkownika.";
+#elif L==9
+	"Obrigado por relatar um possível usu&aacute;rio duplicado.";
+#endif
+
 const char *Txt_Thanks_for_answering_the_survey =
 #if   L==1
 	"Gracias por responder la encuesta.";	// Necessita traduccio

@@ -128,14 +128,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.2 (2016-06-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.3 (2016-06-15)"
 #define CSS_FILE		"swad15.224.3.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.225.2: Jun 15, 2016	New option in user administration to report a user as possible duplicate. Not finished. (? lines)
+        Version 15.225.3: Jun 15, 2016	New database table to report users as possible duplicates. (202550 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS usr_duplicated (UsrCod INT NOT NULL,InformerCod INT NOT NULL,InformTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,InformerCod),INDEX(UsrCod));
+
+        Version 15.225.2: Jun 15, 2016	New option in user administration to report a user as possible duplicate. Not finished. (202497 lines)
         Version 15.225.1: Jun 14, 2016	New option in user administration to report a user as possible duplicate. Not finished. (202468 lines)
         Version 15.225:   Jun 14, 2016	Removing a user's photo now requires confirmation. (202425 lines)
 					5 changes necessary in database:

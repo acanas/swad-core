@@ -2631,6 +2631,25 @@ mysql> DESCRIBE usr_data;
                    "INDEX(Menu),"
                    "INDEX(SideCols))");
 
+   /***** Table usr_duplicated *****/
+/*
+mysql> DESCRIBE usr_duplicated;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| UsrCod      | int(11)  | NO   | PRI | NULL    |       |
+| InformerCod | int(11)  | NO   | PRI | NULL    |       |
+| InformTime  | datetime | NO   |     | NULL    |       |
++-------------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_duplicated ("
+	           "UsrCod INT NOT NULL,"
+	           "InformerCod INT NOT NULL,"
+	           "InformTime DATETIME NOT NULL,"
+	           "UNIQUE INDEX(UsrCod,InformerCod),"
+	           "INDEX(UsrCod))");
+
    /***** Table usr_emails *****/
    /*
 mysql> DESCRIBE usr_emails;

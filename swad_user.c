@@ -7849,6 +7849,7 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 
 void Usr_ReportUsrAsPossibleDuplicate (void)
   {
+   extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    bool ItsMe;
@@ -7860,12 +7861,15 @@ void Usr_ReportUsrAsPossibleDuplicate (void)
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
       if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 	{
-         sprintf (Query,"REPLACE INTO usr_dup (UsrCod,UsrWhoReported,TimeReport)"
+	 /***** Insert possible duplicate into database *****/
+         sprintf (Query,"REPLACE INTO usr_duplicated (UsrCod,InformerCod,InformTime)"
                         " VALUES ('%ld','%ld',NOW())",
                   Gbl.Usrs.Other.UsrDat.UsrCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
-         Lay_ShowAlert (Lay_INFO,Query);	// TODO: Remove this line, written only for debug purposes
-         // DB_QueryINSERT (Query,"can not report duplicate");
+         DB_QueryINSERT (Query,"can not report duplicate");
+
+         /***** Show feedback message *****/
+         Lay_ShowAlert (Lay_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
 	}
       else
          Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

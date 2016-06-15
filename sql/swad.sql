@@ -1250,6 +1250,15 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(Menu),
 	INDEX(SideCols));
 --
+-- Table usr_duplicated: stores informs of users possibly duplicated
+--
+CREATE TABLE IF NOT EXISTS usr_duplicated (
+	UsrCod INT NOT NULL,
+	InformerCod INT NOT NULL,
+	InformTime DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod,InformerCod),
+	INDEX(UsrCod));
+--
 -- Table usr_emails: stores the users' e-mails
 --
 CREATE TABLE IF NOT EXISTS usr_emails (

@@ -11590,7 +11590,8 @@ UPDATE notif SET NotifyEvent=4  WHERE NotifyEvent=3;
 UPDATE notif SET NotifyEvent=3  WHERE NotifyEvent=2;
 
 
+----- SWAD 15.225.3 (2016/06/15) -----
 
-
+CREATE TABLE IF NOT EXISTS usr_duplicated (UsrCod INT NOT NULL,InformerCod INT NOT NULL,InformTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,InformerCod),INDEX(UsrCod));
 
 
