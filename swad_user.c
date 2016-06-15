@@ -128,9 +128,6 @@ static void Usr_SetUsrRoleAndPrefs (void);
 
 static void Usr_InsertMyLastData (void);
 
-static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat);
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                                     bool PutCheckBoxToSelectUsr);
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
 static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat);
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
@@ -2707,79 +2704,10 @@ static void Usr_InsertMyLastData (void)
   }
 
 /*****************************************************************************/
-/************* Write a row of a table with the data of a guest ***************/
+/*********** Write a row of a table with the main data of a user *************/
 /*****************************************************************************/
 
-static void Usr_WriteRowGstMainData (unsigned NumUsr,struct UsrData *UsrDat)
-  {
-   char PhotoURL[PATH_MAX+1];
-   bool ShowPhoto;
-   struct Institution Ins;
-
-   /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
-
-   /***** Checkbox to select user *****/
-   // Two colors are used alternatively to better distinguish the rows
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
-            Gbl.RowEvenOdd);
-   Usr_PutCheckboxToSelectUser (UsrDat,false);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Guest has accepted enrollment in current course? *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
-	              "<img src=\"%s/tr16x16.gif\""
-	              " alt=\"\" title=\"\""
-	              " class=\"ICON20x20\" />"
-	              "</td>",
-            Gbl.RowEvenOdd,
-            Gbl.Prefs.IconsURL);
-
-   /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL RIGHT_MIDDLE COLOR%u\">"
-	              "&nbsp;%u&nbsp;"
-	              "</td>",
-            Gbl.RowEvenOdd,NumUsr);
-
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      /***** Show guest's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
-               Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
-     }
-
-   /****** Write user's IDs ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL",
-            Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Write rest of main guest's data *****/
-   Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_RestrictLengthUsrName (UsrDat);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
-                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW  :
-                                	                       NULL);
-
-   /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/************ Write a row of a table with the data of a student **************/
-/*****************************************************************************/
-
-void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
+void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
@@ -3075,99 +3003,6 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
          DB_FreeMySQLResult (&mysql_res);
         }
      }
-
-   /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/************* Write a row of a table with the data of a teacher *************/
-/*****************************************************************************/
-
-static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                                     bool PutCheckBoxToSelectUsr)
-  {
-   extern const char *Txt_Enrollment_confirmed;
-   extern const char *Txt_Enrollment_not_confirmed;
-   const char *BgColor;
-   char PhotoURL[PATH_MAX+1];
-   bool ShowPhoto;
-   bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
-	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   struct Institution Ins;
-
-   /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
-
-   /***** Checkbox to select user *****/
-   // Two colors are used alternatively to better distinguish the rows
-   BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
-                                 Gbl.ColorRows[Gbl.RowEvenOdd];
-   if (PutCheckBoxToSelectUsr)
-     {
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-
-      Usr_PutCheckboxToSelectUser (UsrDat,UsrIsTheMsgSender);
-
-      fprintf (Gbl.F.Out,"</td>");
-     }
-
-   /***** User has accepted enrollment? *****/
-   fprintf (Gbl.F.Out,"<td class=\"");
-   if (UsrIsTheMsgSender)
-      fprintf (Gbl.F.Out,"BM_SEL");
-   else
-      fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
-	              "</td>",
-            Gbl.Prefs.IconsURL,
-            UsrDat->Accepted ? "ok_on" :
-        	               "tr",
-            UsrDat->Accepted ? Txt_Enrollment_confirmed :
-                               Txt_Enrollment_not_confirmed,
-            UsrDat->Accepted ? Txt_Enrollment_confirmed :
-                               Txt_Enrollment_not_confirmed);
-
-   /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "&nbsp;%u&nbsp;"
-	              "</td>",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL",
-            BgColor,
-            NumUsr);
-
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      /***** Show user's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                                           NULL,
-                        "PHOTO21x28",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
-     }
-
-   /****** Write user's IDs ******/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-                               "DAT_SMALL",
-            BgColor);
-   ID_WriteUsrIDs (UsrDat);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Write rest of main user's data *****/
-   Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_RestrictLengthUsrName (UsrDat);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,
-                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
-                                	                       NULL);
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -5318,7 +5153,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
             UsrDat.Accepted = false;	// Guests have no courses,...
                                         // ...so they have not accepted...
             	    	    	    	// ...inscription in any course
-            Usr_WriteRowGstMainData (++NumUsr,&UsrDat);
+            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
            }
         }
 
@@ -5399,7 +5234,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
             UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
-            Usr_WriteRowStdMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
            }
         }
 
@@ -5470,7 +5305,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
             UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
-            Usr_WriteRowTchMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
            }
         }
 
@@ -5841,7 +5676,7 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
               {
                UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
-               Usr_WriteRowStdMainData (++NumUsr,&UsrDat,true);
+               Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
               }
            }
          break;
@@ -5853,7 +5688,7 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
               {
                UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
-               Usr_WriteRowTchMainData (++NumUsr,&UsrDat,true);
+               Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
               }
            }
          break;
@@ -6035,10 +5870,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
             UsrDat.Accepted = LstUsrs->Lst[NumUsr].Accepted;
 
             /* Write data of this user */
-            if (Role == Rol_STUDENT)
-               Usr_WriteRowStdMainData (NumUsr + 1,&UsrDat,false);
-            else	// Role == Rol_ROLE_TEACHER
-               Usr_WriteRowTchMainData (NumUsr + 1,&UsrDat,false);
+            Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false);
 
 	    /* Write all the courses this user belongs to */
             if (Role != Rol__GUEST_)

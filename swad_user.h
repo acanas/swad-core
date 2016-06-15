@@ -277,7 +277,7 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
-void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
+void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckboxToSelectUsr);
 void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GrpNames);
 void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
