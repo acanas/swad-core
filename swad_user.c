@@ -7996,10 +7996,9 @@ void Usr_ListDuplicateUsrs (void)
 
             fprintf (Gbl.F.Out,"</tr>");
            }
-         else        // User does not exists or user already belongs to course ==> remove user from table of possible duplicate users
-           {
-            // TODO: Remove user from table of possible duplicate users
-           }
+         else        // User does not exists ==>
+                     // remove user from table of possible duplicate users
+            Usr_RemoveUsrFromDuplicated (UsrDat->UsrCod);
         }
 
       /* End table */
@@ -8013,4 +8012,18 @@ void Usr_ListDuplicateUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* Remove a request for enrollment ***********************/
+/*****************************************************************************/
+
+void Usr_RemoveUsrFromDuplicated (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Remove enrollment request *****/
+   sprintf (Query,"DELETE FROM usr_duplicated WHERE UsrCod='%ld'",
+            UsrCod);
+   DB_QueryDELETE (Query,"can not remove a user from possible duplicates");
   }

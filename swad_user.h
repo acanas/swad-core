@@ -353,5 +353,6 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod);
 void Usr_ReportUsrAsPossibleDuplicate (void);
 void Usr_PutLinkToListDupUsrs (void);
 void Usr_ListDuplicateUsrs (void);
+void Usr_RemoveUsrFromDuplicated (long UsrCod);
 
 #endif

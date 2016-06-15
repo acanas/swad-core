@@ -745,6 +745,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's requests for inscription");
 
+   /***** Remove user from possible duplicate users *****/
+   Usr_RemoveUsrFromDuplicated (UsrDat->UsrCod);
+
    /***** Remove user from the table of courses and users *****/
    sprintf (Query,"DELETE FROM crs_usr"
                   " WHERE UsrCod='%ld'",
