@@ -2787,15 +2787,14 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
    const char *BgColor;
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   bool UsrIsTheMsgSender = false;
+   bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
+	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    struct Institution Ins;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
-   if (PutCheckBoxToSelectUsr)
-      UsrIsTheMsgSender = (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
    // Two colors are used alternatively to better distinguish the rows
    BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
                                  Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -2808,7 +2807,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Student has accepted enrollment in current course? *****/
+   /***** User has accepted enrollment? *****/
    fprintf (Gbl.F.Out,"<td class=\"");
    if (UsrIsTheMsgSender)
       fprintf (Gbl.F.Out,"BM_SEL");
@@ -2827,7 +2826,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
             UsrDat->Accepted ? Txt_Enrollment_confirmed :
                                Txt_Enrollment_not_confirmed);
 
-   /***** Write number of student in the list *****/
+   /***** Write number of user in the list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
@@ -2838,7 +2837,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      /***** Show student's photo *****/
+      /***** Show user's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -2847,7 +2846,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /****** Write user's ID ******/
+   /****** Write user's IDs ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
@@ -2855,7 +2854,7 @@ void Usr_WriteRowStdMainData (unsigned NumUsr,struct UsrData *UsrDat,
    ID_WriteUsrIDs (UsrDat);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Write rest of main student's data *****/
+   /***** Write rest of main user's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
@@ -3103,8 +3102,9 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Checkbox to select user *****/
+   // Two colors are used alternatively to better distinguish the rows
    BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
-                                 Gbl.ColorRows[Gbl.RowEvenOdd];	// Two colors are used alternatively to better distinguish the rows
+                                 Gbl.ColorRows[Gbl.RowEvenOdd];
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
@@ -3114,7 +3114,7 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Teacher has accepted enrollment in current course/in any course in degree/in any course? *****/
+   /***** User has accepted enrollment? *****/
    fprintf (Gbl.F.Out,"<td class=\"");
    if (UsrIsTheMsgSender)
       fprintf (Gbl.F.Out,"BM_SEL");
@@ -3133,15 +3133,18 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
             UsrDat->Accepted ? Txt_Enrollment_confirmed :
                                Txt_Enrollment_not_confirmed);
 
-   /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE %s\">"
+   /***** Write number of user in the list *****/
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "&nbsp;%u&nbsp;"
 	              "</td>",
-            BgColor,NumUsr);
+            UsrDat->Accepted ? "DAT_SMALL_N" :
+        	               "DAT_SMALL",
+            BgColor,
+            NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      /***** Show teacher's photo *****/
+      /***** Show user's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -3150,22 +3153,23 @@ static void Usr_WriteRowTchMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /****** Write the user's ID ******/
+   /****** Write user's IDs ******/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
    ID_WriteUsrIDs (UsrDat);
-   fprintf (Gbl.F.Out,"&nbsp;");
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Write rest of main teacher's data *****/
+   /***** Write rest of main user's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,
                                     Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
                                 	                       NULL);
+
+   /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -6040,9 +6044,9 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
             if (Role != Rol__GUEST_)
               {
 	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td colspan=\"3\"></td>"
+				  "<td colspan=\"2\"></td>"
 				  "<td colspan=\"%u\">",
-			Usr_NUM_MAIN_FIELDS_DATA_USR-3);
+			Usr_NUM_MAIN_FIELDS_DATA_USR-2);
 	       Lay_StartRoundFrameTable (NULL,2,NULL);
 	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
 	       Lay_EndRoundFrameTable ();
