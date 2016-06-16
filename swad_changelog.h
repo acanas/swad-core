@@ -128,13 +128,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.12 (2016-06-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.14 (2016-06-16)"
 #define CSS_FILE		"swad15.225.11.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.225.14:Jun 16, 2016	Button in possible duplicate user to show similar users. (? lines)
+        Version 15.225.13:Jun 16, 2016	Check if a user in listing of possible duplicate users has accepted all his/her courses. (? lines)
         Version 15.225.12:Jun 16, 2016	New module swad_duplicate for possible duplicate users. (202758 lines)
         Version 15.225.11:Jun 16, 2016	Listing possible duplicate users. (202667 lines)
         Version 15.225.10:Jun 15, 2016	Listing possible duplicate users. (202626 lines)

@@ -787,6 +787,36 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   }
 
 /*****************************************************************************/
+/********************* Get number of courses of a user ***********************/
+/*****************************************************************************/
+
+unsigned Usr_GetNumCrssOfUsr (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Get the number of courses of a user from database ******/
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
+	          " WHERE UsrCod='%ld'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user");
+  }
+
+/*****************************************************************************/
+/*************** Get number of courses of a user not accepted ****************/
+/*****************************************************************************/
+
+unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod)
+  {
+   char Query[256];
+
+   /***** Get the number of courses of a user not accepted from database ******/
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
+	          " WHERE UsrCod='%ld' AND Accepted='N'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user not accepted");
+  }
+
+/*****************************************************************************/
 /********* Get number of courses in with a user have a given role ************/
 /*****************************************************************************/
 
@@ -794,7 +824,7 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
   {
    char Query[128];
 
-   /***** Get the number of teachers in a course from database ******/
+   /***** Get the number of courses of a user with a role from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
                   " WHERE UsrCod='%ld' AND Role='%u'",
             UsrCod,(unsigned) Role);
@@ -6117,7 +6147,8 @@ static void Usr_GetMyUsrListTypeFromDB (void)
    Usr_ShowUsrsType_t ListType;
 
    /***** Get type of listing of users from database *****/
-   sprintf (Query,"SELECT UsrListType FROM crs_usr WHERE CrsCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"SELECT UsrListType FROM crs_usr"
+	          " WHERE CrsCod='%ld' AND UsrCod='%ld'",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get type of listing of users");
 

@@ -216,6 +216,9 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
+
+unsigned Usr_GetNumCrssOfUsr (long UsrCod);
+unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
@@ -241,6 +244,7 @@ bool Usr_CheckIfIBelongToIns (long InsCod);
 bool Usr_CheckIfIBelongToCtr (long CtrCod);
 bool Usr_CheckIfIBelongToDeg (long DegCod);
 bool Usr_CheckIfIBelongToCrs (long CrsCod);
+
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);

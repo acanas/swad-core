@@ -180,7 +180,10 @@ void Dup_ListDuplicateUsrs (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
            {
-            UsrDat.Accepted = false;	// TODO: Get this from database
+            if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+               UsrDat.Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+            else
+               UsrDat.Accepted = false;
 
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
