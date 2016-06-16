@@ -281,8 +281,6 @@ void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckboxToSelectUsr);
-void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GrpNames);
-void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);

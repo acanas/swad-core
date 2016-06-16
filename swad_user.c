@@ -128,6 +128,9 @@ static void Usr_SetUsrRoleAndPrefs (void);
 static void Usr_InsertMyLastData (void);
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
+static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames);
+static void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
+static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat);
 static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat);
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                                              const char *BgColor,
@@ -2711,7 +2714,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   const char *BgColor;
+   char BgColor[16];
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
@@ -2723,14 +2726,15 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
-   BgColor = UsrIsTheMsgSender ? "LIGHT_GREEN" :
-                                 Gbl.ColorRows[Gbl.RowEvenOdd];
+   if (UsrIsTheMsgSender)
+      strcpy (BgColor,"LIGHT_GREEN");
+   else
+      sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
+
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-
       Usr_PutCheckboxToSelectUser (UsrDat,UsrIsTheMsgSender);
-
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -2755,17 +2759,17 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    /***** Write number of user in the list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "&nbsp;%u&nbsp;"
+	              "%u"
 	              "</td>",
-            UsrDat->Accepted ? "DAT_SMALL_N" :
-        	               "DAT_SMALL",
+            UsrDat->Accepted ? "USR_LIST_NUM_N" :
+        	               "USR_LIST_NUM",
             BgColor,
             NumUsr);
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show user's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2791,8 +2795,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
@@ -2888,15 +2890,13 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
 /************ Write a row of a table with the data of a student **************/
 /*****************************************************************************/
 
-void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
+static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
@@ -3005,15 +3005,13 @@ void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
 /*** Write a row of a table with the data of a teacher or an administrator ***/
 /*****************************************************************************/
 
-void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
+static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
@@ -3082,15 +3080,13 @@ void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
                      NULL,true,UsrDat->Accepted);
 
    fprintf (Gbl.F.Out,"</tr>");
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
 /********** Write a row of a table with the data of an administrator *********/
 /*****************************************************************************/
 
-void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
+static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
@@ -3138,8 +3134,6 @@ void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Deg_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
                                     Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
                                 	                          Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
-
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
@@ -5143,7 +5137,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List students' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstGsts.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstGsts.Lst[NumUsr].UsrCod;
@@ -5153,6 +5147,8 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
                                         // ...so they have not accepted...
             	    	    	    	// ...inscription in any course
             Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5226,7 +5222,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List students' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
@@ -5234,6 +5230,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
            {
             UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
             Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5297,7 +5295,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List data of teachers *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
@@ -5305,6 +5303,8 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
            {
             UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
             Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5403,7 +5403,7 @@ void Usr_ListAllDataGsts (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List guests' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstGsts.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstGsts.Lst[NumUsr].UsrCod;
@@ -5414,6 +5414,8 @@ void Usr_ListAllDataGsts (void)
                                         // ...inscription in any course
             NumUsr++;
             Usr_WriteRowGstAllData (&UsrDat);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5593,7 +5595,7 @@ void Usr_ListAllDataStds (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List students' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
@@ -5602,6 +5604,8 @@ void Usr_ListAllDataStds (void)
             UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowStdAllData (&UsrDat,GroupNames);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5668,7 +5672,7 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STUDENT:
-         for (NumUsr = 0;
+         for (NumUsr = 0, Gbl.RowEvenOdd = 0;
               NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
            {
             UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
@@ -5676,11 +5680,13 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
               {
                UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
                Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+
+               Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
               }
            }
          break;
       case Rol_TEACHER:
-         for (NumUsr = 0;
+         for (NumUsr = 0, Gbl.RowEvenOdd = 0;
               NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
            {
             UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
@@ -5688,6 +5694,8 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
               {
                UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
                Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+
+               Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
               }
            }
          break;
@@ -5779,7 +5787,7 @@ void Usr_ListAllDataTchs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List data of teachers *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
@@ -5788,6 +5796,8 @@ void Usr_ListAllDataTchs (void)
             UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowTchAllData (&UsrDat);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -5859,7 +5869,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List data of users *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < NumUsrs;
            NumUsr++)
         {
@@ -5873,7 +5883,9 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
 	    /* Write all the courses this user belongs to */
             if (Role != Rol__GUEST_)
-	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
+	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -6001,7 +6013,7 @@ void Usr_ListDataAdms (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List data of administrators *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstAdms.NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstAdms.Lst[NumUsr].UsrCod;
@@ -6009,6 +6021,8 @@ void Usr_ListDataAdms (void)
            {
             UsrDat.Accepted = Gbl.Usrs.LstAdms.Lst[NumUsr].Accepted;
             Usr_WriteRowAdmData (++NumUsr,&UsrDat);
+
+            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
@@ -7739,7 +7753,6 @@ void Usr_ListDuplicateUsrs (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
    unsigned NumInformants;
-   Rol_Role_t Role;
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
@@ -7778,7 +7791,7 @@ void Usr_ListDuplicateUsrs (void)
       fprintf (Gbl.F.Out,"</tr>");
 
       /***** List users *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < NumUsrs;
            NumUsr++)
         {
@@ -7806,10 +7819,10 @@ void Usr_ListDuplicateUsrs (void)
 			NumInformants);
 
 	    /* Write all the courses this user belongs to */
-            for (Role = Rol_STUDENT;
-        	 Role <= Rol_TEACHER;
-        	 Role++)
-	       Crs_GetAndWriteCrssOfAUsr (UsrDat.UsrCod,Role);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+
+	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
          else        // User does not exists ==>
                      // remove user from table of possible duplicate users

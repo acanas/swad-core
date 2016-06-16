@@ -31,6 +31,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_degree.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -132,7 +133,7 @@ void Crs_PutParamCrsCod (long CrsCod);
 
 void Crs_ReqSelectOneOfMyCourses (void);
 
-void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role);
+void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
 
 unsigned Crs_ListCrssFound (const char *Query);
 

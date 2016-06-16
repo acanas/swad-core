@@ -1521,6 +1521,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-repeat:no-repeat;
 	}
 
+/************************** Listing of users *********************************/
+.USR_LIST_NUM	{color:#A0A0A0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N	{color:#404040; font-size:15pt; font-weight:bold;}
+
 /*****************************************************************************/
 .WHITE_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 .GREY_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}

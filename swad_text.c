@@ -49268,6 +49268,27 @@ const char *Txt_User_ID =
 	"N&ordm; de identif. do utilizador";
 #endif
 
+const char *Txt_USER_in_COURSE =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"%s en:";
+#elif L==2
+	"%s im:";
+#elif L==3
+	"%s in:";
+#elif L==4
+	"%s en:";
+#elif L==5
+	"%s dans:";
+#elif L==6
+	"%s en:";	// Okoteve traducción
+#elif L==7
+	"%s in:";
+#elif L==8
+	"%s w:";
+#elif L==9
+	"%s em:";
+#endif
+
 const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 #if   L==1
 	"Usuari no trobat"

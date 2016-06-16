@@ -2946,8 +2946,10 @@ static long Crs_GetParamOtherCrsCod (void)
 /************************** Write courses of a user **************************/
 /*****************************************************************************/
 
-void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
+void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
   {
+   extern const char *Txt_USER_in_COURSE;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
@@ -2969,20 +2971,26 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
                   " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-            UsrCod,(unsigned) Role);
+            UsrDat->UsrCod,(unsigned) Role);
 
    /***** List the courses (one row per course) *****/
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Start frame and table */
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"2\"></td>"
-			 "<td colspan=\"%u\">",
-	       Usr_NUM_MAIN_FIELDS_DATA_USR-2);
-      Lay_StartRoundFrameTable (NULL,2,NULL);
+			 "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			 "<td colspan=\"%u\" class=\"COLOR%u\">",
+	       Gbl.RowEvenOdd,
+	       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+	       Gbl.RowEvenOdd);
+      Lay_StartRoundFrameTable ("100%",2,NULL);
 
       /* Heading row */
+      sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
       fprintf (Gbl.F.Out,"<tr>"
+                         "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s</th>"
+                         "</tr>"
+	                 "<tr>"
                          "<th class=\"BM\"></th>"
                          "<th class=\"BM\"></th>"
                          "<th class=\"LEFT_MIDDLE\">"
@@ -3001,6 +3009,7 @@ void Crs_GetAndWriteCrssOfAUsr (long UsrCod,Rol_Role_t Role)
                          "%s"
                          "</th>"
                          "</tr>",
+               Gbl.Title,
                Txt_Degree,
                Txt_Year_OF_A_DEGREE,
                Txt_Course,
@@ -3126,6 +3135,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    const char *StyleNoBR;
    const char *BgColor;
    bool Accepted;
+   static unsigned RowEvenOdd = 1;
 
    /*
    SELECT degrees.DegCod	0
@@ -3162,12 +3172,12 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       StyleNoBR = "DAT_NOBR";
      }
    BgColor = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
-                                                     Gbl.ColorRows[Gbl.RowEvenOdd];
+                                                     Gbl.ColorRows[RowEvenOdd];
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
 
-   /***** Teacher has accepted joining to this course/to any course in degree/to any course? *****/
+   /***** User has accepted joining to this course/to any course in degree/to any course? *****/
    if (WriteColumnAccepted)
      {
       Accepted = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
@@ -3237,7 +3247,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	              "</tr>",
             Style,BgColor,NumStds);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   RowEvenOdd = 1 - RowEvenOdd;
   }
 
 /*****************************************************************************/
