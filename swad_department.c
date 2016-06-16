@@ -133,7 +133,7 @@ void Dpt_SeeDepts (void)
 			    "</a>"
 			    "</td>"
 	                    "<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "&nbsp;%u&nbsp;"
+	                    "%u"
 	                    "</td>"
 	                    "</tr>",
 	          Gbl.Dpts.Lst[NumDpt].WWW,
@@ -159,7 +159,7 @@ void Dpt_SeeDepts (void)
 			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "&nbsp;%u&nbsp;"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       Txt_Other_departments,NumTchsInOtherDpts);
@@ -171,7 +171,7 @@ void Dpt_SeeDepts (void)
 			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "&nbsp;%u&nbsp;"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       Txt_Department_unspecified,
@@ -579,7 +579,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Number of teachers */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "&nbsp;%u&nbsp;"
+	                 "%u"
 	                 "</td>"
 	                 "</tr>",
                Dpt->NumTchs);

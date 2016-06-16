@@ -120,14 +120,12 @@ void Dup_PutLinkToListDupUsrs (void)
 
 void Dup_ListDuplicateUsrs (void)
   {
-   extern const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCol;
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -156,18 +154,8 @@ void Dup_ListDuplicateUsrs (void)
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
       /***** Heading row with column names *****/
-      /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
-      for (NumCol = 0;
-           NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-           NumCol++)
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                            "%s&nbsp;"
-                            "</th>",
-                  Usr_UsrDatMainFieldNames[NumCol]);
-
-      /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Gbl.Usrs.Listing.WithPhotos = true;
+      Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
       /***** List users *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;

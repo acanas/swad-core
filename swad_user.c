@@ -3125,8 +3125,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL_N RIGHT_MIDDLE COLOR%u\">"
-	              "&nbsp;%u&nbsp;"
+   fprintf (Gbl.F.Out,"<td class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\">"
+	              "%u"
 	              "</td>",
             Gbl.RowEvenOdd,NumUsr);
 
@@ -5125,12 +5125,39 @@ void Usr_SetUsrDatMainFieldNames (void)
   }
 
 /*****************************************************************************/
+/************ Write header with main field names of user's data **************/
+/*****************************************************************************/
+
+void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
+  {
+   unsigned NumCol;
+
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /***** First column used for selection *****/
+   if (PutCheckBoxToSelectUsr)
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+			 "</th>");
+
+   /***** Columns for user's data fields *****/
+   for (NumCol = 0;
+        NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
+        NumCol++)
+      if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+                            "%s&nbsp;"
+                            "</th>",
+                  Usr_UsrDatMainFieldNames[NumCol]);
+
+   fprintf (Gbl.F.Out,"</tr>");
+  }
+
+/*****************************************************************************/
 /************************** List guests' main data ***************************/
 /*****************************************************************************/
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
   {
-   unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
 
@@ -5140,27 +5167,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
    if (Gbl.Usrs.LstGsts.NumUsrs)
      {
       /***** Heading row with column names *****/
-      /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
-
-      /* First column used for selection  */
-      if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-	                    "&nbsp;"
-	                    "</th>");
-
-      /* Columns for the data */
-      for (NumCol = 0;
-           NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-           NumCol++)
-         if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-        	               "%s&nbsp;"
-        	               "</th>",
-                     Usr_UsrDatMainFieldNames[NumCol]);
-
-      /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -5197,7 +5204,6 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
   {
-   unsigned NumCol;
    unsigned NumUsr;
    char *GroupNames;
    struct UsrData UsrDat;
@@ -5225,27 +5231,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
         }
 
       /***** Heading row with column names *****/
-      /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
-
-      /* First column used for selection  */
-      if (PutCheckBoxToSelectUsr)
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-	                    "&nbsp;"
-	                    "</th>");
-
-      /* Columns for the data */
-      for (NumCol = 0;
-           NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-           NumCol++)
-         if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-        	               "%s&nbsp;"
-        	               "</th>",
-                     Usr_UsrDatMainFieldNames[NumCol]);
-
-      /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -5667,7 +5653,6 @@ void Usr_ListAllDataStds (void)
 
 void Usr_ListUsrsForSelection (Rol_Role_t Role)
   {
-   unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
 
@@ -5675,24 +5660,7 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    Usr_SetUsrDatMainFieldNames ();
 
    /***** Heading row with column names *****/
-   /* Start row and first column used for selection */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                      "&nbsp;"
-                      "</th>");
-
-   /* Columns for the data */
-   for (NumCol = 0;
-        NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-        NumCol++)
-      if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                            "%s&nbsp;"
-                            "</th>",
-                  Usr_UsrDatMainFieldNames[NumCol]);
-
-   /* End row */
-   fprintf (Gbl.F.Out,"</tr>");
+   Usr_WriteHeaderFieldsUsrDat (true);	// Columns for the data
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -5855,7 +5823,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    struct ListUsers *LstUsrs;
    Usr_Sex_t Sex;
-   unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
    unsigned NumUsrs;
@@ -5881,18 +5848,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       /***** Heading row with column names *****/
-      /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
-      for (NumCol = 0;
-           NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
-           NumCol++)
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                            "%s&nbsp;"
-                            "</th>",
-                  Usr_UsrDatMainFieldNames[NumCol]);
-
-      /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Gbl.Usrs.Listing.WithPhotos = true;
+      Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -6026,7 +5983,7 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table>"
 	                 "<tr>");
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
