@@ -136,7 +136,7 @@ void Dup_ListDuplicateUsrs (void)
 	          " FROM usr_duplicated"
 		  " GROUP BY UsrCod"
 		  " ORDER BY N DESC,T DESC");
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrollment");
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get possibly duplicate users");
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
@@ -204,10 +204,6 @@ void Dup_ListDuplicateUsrs (void)
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
-
-	    /* Write all the courses this user belongs to */
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
@@ -233,31 +229,31 @@ void Dup_ListDuplicateUsrs (void)
 /********************* List similar users to a given one *********************/
 /*****************************************************************************/
 
-// TODO: Write the code of this function
-
 void Dup_ListSimilarUsrs (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
    extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   char Query[1024];
+   struct UsrData UsrDat;
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
-   unsigned NumInformants;
+
+   /***** Get user's code *****/
+   Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
 
    /***** Build query *****/
-   sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
-	          " FROM usr_duplicated"
-		  " GROUP BY UsrCod"
-		  " ORDER BY N DESC,T DESC");
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrollment");
+   sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
+                  " WHERE usr_IDs.UsrID IN"
+                  " (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
+            UsrDat.UsrCod);
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
    /***** List possible duplicated users *****/
    if (NumUsrs)
@@ -294,24 +290,7 @@ void Dup_ListSimilarUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
 
-            /* Write number of informants (row[1]) if greater than 1 */
-	    if (sscanf (row[1],"%u",&NumInformants) != 1)
-	       Lay_ShowErrorAndExit ("Wrong number of informers.");
-            if (NumInformants > 1)
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td colspan=\"2\" class=\"COLOR%u\"></td>"
-				  "<td colspan=\"%u\""
-				  " class=\"DAT LEFT_MIDDLE COLOR%u\">"
-				  "%s: %u"
-				  "</td>"
-				  "</tr>",
-	                Gbl.RowEvenOdd,
-			Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-	                Gbl.RowEvenOdd,
-			Txt_Informants,
-			NumInformants);
-
-            /* Write link to view users similar to this */
+            /* Write buttons */
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\""
@@ -319,10 +298,20 @@ void Dup_ListSimilarUsrs (void)
 	             Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 	             Gbl.RowEvenOdd);
-	    Act_FormStart (ActLstSimUsr);
+
+	    /* Button to remove this user from list of duplicates */
+	    // TODO: Show the following button only if this user is in list of duplicates
+	    Act_FormStart (ActLstSimUsr);	// TODO: Change to a new action
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutConfirmButtonInline (Txt_Similar_users);
+	    Lay_PutConfirmButtonInline ("Quitar de duplicados");	// TODO: Need translation!!!
 	    Act_FormEnd ();
+
+	    /* Button to remove this user */
+	    Act_FormStart (ActLstSimUsr);	// TODO: Change to action to request confirmation to remove
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
+	    Act_FormEnd ();
+
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
@@ -330,11 +319,14 @@ void Dup_ListSimilarUsrs (void)
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
 
+	    /* Write number of works in courses */
+	    // TODO: ...
+
+	    /* Write number of files in briefcase */
+	    // TODO: ...
+
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
-         else        // User does not exists ==>
-                     // remove user from table of possible duplicate users
-            Dup_RemoveUsrFromDuplicated (UsrDat.UsrCod);
         }
 
       /***** End table *****/
