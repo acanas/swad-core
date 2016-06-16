@@ -36694,6 +36694,27 @@ const char *Txt_Sign_up =
 	"Solicitar inscri&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Similar_users =
+#if   L==1
+	"Usuaris similars";
+#elif L==2
+	"&Auml;hnliche Benutzer";
+#elif L==3
+	"Similar users";
+#elif L==4
+	"Usuarios similares";
+#elif L==5
+	"Utilisateurs similaires";
+#elif L==6
+	"Usuarios similares";	// Okoteve traducción
+#elif L==7
+	"Utenti simili";
+#elif L==8
+	"Podobne u&zdot;ytkownik&oacute;w";
+#elif L==9
+	"Usu&aacute;rios similares";
+#endif
+
 const char *Txt_Size =		// ...of a file zone
 #if   L==1
 	"Mida";

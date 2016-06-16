@@ -122,6 +122,7 @@ void Dup_ListDuplicateUsrs (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
+   extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -181,12 +182,32 @@ void Dup_ListDuplicateUsrs (void)
 	       Lay_ShowErrorAndExit ("Wrong number of informers.");
             if (NumInformants > 1)
 	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td colspan=\"2\"></td>"
-				  "<td colspan=\"%u\" class=\"DAT\">%s: %u</td>"
+				  "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+				  "<td colspan=\"%u\""
+				  " class=\"DAT LEFT_MIDDLE COLOR%u\">"
+				  "%s: %u"
+				  "</td>"
 				  "</tr>",
+	                Gbl.RowEvenOdd,
 			Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+	                Gbl.RowEvenOdd,
 			Txt_Informants,
 			NumInformants);
+
+            /* Write link to view users similar to this */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			       "<td colspan=\"%u\""
+			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
+	             Gbl.RowEvenOdd,
+		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+	             Gbl.RowEvenOdd);
+	    Act_FormStart (ActLstDupUsr);	// TODO: Change to new action
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Lay_PutConfirmButtonInline (Txt_Similar_users);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
 
 	    /* Write all the courses this user belongs to */
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
