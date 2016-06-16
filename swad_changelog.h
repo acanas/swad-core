@@ -128,13 +128,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.15 (2016-06-16)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.16 (2016-06-16)"
 #define CSS_FILE		"swad15.225.11.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.225.16:Jun 16, 2016	New action to show similar users. Not finished. (202887 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1579','es','N','Listar usuarios similares');
+
         Version 15.225.15:Jun 16, 2016	Button in possible duplicate user to show similar users. (202781 lines)
         Version 15.225.14:Jun 16, 2016	Code refactoring in listing of users. (202741 lines)
         Version 15.225.13:Jun 16, 2016	Check if a user in listing of possible duplicate users has accepted all his/her courses. (202790 lines)

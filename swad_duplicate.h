@@ -42,6 +42,7 @@
 void Dup_ReportUsrAsPossibleDuplicate (void);
 void Dup_PutLinkToListDupUsrs (void);
 void Dup_ListDuplicateUsrs (void);
+void Dup_ListSimilarUsrs (void);
 void Dup_RemoveUsrFromDuplicated (long UsrCod);
 
 #endif

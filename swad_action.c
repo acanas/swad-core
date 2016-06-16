@@ -41,6 +41,7 @@
 #include "swad_chat.h"
 #include "swad_database.h"
 #include "swad_degree_type.h"
+#include "swad_duplicate.h"
 #include "swad_exam.h"
 #include "swad_enrollment.h"
 #include "swad_follow.h"
@@ -1056,6 +1057,7 @@ Users:
 	883. ActRemOldUsr		Eliminate completely old users
 
 	NEW. ActLstDupUsr		List possible duplicate users
+	NEW. ActLstSimUsr		List users similar to a given one (possible duplicates)
 
         884. ActLstClk			List last clicks in real time
 Social:
@@ -2452,6 +2454,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemOldUsr	*/{ 773,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemoveOldUsrs		,NULL},
 
    /* ActLstDupUsr	*/{1578,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_ListDuplicateUsrs		,NULL},
+   /* ActLstSimUsr	*/{1579,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_ListSimilarUsrs		,NULL},
 
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
@@ -4417,6 +4420,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemTchPho,	// #1576
 	ActReqRemMyPho,		// #1577
 	ActLstDupUsr,		// #1578
+	ActLstSimUsr,		// #1579
 	};
 
 /*****************************************************************************/

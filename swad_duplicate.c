@@ -25,16 +25,12 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <ctype.h>		// For isalnum, isdigit, etc.
-// #include <limits.h>		// For maximum values
-// #include <linux/limits.h>	// For PATH_MAX
 // #include <linux/stddef.h>	// For NULL
 // #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 // #include <string.h>		// For string functions
-// #include <sys/wait.h>	// For the macro WEXITSTATUS
-// #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
 #include "swad_database.h"
+#include "swad_duplicate.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_role.h"
@@ -202,7 +198,128 @@ void Dup_ListDuplicateUsrs (void)
 	             Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 	             Gbl.RowEvenOdd);
-	    Act_FormStart (ActLstDupUsr);	// TODO: Change to new action
+	    Act_FormStart (ActLstSimUsr);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	    Lay_PutConfirmButtonInline (Txt_Similar_users);
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+
+	    /* Write all the courses this user belongs to */
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+
+	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+           }
+         else        // User does not exists ==>
+                     // remove user from table of possible duplicate users
+            Dup_RemoveUsrFromDuplicated (UsrDat.UsrCod);
+        }
+
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+   else	// There are no users
+      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_UNKNOWN]);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* List similar users to a given one *********************/
+/*****************************************************************************/
+
+// TODO: Write the code of this function
+
+void Dup_ListSimilarUsrs (void)
+  {
+   extern const char *Txt_Possibly_duplicate_users;
+   extern const char *Txt_Informants;
+   extern const char *Txt_Similar_users;
+   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+   unsigned NumInformants;
+
+   /***** Start frame with list of possible duplicate users *****/
+   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
+
+   /***** Build query *****/
+   sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
+	          " FROM usr_duplicated"
+		  " GROUP BY UsrCod"
+		  " ORDER BY N DESC,T DESC");
+   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrollment");
+
+   /***** List possible duplicated users *****/
+   if (NumUsrs)
+     {
+      /***** Initialize field names *****/
+      Usr_SetUsrDatMainFieldNames ();
+
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+
+      /***** Heading row with column names *****/
+      Gbl.Usrs.Listing.WithPhotos = true;
+      Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
+
+      /***** List users *****/
+      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+           NumUsr < NumUsrs;
+           NumUsr++)
+        {
+         row = mysql_fetch_row (mysql_res);
+
+         /* Get user code (row[0]) */
+         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+           {
+            if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+               UsrDat.Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+            else
+               UsrDat.Accepted = false;
+
+            /* Write data of this user */
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
+
+            /* Write number of informants (row[1]) if greater than 1 */
+	    if (sscanf (row[1],"%u",&NumInformants) != 1)
+	       Lay_ShowErrorAndExit ("Wrong number of informers.");
+            if (NumInformants > 1)
+	       fprintf (Gbl.F.Out,"<tr>"
+				  "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+				  "<td colspan=\"%u\""
+				  " class=\"DAT LEFT_MIDDLE COLOR%u\">"
+				  "%s: %u"
+				  "</td>"
+				  "</tr>",
+	                Gbl.RowEvenOdd,
+			Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+	                Gbl.RowEvenOdd,
+			Txt_Informants,
+			NumInformants);
+
+            /* Write link to view users similar to this */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			       "<td colspan=\"%u\""
+			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
+	             Gbl.RowEvenOdd,
+		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+	             Gbl.RowEvenOdd);
+	    Act_FormStart (ActLstSimUsr);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	    Lay_PutConfirmButtonInline (Txt_Similar_users);
 	    Act_FormEnd ();

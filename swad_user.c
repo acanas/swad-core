@@ -41,6 +41,7 @@
 #include "swad_connected.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_duplicate.h"
 #include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_group.h"

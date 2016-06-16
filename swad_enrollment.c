@@ -31,6 +31,7 @@
 #include "swad_account.h"
 #include "swad_announcement.h"
 #include "swad_database.h"
+#include "swad_duplicate.h"
 #include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_ID.h"

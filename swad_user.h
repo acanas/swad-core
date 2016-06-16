@@ -357,9 +357,4 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role);
 bool Usr_CheckIfUsrBanned (long UsrCod);
 void Usr_RemoveUsrFromUsrBanned (long UsrCod);
 
-void Dup_ReportUsrAsPossibleDuplicate (void);
-void Dup_PutLinkToListDupUsrs (void);
-void Dup_ListDuplicateUsrs (void);
-void Dup_RemoveUsrFromDuplicated (long UsrCod);
-
 #endif
