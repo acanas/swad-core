@@ -62,6 +62,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Dup_WriteUsrFigures (long UsrCod);
+
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
 /*****************************************************************************/
@@ -290,7 +292,6 @@ void Dup_ListSimilarUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
 
-            /* Write buttons */
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\""
@@ -312,18 +313,15 @@ void Dup_ListSimilarUsrs (void)
 	    Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
 	    Act_FormEnd ();
 
+	    /* Write user figures */
+	    Dup_WriteUsrFigures (UsrDat.UsrCod);
+
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
 	    /* Write all the courses this user belongs to */
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
-
-	    /* Write number of works in courses */
-	    // TODO: ...
-
-	    /* Write number of files in briefcase */
-	    // TODO: ...
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
@@ -340,6 +338,39 @@ void Dup_ListSimilarUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/**************************** Write user figures *****************************/
+/*****************************************************************************/
+
+static void Dup_WriteUsrFigures (long UsrCod)
+  {
+   extern const char *Txt_Files;
+   extern const char *Txt_file;
+   extern const char *Txt_files;
+   unsigned NumFiles;
+
+   /***** Star list ****/
+   fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+
+   /***** Write number of files *****/
+   NumFiles = Brw_GetNumFilesUsr (UsrCod);
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+		      " style=\"background-image:url('%s/file64x64.gif');\" />"
+		      "%u&nbsp;%s"
+		      "</li>",
+	    Txt_Files,
+	    Gbl.Prefs.IconsURL,
+	    NumFiles,
+	    (NumFiles == 1) ? Txt_file :
+			      Txt_files);
+
+   /***** Write number of messages *****/
+   // TODO: ...
+
+   /***** End list *****/
+   fprintf (Gbl.F.Out,"</ul>");
   }
 
 /*****************************************************************************/
