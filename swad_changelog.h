@@ -120,6 +120,7 @@
 // TODO: In social refreshing via AJAX, an error occurs when session expirates
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
+// TODO: Add StackOverflow (and similar) to webs/networks
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -128,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.226 (2016-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.226.1 (2016-06-17)"
 #define CSS_FILE		"swad15.226.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.226.1: Jun 17, 2016	Changed layout of listing of similar users. (202887 lines)
         Version 15.226:   Jun 17, 2016	Fixed bug in photo zoom. (202870 lines)
         Version 15.225.21:Jun 17, 2016	Fixed bug in photo zoom, reported by Javier Fernández Baldomero. (202894 lines)
         Version 15.225.20:Jun 17, 2016	Show details of user's profile in similar users. (202893 lines)

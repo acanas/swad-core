@@ -63,6 +63,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static bool Usr_CheckIfUsrIsDup (long UsrCod);
+
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
 /*****************************************************************************/
@@ -236,6 +238,7 @@ void Dup_ListSimilarUsrs (void)
    extern const char *Txt_Informants;
    extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
+   struct UsrData UsrDatFromForm;
    struct UsrData UsrDat;
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -244,7 +247,7 @@ void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted (&UsrDat);
+   Usr_GetParamOtherUsrCodEncrypted (&UsrDatFromForm);
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
@@ -253,7 +256,7 @@ void Dup_ListSimilarUsrs (void)
    sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
                   " WHERE usr_IDs.UsrID IN"
                   " (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
-            UsrDat.UsrCod);
+            UsrDatFromForm.UsrCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
    /***** List possible duplicated users *****/
@@ -317,17 +320,20 @@ void Dup_ListSimilarUsrs (void)
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
 
-	    // TODO: Show the following button only if this user is in list of duplicates
-	    Act_FormStart (ActLstSimUsr);	// TODO: Change to a new action
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutConfirmButtonInline ("No es duplicado");	// TODO: Need translation!!!
-	    Act_FormEnd ();
-
 	    /* Button to remove this user */
 	    Act_FormStart (ActLstSimUsr);	// TODO: Change to action to request confirmation to remove
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	    Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
 	    Act_FormEnd ();
+
+	    /* Button to remove from list of possible duplicate users */
+	    if (Usr_CheckIfUsrIsDup (UsrDat.UsrCod))
+	      {
+	       Act_FormStart (ActLstSimUsr);	// TODO: Change to a new action
+	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	       Lay_PutConfirmButtonInline ("No es duplicado");	// TODO: Need translation!!!
+	       Act_FormEnd ();
+	      }
 
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
@@ -347,6 +353,19 @@ void Dup_ListSimilarUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********** Check if a user is in list of possible duplicate users ***********/
+/*****************************************************************************/
+
+static bool Usr_CheckIfUsrIsDup (long UsrCod)
+  {
+   char Query[128];
+
+   sprintf (Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod='%ld'",
+	    UsrCod);
+   return (DB_QueryCOUNT (Query,"can not if user is in list of possible duplicate users") != 0);
   }
 
 /*****************************************************************************/
