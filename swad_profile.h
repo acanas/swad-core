@@ -48,6 +48,8 @@ void Prf_GetUsrDatAndShowUserProfile (void);
 
 bool Prf_ShowUserProfile (struct UsrData *UsrDat);
 void Prf_ChangeProfileVisibility (void);
+
+void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 void Prf_CalculateFirstClickTime (void);
 void Prf_CalculateNumClicks (void);
 void Prf_CalculateNumFileViews (void);

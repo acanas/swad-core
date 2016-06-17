@@ -4714,8 +4714,8 @@ void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID])
   {
    static unsigned CountForThisExecution = 0;
 
-   /***** Create Id. The id must be unique in timeline,
-          but the timeline is updated via AJAX.
+   /***** Create Id. The id must be unique,
+          the page content may be updated via AJAX.
           So, Id uses:
           - a name for this execution (Gbl.UniqueNameEncrypted)
           - a number for each element in this execution (CountForThisExecution) *****/

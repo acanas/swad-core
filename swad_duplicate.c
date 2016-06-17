@@ -33,6 +33,7 @@
 #include "swad_duplicate.h"
 #include "swad_global.h"
 #include "swad_layout.h"
+#include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_user.h"
 
@@ -61,8 +62,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
-
-static void Dup_WriteUsrFigures (long UsrCod);
 
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
@@ -294,31 +293,22 @@ void Dup_ListSimilarUsrs (void)
 
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			       "<td colspan=\"%u\""
-			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
-	             Gbl.RowEvenOdd,
-		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-	             Gbl.RowEvenOdd);
-
-	    /* Write user figures */
-	    Dup_WriteUsrFigures (UsrDat.UsrCod);
-
-	    fprintf (Gbl.F.Out,"</td>"
-			       "</tr>");
-
-	    /* Write all the courses this user belongs to */
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"COLOR%u\">",
 		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
+
+	    /* Show details of user's profile */
+            Prf_ShowDetailsUserProfile (&UsrDat);
+
+	    /* Write all the courses this user belongs to */
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
-	    /* Button to remove this user from list of duplicates */
+	    /* Buttons to make actions on this user */
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
@@ -357,41 +347,6 @@ void Dup_ListSimilarUsrs (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/**************************** Write user figures *****************************/
-/*****************************************************************************/
-
-static void Dup_WriteUsrFigures (long UsrCod)
-  {
-   extern const char *Txt_Files;
-   extern const char *Txt_file;
-   extern const char *Txt_files;
-   unsigned NumFiles;
-
-   /***** Star list ****/
-   fprintf (Gbl.F.Out,"<div>"
-	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
-
-   /***** Write number of files *****/
-   NumFiles = Brw_GetNumFilesUsr (UsrCod);
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-		      " style=\"background-image:url('%s/file64x64.gif');\" />"
-		      "%u&nbsp;%s"
-		      "</li>",
-	    Txt_Files,
-	    Gbl.Prefs.IconsURL,
-	    NumFiles,
-	    (NumFiles == 1) ? Txt_file :
-			      Txt_files);
-
-   /***** Write number of messages *****/
-   // TODO: ...
-
-   /***** End list *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
   }
 
 /*****************************************************************************/

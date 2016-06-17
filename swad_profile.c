@@ -81,7 +81,6 @@ extern struct Globals Gbl;
 
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
 
-static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
 
 static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
@@ -350,7 +349,7 @@ void Prf_ChangeProfileVisibility (void)
 /********************** Show details of user's profile ***********************/
 /*****************************************************************************/
 
-static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
+void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_teachers_ABBREVIATION;
@@ -381,9 +380,10 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumCrssUsrIsStudent;
    unsigned NumFiles;
    unsigned NumPublicFiles;
+   char IdFirstClickTime[Act_MAX_LENGTH_ID];
 
    /***** Start left list *****/
-   fprintf (Gbl.F.Out,"<div id=\"prf_fig_left_container\">"
+   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /***** Number of courses in which the user is teacher *****/
@@ -446,15 +446,19 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
             Gbl.Prefs.IconsURL);
    if (UsrFigures.FirstClickTimeUTC)
      {
-      fprintf (Gbl.F.Out,"<span id=\"first_click_date\"></span>");
+      /* Create unique id for new comment */
+      Act_SetUniqueId (IdFirstClickTime);
+
+      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
       if (UsrFigures.NumDays > 0)
 	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
 		  UsrFigures.NumDays,
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateFromUTC('first_click_date',%ld,'%s');"
+                         "writeLocalDateFromUTC('%s',%ld,'%s');"
                          "</script>",
+               IdFirstClickTime,
                (long) UsrFigures.FirstClickTimeUTC,Txt_Today);
      }
    else	// First click time is unknown or user never logged
@@ -467,7 +471,7 @@ static void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              "</div>");
 
    /***** Start left list *****/
-   fprintf (Gbl.F.Out,"<div id=\"prf_fig_right_container\">"
+   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);

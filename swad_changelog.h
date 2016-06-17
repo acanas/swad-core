@@ -128,14 +128,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.19 (2016-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.225.20 (2016-06-17)"
 #define CSS_FILE		"swad15.225.11.css"
 #define JS_FILE			"swad15.216.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.225.20:Jun 17, 2016	Show number of messages of a user in similar users. (? lines)
+        Version 15.225.20:Jun 17, 2016	Show details of user's profile in similar users. (202893 lines)
         Version 15.225.19:Jun 17, 2016	Changed layout of listing of similar users. (202927 lines)
         Version 15.225.18:Jun 17, 2016	Show number of files of a user in similar users. (202904 lines)
         Version 15.225.17:Jun 17, 2016	Show similar users. Not finished. (202878 lines)
