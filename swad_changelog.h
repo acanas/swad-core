@@ -129,13 +129,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.226.1 (2016-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.226.2 (2016-06-17)"
 #define CSS_FILE		"swad15.226.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.226.2: Jun 17, 2016	New action to remove a user from list of possible duplicate users. (202921 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1580','es','N','Quitar de usuarios duplicados');
+
         Version 15.226.1: Jun 17, 2016	Changed layout of listing of similar users. (202887 lines)
         Version 15.226:   Jun 17, 2016	Fixed bug in photo zoom. (202870 lines)
         Version 15.225.21:Jun 17, 2016	Fixed bug in photo zoom, reported by Javier Fernández Baldomero. (202894 lines)

@@ -1058,6 +1058,7 @@ Users:
 
 	NEW. ActLstDupUsr		List possible duplicate users
 	NEW. ActLstSimUsr		List users similar to a given one (possible duplicates)
+	NEW. ActRemDupUsr		Remove user from list of possible duplicate users
 
         884. ActLstClk			List last clicks in real time
 Social:
@@ -2455,6 +2456,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActLstDupUsr	*/{1578,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_ListDuplicateUsrs		,NULL},
    /* ActLstSimUsr	*/{1579,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_ListSimilarUsrs		,NULL},
+   /* ActRemDupUsr	*/{1580,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_RemoveUsrFromListDupUsrs	,NULL},
 
    /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
 
@@ -4421,6 +4423,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqRemMyPho,		// #1577
 	ActLstDupUsr,		// #1578
 	ActLstSimUsr,		// #1579
+	ActRemDupUsr,		// #1580
 	};
 
 /*****************************************************************************/

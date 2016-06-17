@@ -63,7 +63,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Usr_CheckIfUsrIsDup (long UsrCod);
+static void Dup_ListSimilarUsrsInternal (void);
+
+static bool Dup_CheckIfUsrIsDup (long UsrCod);
 
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
@@ -234,20 +236,29 @@ void Dup_ListDuplicateUsrs (void)
 
 void Dup_ListSimilarUsrs (void)
   {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user to be removed from list of possible duplicates *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      Dup_ListSimilarUsrsInternal ();
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+static void Dup_ListSimilarUsrsInternal (void)
+  {
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
    extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   struct UsrData UsrDatFromForm;
    struct UsrData UsrDat;
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-
-   /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncrypted (&UsrDatFromForm);
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
@@ -256,7 +267,7 @@ void Dup_ListSimilarUsrs (void)
    sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
                   " WHERE usr_IDs.UsrID IN"
                   " (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
-            UsrDatFromForm.UsrCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
    /***** List possible duplicated users *****/
@@ -327,9 +338,9 @@ void Dup_ListSimilarUsrs (void)
 	    Act_FormEnd ();
 
 	    /* Button to remove from list of possible duplicate users */
-	    if (Usr_CheckIfUsrIsDup (UsrDat.UsrCod))
+	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
 	      {
-	       Act_FormStart (ActLstSimUsr);	// TODO: Change to a new action
+	       Act_FormStart (ActRemDupUsr);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	       Lay_PutConfirmButtonInline ("No es duplicado");	// TODO: Need translation!!!
 	       Act_FormEnd ();
@@ -359,7 +370,7 @@ void Dup_ListSimilarUsrs (void)
 /********** Check if a user is in list of possible duplicate users ***********/
 /*****************************************************************************/
 
-static bool Usr_CheckIfUsrIsDup (long UsrCod)
+static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
    char Query[128];
 
@@ -369,7 +380,28 @@ static bool Usr_CheckIfUsrIsDup (long UsrCod)
   }
 
 /*****************************************************************************/
-/********************* Remove a request for enrollment ***********************/
+/*********** Remove user from list of possible duplicate users ***************/
+/*****************************************************************************/
+
+void Dup_RemoveUsrFromListDupUsrs (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user to be removed from list of possible duplicates *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /* Remove entry from database */
+      Dup_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
+
+      /* Show list of similar users again */
+      Dup_ListSimilarUsrsInternal ();
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
+/******* Remove user from list of possible duplicate users in database *******/
 /*****************************************************************************/
 
 void Dup_RemoveUsrFromDuplicated (long UsrCod)
