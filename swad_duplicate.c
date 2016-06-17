@@ -168,6 +168,7 @@ void Dup_ListDuplicateUsrs (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
            {
+            /* Get if user has accepted all his/her courses */
             if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
                UsrDat.Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
             else
@@ -248,8 +249,8 @@ void Dup_ListSimilarUsrs (void)
 static void Dup_ListSimilarUsrsInternal (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
-   extern const char *Txt_Informants;
-   extern const char *Txt_Similar_users;
+   extern const char *Txt_Eliminate_user_account;
+   extern const char *Txt_Not_duplicated;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct UsrData UsrDat;
    char Query[256];
@@ -295,6 +296,7 @@ static void Dup_ListSimilarUsrsInternal (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
            {
+            /* Get if user has accepted all his/her courses */
             if (Usr_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
                UsrDat.Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
             else
@@ -320,7 +322,6 @@ static void Dup_ListSimilarUsrsInternal (void)
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
-	    /* Buttons to make actions on this user */
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
@@ -335,7 +336,7 @@ static void Dup_ListSimilarUsrsInternal (void)
 	       Act_FormStart (ActUpdOth);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	       Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-	       Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
+	       Lay_PutRemoveButtonInline (Txt_Eliminate_user_account);
 	       Act_FormEnd ();
 	      }
 
@@ -344,7 +345,7 @@ static void Dup_ListSimilarUsrsInternal (void)
 	      {
 	       Act_FormStart (ActRemDupUsr);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	       Lay_PutConfirmButtonInline ("No es duplicado");	// TODO: Need translation!!!
+	       Lay_PutConfirmButtonInline (Txt_Not_duplicated);
 	       Act_FormEnd ();
 	      }
 

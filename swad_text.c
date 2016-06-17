@@ -25266,6 +25266,27 @@ const char *Txt_not_available =
 	"n&atilde;o dispon&iacute;vel";
 #endif
 
+const char *Txt_Not_duplicated =
+#if   L==1
+	"No &eacute;s duplicat";
+#elif L==2
+	"Nicht dupliziert";
+#elif L==3
+	"Not duplicated";
+#elif L==4
+	"No es duplicado";
+#elif L==5
+	"Pas dupliqu&eacute;";
+#elif L==6
+	"No es duplicado";		// Okoteve traducción
+#elif L==7
+	"Non duplicato";
+#elif L==8
+	"Nie powiela&cacute;";
+#elif L==9
+	"N&atilde;o duplicado";
+#endif
+
 const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 #if   L==1
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
