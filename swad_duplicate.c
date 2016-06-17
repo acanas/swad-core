@@ -25,12 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <linux/stddef.h>	// For NULL
-// #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
-// #include <string.h>		// For string functions
-
+#include "swad_account.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
+#include "swad_enrollment.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_profile.h"
@@ -332,10 +330,14 @@ static void Dup_ListSimilarUsrsInternal (void)
 		     Gbl.RowEvenOdd);
 
 	    /* Button to remove this user */
-	    Act_FormStart (ActLstSimUsr);	// TODO: Change to action to request confirmation to remove
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
-	    Act_FormEnd ();
+	    if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
+	      {
+	       Act_FormStart (ActUpdOth);
+	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	       Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
+	       Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
+	       Act_FormEnd ();
+	      }
 
 	    /* Button to remove from list of possible duplicate users */
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))

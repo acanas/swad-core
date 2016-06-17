@@ -54,12 +54,6 @@
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Acc_REQUEST_REMOVE_USR,
-   Acc_REMOVE_USR,
-  } Acc_ReqOrRemUsr_t;
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -86,7 +80,6 @@ static void Acc_PutLinkToRemoveMyAccountParams (void);
 
 static void Acc_PrintAccountSeparator (void);
 
-static void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
 static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
 
@@ -242,7 +235,7 @@ void Acc_ShowFormChangeMyAccount (void)
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Pwd_PutLinkToChangeMyPassword ();
-   if (Acc_CheckIfICanEliminateAccount (true))	// ItsMe = true
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Acc_PutLinkToRemoveMyAccount ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -576,55 +569,43 @@ void Acc_AfterCreationNewAccount (void)
   }
 
 /*****************************************************************************/
-/********* Request definite removing of a user from the platform *************/
-/*****************************************************************************/
-
-void Acc_ReqRemUsrGbl (void)
-  {
-   Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
-  }
-
-/*****************************************************************************/
 /************** Definite removing of a user from the platform ****************/
 /*****************************************************************************/
 
-void Acc_RemUsrGbl (void)
+void Acc_GetUsrCodAndRemUsrGbl (void)
   {
-   Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
 /**************************** Removing of a user *****************************/
 /*****************************************************************************/
 
-static void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
+void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool ItsMe;
 
-   /***** Get user to be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      if (Acc_CheckIfICanEliminateAccount (ItsMe))
-         switch (RequestOrRemove)
-           {
-            case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
-               Acc_AskIfRemoveUsrAccount (ItsMe);
-               break;
-            case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
-               if (Pwd_GetConfirmationOnDangerousAction ())
-        	 {
-                  Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+      switch (RequestOrRemove)
+	{
+	 case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
+	    Acc_AskIfRemoveUsrAccount (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	    break;
+	 case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
+	    if (Pwd_GetConfirmationOnDangerousAction ())
+	      {
+	       Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
 
-                  /***** Move unused contents of messages to table of deleted contents of messages *****/
-                  Msg_MoveUnusedMsgsContentToDeleted ();
-        	 }
-               break;
-           }
-      else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-     }
+	       /***** Move unused contents of messages to table of deleted contents of messages *****/
+	       Msg_MoveUnusedMsgsContentToDeleted ();
+	      }
+	    break;
+	}
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
@@ -633,15 +614,18 @@ static void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 /******** Check if I can eliminate completely another user's account *********/
 /*****************************************************************************/
 
-bool Acc_CheckIfICanEliminateAccount (bool ItsMe)
+bool Acc_CheckIfICanEliminateAccount (long UsrCod)
   {
+   bool ItsMe = (Gbl.Usrs.Me.Logged &&
+	         UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
    // A user logged as superuser can eliminate any user except her/him
    // Other users only can eliminate themselves
-   return (( ItsMe &&								// It's me
-	    (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_SYS_ADM)) == 0)	// I can not be superuser
+   return (( ItsMe &&							// It's me
+	    (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_SYS_ADM)) == 0)	// I can not be system admin
 	   ||
-           (!ItsMe &&								// It's not me
-             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));			// I am logged as superuser
+           (!ItsMe &&							// It's not me
+             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));			// I am logged as system admin
   }
 
 /*****************************************************************************/

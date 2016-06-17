@@ -1114,7 +1114,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Eliminate user completely from platform *****/
-   if (Acc_CheckIfICanEliminateAccount (ItsMe))
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       fprintf (Gbl.F.Out,"<li>"
                          "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
@@ -3780,10 +3780,7 @@ void Enr_ModifyUsr (void)
 		     Error = true;
 		  break;
 	       case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
-		  if (Acc_CheckIfICanEliminateAccount (ItsMe))
-		     Acc_ReqRemUsrGbl ();
-		  else
-		     Error = true;
+                  Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
 		  break;
 	       default:
 		  Error = true;

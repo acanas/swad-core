@@ -40,6 +40,12 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Acc_REQUEST_REMOVE_USR,
+   Acc_REMOVE_USR,
+  } Acc_ReqOrRemUsr_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -52,10 +58,10 @@ bool Acc_CreateNewAccountAndLogIn (void);
 void Acc_CreateNewUsr (struct UsrData *UsrDat);
 void Acc_AfterCreationNewAccount (void);
 
-void Acc_ReqRemUsrGbl (void);
-void Acc_RemUsrGbl (void);
+void Acc_GetUsrCodAndRemUsrGbl (void);
+void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
 
-bool Acc_CheckIfICanEliminateAccount (bool ItsMe);
+bool Acc_CheckIfICanEliminateAccount (long UsrCod);
 void Acc_AskIfRemoveMyAccount (void);
 void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
