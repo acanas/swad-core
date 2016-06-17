@@ -2977,12 +2977,6 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Start frame and table */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			 "<td colspan=\"%u\" class=\"COLOR%u\">",
-	       Gbl.RowEvenOdd,
-	       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-	       Gbl.RowEvenOdd);
       Lay_StartRoundFrameTable ("100%",2,NULL);
 
       /* Heading row */
@@ -3030,8 +3024,6 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 
       /* End table and frame */
       Lay_EndRoundFrameTable ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
      }
 
    /***** Free structure that stores the query result *****/

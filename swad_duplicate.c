@@ -300,11 +300,37 @@ void Dup_ListSimilarUsrs (void)
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 	             Gbl.RowEvenOdd);
 
+	    /* Write user figures */
+	    Dup_WriteUsrFigures (UsrDat.UsrCod);
+
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+
+	    /* Write all the courses this user belongs to */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			       "<td colspan=\"%u\" class=\"COLOR%u\">",
+		     Gbl.RowEvenOdd,
+		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+		     Gbl.RowEvenOdd);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+
 	    /* Button to remove this user from list of duplicates */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			       "<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
+			       " style=\"padding-bottom:20px;\">",
+		     Gbl.RowEvenOdd,
+		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+		     Gbl.RowEvenOdd);
+
 	    // TODO: Show the following button only if this user is in list of duplicates
 	    Act_FormStart (ActLstSimUsr);	// TODO: Change to a new action
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutConfirmButtonInline ("Quitar de duplicados");	// TODO: Need translation!!!
+	    Lay_PutConfirmButtonInline ("No es duplicado");	// TODO: Need translation!!!
 	    Act_FormEnd ();
 
 	    /* Button to remove this user */
@@ -313,15 +339,8 @@ void Dup_ListSimilarUsrs (void)
 	    Lay_PutRemoveButtonInline ("Eliminar usuario");		// TODO: Need translation!!!
 	    Act_FormEnd ();
 
-	    /* Write user figures */
-	    Dup_WriteUsrFigures (UsrDat.UsrCod);
-
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
-
-	    /* Write all the courses this user belongs to */
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
@@ -352,7 +371,8 @@ static void Dup_WriteUsrFigures (long UsrCod)
    unsigned NumFiles;
 
    /***** Star list ****/
-   fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+   fprintf (Gbl.F.Out,"<div>"
+	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /***** Write number of files *****/
    NumFiles = Brw_GetNumFilesUsr (UsrCod);
@@ -370,7 +390,8 @@ static void Dup_WriteUsrFigures (long UsrCod)
    // TODO: ...
 
    /***** End list *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
   }
 
 /*****************************************************************************/

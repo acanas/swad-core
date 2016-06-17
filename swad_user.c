@@ -5871,7 +5871,17 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
 
 	    /* Write all the courses this user belongs to */
             if (Role != Rol__GUEST_)
+              {
+	       fprintf (Gbl.F.Out,"<tr>"
+			          "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+			          "<td colspan=\"%u\" class=\"COLOR%u\">",
+		        Gbl.RowEvenOdd,
+		        Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+		        Gbl.RowEvenOdd);
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
+	       fprintf (Gbl.F.Out,"</td>"
+				  "</tr>");
+              }
 
             Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
