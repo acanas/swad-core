@@ -61,9 +61,13 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dup_ListSimilarUsrsInternal (void);
+static void Dup_ListSimilarUsrs (void);
 
 static bool Dup_CheckIfUsrIsDup (long UsrCod);
+
+static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat);
+static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat);
+static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
@@ -121,7 +125,6 @@ void Dup_ListDuplicateUsrs (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
-   extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -177,24 +180,6 @@ void Dup_ListDuplicateUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
 
-            /* Write number of informants (row[1]) if greater than 1 */
-	    if (sscanf (row[1],"%u",&NumInformants) != 1)
-	       Lay_ShowErrorAndExit ("Wrong number of informers.");
-            if (NumInformants > 1)
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td colspan=\"2\" class=\"COLOR%u\"></td>"
-				  "<td colspan=\"%u\""
-				  " class=\"DAT LEFT_MIDDLE COLOR%u\">"
-				  "%s: %u"
-				  "</td>"
-				  "</tr>",
-	                Gbl.RowEvenOdd,
-			Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-	                Gbl.RowEvenOdd,
-			Txt_Informants,
-			NumInformants);
-
-            /* Write link to view users similar to this */
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\""
@@ -202,10 +187,21 @@ void Dup_ListDuplicateUsrs (void)
 	             Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 	             Gbl.RowEvenOdd);
-	    Act_FormStart (ActLstSimUsr);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutConfirmButtonInline (Txt_Similar_users);
-	    Act_FormEnd ();
+
+            /* Write number of informants (row[1]) if greater than 1 */
+	    if (sscanf (row[1],"%u",&NumInformants) != 1)
+	       Lay_ShowErrorAndExit ("Wrong number of informants.");
+            if (NumInformants > 1)
+	       fprintf (Gbl.F.Out,"%s: %u<br />",
+			Txt_Informants,
+			NumInformants);
+
+            /* Button to view users similar to this */
+	    Dup_PutButtonToViewSimilarUsrs (&UsrDat);
+
+	    /* Button to remove from list of possible duplicate users */
+	    Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
+
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
@@ -233,24 +229,20 @@ void Dup_ListDuplicateUsrs (void)
 /********************* List similar users to a given one *********************/
 /*****************************************************************************/
 
-void Dup_ListSimilarUsrs (void)
+void Dup_GetUsrCodAndListSimilarUsrs (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user to be removed from list of possible duplicates *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      Dup_ListSimilarUsrsInternal ();
-     }
+      Dup_ListSimilarUsrs ();
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
-static void Dup_ListSimilarUsrsInternal (void)
+static void Dup_ListSimilarUsrs (void)
   {
    extern const char *Txt_Possibly_duplicate_users;
-   extern const char *Txt_Eliminate_user_account;
-   extern const char *Txt_Not_duplicated;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct UsrData UsrDat;
    char Query[256];
@@ -332,22 +324,11 @@ static void Dup_ListSimilarUsrsInternal (void)
 
 	    /* Button to remove this user */
 	    if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
-	      {
-	       Act_FormStart (ActUpdOth);
-	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	       Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-	       Lay_PutRemoveButtonInline (Txt_Eliminate_user_account);
-	       Act_FormEnd ();
-	      }
+	       Dup_PutButtonToEliminateUsrAccount (&UsrDat);
 
 	    /* Button to remove from list of possible duplicate users */
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
-	      {
-	       Act_FormStart (ActRemDupUsr);
-	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	       Lay_PutConfirmButtonInline (Txt_Not_duplicated);
-	       Act_FormEnd ();
-	      }
+	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
@@ -383,6 +364,49 @@ static bool Dup_CheckIfUsrIsDup (long UsrCod)
   }
 
 /*****************************************************************************/
+/********************* Put button to view similar users **********************/
+/*****************************************************************************/
+
+static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Similar_users;
+
+   Act_FormStart (ActLstSimUsr);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Lay_PutConfirmButtonInline (Txt_Similar_users);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/********* Put button to request the elimination of a user's account *********/
+/*****************************************************************************/
+
+static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Eliminate_user_account;
+
+   Act_FormStart (ActUpdOth);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
+   Lay_PutRemoveButtonInline (Txt_Eliminate_user_account);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/****** Put button to remove user from list of possible duplicate users ******/
+/*****************************************************************************/
+
+static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Not_duplicated;
+
+   Act_FormStart (ActRemDupUsr);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Lay_PutConfirmButtonInline (Txt_Not_duplicated);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
 /*********** Remove user from list of possible duplicate users ***************/
 /*****************************************************************************/
 
@@ -397,7 +421,10 @@ void Dup_RemoveUsrFromListDupUsrs (void)
       Dup_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Show list of similar users again */
-      Dup_ListSimilarUsrsInternal ();
+      // Dup_ListSimilarUsrsInternal ();
+
+      /* Show list of possible duplicated users again */
+      Dup_ListDuplicateUsrs ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

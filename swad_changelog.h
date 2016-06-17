@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.226.4 (2016-06-17)"
+#define Log_PLATFORM_VERSION	"SWAD 15.226.5 (2016-06-18)"
 #define CSS_FILE		"swad15.226.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.226.5: Jun 18, 2016	Code refactoring in duplicate users. (202948 lines)
         Version 15.226.4: Jun 17, 2016	Translation of buttons in list of similar users. (202934 lines)
         Version 15.226.3: Jun 17, 2016	Request the removal of a user account from list of similar users. (202912 lines)
         Version 15.226.2: Jun 17, 2016	New action to remove a user from list of possible duplicate users. (202921 lines)
