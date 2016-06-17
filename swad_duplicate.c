@@ -245,7 +245,7 @@ static void Dup_ListSimilarUsrs (void)
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct UsrData UsrDat;
-   char Query[256];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -255,10 +255,23 @@ static void Dup_ListSimilarUsrs (void)
    Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
 
    /***** Build query *****/
-   sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
-                  " WHERE usr_IDs.UsrID IN"
-                  " (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
-            Gbl.Usrs.Other.UsrDat.UsrCod);
+   if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
+       Gbl.Usrs.Other.UsrDat.FirstName[0])	// Name and surname 1 not empty
+      sprintf (Query,"SELECT DISTINCT UsrCod FROM"
+	             "(SELECT DISTINCT UsrCod FROM usr_IDs"
+		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')"
+		     " UNION"
+		     " SELECT UsrCod FROM usr_data"
+		     " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
+		     " AS U",
+	       Gbl.Usrs.Other.UsrDat.UsrCod,
+	       Gbl.Usrs.Other.UsrDat.Surname1,
+	       Gbl.Usrs.Other.UsrDat.Surname2,
+	       Gbl.Usrs.Other.UsrDat.FirstName);
+   else
+      sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
+		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
+	       Gbl.Usrs.Other.UsrDat.UsrCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
    /***** List possible duplicated users *****/

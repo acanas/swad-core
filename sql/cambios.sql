@@ -11595,3 +11595,5 @@ UPDATE notif SET NotifyEvent=3  WHERE NotifyEvent=2;
 CREATE TABLE IF NOT EXISTS usr_duplicated (UsrCod INT NOT NULL,InformerCod INT NOT NULL,InformTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,InformerCod),INDEX(UsrCod));
 
 
+SELECT DISTINCT UsrCod FROM (SELECT DISTINCT UsrCod FROM usr_IDs WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='1') UNION SELECT UsrCod FROM usr_data WHERE Surname1='' AND Surname2='' AND FirstName='') AS I;
+
