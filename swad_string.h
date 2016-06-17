@@ -98,7 +98,6 @@ void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLen
 void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t MaxLength);
 void Str_GetNextStringFromFileUntilSeparator (FILE *FileSrc,char *StrDst);
 void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLength);
-void Str_ReplaceSpecialCharByCodes (char *Str,unsigned long MaxLengthStr);
 void Str_ReplaceSeveralSpacesForOne (char *Str);
 void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithoutSpaces,unsigned MaxLength);
 long Str_ConvertStrCodToLongCod (const char *Str);

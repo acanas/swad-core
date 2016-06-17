@@ -549,9 +549,9 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    /* Write total number of connected users belonging to the current course */
    strcpy (CourseName,Gbl.CurrentCrs.Crs.ShortName);
    Str_LimitLengthHTMLStr (CourseName,12);
-   Str_ReplaceSpecialCharByCodes (CourseName,Crs_MAX_LENGTH_COURSE_SHORT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
-   fprintf (Gbl.F.Out,"%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+   fprintf (Gbl.F.Out,"%u %s %s",
+            Usrs.NumUsrs,Txt_from,CourseName);
 
    /* End of link to view more details about connected users */
    fprintf (Gbl.F.Out,"</a>");

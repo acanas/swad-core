@@ -645,7 +645,9 @@ function toggleDisplay (elementID) {
 }
 
 // Zoom a user's photograph
-function zoom (img,urlPhoto,shortName) {
+// idCaption must be the id of a hidden div with the caption in innerHTML
+// (this allows showing &#39; and &quot;)
+function zoom (img,urlPhoto,idCaption) {
 	var zoomImgWidth  = 186;	// big photo
 	var zoomImgHeight = 248;	// big photo
 	var padding = 7;			// padding around big photo including border
@@ -668,7 +670,9 @@ function zoom (img,urlPhoto,shortName) {
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
 	document.getElementById('zoomLyr').style.top  = yPos + 'px';
 	document.getElementById('zoomImg').src = urlPhoto;
-	document.getElementById('zoomTxt').innerHTML = '<span class="ZOOM_TXT">' + shortName + '</span>';
+	document.getElementById('zoomTxt').innerHTML = '<span class="ZOOM_TXT">' +
+													document.getElementById(idCaption).innerHTML +
+													'</span>';
 }
 
 // Exit from zooming a user's photograph

@@ -744,10 +744,6 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
    Str_LimitLengthHTMLStr (FirstName,MaxChars);
    Str_LimitLengthHTMLStr (Surnames,MaxChars);
 
-   /***** Replace tildes, ñ, etc. by codes, because some browsers (i.e., IE5) don't show correctly tildes with AJAX *****/
-   Str_ReplaceSpecialCharByCodes (FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-   Str_ReplaceSpecialCharByCodes (Surnames,2*Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-
    /***** Write shorted firstname, then return, then shorted surnames *****/
    fprintf (Gbl.F.Out,"%s<br />%s",FirstName,Surnames);
   }

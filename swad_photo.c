@@ -1123,21 +1123,17 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        bool FormUnique)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char SpecialFullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
-   char SpecialShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
-   char SpecialSurnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
+   char FullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
+   char ShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
+   char Surnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
                                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
    bool PutZoomCode = PhotoURL &&							// Photo exists
                       Zoom == Pho_ZOOM &&						// Make zoom
                       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+   char IdCaption[Act_MAX_LENGTH_ID];
 
-   /***** Replace tildes, ñ, etc. in full name by codes,
-          because some browsers (i.e., IE5)
-          don't show correctly tildes with AJAX *****/
-   strcpy (SpecialFullName,UsrDat->FullName);
-   Str_ReplaceSpecialCharByCodes (SpecialFullName,sizeof (SpecialFullName)-1);
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
@@ -1153,6 +1149,31 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
          Act_LinkFormSubmit (NULL,NULL);
      }
 
+   /***** Hidden div to pass user's name to Javascript *****/
+   strcpy (FullName,UsrDat->FullName);
+   if (PutZoomCode)
+     {
+      strcpy (ShortName,UsrDat->FirstName);
+      Str_LimitLengthHTMLStr (ShortName,23);
+      Surnames[0] = '\0';
+      if (UsrDat->Surname1[0])
+         strcpy (Surnames,UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+        {
+         strcat (Surnames," ");
+         strcat (Surnames,UsrDat->Surname2);
+        }
+      Str_LimitLengthHTMLStr (Surnames,23);
+      strcat (ShortName,"<br />");
+      strcat (ShortName,Surnames);
+
+      Act_SetUniqueId (IdCaption);
+      fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+	                 "%s"
+	                 "</div>",
+	       IdCaption,ShortName);
+     }
+
    /***** Start image *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    PhotoExists = false;
@@ -1165,30 +1186,13 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
    fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
 	              " class=\"%s\"",
-            SpecialFullName,SpecialFullName,
+            FullName,FullName,
 	    ClassPhoto);
 
    /***** Image zoom *****/
    if (PutZoomCode)
-     {
-      strcpy (SpecialShortName,UsrDat->FirstName);
-      Str_LimitLengthHTMLStr (SpecialShortName,23);
-      Str_ReplaceSpecialCharByCodes (SpecialShortName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      SpecialSurnames[0] = '\0';
-      if (UsrDat->Surname1[0])
-         strcpy (SpecialSurnames,UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-        {
-         strcat (SpecialSurnames," ");
-         strcat (SpecialSurnames,UsrDat->Surname2);
-        }
-      Str_LimitLengthHTMLStr (SpecialSurnames,23);
-      Str_ReplaceSpecialCharByCodes (SpecialSurnames,2*Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-      strcat (SpecialShortName,"<br />");
-      strcat (SpecialShortName,SpecialSurnames);
-      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s',&quot;%s&quot;);\" onmouseout=\"noZoom();\"",
-               PhotoURL,SpecialShortName);
-     }
+      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\" onmouseout=\"noZoom();\"",
+               PhotoURL,IdCaption);
 
    /***** End image *****/
    fprintf (Gbl.F.Out," />");
@@ -2337,9 +2341,14 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    unsigned PhotoHeight;
    char PathRelAvgPhoto[PATH_MAX+1];
    char PhotoURL[PATH_MAX+1];
-   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
    char PhotoCaption[512];
+   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
    bool ShowDegPhoto;
+   char IdCaption[Act_MAX_LENGTH_ID];
+
+   /***** Initializations *****/
+   PhotoURL[0] = '\0';
+   PhotoCaption[0] = '\0';
 
    /***** Compute photo width and height to be proportional to number of students *****/
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
@@ -2367,48 +2376,54 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       ShowDegPhoto = (NumStds > 0 &&
 		      NumStdsWithPhoto >= Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE);
 
-   /***** Show photo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
    if (ShowDegPhoto)
      {
       sprintf (PathRelAvgPhoto,"%s/%s/%s/%ld_%s.jpg",
-               Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-               Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
-               Deg->DegCod,Usr_StringsSexDB[Sex]);
-
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+	       Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+	       Deg->DegCod,Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
-        {
-         sprintf (PhotoURL,"%s/%s/%s/%ld_%s.jpg",
-                  Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
-                  Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
-                  Deg->DegCod,Usr_StringsSexDB[Sex]);
-         fprintf (Gbl.F.Out,"%s\" style=\"width:%upx; height:%upx;\"",
-                  PhotoURL,PhotoWidth,PhotoHeight);
+	{
+	 sprintf (PhotoURL,"%s/%s/%s/%ld_%s.jpg",
+		  Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+		  Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
+		  Deg->DegCod,Usr_StringsSexDB[Sex]);
+		    if (SeeOrPrint == Pho_DEGREES_SEE)
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
-            sprintf (PhotoCaption,"%s<br />"
-        	                  "%d&nbsp;%s&nbsp;(%s)<br />"
-        	                  "%d&nbsp;%s&nbsp;(%d%%)",
-                     Deg->ShortName,
-                     NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
-                     NumStdsWithPhoto,Txt_photos,
-                     NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-                	           0);
-            fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s',&quot;%s&quot;);\" onmouseout=\"noZoom();\"",
-                     PhotoURL,PhotoCaption);
-           }
-        }
-      else
-         fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
-                            " style=\"width:%upx; height:%upx;\"",
-                  Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
+            /***** Hidden div to pass user's name to Javascript *****/
+	    sprintf (PhotoCaption,"%s<br />"
+				  "%d&nbsp;%s&nbsp;(%s)<br />"
+				  "%d&nbsp;%s&nbsp;(%d%%)",
+		     Deg->ShortName,
+		     NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
+		     NumStdsWithPhoto,Txt_photos,
+		     NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+				   0);
+	    Act_SetUniqueId (IdCaption);
+	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+			       "%s"
+			       "</div>",
+		     IdCaption,PhotoCaption);
+	   }
+	}
+     }
+
+   /***** Show photo *****/
+   fprintf (Gbl.F.Out,"<img src=\"");
+   if (PhotoURL[0])
+     {
+      fprintf (Gbl.F.Out,"%s\"",PhotoURL);
+      if (PhotoCaption[0])
+	 fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\" onmouseout=\"noZoom();\"",
+		  PhotoURL,IdCaption);
      }
    else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\""
-	                 " style=\"width:%upx; height:%upx;\"",
-	       Gbl.Prefs.IconsURL,PhotoWidth,PhotoHeight);
-   fprintf (Gbl.F.Out," alt=\"%s\" />",
-            Deg->ShortName);
+      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\"",Gbl.Prefs.IconsURL);
+   fprintf (Gbl.F.Out," alt=\"%s\""
+	              " style=\"width:%upx; height:%upx;\" />",
+            Deg->ShortName,
+            PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
    if (SeeOrPrint == Pho_DEGREES_PRINT)

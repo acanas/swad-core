@@ -128,13 +128,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.225.21 (2016-06-17)"
-#define CSS_FILE		"swad15.225.11.css"
-#define JS_FILE			"swad15.216.js"
+#define Log_PLATFORM_VERSION	"SWAD 15.226 (2016-06-17)"
+#define CSS_FILE		"swad15.226.css"
+#define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.226:   Jun 17, 2016	Fixed bug in photo zoom. (202870 lines)
         Version 15.225.21:Jun 17, 2016	Fixed bug in photo zoom, reported by Javier Fernández Baldomero. (202894 lines)
         Version 15.225.20:Jun 17, 2016	Show details of user's profile in similar users. (202893 lines)
         Version 15.225.19:Jun 17, 2016	Changed layout of listing of similar users. (202927 lines)

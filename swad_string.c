@@ -2231,46 +2231,6 @@ void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLen
   }
 
 /*****************************************************************************/
-/********** Replace special characters in a string for HTML codes ************/
-/*****************************************************************************/
-
-void Str_ReplaceSpecialCharByCodes (char *Str,unsigned long MaxLengthStr)
-  {
-   char *Ptr, *PtrSrc, *PtrDst, *PtrEndStr;
-   int LengthSpecStrDst;
-   unsigned long LengthStrDst = 0;
-   char StrSpecialChar[256];
-
-   /***** Make the conversion *****/
-   for (Ptr = Str;
-	*Ptr;)
-     {
-      if (*Ptr >= 32 && *Ptr <= 126)	// If character is printable in english ==> is OK; else ==> convert to code
-        {
-         LengthStrDst++;
-         Ptr++;
-        }
-      else
-        {
-         sprintf (StrSpecialChar,"&#%u;",(unsigned char) *Ptr);
-         PtrEndStr = Str + strlen (Str);
-         LengthSpecStrDst = strlen (StrSpecialChar);
-         LengthStrDst += LengthSpecStrDst;
-         if (LengthStrDst > MaxLengthStr)
-            Lay_ShowErrorAndExit ("Not enough memory to convert the format of a string.");
-         for (PtrSrc = PtrEndStr,
-	      PtrDst = PtrSrc + LengthSpecStrDst - 1;
-	      PtrSrc >= Ptr + 1;
-              *PtrDst-- = *PtrSrc--);	/* Copy backward from '\0' (included) */
-         /* Copy to appropiate place the special character string */
-         strncpy (Ptr,StrSpecialChar,LengthSpecStrDst);
-	 /* Increment pointer to character after ';' */
- 	 Ptr += LengthSpecStrDst;
-        }
-     }
-  }
-
-/*****************************************************************************/
 /***************** Replace several spaces of a string for one ****************/
 /*****************************************************************************/
 
