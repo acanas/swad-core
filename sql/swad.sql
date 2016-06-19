@@ -1340,7 +1340,7 @@ CREATE TABLE IF NOT EXISTS usr_webs (
         'paperli','pinterest',
 	'quitter',
         'researchgate','researcherid',
-        'scoopit','slideshare','storify',
+        'scoopit','slideshare','stackoverflow','storify',
         'tumblr','twitter',
         'wikipedia',
         'youtube') NOT NULL,

@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 29
+#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 30
 typedef enum
   {
    Net_WWW,		// Personal web page
@@ -70,6 +70,7 @@ typedef enum
    Net_RESEARCHERID,
    Net_SCOOPIT,
    Net_SLIDESHARE,
+   Net_STACK_OVERFLOW,
    Net_STORIFY,
    Net_TUMBLR,
    Net_TWITTER,
@@ -103,6 +104,7 @@ const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "researcherid",	// Net_RESEARCHERID
    "scoopit",		// Net_SCOOPIT
    "slideshare",	// Net_SLIDESHARE
+   "stackoverflow",	// Net_STACK_OVERFLOW
    "storify",		// Net_STORIFY
    "tumblr",		// Net_TUMBLR
    "twitter",		// Net_TWITTER
@@ -136,6 +138,7 @@ const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "researcherid16x16.gif",	// Net_RESEARCHERID
    "scoopit16x16.gif",		// Net_SCOOPIT
    "slideshare16x16.gif",	// Net_SLIDESHARE
+   "stackoverflow64x64.png",	// Net_STACK_OVERFLOW
    "storify16x16.gif",		// Net_STORIFY
    "tumblr16x16.gif",		// Net_TUMBLR
    "twitter16x16.gif",		// Net_TWITTER
@@ -169,6 +172,7 @@ const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
    "ResearcherID",	// Net_RESEARCHERID
    "Scoop.it",		// Net_SCOOPIT
    "Slideshare",	// Net_SLIDESHARE
+   "Stack Overflow",	// Net_STACK_OVERFLOW
    "Storify",		// Net_STORIFY
    "Tumblr",		// Net_TUMBLR
    "Twitter",		// Net_TWITTER
