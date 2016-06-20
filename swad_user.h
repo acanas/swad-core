@@ -220,6 +220,8 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 unsigned Usr_GetNumCrssOfUsr (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
+unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
+
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
@@ -301,6 +303,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
+void Usr_GetUsrsLst_new (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool Search);
 void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t ListUsrsRange,const char *TchQuery,bool Search);
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_FreeUsrsList (struct ListUsers *LstUsrs);

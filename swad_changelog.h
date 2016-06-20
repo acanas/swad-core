@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.226.7 (2016-06-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.227 (2016-06-20)"
 #define CSS_FILE		"swad15.226.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.227:   Jun 20, 2015	Query optimization in search of users. (203214 lines)
         Version 15.226.7: Jun 19, 2015	One new social network. (202969 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'quitter', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;

@@ -577,7 +577,7 @@ function readOldTimelineData () {
 					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
-							timeline.appendChild(oldTimeline.firstChild);
+						timeline.appendChild(oldTimeline.firstChild);
 				}
 				
 				if (countOldTimeline < 20)	// Set to Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW
