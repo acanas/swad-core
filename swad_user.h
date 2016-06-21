@@ -303,8 +303,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
-void Usr_GetUsrsLst_new (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool Search);
-void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t ListUsrsRange,const char *TchQuery,bool Search);
+void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool Search);
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_FreeUsrsList (struct ListUsers *LstUsrs);
 bool Usr_GetIfShowBigList (unsigned NumUsrs);
