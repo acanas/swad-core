@@ -141,11 +141,11 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,bool Search,char *Query);
+static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const char *UsrQuery,char *Query);
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
-static void Usr_GetListUsrs (const char *Query,struct ListUsers *LstUsrs,
-                             Rol_Role_t Role,Sco_Scope_t Scope);
+static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsrs,
+                                      Rol_Role_t Role,Sco_Scope_t Scope);
 static void Usr_AllocateUsrsList (struct ListUsers *LstUsrs);
 static void Usr_ShowWarningListIsTooBig (unsigned NumStds);
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs);
@@ -3535,7 +3535,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
 /******* Build query to get list with data of users in current course ********/
 /*****************************************************************************/
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,bool Search,char *Query)
+static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const char *UsrQuery,char *Query)
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
@@ -3679,18 +3679,137 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,const char *UsrQuery,
   }
 
 /*****************************************************************************/
-/************************* Get list with data of users ***********************/
+/*********** Get list of users with a given role in a given scope ************/
 /*****************************************************************************/
 
-#define Usr_MAX_LENGTH_QUERY_LIST_USERS (16*1024)
+// Role can be:
+// - Rol_STUDENT
+// - Rol_TEACHER
 
-void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool Search)
+void Usr_GetListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,Sco_Scope_t Scope)
   {
-   char Query[Usr_MAX_LENGTH_QUERY_LIST_USERS+1];
+   char Query[512];
 
    /***** Build query *****/
-   if (Search && Role == Rol__GUEST_)	// Special case
-      /* Select users with no courses */
+   switch (Scope)
+     {
+      case Sco_SCOPE_SYS:
+	 /* Get users in courses from the whole platform */
+	 // 2 columns are retrieved: UsrCod, Sex
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+			" FROM usr_data,crs_usr"
+			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			" AND crs_usr.Role='%u'"
+			" ORDER BY "
+			"usr_data.Surname1,"
+			"usr_data.Surname2,"
+			"usr_data.FirstName,"
+			"usr_data.UsrCod",
+		  (unsigned) Role);
+	 break;
+      case Sco_SCOPE_CTY:
+	 /* Get users in courses from the current country */
+	 // 2 columns are retrieved: UsrCod, Sex
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+			" FROM usr_data,crs_usr,courses,degrees,centres,institutions"
+			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			" AND crs_usr.Role='%u'"
+			" AND crs_usr.CrsCod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod=institutions.InsCod"
+			" AND institutions.CtyCod='%ld'"
+			" ORDER BY "
+			"usr_data.Surname1,"
+			"usr_data.Surname2,"
+			"usr_data.FirstName,"
+			"usr_data.UsrCod",
+		  (unsigned) Role,
+		  Gbl.CurrentCty.Cty.CtyCod);
+	 break;
+      case Sco_SCOPE_INS:
+	 /* Get users in courses from the current institution */
+	 // 2 columns are retrieved: UsrCod, Sex
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+			" FROM usr_data,crs_usr,courses,degrees,centres"
+			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			" AND crs_usr.Role='%u'"
+			" AND crs_usr.CrsCod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod=centres.CtrCod"
+			" AND centres.InsCod='%ld'"
+			" ORDER BY "
+			"usr_data.Surname1,"
+			"usr_data.Surname2,"
+			"usr_data.FirstName,"
+			"usr_data.UsrCod",
+		  (unsigned) Role,
+		  Gbl.CurrentIns.Ins.InsCod);
+	 break;
+      case Sco_SCOPE_CTR:
+	 /* Get users in courses from the current centre */
+	 // 2 columns are retrieved: UsrCod, Sex
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+			" FROM usr_data,crs_usr,courses,degrees"
+			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			" AND crs_usr.Role='%u'"
+			" AND crs_usr.CrsCod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" AND degrees.CtrCod='%ld'"
+			" ORDER BY "
+			"usr_data.Surname1,"
+			"usr_data.Surname2,"
+			"usr_data.FirstName,"
+			"usr_data.UsrCod",
+		  (unsigned) Role,
+		  Gbl.CurrentCtr.Ctr.CtrCod);
+	 break;
+      case Sco_SCOPE_DEG:
+	 /* Get users in courses from the current degree */
+	 // 2 columns are retrieved: UsrCod, Sex
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+			" FROM usr_data,crs_usr,courses"
+			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
+			" AND crs_usr.Role='%u'"
+			" AND crs_usr.CrsCod=courses.CrsCod"
+			" AND courses.DegCod='%ld'"
+			" ORDER BY "
+			"usr_data.Surname1,"
+			"usr_data.Surname2,"
+			"usr_data.FirstName,"
+			"usr_data.UsrCod",
+		  (unsigned) Role,
+		  Gbl.CurrentDeg.Deg.DegCod);
+	 break;
+      case Sco_SCOPE_CRS:
+	 /* Get users from the current course */
+	 // 3 columns are retrieved: UsrCod, Sex, Accepted
+	 Usr_BuildQueryToGetUsrsLstCrs (Role,false,NULL,Query);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+/*
+   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+      Lay_ShowAlert (Lay_INFO,Query);
+*/
+   /***** Get list of users from database given a query *****/
+   Usr_GetListUsrsFromQuery (Query,LstUsrs,Role,Scope);
+  }
+
+
+/*****************************************************************************/
+/********* Search list of users with a given role in current scope ***********/
+/*****************************************************************************/
+
+void Usr_SearchListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,const char *UsrQuery)
+  {
+   char Query[16*1024];
+
+   /***** Build query *****/
+   if (Role == Rol__GUEST_)	// Guests
+      /* Search users with no courses */
       sprintf (Query,"SELECT UsrCod,Sex"
                      " FROM usr_data"
 		     " WHERE %s"
@@ -3701,193 +3820,116 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
 		     "FirstName,"
 		     "UsrCod",
 	       UsrQuery);
-   else					// Rest of cases
-      switch (Scope)
+   else				// Students / Teachers
+      switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
-	    /* Get users from the whole platform */
+	    /* Search users in courses from the whole platform */
 	    // 2 columns are retrieved: UsrCod, Sex
-	    if (Search)
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr"
-			      " WHERE %s"
-			      " AND usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			UsrQuery,
-			(unsigned) Role);
-	    else
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr"
-			      " WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role);
+	    sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+			   "(SELECT DISTINCT candidate_users.UsrCod"
+			   " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+			   " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			   " AND crs_usr.Role='%u') AS list_usrs,usr_data"
+			   " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			   " ORDER BY "
+			   "usr_data.Surname1,"
+			   "usr_data.Surname2,"
+			   "usr_data.FirstName,"
+			   "usr_data.UsrCod",
+		     UsrQuery,
+		     (unsigned) Role);
 	    break;
 	 case Sco_SCOPE_CTY:
-	    /* Get users from the current country */
+	    /* Search users in courses from the current country */
 	    // 2 columns are retrieved: UsrCod, Sex
-	    if (Search)
-	       sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-			      "(SELECT DISTINCT candidate_users.UsrCod"
-			      " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod='%ld') AS list_usrs,usr_data"
-			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			UsrQuery,
-			(unsigned) Role,
-			Gbl.CurrentCty.Cty.CtyCod);
-	    else
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr,courses,degrees,centres,institutions"
-			      " WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod='%ld'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role,
-			Gbl.CurrentCty.Cty.CtyCod);
+	    sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+			   "(SELECT DISTINCT candidate_users.UsrCod"
+			   " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
+			   " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.CrsCod=courses.CrsCod"
+			   " AND courses.DegCod=degrees.DegCod"
+			   " AND degrees.CtrCod=centres.CtrCod"
+			   " AND centres.InsCod=institutions.InsCod"
+			   " AND institutions.CtyCod='%ld') AS list_usrs,usr_data"
+			   " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			   " ORDER BY "
+			   "usr_data.Surname1,"
+			   "usr_data.Surname2,"
+			   "usr_data.FirstName,"
+			   "usr_data.UsrCod",
+		     UsrQuery,
+		     (unsigned) Role,
+		     Gbl.CurrentCty.Cty.CtyCod);
 	    break;
 	 case Sco_SCOPE_INS:
-	    /* Get users from the current institution */
+	    /* Search users in courses from the current institution */
 	    // 2 columns are retrieved: UsrCod, Sex
-	    if (Search)
-	       sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-			      "(SELECT DISTINCT candidate_users.UsrCod"
-			      " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod='%ld') AS list_usrs,usr_data"
-			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			UsrQuery,
-			(unsigned) Role,
-			Gbl.CurrentIns.Ins.InsCod);
-	    else
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr,courses,degrees,centres"
-			      " WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod='%ld'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role,
-			Gbl.CurrentIns.Ins.InsCod);
+	    sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+			   "(SELECT DISTINCT candidate_users.UsrCod"
+			   " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
+			   " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.CrsCod=courses.CrsCod"
+			   " AND courses.DegCod=degrees.DegCod"
+			   " AND degrees.CtrCod=centres.CtrCod"
+			   " AND centres.InsCod='%ld') AS list_usrs,usr_data"
+			   " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			   " ORDER BY "
+			   "usr_data.Surname1,"
+			   "usr_data.Surname2,"
+			   "usr_data.FirstName,"
+			   "usr_data.UsrCod",
+		     UsrQuery,
+		     (unsigned) Role,
+		     Gbl.CurrentIns.Ins.InsCod);
 	    break;
 	 case Sco_SCOPE_CTR:
-	    /* Get users from the current centre */
+	    /* Search users in courses from the current centre */
 	    // 2 columns are retrieved: UsrCod, Sex
-	    if (Search)
-	       sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-			      "(SELECT DISTINCT candidate_users.UsrCod"
-			      " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod='%ld') AS list_usrs,usr_data"
-			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			UsrQuery,
-			(unsigned) Role,
-			Gbl.CurrentCtr.Ctr.CtrCod);
-	    else
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr,courses,degrees"
-			      " WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod='%ld'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role,
-			Gbl.CurrentCtr.Ctr.CtrCod);
+	    sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+			   "(SELECT DISTINCT candidate_users.UsrCod"
+			   " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
+			   " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.CrsCod=courses.CrsCod"
+			   " AND courses.DegCod=degrees.DegCod"
+			   " AND degrees.CtrCod='%ld') AS list_usrs,usr_data"
+			   " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			   " ORDER BY "
+			   "usr_data.Surname1,"
+			   "usr_data.Surname2,"
+			   "usr_data.FirstName,"
+			   "usr_data.UsrCod",
+		     UsrQuery,
+		     (unsigned) Role,
+		     Gbl.CurrentCtr.Ctr.CtrCod);
 	    break;
 	 case Sco_SCOPE_DEG:
-	    /* Get users from the current degree */
+	    /* Search users in courses from the current degree */
 	    // 2 columns are retrieved: UsrCod, Sex
-	    if (Search)
-	       sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-			      "(SELECT DISTINCT candidate_users.UsrCod"
-			      " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
-			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod='%ld') AS list_usrs,usr_data"
-			      " WHERE list_usrs.UsrCod=usr_data.UsrCod "
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			UsrQuery,
-			(unsigned) Role,
-			Gbl.CurrentDeg.Deg.DegCod);
-	    else
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
-			      " FROM usr_data,crs_usr,courses"
-			      " WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod='%ld'"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role,
-			Gbl.CurrentDeg.Deg.DegCod);
+	    sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+			   "(SELECT DISTINCT candidate_users.UsrCod"
+			   " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
+			   " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.CrsCod=courses.CrsCod"
+			   " AND courses.DegCod='%ld') AS list_usrs,usr_data"
+			   " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			   " ORDER BY "
+			   "usr_data.Surname1,"
+			   "usr_data.Surname2,"
+			   "usr_data.FirstName,"
+			   "usr_data.UsrCod",
+		     UsrQuery,
+		     (unsigned) Role,
+		     Gbl.CurrentDeg.Deg.DegCod);
 	    break;
 	 case Sco_SCOPE_CRS:
-	    /* Get users from the current course */
+	    /* Search users in courses from the current course */
 	    // 3 columns are retrieved: UsrCod, Sex, Accepted
-	    Usr_BuildQueryToGetUsrsLstCrs (Role,UsrQuery,Search,Query);
+	    Usr_BuildQueryToGetUsrsLstCrs (Role,true,UsrQuery,Query);
 	    break;
 	 default:
 	    Lay_ShowErrorAndExit ("Wrong scope.");
@@ -3897,13 +3939,8 @@ void Usr_GetUsrsLst (Rol_Role_t Role,Sco_Scope_t Scope,const char *UsrQuery,bool
    if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
 */
-   /***** Get list of users from database *****/
-   Usr_GetListUsrs (Query,
-                    ( Role == Rol_TEACHER ? &Gbl.Usrs.LstTchs :
-		     (Role == Rol_STUDENT ? &Gbl.Usrs.LstStds :
-		                            &Gbl.Usrs.LstGsts)),
-		    Role,
-		    Scope);
+   /***** Get list of users from database given a query *****/
+   Usr_GetListUsrsFromQuery (Query,LstUsrs,Role,Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -4032,7 +4069,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of administrators from database *****/
-   Usr_GetListUsrs (Query,&Gbl.Usrs.LstAdms,Rol_UNKNOWN,Scope);
+   Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstAdms,Rol_UNKNOWN,Scope);
   }
 
 /*****************************************************************************/
@@ -4083,7 +4120,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrs (Query,&Gbl.Usrs.LstGsts,Rol__GUEST_,Scope);
+   Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstGsts,Rol__GUEST_,Scope);
   }
 
 /*****************************************************************************/
@@ -4109,7 +4146,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
                DegCod,(unsigned) Rol_STUDENT);
 
       /***** Get list of students from database *****/
-      Usr_GetListUsrs (Query,&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_DEG);
+      Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_DEG);
      }
   }
 
@@ -4117,8 +4154,8 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-static void Usr_GetListUsrs (const char *Query,struct ListUsers *LstUsrs,
-                             Rol_Role_t Role,Sco_Scope_t Scope)
+static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsrs,
+                                      Rol_Role_t Role,Sco_Scope_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5355,7 +5392,7 @@ void Usr_ListAllDataStds (void)
    Sco_GetScope ();
 
    /****** Get and order list of students in current course ******/
-   Usr_GetUsrsLst (Rol_STUDENT,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -5602,7 +5639,7 @@ void Usr_ListAllDataTchs (void)
    Sco_GetScope ();
 
    /***** Get and order list of teachers *****/
-   Usr_GetUsrsLst (Rol_TEACHER,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstTchs.NumUsrs)
      {
@@ -5675,13 +5712,13 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
    /***** Set list *****/
    LstUsrs = ( Role == Rol_TEACHER ? &Gbl.Usrs.LstTchs :
 	      (Role == Rol_STUDENT ? &Gbl.Usrs.LstStds :
-					  &Gbl.Usrs.LstGsts));
+			             &Gbl.Usrs.LstGsts));
 
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
    /***** Search for users *****/
-   Usr_GetUsrsLst (Role,Gbl.Scope.Current,UsrQuery,true);
+   Usr_SearchListUsrs (LstUsrs,Role,UsrQuery);
    if ((NumUsrs = LstUsrs->NumUsrs))
      {
       /***** Write heading *****/
@@ -6434,7 +6471,7 @@ void Usr_SeeStudents (void)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
 
    /***** Get and order list of students *****/
-   Usr_GetUsrsLst (Rol_STUDENT,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
      {
@@ -6594,7 +6631,7 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get and order list of teachers *****/
-   Usr_GetUsrsLst (Rol_TEACHER,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs))
      {
@@ -6831,7 +6868,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students *****/
-   Usr_GetUsrsLst (Rol_STUDENT,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -6887,7 +6924,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    Sco_GetScope ();
 
    /***** Get and order list of teachers *****/
-   Usr_GetUsrsLst (Rol_TEACHER,Gbl.Scope.Current,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstTchs.NumUsrs)
      {
@@ -6898,12 +6935,12 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
 				  Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                        -1L,
+					                                -1L,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                   -1L,
-				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                  -1L);
+					                                -1L,
+				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+					                                -1L);
       fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
       fprintf (Gbl.F.Out,"</table>");

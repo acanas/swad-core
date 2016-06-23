@@ -1868,7 +1868,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {
@@ -2190,7 +2190,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstStds *****/
    /* Get list of students in the groups selected */
-   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
 
    if (Gbl.Usrs.LstStds.NumUsrs)	// If there are students in the groups selected...
      {
@@ -2533,7 +2533,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
 
    /***** Get and order lists of users from current course *****/
-   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
 
    if (Gbl.Usrs.LstStds.NumUsrs)
      {

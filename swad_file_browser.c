@@ -3096,8 +3096,8 @@ void Brw_AskEditWorksCrs (void)
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
-   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
 
    if (Gbl.Usrs.LstTchs.NumUsrs ||
        Gbl.Usrs.LstStds.NumUsrs)

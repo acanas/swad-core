@@ -1374,11 +1374,9 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 switch (Role)
 	   {
 	    case Rol_STUDENT:
-	       Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
 	       LstCurrentUsrs = &Gbl.Usrs.LstStds;
 	       break;
 	    case Rol_TEACHER:
-	       Usr_GetUsrsLst (Rol_TEACHER,Sco_SCOPE_CRS,NULL,false);
 	       LstCurrentUsrs = &Gbl.Usrs.LstTchs;
 	       break;
 	    default:
@@ -1386,6 +1384,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       Lay_ShowErrorAndExit ("Wrong role.");        // If user manipulated the form
 	       break;
 	   }
+         Usr_GetListUsrs (LstCurrentUsrs,Rol_STUDENT,Sco_SCOPE_CRS);
 
 	 if (LstCurrentUsrs->NumUsrs)
 	   {
@@ -1880,7 +1879,7 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 
    /***** Get list of students in current course *****/
    Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all the students of the current course
-   Usr_GetUsrsLst (Rol_STUDENT,Sco_SCOPE_CRS,NULL,false);
+   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
    NumStdsInCrs = Gbl.Usrs.LstStds.NumUsrs;
 
    /***** Remove all the students *****/
