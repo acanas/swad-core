@@ -3876,12 +3876,11 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
 		  break;
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u') AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -3976,17 +3975,16 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
 		  break;
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
 				 " AND courses.DegCod=degrees.DegCod"
 				 " AND degrees.CtrCod=centres.CtrCod"
 				 " AND centres.InsCod=institutions.InsCod"
-				 " AND institutions.CtyCod='%ld') AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				 " AND institutions.CtyCod='%ld'"
+				 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4100,16 +4098,15 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 		  break;
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,usr_data"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
 				 " AND courses.DegCod=degrees.DegCod"
 				 " AND degrees.CtrCod=centres.CtrCod"
-				 " AND centres.InsCod='%ld') AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				 " AND centres.InsCod='%ld'"
+				 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4220,15 +4217,14 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	       case Rol_CTR_ADM:
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,usr_data"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
 				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod='%ld') AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				 " AND degrees.CtrCod='%ld'"
+		                 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4336,15 +4332,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	       case Rol_CTR_ADM:
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod='%ld') "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,usr_data"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod=courses.CrsCod"
+				 " AND courses.DegCod='%ld'"
+				 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4452,16 +4446,12 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	       case Rol_CTR_ADM:
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
-				    "(SELECT DISTINCT candidate_users.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod='%ld') "
-				 "AS list_usrs,crs_usr,usr_data"
-				 " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
+		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod='%ld'"
-				 " AND list_usrs.UsrCod=usr_data.UsrCod"
+				 " AND candidate_users.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4469,7 +4459,6 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				 "usr_data.UsrCod",
 			   UsrQuery,
 			   (unsigned) Role,
-			   Gbl.CurrentCrs.Crs.CrsCod,
 			   Gbl.CurrentCrs.Crs.CrsCod);
 		  break;
 	       default:		// I am logged
