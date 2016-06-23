@@ -4426,12 +4426,16 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	      {
 	       case Rol_UNKNOWN:	// I am not logged
 		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
 				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
 				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u') AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod='%ld') "
+				 "AS list_usrs,crs_usr,usr_data"
+				 " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.CrsCod='%ld'"
+				 " AND list_usrs.UsrCod=usr_data.UsrCod"
 				 " AND usr_data.ProfileVisibility='%s'"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
@@ -4440,25 +4444,33 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				 "usr_data.UsrCod",
 			   UsrQuery,
 			   (unsigned) Role,
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Gbl.CurrentCrs.Crs.CrsCod,
 			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
 		  break;
 	       case Rol_DEG_ADM:
 	       case Rol_CTR_ADM:
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT crs_usr.UsrCod,usr_data.Sex,crs_usr.Accepted"
-				 " FROM crs_usr,usr_data"
-				 " WHERE crs_usr.CrsCod='%ld'"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.UsrCod=usr_data.UsrCod"
-				 " AND %s"
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
+				    "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod='%ld') "
+				 "AS list_usrs,crs_usr,usr_data"
+				 " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.CrsCod='%ld'"
+				 " AND list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
 				 "usr_data.FirstName,"
 				 "usr_data.UsrCod",
-			   Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
-			   UsrQuery);
+			   UsrQuery,
+			   (unsigned) Role,
+			   Gbl.CurrentCrs.Crs.CrsCod,
+			   Gbl.CurrentCrs.Crs.CrsCod);
 		  break;
 	       default:		// I am logged
 		  sprintf (Query,"SELECT DISTINCT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
