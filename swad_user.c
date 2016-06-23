@@ -5704,11 +5704,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
            {
             UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 
-            if (Role == Rol__GUEST_)
-               UsrDat.Accepted = false;
-            else
-               UsrDat.Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (UsrDat.UsrCod,Role) == 0);
-
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false);
 
