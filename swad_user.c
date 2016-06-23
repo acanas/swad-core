@@ -3905,7 +3905,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
 				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
