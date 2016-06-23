@@ -304,7 +304,6 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope);
-void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_FreeUsrsList (Rol_Role_t Role);

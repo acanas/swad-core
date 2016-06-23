@@ -296,8 +296,8 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x1FF,	// Sch_SEARCH_DEGREES
       0x1FF,	// Sch_SEARCH_COURSES
       0x1FF,	// Sch_SEARCH_TEACHERS
-      0x100,	// Sch_SEARCH_STUDENTS			Only for superusers
-      0x100,	// Sch_SEARCH_GUESTS			Only for superusers
+      0x1FF,	// Sch_SEARCH_STUDENTS
+      0x1FF,	// Sch_SEARCH_GUESTS
       0x1FF,	// Sch_SEARCH_OPEN_DOCUMENTS
       0x1FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
       0x1FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
@@ -742,7 +742,7 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_TEACHER ? Sch_SEARCH_TEACHERS :
 		                           (Role == Rol_STUDENT ? Sch_SEARCH_STUDENTS :
-		                        		               Sch_SEARCH_GUESTS)))
+		                        		          Sch_SEARCH_GUESTS)))
       /***** Split user string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,
 				"CONCAT_WS(' ',usr_data.FirstName,usr_data.Surname1,usr_data.Surname2)",
@@ -1149,7 +1149,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 /*****************************************************************************/
 /****** Build a search query by splitting a string to search into words ******/
 /*****************************************************************************/
-// Returns true if a valid search query is biult
+// Returns true if a valid search query is built
 // Returns false when no valid search query
 
 static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
