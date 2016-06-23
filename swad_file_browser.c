@@ -3096,14 +3096,14 @@ void Brw_AskEditWorksCrs (void)
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstTchs.NumUsrs ||
-       Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
+       Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
-	                        Gbl.Usrs.LstStds.NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
         {
          /***** Draw class photos to select users *****/
          Lay_StartRoundFrame (NULL,Txt_Users,NULL);
@@ -3136,8 +3136,8 @@ void Brw_AskEditWorksCrs (void)
       Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
 
    /***** Free memory for users' list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free the memory used by the list of users *****/
    Usr_FreeListsSelectedUsrCods ();

@@ -1868,9 +1868,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Get my preference about photos in users' list for current course *****/
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
@@ -1908,13 +1908,13 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /* List of students */
       for (NumStd = 0, Gbl.RowEvenOdd = 0;
-	   NumStd < Gbl.Usrs.LstStds.NumUsrs;
+	   NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 	   NumStd++)
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumStd].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumStd].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Accepted;
             Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
            }
         }
@@ -1932,7 +1932,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -2154,12 +2154,12 @@ void Att_RegisterMeAsStdInAttEvent (void)
 /***************** Save students who attended to an event ********************/
 /*****************************************************************************/
 /* Algorithm:
-   1. Get list of students in the groups selected: Gbl.Usrs.LstStds
+   1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STUDENT]
    2. Mark all students in the groups selected setting Remove=true
    3. Get list of students marked as present by me: Gbl.Usrs.Select.Std
    4. Loop over the list Gbl.Usrs.Select.Std,
       that holds the list of the students marked as present,
-      marking the students in Gbl.Usrs.LstStds.Lst as Remove=false
+      marking the students in Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst as Remove=false
    5. Delete from att_usr all the students marked as Remove=true
    6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
  */
@@ -2188,17 +2188,17 @@ void Att_RegisterStudentsInAttEvent (void)
    /***** Get groups selected *****/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstStds *****/
+   /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STUDENT] *****/
    /* Get list of students in the groups selected */
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)	// If there are students in the groups selected...
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)	// If there are students in the groups selected...
      {
       /***** 2. Mark all students in the groups selected setting Remove=true *****/
       for (NumStd = 0;
-           NumStd < Gbl.Usrs.LstStds.NumUsrs;
+           NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
            NumStd++)
-         Gbl.Usrs.LstStds.Lst[NumStd].Remove = true;
+         Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Remove = true;
 
       /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select.Std *****/
       Usr_GetListsSelectedUsrs ();
@@ -2208,7 +2208,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** 4. Loop over the list Gbl.Usrs.Select.Std,
                 that holds the list of the students marked as present,
-                marking the students in Gbl.Usrs.LstStds.Lst as Remove=false *****/
+                marking the students in Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst as Remove=false *****/
       Ptr = Gbl.Usrs.Select.Std;
       while (*Ptr)
 	{
@@ -2217,11 +2217,11 @@ void Att_RegisterStudentsInAttEvent (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrData))		// Get student's data from the database
 	    /***** Mark student to not be removed *****/
 	    for (NumStd = 0;
-		 NumStd < Gbl.Usrs.LstStds.NumUsrs;
+		 NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 		 NumStd++)
-	       if (Gbl.Usrs.LstStds.Lst[NumStd].UsrCod == UsrData.UsrCod)
+	       if (Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod == UsrData.UsrCod)
 		 {
-		  Gbl.Usrs.LstStds.Lst[NumStd].Remove = false;
+		  Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Remove = false;
 	          break;	// Found! Exit loop
 	         }
 	}
@@ -2236,25 +2236,25 @@ void Att_RegisterStudentsInAttEvent (void)
       // 5. Delete from att_usr all the students marked as Remove=true
       // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
       for (NumStd = 0, NumStdsAbsent = NumStdsPresent = 0;
-	   NumStd < Gbl.Usrs.LstStds.NumUsrs;
+	   NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 	   NumStd++)
 	{
 	 /***** Get comments for this student *****/
-	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstStds.Lst[NumStd].UsrCod,CommentStd,CommentTch);
-	 sprintf (CommentParamName,"CommentTch%ld",Gbl.Usrs.LstStds.Lst[NumStd].UsrCod);
+	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod,CommentStd,CommentTch);
+	 sprintf (CommentParamName,"CommentTch%ld",Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod);
 	 Par_GetParToHTML (CommentParamName,CommentTch,Cns_MAX_BYTES_TEXT);
 
-	 Present = !Gbl.Usrs.LstStds.Lst[NumStd].Remove;
+	 Present = !Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Remove;
 
 	 if (Present ||
 	     CommentStd[0] ||
 	     CommentTch[0])
 	    /***** Register student *****/
-	    Att_RegUsrInAttEventChangingComments (Att.AttCod,Gbl.Usrs.LstStds.Lst[NumStd].UsrCod,
+	    Att_RegUsrInAttEventChangingComments (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod,
 					          Present,CommentStd,CommentTch);
 	 else
 	    /***** Remove student *****/
-	    Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.LstStds.Lst[NumStd].UsrCod);
+	    Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod);
 
 	 if (Present)
             NumStdsPresent++;
@@ -2263,7 +2263,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	}
 
       /***** Free memory for students list *****/
-      Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+      Usr_FreeUsrsList (Rol_STUDENT);
 
       /***** Write final message *****/
       sprintf (Format,"%s: %%u<br />%s: %%u",Txt_Presents,Txt_Absents);
@@ -2271,7 +2271,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	       NumStdsPresent,NumStdsAbsent);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
-   else	// Gbl.Usrs.LstStds.NumUsrs == 0
+   else	// Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
 
    /***** Show the attendance event again *****/
@@ -2533,11 +2533,11 @@ void Usr_ReqListStdsAttendanceCrs (void)
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
 
    /***** Get and order lists of users from current course *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
 	{
 	 /***** Get list of selected users *****/
 	 Usr_GetListsSelectedUsrs ();
@@ -2575,7 +2575,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();

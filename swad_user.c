@@ -144,9 +144,8 @@ static void Usr_WriteUsrData (const char *BgColor,
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const char *UsrQuery,char *Query);
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
-static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsrs,
-                                      Rol_Role_t Role,Sco_Scope_t Scope);
-static void Usr_AllocateUsrsList (struct ListUsers *LstUsrs);
+static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scope_t Scope);
+static void Usr_AllocateUsrsList (Rol_Role_t Role);
 static void Usr_ShowWarningListIsTooBig (unsigned NumStds);
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs);
 
@@ -154,7 +153,7 @@ static void Usr_AllocateListOtherRecipients (void);
 
 static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType);
 
-static Usr_Sex_t Usr_GetSexOfUsrsLst (struct ListUsers *LstUsrs);
+static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 
 static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender);
 static void Usr_PutCheckboxListWithPhotos (void);
@@ -3686,7 +3685,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const cha
 // - Rol_STUDENT
 // - Rol_TEACHER
 
-void Usr_GetListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,Sco_Scope_t Scope)
+void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
    char Query[512];
 
@@ -3795,7 +3794,7 @@ void Usr_GetListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,Sco_Scope_t Scop
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Query,LstUsrs,Role,Scope);
+   Usr_GetListUsrsFromQuery (Query,Role,Scope);
   }
 
 
@@ -3803,7 +3802,7 @@ void Usr_GetListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,Sco_Scope_t Scop
 /********* Search list of users with a given role in current scope ***********/
 /*****************************************************************************/
 
-void Usr_SearchListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,const char *UsrQuery)
+void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
   {
    char Query[16*1024];
 
@@ -3940,7 +3939,7 @@ void Usr_SearchListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,const char *U
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Query,LstUsrs,Role,Gbl.Scope.Current);
+   Usr_GetListUsrsFromQuery (Query,Role,Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -4069,7 +4068,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of administrators from database *****/
-   Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstAdms,Rol_UNKNOWN,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol_DEG_ADM,Scope);
   }
 
 /*****************************************************************************/
@@ -4120,7 +4119,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstGsts,Rol__GUEST_,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol__GUEST_,Scope);
   }
 
 /*****************************************************************************/
@@ -4131,7 +4130,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
   {
    char Query[512];
 
-   Gbl.Usrs.LstStds.NumUsrs = 0;
+   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
 
    if (Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,DegCod))
      {
@@ -4146,7 +4145,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
                DegCod,(unsigned) Rol_STUDENT);
 
       /***** Get list of students from database *****/
-      Usr_GetListUsrsFromQuery (Query,&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_DEG);
+      Usr_GetListUsrsFromQuery (Query,Rol_STUDENT,Sco_SCOPE_DEG);
      }
   }
 
@@ -4154,8 +4153,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsrs,
-                                      Rol_Role_t Role,Sco_Scope_t Scope)
+static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scope_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4164,36 +4162,36 @@ static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsr
 
    if (!Query[0])
      {
-      LstUsrs->NumUsrs = 0;
+      Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
       return;
      }
 
    /***** Query database *****/
-   if ((LstUsrs->NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get list of users")))
+   if ((Gbl.Usrs.LstUsrs[Role].NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get list of users")))
      {
-      if (LstUsrs->NumUsrs > Cfg_MAX_USRS_IN_LIST)
+      if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {
-         Usr_ShowWarningListIsTooBig (LstUsrs->NumUsrs);
+         Usr_ShowWarningListIsTooBig (Gbl.Usrs.LstUsrs[Role].NumUsrs);
          Abort = true;
         }
       else
         {
          /***** Allocate memory for the list of users *****/
-         Usr_AllocateUsrsList (LstUsrs);
+         Usr_AllocateUsrsList (Role);
 
          /***** Get list of users *****/
          for (NumUsr = 0;
-              NumUsr < LstUsrs->NumUsrs;
+              NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
               NumUsr++)
            {
             /* Get next user */
             row = mysql_fetch_row (mysql_res);
 
             /* Get user code */
-            LstUsrs->Lst[NumUsr].UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+            Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
             /* Get user's sex */
-            LstUsrs->Lst[NumUsr].Sex = Usr_GetSexFromStr (row[1]);
+            Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Sex = Usr_GetSexFromStr (row[1]);
 
             /* Get user's acceptance of enrollment in course(s) */
 	    if (Role == Rol_STUDENT ||
@@ -4201,16 +4199,16 @@ static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsr
 	      {
 	       if (Scope == Sco_SCOPE_CRS)
 		  // Query result has a third column with the acceptation
-		  LstUsrs->Lst[NumUsr].Accepted = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
 	       else
 		  // Query result has not a third column with the acceptation
-		  LstUsrs->Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (LstUsrs->Lst[NumUsr].UsrCod,Role) == 0);
+		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod,Role) == 0);
 	      }
 	    else
-	       LstUsrs->Lst[NumUsr].Accepted = false;
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = false;
 
             /* By default, users are not removed */
-            LstUsrs->Lst[NumUsr].Remove = false;
+            Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = false;
            }
         }
      }
@@ -4226,7 +4224,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,struct ListUsers *LstUsr
 /********************** Allocate space for list of users *********************/
 /*****************************************************************************/
 
-static void Usr_AllocateUsrsList (struct ListUsers *LstUsrs)
+static void Usr_AllocateUsrsList (Rol_Role_t Role)
   {
 /*
 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
@@ -4235,8 +4233,8 @@ if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
     Lay_ShowAlert (Lay_INFO,Gbl.Message);
    }
 */
-   if (LstUsrs->NumUsrs)
-      if ((LstUsrs->Lst = (struct UsrInList *) calloc (LstUsrs->NumUsrs,sizeof (struct UsrInList))) == NULL)
+   if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+      if ((Gbl.Usrs.LstUsrs[Role].Lst = (struct UsrInList *) calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,sizeof (struct UsrInList))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store users list.");
   }
 
@@ -4244,19 +4242,19 @@ if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
 /********************* Free space used for list of users *********************/
 /*****************************************************************************/
 
-void Usr_FreeUsrsList (struct ListUsers *LstUsrs)
+void Usr_FreeUsrsList (Rol_Role_t Role)
   {
-   if (LstUsrs->NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
       /***** Free the list itself *****/
-      if (LstUsrs->Lst)
+      if (Gbl.Usrs.LstUsrs[Role].Lst)
         {
-         free ((void *) LstUsrs->Lst);
-         LstUsrs->Lst = NULL;
+         free ((void *) Gbl.Usrs.LstUsrs[Role].Lst);
+         Gbl.Usrs.LstUsrs[Role].Lst = NULL;
         }
 
       /***** Reset number of users *****/
-      LstUsrs->NumUsrs = 0;
+      Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
      }
   }
 
@@ -4829,11 +4827,11 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STUDENT:
-         if (!Gbl.Usrs.LstStds.NumUsrs)
+         if (!Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
             return;
          break;
       case Rol_TEACHER:
-         if (!Gbl.Usrs.LstTchs.NumUsrs)
+         if (!Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
             return;
          break;
       default:
@@ -4863,53 +4861,46 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   struct ListUsers *LstUsrs;
    Usr_Sex_t Sex;
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">",
             Usr_GetColumnsForSelectUsrs ());
    if (Role == Rol_STUDENT)
-     {
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_STDS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
-      LstUsrs = &Gbl.Usrs.LstStds;
-     }
    else	// Role == Rol_TEACHER or Role == Rol__GUEST_
-     {
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_TCHS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
-      LstUsrs = &Gbl.Usrs.LstTchs;
-     }
-   Sex = Usr_GetSexOfUsrsLst (LstUsrs);
+   Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
 	              "</th>"
 	              "</tr>",
-	    LstUsrs->NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-                                    Txt_ROLES_PLURAL_Abc[Role][Sex]);
+	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
+                                                  Txt_ROLES_PLURAL_Abc[Role][Sex]);
   }
 
 /*****************************************************************************/
 /************************** Get sex of a list of users ***********************/
 /*****************************************************************************/
 
-static Usr_Sex_t Usr_GetSexOfUsrsLst (struct ListUsers *LstUsrs)
+static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
   {
    Usr_Sex_t Sex;
    unsigned NumUsr;
 
    /***** If no users, sex is undefined *****/
-   if (LstUsrs->NumUsrs == 0)
+   if (Gbl.Usrs.LstUsrs[Role].NumUsrs == 0)
       return Usr_SEX_UNKNOWN;
 
    /***** Initialize sex to that of first user in list *****/
-   Sex = LstUsrs->Lst[0].Sex;
+   Sex = Gbl.Usrs.LstUsrs[Role].Lst[0].Sex;
 
    /***** Search if there is one user at least with different sex than the first one *****/
    for (NumUsr = 1;
-        NumUsr < LstUsrs->NumUsrs;
+        NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
         NumUsr++)
-      if (LstUsrs->Lst[NumUsr].Sex != Sex)
+      if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Sex != Sex)
          return Usr_SEX_UNKNOWN;
 
    return Sex;
@@ -5046,7 +5037,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
-   if (Gbl.Usrs.LstGsts.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -5056,9 +5047,9 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstGsts.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstGsts.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
             UsrDat.Accepted = false;	// Guests have no courses,...
@@ -5073,11 +5064,11 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else        // Gbl.Usrs.LstGsts.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
 
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
+   /***** Free memory for guests list *****/
+   Usr_FreeUsrsList (Rol__GUEST_);
   }
 
 /*****************************************************************************/
@@ -5095,7 +5086,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
    GroupNames = NULL;        // To avoid warning
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if ((GroupNames = (char *) malloc ((MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
@@ -5120,12 +5111,12 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
             Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
 
             Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -5138,11 +5129,11 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       free ((void *) GroupNames);
      }
-   else        // Gbl.Usrs.LstStds.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
   }
 
 /*****************************************************************************/
@@ -5160,7 +5151,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
-   if (Gbl.Usrs.LstTchs.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
      {
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_MAIN_FIELDS_DATA_USR;
@@ -5193,12 +5184,12 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 
       /***** List data of teachers *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
             Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
 
             Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -5208,11 +5199,11 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else        // Gbl.Usrs.LstTchs.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
+   Usr_FreeUsrsList (Rol_TEACHER);
   }
 
 /*****************************************************************************/
@@ -5273,7 +5264,7 @@ void Usr_ListAllDataGsts (void)
    /****** Get and order list of guests ******/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstGsts.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Set number of columns *****/
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_INV;
@@ -5301,9 +5292,9 @@ void Usr_ListAllDataGsts (void)
 
       /***** List guests' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstGsts.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstGsts.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
             UsrDat.Accepted = false;	// Guests have no courses,...
@@ -5322,11 +5313,11 @@ void Usr_ListAllDataGsts (void)
       /***** End of table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
-   else        // Gbl.Usrs.LstGsts.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
 
-   /***** Free memory for guests' list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
+   /***** Free memory for guests list *****/
+   Usr_FreeUsrsList (Rol__GUEST_);
   }
 
 /*****************************************************************************/
@@ -5392,9 +5383,9 @@ void Usr_ListAllDataStds (void)
    Sco_GetScope ();
 
    /****** Get and order list of students in current course ******/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
          /***** Get list of record fields in current course *****/
@@ -5493,12 +5484,12 @@ void Usr_ListAllDataStds (void)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowStdAllData (&UsrDat,GroupNames);
 
@@ -5516,14 +5507,14 @@ void Usr_ListAllDataStds (void)
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
          free ((void *) GroupNames);
      }
-   else        // Gbl.Usrs.LstStds.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -5552,12 +5543,12 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
      {
       case Rol_STUDENT:
          for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-              NumUsr < Gbl.Usrs.LstStds.NumUsrs; )
+              NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
            {
-            UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
+            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
               {
-               UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
+               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
                Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
 
                Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -5566,12 +5557,12 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
          break;
       case Rol_TEACHER:
          for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-              NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
+              NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
            {
-            UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
+            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
               {
-               UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
+               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
                Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
 
                Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -5639,9 +5630,9 @@ void Usr_ListAllDataTchs (void)
    Sco_GetScope ();
 
    /***** Get and order list of teachers *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstTchs.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
      {
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
@@ -5667,12 +5658,12 @@ void Usr_ListAllDataTchs (void)
 
       /***** List data of teachers *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstTchs.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstTchs.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstTchs.Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowTchAllData (&UsrDat);
 
@@ -5686,11 +5677,11 @@ void Usr_ListAllDataTchs (void)
       /***** End of table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
-   else        // Gbl.Usrs.LstTchs.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
+   Usr_FreeUsrsList (Rol_TEACHER);
   }
 
 /*****************************************************************************/
@@ -5703,27 +5694,21 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   struct ListUsers *LstUsrs;
    Usr_Sex_t Sex;
    unsigned NumUsr;
    struct UsrData UsrDat;
    unsigned NumUsrs;
 
-   /***** Set list *****/
-   LstUsrs = ( Role == Rol_TEACHER ? &Gbl.Usrs.LstTchs :
-	      (Role == Rol_STUDENT ? &Gbl.Usrs.LstStds :
-			             &Gbl.Usrs.LstGsts));
-
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
    /***** Search for users *****/
-   Usr_SearchListUsrs (LstUsrs,Role,UsrQuery);
-   if ((NumUsrs = LstUsrs->NumUsrs))
+   Usr_SearchListUsrs (Role,UsrQuery);
+   if ((NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs))
      {
       /***** Write heading *****/
       /* Number of users found */
-      Sex = Usr_GetSexOfUsrsLst (LstUsrs);
+      Sex = Usr_GetSexOfUsrsLst (Role);
       sprintf (Gbl.Title,"%u %s",
 	       NumUsrs,(NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                        Txt_ROLES_PLURAL_abc[Role][Sex]);
@@ -5741,10 +5726,10 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
            NumUsr < NumUsrs;
            NumUsr++)
         {
-         UsrDat.UsrCod = LstUsrs->Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = LstUsrs->Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 
             if (Role == Rol__GUEST_)
                UsrDat.Accepted = false;
@@ -5780,7 +5765,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
      }
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (LstUsrs);
+   Usr_FreeUsrsList (Role);
 
    return NumUsrs;
   }
@@ -5868,7 +5853,7 @@ void Usr_ListDataAdms (void)
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   if (Gbl.Usrs.LstAdms.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -5897,12 +5882,12 @@ void Usr_ListDataAdms (void)
 
       /***** List data of administrators *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstAdms.NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstAdms.Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstAdms.Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
             Usr_WriteRowAdmData (++NumUsr,&UsrDat);
 
             Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -5915,14 +5900,14 @@ void Usr_ListDataAdms (void)
       /***** End of table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
-   else        // Gbl.Usrs.LstAdms.NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs == 0
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
 
-   /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstAdms);
+   /***** Free memory for administrators list *****/
+   Usr_FreeUsrsList (Rol_DEG_ADM);
   }
 
 /*****************************************************************************/
@@ -6322,15 +6307,15 @@ void Usr_SeeGuests (void)
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstGsts.NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs))
      {
       /***** Get list of selected users *****/
       Usr_GetListsSelectedUsrs ();
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstGsts.NumUsrs ? Usr_PutIconToPrintGsts :
-				                                                                   NULL) :
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs ? Usr_PutIconToPrintGsts :
+				                                                                                NULL) :
 								       Usr_PutIconToShowGstsAllData);
 
       /***** Form to select range of guests *****/
@@ -6354,7 +6339,7 @@ void Usr_SeeGuests (void)
 	    break;
 	}
 
-      if (Gbl.Usrs.LstGsts.NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
@@ -6406,8 +6391,8 @@ void Usr_SeeGuests (void)
       Lay_EndRoundFrame ();
      }
 
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
+   /***** Free memory for guests list *****/
+   Usr_FreeUsrsList (Rol__GUEST_);
   }
 
 /*****************************************************************************/
@@ -6471,16 +6456,16 @@ void Usr_SeeStudents (void)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
 
    /***** Get and order list of students *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
      {
       /***** Get list of selected users *****/
       Usr_GetListsSelectedUsrs ();
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstStds.NumUsrs ? Usr_PutIconToPrintStds :
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs ? Usr_PutIconToPrintStds :
 												   NULL) :
 			    ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
 								       NULL));
@@ -6505,7 +6490,7 @@ void Usr_SeeStudents (void)
 	    break;
 	}
 
-      if (Gbl.Usrs.LstStds.NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
@@ -6579,7 +6564,7 @@ void Usr_SeeStudents (void)
      }
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -6631,13 +6616,13 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get and order list of teachers *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs))
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstTchs.NumUsrs ? Usr_PutIconToPrintTchs :
+			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ? Usr_PutIconToPrintTchs :
 				                                                                   NULL) :
 			    ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
 								       NULL));
@@ -6654,7 +6639,7 @@ void Usr_SeeTeachers (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      if (Gbl.Usrs.LstTchs.NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
@@ -6717,7 +6702,7 @@ void Usr_SeeTeachers (void)
      }
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
+   Usr_FreeUsrsList (Rol_TEACHER);
   }
 
 /*****************************************************************************/
@@ -6828,7 +6813,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    /***** Get and order list of students *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstGsts.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
       Lay_StartRoundFrame (NULL,NULL,NULL);
@@ -6845,8 +6830,8 @@ void Usr_SeeGstClassPhotoPrn (void)
    else
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
 
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstGsts);
+   /***** Free memory for guests list *****/
+   Usr_FreeUsrsList (Rol__GUEST_);
   }
 
 /*****************************************************************************/
@@ -6868,9 +6853,9 @@ void Usr_SeeStdClassPhotoPrn (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Draw the students' class photo *****/
       Lay_StartRoundFrame (NULL,NULL,NULL);
@@ -6894,7 +6879,7 @@ void Usr_SeeStdClassPhotoPrn (void)
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -6924,9 +6909,9 @@ void Usr_SeeTchClassPhotoPrn (void)
    Sco_GetScope ();
 
    /***** Get and order list of teachers *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstTchs.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
       Lay_StartRoundFrame (NULL,NULL,NULL);
@@ -6950,7 +6935,7 @@ void Usr_SeeTchClassPhotoPrn (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
+   Usr_FreeUsrsList (Rol_TEACHER);
   }
 
 /*****************************************************************************/
@@ -6960,7 +6945,6 @@ void Usr_SeeTchClassPhotoPrn (void)
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t RoleInClassPhoto)
   {
-   struct ListUsers *LstUsrs;
    unsigned NumUsr;
    bool TRIsOpen = false;
    bool PutCheckBoxToSelectUsr = (ClassPhotoType == Usr_CLASS_PHOTO_SEL ||
@@ -6977,20 +6961,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    int LengthUsrData = 10;	// Maximum number of characters of user data
    char PhotoURL[PATH_MAX+1];
    struct UsrData UsrDat;
-
-   /***** Show guests, students or teachers? *****/
-   switch (RoleInClassPhoto)
-     {
-      case Rol_STUDENT:
-	 LstUsrs = &Gbl.Usrs.LstStds;
-	 break;
-      case Rol_TEACHER:
-	 LstUsrs = &Gbl.Usrs.LstTchs;
-         break;
-      default:
-	 LstUsrs = &Gbl.Usrs.LstGsts;
-         break;
-     }
 
    /***** Set width and height of photos *****/
    switch (ClassPhotoType)
@@ -7015,7 +6985,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
    /***** Loop for showing users photos, names and place of birth *****/
    for (NumUsr = 0;
-        NumUsr < LstUsrs->NumUsrs; )
+        NumUsr < Gbl.Usrs.LstUsrs[RoleInClassPhoto].NumUsrs; )
      {
       if ((NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
         {
@@ -7023,10 +6993,10 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
          TRIsOpen = true;
         }
 
-      UsrDat.UsrCod = LstUsrs->Lst[NumUsr].UsrCod;
+      UsrDat.UsrCod = Gbl.Usrs.LstUsrs[RoleInClassPhoto].Lst[NumUsr].UsrCod;
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
         {
-         UsrDat.Accepted = LstUsrs->Lst[NumUsr].Accepted;
+         UsrDat.Accepted = Gbl.Usrs.LstUsrs[RoleInClassPhoto].Lst[NumUsr].Accepted;
 
          ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);
          ShowData = (ItsMe || UsrDat.Accepted ||

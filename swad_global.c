@@ -183,17 +183,17 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.UsesAJAX = false;
    Gbl.Action.Tab = TabUnk;
 
-   Gbl.Usrs.LstGsts.NumUsrs = 0;
-   Gbl.Usrs.LstGsts.Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs = 0;
 
-   Gbl.Usrs.LstStds.NumUsrs = 0;
-   Gbl.Usrs.LstStds.Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
 
-   Gbl.Usrs.LstTchs.NumUsrs = 0;
-   Gbl.Usrs.LstTchs.Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs = 0;
 
-   Gbl.Usrs.LstAdms.NumUsrs = 0;
-   Gbl.Usrs.LstAdms.Lst = NULL;
+   Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst = NULL;	// Used to list of administrators of any scope, not only degree administrators
+   Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs = 0;
 
    Gbl.ExamAnnouncements.NumExaAnns = 0;
    Gbl.ExamAnnouncements.Lst = NULL;
@@ -462,9 +462,10 @@ void Gbl_Cleanup (void)
    Hld_FreeListHolidays ();
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();
-   Usr_FreeUsrsList (&Gbl.Usrs.LstAdms);
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol__GUEST_);
+   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_DEG_ADM);
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedUsrCods ();
    Syl_FreeListItemsSyllabus ();

@@ -362,10 +362,7 @@ struct Globals
 	{
 	 struct UsrData UsrDat;
 	} Other;		// Another user, used for example to register in / remove from a course
-      struct ListUsers LstGsts;
-      struct ListUsers LstStds;
-      struct ListUsers LstTchs;
-      struct ListUsers LstAdms;
+      struct ListUsrs LstUsrs[Rol_NUM_ROLES];
       struct
         {
          char *All;

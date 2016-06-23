@@ -1240,7 +1240,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    unsigned NumUsrsRegistered = 0;
    unsigned NumUsrsRemoved = 0;
    unsigned NumUsrsEliminated = 0;
-   struct ListUsers *LstCurrentUsrs;
    struct ListCodGrps LstGrps;
    struct UsrData UsrDat;
    bool ItLooksLikeAUsrID;
@@ -1371,28 +1370,15 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       if (WhatToDo.RemoveUsrs)
 	{
 	 /***** Get list of users in current course *****/
-	 switch (Role)
-	   {
-	    case Rol_STUDENT:
-	       LstCurrentUsrs = &Gbl.Usrs.LstStds;
-	       break;
-	    case Rol_TEACHER:
-	       LstCurrentUsrs = &Gbl.Usrs.LstTchs;
-	       break;
-	    default:
-	       LstCurrentUsrs = NULL;        // To avoid warning
-	       Lay_ShowErrorAndExit ("Wrong role.");        // If user manipulated the form
-	       break;
-	   }
-         Usr_GetListUsrs (LstCurrentUsrs,Rol_STUDENT,Sco_SCOPE_CRS);
+         Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-	 if (LstCurrentUsrs->NumUsrs)
+	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	   {
 	    /***** Initialize list of users to remove *****/
 	    for (NumCurrentUsr = 0;
-		 NumCurrentUsr < LstCurrentUsrs->NumUsrs;
+		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 		 NumCurrentUsr++)
-	       LstCurrentUsrs->Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
 
 	    /***** Loop 1: go through form list setting if a student must be removed *****/
 	    /* Step a: Get students from a list of official groups */
@@ -1464,21 +1450,21 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		 {
 	          if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
 		     for (NumCurrentUsr = 0;
-			  NumCurrentUsr < LstCurrentUsrs->NumUsrs;
+			  NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 			  NumCurrentUsr++)
-			if (LstCurrentUsrs->Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
-			   LstCurrentUsrs->Lst[NumCurrentUsr].Remove = true;	// Mark as removable
+			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = true;	// Mark as removable
 		 }
 	       else	// Remove all the users (of the role) except these specified
 		 {
 		  for (NumCurrentUsr = 0;
-		       NumCurrentUsr < LstCurrentUsrs->NumUsrs;
+		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 		       NumCurrentUsr++)
 		     for (NumUsrFound = 0;
 			  NumUsrFound < ListUsrCods.NumUsrs;
 			  NumUsrFound++)
-			if (LstCurrentUsrs->Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-			   LstCurrentUsrs->Lst[NumCurrentUsr].Remove = false;	// Mark as not removable
+			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = false;	// Mark as not removable
 		 }
 
 	       /* Free memory used for list of users' codes found for this ID */
@@ -1487,11 +1473,11 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	    /***** Loop 2: go through users list removing users *****/
 	    for (NumCurrentUsr = 0;
-		 NumCurrentUsr < LstCurrentUsrs->NumUsrs;
+		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 		 NumCurrentUsr++)
-	       if (LstCurrentUsrs->Lst[NumCurrentUsr].Remove)        // If this student must be removed
+	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
 		 {
-		  UsrDat.UsrCod = LstCurrentUsrs->Lst[NumCurrentUsr].UsrCod;
+		  UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
 		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
 		    {
 		     if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
@@ -1527,7 +1513,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	   }
 
 	 /***** Free memory for users list *****/
-	 Usr_FreeUsrsList (LstCurrentUsrs);
+	 Usr_FreeUsrsList (Role);
 	}
 
       /***** Register users *****/
@@ -1776,13 +1762,13 @@ static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecified
          if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,&ListUsrCods,false))	// User(s) found
            {
 	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstStds.NumUsrs;
+		 NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 		 NumUsr++)
 	       for (NumUsrFound = 0;
 		    NumUsrFound < ListUsrCods.NumUsrs;
 		    NumUsrFound++)
-		  if (Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-		     Gbl.Usrs.LstStds.Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
+		  if (Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
+		     Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
 
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
@@ -1879,21 +1865,21 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 
    /***** Get list of students in current course *****/
    Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all the students of the current course
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
-   NumStdsInCrs = Gbl.Usrs.LstStds.NumUsrs;
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+   NumStdsInCrs = Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
    /***** Remove all the students *****/
    for (NumUsr = 0;
 	NumUsr < NumStdsInCrs;
 	NumUsr++)
      {
-      Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
+      Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,Crs,
 				    Enr_REMOVE_WORKS,Cns_QUIET);
      }
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    return NumStdsInCrs;
   }

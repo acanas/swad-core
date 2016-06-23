@@ -417,14 +417,14 @@ void Sta_AskShowCrsHits (void)
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstTchs.NumUsrs ||
-       Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
+       Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
-	                        Gbl.Usrs.LstStds.NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
         {
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrs ();
@@ -554,8 +554,8 @@ void Sta_AskShowCrsHits (void)
       Lay_ShowAlert (Lay_WARNING,Txt_No_teachers_or_students_found);
 
    /* Free memory used by the lists */
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /* Free memory for list of selected groups */
    Grp_FreeListCodSelectedGrps ();

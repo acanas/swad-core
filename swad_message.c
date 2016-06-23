@@ -162,11 +162,11 @@ void Msg_ListEMails (void)
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-   if (Gbl.Usrs.LstStds.NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstStds.NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
         {
          /***** Start of the frame used to list the e-mails *****/
          Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
@@ -178,13 +178,13 @@ void Msg_ListEMails (void)
 
          /***** List the students' e-mail addresses *****/
          for (NumUsr = 0;
-              NumUsr < Gbl.Usrs.LstStds.NumUsrs;
+              NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
               NumUsr++)
            {
-            UsrDat.UsrCod = Gbl.Usrs.LstStds.Lst[NumUsr].UsrCod;
+            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
               {
-               UsrDat.Accepted = Gbl.Usrs.LstStds.Lst[NumUsr].Accepted;
+               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
                if (UsrDat.Email[0])
                  {
                   NumStdsWithEmail++;
@@ -224,7 +224,7 @@ void Msg_ListEMails (void)
                             "<td class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_e_mail,
                   NumStdsWithEmail,
-                  ((float) NumStdsWithEmail / (float) Gbl.Usrs.LstStds.NumUsrs) * 100.0,Gbl.Usrs.LstStds.NumUsrs);
+                  ((float) NumStdsWithEmail / (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -232,7 +232,7 @@ void Msg_ListEMails (void)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_e_mail,
-                  NumAcceptedStdsWithEmail,((float) NumAcceptedStdsWithEmail / (float) Gbl.Usrs.LstStds.NumUsrs) * 100.0,Gbl.Usrs.LstStds.NumUsrs);
+                  NumAcceptedStdsWithEmail,((float) NumAcceptedStdsWithEmail / (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -255,7 +255,7 @@ void Msg_ListEMails (void)
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -286,8 +286,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_Send_message;
    char YN[1+1];
 
-   Gbl.Usrs.LstTchs.NumUsrs =
-   Gbl.Usrs.LstStds.NumUsrs = 0;
+   Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs =
+   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
    Par_GetParToText ("IsReply",YN,1);
@@ -328,17 +328,17 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (&Gbl.Usrs.LstTchs,Rol_TEACHER,Sco_SCOPE_CRS);
-      Usr_GetListUsrs (&Gbl.Usrs.LstStds,Rol_STUDENT,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
-      if (Gbl.Usrs.LstTchs.NumUsrs ||
-          Gbl.Usrs.LstStds.NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
+          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrs ();
      }
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstTchs.NumUsrs +
-	                     Gbl.Usrs.LstStds.NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	                     Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,
@@ -347,8 +347,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                   NULL);
 
       /***** Form to select type of list used for select several users *****/
-      if (Gbl.Usrs.LstTchs.NumUsrs ||
-          Gbl.Usrs.LstStds.NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
+          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
 	 Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
       /***** Form to show several potential recipients *****/
@@ -433,8 +433,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    Usr_FreeListOtherRecipients ();
 
    /***** Free memory used for by the lists of users *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstTchs);
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Free memory used by list of users *****/
    Usr_FreeListsSelectedUsrCods ();

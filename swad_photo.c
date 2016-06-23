@@ -100,7 +100,7 @@ static void Pho_ClearPhotoName (long UsrCod);
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
 static long Pho_GetTimeToComputeAvgPhoto (long DegCod);
-static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,struct ListUsers *LstUsrs,
+static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
 static void Pho_PutSelectorForTypeOfAvg (void);
@@ -1293,7 +1293,7 @@ void Pho_CalcPhotoDegree (void)
 	   TypeOfAverage++)
         {
          /***** Compute average photos of students belonging this degree *****/
-         Pho_ComputeAveragePhoto (DegCod,Sex,&Gbl.Usrs.LstStds,
+         Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STUDENT,
                                   TypeOfAverage,DirAvgPhotosRelPath[TypeOfAverage],
                                   &NumStds,&NumStdsWithPhoto,&PartialTimeToComputeAvgPhotoInMicroseconds);
          TotalTimeToComputeAvgPhotoInMicroseconds += PartialTimeToComputeAvgPhotoInMicroseconds;
@@ -1304,7 +1304,7 @@ void Pho_CalcPhotoDegree (void)
      }
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (&Gbl.Usrs.LstStds);
+   Usr_FreeUsrsList (Rol_STUDENT);
 
    /***** Show photos *****/
    Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
@@ -1489,7 +1489,7 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
 /*****************************************************************************/
 // Returns number of users in list with photo
 
-static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,struct ListUsers *LstUsrs,
+static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds)
   {
@@ -1528,16 +1528,16 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,struct ListUsers 
 
    /***** Loop writing file names in text file *****/
    for (NumUsr = 0;
-	NumUsr < LstUsrs->NumUsrs;
+	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 	NumUsr++)
      {
-      Gbl.Usrs.Other.UsrDat.Sex = LstUsrs->Lst[NumUsr].Sex;
+      Gbl.Usrs.Other.UsrDat.Sex = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Sex;
       if (Sex == Usr_SEX_ALL || Sex == Gbl.Usrs.Other.UsrDat.Sex)
 	{
 	 (*NumStds)++;
 
 	 /***** Add photo to file for average face calculation *****/
-	 Gbl.Usrs.Other.UsrDat.UsrCod = LstUsrs->Lst[NumUsr].UsrCod;
+	 Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
 	 if (Pho_CheckIfPrivPhotoExists (Gbl.Usrs.Other.UsrDat.UsrCod,PathPrivRelPhoto))
 	   {
 	    (*NumStdsWithPhoto)++;
@@ -1573,7 +1573,10 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,struct ListUsers 
 	 tvEndComputingStat.tv_sec--;
 	 tvEndComputingStat.tv_usec += 1000000L;
 	}
-      *TimeToComputeAvgPhotoInMicroseconds = (tvEndComputingStat.tv_sec - tvStartComputingStat.tv_sec) * 1000000L + tvEndComputingStat.tv_usec - tvStartComputingStat.tv_usec;
+      *TimeToComputeAvgPhotoInMicroseconds = (tvEndComputingStat.tv_sec -
+	                                      tvStartComputingStat.tv_sec) * 1000000L +
+	                                      tvEndComputingStat.tv_usec -
+	                                      tvStartComputingStat.tv_usec;
      }
   }
 

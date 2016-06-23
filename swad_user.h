@@ -181,7 +181,7 @@ struct UsrInList
    bool Remove;		// A boolean associated with each user that indicates if it must be removed
   };
 
-struct ListUsers
+struct ListUsrs
   {
    struct UsrInList *Lst;	// List of users
    unsigned NumUsrs;		// Number of users in the list
@@ -303,11 +303,11 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
-void Usr_GetListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,Sco_Scope_t Scope);
-void Usr_SearchListUsrs (struct ListUsers *LstUsrs,Rol_Role_t Role,const char *UsrQuery);
+void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope);
+void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
-void Usr_FreeUsrsList (struct ListUsers *LstUsrs);
+void Usr_FreeUsrsList (Rol_Role_t Role);
 bool Usr_GetIfShowBigList (unsigned NumUsrs);
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
 void Usr_GetListsSelectedUsrs (void);
