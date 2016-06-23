@@ -141,7 +141,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const char *UsrQuery,char *Query);
+static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query);
 static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery);
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
@@ -1437,13 +1437,17 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
    if (DegCod > 0)                // Courses in a degree
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses"
-                     " WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod='%ld'"
+                     " WHERE crs_usr.UsrCod='%ld'"
+                     " AND crs_usr.CrsCod=courses.CrsCod"
+                     " AND courses.DegCod='%ld'"
                      " ORDER BY courses.ShortName",
                UsrCod,DegCod);
    else                        // All the courses
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod=degrees.DegCod"
+                     " WHERE crs_usr.UsrCod='%ld'"
+                     " AND crs_usr.CrsCod=courses.CrsCod"
+                     " AND courses.DegCod=degrees.DegCod"
                      " ORDER BY degrees.ShortName,courses.ShortName",
                UsrCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get the courses a user belongs to");
@@ -3432,7 +3436,8 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
 
    /***** Get a random student from a group from database *****/
    sprintf (Query,"SELECT crs_grp_usr.UsrCod FROM crs_grp_usr,crs_usr"
-                  " WHERE crs_grp_usr.GrpCod='%ld' AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
+                  " WHERE crs_grp_usr.GrpCod='%ld'"
+                  " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
                   " AND crs_usr.Role='%u' ORDER BY RAND(NOW()) LIMIT 1",
             GrpCod,(unsigned) Rol_STUDENT);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get a random student from a group"))
@@ -3535,7 +3540,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
 /******* Build query to get list with data of users in current course ********/
 /*****************************************************************************/
 
-static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const char *UsrQuery,char *Query)
+static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
@@ -3565,15 +3570,6 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,bool Search,const cha
       		     " AND crs_usr.UsrCod=usr_data.UsrCod",        // Do not get banned users
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
                Gbl.Usrs.Me.UsrDat.UsrCod);
-   else if (Search)
-      sprintf (Query,"SELECT crs_usr.UsrCod,usr_data.Sex,crs_usr.Accepted"
-		     " FROM crs_usr,usr_data"
-		     " WHERE crs_usr.CrsCod='%ld'"
-		     " AND crs_usr.Role='%u'"
-		     " AND crs_usr.UsrCod=usr_data.UsrCod"
-		     " AND %s",
-	       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
-	       UsrQuery);
    else
       sprintf (Query,"SELECT crs_usr.UsrCod,usr_data.Sex,crs_usr.Accepted"
                      " FROM crs_usr,usr_data"
@@ -3784,7 +3780,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_CRS:
 	 /* Get users from the current course */
 	 // 3 columns are retrieved: UsrCod, Sex, Accepted
-	 Usr_BuildQueryToGetUsrsLstCrs (Role,false,NULL,Query);
+	 Usr_BuildQueryToGetUsrsLstCrs (Role,Query);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -3808,38 +3804,84 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
    char Query[16*1024];
 
    /***** Build query *****/
-   if (Role == Rol__GUEST_)	// Guests
+   // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
+   //                           else ==> 2 columns are retrieved: UsrCod, Sex
+
+   if (Role == Rol__GUEST_)	// Guests (scope is not used)
       /* Search users with no courses */
-      sprintf (Query,"SELECT UsrCod,Sex"
-                     " FROM usr_data"
-		     " WHERE %s"
-		     " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-		     " ORDER BY "
-		     "Surname1,"
-		     "Surname2,"
-		     "FirstName,"
-		     "UsrCod",
-	       UsrQuery);
+      switch (Gbl.Usrs.Me.LoggedRole)
+	{
+	 case Rol_UNKNOWN:	// I am not logged
+	    // Guests whose privacy is Pri_VISIBILITY_WORLD
+	    sprintf (Query,"SELECT UsrCod,Sex FROM usr_data"
+			   " WHERE %s"
+			   " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			   " AND ProfileVisibility='%s'"
+			   " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+		     UsrQuery,
+		     Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+	    break;
+	 case Rol_SYS_ADM:
+	    // Any guest
+	    sprintf (Query,"SELECT UsrCod,Sex FROM usr_data"
+			   " WHERE %s"
+			   " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			   " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+		     UsrQuery);
+	    break;
+	 default:		// I am logged
+	    // Guests whose privacy is
+	    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+	    sprintf (Query,"SELECT UsrCod,Sex FROM usr_data"
+			   " WHERE %s"
+			   " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			   " AND ProfileVisibility IN ('%s','%s')"
+			   " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+		     UsrQuery,
+		     Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+		     Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	    break;
+	}
    else				// Students / Teachers
       /*
          To achieve maximum speed, it's important to do the things in this order:
          1) Search for user's name (UsrQuery) getting candidate users
+            (this search is not stored in a temporary table
+             because MySQL does not allow temporary tables
+             to be used more than once in the same query)
          2) Filter the candidate users according to scope
       */
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
 	    /* Search users in courses from the whole platform */
-	    // 2 columns are retrieved: UsrCod, Sex
 	    switch (Gbl.Usrs.Me.LoggedRole)
 	      {
-	       case Rol_SYS_ADM:
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod"
-				 " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u') AS list_usrs,usr_data"
 				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			         " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
+	       case Rol_SYS_ADM:
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -3848,15 +3890,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   UsrQuery,
 			   (unsigned) Role);
 		  break;
-	       default:
+	       default:			// I am logged
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
 				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "crs_usr,"
-				    "usr_data"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -3865,10 +3905,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,"
-				    "crs_usr,"
-				    "usr_data"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=my_crs.CrsCod"
@@ -3878,10 +3916,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me with another role
 				    // and whose privacy is Pri_VISIBILITY_USER
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,"
-				    "crs_usr,"
-				    "usr_data"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
@@ -3890,7 +3926,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 		                    " AND usr_data.ProfileVisibility='%s'"
 				    ") "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -3913,13 +3949,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	    break;
 	 case Sco_SCOPE_CTY:
 	    /* Search users in courses from the current country */
-	    // 2 columns are retrieved: UsrCod, Sex
 	    switch (Gbl.Usrs.Me.LoggedRole)
 	      {
-	       case Rol_SYS_ADM:
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod"
-				 " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
@@ -3928,6 +3964,29 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				 " AND centres.InsCod=institutions.InsCod"
 				 " AND institutions.CtyCod='%ld') AS list_usrs,usr_data"
 				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			         " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Gbl.CurrentCty.Cty.CtyCod,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
+	       case Rol_SYS_ADM:
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres,institutions"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod=courses.CrsCod"
+				 " AND courses.DegCod=degrees.DegCod"
+				 " AND degrees.CtrCod=centres.CtrCod"
+				 " AND centres.InsCod=institutions.InsCod"
+				 " AND institutions.CtyCod='%ld') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -3937,16 +3996,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   (unsigned) Role,
 			   Gbl.CurrentCty.Cty.CtyCod);
 		  break;
-	       default:
+	       default:			// I am logged
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
 				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres,institutions"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data,courses,degrees,centres,institutions"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -3960,11 +4016,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres,institutions"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data,courses,degrees,centres,institutions"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=my_crs.CrsCod"
@@ -3979,11 +4032,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me with another role
 				    // and whose privacy is Pri_VISIBILITY_USER
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres,institutions"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data,courses,degrees,centres,institutions"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
@@ -3997,7 +4047,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    " AND institutions.CtyCod='%ld'"
 				    ") "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4023,14 +4073,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	    break;
 	 case Sco_SCOPE_INS:
 	    /* Search users in courses from the current institution */
-	    // 2 columns are retrieved: UsrCod, Sex
 	    switch (Gbl.Usrs.Me.LoggedRole)
 	      {
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod"
-				 " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4038,6 +4087,29 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				 " AND degrees.CtrCod=centres.CtrCod"
 				 " AND centres.InsCod='%ld') AS list_usrs,usr_data"
 				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			         " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Gbl.CurrentIns.Ins.InsCod,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
+	       case Rol_INS_ADM:
+	       case Rol_SYS_ADM:
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees,centres"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod=courses.CrsCod"
+				 " AND courses.DegCod=degrees.DegCod"
+				 " AND degrees.CtrCod=centres.CtrCod"
+				 " AND centres.InsCod='%ld') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4047,16 +4119,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   (unsigned) Role,
 			   Gbl.CurrentIns.Ins.InsCod);
 		  break;
-	       default:
+	       default:			// I am logged
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
 				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data,courses,degrees,centres"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -4069,11 +4138,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data,courses,degrees,centres"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=my_crs.CrsCod"
@@ -4087,11 +4153,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me with another role
 				    // and whose privacy is Pri_VISIBILITY_USER
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees,centres"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data,courses,degrees,centres"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
@@ -4104,7 +4167,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    " AND centres.InsCod='%ld'"
 				    ") "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4130,21 +4193,42 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
             break;
 	 case Sco_SCOPE_CTR:
 	    /* Search users in courses from the current centre */
-	    // 2 columns are retrieved: UsrCod, Sex
 	    switch (Gbl.Usrs.Me.LoggedRole)
 	      {
-	       case Rol_CTR_ADM:
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				 "(SELECT DISTINCT candidate_users.UsrCod"
-				 " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
 				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				 " AND crs_usr.Role='%u'"
 				 " AND crs_usr.CrsCod=courses.CrsCod"
 				 " AND courses.DegCod=degrees.DegCod"
 				 " AND degrees.CtrCod='%ld') AS list_usrs,usr_data"
 				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			         " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Gbl.CurrentCtr.Ctr.CtrCod,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
+	       case Rol_CTR_ADM:
+	       case Rol_INS_ADM:
+	       case Rol_SYS_ADM:
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses,degrees"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod=courses.CrsCod"
+				 " AND courses.DegCod=degrees.DegCod"
+				 " AND degrees.CtrCod='%ld') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4154,16 +4238,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   (unsigned) Role,
 			   Gbl.CurrentCtr.Ctr.CtrCod);
 		  break;
-	       default:
+	       default:			// I am logged
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
 				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data,courses,degrees"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -4175,11 +4256,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data,courses,degrees"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=my_crs.CrsCod"
@@ -4192,11 +4270,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me with another role
 				    // and whose privacy is Pri_VISIBILITY_USER
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses,degrees"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data,courses,degrees"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
@@ -4208,7 +4283,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    " AND degrees.CtrCod='%ld'"
 				    ") "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4234,22 +4309,42 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	    break;
 	 case Sco_SCOPE_DEG:
 	    /* Search users in courses from the current degree */
-	    // 2 columns are retrieved: UsrCod, Sex
 	    switch (Gbl.Usrs.Me.LoggedRole)
 	      {
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.CrsCod=courses.CrsCod"
+				 " AND courses.DegCod='%ld') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+			         " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Gbl.CurrentDeg.Deg.DegCod,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
 	       case Rol_DEG_ADM:
 	       case Rol_CTR_ADM:
 	       case Rol_INS_ADM:
 	       case Rol_SYS_ADM:
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "(SELECT DISTINCT candidate_users.UsrCod"
-				    " FROM (SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
+				    "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,courses"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=courses.CrsCod"
 				    " AND courses.DegCod='%ld') "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4259,16 +4354,13 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 			   (unsigned) Role,
 			   Gbl.CurrentDeg.Deg.DegCod);
 		  break;
-	       default:
+	       default:			// I am logged
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
 				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data,courses"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -4279,11 +4371,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me
 		                    // and whose privacy is Pri_VISIBILITY_COURSE
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data,courses"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 				    " AND crs_usr.CrsCod=my_crs.CrsCod"
@@ -4295,11 +4384,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    // Users who share any course with me with another role
 				    // and whose privacy is Pri_VISIBILITY_USER
 				    "SELECT DISTINCT crs_usr.UsrCod FROM "
-				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,"
-				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,"
-				    "crs_usr,"
-				    "usr_data,"
-				    "courses"
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data,courses"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
 		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
@@ -4310,7 +4396,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 				    " AND courses.DegCod='%ld'"
 				    ") "
 				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
 				 " ORDER BY "
 				 "usr_data.Surname1,"
 				 "usr_data.Surname2,"
@@ -4336,8 +4422,102 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 	    break;
 	 case Sco_SCOPE_CRS:
 	    /* Search users in courses from the current course */
-	    // 3 columns are retrieved: UsrCod, Sex, Accepted
-	    Usr_BuildQueryToGetUsrsLstCrs (Role,true,UsrQuery,Query);
+	    switch (Gbl.Usrs.Me.LoggedRole)
+	      {
+	       case Rol_UNKNOWN:	// I am not logged
+		  // Users whose privacy is Pri_VISIBILITY_WORLD
+		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				 "(SELECT DISTINCT candidate_users.UsrCod FROM "
+				 "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr"
+				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.Role='%u') AS list_usrs,usr_data"
+				 " WHERE list_usrs.UsrCod=usr_data.UsrCod "
+				 " AND usr_data.ProfileVisibility='%s'"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		  break;
+	       case Rol_DEG_ADM:
+	       case Rol_CTR_ADM:
+	       case Rol_INS_ADM:
+	       case Rol_SYS_ADM:
+		  sprintf (Query,"SELECT crs_usr.UsrCod,usr_data.Sex,crs_usr.Accepted"
+				 " FROM crs_usr,usr_data"
+				 " WHERE crs_usr.CrsCod='%ld'"
+				 " AND crs_usr.Role='%u'"
+				 " AND crs_usr.UsrCod=usr_data.UsrCod"
+				 " AND %s"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
+			   UsrQuery);
+		  break;
+	       default:		// I am logged
+		  sprintf (Query,"SELECT DISTINCT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
+				    "("
+				    // Users whose privacy is
+				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				    "SELECT DISTINCT crs_usr.UsrCod FROM "
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				    " UNION "
+				    // Users who share any course with me
+				    // and whose privacy is Pri_VISIBILITY_COURSE
+				    "SELECT DISTINCT crs_usr.UsrCod FROM "
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld') AS my_crs,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=my_crs.CrsCod"
+				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    " UNION "
+				    // Users who share any course with me with another role
+				    // and whose privacy is Pri_VISIBILITY_USER
+				    "SELECT DISTINCT crs_usr.UsrCod FROM "
+				    "(SELECT UsrCod FROM usr_data WHERE %s) AS candidate_users,crs_usr,"
+				    "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_crs_role,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				    " AND crs_usr.Role<>my_crs_role.Role"
+				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    ") "
+				 "AS list_usrs,crs_usr,usr_data"
+				 " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
+				 " AND crs_usr.CrsCod='%ld'"
+				 " AND list_usrs.UsrCod=usr_data.UsrCod"
+				 " ORDER BY "
+				 "usr_data.Surname1,"
+				 "usr_data.Surname2,"
+				 "usr_data.FirstName,"
+				 "usr_data.UsrCod",
+			   UsrQuery,
+			   (unsigned) Role,
+			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			   UsrQuery,
+			   Gbl.Usrs.Me.UsrDat.UsrCod,
+			   (unsigned) Role,
+			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			   UsrQuery,
+			   Gbl.Usrs.Me.UsrDat.UsrCod,
+			   (unsigned) Role,
+			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			   Gbl.CurrentCrs.Crs.CrsCod);
+	      }
 	    break;
 	 default:
 	    Lay_ShowErrorAndExit ("Wrong scope.");
@@ -4345,7 +4525,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
         }
 
    // if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
-      Lay_ShowAlert (Lay_INFO,Query);
+   //   Lay_ShowAlert (Lay_INFO,Query);
 
    /***** Get list of users from database given a query *****/
    Usr_GetListUsrsFromQuery (Query,Role,Gbl.Scope.Current);

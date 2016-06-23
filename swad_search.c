@@ -297,7 +297,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x1FF,	// Sch_SEARCH_COURSES
       0x1FF,	// Sch_SEARCH_TEACHERS
       0x1FF,	// Sch_SEARCH_STUDENTS
-      0x1FF,	// Sch_SEARCH_GUESTS
+      0x100,	// Sch_SEARCH_GUESTS			Only if I am a system admin
       0x1FF,	// Sch_SEARCH_OPEN_DOCUMENTS
       0x1FE,	// Sch_SEARCH_DOCUM_IN_MY_COURSES	Only if I am logged
       0x1FE,	// Sch_SEARCH_MY_DOCUMENTS		Only if I am logged
