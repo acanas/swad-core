@@ -81,6 +81,7 @@ void Gbl_InitializeGlobals (void)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
+   Rol_Role_t Role;
    Txt_Language_t Lan;
 
    Gbl.Layout.WritingHTMLStart =
@@ -183,17 +184,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.UsesAJAX = false;
    Gbl.Action.Tab = TabUnk;
 
-   Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst = NULL;
-   Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs = 0;
-
-   Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst = NULL;
-   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
-
-   Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst = NULL;
-   Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs = 0;
-
-   Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst = NULL;	// Used to list of administrators of any scope, not only degree administrators
-   Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs = 0;
+   for (Role = (Rol_Role_t) 0;
+	Role < Rol_NUM_ROLES;
+	Role++)
+     {
+      Gbl.Usrs.LstUsrs[Role].Lst = NULL;
+      Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
+     }
 
    Gbl.ExamAnnouncements.NumExaAnns = 0;
    Gbl.ExamAnnouncements.Lst = NULL;

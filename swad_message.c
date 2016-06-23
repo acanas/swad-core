@@ -232,7 +232,10 @@ void Msg_ListEMails (void)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_e_mail,
-                  NumAcceptedStdsWithEmail,((float) NumAcceptedStdsWithEmail / (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
+                  NumAcceptedStdsWithEmail,
+                  ((float) NumAcceptedStdsWithEmail /
+                   (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
+                  Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -285,6 +288,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
+   unsigned NumTotalUsrs = 0;
 
    Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -330,15 +334,15 @@ static void Msg_PutFormMsgUsrs (const char *Content)
       /***** Get and order lists of users from this course *****/
       Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
       Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+      NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+                     Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
-      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
-          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+      if (NumTotalUsrs)
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrs ();
      }
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	                     Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+   if (Usr_GetIfShowBigList (NumTotalUsrs))
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,
@@ -347,8 +351,7 @@ static void Msg_PutFormMsgUsrs (const char *Content)
 	                   NULL);
 
       /***** Form to select type of list used for select several users *****/
-      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
-          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+      if (NumTotalUsrs)
 	 Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
       /***** Form to show several potential recipients *****/

@@ -405,6 +405,7 @@ void Sta_AskShowCrsHits (void)
    extern const char *Txt_No_teachers_or_students_found;
    static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
+   unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned long i;
 
@@ -419,12 +420,12 @@ void Sta_AskShowCrsHits (void)
    /***** Get and order the lists of users of this course *****/
    Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
-       Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+      if (Usr_GetIfShowBigList (NumTotalUsrs))
         {
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrs ();

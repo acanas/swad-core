@@ -3820,6 +3820,11 @@ void Usr_SearchListUsrs (Rol_Role_t Role,const char *UsrQuery)
 		     "UsrCod",
 	       UsrQuery);
    else				// Students / Teachers
+      /*
+         To achieve maximum speed, it's important to do the things in this order:
+         1) Search for user's name (UsrQuery) getting candidate users
+         2) Filter the candidate users according to scope
+      */
       switch (Gbl.Scope.Current)
 	{
 	 case Sco_SCOPE_SYS:
@@ -4824,19 +4829,8 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
 void Usr_ListUsersToSelect (Rol_Role_t Role)
   {
    /***** If there are no users, don't list anything *****/
-   switch (Role)
-     {
-      case Rol_STUDENT:
-         if (!Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
-            return;
-         break;
-      case Rol_TEACHER:
-         if (!Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
-            return;
-         break;
-      default:
-         return;
-     }
+   if (!Gbl.Usrs.LstUsrs[Role].NumUsrs)
+      return;
 
    /***** Put a row to select all users *****/
    Usr_PutCheckboxToSelectAllTheUsers (Role);
@@ -5539,38 +5533,17 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List users' data *****/
-   switch (Role)
+   for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
      {
-      case Rol_STUDENT:
-         for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-              NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
-           {
-            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-              {
-               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
-               Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+      UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+	{
+	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
+	 Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
 
-               Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-              }
-           }
-         break;
-      case Rol_TEACHER:
-         for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-              NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
-           {
-            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-              {
-               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
-               Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
-
-               Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-              }
-           }
-         break;
-      default:
-         break;
+	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	}
      }
 
    /***** Free memory used for user's data *****/
@@ -6353,7 +6326,7 @@ void Usr_SeeGuests (void)
 	    Lay_WriteHeaderClassPhoto (false,true,
 				       (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                              -1L,
+					                                      -1L,
 				       -1L,
 				       -1L);
 
@@ -6509,12 +6482,12 @@ void Usr_SeeStudents (void)
 					Gbl.Scope.Current == Sco_SCOPE_DEG ||
 					Gbl.Scope.Current == Sco_SCOPE_CTR ||
 					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                              -1L,
+					                                      -1L,
 				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                         -1L,
-					Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                        -1L);
+					                                      -1L,
+					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+					                                      -1L);
 
          /* Start table */
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
@@ -6623,7 +6596,7 @@ void Usr_SeeTeachers (void)
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
 			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ? Usr_PutIconToPrintTchs :
-				                                                                   NULL) :
+				                                                                                NULL) :
 			    ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
 								       NULL));
 
@@ -6655,12 +6628,12 @@ void Usr_SeeTeachers (void)
 					Gbl.Scope.Current == Sco_SCOPE_DEG ||
 					Gbl.Scope.Current == Sco_SCOPE_CTR ||
 					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                              -1L,
+					                                      -1L,
 				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                         -1L,
-					Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                        -1L);
+					                                      -1L,
+					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+					                                      -1L);
 
          /* Start table */
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
@@ -6864,12 +6837,12 @@ void Usr_SeeStdClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
 				  Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                        -1L,
+					                                -1L,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                   -1L,
-				  Gbl.Scope.Current == Sco_SCOPE_CRS ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                  -1L);
+					                                -1L,
+				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+					                                -1L);
       fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
       fprintf (Gbl.F.Out,"</table>");

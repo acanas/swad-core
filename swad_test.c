@@ -6811,6 +6811,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
    extern const char *Txt_Exams;
    extern const char *Txt_Users;
    extern const char *Txt_See_exams;
+   unsigned NumTotalUsrs;
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6823,12 +6824,12 @@ void Tst_SelUsrsToSeeUsrsExams (void)
    /***** Get and order lists of users from this course *****/
    Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
-       Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+      if (Usr_GetIfShowBigList (NumTotalUsrs))
         {
          /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Exams,NULL);
