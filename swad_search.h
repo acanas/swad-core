@@ -63,6 +63,9 @@ void Sch_ReqInsSearch (void);
 void Sch_ReqCtrSearch (void);
 void Sch_ReqDegSearch (void);
 void Sch_ReqCrsSearch (void);
+
+void Sch_PutFormToSearchInPageTopHeading (void);
+
 void Sch_PutInputStringToSearch (const char *IdInputText);
 void Sch_PutMagnifyingGlassButton (const char *Icon);
 void Sch_GetParamWhatToSearch (void);

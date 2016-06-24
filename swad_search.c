@@ -235,7 +235,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Act_FormStart (Action);
    Lay_StartRoundFrame (NULL,Txt_Search,NULL);
 
-   /***** Scope (whole platform, current centre, current degree or current course) *****/
+   /***** Scope (whole platform, current country, current institution,
+                 current centre, current degree or current course) *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	              "<label class=\"%s\">%s: </label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
@@ -304,6 +305,60 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
      };
 
    return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.LoggedRole));
+  }
+
+/*****************************************************************************/
+/**************** Put a form to search in page top heading *******************/
+/*****************************************************************************/
+
+void Sch_PutFormToSearchInPageTopHeading (void)
+  {
+   Act_Action_t ActionSearch;
+
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
+   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	               1 << Sco_SCOPE_CTY |
+		       1 << Sco_SCOPE_INS |
+		       1 << Sco_SCOPE_CTR |
+		       1 << Sco_SCOPE_DEG |
+		       1 << Sco_SCOPE_CRS;
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+     {
+      ActionSearch = ActCrsSch;
+      Gbl.Scope.Default = Sco_SCOPE_CRS;
+     }
+   else if (Gbl.CurrentDeg.Deg.DegCod > 0)
+     {
+      ActionSearch = ActDegSch;
+      Gbl.Scope.Default = Sco_SCOPE_DEG;
+     }
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+     {
+      ActionSearch = ActCtrSch;
+      Gbl.Scope.Default = Sco_SCOPE_CTR;
+     }
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      ActionSearch = ActInsSch;
+      Gbl.Scope.Default = Sco_SCOPE_INS;
+     }
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+     {
+      ActionSearch = ActCtySch;
+      Gbl.Scope.Default = Sco_SCOPE_CTY;
+     }
+   else
+     {
+      ActionSearch = ActSysSch;
+      Gbl.Scope.Default = Sco_SCOPE_SYS;
+     }
+   Act_FormStart (ActionSearch);
+   Sco_GetScope ();
+   Sco_PutParamScope (Gbl.Scope.Current);
+   Sch_PutInputStringToSearch ("head_search_text");
+   Sch_PutMagnifyingGlassButton ("search-white64x64.png");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
   }
 
 /*****************************************************************************/

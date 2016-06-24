@@ -191,32 +191,36 @@ void Sco_PutParamScope (Sco_Scope_t Scope)
 
 void Sco_GetScope (void)
   {
+   static bool AlreadyGotScope = false;
    char UnsignedStr[10+1];
 
-   /***** Get parameter location range if exists *****/
-   Par_GetParToText ("Scope",UnsignedStr,10);
-   if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
-      Gbl.Scope.Current = Gbl.Scope.Default;
+   if (!AlreadyGotScope)
+     {
+      /***** Get parameter location range if exists *****/
+      Par_GetParToText ("Scope",UnsignedStr,10);
+      if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
+	 Gbl.Scope.Current = Gbl.Scope.Default;
 
-   /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_DEG;
+      /***** Avoid impossible scopes *****/
+      if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
+	 Gbl.Scope.Current = Sco_SCOPE_DEG;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTR;
+      if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
+	 Gbl.Scope.Current = Sco_SCOPE_CTR;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_INS;
+      if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
+	 Gbl.Scope.Current = Sco_SCOPE_INS;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTY;
+      if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
+	 Gbl.Scope.Current = Sco_SCOPE_CTY;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_SYS;
+      if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
+	 Gbl.Scope.Current = Sco_SCOPE_SYS;
 
-   /***** Avoid forbidden scopes *****/
-   if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-      Gbl.Scope.Current = Sco_SCOPE_UNK;
+      /***** Avoid forbidden scopes *****/
+      if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
+	 Gbl.Scope.Current = Sco_SCOPE_UNK;
+     }
   }
 
 /*****************************************************************************/

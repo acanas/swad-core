@@ -815,18 +815,7 @@ static void Lay_WritePageTopHeading (void)
    /* End form to go to home page */
    Act_FormEnd ();
 
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
-   Act_FormStart ( Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
-		  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
-		  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
-		  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
-		  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
-						   ActSysSch)))));
-   Sco_PutParamScope (Sco_SCOPE_SYS);
-   Sch_PutInputStringToSearch ("head_search_text");
-   Sch_PutMagnifyingGlassButton ("search-white64x64.png");
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
+   Sch_PutFormToSearchInPageTopHeading ();
 
    fprintf (Gbl.F.Out,"</div>");	// head_row_1_left
 
