@@ -129,13 +129,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.231.2 (2016-06-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.231.3 (2016-06-24)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.231.3: Jun 24, 2015	Parameter name used for "Scope" now depends on context. (203472 lines)
         Version 15.231.2: Jun 24, 2015	Search is restricted by default to the smaller (down in hierarchy) scope. (203475 lines)
         Version 15.231.1: Jun 24, 2015	All users can search guests. (203429 lines)
         Version 15.231:   Jun 24, 2015	Speed up in search of users by using temporary tables. (203427 lines)

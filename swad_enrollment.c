@@ -2244,7 +2244,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                        1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL);
@@ -2261,7 +2261,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Sco_PutSelectorScope (true);
+   Sco_PutSelectorScope ("ScopeEnr",true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 

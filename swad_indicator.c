@@ -117,7 +117,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-   Sco_PutSelectorScope (true);
+   Sco_PutSelectorScope ("ScopeInd",true);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -185,7 +185,7 @@ void Ind_ReqIndicatorsCourses (void)
 
       /* Button to show more details */
       Act_FormStart (ActSeeAllStaCrs);
-      Sco_PutParamScope (Gbl.Scope.Current);
+      Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
       Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
@@ -215,7 +215,7 @@ static void Ind_GetParamsIndicators (void)
 		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
    Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? DT_GetParamOtherDegTypCod () :
@@ -525,7 +525,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 
    /***** Put form to confirm that I want to see the big list *****/
    Act_FormStart (Gbl.Action.Act);
-   Sco_PutParamScope (Gbl.Scope.Current);
+   Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
    Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
    Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
    if (Gbl.Stat.StrIndicatorsSelected[0])

@@ -104,7 +104,7 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
 
 static void Crs_PutLinkToSearchCourses (void);
-static void Crs_PutLinkToSearchCoursesParams (void);
+static void Sch_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetParamOtherCrsCod (void);
@@ -2887,14 +2887,14 @@ static void Crs_PutLinkToSearchCourses (void)
                           (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
                           (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
                                                            ActSysReqSch)))),
-                          Crs_PutLinkToSearchCoursesParams,
+                          Sch_PutLinkToSearchCoursesParams,
 			  "search64x64.gif",
 			  Txt_Search_courses,Txt_Search_courses);
   }
 
-static void Crs_PutLinkToSearchCoursesParams (void)
+static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
   {
-   Sco_PutParamScope (Sco_SCOPE_SYS);
+   Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }
 

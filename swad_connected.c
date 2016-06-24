@@ -88,7 +88,7 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeCon");
 
    /***** Start frame *****/
    /* Current time */
@@ -120,7 +120,7 @@ static void Con_PutIconToUpdateConnected (void)
    extern const char *Txt_Update;
 
    Act_FormStart (ActLstCon);
-   Sco_PutParamScope (Gbl.Scope.Current);
+   Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
    Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutCalculateIcon (Txt_Update);
    Act_FormEnd ();
@@ -498,7 +498,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
      {
       /* Put form to change scope */
       Act_FormStart (ActLstCon);
-      Sco_PutSelectorScope (true);
+      Sco_PutSelectorScope ("ScopeCon",true);
       Act_FormEnd ();
      }
    else
@@ -668,7 +668,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Act_FormStartUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
-	 Sco_PutParamScope (Sco_SCOPE_CRS);
+	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
 	 Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"

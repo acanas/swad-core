@@ -5431,7 +5431,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
       case ActLstGst:
       case ActLstStd:
       case ActLstTch:
-         Sco_PutParamScope (Gbl.Scope.Current);
+         Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
          break;
       case ActSeeOneAtt:
       case ActRecAttStd:
@@ -5896,7 +5896,7 @@ void Usr_ListAllDataGsts (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /****** Get and order list of guests ******/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -6017,7 +6017,7 @@ void Usr_ListAllDataStds (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /****** Get and order list of students in current course ******/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
@@ -6243,7 +6243,7 @@ void Usr_ListAllDataTchs (void)
                        1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /***** Get and order list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
@@ -6454,7 +6454,7 @@ void Usr_ListDataAdms (void)
                        1 << Sco_SCOPE_CTR |
                        1 << Sco_SCOPE_DEG;
    Gbl.Scope.Default = Sco_SCOPE_DEG;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /***** Get and order list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
@@ -6467,7 +6467,7 @@ void Usr_ListDataAdms (void)
 		      "<label class=\"%s\">%s: </label>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Act_FormStart (ActLstOth);
-   Sco_PutSelectorScope (true);
+   Sco_PutSelectorScope ("ScopeUsr",true);
    Usr_PutParamListWithPhotos ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
@@ -6478,7 +6478,7 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                 " style=\"margin-bottom:8px;\">");
       Act_FormStart (ActLstOth);
-      Sco_PutParamScope (Gbl.Scope.Current);
+      Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
       Usr_PutCheckboxListWithPhotos ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -6921,7 +6921,7 @@ void Usr_SeeGuests (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -6950,7 +6950,7 @@ void Usr_SeeGuests (void)
 	    Usr_PutParamListWithPhotos ();
 	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-	    Sco_PutSelectorScope (true);
+	    Sco_PutSelectorScope ("ScopeUsr",true);
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</div>");
 	    break;
@@ -7063,7 +7063,7 @@ void Usr_SeeStudents (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
 	              (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
                        Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
@@ -7101,7 +7101,7 @@ void Usr_SeeStudents (void)
 	    Usr_PutParamListWithPhotos ();
 	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-	    Sco_PutSelectorScope (true);
+	    Sco_PutSelectorScope ("ScopeUsr",true);
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</div>");
 	    break;
@@ -7231,7 +7231,7 @@ void Usr_SeeTeachers (void)
                        1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get and order list of teachers *****/
@@ -7254,7 +7254,7 @@ void Usr_SeeTeachers (void)
       Usr_PutParamListWithPhotos ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-      Sco_PutSelectorScope (true);
+      Sco_PutSelectorScope ("ScopeUsr",true);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
@@ -7391,7 +7391,7 @@ static void Usr_ShowStdsAllDataParams (void)
 
 static void Usr_ShowTchsAllDataParams (void)
   {
-   Sco_PutParamScope (Gbl.Scope.Current);
+   Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (ActLstTchAll);
   }
@@ -7427,7 +7427,7 @@ void Usr_SeeGstClassPhotoPrn (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /***** Get and order list of students *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -7466,7 +7466,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -7525,7 +7525,7 @@ void Usr_SeeTchClassPhotoPrn (void)
                        1 << Sco_SCOPE_DEG |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeUsr");
 
    /***** Get and order list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);

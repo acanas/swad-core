@@ -1546,8 +1546,8 @@ void Svy_RequestCreatOrEditSvy (void)
             Txt_Scope);
    if (!Svy_SetDefaultAndAllowedForEdition ())
       Lay_ShowErrorAndExit ("You don't have permission to edit surveys here.");
-   Sco_GetScope ();
-   Sco_PutSelectorScope (false);
+   Sco_GetScope ("ScopeSvy");
+   Sco_PutSelectorScope ("ScopeSvy",false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -1746,7 +1746,7 @@ void Svy_RecFormSurvey (void)
                        1 << Sco_SCOPE_DEG    |
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
-   Sco_GetScope ();
+   Sco_GetScope ("ScopeSvy");
 
    switch (Gbl.Scope.Current)
      {

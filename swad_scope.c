@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (bool SendOnChange)
+void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
   {
    extern const char *Txt_System;
    extern const char *Txt_Country;
@@ -84,7 +84,7 @@ void Sco_PutSelectorScope (bool SendOnChange)
    Sco_Scope_t Scope;
    bool WriteScope;
 
-   fprintf (Gbl.F.Out,"<select name=\"Scope\"");
+   fprintf (Gbl.F.Out,"<select name=\"%s\"",ParamName);
    if (SendOnChange)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
@@ -180,47 +180,43 @@ void Sco_PutSelectorScope (bool SendOnChange)
 /************* Put hidden parameter with location range  *********************/
 /*****************************************************************************/
 
-void Sco_PutParamScope (Sco_Scope_t Scope)
+void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
   {
-   Par_PutHiddenParamUnsigned ("Scope",(unsigned) Scope);
+   Par_PutHiddenParamUnsigned (ParamName,(unsigned) Scope);
   }
 
 /*****************************************************************************/
 /************************* Get users range for listing ***********************/
 /*****************************************************************************/
 
-void Sco_GetScope (void)
+void Sco_GetScope (const char *ParamName)
   {
-   static bool AlreadyGotScope = false;
    char UnsignedStr[10+1];
 
-   if (!AlreadyGotScope)
-     {
-      /***** Get parameter location range if exists *****/
-      Par_GetParToText ("Scope",UnsignedStr,10);
-      if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
-	 Gbl.Scope.Current = Gbl.Scope.Default;
+   /***** Get parameter location range if exists *****/
+   Par_GetParToText (ParamName,UnsignedStr,10);
+   if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
+      Gbl.Scope.Current = Gbl.Scope.Default;
 
-      /***** Avoid impossible scopes *****/
-      if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
-	 Gbl.Scope.Current = Sco_SCOPE_DEG;
+   /***** Avoid impossible scopes *****/
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_DEG;
 
-      if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
-	 Gbl.Scope.Current = Sco_SCOPE_CTR;
+   if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTR;
 
-      if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
-	 Gbl.Scope.Current = Sco_SCOPE_INS;
+   if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_INS;
 
-      if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
-	 Gbl.Scope.Current = Sco_SCOPE_CTY;
+   if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTY;
 
-      if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
-	 Gbl.Scope.Current = Sco_SCOPE_SYS;
+   if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
+      Gbl.Scope.Current = Sco_SCOPE_SYS;
 
-      /***** Avoid forbidden scopes *****/
-      if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-	 Gbl.Scope.Current = Sco_SCOPE_UNK;
-     }
+   /***** Avoid forbidden scopes *****/
+   if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
+      Gbl.Scope.Current = Sco_SCOPE_UNK;
   }
 
 /*****************************************************************************/

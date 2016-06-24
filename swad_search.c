@@ -247,8 +247,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = DefaultScope;
-   Sco_GetScope ();
-   Sco_PutSelectorScope (false);
+   Sco_GetScope ("ScopeSch");
+   Sco_PutSelectorScope ("ScopeSch",false);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** String to find *****/
@@ -353,8 +353,8 @@ void Sch_PutFormToSearchInPageTopHeading (void)
       Gbl.Scope.Default = Sco_SCOPE_SYS;
      }
    Act_FormStart (ActionSearch);
-   Sco_GetScope ();
-   Sco_PutParamScope (Gbl.Scope.Current);
+   Sco_GetScope ("ScopeSch");
+   Sco_PutParamScope ("ScopeSch",Gbl.Scope.Current);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white64x64.png");
    Act_FormEnd ();

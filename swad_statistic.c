@@ -647,8 +647,8 @@ void Sta_AskShowGblHits (void)
 		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
-   Sco_GetScope ();
-   Sco_PutSelectorScope (false);
+   Sco_GetScope ("ScopeSta");
+   Sco_PutSelectorScope ("ScopeSta",false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -894,7 +894,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			     1 << Sco_SCOPE_DEG |
 			     1 << Sco_SCOPE_CRS;
 	 Gbl.Scope.Default = Sco_SCOPE_SYS;
-	 Sco_GetScope ();
+	 Sco_GetScope ("ScopeSta");
 
 	 /***** Show form again *****/
 	 Sta_AskShowGblHits ();
@@ -2057,7 +2057,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);
-      Sco_PutParamScope (Gbl.Scope.Current);
+      Sco_PutParamScope ("ScopeSta",Gbl.Scope.Current);
      }
 
    fprintf (Gbl.F.Out,"%s: ",Txt_Color_of_the_graphic);
@@ -3800,8 +3800,8 @@ void Sta_ReqUseOfPlatform (void)
 		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_SYS;
-   Sco_GetScope ();
-   Sco_PutSelectorScope (false);
+   Sco_GetScope ("ScopeSta");
+   Sco_PutSelectorScope ("ScopeSta",false);
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<br />"
