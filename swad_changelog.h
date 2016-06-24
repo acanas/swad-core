@@ -125,17 +125,20 @@
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
 
+// TODO: Search should be restricted by default to the smaller (down in hierarchy) scope
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.231 (2016-06-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.231.1 (2016-06-24)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.231.1: Jun 24, 2015	All users can search guests. (? lines)
         Version 15.231:   Jun 24, 2015	Speed up in search of users by using temporary tables. (203427 lines)
         Version 15.230.4: Jun 23, 2015	Optimization in search of users. (203369 lines)
         Version 15.230.3: Jun 23, 2015	Optimization in search of users. (203378 lines)

@@ -144,7 +144,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query);
 static void Usr_SearchListUsrs (Rol_Role_t Role);
 static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery);
-static void Usr_CreateExtraTmpTables (void);
+static void Usr_CreateExtraTmpTablesForSearch (void);
 static void Usr_CloneTmpTableCandidateUsers (unsigned NumCopy);
 static void Usr_DropTmpTablesWithCandidateUsrs (void);
 
@@ -3905,7 +3905,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   (unsigned) Role);
 		  break;
 	       default:			// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
@@ -4001,7 +4001,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   Gbl.CurrentCty.Cty.CtyCod);
 		  break;
 	       default:			// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
@@ -4114,7 +4114,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   Gbl.CurrentIns.Ins.InsCod);
 		  break;
 	       default:			// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
@@ -4223,7 +4223,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   Gbl.CurrentCtr.Ctr.CtrCod);
 		  break;
 	       default:			// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
@@ -4328,7 +4328,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   Gbl.CurrentDeg.Deg.DegCod);
 		  break;
 	       default:			// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
 				    "("
 				    // Users whose privacy is
@@ -4428,7 +4428,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			   Gbl.CurrentCrs.Crs.CrsCod);
 		  break;
 	       default:		// I am logged
-		  Usr_CreateExtraTmpTables ();
+		  Usr_CreateExtraTmpTablesForSearch ();
 		  sprintf (Query,"SELECT DISTINCT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
 				    "("
 				    // Users whose privacy is
@@ -4518,10 +4518,10 @@ static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery)
   }
 
 /*****************************************************************************/
-/************** Create more temporary tables users in search *****************/
+/************** Create more temporary tables for search users ****************/
 /*****************************************************************************/
 
-static void Usr_CreateExtraTmpTables (void)
+static void Usr_CreateExtraTmpTablesForSearch (void)
   {
    char Query[256];
 
