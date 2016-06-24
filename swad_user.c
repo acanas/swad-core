@@ -3689,7 +3689,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
-   char Query[512];
+   char Query[16*1024];	// Big query when the course has lot of groups
+   // TODO: Check buffer overflow when writing query
 
    /***** Build query *****/
    switch (Scope)
