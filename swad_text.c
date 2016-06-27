@@ -44544,25 +44544,25 @@ const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_fr
 	"The %u students who belonged to the course <strong>%s</strong> have been removed from it.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_search_term_must_be_longer =
+const char *Txt_The_search_text_must_be_longer =
 #if   L==1
-	"La palabra a buscar debe ser m&aacute;s larga.";	// Necessita traduccio
+	"El text a cercar ha de ser m&eacute;s llarg.";
 #elif L==2
-	"The search term must be longer.";			// Need Übersetzung
+	"Der Suchtext muss l&auml;nger sein.";
 #elif L==3
-	"The search term must be longer.";
+	"The search text must be longer.";
 #elif L==4
-	"La palabra a buscar debe ser m&aacute;s larga.";
+	"El texto a buscar debe ser m&aacute;s largo.";
 #elif L==5
-	"The search term must be longer.";			// Besoin de traduction
+	"Le texte de recherche doit &ecirc;tre plus longue.";
 #elif L==6
-	"La palabra a buscar debe ser m&aacute;s larga.";	// Okoteve traducción
+	"El texto a buscar debe ser m&aacute;s largo.";	// Okoteve traducción
 #elif L==7
-	"The search term must be longer.";			// Bisogno di traduzione
+	"Il testo di ricerca deve essere pi&ugrave; lungo.";
 #elif L==8
-	"The search term must be longer.";			// Potrzebujesz tlumaczenie
+	"Tekst wyszukiwania powinien by&cacute; d&lstrok;u&zdot;szy.";
 #elif L==9
-	"The search term must be longer.";			// Necessita de tradução
+	"O texto de pesquisa deve ser mais longo.";
 #endif
 
 const char *Txt_The_session_has_been_closed =	// Closed by user

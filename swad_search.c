@@ -44,6 +44,7 @@
 #define Sch_MAX_WORDS_IN_SEARCH		 10
 #define Sch_MAX_LENGTH_SEARCH_WORD	255
 #define Sch_MIN_LENGTH_LONGEST_WORD	  3
+#define Sch_MIN_LENGTH_TOTAL		  7	// "A An Ann" is not valid; "A An Ann Anna" is valid
 #define Sch_MAX_LENGTH_SEARCH_QUERY	(10*Sch_MAX_LENGTH_STRING_TO_FIND)
 
 /*****************************************************************************/
@@ -801,9 +802,10 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_TEACHER ? Sch_SEARCH_TEACHERS :
+   if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_UNKNOWN ? Sch_SEARCH_USERS :
+	                                   (Role == Rol_TEACHER ? Sch_SEARCH_TEACHERS :
 		                           (Role == Rol_STUDENT ? Sch_SEARCH_STUDENTS :
-		                        		          Sch_SEARCH_GUESTS)))
+		                        		          Sch_SEARCH_GUESTS))))
       /***** Split user string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,
 				"CONCAT_WS(' ',usr_data.FirstName,usr_data.Surname1,usr_data.Surname2)",
@@ -1216,13 +1218,15 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
                                   const char *CharSet,const char *Collate)
   {
-   extern const char *Txt_The_search_term_must_be_longer;
+   extern const char *Txt_The_search_text_must_be_longer;
    static bool WarningMessageWritten = false;
    const char *Ptr;
    unsigned NumWords;
+   unsigned NumWord;
    size_t LengthWord;
+   size_t LengthTotal = 0;
    size_t MaxLengthWord = 0;
-   char SearchWord[Sch_MAX_LENGTH_SEARCH_WORD+1];
+   char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_LENGTH_SEARCH_WORD+1];
    bool SearchWordIsValid = true;
 
    SearchQuery[0] = '\0';
@@ -1232,7 +1236,7 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
 	NumWords++)
      {
       /* Get next word */
-      Str_GetNextStringUntilSpace (&Ptr,SearchWord,Sch_MAX_LENGTH_SEARCH_WORD);
+      Str_GetNextStringUntilSpace (&Ptr,SearchWords[NumWords],Sch_MAX_LENGTH_SEARCH_WORD);
 
       /* Is this word valid? */
       switch (Gbl.Search.WhatToSearch)
@@ -1240,17 +1244,25 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
 	 case Sch_SEARCH_OPEN_DOCUMENTS:
 	 case Sch_SEARCH_DOCUM_IN_MY_COURSES:
 	 case Sch_SEARCH_MY_DOCUMENTS:
-	    SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWord);
+	    SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWords[NumWords]);
 	    break;
 	 default:
 	    SearchWordIsValid = true;
 	    break;
         }
 
+      /* Check if this word is repeated (case insensitive) */
+      for (NumWord = 0;
+	   SearchWordIsValid && NumWord < NumWords;
+	   NumWord++)
+	 if (!strcasecmp (SearchWords[NumWord],SearchWords[NumWords]))
+	    SearchWordIsValid = false;
+
       /* Concatenate word to search string */
       if (SearchWordIsValid)
 	{
-	 LengthWord = strlen (SearchWord);
+	 LengthWord = strlen (SearchWords[NumWords]);
+	 LengthTotal += LengthWord;
 	 if (LengthWord > MaxLengthWord)
 	    MaxLengthWord = LengthWord;
 	 if (strlen (SearchQuery) + LengthWord + 512 > Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
@@ -1263,7 +1275,7 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
 	    if (CharSet[0])
 	       strcat (SearchQuery,CharSet);
 	 strcat (SearchQuery,"'%");
-	 strcat (SearchQuery,SearchWord);
+	 strcat (SearchQuery,SearchWords[NumWords]);
 	 strcat (SearchQuery,"%'");
 	 if (Collate)
 	    if (Collate[0])
@@ -1272,17 +1284,19 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
      }
 
    /***** If search string valid? *****/
-   if (MaxLengthWord >= Sch_MIN_LENGTH_LONGEST_WORD)
-      return true;
-   else	// Too short
+   if (LengthTotal < Sch_MIN_LENGTH_TOTAL ||
+       MaxLengthWord < Sch_MIN_LENGTH_LONGEST_WORD)
      {
+      // Too short
       if (!WarningMessageWritten)	// To avoid repetitions
 	{
-         Lay_ShowAlert (Lay_WARNING,Txt_The_search_term_must_be_longer);
+         Lay_ShowAlert (Lay_WARNING,Txt_The_search_text_must_be_longer);
          WarningMessageWritten = true;
 	}
       return false;
      }
+   else
+      return true;
   }
 
 /*****************************************************************************/
