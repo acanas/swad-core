@@ -130,13 +130,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.233.2 (2016-06-27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.233.3 (2016-06-27)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.233.3: Jun 27, 2015	Fixed bug in list of admins. (203074 lines)
         Version 15.233.2: Jun 27, 2015	Code refactoring in search of users. (203072 lines)
         Version 15.233.1: Jun 27, 2015	New restrictions in length of search string. (203117 lines)
         Version 15.233:   Jun 27, 2015	Simplified search for users with a role. Now all users can be found. (203103 lines)

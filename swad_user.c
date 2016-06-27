@@ -4323,6 +4323,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		    }
         	  break;
                case Rol__GUEST_:
+               case Rol_DEG_ADM:	// Any admin (degree, centre, institution or system)
 	          Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = false;
 	          break;
                case Rol_STUDENT:
