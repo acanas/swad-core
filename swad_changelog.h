@@ -130,13 +130,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.232.1 (2016-06-27)"
+#define Log_PLATFORM_VERSION	"SWAD 15.233 (2016-06-27)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.233:   Jun 27, 2015	Simplified search for users with a role. Now all users can be found. (203103 lines)
         Version 15.232.1: Jun 27, 2015	Fixed bug in search of any user (acceptation of enrollment was wrong). (203702 lines)
         Version 15.232:   Jun 27, 2015	Search any user, independently on role. (203657 lines)
         Version 15.231.4: Jun 24, 2015	Fix bug (buffer overflow) when getting users. (203474 lines)
