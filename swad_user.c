@@ -4951,18 +4951,62 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Sex = Usr_GetSexFromStr (row[1]);
 
             /* Get user's acceptance of enrollment in course(s) */
-	    if (Role == Rol_STUDENT ||
-		Role == Rol_TEACHER)
-	      {
-	       if (Scope == Sco_SCOPE_CRS)
-		  // Query result has a third column with the acceptation
-		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-	       else
-		  // Query result has not a third column with the acceptation
-		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod,Role) == 0);
+            switch (Role)
+              {
+               case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any user
+		  switch (Scope)
+		    {
+		     case Sco_SCOPE_UNK:	// Unknown
+			Lay_ShowErrorAndExit ("Wrong scope.");
+			break;
+		     case Sco_SCOPE_SYS:	// System
+			// Query result has not a third column with the acceptation
+			if (Usr_GetNumCrssOfUsr (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod))
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrNotAccepted (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod) == 0);
+			else
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = false;
+			break;
+		     case Sco_SCOPE_CTY:	// Country
+		     case Sco_SCOPE_INS:	// Institution
+		     case Sco_SCOPE_CTR:	// Centre
+		     case Sco_SCOPE_DEG:	// Degree
+			// Query result has not a third column with the acceptation
+			Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrNotAccepted (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod) == 0);
+			break;
+		     case Sco_SCOPE_CRS:	// Course
+			// Query result has a third column with the acceptation
+			Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+			break;
+		    }
+        	  break;
+               case Rol__GUEST_:
+	          Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = false;
+	          break;
+               case Rol_STUDENT:
+               case Rol_TEACHER:
+		  switch (Scope)
+		    {
+		     case Sco_SCOPE_UNK:	// Unknown
+			Lay_ShowErrorAndExit ("Wrong scope.");
+			break;
+		     case Sco_SCOPE_SYS:	// System
+		     case Sco_SCOPE_CTY:	// Country
+		     case Sco_SCOPE_INS:	// Institution
+		     case Sco_SCOPE_CTR:	// Centre
+		     case Sco_SCOPE_DEG:	// Degree
+			// Query result has not a third column with the acceptation
+			Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod,Role) == 0);
+			break;
+		     case Sco_SCOPE_CRS:	// Course
+			// Query result has a third column with the acceptation
+			Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+			break;
+		    }
+        	  break;
+               default:
+		  Lay_ShowErrorAndExit ("Wrong role.");
+        	  break;
 	      }
-	    else
-	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted = false;
 
             /* By default, users are not removed */
             Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = false;
