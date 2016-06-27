@@ -3805,12 +3805,17 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 static void Usr_SearchListUsrs (Rol_Role_t Role)
   {
    char Query[4*1024];
+   const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod";
 
    /***** Build query *****/
    // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
    //                           else ==> 2 columns are retrieved: UsrCod, Sex
-   // Search is faster (aproximately x2) using temporary tables
-
+   // Search is faster (aproximately x2) using a temporary table to store users found  in the whole platform
    switch (Role)
      {
       case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any rol (role does not matter)
@@ -3820,12 +3825,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 	       /* Search users from the whole platform */
 	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
 			      " FROM candidate_users,usr_data"
-			      " WHERE candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod");
+			      " WHERE %s",
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
@@ -3837,13 +3838,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			Gbl.CurrentCty.Cty.CtyCod);
+			      " AND %s",
+			Gbl.CurrentCty.Cty.CtyCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
@@ -3854,13 +3851,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			Gbl.CurrentIns.Ins.InsCod);
+			      " AND %s",
+			Gbl.CurrentIns.Ins.InsCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
@@ -3870,13 +3863,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			Gbl.CurrentCtr.Ctr.CtrCod);
+			      " AND %s",
+			Gbl.CurrentCtr.Ctr.CtrCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
@@ -3885,13 +3874,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			Gbl.CurrentDeg.Deg.DegCod);
+			      " AND %s",
+			Gbl.CurrentDeg.Deg.DegCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
@@ -3899,13 +3884,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			Gbl.CurrentCrs.Crs.CrsCod);
+			      " AND %s",
+			Gbl.CurrentCrs.Crs.CrsCod,
+			OrderQuery);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong scope.");
@@ -3917,12 +3898,8 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 	 sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
 			" FROM candidate_users,usr_data"
 			" WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-			" AND candidate_users.UsrCod=usr_data.UsrCod"
-			" ORDER BY "
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.UsrCod");
+			" AND %s",
+		  OrderQuery);
 	 break;
       case Rol_STUDENT:
       case Rol_TEACHER:
@@ -3939,13 +3916,9 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
-			(unsigned) Role);
+			      " AND %s",
+			(unsigned) Role,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
@@ -3958,14 +3931,10 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
+			      " AND %s",
 			(unsigned) Role,
-			Gbl.CurrentCty.Cty.CtyCod);
+			Gbl.CurrentCty.Cty.CtyCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
@@ -3977,14 +3946,10 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
+			      " AND %s",
 			(unsigned) Role,
-			Gbl.CurrentIns.Ins.InsCod);
+			Gbl.CurrentIns.Ins.InsCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
@@ -3995,14 +3960,10 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
+			      " AND %s",
 			(unsigned) Role,
-			Gbl.CurrentCtr.Ctr.CtrCod);
+			Gbl.CurrentCtr.Ctr.CtrCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
@@ -4012,14 +3973,10 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
+			      " AND %s",
 			(unsigned) Role,
-			Gbl.CurrentDeg.Deg.DegCod);
+			Gbl.CurrentDeg.Deg.DegCod,
+			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
@@ -4028,14 +3985,10 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod='%ld'"
-			      " AND candidate_users.UsrCod=usr_data.UsrCod"
-			      " ORDER BY "
-			      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.UsrCod",
+			      " AND %s",
 			(unsigned) Role,
-			Gbl.CurrentCrs.Crs.CrsCod);
+			Gbl.CurrentCrs.Crs.CrsCod,
+			OrderQuery);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong scope.");
