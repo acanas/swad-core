@@ -3814,677 +3814,785 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
    //                           else ==> 2 columns are retrieved: UsrCod, Sex
    // Search is faster (aproximately x2) using temporary tables
 
-   if (Role == Rol__GUEST_)	// Guests (scope is not used)
-      /* Search users with no courses */
-      switch (Gbl.Usrs.Me.LoggedRole)
-	{
-	 case Rol_UNKNOWN:	// I am not logged
-	    // Guests whose privacy is Pri_VISIBILITY_WORLD
-	    sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
-		           " FROM candidate_users,usr_data"
-			   " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-	                   " AND candidate_users.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.ProfileVisibility='%s'"
-			   " ORDER BY "
-			   "usr_data.Surname1,"
-			   "usr_data.Surname2,"
-			   "usr_data.FirstName,"
-			   "usr_data.UsrCod",
-		     Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-	    break;
-	 case Rol_SYS_ADM:
-	    // Any guest
-	    sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
-		           " FROM candidate_users,usr_data"
-			   " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-	                   " AND candidate_users.UsrCod=usr_data.UsrCod"
-			   " ORDER BY "
-			   "usr_data.Surname1,"
-			   "usr_data.Surname2,"
-			   "usr_data.FirstName,"
-			   "usr_data.UsrCod");
-	    break;
-	 default:		// I am logged
-	    // Guests whose privacy is
-	    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-	    sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
-		           " FROM candidate_users,usr_data"
-			   " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-	                   " AND candidate_users.UsrCod=usr_data.UsrCod"
-			   " AND usr_data.ProfileVisibility IN ('%s','%s')"
-			   " ORDER BY "
-			   "usr_data.Surname1,"
-			   "usr_data.Surname2,"
-			   "usr_data.FirstName,"
-			   "usr_data.UsrCod",
-		     Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-		     Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
-	    break;
-	}
-   else				// Students / Teachers
-      /*
-         To achieve maximum speed, it's important to do the things in this order:
-         1) Search for user's name (UsrQuery) getting candidate users
-            (this search is not stored in a temporary table
-             because MySQL does not allow temporary tables
-             to be used more than once in the same query)
-         2) Filter the candidate users according to scope
-      */
-      switch (Gbl.Scope.Current)
-	{
-	 case Sco_SCOPE_SYS:
-	    /* Search users in courses from the whole platform */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role);
-		  break;
-	       default:			// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
+   switch (Role)
+     {
+      case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any rol (role does not matter)
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:
+	       /* Search users from the whole platform */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,usr_data"
+			      " WHERE candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod");
+	       break;
+	    case Sco_SCOPE_CTY:
+	       /* Search users in courses from the current country */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod=institutions.InsCod"
+			      " AND institutions.CtyCod='%ld'"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Gbl.CurrentCty.Cty.CtyCod);
+	       break;
+	    case Sco_SCOPE_INS:
+	       /* Search users in courses from the current institution */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod=centres.CtrCod"
+			      " AND centres.InsCod='%ld'"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Gbl.CurrentIns.Ins.InsCod);
+	       break;
+	    case Sco_SCOPE_CTR:
+	       /* Search users in courses from the current centre */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod=degrees.DegCod"
+			      " AND degrees.CtrCod='%ld'"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Gbl.CurrentCtr.Ctr.CtrCod);
+	       break;
+	    case Sco_SCOPE_DEG:
+	       /* Search users in courses from the current degree */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,crs_usr,courses,usr_data"
+			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.CrsCod=courses.CrsCod"
+			      " AND courses.DegCod='%ld'"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Gbl.CurrentDeg.Deg.DegCod);
+	       break;
+	    case Sco_SCOPE_CRS:
+	       /* Search users in courses from the current course */
+	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
+			      " FROM candidate_users,crs_usr,usr_data"
+			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+			      " AND crs_usr.CrsCod='%ld'"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Gbl.CurrentCrs.Crs.CrsCod);
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+         break;
+      case Rol__GUEST_:	// Guests (scope is not used)
+	 /* Search users with no courses */
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_UNKNOWN:	// I am not logged
+	       // Guests whose privacy is Pri_VISIBILITY_WORLD
+	       sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,usr_data"
+			      " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.ProfileVisibility='%s'"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+	       break;
+	    case Rol_SYS_ADM:
+	       // Any guest
+	       sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,usr_data"
+			      " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod");
+	       break;
+	    default:		// I am logged
+	       // Guests whose privacy is
+	       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+	       sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
+			      " FROM candidate_users,usr_data"
+			      " WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+			      " AND candidate_users.UsrCod=usr_data.UsrCod"
+			      " AND usr_data.ProfileVisibility IN ('%s','%s')"
+			      " ORDER BY "
+			      "usr_data.Surname1,"
+			      "usr_data.Surname2,"
+			      "usr_data.FirstName,"
+			      "usr_data.UsrCod",
+			Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	       break;
+	   }
+	 break;
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+	 /*
+	    To achieve maximum speed, it's important to do the things in this order:
+	    1) Search for user's name (UsrQuery) getting candidate users
+	       (this search is not stored in a temporary table
+		because MySQL does not allow temporary tables
+		to be used more than once in the same query)
+	    2) Filter the candidate users according to scope
+	 */
+	 switch (Gbl.Scope.Current)
+	   {
+	    case Sco_SCOPE_SYS:
+	       /* Search users in courses from the whole platform */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
 				    " FROM candidate_users,crs_usr,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-		                    " UNION "
-				    // Users who share any course with me
-		                    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-		                    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-                                    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    ") "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-                           Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ]);
-	          break;
-	      }
-	    break;
-	 case Sco_SCOPE_CTY:
-	    /* Search users in courses from the current country */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod=centres.CtrCod"
-				 " AND centres.InsCod=institutions.InsCod"
-				 " AND institutions.CtyCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod=centres.CtrCod"
-				 " AND centres.InsCod=institutions.InsCod"
-				 " AND institutions.CtyCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCty.Cty.CtyCod);
-		  break;
-	       default:			// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users,crs_usr,usr_data,courses,degrees,centres,institutions"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod=institutions.InsCod"
-				    " AND institutions.CtyCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me
-		                    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees,centres,institutions"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod=institutions.InsCod"
-				    " AND institutions.CtyCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees,centres,institutions"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-                                    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod=institutions.InsCod"
-				    " AND institutions.CtyCod='%ld'"
-				    ") "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-                           Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   Gbl.CurrentCty.Cty.CtyCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-			   Gbl.CurrentCty.Cty.CtyCod);
-	          break;
-	      }
-	    break;
-	 case Sco_SCOPE_INS:
-	    /* Search users in courses from the current institution */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod=centres.CtrCod"
-				 " AND centres.InsCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentIns.Ins.InsCod,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod=centres.CtrCod"
-				 " AND centres.InsCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentIns.Ins.InsCod);
-		  break;
-	       default:			// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users,crs_usr,usr_data,courses,degrees,centres"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me
-		                    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees,centres"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees,centres"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-                                    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod=centres.CtrCod"
-				    " AND centres.InsCod='%ld'"
-				    ") "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-                           Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   Gbl.CurrentIns.Ins.InsCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   Gbl.CurrentIns.Ins.InsCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-			   Gbl.CurrentIns.Ins.InsCod);
-	          break;
-	      }
-            break;
-	 case Sco_SCOPE_CTR:
-	    /* Search users in courses from the current centre */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_CTR_ADM:
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,degrees,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod=degrees.DegCod"
-				 " AND degrees.CtrCod='%ld'"
-		                 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCtr.Ctr.CtrCod);
-		  break;
-	       default:			// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users,crs_usr,usr_data,courses,degrees"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me
-		                    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-                                    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod=degrees.DegCod"
-				    " AND degrees.CtrCod='%ld'"
-				    ") "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-                           Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   Gbl.CurrentCtr.Ctr.CtrCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-			   Gbl.CurrentCtr.Ctr.CtrCod);
-	          break;
-	      }
-	    break;
-	 case Sco_SCOPE_DEG:
-	    /* Search users in courses from the current degree */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_DEG_ADM:
-	       case Rol_CTR_ADM:
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
-			         " FROM candidate_users,crs_usr,courses,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod=courses.CrsCod"
-				 " AND courses.DegCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentDeg.Deg.DegCod);
-		  break;
-	       default:			// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users,crs_usr,usr_data,courses"
-				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me
-		                    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod='%ld'"
-		                    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
-				    " AND crs_usr.Role='%u'"
-		                    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-                                    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-		                    " AND usr_data.ProfileVisibility='%s'"
-				    " AND crs_usr.CrsCod=courses.CrsCod"
-				    " AND courses.DegCod='%ld'"
-				    ") "
-				 "AS list_usrs,usr_data"
-				 " WHERE list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-                           Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   Gbl.CurrentDeg.Deg.DegCod,
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-			   Gbl.CurrentDeg.Deg.DegCod);
-	          break;
-	      }
-	    break;
-	 case Sco_SCOPE_CRS:
-	    /* Search users in courses from the current course */
-	    switch (Gbl.Usrs.Me.LoggedRole)
-	      {
-	       case Rol_UNKNOWN:	// I am not logged
-		  // Users whose privacy is Pri_VISIBILITY_WORLD
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
-			         " FROM candidate_users,crs_usr,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " AND usr_data.ProfileVisibility='%s'"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCrs.Crs.CrsCod,
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
-		  break;
-	       case Rol_DEG_ADM:
-	       case Rol_CTR_ADM:
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
-		  sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
-			         " FROM candidate_users,crs_usr,usr_data"
-				 " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.Role='%u'"
-				 " AND crs_usr.CrsCod='%ld'"
-				 " AND candidate_users.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Gbl.CurrentCrs.Crs.CrsCod);
-		  break;
-	       default:		// I am logged
-		  Usr_CreateExtraTmpTablesForSearch ();
-		  sprintf (Query,"SELECT DISTINCT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
-				    "("
-				    // Users whose privacy is
-				    // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
-				    "SELECT DISTINCT crs_usr.UsrCod"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
 				    " FROM candidate_users,crs_usr,usr_data"
 				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
-				    " AND usr_data.ProfileVisibility IN ('%s','%s')"
-				    " UNION "
-				    // Users who share any course with me
-				    // and whose privacy is Pri_VISIBILITY_COURSE
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_2,crs_usr,my_crs,usr_data"
-				    " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role);
+		     break;
+		  default:			// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       ") "
+				    "AS list_usrs,usr_data"
+				    " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ]);
+		     break;
+		 }
+	       break;
+	    case Sco_SCOPE_CTY:
+	       /* Search users in courses from the current country */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs.CrsCod"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " AND institutions.CtyCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
 				    " AND usr_data.ProfileVisibility='%s'"
-				    " UNION "
-				    // Users who share any course with me with another role
-				    // and whose privacy is Pri_VISIBILITY_USER
-				    "SELECT DISTINCT crs_usr.UsrCod"
-				    " FROM candidate_users_3,crs_usr,my_crs_role,usr_data"
-				    " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 				    " AND crs_usr.Role='%u'"
-				    " AND crs_usr.CrsCod=my_crs_role.CrsCod"
-				    " AND crs_usr.Role<>my_crs_role.Role"
-				    " AND crs_usr.UsrCod=usr_data.UsrCod"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod=institutions.InsCod"
+				    " AND institutions.CtyCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCty.Cty.CtyCod);
+		     break;
+		  default:			// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data,courses,degrees,centres,institutions"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod=institutions.InsCod"
+				       " AND institutions.CtyCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees,centres,institutions"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod=institutions.InsCod"
+				       " AND institutions.CtyCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees,centres,institutions"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod=institutions.InsCod"
+				       " AND institutions.CtyCod='%ld'"
+				       ") "
+				    "AS list_usrs,usr_data"
+				    " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      Gbl.CurrentCty.Cty.CtyCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			      Gbl.CurrentCty.Cty.CtyCod);
+		     break;
+		 }
+	       break;
+	    case Sco_SCOPE_INS:
+	       /* Search users in courses from the current institution */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
 				    " AND usr_data.ProfileVisibility='%s'"
-				    ") "
-				 "AS list_usrs,crs_usr,usr_data"
-				 " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
-				 " AND crs_usr.CrsCod='%ld'"
-				 " AND list_usrs.UsrCod=usr_data.UsrCod"
-				 " ORDER BY "
-				 "usr_data.Surname1,"
-				 "usr_data.Surname2,"
-				 "usr_data.FirstName,"
-				 "usr_data.UsrCod",
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-			   Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			   (unsigned) Role,
-			   Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-			   Gbl.CurrentCrs.Crs.CrsCod);
-	      }
-	    break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
-	    break;
-        }
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentIns.Ins.InsCod,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_INS_ADM:
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod=centres.CtrCod"
+				    " AND centres.InsCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentIns.Ins.InsCod);
+		     break;
+		  default:			// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data,courses,degrees,centres"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees,centres"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees,centres"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod=centres.CtrCod"
+				       " AND centres.InsCod='%ld'"
+				       ") "
+				    "AS list_usrs,usr_data"
+				    " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      Gbl.CurrentIns.Ins.InsCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      Gbl.CurrentIns.Ins.InsCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			      Gbl.CurrentIns.Ins.InsCod);
+		     break;
+		 }
+	       break;
+	    case Sco_SCOPE_CTR:
+	       /* Search users in courses from the current centre */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_CTR_ADM:
+		  case Rol_INS_ADM:
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod=degrees.DegCod"
+				    " AND degrees.CtrCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCtr.Ctr.CtrCod);
+		     break;
+		  default:			// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data,courses,degrees"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses,degrees"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses,degrees"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod=degrees.DegCod"
+				       " AND degrees.CtrCod='%ld'"
+				       ") "
+				    "AS list_usrs,usr_data"
+				    " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      Gbl.CurrentCtr.Ctr.CtrCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			      Gbl.CurrentCtr.Ctr.CtrCod);
+		     break;
+		 }
+	       break;
+	    case Sco_SCOPE_DEG:
+	       /* Search users in courses from the current degree */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_DEG_ADM:
+		  case Rol_CTR_ADM:
+		  case Rol_INS_ADM:
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+				    " FROM candidate_users,crs_usr,courses,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod=courses.CrsCod"
+				    " AND courses.DegCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentDeg.Deg.DegCod);
+		     break;
+		  default:			// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT list_usrs.UsrCod,usr_data.Sex FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data,courses"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data,courses"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod='%ld'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data,courses"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " AND crs_usr.CrsCod=courses.CrsCod"
+				       " AND courses.DegCod='%ld'"
+				       ") "
+				    "AS list_usrs,usr_data"
+				    " WHERE list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			      Gbl.CurrentDeg.Deg.DegCod);
+		     break;
+		 }
+	       break;
+	    case Sco_SCOPE_CRS:
+	       /* Search users in courses from the current course */
+	       switch (Gbl.Usrs.Me.LoggedRole)
+		 {
+		  case Rol_UNKNOWN:	// I am not logged
+		     // Users whose privacy is Pri_VISIBILITY_WORLD
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
+				    " FROM candidate_users,crs_usr,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " AND usr_data.ProfileVisibility='%s'"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD]);
+		     break;
+		  case Rol_DEG_ADM:
+		  case Rol_CTR_ADM:
+		  case Rol_INS_ADM:
+		  case Rol_SYS_ADM:
+		     sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
+				    " FROM candidate_users,crs_usr,usr_data"
+				    " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.Role='%u'"
+				    " AND crs_usr.CrsCod='%ld'"
+				    " AND candidate_users.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Gbl.CurrentCrs.Crs.CrsCod);
+		     break;
+		  default:		// I am logged
+		     Usr_CreateExtraTmpTablesForSearch ();
+		     sprintf (Query,"SELECT DISTINCT list_usrs.UsrCod,usr_data.Sex,crs_usr.Accepted FROM "
+				       "("
+				       // Users whose privacy is
+				       // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users,crs_usr,usr_data"
+				       " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility IN ('%s','%s')"
+				       " UNION "
+				       // Users who share any course with me
+				       // and whose privacy is Pri_VISIBILITY_COURSE
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_2,crs_usr,my_crs,usr_data"
+				       " WHERE candidate_users_2.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs.CrsCod"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       " UNION "
+				       // Users who share any course with me with another role
+				       // and whose privacy is Pri_VISIBILITY_USER
+				       "SELECT DISTINCT crs_usr.UsrCod"
+				       " FROM candidate_users_3,crs_usr,my_crs_role,usr_data"
+				       " WHERE candidate_users_3.UsrCod=crs_usr.UsrCod"
+				       " AND crs_usr.Role='%u'"
+				       " AND crs_usr.CrsCod=my_crs_role.CrsCod"
+				       " AND crs_usr.Role<>my_crs_role.Role"
+				       " AND crs_usr.UsrCod=usr_data.UsrCod"
+				       " AND usr_data.ProfileVisibility='%s'"
+				       ") "
+				    "AS list_usrs,crs_usr,usr_data"
+				    " WHERE list_usrs.UsrCod=crs_usr.UsrCod"
+				    " AND crs_usr.CrsCod='%ld'"
+				    " AND list_usrs.UsrCod=usr_data.UsrCod"
+				    " ORDER BY "
+				    "usr_data.Surname1,"
+				    "usr_data.Surname2,"
+				    "usr_data.FirstName,"
+				    "usr_data.UsrCod",
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+			      Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+			      (unsigned) Role,
+			      Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+			      Gbl.CurrentCrs.Crs.CrsCod);
+		 }
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong scope.");
+	       break;
+	   }
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
 
    // if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
    //   Lay_ShowAlert (Lay_INFO,Query);
@@ -6308,6 +6416,8 @@ void Usr_ListAllDataTchs (void)
 
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
   {
+   extern const char *Txt_user[Usr_NUM_SEXS];
+   extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -6331,8 +6441,10 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
       sprintf (Gbl.Title,"%u %s",
-	       NumUsrs,(NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-		                        Txt_ROLES_PLURAL_abc[Role][Sex]);
+	       NumUsrs,(Role == Rol_UNKNOWN) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+		                                                 Txt_users[Sex]) :
+		                               ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+		                                                 Txt_ROLES_PLURAL_abc[Role][Sex]));
       Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
       /***** Heading row with column names *****/

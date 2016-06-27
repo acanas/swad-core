@@ -209,6 +209,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_centres;
    extern const char *Txt_degrees;
    extern const char *Txt_courses;
+   extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_my_documents;
    extern const char *Txt_documents_in_my_courses;
@@ -221,6 +222,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_centres,						// Sch_SEARCH_CENTRES
 	Txt_degrees,						// Sch_SEARCH_DEGREES
 	Txt_courses,						// Sch_SEARCH_COURSES
+	Txt_users[Usr_SEX_UNKNOWN],				// Sch_SEARCH_USERS
 	Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
 	Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
         Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
@@ -296,6 +298,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       0x1FF,	// Sch_SEARCH_CENTRES
       0x1FF,	// Sch_SEARCH_DEGREES
       0x1FF,	// Sch_SEARCH_COURSES
+      0x1FF,	// Sch_SEARCH_USERS
       0x1FF,	// Sch_SEARCH_TEACHERS
       0x1FF,	// Sch_SEARCH_STUDENTS
       0x1FF,	// Sch_SEARCH_GUESTS
@@ -626,6 +629,9 @@ static void Sch_SearchInDB (void)
 	 break;
       case Sch_SEARCH_COURSES:
 	 NumResults = Sch_SearchCoursesInDB (RangeQuery);
+	 break;
+      case Sch_SEARCH_USERS:
+	 NumResults = Sch_SearchUsrsInDB (Rol_UNKNOWN);	// Here Rol_UNKNOWN means any user
 	 break;
       case Sch_SEARCH_TEACHERS:
 	 NumResults = Sch_SearchUsrsInDB (Rol_TEACHER);

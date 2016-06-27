@@ -334,7 +334,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    extern const char *Txt_session;
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
-   extern const char *Txt_users;
+   extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned StdsTotal = Con_GetConnectedStdsTotal ();
@@ -369,7 +369,7 @@ void Con_ShowGlobalConnectedUsrs (void)
       fprintf (Gbl.F.Out,"%u %s:",
 	       UsrsTotal,
 	       (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-				  Txt_users);
+				  Txt_users[Usr_SEX_UNKNOWN]);
 
       /***** Write total number of students *****/
       if (StdsTotal)

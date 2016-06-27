@@ -49433,26 +49433,88 @@ const char *Txt_Users =
 	"Utilizadores";
 #endif
 
-const char *Txt_users =
+const char *Txt_users[Usr_NUM_SEXS] =
+	{	// Usr_SEX_UNKNOWN
 #if   L==1
-	"usuaris";
+	"usuaris"
 #elif L==2
-	"Benutzer";
+	"Benutzer"
 #elif L==3
-	"users";
+	"users"
 #elif L==4
-	"usuarios";
+	"usuarios"
 #elif L==5
-	"utilisateurs";
+	"utilisateurs"
 #elif L==6
-	"puruh&aacute;ra";
+	"puruh&aacute;ra"
 #elif L==7
-	"utenti";
+	"utenti"
 #elif L==8
-	"u&zdot;ytkownicy";
+	"u&zdot;ytkownicy"
 #elif L==9
-	"utilizadores";
+	"utilizadores"
 #endif
+	,	// Usr_SEX_FEMALE
+#if   L==1
+	"usuarias"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"users"
+#elif L==4
+	"usuarias"
+#elif L==5
+	"utilisateuses"
+#elif L==6
+	"usuarias"	// Okoteve traducción
+#elif L==7
+	"utenti"
+#elif L==8
+	"u&zdot;ytkownicy"
+#elif L==9
+	"utilizadoras"
+#endif
+	,	// Usr_SEX_MALE
+#if   L==1
+	"usuaris"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"users"
+#elif L==4
+	"usuarios"
+#elif L==5
+	"utilisateurs"
+#elif L==6
+	"puruh&aacute;ra"
+#elif L==7
+	"utenti"
+#elif L==8
+	"u&zdot;ytkownicy"
+#elif L==9
+	"utilizadores"
+#endif
+	,	// Usr_SEX_ALL
+#if   L==1
+	"usuaris"
+#elif L==2
+	"Benutzer"
+#elif L==3
+	"users"
+#elif L==4
+	"usuarios"
+#elif L==5
+	"utilisateurs"
+#elif L==6
+	"puruh&aacute;ra"
+#elif L==7
+	"utenti"
+#elif L==8
+	"u&zdot;ytkownicy"
+#elif L==9
+	"utilizadores"
+#endif
+	};
 
 const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==1

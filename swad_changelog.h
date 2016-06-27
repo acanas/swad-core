@@ -121,6 +121,7 @@
 // TODO: Messages in msg_content_deleted older than a certain time should be deleted to ensure the protection of personal data
 // TODO: FIX BUG: A teacher uploads a document in course documents zone, then he/she unregister from course, then he/she search for his/her documents, a document is shown in results but he/she can not view it
 // TODO: Add Stack Exchange to webs/networks
+// TODO: Degree in list of notifications should link to internal degree
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
@@ -129,13 +130,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.231.4 (2016-06-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.232 (2016-06-27)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.232:   Jun 27, 2015	Search any user, independently on role. (203657 lines)
         Version 15.231.4: Jun 24, 2015	Fix bug (buffer overflow) when getting users. (203474 lines)
         Version 15.231.3: Jun 24, 2015	Parameter name used for "Scope" now depends on context. (203472 lines)
         Version 15.231.2: Jun 24, 2015	Search is restricted by default to the smaller (down in hierarchy) scope. (203475 lines)

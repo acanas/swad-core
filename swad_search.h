@@ -37,7 +37,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Sch_NUM_WHAT_TO_SEARCH	11
+#define Sch_NUM_WHAT_TO_SEARCH	12
 typedef enum
   {
    Sch_SEARCH_ALL			=  0,
@@ -45,12 +45,13 @@ typedef enum
    Sch_SEARCH_CENTRES			=  2,
    Sch_SEARCH_DEGREES			=  3,
    Sch_SEARCH_COURSES			=  4,
-   Sch_SEARCH_TEACHERS			=  5,
-   Sch_SEARCH_STUDENTS			=  6,
-   Sch_SEARCH_GUESTS			=  7,
-   Sch_SEARCH_OPEN_DOCUMENTS		=  8,
-   Sch_SEARCH_DOCUM_IN_MY_COURSES	=  9,
-   Sch_SEARCH_MY_DOCUMENTS		= 10,
+   Sch_SEARCH_USERS			=  5,
+   Sch_SEARCH_TEACHERS			=  6,
+   Sch_SEARCH_STUDENTS			=  7,
+   Sch_SEARCH_GUESTS			=  8,
+   Sch_SEARCH_OPEN_DOCUMENTS		=  9,
+   Sch_SEARCH_DOCUM_IN_MY_COURSES	= 10,
+   Sch_SEARCH_MY_DOCUMENTS		= 11,
   } Sch_WhatToSearch_t;
 
 /*****************************************************************************/

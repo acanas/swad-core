@@ -9187,7 +9187,7 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Identified_views;
    extern const char *Txt_Public_views;
    extern const char *Txt_user[Usr_NUM_SEXS];
-   extern const char *Txt_users;
+   extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_Save_file_properties;
    struct FileMetadata FileMetadata;
    struct UsrData PublisherUsrDat;
@@ -9487,7 +9487,7 @@ void Brw_ShowFileMetadata (void)
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
 		  (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-			                              Txt_users);
+			                              Txt_users[Usr_SEX_UNKNOWN]);
 
 	 /***** Write number of public views *****/
 	 fprintf (Gbl.F.Out,"<tr>"
