@@ -540,7 +540,7 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"</span>");
            }
-         else if (Crs.CrsCod > 0)
+         else
            {
             if (PutLink)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
@@ -549,7 +549,18 @@ void Ntf_ShowMyNotifications (void)
                Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
-            fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
+
+            if (Crs.CrsCod > 0)
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
+            else if (Deg.DegCod > 0)
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShortName);
+            else if (Ctr.CtrCod > 0)
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShortName);
+            else if (Ins.InsCod > 0)
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShortName);
+            else
+               fprintf (Gbl.F.Out,"-");
+
             if (PutLink)
               {
                fprintf (Gbl.F.Out,"</a>");
@@ -558,24 +569,6 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"</span>");
            }
-         else if (Deg.DegCod > 0)
-           {
-            fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">%s: %s</a>",
-                     Deg.WWW,ClassAnchor,
-                     Txt_Degree,Deg.ShortName);
-           }
-         else if (Ctr.CtrCod > 0)
-           {
-            fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">%s: %s</a>",
-                     Ctr.WWW,ClassAnchor,
-                     Txt_Centre,Ctr.ShortName);
-           }
-         else if (Ins.InsCod > 0)
-            fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">%s: %s</a>",
-                     Ins.WWW,ClassAnchor,
-                     Txt_Institution,Ins.ShortName);
-         else
-            fprintf (Gbl.F.Out,"-");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write date and time */
