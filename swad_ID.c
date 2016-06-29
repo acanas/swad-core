@@ -70,7 +70,6 @@ typedef enum
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
-static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat);
 static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
 static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID);
 
@@ -405,7 +404,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
 /*****************************************************************************/
 // This function should not be called when UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod
 
-static bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
+bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
   {
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.LoggedRole)

@@ -109,6 +109,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
+#include "swad_search.h"
 #include "swad_user.h"
 #include "swad_web_service.h"
 
@@ -179,13 +180,15 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword);	// Output
 
+static void Svc_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getUsersOut);
 static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible);
 
-static void Svc_GetListGrpsInAttendanceEvent (long AttCod,char **ListGroups);
+static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroups);
+static void Svc_GetLstGrpsSel (const char *Groups);
 
 static int Svc_GetMyLanguage (void);
 
-static int Svc_sendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
+static int Svc_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
 static int Svc_GetTstConfig (long CrsCod);
 static int Svc_GetNumTestQuestionsInCrs (long CrsCod);
@@ -1340,25 +1343,20 @@ int swad__getCourseInfo (struct soap *soap,
   }
 
 /*****************************************************************************/
-/********************** Return students in a course **************************/
+/************* Get users in a course (and optionally in groups) **************/
 /*****************************************************************************/
-// If groupCode <= 0 ==> get users from the whole course
 
 int swad__getUsers (struct soap *soap,
-                    char *wsKey,int courseCode,int groupCode,int userRole,	// input
+                    char *wsKey,int courseCode,char *groups,int userRole,	// input
                     struct swad__getUsersOutput *getUsersOut)			// output
   {
    int ReturnCode;
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRow,NumRows;
-   bool UsrIDIsVisible;
+   Rol_Role_t Role;
 
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getUsers;
-   Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
-   Gbl.CurrentCrs.Grps.GrpCod = (long) groupCode;
+   Gbl.CurrentCrs.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
+	                                          -1L;
 
    /***** Check web service key *****/
    if ((ReturnCode = Svc_CheckWSKey (wsKey)) != SOAP_OK)
@@ -1368,8 +1366,8 @@ int swad__getUsers (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   /***** Check course and group codes *****/
-   if ((ReturnCode = Svc_CheckCourseAndGroupCodes (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpCod)) != SOAP_OK)
+   /***** Check course *****/
+   if ((ReturnCode = Svc_CheckCourseAndGroupCodes (Gbl.CurrentCrs.Crs.CrsCod,-1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
@@ -1382,76 +1380,192 @@ int swad__getUsers (struct soap *soap,
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
        Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
       return soap_receiver_fault (Gbl.soap,
-	                          "Request forbidden",
-	                          "Requester must belong to course");
+				  "Request forbidden",
+				  "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = Svc_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
+   if ((ReturnCode = Svc_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
      return ReturnCode;
 
-   /***** Check requested users' type *****/
-   if (userRole != 2 &&	// student
-       userRole != 3)	// teacher
-     {
-      sprintf (Gbl.Message,"Only students (user's type = %u) or teachers (user's type = %u) are allowed",
-               (unsigned) 2,	// student
-               (unsigned) 3);	// teacher
+   /***** Check requested users' role *****/
+   if (userRole < 2 ||	// Students
+       userRole > 3)	// Teachers
       return soap_sender_fault (Gbl.soap,
 	                        "Bad requested users' type",
-	                        Gbl.Message);
-     }
+	                        "User roles allowed are 2 (students) or 3 (teachers)");
+   Role = (Rol_Role_t) userRole;
 
-   /***** Query users beloging to course or group from database *****/
-   if (groupCode <= 0)	// Users belonging to the whole course
-      sprintf (Query,"SELECT usr_data.UsrCod"
-                     " FROM crs_usr,usr_data"
-                     " WHERE crs_usr.CrsCod='%ld' AND crs_usr.UsrCod=usr_data.UsrCod AND crs_usr.Role='%d'"
-                     " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
-               (long) courseCode,
-               userRole == 2 ? (unsigned) Rol_STUDENT :
-                               (unsigned) Rol_TEACHER);
-   else			// Users belonging to the group
-      sprintf (Query,"SELECT usr_data.UsrCod"
-                     " FROM crs_grp_usr,crs_usr,usr_data"
-                     " WHERE crs_grp_usr.GrpCod='%ld' AND crs_grp_usr.UsrCod=crs_usr.UsrCod AND crs_grp_usr.UsrCod=usr_data.UsrCod AND crs_usr.Role='%d'"
-                     " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName,usr_data.UsrCod",
-               (long) groupCode,
-               userRole == 2 ? (unsigned) Rol_STUDENT :
-                               (unsigned) Rol_TEACHER);
-   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users");
+   /***** Create a list of groups selected *****/
+   Svc_GetLstGrpsSel (groups);
+   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
+      /***** Get list of groups types and groups in current course *****/
+      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   getUsersOut->numUsers = (int) NumRows;
-   getUsersOut->usersArray.__size = (int) NumRows;
+   /***** Get list of users *****/
+   Usr_GetListUsrs (Role,Sco_SCOPE_CRS);
+   Svc_CopyListUsers (Role,getUsersOut);
+   Usr_FreeUsrsList (Role);
 
-   if (NumRows == 0)
-      getUsersOut->usersArray.__ptr = NULL;
-   else	// Users found
+   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
      {
-      getUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,(getUsersOut->usersArray.__size) * sizeof (*(getUsersOut->usersArray.__ptr)));
+      /***** Free list of groups types and groups in current course *****/
+      Grp_FreeListGrpTypesAndGrps ();
 
-      /***** Users' IDs are visible? *****/
-      UsrIDIsVisible = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&
-		        userRole == 2);	// get students in the course
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-        {
-         /* Get next user */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get user's code (row[0]) */
-         if ((Gbl.Usrs.Other.UsrDat.UsrCod = (long) Str_ConvertStrCodToLongCod (row[0])) > 0)
-            /* Get user's data */
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
-               /* Copy user's data into output structure */
-               Svc_CopyUsrData (&(getUsersOut->usersArray.__ptr[NumRow]),&Gbl.Usrs.Other.UsrDat,UsrIDIsVisible);
-        }
+      /***** Free memory for list of selected groups *****/
+      Grp_FreeListCodSelectedGrps ();
      }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return SOAP_OK;
+  }
+
+int swad__findUsers (struct soap *soap,
+                     char *wsKey,int courseCode,char *filter,int userRole,	// input
+                     struct swad__getUsersOutput *getUsersOut)			// output
+  {
+   int ReturnCode;
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
+   Rol_Role_t Role;
+   bool FilterTooShort = false;
+
+   Gbl.soap = soap;
+   Gbl.WebService.Function = Svc_getUsers;
+   Gbl.CurrentCrs.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
+	                                          -1L;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = Svc_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+      /***** Check course *****/
+      if ((ReturnCode = Svc_CheckCourseAndGroupCodes (Gbl.CurrentCrs.Crs.CrsCod,-1L)) != SOAP_OK)
+	 return ReturnCode;
+
+   /***** Get some of my data *****/
+   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
+      return ReturnCode;
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+      /***** Check if I am a student or teacher in the course *****/
+      if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
+	  Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+	 return soap_receiver_fault (Gbl.soap,
+				     "Request forbidden",
+				     "Requester must belong to course");
+
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+     {
+      /***** Get degree of current course *****/
+      if ((ReturnCode = Svc_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
+	return ReturnCode;
+     }
+
+   /***** Check requested users' role *****/
+   if (userRole < 0 ||
+       userRole > 3)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad requested users' type",
+	                        "User roles allowed are 0 (all),1 (guests), 2 (students) or 3 (teachers)");
+   Role = (Rol_Role_t) userRole;
+
+   /***** Query users beloging to course or group from database *****/
+   strncpy (Gbl.Search.Str,filter,Sch_MAX_LENGTH_STRING_TO_FIND);
+   Gbl.Search.Str[Sch_MAX_LENGTH_STRING_TO_FIND] = '\0';
+
+   if (Gbl.Search.Str[0])	// Search some users
+     {
+      Gbl.Scope.Current = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Sco_SCOPE_CRS :
+							    Sco_SCOPE_SYS;
+      if (Sch_BuildSearchQuery (SearchQuery,
+				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
+				NULL,NULL))
+	{
+	 /***** Create temporary table with candidate users *****/
+	 // Search is faster (aproximately x2) using temporary tables
+	 Usr_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
+
+	 /***** Search for users *****/
+	 Usr_SearchListUsrs (Role);
+	 Svc_CopyListUsers (Role,getUsersOut);
+	 Usr_FreeUsrsList (Role);
+
+	 /***** Drop temporary table with candidate users *****/
+	 Usr_DropTmpTableWithCandidateUsrs ();
+        }
+      else
+	 FilterTooShort = true;
+     }
+   else
+      FilterTooShort = true;
+
+   /***** Return error in filter? *****/
+   if (FilterTooShort)
+     {
+      getUsersOut->numUsers = -1;	// < 0 ==> filter too short
+      getUsersOut->usersArray.__size = 0;
+      getUsersOut->usersArray.__ptr = NULL;
+     }
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/***************************** Copy users from list **************************/
+/*****************************************************************************/
+
+static void Svc_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getUsersOut)
+  {
+   unsigned NumUsrs;
+   unsigned NumUsr;
+   struct UsrData UsrDat;
+   bool ICanSeeUsrID;
+
+   /***** Initialize result *****/
+   getUsersOut->numUsers = 0;
+   getUsersOut->usersArray.__size = 0;
+   getUsersOut->usersArray.__ptr = NULL;
+
+   NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs;
+   if (NumUsrs)
+     {
+      getUsersOut->numUsers = (int) NumUsrs;
+      getUsersOut->usersArray.__size = (int) NumUsrs;
+      getUsersOut->usersArray.__ptr = soap_malloc (Gbl.soap,(getUsersOut->usersArray.__size) * sizeof (*(getUsersOut->usersArray.__ptr)));
+
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** List data of users *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+
+	 /* Get user's data */
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
+	   {
+	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
+
+	    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)	// It's me
+	       ICanSeeUsrID = true;
+	    else						// A user distinct than me
+	       ICanSeeUsrID = ID_ICanSeeAnotherUsrID (&UsrDat);
+
+	    /* Copy user's data into output structure */
+	    Svc_CopyUsrData (&(getUsersOut->usersArray.__ptr[NumUsr]),&UsrDat,ICanSeeUsrID);
+	   }
+	}
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
   }
 
 /*****************************************************************************/
@@ -2026,7 +2140,7 @@ int swad__getAttendanceEvents (struct soap *soap,
                  row[6]);
 
 	 /* Get list of groups for this attendance event */
-	 Svc_GetListGrpsInAttendanceEvent (AttCod,&(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
+	 Svc_GetListGrpsInAttendanceEventFromDB (AttCod,&(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
 	}
      }
 
@@ -2040,7 +2154,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 /**************** Get lists of groups of an attendance event *****************/
 /*****************************************************************************/
 
-static void Svc_GetListGrpsInAttendanceEvent (long AttCod,char **ListGroups)
+static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroups)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
@@ -2093,9 +2207,6 @@ int swad__sendAttendanceEvent (struct soap *soap,
    int ReturnCode;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
-   const char *Ptr;
-   char LongStr[1+10+1];
-   unsigned NumGrp;
 
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendAttendanceEvent;
@@ -2168,8 +2279,35 @@ int swad__sendAttendanceEvent (struct soap *soap,
    strncpy (Att.Title,title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
    Att.Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE] = '\0';
 
+   /* Create a list of groups selected */
+   Svc_GetLstGrpsSel (groups);
+
+   /***** Create or update attendance event *****/
+   if (ItsANewAttEvent)
+      Att_CreateAttEvent (&Att,text);	// Add new attendance event to database
+   else
+      Att_UpdateAttEvent (&Att,text);	// Modify existing attendance event
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
+
+   sendAttendanceEventOut->attendanceEventCode = Att.AttCod;
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
+/********************** Create a list of groups selected *********************/
+/*****************************************************************************/
+
+static void Svc_GetLstGrpsSel (const char *Groups)
+  {
+   const char *Ptr;
+   char LongStr[1+10+1];
+   unsigned NumGrp;
+
    /***** Count number of groups *****/
-   for (Ptr = groups, NumGrp = 0;
+   for (Ptr = Groups, NumGrp = 0;
 	*Ptr;
 	NumGrp++)
       Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
@@ -2184,7 +2322,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
       if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
 
-      for (Ptr = groups, NumGrp = 0;
+      for (Ptr = Groups, NumGrp = 0;
 	   *Ptr;
 	   )
 	{
@@ -2195,19 +2333,6 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	}
       Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;	// Update number of groups
      }
-
-   /***** Create or update attendance event *****/
-   if (ItsANewAttEvent)
-      Att_CreateAttEvent (&Att,text);	// Add new attendance event to database
-   else
-      Att_UpdateAttEvent (&Att,text);	// Modify existing attendance event
-
-   /***** Free memory for list of selected groups *****/
-   Grp_FreeListCodSelectedGrps ();
-
-   sendAttendanceEventOut->attendanceEventCode = Att.AttCod;
-
-   return SOAP_OK;
   }
 
 /*****************************************************************************/
@@ -2991,7 +3116,7 @@ int swad__sendMessage (struct soap *soap,
                                    (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE)));
 
                   /* Send message to this user */
-                  if ((ReturnCode = Svc_sendMessageToUsr ((long) messageCode,Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,NotifyByEmail,subject,body)) != SOAP_OK)
+                  if ((ReturnCode = Svc_SendMessageToUsr ((long) messageCode,Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,NotifyByEmail,subject,body)) != SOAP_OK)
                     {
                      DB_FreeMySQLResult (&mysql_res);
                      return ReturnCode;
@@ -3013,7 +3138,7 @@ int swad__sendMessage (struct soap *soap,
 /************************* Send a message to one user ************************/
 /*****************************************************************************/
 
-static int Svc_sendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content)
+static int Svc_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content)
   {
    static bool MsgAlreadyInserted = false;
    static long NewMsgCod;

@@ -142,9 +142,6 @@ static void Usr_WriteUsrData (const char *BgColor,
                               bool NonBreak,bool Accepted);
 
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query);
-static void Usr_SearchListUsrs (Rol_Role_t Role);
-static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery);
-static void Usr_DropTmpTableWithCandidateUsrs (void);
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
@@ -3802,7 +3799,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 /********* Search list of users with a given role in current scope ***********/
 /*****************************************************************************/
 
-static void Usr_SearchListUsrs (Rol_Role_t Role)
+void Usr_SearchListUsrs (Rol_Role_t Role)
   {
    char Query[4*1024];
    const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
@@ -4011,7 +4008,7 @@ static void Usr_SearchListUsrs (Rol_Role_t Role)
 /*************** Create temporary table with candidate users *****************/
 /*****************************************************************************/
 
-static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery)
+void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *SearchQuery)
   {
    char Query[16*1024];
 
@@ -4024,7 +4021,7 @@ static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery)
    sprintf (Query,"CREATE TEMPORARY TABLE candidate_users"
 		  " (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
 		  " SELECT UsrCod FROM usr_data WHERE %s",
-	    UsrQuery);
+	    SearchQuery);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
   }
@@ -4033,7 +4030,7 @@ static void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery)
 /***************** Drop temporary table with candidate users *****************/
 /*****************************************************************************/
 
-static void Usr_DropTmpTableWithCandidateUsrs (void)
+void Usr_DropTmpTableWithCandidateUsrs (void)
   {
    char Query[128];
 
@@ -5802,24 +5799,24 @@ void Usr_ListAllDataTchs (void)
 /*****************************************************************************/
 // Returns number of users found
 
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   Usr_Sex_t Sex;
+   unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
-   unsigned NumUsrs;
+   Usr_Sex_t Sex;
 
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
    /***** Create temporary table with candidate users *****/
    // Search is faster (aproximately x2) using temporary tables
-   Usr_CreateTmpTableAndSearchCandidateUsrs (UsrQuery);
+   Usr_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
 
    /***** Search for users *****/
    Usr_SearchListUsrs (Role);
@@ -5884,7 +5881,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery)
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Role);
 
-   /***** Drop temporary tables *****/
+   /***** Drop temporary table with candidate users *****/
    Usr_DropTmpTableWithCandidateUsrs ();
 
    return NumUsrs;

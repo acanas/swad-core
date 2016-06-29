@@ -305,6 +305,10 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope);
 
+void Usr_SearchListUsrs (Rol_Role_t Role);
+void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery);
+void Usr_DropTmpTableWithCandidateUsrs (void);
+
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_FreeUsrsList (Rol_Role_t Role);
 bool Usr_GetIfShowBigList (unsigned NumUsrs);
@@ -332,7 +336,7 @@ void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListUsrsForSelection (Rol_Role_t Role);
 void Usr_ListAllDataTchs (void);
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *UsrQuery);
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery);
 void Usr_ListDataAdms (void);
 
 void Usr_GetAndUpdatePrefsAboutUsrList (void);

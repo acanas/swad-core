@@ -41,11 +41,8 @@
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
 
-#define Sch_MAX_WORDS_IN_SEARCH		 10
-#define Sch_MAX_LENGTH_SEARCH_WORD	255
 #define Sch_MIN_LENGTH_LONGEST_WORD	  3
 #define Sch_MIN_LENGTH_TOTAL		  7	// "A An Ann" is not valid; "A An Ann Anna" is valid
-#define Sch_MAX_LENGTH_SEARCH_QUERY	(10*Sch_MAX_LENGTH_STRING_TO_FIND)
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -77,8 +74,6 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role);
 static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery);
 static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery);
 static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery);
-static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
-                                  const char *CharSet,const char *Collate);
 
 static void Sch_SaveLastSearchIntoSession (void);
 
@@ -793,25 +788,29 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
   }
 
 /*****************************************************************************/
-/************************* Search teachers in database ***********************/
+/*************************** Search users in database ************************/
 /*****************************************************************************/
-// Returns number of teachers found
+// Returns number of users found
 
 static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
   {
+   extern const char *Txt_The_search_text_must_be_longer;
+   static bool WarningMessageWritten = false;
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
 
-   /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch ( Role == Rol_UNKNOWN ? Sch_SEARCH_USERS :
-	                                   (Role == Rol_TEACHER ? Sch_SEARCH_TEACHERS :
-		                           (Role == Rol_STUDENT ? Sch_SEARCH_STUDENTS :
-		                        		          Sch_SEARCH_GUESTS))))
-      /***** Split user string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,
-				"CONCAT_WS(' ',usr_data.FirstName,usr_data.Surname1,usr_data.Surname2)",
-				NULL,NULL))
-	 /***** Query database and list users found *****/
-	 return Usr_ListUsrsFound (Role,SearchQuery);
+   /***** Split user string into words *****/
+   if (Sch_BuildSearchQuery (SearchQuery,
+			     "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
+			     NULL,NULL))
+      /***** Query database and list users found *****/
+      return Usr_ListUsrsFound (Role,SearchQuery);
+   else
+      // Too short
+      if (!WarningMessageWritten)	// To avoid repetitions
+	{
+         Lay_ShowAlert (Lay_WARNING,Txt_The_search_text_must_be_longer);
+         WarningMessageWritten = true;
+	}
 
    return 0;
   }
@@ -1215,11 +1214,9 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 // Returns true if a valid search query is built
 // Returns false when no valid search query
 
-static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
-                                  const char *CharSet,const char *Collate)
+bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
+                           const char *CharSet,const char *Collate)
   {
-   extern const char *Txt_The_search_text_must_be_longer;
-   static bool WarningMessageWritten = false;
    const char *Ptr;
    unsigned NumWords;
    unsigned NumWord;
@@ -1229,74 +1226,71 @@ static bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
    char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_LENGTH_SEARCH_WORD+1];
    bool SearchWordIsValid = true;
 
-   SearchQuery[0] = '\0';
-   Ptr = Gbl.Search.Str;
-   for (NumWords = 0;
-	NumWords < Sch_MAX_WORDS_IN_SEARCH && *Ptr;
-	NumWords++)
+   if (Gbl.Search.Str[0])
      {
-      /* Get next word */
-      Str_GetNextStringUntilSpace (&Ptr,SearchWords[NumWords],Sch_MAX_LENGTH_SEARCH_WORD);
-
-      /* Is this word valid? */
-      switch (Gbl.Search.WhatToSearch)
-        {
-	 case Sch_SEARCH_OPEN_DOCUMENTS:
-	 case Sch_SEARCH_DOCUM_IN_MY_COURSES:
-	 case Sch_SEARCH_MY_DOCUMENTS:
-	    SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWords[NumWords]);
-	    break;
-	 default:
-	    SearchWordIsValid = true;
-	    break;
-        }
-
-      /* Check if this word is repeated (case insensitive) */
-      for (NumWord = 0;
-	   SearchWordIsValid && NumWord < NumWords;
-	   NumWord++)
-	 if (!strcasecmp (SearchWords[NumWord],SearchWords[NumWords]))
-	    SearchWordIsValid = false;
-
-      /* Concatenate word to search string */
-      if (SearchWordIsValid)
+      SearchQuery[0] = '\0';
+      Ptr = Gbl.Search.Str;
+      for (NumWords = 0;
+	   NumWords < Sch_MAX_WORDS_IN_SEARCH && *Ptr;
+	   NumWords++)
 	{
-	 LengthWord = strlen (SearchWords[NumWords]);
-	 LengthTotal += LengthWord;
-	 if (LengthWord > MaxLengthWord)
-	    MaxLengthWord = LengthWord;
-	 if (strlen (SearchQuery) + LengthWord + 512 > Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
-	    break;
-	 if (NumWords)
-	    strcat (SearchQuery," AND ");
-	 strcat (SearchQuery,FieldName);
-	 strcat (SearchQuery," LIKE ");
-	 if (CharSet)
-	    if (CharSet[0])
-	       strcat (SearchQuery,CharSet);
-	 strcat (SearchQuery,"'%");
-	 strcat (SearchQuery,SearchWords[NumWords]);
-	 strcat (SearchQuery,"%'");
-	 if (Collate)
-	    if (Collate[0])
-	       strcat (SearchQuery,Collate);
-	}
-     }
+	 /* Get next word */
+	 Str_GetNextStringUntilSpace (&Ptr,SearchWords[NumWords],Sch_MAX_LENGTH_SEARCH_WORD);
 
-   /***** If search string valid? *****/
-   if (LengthTotal < Sch_MIN_LENGTH_TOTAL ||
-       MaxLengthWord < Sch_MIN_LENGTH_LONGEST_WORD)
-     {
-      // Too short
-      if (!WarningMessageWritten)	// To avoid repetitions
-	{
-         Lay_ShowAlert (Lay_WARNING,Txt_The_search_text_must_be_longer);
-         WarningMessageWritten = true;
+	 /* Is this word valid? */
+	 switch (Gbl.Search.WhatToSearch)
+	   {
+	    case Sch_SEARCH_OPEN_DOCUMENTS:
+	    case Sch_SEARCH_DOCUM_IN_MY_COURSES:
+	    case Sch_SEARCH_MY_DOCUMENTS:
+	       SearchWordIsValid = Str_ConvertFilFolLnkNameToValid (SearchWords[NumWords]);
+	       break;
+	    default:
+	       SearchWordIsValid = true;
+	       break;
+	   }
+
+	 /* Check if this word is repeated (case insensitive) */
+	 for (NumWord = 0;
+	      SearchWordIsValid && NumWord < NumWords;
+	      NumWord++)
+	    if (!strcasecmp (SearchWords[NumWord],SearchWords[NumWords]))
+	       SearchWordIsValid = false;
+
+	 /* Concatenate word to search string */
+	 if (SearchWordIsValid)
+	   {
+	    LengthWord = strlen (SearchWords[NumWords]);
+	    LengthTotal += LengthWord;
+	    if (LengthWord > MaxLengthWord)
+	       MaxLengthWord = LengthWord;
+	    if (strlen (SearchQuery) + LengthWord + 512 > Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
+	       break;
+	    if (NumWords)
+	       strcat (SearchQuery," AND ");
+	    strcat (SearchQuery,FieldName);
+	    strcat (SearchQuery," LIKE ");
+	    if (CharSet)
+	       if (CharSet[0])
+		  strcat (SearchQuery,CharSet);
+	    strcat (SearchQuery,"'%");
+	    strcat (SearchQuery,SearchWords[NumWords]);
+	    strcat (SearchQuery,"%'");
+	    if (Collate)
+	       if (Collate[0])
+		  strcat (SearchQuery,Collate);
+	   }
 	}
-      return false;
-     }
-   else
+
+      /***** If search string valid? *****/
+      if (LengthTotal < Sch_MIN_LENGTH_TOTAL ||
+	  MaxLengthWord < Sch_MIN_LENGTH_LONGEST_WORD)
+	 return false;
+
       return true;
+     }
+
+   return false;
   }
 
 /*****************************************************************************/

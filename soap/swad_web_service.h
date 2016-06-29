@@ -410,9 +410,11 @@ int swad__getTests (char *wsKey,int courseCode,long beginTime,
 int swad__getTrivialQuestion (char *wsKey,char *degrees,float lowerScore,float upperScore,
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut);
 
-/* List of users of a course / group */
-int swad__getUsers (char *wsKey,int courseCode,int groupCode,int userRole,
+/* List of users */
+int swad__getUsers (char *wsKey,int courseCode,char *groups,int userRole,
                     struct swad__getUsersOutput *getUsersOut);
+int swad__findUsers (char *wsKey,int courseCode,char *filter,int userRole,
+                     struct swad__getUsersOutput *getUsersOut);
 
 /* Control of attendance */
 int swad__getAttendanceEvents (char *wsKey,int courseCode,
