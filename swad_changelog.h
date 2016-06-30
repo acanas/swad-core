@@ -125,22 +125,23 @@
 // TODO: FIX BUG: Searching messages received gives unordered list
 
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
+// TODO: Check if white lines are correct when composing a message and clicking in "Show more recipients"
 
-// TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
 // TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.236 (2016-06-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.237 (2016-07-01)"
 #define CSS_FILE		"swad15.229.css"
-#define JS_FILE			"swad15.236.js"
+#define JS_FILE			"swad15.237.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.236:   Jun 30, 2015	The form "Show more recipients" now have a hidden field with the subject. (204343 lines)
+        Version 15.237:   Jul 01, 2015	The form "Show more recipients" now have a hidden field with the content. (203243 lines)
+        Version 15.236:   Jun 30, 2015	The form "Show more recipients" now have a hidden field with the subject. (? lines)
         Version 15.235.1: Jun 30, 2015	Minor change in icon to download files. (203206 lines)
 Copy icons icon/download64x64.png
 

@@ -922,8 +922,6 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
    unsigned NumTimes = Par_GetParameter (Par_PARAM_SINGLE,ParamName,
                                          ParamValue,MaxBytes,NULL);
 
-   // Lay_ShowAlert (Lay_ERROR,ParamValue); !!!!!!!!!!!!
-
    Str_ChangeFormat (Str_FROM_FORM,ChangeTo,
                      ParamValue,MaxBytes,RemoveLeadingAndTrailingSpaces);
    return NumTimes;

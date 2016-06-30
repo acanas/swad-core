@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /**************************** Internal prototypes ****************************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (const char *Content);
+static void Msg_PutFormMsgUsrs (char *Content);
 
 static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
@@ -100,7 +100,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void);
 static void Msg_PutParamsShowMorePotentialRecipients (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content);
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
 static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery);
@@ -129,7 +129,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image);
 
 static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod,const char *Subject,bool Open,bool Expanded);
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
+static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                                   bool ThisCrs,bool Replied,
                                   const struct UsrData *UsrDat);
 static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted);
@@ -272,7 +272,11 @@ void Msg_FormMsgUsrs (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   Content[0] = '\0';
+   /***** Get possible subject and body of the message *****/
+   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+                              Str_TO_TEXT,false);
+
    Msg_PutFormMsgUsrs (Content);
   }
 
@@ -280,7 +284,7 @@ void Msg_FormMsgUsrs (void)
 /***************** Put a form to write a new message to users ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (const char *Content)
+static void Msg_PutFormMsgUsrs (char *Content)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
@@ -476,8 +480,13 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
 
+   /***** Hidden params to send subject and content.
+          When the user edit the subject or the content,
+          they are copied here. *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"ShowMoreRecipientsSubject\""
-	              " name=\"Subject\" value=\"\" />");
+	              " name=\"Subject\" value=\"\" />"
+                      "<input type=\"hidden\" id=\"ShowMoreRecipientsContent\""
+	              " name=\"Content\" value=\"\" />");
   }
 
 /*****************************************************************************/
@@ -567,7 +576,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 /****** Write form fields with subject and content of a message to users *****/
 /*****************************************************************************/
 
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
@@ -578,13 +587,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
    MYSQL_ROW row;
    unsigned long NumRows;
    long MsgCod;
-   char OriginalTxt[Cns_MAX_BYTES_LONG_TEXT+1];
+   bool SubjectAndContentComeFromForm = (Gbl.Msg.Subject[0] || Content[0]);
 
    /***** Get possible code (of original message if it's a reply) *****/
    MsgCod = Msg_GetParamMsgCod ();
-
-   /***** Get possible subject *****/
-   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
 
    /***** Subject of new message *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -601,43 +607,54 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
    /***** If message is a reply ==> get original message *****/
    if (MsgCod > 0)	// It's a reply
      {
-      /***** Get subject and content of message from database *****/
-      sprintf (Query,"SELECT Subject,Content FROM msg_content"
-                     " WHERE MsgCod='%ld'",MsgCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get message content");
+      if (!SubjectAndContentComeFromForm)
+	{
+	 /***** Get subject and content of message from database *****/
+	 sprintf (Query,"SELECT Subject,Content FROM msg_content"
+			" WHERE MsgCod='%ld'",MsgCod);
+	 NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get message content");
 
-      /***** Result should have a unique row *****/
-      if (NumRows != 1)
-         Lay_ShowErrorAndExit ("Error when getting message.");
+	 /***** Result should have a unique row *****/
+	 if (NumRows != 1)
+	    Lay_ShowErrorAndExit ("Error when getting message.");
 
-      row = mysql_fetch_row (mysql_res);
+	 row = mysql_fetch_row (mysql_res);
 
-      /***** Subject of new message *****/
-      if (Gbl.Msg.Subject[0])	// Subject comes from form
-	 fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
-      else			// Subject comes from database
-	 fprintf (Gbl.F.Out,"Re: %s",row[0]);
-      fprintf (Gbl.F.Out,"</textarea>"
+	 /* Get subject */
+	 strncpy (Gbl.Msg.Subject,row[0],Cns_MAX_BYTES_SUBJECT);
+	 Gbl.Msg.Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
+
+	 /* Get content */
+	 strncpy (Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
+	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+
+      /***** Write subject *****/
+      if (!SubjectAndContentComeFromForm)
+	 fprintf (Gbl.F.Out,"Re: ");
+      fprintf (Gbl.F.Out,"%s"
+                         "</textarea>"
 	                 "</td>"
-	                 "</tr>");
+	                 "</tr>",
+	       Gbl.Msg.Subject);
 
-      /***** Content of new message *****/
+      /***** Write content *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
 	                 "%s: "
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<textarea name=\"Content\" cols=\"72\" rows=\"20\">",
+                         "<textarea id=\"MsgContent\" name=\"Content\""
+                         " cols=\"72\" rows=\"20\""
+                         " onblur=\"CopyContentToShowMoreRecipients();\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
-
-      fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
-               Txt_Original_message);
-      strncpy (OriginalTxt,row[1],Cns_MAX_BYTES_LONG_TEXT);
-      OriginalTxt[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-      Msg_WriteMsgContent (OriginalTxt,Cns_MAX_BYTES_LONG_TEXT,false,true);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+      if (!SubjectAndContentComeFromForm)
+	 fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
+		  Txt_Original_message);
+      Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
      }
    else	// It's not a reply
      {
@@ -653,7 +670,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	                 "%s: "
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<textarea name=\"Content\" cols=\"72\" rows=\"20\">%s",
+                         "<textarea id=\"MsgContent\" name=\"Content\""
+                         " cols=\"72\" rows=\"20\""
+                         " onblur=\"CopyContentToShowMoreRecipients();\">"
+                         "%s",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message,
                Content);
@@ -2926,9 +2946,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
       if (TypeOfMessages == Msg_MESSAGES_RECEIVED &&
 	  Gbl.Usrs.Me.LoggedRole >= Rol_VISITOR)
 	 // Guests (users without courses) can read messages but not reply them
-         Msg_WriteFormToReply (MsgCod,CrsCod,Subject,
-                               FromThisCrs,Replied,
-                               &UsrDat);
+         Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>"
@@ -2977,10 +2995,7 @@ static void Msg_ShowASentOrReceivedMessage (Msg_TypeOfMessages_t TypeOfMessages,
       /***** Show content and image *****/
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_TXT LEFT_TOP\">");
       if (Content[0])
-        {
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-         // fprintf (Gbl.F.Out,"<br />&nbsp;");
-        }
       Img_ShowImage (&Image,"MSG_IMG_CONTAINER","MSG_IMG");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -3213,7 +3228,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
 /************************* Write form to reply a message *********************/
 /*****************************************************************************/
 
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
+static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                                   bool FromThisCrs,bool Replied,
                                   const struct UsrData *UsrDat)
   {
@@ -3236,9 +3251,6 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,const char *Subject,
    Msg_PutHiddenParamMsgCod (MsgCod);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Subject\""
-	              " value=\"Re: %s\" />",
-            Subject);
 
    /****** Link and form end *****/
    Act_LinkFormSubmit (FromThisCrs ? (Replied ? Txt_Reply_again :
@@ -3537,7 +3549,7 @@ static void Msg_PutFormToDeleteMessage (long MsgCod,Msg_TypeOfMessages_t TypeOfM
   }
 
 /*****************************************************************************/
-/******************** Write the texto (content) of a message *****************/
+/********************* Write the text (content) of a message *****************/
 /*****************************************************************************/
 
 void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks,bool ChangeBRToRet)

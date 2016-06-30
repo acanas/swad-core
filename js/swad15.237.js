@@ -1248,3 +1248,19 @@ function GetNumDaysFebruary (Year) {
 function GetIfLeapYear (Year) {
 	return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
 }
+
+/*****************************************************************************/
+/*********** Copy message subject to form "Show more recipients" *************/
+/*****************************************************************************/
+
+function CopySubjectToShowMoreRecipients () {
+	document.getElementById ('ShowMoreRecipientsSubject').value = document.getElementById ('MsgSubject').value;
+}
+
+/*****************************************************************************/
+/*********** Copy message content to form "Show more recipients" *************/
+/*****************************************************************************/
+
+function CopyContentToShowMoreRecipients () {
+	document.getElementById ('ShowMoreRecipientsContent').value = document.getElementById ('MsgContent').value;
+}
