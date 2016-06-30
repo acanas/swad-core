@@ -297,7 +297,8 @@ static void Msg_PutFormMsgUsrs (const char *Content)
    Par_GetParToText ("IsReply",YN,1);
    if ((Gbl.Msg.Reply.IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
       /* Get original message code */
-      Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ();
+      if ((Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
+         Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Get user's code of possible preselected recipient *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
@@ -474,6 +475,9 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
+
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"ShowMoreRecipientsSubject\""
+	              " name=\"Subject\" value=\"\" />");
   }
 
 /*****************************************************************************/
@@ -573,9 +577,14 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   char LongStr[1+10+1];
-   long MsgCod = -1;
+   long MsgCod;
    char OriginalTxt[Cns_MAX_BYTES_LONG_TEXT+1];
+
+   /***** Get possible code (of original message if it's a reply) *****/
+   MsgCod = Msg_GetParamMsgCod ();
+
+   /***** Get possible subject *****/
+   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
 
    /***** Subject of new message *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -583,14 +592,14 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
 	              "%s: "
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
+                      "<textarea id=\"MsgSubject\" name=\"Subject\""
+                      " cols=\"72\" rows=\"2\""
+                      " onblur=\"CopySubjectToShowMoreRecipients();\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
    /***** If message is a reply ==> get original message *****/
-   /* Get code of original message */
-   Par_GetParToText ("MsgCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&MsgCod) == 1)	// It's a reply
+   if (MsgCod > 0)	// It's a reply
      {
       /***** Get subject and content of message from database *****/
       sprintf (Query,"SELECT Subject,Content FROM msg_content"
@@ -601,12 +610,16 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (const char *Content)
       if (NumRows != 1)
          Lay_ShowErrorAndExit ("Error when getting message.");
 
-      /***** Subject of new message *****/
       row = mysql_fetch_row (mysql_res);
-      fprintf (Gbl.F.Out,"Re: %s</textarea>"
+
+      /***** Subject of new message *****/
+      if (Gbl.Msg.Subject[0])	// Subject comes from form
+	 fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
+      else			// Subject comes from database
+	 fprintf (Gbl.F.Out,"Re: %s",row[0]);
+      fprintf (Gbl.F.Out,"</textarea>"
 	                 "</td>"
-	                 "</tr>",
-	       row[0]);
+	                 "</tr>");
 
       /***** Content of new message *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -710,10 +723,10 @@ void Msg_RecMsgFromUsr (void)
    bool Error = false;
 
    /***** Get data from form *****/
-   /* Get the subject of the message */
+   /* Get subject */
    Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
 
-   /* Get the body of the message */
+   /* Get body */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_DONT_CHANGE,false);
 
@@ -721,7 +734,8 @@ void Msg_RecMsgFromUsr (void)
    Par_GetParToText ("IsReply",YN,1);
    if ((IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
       /* Get original message code */
-      OriginalMsgCod = Msg_GetParamMsgCod ();
+      if ((OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
+         Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /* Get user's code of possible preselected recipient */
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1137,7 +1151,8 @@ void Msg_DelSntMsg (void)
    long MsgCod;
 
    /***** Get the code of the message to delete *****/
-   MsgCod = Msg_GetParamMsgCod ();
+   if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Delete the message *****/
    /* Delete the sent message */
@@ -1158,7 +1173,8 @@ void Msg_DelRecMsg (void)
    long MsgCod;
 
    /***** Get the code of the message to delete *****/
-   MsgCod = Msg_GetParamMsgCod ();
+   if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Delete the message *****/
    /* Delete the received message */
@@ -1176,7 +1192,8 @@ void Msg_DelRecMsg (void)
 void Msg_ExpSntMsg (void)
   {
    /***** Get the code of the message to expand *****/
-   Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ();
+   if ((Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Expand the message *****/
    Msg_ExpandSentMsg (Gbl.Msg.ExpandedMsgCod);
@@ -1192,7 +1209,8 @@ void Msg_ExpSntMsg (void)
 void Msg_ExpRecMsg (void)
   {
    /***** Get the code of the message to expand *****/
-   Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ();
+   if ((Gbl.Msg.ExpandedMsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Expand the message *****/
    Msg_ExpandReceivedMsg (Gbl.Msg.ExpandedMsgCod);
@@ -1215,7 +1233,8 @@ void Msg_ConSntMsg (void)
    long MsgCod;
 
    /***** Get the code of the message to contract *****/
-   MsgCod = Msg_GetParamMsgCod ();
+   if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Contract the message *****/
    Msg_ContractSentMsg (MsgCod);
@@ -1233,7 +1252,8 @@ void Msg_ConRecMsg (void)
    long MsgCod;
 
    /***** Get the code of the message to contract *****/
-   MsgCod = Msg_GetParamMsgCod ();
+   if ((MsgCod = Msg_GetParamMsgCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Contract the message *****/
    Msg_ContractReceivedMsg (MsgCod);
@@ -3548,15 +3568,11 @@ void Msg_PutHiddenParamMsgCod (long MsgCod)
 
 static long Msg_GetParamMsgCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the message code
-   long MsgCod;
+   char LongStr[1+10+1];
 
-   /* Get message code */
+   /***** Get parameter with code of message *****/
    Par_GetParToText ("MsgCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&MsgCod) != 1)
-      Lay_ShowErrorAndExit ("Wrong code of message.");
-
-   return MsgCod;
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/

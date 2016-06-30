@@ -133,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.235.1 (2016-06-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.236 (2016-06-30)"
 #define CSS_FILE		"swad15.229.css"
-#define JS_FILE			"swad15.226.js"
+#define JS_FILE			"swad15.236.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.236:   Jun 30, 2015	The form "Show more recipients" now have a hidden field with the subject. (204343 lines)
         Version 15.235.1: Jun 30, 2015	Minor change in icon to download files. (203206 lines)
 Copy icons icon/download64x64.png
 
