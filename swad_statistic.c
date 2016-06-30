@@ -5355,15 +5355,22 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
    char StrNumFilesPerCrs[10+1];
    char StrNumFilesPerUsr[10+1];
    struct Sta_SizeOfFileZones SizeOfFileZones;
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
    char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
 	                                     "DAT";
 
    Sta_GetSizeOfFileZoneFromDB (Gbl.Scope.Current,FileZone,&SizeOfFileZones);
+
+   Fil_WriteFileSizeFull ((double) SizeOfFileZones.Size,FileSizeStr);
+
    if (SizeOfFileZones.NumCrss == -1)
      {
       strcpy (StrNumCrss         ,"-");
       strcpy (StrNumFoldersPerCrs,"-");
       strcpy (StrNumFilesPerCrs  ,"-");
+      strcpy (FileSizePerCrsStr  ,"-");
      }
    else
      {
@@ -5376,6 +5383,10 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
                SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.NumFiles /
         	                         (double) SizeOfFileZones.NumCrss :
         	                         0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.Size /
+	                                               (double) SizeOfFileZones.NumCrss :
+	                                               0.0,
+	                     FileSizePerCrsStr);
      }
 
    if (SizeOfFileZones.NumGrps == -1)
@@ -5388,6 +5399,7 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
       strcpy (StrNumUsrs         ,"-");
       strcpy (StrNumFoldersPerUsr,"-");
       strcpy (StrNumFilesPerUsr  ,"-");
+      strcpy (FileSizePerUsrStr  ,"-");
      }
    else
      {
@@ -5400,7 +5412,12 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
                SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.NumFiles /
         	                         (double) SizeOfFileZones.NumUsrs :
         	                         0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.Size /
+	                                               (double) SizeOfFileZones.NumUsrs :
+	                                               0.0,
+	                     FileSizePerUsrStr);
      }
+
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s LEFT_MIDDLE\">"
                       "%s"
@@ -5423,7 +5440,28 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%lu"
                       "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">",
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s"
+                      "</td>"
+	              "</tr>",
             Class,NameOfFileZones,
             Class,StrNumCrss,
             Class,StrNumGrps,
@@ -5431,44 +5469,13 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
             Class,SizeOfFileZones.MaxLevels,
             Class,SizeOfFileZones.NumFolders,
             Class,SizeOfFileZones.NumFiles,
-            Class);
-   Str_WriteSizeInBytesFull ((double) SizeOfFileZones.Size);
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">",
+            Class,FileSizeStr,
             Class,StrNumFoldersPerCrs,
             Class,StrNumFilesPerCrs,
-            Class);
-   if (SizeOfFileZones.NumCrss == -1)
-      fprintf (Gbl.F.Out,"-");
-   else
-      Str_WriteSizeInBytesFull (SizeOfFileZones.NumCrss ? (double) SizeOfFileZones.Size /
-	                                                  (double) SizeOfFileZones.NumCrss :
-	                                                  0.0);
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"%s RIGHT_MIDDLE\">",
+            Class,FileSizePerCrsStr,
             Class,StrNumFoldersPerUsr,
             Class,StrNumFilesPerUsr,
-            Class);
-   if (SizeOfFileZones.NumUsrs == -1)
-      fprintf (Gbl.F.Out,"-");
-   else
-      Str_WriteSizeInBytesFull (SizeOfFileZones.NumUsrs ? (double) SizeOfFileZones.Size /
-	                                                  (double) SizeOfFileZones.NumUsrs :
-	                                                  0.0);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+            Class,FileSizePerUsrStr);
   }
 
 /*****************************************************************************/

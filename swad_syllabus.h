@@ -98,8 +98,5 @@ void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteAllItemsFileSyllabus (FILE *FileSyllabus);
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text);
 void Syl_WriteEndFileSyllabus (FILE *FileSyllabus);
-void Fil_CloseXMLFile (void);
-void XML_WriteStartFile (FILE *FileTgt,const char *Type,bool Credits);
-void XML_WriteEndFile (FILE *FileTgt,const char *Type);
 
 #endif

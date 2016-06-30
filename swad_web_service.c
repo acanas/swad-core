@@ -112,6 +112,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_search.h"
 #include "swad_user.h"
 #include "swad_web_service.h"
+#include "swad_xml.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

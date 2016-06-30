@@ -124,7 +124,6 @@
 // TODO: Optimize slow query searching messages received
 // TODO: FIX BUG: Searching messages received gives unordered list
 
-// TODO: Add file size to summary in notifications of new files.
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
 
 // TODO: Modify WS function getUsers changing: userRole to indicate all users, and a new parameter filter (search string (name, @nickname, mail)) to restring number of users
@@ -134,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.234 (2016-06-29)"
+#define Log_PLATFORM_VERSION	"SWAD 15.235 (2016-06-29)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.226.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.235:   Jun 29, 2015	Some file metadata are written in content of notifications. (203204 lines)
         Version 15.234:   Jun 29, 2015	New web service functions getUsers and findUsers. (203169 lines)
         Version 15.233.4: Jun 27, 2015	Changes in links in list of notifications. (203065 lines)
         Version 15.233.3: Jun 27, 2015	Fixed bug in list of admins. (203074 lines)

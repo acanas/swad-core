@@ -2760,53 +2760,6 @@ void Str_ConvertToValidFileName (char *Str)
   }
 
 /*****************************************************************************/
-/********** Write a quantity of bytes as bytes, KiB, MiB, GiB or TiB *********/
-/*****************************************************************************/
-
-#define Ki 1024.0
-#define Mi 1048576.0
-#define Gi 1073741824.0
-#define Ti 1099511627776.0
-
-void Str_WriteSizeInBytesBrief (double SizeInBytes)
-  {
-   if (SizeInBytes < Ki)
-      fprintf (Gbl.F.Out,"%.0f&nbsp;B",
-               SizeInBytes);
-   else if (SizeInBytes < Mi)
-      fprintf (Gbl.F.Out,"%.0f&nbsp;KiB",
-               SizeInBytes / Ki);
-   else if (SizeInBytes < Gi)
-      fprintf (Gbl.F.Out,"%.0f&nbsp;MiB",
-               SizeInBytes / Mi);
-   else if (SizeInBytes < Ti)
-      fprintf (Gbl.F.Out,"%.0f&nbsp;GiB",
-               SizeInBytes / Gi);
-   else
-      fprintf (Gbl.F.Out,"%.0f&nbsp;TiB",
-               SizeInBytes / Ti);
-  }
-
-void Str_WriteSizeInBytesFull (double SizeInBytes)
-  {
-   if (SizeInBytes < Ki)
-      fprintf (Gbl.F.Out,"%.0f&nbsp;B",
-               SizeInBytes);
-   else if (SizeInBytes < Mi)
-      fprintf (Gbl.F.Out,"%.1f&nbsp;KiB",
-               SizeInBytes / Ki);
-   else if (SizeInBytes < Gi)
-      fprintf (Gbl.F.Out,"%.1f&nbsp;MiB",
-               SizeInBytes / Mi);
-   else if (SizeInBytes < Ti)
-      fprintf (Gbl.F.Out,"%.1f&nbsp;GiB",
-               SizeInBytes / Gi);
-   else
-      fprintf (Gbl.F.Out,"%.1f&nbsp;TiB",
-               SizeInBytes / Ti);
-  }
-
-/*****************************************************************************/
 /******************* Create a random alphanumeric string *********************/
 /*****************************************************************************/
 

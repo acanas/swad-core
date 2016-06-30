@@ -523,3 +523,43 @@ void Fil_CloseXMLFile (void)
       Gbl.F.XML = NULL;	// To indicate that it is not open
      }
   }
+
+/*****************************************************************************/
+/********** Write a quantity of bytes as bytes, KiB, MiB, GiB or TiB *********/
+/*****************************************************************************/
+
+#define Ki 1024.0
+#define Mi 1048576.0
+#define Gi 1073741824.0
+#define Ti 1099511627776.0
+
+void Fil_WriteFileSizeBrief (double SizeInBytes,
+                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING])
+  {
+   if (SizeInBytes < Ki)
+      sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);
+   else if (SizeInBytes < Mi)
+      sprintf (FileSizeStr,"%.0f&nbsp;KiB",SizeInBytes / Ki);
+   else if (SizeInBytes < Gi)
+      sprintf (FileSizeStr,"%.0f&nbsp;MiB",SizeInBytes / Mi);
+   else if (SizeInBytes < Ti)
+      sprintf (FileSizeStr,"%.0f&nbsp;GiB",SizeInBytes / Gi);
+   else
+      sprintf (FileSizeStr,"%.0f&nbsp;TiB",SizeInBytes / Ti);
+  }
+
+void Fil_WriteFileSizeFull (double SizeInBytes,
+                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING])
+  {
+   if (SizeInBytes < Ki)
+      sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);
+   else if (SizeInBytes < Mi)
+      sprintf (FileSizeStr,"%.1f&nbsp;KiB",SizeInBytes / Ki);
+   else if (SizeInBytes < Gi)
+      sprintf (FileSizeStr,"%.1f&nbsp;MiB",SizeInBytes / Mi);
+   else if (SizeInBytes < Ti)
+      sprintf (FileSizeStr,"%.1f&nbsp;GiB",SizeInBytes / Gi);
+   else
+      sprintf (FileSizeStr,"%.1f&nbsp;TiB",SizeInBytes / Ti);
+  }
+

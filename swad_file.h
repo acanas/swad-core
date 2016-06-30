@@ -52,6 +52,8 @@ struct Files
    FILE *XML;		// XML file for syllabus, for directory tree
   };
 
+#define Fil_MAX_BYTES_FILE_SIZE_STRING 32
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -72,5 +74,10 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
 void Fil_CloseXMLFile (void);
+
+void Fil_WriteFileSizeBrief (double SizeInBytes,
+                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING]);
+void Fil_WriteFileSizeFull (double SizeInBytes,
+                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING]);
 
 #endif

@@ -115,8 +115,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
                                   unsigned long long MaxLength);
 bool Str_ConvertFilFolLnkNameToValid (char *FileName);
 void Str_ConvertToValidFileName (char *Str);
-void Str_WriteSizeInBytesBrief (double SizeInBytes);
-void Str_WriteSizeInBytesFull (double SizeInBytes);
+
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length);
 void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength);
 

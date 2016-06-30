@@ -3983,9 +3983,11 @@ static void Brw_ShowSizeOfFileTree (void)
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_of_PART_OF_A_TOTAL;
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
+   Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
    fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
-                      "%u %s; %lu %s; %lu %s; ",
+                      "%u %s; %lu %s; %lu %s; %s",
             Gbl.FileBrowser.Size.NumLevls,
             Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
         	                                 Txt_levels ,
@@ -3994,15 +3996,16 @@ static void Brw_ShowSizeOfFileTree (void)
         	                                 Txt_folders,
             Gbl.FileBrowser.Size.NumFiles,
             Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
-        	                                 Txt_files);
-   Str_WriteSizeInBytesFull ((double) Gbl.FileBrowser.Size.TotalSiz);
+        	                                 Txt_files,
+            FileSizeStr);
    if (Gbl.FileBrowser.Size.MaxQuota)
      {
-      fprintf (Gbl.F.Out," (%.1f%% %s ",
-	       100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz / (double) Gbl.FileBrowser.Size.MaxQuota),
-	       Txt_of_PART_OF_A_TOTAL);
-      Str_WriteSizeInBytesBrief ((double) Gbl.FileBrowser.Size.MaxQuota);
-      fprintf (Gbl.F.Out,")");
+      Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
+      fprintf (Gbl.F.Out," (%.1f%% %s %s)",
+	       100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
+		        (double) Gbl.FileBrowser.Size.MaxQuota),
+	       Txt_of_PART_OF_A_TOTAL,
+	       FileSizeStr);
      }
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -6150,14 +6153,18 @@ static void Brw_WriteFileSizeAndDate (Brw_FileType_t FileType,struct FileMetadat
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
    /***** Write the file size *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-	              "&nbsp;",
-            Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    if (FileType == Brw_IS_FILE)
-      Str_WriteSizeInBytesBrief ((double) FileMetadata->Size);
-   fprintf (Gbl.F.Out,"</td>");
+      Fil_WriteFileSizeBrief ((double) FileMetadata->Size,FileSizeStr);
+   else
+      FileSizeStr[0] = '\0';
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+	              "&nbsp;%s"
+	              "</td>",
+            Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd,
+            FileSizeStr);
 
    /***** Write the date *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
@@ -9193,6 +9200,7 @@ void Brw_ShowFileMetadata (void)
    struct UsrData PublisherUsrDat;
    char FileNameToShow[NAME_MAX+1];
    char URL[PATH_MAX+1];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
    bool Found;
    bool ICanView = false;
    bool ICanEdit;
@@ -9378,31 +9386,33 @@ void Brw_ShowFileMetadata (void)
 	    Usr_UsrDataDestructor (&PublisherUsrDat);
 
 	 /***** Write the file size *****/
+	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
-	 Str_WriteSizeInBytesFull ((double) FileMetadata.Size);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+	                    "%s"
+	                    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_File_size,
+		  FileSizeStr);
 
 	 /***** Write the date *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td id=\"filedate\" class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Date_of_creation);
-
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			    "<td id=\"filedate\" class=\"DAT LEFT_MIDDLE\">"
+	                    "<script type=\"text/javascript\">"
 		            "writeLocalDateHMSFromUTC('filedate',%ld,'&nbsp;','%s');"
-		            "</script>",
+		            "</script>"
+	                    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_Date_of_creation,
 	          (long) FileMetadata.Time,Txt_Today);
-
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
 
 	 /***** Private or public? *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -10425,7 +10435,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
-/*************************** Get file size and date **************************/
+/********************** Get file type, size and date *************************/
 /*****************************************************************************/
 // Return true if file exists
 
@@ -11356,49 +11366,75 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
+#define Brw_MAX_BYTES_FILE_CONTENT_STR (100+NAME_MAX + 100+(Usr_MAX_BYTES_NAME+1)*3 + 100+Fil_MAX_BYTES_FILE_SIZE_STRING)
+
 void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
                                      long FilCod,unsigned MaxChars,bool GetContent)
   {
-   char Query[256];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   char FullPathInTreeFromDB[PATH_MAX+1];
-   char PathUntilFileName[PATH_MAX+1];
-   char FileName[NAME_MAX+1];
+   extern const char *Txt_Filename;
+   extern const char *Txt_Uploaded_by;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_File_size;
+   struct FileMetadata FileMetadata;
+   bool Found;
+   bool FileHasPublisher;
+   struct UsrData PublisherUsrDat;
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
+   /***** Return nothing on error *****/
    SummaryStr[0] = '\0';	// Return nothing on error
+   *ContentStr = NULL;
 
-   /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Path FROM files WHERE FilCod='%ld'",
-            FilCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get data of this file *****/
-            row = mysql_fetch_row (mysql_res);
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_GetFileMetadataByCod (&FileMetadata);
 
-            /* Path (row[0]) */
-            strncpy (FullPathInTreeFromDB,row[0],PATH_MAX);
-            FullPathInTreeFromDB[PATH_MAX] = '\0';
-            Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDB,
-        	                                  PathUntilFileName,
-        	                                  FileName);
-            strcpy (SummaryStr,FileName);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+   /***** Get file type, size and date *****/
+   Gbl.FileBrowser.Type = FileMetadata.FileBrowser;
+   Brw_SetPathFileBrowser ();
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
-            if (GetContent)
-              {	// TODO: Put file metadata into content string
-	       if ((*ContentStr = (char *) malloc (strlen (FullPathInTreeFromDB)+1)))
-		  strcpy (*ContentStr,FullPathInTreeFromDB);
-              }
-           }
+   /***** Copy file name into summary string *****/
+   strcpy (SummaryStr,FileMetadata.FilFolLnkName);
+   if (MaxChars)
+      Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
-         mysql_free_result (mysql_res);
-        }
+   /***** Copy some file metadata into content string *****/
+   if (GetContent)
+     {
+      if ((*ContentStr = (char *) malloc (Brw_MAX_BYTES_FILE_CONTENT_STR)))
+	{
+	 /* Get publisher */
+	 if (FileMetadata.PublisherUsrCod > 0)
+	   {
+	    /* Initialize structure with publisher's data */
+	    Usr_UsrDataConstructor (&PublisherUsrDat);
+	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
+	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat);
+	   }
+	 else
+	    /* Unknown publisher */
+	    FileHasPublisher = false;
+
+	 /* File size */
+	 if (Found)
+	    Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
+
+	 /* Fill content string */
+	 sprintf (*ContentStr,"%s: %s<br />"	// File name
+	                      "%s: %s<br />"	// Publisher
+	                      "%s: %s",		// File size
+	          Txt_Filename,FileMetadata.FilFolLnkName,
+	          Txt_Uploaded_by,FileHasPublisher ? PublisherUsrDat.FullName :
+	                                             Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN],
+	          Txt_File_size,Found ? FileSizeStr :
+	        	                "Not found");
+
+	 /* Free memory used for publisher's data */
+	 if (FileMetadata.PublisherUsrCod > 0)
+	    Usr_UsrDataDestructor (&PublisherUsrDat);
+	}
+     }
   }
 
 /*****************************************************************************/

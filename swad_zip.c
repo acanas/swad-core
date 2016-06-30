@@ -575,6 +575,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    extern const char *Txt_File_size;
    extern const char *Txt_FILE_uncompressed;
    char FileNameShort[NAME_MAX+1];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
    /***** Limit length of the name of the file *****/
    strncpy (FileNameShort,FileName,NAME_MAX);
@@ -620,18 +621,21 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    URL,FileName,FileName);
 
    /***** Write the file size *****/
+   Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_File_size);
-   Str_WriteSizeInBytesFull ((double) FileSize);
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_File_size,
+	    FileSizeStr);
    if (UncompressedSize)
      {
-      fprintf (Gbl.F.Out," (");
-      Str_WriteSizeInBytesFull ((double) UncompressedSize);
-      fprintf (Gbl.F.Out," %s)",Txt_FILE_uncompressed);
+      Fil_WriteFileSizeFull ((double) UncompressedSize,FileSizeStr);
+      fprintf (Gbl.F.Out," (%s %s)",
+               FileSizeStr,Txt_FILE_uncompressed);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
