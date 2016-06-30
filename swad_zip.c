@@ -119,7 +119,7 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
-                          "download64x64.gif",
+                          "download64x64.png",
                           Txt_Create_ZIP_file,Txt_Create_ZIP_file);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -341,7 +341,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.gif\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON20x20B\" />"
 		      "</a>",
@@ -593,7 +593,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON40x40\" />"
                       "&nbsp;%s&nbsp;"
-		      "<img src=\"%s/down32x32.gif\""
+		      "<img src=\"%s/download64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICON40x40\" />"
 		      "</a>"

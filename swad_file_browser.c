@@ -9874,12 +9874,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 		                                         FileNameToShow);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/%s/download64x64.gif\""
+			 "<img src=\"%s/download64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON40x40\">"
 			 "</a>",
 	       FileNameToShow,
-	       Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+	       Gbl.Prefs.IconsURL,
 	       Txt_Download,Txt_Download);
      }
   }

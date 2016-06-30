@@ -507,7 +507,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of file views *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/download64x64.gif');\" />",
+	                 " style=\"background-image:url('%s/download64x64.png');\" />",
 	       Txt_Downloads,
 	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumFileViews >= 0)
