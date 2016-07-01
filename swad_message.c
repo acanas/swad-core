@@ -477,7 +477,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
                       " cols=\"72\" rows=\"2\""
-                      " onblur=\"CopySubjectToShowMoreRecipients();\">",
+                      " onblur=\"CopyMessageToShowMoreRecipients();\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
@@ -526,7 +526,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyContentToShowMoreRecipients();\">",
+                         " onblur=\"CopyMessageToShowMoreRecipients();\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -557,7 +557,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyContentToShowMoreRecipients();\">",
+                         " onblur=\"CopyMessageToShowMoreRecipients();\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message);
 

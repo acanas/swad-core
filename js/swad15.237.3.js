@@ -1250,17 +1250,10 @@ function GetIfLeapYear (Year) {
 }
 
 /*****************************************************************************/
-/*********** Copy message subject to form "Show more recipients" *************/
+/****** Copy message subject and content to form "Show more recipients" ******/
 /*****************************************************************************/
 
-function CopySubjectToShowMoreRecipients () {
+function CopyMessageToShowMoreRecipients () {
 	document.getElementById ('ShowMoreRecipientsSubject').value = document.getElementById ('MsgSubject').value;
-}
-
-/*****************************************************************************/
-/*********** Copy message content to form "Show more recipients" *************/
-/*****************************************************************************/
-
-function CopyContentToShowMoreRecipients () {
 	document.getElementById ('ShowMoreRecipientsContent').value = document.getElementById ('MsgContent').value;
 }
