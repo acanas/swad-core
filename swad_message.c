@@ -149,9 +149,9 @@ void Msg_FormMsgUsrs (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
 
-   /***** Get possible subject and body of the message *****/
-   Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
-   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+   /***** Get possible hidden subject and content of the message *****/
+   Par_GetParToHTML ("HiddenSubject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_TEXT,false);
 
    Msg_PutFormMsgUsrs (Content);
@@ -357,13 +357,21 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
 
+   /***** Hidden params to send subject and content *****/
+   Msg_PutHiddenParamsSubjectAndContent ();
+  }
+
+/*****************************************************************************/
+/********** Put hidden parameters with message subject and content ***********/
+/*****************************************************************************/
+
+void Msg_PutHiddenParamsSubjectAndContent (void)
+  {
    /***** Hidden params to send subject and content.
           When the user edit the subject or the content,
           they are copied here. *****/
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"ShowMoreRecipientsSubject\""
-	              " name=\"Subject\" value=\"\" />"
-                      "<input type=\"hidden\" id=\"ShowMoreRecipientsContent\""
-	              " name=\"Content\" value=\"\" />");
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenSubject\" value=\"\" />"
+                      "<input type=\"hidden\" name=\"HiddenContent\" value=\"\" />");
   }
 
 /*****************************************************************************/
@@ -477,7 +485,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
                       " cols=\"72\" rows=\"2\""
-                      " onblur=\"CopyMessageToShowMoreRecipients();\">",
+                      " onblur=\"CopyMessageToHiddenFields();\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
@@ -526,7 +534,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyMessageToShowMoreRecipients();\">",
+                         " onblur=\"CopyMessageToHiddenFields();\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -557,7 +565,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyMessageToShowMoreRecipients();\">",
+                         " onblur=\"CopyMessageToHiddenFields();\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message);
 

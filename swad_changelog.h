@@ -125,7 +125,6 @@
 // TODO: FIX BUG: Searching messages received gives unordered list
 
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
-// TODO: Fill hidden subject and content of message in selectors of class photo / list
 // TODO: Add path to information about file in notifications
 
 // TODO: Add new WS functions to count the number of users to return in call to functions getUsers/findUsers?
@@ -134,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.237.3 (2016-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.238 (2016-07-01)"
 #define CSS_FILE		"swad15.229.css"
-#define JS_FILE			"swad15.237.3.js"
+#define JS_FILE			"swad15.238.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.238:   Jul 01, 2015	Hidden fields in in selectors of class photo / list with message subject and content. (203274 lines)
         Version 15.237.3: Jul 01, 2015	Fixed bug in messages. (203257 lines)
         Version 15.237.2: Jul 01, 2015	Fixed minor problem in textarea for message content. (203261 lines)
         Version 15.237.1: Jul 01, 2015	Code refactoring in function to send e-mail to students. (203254 lines)
