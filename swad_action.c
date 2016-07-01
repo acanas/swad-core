@@ -4699,12 +4699,20 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
+   /*
    fprintf (Gbl.F.Out," onclick=\""
 		      "document.getElementById('update_%d').style.display='none';"	// Icon to be hidden on click
 		      "document.getElementById('updating_%d').style.display='';"	// Icon to be shown on click
 		      "document.getElementById('%s').submit();"
 		      "return false;\">",
 	    Gbl.Form.Num,
+	    Gbl.Form.Num,
+	    Gbl.Form.Id);
+   */
+   fprintf (Gbl.F.Out," onclick=\""
+		      "AnimateIcon(%d);"
+		      "document.getElementById('%s').submit();"
+		      "return false;\">",
 	    Gbl.Form.Num,
 	    Gbl.Form.Id);
   }

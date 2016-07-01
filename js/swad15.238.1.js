@@ -1254,17 +1254,28 @@ function GetIfLeapYear (Year) {
 /*****************************************************************************/
 
 function CopyMessageToHiddenFields () {
+	var Subject = document.getElementById('MsgSubject');
+	var Content = document.getElementById('MsgContent');
 	var Subjects = document.getElementsByName("HiddenSubject");
 	var Contents = document.getElementsByName("HiddenContent");
-	var Subject = document.getElementById('MsgSubject').value;
-	var Content = document.getElementById('MsgContent').value;
 	var i;
 
-	for (i = 0; i < Subjects.length; i++)
-	    if (Subjects[i].type == "hidden")
-	    	Subjects[i].value = Subject;
+	if (Subject)
+		for (i = 0; i < Subjects.length; i++)
+		    if (Subjects[i].type == "hidden")
+		    	Subjects[i].value = Subject.value;
 
-	for (i = 0; i < Contents.length; i++)
-	    if (Contents[i].type == "hidden")
-	    	Contents[i].value = Content;
+	if (Content)
+		for (i = 0; i < Contents.length; i++)
+		    if (Contents[i].type == "hidden")
+		    	Contents[i].value = Content.value;
+}
+
+/*****************************************************************************/
+/**************** Animate icon "recycle" when click on a link ****************/
+/*****************************************************************************/
+
+function AnimateIcon (NumForm) {
+	document.getElementById('update_'+NumForm).style.display='none';	// Icon to be hidden on click
+	document.getElementById('updating_'+NumForm).style.display='';		// Icon to be shown on click
 }
