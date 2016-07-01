@@ -42,8 +42,6 @@
 #include "swad_file.h"
 #include "swad_string.h"
 
-#include "swad_database.h"	// Only for debug purposes. Remove this line!
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/

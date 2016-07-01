@@ -33,8 +33,6 @@
 #include "swad_action.h"
 #include "swad_config.h"
 
-#include "swad_database.h"	// TODO: remove when debug ends
-
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_password.h"

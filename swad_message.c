@@ -528,9 +528,17 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          " cols=\"72\" rows=\"20\""
                          " onblur=\"CopyContentToShowMoreRecipients();\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
+
+      /* Start textarea with a '\n', that will be not visible in textarea.
+         When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
+         if we don't put the initial '\n' ==> the form will be sent starting
+         by "Lorem", without the white line */
+      fprintf (Gbl.F.Out,"\n");
+
       if (!SubjectAndContentComeFromForm)
-	 fprintf (Gbl.F.Out,"\n\n\n\n\n----- %s -----\n",
+	 fprintf (Gbl.F.Out,"\n\n----- %s -----\n",
 		  Txt_Original_message);
+
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
      }
    else	// It's not a reply
@@ -549,11 +557,15 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyContentToShowMoreRecipients();\">"
-                         "%s",
+                         " onblur=\"CopyContentToShowMoreRecipients();\">",
                The_ClassForm[Gbl.Prefs.Theme],
-               Txt_MSG_Message,
-               Content);
+               Txt_MSG_Message);
+
+      /* Start textarea with a '\n', that will be not visible in textarea.
+         When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
+         if we don't put the initial '\n' ==> the form will be sent starting
+         by "Lorem", without the white line */
+      fprintf (Gbl.F.Out,"\n%s",Content);
      }
    fprintf (Gbl.F.Out,"</textarea>"
 	              "</td>"
