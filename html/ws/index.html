@@ -190,7 +190,8 @@
 		<li><a href="#getTests"><code>getTests</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#getTrivialQuestion"><code>getTrivialQuestion</code></a></li>
 
-		<li style="margin-bottom:1em;"><a href="#getUsers"><code>getUsers</code></a></li>
+		<li><a href="#getUsers"><code>getUsers</code></a></li>
+		<li style="margin-bottom:1em;"><a href="#findUsers"><code>findUsers</code></a></li>
 
 		<li><a href="#getAttendanceEvents"><code>getAttendanceEvents</code></a></li>
 		<li><a href="#sendAttendanceEvent"><code>sendAttendanceEvent</code></a></li>
@@ -278,9 +279,9 @@
 						with one of the following 4 values:
 						<ul>
 							<li><var>0</var>: unknown, an error has occurred.</li>
-							<li><var>1</var>: invited, not enrolled in any course.</li>
+							<li><var>1</var>: guest, not enrolled in any course.</li>
 							<li><var>2</var>: student in all his/her courses.</li>
-							<li><var>3</var>: teacher in at aleast one of his/her courses.</li>
+							<li><var>3</var>: teacher in at least one of his/her courses.</li>
 						</ul>
 					</li>
 				</ul>
@@ -321,9 +322,9 @@
 						with one of the following 4 values:
 						<ul>
 							<li><var>0</var>: unknown, an error has occurred.</li>
-							<li><var>1</var>: invited, not enrolled in any course.</li>
+							<li><var>1</var>: guest, not enrolled in any course.</li>
 							<li><var>2</var>: student in all his/her courses.</li>
-							<li><var>3</var>: teacher in at aleast one of his/her courses.</li>
+							<li><var>3</var>: teacher in at least one of his/her courses.</li>
 						</ul>
 					</li>
 					<li><strong>degreeName</strong>: string.</li>
@@ -517,7 +518,7 @@
 								If &lt; 0 &rArr; there is no limit of students in the group.</li>
 							<li><strong>numStudents</strong>: integer, current number of students in the group.</li>
 							<li><strong>fileZones</strong>: integer. If not 0 &rArr; the file zones for this group are enabled.</li>
-							<li><strong>member</strong>: integer. If not 0 &rArr; the logged user belongs to this group.</li>
+							<li><strong>member</strong>: integer. If not 0 &rArr; the requester belongs to this group.</li>
 						</ul>
 					</li>
 				</ul>
@@ -527,7 +528,7 @@
 	<a name="sendMyGroups"><h3 class="WS_FUNCTION"><code>sendMyGroups</code></h3></a>
 	<p align="justify">
 	It sends to the server a list with all the groups in a course
-	to which the logged user wants to belong.
+	to which the requester wants to belong.
 	It tries to enroll the user in those groups if possible,
 	and remove from the groups not in the list.
 	If all the changes are not possible, no change is performed.
@@ -569,7 +570,7 @@
 	<a name="getDirectoryTree"><h3 class="WS_FUNCTION"><code>getDirectoryTree</code></h3></a>
 	<p align="justify">
 	Returns the full tree of a file zone (documents, shared files or marks) in a course or a group.
-	The logged user must belong to the course or the group.
+	The requester must belong to the course or the group.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -598,12 +599,12 @@
 								or <a href="#getFile"><code>getFile</code></a>:
 								<ul>
 									<li>
-									if the logged user is a student in the course/group,
+									if the requester is a student in the course/group,
 									the client should call <a href="#getMarks"><code>getMarks</code></a>
 									to view the student's specific marks.
 									</li>
 									<li>
-									if the logged user is a teacher in the course/group,
+									if the requester is a teacher in the course/group,
 									the client should call <a href="#getFile"><code>getFile</code></a>
 									to download the HTML file with the marks of several students.
 									</li>
@@ -656,7 +657,7 @@
 	<p align="justify">
 	This function must be called each time the user wants to download a file
 	from a documents zone or a shared files zone in a course or a group.
-	The logged user must belong to the course or group.
+	The requester must belong to the course or group.
 	The function counts the access as a visit to the file
 	and returns information about the file.
 	</p>
@@ -668,13 +669,22 @@
 						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.
 					</li>
 					<li><strong>fileCode</strong>: integer,
-						corresponding to an element <code>&lt;code&gt;</code>
-						of the XML tree returned by <a href="#getDirectoryTree"><code>getDirectoryTree</code></a>.
-						If the file code corresponds to an HTML file of marks
-						(<code>treeCode</code> = 3 in <a href="#getDirectoryTree"><code>getDirectoryTree</code></a>,
-						the requester should be a student in the course/group.
-						If the logged user is a teacher, the client should call
-						<a href="#getMarks"><code>getMarks</code></a> instead <code>getFile</code>.
+						corresponding to:
+						<ul>
+							<li>an element <code>&lt;code&gt;</code>
+							of the XML tree returned by
+							<a href="#getDirectoryTree"><code>getDirectoryTree</code></a>.
+							</li>
+							<li>the value of <code>eventCode</code>
+							returned by <a href="#getNotifications"><code>getNotifications</code></a>
+							if <code>eventType</code> is <var>documentFile</var> or <var>sharedFile</var>.
+							</li>
+							<li>the value of <code>eventCode</code>
+							returned by <a href="#getNotifications"><code>getNotifications</code></a>
+							if the requester is a teacher and
+							<code>eventType</code> is <var>marksFile</var>.
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</li>
@@ -701,10 +711,11 @@
 
 	<a name="getMarks"><h3 class="WS_FUNCTION"><code>getMarks</code></h3></a>
 	<p align="justify">
-	Returns information about the marks (qualifications, scores) of the logged user (requester)
+	Returns information about the marks (qualifications, scores) of the requester
 	from a given HTML file of marks.
-	This function is allowed only for students. The requester must be a student in the course/group.
-	If the logged user is a teacher, the client should call
+	This function is allowed <strong>only for students</strong>.
+	The requester must be a student in the course/group.
+	If the requester is a teacher, the client should call
 	<a href="#getFile"><code>getFile</code></a> instead of <code>getMarks</code>.
 	</p>
 		<ul>
@@ -714,9 +725,18 @@
 						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
 						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
 					<li><strong>fileCode</strong>: integer,
-						corresponding to an element <code>&lt;code&gt;</code>
-						of the XML tree returned
-						by <a href="#getDirectoryTree"><code>getDirectoryTree</code></a>.</li>
+						corresponding to:
+						<ul>
+							<li>an element <code>&lt;code&gt;</code>
+							of the XML tree returned by
+							<a href="#getDirectoryTree"><code>getDirectoryTree</code></a>.
+							</li>
+							<li>the value of <code>eventCode</code>
+							returned by <a href="#getNotifications"><code>getNotifications</code></a>
+							if the requester is a student and
+							<code>eventType</code> is <var>marksFile</var>.
+							</li>
+						</ul>
 				</ul>
 			</li>
 			<li>Returns a data structure with the following fields:
@@ -894,10 +914,10 @@
 
 	<hr />
 
-	<a name="getUsers" ><h3 class="WS_FUNCTION"><code>getUsers</code></h3></a>
+	<a name="getUsers"><h3 class="WS_FUNCTION"><code>getUsers</code></h3></a>
 	<p align="justify">
-	Returns the list of users of a given type (students or teachers)
-	enrolled in a course and group (code of group &lt;= 0 means the whole course).
+	Returns the list of users with a given role (students or teachers)
+	enrolled in a course (and optionally in some groups of the course).
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -905,11 +925,16 @@
 					<li><strong>wsKey</strong>: string, identifier returned by
 						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
 						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
-					<li><strong>courseCode</strong>: integer.</li>
-					<li><strong>groupCode</strong>: integer (&lt;= 0 means the whole course).</li>
-					<li><strong>userRole</strong>: integer, role of the users to be listed
-						(2=students;
-						 3=teachers)
+					<li><strong>courseCode</strong>: integer</li>
+					<li><strong>groups</strong>: string.
+						List of codes of groups (each code is an integer number, all the groups must belong to the course).<br />
+						If the list is empty, the whole course will be used.					</li>
+					<li><strong>userRole</strong>: integer, role of the users to be listed,
+						with one of the following 2 values:
+						<ul>
+							<li><var>2</var>: students.</li>
+							<li><var>3</var>: teachers.</li>
+						</ul>
 					</li>
 				</ul>
 			</li>
@@ -940,12 +965,82 @@
 			</li>
 		</ul>
 
+	<a name="findUsers"><h3 class="WS_FUNCTION"><code>findUsers</code></h3></a>
+	<p align="justify">
+	Returns a list of users whose full name contains the words given in filter.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer
+						(&le; 0 &rArr; users from the whole platform;
+						 &gt; 0 &rArr; users from the course given by <code>courseCode</code>).
+					</li>
+					<li><strong>filter</strong>: string, one or several words separated by spaces.<br />
+					Only those users whose full name will contain
+					all the words in <code>filter</code> as substrings will be returned,
+					provided that the two following conditions are satisfied:
+						<ul>
+							<li>The length of the longest word in <code>filter</code> must be &ge; a given <var>n</var>.
+							Eg. For <var>n</var> = 3, &quot;Bruce Lee&quot; is valid, &quot;B Le&quot; is not valid.
+							</li>
+							<li>The total number of characters in all the words
+							(not counting spaces) must be &ge; a given <var>m</var>.
+							Eg. For <var>m</var> = 7, &quot;Bruce Lee&quot; is valid, but &quot;Bruce&quot; or &quot;Lee&quot; are not valid.
+							</li>
+						</ul>
+					<var>n</var> and <var>m</var> can change in the server side.
+					A client should delegate to the server.
+					If any of these two conditions is not satisfied,
+					a negative value is returned in <code>numUsers</code>, indicating filter too short.
+					</li>
+					<li><strong>userRole</strong>: integer, role of the users to be listed,
+						with one of the following 4 values:
+						<ul>
+							<li><var>0</var>: unknown, any role (guests, students, teachers).</li>
+							<li><var>1</var>: guests, not enrolled in any course.</li>
+							<li><var>2</var>: students.</li>
+							<li><var>3</var>: teachers.</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>numUsers</strong>: integer, number of users found. If < 0 &rArr; filter is too short.</li>
+					<li><strong>usersArray</strong>: list of elements,
+						where each element is a data structure with the following fields:
+						<ul>
+							<li><strong>userCode</strong>: integer, unique identifier for each user.</li>
+							<li><strong>userNickname</strong>: string, user's nickname (without @).</li>
+							<li><strong>userID</strong>: string, DNI/passport of the user.
+								If the requester has permission to see the user's ID, the ID is shown.
+								If not, the ID is hidden.
+							</li>
+							<li><strong>userSurname1</strong>: string.</li>
+							<li><strong>userSurname2</strong>: string.</li>
+							<li><strong>userFirstname</strong>: string.</li>
+							<li><strong>userPhoto</strong>: string
+								with the full URL of a JPG image
+								of size 150 (width) &times; 200 (height).
+								If it is an empty string, the user
+								has no photo or it can not be shown.
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
 	<hr />
 
 	<a name="getAttendanceEvents"><h3 class="WS_FUNCTION"><code>getAttendanceEvents</code></h3></a>
 	<p align="justify">
-	Returns the list of the attendance events in a course available for the logged user
-	(associated to the whole course or to the groups to which the logged user belongs).
+	Returns the list of the attendance events in a course available for the requester
+	(associated to the whole course or to the groups to which the requester belongs).
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -992,7 +1087,7 @@
 	<a name="sendAttendanceEvent"><h3 class="WS_FUNCTION"><code>sendAttendanceEvent</code></h3></a>
 	<p align="justify">
 	Sends an attendance event.
-	The logged user must be a teacher in the course.
+	The requester must be a teacher in the course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1034,7 +1129,7 @@
 	<a name="getAttendanceUsers"><h3 class="WS_FUNCTION"><code>getAttendanceUsers</code></h3></a>
 	<p align="justify">
 	Returns the list of users (students) in an attendance event.
-	The logged user must be teacher in the selected course.
+	The requester must be teacher in the selected course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1080,7 +1175,7 @@
 	who have attended to an attendance event.
 	All users in this list will be marked as present;
 	other users formerly marked as present will be marked as absent when <code>setOthersAsAbsent</code> = 1.
-	The logged user must be teacher in the selected course.
+	The requester must be teacher in the selected course.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1125,7 +1220,7 @@
 
 	<a name="getNotifications"><h3 class="WS_FUNCTION"><code>getNotifications</code></h3></a>
 	<p align="justify">
-	Returns the list of recent notifications for the logged user.
+	Returns the list of recent notifications for the requester.
 	</p>
 		<ul>
 			<li>Call parameters:
@@ -1151,13 +1246,39 @@
 								When a user opens this notification,
 								you should call <a href="#markNotificationsAsRead"><code>markNotificationsAsRead</code></a> with this value.</li>
 							<li><strong>eventType</strong>: string,
-								with one of the following 18 values:
+								with one of the following 19 values:
 								<ol>				
-									<li><var>documentFile</var>: document.</li>
-									<li><var>sharedFile</var>: shared file.</li>
+									<li><var>documentFile</var>: document.
+									To download the file, clients can call
+									<a href="#getFile"><code>getFile</code></a>
+									with the value returned in <code>eventCode</code>
+									as parameter <code>fileCode</code>.
+									</li>
+									<li><var>teachersFile</var>: teachers' file.</li>
+									<li><var>sharedFile</var>: shared file.
+									To download the file, clients can call 
+									<a href="#getFile"><code>getFile</code></a>
+									with the value returned in <code>eventCode</code>
+									as parameter <code>fileCode</code>.
+									</li>
 									<li><var>assignment</var>: assignment.</li>
 									<li><var>examAnnouncement</var>: exam announcement.</li>
-									<li><var>marksFile</var>: marks/grades file.</li>
+									<li><var>marksFile</var>: marks/grades file.
+										<ul>
+											<li>If the requester is a student, <code>content</code>
+											will contain a full HTML page containing the marks of the requester.
+											The client application can also call <a href="#getMarks"><code>getMarks</code></a>
+											with the value returned in <code>eventCode</code>
+											as parameter <code>fileCode</code>.
+											</li>
+											<li>If the requester is a teacher,
+											and he/she wants to download the file,
+											the client application can call <a href="#getFile"><code>getFile</code></a>
+											with the value returned in <code>eventCode</code>
+											as parameter <code>fileCode</code>.
+											</li>
+										</ul>
+									</li>
 									<li><var>enrollmentStudent</var>: I have been enrolled in a course as a student.</li>
 									<li><var>enrollmentTeacher</var>: I have been enrolled in a course as a teacher.</li>
 									<li><var>enrollmentRequest</var>: enrollment request.</li>
@@ -1254,7 +1375,7 @@
 	<a name="sendNotice"><h3 class="WS_FUNCTION"><code>sendNotice</code></h3></a>
 	<p align="justify">
 	Sends a public notice (yellow note) to a course.
-	The logged user must be a teacher in the course.
+	The requester must be a teacher in the course.
 	</p>
 		<ul>
 			<li>Call parameters:

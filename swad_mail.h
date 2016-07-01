@@ -66,6 +66,8 @@ void Mai_RenameMailDomainShort (void);
 void Mai_RenameMailDomainFull (void);
 void Mai_RecFormNewMailDomain (void);
 
+void Mai_ListEMails (void); // Creates an e-mail message to students
+
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
 long Mai_GetUsrCodFromEmail (const char *Email);

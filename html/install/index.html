@@ -1135,9 +1135,9 @@
   			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',<br />
 			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',<br />
 			'0','1','2','3','4','5','6','7','8','9','-','_'<br />
-		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod) VALUES(@EncryptedUsrCod);</code><br />
+		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod,Comments) VALUES(@EncryptedUsrCod,'');</code><br />	
 		<code>mysql&gt; INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime,Confirmed) VALUES(LAST_INSERT_ID(),@MyID,NOW(),'Y');</code><br />
-		<code>mysql&gt; INSERT INTO deg_admin (UsrCod,DegCod) VALUES (LAST_INSERT_ID(),'-2');</code><br />
+		<code>mysql&gt; INSERT INTO admin (UsrCod,Scope,Cod) VALUES (LAST_INSERT_ID(),'Sys','0');</code><br />
 		<code>mysql&gt; quit</code>
  	</p>
 
@@ -1208,7 +1208,13 @@
 	</ul>
 
 	<p>
-	Create the public directory <code>swad</code>, that will store the SWAD public content,
+	The directory <code>swad</code> inside <code>cgi-bin</code>,
+	will be created later.
+	</p>
+
+	<p>
+	Create the public directory <code>swad</code>,
+	that will store the SWAD public content,
 	inside the main public directory:
 	<table width="100%">
 	<tr>
@@ -1574,7 +1580,7 @@
 	that can be downloaded from:<br />
 	<a href="http://www.cs.fsu.edu/~engelen/soap.html">http://www.cs.fsu.edu/~engelen/soap.html</a><br />
 	<a href="http://sourceforge.net/projects/gsoap2/files/">http://sourceforge.net/projects/gsoap2/files/</a><br />
-	(Tested with the version 2.8.18,
+	(Tested with the version 2.8.30,
 	probably more recent versions also work.)
 	</p>
 
@@ -1585,12 +1591,12 @@
 	Go to directory <code>/home/&lt;user_directory&gt;/swad/gsoap</code>:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad/gsoap</code><br />
 
-	Download the file <code>gsoap_2.8.18.zip</code> (or later)
+	Download the file <code>gsoap_2.8.30.zip</code> (or later)
 	and copy it in <code>/home/&lt;user_directory&gt;/swad/gsoap</code><br />
-	<code>wget http://downloads.sourceforge.net/project/gsoap2/gSOAP/gsoap_2.8.18.zip</code><br />
+	<code>wget http://downloads.sourceforge.net/project/gsoap2/gSOAP/gsoap_2.8.30.zip</code><br />
 
 	Uncompress gSOAP:<br />
-		<code>unzip gsoap_2.8.18.zip</code> (or later)<br />
+		<code>unzip gsoap_2.8.30.zip</code> (or later)<br />
 	It should have been created the directory <code>gsoap-2.8</code>. Go to that directory:<br />
 		<code>cd gsoap-2.8</code><br />
 	Configure:<br />
@@ -1637,7 +1643,7 @@
 		<code>//gsoap swad service location: URL</code><br />
 	Replace <code>URL</code> (everything after the two points)
 	by our SWAD address,
-	for example <code>https://swad.ugr.es/</code> or <code>https://cevuna.una.py/swad/</code>,
+	for example <code>https://openswad.org/</code> or <code>https://swad.ugr.es/</code>,
 	and save the file.
 	</p>
 
@@ -1667,8 +1673,15 @@
 	</p>
 
 	<p>
+	Go to directory <code>/home/&lt;user_directory&gt;/swad/swad-core/sha2</code>:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/sha2</code><br />
+	to compile <code>sha2</code>:<br />
+		<code>gcc -O2 -c sha2.c -o sha2.o</code>
+	</p>
+
+	<p>
 	Return to directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>:<br />
-		<code>cd /home/&lt;user_directory&gt;/swad/swad-core</code><br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core</code>
 	</p>
  
  	<p>

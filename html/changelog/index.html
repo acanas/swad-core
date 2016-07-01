@@ -58,13 +58,621 @@
 
 	<tr>
 	<td align="center">
-		Last update: April 18, 2016
+		Last update: June 13, 2016
 	</td>
 	</tr>
 
 	<tr>
 	<td align="left">
 		<dl>
+		<dt>Version 15.224.3: Jun 13, 2016</dt>
+							<dd>
+							Fix bug while finding cell content in file of marks. (202266 lines)
+							</dd>
+		<dt>Version 15.224.2: Jun 12, 2016</dt>
+							<dd>
+							Info about number of files is moved to bottom of file browsers. (202266 lines)
+							</dd>
+		<dt>Version 15.224.1: Jun 12, 2016</dt>
+							<dd>
+							Change in layout of file browsers. (202266 lines)
+							</dd>
+		<dt>Version 15.224:   Jun 12, 2016</dt>
+							<dd>
+							Now a user can unfollow users followed by him/her whose profile is not visible.<br />
+							Code refactoring in list of follwing/followers. (202304 lines)
+							</dd>
+		<dt>Version 15.223.3: Jun 12, 2016</dt>
+							<dd>
+							Fixed layout of list of forums. (202282 lines)
+							</dd>
+		<dt>Version 15.223.2: Jun 12, 2016</dt>
+							<dd>
+							Fixed bug in results of search of students. (202277 lines)
+							</dd>
+		<dt>Version 15.223.1: Jun 12, 2016</dt>
+							<dd>
+							Show only users to follow with first name and surname 1. (202276 lines)
+							</dd>
+		<dt>Version 15.223:   Jun 12, 2016</dt>
+							<dd>
+							New forms to change course configuration. (202268 lines)<br />
+							4 changes necessary in database:<br />
+							<small><code>
+UPDATE actions SET Txt='Cambiar c&oacute;d. institucional asignatura' WHERE ActCod='1024' AND Language='es';<br />
+UPDATE actions SET Txt='Cambiar c&oacute;d. institucional asignatura' WHERE ActCod='1025' AND Language='es';<br />
+UPDATE actions SET Txt='Cambiar a&ntilde;o/semestre asignatura' WHERE ActCod='561' AND Language='es';<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1573','es','N','Cambiar a&ntilde;o/semestre asignatura');
+							</code></small>
+							</dd>
+		<dt>Version 15.222.6: Jun 11, 2016</dt>
+							<dd>
+							Fixed layout in students column in result of search of teachers. (202214 lines)
+							</dd>
+		<dt>Version 15.222.5: Jun 10, 2016</dt>
+							<dd>
+							Indicators of a course are always calculated and stored in course configuration. (202214 lines)
+							</dd>
+		<dt>Version 15.222.4: Jun 09, 2016</dt>
+							<dd>
+							Code refactoring in indicators. (202208 lines)
+							</dd>
+		<dt>Version 15.222.3: Jun 09, 2016</dt>
+							<dd>
+							Indicators form is sended automatically when any parameter changes. (202214 lines)
+							</dd>
+		<dt>Version 15.222.2: Jun 09, 2016</dt>
+							<dd>
+							Code refactoring in indicators. (202233 lines)
+							</dd>
+		<dt>Version 15.222.1: Jun 09, 2016</dt>
+							<dd>
+							Optimization in number of indicators. (202230 lines)
+							</dd>
+		<dt>Version 15.222:   Jun 09, 2016</dt>
+							<dd>
+							Number of indicators is stored in table of courses. (202224 lines)
+							</dd>
+		<dt>Version 15.221.4: Jun 09, 2016</dt>
+							<dd>
+							New columns in table of courses to store number of indicators. (202153 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE courses ADD COLUMN NumIndicators INT NOT NULL DEFAULT -1 AFTER FullName;
+							</code></small>
+							</dd>
+		<dt>Version 15.221.3: Jun 08, 2016</dt>
+							<dd>
+							Fix bug in calculation of number of files in groups of a course. (202146 lines)
+							</dd>
+		<dt>Version 15.221.2: Jun 08, 2016</dt>
+							<dd>
+							Fix bug in calculation of number of files in groups of a course. (202149 lines)
+							</dd>
+		<dt>Version 15.221.1: Jun 08, 2016</dt>
+							<dd>
+							Fix bug in form of indicators.<br />
+				  			Speed up database queries to get course info when getting indicators. (? lines)
+							</dd>
+		<dt>Version 15.221:   Jun 08, 2016</dt>
+							<dd>
+							Single (radio) selection of number of indicators changed to multiple (checkbox) selection. (202028 lines)
+							</dd>
+		<dt>Version 15.220.1: Jun 08, 2016</dt>
+							<dd>
+							Code refactoring in form to view indicators of courses. (202031 lines)
+							</dd>
+		<dt>Version 15.220:   Jun 08, 2016</dt>
+							<dd>
+							Number of indicators now appears inside form. (202029 lines)
+							</dd>
+		<dt>Version 15.219.1: Jun 05, 2016</dt>
+							<dd>
+							Highlighted row with number of indicators selected. (202023 lines)
+							</dd>
+		<dt>Version 15.219:   Jun 04, 2016</dt>
+							<dd>
+							Changes in listing of indicators of courses. (202001 lines)
+							</dd>
+		<dt>Version 15.218.5: Jun 04, 2016</dt>
+							<dd>
+							Fix bug in social notes, reported by Raymon Moreno Colina. (201940 lines)<br />
+							2 changes necessary in database:<br />
+							<small><code>
+DROP INDEX NoteType ON social_notes;<br />
+CREATE INDEX NoteType ON social_notes (NoteType,Cod);
+							</code></small>
+							</dd>
+		<dt>Version 15.218.4: Jun 04, 2016</dt>
+							<dd>
+							User can change license of files in briefcase.<br />
+							Code refactoring related to file metadata. (201936 lines)
+							</dd>
+		<dt>Version 15.218.3: Jun 04, 2016</dt>
+							<dd>
+							Code refactoring related to setlocale. (201952 lines)
+							</dd>
+		<dt>Version 15.218.2: Jun 04, 2016</dt>
+							<dd>
+							Checked value returned by setlocale in all calls. (201957 lines)
+							</dd>
+		<dt>Version 15.218.1: Jun 04, 2016</dt>
+							<dd>
+							Change in listing of courses. (201934 lines)
+							</dd>
+		<dt>Version 15.218:   Jun 03, 2016</dt>
+							<dd>
+							New module swad_MFU for most frequently used actions.<br />
+							Change in layout of most frequent actions. (201934 lines)
+							</dd>
+		<dt>Version 15.217.2: Jun 03, 2016</dt>
+							<dd>
+							Fixed bug in copy-paste from briefcase to another file browser. (201827 lines)
+							</dd>
+		<dt>Version 15.217.1: Jun 03, 2016</dt>
+							<dd>
+							Fixed bug when creating zip file for students works, reported by Francisco Barranco Exp&oacute;sito. (201809 lines)
+							</dd>
+		<dt>Version 15.217:   Jun 01, 2016</dt>
+							<dd>
+							When clicking on a social note associated to an exam announcement, show that exam announcement highlighted. (201801 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1572','es','N','Ver convocatoria');
+							</code></small>
+							</dd>
+		<dt>Version 15.216:   Jun 01, 2016</dt>
+							<dd>
+							When clicking on a day on calendar, all exam announcements in that day are shown highlighted. (201751 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1571','es','N','Ver convocatorias de una fecha');
+							</code></small>
+							</dd>
+		<dt>Version 15.215:   Jun 01, 2016</dt>
+							<dd>
+							List exam announcements as a list, like notices. (201670 lines)
+							</dd>
+		<dt>Version 15.214:   May 31, 2016</dt>
+							<dd>
+							Fixed bug in renaming test tags. (201589 lines)
+							</dd>
+		<dt>Version 15.213:   May 31, 2016</dt>
+							<dd>
+							Code refactoring related to renaming test tags.<br />
+							Fixed bug in dates, reported by Christian A. Morillas Guti&eacute;rrez. (201581 lines)
+							</dd>
+		<dt>Version 15.212.9: May 30, 2016</dt>
+							<dd>
+							Link to list institutions of country in country configuration. (201567 lines)
+							</dd>
+		<dt>Version 15.212.8: May 30, 2016</dt>
+							<dd>
+							Link to list centres of institution in institution configuration. (201555 lines)
+							</dd>
+		<dt>Version 15.212.7: May 30, 2016</dt>
+							<dd>
+							Link to list degrees of centre in centre configuration. (201547 lines)
+							</dd>
+		<dt>Version 15.212.6: May 30, 2016</dt>
+							<dd>
+							Link to list courses of degree in degree configuration. (201539 lines)
+							</dd>
+		<dt>Version 15.212.5: May 30, 2016</dt>
+							<dd>
+							Fixed bug in number of courses of a degree. (201531 lines)
+							</dd>
+		<dt>Version 15.212.4: May 30, 2016</dt>
+							<dd>
+							Changed links from external degrees to internal degrees in STATS > Degrees. (201529 lines)
+							</dd>
+		<dt>Version 15.212.3: May 30, 2016</dt>
+							<dd>
+							Fixed bug in test question. A student can see now his/her test results. (201522 lines)
+							</dd>
+		<dt>Version 15.212.2: May 30, 2016</dt>
+							<dd>
+							Fixed bug in test question. Button &quot;Add a new question&quot; in tests will not be available for students. (201516 lines)
+							</dd>
+		<dt>Version 15.212.1: May 30, 2016</dt>
+							<dd>
+							Fixed bug in course information. (201515 lines)
+							</dd>
+		<dt>Version 15.212:   May 30, 2016</dt>
+							<dd>
+							Fixed bug in edition of syllabus, reported by Raymon Moreno Colina and Javier Fern&aacute;ndez Baldomero.<br />
+							Code refactoring related to course info. (201471 lines)
+							</dd>
+		<dt>Version 15.211.2: May 13, 2016</dt>
+							<dd>
+							Fixed bug in test questions, reported by Nuria Torres Rosell. (201394 lines)
+							</dd>
+		<dt>Version 15.211.1: May 07, 2016</dt>
+							<dd>
+							Files in briefcase older than 1 year are removed automatically. (201397 lines)
+							</dd>
+		<dt>Version 15.211:   May 07, 2016</dt>
+							<dd>
+							Code refactoring related to removing old files in briefcase.<br />
+                                       			Old files in briefcase are removed automatically. (201396 lines)
+							</dd>
+		<dt>Version 15.210.4: May 05, 2016</dt>
+							<dd>
+							Link to change logo of degree is moved to top of window. (201385 lines)
+							</dd>
+		<dt>Version 15.210.3: May 05, 2016</dt>
+							<dd>
+							Link to change logo of centre is moved to top of window. (201407 lines)
+							</dd>
+		<dt>Version 15.210.2: May 05, 2016</dt>
+							<dd>
+							Link to change logo of institution is moved to top of window. (201399 lines)
+							</dd>
+		<dt>Version 15.210.1: May 05, 2016</dt>
+							<dd>
+							New icon to change logo of institution/centre/degree. (201388 lines)<br />
+							1 change necessary in icons:
+							<small><code>
+Copy file icon/logo64x64.png to public icon directory
+							</code></small>
+							</dd>
+		<dt>Version 15.210:   May 05, 2016</dt>
+							<dd>
+							Commands/shortcuts in record are removed from left of window. (201389 lines)
+							</dd>
+		<dt>Version 15.209:   May 05, 2016</dt>
+							<dd>
+							Commands/shortcuts in record are cloned to top of window. (201614 lines)
+							</dd>
+		<dt>Version 15.208.6: May 05, 2016</dt>
+							<dd>
+							Integrated &quot;Configure&quot; link in tests at top of window, near &quot;Edit&quot; icon. (201463 lines)
+							</dd>
+		<dt>Version 15.208.5: May 05, 2016</dt>
+							<dd>
+							Changes in Statistics > Degrees. (201469 lines)
+							</dd>
+		<dt>Version 15.208.4: May 05, 2016</dt>
+							<dd>
+							In Statistics > Degrees, show all degrees with students. (201458 lines)
+							</dd>
+		<dt>Version 15.208.3: May 03, 2016</dt>
+							<dd>
+							Fixed bug in sessions database table when no social publishings available. (201446 lines)
+							</dd>
+		<dt>Version 15.208.2: May 01, 2016</dt>
+							<dd>
+							Add default values in some database fields. (201439 lines)<br />
+							1 change necessary in database:<br />
+							<small><code>
+ALTER TABLE sessions CHANGE COLUMN SearchString SearchString VARCHAR(255) NOT NULL DEFAULT '';
+							</code></small>
+							</dd>
+		<dt>Version 15.208.2: May 01, 2016</dt>
+							<dd>
+							Fixed bug in user's last data. (201439 lines)
+							</dd>
+		<dt>Version 15.208.1: May 01, 2016</dt>
+							<dd>
+							Minor fix to avoid warning related to size_t. (201438 lines)
+							</dd>
+		<dt>Version 15.208:   May 01, 2016</dt>
+							<dd>
+							Changes in config for swadberry.ugr.es.<br />
+							Removed cevuna.una.py from config. (201435 lines)
+							</dd>
+		<dt>Version 15.207.2: May 01, 2016</dt>
+							<dd>
+							Fixed bug in database table log_full. (201515 lines)
+							</dd>
+		<dt>Version 15.207.1: May 01, 2016</dt>
+							<dd>
+							Minor fix to avoid warning related to char type limits. (201515 lines)
+							</dd>
+		<dt>Version 15.207:   May 01, 2016</dt>
+							<dd>
+							Add default values for fields in users' data table. (201514 lines)<br />
+							Birthday default value now is NULL.<br />
+							18 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE usr_data CHANGE COLUMN EncryptedUsrCod EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Password Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Surname1 Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Surname2 Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN FirstName FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Theme Theme CHAR(16) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN IconSet IconSet CHAR(16) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Language Language CHAR(2) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Photo Photo CHAR(43) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Office Office VARCHAR(127) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN OfficePhone OfficePhone CHAR(16) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN LocalAddress LocalAddress VARCHAR(127) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN LocalPhone LocalPhone CHAR(16) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN FamilyAddress FamilyAddress VARCHAR(127) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN FamilyPhone FamilyPhone CHAR(16) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN OriginPlace OriginPlace VARCHAR(127) NOT NULL DEFAULT '';<br />
+ALTER TABLE usr_data CHANGE COLUMN Birthday Birthday DATE;<br />
+UPDATE usr_data SET Birthday=NULL WHERE Birthday='0000-00-00';
+							</code></small>
+							</dd>
+		<dt>Version 15.206:   Apr 30, 2016</dt>
+							<dd>
+							Remove default DATETIME fields to avoid errors if 0 is not allowed in date in database. (201424 lines)<br />
+							7 changes necessary in database:<br />
+							<small><code>
+ALTER TABLE connected CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;<br />
+ALTER TABLE crs_grp_types CHANGE COLUMN OpenTime OpenTime DATETIME NOT NULL;<br />
+ALTER TABLE crs_last CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;<br />
+ALTER TABLE sessions CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;<br />
+ALTER TABLE sessions CHANGE COLUMN LastRefresh LastRefresh DATETIME NOT NULL;<br />
+ALTER TABLE usr_last CHANGE COLUMN LastTime LastTime DATETIME NOT NULL;<br />
+ALTER TABLE usr_last CHANGE COLUMN LastAccNotif LastAccNotif DATETIME NOT NULL;
+							</code></small>
+							</dd>
+		<dt>Version 15.205:   Apr 30, 2016</dt>
+							<dd>
+							New demo server added to swad_config.h: swadberry.ugr.es. (201409 lines)
+							</dd>
+		<dt>Version 15.204.1: Apr 25, 2016</dt>
+							<dd>
+							Fixed bug in changes in database necessary in version 15.201. (201366 lines)<br />
+							6 changes necessary in database:<br />
+							<small><code>
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1565','es','N','Solicitar conf. ID invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1566','es','N','Solicitar conf. ID estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1567','es','N','Solicitar conf. ID profesor');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1568','es','N','Confirmar ID invitado');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1569','es','N','Confirmar ID estudiante');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1570','es','N','Confirmar ID profesor');
+							</code></small>
+							</dd>
+		<dt>Version 15.204:   Apr 25, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. (201326 lines)
+							</dd>
+		<dt>Version 15.203.6: Apr 24, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201295 lines)
+							</dd>
+		<dt>Version 15.203.5: Apr 24, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201230 lines)
+							</dd>
+		<dt>Version 15.203.4: Apr 23, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201140 lines)
+							</dd>
+		<dt>Version 15.203.3: Apr 23, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201113 lines)
+							</dd>
+		<dt>Version 15.203.2: Apr 23, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201104 lines)
+							</dd>
+		<dt>Version 15.203.1: Apr 23, 2016</dt>
+							<dd>
+							New form to confirm another user's ID. Not finished. (201090 lines)
+							</dd>
+		<dt>Version 15.203:   Apr 23, 2016</dt>
+							<dd>
+							Changes in layout and CSS related to record card. (201076 lines)
+							</dd>
+		<dt>Version 15.202.19:Apr 23, 2016</dt>
+							<dd>
+							User's ID is shown in green or red in user's account. (201120 lines)
+							</dd>
+		<dt>Version 15.202.18:Apr 23, 2016</dt>
+							<dd>
+							Change of message about ID in user's account. (201092 lines)
+							</dd>
+		<dt>Version 15.202.17:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201081 lines)
+							</dd>
+		<dt>Version 15.202.16:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201070 lines)
+							</dd>
+		<dt>Version 15.202.15:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201059 lines)
+							</dd>
+		<dt>Version 15.202.14:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201048 lines)
+							</dd>
+		<dt>Version 15.202.13:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201037 lines)
+							</dd>
+		<dt>Version 15.202.12:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201026 lines)
+							</dd>
+		<dt>Version 15.202.11:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201014 lines)
+							</dd>
+		<dt>Version 15.202.10:Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (201000 lines)
+							</dd>
+		<dt>Version 15.202.9: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200987 lines)
+							</dd>
+		<dt>Version 15.202.8: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200979 lines)
+							</dd>
+		<dt>Version 15.202.7: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200964 lines)
+							</dd>
+		<dt>Version 15.202.6: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200949 lines)
+							</dd>
+		<dt>Version 15.202.5: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200934 lines)
+							</dd>
+		<dt>Version 15.202.4: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200926 lines)
+							</dd>
+		<dt>Version 15.202.3: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200911 lines)
+							</dd>
+		<dt>Version 15.202.2: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200899 lines)
+							</dd>
+		<dt>Version 15.202.1: Apr 23, 2016</dt>
+							<dd>
+							Code refactoring related to showing user's e-mail. (200887 lines)
+							</dd>
+		<dt>Version 15.202:   Apr 23, 2016</dt>
+							<dd>
+							User's IDs are show in green or red.<br />
+							Code refactoring and bug fixing related to showing user's ID and e-mail. (200908 lines)
+							</dd>
+		<dt>Version 15.201.9: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card.<br />
+							Changes in layout of record cards. (200895 lines)
+							</dd>
+		<dt>Version 15.201.8: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card.<br />
+							Fixed bugs in record cards. (200881 lines)
+							</dd>
+		<dt>Version 15.201.7: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card.<br />
+							Fixed bugs in record cards. (200862 lines)
+							</dd>
+		<dt>Version 15.201.6: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200842 lines)
+							</dd>
+		<dt>Version 15.201.5: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200832 lines)
+							</dd>
+		<dt>Version 15.201.4: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200822 lines)
+							</dd>
+		<dt>Version 15.201.3: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200812 lines)
+							</dd>
+		<dt>Version 15.201.2: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200806 lines)
+							</dd>
+		<dt>Version 15.201.1: Apr 22, 2016</dt>
+							<dd>
+							Code refactoring in record card. (200778 lines)
+							</dd>
+		<dt>Version 15.201:   Apr 21, 2016</dt>
+							<dd>
+							New private file zone for the teachers who belong to a course. (200768 lines)<br />
+							82 changes necessary in database:<br />
+							<small><code>
+CREATE TABLE notif_backup LIKE notif;<br />
+INSERT INTO notif_backup SELECT * FROM notif;<br />
+<br />
+CREATE TABLE sta_notif_backup LIKE sta_notif;<br />
+INSERT INTO sta_notif_backup SELECT * FROM sta_notif;<br />
+<br />
+CREATE TABLE usr_data_backup LIKE usr_data;<br />
+INSERT INTO usr_data_backup SELECT * FROM usr_data;<br />
+<br />
+UPDATE notif SET NotifyEvent=19 WHERE NotifyEvent=18;<br />
+UPDATE notif SET NotifyEvent=18 WHERE NotifyEvent=17;<br />
+UPDATE notif SET NotifyEvent=17 WHERE NotifyEvent=16;<br />
+UPDATE notif SET NotifyEvent=16 WHERE NotifyEvent=15;<br />
+UPDATE notif SET NotifyEvent=15 WHERE NotifyEvent=14;<br />
+UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;<br />
+UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;<br />
+UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;<br />
+UPDATE notif SET NotifyEvent=11 WHERE NotifyEvent=10;<br />
+UPDATE notif SET NotifyEvent=10 WHERE NotifyEvent=9;<br />
+UPDATE notif SET NotifyEvent=9  WHERE NotifyEvent=8;<br />
+UPDATE notif SET NotifyEvent=8  WHERE NotifyEvent=7;<br />
+UPDATE notif SET NotifyEvent=7  WHERE NotifyEvent=6;<br />
+UPDATE notif SET NotifyEvent=6  WHERE NotifyEvent=5;<br />
+UPDATE notif SET NotifyEvent=5  WHERE NotifyEvent=4;<br />
+UPDATE notif SET NotifyEvent=4  WHERE NotifyEvent=3;<br />
+UPDATE notif SET NotifyEvent=3  WHERE NotifyEvent=2;<br />
+<br />
+UPDATE sta_notif SET NotifyEvent=19 WHERE NotifyEvent=18;<br />
+UPDATE sta_notif SET NotifyEvent=18 WHERE NotifyEvent=17;<br />
+UPDATE sta_notif SET NotifyEvent=17 WHERE NotifyEvent=16;<br />
+UPDATE sta_notif SET NotifyEvent=16 WHERE NotifyEvent=15;<br />
+UPDATE sta_notif SET NotifyEvent=15 WHERE NotifyEvent=14;<br />
+UPDATE sta_notif SET NotifyEvent=14 WHERE NotifyEvent=13;<br />
+UPDATE sta_notif SET NotifyEvent=13 WHERE NotifyEvent=12;<br />
+UPDATE sta_notif SET NotifyEvent=12 WHERE NotifyEvent=11;<br />
+UPDATE sta_notif SET NotifyEvent=11 WHERE NotifyEvent=10;<br />
+UPDATE sta_notif SET NotifyEvent=10 WHERE NotifyEvent=9;<br />
+UPDATE sta_notif SET NotifyEvent=9  WHERE NotifyEvent=8;<br />
+UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;<br />
+UPDATE sta_notif SET NotifyEvent=7  WHERE NotifyEvent=6;<br />
+UPDATE sta_notif SET NotifyEvent=6  WHERE NotifyEvent=5;<br />
+UPDATE sta_notif SET NotifyEvent=5  WHERE NotifyEvent=4;<br />
+UPDATE sta_notif SET NotifyEvent=4  WHERE NotifyEvent=3;<br />
+UPDATE sta_notif SET NotifyEvent=3  WHERE NotifyEvent=2;<br />
+<br />
+UPDATE usr_data  SET NotifNtfEvents = (((NotifNtfEvents & ~0x3) << 1) | (NotifNtfEvents & 0x3) | 0x04);<br />
+UPDATE usr_data  SET EmailNtfEvents = (((EmailNtfEvents & ~0x3) << 1) | (EmailNtfEvents & 0x3));<br />
+<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1525','es','N','Administrar zona de profesores');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1526','es','N','Cambiar a admin. archivos prof.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1527','es','N','Administrar archivos prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1528','es','N','Solicitar elim. arch. prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1529','es','N','Eliminar archivo prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1530','es','N','Eliminar carpeta prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1531','es','N','Copiar de zona prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1532','es','N','Pegar en zona prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1533','es','N','Eliminar &aacute;rbol prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1534','es','N','Solic.nuevo arch/carp prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1535','es','N','Crear carpeta prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1536','es','N','Crear enlace prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1537','es','N','Renombrar carpeta prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1538','es','N','Subir archivo prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1539','es','N','Subir archivo prof. asg. (ant.)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1540','es','N','Expandir carpeta prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1541','es','N','Contraer carpeta prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1542','es','N','Crear ZIP prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1543','es','N','Ver metadatos arch. prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1544','es','N','Cambiar metadatos arch. prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1545','es','N','Descargar arch. prof. asg.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1546','es','N','Administrar archivos prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1547','es','N','Solicitar elim. arch. prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1548','es','N','Eliminar archivo prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1549','es','N','Eliminar carpeta prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1550','es','N','Copiar de zona prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1551','es','N','Pegar en zona prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1552','es','N','Eliminar &aacute;rbol prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1553','es','N','Solic.nuevo arch/carp prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1554','es','N','Crear carpeta prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1555','es','N','Crear enlace prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1556','es','N','Renombrar carpeta prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1557','es','N','Subir archivo prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1558','es','N','Subir archivo prof. asg. (grp.)');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1559','es','N','Expandir carpeta prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1560','es','N','Contraer carpeta prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1561','es','N','Crear ZIP prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1562','es','N','Ver metadatos arch. prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1563','es','N','Cambiar metadatos arch. prof. grp.');<br />
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1564','es','N','Descargar arch. prof. grp.');
+							</code></small>
+							</dd>
 		<dt>Version 15.200.5: Apr 18, 2016</dt>
 							<dd>
 							Removed link to enter from external service. (199764 lines)
@@ -698,7 +1306,7 @@ ALTER TABLE tst_questions ADD COLUMN Image CHAR(43) NOT NULL AFTER Stem;
 							</dd>
 		<dt>Version 15.163.1: Mar 27, 2016</dt>
 							<dd>
-							Added HTML directives "label" for scope and other form fields. (196654 lines)
+							Added HTML directives &quot;label&quot; for scope and other form fields. (196654 lines)
 							</dd>
 		<dt>Version 15.163:   Mar 27, 2016</dt>
 							<dd>
@@ -751,12 +1359,12 @@ Copy file recycle64x64.png to icon directory
 							</dd>
 		<dt>Version 15.161.2: Mar 24, 2016</dt>
 							<dd>
-							Removed contextual icon "update" integrated in frame in "enrollment requests". (196577 lines)
+							Removed contextual icon &quot;update&quot; integrated in frame in &quot;enrollment requests&quot;. (196577 lines)
 							</dd>
 		<dt>Version 15.161.1: Mar 24, 2016</dt>
 							<dd>
 							Code refactoring in forms to select roles.<br />
-							Put contextual icon "update" integrated in frame in "enrollment requests". (196598 lines)
+							Put contextual icon &quot;update&quot; integrated in frame in &quot;enrollment requests&quot;. (196598 lines)
 							</dd>
 		<dt>Version 15.161:   Mar 24, 2016</dt>
 							<dd>
@@ -768,11 +1376,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1522','es','N','Actu
 							</dd>
 		<dt>Version 15.160.4: Mar 24, 2016</dt>
 							<dd>
-							Put contextual icon "update" integrated in frame in "Connected users". (196543 lines)
+							Put contextual icon &quot;update&quot; integrated in frame in &quot;Connected users&quot;. (196543 lines)
 							</dd>
 		<dt>Version 15.160.3: Mar 24, 2016</dt>
 							<dd>
-							Put contextual icon "update" integrated in frame in "Who to follow". (196538 lines)
+							Put contextual icon &quot;update&quot; integrated in frame in &quot;Who to follow&quot;. (196538 lines)
 							</dd>
 		<dt>Version 15.160.2: Mar 22, 2016</dt>
 							<dd>
@@ -1153,7 +1761,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='1006';
 							</dd>
 		<dt>Version 15.140:   Mar 01, 2016</dt>
 							<dd>
-							New option "landing page". (195817 lines)<br />
+							New option &quot;landing page&quot;. (195817 lines)<br />
 							2 changes necessary in database:<br />
 							<small><code>
 UPDATE actions SET Txt='Formularios cambiar rol y cerrar sesi&oacute;n' WHERE ActCod='843' AND Language='es';<br />
@@ -1262,11 +1870,11 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('550','551');
 							</dd>
 		<dt>Version 15.133.6: Jan 28, 2016</dt>
 							<dd>
-							Changes in layout of "Who to follow". (195287 lines)
+							Changes in layout of &quot;Who to follow&quot;. (195287 lines)
 							</dd>
 		<dt>Version 15.133.5: Jan 28, 2016</dt>
 							<dd>
-							Unlogged users can not view "Who to follow". (195276 lines)
+							Unlogged users can not view &quot;Who to follow&quot;. (195276 lines)
 							</dd>
 		<dt>Version 15.133.4: Jan 28, 2016</dt>
 							<dd>
@@ -1646,7 +2254,7 @@ ALTER TABLE imported_sessions CHANGE SessionId SessionId CHAR(43) COLLATE latin1
 							</dd>
 		<dt>Version 15.118:   Jan 18, 2016</dt>
 							<dd>
-							Change in privacy options (new value "unknown"). (192967 lines)<br />
+							Change in privacy options (new value &quot;unknown&quot;). (192967 lines)<br />
 							3 changes necessary in database:<br />
 							<small><code>
 ALTER TABLE usr_data CHANGE COLUMN PhotoVisibility PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';<br />
@@ -2599,7 +3207,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1490','es','N','Ver 
 							<dd>
 							Fixed bug in privacy form.<br />
 							Privacy is moved to preferences.<br />
-							Default privacy is changed from "user" to "system". (187700 lines)
+							Default privacy is changed from &quot;user&quot; to &quot;system&quot;. (187700 lines)
 							</dd>
 		<dt>Version 15.72.7:  Dec 24, 2015</dt>
 							<dd>

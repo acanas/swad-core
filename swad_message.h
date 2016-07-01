@@ -56,8 +56,6 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Msg_ListEMails (void); // Creates an e-mail message to students
-
 void Msg_FormMsgUsrs (void);
 void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
 void Msg_PutHiddenParamOtherRecipients (void);

@@ -57,7 +57,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Msg_MAX_LENGTH_MESSAGES_QUERY 4096
-#define Msg_MAX_LENGTH_STR_ADDR (32*5000)
 
 // Forum images will be saved with:
 // - maximum width of Msg_IMAGE_SAVED_MAX_HEIGHT
@@ -141,128 +140,6 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat);
 static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat);
 static void Msg_UnbanSender (void);
 static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
-
-/*****************************************************************************/
-/******************* List the e-mails of all the students ********************/
-/*****************************************************************************/
-
-void Msg_ListEMails (void)
-  {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Students_who_have_accepted_and_who_have_e_mail;
-   extern const char *Txt_X_students_who_have_e_mail;
-   extern const char *Txt_X_students_who_have_accepted_and_who_have_e_mail;
-   extern const char *Txt_Create_e_mail_message;
-   unsigned NumUsr,NumStdsWithEmail = 0,NumAcceptedStdsWithEmail = 0;
-   char StrAddresses[Msg_MAX_LENGTH_STR_ADDR+1];
-   unsigned int LengthStrAddr = 0;
-   struct UsrData UsrDat;
-
-   /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
-
-   /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-
-   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
-     {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
-        {
-         /***** Start of the frame used to list the e-mails *****/
-         Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT_SMALL LEFT_MIDDLE\">");
-
-         /***** Initialize structure with user's data *****/
-         Usr_UsrDataConstructor (&UsrDat);
-
-         /***** List the students' e-mail addresses *****/
-         for (NumUsr = 0;
-              NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
-              NumUsr++)
-           {
-            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
-              {
-               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
-               if (UsrDat.Email[0])
-                 {
-                  NumStdsWithEmail++;
-                  if (UsrDat.Accepted) // If student has e-mail and has accepted
-	            {
-	             if (NumAcceptedStdsWithEmail > 0)
-	               {
-	                fprintf (Gbl.F.Out,", ");
-	                LengthStrAddr += 2;
-	                if (LengthStrAddr <= Msg_MAX_LENGTH_STR_ADDR)
-	                   strcat (StrAddresses,",");
-	                else
-	                   Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
-	               }
-                     LengthStrAddr += strlen (UsrDat.Email);
-	             if (LengthStrAddr <= Msg_MAX_LENGTH_STR_ADDR)
-	                strcat (StrAddresses,UsrDat.Email);
-	             else
-	                Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
-
-	             fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-                              UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
-
-	             NumAcceptedStdsWithEmail++;
-	            }
-                 }
-              }
-           }
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /***** Free memory used for user's data *****/
-         Usr_UsrDataDestructor (&UsrDat);
-
-         /***** Show a message with the number of students with e-mail ****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_e_mail,
-                  NumStdsWithEmail,
-                  ((float) NumStdsWithEmail / (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /***** Show a message with the number of students who have accepted and have e-mail ****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_e_mail,
-                  NumAcceptedStdsWithEmail,
-                  ((float) NumAcceptedStdsWithEmail /
-                   (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
-                  Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /***** End of the frame used to list the e-mails *****/
-         Lay_EndRoundFrameTable ();
-
-         /***** Icon to open the client e-mail program *****/
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
-                            "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\" title=\"%s\" class=\"%s\">",
-                  Gbl.Usrs.Me.UsrDat.Email,
-	          Gbl.CurrentCrs.Crs.FullName,Gbl.Usrs.Me.UsrDat.Email,StrAddresses,
-                  Txt_Create_e_mail_message,
-                  The_ClassFormBold[Gbl.Prefs.Theme]);
-         Lay_PutIconWithText ("editnewmsg16x16.gif",Txt_Create_e_mail_message,Txt_Create_e_mail_message);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</div>");
-        }
-     }
-   else
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
-
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
-
-   /***** Free memory for list of selected groups *****/
-   Grp_FreeListCodSelectedGrps ();
-  }
 
 /*****************************************************************************/
 /***************** Put a form to write a new message to users ****************/

@@ -126,20 +126,23 @@
 
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
 // TODO: Check if white lines are correct when composing a message and clicking in "Show more recipients"
+// TODO: Fill hidden subject and content of message in selectors of class photo / list
+// TODO: Add path to information about file in notifications
 
-// TODO: Add a new WS function to count the nunmber of users to return in call to function getUsers
+// TODO: Add new WS functions to count the number of users to return in call to functions getUsers/findUsers?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.237 (2016-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.237.1 (2016-07-01)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.237.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.237.1: Jul 01, 2015	Code refactoring in function to send e-mail to students. (203254 lines)
         Version 15.237:   Jul 01, 2015	The form "Show more recipients" now have a hidden field with the content. (203243 lines)
         Version 15.236:   Jun 30, 2015	The form "Show more recipients" now have a hidden field with the subject. (? lines)
         Version 15.235.1: Jun 30, 2015	Minor change in icon to download files. (203206 lines)
