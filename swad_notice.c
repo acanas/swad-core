@@ -491,7 +491,10 @@ static void Not_PutIconToAddNewNotice (void)
   {
    extern const char *Txt_New_notice;
 
-   Lay_PutContextualLink (ActWriNot,NULL,"plus64x64.png",Txt_New_notice,NULL);
+   Lay_PutContextualLink (ActWriNot,NULL,
+                          "plus64x64.png",
+                          Txt_New_notice,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

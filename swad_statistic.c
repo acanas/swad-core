@@ -591,7 +591,8 @@ void Sta_AskShowGblHits (void)
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
       Lay_PutContextualLink (ActReqAccCrs,NULL,
 			     "stats64x64.gif",
-			     Txt_Visits_to_course,Txt_Visits_to_course);
+			     Txt_Visits_to_course,Txt_Visits_to_course,
+		             NULL);
 
    /* Link to show last clicks in real time */
    Con_PutLinkToLastClicks ();

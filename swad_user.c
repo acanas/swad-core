@@ -1520,8 +1520,10 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLink (ActFrmLogIn,NULL,"login-green64x64.png",
-                          Txt_Log_in,Txt_Log_in);
+   Lay_PutContextualLink (ActFrmLogIn,NULL,
+                          "login-green64x64.png",
+                          Txt_Log_in,Txt_Log_in,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -2661,8 +2663,10 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLogOut,NULL,"logout-red64x64.png",
-                          Txt_Log_out,Txt_Log_out);
+   Lay_PutContextualLink (ActLogOut,NULL,
+                          "logout-red64x64.png",
+                          Txt_Log_out,Txt_Log_out,
+		          NULL);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
@@ -6368,9 +6372,11 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
-   Lay_PutContextualLink (ActLstOth,NULL,"adm16x16.gif",
+   Lay_PutContextualLink (ActLstOth,NULL,
+                          "adm16x16.gif",
                           Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
+                          Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -6382,9 +6388,11 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLink (ActLstGst,NULL,"usrs64x64.gif",
+   Lay_PutContextualLink (ActLstGst,NULL,
+                          "usrs64x64.gif",
                           Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -6832,7 +6840,9 @@ static void Usr_PutIconToPrintGsts (void)
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (ActPrnGstPho,Usr_ShowGstsAllDataParams,
-			  "print64x64.png",Txt_Print,NULL);
+			  "print64x64.png",
+			  Txt_Print,NULL,
+		          NULL);
   }
 
 static void Usr_PutIconToPrintStds (void)
@@ -6840,7 +6850,9 @@ static void Usr_PutIconToPrintStds (void)
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (ActPrnStdPho,Usr_ShowStdsAllDataParams,
-			  "print64x64.png",Txt_Print,NULL);
+			  "print64x64.png",
+			  Txt_Print,NULL,
+		          NULL);
   }
 
 static void Usr_PutIconToPrintTchs (void)
@@ -6848,7 +6860,9 @@ static void Usr_PutIconToPrintTchs (void)
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (ActPrnTchPho,Usr_ShowTchsAllDataParams,
-			  "print64x64.png",Txt_Print,NULL);
+			  "print64x64.png",
+			  Txt_Print,NULL,
+		          NULL);
   }
 
 static void Usr_PutIconToShowGstsAllData (void)
@@ -6856,7 +6870,9 @@ static void Usr_PutIconToShowGstsAllData (void)
    extern const char *Txt_Show_all_data;
 
    Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
-			  "table64x64.gif",Txt_Show_all_data,NULL);
+			  "table64x64.gif",
+			  Txt_Show_all_data,NULL,
+		          NULL);
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
@@ -6864,7 +6880,9 @@ static void Usr_PutIconToShowStdsAllData (void)
    extern const char *Txt_Show_all_data;
 
    Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
-			  "table64x64.gif",Txt_Show_all_data,NULL);
+			  "table64x64.gif",
+			  Txt_Show_all_data,NULL,
+		          NULL);
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
@@ -6872,7 +6890,9 @@ static void Usr_PutIconToShowTchsAllData (void)
    extern const char *Txt_Show_all_data;
 
    Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
-			  "table64x64.gif",Txt_Show_all_data,NULL);
+			  "table64x64.gif",
+			  Txt_Show_all_data,NULL,
+		          NULL);
   }
 
 static void Usr_ShowGstsAllDataParams (void)
@@ -6909,8 +6929,10 @@ static void Usr_PutLinkToListOfficialStudents (void)
        Gbl.Imported.ExternalSesId[0] &&
        Gbl.Imported.ExternalRole == Rol_TEACHER)	// ...as a teacher
       /***** Link to list official students *****/
-      Lay_PutContextualLink (ActGetExtLstStd,NULL,"list64x64.gif",
-                             Txt_Official_students,Txt_Official_students);
+      Lay_PutContextualLink (ActGetExtLstStd,NULL,
+                             "list64x64.gif",
+                             Txt_Official_students,Txt_Official_students,
+		             NULL);
   }
 
 /*****************************************************************************/

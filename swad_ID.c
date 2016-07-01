@@ -449,7 +449,7 @@ static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 	    UsrDat->IDs.List[NumID].ID);
    Lay_PutIconLink ("ok_on16x16.gif",Txt_Confirm_ID,Txt_Confirm_ID,
-                    The_ClassFormBold[Gbl.Prefs.Theme]);
+                    The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Act_FormEnd ();
   }
 
@@ -483,14 +483,16 @@ void ID_PutLinkToChangeUsrIDs (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Lay_PutContextualLink (ActFrmUsrAcc,NULL,
 			     "arroba64x64.gif",
-			     Txt_Change_IDs,Txt_Change_IDs);
+			     Txt_Change_IDs,Txt_Change_IDs,
+                             NULL);
    else									// Not me
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmIDsStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmIDsTch :
 	                	                                                        ActFrmIDsOth),	// Guest, visitor or admin
                              Usr_PutParamOtherUsrCodEncrypted,
 			     "arroba64x64.gif",
-			     Txt_Change_IDs,Txt_Change_IDs);
+			     Txt_Change_IDs,Txt_Change_IDs,
+                             NULL);
   }
 
 /*****************************************************************************/

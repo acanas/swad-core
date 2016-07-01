@@ -174,7 +174,10 @@ static void Mai_PutIconToEditMailDomains (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiMai,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiMai,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1046,15 +1049,18 @@ void Mai_PutLinkToChangeOtherUsrEmail (void)
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Lay_PutContextualLink (ActFrmUsrAcc,NULL,"msg64x64.gif",
-			     Txt_Change_email,Txt_Change_email);
+      Lay_PutContextualLink (ActFrmUsrAcc,NULL,
+                             "msg64x64.gif",
+			     Txt_Change_email,Txt_Change_email,
+                             NULL);
    else									// Not me
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmMaiStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmMaiTch :
 	                	                                                        ActFrmMaiOth),
                              Usr_PutParamOtherUsrCodEncrypted,
                              "msg64x64.gif",
-                             Txt_Change_email,Txt_Change_email);
+                             Txt_Change_email,Txt_Change_email,
+                             NULL);
   }
 
 /*****************************************************************************/

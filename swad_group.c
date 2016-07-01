@@ -1615,7 +1615,10 @@ static void Grp_PutIconToEditGroups (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActReqEdiGrp,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActReqEdiGrp,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

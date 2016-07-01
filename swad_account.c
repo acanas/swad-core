@@ -96,7 +96,8 @@ void Acc_PutLinkToCreateAccount (void)
 
    Lay_PutContextualLink (ActFrmUsrAcc,NULL,
                           "arroba64x64.gif",
-                          Txt_Create_account,Txt_Create_account);
+                          Txt_Create_account,Txt_Create_account,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -271,7 +272,8 @@ static void Acc_PutLinkToRemoveMyAccount (void)
 
    Lay_PutContextualLink (ActReqRemMyAcc,Acc_PutLinkToRemoveMyAccountParams,
                           "remove-on64x64.png",
-                          Txt_Remove_account,Txt_Remove_account);
+                          Txt_Remove_account,Txt_Remove_account,
+                          NULL);
   }
 
 static void Acc_PutLinkToRemoveMyAccountParams (void)

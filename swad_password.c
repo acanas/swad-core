@@ -219,7 +219,8 @@ void Pwd_PutLinkToSendNewPasswd (void)
 
    Lay_PutContextualLink (ActReqSndNewPwd,Pwd_PutLinkToSendNewPasswdParams,
                           "key64x64.gif",
-                          Txt_Forgotten_password,Txt_Forgotten_password);
+                          Txt_Forgotten_password,Txt_Forgotten_password,
+                          NULL);
   }
 
 static void Pwd_PutLinkToSendNewPasswdParams (void)
@@ -843,8 +844,10 @@ void Pwd_PutLinkToChangeMyPassword (void)
    extern const char *Txt_Change_password;
 
    /***** Link for changing the password *****/
-   Lay_PutContextualLink (ActFrmChgMyPwd,NULL,"key64x64.gif",
-                          Txt_Change_password,Txt_Change_password);
+   Lay_PutContextualLink (ActFrmChgMyPwd,NULL,
+                          "key64x64.gif",
+                          Txt_Change_password,Txt_Change_password,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -862,8 +865,10 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
 	                	                                                        ActFrmPwdOth),
-                             Usr_PutParamOtherUsrCodEncrypted,"key64x64.gif",
-                             Txt_Change_password,Txt_Change_password);
+                             Usr_PutParamOtherUsrCodEncrypted,
+                             "key64x64.gif",
+                             Txt_Change_password,Txt_Change_password,
+                             NULL);
   }
 
 /*****************************************************************************/

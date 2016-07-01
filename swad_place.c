@@ -202,7 +202,10 @@ static void Plc_PutIconToEditPlaces (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiPlc,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiPlc,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/

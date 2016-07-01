@@ -500,7 +500,10 @@ static void Ins_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
 
    /***** Link to print info about institution *****/
-   Lay_PutContextualLink (ActPrnInsInf,NULL,"print64x64.png",Txt_Print,NULL);
+   Lay_PutContextualLink (ActPrnInsInf,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
@@ -588,7 +591,10 @@ static void Ins_PutIconToEditInstitutions (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiIns,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiIns,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

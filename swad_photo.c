@@ -179,13 +179,13 @@ void Pho_PutLinkToChangeMyPhoto (void)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
+   const char *TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
+		                                       Txt_Upload_photo;
 
    /***** Link for changing / uploading the photo *****/
    Lay_PutContextualLink (ActReqMyPho,NULL,"photo64x64.gif",
-                          Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
-		                                      Txt_Upload_photo,
-                          Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
-		                                      Txt_Upload_photo);
+                          TitleText,TitleText,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -198,6 +198,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    extern const char *Txt_Upload_photo;
    bool PhotoExists;
    char PhotoURL[PATH_MAX+1];
+   const char *TitleText;
 
    /***** Link for changing / uploading the photo *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
@@ -206,15 +207,15 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
       if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+	 TitleText = PhotoExists ? Txt_Change_photo :
+				   Txt_Upload_photo;
 	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
 	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
 	                                                                                   ActReqOthPho),	// Guest, visitor or admin
 	                        Usr_PutParamOtherUsrCodEncrypted,
 	                        "photo64x64.gif",
-				PhotoExists ? Txt_Change_photo :
-					      Txt_Upload_photo,
-				PhotoExists ? Txt_Change_photo :
-					      Txt_Upload_photo);
+				TitleText,TitleText,
+				NULL);
 	}
   }
 
@@ -228,8 +229,10 @@ static void Pho_PutIconToRequestRemoveMyPhoto (void)
 
    /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
-      Lay_PutContextualLink (ActReqRemMyPho,NULL,"remove-on64x64.png",
-			     Txt_Remove_photo,NULL);
+      Lay_PutContextualLink (ActReqRemMyPho,NULL,
+                             "remove-on64x64.png",
+			     Txt_Remove_photo,NULL,
+		             NULL);
   }
 
 /*****************************************************************************/
@@ -250,7 +253,8 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
 											ActReqRemOthPho),	// Guest, visitor or admin
 			     Usr_PutParamOtherUsrCodEncrypted,
 			     "remove-on64x64.png",
-			     Txt_Remove_photo,NULL);
+			     Txt_Remove_photo,NULL,
+		             NULL);
   }
 
 /*****************************************************************************/
@@ -1874,7 +1878,9 @@ static void Pho_PutIconToPrintDegreeStats (void)
    extern const char *Txt_Print;
 
    Lay_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
-                          "print64x64.png",Txt_Print,NULL);
+                          "print64x64.png",
+                          Txt_Print,NULL,
+		          NULL);
   }
 
 static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)

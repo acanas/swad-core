@@ -607,7 +607,10 @@ static void Exa_PutIconToCreateNewExamAnnouncement (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Lay_PutContextualLink (ActEdiExaAnn,NULL,"plus64x64.png",Txt_New_announcement_OF_EXAM,NULL);
+   Lay_PutContextualLink (ActEdiExaAnn,NULL,
+                          "plus64x64.png",
+                          Txt_New_announcement_OF_EXAM,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1361,17 +1364,23 @@ static void Exa_PutIconsExamAnnouncement (void)
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/
-      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCodToEdit,"remove-on64x64.png",
-			     Txt_Remove,NULL);
+      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCodToEdit,
+                             "remove-on64x64.png",
+			     Txt_Remove,NULL,
+                             NULL);
 
       /***** Link to edit this exam announcement *****/
-      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCodToEdit,"edit64x64.png",
-			     Txt_Edit,NULL);
+      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCodToEdit,
+                             "edit64x64.png",
+			     Txt_Edit,NULL,
+                             NULL);
      }
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCodToEdit,"print64x64.png",
-			  Txt_Print,NULL);
+   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCodToEdit,
+                          "print64x64.png",
+			  Txt_Print,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

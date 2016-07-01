@@ -156,8 +156,10 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLink (ActReqSignUp,NULL,"enrollmentrequest64x64.gif",
-                          Txt_Sign_up,Txt_Sign_up);
+   Lay_PutContextualLink (ActReqSignUp,NULL,
+                          "enrollmentrequest64x64.gif",
+                          Txt_Sign_up,Txt_Sign_up,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -696,8 +698,10 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLink (ActReqRemOldUsr,NULL,"remove-on64x64.png",
-                          Txt_Eliminate_old_users,Txt_Eliminate_old_users);
+   Lay_PutContextualLink (ActReqRemOldUsr,NULL,
+                          "remove-on64x64.png",
+                          Txt_Eliminate_old_users,Txt_Eliminate_old_users,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1790,7 +1794,8 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    /***** Put form to remove all the students in the current course *****/
    Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,
                           "remove-on64x64.png",
-                          Txt_Remove_all_students,Txt_Remove_all_students);
+                          Txt_Remove_all_students,Txt_Remove_all_students,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2946,12 +2951,13 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
    extern const char *Txt_Admin_me;
    extern const char *Txt_Admin_one_user;
+   const char *TitleText = Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
+                        	                              Txt_Admin_me;
 
-   Lay_PutContextualLink (NextAction,NULL,"config64x64.gif",
-                          Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
-                        	                             Txt_Admin_me,
-                          Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
-                        	                             Txt_Admin_me);
+   Lay_PutContextualLink (NextAction,NULL,
+                          "config64x64.gif",
+                          TitleText,TitleText,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2962,14 +2968,14 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_Admin_several_students;
    extern const char *Txt_Admin_several_teachers;
+   const char *TitleText = (Role == Rol_STUDENT) ? Txt_Admin_several_students :
+	                	                   Txt_Admin_several_teachers;
 
    Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
 	                  NULL,"config64x64.gif",
-	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
-	                	                Txt_Admin_several_teachers,
-	                  Role == Rol_STUDENT ? Txt_Admin_several_students :
-	                	                Txt_Admin_several_teachers);
+	                  TitleText,TitleText,
+                          NULL);
   }
 
 /*****************************************************************************/

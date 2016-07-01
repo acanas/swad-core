@@ -401,7 +401,10 @@ static void Crs_PutIconToPrint (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnCrsInf,NULL,"print64x64.png",Txt_Print,NULL);
+   Lay_PutContextualLink (ActPrnCrsInf,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1155,7 +1158,10 @@ static void Crs_PutIconToEditCourses (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiCrs,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiCrs,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2889,7 +2895,8 @@ static void Crs_PutLinkToSearchCourses (void)
                                                            ActSysReqSch)))),
                           Sch_PutLinkToSearchCoursesParams,
 			  "search64x64.gif",
-			  Txt_Search_courses,Txt_Search_courses);
+			  Txt_Search_courses,Txt_Search_courses,
+                          NULL);
   }
 
 static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
@@ -2907,8 +2914,10 @@ void Crs_PutFormToSelectMyCourses (void)
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLink (ActMyCrs,NULL,"hierarchy64x64.gif",
-                          Txt_My_courses,Txt_My_courses);
+   Lay_PutContextualLink (ActMyCrs,NULL,
+                          "hierarchy64x64.gif",
+                          Txt_My_courses,Txt_My_courses,
+                          NULL);
   }
 
 /*****************************************************************************/

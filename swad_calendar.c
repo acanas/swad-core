@@ -286,6 +286,9 @@ static void Cal_PutIconToPrintCalendar (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnCal,NULL,"print64x64.png",Txt_Print,NULL);
+   Lay_PutContextualLink (ActPrnCal,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
   }
 

@@ -371,7 +371,8 @@ static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (Action,NULL,"file64x64.gif",
-	                  Txt_Results_tests,Txt_Results_tests);
+	                  Txt_Results_tests,Txt_Results_tests,
+		          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1301,18 +1302,24 @@ static void Tst_PutIconsToEditAndConfig (void)
 
    /***** Put form to edit existing test questions *****/
    if (Gbl.Action.Act != ActEdiTstQst)
-      Lay_PutContextualLink (ActEdiTstQst,NULL,"edit64x64.png",
-			     Txt_Edit,NULL);
+      Lay_PutContextualLink (ActEdiTstQst,NULL,
+                             "edit64x64.png",
+			     Txt_Edit,NULL,
+		             NULL);
 
    /***** Put form to create a new test question *****/
    if (Gbl.Action.Act != ActEdiOneTstQst)
-      Lay_PutContextualLink (ActEdiOneTstQst,NULL,"plus64x64.png",
-			     Txt_New_question,NULL);
+      Lay_PutContextualLink (ActEdiOneTstQst,NULL,
+                             "plus64x64.png",
+			     Txt_New_question,NULL,
+		             NULL);
 
    /***** Put form to go to test configuration *****/
    if (Gbl.Action.Act != ActCfgTst)
-      Lay_PutContextualLink (ActCfgTst,NULL,"config64x64.gif",
-			     Txt_Configure,NULL);
+      Lay_PutContextualLink (ActCfgTst,NULL,
+                             "config64x64.gif",
+			     Txt_Configure,NULL,
+		             NULL);
   }
 
 /*****************************************************************************/
@@ -5718,7 +5725,9 @@ static void Tst_PutIconToRemoveOneQst (void)
    extern const char *Txt_Remove;
 
    Lay_PutContextualLink (ActReqRemTstQst,Tst_PutParamsRemoveOneQst,
-                          "remove-on64x64.png",Txt_Remove,NULL);
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/

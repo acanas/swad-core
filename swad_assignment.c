@@ -219,7 +219,9 @@ static void Asg_PutIconToCreateNewAsg (void)
 
    /***** Put form to create a new assignment *****/
    Lay_PutContextualLink (ActFrmNewAsg,Asg_PutParamsToCreateNewAsg,
-                          "plus64x64.png",Txt_New_assignment,NULL);
+                          "plus64x64.png",
+                          Txt_New_assignment,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -516,20 +518,28 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
    /***** Put form to remove assignment *****/
-   Lay_PutContextualLink (ActReqRemAsg,Asg_PutParams,"remove-on64x64.png",
-                          Txt_Remove,NULL);
+   Lay_PutContextualLink (ActReqRemAsg,Asg_PutParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+                          NULL);
 
    /***** Put form to hide/show assignment *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAsg,Asg_PutParams,"eye-slash-on64x64.png",
-			     Txt_Show,NULL);
+      Lay_PutContextualLink (ActShoAsg,Asg_PutParams,
+                             "eye-slash-on64x64.png",
+			     Txt_Show,NULL,
+                             NULL);
    else
-      Lay_PutContextualLink (ActHidAsg,Asg_PutParams,"eye-on64x64.png",
-			     Txt_Hide,NULL);
+      Lay_PutContextualLink (ActHidAsg,Asg_PutParams,
+                             "eye-on64x64.png",
+			     Txt_Hide,NULL,
+                             NULL);
 
    /***** Put form to edit assignment *****/
-   Lay_PutContextualLink (ActEdiOneAsg,Asg_PutParams,"edit64x64.png",
-                          Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiOneAsg,Asg_PutParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
 
    fprintf (Gbl.F.Out,"</div>");
   }

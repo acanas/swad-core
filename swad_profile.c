@@ -143,7 +143,8 @@ void Prf_PutLinkRequestUserProfile (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActReqPubPrf,NULL,
                           "usr64x64.gif",
-                          Txt_View_public_profile,Txt_View_public_profile);
+                          Txt_View_public_profile,Txt_View_public_profile,
+		          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 

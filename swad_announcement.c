@@ -175,8 +175,10 @@ static void Ann_PutIconToAddNewAnnouncement (void)
   {
    extern const char *Txt_New_announcement;
 
-   Lay_PutContextualLink (ActWriAnn,NULL,"plus64x64.png",
-                          Txt_New_announcement,NULL);
+   Lay_PutContextualLink (ActWriAnn,NULL,
+                          "plus64x64.png",
+                          Txt_New_announcement,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

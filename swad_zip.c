@@ -120,7 +120,8 @@ void ZIP_PutButtonToCreateZIPAsgWrk (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
                           "download64x64.png",
-                          Txt_Create_ZIP_file,Txt_Create_ZIP_file);
+                          Txt_Create_ZIP_file,Txt_Create_ZIP_file,
+		          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 

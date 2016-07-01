@@ -3670,7 +3670,9 @@ static void Brw_PutIconToEditFileBrowser (void)
    if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
       Lay_PutContextualLink (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
                              Brw_PutParamsContextualLink,
-			     "edit64x64.png",Txt_Edit,NULL);
+			     "edit64x64.png",
+			     Txt_Edit,NULL,
+                             NULL);
   }
 
 /*****************************************************************************/
@@ -3684,7 +3686,9 @@ static void Brw_PutIconToSeeFileBrowser (void)
    if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
       Lay_PutContextualLink (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
                              Brw_PutParamsContextualLink,
-			     "eye-on64x64.png",Txt_View,NULL);
+			     "eye-on64x64.png",
+			     Txt_View,NULL,
+                             NULL);
   }
 
 /*****************************************************************************/
@@ -11799,7 +11803,8 @@ static void Brw_PutFormToAskRemOldFiles (void)
 
    Lay_PutContextualLink (ActReqRemOldBrf,Brw_PutParamsContextualLink,
 			  "remove-on64x64.png",
-			  Txt_Remove_old_files,Txt_Remove_old_files);
+			  Txt_Remove_old_files,Txt_Remove_old_files,
+                          NULL);
   }
 
 /*****************************************************************************/

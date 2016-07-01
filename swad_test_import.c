@@ -89,7 +89,8 @@ void TsI_PutFormToExportQuestions (void)
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLink (ActLstTstQst,TsI_PutParamsExportQsts,
 		          "export16x16.gif",
-		          Txt_Export_questions_to_XML_file,Txt_Export_questions);
+		          Txt_Export_questions_to_XML_file,Txt_Export_questions,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -118,7 +119,8 @@ void TsI_PutFormToImportQuestions (void)
    Lay_PutContextualLink (ActReqImpTstQst,NULL,
 		          "import16x16.gif",
 		          Txt_Import_questions_from_XML_file,
-                          Txt_Import_questions);
+                          Txt_Import_questions,
+		          NULL);
   }
 
 /*****************************************************************************/

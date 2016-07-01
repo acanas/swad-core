@@ -238,7 +238,8 @@ void Pre_PutLinkToChangeLanguage (void)
   {
    Lay_PutContextualLink (ActEdiPrf,NULL,
                           "cty64x64.gif",
-                          "Change language","Change language");
+                          "Change language","Change language",
+		          NULL);
   }
 
 /*****************************************************************************/

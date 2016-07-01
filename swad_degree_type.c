@@ -257,7 +257,10 @@ static void DT_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiDegTyp,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiDegTyp,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

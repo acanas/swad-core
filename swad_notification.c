@@ -341,12 +341,17 @@ void Ntf_ShowMyNotifications (void)
    /***** Buttons to change preferences and to mark all notifications as seen *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    // Put form to change notification preferences
-   Lay_PutContextualLink (ActEdiPrf,NULL,"heart64x64.gif",
-			  Txt_Change_preferences,Txt_Change_preferences);
+   Lay_PutContextualLink (ActEdiPrf,NULL,
+                          "heart64x64.gif",
+			  Txt_Change_preferences,Txt_Change_preferences,
+                          NULL);
    if (NumNotifications)
       // Put form to change notification preferences
-      Lay_PutContextualLink (ActMrkNtfSee,NULL,"eye-on64x64.png",
-			     Txt_Mark_all_notifications_as_read,Txt_Mark_all_notifications_as_read);
+      Lay_PutContextualLink (ActMrkNtfSee,NULL,
+                             "eye-on64x64.png",
+			     Txt_Mark_all_notifications_as_read,
+			     Txt_Mark_all_notifications_as_read,
+                             NULL);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write form to show all notifications *****/

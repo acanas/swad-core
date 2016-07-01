@@ -89,7 +89,8 @@ void Fol_PutLinkWhoToFollow (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActSeeSocPrf,NULL,
                           "follow64x64.png",
-                          Txt_Who_to_follow,Txt_Who_to_follow);
+                          Txt_Who_to_follow,Txt_Who_to_follow,
+                          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 

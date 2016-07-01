@@ -299,17 +299,22 @@ static void TT_PutContextualIcons (void)
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
       Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
 			     "edit64x64.png",
-			     Txt_Edit,NULL);
+			     Txt_Edit,NULL,
+		             NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Lay_PutContextualLink (ActEdiTut,NULL,"edit64x64.png",
-			     Txt_Edit_office_hours,NULL);
+      Lay_PutContextualLink (ActEdiTut,NULL,
+                             "edit64x64.png",
+			     Txt_Edit_office_hours,NULL,
+		             NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
       Lay_PutContextualLink (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-								    ActPrnMyTT,
-			     Grp_PutParamWhichGrps,"print64x64.png",
-			     Txt_Print,NULL);
+								         ActPrnMyTT,
+			     Grp_PutParamWhichGrps,
+			     "print64x64.png",
+			     Txt_Print,NULL,
+		             NULL);
   }
 
 /*****************************************************************************/
@@ -364,8 +369,10 @@ static void TT_PutIconToViewCrsTT (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see course timetable *****/
-   Lay_PutContextualLink (ActSeeCrsTT,NULL,"clock64x64.gif",
-                          Txt_Show_timetable,NULL);
+   Lay_PutContextualLink (ActSeeCrsTT,NULL,
+                          "clock64x64.gif",
+                          Txt_Show_timetable,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -377,8 +384,10 @@ static void TT_PutIconToViewMyTT (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
-   Lay_PutContextualLink (ActSeeMyTT,NULL,"clock64x64.gif",
-                          Txt_Show_timetable,NULL);
+   Lay_PutContextualLink (ActSeeMyTT,NULL,
+                          "clock64x64.gif",
+                          Txt_Show_timetable,NULL,
+		          NULL);
   }
 
 /*****************************************************************************/

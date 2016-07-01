@@ -295,7 +295,9 @@ static void Att_PutIconToCreateNewAttEvent (void)
 
    /***** Put form to create a new attendance event *****/
    Lay_PutContextualLink (ActFrmNewAtt,Att_PutParamsToCreateNewAttEvent,
-                          "plus64x64.png",Txt_New_event,NULL);
+                          "plus64x64.png",
+                          Txt_New_event,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -520,7 +522,8 @@ static void Att_PutFormToListMyAttendance (void)
 
    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
                           "list64x64.gif",
-                          Txt_Attendance_list,Txt_Attendance_list);
+                          Txt_Attendance_list,Txt_Attendance_list,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -533,7 +536,8 @@ static void Att_PutFormToListStdsAttendance (void)
 
    Lay_PutContextualLink (ActReqLstStdAtt,Att_PutFormToListStdsParams,
                           "list64x64.gif",
-                          Txt_Attendance_list,Txt_Attendance_list);
+                          Txt_Attendance_list,Txt_Attendance_list,
+                          NULL);
   }
 
 static void Att_PutFormToListStdsParams (void)
@@ -558,20 +562,28 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
-   Lay_PutContextualLink (ActReqRemAtt,Att_PutParams,"remove-on64x64.png",
-                          Txt_Remove,NULL);
+   Lay_PutContextualLink (ActReqRemAtt,Att_PutParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+                          NULL);
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAtt,Att_PutParams,"eye-slash-on64x64.png",
-			     Txt_Show,NULL);
+      Lay_PutContextualLink (ActShoAtt,Att_PutParams,
+                             "eye-slash-on64x64.png",
+			     Txt_Show,NULL,
+                             NULL);
    else
-      Lay_PutContextualLink (ActHidAtt,Att_PutParams,"eye-on64x64.png",
-			     Txt_Hide,NULL);
+      Lay_PutContextualLink (ActHidAtt,Att_PutParams,
+                             "eye-on64x64.png",
+			     Txt_Hide,NULL,
+                             NULL);
 
    /***** Put form to edit attendance event *****/
-   Lay_PutContextualLink (ActEdiOneAtt,Att_PutParams,"edit64x64.png",
-                          Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiOneAtt,Att_PutParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2885,7 +2897,9 @@ static void Att_PutIconToPrintMyList (void)
 
    /***** Link to print view *****/
    Lay_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
-                          "print64x64.png",Txt_Print,NULL);
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
   }
 
 static void Att_PutFormToPrintMyListParams (void)
@@ -2906,7 +2920,9 @@ static void Att_PutIconToPrintStdsList (void)
 
    /***** Link to print view *****/
    Lay_PutContextualLink (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList,
-                          "print64x64.png",Txt_Print,NULL);
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
   }
 
 static void Att_PutParamsToPrintStdsList (void)

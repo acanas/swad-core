@@ -1007,18 +1007,8 @@ static void Lay_ShowRightColumn (void)
 void Lay_PutContextualLink (Act_Action_t NextAction,
                             void (*FuncParams) (),
                             const char *Icon,
-                            const char *Title,const char *Text)
-  {
-   Lay_PutContextualLinkAnchor (NextAction,NULL,
-                                FuncParams,
-                                Icon,
-                                Title,Text);
-  }
-
-void Lay_PutContextualLinkAnchor (Act_Action_t NextAction,const char *Anchor,
-                                  void (*FuncParams) (),
-                                  const char *Icon,
-                                  const char *Title,const char *Text)
+                            const char *Title,const char *Text,
+                            const char *Function)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
@@ -1026,15 +1016,13 @@ void Lay_PutContextualLinkAnchor (Act_Action_t NextAction,const char *Anchor,
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
-   if (Anchor)
-      Act_FormStartAnchor (NextAction,Anchor);
-   else
-      Act_FormStart (NextAction);
+   Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();
    Lay_PutIconLink (Icon,Title,Text,
                     Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
-                	   NULL);
+                	   NULL,
+                    Function);
    Act_FormEnd ();
 
    if (Text)
@@ -1047,9 +1035,12 @@ void Lay_PutContextualLinkAnchor (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle)
+                      const char *LinkStyle,const char *Function)
   {
-   Act_LinkFormSubmit (Title,LinkStyle);
+   if (Function)
+      Act_LinkFormSubmitFunction (Title,LinkStyle,Function);
+   else
+      Act_LinkFormSubmit (Title,LinkStyle);
    Lay_PutIconWithText (Icon,Title,Text);
    fprintf (Gbl.F.Out,"</a>");
   }

@@ -128,7 +128,10 @@ static void Ban_PutFormToEditBanners (void)
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       /***** Link to edit banners *****/
-      Lay_PutContextualLink (ActEdiBan,NULL,"edit64x64.png",Txt_Edit,NULL);
+      Lay_PutContextualLink (ActEdiBan,NULL,
+                             "edit64x64.png",
+                             Txt_Edit,NULL,
+                             NULL);
   }
 
 /*****************************************************************************/

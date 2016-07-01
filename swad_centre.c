@@ -563,7 +563,10 @@ static void Ctr_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
 
    /***** Link to print info about centre *****/
-   Lay_PutContextualLink (ActPrnCtrInf,NULL,"print64x64.png",Txt_Print,NULL);
+   Lay_PutContextualLink (ActPrnCtrInf,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
@@ -596,8 +599,8 @@ static void Ctr_PutIconToChangePhoto (void)
    Lay_PutContextualLink (ActReqCtrPho,NULL,
 			  "photo64x64.gif",
 			  PhotoExists ? Txt_Change_photo :
-				        Txt_Upload_photo,
-			  NULL);
+				        Txt_Upload_photo,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -682,7 +685,10 @@ static void Ctr_PutIconToEditFrames (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiCtr,NULL,"edit64x64.png",Txt_Edit,NULL);
+   Lay_PutContextualLink (ActEdiCtr,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

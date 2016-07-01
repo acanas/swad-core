@@ -76,9 +76,11 @@ void QR_PutLinkToPrintQRCode (const char *Nickname,bool PrintText)
 
    /***** Link to print QR *****/
    Gbl.Usrs.NicknameForQR = Nickname;
-   Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,"qr64x64.gif",
+   Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,
+                          "qr64x64.gif",
                           Txt_QR_code,PrintText ? Txt_QR_code :
-	                                          NULL);
+	                                          NULL,
+		          NULL);
   }
 
 /*****************************************************************************/

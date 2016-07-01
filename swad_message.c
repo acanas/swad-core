@@ -339,7 +339,8 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
 			  "usrs64x64.gif",
-			  Txt_Show_more_recipients,Txt_Show_more_recipients);
+			  Txt_Show_more_recipients,Txt_Show_more_recipients,
+                          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1807,8 +1808,10 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Lay_PutContextualLink (ActLstBanUsr,NULL,"stop16x16.gif",
-                          Txt_Banned_users,Txt_Banned_users);
+   Lay_PutContextualLink (ActLstBanUsr,NULL,
+                          "stop16x16.gif",
+                          Txt_Banned_users,Txt_Banned_users,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2317,7 +2320,9 @@ static void Msg_PutIconToRemoveOneRcvMsg (void)
    extern const char *Txt_Remove_this_message;
 
    Lay_PutContextualLink (ActReqDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",Txt_Remove_this_message,NULL);
+			  "remove-on64x64.png",
+			  Txt_Remove_this_message,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2329,7 +2334,9 @@ static void Msg_PutIconToRemoveSevRcvMsgs (void)
    extern const char *Txt_Remove_these_messages;
 
    Lay_PutContextualLink (ActReqDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",Txt_Remove_these_messages,NULL);
+			  "remove-on64x64.png",
+			  Txt_Remove_these_messages,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2341,7 +2348,9 @@ static void Msg_PutIconToRemoveOneSntMsg (void)
    extern const char *Txt_Remove_this_message;
 
    Lay_PutContextualLink (ActReqDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",Txt_Remove_this_message,NULL);
+			  "remove-on64x64.png",
+			  Txt_Remove_this_message,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2353,7 +2362,9 @@ static void Msg_PutIconToRemoveSevSntMsgs (void)
    extern const char *Txt_Remove_these_messages;
 
    Lay_PutContextualLink (ActReqDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",Txt_Remove_these_messages,NULL);
+			  "remove-on64x64.png",
+			  Txt_Remove_these_messages,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

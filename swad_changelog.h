@@ -133,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.238.1 (2016-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.239 (2016-07-01)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.239:   Jul 01, 2015	Code refactoring related to contextual menus. (203531 lines)
         Version 15.238.1: Jul 01, 2015	New javascript function to animate icon. (203292 lines)
         Version 15.238:   Jul 01, 2015	Hidden fields in in selectors of class photo / list with message subject and content. (203274 lines)
         Version 15.237.3: Jul 01, 2015	Fixed bug in messages. (203257 lines)
