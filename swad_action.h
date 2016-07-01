@@ -1504,11 +1504,10 @@ void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_FormStartId (Act_Action_t NextAction,const char *Id);
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion);
 void Act_FormEnd (void);
-void Act_LinkFormSubmit (const char *Title,const char *LinkStyle);
+void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,const char *Function);
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle);
-void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id);
-void Act_LinkFormSubmitFunction (const char *Title,const char *LinkStyle,const char *Function);
-void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle);
+void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id,const char *Function);
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,const char *Function);
 
 void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
 

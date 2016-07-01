@@ -701,7 +701,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Form to view full notice */
       Act_FormStart (ActSeeOneNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status]);
+      Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
      }
    fprintf (Gbl.F.Out,"<span id=\"notice_date_%u\"></span>",
             UniqueId);
@@ -726,7 +726,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActSeeOneNot);
       Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICON40x40\" />"

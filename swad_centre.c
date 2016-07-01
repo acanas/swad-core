@@ -216,7 +216,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
 
    /***** Link to action *****/
    sprintf (Gbl.Title,Txt_Go_to_X,Ctr->FullName);
-   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw centre logo *****/
    Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,ClassLogo,true);
@@ -484,7 +484,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
 	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
 	          Gbl.CurrentCtr.Ctr.ShortName);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 	 Act_FormEnd ();
@@ -2374,7 +2374,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 Act_FormStart (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL");
+	 Act_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Ctrs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
 	}

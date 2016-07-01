@@ -380,7 +380,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /* Form to mark announcement as seen */
       Act_FormStart (ActAnnSee);
       Ann_PutHiddenParamAnnCod (AnnCod);
-      Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICON20x20\" />"

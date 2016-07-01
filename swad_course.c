@@ -372,7 +372,7 @@ static void Crs_Configuration (bool PrintView)
       Act_FormStart (ActReqStaCrs);
       sprintf (Gbl.Title,"%u %s %u",
                Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
-      Act_LinkFormSubmit (Gbl.Title,"DAT");
+      Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
                          "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
                          " class=\"ICON20x20\" />",
@@ -470,7 +470,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    Cty_PutParamCtyCod (-1L);
    Act_LinkFormSubmit (Txt_System,
                        Highlight ? ClassHighlight :
-        	                   ClassNormal);
+        	                   ClassNormal,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />&nbsp;%s</a>",
@@ -507,7 +507,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Cty_PutParamCtyCod (Cty.CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
 			  Highlight ? ClassHighlight :
-        	                      ClassNormal);
+        	                      ClassNormal,NULL);
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
@@ -548,7 +548,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Ins_PutParamInsCod (Ins.InsCod);
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     Highlight ? ClassHighlight :
-        	                         ClassNormal);
+        	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,20,NULL,true);
 	 strcpy (InsFullName,Ins.FullName);
          Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
@@ -583,7 +583,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Ctr_PutParamCtrCod (Ctr.CtrCod);
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        Highlight ? ClassHighlight :
-        	                            ClassNormal);
+        	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,20,NULL,true);
 	    strcpy (CtrFullName,Ctr.FullName);
             Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
@@ -618,7 +618,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Deg_PutParamDegCod (Deg.DegCod);
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           Highlight ? ClassHighlight :
-        	                               ClassNormal);
+        	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,NULL,true);
 	       strcpy (DegFullName,Deg.FullName);
                Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
@@ -653,7 +653,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      Highlight ? ClassHighlight :
-        	                                  ClassNormal);
+        	                                  ClassNormal,NULL);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON20x20\" />",
@@ -1242,7 +1242,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 Act_FormGoToStart (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,Crs->FullName);
-	 Act_LinkFormSubmit (Gbl.Title,TxtClassStrong);
+	 Act_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
 	 fprintf (Gbl.F.Out,"%s</a>",
 		  Crs->FullName);
 	 Act_FormEnd ();
@@ -3210,7 +3210,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Act_FormGoToStart (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
-   Act_LinkFormSubmit (Gbl.Title,StyleNoBR);
+   Act_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
@@ -3230,7 +3230,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Act_FormGoToStart (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
-   Act_LinkFormSubmit (Gbl.Title,Style);
+   Act_LinkFormSubmit (Gbl.Title,Style,NULL);
    fprintf (Gbl.F.Out,"%s</a>",row[5]);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");

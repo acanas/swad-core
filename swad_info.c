@@ -577,7 +577,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
          fprintf (Gbl.F.Out,"<li>");
          Act_FormStart (Inf_ActionsSeeInfo[InfoType]);
          Act_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
-                             The_ClassForm[Gbl.Prefs.Theme]);
+                             The_ClassForm[Gbl.Prefs.Theme],NULL);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));

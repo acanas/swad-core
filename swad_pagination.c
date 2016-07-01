@@ -167,7 +167,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   1,(unsigned) Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font);
+         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
         }
       else
          fprintf (Gbl.F.Out,"<span class=\"%s\">",Font);
@@ -244,7 +244,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   1,(unsigned) Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font);
+         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"1</a>");
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
@@ -304,7 +304,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->LeftPage,(unsigned) Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font);
+         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"%u</a>",
                   (unsigned) Pagination->LeftPage);
          Act_FormEnd ();
@@ -371,7 +371,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
               }
             sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                      (unsigned) NumPage,(unsigned) Pagination->NumPags);
-            Act_LinkFormSubmit (Gbl.Title,Font);
+            Act_LinkFormSubmit (Gbl.Title,Font,NULL);
             fprintf (Gbl.F.Out,"%u</a>",
         	     (unsigned) NumPage);
             Act_FormEnd ();
@@ -434,7 +434,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->RightPage,(unsigned) Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font);
+         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->RightPage);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
@@ -494,7 +494,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->NumPags,(unsigned) Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font);
+         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->NumPags);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");

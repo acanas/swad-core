@@ -2692,7 +2692,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-         Act_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL");
+         Act_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Test.SelectedOrderType)
             fprintf (Gbl.F.Out,"<u>");
         }
@@ -7364,7 +7364,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT");
+   Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat);

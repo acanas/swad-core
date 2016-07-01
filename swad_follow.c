@@ -277,7 +277,8 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    extern const char *Txt_Update;
 
    Act_FormStart (ActSeeSocPrf);
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
+                               NULL);
    Lay_PutCalculateIcon (Txt_Update);
    Act_FormEnd ();
   }
@@ -383,7 +384,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	{
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD");
+	 Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/following64x64.png\""
@@ -399,7 +400,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	{
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD");
+	 Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/follow64x64.png\""
@@ -445,7 +446,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-        	                                       "FOLLOW_NUM");
+        	                                       "FOLLOW_NUM",NULL);
      }
    else
       fprintf (Gbl.F.Out,"<span class=\"%s\">",
@@ -471,7 +472,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
-        	                                       The_ClassForm[Gbl.Prefs.Theme]);
+        	                                       The_ClassForm[Gbl.Prefs.Theme],NULL);
      }
    fprintf (Gbl.F.Out,"%s",Title);
    if (NumUsrs)
@@ -689,7 +690,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"DAT");
+      Act_LinkFormSubmit (Txt_View_public_profile,"DAT",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,10);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
@@ -712,7 +713,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 /* Form to unfollow */
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Following_unfollow,NULL);
+	 Act_LinkFormSubmit (Txt_Following_unfollow,NULL,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/following64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
@@ -728,7 +729,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_Follow,NULL);
+	 Act_LinkFormSubmit (Txt_Follow,NULL,NULL);
 	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
 			    "<img src=\"%s/follow64x64.png\""
 			    " alt=\"%s\" title=\"%s\""

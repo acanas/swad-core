@@ -918,7 +918,7 @@ void Ban_WriteMenuWithBanners (void)
       Act_FormStart (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
-      Act_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER");
+      Act_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"

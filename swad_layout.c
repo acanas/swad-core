@@ -786,7 +786,7 @@ static void Lay_WritePageTopHeading (void)
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
 
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
-   Act_LinkFormSubmit (Txt_System,NULL);
+   Act_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
@@ -796,7 +796,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
                       "<div id=\"head_row_1_logo_big\">");
-   Act_LinkFormSubmit (Txt_System,NULL);
+   Act_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
@@ -806,7 +806,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
                       "<div id=\"head_row_1_tagline\">");
-   Act_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s"
 	              "</a>"
                       "</div>",	// head_row_1_tagline
@@ -1037,10 +1037,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
 void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
                       const char *LinkStyle,const char *Function)
   {
-   if (Function)
-      Act_LinkFormSubmitFunction (Title,LinkStyle,Function);
-   else
-      Act_LinkFormSubmit (Title,LinkStyle);
+   Act_LinkFormSubmit (Title,LinkStyle,Function);
    Lay_PutIconWithText (Icon,Title,Text);
    fprintf (Gbl.F.Out,"</a>");
   }

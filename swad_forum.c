@@ -1904,7 +1904,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Act_FormStart (ActSeeFor);
    For_PutAllHiddenParamsForum ();
-   Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICON20x20\" />"
@@ -2275,7 +2275,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    /***** Write link to forum *****/
    Act_FormStart (NextAct);
    For_PutAllHiddenParamsForum ();
-   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[NextAct].ActCod,ActTxt),Style);
+   Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[NextAct].ActCod,ActTxt),Style,NULL);
    switch (ForumType)
      {
       case For_FORUM_INSTITUTION_USRS:
@@ -2628,7 +2628,7 @@ void For_ShowForumThrs (void)
          For_PutParamWhichForum ();
          For_PutParamsForumInsDegCrs ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL");
+	 Act_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Forum.SelectedOrderType)
             fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);

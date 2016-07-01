@@ -225,7 +225,7 @@ static void Att_ShowAllAttEvents (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
@@ -386,7 +386,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Att_PutParamAttCod (Att->AttCod);
    Att_PutParamsCodGrps (Att->AttCod);
    Act_LinkFormSubmit (Txt_View_event,Att->Hidden ? "ASG_TITLE_LIGHT" :
-	                                            "ASG_TITLE");
+	                                            "ASG_TITLE",NULL);
    fprintf (Gbl.F.Out,"%s</a>",Att->Title);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -3045,7 +3045,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"4\" class=\"CENTER_MIDDLE\">");
       Act_LinkFormSubmitAnimated (Txt_Update_attendance_according_to_selected_events,
-                                  The_ClassFormBold[Gbl.Prefs.Theme]);
+                                  The_ClassFormBold[Gbl.Prefs.Theme],
+                                  NULL);
       Lay_PutCalculateIconWithText (Txt_Update_attendance_according_to_selected_events,
                                     Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"

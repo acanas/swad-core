@@ -227,7 +227,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL");
+	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
@@ -445,7 +445,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_View_survey,
                        Svy.Status.Visible ? "ASG_TITLE" :
-	                                    "ASG_TITLE_LIGHT");
+	                                    "ASG_TITLE_LIGHT",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Svy.Title);
    Act_FormEnd ();

@@ -1150,7 +1150,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       if (FormUnique)
          Act_LinkFormSubmitUnique (NULL,NULL);
       else
-         Act_LinkFormSubmit (NULL,NULL);
+         Act_LinkFormSubmit (NULL,NULL,NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -1929,7 +1929,9 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
-      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,The_ClassFormBold[Gbl.Prefs.Theme]);
+      Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
+                                  The_ClassFormBold[Gbl.Prefs.Theme],
+                                  NULL);
       Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees with students *****/
@@ -2375,7 +2377,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       Act_FormGoToStart (ActSeeDegInf);
       Deg_PutParamDegCod (Deg->DegCod);
       sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
-      Act_LinkFormSubmit (Gbl.Title,NULL);
+      Act_LinkFormSubmit (Gbl.Title,NULL,NULL);
      }
 
    /***** Check if photo of degree can be shown *****/

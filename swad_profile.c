@@ -602,7 +602,8 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
 
    Act_FormStart (Action);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
+                               NULL);
    Lay_PutCalculateIconWithText (Txt_Calculate,Txt_Calculate);
    Act_FormEnd ();
   }
@@ -757,7 +758,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Act_FormStart (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Sta_USERS_RANKING);
-   Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Act_FormEnd ();
   }
@@ -1526,7 +1527,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
      {
       Act_FormStart (ActSeePubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL");
+      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();

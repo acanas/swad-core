@@ -125,7 +125,7 @@ void Tab_DrawTabs (void)
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
 	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
 	                        NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
@@ -241,7 +241,7 @@ static void Tab_WriteBreadcrumbHome (void)
    extern const char *Txt_Home_PAGE;
 
    Act_FormStart (ActHom);
-   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Home_PAGE,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s</a>",
 	    Txt_Home_PAGE);
    Act_FormEnd ();
@@ -259,7 +259,7 @@ static void Tab_WriteBreadcrumbTab (void)
    /***** Start form *****/
    Act_FormStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end of form *****/
    fprintf (Gbl.F.Out,"%s</a>",
@@ -279,7 +279,7 @@ static void Tab_WriteBreadcrumbAction (void)
 
    /***** Start form *****/
    Act_FormStart (Act_Actions[Gbl.Action.Act].SuperAction);
-   Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Title,The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end of form *****/
    fprintf (Gbl.F.Out,"%s</a>",

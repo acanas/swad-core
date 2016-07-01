@@ -284,7 +284,10 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"padding-top:12px;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,
+                               The_ClassFormBold[Gbl.Prefs.Theme],
+                               NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
+                        	                            NULL);
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
    fprintf (Gbl.F.Out,"</div>");
 

@@ -1389,7 +1389,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<span class=\"%s\">(</span>"
@@ -2422,7 +2422,7 @@ static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks
 	{
 	 Act_FormGoToStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Act_LinkFormSubmit (Ins->FullName,NULL);
+	 Act_LinkFormSubmit (Ins->FullName,NULL,NULL);
 	}
       Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
@@ -2443,7 +2443,7 @@ static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks
 	{
 	 Act_FormGoToStart (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 Act_LinkFormSubmit (Ins->FullName,"REC_HEAD");
+	 Act_LinkFormSubmit (Ins->FullName,"REC_HEAD",NULL);
 	}
       fprintf (Gbl.F.Out,"%s",Ins->FullName);
       if (PutFormLinks)
@@ -2521,7 +2521,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 /* Put form to go to public profile */
 	 Act_FormStart (ActSeePubPrf);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK");
+	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK",NULL);
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (PutFormLinks)

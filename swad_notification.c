@@ -510,7 +510,7 @@ void Ntf_ShowMyNotifications (void)
 
          if (PutLink)
            {
-            Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
+            Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             fprintf (Gbl.F.Out,"%s</a>",
                      Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
             Act_FormEnd ();
@@ -533,7 +533,7 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
+               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
@@ -551,7 +551,7 @@ void Ntf_ShowMyNotifications (void)
                PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
             if (PutLink)
-               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor);
+               Act_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
             else
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
 
@@ -1987,7 +1987,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    /***** Start form *****/
    Act_FormStartId (ActSeeNewNtf,"form_ntf");
    Act_LinkFormSubmitId (Txt_See_notifications,
-			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf");
+			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf",NULL);
 
    /***** Number of unseen notifications *****/
    fprintf (Gbl.F.Out,"<span id=\"notif_all\">%u&nbsp;%s<br /></span>",

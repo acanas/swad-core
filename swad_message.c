@@ -340,7 +340,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
    Lay_PutContextualLink (ActReqMsgUsr,Msg_PutParamsShowMorePotentialRecipients,
 			  "usrs64x64.gif",
 			  Txt_Show_more_recipients,Txt_Show_more_recipients,
-                          NULL);
+                          "CopyMessageToHiddenFields()");
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -485,8 +485,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
-                      " cols=\"72\" rows=\"2\""
-                      " onblur=\"CopyMessageToHiddenFields();\">",
+                      " cols=\"72\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
@@ -534,8 +533,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
-                         " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyMessageToHiddenFields();\">",
+                         " cols=\"72\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -565,8 +563,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
-                         " cols=\"72\" rows=\"20\""
-                         " onblur=\"CopyMessageToHiddenFields();\">",
+                         " cols=\"72\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message);
 
@@ -1687,7 +1684,9 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
      }
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_messages,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update_messages,
+                               The_ClassFormBold[Gbl.Prefs.Theme],
+                               NULL);
    Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3000,7 +2999,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (Msg_TypeOfMessages_t TypeOfMessag
    Act_LinkFormSubmit (Expanded ? Txt_Hide_message :
 	                          Txt_See_message,
                        Open ? "MSG_TIT" :
-                	      "MSG_TIT_NEW");
+                	      "MSG_TIT_NEW",NULL);
 
    /***** Write subject *****/
    if (Subject[0])
@@ -3115,7 +3114,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
         	               "(");
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
-            Act_LinkFormSubmit (Gbl.Title,"MSG_AUT");
+            Act_LinkFormSubmit (Gbl.Title,"MSG_AUT",NULL);
             fprintf (Gbl.F.Out,"%s</a>)"
         	               "</div>",
         	     Crs.ShortName);
@@ -3165,7 +3164,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
 						Txt_Reply) :
 				     (Replied ? Txt_Go_to_course_and_reply_again :
 						Txt_Go_to_course_and_reply),
-		       The_ClassFormBold[Gbl.Prefs.Theme]);
+		       The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Lay_PutIconWithText ("reply16x16.gif",
                         Replied ? Txt_Reply_again :
 			          Txt_Reply,
@@ -3394,7 +3393,7 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
          Msg_PutHiddenParamMsgCod (MsgCod);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-         Act_LinkFormSubmit (Txt_View_all_recipients,"MSG_AUT");
+         Act_LinkFormSubmit (Txt_View_all_recipients,"MSG_AUT",NULL);
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");

@@ -4662,20 +4662,20 @@ void Act_FormEnd (void)
 /*****************************************************************************/
 // Requires an extern </a>
 
-void Act_LinkFormSubmit (const char *Title,const char *LinkStyle)
+void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,const char *Function)
   {
-   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id);
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,Function);
   }
 
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
   {
-   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.UniqueId);
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.UniqueId,NULL);
   }
 
 // Title can be NULL
 // LinkStyle can be NULL
 // Id can not be NULL
-void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id)
+void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id,const char *Function)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4684,13 +4684,16 @@ void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *I
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out," onclick=\""
-	              "document.getElementById('%s').submit();"
-	              "return false;\">",
+   fprintf (Gbl.F.Out," onclick=\"");
+   if (Function)
+      if (Function[0])
+         fprintf (Gbl.F.Out,"%s;",Function);
+   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
+		      "return false;\">",
 	    Id);
   }
 
-void Act_LinkFormSubmitFunction (const char *Title,const char *LinkStyle,const char *Function)
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,const char *Function)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4699,25 +4702,11 @@ void Act_LinkFormSubmitFunction (const char *Title,const char *LinkStyle,const c
    if (LinkStyle)
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out," onclick=\""
-		      "%s;"
-		      "document.getElementById('%s').submit();"
-		      "return false;\">",
-	    Function,
-	    Gbl.Form.Id);
-  }
-
-void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle)
-  {
-   fprintf (Gbl.F.Out,"<a href=\"\"");
-   if (Title)
-      if (Title[0])
-         fprintf (Gbl.F.Out," title=\"%s\"",Title);
-   if (LinkStyle)
-      if (LinkStyle[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
-   fprintf (Gbl.F.Out," onclick=\""
-		      "AnimateIcon(%d);"
+   fprintf (Gbl.F.Out," onclick=\"");
+   if (Function)
+      if (Function[0])
+         fprintf (Gbl.F.Out,"%s;",Function);
+   fprintf (Gbl.F.Out,"AnimateIcon(%d);"
 		      "document.getElementById('%s').submit();"
 		      "return false;\">",
 	    Gbl.Form.Num,

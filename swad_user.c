@@ -1724,7 +1724,7 @@ void Usr_PutFormLogIn (void)
 
    /***** Link to log in form *****/
    Act_FormStart (ActFrmLogIn);
-   Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
@@ -1793,7 +1793,7 @@ void Usr_PutFormLogOut (void)
    extern const char *Txt_Log_out;
 
    Act_FormStart (ActLogOut);
-   Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"
@@ -4905,7 +4905,10 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Usr_PutParamListWithPhotos ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutExtraParamsUsrList (NextAction);
-   Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],The_ClassFormNoWrap[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
+                               The_ClassFormNoWrap[Gbl.Prefs.Theme],
+                               NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
+                                                            NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"

@@ -121,7 +121,8 @@ static void Con_PutIconToUpdateConnected (void)
 
    Act_FormStart (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
+                               NULL);
    Lay_PutCalculateIcon (Txt_Update);
    Act_FormEnd ();
   }
@@ -1279,7 +1280,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
 							   ActSeeRecOneTch);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	       Act_LinkFormSubmit (UsrDat.FullName,Font);
+	       Act_LinkFormSubmit (UsrDat.FullName,Font,NULL);
 	      }
 	    Usr_RestrictLengthAndWriteName (&UsrDat,40);
 	    if (PutLinkToRecord)

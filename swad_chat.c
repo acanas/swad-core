@@ -305,7 +305,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
-   Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

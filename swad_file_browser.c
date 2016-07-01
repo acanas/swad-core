@@ -3435,7 +3435,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<br />");
    sprintf (Gbl.Title,Txt_Write_a_message_to_X,
             UsrDat->FullName);
-   Act_LinkFormSubmit (Gbl.Title,"MSG_AUT");
+   Act_LinkFormSubmit (Gbl.Title,"MSG_AUT",NULL);
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
@@ -5846,7 +5846,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 	    FileNameToShow);
 
    /* Link to the form and to the file */
-   Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle);
+   Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileMetadata->FileType,FileMetadata->FilFolLnkName);
@@ -6006,7 +6006,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
 	                  Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP) ? Txt_Check_marks_in_file_X :
 	                	                                        Txt_Download_FILE_OR_LINK_X,
 	       FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle);
+      Act_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       FileNameToShow);
       Act_FormEnd ();
@@ -9855,7 +9855,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
       /* Link begin */
       sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,"FILENAME");
+      Act_LinkFormSubmit (Gbl.Title,"FILENAME",NULL);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
       /* Name of the file of marks, link end and form end */
@@ -9920,7 +9920,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 
       /* Link begin */
       sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,"DAT");
+      Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"%s</a>",FileNameToShow);
@@ -11626,7 +11626,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_FormGoToStart (ActSeeInsInf);
          Deg_PutParamDegCod (InsCod);
          sprintf (Gbl.Title,Txt_Go_to_X,InsShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
+         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_INS,InsCod,InsShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
 	 Act_FormEnd ();
@@ -11641,7 +11641,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_FormGoToStart (ActSeeCtrInf);
          Deg_PutParamDegCod (CtrCod);
          sprintf (Gbl.Title,Txt_Go_to_X,CtrShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
+         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_CTR,CtrCod,CtrShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
 	 Act_FormEnd ();
@@ -11656,7 +11656,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Act_FormGoToStart (ActSeeDegInf);
          Deg_PutParamDegCod (DegCod);
          sprintf (Gbl.Title,Txt_Go_to_X,DegShortName);
-         Act_LinkFormSubmit (Gbl.Title,"DAT");
+         Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Sco_SCOPE_DEG,DegCod,DegShortName,20,"CENTER_TOP",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
 	 Act_FormEnd ();
@@ -11671,7 +11671,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 Act_FormGoToStart (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (CrsCod);
 	 sprintf (Gbl.Title,Txt_Go_to_X,CrsShortName);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
 	 Act_FormEnd ();
 	}
@@ -11768,7 +11768,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 
       /* File or folder icon */
-      Act_LinkFormSubmit (FileNameToShow,"DAT_N");
+      Act_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
       if (FileMetadata.FileType == Brw_IS_FOLDER)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""

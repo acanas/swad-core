@@ -201,7 +201,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_
 
    /***** Link to action *****/
    sprintf (Gbl.Title,Txt_Go_to_X,Ins->FullName);
-   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw institution logo *****/
    Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,ClassLogo,true);
@@ -395,7 +395,7 @@ static void Ins_Configuration (bool PrintView)
 	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
 	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
 	          Gbl.CurrentIns.Ins.ShortName);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
 	 Act_FormEnd ();
@@ -714,7 +714,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 Act_FormStart (ActSeeIns);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL");
+	 Act_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Inss.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
 	}

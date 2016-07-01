@@ -247,7 +247,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
 
    /***** Link to action *****/
    sprintf (Gbl.Title,Txt_Go_to_X,Deg->FullName);
-   Act_LinkFormSubmit (Gbl.Title,ClassLink);
+   Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw degree logo *****/
    Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,ClassLogo,true);
@@ -425,7 +425,7 @@ static void Deg_Configuration (bool PrintView)
 	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
 	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
 	          Gbl.CurrentDeg.Deg.ShortName);
-	 Act_LinkFormSubmit (Gbl.Title,"DAT");
+	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
 	 Act_FormEnd ();
@@ -671,7 +671,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
    /***** Form to go to the system *****/
    Act_FormGoToStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_System,ClassOn);
+   Act_LinkFormSubmit (Txt_System,ClassOn,NULL);
    fprintf (Gbl.F.Out,"%s</a>",Txt_System);
    Act_FormEnd ();
 
@@ -683,7 +683,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       /***** Form to go to see institutions of this country *****/
       Act_FormGoToStart (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassOn);
+      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassOn,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
                Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       Act_FormEnd ();
@@ -695,7 +695,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
 
       /***** Form to go to select countries *****/
       Act_FormGoToStart (ActSeeCty);
-      Act_LinkFormSubmit (Txt_Country,ClassSemiOff);
+      Act_LinkFormSubmit (Txt_Country,ClassSemiOff,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
       Act_FormEnd ();
      }
@@ -708,7 +708,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       /***** Form to see centres of this institution *****/
       Act_FormGoToStart (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn);
+      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       Gbl.CurrentIns.Ins.ShortName);
       Act_FormEnd ();
@@ -720,7 +720,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
 
       /***** Form to go to select institutions *****/
       Act_FormGoToStart (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institution,ClassSemiOff);
+      Act_LinkFormSubmit (Txt_Institution,ClassSemiOff,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
       Act_FormEnd ();
      }
@@ -737,7 +737,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       /***** Form to see degrees of this centre *****/
       Act_FormGoToStart (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn);
+      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       Gbl.CurrentCtr.Ctr.ShortName);
       Act_FormEnd ();
@@ -749,7 +749,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
 
       /***** Form to go to select centres *****/
       Act_FormGoToStart (ActSeeCtr);
-      Act_LinkFormSubmit (Txt_Centre,ClassSemiOff);
+      Act_LinkFormSubmit (Txt_Centre,ClassSemiOff,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
       Act_FormEnd ();
      }
@@ -766,7 +766,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       /***** Form to go to see courses of this degree *****/
       Act_FormGoToStart (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn);
+      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn,NULL);
       strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
       Str_LimitLengthHTMLStr (DegreeShortName,
 			      Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
@@ -781,7 +781,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
 
       /***** Form to go to select degrees *****/
       Act_FormGoToStart (ActSeeDeg);
-      Act_LinkFormSubmit (Txt_Degree,ClassSemiOff);
+      Act_LinkFormSubmit (Txt_Degree,ClassSemiOff,NULL);
       fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
       Act_FormEnd ();
      }
