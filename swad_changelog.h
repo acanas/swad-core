@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.240.1 (2016-07-02)"
+#define Log_PLATFORM_VERSION	"SWAD 15.240.2 (2016-07-02)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.240.2: Jul 02, 2015	Fixed bug in edition of courses. (203548 lines)
         Version 15.240.1: Jul 02, 2015	Fixed bug in web service. (203539 lines)
         Version 15.240:   Jul 01, 2015	Copy subject and content of message to hidden param when clicking on link. (203534 lines)
         Version 15.239:   Jul 01, 2015	Code refactoring related to contextual menus. (203531 lines)

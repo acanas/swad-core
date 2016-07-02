@@ -2457,13 +2457,17 @@ void Crs_ChangeCrsYearInConfig (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,NewYear,"ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L))
+      if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,
+                                                NewYear,"ShortName",
+                                                Gbl.CurrentCrs.Crs.ShortName,-1L))
 	{
 	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
 	 Gbl.Error = true;
 	}
-      else if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,NewYear,"FullName",Gbl.CurrentCrs.Crs.FullName,-1L))
+      else if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,
+                                                     NewYear,"FullName",
+                                                     Gbl.CurrentCrs.Crs.FullName,-1L))
 	{
 	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.FullName,Txt_YEAR_OF_DEGREE[NewYear]);
@@ -2523,13 +2527,17 @@ void Crs_ChangeCrsYear (void)
       if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
-         if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,NewYear,"ShortName",Crs->ShortName,-1L))
+         if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,
+                                                   NewYear,"ShortName",
+                                                   Crs->ShortName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
             Gbl.Error = true;
            }
-         else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,NewYear,"FullName",Crs->FullName,-1L))
+         else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,
+                                                        NewYear,"FullName",
+                                                        Crs->FullName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->FullName,Txt_YEAR_OF_DEGREE[NewYear]);
@@ -2568,10 +2576,10 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
 
    /***** Update year/semester in table of courses *****/
    sprintf (Query,"UPDATE courses SET Year='%u' WHERE CrsCod='%ld'",
-	    NewYear,Gbl.CurrentCrs.Crs.CrsCod);
+	    NewYear,Crs->CrsCod);
    DB_QueryUPDATE (Query,"can not update the year of a course");
 
-   /***** Copy couese year/semester *****/
+   /***** Copy course year/semester *****/
    Crs->Year = NewYear;
   }
 
