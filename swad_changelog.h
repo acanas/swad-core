@@ -129,17 +129,21 @@
 
 // TODO: Add new WS functions to count the number of users to return in call to functions getUsers/findUsers?
 
+// TODO: In search of users and findUsers banned users should not appear in listing!!!!!
+// TODO: Send attached photos via SOAP?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.240 (2016-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 15.240.1 (2016-07-02)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.240.1: Jul 02, 2015	Fixed bug in web service. (203539 lines)
         Version 15.240:   Jul 01, 2015	Copy subject and content of message to hidden param when clicking on link. (203534 lines)
         Version 15.239:   Jul 01, 2015	Code refactoring related to contextual menus. (203531 lines)
         Version 15.238.1: Jul 01, 2015	New javascript function to animate icon. (203292 lines)

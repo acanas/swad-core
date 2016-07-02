@@ -153,6 +153,7 @@ static const char *Svc_Functions[1+Svc_NUM_FUNCTIONS] =
    "sendAttendanceUsers",	// 22
    "createAccount",		// 23
    "getMarks",			// 24
+   "findUsers",			// 25
   };
 
 /*****************************************************************************/
@@ -1429,7 +1430,7 @@ int swad__findUsers (struct soap *soap,
    bool FilterTooShort = false;
 
    Gbl.soap = soap;
-   Gbl.WebService.Function = Svc_getUsers;
+   Gbl.WebService.Function = Svc_findUsers;
    Gbl.CurrentCrs.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
 	                                          -1L;
 
