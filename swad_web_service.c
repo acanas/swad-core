@@ -156,6 +156,7 @@ static const char *Svc_Functions[1+Svc_NUM_FUNCTIONS] =
    "findUsers",			// 25
   };
 
+/* Web service roles (they do not match internal swad-core roles) */
 #define Svc_NUM_ROLES 4
 typedef enum
   {
@@ -165,6 +166,7 @@ typedef enum
    Svc_ROLE_TEACHER = 3,	// Teacher in current course
   } Svc_Role_t;
 
+/* Translation from service-web-role to swad-core-role */
 Rol_Role_t Svc_SvcRole_to_RolRole[Svc_NUM_ROLES] =
   {
    Rol_UNKNOWN,	// Svc_ROLE_UNKNOWN
@@ -173,6 +175,7 @@ Rol_Role_t Svc_SvcRole_to_RolRole[Svc_NUM_ROLES] =
    Rol_TEACHER,	// Svc_ROLE_TEACHER
   };
 
+/* Translation from swad-core-role to service-web-role */
 Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
   {
    Svc_ROLE_UNKNOWN,	// Rol_UNKNOWN
