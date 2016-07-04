@@ -171,7 +171,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    char YN[1+1];
    unsigned NumUsrsInCrs;
    bool ShowUsrsInCrs = false;
-   bool GetListUsrs = !Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
+   bool GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
 	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
@@ -209,7 +209,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    else
      {
       /***** Get list of users belonging to the current course *****/
-      if (GetListUsrs)
+      if (GetUsrsInCrs)
 	{
 	 /***** Get and update type of list,
 		number of columns in class photo
@@ -236,10 +236,10 @@ static void Msg_PutFormMsgUsrs (char *Content)
 	       /***** Get lists of selected users *****/
 	       Usr_GetListsSelectedUsrsCods ();
 	   }
+        }
 
-	 /***** Get list of users' IDs or nicknames written explicitely *****/
-	 Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
-	}
+      /***** Get list of users' IDs or nicknames written explicitely *****/
+      Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
      }
 
    /***** Start form to select recipients and write the message *****/
@@ -310,8 +310,11 @@ static void Msg_PutFormMsgUsrs (char *Content)
    Usr_FreeListOtherRecipients ();
 
    /***** Free memory used for by the lists of users *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
-   Usr_FreeUsrsList (Rol_STUDENT);
+   if (GetUsrsInCrs)
+     {
+      Usr_FreeUsrsList (Rol_TEACHER);
+      Usr_FreeUsrsList (Rol_STUDENT);
+     }
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
