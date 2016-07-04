@@ -156,6 +156,36 @@ static const char *Svc_Functions[1+Svc_NUM_FUNCTIONS] =
    "findUsers",			// 25
   };
 
+#define Svc_NUM_ROLES 4
+typedef enum
+  {
+   Svc_ROLE_UNKNOWN = 0,	// User not logged in
+   Svc_ROLE__GUEST_ = 1,	// User not belonging to any course
+   Svc_ROLE_STUDENT = 2,	// Student in current course
+   Svc_ROLE_TEACHER = 3,	// Teacher in current course
+  } Svc_Role_t;
+
+Rol_Role_t Svc_SvcRole_to_RolRole[Svc_NUM_ROLES] =
+  {
+   Rol_UNKNOWN,	// Svc_ROLE_UNKNOWN
+   Rol__GUEST_,	// Svc_ROLE__GUEST_
+   Rol_STUDENT,	// Svc_ROLE_STUDENT
+   Rol_TEACHER,	// Svc_ROLE_TEACHER
+  };
+
+Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
+  {
+   Svc_ROLE_UNKNOWN,	// Rol_UNKNOWN
+   Svc_ROLE__GUEST_,	// Rol__GUEST_
+   Svc_ROLE_UNKNOWN,	// Rol_VISITOR
+   Svc_ROLE_STUDENT,	// Rol_STUDENT
+   Svc_ROLE_TEACHER,	// Rol_TEACHER
+   Svc_ROLE_UNKNOWN,	// Rol_DEG_ADM
+   Svc_ROLE_UNKNOWN,	// Rol_CTR_ADM
+   Svc_ROLE_UNKNOWN,	// Rol_INS_ADM
+   Svc_ROLE_UNKNOWN,	// Rol_SYS_ADM
+  };
+
 /*****************************************************************************/
 /********************************* Data types ********************************/
 /*****************************************************************************/
@@ -174,7 +204,6 @@ static int Svc_GenerateNewWSKey (long UsrCod,char *WSKey);
 static int Svc_RemoveOldWSKeys (void);
 static int Svc_GetCurrentDegCodFromCurrentCrsCod (void);
 static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
-static int Svc_GetRoleFromInternalRole (Rol_Role_t Role);
 
 static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewNicknameWithoutArroba,	// Output
@@ -601,27 +630,6 @@ static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
   }
 
 /*****************************************************************************/
-/****** Get the role returned via web service from internal role code ********/
-/*****************************************************************************/
-
-static int Svc_GetRoleFromInternalRole (Rol_Role_t Role)
-  {
-   switch (Role)
-     {
-      case Rol__GUEST_:
-      case Rol_VISITOR:
-	 return 1;	// guest or visitor
-      case Rol_STUDENT:
-	 return 2;	// student
-      case Rol_TEACHER:
-	 return 3;	// teacher
-      default:
-	 return 0;	// unknown
-     }
-   return 0;		// unknown
-  }
-
-/*****************************************************************************/
 /**************************** Get info of my marks ***************************/
 /*****************************************************************************/
 
@@ -876,7 +884,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
          strncpy (loginByUserPasswordKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
          loginByUserPasswordKeyOut->userBirthday[4+2+2] = '\0';
 
-         loginByUserPasswordKeyOut->userRole = Svc_GetRoleFromInternalRole (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB);
+         loginByUserPasswordKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
         }
       else
 	{
@@ -1011,7 +1019,7 @@ int swad__loginBySessionKey (struct soap *soap,
          strncpy (loginBySessionKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
          loginBySessionKeyOut->userBirthday[4+2+2] = '\0';
 
-         loginBySessionKeyOut->userRole = Svc_GetRoleFromInternalRole (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB);
+         loginBySessionKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
         }
       else
 	{
@@ -1212,7 +1220,7 @@ int swad__getCourses (struct soap *soap,
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
             Role = Rol_UNKNOWN;
-         getCoursesOut->coursesArray.__ptr[NumRow].userRole = Svc_GetRoleFromInternalRole (Role);
+         getCoursesOut->coursesArray.__ptr[NumRow].userRole = Svc_RolRole_to_SvcRole[Role];
 	}
      }
 
@@ -1390,12 +1398,12 @@ int swad__getUsers (struct soap *soap,
      return ReturnCode;
 
    /***** Check requested users' role *****/
-   if (userRole < 2 ||	// Students
-       userRole > 3)	// Teachers
+   if (userRole != Svc_ROLE_STUDENT &&	// Students
+       userRole != Svc_ROLE_TEACHER)	// Teachers
       return soap_sender_fault (Gbl.soap,
 	                        "Bad requested users' type",
 	                        "User roles allowed are 2 (students) or 3 (teachers)");
-   Role = (Rol_Role_t) userRole;
+   Role = Svc_SvcRole_to_RolRole[userRole];
 
    /***** Create a list of groups selected *****/
    Svc_GetLstGrpsSel (groups);
@@ -1469,12 +1477,12 @@ int swad__findUsers (struct soap *soap,
      }
 
    /***** Check requested users' role *****/
-   if (userRole < 0 ||
-       userRole > 3)
+   if (userRole < Svc_ROLE_UNKNOWN ||
+       userRole > Svc_ROLE_TEACHER)
       return soap_sender_fault (Gbl.soap,
 	                        "Bad requested users' type",
-	                        "User roles allowed are 0 (all),1 (guests), 2 (students) or 3 (teachers)");
-   Role = (Rol_Role_t) userRole;
+	                        "User roles allowed are 0 (all), 1 (guests), 2 (students) or 3 (teachers)");
+   Role = Svc_SvcRole_to_RolRole[userRole];
 
    /***** Query users beloging to course or group from database *****/
    strncpy (Gbl.Search.Str,filter,Sch_MAX_LENGTH_STRING_TO_FIND);

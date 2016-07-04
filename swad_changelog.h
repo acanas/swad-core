@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.240.3 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.240.4 (2016-07-04)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.240.4: Jul 04, 2015	Fixed bugs in web service, reported by Rubén Martín Hidalgo. (203589 lines)
         Version 15.240.3: Jul 04, 2015	N.A. year is shown at foot in edition of courses. (? lines)
         Version 15.240.2: Jul 02, 2015	Fixed bug in edition of courses. (203548 lines)
         Version 15.240.1: Jul 02, 2015	Fixed bug in web service. (203539 lines)
