@@ -84,6 +84,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCourses (void);
 static void Crs_ListCoursesForEdition (void);
+static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
 static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status);
 static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt);
@@ -92,7 +93,8 @@ static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_RecFormRequestOrCreateCrs (unsigned Status);
 static void Crs_GetParamsNewCourse (struct Course *Crs);
-static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,const char *FieldName,const char *Name,long CrsCod);
+static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
+                                                  const char *FieldName,const char *Name,long CrsCod);
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
@@ -1294,10 +1296,34 @@ static void Crs_EditCourses (void)
 static void Crs_ListCoursesForEdition (void)
   {
    extern const char *Txt_Courses_of_DEGREE_X;
+   unsigned Year;
+
+   /***** Write heading *****/
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
+            Gbl.CurrentDeg.Deg.ShortName);
+   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
+   Crs_PutHeadCoursesForEdition ();
+
+   /***** List the courses *****/
+   for (Year = 1;
+	Year <= Deg_MAX_YEARS_PER_DEGREE;
+	Year++)
+      Crs_ListCoursesOfAYearForEdition (Year);
+   Crs_ListCoursesOfAYearForEdition (0);
+
+   /***** End table *****/
+   Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/******************** List courses of a year for edition *********************/
+/*****************************************************************************/
+
+static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
+  {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    struct Course *Crs;
-   unsigned Year;
    unsigned YearAux;
    unsigned NumDeg;
    unsigned NumCrs;
@@ -1308,203 +1334,191 @@ static void Crs_ListCoursesForEdition (void)
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShortName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
-   Crs_PutHeadCoursesForEdition ();
+   /***** List courses of a given year *****/
+   for (NumCrs = 0;
+	NumCrs < Gbl.CurrentDeg.NumCrss;
+	NumCrs++)
+     {
+      Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
+      if (Crs->Year == Year)
+	{
+	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
-   /***** List the courses *****/
-   for (Year = 0;
-	Year <= Deg_MAX_YEARS_PER_DEGREE;
-	Year++)
-      for (NumCrs = 0;
-	   NumCrs < Gbl.CurrentDeg.NumCrss;
-	   NumCrs++)
-        {
-         Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
-         if (Crs->Year == Year)
-           {
-            ICanEdit = Crs_CheckIfICanEdit (Crs);
+	 /* Put icon to remove course */
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"BM\">");
+	 if (Crs->NumUsrs ||	// Course has users ==> deletion forbidden
+	     !ICanEdit)
+	    Lay_PutIconRemovalNotAllowed ();
+	 else	// Crs->NumUsrs == 0 && ICanEdit
+	   {
+	    Act_FormStart (ActRemCrs);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    Lay_PutIconRemove ();
+	    Act_FormEnd ();
+	   }
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Put icon to remove course */
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"BM\">");
-            if (Crs->NumUsrs ||	// Course has users ==> deletion forbidden
-                !ICanEdit)
-               Lay_PutIconRemovalNotAllowed ();
-            else	// Crs->NumUsrs == 0 && ICanEdit
-              {
-               Act_FormStart (ActRemCrs);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               Lay_PutIconRemove ();
-               Act_FormEnd ();
-              }
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Course code */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
+			    "%ld"
+			    "</td>",
+		  Crs->CrsCod);
 
-            /* Course code */
-            fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
-        	               "%ld"
-        	               "</td>",
-                     Crs->CrsCod);
+	 /* Institutional code of the course */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
+	 if (ICanEdit)
+	   {
+	    Act_FormStart (ActChgInsCrsCod);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
+			       " maxlength=\"%u\" value=\"%s\""
+			       " class=\"INPUT_INS_CODE\""
+			       " onchange=\"document.getElementById('%s').submit();\" />",
+		     Crs_LENGTH_INSTITUTIONAL_CRS_COD,
+		     Crs->InstitutionalCrsCod,
+		     Gbl.Form.Id);
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Institutional code of the course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
-            if (ICanEdit)
-              {
-               Act_FormStart (ActChgInsCrsCod);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
-        	                  " maxlength=\"%u\" value=\"%s\""
-                                  " class=\"INPUT_INS_CODE\""
-                                  " onchange=\"document.getElementById('%s').submit();\" />",
-                        Crs_LENGTH_INSTITUTIONAL_CRS_COD,
-                        Crs->InstitutionalCrsCod,
-                        Gbl.Form.Id);
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Degree */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	   {
+	    Act_FormStart (ActChgCrsDeg);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
+			       " class=\"INPUT_DEGREE\""
+			       " onchange=\"document.getElementById('%s').submit();\">",
+		     Gbl.Form.Id);
+	    for (NumDeg = 0;
+		 NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
+		 NumDeg++)
+	       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod,
+			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
+												  "",
+			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].ShortName);
+	    fprintf (Gbl.F.Out,"</select>");
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShortName);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Degree */
-            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-              {
-               Act_FormStart (ActChgCrsDeg);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-        	                  " class=\"INPUT_DEGREE\""
-        	                  " onchange=\"document.getElementById('%s').submit();\">",
-                        Gbl.Form.Id);
-               for (NumDeg = 0;
-        	    NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
-        	    NumDeg++)
-                  fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-                           Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod,
-                           Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
-                        	                                                                     "",
-                           Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].ShortName);
-               fprintf (Gbl.F.Out,"</select>");
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShortName);
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Course year */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
+	 if (ICanEdit)
+	   {
+	    Act_FormStart (ActChgCrsYea);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
+			       " style=\"width:50px;\""
+			       " onchange=\"document.getElementById('%s').submit();\">",
+		     Gbl.Form.Id);
+	    for (YearAux = 0;
+		 YearAux <= Deg_MAX_YEARS_PER_DEGREE;
+		 YearAux++)	// All the years are permitted because it's possible to move this course to another degree (with other active years)
+	       fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
+			YearAux,
+			YearAux == Crs->Year ? " selected=\"selected\"" :
+					       "",
+			Txt_YEAR_OF_DEGREE[YearAux]);
+	    fprintf (Gbl.F.Out,"</select>");
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Course year */
-            fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
-            if (ICanEdit)
-              {
-               Act_FormStart (ActChgCrsYea);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
-        	                  " style=\"width:50px;\""
-        	                  " onchange=\"document.getElementById('%s').submit();\">",
-                        Gbl.Form.Id);
-               for (YearAux = 0;
-        	    YearAux <= Deg_MAX_YEARS_PER_DEGREE;
-        	    YearAux++)	// All the years are permitted because it's possible to move this course to another degree (with other active years)
-                  fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
-                           YearAux,
-                           YearAux == Crs->Year ? " selected=\"selected\"" :
-                        	                  "",
-                           Txt_YEAR_OF_DEGREE[YearAux]);
-               fprintf (Gbl.F.Out,"</select>");
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Course short name */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+	 if (ICanEdit)
+	   {
+	    Act_FormStart (ActRenCrsSho);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+			       " maxlength=\"%u\" value=\"%s\""
+			       " class=\"INPUT_SHORT_NAME\""
+			       " onchange=\"document.getElementById('%s').submit();\" />",
+		     Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
+		     Gbl.Form.Id);
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Crs->ShortName);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Course short name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-            if (ICanEdit)
-              {
-               Act_FormStart (ActRenCrsSho);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-        	                  " maxlength=\"%u\" value=\"%s\""
-                                  " class=\"INPUT_SHORT_NAME\""
-                                  " onchange=\"document.getElementById('%s').submit();\" />",
-                        Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
-                        Gbl.Form.Id);
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Crs->ShortName);
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Course full name */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+	 if (ICanEdit)
+	   {
+	    Act_FormStart (ActRenCrsFul);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+			       " maxlength=\"%u\" value=\"%s\""
+			       " class=\"INPUT_FULL_NAME\""
+			       " onchange=\"document.getElementById('%s').submit();\" />",
+		     Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName,
+		     Gbl.Form.Id);
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Crs->FullName);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Course full name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-            if (ICanEdit)
-              {
-               Act_FormStart (ActRenCrsFul);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-        	                  " maxlength=\"%u\" value=\"%s\""
-                                  " class=\"INPUT_FULL_NAME\""
-                                  " onchange=\"document.getElementById('%s').submit();\" />",
-                        Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName,
-                        Gbl.Form.Id);
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Crs->FullName);
-            fprintf (Gbl.F.Out,"</td>");
+	 /* Current number of teachers in this course */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%u"
+			    "</td>",
+		  Crs->NumTchs);
 
-            /* Current number of teachers in this course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-        	               "%u"
-        	               "</td>",
-                     Crs->NumTchs);
+	 /* Current number of students in this course */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%u"
+			    "</td>",
+		  Crs->NumStds);
 
-            /* Current number of students in this course */
-            fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-        	               "%u"
-        	               "</td>",
-                     Crs->NumStds);
+	 /* Course status */
+	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
+	     StatusTxt == Crs_STATUS_PENDING)
+	   {
+	    Act_FormStart (ActChgCrsSta);
+	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
+	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
+			       " onchange=\"document.getElementById('%s').submit();\">"
+			       "<option value=\"%u\" selected=\"selected\">%s</option>"
+			       "<option value=\"%u\">%s</option>"
+			       "</select>",
+		     Gbl.Form.Id,
+		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
+		     Txt_COURSE_STATUS[Crs_STATUS_PENDING],
+		     (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
+		     Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
+	    Act_FormEnd ();
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
+	 fprintf (Gbl.F.Out,"</td>");
 
-            /* Course status */
-            StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-            fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
-            if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
-        	StatusTxt == Crs_STATUS_PENDING)
-              {
-               Act_FormStart (ActChgCrsSta);
-               Crs_PutParamOtherCrsCod (Crs->CrsCod);
-               fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-        	                  " onchange=\"document.getElementById('%s').submit();\">"
-                                  "<option value=\"%u\" selected=\"selected\">%s</option>"
-                                  "<option value=\"%u\">%s</option>"
-                                  "</select>",
-                        Gbl.Form.Id,
-                        (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING),
-                        Txt_COURSE_STATUS[Crs_STATUS_PENDING],
-                        (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE),
-                        Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
-               Act_FormEnd ();
-              }
-            else
-               fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
-            fprintf (Gbl.F.Out,"</td>");
-
-            /* Course requester */
-            UsrDat.UsrCod = Crs->RequesterUsrCod;
-            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-                               "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-                               "<tr>");
-            Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
-            fprintf (Gbl.F.Out,"</tr>"
-        	               "</table>"
-        	               "</td>"
-        	               "</tr>");
-           }
-        }
-
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
+	 /* Course requester */
+	 UsrDat.UsrCod = Crs->RequesterUsrCod;
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			    "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
+			    "<tr>");
+	 Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
+	 fprintf (Gbl.F.Out,"</tr>"
+			    "</table>"
+			    "</td>"
+			    "</tr>");
+	}
+     }
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1838,13 +1852,15 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 	  Crs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,"ShortName",Crs->ShortName,-1L))
+	 if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
+	                                           "ShortName",Crs->ShortName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
 	             Crs->ShortName);
             Gbl.Error = true;
 	   }
-	 else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,"FullName",Crs->FullName,-1L))
+	 else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
+	                                                "FullName",Crs->FullName,-1L))
 	   {
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
 		     Crs->FullName);
@@ -1893,7 +1909,8 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 /********** Check if the name of course exists in existing courses ***********/
 /*****************************************************************************/
 
-static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,const char *FieldName,const char *Name,long CrsCod)
+static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
+                                                  const char *FieldName,const char *Name,long CrsCod)
   {
    char Query[512];
 
@@ -2074,7 +2091,8 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    /***** Get number of students *****/
    Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs->CrsCod);
 
-   Crs->NumUsrs = Crs->NumStds + Crs->NumTchs;
+   Crs->NumUsrs = Crs->NumStds +
+	          Crs->NumTchs;
   }
 
 /*****************************************************************************/
@@ -2175,7 +2193,9 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    /***** Remove course cards of the course *****/
    /* Remove content of course cards */
    sprintf (Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
-                  " WHERE crs_record_fields.CrsCod='%ld' AND crs_record_fields.FieldCod=crs_records.FieldCod",CrsCod);
+                  " WHERE crs_record_fields.CrsCod='%ld'"
+                  " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+            CrsCod);
    DB_QueryDELETE (Query,"can not remove content of cards in a course");
 
    /* Remove definition of fields in course cards */
@@ -2193,9 +2213,11 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
    /***** Remove notices in the course *****/
    /* Copy all notices from the course to table of deleted notices */
-   sprintf (Query,"INSERT INTO notices_deleted (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+   sprintf (Query,"INSERT INTO notices_deleted"
+	          " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
                   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif FROM notices"
-                  " WHERE CrsCod='%ld'",CrsCod);
+                  " WHERE CrsCod='%ld'",
+            CrsCod);
    DB_QueryINSERT (Query,"can not remove notices in a course");
    /* Remove all notices from the course */
    sprintf (Query,"DELETE FROM notices WHERE CrsCod='%ld'",CrsCod);
@@ -2203,26 +2225,35 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
    /***** Remove all the threads and posts in course forums *****/
    /* Remove disabled posts */
-   sprintf (Query,"DELETE FROM forum_disabled_post USING forum_thread,forum_post,forum_disabled_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u') AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_post.ThrCod AND forum_post.PstCod=forum_disabled_post.PstCod",
+   sprintf (Query,"DELETE FROM forum_disabled_post"
+	          " USING forum_thread,forum_post,forum_disabled_post"
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod"
+                  " AND forum_post.PstCod=forum_disabled_post.PstCod",
             For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
    DB_QueryDELETE (Query,"can not remove disabled posts in forums of a course");
 
    /* Remove posts */
    sprintf (Query,"DELETE FROM forum_post USING forum_thread,forum_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u') AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_post.ThrCod",
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod",
             For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
    DB_QueryDELETE (Query,"can not remove posts in forums of a course");
 
    /* Remove threads read */
    sprintf (Query,"DELETE FROM forum_thr_read USING forum_thread,forum_thr_read"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u') AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_thr_read.ThrCod",
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
             For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
    DB_QueryDELETE (Query,"can not remove read threads in forums of a course");
 
    /* Remove threads */
    sprintf (Query,"DELETE FROM forum_thread"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u') AND Location='%ld'",
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND Location='%ld'",
             For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
    DB_QueryDELETE (Query,"can not remove threads in forums of a course");
 
@@ -2398,13 +2429,15 @@ void Crs_ChangeCrsDegree (void)
       if (Crs->Year <= Deg_MAX_YEARS_PER_DEGREE)
         {
          /***** If name of course was in database in the new degree... *****/
-         if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,"ShortName",Crs->ShortName,-1L))
+         if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
+                                                   "ShortName",Crs->ShortName,-1L))
            {
             sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
                      Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
             Gbl.Error = true;
            }
-         else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,"FullName",Crs->FullName,-1L))
+         else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
+                                                        "FullName",Crs->FullName,-1L))
            {
             sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
                      Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
@@ -2694,7 +2727,8 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
          if (strcmp (CurrentCrsName,NewCrsName))	// Different names
            {
             /***** If course was in database... *****/
-            if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,ParamName,NewCrsName,Crs->CrsCod))
+            if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
+                                                      ParamName,NewCrsName,Crs->CrsCod))
               {
                sprintf (Gbl.Message,Txt_The_course_X_already_exists,
                         NewCrsName);
