@@ -171,6 +171,9 @@ static void Msg_PutFormMsgUsrs (char *Content)
    char YN[1+1];
    unsigned NumTotalUsrs = 0;
    bool ShowUsers = true;
+   bool GetListUsrs = !Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
+	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -191,35 +194,8 @@ static void Msg_PutFormMsgUsrs (char *Content)
       Par_GetParToText ("ShowOnlyOneRecipient",YN,1);
       Gbl.Msg.ShowOnlyOneRecipient = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
      }
-
-   /***** Get list of users' IDs or nicknames written explicitely *****/
-   Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
-
-   /***** Get who to show as potential recipients:
-          - only the selected recipient
-          - any user (default) *****/
-   Par_GetParToText ("ShowOnlyOneRecipient",YN,1);
-   Gbl.Msg.ShowOnlyOneRecipient = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-
-   /***** Get list of users belonging to the current course *****/
-   if (!Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
-       (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-     {
-      /***** Get and update type of list,
-	     number of columns in class photo
-	     and preference about view photos *****/
-      Usr_GetAndUpdatePrefsAboutUsrList ();
-
-      /***** Form to select groups *****/
-      Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
-
-      /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-      Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-      NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-                     Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
-     }
+   else
+      Gbl.Msg.ShowOnlyOneRecipient = false;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
@@ -230,17 +206,40 @@ static void Msg_PutFormMsgUsrs (char *Content)
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
       Msg_PutLinkToShowMorePotentialRecipients ();
-   else if (NumTotalUsrs)
+   else
      {
-      /***** Form to select type of list used for select several users *****/
-      Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+      /***** Get list of users belonging to the current course *****/
+      if (GetListUsrs)
+	{
+	 /***** Get and update type of list,
+		number of columns in class photo
+		and preference about view photos *****/
+	 Usr_GetAndUpdatePrefsAboutUsrList ();
 
-      /***** Check if it's a big list *****/
-      ShowUsers = Usr_GetIfShowBigList (NumTotalUsrs,"CopyMessageToHiddenFields()");
+	 /***** Form to select groups *****/
+	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
 
-      if (ShowUsers)
-	 /***** Get lists of selected users *****/
-	 Usr_GetListsSelectedUsrsCods ();
+	 /***** Get and order lists of users from this course *****/
+	 Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+	 Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+	 NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+			Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+	 if (NumTotalUsrs)
+	   {
+	    /***** Form to select type of list used for select several users *****/
+	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+
+	    /***** Check if it's a big list *****/
+	    ShowUsers = Usr_GetIfShowBigList (NumTotalUsrs,"CopyMessageToHiddenFields()");
+
+	    if (ShowUsers)
+	       /***** Get lists of selected users *****/
+	       Usr_GetListsSelectedUsrsCods ();
+	   }
+
+	 /***** Get list of users' IDs or nicknames written explicitely *****/
+	 Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
+      	}
      }
 
    /***** Start form to select recipients and write the message *****/

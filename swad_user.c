@@ -4556,7 +4556,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    extern const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X;
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
-   unsigned Length;
+   size_t LengthSelectedUsrsCods;
+   size_t LengthUsrCod;
    const char *Ptr;
    char UsrIDNickOrEmail[1024+1];
    struct UsrData UsrDat;
@@ -4565,6 +4566,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
    /***** Allocate memory for the lists of users's IDs *****/
    Usr_AllocateListSelectedUsrCodAll ();
+   LengthSelectedUsrsCods = strlen (Gbl.Usrs.Select.All);
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
    Usr_AllocateListOtherRecipients ();
@@ -4690,18 +4692,22 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                if (!Usr_FindUsrCodInListOfSelectedUsrs (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
                  {
                   /* Add encrypted user's code to list of users */
-                  if ((Length = strlen (Gbl.Usrs.Select.All)) == 0)        // First user in list
+                  if (LengthSelectedUsrsCods == 0)        // First user in list
                     {
                      if (strlen (UsrDat.EncryptedUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                         strcpy (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod);        // Add first user
                     }
                   else        // Not first user in list
-                     if (Length < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1 + strlen (UsrDat.EncryptedUsrCod))
+                    {
+                     LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
+                     if (LengthSelectedUsrsCods + (1 + LengthUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         // Add another user
-                        Gbl.Usrs.Select.All[Length] = Par_SEPARATOR_PARAM_MULTIPLE;
+                        Gbl.Usrs.Select.All[LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
                         strcat (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod);
+                        LengthSelectedUsrsCods += 1 + LengthUsrCod;
                        }
+                    }
                  }
               }
 
