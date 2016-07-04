@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.241.3 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.241.4 (2016-07-04)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.241.4: Jul 04, 2015	Changes in form to compose message. (203624 lines)
         Version 15.241.3: Jul 04, 2015	Changes in layout of form to compose message.
 					Code optimization in list of selected users. (203628 lines)
         Version 15.241.2: Jul 04, 2015	Changes in layout of form to compose message. (203619 lines)

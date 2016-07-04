@@ -169,8 +169,8 @@ static void Msg_PutFormMsgUsrs (char *Content)
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
-   unsigned NumTotalUsrs = 0;
-   bool ShowUsers = true;
+   unsigned NumUsrsInCrs;
+   bool ShowUsrsInCrs = false;
    bool GetListUsrs = !Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
 	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
@@ -222,24 +222,24 @@ static void Msg_PutFormMsgUsrs (char *Content)
 	 /***** Get and order lists of users from this course *****/
 	 Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
 	 Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-	 NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	 NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
 			Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
-	 if (NumTotalUsrs)
+	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/
 	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
 	    /***** Check if it's a big list *****/
-	    ShowUsers = Usr_GetIfShowBigList (NumTotalUsrs,"CopyMessageToHiddenFields()");
+	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,"CopyMessageToHiddenFields()");
 
-	    if (ShowUsers)
+	    if (ShowUsrsInCrs)
 	       /***** Get lists of selected users *****/
 	       Usr_GetListsSelectedUsrsCods ();
 	   }
 
 	 /***** Get list of users' IDs or nicknames written explicitely *****/
 	 Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
-      	}
+	}
      }
 
    /***** Start form to select recipients and write the message *****/
@@ -260,39 +260,30 @@ static void Msg_PutFormMsgUsrs (char *Content)
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
    /***** "To:" section (recipients) *****/
-   if (Gbl.Msg.ShowOnlyOneRecipient || ShowUsers)
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_TOP\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"LEFT_TOP\">",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
+   if (Gbl.Msg.ShowOnlyOneRecipient)
+      /***** Show only one user as recipient *****/
+      Msg_ShowOneUniqueRecipient ();
+   else
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"LEFT_TOP\">",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
-      if (Gbl.Msg.ShowOnlyOneRecipient)
-	 /***** Show only one user as recipient *****/
-	 Msg_ShowOneUniqueRecipient ();
-      else
+      /***** Show potential recipients *****/
+      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      if (ShowUsrsInCrs)
 	{
-	 /***** Show potential recipients *****/
-	 /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
-
-         /* Teachers */
-	 Usr_ListUsersToSelect (Rol_TEACHER);
-
-	 /* Students */
-	 Usr_ListUsersToSelect (Rol_STUDENT);
-
-	 /* Other users (nicknames) */
-	 Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
-
-	 /* End table */
-         fprintf (Gbl.F.Out,"</table>");
+	 Usr_ListUsersToSelect (Rol_TEACHER);	// All teachers in course
+	 Usr_ListUsersToSelect (Rol_STUDENT);	// All students in selected groups
 	}
-
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+      fprintf (Gbl.F.Out,"</table>");
      }
+
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Subject and content sections *****/
    Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
