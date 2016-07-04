@@ -4910,9 +4910,9 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Usr_PutParamUsrListType (ListType);
    Usr_PutExtraParamsUsrList (NextAction);
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
-                               The_ClassFormNoWrap[Gbl.Prefs.Theme],
-                               NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
-                                                            NULL);
+                       The_ClassFormNoWrap[Gbl.Prefs.Theme],
+                       NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
+                                                    NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICON20x20\" />"

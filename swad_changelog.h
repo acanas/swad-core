@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.241 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.241.1 (2016-07-04)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.241.1: Jul 04, 2015	Code refactoring related with form submit. (203620 lines)
         Version 15.241:   Jul 04, 2015	When composing a new message, subject and content are shown even if list of users is too big, in order to keep messages that had begun to be written. (203618 lines)
         Version 15.240.5: Jul 04, 2015	Code refactoring related to big lists of users. (203595 lines)
         Version 15.240.4: Jul 04, 2015	Fixed bugs in web service, reported by Rubén Martín Hidalgo. (203592 lines)

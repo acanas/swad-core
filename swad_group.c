@@ -286,8 +286,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
 	              " style=\"padding-top:12px;\">");
    Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,
                                The_ClassFormBold[Gbl.Prefs.Theme],
-                               NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
-                        	                            NULL);
+                               "CopyMessageToHiddenFields()");
    Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,
                                  Txt_Update_students);
    fprintf (Gbl.F.Out,"</div>");

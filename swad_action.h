@@ -1506,12 +1506,12 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id);
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion);
 void Act_FormEnd (void);
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,
-                         const char *JSFunction);
+                         const char *OnSubmit);
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle);
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
-                           const char *Id,const char *JSFunction);
+                           const char *Id,const char *OnSubmit);
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
-                                 const char *JSFunction);
+                                 const char *OnSubmit);
 
 void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
 

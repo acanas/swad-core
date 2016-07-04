@@ -4596,7 +4596,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
       fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
       if (OnSubmit)
          if (OnSubmit[0])
-            fprintf (Gbl.F.Out," onsubmit=\"%s\"",OnSubmit);
+            fprintf (Gbl.F.Out," onsubmit=\"%s;\"",OnSubmit);
       switch (Act_Actions[NextAction].BrowserWindow)
 	{
 	 case Act_NEW_WINDOW:
@@ -4675,9 +4675,9 @@ void Act_FormEnd (void)
 // Requires an extern </a>
 
 void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,
-                         const char *JSFunction)
+                         const char *OnSubmit)
   {
-   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,JSFunction);
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,OnSubmit);
   }
 
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
@@ -4688,10 +4688,10 @@ void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
 // Title can be NULL
 // LinkStyle can be NULL
 // Id can not be NULL
-// JSFunction can be NULL
+// OnSubmit can be NULL
 
 void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
-                           const char *Id,const char *JSFunction)
+                           const char *Id,const char *OnSubmit)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4701,16 +4701,17 @@ void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
    fprintf (Gbl.F.Out," onclick=\"");
-   if (JSFunction)	// JavaScript function to be called before submitting the form
-      if (JSFunction[0])
-         fprintf (Gbl.F.Out,"%s;",JSFunction);
+   if (OnSubmit)	// JavaScript function to be called
+			// before submitting the form
+      if (OnSubmit[0])
+         fprintf (Gbl.F.Out,"%s;",OnSubmit);
    fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
 		      "return false;\">",
 	    Id);
   }
 
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
-                                 const char *JSFunction)
+                                 const char *OnSubmit)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4720,9 +4721,10 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
    fprintf (Gbl.F.Out," onclick=\"");
-   if (JSFunction)	// JavaScript function to be called before submitting the form
-      if (JSFunction[0])
-         fprintf (Gbl.F.Out,"%s;",JSFunction);
+   if (OnSubmit)	// JavaScript function to be called
+			// before submitting the form
+      if (OnSubmit[0])
+         fprintf (Gbl.F.Out,"%s;",OnSubmit);
    fprintf (Gbl.F.Out,"AnimateIcon(%d);"
 		      "document.getElementById('%s').submit();"
 		      "return false;\">",

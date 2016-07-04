@@ -75,9 +75,9 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
                             void (*FuncParams) (),
                             const char *Icon,
                             const char *Title,const char *Text,
-                            const char *JSFunction);
+                            const char *OnSubmit);
 void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle,const char *JSFunction);
+                      const char *LinkStyle,const char *OnSubmit);
 void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text);
 void Lay_PutCalculateIcon (const char *Alt);
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
