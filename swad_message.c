@@ -170,6 +170,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    extern const char *Txt_Send_message;
    char YN[1+1];
    unsigned NumTotalUsrs = 0;
+   bool ShowUsers = true;
 
    Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -220,99 +221,101 @@ static void Msg_PutFormMsgUsrs (char *Content)
                      Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
       if (NumTotalUsrs)
-         /***** Get lists of selected users *****/
-         Usr_GetListsSelectedUsrs ();
+	{
+         ShowUsers = Usr_GetIfShowBigList (NumTotalUsrs,"CopyMessageToHiddenFields()");
+
+         if (ShowUsers)
+	    /***** Get lists of selected users *****/
+	    Usr_GetListsSelectedUsrsCods ();
+	}
      }
 
-   if (Usr_GetIfShowBigList (NumTotalUsrs))
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,
+			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
+						Txt_New_message,
+			NULL);
+
+   /***** Form to select type of list used for select several users *****/
+   if (NumTotalUsrs)
+      Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+
+   /***** Form to show several potential recipients *****/
+   if (Gbl.Msg.ShowOnlyOneRecipient)
+      Msg_PutLinkToShowMorePotentialRecipients ();
+
+   /***** Start form to select recipients and write the message *****/
+   Act_FormStart (ActRcvMsgUsr);
+   if (Gbl.Msg.Reply.IsReply)
      {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,
-                           Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
-	                                           Txt_New_message,
-	                   NULL);
-
-      /***** Form to select type of list used for select several users *****/
-      if (NumTotalUsrs)
-	 Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
-
-      /***** Form to show several potential recipients *****/
-      if (Gbl.Msg.ShowOnlyOneRecipient)
-	 Msg_PutLinkToShowMorePotentialRecipients ();
-
-      /***** Start form to select recipients and write the message *****/
-      Act_FormStart (ActRcvMsgUsr);
-      if (Gbl.Msg.Reply.IsReply)
-	{
-	 Par_PutHiddenParamChar ("IsReply",'Y');
-	 Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
-	}
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	{
-	 Usr_PutParamOtherUsrCodEncrypted ();
-         if (Gbl.Msg.ShowOnlyOneRecipient)
-	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-	}
-
-      /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
-
-      /***** "To:" section (recipients) *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%s:"
-	                 "</td>"
-	                 "<td class=\"LEFT_MIDDLE\">"
-                         "<table style=\"width:100%%;\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
-      if (Gbl.Msg.ShowOnlyOneRecipient)
-	{
-	 /***** Show only one user as recipient *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LEFT_TOP\">");
-         Msg_ShowOneUniqueRecipient ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-	}
-      else
-	{
-	 /***** Show potential recipients *****/
-	 /* Teachers */
-	 Usr_ListUsersToSelect (Rol_TEACHER);
-
-	 /* Students */
-	 Usr_ListUsersToSelect (Rol_STUDENT);
-
-	 /* Other users (nicknames) */
-	 Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
-	}
-
-      /* End of table */
-      fprintf (Gbl.F.Out,"</table>"
-                         "</td>"
-	                 "</tr>");
-
-      /***** Subject and content sections *****/
-      Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
-
-      /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
-
-      /***** Help for text editor and send button *****/
-      Lay_HelpPlainEditor ();
-
-      /***** Attached image (optional) *****/
-      Img_PutImageUploader (-1,"MSG_IMG_TIT_URL");
-
-      /***** Send button *****/
-      Lay_PutCreateButton (Txt_Send_message);
-
-      /***** End form *****/
-      Act_FormEnd ();
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Par_PutHiddenParamChar ("IsReply",'Y');
+      Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
      }
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Usr_PutParamOtherUsrCodEncrypted ();
+      if (Gbl.Msg.ShowOnlyOneRecipient)
+	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+     }
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+
+   /***** "To:" section (recipients) *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_TOP\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"LEFT_MIDDLE\">"
+		      "<table style=\"width:100%%;\">",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
+   if (Gbl.Msg.ShowOnlyOneRecipient)
+     {
+      /***** Show only one user as recipient *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"LEFT_TOP\">");
+      Msg_ShowOneUniqueRecipient ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
+   else	if (ShowUsers)
+     {
+      /***** Show potential recipients *****/
+      /* Teachers */
+      Usr_ListUsersToSelect (Rol_TEACHER);
+
+      /* Students */
+      Usr_ListUsersToSelect (Rol_STUDENT);
+
+      /* Other users (nicknames) */
+      Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();
+     }
+
+   /* End of table */
+   fprintf (Gbl.F.Out,"</table>"
+		      "</td>"
+		      "</tr>");
+
+   /***** Subject and content sections *****/
+   Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
+
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** Help for text editor and send button *****/
+   Lay_HelpPlainEditor ();
+
+   /***** Attached image (optional) *****/
+   Img_PutImageUploader (-1,"MSG_IMG_TIT_URL");
+
+   /***** Send button *****/
+   Lay_PutCreateButton (Txt_Send_message);
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory used by the list of nicknames *****/
    Usr_FreeListOtherRecipients ();
@@ -321,8 +324,8 @@ static void Msg_PutFormMsgUsrs (char *Content)
    Usr_FreeUsrsList (Rol_TEACHER);
    Usr_FreeUsrsList (Rol_STUDENT);
 
-   /***** Free memory used by list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -656,7 +659,7 @@ void Msg_RecMsgFromUsr (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /* Get lists of selected users */
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /* Get list of users' IDs or nicknames written explicitely */
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
@@ -791,7 +794,7 @@ void Msg_RecMsgFromUsr (void)
 
    /* Free memory used for list of users */
    Usr_FreeListOtherRecipients ();
-   Usr_FreeListsSelectedUsrCods ();
+   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)

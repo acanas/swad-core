@@ -800,7 +800,7 @@ void Mai_ListEMails (void)
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
          /***** Start of the frame used to list the e-mails *****/
          Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);

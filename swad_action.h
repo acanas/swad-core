@@ -1498,16 +1498,20 @@ char *Act_GetActionTextFromDB (long ActCod,char *Txt);
 
 void Act_FormGoToStart (Act_Action_t NextAction);
 void Act_FormStart (Act_Action_t NextAction);
+void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
 void Act_FormStartUnique (Act_Action_t NextAction);
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_FormStartId (Act_Action_t NextAction,const char *Id);
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion);
 void Act_FormEnd (void);
-void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,const char *Function);
+void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,
+                         const char *JSFunction);
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle);
-void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id,const char *Function);
-void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,const char *Function);
+void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
+                           const char *Id,const char *JSFunction);
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
+                                 const char *JSFunction);
 
 void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
 

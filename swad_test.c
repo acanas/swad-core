@@ -6838,7 +6838,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
          /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Exams,NULL);
@@ -6889,8 +6889,8 @@ void Tst_SelUsrsToSeeUsrsExams (void)
    Usr_FreeUsrsList (Rol_TEACHER);
    Usr_FreeUsrsList (Rol_STUDENT);
 
-   /***** Free the memory used by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -6969,7 +6969,7 @@ void Tst_ShowUsrsExams (void)
    const char *Ptr;
 
    /***** Get list of the selected users's IDs *****/
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
@@ -7006,8 +7006,8 @@ void Tst_ShowUsrsExams (void)
       Tst_SelUsrsToSeeUsrsExams ();
      }
 
-   /***** Free the memory used for the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/

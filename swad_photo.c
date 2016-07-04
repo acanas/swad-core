@@ -1932,7 +1932,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);
-      Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,Txt_Calculate_average_photo_of_THE_DEGREE_X);
+      Lay_PutCalculateIconWithText (Txt_Calculate_average_photo_of_a_degree,
+                                    Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
       /***** Put selector with all the degrees with students *****/
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");

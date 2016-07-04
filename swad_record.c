@@ -951,7 +951,7 @@ void Rec_ListRecordsGsts (void)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected users *****/
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
@@ -1010,8 +1010,8 @@ void Rec_ListRecordsGsts (void)
    if (Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS)
       Rec_FreeListFields ();
 
-   /***** Free memory used for by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1109,7 +1109,7 @@ static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected students *****/
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
@@ -1194,8 +1194,8 @@ static void Rec_ListRecordsStds (Rec_RecordViewType_t TypeOfView)
    // if (Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS)
       Rec_FreeListFields ();
 
-   /***** Free memory used for by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1296,7 +1296,7 @@ void Rec_ListRecordsTchs (void)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected teachers *****/
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of teachers to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no teachers selected...
@@ -1373,8 +1373,8 @@ void Rec_ListRecordsTchs (void)
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
 
-   /***** Free memory used for by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/

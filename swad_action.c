@@ -4430,7 +4430,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor);
+static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+                                   const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
 /************* Check if I have permission to execute an action ***************/
@@ -4530,14 +4531,21 @@ void Act_FormGoToStart (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,false,Gbl.Form.Id,NULL);	// Do not put now parameter location
+   Act_FormStartInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
   }
 
 void Act_FormStart (Act_Action_t NextAction)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,NULL);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,NULL,NULL);	// Do put now parameter location (if no open session)
+  }
+
+void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
+  {
+   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
+   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,NULL,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartUnique (Act_Action_t NextAction)
@@ -4545,14 +4553,14 @@ void Act_FormStartUnique (Act_Action_t NextAction)
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.UniqueId,"form_%s_%d",
             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,NULL);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
@@ -4560,17 +4568,18 @@ void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor)
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.UniqueId,"form_%s_%d",
             Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,Anchor);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartId (Act_Action_t NextAction,const char *Id)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   Act_FormStartInternal (NextAction,true,Id,NULL);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
 // Id can not be NULL
-static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,const char *Id,const char *Anchor)
+static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+                                   const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
@@ -4585,6 +4594,9 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
 	 if (Anchor[0])
             fprintf (Gbl.F.Out,"#%s",Anchor);
       fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
+      if (OnSubmit)
+         if (OnSubmit[0])
+            fprintf (Gbl.F.Out," onsubmit=\"%s\"",OnSubmit);
       switch (Act_Actions[NextAction].BrowserWindow)
 	{
 	 case Act_NEW_WINDOW:
@@ -4662,9 +4674,10 @@ void Act_FormEnd (void)
 /*****************************************************************************/
 // Requires an extern </a>
 
-void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,const char *Function)
+void Act_LinkFormSubmit (const char *Title,const char *LinkStyle,
+                         const char *JSFunction)
   {
-   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,Function);
+   Act_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,JSFunction);
   }
 
 void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
@@ -4675,7 +4688,10 @@ void Act_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
 // Title can be NULL
 // LinkStyle can be NULL
 // Id can not be NULL
-void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *Id,const char *Function)
+// JSFunction can be NULL
+
+void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
+                           const char *Id,const char *JSFunction)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4685,15 +4701,16 @@ void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,const char *I
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
    fprintf (Gbl.F.Out," onclick=\"");
-   if (Function)
-      if (Function[0])
-         fprintf (Gbl.F.Out,"%s;",Function);
+   if (JSFunction)	// JavaScript function to be called before submitting the form
+      if (JSFunction[0])
+         fprintf (Gbl.F.Out,"%s;",JSFunction);
    fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
 		      "return false;\">",
 	    Id);
   }
 
-void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,const char *Function)
+void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
+                                 const char *JSFunction)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
@@ -4703,9 +4720,9 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,const c
       if (LinkStyle[0])
          fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
    fprintf (Gbl.F.Out," onclick=\"");
-   if (Function)
-      if (Function[0])
-         fprintf (Gbl.F.Out,"%s;",Function);
+   if (JSFunction)	// JavaScript function to be called before submitting the form
+      if (JSFunction[0])
+         fprintf (Gbl.F.Out,"%s;",JSFunction);
    fprintf (Gbl.F.Out,"AnimateIcon(%d);"
 		      "document.getElementById('%s').submit();"
 		      "return false;\">",

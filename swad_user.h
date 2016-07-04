@@ -311,16 +311,16 @@ void Usr_DropTmpTableWithCandidateUsrs (void);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_FreeUsrsList (Rol_Role_t Role);
-bool Usr_GetIfShowBigList (unsigned NumUsrs);
+bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit);
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
-void Usr_GetListsSelectedUsrs (void);
+void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind);
 unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void);
 void Usr_AllocateListSelectedUsrCodAll (void);
 void Usr_AllocateListSelectedUsrCodStd (void);
 void Usr_AllocateListSelectedUsrCodTch (void);
-void Usr_FreeListsSelectedUsrCods (void);
+void Usr_FreeListsSelectedUsrsCods (void);
 void Usr_FreeListOtherRecipients (void);
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction);

@@ -425,10 +425,10 @@ void Sta_AskShowCrsHits (void)
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
          /***** Get lists of selected users *****/
-         Usr_GetListsSelectedUsrs ();
+         Usr_GetListsSelectedUsrsCods ();
 
          /***** Start frame *****/
          sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
@@ -547,8 +547,8 @@ void Sta_AskShowCrsHits (void)
 	 /***** End frame *****/
          Lay_EndRoundFrame ();
 
-         /* Free the memory used by the list of users */
-         Usr_FreeListsSelectedUsrCods ();
+         /* Free memory used by list of selected users' codes */
+         Usr_FreeListsSelectedUsrsCods ();
         }
      }
    else	// No teachers nor students found
@@ -934,7 +934,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sta_AskShowCrsHits ();
 
 	 /****** Get lists of selected users ******/
-	 Usr_GetListsSelectedUsrs ();
+	 Usr_GetListsSelectedUsrsCods ();
 
 	 /* Check the number of users whose clicks will be shown */
 	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
@@ -1433,9 +1433,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Free the memory used by the list of users *****/
+   /***** Free memory used by list of selected users' codes *****/
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_FreeListsSelectedUsrCods ();
+      Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free memory used by the data of the user *****/
    Usr_UsrDataDestructor (&UsrDat);

@@ -2214,7 +2214,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          /* Get lists of the selected users */
-         Usr_GetListsSelectedUsrs ();
+         Usr_GetListsSelectedUsrsCods ();
          /* Get user whose folder will be used to make any operation */
          Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
          /* Get whether we must create the zip file or not */
@@ -3103,7 +3103,7 @@ void Brw_AskEditWorksCrs (void)
        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
          /***** Draw class photos to select users *****/
          Lay_StartRoundFrame (NULL,Txt_Users,NULL);
@@ -3139,8 +3139,8 @@ void Brw_AskEditWorksCrs (void)
    Usr_FreeUsrsList (Rol_TEACHER);
    Usr_FreeUsrsList (Rol_STUDENT);
 
-   /***** Free the memory used by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -3263,8 +3263,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_AskEditWorksCrs ();
      }
 
-   /***** Free the memory used for the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/

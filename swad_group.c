@@ -288,7 +288,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
                                The_ClassFormBold[Gbl.Prefs.Theme],
                                NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
                         	                            NULL);
-   Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,Txt_Update_students);
+   Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,
+                                 Txt_Update_students);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End form *****/

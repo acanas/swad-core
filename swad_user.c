@@ -148,7 +148,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope);
 static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scope_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
-static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs);
+static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
 static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs);
 
 static void Usr_AllocateListOtherRecipients (void);
@@ -4409,7 +4409,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-bool Usr_GetIfShowBigList (unsigned NumUsrs)
+bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
   {
    bool ShowBigList;
    char YN[1+1];
@@ -4422,7 +4422,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs)
       Par_GetParToText ("ShowBigList",YN,1);
       ShowBigList = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
       if (!ShowBigList)
-	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs);
+	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,OnSubmit);
 
       return ShowBigList;
      }
@@ -4434,7 +4434,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
+static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit)
   {
    extern const char *Txt_Show_anyway;
 
@@ -4444,7 +4444,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
    Usr_ShowWarningListIsTooBig (NumUsrs);
 
    /***** Put form to confirm that I want to see the big list *****/
-   Act_FormStart (Gbl.Action.Act);
+   Act_FormStartOnSubmit (Gbl.Action.Act,OnSubmit);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
    Usr_PutParamColsClassPhoto ();
@@ -4454,6 +4454,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
 
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Show_anyway);
+
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
@@ -4488,7 +4489,7 @@ void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
 /************************* Get list of selected users ************************/
 /*****************************************************************************/
 
-void Usr_GetListsSelectedUsrs (void)
+void Usr_GetListsSelectedUsrsCods (void)
   {
    unsigned Length;
 
@@ -4803,10 +4804,10 @@ void Usr_AllocateListSelectedUsrCodTch (void)
   }
 
 /*****************************************************************************/
-/********************** Free memory for lists of users ***********************/
+/************ Free memory used by list of selected users' codes **************/
 /*****************************************************************************/
 
-void Usr_FreeListsSelectedUsrCods (void)
+void Usr_FreeListsSelectedUsrsCods (void)
   {
    if (Gbl.Usrs.Select.All)
      {
@@ -6439,10 +6440,10 @@ void Usr_SeeGuests (void)
    /***** Get and order list of students in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs,NULL))
      {
       /***** Get list of selected users *****/
-      Usr_GetListsSelectedUsrs ();
+      Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
@@ -6590,10 +6591,10 @@ void Usr_SeeStudents (void)
    /***** Get and order list of students *****/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
      {
       /***** Get list of selected users *****/
-      Usr_GetListsSelectedUsrs ();
+      Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
@@ -6750,7 +6751,7 @@ void Usr_SeeTeachers (void)
    /***** Get and order list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs,NULL))
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],

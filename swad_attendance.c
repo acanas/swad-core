@@ -2213,7 +2213,7 @@ void Att_RegisterStudentsInAttEvent (void)
          Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Remove = true;
 
       /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select.Std *****/
-      Usr_GetListsSelectedUsrs ();
+      Usr_GetListsSelectedUsrsCods ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrData);
@@ -2242,8 +2242,8 @@ void Att_RegisterStudentsInAttEvent (void)
       Usr_UsrDataDestructor (&UsrData);
 
       /***** Free memory *****/
-      /* Free memory used for list of students */
-      Usr_FreeListsSelectedUsrCods ();
+      /* Free memory used by list of selected students' codes */
+      Usr_FreeListsSelectedUsrsCods ();
 
       // 5. Delete from att_usr all the students marked as Remove=true
       // 6. Replace (insert without duplicated) into att_usr all the students marked as Remove=false
@@ -2549,10 +2549,10 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
 	{
 	 /***** Get list of selected users *****/
-	 Usr_GetListsSelectedUsrs ();
+	 Usr_GetListsSelectedUsrsCods ();
 
 	 /***** Draw a class photo with students of the course *****/
 	 /* Start frame */
@@ -2579,8 +2579,8 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 /* End frame */
 	 Lay_EndRoundFrame ();
 
-	 /***** Free memory used for by the list of users *****/
-	 Usr_FreeListsSelectedUsrCods ();
+         /***** Free memory used by list of selected users' codes *****/
+	 Usr_FreeListsSelectedUsrsCods ();
 	}
      }
    else
@@ -2685,7 +2685,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    Att_GetListAttEvents (Att_OLDEST_FIRST);
 
    /***** Get list of selected students *****/
-   Usr_GetListsSelectedUsrs ();
+   Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of students to list */
    if ((NumStdsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
@@ -2739,8 +2739,8 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       Usr_ReqListStdsAttendanceCrs ();		// ...show again the form
      }
 
-   /***** Free memory used for by the list of users *****/
-   Usr_FreeListsSelectedUsrCods ();
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

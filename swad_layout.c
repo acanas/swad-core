@@ -1008,7 +1008,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
                             void (*FuncParams) (),
                             const char *Icon,
                             const char *Title,const char *Text,
-                            const char *Function)
+                            const char *JSFunction)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
@@ -1022,7 +1022,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
    Lay_PutIconLink (Icon,Title,Text,
                     Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
                 	   NULL,
-                    Function);
+                    JSFunction);
    Act_FormEnd ();
 
    if (Text)
@@ -1035,9 +1035,9 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
 /*****************************************************************************/
 
 void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
-                      const char *LinkStyle,const char *Function)
+                      const char *LinkStyle,const char *JSFunction)
   {
-   Act_LinkFormSubmit (Title,LinkStyle,Function);
+   Act_LinkFormSubmit (Title,LinkStyle,JSFunction);
    Lay_PutIconWithText (Icon,Title,Text);
    fprintf (Gbl.F.Out,"</a>");
   }

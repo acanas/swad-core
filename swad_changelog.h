@@ -132,19 +132,18 @@
 // TODO: In search of users and findUsers banned users should not appear in listing!!!!!
 // TODO: Send attached photos via SOAP?
 
-// TODO: When writing a message, below Txt_Show_anyway, Subject and Content should be shown in order to keep the message that had begun to be written. Use as example https://swad.ugr.es/es?crs=2122
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.240.5 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.241 (2016-07-04)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.241:   Jul 04, 2015	When composing a new message, subject and content are shown even if list of users is too big, in order to keep messages that had begun to be written. (203618 lines)
         Version 15.240.5: Jul 04, 2015	Code refactoring related to big lists of users. (203595 lines)
         Version 15.240.4: Jul 04, 2015	Fixed bugs in web service, reported by Rubén Martín Hidalgo. (203592 lines)
         Version 15.240.3: Jul 04, 2015	N.A. year is shown at foot in edition of courses. (? lines)
