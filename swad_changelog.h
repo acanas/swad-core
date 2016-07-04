@@ -125,9 +125,6 @@
 // TODO: FIX BUG: Searching messages received gives unordered list
 
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
-// TODO: Add path to information about file in notifications
-
-// TODO: Add new WS functions to count the number of users to return in call to functions getUsers/findUsers?
 
 // TODO: In search of users and findUsers banned users should not appear in listing!!!!!
 // TODO: Send attached photos via SOAP?
@@ -136,13 +133,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.241.5 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.241.6 (2016-07-04)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.241.6: Jul 04, 2015	Added path to information about file in notifications. (203630 lines)
         Version 15.241.5: Jul 04, 2015	Fix bug in form to compose message. (203628 lines)
         Version 15.241.4: Jul 04, 2015	Changes in form to compose message. (203624 lines)
         Version 15.241.3: Jul 04, 2015	Changes in layout of form to compose message.

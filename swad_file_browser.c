@@ -11370,12 +11370,13 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-#define Brw_MAX_BYTES_FILE_CONTENT_STR (100+NAME_MAX + 100+(Usr_MAX_BYTES_NAME+1)*3 + 100+Fil_MAX_BYTES_FILE_SIZE_STRING)
+#define Brw_MAX_BYTES_FILE_CONTENT_STR (100+NAME_MAX + 100+PATH_MAX + 100+(Usr_MAX_BYTES_NAME+1)*3 + 100+Fil_MAX_BYTES_FILE_SIZE_STRING)
 
 void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
                                      long FilCod,unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_Filename;
+   extern const char *Txt_Folder;
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_File_size;
@@ -11426,9 +11427,11 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
 
 	 /* Fill content string */
 	 sprintf (*ContentStr,"%s: %s<br />"	// File name
+	                      "%s: %s<br />"	// File path
 	                      "%s: %s<br />"	// Publisher
 	                      "%s: %s",		// File size
 	          Txt_Filename,FileMetadata.FilFolLnkName,
+	          Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,
 	          Txt_Uploaded_by,FileHasPublisher ? PublisherUsrDat.FullName :
 	                                             Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN],
 	          Txt_File_size,Found ? FileSizeStr :
