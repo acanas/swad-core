@@ -147,8 +147,9 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
 static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scope_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
-static void Usr_ShowWarningListIsTooBig (unsigned NumStds);
+
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs);
+static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs);
 
 static void Usr_AllocateListOtherRecipients (void);
 
@@ -4408,34 +4409,25 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-static void Usr_ShowWarningListIsTooBig (unsigned NumStds)
-  {
-   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
-
-   sprintf (Gbl.Message,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-            NumStds);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-  }
-
-/*****************************************************************************/
-/******** Show form to confirm that I want to see a big list of users ********/
-/*****************************************************************************/
-
 bool Usr_GetIfShowBigList (unsigned NumUsrs)
   {
    bool ShowBigList;
    char YN[1+1];
 
    /***** If list of users is too big... *****/
-   if (NumUsrs <= Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST)
+   if (NumUsrs > Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST)
+     {
+      /***** Get parameter with user's confirmation
+             to see a big list of users *****/
+      Par_GetParToText ("ShowBigList",YN,1);
+      ShowBigList = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+      if (!ShowBigList)
+	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs);
+
+      return ShowBigList;
+     }
+   else
       return true;        // List is not too big ==> show it
-
-   /***** Get parameter with user's confirmation to see a big list of users *****/
-   Par_GetParToText ("ShowBigList",YN,1);
-   if (!(ShowBigList = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
-      Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs);
-
-   return ShowBigList;
   }
 
 /*****************************************************************************/
@@ -4444,15 +4436,12 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs)
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
   {
-   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Show warning *****/
-   sprintf (Gbl.Message,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-            NumUsrs);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Usr_ShowWarningListIsTooBig (NumUsrs);
 
    /***** Put form to confirm that I want to see the big list *****/
    Act_FormStart (Gbl.Action.Act);
@@ -4466,7 +4455,21 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs)
    /***** Send button *****/
    Lay_PutConfirmButton (Txt_Show_anyway);
    Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/************************** Show big list warning ****************************/
+/*****************************************************************************/
+
+static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
+  {
+   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
+
+   sprintf (Gbl.Message,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+            NumUsrs);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
   }
 
 /*****************************************************************************/
