@@ -133,64 +133,69 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.241.6 (2016-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 15.241.7 (2016-07-06)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.241.6: Jul 04, 2015	Added path to information about file in notifications. (203630 lines)
-        Version 15.241.5: Jul 04, 2015	Fix bug in form to compose message. (203628 lines)
-        Version 15.241.4: Jul 04, 2015	Changes in form to compose message. (203624 lines)
-        Version 15.241.3: Jul 04, 2015	Changes in layout of form to compose message.
+        Version 15.241.7: Jul 06, 2016	Removed cookies in swad.ugr.es.
+					Removed unused database tables. (203641 lines)
+					1 change necessary in database:
+DROP TABLE IF EXISTS notif_backup,sta_notif_backup,usr_data_backup;
+
+        Version 15.241.6: Jul 04, 2016	Added path to information about file in notifications. (203630 lines)
+        Version 15.241.5: Jul 04, 2016	Fix bug in form to compose message. (203628 lines)
+        Version 15.241.4: Jul 04, 2016	Changes in form to compose message. (203624 lines)
+        Version 15.241.3: Jul 04, 2016	Changes in layout of form to compose message.
 					Code optimization in list of selected users. (203628 lines)
-        Version 15.241.2: Jul 04, 2015	Changes in layout of form to compose message. (203619 lines)
-        Version 15.241.1: Jul 04, 2015	Code refactoring related with forms submit. (203620 lines)
-        Version 15.241:   Jul 04, 2015	When composing a new message, subject and content are shown even if list of users is too big, in order to keep messages that had begun to be written. (203618 lines)
-        Version 15.240.5: Jul 04, 2015	Code refactoring related to big lists of users. (203595 lines)
-        Version 15.240.4: Jul 04, 2015	Fixed bugs in web service, reported by Rubén Martín Hidalgo. (203592 lines)
-        Version 15.240.3: Jul 04, 2015	N.A. year is shown at foot in edition of courses. (? lines)
-        Version 15.240.2: Jul 02, 2015	Fixed bug in edition of courses. (203548 lines)
-        Version 15.240.1: Jul 02, 2015	Fixed bug in web service. (203539 lines)
-        Version 15.240:   Jul 01, 2015	Copy subject and content of message to hidden param when clicking on link. (203534 lines)
-        Version 15.239:   Jul 01, 2015	Code refactoring related to contextual menus. (203531 lines)
-        Version 15.238.1: Jul 01, 2015	New javascript function to animate icon. (203292 lines)
-        Version 15.238:   Jul 01, 2015	Hidden fields in in selectors of class photo / list with message subject and content. (203274 lines)
-        Version 15.237.3: Jul 01, 2015	Fixed bug in messages. (203257 lines)
-        Version 15.237.2: Jul 01, 2015	Fixed minor problem in textarea for message content. (203261 lines)
-        Version 15.237.1: Jul 01, 2015	Code refactoring in function to send e-mail to students. (203254 lines)
-        Version 15.237:   Jul 01, 2015	The form "Show more recipients" now have a hidden field with the content. (203243 lines)
-        Version 15.236:   Jun 30, 2015	The form "Show more recipients" now have a hidden field with the subject. (? lines)
-        Version 15.235.1: Jun 30, 2015	Minor change in icon to download files. (203206 lines)
+        Version 15.241.2: Jul 04, 2016	Changes in layout of form to compose message. (203619 lines)
+        Version 15.241.1: Jul 04, 2016	Code refactoring related with forms submit. (203620 lines)
+        Version 15.241:   Jul 04, 2016	When composing a new message, subject and content are shown even if list of users is too big, in order to keep messages that had begun to be written. (203618 lines)
+        Version 15.240.5: Jul 04, 2016	Code refactoring related to big lists of users. (203595 lines)
+        Version 15.240.4: Jul 04, 2016	Fixed bugs in web service, reported by Rubén Martín Hidalgo. (203592 lines)
+        Version 15.240.3: Jul 04, 2016	N.A. year is shown at foot in edition of courses. (? lines)
+        Version 15.240.2: Jul 02, 2016	Fixed bug in edition of courses. (203548 lines)
+        Version 15.240.1: Jul 02, 2016	Fixed bug in web service. (203539 lines)
+        Version 15.240:   Jul 01, 2016	Copy subject and content of message to hidden param when clicking on link. (203534 lines)
+        Version 15.239:   Jul 01, 2016	Code refactoring related to contextual menus. (203531 lines)
+        Version 15.238.1: Jul 01, 2016	New javascript function to animate icon. (203292 lines)
+        Version 15.238:   Jul 01, 2016	Hidden fields in in selectors of class photo / list with message subject and content. (203274 lines)
+        Version 15.237.3: Jul 01, 2016	Fixed bug in messages. (203257 lines)
+        Version 15.237.2: Jul 01, 2016	Fixed minor problem in textarea for message content. (203261 lines)
+        Version 15.237.1: Jul 01, 2016	Code refactoring in function to send e-mail to students. (203254 lines)
+        Version 15.237:   Jul 01, 2016	The form "Show more recipients" now have a hidden field with the content. (203243 lines)
+        Version 15.236:   Jun 30, 2016	The form "Show more recipients" now have a hidden field with the subject. (? lines)
+        Version 15.235.1: Jun 30, 2016	Minor change in icon to download files. (203206 lines)
 Copy icons icon/download64x64.png
 
-        Version 15.235:   Jun 30, 2015	Some file metadata are written in content of notifications. (203204 lines)
-        Version 15.234:   Jun 29, 2015	New web service functions getUsers and findUsers. (203169 lines)
-        Version 15.233.4: Jun 27, 2015	Changes in links in list of notifications. (203065 lines)
-        Version 15.233.3: Jun 27, 2015	Fixed bug in list of admins. (203074 lines)
-        Version 15.233.2: Jun 27, 2015	Code refactoring in search of users. (203072 lines)
-        Version 15.233.1: Jun 27, 2015	New restrictions in length of search string. (203117 lines)
-        Version 15.233:   Jun 27, 2015	Simplified search for users with a role. Now all users can be found. (203103 lines)
-        Version 15.232.1: Jun 27, 2015	Fixed bug in search of any user (acceptation of enrollment was wrong). (203702 lines)
-        Version 15.232:   Jun 27, 2015	Search any user, independently on role. (203657 lines)
-        Version 15.231.4: Jun 24, 2015	Fix bug (buffer overflow) when getting users. (203474 lines)
-        Version 15.231.3: Jun 24, 2015	Parameter name used for "Scope" now depends on context. (203472 lines)
-        Version 15.231.2: Jun 24, 2015	Search is restricted by default to the smaller (down in hierarchy) scope. (203475 lines)
-        Version 15.231.1: Jun 24, 2015	All users can search guests. (203429 lines)
-        Version 15.231:   Jun 24, 2015	Speed up in search of users by using temporary tables. (203427 lines)
-        Version 15.230.4: Jun 23, 2015	Optimization in search of users. (203369 lines)
-        Version 15.230.3: Jun 23, 2015	Optimization in search of users. (203378 lines)
-        Version 15.230.2: Jun 23, 2015	Fixed bug in search of users. (203388 lines)
-        Version 15.230.1: Jun 23, 2015	Fixed bug in search of users. (203375 lines)
-        Version 15.230:   Jun 23, 2015	Optimization and bug fixing in search of users. (203374 lines)
-        Version 15.229:   Jun 23, 2015	Search of students available for all users. (203194 lines)
-        Version 15.228.2: Jun 23, 2015	Code refactoring in lists of users. (202791 lines)
-        Version 15.228.1: Jun 23, 2015	Code refactoring in lists of users. (202794 lines)
-        Version 15.228:   Jun 23, 2015	Code refactoring in lists of users. (202814 lines)
-        Version 15.227.1: Jun 23, 2015	Code refactoring in getting/searching users. (202854 lines)
-        Version 15.227:   Jun 21, 2015	Query optimization in search of users. (202820 lines)
-        Version 15.226.7: Jun 19, 2015	One new social network. (202969 lines)
+        Version 15.235:   Jun 30, 2016	Some file metadata are written in content of notifications. (203204 lines)
+        Version 15.234:   Jun 29, 2016	New web service functions getUsers and findUsers. (203169 lines)
+        Version 15.233.4: Jun 27, 2016	Changes in links in list of notifications. (203065 lines)
+        Version 15.233.3: Jun 27, 2016	Fixed bug in list of admins. (203074 lines)
+        Version 15.233.2: Jun 27, 2016	Code refactoring in search of users. (203072 lines)
+        Version 15.233.1: Jun 27, 2016	New restrictions in length of search string. (203117 lines)
+        Version 15.233:   Jun 27, 2016	Simplified search for users with a role. Now all users can be found. (203103 lines)
+        Version 15.232.1: Jun 27, 2016	Fixed bug in search of any user (acceptation of enrollment was wrong). (203702 lines)
+        Version 15.232:   Jun 27, 2016	Search any user, independently on role. (203657 lines)
+        Version 15.231.4: Jun 24, 2016	Fix bug (buffer overflow) when getting users. (203474 lines)
+        Version 15.231.3: Jun 24, 2016	Parameter name used for "Scope" now depends on context. (203472 lines)
+        Version 15.231.2: Jun 24, 2016	Search is restricted by default to the smaller (down in hierarchy) scope. (203475 lines)
+        Version 15.231.1: Jun 24, 2016	All users can search guests. (203429 lines)
+        Version 15.231:   Jun 24, 2016	Speed up in search of users by using temporary tables. (203427 lines)
+        Version 15.230.4: Jun 23, 2016	Optimization in search of users. (203369 lines)
+        Version 15.230.3: Jun 23, 2016	Optimization in search of users. (203378 lines)
+        Version 15.230.2: Jun 23, 2016	Fixed bug in search of users. (203388 lines)
+        Version 15.230.1: Jun 23, 2016	Fixed bug in search of users. (203375 lines)
+        Version 15.230:   Jun 23, 2016	Optimization and bug fixing in search of users. (203374 lines)
+        Version 15.229:   Jun 23, 2016	Search of students available for all users. (203194 lines)
+        Version 15.228.2: Jun 23, 2016	Code refactoring in lists of users. (202791 lines)
+        Version 15.228.1: Jun 23, 2016	Code refactoring in lists of users. (202794 lines)
+        Version 15.228:   Jun 23, 2016	Code refactoring in lists of users. (202814 lines)
+        Version 15.227.1: Jun 23, 2016	Code refactoring in getting/searching users. (202854 lines)
+        Version 15.227:   Jun 21, 2016	Query optimization in search of users. (202820 lines)
+        Version 15.226.7: Jun 19, 2016	One new social network. (202969 lines)
 					1 change necessary in database:
 ALTER TABLE usr_webs CHANGE Web Web ENUM('www', '500px', 'delicious', 'deviantart', 'diaspora', 'edmodo', 'facebook', 'flickr', 'foursquare', 'github', 'gnusocial', 'googleplus', 'googlescholar', 'identica', 'instagram', 'linkedin', 'orcid', 'paperli', 'pinterest', 'quitter', 'researchgate', 'researcherid', 'scoopit', 'slideshare', 'stackoverflow', 'storify', 'tumblr', 'twitter', 'wikipedia', 'youtube') NOT NULL;
 Copy icon stackoverflow64x64.png to icon directory

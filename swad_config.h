@@ -28,9 +28,9 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
-//#define SWAD_UGR_ES		// Comment this line if not applicable
+#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
 /*****************************************************************************/
@@ -213,7 +213,14 @@
 "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
 "  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');" \
-"  ga('create', 'UA-42150741-1', 'ugr.es');" \
+"  ga('create', 'UA-42150741-1', 'ugr.es', {" \
+"    'anonymizeIp': true," \
+"    'storage': 'none'," \
+"    'clientId': window.localStorage.getItem('ga_clientId')" \
+"  });" \
+"  ga(function(tracker) {" \
+"    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));" \
+"  });" \
 "  ga('send', 'pageview');" \
 "</script>"
 
