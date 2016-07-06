@@ -32,6 +32,7 @@
 
 #include "swad_account.h"
 #include "swad_action.h"
+#include "swad_agenda.h"
 #include "swad_announcement.h"
 #include "swad_banner.h"
 #include "swad_calendar.h"
@@ -1312,6 +1313,7 @@ Profile:
        1127. ActFrmRolSes		Show form to log out and to change current role in this session
        1128. ActMyCrs			Select one of my courses
        1129. ActSeeMyTT			Show the timetable of all courses of the logged user
+        NEW. ActSeeMyAgd		Show my agenda (personal organizer)
        1130. ActFrmUsrAcc		Show form to the creation or change of user's account
        1131. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
        1132. ActEdiPrf			Show forms to edit preferences
@@ -2738,11 +2740,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActFrmUsrAcc	*/{  36, 4,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba64x64.gif"	},
-   /* ActReqEdiRecCom	*/{ 285, 5,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
-   /* ActEdiPrf		*/{ 673, 6,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
-   /* ActAdmBrf		*/{  23, 7,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
-   /* ActMFUAct		*/{ 993, 8,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,MFU_ShowMyMFUActions		,"star64x64.gif"	},
+   /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Agd_ShowMyAgenda		,"date64x64.gif"	},
+   /* ActFrmUsrAcc	*/{  36, 5,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba64x64.gif"	},
+   /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
+   /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
+   /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
+   /* ActMFUAct		*/{ 993, 9,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
    /* ActReqSndNewPwd	*/{ 665,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,NULL},
@@ -4424,6 +4427,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLstDupUsr,		// #1578
 	ActLstSimUsr,		// #1579
 	ActRemDupUsr,		// #1580
+	ActSeeMyAgd,		// #1581
 	};
 
 /*****************************************************************************/

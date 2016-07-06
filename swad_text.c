@@ -19049,6 +19049,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
+	// ActSeeMyAgd
+#if   L==1
+	"Agenda"
+#elif L==2
+	"Organizer"
+#elif L==3
+	"Agenda"
+#elif L==4
+	"Agenda"
+#elif L==5
+	"Agenda"
+#elif L==6
+	"Agenda"	// Okoteve traducción
+#elif L==7
+	"Agenda"
+#elif L==8
+	"Pami&eogon;tnik"
+#elif L==9
+	"Agenda"
+#endif
+	,
 	// ActFrmUsrAcc
 #if   L==1
 	"Compte"
@@ -21061,6 +21082,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"M&oacute;j plan lekcji"
 #elif L==9
 	"Hor&aacute;rio minha disciplinas"
+#endif
+	,
+	// ActSeeMyAgd
+#if   L==1
+	"Agenda"
+#elif L==2
+	"Organizer"
+#elif L==3
+	"Agenda (personal organizer)"
+#elif L==4
+	"Agenda"
+#elif L==5
+	"Agenda"
+#elif L==6
+	"Agenda"	// Okoteve traducción
+#elif L==7
+	"Agenda"
+#elif L==8
+	"Pami&eogon;tnik"
+#elif L==9
+	"Agenda"
 #endif
 	,
 	// ActFrmUsrAcc

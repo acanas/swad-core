@@ -26,8 +26,8 @@
 #                                                                             #
 ###############################################################################
 
-OBJS = swad_account.o swad_action.o swad_announcement.o swad_assignment.o \
-       swad_attendance.o \
+OBJS = swad_account.o swad_action.o swad_agenda.o swad_announcement.o \
+       swad_assignment.o swad_attendance.o \
        swad_banner.o \
        swad_calendar.o swad_centre.o swad_chat.o swad_config.o \
        swad_connected.o swad_country.o swad_course.o swad_cryptography.o \
