@@ -309,10 +309,10 @@ static void Cty_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCty.Cty.CtyCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCty.Cty.CtyCod);
 

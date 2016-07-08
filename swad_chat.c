@@ -527,9 +527,9 @@ void Cht_OpenChatWindow (void)
 	    Cfg_PLATFORM_SERVER);
    fprintf (Gbl.F.Out,"\n<param name=\"port\" value=\"5000\">");
    fprintf (Gbl.F.Out,"\n<param name=\"image_bl\" value=\"%s/%s/usr_bl.jpg\">",
-	    Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
+	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
    fprintf (Gbl.F.Out,"\n<param name=\"image_url\" value=\"%s/%s/%s.jpg\">",
-	    Cfg_HTTP_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Gbl.Usrs.Me.UsrDat.Photo);
+	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Gbl.Usrs.Me.UsrDat.Photo);
    fprintf (Gbl.F.Out,"\n<param name=\"channel_name\" value=\"%s\">",
 	    ListRoomCodes);
    fprintf (Gbl.F.Out,"\n<param name=\"tab\" value=\"%s\">",

@@ -105,7 +105,7 @@ void Ban_SeeBanners (void)
                          "</tr>",
                Gbl.Banners.Lst[NumBan].WWW,
                Gbl.Banners.Lst[NumBan].FullName,
-               Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShortName,
                Gbl.Banners.Lst[NumBan].FullName);
@@ -923,7 +923,7 @@ void Ban_WriteMenuWithBanners (void)
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>",
-               Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShortName,
                Gbl.Banners.Lst[NumBan].FullName);

@@ -206,7 +206,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    else									// Not me
       if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
-	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
 	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
@@ -246,7 +246,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
    bool PhotoExists;
 
    /***** Link to request the removal of another user's photo *****/
-   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+   PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqRemStdPho :
 			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqRemTchPho :
@@ -290,7 +290,7 @@ static void Pho_ReqOtherUsrPhoto (void)
    char PhotoURL[PATH_MAX+1];
 
    /***** Get photo URL *****/
-   Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
+   Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 
    /***** Show the form to send another user's photo *****/
    Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
@@ -423,7 +423,7 @@ void Pho_ReqRemoveMyPhoto (void)
    extern const char *Txt_The_photo_no_longer_exists;
 
    /***** Show current photo and help message *****/
-   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,true))
+   if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveMyPhoto);
@@ -455,7 +455,7 @@ void Pho_RemoveMyPhoto1 (void)
    Gbl.Error = !Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
 
    /***** The link to my photo is not valid now, so build it again before writing the web page *****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,true);
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
   }
 
 void Pho_RemoveMyPhoto2 (void)
@@ -488,7 +488,7 @@ void Pho_ReqRemoveUsrPhoto (void)
       if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Show current photo and help message *****/
-	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true))
+	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
 	   {
 	    /***** Start frame *****/
 	    Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveOtherUsrPhoto);
@@ -764,7 +764,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
                       " usemap=\"#faces_map\""
                       " alt=\"%s\" title=\"%s\" />"
                       "</div>",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
             Gbl.UniqueNameEncrypted,
             Txt_Faces_detected,Txt_Faces_detected);
 
@@ -781,7 +781,7 @@ void Pho_UpdateMyPhoto1 (void)
    Pho_UpdatePhoto1 (&Gbl.Usrs.Me.UsrDat);
 
    /***** The link to my photo is not valid now, so build it again before writing the web page *****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,true);
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
   }
 
 void Pho_UpdateMyPhoto2 (void)
@@ -862,7 +862,7 @@ static void Pho_UpdatePhoto2 (void)
                          " style=\"width:%upx; height:%upx;\" />"
                          "<br />%s"
                          "</td>",
-               Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
+               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Cfg_FOLDER_PHOTO_TMP,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
@@ -954,7 +954,7 @@ bool Pho_ShowUsrPhotoIsAllowed (const struct UsrData *UsrDat,char *PhotoURL)
    ICanSeePhoto = Pri_ShowIsAllowed (UsrDat->PhotoVisibility,UsrDat->UsrCod);
 
    /***** Photo is shown if I can see it, and it exists *****/
-   return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL,true) :
+   return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
 	                 false;
   }
 
@@ -964,7 +964,7 @@ bool Pho_ShowUsrPhotoIsAllowed (const struct UsrData *UsrDat,char *PhotoURL)
 // Returns false if photo does not exist
 // Returns true if link is created successfully
 
-bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL,bool HTTPS)
+bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
   {
    char PathPublPhoto[PATH_MAX+1];
    char PathPrivPhoto[PATH_MAX+1];
@@ -993,9 +993,7 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL,bool HTTP
 
       /***** Create the public URL of the photo *****/
       sprintf (PhotoURL,"%s/%s/%s.jpg",
-               HTTPS ? Cfg_HTTPS_URL_SWAD_PUBLIC :
-                       Cfg_HTTP_URL_SWAD_PUBLIC,
-               Cfg_FOLDER_PHOTO,UsrDat->Photo);
+               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
 
       return true;
      }
@@ -2397,7 +2395,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
 	{
 	 sprintf (PhotoURL,"%s/%s/%s/%ld_%s.jpg",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
+		  Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,
 		  Pho_StrAvgPhotoDirs[Gbl.Stat.DegPhotos.TypeOfAverage],
 		  Deg->DegCod,Usr_StringsSexDB[Sex]);
 		    if (SeeOrPrint == Pho_DEGREES_SEE)

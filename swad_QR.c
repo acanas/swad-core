@@ -147,7 +147,7 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:%upx; height:%upx;\" />",
             Size,Size,
-            Cfg_HTTPS_URL_SWAD_CGI,
+            Cfg_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
             Txt_Shortcut,
             Txt_Shortcut,
@@ -170,7 +170,7 @@ void QR_ExamAnnnouncement (void)
                       " style=\"width:250px; height:250px;\" />"
                       "</div>",
             300,300,
-            Cfg_HTTPS_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeAllExaAnn].ActCod,
+            Cfg_URL_SWAD_CGI,Gbl.CurrentCrs.Crs.CrsCod,Act_Actions[ActSeeAllExaAnn].ActCod,
             Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);
   }

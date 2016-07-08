@@ -28,9 +28,9 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+#define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
-#define SWAD_UGR_ES		// Comment this line if not applicable
+//#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
 /*****************************************************************************/
@@ -51,9 +51,8 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://localhost/swad"	// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://localhost/swad"		// Without ending slash
+#define Cfg_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
+#define Cfg_URL_SWAD_PUBLIC			"https://localhost/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data
@@ -100,9 +99,8 @@
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
 #define Cfg_PLATFORM_FULL_NAME			"OpenSWAD (Open Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://openswad.org/swad"		// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://openswad.org/swad"		// Without ending slash
+#define Cfg_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
+#define Cfg_URL_SWAD_PUBLIC			"https://openswad.org/swad"		// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin/swad"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
@@ -166,9 +164,8 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://swad.ugr.es/swad"		// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://swad.ugr.es/swad"		// Without ending slash
+#define Cfg_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
+#define Cfg_URL_SWAD_PUBLIC			"https://swad.ugr.es/swad"		// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin"			// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
@@ -228,10 +225,9 @@
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWADberry"
 #define Cfg_PLATFORM_FULL_NAME			"SWADberry (Shared Workspace At a Distance on a Raspberry Pi)"
-#define Cfg_PLATFORM_SERVER			"150.214.190.151"		// Server name (main part of the URL)
-#define Cfg_HTTPS_URL_SWAD_CGI			"https://150.214.190.151/swad"	// Without ending slash
-#define Cfg_HTTPS_URL_SWAD_PUBLIC		"https://150.214.190.151/swad"	// Without ending slash
-#define Cfg_HTTP_URL_SWAD_PUBLIC		"http://150.214.190.151/swad"	// Without ending slash
+#define Cfg_PLATFORM_SERVER			"swadberry.ugr.es"		// Server name (main part of the URL)
+#define Cfg_URL_SWAD_CGI			"https://swadberry.ugr.es/swad"	// Without ending slash
+#define Cfg_URL_SWAD_PUBLIC			"https://swadberry.ugr.es/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"			// Main private directory for SWAD private data

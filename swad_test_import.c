@@ -259,7 +259,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
 
    /***** Write the link to XML file *****/
    fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\">",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
             The_ClassFormBold[Gbl.Prefs.Theme]);
    Lay_PutIconWithText ("file64x64.gif",

@@ -176,7 +176,7 @@ void Lay_WriteStartOfPage (void)
    /* Canonical URL */
    fprintf (Gbl.F.Out,"<link rel=\"canonical\""
 	              " href=\"%s\" />\n",
-	    Cfg_HTTPS_URL_SWAD_CGI);
+	    Cfg_URL_SWAD_CGI);
 
    /* Favicon */
    fprintf (Gbl.F.Out,"<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n"
@@ -186,7 +186,7 @@ void Lay_WriteStartOfPage (void)
 
    /* Style sheet for SWAD */
    fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,CSS_FILE);
+            Cfg_URL_SWAD_PUBLIC,CSS_FILE);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
    // The public directory dropzone must hold:
@@ -216,7 +216,7 @@ void Lay_WriteStartOfPage (void)
       fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
 	                 " href=\"%s/dropzone/css/dropzone.css\""
 	                 " type=\"text/css\" />\n",
-               Cfg_HTTPS_URL_SWAD_PUBLIC);
+               Cfg_URL_SWAD_PUBLIC);
 
    /* Redirect to correct language */
    if ((Gbl.Action.Act == ActAutUsrInt ||
@@ -401,7 +401,7 @@ static void Lay_WriteRedirectionToMyLanguage (void)
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
-	    Cfg_HTTPS_URL_SWAD_CGI,
+	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
 	    Act_Actions[ActAutUsrChgLan].ActCod,
 	    Gbl.Session.Id);
@@ -425,7 +425,7 @@ static void Lay_WriteScripts (void)
    /***** General scripts for swad *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/%s\">"
                       "</script>\n",
-	    Cfg_HTTPS_URL_SWAD_PUBLIC,JS_FILE);
+	    Cfg_URL_SWAD_PUBLIC,JS_FILE);
 
    /***** Script for MathJax *****/
    // MathJax configuration
@@ -444,7 +444,7 @@ static void Lay_WriteScripts (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
 	              " src=\"%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
 	              "</script>\n",
-	    Cfg_HTTPS_URL_SWAD_PUBLIC);
+	    Cfg_URL_SWAD_PUBLIC);
 #else
    // Use the MathJax Content Delivery Network (CDN)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
@@ -565,7 +565,7 @@ static void Lay_WriteScripts (void)
 			    " src=\"%s/dropzone/dropzone.js\""
 			    " charset=\"windows-1252\">"
 			    "</script>\n",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC);
+		  Cfg_URL_SWAD_PUBLIC);
 	 Lay_WriteScriptCustomDropzone ();
          break;
       case ActReqAccGbl:
@@ -576,7 +576,7 @@ static void Lay_WriteScripts (void)
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
 			    " src=\"%s/jstz/jstz.js\">"
 			    "</script>\n",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC);
+		  Cfg_URL_SWAD_PUBLIC);
 	 break;
       default:
 	 break;

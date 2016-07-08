@@ -147,7 +147,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	 fprintf (Gbl.F.Out,"<img src=\"");
 	 if (LogoFound)
 	    fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-		     Cfg_HTTPS_URL_SWAD_PUBLIC,Folder,
+		     Cfg_URL_SWAD_PUBLIC,Folder,
 		     (unsigned) (Cod % 100),
 		     (unsigned) Cod,
 		     (unsigned) Cod);

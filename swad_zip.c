@@ -200,7 +200,7 @@ void ZIP_CreateZIPAsgWrk (void)
 
       /***** Create URL pointing to ZIP file *****/
       sprintf (URLWithSpaces,"%s/%s/%s/%s",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,
+	       Cfg_URL_SWAD_PUBLIC,
                Cfg_FOLDER_FILE_BROWSER_TMP,
                Gbl.FileBrowser.TmpPubDir,
                FileNameZIP);
@@ -443,7 +443,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 
 	 /***** Create URL pointing to ZIP file *****/
 	 sprintf (URLWithSpaces,"%s/%s/%s/%s",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC,
+		  Cfg_URL_SWAD_PUBLIC,
 		  Cfg_FOLDER_FILE_BROWSER_TMP,
 		  Gbl.FileBrowser.TmpPubDir,
 		  FileNameZIP);

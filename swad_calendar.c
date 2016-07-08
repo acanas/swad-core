@@ -195,7 +195,7 @@ void Cal_DrawCurrentMonth (void)
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
-	    Cfg_HTTPS_URL_SWAD_CGI,
+	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
    Act_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
@@ -264,7 +264,7 @@ void Cal_DrawCalendar (void)
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    (Gbl.Action.Act == ActPrnCal) ? "true" :
 		                            "false",
-	    Cfg_HTTPS_URL_SWAD_CGI,
+	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
    Act_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",

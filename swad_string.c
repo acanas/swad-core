@@ -307,7 +307,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    sprintf (Anchor1Nick,"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 				 "%s"
 				 "<input type=\"hidden\" name=\"usr\" value=\"",
-		     Cfg_HTTPS_URL_SWAD_CGI,
+		     Cfg_URL_SWAD_CGI,
 		     Txt_STR_LANG_ID[Gbl.Prefs.Language],
 		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                  Gbl.Form.Id,

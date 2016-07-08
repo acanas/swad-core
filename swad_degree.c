@@ -388,10 +388,10 @@ static void Deg_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentDeg.Deg.DegCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentDeg.Deg.DegCod);
 
@@ -987,7 +987,7 @@ void Deg_InitCurrentCourse (void)
       sprintf (Gbl.CurrentCrs.PathRelPubl,"%s/%s/%ld",
 	       Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
       sprintf (Gbl.CurrentCrs.PathURLPubl,"%s/%s/%ld",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathPriv))

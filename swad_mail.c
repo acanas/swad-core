@@ -1500,9 +1500,9 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    /* Message body */
    fprintf (Gbl.Msg.FileMail,
 	    Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML,
-	    Cfg_HTTPS_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
-            Cfg_HTTPS_URL_SWAD_CGI,Act_Actions[ActCnfMai].ActCod,Gbl.UniqueNameEncrypted,
-            Cfg_HTTPS_URL_SWAD_CGI);
+	    Cfg_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
+            Cfg_URL_SWAD_CGI,Act_Actions[ActCnfMai].ActCod,Gbl.UniqueNameEncrypted,
+            Cfg_URL_SWAD_CGI);
 
    /* Footer note */
    Mai_WriteFootNoteEMail (Gbl.Prefs.Language);
@@ -1695,7 +1695,7 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
                              "%s\n",
             Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[Language],
             Cfg_PLATFORM_SHORT_NAME,
-            Cfg_HTTPS_URL_SWAD_CGI);
+            Cfg_URL_SWAD_CGI);
   }
 
 /*****************************************************************************/

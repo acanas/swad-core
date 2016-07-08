@@ -133,7 +133,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.Theme = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet = Ico_ICON_SET_DEFAULT;	// Default icon set
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
+            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
 	    Gbl.Prefs.IconsURL,
 	    Cfg_ICON_FOLDER_THEMES,

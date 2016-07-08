@@ -406,7 +406,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
    /* Message body */
    fprintf (Gbl.Msg.FileMail,Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML,
 	    Cfg_PLATFORM_SHORT_NAME,NewRandomPlainPassword,
-	    Cfg_HTTPS_URL_SWAD_CGI,(unsigned) (Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS/(24L*60L*60L)),
+	    Cfg_URL_SWAD_CGI,(unsigned) (Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS/(24L*60L*60L)),
 	    Gbl.Usrs.Me.UsrDat.Email);
 
    /* Footer note */

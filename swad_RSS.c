@@ -87,7 +87,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-            Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
+            Cfg_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<description>%s</description>\n",
             Crs->FullName);
    fprintf (FileRSS,"<language>%s</language>\n",
@@ -101,7 +101,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-            Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
+            Cfg_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<width>112</width>\n");
    fprintf (FileRSS,"<height>32</height>\n");
    fprintf (FileRSS,"</image>\n");
@@ -200,7 +200,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
 
          /* Write link to the notice */
          fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-                  Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
+                  Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
          strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
@@ -216,7 +216,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
 
          /* Write unique string for this item */
          fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, notice #%ld</guid>\n",
-                  Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod,NotCod);
+                  Cfg_URL_SWAD_CGI,Crs->CrsCod,NotCod);
 
          /* Write publication date */
          fprintf (FileRSS,"<pubDate>");	
@@ -290,7 +290,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 
 	    /* Write link to the notice */
 	    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-		     Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod);
+		     Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
 	    /* Write full content of the exam announcement */
 	    //strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
@@ -306,7 +306,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 
 	    /* Write unique string for this item */
 	    fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, exam #%ld</guid>\n",
-		     Cfg_HTTPS_URL_SWAD_CGI,Crs->CrsCod,ExaCod);
+		     Cfg_URL_SWAD_CGI,Crs->CrsCod,ExaCod);
 
 	    /* Write publication date */
 	    fprintf (FileRSS,"<pubDate>");
@@ -332,5 +332,5 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 void RSS_WriteRSSLink (FILE *FileTgt,long CrsCod)
   {
    fprintf (FileTgt,"%s/%s/%ld/%s/%s",
-            Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

@@ -3202,7 +3202,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
                          "</a>",
                Ban.WWW,
                Ban.FullName,
-               Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Ban.Img,
                Ban.ShortName,
                Ban.FullName);

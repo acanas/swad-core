@@ -1066,8 +1066,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
 			   row[3],
-			   Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-					  Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
@@ -1231,8 +1231,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
 			   row[3],
-			   Gbl.RowEvenOdd,Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
-					  Cfg_HTTPS_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,Act_Actions[ActReqStaCrs].ActCod,
 
 			   NumTchs != 0 ? "DAT_SMALL_GREEN" :
 					  "DAT_SMALL_RED",

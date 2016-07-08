@@ -1680,7 +1680,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	 /* Go to: */
 	 fprintf (Gbl.Msg.FileMail,"%s: %s/ > %s > %s\n",
 		  Txt_Go_to_NO_HTML[ToUsrLanguage],
-		  Cfg_HTTPS_URL_SWAD_CGI,
+		  Cfg_URL_SWAD_CGI,
 		  Txt_TAB_Messages_NO_HTML[ToUsrLanguage],
 		  Txt_Notifications_NO_HTML[ToUsrLanguage]);
 

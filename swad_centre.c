@@ -316,7 +316,7 @@ static void Ctr_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%02u/%u/%u.jpg\""
 	                    " alt=\"%s\" title=\"%s\""
 	                    " class=\"%s\" />",
-		  Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
@@ -419,10 +419,10 @@ static void Ctr_Configuration (bool PrintView)
 			 "</tr>",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCtr.Ctr.CtrCod,
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	       Gbl.CurrentCtr.Ctr.CtrCod);
 

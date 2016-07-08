@@ -575,7 +575,7 @@ void Img_ShowImage (struct Image *Image,
 
       /***** Create URL pointing to symbolic link *****/
       sprintf (URL,"%s/%s/%s/%s",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
 	       Gbl.FileBrowser.TmpPubDir,
 	       FileNameImgPriv);
 

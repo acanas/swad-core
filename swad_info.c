@@ -781,7 +781,7 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       sprintf (URL,"%s/%s/%ld/%s/index.html",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
 	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -793,7 +793,7 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       sprintf (URL,"%s/%s/%ld/%s/index.htm",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
 	       Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -1835,7 +1835,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 #ifdef Cfg_MATHJAX_LOCAL
       // Use the local copy of MathJax
       sprintf (MathJaxURL,"=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC);
+	       Cfg_URL_SWAD_PUBLIC);
 #else
       // Use the MathJax Content Delivery Network (CDN)
       MathJaxURL[0] = '\0';

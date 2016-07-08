@@ -2550,7 +2550,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
 
    /***** Check if my photo exists and create a link to it ****/
-   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,true);
+   Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
 
    /***** Check if I am administrator of current institution/centre/degree *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)

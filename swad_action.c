@@ -4491,7 +4491,7 @@ void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *Breadcru
    Arrow = HTML ? "&gt;" :
 	          ">";
    sprintf (BreadcrumbStr,"%s %s %s %s %s",
-            Cfg_HTTPS_URL_SWAD_CGI,Arrow,
+            Cfg_URL_SWAD_CGI,Arrow,
             Txt_TABS_FULL_TXT[Act_Actions[Superaction].Tab],Arrow,
             Txt_MENU_TITLE[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu]);
   }
@@ -4592,7 +4592,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
      {
       /* Start form */
       fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
-	       Cfg_HTTPS_URL_SWAD_CGI,
+	       Cfg_URL_SWAD_CGI,
 	       Txt_STR_LANG_ID[Gbl.Prefs.Language]);
       if (Anchor)
 	 if (Anchor[0])

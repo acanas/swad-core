@@ -8146,7 +8146,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                       " id=\"my-awesome-dropzone\""
                       " style=\"display:inline-block; width:100%%;"
                       " background:url('%s/upload320x320.gif') no-repeat center;\">",
-            Cfg_HTTPS_URL_SWAD_CGI,
+            Cfg_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Prefs.IconsURL);
    Par_PutHiddenParamLong ("act",Act_Actions[Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]].ActCod);
@@ -9968,7 +9968,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 
       /***** Create URL pointing to symbolic link *****/
       sprintf (URLWithSpaces,"%s/%s/%s/%s",
-	       Cfg_HTTPS_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
 	       Gbl.FileBrowser.TmpPubDir,
 	       FileName);
      }

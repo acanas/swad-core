@@ -125,7 +125,7 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
 
    /***** Build URL using nickname *****/
    sprintf (URL,"%s/%s?usr=@%s",
-	    Cfg_HTTPS_URL_SWAD_CGI,
+	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	    NicknameWithoutArroba);
 

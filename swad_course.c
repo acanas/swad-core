@@ -313,10 +313,10 @@ static void Crs_Configuration (bool PrintView)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Shortcut,
-            Cfg_HTTPS_URL_SWAD_CGI,
+            Cfg_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod,
-            Cfg_HTTPS_URL_SWAD_CGI,
+            Cfg_URL_SWAD_CGI,
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.CurrentCrs.Crs.CrsCod);
 
