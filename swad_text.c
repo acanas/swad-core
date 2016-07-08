@@ -47151,9 +47151,9 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 #if   L==1
 	 "Lliure"
 #elif L==2
-	 "No class"
-#elif L==3
 	 "Keine Klasse"
+#elif L==3
+	 "No class"
 #elif L==4
 	 "Libre"
 #elif L==5

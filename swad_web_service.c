@@ -880,7 +880,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
          strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
          loginByUserPasswordKeyOut->userFirstname[255] = '\0';
 
-         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,false);
+         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,true);
          strncpy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,PATH_MAX);
          loginByUserPasswordKeyOut->userPhoto[PATH_MAX] = '\0';
 
@@ -1015,7 +1015,7 @@ int swad__loginBySessionKey (struct soap *soap,
          strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
          loginBySessionKeyOut->userFirstname[255] = '\0';
 
-         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,false);
+         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,true);
          strncpy (loginBySessionKeyOut->userPhoto,PhotoURL,PATH_MAX);
          loginBySessionKeyOut->userPhoto[PATH_MAX] = '\0';
 
@@ -2008,7 +2008,7 @@ static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
    Usr->userFirstname[255] = '\0';
 
    /* User's photo URL */
-   Pho_BuildLinkToPhoto (UsrDat,PhotoURL,false);
+   Pho_BuildLinkToPhoto (UsrDat,PhotoURL,true);
    Usr->userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
    strncpy (Usr->userPhoto,PhotoURL,PATH_MAX);
    Usr->userPhoto[PATH_MAX] = '\0';
@@ -2110,7 +2110,7 @@ int swad__getAttendanceEvents (struct soap *soap,
             strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
                     Gbl.Usrs.Other.UsrDat.FirstName);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,false);
+            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
             Length = strlen (PhotoURL);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
             strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
@@ -2480,7 +2480,7 @@ int swad__getAttendanceUsers (struct soap *soap,
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
             strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName);
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,false);
+            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
             Length = strlen (PhotoURL);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
             strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,PhotoURL);
@@ -2751,7 +2751,7 @@ int swad__getNotifications (struct soap *soap,
             strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName,255);
             getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname[255] = '\0';
 
-            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,false);
+            Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
             getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
             strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto,PhotoURL,PATH_MAX);
             getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto[PATH_MAX] = '\0';
@@ -4273,7 +4273,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
-      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,false);
+      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL,true);
 
       fprintf (Gbl.F.XML,"<file name=\"%s\">"
 			 "<code>%ld</code>"
@@ -4455,7 +4455,7 @@ int swad__getFile (struct soap *soap,
 	 strncpy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,255+1+255+1+255);
 	 getFileOut->publisherName[255+1+255+1+255] = '\0';
 
-	 Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,false);
+	 Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,true);
 	 strncpy (getFileOut->publisherPhoto,PhotoURL,PATH_MAX);
 	 getFileOut->publisherPhoto[PATH_MAX] = '\0';
 	}
