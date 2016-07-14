@@ -3698,7 +3698,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_SYS:
 	 /* Get users in courses from the whole platform */
 	 // 2 columns are retrieved: UsrCod, Sex
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+	                "usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM usr_data,crs_usr"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
@@ -3712,7 +3715,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_CTY:
 	 /* Get users in courses from the current country */
 	 // 2 columns are retrieved: UsrCod, Sex
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+	                "usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM usr_data,crs_usr,courses,degrees,centres,institutions"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
@@ -3732,7 +3738,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_INS:
 	 /* Get users in courses from the current institution */
 	 // 2 columns are retrieved: UsrCod, Sex
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+	                "usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM usr_data,crs_usr,courses,degrees,centres"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
@@ -3751,7 +3760,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
 	 /* Get users in courses from the current centre */
 	 // 2 columns are retrieved: UsrCod, Sex
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+	                "usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM usr_data,crs_usr,courses,degrees"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
@@ -3769,7 +3781,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
 	 /* Get users in courses from the current degree */
 	 // 2 columns are retrieved: UsrCod, Sex
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+	                "usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM usr_data,crs_usr,courses"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
@@ -3825,14 +3840,20 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users from the whole platform */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,usr_data"
 			      " WHERE %s",
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -3846,7 +3867,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -3859,7 +3883,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -3871,7 +3898,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -3882,7 +3912,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,crs_usr.Accepted,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod='%ld'"
@@ -3897,7 +3930,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
          break;
       case Rol__GUEST_:	// Guests (scope is not used)
 	 /* Search users with no courses */
-	 sprintf (Query,"SELECT candidate_users.UsrCod,usr_data.Sex"
+	 sprintf (Query,"SELECT usr_data.UsrCod,usr_data.Sex,"
+			"usr_data.Surname1,"	// Only necessary for ORDER BY
+			"usr_data.Surname2,"	// Only necessary for ORDER BY
+			"usr_data.FirstName"	// Only necessary for ORDER BY
 			" FROM candidate_users,usr_data"
 			" WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
 			" AND %s",
@@ -3914,7 +3950,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users in courses from the whole platform */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -3924,7 +3963,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -3940,7 +3982,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -3955,7 +4000,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -3969,7 +4017,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -3982,7 +4033,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT DISTINCT candidate_users.UsrCod,usr_data.Sex,crs_usr.Accepted"
+	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,usr_data.Sex,crs_usr.Accepted,"
+			      "usr_data.Surname1,"	// Only necessary for ORDER BY
+			      "usr_data.Surname2,"	// Only necessary for ORDER BY
+			      "usr_data.FirstName"	// Only necessary for ORDER BY
 			      " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
@@ -4186,13 +4240,19 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         strcpy (Query,"SELECT DISTINCT UsrCod,Sex"
+         strcpy (Query,"SELECT DISTINCT UsrCod,Sex,"
+                       "Surname1,"	// Only necessary for ORDER BY
+                       "Surname2,"	// Only necessary for ORDER BY
+                       "FirstName"	// Only necessary for ORDER BY
                        " FROM usr_data"
                        " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                        " ORDER BY Surname1,Surname2,FirstName,UsrCod");
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT DISTINCT UsrCod,Sex"
+         sprintf (Query,"SELECT DISTINCT UsrCod,Sex,"
+                       "Surname1,"	// Only necessary for ORDER BY
+                       "Surname2,"	// Only necessary for ORDER BY
+                       "FirstName"	// Only necessary for ORDER BY
                         " FROM usr_data"
                         " WHERE (CtyCod='%ld' OR InsCtyCod='%ld')"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
@@ -4201,7 +4261,10 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT DISTINCT UsrCod,Sex"
+         sprintf (Query,"SELECT DISTINCT UsrCod,Sex,"
+                       "Surname1,"	// Only necessary for ORDER BY
+                       "Surname2,"	// Only necessary for ORDER BY
+                       "FirstName"	// Only necessary for ORDER BY
                         " FROM usr_data"
                         " WHERE InsCod='%ld'"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
@@ -4209,7 +4272,10 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT DISTINCT UsrCod,Sex"
+         sprintf (Query,"SELECT DISTINCT UsrCod,Sex,"
+                       "Surname1,"	// Only necessary for ORDER BY
+                       "Surname2,"	// Only necessary for ORDER BY
+                       "FirstName"	// Only necessary for ORDER BY
                         " FROM usr_data"
                         " WHERE CtrCod='%ld'"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"

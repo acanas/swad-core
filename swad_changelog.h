@@ -129,18 +129,22 @@
 // TODO: In search of users and findUsers banned users should not appear in listing!!!!!
 // TODO: Send attached photos via SOAP?
 
+// TODO: In list of users, institution should be the institution photo with internal link to institution
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.242.2 (2016-07-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.242.3 (2016-07-14)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.242.2: Jul 08, 2016	Code refactoring related to users' photos. (203777 lines)
+        Version 15.242.3: Jul 14, 2016	Fixed bug in getting/finding users, due to default mysql mode in 5.7 which is ONLY_FULL_GROUP_BY. (203846 lines)
+        Version 15.242.2: Jul 08, 2016	Code refactoring related to users' photos.
+					Fixed bug in chat. (203778 lines)
         Version 15.242.1: Jul 08, 2016	URLs for users' photos in web service are sent with https instead of http. (203782 lines)
         Version 15.242:   Jul 07, 2016	New option Profile > Agenda. Not implemented. (203781 lines)
         Version 15.241.7: Jul 06, 2016	Removed cookies in swad.ugr.es.
