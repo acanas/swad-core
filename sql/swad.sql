@@ -457,17 +457,14 @@ CREATE TABLE IF NOT EXISTS file_browser_last (
 --
 CREATE TABLE IF NOT EXISTS file_browser_size (
 	FileBrowser TINYINT NOT NULL,
-	CrsCod INT NOT NULL DEFAULT -1,
-	GrpCod INT NOT NULL DEFAULT -1,
-	UsrCod INT NOT NULL DEFAULT -1,
+	Cod INT NOT NULL DEFAULT -1,
+	ZoneUsrCod INT NOT NULL DEFAULT -1,
 	NumLevels INT NOT NULL,
 	NumFolders INT NOT NULL,
 	NumFiles INT NOT NULL,
 	TotalSize BIGINT NOT NULL,
-	UNIQUE INDEX(FileBrowser,CrsCod,GrpCod,UsrCod),
-	INDEX(CrsCod),
-	INDEX(GrpCod),
-	INDEX(UsrCod));
+	UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),
+	INDEX(ZoneUsrCod));
 --
 -- Table file_view: stores the number of times each user has seen each file
 --

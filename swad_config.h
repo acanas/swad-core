@@ -28,10 +28,10 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
-//#define SWADBERRY_UGR_ES	// Comment this line if not applicable
+#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
 /*****************************************************************************/
 /********************************* Headers ***********************************/
@@ -226,7 +226,7 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWADberry"
 #define Cfg_PLATFORM_FULL_NAME			"SWADberry (Shared Workspace At a Distance on a Raspberry Pi)"
 #define Cfg_PLATFORM_SERVER			"swadberry.ugr.es"		// Server name (main part of the URL)
-#define Cfg_URL_SWAD_CGI			"https://swadberry.ugr.es/swad"	// Without ending slash
+#define Cfg_URL_SWAD_CGI			"https://swadberry.ugr.es"	// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://swadberry.ugr.es/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.

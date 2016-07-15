@@ -130,18 +130,22 @@
 // TODO: Send attached photos via SOAP?
 
 // TODO: In list of users, institution should be the institution photo with internal link to institution
+// TODO: IMPORTANT FOR SWADROID: For reasons of speed, when getting list of users (find/get), get all main data in the find/get query, do not iterate with multiple queries
+// TODO: Remove "e-mail" column from list of users (usually it's not necessary)
+// TODO: Upload photos/files from SWADroid using MIME attachments
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.242.3 (2016-07-14)"
+#define Log_PLATFORM_VERSION	"SWAD 15.242.4 (2016-07-15)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.242.4: Jul 15, 2016	Fixed bug in creation of database table file_browser_size. (203847 lines)
         Version 15.242.3: Jul 14, 2016	Fixed bug in getting/finding users, due to default mysql mode in 5.7 which is ONLY_FULL_GROUP_BY. (203846 lines)
         Version 15.242.2: Jul 08, 2016	Code refactoring related to users' photos.
 					Fixed bug in chat. (203778 lines)
