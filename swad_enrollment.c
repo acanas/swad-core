@@ -244,11 +244,12 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		  "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,NumAccTst,LastAccTst,NumQstsLastTst,"
 		  "UsrListType,ColsClassPhoto,ListWithPhotos)"
 		  " VALUES ('%ld','%ld','%u','%c',"
-		  "'-1','-1','-1','0','0000-00-00','0',"
+		  "'-1','-1','-1','0',FROM_UNIXTIME('%ld'),'0',"
 		  "'%s','%u','%c')",
 	    Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
 	    KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
 		                                            'N',
+            (long) (time_t) 0,	// The user never accessed to tests in this course
 	    Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
 	    Usr_CLASS_PHOTO_COLS_DEF,
 	    Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :

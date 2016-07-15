@@ -623,7 +623,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    long NumSecondsFromNowToNextAccTst = -1L;	// Access allowed when this number <= 0
    time_t TimeNextTestUTC = (time_t) 0;
 
-   /***** Superusers are allowed to do all test they want *****/
+   /***** Superusers are allowed to do all tests they want *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       return true;
 
