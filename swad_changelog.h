@@ -138,13 +138,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.242.5 (2016-07-15)"
+#define Log_PLATFORM_VERSION	"SWAD 15.242.6 (2016-07-15)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.242.6: Jul 15, 2016	Fixed bug in creation of database table tst_config. (203850 lines)
         Version 15.242.5: Jul 15, 2016	Fixed bug in user's registration. (203849 lines)
         Version 15.242.4: Jul 15, 2016	Fixed bug in creation of database table file_browser_size. (203847 lines)
         Version 15.242.3: Jul 14, 2016	Fixed bug in getting/finding users, due to default mysql mode in 5.7 which is ONLY_FULL_GROUP_BY. (203846 lines)

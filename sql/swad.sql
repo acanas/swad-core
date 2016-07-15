@@ -1115,7 +1115,7 @@ CREATE TABLE IF NOT EXISTS tst_config (
 	Def INT NOT NULL,
 	Max INT NOT NULL,
 	MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,
-	Feedback ENUM('nothing','total_result','each_result','each_good_bad') NOT NULL,
+	Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL,
 	UNIQUE INDEX(CrsCod));
 --
 -- Table tst_exam_questions: stores the questions and answers in test exams made by users
