@@ -206,7 +206,7 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod);
 static int Svc_GenerateNewWSKey (long UsrCod,char *WSKey);
 static int Svc_RemoveOldWSKeys (void);
 static int Svc_GetCurrentDegCodFromCurrentCrsCod (void);
-static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
+static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
 static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewNicknameWithoutArroba,	// Output
@@ -552,13 +552,17 @@ static int Svc_GetCurrentDegCodFromCurrentCrsCod (void)
 /*****************************************************************************/
 /************ Get user's data from database giving a user's code *************/
 /*****************************************************************************/
-// UsrDat->UsrCod must contain an existing user's code
+// Return false if UsrDat->UsrCod does not exist ini database
 
-static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
+static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+
+   /***** Check if user's code is valid *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
 
    /***** Get some user's data *****/
    /* Query database */
@@ -568,20 +572,17 @@ static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 
    /* Check number of rows in result */
    if (DB_QuerySELECT (Query,&mysql_res,"can not get user's data") != 1)
-      return soap_receiver_fault (Gbl.soap,
-	                          "Can not get user's data from database",
-	                          "User does not exist in database");
+      return false;
 
    /* Read some user's data */
    row = mysql_fetch_row (mysql_res);
 
    /* Get user's name */
    strncpy (UsrDat->Surname1 ,row[0],sizeof (UsrDat->Surname1 )-1);
-   strncpy (UsrDat->Surname2 ,row[1],sizeof (UsrDat->Surname2 )-1);
-   strncpy (UsrDat->FirstName,row[2],sizeof (UsrDat->FirstName)-1);
-
    UsrDat->Surname1 [sizeof (UsrDat->Surname1 )-1] = '\0';
+   strncpy (UsrDat->Surname2 ,row[1],sizeof (UsrDat->Surname2 )-1);
    UsrDat->Surname2 [sizeof (UsrDat->Surname2 )-1] = '\0';
+   strncpy (UsrDat->FirstName,row[2],sizeof (UsrDat->FirstName)-1);
    UsrDat->FirstName[sizeof (UsrDat->FirstName)-1] = '\0';
 
    /* Get user's photo */
@@ -609,27 +610,51 @@ static int Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    /***** Get user's role *****/
    /* Query database */
    if (CrsCod > 0)
+     {
+      /* Get the role in the given course */
       sprintf (Query,"SELECT Role FROM crs_usr"
                      " WHERE CrsCod='%ld' AND UsrCod='%ld'",
                CrsCod,UsrDat->UsrCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's role"))	// User belongs to course
+	{
+	 row = mysql_fetch_row (mysql_res);
+	 if (row[0])
+	   {
+	    if (sscanf (row[0],"%u",&UsrDat->RoleInCurrentCrsDB) != 1)
+	       UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	   }
+	 else	// Impossible
+	    UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	}
+      else	// User does not belong to course
+	 UsrDat->RoleInCurrentCrsDB = Rol_VISITOR;
+     }
    else
+     {
+      /* Get the maximum role in any course */
       sprintf (Query,"SELECT MAX(Role)"
                      " FROM crs_usr WHERE UsrCod='%ld'",
                UsrDat->UsrCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get user's role") == 1)
-     {
-      /* Read the maximum role */
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&UsrDat->RoleInCurrentCrsDB) != 1)
-         UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's role") == 1)
+	{
+	 row = mysql_fetch_row (mysql_res);
+	 if (row[0])
+	   {
+	    if (sscanf (row[0],"%u",&UsrDat->RoleInCurrentCrsDB) != 1)
+	       UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	   }
+	 else
+	    // MAX(Role) == NULL if user does not belong to any course
+	    UsrDat->RoleInCurrentCrsDB = Rol__GUEST_;
+	}
+      else	// Impossible
+	 UsrDat->RoleInCurrentCrsDB = Rol__GUEST_;
      }
-   else
-      UsrDat->RoleInCurrentCrsDB = Rol__GUEST_;
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   return SOAP_OK;
+   return true;
   }
 
 /*****************************************************************************/
@@ -652,6 +677,7 @@ int swad__createAccount (struct soap *soap,
    int Result;
    int ReturnCode;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_createAccount;
 
@@ -775,7 +801,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumRows;
    char PhotoURL[PATH_MAX+1];
+   bool UsrFound;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_loginByUserPasswordKey;
 
@@ -853,65 +881,69 @@ int swad__loginByUserPasswordKey (struct soap *soap,
      }
 
    /***** Get user's data from database *****/
-   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's data")))	// User found in table of users' data
+   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's data")) == 1)	// User found in table of users' data
      {
       row = mysql_fetch_row (mysql_res);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L) == SOAP_OK)		// Get some user's data from database
-        {
-         Gbl.Usrs.Me.Logged = true;
-         Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
-
-         loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
-
-         strncpy (loginByUserPasswordKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-         loginByUserPasswordKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
-
-         strncpy (loginByUserPasswordKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
-         loginByUserPasswordKeyOut->userID[255] = '\0';
-
-         strncpy (loginByUserPasswordKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
-         loginByUserPasswordKeyOut->userSurname1[255] = '\0';
-         strncpy (loginByUserPasswordKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
-         loginByUserPasswordKeyOut->userSurname2[255] = '\0';
-         strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
-         loginByUserPasswordKeyOut->userFirstname[255] = '\0';
-
-         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-         strncpy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,PATH_MAX);
-         loginByUserPasswordKeyOut->userPhoto[PATH_MAX] = '\0';
-
-         strncpy (loginByUserPasswordKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
-         loginByUserPasswordKeyOut->userBirthday[4+2+2] = '\0';
-
-         loginByUserPasswordKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
-        }
-      else
-	{
-	 loginByUserPasswordKeyOut->userCode      = -1;
-	 loginByUserPasswordKeyOut->userID        = NULL;
-	 loginByUserPasswordKeyOut->userSurname1  = NULL;
-	 loginByUserPasswordKeyOut->userSurname2  = NULL;
-	 loginByUserPasswordKeyOut->userFirstname = NULL;
-	 loginByUserPasswordKeyOut->userPhoto     = NULL;
-	 loginByUserPasswordKeyOut->userRole      = 0;
-	}
+      /***** Get user's data *****/
+      UsrFound = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L);	// Get some user's data from database
      }
+   else
+      UsrFound = false;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumRows == 1)
+   if (UsrFound)
+     {
+      Gbl.Usrs.Me.Logged = true;
+      Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
+
+      loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
+
+      strncpy (loginByUserPasswordKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+      loginByUserPasswordKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+
+      strncpy (loginByUserPasswordKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
+      loginByUserPasswordKeyOut->userID[255] = '\0';
+
+      strncpy (loginByUserPasswordKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
+      loginByUserPasswordKeyOut->userSurname1[255] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
+      loginByUserPasswordKeyOut->userSurname2[255] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
+      loginByUserPasswordKeyOut->userFirstname[255] = '\0';
+
+      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+      strncpy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,PATH_MAX);
+      loginByUserPasswordKeyOut->userPhoto[PATH_MAX] = '\0';
+
+      strncpy (loginByUserPasswordKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
+      loginByUserPasswordKeyOut->userBirthday[4+2+2] = '\0';
+
+      loginByUserPasswordKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
+
       /***** Generate a key used in subsequents calls to other web services *****/
       return Svc_GenerateNewWSKey ((long) loginByUserPasswordKeyOut->userCode,
                                    loginByUserPasswordKeyOut->wsKey);
+     }
    else
+     {
+      loginByUserPasswordKeyOut->userCode      = -1;
+      loginByUserPasswordKeyOut->userID        = NULL;
+      loginByUserPasswordKeyOut->userSurname1  = NULL;
+      loginByUserPasswordKeyOut->userSurname2  = NULL;
+      loginByUserPasswordKeyOut->userFirstname = NULL;
+      loginByUserPasswordKeyOut->userPhoto     = NULL;
+      loginByUserPasswordKeyOut->userRole      = 0;
+
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad log in",
 	                          "User's ID or nickname don't exist or password is wrong");
+     }
   }
 
 /*****************************************************************************/
@@ -928,7 +960,9 @@ int swad__loginBySessionKey (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumRows;
    char PhotoURL[PATH_MAX+1];
+   bool UsrFound;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_loginBySessionKey;
 
@@ -982,7 +1016,7 @@ int swad__loginBySessionKey (struct soap *soap,
    /***** Query data of the session from database *****/
    sprintf (Query,"SELECT UsrCod,DegCod,CrsCod FROM sessions"
                   " WHERE SessionId='%s'",sessionID);
-   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get session data")))	// Session found in table of sessions
+   if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get session data")) == 1)	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -995,45 +1029,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod) == SOAP_OK)		// Get some user's data from database
-        {
-         Gbl.Usrs.Me.Logged = true;
-         Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
-
-         loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
-
-         strncpy (loginBySessionKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-         loginBySessionKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
-
-         strncpy (loginBySessionKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
-         loginBySessionKeyOut->userID[255] = '\0';
-
-         strncpy (loginBySessionKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
-         loginBySessionKeyOut->userSurname1[255] = '\0';
-         strncpy (loginBySessionKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
-         loginBySessionKeyOut->userSurname2[255] = '\0';
-         strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
-         loginBySessionKeyOut->userFirstname[255] = '\0';
-
-         Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-         strncpy (loginBySessionKeyOut->userPhoto,PhotoURL,PATH_MAX);
-         loginBySessionKeyOut->userPhoto[PATH_MAX] = '\0';
-
-         strncpy (loginBySessionKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
-         loginBySessionKeyOut->userBirthday[4+2+2] = '\0';
-
-         loginBySessionKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
-        }
-      else
-	{
-	 loginBySessionKeyOut->userCode      = -1;
-	 loginBySessionKeyOut->userID        = NULL;
-	 loginBySessionKeyOut->userSurname1  = NULL;
-	 loginBySessionKeyOut->userSurname2  = NULL;
-	 loginBySessionKeyOut->userFirstname = NULL;
-	 loginBySessionKeyOut->userPhoto     = NULL;
-	 loginBySessionKeyOut->userRole      = 0;
-	}
+      UsrFound = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod);	// Get some user's data from database
 
       /***** Get degree (row[1]) *****/
       Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -1042,6 +1038,8 @@ int swad__loginBySessionKey (struct soap *soap,
       strncpy (loginBySessionKeyOut->degreeName,Gbl.CurrentDeg.Deg.FullName,255);
       loginBySessionKeyOut->degreeName[255] = '\0';
      }
+   else
+      UsrFound = false;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1050,14 +1048,53 @@ int swad__loginBySessionKey (struct soap *soap,
    if ((ReturnCode = Svc_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
      return ReturnCode;
 
-   if (NumRows == 1)
+   if (UsrFound)
+     {
+      Gbl.Usrs.Me.Logged = true;
+      Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
+
+      loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
+
+      strncpy (loginBySessionKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+      loginBySessionKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+
+      strncpy (loginBySessionKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
+      loginBySessionKeyOut->userID[255] = '\0';
+
+      strncpy (loginBySessionKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
+      loginBySessionKeyOut->userSurname1[255] = '\0';
+      strncpy (loginBySessionKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
+      loginBySessionKeyOut->userSurname2[255] = '\0';
+      strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
+      loginBySessionKeyOut->userFirstname[255] = '\0';
+
+      Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+      strncpy (loginBySessionKeyOut->userPhoto,PhotoURL,PATH_MAX);
+      loginBySessionKeyOut->userPhoto[PATH_MAX] = '\0';
+
+      strncpy (loginBySessionKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
+      loginBySessionKeyOut->userBirthday[4+2+2] = '\0';
+
+      loginBySessionKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
+
       /***** Generate a key used in subsequents calls to other web services *****/
       return Svc_GenerateNewWSKey ((long) loginBySessionKeyOut->userCode,
                                    loginBySessionKeyOut->wsKey);
+     }
    else
+     {
+      loginBySessionKeyOut->userCode      = -1;
+      loginBySessionKeyOut->userID        = NULL;
+      loginBySessionKeyOut->userSurname1  = NULL;
+      loginBySessionKeyOut->userSurname2  = NULL;
+      loginBySessionKeyOut->userFirstname = NULL;
+      loginBySessionKeyOut->userPhoto     = NULL;
+      loginBySessionKeyOut->userRole      = 0;
+
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
+     }
   }
 
 /*****************************************************************************/
@@ -1076,6 +1113,7 @@ int swad__getNewPassword (struct soap *soap,
    unsigned NumRows;
    char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getNewPassword;
 
@@ -1167,6 +1205,7 @@ int swad__getCourses (struct soap *soap,
    unsigned NumRow,NumRows;
    Rol_Role_t Role;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getCourses;
 
@@ -1179,8 +1218,10 @@ int swad__getCourses (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1268,6 +1309,7 @@ int swad__getCourseInfo (struct soap *soap,
       "URL",		// Inf_INFO_SRC_URL
      };
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getCourseInfo;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -1285,8 +1327,10 @@ int swad__getCourseInfo (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1366,6 +1410,7 @@ int swad__getUsers (struct soap *soap,
    int ReturnCode;
    Rol_Role_t Role;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getUsers;
    Gbl.CurrentCrs.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
@@ -1384,8 +1429,10 @@ int swad__getUsers (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1440,6 +1487,7 @@ int swad__findUsers (struct soap *soap,
    Rol_Role_t Role;
    bool FilterTooShort = false;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_findUsers;
    Gbl.CurrentCrs.Crs.CrsCod = (courseCode > 0) ? (long) courseCode :
@@ -1459,8 +1507,10 @@ int swad__findUsers (struct soap *soap,
 	 return ReturnCode;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1596,6 +1646,7 @@ int swad__getGroupTypes (struct soap *soap,
    unsigned NumRow,NumRows;
    long OpenTime;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getGroupTypes;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -1619,8 +1670,10 @@ int swad__getGroupTypes (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1701,6 +1754,7 @@ int swad__getGroups (struct soap *soap,
    long GrpCod;
    unsigned MaxStudents;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getGroups;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -1724,8 +1778,10 @@ int swad__getGroups (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -1828,6 +1884,7 @@ int swad__sendMyGroups (struct soap *soap,
    long GrpCod;
    unsigned MaxStudents;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendMyGroups;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -1847,8 +1904,10 @@ int swad__sendMyGroups (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2033,6 +2092,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    long EndTime;
    size_t Length;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getAttendanceEvents;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -2052,8 +2112,10 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2093,7 +2155,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 
 	 /* Get user's code of the user who created the event (row[1]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.CurrentCrs.Crs.CrsCod) == SOAP_OK)	// Get some user's data from database
+         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
@@ -2221,6 +2283,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendAttendanceEvent;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -2240,8 +2303,10 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2366,6 +2431,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    char PhotoURL[PATH_MAX+1];
    size_t Length;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getAttendanceUsers;
 
@@ -2383,8 +2449,10 @@ int swad__getAttendanceUsers (struct soap *soap,
    Gbl.CurrentCrs.Crs.CrsCod = Att.CrsCod;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2458,7 +2526,7 @@ int swad__getAttendanceUsers (struct soap *soap,
          getAttendanceUsersOut->usersArray.__ptr[NumRow].userCode = (int) Gbl.Usrs.Other.UsrDat.UsrCod;
 
          /* Get user's data */
-         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L) == SOAP_OK)	// Get some user's data from database
+         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
@@ -2525,6 +2593,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    char SubQuery[256];
    char *Query = NULL;	// Initialized to avoid warning
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendAttendanceUsers;
 
@@ -2547,8 +2616,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
    Gbl.CurrentCrs.Crs.CrsCod = Att.CrsCod;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2643,8 +2714,8 @@ int swad__getNotifications (struct soap *soap,
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
-   unsigned NumRow;
+   unsigned NumNotifications;
+   unsigned NumNotif;
    long NtfCod;
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
@@ -2659,6 +2730,7 @@ int swad__getNotifications (struct soap *soap,
    char *ContentStr;
    Ntf_Status_t Status;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getNotifications;
 
@@ -2671,19 +2743,16 @@ int swad__getNotifications (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Get my language from database *****/
    if ((ReturnCode = Svc_GetMyLanguage ()) != SOAP_OK)
       return ReturnCode;
-
-   if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
-      return soap_receiver_fault (Gbl.soap,
-	                          "Not enough memory",
-	                          "Not enough memory to store the summary of the notification");
 
    /***** Get my notifications from database *****/
    sprintf (Query,"SELECT NtfCod,NotifyEvent,UNIX_TIMESTAMP(TimeNotif),"
@@ -2692,40 +2761,41 @@ int swad__getNotifications (struct soap *soap,
                   " WHERE ToUsrCod='%ld' AND TimeNotif>=FROM_UNIXTIME('%ld')"
                   " ORDER BY TimeNotif DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's notifications");
-
-   getNotificationsOut->numNotifications = (int) NumRows;
-   getNotificationsOut->notificationsArray.__size = (int) NumRows;
-
-   if (NumRows == 0)
-      getNotificationsOut->notificationsArray.__ptr = NULL;
-   else	// Notifications found
+   NumNotifications = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's notifications");
+   if (NumNotifications)	// Notifications found
      {
+      /* Allocate memory for summary string */
+      if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+	 return soap_receiver_fault (Gbl.soap,
+				     "Not enough memory",
+				     "Not enough memory to store the summary of the notification");
+
+      getNotificationsOut->numNotifications = (int) NumNotifications;
+      getNotificationsOut->notificationsArray.__size = (int) NumNotifications;
       getNotificationsOut->notificationsArray.__ptr = soap_malloc (Gbl.soap,(getNotificationsOut->notificationsArray.__size) * sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumNotif = 0;
+	   NumNotif < NumNotifications;
+	   NumNotif++)
 	{
 	 /* Get next notification */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get unique notification code (row[0]) */
          NtfCod = Str_ConvertStrCodToLongCod (row[0]);
-         getNotificationsOut->notificationsArray.__ptr[NumRow].notifCode = (int) NtfCod;
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].notifCode = (int) NtfCod;
 
          /* Get notification event type (row[1]) */
          NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[1]);
-
-         getNotificationsOut->notificationsArray.__ptr[NumRow].eventType = (char *) soap_malloc (Gbl.soap,256);
-         strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].eventType,Ntf_WSNotifyEvents[NotifyEvent],255);
-         getNotificationsOut->notificationsArray.__ptr[NumRow].eventType[255] = '\0';
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType = (char *) soap_malloc (Gbl.soap,256);
+         strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,Ntf_WSNotifyEvents[NotifyEvent],255);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType[255] = '\0';
 
          /* Get time of the event (row[2]) */
          EventTime = 0L;
          if (row[2])
             sscanf (row[2],"%ld",&EventTime);
-         getNotificationsOut->notificationsArray.__ptr[NumRow].eventTime = EventTime;
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventTime = EventTime;
 
          /* Get course (row[7]) */
          Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
@@ -2733,36 +2803,37 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
-         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Crs.CrsCod) == SOAP_OK)	// Get some user's data from database
+
+         if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Crs.CrsCod))	// Get some user's data from database
            {
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userNickname = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userNickname,Gbl.Usrs.Other.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,Gbl.Usrs.Other.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname1 = (char *) soap_malloc (Gbl.soap,256);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname1,Gbl.Usrs.Other.UsrDat.Surname1,255);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname1[255] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,Gbl.Usrs.Other.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname2 = (char *) soap_malloc (Gbl.soap,256);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname2,Gbl.Usrs.Other.UsrDat.Surname2,255);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname2[255] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,Gbl.Usrs.Other.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname = (char *) soap_malloc (Gbl.soap,256);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName,255);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname[255] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto,PhotoURL,PATH_MAX);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto[PATH_MAX] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,PhotoURL,PATH_MAX);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto[PATH_MAX] = '\0';
            }
          else
            {
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userNickname  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname1  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userSurname2  = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userFirstname = NULL;
-            getNotificationsOut->notificationsArray.__ptr[NumRow].userPhoto     = NULL;
+	    getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname  = NULL;
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = NULL;
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = NULL;
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = NULL;
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto     = NULL;
            }
 
          /* Get institution (row[4]) */
@@ -2779,10 +2850,10 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);
-         getNotificationsOut->notificationsArray.__ptr[NumRow].eventCode = (int) Cod;
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventCode = (int) Cod;
 
          /* Set location */
-         getNotificationsOut->notificationsArray.__ptr[NumRow].location = (char *) soap_malloc (Gbl.soap,1024);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].location = (char *) soap_malloc (Gbl.soap,1024);
 
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
@@ -2793,28 +2864,28 @@ int swad__getNotifications (struct soap *soap,
         	              &Deg,
         	              &Crs,
         	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"%s: %s",
+            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);
            }
          else if (Crs.CrsCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"%s: %s",
+            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Course,Crs.ShortName);
          else if (Deg.DegCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"%s: %s",
+            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Degree,Deg.ShortName);
          else if (Ctr.CtrCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"%s: %s",
+            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Centre,Ctr.ShortName);
          else if (Ins.InsCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"%s: %s",
+            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Institution,Ins.ShortName);
          else
-            strcpy (getNotificationsOut->notificationsArray.__ptr[NumRow].location,"-");
+            strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-");
 
          /* Get status (row[9]) */
          if (sscanf (row[9],"%u",&Status) != 1)
             Status = (Ntf_Status_t) 0;
-         getNotificationsOut->notificationsArray.__ptr[NumRow].status = (int) Status;
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].status = (int) Status;
 
          /* Get summary and content */
          ContentStr = NULL;
@@ -2822,31 +2893,37 @@ int swad__getNotifications (struct soap *soap,
                                         Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                         Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE,true);
 
-         getNotificationsOut->notificationsArray.__ptr[NumRow].summary = (char *) soap_malloc (Gbl.soap,strlen (SummaryStr)+1);
-         strcpy (getNotificationsOut->notificationsArray.__ptr[NumRow].summary,SummaryStr);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].summary = (char *) soap_malloc (Gbl.soap,strlen (SummaryStr)+1);
+         strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].summary,SummaryStr);
 
-         if (ContentStr != NULL)
+         if (ContentStr == NULL)
            {
-            getNotificationsOut->notificationsArray.__ptr[NumRow].content = (char *) soap_malloc (Gbl.soap,strlen (ContentStr)+1);
-
-            strcpy (getNotificationsOut->notificationsArray.__ptr[NumRow].content,ContentStr);
-
-            free ((void *) ContentStr);
-            ContentStr = NULL;
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content[0] = '\0';
            }
          else
            {
-            getNotificationsOut->notificationsArray.__ptr[NumRow].content = (char *) soap_malloc (Gbl.soap,1);
-            getNotificationsOut->notificationsArray.__ptr[NumRow].content[0] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,strlen (ContentStr)+1);
+            strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].content,ContentStr);
+
+            /* Free memory used by content string */
+            free ((void *) ContentStr);
+            ContentStr = NULL;
            }
 	}
+
+      /* Free memory used by summary string */
+      free ((void *) SummaryStr);
+     }
+   else	// No notifications found
+     {
+      getNotificationsOut->numNotifications = 0;
+      getNotificationsOut->notificationsArray.__size = 0;
+      getNotificationsOut->notificationsArray.__ptr = NULL;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Free summary *****/
-   free ((void *) SummaryStr);
 
    return SOAP_OK;
   }
@@ -2910,6 +2987,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
    long NtfCod;
    char Query[512];
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_markNotificationsAsRead;
 
@@ -2922,8 +3000,10 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -2978,6 +3058,7 @@ int swad__sendMessage (struct soap *soap,
    const char *Ptr;
    bool NotifyByEmail;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendMessage;
 
@@ -2990,8 +3071,10 @@ int swad__sendMessage (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,-1L))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -3221,6 +3304,7 @@ int swad__sendNotice (struct soap *soap,
    char Query[512+Cns_MAX_BYTES_TEXT];
    long NotCod;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_sendNotice;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -3234,8 +3318,10 @@ int swad__sendNotice (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -3284,6 +3370,7 @@ int swad__getTestConfig (struct soap *soap,
    extern const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK];
    int ReturnCode;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getTestConfig;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -3297,8 +3384,10 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -3413,6 +3502,7 @@ int swad__getTests (struct soap *soap,
   {
    int ReturnCode;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getTests;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -3426,8 +3516,10 @@ int swad__getTests (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -3807,6 +3899,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    Tst_AnswerType_t AnswerType;
    unsigned Index;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getTrivialQuestion;
 
@@ -3819,8 +3912,10 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -4045,6 +4140,7 @@ int swad__getDirectoryTree (struct soap *soap,
    unsigned long FileSize;
    unsigned long NumBytesRead;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getDirectoryTree;
    Gbl.CurrentCrs.Crs.CrsCod = (long) courseCode;
@@ -4058,8 +4154,10 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -4322,6 +4420,7 @@ int swad__getFile (struct soap *soap,
    char URL[PATH_MAX+1];
    char PhotoURL[PATH_MAX+1];
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getFile;
 
@@ -4371,8 +4470,10 @@ int swad__getFile (struct soap *soap,
                                   &Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
@@ -4476,6 +4577,7 @@ int swad__getMarks (struct soap *soap,
    char SummaryStr[NAME_MAX+1];	// Really not used
    char *ContentStr;
 
+   /***** Initializations *****/
    Gbl.soap = soap;
    Gbl.WebService.Function = Svc_getMarks;
    getMarksOut->content = NULL;
@@ -4513,8 +4615,10 @@ int swad__getMarks (struct soap *soap,
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if ((ReturnCode = Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod)) != SOAP_OK)
-      return ReturnCode;
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 

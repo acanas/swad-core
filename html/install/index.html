@@ -702,16 +702,6 @@
 		<code>DirectoryIndex index.html index.htm index.php</code><br />
 		</li>
 
-		<li>
-		Optionally, if we want to redirect from http://... to https://...
-		we should add the following lines at the end of the
-		<code>Section 3: Virtual Hosts</code>:<br />
-		<code>&lt;VirtualHost _default_:*&gt;<br />
-		Redirect permanent / https://openswad.org/<br />
-		&lt;/VirtualHost&gt;</code><br />
-		(replace https://openswad.org/ by our https address).
-		</li>
-
 		</ul>
 	</td>
 	<td width="50%" valign="top">
@@ -849,6 +839,40 @@
 	</td>
 	</tr>
 	</table>
+	</p>
+
+
+	<p>
+	Optionally, if we want to redirect from http://... to https://...
+	we should add some lines to configuration files:
+
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		Edit the file <code>/etc/httpd/conf/httpd.conf</code>,
+		add the following lines at the end of the
+		<code>Section 3: Virtual Hosts</code> section:<br />
+		<code>&lt;VirtualHost _default_:*&gt;<br />
+		Redirect permanent / https://openswad.org/<br />
+		&lt;/VirtualHost&gt;</code><br />
+		(replace https://openswad.org/ by your https address),
+		and save it.
+	</td>
+	<td width="50%" valign="top">
+		Edit the file <code>/etc/apache2/sites-available/000-default.conf</code>,
+		add the following line into the
+		<code>&lt;VirtualHost *:80&gt;</code> section:<br />
+		<code>Redirect permanent / https://openswad.org/</code><br />
+		(replace https://openswad.org/ by your https address),
+		and save it.
+	</td>
+	</tr>
+	</table>
+
 	</p>
 
 	<p>
