@@ -811,9 +811,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,256);
    loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
    loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (Gbl.soap,256);
-   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,256);
-   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,256);
-   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,256);
+   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
    loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
    loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,8+2+2+1);
 
@@ -907,15 +907,18 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       strncpy (loginByUserPasswordKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
       loginByUserPasswordKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
 
-      strncpy (loginByUserPasswordKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
-      loginByUserPasswordKeyOut->userID[255] = '\0';
+      if (Gbl.Usrs.Me.UsrDat.IDs.Num)
+	{
+	 strncpy (loginByUserPasswordKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
+	 loginByUserPasswordKeyOut->userID[255] = '\0';
+	}
 
-      strncpy (loginByUserPasswordKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
-      loginByUserPasswordKeyOut->userSurname1[255] = '\0';
-      strncpy (loginByUserPasswordKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
-      loginByUserPasswordKeyOut->userSurname2[255] = '\0';
-      strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
-      loginByUserPasswordKeyOut->userFirstname[255] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginByUserPasswordKeyOut->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginByUserPasswordKeyOut->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginByUserPasswordKeyOut->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       strncpy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,PATH_MAX);
@@ -970,9 +973,9 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,256);
    loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
    loginBySessionKeyOut->userID         = (char *) soap_malloc (Gbl.soap,256);
-   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,256);
-   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,256);
-   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,256);
+   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,8+2+2+1);
    loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,256);
@@ -990,7 +993,7 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2[0]   = '\0';
    loginBySessionKeyOut->userPhoto[0]      = '\0';
    loginBySessionKeyOut->userBirthday[0]   = '\0';
-   loginBySessionKeyOut->userRole          = 0;	// unknown
+   loginBySessionKeyOut->userRole          = Rol_UNKNOWN;
    loginBySessionKeyOut->degreeName[0]     = '\0';
    loginBySessionKeyOut->courseName[0]     = '\0';
 
@@ -1058,15 +1061,18 @@ int swad__loginBySessionKey (struct soap *soap,
       strncpy (loginBySessionKeyOut->userNickname,Gbl.Usrs.Me.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
       loginBySessionKeyOut->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
 
-      strncpy (loginBySessionKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
-      loginBySessionKeyOut->userID[255] = '\0';
+      if (Gbl.Usrs.Me.UsrDat.IDs.Num)
+	{
+	 strncpy (loginBySessionKeyOut->userID,Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,255);	// TODO: What user's ID?
+	 loginBySessionKeyOut->userID[255] = '\0';
+	}
 
-      strncpy (loginBySessionKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,255);
-      loginBySessionKeyOut->userSurname1[255] = '\0';
-      strncpy (loginBySessionKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,255);
-      loginBySessionKeyOut->userSurname2[255] = '\0';
-      strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,255);
-      loginBySessionKeyOut->userFirstname[255] = '\0';
+      strncpy (loginBySessionKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginBySessionKeyOut->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginBySessionKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginBySessionKeyOut->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+      loginBySessionKeyOut->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       strncpy (loginBySessionKeyOut->userPhoto,PhotoURL,PATH_MAX);
@@ -1082,19 +1088,9 @@ int swad__loginBySessionKey (struct soap *soap,
                                    loginBySessionKeyOut->wsKey);
      }
    else
-     {
-      loginBySessionKeyOut->userCode      = -1;
-      loginBySessionKeyOut->userID        = NULL;
-      loginBySessionKeyOut->userSurname1  = NULL;
-      loginBySessionKeyOut->userSurname2  = NULL;
-      loginBySessionKeyOut->userFirstname = NULL;
-      loginBySessionKeyOut->userPhoto     = NULL;
-      loginBySessionKeyOut->userRole      = 0;
-
       return soap_receiver_fault (Gbl.soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
-     }
   }
 
 /*****************************************************************************/
@@ -2052,19 +2048,19 @@ static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool 
       strcpy (Usr->userID,"********");
 
    /* Copy user's surname1 */
-   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,256);
-   strncpy (Usr->userSurname1,UsrDat->Surname1,255);
-   Usr->userSurname1[255] = '\0';
+   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   strncpy (Usr->userSurname1,UsrDat->Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+   Usr->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
    /* Copy user's surname2 */
-   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,256);
-   strncpy (Usr->userSurname2,UsrDat->Surname2,255);
-   Usr->userSurname2[255] = '\0';
+   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   strncpy (Usr->userSurname2,UsrDat->Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+   Usr->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
    /* Copy user's first name */
-   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,256);
-   strncpy (Usr->userFirstname,UsrDat->FirstName,255);
-   Usr->userFirstname[255] = '\0';
+   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   strncpy (Usr->userFirstname,UsrDat->FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
+   Usr->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
 
    /* User's photo URL */
    Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
@@ -2532,9 +2528,17 @@ int swad__getAttendanceUsers (struct soap *soap,
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
             strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,Gbl.Usrs.Other.UsrDat.Nickname);
 
-            Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,Length + 1);
-	    strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+            if (Gbl.Usrs.Other.UsrDat.IDs.Num)
+              {
+	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
+	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,Length + 1);
+	       strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+              }
+            else
+              {
+	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,1);
+	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID[0] = '\0';
+              }
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);

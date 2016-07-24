@@ -138,14 +138,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.243 (2016-07-20)"
+#define Log_PLATFORM_VERSION	"SWAD 15.243.2 (2016-07-24)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.243: Jul 20, 2016	Fixed bug in web service (getNotifications).
+        Version 15.243.2: Jul 24, 2016	Guests now have permission to write messages. (? lines)
+        Version 15.243.1: Jul 21, 2016	Fixed bugs in web service. (203962 lines)
+        Version 15.243:   Jul 20, 2016	Fixed bug in web service (getNotifications).
 					Code refactoring in web service. (203956 lines)
         Version 15.242.6: Jul 15, 2016	Fixed bug in creation of database table tst_config. (203850 lines)
         Version 15.242.5: Jul 15, 2016	Fixed bug in user's registration. (203849 lines)
