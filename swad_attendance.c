@@ -1969,11 +1969,11 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 
    /***** Icon to show if the user is already registered *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"BT%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
+	              "<td class=\"BT%u\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
 	              "</td>",
+            Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
             Present ? "check" :
         	      "check-empty",

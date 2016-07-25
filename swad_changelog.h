@@ -130,20 +130,21 @@
 // TODO: Send attached photos via SOAP?
 
 // TODO: In list of users, institution should be the institution photo with internal link to institution
-// TODO: IMPORTANT FOR SWADROID: For reasons of speed, when getting list of users (find/get), get all main data in the find/get query, do not iterate with multiple queries
 // TODO: Upload photos/files from SWADroid using MIME attachments
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.244 (2016-07-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.245 (2016-07-24)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.245:   Jul 25, 2016	List of users is filled with user's name and user's institution.
+					Search of users uses the list filled instead of query database a second time to get all user's data. (204192 lines)
         Version 15.244:   Jul 25, 2016	Removed e-mail column from some lists of users (usually it's not necessary). (203969 lines)
         Version 15.243.2: Jul 24, 2016	Guests now have permission to write messages. (203963 lines)
         Version 15.243.1: Jul 21, 2016	Fixed bugs in web service. (203962 lines)

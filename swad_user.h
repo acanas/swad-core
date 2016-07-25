@@ -176,7 +176,14 @@ struct UsrLast
 struct UsrInList
   {
    long UsrCod;
+   char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char Surname1 [Usr_MAX_BYTES_NAME+1];
+   char Surname2 [Usr_MAX_BYTES_NAME+1];
+   char FirstName[Usr_MAX_BYTES_NAME+1];
    Usr_Sex_t Sex;
+   char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
+   Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
+   long InsCod;		// Institution
    bool Accepted;	// User has accepted joining to one/all courses?
    bool Remove;		// A boolean associated with each user that indicates if it must be removed
   };
