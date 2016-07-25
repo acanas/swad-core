@@ -143,6 +143,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.245.1: Jul 25, 2016	Code refactoring in building of queries to get/search users. (204081 lines)
         Version 15.245:   Jul 25, 2016	List of users is filled with user's name and user's institution.
 					Search of users uses the list filled instead of query database a second time to get all user's data. (204192 lines)
         Version 15.244:   Jul 25, 2016	Removed e-mail column from some lists of users (usually it's not necessary). (203969 lines)

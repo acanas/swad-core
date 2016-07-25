@@ -3565,6 +3565,17 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
    long GrpCod;
    unsigned NumGrpTyp;
    bool *AddStdsWithoutGroupOf;
+   const char *QueryFields =
+      "usr_data.UsrCod,"
+      "usr_data.EncryptedUsrCod,"
+      "usr_data.Surname1,"
+      "usr_data.Surname2,"
+      "usr_data.FirstName,"
+      "usr_data.Sex,"
+      "usr_data.Photo,"
+      "usr_data.PhotoVisibility,"
+      "usr_data.InsCod"
+      "crs_usr.Accepted";
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
@@ -3589,41 +3600,21 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
 
    /***** Create query for users in the course *****/
    if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
-      sprintf (Query,"SELECT usr_data.UsrCod,"
-                     "usr_data.EncryptedUsrCod,"
-                     "usr_data.Surname1,"
-                     "usr_data.Surname2,"
-                     "usr_data.FirstName,"
-                     "usr_data.Sex,"
-                     "usr_data.Photo,"
-                     "usr_data.PhotoVisibility,"
-                     "usr_data.InsCod"
-	             "usr_data.Sex,"
-	             "crs_usr.Accepted"
-                     " FROM crs_usr,usr_data"
+      sprintf (Query,"SELECT %s FROM crs_usr,usr_data"
                      " WHERE crs_usr.CrsCod='%ld'"
                      " AND crs_usr.Role='%u'"
                      " AND crs_usr.UsrCod NOT IN"
                      " (SELECT ToUsrCod FROM msg_banned WHERE FromUsrCod='%ld')"
       		     " AND crs_usr.UsrCod=usr_data.UsrCod",        // Do not get banned users
+      	       QueryFields,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
                Gbl.Usrs.Me.UsrDat.UsrCod);
    else
-      sprintf (Query,"SELECT usr_data.UsrCod,"
-                     "usr_data.EncryptedUsrCod,"
-                     "usr_data.Surname1,"
-                     "usr_data.Surname2,"
-                     "usr_data.FirstName,"
-                     "usr_data.Sex,"
-                     "usr_data.Photo,"
-                     "usr_data.PhotoVisibility,"
-                     "usr_data.InsCod"
-	             "usr_data.Sex,"
-	             "crs_usr.Accepted"
-                     " FROM crs_usr,usr_data"
+      sprintf (Query,"SELECT %s FROM crs_usr,usr_data"
                      " WHERE crs_usr.CrsCod='%ld'"
                      " AND crs_usr.Role='%u'"
 		     " AND crs_usr.UsrCod=usr_data.UsrCod",
+	       QueryFields,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
 
    /***** Select users in selected groups (only for students) *****/
@@ -3734,8 +3725,16 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
    char Query[16*1024];	// Big query when the course has lot of groups
    // TODO: Check buffer overflow when writing query
-
-   /***** Build query *****/
+   const char *QueryFields =
+      "DISTINCT usr_data.UsrCod,"
+      "usr_data.EncryptedUsrCod,"
+      "usr_data.Surname1,"
+      "usr_data.Surname2,"
+      "usr_data.FirstName,"
+      "usr_data.Sex,"
+      "usr_data.Photo,"
+      "usr_data.PhotoVisibility,"
+      "usr_data.InsCod";
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
@@ -3748,20 +3747,13 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
    row[8]: usr_data.InsCod
    row[9]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
+
+   /***** Build query *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
 	 /* Get users in courses from the whole platform */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                "usr_data.EncryptedUsrCod,"
-	                "usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM usr_data,crs_usr"
+	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" ORDER BY "
@@ -3769,20 +3761,12 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 			"usr_data.Surname2,"
 			"usr_data.FirstName,"
 			"usr_data.UsrCod",
+	          QueryFields,
 		  (unsigned) Role);
 	 break;
       case Sco_SCOPE_CTY:
 	 /* Get users in courses from the current country */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                "usr_data.EncryptedUsrCod,"
-	                "usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM usr_data,crs_usr,courses,degrees,centres,institutions"
+	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees,centres,institutions"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -3795,21 +3779,13 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 			"usr_data.Surname2,"
 			"usr_data.FirstName,"
 			"usr_data.UsrCod",
+		  QueryFields,
 		  (unsigned) Role,
 		  Gbl.CurrentCty.Cty.CtyCod);
 	 break;
       case Sco_SCOPE_INS:
 	 /* Get users in courses from the current institution */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                "usr_data.EncryptedUsrCod,"
-	                "usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM usr_data,crs_usr,courses,degrees,centres"
+	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees,centres"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -3821,21 +3797,13 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 			"usr_data.Surname2,"
 			"usr_data.FirstName,"
 			"usr_data.UsrCod",
+		  QueryFields,
 		  (unsigned) Role,
 		  Gbl.CurrentIns.Ins.InsCod);
 	 break;
       case Sco_SCOPE_CTR:
 	 /* Get users in courses from the current centre */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                "usr_data.EncryptedUsrCod,"
-	                "usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM usr_data,crs_usr,courses,degrees"
+	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -3846,21 +3814,13 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 			"usr_data.Surname2,"
 			"usr_data.FirstName,"
 			"usr_data.UsrCod",
+		  QueryFields,
 		  (unsigned) Role,
 		  Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
       case Sco_SCOPE_DEG:
 	 /* Get users in courses from the current degree */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                "usr_data.EncryptedUsrCod,"
-	                "usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM usr_data,crs_usr,courses"
+	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -3870,6 +3830,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 			"usr_data.Surname2,"
 			"usr_data.FirstName,"
 			"usr_data.UsrCod",
+		  QueryFields,
 		  (unsigned) Role,
 		  Gbl.CurrentDeg.Deg.DegCod);
 	 break;
@@ -3896,17 +3857,16 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
    char Query[4*1024];
-   const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
-			    " ORDER BY "
-			    "usr_data.Surname1,"
-			    "usr_data.Surname2,"
-			    "usr_data.FirstName,"
-			    "usr_data.UsrCod";
-
-   /***** Build query *****/
-   // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
-   //                           else ==> 2 columns are retrieved: UsrCod, Sex
-   // Search is faster (aproximately x2) using a temporary table to store users found in the whole platform
+   const char *QueryFields =
+      "DISTINCT usr_data.UsrCod,"
+      "usr_data.EncryptedUsrCod,"
+      "usr_data.Surname1,"
+      "usr_data.Surname2,"
+      "usr_data.FirstName,"
+      "usr_data.Sex,"
+      "usr_data.Photo,"
+      "usr_data.PhotoVisibility,"
+      "usr_data.InsCod";
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
@@ -3918,6 +3878,17 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    row[7]: usr_data.PhotoVisibility
    row[8]: usr_data.InsCod
    */
+   const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
+			    " ORDER BY "
+			    "usr_data.Surname1,"
+			    "usr_data.Surname2,"
+			    "usr_data.FirstName,"
+			    "usr_data.UsrCod";
+
+   /***** Build query *****/
+   // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
+   //                           else ==> 2 columns are retrieved: UsrCod, Sex
+   // Search is faster (aproximately x2) using a temporary table to store users found in the whole platform
    switch (Role)
      {
       case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any rol (role does not matter)
@@ -3925,31 +3896,13 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users from the whole platform */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,usr_data"
 			      " WHERE %s",
-			OrderQuery);
+			QueryFields,OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
@@ -3957,84 +3910,53 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND centres.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			Gbl.CurrentCty.Cty.CtyCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			Gbl.CurrentIns.Ins.InsCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			Gbl.CurrentCtr.Ctr.CtrCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			Gbl.CurrentDeg.Deg.DegCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			Gbl.CurrentCrs.Crs.CrsCod,
 			OrderQuery);
 	       break;
@@ -4045,18 +3967,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
          break;
       case Rol__GUEST_:	// Guests (scope is not used)
 	 /* Search users with no courses */
-	 sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-			"usr_data.EncryptedUsrCod,"
-			"usr_data.Surname1,"
-			"usr_data.Surname2,"
-			"usr_data.FirstName,"
-			"usr_data.Sex,"
-			"usr_data.Photo,"
-			"usr_data.PhotoVisibility,"
-			"usr_data.InsCod"
-			" FROM candidate_users,usr_data"
+	 sprintf (Query,"SELECT %s FROM candidate_users,usr_data"
 			" WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
 			" AND %s",
+		  QueryFields,
 		  OrderQuery);
 	 break;
       case Rol_STUDENT:
@@ -4070,34 +3984,17 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users in courses from the whole platform */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4106,22 +4003,14 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND centres.InsCod=institutions.InsCod"
 			      " AND institutions.CtyCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			Gbl.CurrentCty.Cty.CtyCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4129,69 +4018,46 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			Gbl.CurrentIns.Ins.InsCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,degrees,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			Gbl.CurrentCtr.Ctr.CtrCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,courses,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			Gbl.CurrentDeg.Deg.DegCod,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	                      "usr_data.EncryptedUsrCod,"
-	                      "usr_data.Surname1,"
-			      "usr_data.Surname2,"
-			      "usr_data.FirstName,"
-			      "usr_data.Sex,"
-			      "usr_data.Photo,"
-			      "usr_data.PhotoVisibility,"
-			      "usr_data.InsCod"
-			      " FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod='%ld'"
 			      " AND %s",
+			QueryFields,
 			(unsigned) Role,
 			Gbl.CurrentCrs.Crs.CrsCod,
 			OrderQuery);
@@ -4255,8 +4121,16 @@ void Usr_DropTmpTableWithCandidateUsrs (void)
 static void Usr_GetAdmsLst (Sco_Scope_t Scope)
   {
    char Query[1024];
-
-   /***** Build query *****/
+   const char *QueryFields =
+      "UsrCod,"
+      "EncryptedUsrCod,"
+      "Surname1,"
+      "Surname2,"
+      "FirstName,"
+      "Sex,"
+      "Photo,"
+      "PhotoVisibility,"
+      "InsCod";
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
@@ -4268,6 +4142,8 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    row[7]: usr_data.PhotoVisibility
    row[8]: usr_data.InsCod
    */
+
+   /***** Build query *****/
    // Important: it is better to use:
    // SELECT... WHERE UsrCod IN (SELECT...) OR UsrCod IN (SELECT...) <-- fast
    // instead of using or with different joins:
@@ -4275,16 +4151,15 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:	// All admins
-         strcpy (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                       " FROM usr_data"
-                       " WHERE UsrCod IN "
-                       "(SELECT DISTINCT UsrCod FROM admin)"
-                       " ORDER BY Surname1,Surname2,FirstName,UsrCod");
+         sprintf (Query,"SELECT %s FROM usr_data"
+                        " WHERE UsrCod IN "
+                        "(SELECT DISTINCT UsrCod FROM admin)"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields);
          break;
       case Sco_SCOPE_CTY:	// System admins
 				// and admins of the institutions, centres and degrees in the current country
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
                         " WHERE Scope='Sys')"
@@ -4307,6 +4182,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " AND centres.InsCod=institutions.InsCod"
                         " AND institutions.CtyCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod);
@@ -4314,8 +4190,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       case Sco_SCOPE_INS:	// System admins,
 				// admins of the current institution,
 				// and admins of the centres and degrees in the current institution
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
                         " WHERE Scope='Sys')"
@@ -4334,6 +4209,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " AND degrees.CtrCod=centres.CtrCod"
                         " AND centres.InsCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentIns.Ins.InsCod);
@@ -4342,8 +4218,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 				// admins of the current institution,
 				// admins and the current centre,
 				// and admins of the degrees in the current centre
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
                         " WHERE Scope='Sys')"
@@ -4359,14 +4234,14 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:	// System admins
 				// and admins of the current institution, centre or degree
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
                         " WHERE Scope='Sys')"
@@ -4380,6 +4255,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         "(SELECT UsrCod FROM admin"
                         " WHERE Scope='Deg' AND Cod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentIns.Ins.InsCod,
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Gbl.CurrentDeg.Deg.DegCod);
@@ -4400,8 +4276,16 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 static void Usr_GetGstsLst (Sco_Scope_t Scope)
   {
    char Query[512];
-
-   /***** Build query *****/
+   const char *QueryFields =
+      "UsrCod,"
+      "EncryptedUsrCod,"
+      "Surname1,"
+      "Surname2,"
+      "FirstName,"
+      "Sex,"
+      "Photo,"
+      "PhotoVisibility,"
+      "InsCod";
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
@@ -4413,37 +4297,39 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    row[7]: usr_data.PhotoVisibility
    row[8]: usr_data.InsCod
    */
+
+   /***** Build query *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         strcpy (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                       " FROM usr_data"
-                       " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
-                       " ORDER BY Surname1,Surname2,FirstName,UsrCod");
+         sprintf (Query,"SELECT %s FROM usr_data"
+                        " WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
+                        " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE (CtyCod='%ld' OR InsCtyCod='%ld')"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentCty.Cty.CtyCod,
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE InsCod='%ld'"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT UsrCod,EncryptedUsrCod,Surname1,Surname2,FirstName,Sex,Photo,PhotoVisibility,InsCod"
-                        " FROM usr_data"
+         sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE CtrCod='%ld'"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
+                  QueryFields,
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       default:        // not aplicable
@@ -4460,38 +4346,40 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
   {
-   char Query[512];
+   char Query[1024];
+   const char *QueryFields =
+      "DISTINCT usr_data.UsrCod,"
+      "usr_data.EncryptedUsrCod,"
+      "usr_data.Surname1,"
+      "usr_data.Surname2,"
+      "usr_data.FirstName,"
+      "usr_data.Sex,"
+      "usr_data.Photo,"
+      "usr_data.PhotoVisibility,"
+      "usr_data.InsCod";
+   /*
+   row[0]: usr_data.UsrCod
+   row[1]: usr_data.EncryptedUsrCod
+   row[2]: usr_data.Surname1
+   row[3]: usr_data.Surname2
+   row[4]: usr_data.FirstName
+   row[5]: usr_data.Sex
+   row[6]: usr_data.Photo
+   row[7]: usr_data.PhotoVisibility
+   row[8]: usr_data.InsCod
+   */
 
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
 
    if (Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,DegCod))
      {
       /***** Get the students in a degree from database *****/
-      /*
-      row[0]: usr_data.UsrCod
-      row[1]: usr_data.EncryptedUsrCod
-      row[2]: usr_data.Surname1
-      row[3]: usr_data.Surname2
-      row[4]: usr_data.FirstName
-      row[5]: usr_data.Sex
-      row[6]: usr_data.Photo
-      row[7]: usr_data.PhotoVisibility
-      row[8]: usr_data.InsCod
-      */
-      sprintf (Query,"SELECT DISTINCT usr_data.UsrCod,"
-	             "usr_data.EncryptedUsrCod,"
-	             "usr_data.Surname1,"
-	             "usr_data.Surname2,"
-	             "usr_data.FirstName,"
-	             "usr_data.Sex,"
-                     "usr_data.Photo,"
-                     "usr_data.PhotoVisibility,"
-	             "usr_data.InsCod"
-	             " FROM courses,crs_usr,usr_data"
+      sprintf (Query,"SELECT %s FROM courses,crs_usr,usr_data"
                      " WHERE courses.DegCod='%ld'"
                      " AND courses.CrsCod=crs_usr.CrsCod"
                      " AND crs_usr.Role='%u'"
                      " AND crs_usr.UsrCod=usr_data.UsrCod",
+               QueryFields,
                DegCod,(unsigned) Rol_STUDENT);
 
       /***** Get list of students from database *****/
