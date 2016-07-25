@@ -317,7 +317,10 @@ void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery);
 void Usr_DropTmpTableWithCandidateUsrs (void);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
+
+void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList);
 void Usr_FreeUsrsList (Rol_Role_t Role);
+
 bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit);
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
 void Usr_GetListsSelectedUsrsCods (void);

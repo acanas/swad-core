@@ -3574,7 +3574,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
       "usr_data.Sex,"
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
-      "usr_data.InsCod"
+      "usr_data.InsCod,"
       "crs_usr.Accepted";
    /*
    row[0]: usr_data.UsrCod
@@ -4545,6 +4545,24 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
   }
 
 /*****************************************************************************/
+/********************** Copy user's basic data from list *********************/
+/*****************************************************************************/
+
+void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList)
+  {
+   UsrDat->UsrCod                = UsrInList->UsrCod;
+   strcpy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod);
+   strcpy (UsrDat->Surname1       ,UsrInList->Surname1);
+   strcpy (UsrDat->Surname2       ,UsrInList->Surname2);
+   strcpy (UsrDat->FirstName      ,UsrInList->FirstName);
+   UsrDat->Sex                   = UsrInList->Sex;
+   strcpy (UsrDat->Photo          ,UsrInList->Photo);
+   UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
+   UsrDat->InsCod                = UsrInList->InsCod;
+   UsrDat->Accepted              = UsrInList->Accepted;
+  }
+
+/*****************************************************************************/
 /********************** Allocate space for list of users *********************/
 /*****************************************************************************/
 
@@ -5437,14 +5455,15 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-           {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
-            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
 
-            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-           }
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+
+         Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+
+         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
       /***** Free memory used for user's data *****/
@@ -5510,14 +5529,15 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-           {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
-            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr]);
 
-            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-           }
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+
+	 Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
+
+	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
       /***** Free memory used for user's data *****/
@@ -6041,16 +6061,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
          UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
 	 /* Copy user's basic data from list */
-         UsrDat.UsrCod                = UsrInList->UsrCod;
-	 strcpy (UsrDat.EncryptedUsrCod,UsrInList->EncryptedUsrCod);
-	 strcpy (UsrDat.Surname1       ,UsrInList->Surname1);
-	 strcpy (UsrDat.Surname2       ,UsrInList->Surname2);
-	 strcpy (UsrDat.FirstName      ,UsrInList->FirstName);
-	 UsrDat.Sex                   = UsrInList->Sex;
-	 strcpy (UsrDat.Photo          ,UsrInList->Photo);
-         UsrDat.PhotoVisibility       = UsrInList->PhotoVisibility;
-	 UsrDat.InsCod                = UsrInList->InsCod;
-	 UsrDat.Accepted              = UsrInList->Accepted;
+         Usr_CopyBasicUsrDataFromList (&UsrDat,UsrInList);
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
