@@ -4501,7 +4501,9 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		    }
         	  break;
-               case Rol__GUEST_:
+               case Rol__GUEST_:        // Guests have no courses,...
+            	    	    	    	// ...so they have not accepted...
+                                        // ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, centre, institution or system)
 	          UsrInList->Accepted = false;
 	          break;
@@ -5387,20 +5389,18 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List students' data *****/
+      /***** List guests' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs;
+           NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-           {
-            UsrDat.Accepted = false;	// Guests have no courses,...
-                                        // ...so they have not accepted...
-            	    	    	    	// ...inscription in any course
-            Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr]);
 
-            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-           }
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true);
         }
 
       /***** Free memory used for user's data *****/
@@ -5453,7 +5453,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+           NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
 	 /* Copy user's basic data from list */
          Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
@@ -5461,9 +5462,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
-         Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
-
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
         }
 
       /***** Free memory used for user's data *****/
@@ -5525,9 +5524,10 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List data of teachers *****/
+      /***** List teachers' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs;
+           NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
 	 /* Copy user's basic data from list */
          Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr]);
@@ -5535,9 +5535,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
-	 Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,PutCheckBoxToSelectUsr);
-
-	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
         }
 
       /***** Free memory used for user's data *****/

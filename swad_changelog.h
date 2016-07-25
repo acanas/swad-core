@@ -136,13 +136,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.245.2 (2016-07-24)"
+#define Log_PLATFORM_VERSION	"SWAD 15.245.3 (2016-07-24)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.245.3: Jul 25, 2016	Listing of guests uses the list filled instead of querying database a second time to get all user's data. (204088 lines)
         Version 15.245.2: Jul 25, 2016	Listing of students/teachers uses the list filled instead of querying database a second time to get all user's data. (204088 lines)
         Version 15.245.1: Jul 25, 2016	Code refactoring in building of queries to get/search users. (204081 lines)
         Version 15.245:   Jul 25, 2016	List of users is filled with user's name and user's institution.
