@@ -3871,15 +3871,17 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
       "usr_data.PhotoVisibility,"
       "usr_data.InsCod";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Surname1
+   row[ 3]: usr_data.Surname2
+   row[ 4]: usr_data.FirstName
+   row[ 5]: usr_data.Sex
+   row[ 6]: usr_data.Photo
+   row[ 7]: usr_data.PhotoVisibility
+   row[ 8]: usr_data.InsCod
+   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
    const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
 			    " ORDER BY "
@@ -3899,13 +3901,15 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users from the whole platform */
-	       sprintf (Query,"SELECT %s FROM candidate_users,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,usr_data"
 			      " WHERE %s",
 			QueryFields,OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
@@ -3919,7 +3923,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
@@ -3932,7 +3937,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
@@ -3944,7 +3950,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod='%ld'"
@@ -3955,7 +3962,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s,crs_usr.Role,crs_usr.Accepted"
+		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod='%ld'"
 			      " AND %s",
@@ -3970,7 +3978,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
          break;
       case Rol__GUEST_:	// Guests (scope is not used)
 	 /* Search users with no courses */
-	 sprintf (Query,"SELECT %s FROM candidate_users,usr_data"
+	 sprintf (Query,"SELECT %s"
+	                " FROM candidate_users,usr_data"
 			" WHERE candidate_users.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
 			" AND %s",
 		  QueryFields,
@@ -3987,7 +3996,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   {
 	    case Sco_SCOPE_SYS:
 	       /* Search users in courses from the whole platform */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND %s",
@@ -3997,7 +4007,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTY:
 	       /* Search users in courses from the current country */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4013,7 +4024,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_INS:
 	       /* Search users in courses from the current institution */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4028,7 +4040,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CTR:
 	       /* Search users in courses from the current centre */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,degrees,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4042,7 +4055,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_DEG:
 	       /* Search users in courses from the current degree */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,courses,usr_data"
+	       sprintf (Query,"SELECT %s"
+		              " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
@@ -4055,7 +4069,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	    case Sco_SCOPE_CRS:
 	       /* Search users in courses from the current course */
-	       sprintf (Query,"SELECT %s FROM candidate_users,crs_usr,usr_data"
+	       sprintf (Query,"SELECT %s,crs_usr.Role,crs_usr.Accepted"
+		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.Role='%u'"
 			      " AND crs_usr.CrsCod='%ld'"
