@@ -84,8 +84,8 @@ const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
    "list64x64.gif"
   };
 
-#define Usr_NUM_MAIN_FIELDS_DATA_ADM	 8
-#define Usr_NUM_ALL_FIELDS_DATA_INV	17
+#define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
+#define Usr_NUM_ALL_FIELDS_DATA_GST	17
 #define Usr_NUM_ALL_FIELDS_DATA_STD	13
 #define Usr_NUM_ALL_FIELDS_DATA_TCH	11
 const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
@@ -137,6 +137,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                                              const char *BgColor,
                                              const char *InstitutionName,
                                              const char *InstitutionLink);
+static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
@@ -2887,6 +2888,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
                                     Ins.ShortName,NULL);
+   Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /***** Write the rest of the data of the guest *****/
    if (UsrDat->Tch.CtrCod > 0)
@@ -2988,6 +2990,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
                                     Ins.ShortName,NULL);
+   Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -3102,6 +3105,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
                                     Ins.ShortName,NULL);
+   Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
    /***** Write the rest of teacher's data *****/
    if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -3208,9 +3212,6 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                                              const char *InstitutionName,
                                              const char *InstitutionLink)
   {
-   bool ShowEmail;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
-
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
                 	                   "&nbsp;",
@@ -3223,11 +3224,25 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                      UsrDat->FirstName[0] ? UsrDat->FirstName :
                 	                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
+   Usr_WriteUsrData (BgColor,
+                     UsrDat->InsCod > 0 ? InstitutionName :
+                	                  "&nbsp;",
+                     InstitutionLink,true,UsrDat->Accepted);
+  }
+
+/*****************************************************************************/
+/**************************** Write user's e-mail ****************************/
+/*****************************************************************************/
+
+static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
+  {
+   bool ShowEmail;
+   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
+
    if (UsrDat->Email[0])
      {
       ShowEmail = Mai_ICanSeeEmail (UsrDat);
       sprintf (MailLink,"mailto:%s",UsrDat->Email);
-      Str_LimitLengthHTMLStr (UsrDat->Email,10);
      }
    else
       ShowEmail = false;
@@ -3238,10 +3253,6 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                      ShowEmail ? MailLink :
                 	         NULL,
                      true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->InsCod > 0 ? InstitutionName :
-                	                  "&nbsp;",
-                     InstitutionLink,true,UsrDat->Accepted);
   }
 
 /*****************************************************************************/
@@ -5197,7 +5208,6 @@ void Usr_SetUsrDatMainFieldNames (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Email;
    extern const char *Txt_Institution;
 
    /***** Initialize field names *****/
@@ -5208,8 +5218,7 @@ void Usr_SetUsrDatMainFieldNames (void)
    Usr_UsrDatMainFieldNames[4] = Txt_Surname_1;
    Usr_UsrDatMainFieldNames[5] = Txt_Surname_2;
    Usr_UsrDatMainFieldNames[6] = Txt_First_name;
-   Usr_UsrDatMainFieldNames[7] = Txt_Email;
-   Usr_UsrDatMainFieldNames[8] = Txt_Institution;
+   Usr_UsrDatMainFieldNames[7] = Txt_Institution;
   }
 
 /*****************************************************************************/
@@ -5432,8 +5441,8 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Email;
    extern const char *Txt_Institution;
+   extern const char *Txt_Email;
    extern const char *Txt_Centre;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
@@ -5446,7 +5455,7 @@ void Usr_ListAllDataGsts (void)
    unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
-   const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_INV];
+   const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_GST];
 
    /***** Initialize field names *****/
    FieldNames[ 0] = Txt_Photo;
@@ -5454,8 +5463,8 @@ void Usr_ListAllDataGsts (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
+   FieldNames[ 5] = Txt_Institution;
+   FieldNames[ 6] = Txt_Email;
    FieldNames[ 7] = Txt_Centre;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
@@ -5482,7 +5491,7 @@ void Usr_ListAllDataGsts (void)
    if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Set number of columns *****/
-      NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_INV;
+      NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
 
       /***** Start table with list of guests *****/
       /* Start row */
@@ -5546,8 +5555,8 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Email;
    extern const char *Txt_Institution;
+   extern const char *Txt_Email;
    extern const char *Txt_Local_address;
    extern const char *Txt_Phone;
    extern const char *Txt_Family_address;
@@ -5571,8 +5580,8 @@ void Usr_ListAllDataStds (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
+   FieldNames[ 5] = Txt_Institution;
+   FieldNames[ 6] = Txt_Email;
    FieldNames[ 7] = Txt_Local_address;
    FieldNames[ 8] = Txt_Phone;
    FieldNames[ 9] = Txt_Family_address;
@@ -5782,8 +5791,8 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Email;
    extern const char *Txt_Institution;
+   extern const char *Txt_Email;
    extern const char *Txt_Centre;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
@@ -5801,8 +5810,8 @@ void Usr_ListAllDataTchs (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
+   FieldNames[ 5] = Txt_Institution;
+   FieldNames[ 6] = Txt_Email;
    FieldNames[ 7] = Txt_Centre;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
@@ -6021,8 +6030,7 @@ void Usr_ListDataAdms (void)
    FieldNames[3] = Txt_Surname_1;
    FieldNames[4] = Txt_Surname_2;
    FieldNames[5] = Txt_First_name;
-   FieldNames[6] = Txt_Email;
-   FieldNames[7] = Txt_Institution;
+   FieldNames[6] = Txt_Institution;
 
    /***** Get and update type of list,
           number of columns in class photo
