@@ -7323,10 +7323,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool TRIsOpen = false;
    bool PutCheckBoxToSelectUsr = (ClassPhotoType == Usr_CLASS_PHOTO_SEL ||
 	                          ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE);
-   bool PutOriginPlace = (RoleInClassPhoto == Rol_STUDENT &&
-                          (ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE ||
-                           ClassPhotoType == Usr_CLASS_PHOTO_SEE ||
-                           ClassPhotoType == Usr_CLASS_PHOTO_PRN));
    bool ItsMe;
    bool ShowPhoto;
    bool ShowData;
@@ -7367,95 +7363,75 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
          TRIsOpen = true;
         }
 
-      UsrDat.UsrCod = Gbl.Usrs.LstUsrs[RoleInClassPhoto].Lst[NumUsr].UsrCod;
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-        {
-         UsrDat.Accepted = Gbl.Usrs.LstUsrs[RoleInClassPhoto].Lst[NumUsr].Accepted;
+      /* Copy user's basic data from list */
+      Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[RoleInClassPhoto].Lst[NumUsr]);
 
-         ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);
-         ShowData = (ItsMe || UsrDat.Accepted ||
-                     Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+      /* Get list of user's IDs */
+      ID_GetListIDsFromUsrCod (&UsrDat);
 
-         /***** Begin user's cell *****/
-         fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM");
-         if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
-             UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-           {
-            UsrIsTheMsgSender = true;
-            fprintf (Gbl.F.Out," LIGHT_GREEN");
-           }
-         else
-            UsrIsTheMsgSender = false;
-         fprintf (Gbl.F.Out,"\">");
+      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);
+      ShowData = (ItsMe || UsrDat.Accepted ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
+		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-         /***** Checkbox to select this user *****/
-         if (PutCheckBoxToSelectUsr)
-            Usr_PutCheckboxToSelectUser (&UsrDat,UsrIsTheMsgSender);
+      /***** Begin user's cell *****/
+      fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM");
+      if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
+	  UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
+	{
+	 UsrIsTheMsgSender = true;
+	 fprintf (Gbl.F.Out," LIGHT_GREEN");
+	}
+      else
+	 UsrIsTheMsgSender = false;
+      fprintf (Gbl.F.Out,"\">");
 
-         /***** Show photo *****/
-         ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	               NULL,
-                           ClassPhoto,Pho_ZOOM,false);
+      /***** Checkbox to select this user *****/
+      if (PutCheckBoxToSelectUsr)
+	 Usr_PutCheckboxToSelectUser (&UsrDat,UsrIsTheMsgSender);
 
-         /***** Photo foot *****/
-         fprintf (Gbl.F.Out,"<br />");
+      /***** Show photo *****/
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					    NULL,
+			ClassPhoto,Pho_ZOOM,false);
 
-         /* Name */
-         if (UsrDat.FirstName[0])
-           {
-            Str_LimitLengthHTMLStr (UsrDat.FirstName,LengthUsrData);
-            fprintf (Gbl.F.Out,"%s",UsrDat.FirstName);
-           }
-         else
-            fprintf (Gbl.F.Out,"&nbsp;");
-         fprintf (Gbl.F.Out,"<br />");
-         if (UsrDat.Surname1[0])
-           {
-            Str_LimitLengthHTMLStr (UsrDat.Surname1,LengthUsrData);
-            fprintf (Gbl.F.Out,"%s",UsrDat.Surname1);
-           }
-         else
-            fprintf (Gbl.F.Out,"&nbsp;");
-         fprintf (Gbl.F.Out,"<br />");
-         if (UsrDat.Surname2[0])
-           {
-            Str_LimitLengthHTMLStr (UsrDat.Surname2,LengthUsrData);
-            fprintf (Gbl.F.Out,"%s",UsrDat.Surname2);
-           }
-         else
-            fprintf (Gbl.F.Out,"&nbsp;");
+      /***** Photo foot *****/
+      fprintf (Gbl.F.Out,"<br />");
 
-         /* Origin place */
-         if (PutOriginPlace)
-           {
-            fprintf (Gbl.F.Out,"<br />");
-            if (UsrDat.OriginPlace[0])
-              {
-               fprintf (Gbl.F.Out,"<em>");
-               if (ShowData)
-                 {
-                  Str_LimitLengthHTMLStr (UsrDat.OriginPlace,LengthUsrData);
-                  fprintf (Gbl.F.Out,"%s",UsrDat.OriginPlace);
-                 }
-               else
-                  fprintf (Gbl.F.Out,"-");
-               fprintf (Gbl.F.Out,"</em>");
-              }
-            else // There's no origin place
-               fprintf (Gbl.F.Out,"&nbsp;");
-           }
+      /* Name */
+      if (UsrDat.FirstName[0])
+	{
+	 Str_LimitLengthHTMLStr (UsrDat.FirstName,LengthUsrData);
+	 fprintf (Gbl.F.Out,"%s",UsrDat.FirstName);
+	}
+      else
+	 fprintf (Gbl.F.Out,"&nbsp;");
+      fprintf (Gbl.F.Out,"<br />");
+      if (UsrDat.Surname1[0])
+	{
+	 Str_LimitLengthHTMLStr (UsrDat.Surname1,LengthUsrData);
+	 fprintf (Gbl.F.Out,"%s",UsrDat.Surname1);
+	}
+      else
+	 fprintf (Gbl.F.Out,"&nbsp;");
+      fprintf (Gbl.F.Out,"<br />");
+      if (UsrDat.Surname2[0])
+	{
+	 Str_LimitLengthHTMLStr (UsrDat.Surname2,LengthUsrData);
+	 fprintf (Gbl.F.Out,"%s",UsrDat.Surname2);
+	}
+      else
+	 fprintf (Gbl.F.Out,"&nbsp;");
 
-         /***** End of user's cell *****/
-         fprintf (Gbl.F.Out,"</td>");
+      /***** End of user's cell *****/
+      fprintf (Gbl.F.Out,"</td>");
 
-         if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
-           {
-            fprintf (Gbl.F.Out,"</tr>");
-            TRIsOpen = false;
-           }
-        }
+      if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	{
+	 fprintf (Gbl.F.Out,"</tr>");
+	 TRIsOpen = false;
+	}
      }
    if (TRIsOpen)
       fprintf (Gbl.F.Out,"</tr>");
