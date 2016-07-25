@@ -412,8 +412,7 @@ bool ID_ICanSeeAnotherUsrID (struct UsrData *UsrDat)
       case Rol_TEACHER:
 	 /* If I am a teacher of current course,
 	    I only can see the user's IDs of students from current course */
-	 return (UsrDat->Accepted &&
-	         UsrDat->RoleInCurrentCrsDB == Rol_STUDENT);
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT && UsrDat->Accepted);
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's IDs of users from current degree */

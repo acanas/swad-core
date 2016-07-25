@@ -3575,18 +3575,20 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
       "usr_data.InsCod,"
+      "crs_usr.Role,"
       "crs_usr.Accepted";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
-   row[9]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Surname1
+   row[ 3]: usr_data.Surname2
+   row[ 4]: usr_data.FirstName
+   row[ 5]: usr_data.Sex
+   row[ 6]: usr_data.Photo
+   row[ 7]: usr_data.PhotoVisibility
+   row[ 8]: usr_data.InsCod
+   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** If there are no groups selected, don't do anything *****/
@@ -3736,16 +3738,17 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       "usr_data.PhotoVisibility,"
       "usr_data.InsCod";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
-   row[9]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Surname1
+   row[ 3]: usr_data.Surname2
+   row[ 4]: usr_data.FirstName
+   row[ 5]: usr_data.Sex
+   row[ 6]: usr_data.Photo
+   row[ 7]: usr_data.PhotoVisibility
+   row[ 8]: usr_data.InsCod
+   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** Build query *****/
@@ -4426,16 +4429,17 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             /* Get next user */
             row = mysql_fetch_row (mysql_res);
             /*
-            row[0]: usr_data.UsrCod
-            row[1]: usr_data.EncryptedUsrCod
-	    row[2]: usr_data.Surname1
-	    row[3]: usr_data.Surname2
-	    row[4]: usr_data.FirstName
-            row[5]: usr_data.Sex
-            row[6]: usr_data.Photo
-            row[7]: usr_data.PhotoVisibility
-	    row[8]: usr_data.InsCod
-	    row[9]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+            row[ 0]: usr_data.UsrCod
+            row[ 1]: usr_data.EncryptedUsrCod
+	    row[ 2]: usr_data.Surname1
+	    row[ 3]: usr_data.Surname2
+	    row[ 4]: usr_data.FirstName
+            row[ 5]: usr_data.Sex
+            row[ 6]: usr_data.Photo
+            row[ 7]: usr_data.PhotoVisibility
+	    row[ 8]: usr_data.InsCod
+	    row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+	    row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
 	    */
             UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -4471,8 +4475,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             /* Get user's institution code (row[8]) */
 	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[8]);
 
-            /* Get user's acceptance of enrollment in course(s)
-               (row[9] if Scope == Sco_SCOPE_CRS) */
+            /* Get user's role and acceptance of enrollment in course(s)
+               (row[9], row[10] if Scope == Sco_SCOPE_CRS) */
             switch (Role)
               {
                case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any user
@@ -4482,7 +4486,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			Lay_ShowErrorAndExit ("Wrong scope.");
 			break;
 		     case Sco_SCOPE_SYS:	// System
-			// Query result has not a third column with the acceptation
+			// Query result has not a column with the acceptation
+			UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
 			if (Usr_GetNumCrssOfUsr (UsrInList->UsrCod))
 			   UsrInList->Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			else
@@ -4492,12 +4497,14 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_INS:	// Institution
 		     case Sco_SCOPE_CTR:	// Centre
 		     case Sco_SCOPE_DEG:	// Degree
-			// Query result has not a third column with the acceptation
+			// Query result has not a column with the acceptation
+			UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			break;
 		     case Sco_SCOPE_CRS:	// Course
-			// Query result has a third column with the acceptation
-			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
+			// Query result has a column with the acceptation
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
+			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[10][0]) == 'Y');
 			break;
 		    }
         	  break;
@@ -4505,6 +4512,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             	    	    	    	// ...so they have not accepted...
                                         // ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, centre, institution or system)
+	          UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
 	          UsrInList->Accepted = false;
 	          break;
                case Rol_STUDENT:
@@ -4519,12 +4527,14 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_INS:	// Institution
 		     case Sco_SCOPE_CTR:	// Centre
 		     case Sco_SCOPE_DEG:	// Degree
-			// Query result has not a third column with the acceptation
+			// Query result has not a column with the acceptation
+	                UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,Role) == 0);
 			break;
 		     case Sco_SCOPE_CRS:	// Course
-			// Query result has a third column with the acceptation
-			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[9][0]) == 'Y');
+			// Query result has a column with the acceptation
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
+			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[10][0]) == 'Y');
 			break;
 		    }
         	  break;
@@ -4561,6 +4571,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    strcpy (UsrDat->Photo          ,UsrInList->Photo);
    UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
    UsrDat->InsCod                = UsrInList->InsCod;
+   UsrDat->RoleInCurrentCrsDB    = UsrInList->RoleInCurrentCrsDB;
    UsrDat->Accepted              = UsrInList->Accepted;
   }
 
