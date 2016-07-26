@@ -1605,21 +1605,21 @@ static void Svc_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getU
 	   NumUsr < NumUsrs;
 	   NumUsr++)
 	{
-	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
-	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
-	   {
-	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+	 if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)	// It's me
+	    ICanSeeUsrID = true;
+	 else							// A user distinct than me
+	    ICanSeeUsrID = ID_ICanSeeAnotherUsrID (&UsrDat);
 
-	    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)	// It's me
-	       ICanSeeUsrID = true;
-	    else						// A user distinct than me
-	       ICanSeeUsrID = ID_ICanSeeAnotherUsrID (&UsrDat);
+	 /* Get nickname */
+         Nck_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
 
-	    /* Copy user's data into output structure */
-	    Svc_CopyUsrData (&(getUsersOut->usersArray.__ptr[NumUsr]),&UsrDat,ICanSeeUsrID);
-	   }
+	 /* Copy user's data into output structure */
+	 Svc_CopyUsrData (&(getUsersOut->usersArray.__ptr[NumUsr]),&UsrDat,ICanSeeUsrID);
 	}
 
       /***** Free memory used for user's data *****/
@@ -2028,45 +2028,39 @@ int swad__sendMyGroups (struct soap *soap,
 static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible)
   {
    char PhotoURL[PATH_MAX+1];
+   const char *FirstID;
 
    /* Copy user's code */
    Usr->userCode = UsrDat->UsrCod;
 
    /* Copy user's nickname */
-   Usr->userNickname = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
-   strncpy (Usr->userNickname,UsrDat->Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-   Usr->userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+   Usr->userNickname = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Nickname) + 1);
+   strcpy (Usr->userNickname,UsrDat->Nickname);
 
-   /* Copy user's ID */
-   Usr->userID = (char *) soap_malloc (Gbl.soap,ID_MAX_LENGTH_USR_ID+1);
+   /* Copy user's first ID */
    if (UsrIDIsVisible && UsrDat->IDs.List)
-     {
-      strncpy (Usr->userID,UsrDat->IDs.List[0].ID,ID_MAX_LENGTH_USR_ID);
-      Usr->userID[ID_MAX_LENGTH_USR_ID] = '\0';
-     }
+      FirstID = UsrDat->IDs.List[0].ID;
    else	// Hide user's ID
-      strcpy (Usr->userID,"********");
+      FirstID = "********";
+   Usr->userID = (char *) soap_malloc (Gbl.soap,strlen (FirstID) + 1);
+   strcpy (Usr->userID,FirstID);
 
    /* Copy user's surname1 */
-   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   strncpy (Usr->userSurname1,UsrDat->Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-   Usr->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Surname1) + 1);
+   strcpy (Usr->userSurname1,UsrDat->Surname1);
 
    /* Copy user's surname2 */
-   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   strncpy (Usr->userSurname2,UsrDat->Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-   Usr->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Surname2) + 1);
+   strcpy (Usr->userSurname2,UsrDat->Surname2);
 
    /* Copy user's first name */
-   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   strncpy (Usr->userFirstname,UsrDat->FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-   Usr->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->FirstName) + 1);
+   strcpy (Usr->userFirstname,UsrDat->FirstName);
 
    /* User's photo URL */
    Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
-   Usr->userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
-   strncpy (Usr->userPhoto,PhotoURL,PATH_MAX);
-   Usr->userPhoto[PATH_MAX] = '\0';
+   Usr->userPhoto = (char *) soap_malloc (Gbl.soap,strlen (PhotoURL) + 1);
+   strcpy (Usr->userPhoto,PhotoURL);
   }
 
 /*****************************************************************************/
