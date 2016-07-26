@@ -1923,12 +1923,13 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 	   NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 	   NumStd++)
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
-           {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd].Accepted;
-            Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
-           }
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumStd]);
+
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+
+         Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
         }
 
       /* Send button and end frame */
@@ -2226,7 +2227,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrData))		// Get student's data from the database
+	 if (UsrData.UsrCod > 0)	// Student exists in database
 	    /***** Mark student to not be removed *****/
 	    for (NumStd = 0;
 		 NumStd < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;

@@ -815,37 +815,38 @@ void Mai_ListEMails (void)
               NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
               NumUsr++)
            {
-            UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// If user's data exist...
-              {
-               UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
-               if (UsrDat.Email[0])
-                 {
-                  NumStdsWithEmail++;
-                  if (UsrDat.Accepted) // If student has e-mail and has accepted
-	            {
-	             if (NumAcceptedStdsWithEmail > 0)
-	               {
-	                fprintf (Gbl.F.Out,", ");
-	                LengthStrAddr += 2;
-	                if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
-	                   strcat (StrAddresses,",");
-	                else
-	                   Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
-	               }
-                     LengthStrAddr += strlen (UsrDat.Email);
-	             if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
-	                strcat (StrAddresses,UsrDat.Email);
-	             else
-	                Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
+	    /* Copy user's basic data from list */
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
 
-	             fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-                              UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
+	    /* Get user's e-mail */
+            Mai_GetEmailFromUsrCod (&UsrDat);
 
-	             NumAcceptedStdsWithEmail++;
-	            }
-                 }
-              }
+	    if (UsrDat.Email[0])
+	      {
+	       NumStdsWithEmail++;
+	       if (UsrDat.Accepted) // If student has e-mail and has accepted
+		 {
+		  if (NumAcceptedStdsWithEmail > 0)
+		    {
+		     fprintf (Gbl.F.Out,", ");
+		     LengthStrAddr += 2;
+		     if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
+			strcat (StrAddresses,",");
+		     else
+			Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
+		    }
+		  LengthStrAddr += strlen (UsrDat.Email);
+		  if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
+		     strcat (StrAddresses,UsrDat.Email);
+		  else
+		     Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
+
+		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
+			   UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
+
+		  NumAcceptedStdsWithEmail++;
+		 }
+	      }
            }
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
