@@ -187,6 +187,27 @@ void Ins_SeeInsWithPendingCtrs (void)
   }
 
 /*****************************************************************************/
+/********************** Draw institution logo with link **********************/
+/*****************************************************************************/
+
+void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size,bool PutLink)
+  {
+   if (PutLink)
+     {
+      Act_FormStart (ActSeeInsInf);
+      Ins_PutParamInsCod (Ins->InsCod);
+      Act_LinkFormSubmit (Ins->FullName,NULL,NULL);
+     }
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->FullName,
+		 Size,NULL,true);
+   if (PutLink)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+  }
+
+/*****************************************************************************/
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 

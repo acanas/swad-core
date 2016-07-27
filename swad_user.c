@@ -134,9 +134,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat);
 static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat);
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
-                                             const char *BgColor,
-                                             const char *InstitutionName,
-                                             const char *InstitutionLink);
+                                             const char *BgColor);
 static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
@@ -2842,9 +2840,10 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor,
-                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
-                                	                       NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
+   Ins_DrawInstitutionLogoWithLink (&Ins,25,true);
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** End row *****/
    fprintf (Gbl.F.Out,"</tr>");
@@ -2886,9 +2885,11 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
-                                    Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+                     Ins.FullName,
+	             NULL,true,false);
 
    /***** Write the rest of the data of the guest *****/
    if (UsrDat->Tch.CtrCod > 0)
@@ -2988,9 +2989,11 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
-                                    Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+                     Ins.FullName,
+	             NULL,true,UsrDat->Accepted);
 
    /***** Write the rest of the data of the student *****/
    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
@@ -3103,9 +3106,11 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
-                                    Ins.ShortName,NULL);
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+                     Ins.FullName,
+	             NULL,true,UsrDat->Accepted);
 
    /***** Write the rest of teacher's data *****/
    if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -3181,10 +3186,11 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd],
-                                    Ins.ShortName,Ins.WWW[0] ? Ins.WWW :
-                                	                       NULL);
-   fprintf (Gbl.F.Out,"</tr>");
+   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Ins_DrawInstitutionLogoWithLink (&Ins,25,true);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** Write degrees which are administrated by this administrator *****/
    Deg_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
@@ -3208,9 +3214,7 @@ static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
-                                             const char *BgColor,
-                                             const char *InstitutionName,
-                                             const char *InstitutionLink)
+                                             const char *BgColor)
   {
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
@@ -3224,10 +3228,6 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                      UsrDat->FirstName[0] ? UsrDat->FirstName :
                 	                    "&nbsp;",
                      NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->InsCod > 0 ? InstitutionName :
-                	                  "&nbsp;",
-                     InstitutionLink,true,UsrDat->Accepted);
   }
 
 /*****************************************************************************/
@@ -3270,7 +3270,10 @@ static void Usr_WriteUsrData (const char *BgColor,
                 	           "DAT_SMALL"),
             BgColor);
    if (Link != NULL)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Link);
+      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">",
+               Link,
+               Accepted ? "DAT_SMALL_NOBR_N" :
+			  "DAT_SMALL_NOBR");
    fprintf (Gbl.F.Out,"%s",Data);
    if (NonBreak)
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -5426,6 +5429,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
+         /* Show row for this guest */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true);
         }
 
@@ -5488,6 +5492,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
+         /* Show row for this student */
          Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
         }
 
@@ -5561,6 +5566,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
 
+         /* Show row for this teacher */
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
         }
 
@@ -5607,8 +5613,8 @@ void Usr_ListAllDataGsts (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Institution;
-   FieldNames[ 6] = Txt_Email;
+   FieldNames[ 5] = Txt_Email;
+   FieldNames[ 6] = Txt_Institution;
    FieldNames[ 7] = Txt_Centre;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
@@ -5724,8 +5730,8 @@ void Usr_ListAllDataStds (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Institution;
-   FieldNames[ 6] = Txt_Email;
+   FieldNames[ 5] = Txt_Email;
+   FieldNames[ 6] = Txt_Institution;
    FieldNames[ 7] = Txt_Local_address;
    FieldNames[ 8] = Txt_Phone;
    FieldNames[ 9] = Txt_Family_address;
@@ -5954,8 +5960,8 @@ void Usr_ListAllDataTchs (void)
    FieldNames[ 2] = Txt_Surname_1;
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
-   FieldNames[ 5] = Txt_Institution;
-   FieldNames[ 6] = Txt_Email;
+   FieldNames[ 5] = Txt_Email;
+   FieldNames[ 6] = Txt_Institution;
    FieldNames[ 7] = Txt_Centre;
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
@@ -7323,9 +7329,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool TRIsOpen = false;
    bool PutCheckBoxToSelectUsr = (ClassPhotoType == Usr_CLASS_PHOTO_SEL ||
 	                          ClassPhotoType == Usr_CLASS_PHOTO_SEL_SEE);
-   bool ItsMe;
    bool ShowPhoto;
-   bool ShowData;
    bool UsrIsTheMsgSender;
    const char *ClassPhoto = "PHOTO21x28";	// Default photo size
    int LengthUsrData = 10;	// Maximum number of characters of user data
@@ -7368,11 +7372,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
       /* Get list of user's IDs */
       ID_GetListIDsFromUsrCod (&UsrDat);
-
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod);
-      ShowData = (ItsMe || UsrDat.Accepted ||
-		  Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-		  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
       /***** Begin user's cell *****/
       fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM");

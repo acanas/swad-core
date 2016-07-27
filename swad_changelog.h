@@ -127,22 +127,23 @@
 // TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
 
 // TODO: In search of users and findUsers banned users should not appear in listing!!!!!
-// TODO: Send attached photos via SOAP?
 
-// TODO: In list of users, institution should be the institution photo with internal link to institution
+// TODO: Send attached photos via SOAP?
 // TODO: Upload photos/files from SWADroid using MIME attachments
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.246.2 (2016-07-26)"
+#define Log_PLATFORM_VERSION	"SWAD 15.247.1 (2016-07-27)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.247.1: Jul 27, 2016	In listings of users ready for printing, show institution name instead of logo. (204102 lines)
+        Version 15.247:   Jul 26, 2016	In listings of users, show institution logo with link to institution. (204093 lines)
         Version 15.246.2: Jul 26, 2016	List of users in web service use the list filled instead of querying database a second time to get all user's data.
                                         Code refactoring in copying of user's data in web service. (204089 lines)
         Version 15.246.1: Jul 26, 2016	Attendance of users and e-mail to users use the list filled instead of querying database a second time to get all user's data. (204093 lines)

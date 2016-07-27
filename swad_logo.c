@@ -139,30 +139,30 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	    if (LogoFound)
 	       Cod = InsCod;
 	   }
-	}
 
-      if (LogoFound || PutIconIfNotExists)
-	{
-	 /***** Draw logo *****/
-	 fprintf (Gbl.F.Out,"<img src=\"");
-	 if (LogoFound)
-	    fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-		     Cfg_URL_SWAD_PUBLIC,Folder,
-		     (unsigned) (Cod % 100),
-		     (unsigned) Cod,
-		     (unsigned) Cod);
-	 else if (Icon[Scope])
-	    fprintf (Gbl.F.Out,"%s/%s64x64.gif",
-		     Gbl.Prefs.IconsURL,Icon[Scope]);
-	 fprintf (Gbl.F.Out,"\""
-	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"ICON%ux%u",
-		  AltText,AltText,
-		  Size,Size);
-	 if (Class)
-	    if (Class[0])
-	       fprintf (Gbl.F.Out," %s",Class);
-	 fprintf (Gbl.F.Out,"\" />");
+	 if (LogoFound || PutIconIfNotExists)
+	   {
+	    /***** Draw logo *****/
+	    fprintf (Gbl.F.Out,"<img src=\"");
+	    if (LogoFound)
+	       fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
+			Cfg_URL_SWAD_PUBLIC,Folder,
+			(unsigned) (Cod % 100),
+			(unsigned) Cod,
+			(unsigned) Cod);
+	    else if (Icon[Scope])
+	       fprintf (Gbl.F.Out,"%s/%s64x64.gif",
+			Gbl.Prefs.IconsURL,Icon[Scope]);
+	    fprintf (Gbl.F.Out,"\""
+			       " alt=\"%s\" title=\"%s\""
+			       " class=\"ICON%ux%u",
+		     AltText,AltText,
+		     Size,Size);
+	    if (Class)
+	       if (Class[0])
+		  fprintf (Gbl.F.Out," %s",Class);
+	    fprintf (Gbl.F.Out,"\" />");
+	   }
 	}
      }
   }

@@ -4980,19 +4980,9 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       /***** Write link to institution *****/
 	       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
 			The_ClassForm[Gbl.Prefs.Theme]);
-
-	       /* Icon and name of this institution */
-	       Act_FormStart (ActSeeInsInf);
-	       Ins_PutParamInsCod (Ins.InsCod);
-	       Act_LinkFormSubmit (Ins.FullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
-	       Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,
-			     40,NULL,true);
-	       fprintf (Gbl.F.Out,"<br />%u"
-		                  "</a>",
+	       Ins_DrawInstitutionLogoWithLink (&Ins,40,true);
+               fprintf (Gbl.F.Out,"<br />%u</td>",
 	                NumberThisRow);
-	       Act_FormEnd ();
-
-	       fprintf (Gbl.F.Out,"</td>");
 
 	       /***** End of user's cell *****/
 	       fprintf (Gbl.F.Out,"</td>");
