@@ -4980,7 +4980,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       /***** Write link to institution *****/
 	       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
 			The_ClassForm[Gbl.Prefs.Theme]);
-	       Ins_DrawInstitutionLogoWithLink (&Ins,40,true);
+	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
                fprintf (Gbl.F.Out,"<br />%u</td>",
 	                NumberThisRow);
 

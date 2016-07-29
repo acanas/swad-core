@@ -2841,8 +2841,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-   Ins_DrawInstitutionLogoWithLink (&Ins,25,true);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Ins_DrawInstitutionLogoWithLink (&Ins,25);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** End row *****/
@@ -3187,8 +3187,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_RestrictLengthUsrName (UsrDat);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Ins_DrawInstitutionLogoWithLink (&Ins,25,true);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Ins_DrawInstitutionLogoWithLink (&Ins,25);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

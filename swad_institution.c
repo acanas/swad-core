@@ -190,8 +190,10 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size,bool PutLink)
+void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size)
   {
+   bool PutLink = !Gbl.Form.Inside;	// Don't put link to institution if already inside a form
+
    if (PutLink)
      {
       Act_FormStart (ActSeeInsInf);

@@ -92,7 +92,7 @@ typedef enum
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size,bool PutLink);
+void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size);
 void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo);
 
