@@ -94,6 +94,9 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod);
 static void Att_CreateGrps (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEvent *Att);
 
+static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod);
+static void Att_RemoveAttEventFromCurrentCrs (long AttCod);
+
 static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att);
 static void Att_ListAttStudents (struct AttendanceEvent *Att);
 static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat,struct AttendanceEvent *Att);
@@ -925,13 +928,12 @@ void Att_AskRemAttEvent (void)
   }
 
 /*****************************************************************************/
-/************************ Remove an attendance event *************************/
+/** Get param., remove an attendance event and show attendance events again **/
 /*****************************************************************************/
 
-void Att_RemoveAttEvent (void)
+void Att_GetAndRemAttEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   char Query[512];
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -939,30 +941,34 @@ void Att_RemoveAttEvent (void)
       Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get data of the attendance event from database *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);	// Inside this function, the course is checked to be the current one
+   // Inside this function, the course is checked to be the current one
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Att);
 
-   /***** Remove users registered in the attendance event *****/
-   sprintf (Query,"DELETE FROM att_usr"
-                  " WHERE AttCod='%ld'",
-            Att.AttCod);
-   DB_QueryDELETE (Query,"can not remove attendance event");
-
-   /***** Remove all the groups of this attendance event *****/
-   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (Att.AttCod);
-
-   /***** Remove attendance event *****/
-   sprintf (Query,"DELETE FROM att_events"
-                  " WHERE AttCod='%ld' AND CrsCod='%ld'",
-            Att.AttCod,Gbl.CurrentCrs.Crs.CrsCod);
-   DB_QueryDELETE (Query,"can not remove attendance event");
+   /***** Remove the attendance event from database *****/
+   Att_RemoveAttEventFromDB (Att.AttCod);
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_removed,
-            Att.Title);
+   sprintf (Gbl.Message,Txt_Event_X_removed,Att.Title);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
+  }
+
+/*****************************************************************************/
+/**************** Remove an attendance event from database *******************/
+/*****************************************************************************/
+
+void Att_RemoveAttEventFromDB (long AttCod)
+  {
+   /***** Remove users registered in the attendance event *****/
+   Att_RemoveAllUsrsFromAnAttEvent (AttCod);
+
+   /***** Remove all the groups of this attendance event *****/
+   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (AttCod);
+
+   /***** Remove attendance event *****/
+   Att_RemoveAttEventFromCurrentCrs (AttCod);
   }
 
 /*****************************************************************************/
@@ -1431,35 +1437,6 @@ static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
   }
 
 /*****************************************************************************/
-/*********** Remove one student from all the attendance events ***************/
-/*****************************************************************************/
-
-void Att_RemoveUsrFromAllAttEvents (long UsrCod)
-  {
-   char Query[256];
-
-   /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_usr WHERE UsrCod='%ld'",UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from all attendance events");
-  }
-
-/*****************************************************************************/
-/*********** Remove one student from all the attendance events ***************/
-/*****************************************************************************/
-
-void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
-  {
-   char Query[512];
-
-   /***** Remove group from all the attendance events *****/
-   sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
-                  " WHERE att_events.CrsCod='%ld'"
-                  " AND att_events.AttCod=att_usr.AttCod AND att_usr.UsrCod='%ld'",
-            CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove user from attendance events of a course");
-  }
-
-/*****************************************************************************/
 /************* Remove one group from all the attendance events ***************/
 /*****************************************************************************/
 
@@ -1572,6 +1549,61 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*********** Remove all users registered in an attendance event **************/
+/*****************************************************************************/
+
+static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"DELETE FROM att_usr WHERE AttCod='%ld'",AttCod);
+   DB_QueryDELETE (Query,"can not remove attendance event");
+  }
+
+/*****************************************************************************/
+/* Remove one user from all the attendance events where he/she is registered */
+/*****************************************************************************/
+
+void Att_RemoveUsrFromAllAttEvents (long UsrCod)
+  {
+   char Query[256];
+
+   /***** Remove group from all the attendance events *****/
+   sprintf (Query,"DELETE FROM att_usr WHERE UsrCod='%ld'",UsrCod);
+   DB_QueryDELETE (Query,"can not remove user from all attendance events");
+  }
+
+/*****************************************************************************/
+/*********** Remove one student from all the attendance events ***************/
+/*****************************************************************************/
+
+void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
+  {
+   char Query[512];
+
+   /***** Remove group from all the attendance events *****/
+   sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
+                  " WHERE att_events.CrsCod='%ld'"
+                  " AND att_events.AttCod=att_usr.AttCod AND att_usr.UsrCod='%ld'",
+            CrsCod,UsrCod);
+   DB_QueryDELETE (Query,"can not remove user from attendance events of a course");
+  }
+
+/*****************************************************************************/
+/*********************** Remove an attendance event **************************/
+/*****************************************************************************/
+
+static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
+  {
+   char Query[256];
+
+   sprintf (Query,"DELETE FROM att_events"
+                  " WHERE AttCod='%ld' AND CrsCod='%ld'",
+            AttCod,Gbl.CurrentCrs.Crs.CrsCod);
+   DB_QueryDELETE (Query,"can not remove attendance event");
   }
 
 /*****************************************************************************/

@@ -421,6 +421,8 @@ int swad__getAttendanceEvents (char *wsKey,int courseCode,
                                struct swad__getAttendanceEventsOutput *getAttendanceEventsOut);
 int swad__sendAttendanceEvent (char *wsKey,int attendanceEventCode,int courseCode,int hidden,int startTime,int endTime,int commentsTeachersVisible,char *title,char *text,char *groups,
                                struct swad__sendAttendanceEventOutput *sendAttendanceEventOut);
+int swad__removeAttendanceEvent (char *wsKey,int attendanceEventCode,
+                                 struct swad__sendAttendanceEventOutput *sendAttendanceEventOut);
 int swad__getAttendanceUsers (char *wsKey,int attendanceEventCode,
                               struct swad__getAttendanceUsersOutput *getAttendanceUsersOut);
 int swad__sendAttendanceUsers (char *wsKey,int attendanceEventCode,char *users,int setOthersAsAbsent,

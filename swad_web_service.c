@@ -2365,6 +2365,73 @@ int swad__sendAttendanceEvent (struct soap *soap,
   }
 
 /*****************************************************************************/
+/************************ Remove an attendance event *************************/
+/*****************************************************************************/
+
+int swad__removeAttendanceEvent (struct soap *soap,
+                                 char *wsKey,int attendanceEventCode,					// input
+                                 struct swad__sendAttendanceEventOutput *sendAttendanceEventOut)	// output
+  {
+   int ReturnCode;
+   struct AttendanceEvent Att;
+
+   /***** Initializations *****/
+   Gbl.soap = soap;
+   Gbl.WebService.Function = Svc_sendAttendanceEvent;
+   sendAttendanceEventOut->attendanceEventCode = 0;
+
+   /***** Check web service key *****/
+   if ((ReturnCode = Svc_CheckWSKey (wsKey)) != SOAP_OK)
+      return ReturnCode;
+   if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
+      return soap_receiver_fault (Gbl.soap,
+	                          "Bad web service key",
+	                          "Web service key does not exist in database");
+
+   /**** Get data of attendance event *****/
+   /* Event code */
+   Att.AttCod = (long) attendanceEventCode;
+
+   /* Course code */
+   if (Att.AttCod > 0)	// The event already exists
+     {
+      Att_GetDataOfAttEventByCod (&Att);
+      Gbl.CurrentCrs.Crs.CrsCod = Att.CrsCod;
+     }
+   else
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Attendance event does not exist");
+
+   /***** Check if course code is correct *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return soap_sender_fault (Gbl.soap,
+	                        "Bad course code",
+	                        "Course code must be a integer greater than 0");
+
+   /***** Get some of my data *****/
+   if (!Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))
+      return soap_receiver_fault (Gbl.soap,
+	                          "Can not get user's data from database",
+	                          "User does not exist in database");
+   Gbl.Usrs.Me.Logged = true;
+   Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
+
+   /***** Check if I am a teacher in the course *****/
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+      return soap_receiver_fault (Gbl.soap,
+	                          "Request forbidden",
+	                          "Requester must be a teacher");
+
+   /***** Remove the attendance event from database *****/
+   Att_RemoveAttEventFromDB (Att.AttCod);
+
+   sendAttendanceEventOut->attendanceEventCode = Att.AttCod;
+
+   return SOAP_OK;
+  }
+
+/*****************************************************************************/
 /********************** Create a list of groups selected *********************/
 /*****************************************************************************/
 

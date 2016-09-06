@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.247.2 (2016-07-30)"
+#define Log_PLATFORM_VERSION	"SWAD 15.248 (2016-09-06)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.248:   Sep 06, 2016	New web service function removeAttendanceEvent. (204186 lines)
         Version 15.247.2: Jul 30, 2016	Fixed bug in listings of users, reported by José Abraham Mora Sánchez. (204104 lines)
         Version 15.247.1: Jul 27, 2016	In listings of users ready for printing, show institution name instead of logo. (204102 lines)
         Version 15.247:   Jul 26, 2016	In listings of users, show institution logo with link to institution. (204093 lines)

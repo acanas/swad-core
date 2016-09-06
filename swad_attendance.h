@@ -86,8 +86,11 @@ void Att_GetNotifAttEvent (char *SummaryStr,char **ContentStr,long AsgCod,unsign
 
 void Att_PutParamAttCod (long AttCod);
 long Att_GetParamAttCod (void);
+
 void Att_AskRemAttEvent (void);
-void Att_RemoveAttEvent (void);
+void Att_GetAndRemAttEvent (void);
+void Att_RemoveAttEventFromDB (long AttCod);
+
 void Att_HideAttEvent (void);
 void Att_ShowAttEvent (void);
 void Att_RecFormAttEvent (void);
@@ -95,11 +98,14 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt);
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt);
 bool Att_CheckIfAttEventIsAssociatedToGrps (long AttCod);
 bool Att_CheckIfAttEventIsAssociatedToGrp (long AsgCod,long GrpCod);
+void Att_RemoveGroupsOfType (long GrpTypCod);
+void Att_RemoveGroup (long GrpCod);
+
 void Att_RemoveUsrFromAllAttEvents (long UsrCod);
 void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod);
-void Att_RemoveGroup (long GrpCod);
-void Att_RemoveGroupsOfType (long GrpTypCod);
+
 void Att_RemoveCrsAttEvents (long CrsCod);
+
 unsigned Att_GetNumAttEventsInCrs(long CrsCod);
 
 unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope);
