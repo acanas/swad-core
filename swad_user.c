@@ -4522,7 +4522,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
-			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[10][0]) == 'Y');
+			UsrInList->Accepted = (row[10][0] == 'Y');
 			break;
 		    }
         	  break;
@@ -4552,7 +4552,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
-			UsrInList->Accepted = (Str_ConvertToUpperLetter (row[10][0]) == 'Y');
+			UsrInList->Accepted = (row[10][0] == 'Y');
 			break;
 		    }
         	  break;
@@ -6573,7 +6573,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
          /* Get number of columns in class photo */
          Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
          row = mysql_fetch_row (mysql_res);
-         Gbl.Usrs.Listing.WithPhotos = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+         Gbl.Usrs.Listing.WithPhotos = (row[0][0] == 'Y');
         }
       else if (NumRows > 1)        // Error in databse: more than one row for a user in course
          Lay_ShowErrorAndExit ("Error when checking if listing of users must show photos.");

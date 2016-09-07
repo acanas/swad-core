@@ -3223,7 +3223,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** User has accepted joining to this course/to any course in degree/to any course? *****/
    if (WriteColumnAccepted)
      {
-      Accepted = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
+      Accepted = (row[7][0] == 'Y');
       fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
 	                 "<img src=\"%s/%s16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""

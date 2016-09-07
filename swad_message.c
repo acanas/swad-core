@@ -2698,7 +2698,7 @@ static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get if message is expanded *****/
-   *Expanded = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+   *Expanded = (row[0][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2729,13 +2729,13 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
    row = mysql_fetch_row (mysql_res);
 
    /***** Get if message has been read by me *****/
-   *Open = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+   *Open     = (row[0][0] == 'Y');
 
    /***** Get if message has been replied *****/
-   *Replied = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+   *Replied  = (row[1][0] == 'Y');
 
    /***** Get if message is expanded *****/
-   *Expanded = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+   *Expanded = (row[2][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3316,10 +3316,10 @@ static void Msg_WriteMsgTo (Msg_TypeOfMessages_t TypeOfMessages,long MsgCod)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get if message has been deleted by recipient */
-         Deleted = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+         Deleted   = (row[1][0] == 'Y');
 
          /* Get if message has been read by recipient */
-         OpenByDst = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+         OpenByDst = (row[2][0] == 'Y');
 
          /* Get user's data */
 	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);

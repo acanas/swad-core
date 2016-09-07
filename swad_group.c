@@ -2335,13 +2335,13 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
          strncpy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],MAX_LENGTH_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrollment = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrollment = (row[2][0] == 'Y');
 
          /* Is it possible to register in multiple groups of this type? (row[3]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MultipleEnrollment = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MultipleEnrollment = (row[3][0] == 'Y');
 
          /* Groups of this type must be opened? (row[4]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened = (row[4][0] == 'Y');
 
          /* Get open time (row[5] holds the open time UTC) */
          Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
@@ -2469,10 +2469,10 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Grp->NumStudents = Grp_CountNumStdsInGrp (Grp->GrpCod);
 
                /* Get whether group is open ('Y') or closed ('N') (row[3]) */
-               Grp->Open = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+               Grp->Open = (row[3][0] == 'Y');
 
                /* Get whether group have file zones ('Y') or not ('N') (row[4]) */
-               Grp->FileZones = (Str_ConvertToUpperLetter (row[4][0]) == 'Y');
+               Grp->FileZones = (row[4][0] == 'Y');
               }
            }
          else	// Error: groups should be found, but really they haven't be found. This never should happen.
@@ -2591,9 +2591,9 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    /***** Get some data of group type *****/
    row = mysql_fetch_row (mysql_res);
    strcpy (GrpTyp->GrpTypName,row[0]);
-   GrpTyp->MandatoryEnrollment = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
-   GrpTyp->MultipleEnrollment  = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
-   GrpTyp->MustBeOpened        = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+   GrpTyp->MandatoryEnrollment = (row[1][0] == 'Y');
+   GrpTyp->MultipleEnrollment  = (row[2][0] == 'Y');
+   GrpTyp->MustBeOpened        = (row[3][0] == 'Y');
    GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
 
    /***** Free structure that stores the query result *****/
@@ -2619,7 +2619,7 @@ static bool Grp_GetMultipleEnrollmentOfAGroupType (long GrpTypCod)
 
    /***** Get multiple enrollment *****/
    row = mysql_fetch_row (mysql_res);
-   MultipleEnrollment = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+   MultipleEnrollment = (row[0][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2667,7 +2667,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    strcpy (GrpDat->GrpTypName,row[2]);
 
    /* Get whether a student may be in one or multiple groups (row[3]) */
-   GrpDat->MultipleEnrollment = (Str_ConvertToUpperLetter (row[3][0]) == 'Y');
+   GrpDat->MultipleEnrollment = (row[3][0] == 'Y');
 
    /* Get the name of the group (row[4]) */
    strcpy (GrpDat->GrpName,row[4]);
@@ -2676,10 +2676,10 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[5]);
 
    /* Get whether group is open or closed (row[6]) */
-   GrpDat->Open = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+   GrpDat->Open = (row[6][0] == 'Y');
 
    /* Get whether group has file zones (row[7]) */
-   GrpDat->FileZones = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
+   GrpDat->FileZones = (row[7][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

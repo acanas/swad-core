@@ -237,8 +237,8 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
          fprintf (Gbl.Test.XML.FileXML," shuffle=\"%s\"",
-                  Str_ConvertToUpperLetter (row[3][0]) == 'Y' ? "yes" :
-                	                                        "no");
+                  (row[3][0] == 'Y') ? "yes" :
+                	               "no");
       fprintf (Gbl.Test.XML.FileXML,">");
       TsI_WriteAnswersOfAQstXML (QstCod);
       fprintf (Gbl.Test.XML.FileXML,"</answer>%s",Txt_NEW_LINE);
@@ -366,8 +366,8 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             fprintf (Gbl.Test.XML.FileXML,"<option");
             if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
                fprintf (Gbl.Test.XML.FileXML," correct=\"%s\"",
-                        Str_ConvertToUpperLetter (row[6][0]) == 'Y' ? "yes" :
-                                                                      "no");
+                        (row[6][0] == 'Y') ? "yes" :
+                                             "no");
             fprintf (Gbl.Test.XML.FileXML,">%s"
         	                          "<text>%s</text>%s",
                      Txt_NEW_LINE,

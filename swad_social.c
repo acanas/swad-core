@@ -4464,7 +4464,7 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    SocNot->HieCod      = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** File/post... unavailable (row[5]) *****/
-   SocNot->Unavailable = (Str_ConvertToUpperLetter (row[5][0]) == 'Y');
+   SocNot->Unavailable = (row[5][0] == 'Y');
 
    /***** Get time of the note (row[6]) *****/
    SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);

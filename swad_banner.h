@@ -40,7 +40,7 @@
 struct Banner
   {
    long BanCod;
-   bool IsHidden;
+   bool Hidden;
    char ShortName[Ban_MAX_LENGTH_SHORT_NAME+1];
    char FullName[Ban_MAX_LENGTH_FULL_NAME+1];
    char Img[Ban_MAX_LENGTH_IMAGE+1];

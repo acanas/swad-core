@@ -983,7 +983,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
             Lay_ShowErrorAndExit ("Wrong survey course.");
 
       /* Get whether the survey is hidden (row[3]) */
-      Svy->Status.Visible = (Str_ConvertToUpperLetter (row[3][0]) == 'N');
+      Svy->Status.Visible = (row[3][0] == 'N');
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)

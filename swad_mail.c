@@ -985,7 +985,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
       /* Get e-mail */
       strcpy (UsrDat->Email,row[0]);
 
-      UsrDat->EmailConfirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      UsrDat->EmailConfirmed = (row[1][0] == 'Y');
 
       Found = true;
      }
@@ -1137,7 +1137,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
      {
       /* Get e-mail */
       row = mysql_fetch_row (mysql_res);
-      Confirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      Confirmed = (row[1][0] == 'Y');
 
       if (NumEmail == 1)
 	 /* The first mail is the current one */
@@ -1625,7 +1625,7 @@ void Mai_ConfirmEmail (void)
 	       UsrCod,Email);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and e-mail"))
 	{
-         Confirmed = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+         Confirmed = (row[0][0] == 'Y');
 
          /***** Confirm e-mail *****/
          if (Confirmed)

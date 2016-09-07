@@ -201,7 +201,7 @@ static void Ban_GetListBanners (const char *Query)
 	       Lay_ShowErrorAndExit ("Wrong code of banner.");
 
 	    /* Get if banner is hidden (row[1]) */
-            Ban->IsHidden = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+            Ban->Hidden = (row[1][0] == 'Y');
 
 	    /* Get the short name of the banner (row[2]) */
 	    strcpy (Ban->ShortName,row[2]);
@@ -236,7 +236,7 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
    unsigned long NumRows;
 
    /***** Clear data *****/
-   Ban->IsHidden = false;
+   Ban->Hidden = false;
    Ban->ShortName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
@@ -254,7 +254,7 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
          row = mysql_fetch_row (mysql_res);
 
          /* Get if the banner is hidden (row[0]) */
-         Ban->IsHidden = (row[0][0] == 'Y');
+         Ban->Hidden = (row[0][0] == 'Y');
 
          /* Get the short name of the banner (row[1]) */
          strcpy (Ban->ShortName,row[1]);
@@ -324,18 +324,18 @@ static void Ban_ListBannersForEdition (void)
 
       /* Put icon to hide/show banner */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
-      Act_FormStart (Ban->IsHidden ? ActShoBan :
-	                             ActHidBan);
+      Act_FormStart (Ban->Hidden ? ActShoBan :
+	                           ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
                Gbl.Prefs.IconsURL,
-               Ban->IsHidden ? "eye-slash-on64x64.png" :
-        	               "eye-on64x64.png",
-               Ban->IsHidden ? Txt_Show :
-        	               Txt_Hide,
-               Ban->IsHidden ? Txt_Show :
-        	               Txt_Hide);
+               Ban->Hidden ? "eye-slash-on64x64.png" :
+        	             "eye-on64x64.png",
+               Ban->Hidden ? Txt_Show :
+        	             Txt_Hide,
+               Ban->Hidden ? Txt_Show :
+        	             Txt_Hide);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -343,8 +343,8 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
-               Ban->IsHidden ? "DAT_LIGHT" :
-        	               "DAT",
+               Ban->Hidden ? "DAT_LIGHT" :
+        	             "DAT",
                Ban->BanCod);
 
       /* Banner short name */
@@ -490,7 +490,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Mark file as hidden/visible in database *****/
-   if (Ban.IsHidden != Hide)
+   if (Ban.Hidden != Hide)
      {
       sprintf (Query,"UPDATE banners SET Hidden='%c'"
 		     " WHERE BanCod='%ld'",

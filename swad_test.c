@@ -991,7 +991,7 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                   "TEST_IMG_SHOW_STEM");
 
    if (Gbl.Action.Act == ActSeeTst)
-      Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(Str_ConvertToUpperLetter (row[3][0]) == 'Y'));
+      Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(row[3][0] == 'Y'));
    else	// Assessing exam / Viewing old exam
      {
       Tst_WriteAnswersOfAQstAssessExam (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
@@ -1629,7 +1629,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out,"<tr>");
       if (!ShowOnlyEnabledTags)
         {
-         TagHidden = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+         TagHidden = (row[2][0] == 'Y');
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                             "<img src=\"%s/",
                   Gbl.Prefs.IconsURL);
@@ -1700,7 +1700,7 @@ static void Tst_ShowFormEditTags (void)
          fprintf (Gbl.F.Out,"<tr>");
 
          /* Form to enable / disable this tag */
-         if (Str_ConvertToUpperLetter (row[2][0]) == 'Y')	// Tag disabled
+         if (row[2][0] == 'Y')	// Tag disabled
             Tst_PutIconEnable (TagCod,row[1]);
          else
             Tst_PutIconDisable (TagCod,row[1]);
@@ -2816,7 +2816,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrderType);
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
-         if (Str_ConvertToUpperLetter (row[3][0]) == 'Y')
+         if (row[3][0] == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
@@ -3041,7 +3041,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"BT%u\">",
         	     Gbl.RowEvenOdd);
-            if (Str_ConvertToUpperLetter (row[6][0]) == 'Y')
+            if (row[6][0] == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICON20x20\" />",
@@ -3457,7 +3457,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
 
       /***** Assign correctness (row[6]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
      }
 
    /***** Get indexes for this question from string *****/
@@ -3690,7 +3690,7 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
 	      }
 
       /***** Assign correctness (row[6]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
      }
 
    /***** Header with the title of each column *****/
@@ -4977,7 +4977,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
 
    /* Get shuffle (row[1]) */
-   Gbl.Test.Shuffle = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+   Gbl.Test.Shuffle = (row[1][0] == 'Y');
 
    /* Get the stem of the question from the database (row[2]) */
    strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
@@ -5068,7 +5068,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	    /* Copy image */
             Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
 
-	    Gbl.Test.Answer.Options[NumOpt].Correct = (Str_ConvertToUpperLetter (row[6][0]) == 'Y');
+	    Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
 	    break;
 	 default:
 	    break;
@@ -7145,7 +7145,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
 
 	 /* Get if teachers are allowed to see this test exam (row[1]) */
-	 Gbl.Test.AllowTeachers = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
 	                                     "DAT_LIGHT";
 	 ICanViewExam = ItsMe || Gbl.Test.AllowTeachers;
@@ -7684,7 +7684,7 @@ static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get if teachers are allowed to see this test exam (row[1]) */
-      Gbl.Test.AllowTeachers = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+      Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 
       /* Get date-time (row[2] holds UTC date-time) */
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);

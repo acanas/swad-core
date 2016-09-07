@@ -9135,7 +9135,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
       row = mysql_fetch_row (mysql_res);
 
       /* File is hidden? (row[0]) */
-      IsHidden = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+      IsHidden = (row[0][0] == 'Y');
      }
    else
       Brw_AddPathToDB (-1L,FileType,
@@ -10245,7 +10245,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
          case Brw_ADMI_DOCUM_DEG:
          case Brw_SHOW_DOCUM_CRS:
          case Brw_ADMI_DOCUM_CRS:
-            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
+            FileMetadata->IsHidden = (row[7][0] == 'Y');
             break;
          default:
             FileMetadata->IsHidden = false;
@@ -10267,7 +10267,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
          case Brw_SHOW_DOCUM_CRS:
          case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
-            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
+            FileMetadata->IsPublic = (row[8][0] == 'Y');
             break;
          default:
             FileMetadata->IsPublic = false;
@@ -10375,7 +10375,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
          case Brw_ADMI_DOCUM_DEG:
          case Brw_SHOW_DOCUM_CRS:
          case Brw_ADMI_DOCUM_CRS:
-            FileMetadata->IsHidden = (Str_ConvertToUpperLetter (row[7][0]) == 'Y');
+            FileMetadata->IsHidden = (row[7][0] == 'Y');
             break;
          default:
             FileMetadata->IsHidden = false;
@@ -10397,7 +10397,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
          case Brw_SHOW_DOCUM_CRS:
          case Brw_ADMI_DOCUM_CRS:
          case Brw_ADMI_SHARE_CRS:
-            FileMetadata->IsPublic = (Str_ConvertToUpperLetter (row[8][0]) == 'Y');
+            FileMetadata->IsPublic = (row[8][0] == 'Y');
             break;
          default:
             FileMetadata->IsPublic = false;

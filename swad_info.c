@@ -1522,7 +1522,7 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
       *InfoSrc = Inf_ConvertFromStrDBToInfoSrc (row[0]);
 
       /* Get if students must read info (row[1]) */
-      *MustBeRead = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');;
+      *MustBeRead = (row[1][0] == 'Y');
      }
 
    /***** Free structure that stores the query result *****/

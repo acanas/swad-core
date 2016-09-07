@@ -122,7 +122,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
             UsrDat->IDs.List[NumID].ID[ID_MAX_LENGTH_USR_ID] = '\0';
 
             /* Get if ID is confirmed from row[1] */
-            UsrDat->IDs.List[NumID].Confirmed = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
+            UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y');
 	   }
         }
 

@@ -747,7 +747,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
       Att->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the attendance event is hidden or not (row[2]) */
-      Att->Hidden = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
+      Att->Hidden = (row[2][0] == 'Y');
 
       /* Get author of the attendance event (row[3]) */
       Att->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -2413,7 +2413,7 @@ static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present
       row = mysql_fetch_row (mysql_res);
 
       /* Get if present (row[0]) */
-      *Present = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+      *Present = (row[0][0] == 'Y');
      }
    else	// User is not present
      {
@@ -2462,7 +2462,7 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
       row = mysql_fetch_row (mysql_res);
 
       /* Get if present (row[0]) */
-      Present = (Str_ConvertToUpperLetter (row[0][0]) == 'Y');
+      Present = (row[0][0] == 'Y');
 
       /* Get student's comment (row[1]) */
       strncpy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);

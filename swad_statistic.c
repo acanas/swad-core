@@ -6456,8 +6456,8 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       row = mysql_fetch_row (mysql_res);
 
       /* Get if public (row[0]) */
-      Public = (Str_ConvertToUpperLetter (row[0][0]) == 'Y') ? 1 :
-	                                                       0;
+      Public = (row[0][0] == 'Y') ? 1 :
+	                            0;
 
       /* Get number of files (row[1]) */
       if (sscanf (row[1],"%lu",&NumFiles[Public]) != 1)
