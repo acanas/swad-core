@@ -746,7 +746,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
       /* Get code of the course (row[1]) */
       Att->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get wether the attendance event is hidden or not (row[2]) */
+      /* Get whether the attendance event is hidden or not (row[2]) */
       Att->Hidden = (Str_ConvertToUpperLetter (row[2][0]) == 'Y');
 
       /* Get author of the attendance event (row[3]) */
@@ -1248,77 +1248,78 @@ void Att_RecFormAttEvent (void)
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
    struct AttendanceEvent OldAtt;
-   struct AttendanceEvent NewAtt;
+   struct AttendanceEvent ReceivedAtt;
    char YN[1+1];
    bool ItsANewAttEvent;
-   bool NewAttEventIsCorrect = true;
+   bool ReceivedAttEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((NewAtt.AttCod = Att_GetParamAttCod ()) == -1L);
+   ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) == -1L);
 
    if (!ItsANewAttEvent)
      {
       /* Get data of the old (current) attendance event from database */
-      OldAtt.AttCod = NewAtt.AttCod;
+      OldAtt.AttCod = ReceivedAtt.AttCod;
       Att_GetDataOfAttEventByCodAndCheckCrs (&OldAtt);
      }
 
    /***** Get start/end date-times *****/
-   NewAtt.TimeUTC[Att_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   ReceivedAtt.TimeUTC[Att_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   ReceivedAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
    Par_GetParToText ("CommentTchVisible",YN,1);
-   NewAtt.CommentTchVisible = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   ReceivedAtt.CommentTchVisible = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /***** Get attendance event title *****/
-   Par_GetParToText ("Title",NewAtt.Title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
+   Par_GetParToText ("Title",ReceivedAtt.Title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
 
    /***** Get attendance event text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAtt.TimeUTC[Att_START_TIME] == 0)
-      NewAtt.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewAtt.TimeUTC[Att_END_TIME] == 0)
-      NewAtt.TimeUTC[Att_END_TIME] = NewAtt.TimeUTC[Att_START_TIME] + 2*60*60;	// +2 hours
+   if (ReceivedAtt.TimeUTC[Att_START_TIME] == 0)
+      ReceivedAtt.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (ReceivedAtt.TimeUTC[Att_END_TIME] == 0)
+      ReceivedAtt.TimeUTC[Att_END_TIME] = ReceivedAtt.TimeUTC[Att_START_TIME] + 2*60*60;	// +2 hours // TODO: 2*60*60 should be in a #define in swad_config.h
 
    /***** Check if title is correct *****/
-   if (NewAtt.Title[0])	// If there's an attendance event title
+   if (ReceivedAtt.Title[0])	// If there's an attendance event title
      {
       /* If title of attendance event was in database... */
-      if (Att_CheckIfSimilarAttEventExists ("Title",NewAtt.Title,NewAtt.AttCod))
+      if (Att_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
         {
-         NewAttEventIsCorrect = false;
+         ReceivedAttEventIsCorrect = false;
          sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
-                  NewAtt.Title);
+                  ReceivedAtt.Title);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
    else	// If there is not an attendance event title
      {
-      NewAttEventIsCorrect = false;
+      ReceivedAttEventIsCorrect = false;
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Create a new attendance event or update an existing one *****/
-   if (NewAttEventIsCorrect)
+   if (ReceivedAttEventIsCorrect)
      {
       /* Get groups for this attendance events */
       Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy ();
 
       if (ItsANewAttEvent)
 	{
-         Att_CreateAttEvent (&NewAtt,Txt);	// Add new attendance event to database
+	 ReceivedAtt.Hidden = false;	// New attendance events are visible by default
+         Att_CreateAttEvent (&ReceivedAtt,Txt);	// Add new attendance event to database
 
          /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_event_X,NewAtt.Title);
+	 sprintf (Gbl.Message,Txt_Created_new_event_X,ReceivedAtt.Title);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
 	{
-         Att_UpdateAttEvent (&NewAtt,Txt);
+         Att_UpdateAttEvent (&ReceivedAtt,Txt);
 
 	 /***** Write success message *****/
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
@@ -1344,11 +1345,14 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
    /***** Create a new attendance event *****/
    sprintf (Query,"INSERT INTO att_events"
-	          " (CrsCod,UsrCod,StartTime,EndTime,CommentTchVisible,Title,Txt)"
-                  " VALUES ('%ld','%ld',"
+	          " (CrsCod,Hidden,UsrCod,"
+	          "StartTime,EndTime,CommentTchVisible,Title,Txt)"
+                  " VALUES ('%ld','%c','%ld',"
                   "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%c','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
+            Att->Hidden ? 'Y' :
+        	          'N',
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Att->TimeUTC[Att_START_TIME],
             Att->TimeUTC[Att_END_TIME  ],
@@ -1418,7 +1422,8 @@ bool Att_CheckIfAttEventIsAssociatedToGrp (long AttCod,long GrpCod)
    char Query[512];
 
    /***** Get if an attendance event is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM att_grp WHERE AttCod='%ld' AND GrpCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM att_grp"
+	          " WHERE AttCod='%ld' AND GrpCod='%ld'",
             AttCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if an attendance event is associated to a group") != 0);
   }

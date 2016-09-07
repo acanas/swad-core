@@ -711,7 +711,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       /* Get code of the assignment (row[0]) */
       Asg->AsgCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get wether the assignment is hidden or not (row[1]) */
+      /* Get whether the assignment is hidden or not (row[1]) */
       Asg->Hidden = (Str_ConvertToUpperLetter (row[1][0]) == 'Y');
 
       /* Get author of the assignment (row[2]) */

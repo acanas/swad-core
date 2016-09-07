@@ -2117,10 +2117,11 @@ int swad__getAttendanceEvents (struct soap *soap,
 
    /***** Query list of attendance events *****/
    sprintf (Query,"SELECT AttCod,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime) AS ST,UNIX_TIMESTAMP(EndTime) AS ET,"
+                  "UNIX_TIMESTAMP(StartTime) AS ST,"
+                  "UNIX_TIMESTAMP(EndTime) AS ET,"
                   "CommentTchVisible,Title,Txt"
 	          " FROM att_events"
-                  " WHERE CrsCod='%d' AND Hidden='N'"
+                  " WHERE CrsCod='%d'"
                   " ORDER BY ST DESC,ET DESC,Title DESC",
             courseCode);
    getAttendanceEventsOut->eventsArray.__size =
@@ -2143,8 +2144,12 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 AttCod = Str_ConvertStrCodToLongCod (row[0]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) AttCod;
 
-	 /* Get user's code of the user who created the event (row[1]) */
-         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+         /* Get whether the attendance event is hidden or not (row[1]) */
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (row[1][0] == 'Y') ? 1 :
+										              0;
+
+	 /* Get user's code of the user who created the event (row[2]) */
+         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          if (Svc_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.CurrentCrs.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
@@ -2176,33 +2181,33 @@ int swad__getAttendanceEvents (struct soap *soap,
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto     = NULL;
            }
 
-	 /* Get event start time (row[2]) */
+	 /* Get event start time (row[3]) */
          StartTime = 0L;
-         if (row[2])
-            sscanf (row[2],"%ld",&StartTime);
+         if (row[3])
+            sscanf (row[3],"%ld",&StartTime);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = StartTime;
 
-	 /* Get event end time (row[3]) */
+	 /* Get event end time (row[4]) */
          EndTime = 0L;
-         if (row[3])
-            sscanf (row[3],"%ld",&EndTime);
+         if (row[4])
+            sscanf (row[4],"%ld",&EndTime);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime = EndTime;
 
-         /* Get whether teachers comments are visible ('Y') or hidden ('N') (row[4]) */
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = (row[4][0] == 'Y') ? 1 :
+         /* Get whether teachers comments are visible ('Y') or hidden ('N') (row[5]) */
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = (row[5][0] == 'Y') ? 1 :
                                                                                                                0;
 
-	 /* Get title of the event (row[5]) */
-         Length = strlen (row[5]);
+	 /* Get title of the event (row[6]) */
+         Length = strlen (row[6]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title = (char *) soap_malloc (Gbl.soap,Length + 1);
          strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,
-                 row[5]);
+                 row[6]);
 
-	 /* Get Txt (row[6]) */
-         Length = strlen (row[6]);
+	 /* Get Txt (row[7]) */
+         Length = strlen (row[7]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text = (char *) soap_malloc (Gbl.soap,Length + 1);
          strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,
-                 row[6]);
+                 row[7]);
 
 	 /* Get list of groups for this attendance event */
 	 Svc_GetListGrpsInAttendanceEventFromDB (AttCod,&(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
@@ -2344,6 +2349,10 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                                              false);
 
    /* Title */
+   if (!title[0])
+      return soap_receiver_fault (Gbl.soap,
+				  "Request forbidden",
+				  "Title of attendance event is empty");
    strncpy (Att.Title,title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
    Att.Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE] = '\0';
 
