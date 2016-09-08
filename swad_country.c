@@ -1125,14 +1125,13 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   bool PutForm = !Gbl.Form.Inside &&						// Only if not inside another form
+                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
 
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);
 
-   if (Gbl.Form.Inside)	// If we are writing another form
-      /***** Write country name without link *****/
-      fprintf (Gbl.F.Out,"%s",CtyName);
-   else
+   if (PutForm)
      {
       /***** Write country name with link to country information *****/
       Act_FormStart (ActSeeCtyInf);
@@ -1142,6 +1141,9 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
       fprintf (Gbl.F.Out,"%s</a>",CtyName);
       Act_FormEnd ();
      }
+   else
+      /***** Write country name without link *****/
+      fprintf (Gbl.F.Out,"%s",CtyName);
   }
 
 /*****************************************************************************/
