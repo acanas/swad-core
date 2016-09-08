@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.249.1 (2016-09-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.249.2 (2016-09-08)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.249.2: Sep 08, 2016	Shared record card and details of user's profile are shown in uswer's usage report. (203978 lines)
         Version 15.249.1: Sep 08, 2016	Removed lines with NULL values in swad_text.c. (203977 lines)
         Version 15.249:   Sep 08, 2016	New option Statistics > Report. Not implemented. (204341 lines)
         Version 15.248.3: Sep 07, 2016	Fixed bug related to attendance events in web service, reported by Rubén Martín Hidalgo. (? lines)

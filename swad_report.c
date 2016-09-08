@@ -29,12 +29,8 @@
 // #include <stdio.h>		// For sprintf
 // #include <string.h>		// For string functions
 
-// #include "swad_database.h"
-// #include "swad_follow.h"
-// #include "swad_global.h"
-// #include "swad_notification.h"
-// #include "swad_profile.h"
-// #include "swad_user.h"
+#include "swad_global.h"
+#include "swad_profile.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -52,7 +48,7 @@
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
-// extern struct Globals Gbl;
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************* Internal global variables *************************/
@@ -68,4 +64,9 @@
 
 void Rep_ShowMyUsageReport (void)
   {
+   /***** Common record *****/
+   Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Me.UsrDat);
+
+   /***** Show details of user's profile *****/
+   Prf_ShowDetailsUserProfile (&Gbl.Usrs.Me.UsrDat);
   }
