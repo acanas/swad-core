@@ -62,6 +62,7 @@
 #include "swad_preference.h"
 #include "swad_profile.h"
 #include "swad_QR.h"
+#include "swad_report.h"
 #include "swad_search.h"
 #include "swad_setup.h"
 #include "swad_social.h"
@@ -1284,6 +1285,7 @@ Statistics:
        1100. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
        1101. ActReqStaCrs		Request statistics of courses
        1102. ActReqAccGbl		Request query of clicks to the complete platform
+        NEW. ActSeeMyUsgRep		Show my usage report
 
        1103. ActSeeOneSvy		Show one survey
        1104. ActAnsSvy			Answer a survey
@@ -2705,6 +2707,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
    /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
    /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
+   /* ActSeeMyUsgRep	*/{1582, 5,TabSta,ActSeeMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ShowMyUsageReport		,"report64x64.png"	},
 
    // Actions not in menu:
    /* ActSeeOneSvy	*/{ 982,-1,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_SeeOneSurvey		,NULL},
@@ -4428,6 +4431,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLstSimUsr,		// #1579
 	ActRemDupUsr,		// #1580
 	ActSeeMyAgd,		// #1581
+	ActSeeMyUsgRep,		// #1582
 	};
 
 /*****************************************************************************/

@@ -18947,7 +18947,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Visitas"
 #endif
 	,
-	NULL,
+	// ActSeeMyUsgRep
+#if   L==1
+	"Informe"
+#elif L==2
+	"Nutzungsbericht"
+#elif L==3
+	"Report"
+#elif L==4
+	"Informe"
+#elif L==5
+	"Rapport"
+#elif L==6
+	"Informe"	// Okoteve traducción
+#elif L==7
+	"Rapporto"
+#elif L==8
+	"Raport"
+#elif L==9
+	"Relat&oacute;rio"
+#endif
+	,
 	NULL,
 	NULL,
 	NULL,
@@ -20980,6 +21000,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Statystyki dost&eogon;p do platformy"
 #elif L==9
 	"Estat&iacute;sticas de acesso &agrave; plataforma"
+#endif
+	,
+	// ActSeeMyUsgRep
+#if   L==1
+	"Informe sobre el meu &uacute;s de la plataforma"
+#elif L==2
+	"Bericht &uuml;ber meine Nutzung der Plattform"
+#elif L==3
+	"Report on my use of the platform"
+#elif L==4
+	"Informe sobre mi uso de la plataforma"
+#elif L==5
+	"Rapport sur mon utilisation de la plate-forme"
+#elif L==6
+	"Informe sobre mi uso de la plataforma"	// Okoteve traducción
+#elif L==7
+	"Relazione sulla mia utilizzo della piattaforma"
+#elif L==8
+	"Raport o moim korzystania z platformy"
+#elif L==9
+	"Relat&oacute;rio sobre o meu uso da plataforma"
 #endif
 	,
 	NULL,

@@ -72,9 +72,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+246+186+156+172+36+28+85)
+#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+246+186+156+172+36+29+85)
 
-#define Act_MAX_ACTION_COD 1581
+#define Act_MAX_ACTION_COD 1582
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1335,31 +1335,33 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeePhoDeg		(ActUnbUsrLst+  3)
 #define ActReqStaCrs		(ActUnbUsrLst+  4)
 #define ActReqAccGbl		(ActUnbUsrLst+  5)
-// Secondary actions
-#define ActSeeOneSvy		(ActUnbUsrLst+  6)
-#define ActAnsSvy		(ActUnbUsrLst+  7)
-#define ActFrmNewSvy		(ActUnbUsrLst+  8)
-#define ActEdiOneSvy		(ActUnbUsrLst+  9)
-#define ActNewSvy		(ActUnbUsrLst+ 10)
-#define ActChgSvy		(ActUnbUsrLst+ 11)
-#define ActReqRemSvy		(ActUnbUsrLst+ 12)
-#define ActRemSvy		(ActUnbUsrLst+ 13)
-#define ActReqRstSvy		(ActUnbUsrLst+ 14)
-#define ActRstSvy		(ActUnbUsrLst+ 15)
-#define ActHidSvy		(ActUnbUsrLst+ 16)
-#define ActShoSvy		(ActUnbUsrLst+ 17)
-#define ActEdiOneSvyQst		(ActUnbUsrLst+ 18)
-#define ActRcvSvyQst		(ActUnbUsrLst+ 19)
-#define ActReqRemSvyQst		(ActUnbUsrLst+ 20)
-#define ActRemSvyQst		(ActUnbUsrLst+ 21)
+#define ActSeeMyUsgRep		(ActUnbUsrLst+  6)
 
-#define ActSeeUseGbl		(ActUnbUsrLst+ 22)
-#define ActPrnPhoDeg		(ActUnbUsrLst+ 23)
-#define ActCalPhoDeg		(ActUnbUsrLst+ 24)
-#define ActSeeAccGbl		(ActUnbUsrLst+ 25)
-#define ActReqAccCrs		(ActUnbUsrLst+ 26)
-#define ActSeeAccCrs		(ActUnbUsrLst+ 27)
-#define ActSeeAllStaCrs		(ActUnbUsrLst+ 28)
+// Secondary actions
+#define ActSeeOneSvy		(ActUnbUsrLst+  7)
+#define ActAnsSvy		(ActUnbUsrLst+  8)
+#define ActFrmNewSvy		(ActUnbUsrLst+  9)
+#define ActEdiOneSvy		(ActUnbUsrLst+ 10)
+#define ActNewSvy		(ActUnbUsrLst+ 11)
+#define ActChgSvy		(ActUnbUsrLst+ 12)
+#define ActReqRemSvy		(ActUnbUsrLst+ 13)
+#define ActRemSvy		(ActUnbUsrLst+ 14)
+#define ActReqRstSvy		(ActUnbUsrLst+ 15)
+#define ActRstSvy		(ActUnbUsrLst+ 16)
+#define ActHidSvy		(ActUnbUsrLst+ 17)
+#define ActShoSvy		(ActUnbUsrLst+ 18)
+#define ActEdiOneSvyQst		(ActUnbUsrLst+ 19)
+#define ActRcvSvyQst		(ActUnbUsrLst+ 20)
+#define ActReqRemSvyQst		(ActUnbUsrLst+ 21)
+#define ActRemSvyQst		(ActUnbUsrLst+ 22)
+
+#define ActSeeUseGbl		(ActUnbUsrLst+ 23)
+#define ActPrnPhoDeg		(ActUnbUsrLst+ 24)
+#define ActCalPhoDeg		(ActUnbUsrLst+ 25)
+#define ActSeeAccGbl		(ActUnbUsrLst+ 26)
+#define ActReqAccCrs		(ActUnbUsrLst+ 27)
+#define ActSeeAccCrs		(ActUnbUsrLst+ 28)
+#define ActSeeAllStaCrs		(ActUnbUsrLst+ 29)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

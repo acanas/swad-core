@@ -2116,7 +2116,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance events *****/
-   sprintf (Query,"SELECT AttCod,UsrCod,"
+   sprintf (Query,"SELECT AttCod,Hidden,UsrCod,"
                   "UNIX_TIMESTAMP(StartTime) AS ST,"
                   "UNIX_TIMESTAMP(EndTime) AS ET,"
                   "CommentTchVisible,Title,Txt"
