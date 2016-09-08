@@ -64,6 +64,11 @@ extern struct Globals Gbl;
 
 void Rep_ShowMyUsageReport (void)
   {
+   extern const char *Txt_Report_of_use_of_the_platform;
+
+   /***** Start frame and table *****/
+   Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,NULL);
+
    /***** Common record *****/
    Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Me.UsrDat);
 
@@ -73,4 +78,7 @@ void Rep_ShowMyUsageReport (void)
    /***** List my courses *****/
    Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_TEACHER);
    Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_STUDENT);
+
+   /***** End table and frame *****/
+   Lay_EndRoundFrame ();
   }

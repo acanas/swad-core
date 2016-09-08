@@ -30725,6 +30725,27 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 	"Mensagem de resposta";
 #endif
 
+const char *Txt_Report_of_use_of_the_platform =
+#if   L==1
+	"Informe d'&uacute;s de la plataforma";
+#elif L==2
+	"Bericht der Nutzung der Plattform";
+#elif L==3
+	"Report of use of the platform";
+#elif L==4
+	"Informe de uso de la plataforma";
+#elif L==5
+	"Rapport d'utilisation de la plate-forme";
+#elif L==6
+	"Informe de uso de la plataforma";	// Okoteve traducción
+#elif L==7
+	"Rapporto di utilizzo della piattaforma";
+#elif L==8
+	"Sprawozdanie z wykorzystaniem platformy";
+#elif L==9
+	"Relat&oacute;rio de utiliza&ccedil;&atilde;o da plataforma";
+#endif
+
 const char *Txt_Report_possible_duplicate_user =
 #if   L==1
 	"Informar possible usuari duplicat";
