@@ -135,14 +135,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.249.5 (2016-09-08)"
+#define Log_PLATFORM_VERSION	"SWAD 15.250 (2016-09-09)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 15.249.5: Sep 08, 2016	Changes in layout of user's usage report. (? lines)
+        Version 15.250:   Sep 09, 2016	New option to print user's usage report. (204053 lines)
+        Version 15.249.5: Sep 08, 2016	Changes in layout of user's usage report. (204019 lines)
         Version 15.249.4: Sep 08, 2016	List of courses in user's usage report. (203993 lines)
         Version 15.249.3: Sep 08, 2016	Fixed bug related with search of users. (203983 lines)
         Version 15.249.2: Sep 08, 2016	Shared record card and details of user's profile are shown in user's usage report. (203978 lines)

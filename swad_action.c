@@ -1310,6 +1310,7 @@ Statistics:
        1123. ActReqAccCrs		Request query of clicks in the course
        1124. ActSeeAccCrs		Query clicks to current course
        1125. ActSeeAllStaCrs		Show statistics of courses
+        NEW. ActPrnMyUsgRep		Print my usage report
 Profile:
        1126. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
        1127. ActFrmRolSes		Show form to log out and to change current role in this session
@@ -2736,6 +2737,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqAccCrs	*/{ 594,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
    /* ActSeeAccCrs	*/{ 119,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeCrsAccesses		,NULL},
    /* ActSeeAllStaCrs	*/{ 768,-1,TabSta,ActReqAccGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ind_ShowIndicatorsCourses	,NULL},
+
+   /* ActPrnMyUsgRep	*/{1583, 5,TabSta,ActSeeMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rep_PrintMyUsageReport		,NULL},
 
    // TabPrf ******************************************************************
    // Actions in menu:
@@ -4432,6 +4435,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemDupUsr,		// #1580
 	ActSeeMyAgd,		// #1581
 	ActSeeMyUsgRep,		// #1582
+	ActPrnMyUsgRep,		// #1583
 	};
 
 /*****************************************************************************/

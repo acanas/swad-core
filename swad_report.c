@@ -44,6 +44,12 @@
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Rep_SEE,
+   Rep_PRINT,
+  } Rep_SeeOrPrint_t;
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -58,16 +64,31 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
+static void Rep_PutIconToPrintMyUsageReport (void);
+
 /*****************************************************************************/
 /********* Show my usage report (report on my use of the platform) ***********/
 /*****************************************************************************/
 
 void Rep_ShowMyUsageReport (void)
   {
+   Rep_ShowOrPrintMyUsageReport (false);
+  }
+
+void Rep_PrintMyUsageReport (void)
+  {
+   Rep_ShowOrPrintMyUsageReport (true);
+  }
+
+static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
+  {
    extern const char *Txt_Report_of_use_of_the_platform;
 
    /***** Start frame and table *****/
-   Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,NULL);
+   Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
+                        SeeOrPrint == Rep_SEE ? Rep_PutIconToPrintMyUsageReport :
+                                                NULL);
 
    /***** Common record *****/
    Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Me.UsrDat);
@@ -81,4 +102,18 @@ void Rep_ShowMyUsageReport (void)
 
    /***** End table and frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* Put icon to print my usage report *********************/
+/*****************************************************************************/
+
+static void Rep_PutIconToPrintMyUsageReport (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnMyUsgRep,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+		          NULL);
   }

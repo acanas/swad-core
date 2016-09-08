@@ -44,5 +44,6 @@
 /*****************************************************************************/
 
 void Rep_ShowMyUsageReport (void);
+void Rep_PrintMyUsageReport (void);
 
 #endif
