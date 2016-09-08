@@ -3006,6 +3006,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    extern const char *Txt_Course;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
+   char SubQuery[32];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3013,16 +3014,19 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    unsigned NumCrs;
 
    /***** Get courses of a user from database *****/
+   if (Role == Rol_UNKNOWN)
+      SubQuery[0] = '\0';	// Role == Rol_UNKNOWN ==> any role
+   else
+      sprintf (SubQuery," AND crs_usr.Role='%u'",(unsigned) Role);
    sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
                   "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
                   " FROM crs_usr,courses,degrees,centres"
-                  " WHERE crs_usr.UsrCod='%ld'"
-                  " AND crs_usr.Role='%u'"
+                  " WHERE crs_usr.UsrCod='%ld'%s"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
                   " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-            UsrDat->UsrCod,(unsigned) Role);
+            UsrDat->UsrCod,SubQuery);
 
    /***** List the courses (one row per course) *****/
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
