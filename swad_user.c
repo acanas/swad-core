@@ -6109,7 +6109,13 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
 		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
+	    if (Role == Rol_UNKNOWN)
+	      {
+	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
+  	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+	      }
+	    else
+	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 	   }

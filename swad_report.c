@@ -69,4 +69,8 @@ void Rep_ShowMyUsageReport (void)
 
    /***** Show details of user's profile *****/
    Prf_ShowDetailsUserProfile (&Gbl.Usrs.Me.UsrDat);
+
+   /***** List my courses *****/
+   Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_TEACHER);
+   Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_STUDENT);
   }
