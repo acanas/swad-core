@@ -30,6 +30,7 @@
 // #include <string.h>		// For string functions
 
 #include "swad_global.h"
+#include "swad_ID.h"
 #include "swad_profile.h"
 
 /*****************************************************************************/
@@ -84,14 +85,61 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report_of_use_of_the_platform;
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_ID;
+   extern const char *Txt_Email;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   unsigned NumID;
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   struct Institution Ins;
 
    /***** Start frame and table *****/
    Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
                         SeeOrPrint == Rep_SEE ? Rep_PutIconToPrintMyUsageReport :
                                                 NULL);
+   fprintf (Gbl.F.Out,"<ul class=\"LEFT_MIDDLE\">");
 
-   /***** Common record *****/
-   Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,&Gbl.Usrs.Me.UsrDat);
+   /***** User's name *****/
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
+            Gbl.Usrs.Me.UsrDat.FullName);
+
+   /***** User's ID *****/
+   fprintf (Gbl.F.Out,"<li>%s:",
+            Txt_ID);
+   for (NumID = 0;
+	NumID < Gbl.Usrs.Me.UsrDat.IDs.Num;
+	NumID++)
+     {
+      if (NumID)
+	 fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out," <span class=\"%s\">%s</span>",
+	       Gbl.Usrs.Me.UsrDat.IDs.List[NumID].Confirmed ? "USR_ID_C" :
+						              "USR_ID_NC",
+               Gbl.Usrs.Me.UsrDat.IDs.List[NumID].ID);
+     }
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** User's e-mail *****/
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Email,
+            Gbl.Usrs.Me.UsrDat.Email);
+
+   /***** User's country *****/
+   Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Country,
+            CtyName);
+
+   /***** User's institution *****/
+   Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Institution,
+            Ins.FullName);
+
+   fprintf (Gbl.F.Out,"</ul>");
 
    /***** Show details of user's profile *****/
    Prf_ShowDetailsUserProfile (&Gbl.Usrs.Me.UsrDat);
