@@ -113,6 +113,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_messages;
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_course;
    extern const char *Txt_courses;
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -126,10 +127,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    Rol_Role_t Role;
    unsigned NumCrss;
 
-   /***** Start frame and table *****/
-   Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
-                        SeeOrPrint == Rep_SEE ? Rep_PutIconToPrintMyUsageReport :
-                                                NULL);
+   /***** Start frame and list *****/
+   if (SeeOrPrint == Rep_SEE)
+      Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
+			   Rep_PutIconToPrintMyUsageReport);
    fprintf (Gbl.F.Out,"<ul class=\"LEFT_MIDDLE\">");
 
    /***** User's name *****/
@@ -299,7 +300,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"<li>%s: %u %s",
 	       Gbl.Title,
 	       NumCrss,
-	       Txt_courses);
+	       NumCrss == 1 ? Txt_course :
+		              Txt_courses);
       if (NumCrss)
 	{
 	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
@@ -314,14 +316,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"</li>");
      }
 
+   /***** End list and frame *****/
    fprintf (Gbl.F.Out,"</ul>");
-
-   /***** List my courses *****/
-   Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_TEACHER);
-   Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_STUDENT);
-
-   /***** End table and frame *****/
-   Lay_EndRoundFrame ();
+   if (SeeOrPrint == Rep_SEE)
+      Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -351,14 +349,19 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
    unsigned NumCrs;
 
    /***** Get courses of a user from database *****/
-   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
-                  "courses.Year,courses.FullName,centres.ShortName"
-                  " FROM crs_usr,courses,degrees,centres"
+   /*
+   SELECT degrees.DegCod	0
+	  courses.CrsCod	1
+	  courses.FullName	2
+	  courses.Year		3
+	  degrees.FullName	4
+   */
+   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,courses.FullName,courses.Year,degrees.FullName"
+                  " FROM crs_usr,courses,degrees"
                   " WHERE crs_usr.UsrCod='%ld'"
                   " AND crs_usr.Role='%u'"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
-                  " AND degrees.CtrCod=centres.CtrCod"
                   " ORDER BY degrees.FullName,courses.Year,courses.FullName",
             UsrDat->UsrCod,(unsigned) Role);
 
@@ -394,23 +397,21 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
 
 static void Rep_WriteRowCrsData (MYSQL_ROW row)
   {
-   extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    struct Degree Deg;
    long CrsCod;
+   unsigned Year;
    unsigned NumTchs;
    unsigned NumStds;
 
    /*
    SELECT degrees.DegCod	0
 	  courses.CrsCod	1
-	  degrees.ShortName	2
-	  degrees.FullName	3
-	  courses.Year		4
-	  courses.FullName	5
-	  centres.ShortName	6
+	  courses.FullName	2
+	  courses.Year		3
+	  degrees.FullName	4
    */
 
    /***** Get degree code (row[0]) *****/
@@ -430,29 +431,15 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row)
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<li>");
 
-   /***** Write course full name (row[5]) *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP\">");
-   Act_FormGoToStart (ActSeeCrsInf);
-   Crs_PutParamCrsCod (CrsCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
-   Act_LinkFormSubmit (Gbl.Title,"DAT_N",NULL);
-   fprintf (Gbl.F.Out,"%s</a>",row[5]);
-   Act_FormEnd ();
+   /***** Write course full name (row[2]) *****/
+   fprintf (Gbl.F.Out,"%s -",row[2]);
 
-   /***** Write year (row[4]) *****/
-   fprintf (Gbl.F.Out," - %s",
-            Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
+   /***** Write year (row[3]) *****/
+   if ((Year = Deg_ConvStrToYear (row[3])))
+      fprintf (Gbl.F.Out," %s",Txt_YEAR_OF_DEGREE[Year]);
 
-   /***** Write degree short name (row[2])
-          and centre short name (row[6]) *****/
-   Act_FormGoToStart (ActSeeDegInf);
-   Deg_PutParamDegCod (Deg.DegCod);
-   sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
-   Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR_N",NULL);
-   fprintf (Gbl.F.Out," %s, %s"
-                      "</a>",
-            row[2],row[6]);
-   Act_FormEnd ();
+   /***** Write degree full name (row[4]) *****/
+   fprintf (Gbl.F.Out," %s",row[4]);
 
    /***** Write number of teachers / students in course *****/
    fprintf (Gbl.F.Out," (%u %s / %u %s)"
