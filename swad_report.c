@@ -89,11 +89,13 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report_of_use_of_the_platform;
+   extern const char *Txt_Personal_information;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ID;
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
+   extern const char *Txt_Figures;
    extern const char *Txt_From_TIME;
    extern const char *Txt_day;
    extern const char *Txt_days;
@@ -111,6 +113,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Messages_sent;
    extern const char *Txt_message;
    extern const char *Txt_messages;
+   extern const char *Txt_Courses;
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_course;
@@ -127,11 +130,16 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    Rol_Role_t Role;
    unsigned NumCrss;
 
-   /***** Start frame and list *****/
+   /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
-      Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
+      Lay_StartRoundFrame (NULL,Txt_Report_of_use_of_the_platform,
 			   Rep_PutIconToPrintMyUsageReport);
-   fprintf (Gbl.F.Out,"<ul class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\" style=\"margin:10px;\">");
+
+   /***** Personal information *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+	              "<ul>",
+	    Txt_Personal_information);
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
@@ -171,6 +179,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);
+
+   fprintf (Gbl.F.Out,"</ul>");
+
+   /***** Figures *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+	              "<ul>",
+	    Txt_Figures);
 
    /***** Get figures *****/
    Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
@@ -290,6 +305,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
+   fprintf (Gbl.F.Out,"</ul>");
+
+   /***** Courses *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+	              "<ul>",
+	    Txt_Courses);
+
    /***** Number of courses in which the user is student/teacher *****/
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
@@ -316,8 +338,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"</li>");
      }
 
-   /***** End list and frame *****/
    fprintf (Gbl.F.Out,"</ul>");
+
+   /***** End frame *****/
+   fprintf (Gbl.F.Out,"</div>");
    if (SeeOrPrint == Rep_SEE)
       Lay_EndRoundFrame ();
   }

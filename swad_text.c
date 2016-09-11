@@ -11415,6 +11415,27 @@ const char *Txt_Field_BR_name =
 	"Nome<br />do campo";
 #endif
 
+const char *Txt_Figures =
+#if   L==1
+	"Xifres";
+#elif L==2
+	"Zahlen";
+#elif L==3
+	"Figures";
+#elif L==4
+	"Cifras";
+#elif L==5
+	"Chiffres";
+#elif L==6
+	"Cifras";	// Okoteve traducción
+#elif L==7
+	"Cifre";
+#elif L==8
+	"Cyfry";
+#elif L==9
+	"N&uacute;meros";
+#endif
+
 const char *Txt_File =
 #if   L==1
 	"Fitxer";
@@ -27554,6 +27575,27 @@ const char *Txt_PERCENT_of_users =
 	"% uzytkownik&oacute;w";
 #elif L==9
 	"% de utilizadores";
+#endif
+
+const char *Txt_Personal_information =
+#if   L==1
+	"Dades personals";
+#elif L==2
+	"Pers&ouml;nliche Angaben";
+#elif L==3
+	"Personal information";
+#elif L==4
+	"Datos personales";
+#elif L==5
+	"Informations personnelles";
+#elif L==6
+	"Datos personales";	// Okoteve traducción
+#elif L==7
+	"Informazione personale";
+#elif L==8
+	"Informacje osobiste";
+#elif L==9
+	"Informa&ccedil;&atilde;o pessoal";
 #endif
 
 const char *Txt_Phone =
