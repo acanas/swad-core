@@ -21210,9 +21210,30 @@ const char *Txt_messages_sent =
 	"mensagens enviadas";
 #endif
 
+const char *Txt_Messages_sent =
+#if   L==1
+	"Missatges enviats";
+#elif L==2
+	"Gesendete Nachrichten";
+#elif L==3
+	"Messages sent";
+#elif L==4
+	"Mensajes enviados";
+#elif L==5
+	"Messages envoy&eacute;s";
+#elif L==6
+	"Mensajes enviados";	// Okoteve traducción
+#elif L==7
+	"Messaggi inviati";
+#elif L==8
+	"Wiadomo&sacute;ci wysylane";
+#elif L==9
+	"Mensagens enviadas";
+#endif
+
 const char *Txt_Messages_sent_by_teachers =
 #if   L==1
-	"Mensajes enviados por profesores";	// Necessita traduccio
+	"Missatges enviats per professors";
 #elif L==2
 	"Gesendete Nachrichten, die von Lehrkr&auml;ften";
 #elif L==3

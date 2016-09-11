@@ -568,7 +568,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
 	}
-      else	// Number of clicks is unknown
+      else	// Number of messages sent is unknown
 	 /***** Button to fetch and store number of messages sent *****/
          Prf_PutLinkToUpdateAction (ActCalNumMsgSnt,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");

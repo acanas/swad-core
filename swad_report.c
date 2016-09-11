@@ -104,6 +104,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Forum_posts;
    extern const char *Txt_post;
    extern const char *Txt_posts;
+   extern const char *Txt_Messages_sent;
+   extern const char *Txt_message;
+   extern const char *Txt_messages;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -252,6 +255,26 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	}
      }
    else	// Number of forum posts is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of messages sent *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Messages_sent);
+   if (UsrFigures.NumMsgSnt >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld %s",
+	       UsrFigures.NumMsgSnt,
+	       (UsrFigures.NumMsgSnt == 1) ? Txt_message :
+					     Txt_messages);
+      if (UsrFigures.NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
+			    (float) UsrFigures.NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of messages sent is unknown
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
