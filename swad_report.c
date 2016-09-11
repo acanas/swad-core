@@ -29,6 +29,7 @@
 // #include <stdio.h>		// For sprintf
 // #include <string.h>		// For string functions
 
+#include "swad_database.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
@@ -67,6 +68,9 @@ extern struct Globals Gbl;
 
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
+
+static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
+static void Rep_WriteRowCrsData (MYSQL_ROW row);
 
 /*****************************************************************************/
 /********* Show my usage report (report on my use of the platform) ***********/
@@ -303,14 +307,14 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 		  Txt_teachers_ABBREVIATION,
 		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Rol_TEACHER,Rol_STUDENT),
 		  Txt_students_ABBREVIATION);
+
+         /* List my courses with this role */
+	 Rep_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role);
 	}
       fprintf (Gbl.F.Out,"</li>");
      }
 
    fprintf (Gbl.F.Out,"</ul>");
-
-   /***** Show details of user's profile *****/
-   Prf_ShowDetailsUserProfile (&Gbl.Usrs.Me.UsrDat);
 
    /***** List my courses *****/
    Crs_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Rol_TEACHER);
@@ -332,4 +336,127 @@ static void Rep_PutIconToPrintMyUsageReport (void)
                           "print64x64.png",
                           Txt_Print,NULL,
 		          NULL);
+  }
+
+/*****************************************************************************/
+/************************** Write courses of a user **************************/
+/*****************************************************************************/
+
+static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
+  {
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+
+   /***** Get courses of a user from database *****/
+   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
+                  "courses.Year,courses.FullName,centres.ShortName"
+                  " FROM crs_usr,courses,degrees,centres"
+                  " WHERE crs_usr.UsrCod='%ld'"
+                  " AND crs_usr.Role='%u'"
+                  " AND crs_usr.CrsCod=courses.CrsCod"
+                  " AND courses.DegCod=degrees.DegCod"
+                  " AND degrees.CtrCod=centres.CtrCod"
+                  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
+            UsrDat->UsrCod,(unsigned) Role);
+
+   /***** List the courses (one row per course) *****/
+   if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+     {
+      /* Heading row */
+      fprintf (Gbl.F.Out,"<ol>");
+
+      /* Write courses */
+      for (NumCrs = 1;
+	   NumCrs <= NumCrss;
+	   NumCrs++)
+        {
+         /* Get next course */
+         row = mysql_fetch_row (mysql_res);
+
+         /* Write data of this course */
+         Rep_WriteRowCrsData (row);
+        }
+
+      /* End table */
+      fprintf (Gbl.F.Out,"</ol>");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Write the data of a course (result of a query) ***************/
+/*****************************************************************************/
+
+static void Rep_WriteRowCrsData (MYSQL_ROW row)
+  {
+   extern const char *Txt_Go_to_X;
+   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_students_ABBREVIATION;
+   struct Degree Deg;
+   long CrsCod;
+   unsigned NumTchs;
+   unsigned NumStds;
+
+   /*
+   SELECT degrees.DegCod	0
+	  courses.CrsCod	1
+	  degrees.ShortName	2
+	  degrees.FullName	3
+	  courses.Year		4
+	  courses.FullName	5
+	  centres.ShortName	6
+   */
+
+   /***** Get degree code (row[0]) *****/
+   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      Lay_ShowErrorAndExit ("Wrong code of degree.");
+   if (!Deg_GetDataOfDegreeByCod (&Deg))
+      Lay_ShowErrorAndExit ("Degree not found.");
+
+   /***** Get course code (row[1]) *****/
+   if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+      Lay_ShowErrorAndExit ("Wrong code of course.");
+
+   /***** Get number of teachers and students in this course *****/
+   NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+
+   /***** Start row *****/
+   fprintf (Gbl.F.Out,"<li>");
+
+   /***** Write course full name (row[5]) *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP\">");
+   Act_FormGoToStart (ActSeeCrsInf);
+   Crs_PutParamCrsCod (CrsCod);
+   sprintf (Gbl.Title,Txt_Go_to_X,row[6]);
+   Act_LinkFormSubmit (Gbl.Title,"DAT_N",NULL);
+   fprintf (Gbl.F.Out,"%s</a>",row[5]);
+   Act_FormEnd ();
+
+   /***** Write year (row[4]) *****/
+   fprintf (Gbl.F.Out," - %s",
+            Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
+
+   /***** Write degree short name (row[2])
+          and centre short name (row[6]) *****/
+   Act_FormGoToStart (ActSeeDegInf);
+   Deg_PutParamDegCod (Deg.DegCod);
+   sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
+   Act_LinkFormSubmit (Gbl.Title,"DAT_NOBR_N",NULL);
+   fprintf (Gbl.F.Out," %s, %s"
+                      "</a>",
+            row[2],row[6]);
+   Act_FormEnd ();
+
+   /***** Write number of teachers / students in course *****/
+   fprintf (Gbl.F.Out," (%u %s / %u %s)"
+	              "</li>",
+            NumTchs,Txt_teachers_ABBREVIATION,
+            NumStds,Txt_students_ABBREVIATION);
   }
