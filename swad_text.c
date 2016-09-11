@@ -13858,6 +13858,27 @@ const char *Txt_Hide_right_column =
 	"Ocultar coluna da direita";
 #endif
 
+const char *Txt_Hits =	// hits = visits, clicks, page views...
+#if   L==1
+	"Accessos";
+#elif L==2
+	"Anmeldungen";
+#elif L==3
+	"Hits";
+#elif L==4
+	"Accesos";
+#elif L==5
+	"Visites";
+#elif L==6
+	"Accesos";		// Okoteve traducción
+#elif L==7
+	"Visite";
+#elif L==8
+	"Ods&lstrok;on";
+#elif L==9
+	"Visitas";
+#endif
+
 const char *Txt_Holiday =
 #if   L==1
 	"Festivitat";

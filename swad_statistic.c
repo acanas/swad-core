@@ -124,13 +124,6 @@ typedef enum
    Sta_SHOW_COURSE_ACCESSES,
   } Sta_GlobalOrCourseAccesses_t;
 
-struct Sta_Hits
-  {
-   float Num;
-   float Max;
-   float Total;
-  };
-
 /*****************************************************************************/
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
@@ -182,11 +175,6 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
 static void Sta_WriteDegree (long DegCod);
 static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
-static void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
-                                        unsigned long NumRows,
-                                        MYSQL_RES *mysql_res,unsigned Field,
-                                        unsigned Divisor);
-static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
 
 static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
@@ -1897,7 +1885,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
+   Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2084,7 +2072,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,2,1);
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
+   Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Reset number of pages generated per hour *****/
    for (Hour = 0;
@@ -2479,7 +2467,7 @@ static void Sta_ShowNumHitsPerWeeks (unsigned long NumRows,
 
    /***** Initialize LastDate to avoid warning *****/
    Dat_CalculateWeekOfYear (&Gbl.DateRange.DateEnd.Date);	// Changes Week and Year
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
+   Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2577,7 +2565,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
    MYSQL_ROW row;
 
    /***** Initialize LastDate *****/
-   Dat_AssignDate (&LastDate,&(Gbl.DateRange.DateEnd.Date));
+   Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2625,7 +2613,7 @@ static void Sta_ShowNumHitsPerMonths (unsigned long NumRows,
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits ('c',
                              M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
-                        	                              0.0,
+                        	                                           0.0,
                              Hits.Max,Hits.Total,500);
 
          /* Decrease month */
@@ -3698,10 +3686,10 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
 /*************** Compute maximum and total number of hits ********************/
 /*****************************************************************************/
 
-static void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
-                                        unsigned long NumRows,
-                                        MYSQL_RES *mysql_res,unsigned Field,
-                                        unsigned Divisor)
+void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
+                                 unsigned long NumRows,
+                                 MYSQL_RES *mysql_res,unsigned Field,
+                                 unsigned Divisor)
   {
    unsigned long NumRow;
    MYSQL_ROW row;
@@ -3730,7 +3718,7 @@ static void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
+void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
   {
    unsigned BarWidth;
 

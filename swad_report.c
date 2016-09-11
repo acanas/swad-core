@@ -72,6 +72,8 @@ static void Rep_PutIconToPrintMyUsageReport (void);
 static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
 static void Rep_WriteRowCrsData (MYSQL_ROW row);
 
+static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
+
 /*****************************************************************************/
 /********* Show my usage report (report on my use of the platform) ***********/
 /*****************************************************************************/
@@ -120,11 +122,12 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_courses;
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
+   extern const char *Txt_Hits;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
    struct UsrFigures UsrFigures;
-   struct tm FirstClickTime;
+   struct tm tm_FirstClickTime;
    unsigned NumFiles;
    unsigned NumPublicFiles;
    Rol_Role_t Role;
@@ -194,15 +197,15 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_From_TIME);
    if (UsrFigures.FirstClickTimeUTC)
      {
-      if ((gmtime_r (&UsrFigures.FirstClickTimeUTC,&FirstClickTime)) != NULL)
+      if ((gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime)) != NULL)
 	{
 	 fprintf (Gbl.F.Out,"%04d-%02d-%02d %02d:%02d:%02d UTC",
-                  1900 + FirstClickTime.tm_year,	// year
-                  1 + FirstClickTime.tm_mon,		// month
-                  FirstClickTime.tm_mday,		// day of the month
-                  FirstClickTime.tm_hour,		// hours
-                  FirstClickTime.tm_min,		// minutes
-		  FirstClickTime.tm_sec);		// seconds
+                  1900 + tm_FirstClickTime.tm_year,	// year
+                  1 + tm_FirstClickTime.tm_mon,		// month
+                  tm_FirstClickTime.tm_mday,		// day of the month
+                  tm_FirstClickTime.tm_hour,		// hours
+                  tm_FirstClickTime.tm_min,		// minutes
+		  tm_FirstClickTime.tm_sec);		// seconds
 	 if (UsrFigures.NumDays > 0)
 	    fprintf (Gbl.F.Out," (%d %s)",
 		     UsrFigures.NumDays,
@@ -340,6 +343,17 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    fprintf (Gbl.F.Out,"</ul>");
 
+   /***** Hits *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
+   fprintf (Gbl.F.Out,"<tt>2016-04: &block;&block;&block; 300</tt><br />");
+   fprintf (Gbl.F.Out,"<tt>2016-05: &block; 100</tt><br />");
+   fprintf (Gbl.F.Out,"<tt>2016-06: 0</tt><br />");
+   fprintf (Gbl.F.Out,"<tt>2016-07: &block;&block;&block;&block;&block; 500</tt><br />");
+   fprintf (Gbl.F.Out,"<tt>2016-08: &block;&block;&block;&block;&block;&block;&block;&block;&block; 900</tt><br />");
+   fprintf (Gbl.F.Out,"<tt>2016-09: &block;&block;&block;&block;&block;&block; 600</tt><br />");
+
+   Rep_ShowMyHits (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
    if (SeeOrPrint == Rep_SEE)
@@ -456,7 +470,7 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row)
    fprintf (Gbl.F.Out,"<li>");
 
    /***** Write course full name (row[2]) *****/
-   fprintf (Gbl.F.Out,"%s -",row[2]);
+   fprintf (Gbl.F.Out,"<strong>%s</strong> -",row[2]);
 
    /***** Write year (row[3]) *****/
    if ((Year = Deg_ConvStrToYear (row[3])))
@@ -470,4 +484,114 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row)
 	              "</li>",
             NumTchs,Txt_teachers_ABBREVIATION,
             NumStds,Txt_students_ABBREVIATION);
+  }
+
+/*****************************************************************************/
+/********************* Write my hits grouped by months ***********************/
+/*****************************************************************************/
+
+static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
+  {
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned long NumRow;
+   struct Date ReadDate;
+   struct Date LastDate;
+   struct Date Date;
+   unsigned M;
+   unsigned NumMonthsBetweenLastDateAndCurrentDate;
+   struct Sta_Hits Hits;
+
+   /***** Get client time zone *****/
+   Dat_GetBrowserTimeZone (BrowserTimeZone);
+
+   /***** Make the query *****/
+   sprintf (Query,"SELECT SQL_NO_CACHE "
+		  "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
+		  "COUNT(*) FROM log_full"
+                  " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
+		  " AND UsrCod='%ld'"
+		  " GROUP BY Month DESC",
+	    BrowserTimeZone,
+            (long) FirstClickTimeUTC,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+
+   /***** Initialize first date *****/
+   Gbl.DateRange.DateIni.Date.Year  = 1900 + tm_FirstClickTime->tm_year;
+   Gbl.DateRange.DateIni.Date.Month = 1 + tm_FirstClickTime->tm_mon;
+   Gbl.DateRange.DateIni.Date.Day   = tm_FirstClickTime->tm_mday;
+
+   /***** Initialize LastDate *****/
+   Dat_AssignDate (&LastDate,&Gbl.Now.Date);
+
+   /***** Compute maximum number of pages generated per month *****/
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+
+   fprintf (Gbl.F.Out,"<table>");
+
+   /***** Write rows *****/
+   mysql_data_seek (mysql_res,0);
+   for (NumRow = 1;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the year and the month (in row[0] is the date in YYYYMM format) */
+      if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
+	 Lay_ShowErrorAndExit ("Wrong date.");
+
+      /* Get number of pages generated (in row[1]) */
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+
+      Dat_AssignDate (&Date,&LastDate);
+      NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
+      for (M = 1;
+	   M <= NumMonthsBetweenLastDateAndCurrentDate;
+	   M++)
+        {
+         /* Write the month */
+         fprintf (Gbl.F.Out,"<tr>"
+                            "<td class=\"LOG LEFT_TOP\">"
+                            "%04u-%02u&nbsp;"
+                            "</td>",
+	          Date.Year,Date.Month);
+
+         /* Draw bar proportional to number of pages generated */
+         Sta_DrawBarNumHits ('c',
+                             M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
+                        	                                           0.0,
+                             Hits.Max,Hits.Total,500);
+
+         /* Decrease month */
+         Dat_GetMonthBefore (&Date,&Date);
+        }
+      Dat_AssignDate (&LastDate,&Date);
+     }
+
+  /***** Finally, show the oldest months without clicks *****/
+  NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
+  for (M = 1;
+       M <= NumMonthsBetweenLastDateAndCurrentDate;
+       M++)
+    {
+     /* Write the month */
+     fprintf (Gbl.F.Out,"<tr>"
+	                "<td class=\"LOG LEFT_TOP\">"
+	                "%04u-%02u&nbsp;"
+	                "</td>",
+              Date.Year,Date.Month);
+
+     /* Draw bar proportional to number of pages generated */
+     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+
+     /* Decrease month */
+     Dat_GetMonthBefore (&Date,&Date);
+    }
+
+   fprintf (Gbl.F.Out,"</table>");
   }

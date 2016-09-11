@@ -135,6 +135,13 @@ typedef enum
 
 #define Sta_NUM_STAT_CRS_FILE_ZONES 11
 
+struct Sta_Hits
+  {
+   float Num;
+   float Max;
+   float Total;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -147,10 +154,19 @@ void Sta_AskShowGblHits (void);
 void Sta_SetIniEndDates (void);
 void Sta_SeeGblAccesses (void);
 void Sta_SeeCrsAccesses (void);
+
+void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
+                                 unsigned long NumRows,
+                                 MYSQL_RES *mysql_res,unsigned Field,
+                                 unsigned Divisor);
+
 void Sta_ReqUseOfPlatform (void);
 void Pho_PutHiddenParamFigureType (void);
 void Sta_ShowUseOfPlatform (void);
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role);
+
+void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
+
 void Sta_WriteParamsDatesSeeAccesses (void);
 
 void Sta_ComputeTimeToGeneratePage (void);
