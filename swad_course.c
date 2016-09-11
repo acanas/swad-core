@@ -3037,7 +3037,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       /* Heading row */
       sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
       fprintf (Gbl.F.Out,"<tr>"
-                         "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s</th>"
+                         "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s:</th>"
                          "</tr>"
 	                 "<tr>"
                          "<th class=\"BM\"></th>"

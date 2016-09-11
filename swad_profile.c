@@ -341,9 +341,9 @@ void Prf_ChangeProfileVisibility (void)
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_courses_ABBREVIATION;
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
-   extern const char *Txt_courses_ABBREVIATION;
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
    extern const char *Txt_files;
@@ -378,14 +378,14 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of courses in which the user is teacher *****/
    NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/tch64x64.gif');\" />"
-		      "%u&nbsp;%s&nbsp;",
+	              " style=\"background-image:url('%s/tch64x64.gif');\">"
+		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsTeacher,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsTeacher)
-      fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_STUDENT),
@@ -395,14 +395,14 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Number of courses in which the user is student *****/
    NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STUDENT);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/std64x64.gif');\" />"
-		      "%u&nbsp;%s&nbsp;",
+	              " style=\"background-image:url('%s/std64x64.gif');\">"
+		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsStudent,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsStudent)
-      fprintf (Gbl.F.Out,"(%u&nbsp;%s/%u&nbsp;%s)",
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_STUDENT),
@@ -415,7 +415,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    else
       NumPublicFiles = 0;
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/file64x64.gif');\" />"
+	              " style=\"background-image:url('%s/file64x64.gif');\">"
 		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</li>",
 	    Txt_Files_uploaded,
@@ -430,7 +430,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /* Time since first click */
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/clock64x64.gif');\" />",
+	              " style=\"background-image:url('%s/clock64x64.gif');\">",
 	    Txt_From_TIME,
             Gbl.Prefs.IconsURL);
    if (UsrFigures.FirstClickTimeUTC)
@@ -468,7 +468,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      {
       /* Number of clicks */
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/click64x64.gif');\" />",
+	                 " style=\"background-image:url('%s/click64x64.gif');\">",
 	       Txt_Clicks,
 	       Gbl.Prefs.IconsURL);
 
@@ -496,7 +496,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of file views *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/download64x64.png');\" />",
+	                 " style=\"background-image:url('%s/download64x64.png');\">",
 	       Txt_Downloads,
 	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumFileViews >= 0)
@@ -522,7 +522,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of posts in forums *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/forum64x64.gif');\" />",
+	                 " style=\"background-image:url('%s/forum64x64.gif');\">",
 	       Txt_Forums,
 	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumForPst >= 0)
@@ -549,7 +549,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
       /***** Number of messages sent *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/msg64x64.gif');\" />",
+	                 " style=\"background-image:url('%s/msg64x64.gif');\">",
 	       Txt_Messages,
 	       Gbl.Prefs.IconsURL);
       if (UsrFigures.NumMsgSnt >= 0)

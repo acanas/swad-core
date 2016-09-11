@@ -49093,23 +49093,23 @@ const char *Txt_User_ID =
 
 const char *Txt_USER_in_COURSE =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s en:";
+	"%s en";
 #elif L==2
-	"%s im:";
+	"%s im";
 #elif L==3
-	"%s in:";
+	"%s in";
 #elif L==4
-	"%s en:";
+	"%s en";
 #elif L==5
-	"%s dans:";
+	"%s dans";
 #elif L==6
-	"%s en:";	// Okoteve traducción
+	"%s en";	// Okoteve traducción
 #elif L==7
-	"%s in:";
+	"%s in";
 #elif L==8
-	"%s w:";
+	"%s w";
 #elif L==9
-	"%s em:";
+	"%s em";
 #endif
 
 const char *Txt_User_not_found_or_you_do_not_have_permission_ =

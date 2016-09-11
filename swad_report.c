@@ -107,6 +107,11 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Messages_sent;
    extern const char *Txt_message;
    extern const char *Txt_messages;
+   extern const char *Txt_USER_in_COURSE;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_courses;
+   extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_students_ABBREVIATION;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -114,6 +119,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    struct tm FirstClickTime;
    unsigned NumFiles;
    unsigned NumPublicFiles;
+   Rol_Role_t Role;
+   unsigned NumCrss;
 
    /***** Start frame and table *****/
    Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
@@ -122,7 +129,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<ul class=\"LEFT_MIDDLE\">");
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+   fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
             Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
             Gbl.Usrs.Me.UsrDat.FullName);
 
@@ -197,7 +204,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	 fprintf (Gbl.F.Out," (");
 	 Str_WriteFloatNum ((float) UsrFigures.NumClicks /
 			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of clicks is unknown
@@ -231,7 +238,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	 fprintf (Gbl.F.Out," (");
 	 Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
 			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of file views is unknown
@@ -251,7 +258,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	 fprintf (Gbl.F.Out," (");
 	 Str_WriteFloatNum ((float) UsrFigures.NumForPst /
 			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of forum posts is unknown
@@ -271,12 +278,34 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	 fprintf (Gbl.F.Out," (");
 	 Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
 			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
 	}
      }
    else	// Number of messages sent is unknown
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of courses in which the user is student/teacher *****/
+   for (Role  = Rol_STUDENT;
+	Role <= Rol_TEACHER;
+	Role++)
+     {
+      NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
+      sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+      fprintf (Gbl.F.Out,"<li>%s: %u %s",
+	       Gbl.Title,
+	       NumCrss,
+	       Txt_courses);
+      if (NumCrss)
+	{
+	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
+		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Rol_TEACHER,Rol_TEACHER),
+		  Txt_teachers_ABBREVIATION,
+		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Rol_TEACHER,Rol_STUDENT),
+		  Txt_students_ABBREVIATION);
+	}
+      fprintf (Gbl.F.Out,"</li>");
+     }
 
    fprintf (Gbl.F.Out,"</ul>");
 
