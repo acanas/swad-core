@@ -55,16 +55,6 @@
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
-struct UsrFigures
-  {
-   time_t FirstClickTimeUTC;	//   0 ==> unknown first click time of user never logged
-   int NumDays;			//  -1 ==> not applicable
-   long NumClicks;		// -1L ==> unknown number of clicks
-   long NumFileViews;		// -1L ==> unknown number of file views
-   long NumForPst;		// -1L ==> unknown number of forum posts
-   long NumMsgSnt;		// -1L ==> unknown number of messages sent
-  };
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -82,8 +72,6 @@ extern struct Globals Gbl;
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
 
 static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
-
-static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
 static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName);
@@ -356,7 +344,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_courses_ABBREVIATION;
-   extern const char *Txt_Files;
+   extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
@@ -430,7 +418,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              " style=\"background-image:url('%s/file64x64.gif');\" />"
 		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
 		      "</li>",
-	    Txt_Files,
+	    Txt_Files_uploaded,
             Gbl.Prefs.IconsURL,
 	    NumFiles,
 	    (NumFiles == 1) ? Txt_file :
@@ -440,7 +428,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Get figures *****/
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
-   /* First click time */
+   /* Time since first click */
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/clock64x64.gif');\" />",
 	    Txt_From_TIME,
@@ -612,7 +600,7 @@ static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *Encrypted
 /********************** Select values on user's figures **********************/
 /*****************************************************************************/
 
-static void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
+void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
   {
    char Query[512];
    MYSQL_RES *mysql_res;

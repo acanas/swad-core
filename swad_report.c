@@ -90,9 +90,20 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
+   extern const char *Txt_From_TIME;
+   extern const char *Txt_day;
+   extern const char *Txt_days;
+   extern const char *Txt_Files_uploaded;
+   extern const char *Txt_file;
+   extern const char *Txt_files;
+   extern const char *Txt_public_FILES;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
+   struct UsrFigures UsrFigures;
+   struct tm FirstClickTime;
+   unsigned NumFiles;
+   unsigned NumPublicFiles;
 
    /***** Start frame and table *****/
    Lay_StartRoundFrame ("100%",Txt_Report_of_use_of_the_platform,
@@ -138,6 +149,47 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);
+
+   /***** Get figures *****/
+   Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
+
+   /***** Time since first click *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_From_TIME);
+   if (UsrFigures.FirstClickTimeUTC)
+     {
+      if ((gmtime_r (&UsrFigures.FirstClickTimeUTC,&FirstClickTime)) != NULL)
+	{
+	 fprintf (Gbl.F.Out,"%04d-%02d-%02d %02d:%02d:%02d UTC",
+                  1900 + FirstClickTime.tm_year,	// year
+                  1 + FirstClickTime.tm_mon,		// month
+                  FirstClickTime.tm_mday,		// day of the month
+                  FirstClickTime.tm_hour,		// hours
+                  FirstClickTime.tm_min,		// minutes
+		  FirstClickTime.tm_sec);		// seconds
+	 if (UsrFigures.NumDays > 0)
+	    fprintf (Gbl.F.Out," (%d %s)",
+		     UsrFigures.NumDays,
+		     (UsrFigures.NumDays == 1) ? Txt_day :
+						 Txt_days);
+	}
+     }
+   else
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of files currently published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   else
+      NumPublicFiles = 0;
+   fprintf (Gbl.F.Out,"<li>"
+		      "%s: %u %s (%u %s)"
+		      "</li>",
+	    Txt_Files_uploaded,
+	    NumFiles,
+	    (NumFiles == 1) ? Txt_file :
+		              Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
 
    fprintf (Gbl.F.Out,"</ul>");
 

@@ -11919,6 +11919,27 @@ const char *Txt_Files_copied =
 	"Arquivos copiados";
 #endif
 
+const char *Txt_Files_uploaded =
+#if   L==1
+	"Fitxers pujats";
+#elif L==2
+	"Dateien hochgeladen";
+#elif L==3
+	"Files uploaded";
+#elif L==4
+	"Archivos subidos";
+#elif L==5
+	"Fichiers t&eacute;l&eacute;charg&eacute;s";
+#elif L==6
+	"Archivos subidos";	// Okoteve traducción
+#elif L==7
+	"File caricati";
+#elif L==8
+	"Pliki dodane";
+#elif L==9
+	"Arquivos enviados";
+#endif
+
 const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 #if   L==1
 	"Los archivos de calificaciones deben contener una tabla en <strong>formato HTML</strong> sin im&aacute;genes."

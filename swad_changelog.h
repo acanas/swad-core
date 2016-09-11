@@ -135,13 +135,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.250.2 (2016-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.250.4 (2016-09-11)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.250.4: Sep 11, 2016	Time of first click in user's usage report. (204171 lines)
+        Version 15.250.3: Sep 11, 2016	Number of puslished files in user's usage report. (? lines)
         Version 15.250.2: Sep 11, 2016	Record card replaced by raw user's data in user's usage report. (204100 lines)
         Version 15.250.1: Sep 09, 2016	Changes in layout of user's usage report. (204056 lines)
         Version 15.250:   Sep 09, 2016	New option to print user's usage report. (204053 lines)

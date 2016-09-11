@@ -35,6 +35,16 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+struct UsrFigures
+  {
+   time_t FirstClickTimeUTC;	//   0 ==> unknown first click time of user never logged
+   int NumDays;			//  -1 ==> not applicable
+   long NumClicks;		// -1L ==> unknown number of clicks
+   long NumFileViews;		// -1L ==> unknown number of file views
+   long NumForPst;		// -1L ==> unknown number of forum posts
+   long NumMsgSnt;		// -1L ==> unknown number of messages sent
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -50,6 +60,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat);
 void Prf_ChangeProfileVisibility (void);
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
+void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 void Prf_CalculateFirstClickTime (void);
 void Prf_CalculateNumClicks (void);
 void Prf_CalculateNumFileViews (void);
