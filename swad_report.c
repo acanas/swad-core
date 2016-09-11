@@ -99,6 +99,11 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
    extern const char *Txt_Downloads;
+   extern const char *Txt_download;
+   extern const char *Txt_downloads;
+   extern const char *Txt_Forum_posts;
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -214,7 +219,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
    if (UsrFigures.NumFileViews >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumFileViews);
+      fprintf (Gbl.F.Out,"%ld %s",
+               UsrFigures.NumFileViews,
+	       (UsrFigures.NumFileViews == 1) ? Txt_download :
+						Txt_downloads);
       if (UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out," (");
@@ -224,6 +232,26 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	}
      }
    else	// Number of file views is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of posts in forums *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Forum_posts);
+   if (UsrFigures.NumForPst >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld %s",
+	       UsrFigures.NumForPst,
+	       (UsrFigures.NumForPst == 1) ? Txt_post :
+					     Txt_posts);
+      if (UsrFigures.NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures.NumForPst /
+			    (float) UsrFigures.NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of forum posts is unknown
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
