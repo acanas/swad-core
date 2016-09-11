@@ -455,11 +455,11 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Prf_PutLinkToUpdateAction (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** End of right list *****/
+   /***** End of left list *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
 
-   /***** Start left list *****/
+   /***** Start right list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 

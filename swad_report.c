@@ -93,6 +93,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_From_TIME;
    extern const char *Txt_day;
    extern const char *Txt_days;
+   extern const char *Txt_Clicks;
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
    extern const char *Txt_files;
@@ -173,7 +174,24 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 						 Txt_days);
 	}
      }
-   else
+   else	// Time of first click is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of clicks *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Clicks);
+   if (UsrFigures.NumClicks >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumClicks);
+      if (UsrFigures.NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures.NumClicks /
+			    (float) UsrFigures.NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of clicks is unknown
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
