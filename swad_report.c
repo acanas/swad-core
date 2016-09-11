@@ -98,6 +98,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
+   extern const char *Txt_Downloads;
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -208,6 +209,23 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	    (NumFiles == 1) ? Txt_file :
 		              Txt_files,
 	    NumPublicFiles,Txt_public_FILES);
+
+   /***** Number of file views *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
+   if (UsrFigures.NumFileViews >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumFileViews);
+      if (UsrFigures.NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
+			    (float) UsrFigures.NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of file views is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
 
    fprintf (Gbl.F.Out,"</ul>");
 

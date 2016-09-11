@@ -135,13 +135,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.250.5 (2016-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 15.250.6 (2016-09-11)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.250.6: Sep 11, 2016	Number of downloads in user's usage report. (204207 lines)
         Version 15.250.5: Sep 11, 2016	Number of clicks in user's usage report. (204189 lines)
         Version 15.250.4: Sep 11, 2016	Time of first click in user's usage report. (204171 lines)
         Version 15.250.3: Sep 11, 2016	Number of puslished files in user's usage report. (? lines)
