@@ -73,6 +73,7 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
 static void Rep_WriteRowCrsData (MYSQL_ROW row);
 
 static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
+static void Rep_DrawBarNumHits (char Color,float HitsNum,float HitsMax,unsigned MaxBarWidth);
 
 /*****************************************************************************/
 /********* Show my usage report (report on my use of the platform) ***********/
@@ -557,15 +558,15 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
          /* Write the month */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LOG LEFT_TOP\">"
-                            "%04u-%02u&nbsp;"
+                            "%04u-%02u: "
                             "</td>",
 	          Date.Year,Date.Month);
 
          /* Draw bar proportional to number of pages generated */
-         Sta_DrawBarNumHits ('c',
+         Rep_DrawBarNumHits ('c',
                              M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
                         	                                           0.0,
-                             Hits.Max,Hits.Total,500);
+                             Hits.Max,500);
 
          /* Decrease month */
          Dat_GetMonthBefore (&Date,&Date);
@@ -582,12 +583,12 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
      /* Write the month */
      fprintf (Gbl.F.Out,"<tr>"
 	                "<td class=\"LOG LEFT_TOP\">"
-	                "%04u-%02u&nbsp;"
+	                "%04u-%02u"
 	                "</td>",
               Date.Year,Date.Month);
 
      /* Draw bar proportional to number of pages generated */
-     Sta_DrawBarNumHits ('c',0.0,Hits.Max,Hits.Total,500);
+     Rep_DrawBarNumHits ('c',0.0,Hits.Max,500);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
@@ -595,3 +596,38 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
 
    fprintf (Gbl.F.Out,"</table>");
   }
+
+/*****************************************************************************/
+/********************* Draw a bar with the number of hits ********************/
+/*****************************************************************************/
+
+static void Rep_DrawBarNumHits (char Color,float HitsNum,float HitsMax,unsigned MaxBarWidth)
+  {
+   unsigned BarWidth;
+
+   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+
+   if (HitsNum != 0.0)
+     {
+      /***** Draw bar with a with proportional to the number of hits *****/
+      BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
+      if (BarWidth == 0)
+         BarWidth = 1;
+      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
+	                 " alt=\"\" title=\"\""
+                         " class=\"LEFT_TOP\""
+	                 " style=\"width:%upx; height:18px;\" />"
+                         "&nbsp;",
+	       Gbl.Prefs.IconsURL,Color,BarWidth);
+
+      /***** Write the number of hits *****/
+      Str_WriteFloatNum (HitsNum);
+     }
+   else
+      /***** Write the number of clicks *****/
+      fprintf (Gbl.F.Out,"0");
+
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
+  }
+

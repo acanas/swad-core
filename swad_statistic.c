@@ -176,6 +176,8 @@ static void Sta_WriteDegree (long DegCod);
 static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                                       MYSQL_RES *mysql_res);
 
+static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
+
 static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
 static void Sta_GetAndShowNumCtysInSWAD (void);
@@ -3718,7 +3720,7 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
+static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth)
   {
    unsigned BarWidth;
 

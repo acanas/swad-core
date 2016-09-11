@@ -165,8 +165,6 @@ void Pho_PutHiddenParamFigureType (void);
 void Sta_ShowUseOfPlatform (void);
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role);
 
-void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
-
 void Sta_WriteParamsDatesSeeAccesses (void);
 
 void Sta_ComputeTimeToGeneratePage (void);
