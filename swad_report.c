@@ -80,7 +80,8 @@ static void Rep_PutIconToPrintMyUsageReport (void);
 static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
 static void Rep_WriteRowCrsData (MYSQL_ROW row);
 
-static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
+static void Rep_ShowMyHitsPerYear  (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
+// static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
 
@@ -340,9 +341,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       if (NumCrss)
 	{
 	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
-		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Rol_TEACHER,Rol_TEACHER),
+		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
 		  Txt_teachers_ABBREVIATION,
-		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Rol_TEACHER,Rol_STUDENT),
+		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
 		  Txt_students_ABBREVIATION);
 
          /* List my courses with this role */
@@ -355,7 +356,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    /***** Hits *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   Rep_ShowMyHits (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+   Rep_ShowMyHitsPerYear  (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+   // fprintf (Gbl.F.Out,"<br />");
+   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -490,10 +493,94 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row)
   }
 
 /*****************************************************************************/
-/********************* Write my hits grouped by months ***********************/
+/********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
 
-static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
+static void Rep_ShowMyHitsPerYear (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
+  {
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned long NumRow;
+   unsigned ReadYear;
+   unsigned LastYear;
+   unsigned Year;
+   struct Sta_Hits Hits;
+
+   /***** Get client time zone *****/
+   Dat_GetBrowserTimeZone (BrowserTimeZone);
+
+   /***** Make the query *****/
+   sprintf (Query,"SELECT SQL_NO_CACHE "
+		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
+		  "COUNT(*) FROM log_full"
+                  " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
+		  " AND UsrCod='%ld'"
+		  " GROUP BY Year DESC",
+	    BrowserTimeZone,
+            (long) FirstClickTimeUTC,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+
+   /***** Initialize first year *****/
+   Gbl.DateRange.DateIni.Date.Year = 1900 + tm_FirstClickTime->tm_year;
+
+   /***** Initialize LastYear *****/
+   LastYear = Gbl.Now.Date.Year;
+
+   /***** Compute maximum number of hits per year *****/
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+
+   /***** Write rows *****/
+   mysql_data_seek (mysql_res,0);
+   for (NumRow = 1;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the year (in row[0] is the date in YYYY format) */
+      if (sscanf (row[0],"%04u",&ReadYear) != 1)
+	 Lay_ShowErrorAndExit ("Wrong date.");
+
+      /* Get number hits (in row[1]) */
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+
+      for (Year = LastYear;
+	   Year >= ReadYear;
+	   Year--)
+        {
+         /* Write the year */
+         fprintf (Gbl.F.Out,"%04u ",Year);
+
+         /* Draw bar proportional to number of hits */
+         Rep_DrawBarNumHits (Year == LastYear ? Hits.Num :
+                        	                0.0,
+                             Hits.Max,Rep_MAX_BAR_WIDTH);
+        }
+      LastYear = Year;
+     }
+
+   /***** Finally, show the oldest years without clicks *****/
+   for (Year = LastYear;
+        Year >= Gbl.DateRange.DateIni.Date.Year;
+        Year--)
+     {
+      /* Write the year */
+      fprintf (Gbl.F.Out,"%04u ",Year);
+
+      /* Draw bar proportional to number of hits */
+      Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
+     }
+  }
+
+/*****************************************************************************/
+/********************* Write my hits grouped by months ***********************/
+/*****************************************************************************/
+/*
+static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
   {
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    char Query[1024];
@@ -508,10 +595,10 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
    unsigned NumMonthsBetweenLastDateAndCurrentDate;
    struct Sta_Hits Hits;
 
-   /***** Get client time zone *****/
+   ***** Get client time zone *****
    Dat_GetBrowserTimeZone (BrowserTimeZone);
 
-   /***** Make the query *****/
+   ***** Make the query *****
    sprintf (Query,"SELECT SQL_NO_CACHE "
 		  "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
 		  "COUNT(*) FROM log_full"
@@ -523,18 +610,18 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
-   /***** Initialize first date *****/
+   ***** Initialize first date *****
    Gbl.DateRange.DateIni.Date.Year  = 1900 + tm_FirstClickTime->tm_year;
    Gbl.DateRange.DateIni.Date.Month = 1 + tm_FirstClickTime->tm_mon;
    Gbl.DateRange.DateIni.Date.Day   = tm_FirstClickTime->tm_mday;
 
-   /***** Initialize LastDate *****/
+   ***** Initialize LastDate *****
    Dat_AssignDate (&LastDate,&Gbl.Now.Date);
 
-   /***** Compute maximum number of pages generated per month *****/
+   ***** Compute maximum number of hits per month *****
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
-   /***** Write rows *****/
+   ***** Write rows *****
    mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
@@ -542,11 +629,11 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the year and the month (in row[0] is the date in YYYYMM format) */
+      * Get the year and the month (in row[0] is the date in YYYYMM format) *
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
-      /* Get number hits (in row[1]) */
+      * Get number hits (in row[1]) *
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
@@ -555,37 +642,37 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
 	   M <= NumMonthsBetweenLastDateAndCurrentDate;
 	   M++)
         {
-         /* Write the month */
+         * Write the month *
          fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
 
-         /* Draw bar proportional to number of hits */
+         * Draw bar proportional to number of hits *
          Rep_DrawBarNumHits (M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
                         	                                           0.0,
                              Hits.Max,Rep_MAX_BAR_WIDTH);
 
-         /* Decrease month */
+         * Decrease month *
          Dat_GetMonthBefore (&Date,&Date);
         }
       Dat_AssignDate (&LastDate,&Date);
      }
 
-  /***** Finally, show the oldest months without clicks *****/
+  ***** Finally, show the oldest months without clicks *****
   NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
   for (M = 1;
        M <= NumMonthsBetweenLastDateAndCurrentDate;
        M++)
     {
-     /* Write the month */
+     * Write the month *
      fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
 
-     /* Draw bar proportional to number of hits */
+     * Draw bar proportional to number of hits *
      Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
 
-     /* Decrease month */
+     * Decrease month *
      Dat_GetMonthBefore (&Date,&Date);
     }
   }
-
+*/
 /*****************************************************************************/
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
