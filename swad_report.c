@@ -42,6 +42,14 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Rep_MAX_BAR_WIDTH 75	// Maximum width of graphic bar
+// #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
+// #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
+// #define Rep_BLOCK "&block;"	// HTML code for a block in graphic bar
+// #define Rep_BLOCK "&equiv;"	// HTML code for a block in graphic bar
+// #define Rep_BLOCK "&bull;"	// HTML code for a block in graphic bar
+#define Rep_BLOCK "&squf;"	// HTML code for a block in graphic bar
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -73,7 +81,8 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
 static void Rep_WriteRowCrsData (MYSQL_ROW row);
 
 static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
-static void Rep_DrawBarNumHits (char Color,float HitsNum,float HitsMax,unsigned MaxBarWidth);
+static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
+                                unsigned MaxBarWidth);
 
 /*****************************************************************************/
 /********* Show my usage report (report on my use of the platform) ***********/
@@ -346,13 +355,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    /***** Hits *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   fprintf (Gbl.F.Out,"<tt>2016-04: &block;&block;&block; 300</tt><br />");
-   fprintf (Gbl.F.Out,"<tt>2016-05: &block; 100</tt><br />");
-   fprintf (Gbl.F.Out,"<tt>2016-06: 0</tt><br />");
-   fprintf (Gbl.F.Out,"<tt>2016-07: &block;&block;&block;&block;&block; 500</tt><br />");
-   fprintf (Gbl.F.Out,"<tt>2016-08: &block;&block;&block;&block;&block;&block;&block;&block;&block; 900</tt><br />");
-   fprintf (Gbl.F.Out,"<tt>2016-09: &block;&block;&block;&block;&block;&block; 600</tt><br />");
-
    Rep_ShowMyHits (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
    /***** End frame *****/
@@ -532,8 +534,6 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
    /***** Compute maximum number of pages generated per month *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
-   fprintf (Gbl.F.Out,"<table>");
-
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
@@ -546,7 +546,7 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
       if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
-      /* Get number of pages generated (in row[1]) */
+      /* Get number hits (in row[1]) */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
 
       Dat_AssignDate (&Date,&LastDate);
@@ -556,17 +556,12 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
 	   M++)
         {
          /* Write the month */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG LEFT_TOP\">"
-                            "%04u-%02u: "
-                            "</td>",
-	          Date.Year,Date.Month);
+         fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
 
-         /* Draw bar proportional to number of pages generated */
-         Rep_DrawBarNumHits ('c',
-                             M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
+         /* Draw bar proportional to number of hits */
+         Rep_DrawBarNumHits (M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
                         	                                           0.0,
-                             Hits.Max,500);
+                             Hits.Max,Rep_MAX_BAR_WIDTH);
 
          /* Decrease month */
          Dat_GetMonthBefore (&Date,&Date);
@@ -581,53 +576,42 @@ static void Rep_ShowMyHits (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTim
        M++)
     {
      /* Write the month */
-     fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG LEFT_TOP\">"
-	                "%04u-%02u"
-	                "</td>",
-              Date.Year,Date.Month);
+     fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
 
-     /* Draw bar proportional to number of pages generated */
-     Rep_DrawBarNumHits ('c',0.0,Hits.Max,500);
+     /* Draw bar proportional to number of hits */
+     Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
 
      /* Decrease month */
      Dat_GetMonthBefore (&Date,&Date);
     }
-
-   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-static void Rep_DrawBarNumHits (char Color,float HitsNum,float HitsMax,unsigned MaxBarWidth)
+static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
+                                unsigned MaxBarWidth)
   {
    unsigned BarWidth;
-
-   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+   unsigned i;
 
    if (HitsNum != 0.0)
      {
       /***** Draw bar with a with proportional to the number of hits *****/
       BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
-      if (BarWidth == 0)
-         BarWidth = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x14.gif\""
-	                 " alt=\"\" title=\"\""
-                         " class=\"LEFT_TOP\""
-	                 " style=\"width:%upx; height:18px;\" />"
-                         "&nbsp;",
-	       Gbl.Prefs.IconsURL,Color,BarWidth);
+      for (i = 0;
+	   i < BarWidth;
+	   i++)
+         fprintf (Gbl.F.Out,Rep_BLOCK);
 
       /***** Write the number of hits *****/
+      fprintf (Gbl.F.Out," ");
       Str_WriteFloatNum (HitsNum);
      }
    else
       /***** Write the number of clicks *****/
       fprintf (Gbl.F.Out,"0");
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"<br />");
   }
-
