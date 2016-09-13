@@ -681,9 +681,24 @@ void Dat_GetIniEndDatesFromForm (void)
   {
    /***** Get initial date *****/
    Gbl.DateRange.TimeUTC[0] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   if (Gbl.DateRange.TimeUTC[0])
+      /* Convert time UTC to a local date */
+      Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
+   else	// Gbl.DateRange.TimeUTC[0] == 0 ==> initial date not specified
+     {
+      Gbl.tblock->tm_year  = Cfg_LOG_START_YEAR - 1900;
+      Gbl.tblock->tm_mon   =  0;	// January
+      Gbl.tblock->tm_mday  =  1;
+      Gbl.tblock->tm_hour  =  0;
+      Gbl.tblock->tm_min   =  0;
+      Gbl.tblock->tm_sec   =  0;
+      Gbl.tblock->tm_isdst = -1;	// a negative value means that mktime() should
+					// (use timezone information and system databases to)
+					// attempt to determine whether DST
+					// is in effect at the specified time.
+      Gbl.DateRange.TimeUTC[0] = mktime (Gbl.tblock);
+     }
 
-   /* Convert current time UTC to a local date */
-   Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
    Gbl.DateRange.DateIni.Date.Year   = Gbl.tblock->tm_year + 1900;
    Gbl.DateRange.DateIni.Date.Month  = Gbl.tblock->tm_mon + 1;
    Gbl.DateRange.DateIni.Date.Day    = Gbl.tblock->tm_mday;
@@ -693,9 +708,12 @@ void Dat_GetIniEndDatesFromForm (void)
 
    /***** Get end date *****/
    Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
+   if (Gbl.DateRange.TimeUTC[1] == 0)	// Gbl.DateRange.TimeUTC[1] == 0 ==> end date not specified
+      Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
 
    /* Convert current time UTC to a local date */
    Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[1]);
+
    Gbl.DateRange.DateEnd.Date.Year   = Gbl.tblock->tm_year + 1900;
    Gbl.DateRange.DateEnd.Date.Month  = Gbl.tblock->tm_mon + 1;
    Gbl.DateRange.DateEnd.Date.Day    = Gbl.tblock->tm_mday;

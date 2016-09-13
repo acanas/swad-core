@@ -1174,7 +1174,6 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 
    /***** Update number of clicks and score of the question *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-      Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
    if (AnswerIsNotBlank)
       sprintf (Query,"UPDATE tst_questions"
 	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,Score=Score+(%lf)"
