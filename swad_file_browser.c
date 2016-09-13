@@ -11388,7 +11388,8 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
 
    /***** Return nothing on error *****/
    SummaryStr[0] = '\0';	// Return nothing on error
-   *ContentStr = NULL;
+   if (GetContent && ContentStr)
+      *ContentStr = NULL;
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = FilCod;
@@ -11405,7 +11406,7 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
       Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
    /***** Copy some file metadata into content string *****/
-   if (GetContent)
+   if (GetContent && ContentStr)
      {
       if ((*ContentStr = (char *) malloc (Brw_MAX_BYTES_FILE_CONTENT_STR)))
 	{

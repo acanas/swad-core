@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <string.h>		// For string functions
+#include <time.h>		// For time functions (mktime...)
 
 #include "swad_config.h"
 #include "swad_database.h"
@@ -696,7 +697,8 @@ void Dat_GetIniEndDatesFromForm (void)
 					// (use timezone information and system databases to)
 					// attempt to determine whether DST
 					// is in effect at the specified time.
-      Gbl.DateRange.TimeUTC[0] = mktime (Gbl.tblock);
+      if ((Gbl.DateRange.TimeUTC[0] = mktime (Gbl.tblock)) < 0)
+	 Gbl.DateRange.TimeUTC[0] = (time_t) 0;
      }
 
    Gbl.DateRange.DateIni.Date.Year   = Gbl.tblock->tm_year + 1900;
