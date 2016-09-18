@@ -131,17 +131,22 @@
 // TODO: Send attached photos via SOAP?
 // TODO: Upload photos/files from SWADroid using MIME attachments
 
+// TODO: If a user creates a request for inscription, and the user is removed ==> mark possible notifications as removed
+
+// TODO: Passwords with % do not work
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.254.2 (2016-09-13)"
+#define Log_PLATFORM_VERSION	"SWAD 15.255 (2016-09-18)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.255:   Sep 18, 2016	Migration to new server. (204804 lines)
         Version 15.254.2: Sep 13, 2016	Fixed bug while getting summary and content of a social note related to a new file. (204706 lines)
         Version 15.254.1: Sep 13, 2016	Fixed bugs related to tests, reported by Rafael Montoya Juárez. (204702 lines)
         Version 15.254:   Sep 12, 2016	Hits per year in user's usage report. (204685 lines)

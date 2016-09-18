@@ -40487,6 +40487,50 @@ const char *Txt_TAGLINE_BR =
 	"plataforma de apoio<br />ao ensino (UGR)";
 # endif
 
+#elif defined ODE_UGR_ES		// ode.ugr.es ************************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma de suport a la doc&egrave;ncia (UGR)";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung der Lehre (UGR)";
+# elif L==3
+	"platform to support teaching (UGR)";
+# elif L==4
+	"plataforma de apoyo a la docencia (UGR)";
+# elif L==5
+	"plate-forme pour appuyer l'enseignement (UGR)";
+# elif L==6
+	"plataforma de apoyo a la docencia (UGR)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere l'insegnamento (UGR)";
+# elif L==8
+	"platforma do wspierania nauczania (UGR)";
+# elif L==9
+	"plataforma de apoio ao ensino (UGR)";
+# endif
+
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma de suport<br />a la doc&egrave;ncia (UGR)";
+# elif L==2
+	"Plattform zur Unterst&uuml;tzung<br />der Lehre (UGR)";
+# elif L==3
+	"platform to support<br />teaching (UGR)";
+# elif L==4
+	"plataforma de apoyo<br />a la docencia (UGR)";
+# elif L==5
+	"plate-forme pour appuyer<br />l'enseignement (UGR)";
+# elif L==6
+	"plataforma de apoyo<br />a la docencia (UGR)";	// Okoteve traducción
+# elif L==7
+	"piattaforma per sostenere<br />l'insegnamento (UGR)";
+# elif L==8
+	"platforma do wspierania<br />nauczania (UGR)";
+# elif L==9
+	"plataforma de apoio<br />ao ensino (UGR)";
+# endif
+
 #elif defined SWADBERRY_UGR_ES		// swadberry.ugr.es *******************
 
 const char *Txt_TAGLINE =
