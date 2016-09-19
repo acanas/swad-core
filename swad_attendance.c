@@ -1262,6 +1262,7 @@ void Att_RecFormAttEvent (void)
       /* Get data of the old (current) attendance event from database */
       OldAtt.AttCod = ReceivedAtt.AttCod;
       Att_GetDataOfAttEventByCodAndCheckCrs (&OldAtt);
+      ReceivedAtt.Hidden = OldAtt.Hidden;
      }
 
    /***** Get start/end date-times *****/
@@ -1377,10 +1378,13 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
    /***** Update the data of the attendance event *****/
    sprintf (Query,"UPDATE att_events SET "
+                  "Hidden='%c',"
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "CommentTchVisible='%c',Title='%s',Txt='%s'"
                   " WHERE AttCod='%ld' AND CrsCod='%ld'",
+            Att->Hidden ? 'Y' :
+        	          'N',
             Att->TimeUTC[Att_START_TIME],
             Att->TimeUTC[Att_END_TIME  ],
             Att->CommentTchVisible ? 'Y' :
