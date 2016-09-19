@@ -1583,44 +1583,43 @@ mysql> DESCRIBE msg_content;
 | MsgCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
 | Subject    | text         | NO   | MUL | NULL    |                |
 | Content    | longtext     | NO   |     | NULL    |                |
-| ImageName  | varchar(43)  | NO   |     | NULL    |                |
-| ImageTitle | varchar(255) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255) | NO   |     | NULL    |                |
+| ImageName  | varchar(43)  | NO   |     |         |                |
+| ImageTitle | varchar(255) | NO   |     |         |                |
+| ImageURL   | varchar(255) | NO   |     |         |                |
 +------------+--------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content ("
                    "MsgCod INT NOT NULL AUTO_INCREMENT,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL DEFAULT '',"
+                   "ImageTitle VARCHAR(255) NOT NULL DEFAULT '',"
+                   "ImageURL VARCHAR(255) NOT NULL DEFAULT '',"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_content_deleted *****/
 /*
-mysql> DESCRIBE msg_content_deleted;
-+------------+--------------+------+-----+---------+-------+
+mysql> DESCRIBE msg_content_deleted;                                                                    +------------+--------------+------+-----+---------+-------+
 | Field      | Type         | Null | Key | Default | Extra |
 +------------+--------------+------+-----+---------+-------+
 | MsgCod     | int(11)      | NO   | PRI | NULL    |       |
 | Subject    | text         | NO   | MUL | NULL    |       |
 | Content    | longtext     | NO   |     | NULL    |       |
-| ImageName  | varchar(43)  | NO   |     | NULL    |       |
-| ImageTitle | varchar(255) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255) | NO   |     | NULL    |       |
+| ImageName  | varchar(43)  | NO   |     |         |       |
+| ImageTitle | varchar(255) | NO   |     |         |       |
+| ImageURL   | varchar(255) | NO   |     |         |       |
 +------------+--------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content_deleted ("
                    "MsgCod INT NOT NULL,"
                    "Subject TEXT NOT NULL,"
                    "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
+                   "ImageName VARCHAR(43) NOT NULL DEFAULT '',"
+                   "ImageTitle VARCHAR(255) NOT NULL DEFAULT '',"
+                   "ImageURL VARCHAR(255) NOT NULL DEFAULT '',"
                    "UNIQUE INDEX(MsgCod),"
                    "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 

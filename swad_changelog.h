@@ -139,13 +139,23 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.256 (2016-09-19)"
+#define Log_PLATFORM_VERSION	"SWAD 15.256.1 (2016-09-19)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.256.1: Sep 19, 2016	Fixed bug in web service while sending a message.
+					Added default values in some database fields. (204741 lines)
+					6 changes necessary in database:
+ALTER TABLE msg_content CHANGE COLUMN ImageName ImageName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE msg_content CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE msg_content CHANGE COLUMN ImageURL ImageURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageName ImageName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageTitle ImageTitle VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageURL ImageURL VARCHAR(255) NOT NULL DEFAULT '';
+
         Version 15.256:   Sep 19, 2016	PRADO web service removed from swad.ugr.es. (204722 lines)
         Version 15.255:   Sep 18, 2016	Migration to new server. (204804 lines)
         Version 15.254.2: Sep 13, 2016	Fixed bug while getting summary and content of a social note related to a new file. (204706 lines)

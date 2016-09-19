@@ -3307,8 +3307,15 @@ int swad__sendMessage (struct soap *soap,
 /*****************************************************************************/
 /************************* Send a message to one user ************************/
 /*****************************************************************************/
-
-static int Svc_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content)
+/*
+Svc_SendMessageToUsr ((long) messageCode,
+                      Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,
+                      NotifyByEmail,subject,body)) != SOAP_OK)
+*/
+static int Svc_SendMessageToUsr (long OriginalMsgCod,
+                                 long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,
+                                 bool NotifyByEmail,
+                                 const char *Subject,const char *Content)
   {
    static bool MsgAlreadyInserted = false;
    static long NewMsgCod;
@@ -3319,8 +3326,10 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long Repl
      {
       /***** Insert message subject and body in the database *****/
       /* Build query */
-      sprintf (Query,"INSERT INTO msg_content (Subject,Content)"
-                     " VALUES ('%s','%s')",Subject,Content);
+      sprintf (Query,"INSERT INTO msg_content"
+	             " (Subject,Content,ImageName,ImageTitle,ImageURL)"
+                     " VALUES ('%s','%s','','','')",
+                     Subject,Content);
 
       /* Get the code of the inserted item */
       NewMsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
@@ -3358,7 +3367,8 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long Repl
    if (RecipientUsrCod == ReplyUsrCod)
      {
       /***** ...then update received message setting Replied field to true *****/
-      sprintf (Query,"UPDATE msg_rcv SET Replied='Y' WHERE MsgCod='%ld' AND UsrCod='%ld'",
+      sprintf (Query,"UPDATE msg_rcv SET Replied='Y'"
+	             " WHERE MsgCod='%ld' AND UsrCod='%ld'",
                OriginalMsgCod,SenderUsrCod);
       DB_QueryUPDATE (Query,"can not update a received message");
      }
