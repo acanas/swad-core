@@ -513,8 +513,10 @@ void Cht_OpenChatWindow (void)
    Gbl.Layout.HTMLStartWritten = true;
 
    /***** Copy index.html file until the end of the applet code *****/
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"<applet",Str_NO_SKIP_HTML_COMMENTS);
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,">",Str_NO_SKIP_HTML_COMMENTS);
+   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"<applet",
+                                             Str_NO_SKIP_HTML_COMMENTS);
+   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,">",
+                                             Str_NO_SKIP_HTML_COMMENTS);
 
    /***** Write parameters *****/
    fprintf (Gbl.F.Out,"\n<param name=\"nick\" value=\"N%s\">",
@@ -538,7 +540,8 @@ void Cht_OpenChatWindow (void)
 	    ListRoomFullNames);
 
    /***** Copy index.html file until the end *****/
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"</html>",Str_NO_SKIP_HTML_COMMENTS);
+   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"</html>",
+                                             Str_NO_SKIP_HTML_COMMENTS);
 
    /***** Close index.html file *****/
    fclose (FileChat);

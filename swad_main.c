@@ -84,10 +84,10 @@ int main (int argc, char *argv[])
 		      "<head><title>%s</title></head>"
 		      "<body><br /><br /><br /><br />"
 		      "<h1 class=\"CENTER_MIDDLE\">"
-		      "%s est&aacute; parado por migraci&oacute;n a un nuevo servidor"
+		      "Estamos migrando %s a un nuevo servidor"
 		      "</h1>"
 		      "<h2 class=\"CENTER_MIDDLE\">"
-		      "Esperamos que vuelva a funcionar a lo largo del d&iacute;a (lunes 18 de septiembre)"
+		      "Volver&aacute; a funcionar a lo largo del lunes 19 de septiembre"
 		      "</h2>"
 		      "</body>"
 		      "</html>",

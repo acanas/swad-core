@@ -31,7 +31,6 @@
 #define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
-//#define ODE_UGR_ES		// 150.214.203.216
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
 /*****************************************************************************/
@@ -196,6 +195,14 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
+#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
+#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
+#define Cfg_EXTERNAL_LOGIN_URL			""
+#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
+#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
+#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
+#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
+/*
 #define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
 #define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
 #define Cfg_EXTERNAL_LOGIN_URL			"https://oficinavirtual.ugr.es/"
@@ -203,69 +210,7 @@
 #define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	"pradosession"
 #define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
 #define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
-
-#define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
-"  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
-"  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
-"  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
-"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');" \
-"  ga('create', 'UA-42150741-1', 'ugr.es', {" \
-"    'anonymizeIp': true," \
-"    'storage': 'none'," \
-"    'clientId': window.localStorage.getItem('ga_clientId')" \
-"  });" \
-"  ga(function(tracker) {" \
-"    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));" \
-"  });" \
-"  ga('send', 'pageview');" \
-"</script>"
-
-#elif defined ODE_UGR_ES			// ode.ugr.es 150.214.203.216 *************************
-
-#define Cfg_PLATFORM_SHORT_NAME			"SWAD"
-#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
-#define Cfg_PLATFORM_SERVER			"150.214.203.216"			// Server name (main part of the URL)
-#define Cfg_URL_SWAD_CGI			"https://150.214.203.216"		// Without ending slash
-#define Cfg_URL_SWAD_PUBLIC			"https://150.214.203.216/swad"		// Without ending slash
-#define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin"			// Directory for this CGI and other commands called by it
-#define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
-#define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
-
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr128x64.png"				// Logo displayed in the top of the page
-#define Cfg_PLATFORM_LOGO_SMALL_WIDTH		80
-#define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr280x64.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		175
-#define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
-
-#define Cfg_PLATFORM_RESPONSIBLE_NAME		"UGR"					// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"swad@ugr.es"				// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// E-mail address from where automatic e-mails will be sent
-#define Cfg_DATABASE_HOST			"localhost"				// Database host
-#define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
-#define Cfg_LOG_START_YEAR			2005					// Year when the log started in the database
-
-// Footer of page with info about the institution where this platform is installed
-#define Cfg_ABOUT_NAME				"Universidad de Granada"
-#define Cfg_ABOUT_URL				"http://www.ugr.es/"
-#define Cfg_ABOUT_LOGO				"ugr100x32.png"
-#define Cfg_ABOUT_LOGO_WIDTH			100
-#define Cfg_ABOUT_LOGO_HEIGHT			32
-
-#define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
-#define Cfg_EXTERNAL_LOGIN_URL			"https://oficinavirtual.ugr.es/"
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		"pradouser"
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	"pradosession"
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-
+*/
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
 
 #define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
