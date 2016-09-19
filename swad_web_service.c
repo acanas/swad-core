@@ -153,7 +153,9 @@ static const char *Svc_Functions[1+Svc_NUM_FUNCTIONS] =
    "sendAttendanceUsers",	// 22
    "createAccount",		// 23
    "getMarks",			// 24
-   "findUsers",			// 25
+   "getTrivialQuestion",	// 25
+   "findUsers",			// 26
+   "removeAttendanceEvent",	// 27
   };
 
 /* Web service roles (they do not match internal swad-core roles) */
@@ -2379,15 +2381,15 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
 int swad__removeAttendanceEvent (struct soap *soap,
                                  char *wsKey,int attendanceEventCode,					// input
-                                 struct swad__sendAttendanceEventOutput *sendAttendanceEventOut)	// output
+                                 struct swad__removeAttendanceEventOutput *removeAttendanceEventOut)	// output
   {
    int ReturnCode;
    struct AttendanceEvent Att;
 
    /***** Initializations *****/
    Gbl.soap = soap;
-   Gbl.WebService.Function = Svc_sendAttendanceEvent;
-   sendAttendanceEventOut->attendanceEventCode = 0;
+   Gbl.WebService.Function = Svc_removeAttendanceEvent;
+   removeAttendanceEventOut->attendanceEventCode = 0;
 
    /***** Check web service key *****/
    if ((ReturnCode = Svc_CheckWSKey (wsKey)) != SOAP_OK)
@@ -2435,7 +2437,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    /***** Remove the attendance event from database *****/
    Att_RemoveAttEventFromDB (Att.AttCod);
 
-   sendAttendanceEventOut->attendanceEventCode = Att.AttCod;
+   removeAttendanceEventOut->attendanceEventCode = Att.AttCod;
 
    return SOAP_OK;
   }

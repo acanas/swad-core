@@ -146,6 +146,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 15.256.2: Sep 19, 2016	Fixed bug in web service function removeAttendanceEvent, reported by Rubén Martín Hidalgo. (? lines)
         Version 15.256.1: Sep 19, 2016	Fixed bug in web service while sending a message.
 					Added default values in some database fields. (204741 lines)
 					6 changes necessary in database:
