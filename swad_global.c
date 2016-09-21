@@ -443,6 +443,7 @@ void Gbl_Cleanup (void)
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&
        !Gbl.HiddenParamsInsertedIntoDB)
       Ses_RemoveHiddenParFromThisSession ();
+   Usr_FreeMyCourses ();
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);
    Usr_UsrDataDestructor (&Gbl.Usrs.Other.UsrDat);
    Rec_FreeListFields ();

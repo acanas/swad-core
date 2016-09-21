@@ -115,6 +115,8 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
 
+static void Usr_RemoveTemporaryTableMyCourses (void);
+
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
@@ -857,12 +859,12 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    // The temporary table achieves speedup from ~2s to few ms
 
    /***** Remove temporary table if exists *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
    /***** Create temporary table with all my courses for a role *****/
-   sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
+   sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
 	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
 	          " ENGINE=MEMORY"
 	          " SELECT CrsCod FROM crs_usr"
@@ -873,14 +875,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
    /***** Get the number of teachers in a course from database ******/
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-	          " FROM crs_usr,my_courses_tmp"
-                  " WHERE crs_usr.CrsCod=my_courses_tmp.CrsCod"
+	          " FROM crs_usr,usr_courses_tmp"
+                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
                   " AND crs_usr.Role='%u'",
             (unsigned) OthersRole);
    NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
    /***** Remove temporary table *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
@@ -893,13 +895,13 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get if a user shares any course with me from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_usr WHERE UsrCod='%ld'"
-                  " AND CrsCod IN"
-                  " (SELECT CrsCod FROM crs_usr WHERE UsrCod='%ld')",
-            UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
+	          " WHERE UsrCod='%ld'"
+	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
+            UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
   }
 
@@ -912,12 +914,11 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    char Query[512];
 
    /***** Get if a user shares any course with me from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM"
-                  "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS my_courses,"
+   sprintf (Query,"SELECT COUNT(*) FROM my_courses_tmp,"
                   "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS usr_courses"
-                  " WHERE my_courses.CrsCod=usr_courses.CrsCod"
-                  " AND my_courses.Role<>usr_courses.Role",
-            Gbl.Usrs.Me.UsrDat.UsrCod,UsrCod);
+                  " WHERE my_courses_tmp.CrsCod=usr_courses.CrsCod"
+                  " AND my_courses_tmp.Role<>usr_courses.Role",
+            UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
   }
 
@@ -1068,6 +1069,7 @@ void Usr_GetMyDegrees (void)
 
 void Usr_GetMyCourses (void)
   {
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrs;
@@ -1079,34 +1081,90 @@ void Usr_GetMyCourses (void)
      {
       Gbl.Usrs.Me.MyCourses.Num = 0;
 
-      /***** Get my courses from database *****/
-      if ((NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Courses found
-         for (NumCrs = 0;
-              NumCrs < NumCrss;
-              NumCrs++)
-           {
-            /* Get next course */
-            row = mysql_fetch_row (mysql_res);
+      if (Gbl.Usrs.Me.Logged)
+	{
+	 /***** Remove temporary table with my courses *****/
+	 Usr_RemoveTemporaryTableMyCourses ();
 
-            /* Get course code */
-            if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-              {
-               if (Gbl.Usrs.Me.MyCourses.Num == Crs_MAX_COURSES_PER_USR)
-                  Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
+	 /***** Create temporary table with my courses *****/
+	 sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp "
+			"(CrsCod INT NOT NULL,"
+			"Role TINYINT NOT NULL,"
+			"DegCod INT NOT NULL,"
+			"UNIQUE INDEX(CrsCod),INDEX(Role)) ENGINE=MEMORY"
+			" SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
+			" FROM crs_usr,courses,degrees"
+			" WHERE crs_usr.UsrCod='%ld'"
+			" AND crs_usr.CrsCod=courses.CrsCod"
+			" AND courses.DegCod=degrees.DegCod"
+			" ORDER BY degrees.ShortName,courses.ShortName",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (mysql_query (&Gbl.mysql,Query))
+	    DB_ExitOnMySQLError ("can not create temporary table");
 
-               Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].CrsCod = CrsCod;
-               Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
-               Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
-               Gbl.Usrs.Me.MyCourses.Num++;
-              }
-           }
+	 /***** Get my courses from database *****/
+	 sprintf (Query,"SELECT CrsCod,Role,DegCod FROM my_courses_tmp");
+	 NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the courses you belong to");
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Get my courses from database *****/
+	 for (NumCrs = 0;
+	      NumCrs < NumCrss;
+	      NumCrs++)
+	   {
+	    /* Get next course */
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get course code */
+	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	      {
+	       if (Gbl.Usrs.Me.MyCourses.Num == Crs_MAX_COURSES_PER_USR)
+		  Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
+
+	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].CrsCod = CrsCod;
+	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
+	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
+	       Gbl.Usrs.Me.MyCourses.Num++;
+	      }
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
 
       /***** Set boolean that indicates that my courses are yet filled *****/
       Gbl.Usrs.Me.MyCourses.Filled = true;
      }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my courses ************************/
+/*****************************************************************************/
+
+void Usr_FreeMyCourses (void)
+  {
+   if (Gbl.Usrs.Me.MyCourses.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCourses.Filled = false;
+      Gbl.Usrs.Me.MyCourses.Num    = 0;
+
+      /***** Remove temporary table with my courses *****/
+      Usr_RemoveTemporaryTableMyCourses ();
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my courses ************************/
+/*****************************************************************************/
+
+static void Usr_RemoveTemporaryTableMyCourses (void)
+  {
+   char Query[128];
+
+   /***** Remove temporary table with my courses *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary table");
   }
 
 /*****************************************************************************/
@@ -1434,7 +1492,7 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
    char Query[512];
 
    /***** Get from database the courses a user belongs to *****/
-   if (DegCod > 0)                // Courses in a degree
+   if (DegCod > 0)	// Courses in a degree
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses"
                      " WHERE crs_usr.UsrCod='%ld'"
@@ -1442,7 +1500,7 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
                      " AND courses.DegCod='%ld'"
                      " ORDER BY courses.ShortName",
                UsrCod,DegCod);
-   else                        // All the courses
+   else			// All the courses
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses,degrees"
                      " WHERE crs_usr.UsrCod='%ld'"

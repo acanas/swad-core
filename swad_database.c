@@ -476,11 +476,11 @@ mysql> DESCRIBE connected;
 | Field         | Type       | Null | Key | Default | Extra |
 +---------------+------------+------+-----+---------+-------+
 | UsrCod        | int(11)    | NO   | PRI | NULL    |       |
-| RoleInLastCrs | tinyint(4) | NO   |     | 0       |       |
+| RoleInLastCrs | tinyint(4) | NO   | MUL | 0       |       |
 | LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
 | LastTime      | datetime   | NO   |     | NULL    |       |
 +---------------+------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS connected ("
                    "UsrCod INT NOT NULL,"
@@ -488,6 +488,7 @@ mysql> DESCRIBE connected;
                    "LastCrsCod INT NOT NULL DEFAULT -1,"
                    "LastTime DATETIME NOT NULL,"
                    "UNIQUE INDEX(UsrCod),"
+                   "INDEX(RoleInLastCrs),"
                    "INDEX(LastCrsCod))");
 
    /***** Table countries *****/

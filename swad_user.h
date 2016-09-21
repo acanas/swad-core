@@ -238,6 +238,7 @@ void Usr_GetMyInstitutions (void);
 void Usr_GetMyCentres (void);
 void Usr_GetMyDegrees (void);
 void Usr_GetMyCourses (void);
+void Usr_FreeMyCourses (void);
 bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
                                  long InsCod,
                                  bool CountOnlyAcceptedCourses);

@@ -525,6 +525,34 @@
 
 	</ul>
 
+	<p>
+	SWAD needs <code>convert</code>
+	(part of <a href="http://www.imagemagick.org/">ImageMagick</a>)
+	to convert the size and format of the images uploaded by users.
+	</p>
+
+	<ul>
+
+	<li>
+	To install <code>ImageMagick</code>:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 14.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>yum -y install ImageMagick</code><br />
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo apt-get install ImageMagick</code>
+	</td>
+	</tr>
+	</table>
+	</li>
+
+	</ul>
+
 	</li>
 
 	<li>
@@ -841,6 +869,12 @@
 	</table>
 	</p>
 
+	<p>
+	To allow the META tags in HTML content to override a charset choice, comment out this directive:<br />
+	<code>AddDefaultCharset UTF-8</code></br>
+	by adding #:<br />
+	<code>#AddDefaultCharset UTF-8</code>
+	</p>
 
 	<p>
 	Optionally, if we want to redirect from http://... to https://...

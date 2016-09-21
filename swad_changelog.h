@@ -139,13 +139,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 15.256.3 (2016-09-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.0 (2016-09-22)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.0:     Sep 22, 2016	Temporary table with my courses.
+					Added indexes to database. (204811 lines)
+					1 change necessary in database:
+ALTER TABLE connected ADD INDEX (RoleInLastCrs);
+
         Version 15.256.3: Sep 19, 2016	Fixed bug in web service function sendAttendanceEvent, reported by Rubén Martín Hidalgo. (204755 lines)
         Version 15.256.2: Sep 19, 2016	Fixed bug in web service function removeAttendanceEvent, reported by Rubén Martín Hidalgo. (204750 lines)
         Version 15.256.1: Sep 19, 2016	Fixed bug in web service while sending a message.

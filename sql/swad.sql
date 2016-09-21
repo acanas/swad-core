@@ -192,6 +192,7 @@ CREATE TABLE IF NOT EXISTS connected (
 	LastCrsCod INT NOT NULL DEFAULT -1,
 	LastTime DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod),
+	INDEX(RoleInLastCrs),
 	INDEX(LastCrsCod));
 --
 -- Table countries: stores the countries

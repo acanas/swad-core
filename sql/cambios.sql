@@ -11597,3 +11597,16 @@ CREATE TABLE IF NOT EXISTS usr_duplicated (UsrCod INT NOT NULL,InformerCod INT N
 
 SELECT DISTINCT UsrCod FROM (SELECT DISTINCT UsrCod FROM usr_IDs WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='1') UNION SELECT UsrCod FROM usr_data WHERE Surname1='' AND Surname2='' AND FirstName='') AS I;
 
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT * FROM file_view,files WHERE files.FileBrowser='9' AND files.Cod='-1' AND files.FilCod=file_view.FilCod;
