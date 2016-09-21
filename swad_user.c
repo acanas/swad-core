@@ -863,7 +863,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
-   /***** Create temporary table with all my courses for a role *****/
+   /***** Create temporary table with all user's courses for a role *****/
    sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
 	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
 	          " ENGINE=MEMORY"
@@ -912,14 +912,34 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
   {
    char Query[512];
+   bool UsrSharesAnyOfMyCrsWithDifferentRole;
+
+   /***** Remove temporary table if exists *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   /***** Create temporary table with all user's courses for a role *****/
+   sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
+		  "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
+		  "UNIQUE INDEX(CrsCod),INDEX(Role)) ENGINE=MEMORY"
+		  " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld'",
+	    UsrCod);
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Get if a user shares any course with me from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM my_courses_tmp,"
-                  "(SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld') AS usr_courses"
-                  " WHERE my_courses_tmp.CrsCod=usr_courses.CrsCod"
-                  " AND my_courses_tmp.Role<>usr_courses.Role",
-            UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
+   sprintf (Query,"SELECT COUNT(*) FROM my_courses_tmp,usr_courses_tmp"
+                  " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+                  " AND my_courses_tmp.Role<>usr_courses_tmp.Role");
+   UsrSharesAnyOfMyCrsWithDifferentRole = (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
+
+   /***** Remove temporary table if exists *****/
+   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+   if (mysql_query (&Gbl.mysql,Query))
+      DB_ExitOnMySQLError ("can not remove temporary tables");
+
+   return UsrSharesAnyOfMyCrsWithDifferentRole;
   }
 
 /*****************************************************************************/
