@@ -135,13 +135,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
    extern const char *Txt_ID;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,"Compruebe si ya existe una cuenta para usted",NULL);	// TODO: Need translation!!!
-
-   /***** Info message *****/
-   Lay_ShowAlert (Lay_INFO,"Es posible que un profesor o administrador"
-			   " ya haya creado una cuenta para usted."
-			   " Escriba su ID (DNI/c&eacute;dula)"
-			   " para comprobarlo.");	// TODO: Need translation!!!!
+   Lay_StartRoundFrame (NULL,"Compruebe si ya existe una cuenta vac&iacute;a asociada a su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -165,6 +159,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
 
 void Acc_CheckIfEmptyAccountExists (void)
   {
+   extern const char *Txt_Name;
    char NewID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
    unsigned NumUsr;
@@ -182,7 +177,11 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (NewID))
      {
-      sprintf (Query,"SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
+      sprintf (Query,"SELECT usr_data.UsrCod,"
+	             "UPPER(usr_data.FirstName),"
+	             "UPPER(usr_data.Surname1),"
+	             "UPPER(usr_data.Surname2)"
+	             " FROM usr_IDs,usr_data"
 		     " WHERE usr_IDs.UsrID='%s'"
 		     " AND usr_IDs.UsrCod=usr_data.UsrCod"
 	             " AND usr_data.Password=''",
@@ -191,39 +190,69 @@ void Acc_CheckIfEmptyAccountExists (void)
 
       if (NumUsrs)
 	{
-	 /***** Start frame and write message with number of users found *****/
+	 /***** Start frame and write message with number of accounts found *****/
 	 if (NumUsrs == 1)
-	   {
-	    Lay_StartRoundFrame (NULL,"Cuenta encontrada",NULL);	// TODO: Need translation!!!
-	    Lay_ShowAlert (Lay_SUCCESS,"Existe una cuenta de usuario vac&iacute;a asociada a su ID.");	// TODO: Need translation!!!
-	   }
+	    Lay_StartRoundFrame (NULL,"1 cuenta vac&iacute;a asociada a su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
 	 else
 	   {
-	    sprintf (Gbl.Title,"%u cuentas encontradas",
-	             NumUsrs);
+	    sprintf (Gbl.Title,"%u cuentas vac&iacute;as asociadas a su ID (DNI/c&eacute;dula)",NumUsrs);
 	    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);	// TODO: Need translation!!!
-
-	    sprintf (Gbl.Message,"Existen %u cuentas vac&iacute;as asociadas a su ID:",	// TODO: Need translation!!!
-	             NumUsrs);
-	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	   }
 
 	 /***** List users found *****/
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
+         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\">");
+
+	 for (NumUsr = 1, Gbl.RowEvenOdd = 0;
+	      NumUsr <= NumUsrs;
+	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
 	    /* Get user's code */
 	    row = mysql_fetch_row (mysql_res);
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
+	    /***** Write number of user in the list *****/
+	    fprintf (Gbl.F.Out,"<tr>"
+		               "<td rowspan=\"2\""
+		               " class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\">"
+			       "%u"
+			       "</td>",
+		     Gbl.RowEvenOdd,NumUsr);
 
-	    fprintf (Gbl.F.Out,"UsrCod = %ld",	// TODO: Change this check!!!!!!!!
-		     UsrDat.UsrCod);
+	    fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">%s: ",
+		     Gbl.RowEvenOdd,Txt_Name);
+	    if (row[1][0] ||
+		row[2][0] ||
+                row[3][0])
+	      {
+	       if (row[1][0])
+		  fprintf (Gbl.F.Out,"%c.",row[1][0]);
+	       if (row[2][0])
+		  fprintf (Gbl.F.Out,"%c.",row[2][0]);
+	       if (row[3][0])
+		  fprintf (Gbl.F.Out,"%c.",row[3][0]);
+	      }
+	    else
+	       fprintf (Gbl.F.Out,"?");
+	    fprintf (Gbl.F.Out,"</td>");
 
 	    /* Button to login with this account */
-	    Lay_PutCreateButton ("Usar cuenta");	// TODO: Need translation!!!
+	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
+		     Gbl.RowEvenOdd);
+	    Lay_PutCreateButtonInline ("Usar cuenta");	// TODO: Need translation!!!
+	    fprintf (Gbl.F.Out,"</td>"
+		               "</tr>");
+
+	    /* Courses of this user */
+	    fprintf (Gbl.F.Out,"<tr>"
+		               "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+		     Gbl.RowEvenOdd);
+	    UsrDat.Sex = Usr_SEX_UNKNOWN;
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+	    fprintf (Gbl.F.Out,"</td>"
+		               "</tr>");
 	   }
+         fprintf (Gbl.F.Out,"</table>");
 
 	 /***** End frame *****/
 	 Lay_EndRoundFrame ();

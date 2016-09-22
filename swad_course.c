@@ -3000,6 +3000,7 @@ static long Crs_GetParamOtherCrsCod (void)
 void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
   {
    extern const char *Txt_USER_in_COURSE;
+   extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -3035,7 +3036,9 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
       Lay_StartRoundFrameTable ("100%",2,NULL);
 
       /* Heading row */
-      sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+      sprintf (Gbl.Title,Txt_USER_in_COURSE,
+               Role == Rol_UNKNOWN ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNKNOWN ==> any role
+        	                     Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s:</th>"
                          "</tr>"
