@@ -139,13 +139,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.1 (2016-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 16.1.1 (2016-09-22)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.1.1:   Sep 22, 2016	Index optimization in tables of users' courses. (204829 lines)
         Version 16.1:     Sep 22, 2016	Temporary table with other user's courses. (204828 lines)
         Version 16.0:     Sep 22, 2016	Temporary table with my courses.
 					Added indexes to database. (204811 lines)

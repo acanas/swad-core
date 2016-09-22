@@ -922,7 +922,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    /***** Create temporary table with all user's courses for a role *****/
    sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
 		  "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
-		  "UNIQUE INDEX(CrsCod),INDEX(Role)) ENGINE=MEMORY"
+		  "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
 		  " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld'",
 	    UsrCod);
    if (mysql_query (&Gbl.mysql,Query))
@@ -1111,7 +1111,7 @@ void Usr_GetMyCourses (void)
 			"(CrsCod INT NOT NULL,"
 			"Role TINYINT NOT NULL,"
 			"DegCod INT NOT NULL,"
-			"UNIQUE INDEX(CrsCod),INDEX(Role)) ENGINE=MEMORY"
+			"UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
 			" SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
 			" FROM crs_usr,courses,degrees"
 			" WHERE crs_usr.UsrCod='%ld'"
