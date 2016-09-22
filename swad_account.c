@@ -139,8 +139,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
 
    /***** Info message *****/
    Lay_ShowAlert (Lay_INFO,"Es posible que un profesor o administrador"
-			   " ya haya creado una cuenta para usted"
-			   " asociada a su ID (DNI/c&eacute;dula)."
+			   " ya haya creado una cuenta para usted."
 			   " Escriba su ID (DNI/c&eacute;dula)"
 			   " para comprobarlo.");	// TODO: Need translation!!!!
 
@@ -166,33 +165,84 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
 
 void Acc_CheckIfEmptyAccountExists (void)
   {
-   struct ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
+   char NewID[ID_MAX_LENGTH_USR_ID+1];
+   unsigned NumUsrs;
    unsigned NumUsr;
-
-   Lay_ShowAlert (Lay_INFO,"Usuarios encontrados:");	// TODO: Change this check!!!!!!!!
-
-   /***** Allocate space for the list of IDs *****/
-   ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
+   struct UsrData UsrDat;
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
 
    /***** Get new user's ID from form *****/
-   Par_GetParToText ("ID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,ID_MAX_LENGTH_USR_ID);
+   Par_GetParToText ("ID",NewID,ID_MAX_LENGTH_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
-   Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
-   Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+   Str_RemoveLeadingZeros (NewID);
+   Str_ConvertToUpperText (NewID);
 
    /***** Check if there are users with this user's ID *****/
-   if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
-      if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,&ListUsrCods,false))	// User(s) found
-	{
-	 for (NumUsr = 0;
-	      NumUsr < ListUsrCods.NumUsrs;
-	      NumUsr++)
-	    fprintf (Gbl.F.Out,"UsrCod = %ld<br />",	// TODO: Change this check!!!!!!!!
-	             ListUsrCods.Lst[NumUsr]);	// User found
+   if (ID_CheckIfUsrIDIsValid (NewID))
+     {
+      sprintf (Query,"SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
+		     " WHERE usr_IDs.UsrID='%s'"
+		     " AND usr_IDs.UsrCod=usr_data.UsrCod"
+	             " AND usr_data.Password=''",
+	       NewID);
+      NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
 
-	 /* Free memory used for list of users' codes found for this ID */
-	 Usr_FreeListUsrCods (&ListUsrCods);
+      if (NumUsrs)
+	{
+	 /***** Start frame and write message with number of users found *****/
+	 if (NumUsrs == 1)
+	   {
+	    Lay_StartRoundFrame (NULL,"Cuenta encontrada",NULL);	// TODO: Need translation!!!
+	    Lay_ShowAlert (Lay_SUCCESS,"Existe una cuenta de usuario vac&iacute;a asociada a su ID.");	// TODO: Need translation!!!
+	   }
+	 else
+	   {
+	    sprintf (Gbl.Title,"%u cuentas encontradas",
+	             NumUsrs);
+	    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);	// TODO: Need translation!!!
+
+	    sprintf (Gbl.Message,"Existen %u cuentas vac&iacute;as asociadas a su ID:",	// TODO: Need translation!!!
+	             NumUsrs);
+	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	   }
+
+	 /***** List users found *****/
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
+	   {
+	    /* Get user's code */
+	    row = mysql_fetch_row (mysql_res);
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	    fprintf (Gbl.F.Out,"UsrCod = %ld",	// TODO: Change this check!!!!!!!!
+		     UsrDat.UsrCod);
+
+	    /* Button to login with this account */
+	    Lay_PutCreateButton ("Usar cuenta");	// TODO: Need translation!!!
+	   }
+
+	 /***** End frame *****/
+	 Lay_EndRoundFrame ();
 	}
+      else
+	{
+	 sprintf (Gbl.Message,"No hay ninguna cuenta vac&iacute;a asociada a su ID %s.",	// TODO: Need translation!!!
+		  NewID);
+	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+	 /**** Show form to check if I have an account *****/
+	 Acc_ShowFormCheckIfIHaveAccount ();
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   /**** Show form to create a new account *****/
+   Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
