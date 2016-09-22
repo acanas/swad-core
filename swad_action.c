@@ -1333,6 +1333,7 @@ Profile:
        1141. ActAnnSee			Mark announcement as seen
        1142. ActChgMyRol		Change type of logged user
 
+        NEW. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
        1143. ActCreUsrAcc		Create new user account
        1144. ActRemID_Me		Remove one of my user's IDs
        1145. ActNewIDMe			Create a new user's ID for me
@@ -2764,6 +2765,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
+   /* ActChkUsrAcc	*/{1584,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
 
    /* ActRemID_Me	*/{1147,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
@@ -4436,6 +4438,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeMyAgd,		// #1581
 	ActSeeMyUsgRep,		// #1582
 	ActPrnMyUsgRep,		// #1583
+	ActChkUsrAcc,		// #1584
 	};
 
 /*****************************************************************************/

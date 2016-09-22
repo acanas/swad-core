@@ -11610,3 +11610,24 @@ SELECT DISTINCT UsrCod FROM (SELECT DISTINCT UsrCod FROM usr_IDs WHERE UsrID IN 
 
 
 SELECT * FROM file_view,files WHERE files.FileBrowser='9' AND files.Cod='-1' AND files.FilCod=file_view.FilCod;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT COUNT(*) FROM msg_content WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt) AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv);
+
+
+SELECT COUNT(*) FROM msg_content LEFT JOIN msg_snt ON (msg_content.MsgCod=msg_snt.MsgCod) WHERE msg_content.MsgCod IS NULL;
+
+

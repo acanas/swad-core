@@ -68,6 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Acc_ShowFormCheckIfIHaveAccount (void);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
@@ -116,8 +117,82 @@ void Acc_ShowFormAccount (void)
       Pre_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
+      /**** Show form to check if I have an account *****/
+      Acc_ShowFormCheckIfIHaveAccount ();
+
+      /**** Show form to create a new account *****/
       Acc_ShowFormRequestNewAccountWithParams ("","");
      }
+  }
+
+/*****************************************************************************/
+/***************** Show form to check if I have an account *******************/
+/*****************************************************************************/
+
+static void Acc_ShowFormCheckIfIHaveAccount (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_ID;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,"Compruebe si ya existe una cuenta para usted",NULL);	// TODO: Need translation!!!
+
+   /***** Info message *****/
+   Lay_ShowAlert (Lay_INFO,"Es posible que un profesor o administrador"
+			   " ya haya creado una cuenta para usted"
+			   " asociada a su ID (DNI/c&eacute;dula)."
+			   " Escriba su ID (DNI/c&eacute;dula)"
+			   " para comprobarlo.");	// TODO: Need translation!!!!
+
+   /***** Form to request user's ID for possible account already created *****/
+   Act_FormStart (ActChkUsrAcc);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+		      "%s:&nbsp;"
+		      "</label>"
+		      "<input type=\"text\" name=\"ID\""
+		      " size=\"20\" maxlength=\"%u\" value=\"\" />",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
+	    ID_MAX_LENGTH_USR_ID);
+   Lay_PutConfirmButton ("Comprobar");	// TODO: Need translation!!!!
+   Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/* Check if already exists a new account without password associated to a ID */
+/*****************************************************************************/
+
+void Acc_CheckIfEmptyAccountExists (void)
+  {
+   struct ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
+   unsigned NumUsr;
+
+   Lay_ShowAlert (Lay_INFO,"Usuarios encontrados:");	// TODO: Change this check!!!!!!!!
+
+   /***** Allocate space for the list of IDs *****/
+   ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
+
+   /***** Get new user's ID from form *****/
+   Par_GetParToText ("ID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,ID_MAX_LENGTH_USR_ID);
+   // Users' IDs are always stored internally in capitals and without leading zeros
+   Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+   Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+
+   /***** Check if there are users with this user's ID *****/
+   if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
+      if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,&ListUsrCods,false))	// User(s) found
+	{
+	 for (NumUsr = 0;
+	      NumUsr < ListUsrCods.NumUsrs;
+	      NumUsr++)
+	    fprintf (Gbl.F.Out,"UsrCod = %ld<br />",	// TODO: Change this check!!!!!!!!
+	             ListUsrCods.Lst[NumUsr]);	// User found
+
+	 /* Free memory used for list of users' codes found for this ID */
+	 Usr_FreeListUsrCods (&ListUsrCods);
+	}
   }
 
 /*****************************************************************************/
