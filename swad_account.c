@@ -217,6 +217,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    row = mysql_fetch_row (mysql_res);
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
+
 	    fprintf (Gbl.F.Out,"UsrCod = %ld",	// TODO: Change this check!!!!!!!!
 		     UsrDat.UsrCod);
 

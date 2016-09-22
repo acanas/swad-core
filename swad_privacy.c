@@ -245,9 +245,13 @@ bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod)
       case Pri_VISIBILITY_UNKNOWN:
 	 return false;			// It's not me
       case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
-         return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (OtherUsrCod);	// Both users share the same course but whit different role
+         if (Gbl.Usrs.Me.Logged)
+            return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (OtherUsrCod);	// Both users share the same course but whit different role
+         return false;
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
-         return Usr_CheckIfUsrSharesAnyOfMyCrs (OtherUsrCod);	// Both users share the same course
+         if (Gbl.Usrs.Me.Logged)
+	    return Usr_CheckIfUsrSharesAnyOfMyCrs (OtherUsrCod);	// Both users share the same course
+         return false;
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
          return Gbl.Usrs.Me.Logged;
       case Pri_VISIBILITY_WORLD:	// Public, visible by everyone, even unlogged visitors
