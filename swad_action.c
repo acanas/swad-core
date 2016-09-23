@@ -1328,6 +1328,7 @@ Profile:
        1137. ActLogOut			Close session
 
        1138. ActAutUsrInt		Authentify user internally (directly from the platform)
+        NEW. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
        1139. ActAutUsrExt		Authentify user externally (remotely from an external site)
        1140. ActAutUsrChgLan		Change language to my language just after authentication
        1141. ActAnnSee			Mark announcement as seen
@@ -2760,6 +2761,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLogOut		*/{  10,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
 
    /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
+   /* ActAutUsrNew	*/{1585,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAutUsrExt	*/{ 794,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAutUsrChgLan	*/{1077,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
@@ -4439,6 +4441,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeMyUsgRep,		// #1582
 	ActPrnMyUsgRep,		// #1583
 	ActChkUsrAcc,		// #1584
+	ActAutUsrNew,		// #1585
 	};
 
 /*****************************************************************************/
@@ -4914,6 +4917,7 @@ void Act_AdjustCurrentAction (void)
             switch (Gbl.Action.Act)
               {
                case ActAutUsrInt:
+               case ActAutUsrNew:
                case ActHom:
                case ActMnu:
                case ActLogOut:

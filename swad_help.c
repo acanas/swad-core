@@ -125,6 +125,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	   {
 	    if (Gbl.Action.Act != ActAutUsrInt &&
+		Gbl.Action.Act != ActAutUsrNew &&
 		Gbl.Action.Act != ActAutUsrExt &&
                 Gbl.Action.Act != ActAutUsrChgLan)	// I am not just logged
 	      {

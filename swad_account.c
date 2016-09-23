@@ -135,7 +135,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
    extern const char *Txt_ID;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,"Compruebe si ya existe una cuenta vac&iacute;a asociada a su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
+   Lay_StartRoundFrame (NULL,"Es posible que ya le hayan inscrito con su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -177,7 +177,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    /***** Check if there are users with this user's ID *****/
    if (ID_CheckIfUsrIDIsValid (NewID))
      {
-      sprintf (Query,"SELECT usr_data.UsrCod,"
+      sprintf (Query,"SELECT usr_data.UsrCod,usr_data.EncryptedUsrCod,"
 	             "UPPER(usr_data.FirstName),"
 	             "UPPER(usr_data.Surname1),"
 	             "UPPER(usr_data.Surname2)"
@@ -192,23 +192,27 @@ void Acc_CheckIfEmptyAccountExists (void)
 	{
 	 /***** Start frame and write message with number of accounts found *****/
 	 if (NumUsrs == 1)
-	    Lay_StartRoundFrame (NULL,"1 cuenta vac&iacute;a asociada a su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
+	    Lay_StartRoundFrameTable (NULL,5,"&iquest;Cree que usted es el siguiente usuario?");	// TODO: Need translation!!!
 	 else
 	   {
-	    sprintf (Gbl.Title,"%u cuentas vac&iacute;as asociadas a su ID (DNI/c&eacute;dula)",NumUsrs);
-	    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);	// TODO: Need translation!!!
+	    sprintf (Gbl.Title,"&iquest;Cree que usted es uno de los siguientes %u usuarios?",
+	             NumUsrs);
+	    Lay_StartRoundFrameTable (NULL,5,Gbl.Title);	// TODO: Need translation!!!
 	   }
 
 	 /***** List users found *****/
-         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\">");
-
 	 for (NumUsr = 1, Gbl.RowEvenOdd = 0;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
-	    /* Get user's code */
 	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get user's code */
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	    /* Get encrypted user's code */
+	    strncpy (UsrDat.EncryptedUsrCod,row[1],sizeof (UsrDat.EncryptedUsrCod) - 1);
+	    UsrDat.EncryptedUsrCod[sizeof (UsrDat.EncryptedUsrCod) - 1] = '\0';
 
 	    /***** Write number of user in the list *****/
 	    fprintf (Gbl.F.Out,"<tr>"
@@ -220,16 +224,16 @@ void Acc_CheckIfEmptyAccountExists (void)
 
 	    fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">%s: ",
 		     Gbl.RowEvenOdd,Txt_Name);
-	    if (row[1][0] ||
-		row[2][0] ||
-                row[3][0])
+	    if (row[2][0] ||
+		row[3][0] ||
+                row[4][0])
 	      {
-	       if (row[1][0])
-		  fprintf (Gbl.F.Out,"%c.",row[1][0]);
 	       if (row[2][0])
 		  fprintf (Gbl.F.Out,"%c.",row[2][0]);
 	       if (row[3][0])
 		  fprintf (Gbl.F.Out,"%c.",row[3][0]);
+	       if (row[4][0])
+		  fprintf (Gbl.F.Out,"%c.",row[4][0]);
 	      }
 	    else
 	       fprintf (Gbl.F.Out,"?");
@@ -238,7 +242,10 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    /* Button to login with this account */
 	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		     Gbl.RowEvenOdd);
-	    Lay_PutCreateButtonInline ("Usar cuenta");	// TODO: Need translation!!!
+            Act_FormStart (ActAutUsrNew);
+            Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+	    Lay_PutCreateButtonInline ("&iexcl;Soy yo!");	// TODO: Need translation!!!
+	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</td>"
 		               "</tr>");
 
@@ -252,10 +259,9 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    fprintf (Gbl.F.Out,"</td>"
 		               "</tr>");
 	   }
-         fprintf (Gbl.F.Out,"</table>");
 
 	 /***** End frame *****/
-	 Lay_EndRoundFrame ();
+	 Lay_EndRoundFrameTable ();
 	}
       else
 	{

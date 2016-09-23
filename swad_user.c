@@ -422,8 +422,8 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)
 
       /***** Get encrypted user's code *****/
       row = mysql_fetch_row (mysql_res);
-      strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod)-1);
-      UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod)-1] = '\0';
+      strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod) - 1);
+      UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod) - 1] = '\0';
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -471,12 +471,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    row = mysql_fetch_row (mysql_res);
 
    /* Get encrypted user's code */
-   strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod)-1);
-   UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod)-1] = '\0';
+   strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod) - 1);
+   UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod) - 1] = '\0';
 
    /* Get encrypted password */
-   strncpy (UsrDat->Password,row[1],sizeof (UsrDat->Password)-1);
-   UsrDat->Password[sizeof (UsrDat->Password)-1] = '\0';
+   strncpy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
+   UsrDat->Password[sizeof (UsrDat->Password) - 1] = '\0';
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
@@ -1891,9 +1891,8 @@ void Usr_PutFormLogOut (void)
 void Usr_GetParamUsrIdLogin (void)
   {
    Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Usr_MAX_BYTES_USR_LOGIN);
-   // Users' IDs are always stored internally in capitals and without leading zeros
+   // Users' IDs are always stored internally without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-   // Str_ConvertToUpperText (Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/
@@ -2026,9 +2025,9 @@ void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
 void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void)
   {
    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)        // If parameter exists...
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If parameter exists...
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
-   else       					 // Parameter does not exist
+   else       					// Parameter does not exist
      {
       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
       Gbl.Usrs.Other.UsrDat.IDs.Num = 0;
@@ -2116,9 +2115,9 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrInt)
+	 else if (Gbl.Action.Act == ActAutUsrInt)	// Login using @nickname, e-mail or ID from form
 	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())		// User logged in
+	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
 	      {
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetUsrRoleAndPrefs ();
@@ -2131,7 +2130,25 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrExt)
+	 else if (Gbl.Action.Act == ActAutUsrNew)	// Empty account without password, login using encrypted user's code
+	   {
+	    /***** Get user's data *****/
+	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
+            Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
+            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat))	// User logged in
+	      {
+	       Gbl.Usrs.Me.Logged = true;
+	       Usr_SetUsrRoleAndPrefs ();
+
+	       Act_AdjustCurrentAction ();
+	       Ses_CreateSession ();
+
+	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
+	      }
+	    else
+	       PutFormLogin = true;
+	   }
+	 else if (Gbl.Action.Act == ActAutUsrExt)	// Login from external web service
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromExternalLogin ())	// User logged in
 	      {
@@ -2597,6 +2614,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    /***** Get my last data *****/
    Usr_GetMyLastData ();
    if (Gbl.Action.Act == ActAutUsrInt ||
+       Gbl.Action.Act == ActAutUsrNew ||
        Gbl.Action.Act == ActAutUsrExt)	// If I just logged in...
      {
       /***** WhatToSearch is stored in session,
