@@ -163,6 +163,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Do_you_think_you_are_this_user;
    extern const char *Txt_Do_you_think_you_are_one_of_these_users;
    extern const char *Txt_Name;
+   extern const char *Txt_Its_me;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
    char ID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
@@ -240,7 +241,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 		     Gbl.RowEvenOdd);
             Act_FormStart (ActAutUsrNew);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutCreateButtonInline ("&iexcl;Soy yo!");	// TODO: Need translation!!!
+	    Lay_PutCreateButtonInline (Txt_Its_me);
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</td>"
 		               "</tr>");

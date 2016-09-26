@@ -16108,6 +16108,27 @@ const char *Txt_It_is_optional_to_choose_a_group =
 	"Escolher um grupo &eacute; volunt&aacute;rio";
 #endif
 
+const char *Txt_Its_me =
+#if   L==1
+	"S&oacute;c jo!";
+#elif L==2
+	"Da ich bin!";
+#elif L==3
+	"It's me!";
+#elif L==4
+	"&iexcl;Soy yo!";
+#elif L==5
+	"C'est moi!";
+#elif L==6
+	"&iexcl;Soy yo!";	// Okoteve traducción
+#elif L==7
+	"Sono io!";
+#elif L==8
+	"To ja!";
+#elif L==9
+	"Sou eu!";
+#endif
+
 const char *Txt_Language =
 #if   L==1
 	"Idioma (language)";
