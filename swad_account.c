@@ -107,11 +107,13 @@ void Acc_PutLinkToCreateAccount (void)
 
 void Acc_ShowFormAccount (void)
   {
+   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
+
    if (Gbl.Usrs.Me.Logged)
       Acc_ShowFormChangeMyAccount ();
-   else
+   else	// Not logged
      {
-      /* Links to log in and to change language */
+      /***** Links to other actions *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Usr_PutLinkToLogin ();
       Pwd_PutLinkToSendNewPasswd ();
@@ -119,8 +121,7 @@ void Acc_ShowFormAccount (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /**** Show form to check if I have an account *****/
-      Acc_ShowFormCheckIfIHaveAccount ("Antes de crear una cuenta nueva"
-	                               " compruebe si ya le han inscrito con su ID");	// TODO: Need translation!!!
+      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }
   }
 
@@ -159,6 +160,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 void Acc_CheckIfEmptyAccountExists (void)
   {
    extern const char *Txt_Name;
+   extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
    char ID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
    unsigned NumUsr;
@@ -281,8 +283,7 @@ void Acc_CheckIfEmptyAccountExists (void)
       /**** Show again form to check if I have an account *****/
       Lay_ShowAlert (Lay_WARNING,"Escriba su ID (DNI/c&eacute;dula&hellip;).");
 
-      Acc_ShowFormCheckIfIHaveAccount ("Antes de crear una cuenta nueva"
-	                               " compruebe si ya le han inscrito con su ID");	// TODO: Need translation!!!
+      Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }
   }
 

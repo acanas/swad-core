@@ -3564,6 +3564,36 @@ const char *Txt_Banners =
 	"Banners";
 #endif
 
+const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID =
+#if   L==1
+	"Abans de crear un compte nou,"
+	" comprovi si ja li han inscrit amb el seu ID";
+#elif L==2
+	"Bevor ein neues Konto erstellen,"
+	" wenn Sie bereits mit Ihrer ID registriert worden sind";
+#elif L==3
+	"Before creating a new account,"
+	" check if you have been already registered with your ID";
+#elif L==4
+	"Antes de crear una cuenta nueva,"
+	" compruebe si ya le han inscrito con su ID";
+#elif L==5
+	"Avant de cr&eacute;er un nouveau compte,"
+	" v&eacute;rifiez si vous avez d&eacute;j&agrave; enregistr&eacute; avec votre ID";
+#elif L==6
+	"Antes de crear una cuenta nueva,"
+	" compruebe si ya le han inscrito con su ID";	// Okoteve traducción
+#elif L==7
+	"Prima di creare un nuovo account,"
+	" controllare se sono stati gi&agrave; registrato con il tuo ID";
+#elif L==8
+	"Przed utworzeniem nowego konta,"
+	" nale&zdot;y sprawdzi&cacute;, czy zosta&lstrok; on ju&zdot; zarejestrowany z identyfikatorem";
+#elif L==9
+	"Antes de criar uma nova conta,"
+	" verifique se voc&ecirc; j&aacute; foi registrado com o seu ID";
+#endif
+
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 #if   L==1
 	"Abans d'accedir a qualsevol altra opci&oacute;"
