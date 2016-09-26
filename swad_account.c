@@ -160,6 +160,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
 void Acc_CheckIfEmptyAccountExists (void)
   {
+   extern const char *Txt_Do_you_think_you_are_this_user;
+   extern const char *Txt_Do_you_think_you_are_one_of_these_users;
    extern const char *Txt_Name;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
    char ID[ID_MAX_LENGTH_USR_ID+1];
@@ -197,8 +199,8 @@ void Acc_CheckIfEmptyAccountExists (void)
       if (NumUsrs)
 	{
 	 /***** Start frame and write message with number of accounts found *****/
-	 Lay_StartRoundFrameTable (NULL,5,(NumUsrs == 1) ? "&iquest;Cree que usted es este usuario/a?" :	// TODO: Need translation!!!
-							   "&iquest;Cree que usted es uno de estos usuarios?");	// TODO: Need translation!!!
+	 Lay_StartRoundFrameTable (NULL,5,(NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
+							   Txt_Do_you_think_you_are_one_of_these_users);
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);

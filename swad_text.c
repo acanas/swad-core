@@ -9253,6 +9253,48 @@ const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is ver
 	"Voc&ecirc; realmente deseja reiniciar o inqu&eacute;rito <strong>%s</strong>?";
 #endif
 
+const char *Txt_Do_you_think_you_are_one_of_these_users =
+#if   L==1
+	"Creu que vost&egrave; &eacute;s un d'aquests usuaris?";
+#elif L==2
+	"Denken Sie, Sie einer dieser Benutzer sind?";
+#elif L==3
+	"Do you think you are one of these users?";
+#elif L==4
+	"&iquest;Cree que usted es uno de estos usuarios?";
+#elif L==5
+	"Pensez-vous que vous &ecirc;tes un de ces utilisateurs?";
+#elif L==6
+	"&iquest;Cree que usted es uno de estos usuarios?";	// Okoteve traducción
+#elif L==7
+	"Pensi che sei uno di questi utenti?";
+#elif L==8
+	"My&sacute;lisz, &zdot;e jeste&sacute; jednym z tych u&zdot;ytkownik&oacute;w?";
+#elif L==9
+	"Voc&ecirc; acha que voc&ecirc; &eacute; um desses usu&aacute;rios?";
+#endif
+
+const char *Txt_Do_you_think_you_are_this_user =
+#if   L==1
+	"Creu que vost&egrave; &eacute;s aquest usuari?";
+#elif L==2
+	"Denken Sie, Sie dieser Benutzer?";
+#elif L==3
+	"Do you think you are this user?";
+#elif L==4
+	"&iquest;Cree que usted es este usuario/a?";
+#elif L==5
+	"Pensez-vous que vous &ecirc;tes cet utilisateur?";
+#elif L==6
+	"&iquest;Cree que usted es este usuario/a?";	// Okoteve traducción
+#elif L==7
+	"Pensi che sei questo utente?";
+#elif L==8
+	"Czy uwa&zdot;asz, &zdot;e ta osoba?";
+#elif L==9
+	"Voc&ecirc; acha que voc&ecirc; &eacute; deste usu&aacute;rio?";
+#endif
+
 const char *Txt_Do_you_want_to_confirm_the_ID_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Voleu confirmar l'ID (DNI/c&egrave;dula) <strong>%s</strong>?";
