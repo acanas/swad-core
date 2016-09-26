@@ -135,17 +135,21 @@
 
 // TODO: FIX BUG: Passwords with % do not work
 
+// TODO: Send a message to the user when rejecting a requesto for enrollment. Suggested by Javier Fernández Baldomero.
+// TODO: Fix bug: database error when a not logged user searches users. "Database error: can not check if a user shares any course with you (Table 'swad.my_courses_tmp' doesn't exist).
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.2.4 (2016-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 16.2.5 (2016-09-26)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.2.5:   Sep 26, 2016	Check if an account already exists. Not finished. (205019 lines)
         Version 16.2.4:   Sep 22, 2016	Check if an account already exists. Not finished. (205016 lines)
         Version 16.2.3:   Sep 22, 2016	Check if an account already exists. Not finished. (204984 lines)
         Version 16.2.2:   Sep 22, 2016	Fixed bug in photo visibility. (204951 lines)

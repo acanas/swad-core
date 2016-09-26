@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Acc_ShowFormCheckIfIHaveAccount (void);
+static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
@@ -114,14 +114,13 @@ void Acc_ShowFormAccount (void)
       /* Links to log in and to change language */
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Usr_PutLinkToLogin ();
+      Pwd_PutLinkToSendNewPasswd ();
       Pre_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
       /**** Show form to check if I have an account *****/
-      Acc_ShowFormCheckIfIHaveAccount ();
-
-      /**** Show form to create a new account *****/
-      Acc_ShowFormRequestNewAccountWithParams ("","");
+      Acc_ShowFormCheckIfIHaveAccount ("Antes de crear una cuenta nueva"
+	                               " compruebe si ya le han inscrito con su ID");	// TODO: Need translation!!!
      }
   }
 
@@ -129,13 +128,13 @@ void Acc_ShowFormAccount (void)
 /***************** Show form to check if I have an account *******************/
 /*****************************************************************************/
 
-static void Acc_ShowFormCheckIfIHaveAccount (void)
+static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,"Es posible que ya le hayan inscrito con su ID (DNI/c&eacute;dula)",NULL);	// TODO: Need translation!!!
+   Lay_StartRoundFrame (NULL,Title,NULL);
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -160,7 +159,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (void)
 void Acc_CheckIfEmptyAccountExists (void)
   {
    extern const char *Txt_Name;
-   char NewID[ID_MAX_LENGTH_USR_ID+1];
+   char ID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -168,51 +167,52 @@ void Acc_CheckIfEmptyAccountExists (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
+   /***** Links to other actions *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Usr_PutLinkToLogin ();
+   Pwd_PutLinkToSendNewPasswd ();
+   Pre_PutLinkToChangeLanguage ();
+   fprintf (Gbl.F.Out,"</div>");
+
    /***** Get new user's ID from form *****/
-   Par_GetParToText ("ID",NewID,ID_MAX_LENGTH_USR_ID);
+   Par_GetParToText ("ID",ID,ID_MAX_LENGTH_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
-   Str_RemoveLeadingZeros (NewID);
-   Str_ConvertToUpperText (NewID);
+   Str_RemoveLeadingZeros (ID);
+   Str_ConvertToUpperText (ID);
 
    /***** Check if there are users with this user's ID *****/
-   if (ID_CheckIfUsrIDIsValid (NewID))
+   if (ID_CheckIfUsrIDIsValid (ID))
      {
-      sprintf (Query,"SELECT usr_data.UsrCod,usr_data.EncryptedUsrCod,"
-	             "UPPER(usr_data.FirstName),"
-	             "UPPER(usr_data.Surname1),"
-	             "UPPER(usr_data.Surname2)"
+      sprintf (Query,"SELECT usr_IDs.UsrCod"
 	             " FROM usr_IDs,usr_data"
 		     " WHERE usr_IDs.UsrID='%s'"
 		     " AND usr_IDs.UsrCod=usr_data.UsrCod"
 	             " AND usr_data.Password=''",
-	       NewID);
+	       ID);
       NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
 
       if (NumUsrs)
 	{
 	 /***** Start frame and write message with number of accounts found *****/
-	 if (NumUsrs == 1)
-	    Lay_StartRoundFrameTable (NULL,5,"&iquest;Cree que usted es el siguiente usuario?");	// TODO: Need translation!!!
-	 else
-	   {
-	    sprintf (Gbl.Title,"&iquest;Cree que usted es uno de los siguientes %u usuarios?",
-	             NumUsrs);
-	    Lay_StartRoundFrameTable (NULL,5,Gbl.Title);	// TODO: Need translation!!!
-	   }
+	 Lay_StartRoundFrameTable (NULL,5,(NumUsrs == 1) ? "&iquest;Cree que usted es este usuario/a?" :	// TODO: Need translation!!!
+							   "&iquest;Cree que usted es uno de estos usuarios?");	// TODO: Need translation!!!
+
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List users found *****/
 	 for (NumUsr = 1, Gbl.RowEvenOdd = 0;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
+	    /***** Get user's data from query result *****/
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get user's code */
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	    /* Get encrypted user's code */
-	    strncpy (UsrDat.EncryptedUsrCod,row[1],sizeof (UsrDat.EncryptedUsrCod) - 1);
-	    UsrDat.EncryptedUsrCod[sizeof (UsrDat.EncryptedUsrCod) - 1] = '\0';
+	    /* Get user's data */
+            Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
 	    /***** Write number of user in the list *****/
 	    fprintf (Gbl.F.Out,"<tr>"
@@ -222,28 +222,19 @@ void Acc_CheckIfEmptyAccountExists (void)
 			       "</td>",
 		     Gbl.RowEvenOdd,NumUsr);
 
-	    fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">%s: ",
-		     Gbl.RowEvenOdd,Txt_Name);
-	    if (row[2][0] ||
-		row[3][0] ||
-                row[4][0])
-	      {
-	       if (row[2][0])
-		  fprintf (Gbl.F.Out,"%c.",row[2][0]);
-	       if (row[3][0])
-		  fprintf (Gbl.F.Out,"%c.",row[3][0]);
-	       if (row[4][0])
-		  fprintf (Gbl.F.Out,"%c.",row[4][0]);
-	      }
-	    else
-	       fprintf (Gbl.F.Out,"?");
-	    fprintf (Gbl.F.Out,"</td>");
+	    /***** Write user's name *****/
+	    fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">"
+		               "%s: %s"
+		               "</td>",
+	             Gbl.RowEvenOdd,Txt_Name,
+	             UsrDat.FullName[0] ? UsrDat.FullName :
+	        	                  "?");
 
 	    /* Button to login with this account */
 	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		     Gbl.RowEvenOdd);
             Act_FormStart (ActAutUsrNew);
-            Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	    Lay_PutCreateButtonInline ("&iexcl;Soy yo!");	// TODO: Need translation!!!
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</td>"
@@ -260,25 +251,39 @@ void Acc_CheckIfEmptyAccountExists (void)
 		               "</tr>");
 	   }
 
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
+
 	 /***** End frame *****/
 	 Lay_EndRoundFrameTable ();
 	}
       else
 	{
-	 sprintf (Gbl.Message,"No hay ninguna cuenta vac&iacute;a asociada a su ID %s.",	// TODO: Need translation!!!
-		  NewID);
+	 sprintf (Gbl.Message,"No existe ninguna cuenta &quot;vac&iacute;a&quot;"
+	                      " (a&uacute;n no usada) asociada a su ID %s.<br />"
+	                      " Si cree que puede haber sido inscrito/a"
+	                      " con otro ID, compru&eacute;belo, por favor.",	// TODO: Need translation!!!
+		  ID);
 	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
-	 /**** Show form to check if I have an account *****/
-	 Acc_ShowFormCheckIfIHaveAccount ();
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
-     }
 
-   /**** Show form to create a new account *****/
-   Acc_ShowFormRequestNewAccountWithParams ("","");
+      /**** Show form to check if I have an account *****/
+      Acc_ShowFormCheckIfIHaveAccount ("Comprobar otro ID");	// TODO: Need translation!!!
+
+      /**** Show form to create a new account *****/
+      Acc_ShowFormRequestNewAccountWithParams ("","");
+     }
+   else	// ID not valid
+     {
+      /**** Show again form to check if I have an account *****/
+      Lay_ShowAlert (Lay_WARNING,"Escriba su ID (DNI/c&eacute;dula&hellip;).");
+
+      Acc_ShowFormCheckIfIHaveAccount ("Antes de crear una cuenta nueva"
+	                               " compruebe si ya le han inscrito con su ID");	// TODO: Need translation!!!
+     }
   }
 
 /*****************************************************************************/
@@ -293,14 +298,12 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,2,"Crear una nueva cuenta");	// TODO: Need translation!!!!
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
