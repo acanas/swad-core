@@ -165,6 +165,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Name;
    extern const char *Txt_Its_me;
    extern const char *Txt_Check_another_ID;
+   extern const char *Txt_Please_enter_your_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
    char ID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
@@ -286,7 +287,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    else	// ID not valid
      {
       /**** Show again form to check if I have an account *****/
-      Lay_ShowAlert (Lay_WARNING,"Escriba su ID (DNI/c&eacute;dula&hellip;).");
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_enter_your_ID);	// TODO: Need translation!!!!
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }

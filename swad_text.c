@@ -28176,6 +28176,27 @@ const char *Txt_PLACES_ORDER[2] =
 #endif
 	};
 
+const char *Txt_Please_enter_your_ID =
+#if   L==1
+	"Si us plau, escriviu el seu ID (DNI/c&egrave;dula).";
+#elif L==2
+	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder.";
+#elif L==3
+	"Please enter your ID.";
+#elif L==4
+	"Por favor, escriba su ID (DNI/c&eacute;dula&hellip;).";
+#elif L==5
+	"S'il vous pla&iacute;t, entrez votre ID.";
+#elif L==6
+	"Por favor, escriba su ID (DNI/c&eacute;dula&hellip;).";		// Okoteve traducción
+#elif L==7
+	"Per favore, inserisci il tuo ID.";
+#elif L==8
+	"Prosz&eogon;, poda&cacute; swoje zmie&nacute; identyfikatory.";
+#elif L==9
+	"Por favor, digite n&ordm; de identifica&ccedil;&atilde;o.";
+#endif
+
 const char *Txt_Please_fill_in_your_centre_and_department =
 #if   L==1
 	"Si us plau, ompli el seu centre i department.";
