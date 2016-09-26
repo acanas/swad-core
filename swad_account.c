@@ -69,6 +69,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
+static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
@@ -162,8 +163,7 @@ void Acc_CheckIfEmptyAccountExists (void)
   {
    extern const char *Txt_Do_you_think_you_are_this_user;
    extern const char *Txt_Do_you_think_you_are_one_of_these_users;
-   extern const char *Txt_Name;
-   extern const char *Txt_Its_me;
+   extern const char *Txt_There_is_no_empty_account_associated_with_your_ID_X_;
    extern const char *Txt_Check_another_ID;
    extern const char *Txt_Please_enter_your_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
@@ -222,41 +222,8 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    /* Get user's data */
             Usr_GetAllUsrDataFromUsrCod (&UsrDat);
 
-	    /***** Write number of user in the list *****/
-	    fprintf (Gbl.F.Out,"<tr>"
-		               "<td rowspan=\"2\""
-		               " class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\">"
-			       "%u"
-			       "</td>",
-		     Gbl.RowEvenOdd,NumUsr);
-
-	    /***** Write user's name *****/
-	    fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">"
-		               "%s: %s"
-		               "</td>",
-	             Gbl.RowEvenOdd,Txt_Name,
-	             UsrDat.FullName[0] ? UsrDat.FullName :
-	        	                  "?");
-
-	    /* Button to login with this account */
-	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
-		     Gbl.RowEvenOdd);
-            Act_FormStart (ActAutUsrNew);
-            Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Lay_PutCreateButtonInline (Txt_Its_me);
-	    Act_FormEnd ();
-	    fprintf (Gbl.F.Out,"</td>"
-		               "</tr>");
-
-	    /* Courses of this user */
-	    fprintf (Gbl.F.Out,"<tr>"
-		               "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-		     Gbl.RowEvenOdd);
-	    UsrDat.Sex = Usr_SEX_UNKNOWN;
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
-	    fprintf (Gbl.F.Out,"</td>"
-		               "</tr>");
+            /***** Write row with data of empty account *****/
+            Acc_WriteRowEmptyAccount (NumUsr,ID,&UsrDat);
 	   }
 
 	 /***** Free memory used for user's data *****/
@@ -267,10 +234,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	}
       else
 	{
-	 sprintf (Gbl.Message,"No existe ninguna cuenta &quot;vac&iacute;a&quot;"
-	                      " (a&uacute;n no usada) asociada a su ID %s.<br />"
-	                      " Si cree que puede haber sido inscrito/a"
-	                      " con otro ID, compru&eacute;belo, por favor.",	// TODO: Need translation!!!
+	 sprintf (Gbl.Message,Txt_There_is_no_empty_account_associated_with_your_ID_X_,
 		  ID);
 	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	}
@@ -291,6 +255,59 @@ void Acc_CheckIfEmptyAccountExists (void)
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }
+  }
+
+/*****************************************************************************/
+/************************ Write data of empty account ************************/
+/*****************************************************************************/
+
+static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat)
+  {
+   extern const char *Txt_ID;
+   extern const char *Txt_Name;
+   extern const char *Txt_yet_unnamed;
+   extern const char *Txt_Its_me;
+
+   /***** Write number of user in the list *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td rowspan=\"2\""
+		      " class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\">"
+		      "%u"
+		      "</td>",
+	    Gbl.RowEvenOdd,NumUsr);
+
+   /***** Write user's ID and name *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">"
+		      "%s: %s<br />"
+		      "%s: ",
+	    Gbl.RowEvenOdd,
+	    Txt_ID,ID,
+	    Txt_Name);
+   if (UsrDat->FullName[0])
+      fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FullName);
+   else
+      fprintf (Gbl.F.Out,"<em>%s</em>",Txt_yet_unnamed);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Button to login with this account *****/
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   Act_FormStart (ActAutUsrNew);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Lay_PutCreateButtonInline (Txt_Its_me);
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Courses of this user *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   UsrDat->Sex = Usr_SEX_UNKNOWN;
+   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TEACHER);
+   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STUDENT);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
   }
 
 /*****************************************************************************/

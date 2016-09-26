@@ -3569,7 +3569,7 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	"Abans de crear un compte nou,"
 	" comprovi si ja li han inscrit amb el seu ID";
 #elif L==2
-	"Bevor ein neues Konto erstellen,"
+	"Bevor ein neues Benutzerkonto erstellen,"
 	" wenn Sie bereits mit Ihrer ID registriert worden sind";
 #elif L==3
 	"Before creating a new account,"
@@ -3591,7 +3591,7 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	" nale&zdot;y sprawdzi&cacute;, czy zosta&lstrok; on ju&zdot; zarejestrowany z identyfikatorem";
 #elif L==9
 	"Antes de criar uma nova conta,"
-	" verifique se voc&ecirc; j&aacute; foi registrado com o seu ID";
+	" verifique se voc&ecirc; j&aacute; foi registrado/a com o seu ID";
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
@@ -4981,7 +4981,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" vost&egrave; pot crear abans de sol&middot;licitar la seva inscripci&oacute; en ella"
 	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
 #elif L==2
-	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Konto @%s erstellt."
+	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Benutzerkonto @%s erstellt."
 	" Jetzt %s finden Sie einige Daten in Ihrem Profil."
 	" Vervollst&auml;ndigen anfordern und dann werden Sie in der Lage,"
 	" f&uuml;r die Einschreibung in Kurse an."
@@ -30096,7 +30096,7 @@ const char *Txt_Remove_account =
 #if   L==1
 	"Eliminar compte";
 #elif L==2
-	"Konto entfernen";
+	"Benutzerkonto entfernen";
 #elif L==3
 	"Remove account";
 #elif L==4
@@ -46359,6 +46359,53 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 	"There is already a non-empty folder named <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
+const char *Txt_There_is_no_empty_account_associated_with_your_ID_X_ =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"No hi ha cap compte buida (encara no usada)"
+	" associada al seu ID <strong>%s</strong>."
+	" Si creu que pot haver estat inscrit amb un altre ID,"
+	" comprovi-ho, per favor.";
+#elif L==2
+	"Es gibt keine leeren Benutzerkonto (noch nicht verwendet)"
+	" im Zusammenhang mit Ihrer ID <strong>%s</strong>."
+	" Wenn Sie denken, dass Sie mit einer anderen ID registriert worden sein,"
+	" &uuml;berpr&uuml;fen Sie es bitte.";
+#elif L==3
+	"There is no empty (not yet used) account"
+	" associated with your ID <strong>%s</strong>."
+	" If you think you may have been registered with another ID,"
+	" check it, please.";
+#elif L==4
+	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
+	" asociada a su ID <strong>%s</strong>."
+	" Si cree que puede haber sido inscrito/a con otro ID, compru&eacute;belo, por favor.";
+#elif L==5
+	"Il n'y a pas de compte vide (pas encore utilis&eacute;)"
+	" associ&eacute; &agrave; votre ID <strong>%s</strong>."
+	" Si vous pensez que vous avez &eacute;t&eacute; enregistr&eacute; avec un autre ID,"
+	" v&eacute;rifier, s'il vous pla&icirc;t.";
+#elif L==6
+	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
+	" asociada a su ID <strong>%s</strong>."
+	" Si cree que puede haber sido inscrito/a con otro ID,"
+	" compru&eacute;belo, por favor.";	// Okoteve traducción
+#elif L==7
+	"Non vi &egrave; alcun conto vuoto (non ancora utilizzato)"
+	" associato con il tuo ID <strong>%s</strong>."
+	" Se si pensa che potrebbe essere stato registrato/a con un altro ID,"
+	" verificare, per favore.";
+#elif L==8
+	"Nie ma pusta konta (jeszcze nie u&zdot;ywany)"
+	" powi&aogon;zany z identyfikatorem <strong>%s</strong>."
+	" Je&sacute;li uwa&zdot;asz, &zdot;e mog&lstrok;a zosta&cacute; zarejestrowana w innym ID,"
+	" sprawd&zacute; to, prosz&eogon;.";
+#elif L==9
+	"N&atilde;o existe nenhuma conta vazio (ainda n&atilde;o utilizado)"
+	" associado ao seu ID <strong>%s</strong>."
+	" Se voc&ecirc; acha que pode ter sido registado/a com outro ID,"
+	" verifique-o, por favor.";
+#endif
+
 const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
 #if   L==1
 	"No se puede saber cu&aacute;ntos usuarios distintos han accedido sin identificarse.";	// Necessita traduccio
@@ -51254,6 +51301,27 @@ const char *Txt_Yesterday =
 	"Yesterday";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"Ontem";
+#endif
+
+const char *Txt_yet_unnamed =
+#if   L==1
+	"encara sense nom";
+#elif L==2
+	"noch unbenannte";
+#elif L==3
+	"yet unnamed";
+#elif L==4
+	"a&uacute;n sin nombre";
+#elif L==5
+	"encore sans nom";
+#elif L==6
+	"a&uacute;n sin nombre";
+#elif L==7
+	"ancora senza nome";
+#elif L==8
+	"jeszcze nienazwany";
+#elif L==9
+	"ainda sem nome";
 #endif
 
 const char *Txt_You_already_answered_this_survey_before =
