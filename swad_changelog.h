@@ -149,8 +149,11 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 16.15:    Sep 26, 2016	Message translated.
-					Code refactoring of list with empty accounts for an ID. (205285 lines)
+        Version 16.3:     Sep 26, 2016	Message translated.
+					Code refactoring of list with empty accounts for an ID. (205287 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1585','es','N','Autenticar usuario en cuenta vac&iacute;a');
+
         Version 16.2.13:  Sep 26, 2016	Message translated. (205203 lines)
         Version 16.2.12:  Sep 26, 2016	Message translated. (205181 lines)
         Version 16.2.11:  Sep 26, 2016	Message translated. (205159 lines)
