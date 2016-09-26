@@ -300,6 +300,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                                                      const char *NewEmail)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Create_a_new_account;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
@@ -309,7 +310,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable (NULL,2,"Crear una nueva cuenta");	// TODO: Need translation!!!!
+   Lay_StartRoundFrameTable (NULL,2,Txt_Create_a_new_account);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])

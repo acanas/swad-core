@@ -5813,6 +5813,27 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 	"Disciplinas de %s";
 #endif
 
+const char *Txt_Create_a_new_account =
+#if   L==1
+	"Crea un nou compte";
+#elif L==2
+	"Ein neues Benutzerkonto erstellen";
+#elif L==3
+	"Create a new account";
+#elif L==4
+	"Crear una nueva cuenta";
+#elif L==5
+	"Cr&eacute;er un nouveau compte";
+#elif L==6
+	"Crear una nueva cuenta";	// Okoteve traducción
+#elif L==7
+	"Creare un nuovo account";
+#elif L==8
+	"Stw&oacute;rz nowe konto";
+#elif L==9
+	"Criar uma nova conta";
+#endif
+
 const char *Txt_Create_account =
 #if   L==1
 	"Crea compte";
@@ -5823,7 +5844,7 @@ const char *Txt_Create_account =
 #elif L==4
 	"Crear cuenta";
 #elif L==5
-	"Cr&eacute;er un compte";
+	"Cr&eacute;er compte";
 #elif L==6
 	"Crear cuenta";		// Okoteve traducción
 #elif L==7
