@@ -3585,7 +3585,7 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	" compruebe si ya le han inscrito con su ID";	// Okoteve traducción
 #elif L==7
 	"Prima di creare un nuovo account,"
-	" controllare se sono stati gi&agrave; registrato con il tuo ID";
+	" verificare se sono stati gi&agrave; registrato con il tuo ID";
 #elif L==8
 	"Przed utworzeniem nowego konta,"
 	" nale&zdot;y sprawdzi&cacute;, czy zosta&lstrok; on ju&zdot; zarejestrowany z identyfikatorem";
@@ -4489,6 +4489,27 @@ const char *Txt_Chat_rooms =
 	"Chat rooms";
 #endif
 
+const char *Txt_Check =	// Button to check if an account is already created with a user's ID
+#if   L==1
+	"Comprovar";
+#elif L==2
+	"Pr&uuml;fen";
+#elif L==3
+	"Check";
+#elif L==4
+	"Comprobar";
+#elif L==5
+	"V&eacute;rifier";
+#elif L==6
+	"Comprobar";	// Okoteve traducción
+#elif L==7
+	"Verificare";
+#elif L==8
+	"Sprawdzi&cacute;";
+#elif L==9
+	"Verificar";
+#endif
+
 const char *Txt_Check_marks_in_file_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Consultar qualificacions en el fitxer %s";
@@ -4505,7 +4526,7 @@ const char *Txt_Check_marks_in_file_X =	// Warning: it is very important to incl
 #elif L==7
 	"Consultare i risultati nel file %s";
 #elif L==8
-	"Zaznaczenia w pliku  %s";
+	"Zaznaczenia w pliku %s";
 #elif L==9
 	"Check marks in file %s";			// Necessita de tradução
 #endif

@@ -133,6 +133,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
+   extern const char *Txt_Check;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Title,NULL);
@@ -146,7 +147,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      " size=\"20\" maxlength=\"%u\" value=\"\" />",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_LENGTH_USR_ID);
-   Lay_PutConfirmButton ("Comprobar");	// TODO: Need translation!!!!
+   Lay_PutConfirmButton (Txt_Check);
    Act_FormEnd ();
 
    /***** End frame *****/
