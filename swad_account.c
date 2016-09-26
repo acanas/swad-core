@@ -164,6 +164,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Do_you_think_you_are_one_of_these_users;
    extern const char *Txt_Name;
    extern const char *Txt_Its_me;
+   extern const char *Txt_Check_another_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
    char ID[ID_MAX_LENGTH_USR_ID+1];
    unsigned NumUsrs;
@@ -277,7 +278,7 @@ void Acc_CheckIfEmptyAccountExists (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /**** Show form to check if I have an account *****/
-      Acc_ShowFormCheckIfIHaveAccount ("Comprobar otro ID");	// TODO: Need translation!!!
+      Acc_ShowFormCheckIfIHaveAccount (Txt_Check_another_ID);
 
       /**** Show form to create a new account *****/
       Acc_ShowFormRequestNewAccountWithParams ("","");

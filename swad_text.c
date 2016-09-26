@@ -4493,7 +4493,7 @@ const char *Txt_Check =	// Button to check if an account is already created with
 #if   L==1
 	"Comprovar";
 #elif L==2
-	"Pr&uuml;fen";
+	"&Uuml;berpr&uuml;fen";
 #elif L==3
 	"Check";
 #elif L==4
@@ -4505,9 +4505,30 @@ const char *Txt_Check =	// Button to check if an account is already created with
 #elif L==7
 	"Verificare";
 #elif L==8
-	"Sprawdzi&cacute;";
+	"Sprawd&zacute;";
 #elif L==9
 	"Verificar";
+#endif
+
+const char *Txt_Check_another_ID =
+#if   L==1
+	"Comprovar altre ID";
+#elif L==2
+	"&Uuml;berpr&uuml;fen Sie eine andere ID";
+#elif L==3
+	"Check another ID";
+#elif L==4
+	"Comprobar otro ID";
+#elif L==5
+	"V&eacute;rifier un autre ID";
+#elif L==6
+	"Comprobar otro ID";	// Okoteve traducción
+#elif L==7
+	"Verificare un altro ID";
+#elif L==8
+	"Sprawdzi&cacute; inny identyfikator";
+#elif L==9
+	"Verificar outra ID";
 #endif
 
 const char *Txt_Check_marks_in_file_X =	// Warning: it is very important to include %s in the following sentences
