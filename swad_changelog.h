@@ -135,20 +135,22 @@
 
 // TODO: FIX BUG: Passwords with % do not work
 
-// TODO: Send a message to the user when rejecting a requesto for enrollment. Suggested by Javier Fernández Baldomero.
-// TODO: Fix bug: database error when a not logged user searches users. "Database error: can not check if a user shares any course with you (Table 'swad.my_courses_tmp' doesn't exist).
+// TODO: Send a message to the user when rejecting a request for enrollment. Suggested by Javier Fernández Baldomero.
+// TODO: Create a table with IPs to block temporarily multiple access to the action used to check ID for empty accounts
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.15 (2016-09-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.3.1 (2016-09-27)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.3.1:   Sep 27, 2016	Two different messagesrelated to new account merged into one.
+					Changes in form to create new account. (205271 lines)
         Version 16.3:     Sep 26, 2016	Message translated.
 					Code refactoring of list with empty accounts for an ID. (205287 lines)
 					1 change necessary in database:

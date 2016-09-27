@@ -6275,27 +6275,6 @@ const char *Txt_Create_mail_domain =
 	"Criar dom&iacute;nio de email";
 #endif
 
-const char *Txt_Create_new_account =
-#if   L==1
-	"Crear nou compte";
-#elif L==2
-	"Neuen Account erstellen";
-#elif L==3
-	"Create new account";
-#elif L==4
-	"Crear nueva cuenta";
-#elif L==5
-	"Cr&eacute;er un nouveau compte";
-#elif L==6
-	"Crear nueva cuenta";		// Okoteve traducción
-#elif L==7
-	"Crea nuovo account";
-#elif L==8
-	"Za&lstrok;&oacute;&zdot; nowe konto";
-#elif L==9
-	"Criar nova conta";
-#endif
-
 const char *Txt_Create_notice =
 #if   L==1
 	"Crear av&iacute;s";

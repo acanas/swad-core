@@ -123,6 +123,9 @@ void Acc_ShowFormAccount (void)
 
       /**** Show form to check if I have an account *****/
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
+
+      /**** Show form to create a new account *****/
+      Acc_ShowFormRequestNewAccountWithParams ("","");
      }
   }
 
@@ -244,17 +247,17 @@ void Acc_CheckIfEmptyAccountExists (void)
 
       /**** Show form to check if I have an account *****/
       Acc_ShowFormCheckIfIHaveAccount (Txt_Check_another_ID);
-
-      /**** Show form to create a new account *****/
-      Acc_ShowFormRequestNewAccountWithParams ("","");
      }
    else	// ID not valid
      {
       /**** Show again form to check if I have an account *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_enter_your_ID);	// TODO: Need translation!!!!
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_enter_your_ID);
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }
+
+   /**** Show form to create a new account *****/
+   Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
@@ -383,7 +386,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 void Acc_ShowFormGoToRequestNewAccount (void)
   {
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Create_new_account;
+   extern const char *Txt_Create_a_new_account;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
@@ -391,7 +394,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmUsrAcc);
-   Lay_PutCreateButton (Txt_Create_new_account);
+   Lay_PutCreateButton (Txt_Create_a_new_account);
    Act_FormEnd ();
 
    /***** End frame *****/
