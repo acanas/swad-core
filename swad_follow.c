@@ -825,7 +825,7 @@ void Fol_UnfollowUsr (void)
 	 /* 1) I followed a user when I had permission
 	    2) User restricted permission, so now I can not view his/her profile
 	    3) Now I can not view his/her profile ==> show users I follow */
-	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List user's I follow
+	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

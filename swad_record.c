@@ -2364,19 +2364,24 @@ static void Rec_PutIconsCommands (void)
 		             NULL);
 
       /***** Button to follow / unfollow *****/
-      if (Gbl.Record.TypeOfView == Rec_RECORD_PUBLIC &&
-	  !ItsMe)
+      if (!ItsMe)
 	{
-	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Record.UsrDat->UsrCod))	// I follow user
+	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Record.UsrDat->UsrCod))
+	    // I follow user
 	    Lay_PutContextualLink (ActUnfUsr,Rec_PutParamUsrCodEncrypted,
 				   "following64x64.png",
 				   Txt_Following_unfollow,NULL,
-		                   NULL);
-	 else	// I do not follow user
-	    Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
-				   "follow64x64.png",
-				   Txt_Follow,NULL,
-		                   NULL);
+				   NULL);	// Put button to unfollow, even if I can not view user's profile
+	 else
+	    // I do not follow user
+	    if (Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
+				   Gbl.Record.UsrDat->UsrCod))
+	       // I can view user's profile
+	       Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
+				      "follow64x64.png",
+				      Txt_Follow,NULL,
+				      NULL);	// Put button to follow
 	}
 
       fprintf (Gbl.F.Out,"</div>");

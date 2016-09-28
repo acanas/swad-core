@@ -3575,13 +3575,13 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	"Before creating a new account,"
 	" check if you have been already registered with your ID";
 #elif L==4
-	"Antes de crear una cuenta nueva,"
+	"Antes de crear una nueva cuenta,"
 	" compruebe si ya le han inscrito con su ID";
 #elif L==5
 	"Avant de cr&eacute;er un nouveau compte,"
 	" v&eacute;rifiez si vous avez d&eacute;j&agrave; enregistr&eacute; avec votre ID";
 #elif L==6
-	"Antes de crear una cuenta nueva,"
+	"Antes de crear una nueva cuenta,"
 	" compruebe si ya le han inscrito con su ID";	// Okoteve traducción
 #elif L==7
 	"Prima di creare un nuovo account,"
