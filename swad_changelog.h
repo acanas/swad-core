@@ -142,13 +142,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.4 (2016-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.4.1 (2016-09-29)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.4.1:   Sep 29, 2016	Changes in hits in current courses in user's usage report. (205316 lines)
         Version 16.4:     Sep 29, 2016	Hits in current courses in user's usage report. (205299 lines)
         Version 16.3.2:   Sep 28, 2016	Changes in behaviour of button to follow user. (205277 lines)
         Version 16.3.1:   Sep 28, 2016	Two different messagesrelated to new account merged into one.

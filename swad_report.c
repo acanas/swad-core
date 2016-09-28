@@ -42,7 +42,7 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Rep_MAX_BAR_WIDTH 75	// Maximum width of graphic bar
+#define Rep_MAX_BAR_WIDTH 90	// Maximum width of graphic bar
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&block;"	// HTML code for a block in graphic bar
@@ -79,14 +79,17 @@ static void Rep_PutIconToPrintMyUsageReport (void);
 
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
                                               time_t FirstClickTimeUTC,
-                                              struct tm *tm_FirstClickTime);
+                                              struct tm *tm_FirstClickTime,
+                                              float MaxHitsPerYear);
 static void Rep_WriteRowCrsData (MYSQL_ROW row,
                                  time_t FirstClickTimeUTC,
-                                 struct tm *tm_FirstClickTime);
+                                 struct tm *tm_FirstClickTime,
+                                 float MaxHitsPerYear);
 
-static void Rep_ShowMyHitsPerYear (long CrsCod,
-                                   time_t FirstClickTimeUTC,
-                                   struct tm *tm_FirstClickTime);
+static float Rep_ShowMyHitsPerYear (long CrsCod,
+                                    time_t FirstClickTimeUTC,
+                                    struct tm *tm_FirstClickTime,
+                                    float MaxHitsPerYear);
 // static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
@@ -149,6 +152,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    unsigned NumPublicFiles;
    Rol_Role_t Role;
    unsigned NumCrss;
+   float MaxHitsPerYear;
 
    /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
@@ -327,6 +331,15 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    fprintf (Gbl.F.Out,"</ul>");
 
+   /***** Global hits *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
+   MaxHitsPerYear = Rep_ShowMyHitsPerYear (-1L,
+                                           UsrFigures.FirstClickTimeUTC,
+                                           &tm_FirstClickTime,
+                                           -1.0);
+   // fprintf (Gbl.F.Out,"<br />");
+   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+
    /***** Courses *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>"
 	              "<ul>",
@@ -354,18 +367,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
          /* List my courses with this role */
 	 Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-	                                   UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+	                                   UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
+	                                   MaxHitsPerYear);
 	}
       fprintf (Gbl.F.Out,"</li>");
      }
 
    fprintf (Gbl.F.Out,"</ul>");
-
-   /***** Global hits *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   Rep_ShowMyHitsPerYear (-1L,UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
-   // fprintf (Gbl.F.Out,"<br />");
-   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -393,7 +401,8 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
                                               time_t FirstClickTimeUTC,
-                                              struct tm *tm_FirstClickTime)
+                                              struct tm *tm_FirstClickTime,
+                                              float MaxHitsPerYear)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -433,7 +442,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
          row = mysql_fetch_row (mysql_res);
 
          /* Write data of this course */
-         Rep_WriteRowCrsData (row,FirstClickTimeUTC,tm_FirstClickTime);
+         Rep_WriteRowCrsData (row,FirstClickTimeUTC,tm_FirstClickTime,MaxHitsPerYear);
         }
 
       /* End table */
@@ -450,7 +459,8 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 
 static void Rep_WriteRowCrsData (MYSQL_ROW row,
                                  time_t FirstClickTimeUTC,
-                                 struct tm *tm_FirstClickTime)
+                                 struct tm *tm_FirstClickTime,
+                                 float MaxHitsPerYear)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
@@ -502,7 +512,7 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row,
             NumStds,Txt_students_ABBREVIATION);
 
    /***** Write hits per year for this course *****/
-   Rep_ShowMyHitsPerYear (CrsCod,FirstClickTimeUTC,tm_FirstClickTime);
+   Rep_ShowMyHitsPerYear (CrsCod,FirstClickTimeUTC,tm_FirstClickTime,MaxHitsPerYear);
 
    fprintf (Gbl.F.Out,"</li>");
   }
@@ -510,10 +520,12 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row,
 /*****************************************************************************/
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
+// Return the maximum number of hits per year
 
-static void Rep_ShowMyHitsPerYear (long CrsCod,
-                                   time_t FirstClickTimeUTC,
-                                   struct tm *tm_FirstClickTime)
+static float Rep_ShowMyHitsPerYear (long CrsCod,
+                                    time_t FirstClickTimeUTC,
+                                    struct tm *tm_FirstClickTime,
+                                    float MaxHitsPerYear)
   {
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    char Query[1024];
@@ -554,7 +566,10 @@ static void Rep_ShowMyHitsPerYear (long CrsCod,
    LastYear = Gbl.Now.Date.Year;
 
    /***** Compute maximum number of hits per year *****/
-   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+   if (MaxHitsPerYear >= 0.0)
+      Hits.Max = MaxHitsPerYear;
+   else
+      Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
@@ -597,6 +612,8 @@ static void Rep_ShowMyHitsPerYear (long CrsCod,
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
      }
+
+   return Hits.Max;
   }
 
 /*****************************************************************************/
