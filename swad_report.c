@@ -77,10 +77,16 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
-static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
-static void Rep_WriteRowCrsData (MYSQL_ROW row);
+static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+                                              time_t FirstClickTimeUTC,
+                                              struct tm *tm_FirstClickTime);
+static void Rep_WriteRowCrsData (MYSQL_ROW row,
+                                 time_t FirstClickTimeUTC,
+                                 struct tm *tm_FirstClickTime);
 
-static void Rep_ShowMyHitsPerYear  (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
+static void Rep_ShowMyHitsPerYear (long CrsCod,
+                                   time_t FirstClickTimeUTC,
+                                   struct tm *tm_FirstClickTime);
 // static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
@@ -347,16 +353,17 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 		  Txt_students_ABBREVIATION);
 
          /* List my courses with this role */
-	 Rep_GetAndWriteCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role);
+	 Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+	                                   UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 	}
       fprintf (Gbl.F.Out,"</li>");
      }
 
    fprintf (Gbl.F.Out,"</ul>");
 
-   /***** Hits *****/
+   /***** Global hits *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   Rep_ShowMyHitsPerYear  (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+   Rep_ShowMyHitsPerYear (-1L,UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
    // fprintf (Gbl.F.Out,"<br />");
    // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
@@ -384,7 +391,9 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 /************************** Write courses of a user **************************/
 /*****************************************************************************/
 
-static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
+static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+                                              time_t FirstClickTimeUTC,
+                                              struct tm *tm_FirstClickTime)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -424,7 +433,7 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
          row = mysql_fetch_row (mysql_res);
 
          /* Write data of this course */
-         Rep_WriteRowCrsData (row);
+         Rep_WriteRowCrsData (row,FirstClickTimeUTC,tm_FirstClickTime);
         }
 
       /* End table */
@@ -439,7 +448,9 @@ static void Rep_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t R
 /************** Write the data of a course (result of a query) ***************/
 /*****************************************************************************/
 
-static void Rep_WriteRowCrsData (MYSQL_ROW row)
+static void Rep_WriteRowCrsData (MYSQL_ROW row,
+                                 time_t FirstClickTimeUTC,
+                                 struct tm *tm_FirstClickTime)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
@@ -486,20 +497,27 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row)
    fprintf (Gbl.F.Out," %s",row[4]);
 
    /***** Write number of teachers / students in course *****/
-   fprintf (Gbl.F.Out," (%u %s / %u %s)"
-	              "</li>",
+   fprintf (Gbl.F.Out," (%u %s / %u %s)<br />",
             NumTchs,Txt_teachers_ABBREVIATION,
             NumStds,Txt_students_ABBREVIATION);
+
+   /***** Write hits per year for this course *****/
+   Rep_ShowMyHitsPerYear (CrsCod,FirstClickTimeUTC,tm_FirstClickTime);
+
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
 
-static void Rep_ShowMyHitsPerYear (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
+static void Rep_ShowMyHitsPerYear (long CrsCod,
+                                   time_t FirstClickTimeUTC,
+                                   struct tm *tm_FirstClickTime)
   {
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    char Query[1024];
+   char SubQuery[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -513,15 +531,20 @@ static void Rep_ShowMyHitsPerYear (time_t FirstClickTimeUTC,struct tm *tm_FirstC
    Dat_GetBrowserTimeZone (BrowserTimeZone);
 
    /***** Make the query *****/
+   if (CrsCod > 0)
+      sprintf (SubQuery," AND CrsCod='%ld'",CrsCod);
+   else
+      SubQuery[0] = '\0';
    sprintf (Query,"SELECT SQL_NO_CACHE "
 		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
 		  "COUNT(*) FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-		  " AND UsrCod='%ld'"
+		  " AND UsrCod='%ld'%s"
 		  " GROUP BY Year DESC",
 	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    SubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
    /***** Initialize first year *****/
