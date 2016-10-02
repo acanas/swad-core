@@ -13972,6 +13972,27 @@ const char *Txt_Hide_right_column =
 	"Ocultar coluna da direita";
 #endif
 
+const char *Txt_historical_log =
+#if   L==1
+	"registre hist&ograve;ric";
+#elif L==2
+	"historische log";
+#elif L==3
+	"historical log";
+#elif L==4
+	"registro hist&oacute;rico";
+#elif L==5
+	"journal historique";
+#elif L==6
+	"registro hist&oacute;rico";		// Okoteve traducción
+#elif L==7
+	"registro storico";
+#elif L==8
+	"dziennik historyczny";
+#elif L==9
+	"log hist&oacute;rico";
+#endif
+
 const char *Txt_Hits =	// hits = visits, clicks, page views...
 #if   L==1
 	"Accessos";
@@ -13991,6 +14012,27 @@ const char *Txt_Hits =	// hits = visits, clicks, page views...
 	"Ods&lstrok;on";
 #elif L==9
 	"Visitas";
+#endif
+
+const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Accessos (clics) com a %s";
+#elif L==2
+	"Anmeldungen (Klicks) als %s";
+#elif L==3
+	"Hits (clicks) as a %s";
+#elif L==4
+	"Accesos (clics) como %s";
+#elif L==5
+	"Visites (clics) en tant que %s";
+#elif L==6
+	"Accesos (clics) como %s";		// Okoteve traducción
+#elif L==7
+	"Visite (scatti) come %s";
+#elif L==8
+	"Ods&lstrok;on (klikni&eogon;cia) jako %s";
+#elif L==9
+	"Visitas (cliques) como %s";
 #endif
 
 const char *Txt_Holiday =
@@ -31006,7 +31048,7 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 #elif L==9
 	"Mensagem de resposta";
 #endif
-/*
+
 const char *Txt_Report =
 #if   L==1
 	"Informe";
@@ -31027,26 +31069,26 @@ const char *Txt_Report =
 #elif L==9
 	"Relat&oacute;rio";
 #endif
-*/
-const char *Txt_Report_of_use_of_the_platform =
+
+const char *Txt_Report_of_use_of_PLATFORM =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Informe d'&uacute;s de la plataforma";
+	"Informe d'&uacute;s de %s";
 #elif L==2
-	"Bericht der Nutzung der Plattform";
+	"Bericht der Nutzung der %s";
 #elif L==3
-	"Report of use of the platform";
+	"Report of use of %s";
 #elif L==4
-	"Informe de uso de la plataforma";
+	"Informe de uso de %s";
 #elif L==5
-	"Rapport d'utilisation de la plate-forme";
+	"Rapport d'utilisation de %s";
 #elif L==6
-	"Informe de uso de la plataforma";	// Okoteve traducción
+	"Informe de uso de %s";	// Okoteve traducción
 #elif L==7
-	"Rapporto di utilizzo della piattaforma";
+	"Rapporto di utilizzo de %s";
 #elif L==8
-	"Sprawozdanie z wykorzystaniem platformy";
+	"Sprawozdanie z wykorzystaniem %s";
 #elif L==9
-	"Relat&oacute;rio de utiliza&ccedil;&atilde;o da plataforma";
+	"Relat&oacute;rio de utiliza&ccedil;&atilde;o de %s";
 #endif
 
 const char *Txt_Report_possible_duplicate_user =
@@ -40855,6 +40897,27 @@ const char *Txt_teachers_files_area =
 	"nauczyciela udost&eogon;pnionych plik&oacute;w";
 #elif L==9
 	"zona de arquivos dos professores";
+#endif
+
+const char *Txt_Teaching_platform =
+#if   L==1
+	"Plataforma docent";
+#elif L==2
+	"Lernplattform ";
+#elif L==3
+	"Teaching platform";
+#elif L==4
+	"Plataforma docente";
+#elif L==5
+	"Plate-forme d'enseignement";
+#elif L==6
+	"Plataforma docente";	// Okoteve traducción
+#elif L==7
+	"Piattaforma didattica";
+#elif L==8
+	"Platforma nauczania";
+#elif L==9
+	"Plataforma de ensino";
 #endif
 
 const char *Txt_Temporary_private_storage_area =

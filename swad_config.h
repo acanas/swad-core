@@ -51,6 +51,7 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
+#define Cfg_URL_SWAD_SERVER			"https://localhost/swad/"	// With ending slash
 #define Cfg_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://localhost/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
@@ -99,6 +100,7 @@
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
 #define Cfg_PLATFORM_FULL_NAME			"OpenSWAD (Open Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"openswad.org"				// Server name (main part of the URL)
+#define Cfg_URL_SWAD_SERVER			"https://openswad.org/"			// With ending slash
 #define Cfg_URL_SWAD_CGI			"https://openswad.org"			// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://openswad.org/swad"		// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin/swad"			// Directory for this CGI and other commands called by it
@@ -164,6 +166,7 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"swad.ugr.es"				// Server name (main part of the URL)
+#define Cfg_URL_SWAD_SERVER			"https://swad.ugr.es/"			// With ending slash
 #define Cfg_URL_SWAD_CGI			"https://swad.ugr.es"			// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://swad.ugr.es/swad"		// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/var/www/cgi-bin"			// Directory for this CGI and other commands called by it
@@ -234,6 +237,7 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWADberry"
 #define Cfg_PLATFORM_FULL_NAME			"SWADberry (Shared Workspace At a Distance on a Raspberry Pi)"
 #define Cfg_PLATFORM_SERVER			"swadberry.ugr.es"		// Server name (main part of the URL)
+#define Cfg_URL_SWAD_SERVER			"https://swadberry.ugr.es/"	// With ending slash
 #define Cfg_URL_SWAD_CGI			"https://swadberry.ugr.es"	// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://swadberry.ugr.es/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it

@@ -42,7 +42,7 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Rep_MAX_BAR_WIDTH 90	// Maximum width of graphic bar
+#define Rep_MAX_BAR_WIDTH 80	// Maximum width of graphic bar
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&block;"	// HTML code for a block in graphic bar
@@ -120,13 +120,17 @@ void Rep_PrintMyUsageReport (void)
 
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
-   extern const char *Txt_Report_of_use_of_the_platform;
+   extern const char *Txt_Report;
+   extern const char *Txt_Report_of_use_of_PLATFORM;
+   extern const char *Txt_Teaching_platform;
+   extern const char *Txt_Name;
+   extern const char *Txt_TAGLINE;
    extern const char *Txt_Personal_information;
-   extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ID;
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
+   extern const char *Txt_URL;
    extern const char *Txt_Figures;
    extern const char *Txt_TIME_Since;
    extern const char *Txt_TIME_until;
@@ -147,6 +151,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_message;
    extern const char *Txt_messages;
    extern const char *Txt_Courses;
+   extern const char *Txt_historical_log;
    extern const char *Txt_Hits;
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    unsigned NumID;
@@ -189,28 +194,50 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
-      Lay_StartRoundFrame (NULL,Txt_Report_of_use_of_the_platform,
+      Lay_StartRoundFrame (NULL,Txt_Report,
                            Rep_PutIconToPrintMyUsageReport);
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\" style=\"margin:10px;\">");
 
    /***** Head *****/
-   fprintf (Gbl.F.Out,"<h1>%s</h1>",Txt_Report_of_use_of_the_platform);
-   fprintf (Gbl.F.Out,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
+   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   fprintf (Gbl.F.Out,"<div style=\"margin:10px; text-align:center;\">"
+                      "<h1>%s</h1>"
+                      "<h2>%s",
+            Gbl.Title,
+            Gbl.Usrs.Me.UsrDat.FullName);
    if (StrCurrentDate[0])
       fprintf (Gbl.F.Out,", %s",StrCurrentDate);
-   fprintf (Gbl.F.Out,"</h2>");
+   fprintf (Gbl.F.Out,"</h2>"
+                      "</div>");
+
+   fprintf (Gbl.F.Out,"<div style=\"margin:10px; text-align:left;\">");
+
+   /***** Platform *****/
+   fprintf (Gbl.F.Out,"<h3>%s</h3>"
+	              "<ul>",
+	    Txt_Teaching_platform);
+
+   /* Platform name */
+   fprintf (Gbl.F.Out,"<li>%s: %s, %s</li>",
+            Txt_Name,
+            Cfg_PLATFORM_FULL_NAME,Txt_TAGLINE);
+
+   /* Server URL */
+   fprintf (Gbl.F.Out,"<li>%s: <a href=\"%s\">%s</a></li>",
+            Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
+
+   fprintf (Gbl.F.Out,"</ul>");
 
    /***** Personal information *****/
    fprintf (Gbl.F.Out,"<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Personal_information);
 
-   /***** User's name *****/
+   /* User's name */
    fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
-            Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
+            Txt_Name,
             Gbl.Usrs.Me.UsrDat.FullName);
 
-   /***** User's ID *****/
+   /* User's ID */
    fprintf (Gbl.F.Out,"<li>%s:",
             Txt_ID);
    for (NumID = 0;
@@ -223,18 +250,18 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
      }
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** User's e-mail *****/
+   /* User's e-mail */
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
             Txt_Email,
             Gbl.Usrs.Me.UsrDat.Email);
 
-   /***** User's country *****/
+   /* User's country */
    Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
             Txt_Country,
             CtyName);
 
-   /***** User's institution *****/
+   /* User's institution */
    Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
@@ -248,10 +275,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	              "<ul>",
 	    Txt_Figures);
 
-   /***** Get figures *****/
+   /* Get figures */
    Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
 
-   /***** Time since first click until now *****/
+   /* Time since first click until now */
    fprintf (Gbl.F.Out,"<li>%s ",Txt_TIME_Since);
    if (UsrFigures.FirstClickTimeUTC)
      {
@@ -282,7 +309,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
      }
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** Number of clicks *****/
+   /* Number of clicks */
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_Clicks);
    if (UsrFigures.NumClicks >= 0)
      {
@@ -299,7 +326,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** Number of files currently published *****/
+   /* Number of files currently published */
    if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
       NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
    else
@@ -313,7 +340,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 		              Txt_files,
 	    NumPublicFiles,Txt_public_FILES);
 
-   /***** Number of file views *****/
+   /* Number of file views */
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
    if (UsrFigures.NumFileViews >= 0)
      {
@@ -333,7 +360,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** Number of posts in forums *****/
+   /* Number of posts in forums */
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_Forum_posts);
    if (UsrFigures.NumForPst >= 0)
      {
@@ -353,7 +380,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"?");
    fprintf (Gbl.F.Out,"</li>");
 
-   /***** Number of messages sent *****/
+   /* Number of messages sent */
    fprintf (Gbl.F.Out,"<li>%s: ",Txt_Messages_sent);
    if (UsrFigures.NumMsgSnt >= 0)
      {
@@ -396,9 +423,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Historic courses *****/
-   fprintf (Gbl.F.Out,"<h3>%s (hist&oacute;rico)</h3>"	// TODO: Need translation!!!
+   fprintf (Gbl.F.Out,"<h3>%s (%s)</h3>"
 	              "<ul>",
-	    Txt_Courses);
+	    Txt_Courses,Txt_historical_log);
 
    /* Number of courses in which the user clicked as student/teacher */
    for (Role  = Rol_STUDENT;
@@ -572,6 +599,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
                                                struct tm *tm_FirstClickTime,
                                                unsigned long MaxHitsPerYear)
   {
+   extern const char *Txt_Hits_as_a_USER;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -592,7 +620,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Heading row */
-      sprintf (Gbl.Title,"Accesos como %s",	// TODO: Need translation
+      sprintf (Gbl.Title,Txt_Hits_as_a_USER,
                Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
       fprintf (Gbl.F.Out,"<li>%s:"
 	                 "<ol>",
