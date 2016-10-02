@@ -134,6 +134,7 @@
 // TODO: If a user creates a request for inscription, and the user is removed ==> mark possible notifications as removed
 
 // TODO: FIX BUG: Passwords with % do not work
+// TODO: When SWAD prompts the user to confirm elimination of a group, list the groups below the button
 
 // TODO: Send a message to the user when rejecting a request for enrollment. Suggested by Javier Fernández Baldomero.
 // TODO: Create a table with IPs to block temporarily multiple access to the action used to check ID for empty accounts
@@ -142,13 +143,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.4.1 (2016-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.5 (2016-10-02)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.5:     Oct 02, 2016	Changes in hits in current courses in user's usage report. (205364 lines)
         Version 16.4.1:   Sep 29, 2016	Changes in hits in current courses in user's usage report. (205316 lines)
         Version 16.4:     Sep 29, 2016	Hits in current courses in user's usage report. (205299 lines)
         Version 16.3.2:   Sep 28, 2016	Changes in behaviour of button to follow user. (205277 lines)

@@ -11622,7 +11622,7 @@ SELECT * FROM file_view,files WHERE files.FileBrowser='9' AND files.Cod='-1' AND
 
 
 
-
+----- Optimización de consulta de mensajes -----
 
 
 SELECT COUNT(*) FROM msg_content WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt) AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv);
@@ -11630,4 +11630,12 @@ SELECT COUNT(*) FROM msg_content WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt
 
 SELECT COUNT(*) FROM msg_content LEFT JOIN msg_snt ON (msg_content.MsgCod=msg_snt.MsgCod) WHERE msg_content.MsgCod IS NULL;
 
+
+------------------------------------------------
+
+
+SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'Europe/Berlin')) AS Year,COUNT(*) FROM log_full WHERE ClickTime>=FROM_UNIXTIME('0') AND UsrCod='1' GROUP BY Year DESC;
+		  
+		  
+		  
 

@@ -78,18 +78,23 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+                                              const char *BrowserTimeZone,
                                               time_t FirstClickTimeUTC,
                                               struct tm *tm_FirstClickTime,
-                                              float MaxHitsPerYear);
+                                              unsigned long MaxHitsPerYear);
 static void Rep_WriteRowCrsData (MYSQL_ROW row,
+                                 const char *BrowserTimeZone,
                                  time_t FirstClickTimeUTC,
                                  struct tm *tm_FirstClickTime,
-                                 float MaxHitsPerYear);
+                                 unsigned long MaxHitsPerYear);
 
-static float Rep_ShowMyHitsPerYear (long CrsCod,
-                                    time_t FirstClickTimeUTC,
-                                    struct tm *tm_FirstClickTime,
-                                    float MaxHitsPerYear);
+static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
+                                            time_t FirstClickTimeUTC);
+static void Rep_ShowMyHitsPerYear (long CrsCod,
+                                   const char *BrowserTimeZone,
+                                   time_t FirstClickTimeUTC,
+                                   struct tm *tm_FirstClickTime,
+                                   unsigned long MaxHitsPerYear);
 // static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
@@ -143,6 +148,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_Hits;
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -152,7 +158,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    unsigned NumPublicFiles;
    Rol_Role_t Role;
    unsigned NumCrss;
-   float MaxHitsPerYear;
+   unsigned long MaxHitsPerYear;
+
+   /***** Get client time zone *****/
+   Dat_GetBrowserTimeZone (BrowserTimeZone);
 
    /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
@@ -179,10 +188,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
      {
       if (NumID)
 	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out," <span class=\"%s\">%s</span>",
-	       Gbl.Usrs.Me.UsrDat.IDs.List[NumID].Confirmed ? "USR_ID_C" :
-						              "USR_ID_NC",
-               Gbl.Usrs.Me.UsrDat.IDs.List[NumID].ID);
+      fprintf (Gbl.F.Out," %s",Gbl.Usrs.Me.UsrDat.IDs.List[NumID].ID);
      }
    fprintf (Gbl.F.Out,"</li>");
 
@@ -331,21 +337,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    fprintf (Gbl.F.Out,"</ul>");
 
-   /***** Global hits *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   MaxHitsPerYear = Rep_ShowMyHitsPerYear (-1L,
-                                           UsrFigures.FirstClickTimeUTC,
-                                           &tm_FirstClickTime,
-                                           -1.0);
-   // fprintf (Gbl.F.Out,"<br />");
-   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
-
    /***** Courses *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>"
 	              "<ul>",
 	    Txt_Courses);
 
    /***** Number of courses in which the user is student/teacher *****/
+   MaxHitsPerYear = Rep_GetMaxHitsPerYear (BrowserTimeZone,UsrFigures.FirstClickTimeUTC);
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
 	Role++)
@@ -367,6 +365,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
          /* List my courses with this role */
 	 Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+                                           BrowserTimeZone,
 	                                   UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
 	                                   MaxHitsPerYear);
 	}
@@ -374,6 +373,17 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
      }
 
    fprintf (Gbl.F.Out,"</ul>");
+
+
+   /***** Global hits *****/
+   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
+   Rep_ShowMyHitsPerYear (-1L,
+                          BrowserTimeZone,
+                          UsrFigures.FirstClickTimeUTC,
+                          &tm_FirstClickTime,
+                          0);
+   // fprintf (Gbl.F.Out,"<br />");
+   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -400,9 +410,10 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 /*****************************************************************************/
 
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+					      const char *BrowserTimeZone,
                                               time_t FirstClickTimeUTC,
                                               struct tm *tm_FirstClickTime,
-                                              float MaxHitsPerYear)
+                                              unsigned long MaxHitsPerYear)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -442,7 +453,9 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
          row = mysql_fetch_row (mysql_res);
 
          /* Write data of this course */
-         Rep_WriteRowCrsData (row,FirstClickTimeUTC,tm_FirstClickTime,MaxHitsPerYear);
+         Rep_WriteRowCrsData (row,
+                              BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                              MaxHitsPerYear);
         }
 
       /* End table */
@@ -458,9 +471,10 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 /*****************************************************************************/
 
 static void Rep_WriteRowCrsData (MYSQL_ROW row,
+                                 const char *BrowserTimeZone,
                                  time_t FirstClickTimeUTC,
                                  struct tm *tm_FirstClickTime,
-                                 float MaxHitsPerYear)
+                                 unsigned long MaxHitsPerYear)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
@@ -512,24 +526,62 @@ static void Rep_WriteRowCrsData (MYSQL_ROW row,
             NumStds,Txt_students_ABBREVIATION);
 
    /***** Write hits per year for this course *****/
-   Rep_ShowMyHitsPerYear (CrsCod,FirstClickTimeUTC,tm_FirstClickTime,MaxHitsPerYear);
+   Rep_ShowMyHitsPerYear (CrsCod,
+                          BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                          MaxHitsPerYear);
 
    fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
-/********************** Write my hits grouped by years ***********************/
+/************ Get the maximum number of hits per course-year-role ************/
 /*****************************************************************************/
 // Return the maximum number of hits per year
 
-static float Rep_ShowMyHitsPerYear (long CrsCod,
-                                    time_t FirstClickTimeUTC,
-                                    struct tm *tm_FirstClickTime,
-                                    float MaxHitsPerYear)
+static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
+                                            time_t FirstClickTimeUTC)
   {
-   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    char Query[1024];
-   char SubQuery[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long MaxHitsPerYear = 0;
+
+   sprintf (Query,"SELECT MAX(N) FROM (SELECT "
+	          "CrsCod,"
+	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
+	          "COUNT(*) AS N"
+	          " FROM log_full"
+	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
+	          " AND UsrCod='%ld'"
+	          " AND CrsCod>'0'"
+	          " GROUP BY CrsCod,Year)"
+	          " AS hits_per_crs_year",
+	    BrowserTimeZone,
+            (long) FirstClickTimeUTC,
+	    Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
+
+   /***** Get number of users *****/
+   row = mysql_fetch_row (mysql_res);
+   if (row[0])	// There are questions
+      if (sscanf (row[0],"%lu",&MaxHitsPerYear) != 1)
+         Lay_ShowErrorAndExit ("Error when getting maximum hits.");
+
+   return MaxHitsPerYear;
+  }
+
+/*****************************************************************************/
+/********************** Write my hits grouped by years ***********************/
+/*****************************************************************************/
+
+static void Rep_ShowMyHitsPerYear (long CrsCod,
+                                   const char *BrowserTimeZone,
+                                   time_t FirstClickTimeUTC,
+                                   struct tm *tm_FirstClickTime,
+                                   unsigned long MaxHitsPerYear)
+  {
+   char Query[1024];
+   char SubQueryCrs[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -539,14 +591,12 @@ static float Rep_ShowMyHitsPerYear (long CrsCod,
    unsigned Year;
    struct Sta_Hits Hits;
 
-   /***** Get client time zone *****/
-   Dat_GetBrowserTimeZone (BrowserTimeZone);
-
    /***** Make the query *****/
    if (CrsCod > 0)
-      sprintf (SubQuery," AND CrsCod='%ld'",CrsCod);
+      sprintf (SubQueryCrs," AND CrsCod='%ld'",CrsCod);
    else
-      SubQuery[0] = '\0';
+      SubQueryCrs[0] = '\0';
+
    sprintf (Query,"SELECT SQL_NO_CACHE "
 		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
 		  "COUNT(*) FROM log_full"
@@ -556,7 +606,7 @@ static float Rep_ShowMyHitsPerYear (long CrsCod,
 	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    SubQuery);
+	    SubQueryCrs);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
    /***** Initialize first year *****/
@@ -565,14 +615,18 @@ static float Rep_ShowMyHitsPerYear (long CrsCod,
    /***** Initialize LastYear *****/
    LastYear = Gbl.Now.Date.Year;
 
-   /***** Compute maximum number of hits per year *****/
-   if (MaxHitsPerYear >= 0.0)
-      Hits.Max = MaxHitsPerYear;
+   /***** Set maximum number of hits per year *****/
+   if (MaxHitsPerYear)
+      /* Set maximum number of hits per year from parameter */
+      Hits.Max = (float) MaxHitsPerYear;
    else
+     {
+      /* Compute maximum number of hits per year */
       Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+      mysql_data_seek (mysql_res,0);
+     }
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
 	NumRow++)
@@ -612,8 +666,6 @@ static float Rep_ShowMyHitsPerYear (long CrsCod,
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
      }
-
-   return Hits.Max;
   }
 
 /*****************************************************************************/
