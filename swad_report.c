@@ -595,6 +595,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
+   extern const char *Txt_unknown_removed_course;
    extern const char *Txt_no_course_selected;
    struct Course Crs;
    struct Degree Deg;
@@ -630,7 +631,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 		  Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
 	}
       else
-         fprintf (Gbl.F.Out,"(asignatura desconocida/eliminada)");	// TODO: Need translation
+         fprintf (Gbl.F.Out,"(%s)",Txt_unknown_removed_course);
      }
    else	// CrsCod <= 0 in log ==> no course selected
       fprintf (Gbl.F.Out,"(%s)",Txt_no_course_selected);

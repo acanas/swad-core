@@ -48561,25 +48561,25 @@ const char *Txt_Unfollow =
 	"Deixar de seguir";
 #endif
 
-const char *Txt_unknown_course =
+const char *Txt_unknown_removed_course =
 #if   L==1
-	"assignatura desconeguda";
+	"assignatura desconeguda / eliminada";
 #elif L==2
-	"Kurs unbekannt";
+	"Kurs unbekannt / entfernt";
 #elif L==3
-	"unknown course";
+	"unknown / removed course";
 #elif L==4
-	"asignatura desconocida";
+	"asignatura desconocida / eliminada";
 #elif L==5
-	"mati&egrave;re inconnue";
+	"mati&egrave;re inconnue / supprim&eacute;e";
 #elif L==6
-	"asignatura desconocida";	// Okoteve traducción
+	"asignatura desconocida / eliminada";	// Okoteve traducción
 #elif L==7
-	"corso sconosciuto";
+	"corso sconosciuto / rimosso";
 #elif L==8
-	"kurs nieznany";
+	"kurs nieznany / usuni&eogon;te";
 #elif L==9
-	"disciplina desconhecida";
+	"disciplina desconhecida / removida";
 #endif
 
 const char *Txt_unknown_assignment =

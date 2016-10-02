@@ -1074,7 +1074,7 @@ static void TT_DrawCellAlignTimeTable (void)
 static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
                                   long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place)
   {
-   extern const char *Txt_unknown_course;
+   extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
@@ -1179,7 +1179,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                    ClassType == TT_PRACT_CLASS)
 		  fprintf (Gbl.F.Out,"%s<br />",
 		           Crs.ShortName[0] ? Crs.ShortName :
-			                      Txt_unknown_course);
+			                      Txt_unknown_removed_course);
               }
 	    fprintf (Gbl.F.Out,"%s (%dh%s)",
 		     Txt_TIMETABLE_CLASS_TYPES[ClassType],
