@@ -77,30 +77,24 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
-static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
-                                            time_t FirstClickTimeUTC);
+static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-                                              const char *BrowserTimeZone,
                                               time_t FirstClickTimeUTC,
                                               struct tm *tm_FirstClickTime,
                                               unsigned long MaxHitsPerYear);
 static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-					       const char *BrowserTimeZone,
                                                time_t FirstClickTimeUTC,
                                                struct tm *tm_FirstClickTime,
                                                unsigned long MaxHitsPerYear);
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
-                                 const char *BrowserTimeZone,
                                  time_t FirstClickTimeUTC,
                                  struct tm *tm_FirstClickTime,
                                  unsigned long MaxHitsPerYear);
 
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
-                                   const char *BrowserTimeZone,
                                    time_t FirstClickTimeUTC,
                                    struct tm *tm_FirstClickTime,
                                    unsigned long MaxHitsPerYear);
-// static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
 
@@ -153,7 +147,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
    extern const char *Txt_Hits;
-   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
@@ -169,9 +162,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    unsigned NumPublicFiles;
    Rol_Role_t Role;
    unsigned long MaxHitsPerYear;
-
-   /***** Get client time zone *****/
-   Dat_GetBrowserTimeZone (BrowserTimeZone);
 
    /***** Get current date-time *****/
    time (&CurrentTime);
@@ -410,13 +400,12 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	              "<ul>");
 
    /* Number of courses in which the user is student/teacher */
-   MaxHitsPerYear = Rep_GetMaxHitsPerYear (BrowserTimeZone,UsrFigures.FirstClickTimeUTC);
+   MaxHitsPerYear = Rep_GetMaxHitsPerYear (UsrFigures.FirstClickTimeUTC);
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-					BrowserTimeZone,
 					UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
 					MaxHitsPerYear);
 
@@ -433,7 +422,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteHistoricCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-					 BrowserTimeZone,
 					 UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
 					 MaxHitsPerYear);
 
@@ -442,12 +430,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    /***** Global hits *****/
    fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
    Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
-                          BrowserTimeZone,
                           UsrFigures.FirstClickTimeUTC,
                           &tm_FirstClickTime,
                           0);
-   // fprintf (Gbl.F.Out,"<br />");
-   // Rep_ShowMyHitsPerMonth (UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -475,8 +460,7 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 /*****************************************************************************/
 // Return the maximum number of hits per year
 
-static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
-                                            time_t FirstClickTimeUTC)
+static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -485,17 +469,18 @@ static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
 
    sprintf (Query,"SELECT MAX(N) FROM (SELECT "
 	          "CrsCod,"
-	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
+	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
 	          "Role,"
 	          "COUNT(*) AS N"
 	          " FROM log_full"
 	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-	          " AND UsrCod='%ld'"
+	          " AND UsrCod='%ld' AND Role>='%u' AND Role<='%u'"
 	          " GROUP BY CrsCod,Year,Role)"
 	          " AS hits_per_crs_year",
-	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    (unsigned) Rol_STUDENT,
+	    (unsigned) Rol_TEACHER);
    DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
 
    /***** Get number of users *****/
@@ -512,7 +497,6 @@ static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
 /*****************************************************************************/
 
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-					      const char *BrowserTimeZone,
                                               time_t FirstClickTimeUTC,
                                               struct tm *tm_FirstClickTime,
                                               unsigned long MaxHitsPerYear)
@@ -574,7 +558,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 
 	    /* Write data of this course */
 	    Rep_WriteRowCrsData (CrsCod,Role,
-				 BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+				 FirstClickTimeUTC,tm_FirstClickTime,
 				 MaxHitsPerYear);
 	   }
 
@@ -594,7 +578,6 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 /*****************************************************************************/
 
 static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-					       const char *BrowserTimeZone,
                                                time_t FirstClickTimeUTC,
                                                struct tm *tm_FirstClickTime,
                                                unsigned long MaxHitsPerYear)
@@ -639,7 +622,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
 
          /* Write data of this course */
          Rep_WriteRowCrsData (CrsCod,Role,
-                              BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                              FirstClickTimeUTC,tm_FirstClickTime,
                               MaxHitsPerYear);
         }
 
@@ -657,7 +640,6 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
 /*****************************************************************************/
 
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
-                                 const char *BrowserTimeZone,
                                  time_t FirstClickTimeUTC,
                                  struct tm *tm_FirstClickTime,
                                  unsigned long MaxHitsPerYear)
@@ -709,7 +691,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    /***** Write hits per year for this course *****/
    fprintf (Gbl.F.Out,"<br />");
    Rep_ShowMyHitsPerYear (false,CrsCod,Role,
-                          BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                          FirstClickTimeUTC,tm_FirstClickTime,
                           MaxHitsPerYear);
 
    fprintf (Gbl.F.Out,"</li>");
@@ -720,7 +702,6 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
-                                   const char *BrowserTimeZone,
                                    time_t FirstClickTimeUTC,
                                    struct tm *tm_FirstClickTime,
                                    unsigned long MaxHitsPerYear)
@@ -749,12 +730,11 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
       sprintf (SubQueryRol," AND Role='%u'",(unsigned) Role);
 
    sprintf (Query,"SELECT SQL_NO_CACHE "
-		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
+		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
 		  "COUNT(*) FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
 		  " AND UsrCod='%ld'%s%s"
 		  " GROUP BY Year DESC",
-	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    SubQueryCrs,
@@ -820,103 +800,6 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
      }
   }
 
-/*****************************************************************************/
-/********************* Write my hits grouped by months ***********************/
-/*****************************************************************************/
-/*
-static void Rep_ShowMyHitsPerMonth (time_t FirstClickTimeUTC,struct tm *tm_FirstClickTime)
-  {
-   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
-   char Query[1024];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
-   struct Date ReadDate;
-   struct Date LastDate;
-   struct Date Date;
-   unsigned M;
-   unsigned NumMonthsBetweenLastDateAndCurrentDate;
-   struct Sta_Hits Hits;
-
-   ***** Get client time zone *****
-   Dat_GetBrowserTimeZone (BrowserTimeZone);
-
-   ***** Make the query *****
-   sprintf (Query,"SELECT SQL_NO_CACHE "
-		  "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
-		  "COUNT(*) FROM log_full"
-                  " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-		  " AND UsrCod='%ld'"
-		  " GROUP BY Month DESC",
-	    BrowserTimeZone,
-            (long) FirstClickTimeUTC,
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
-
-   ***** Initialize first date *****
-   Gbl.DateRange.DateIni.Date.Year  = 1900 + tm_FirstClickTime->tm_year;
-   Gbl.DateRange.DateIni.Date.Month = 1 + tm_FirstClickTime->tm_mon;
-   Gbl.DateRange.DateIni.Date.Day   = tm_FirstClickTime->tm_mday;
-
-   ***** Initialize LastDate *****
-   Dat_AssignDate (&LastDate,&Gbl.Now.Date);
-
-   ***** Compute maximum number of hits per month *****
-   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
-
-   ***** Write rows *****
-   mysql_data_seek (mysql_res,0);
-   for (NumRow = 1;
-	NumRow <= NumRows;
-	NumRow++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      * Get the year and the month (in row[0] is the date in YYYYMM format) *
-      if (sscanf (row[0],"%04u%02u",&ReadDate.Year,&ReadDate.Month) != 2)
-	 Lay_ShowErrorAndExit ("Wrong date.");
-
-      * Get number hits (in row[1]) *
-      Hits.Num = Str_GetFloatNumFromStr (row[1]);
-
-      Dat_AssignDate (&Date,&LastDate);
-      NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&ReadDate,&LastDate);
-      for (M = 1;
-	   M <= NumMonthsBetweenLastDateAndCurrentDate;
-	   M++)
-        {
-         * Write the month *
-         fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
-
-         * Draw bar proportional to number of hits *
-         Rep_DrawBarNumHits (M == NumMonthsBetweenLastDateAndCurrentDate ? Hits.Num :
-                        	                                           0.0,
-                             Hits.Max,Rep_MAX_BAR_WIDTH);
-
-         * Decrease month *
-         Dat_GetMonthBefore (&Date,&Date);
-        }
-      Dat_AssignDate (&LastDate,&Date);
-     }
-
-  ***** Finally, show the oldest months without clicks *****
-  NumMonthsBetweenLastDateAndCurrentDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
-  for (M = 1;
-       M <= NumMonthsBetweenLastDateAndCurrentDate;
-       M++)
-    {
-     * Write the month *
-     fprintf (Gbl.F.Out,"%04u-%02u ",Date.Year,Date.Month);
-
-     * Draw bar proportional to number of hits *
-     Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
-
-     * Decrease month *
-     Dat_GetMonthBefore (&Date,&Date);
-    }
-  }
-*/
 /*****************************************************************************/
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
