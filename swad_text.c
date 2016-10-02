@@ -31006,7 +31006,28 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 #elif L==9
 	"Mensagem de resposta";
 #endif
-
+/*
+const char *Txt_Report =
+#if   L==1
+	"Informe";
+#elif L==2
+	"Nutzungsbericht";
+#elif L==3
+	"Report";
+#elif L==4
+	"Informe";
+#elif L==5
+	"Rapport";
+#elif L==6
+	"Informe";	// Okoteve traducción
+#elif L==7
+	"Rapporto";
+#elif L==8
+	"Raport";
+#elif L==9
+	"Relat&oacute;rio";
+#endif
+*/
 const char *Txt_Report_of_use_of_the_platform =
 #if   L==1
 	"Informe d'&uacute;s de la plataforma";
@@ -47061,6 +47082,48 @@ const char *Txt_threads =
 	"w&aogon;tki";
 #elif L==9
 	"threads";
+#endif
+
+const char *Txt_TIME_Since =
+#if   L==1
+	"Des de";
+#elif L==2
+	"Seit dem";
+#elif L==3
+	"Since";
+#elif L==4
+	"Desde";
+#elif L==5
+	"Depuis";
+#elif L==6
+	"Desde";	// Okoteve traducción
+#elif L==7
+	"Dal";
+#elif L==8
+	"Od";
+#elif L==9
+	"Desde";
+#endif
+
+const char *Txt_TIME_until =
+#if   L==1
+	"fins al";
+#elif L==2
+	"bis zum";
+#elif L==3
+	"until";
+#elif L==4
+	"hasta";
+#elif L==5
+	"jusqu'au";
+#elif L==6
+	"hasta";	// Okoteve traducción
+#elif L==7
+	"al";
+#elif L==8
+	"do";
+#elif L==9
+	"at&eacute;";
 #endif
 
 const char *Txt_time =

@@ -128,7 +128,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Figures;
-   extern const char *Txt_From_TIME;
+   extern const char *Txt_TIME_Since;
+   extern const char *Txt_TIME_until;
    extern const char *Txt_day;
    extern const char *Txt_days;
    extern const char *Txt_Clicks;
@@ -152,7 +153,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
    struct UsrFigures UsrFigures;
+   time_t CurrentTime;
+   struct tm tm_CurrentTime;
    struct tm tm_FirstClickTime;
+   char StrCurrentDate[10+1];	// Example: 2016-10-02
+				//          1234567890
+   char StrCurrentTime[8+1];	// Example: 19:03:49
+				//          12345678
    unsigned NumFiles;
    unsigned NumPublicFiles;
    Rol_Role_t Role;
@@ -161,14 +168,40 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    /***** Get client time zone *****/
    Dat_GetBrowserTimeZone (BrowserTimeZone);
 
+   /***** Get current date-time *****/
+   time (&CurrentTime);
+   if ((gmtime_r (&CurrentTime,&tm_CurrentTime)) != NULL)
+     {
+      sprintf (StrCurrentDate,"%04d-%02d-%02d",
+	       1900 + tm_CurrentTime.tm_year,	// year
+	       1 + tm_CurrentTime.tm_mon,	// month
+	       tm_CurrentTime.tm_mday);		// day of the month
+      sprintf (StrCurrentTime,"%02d:%02d:%02d",
+	       tm_CurrentTime.tm_hour,		// hours
+	       tm_CurrentTime.tm_min,		// minutes
+	       tm_CurrentTime.tm_sec);		// seconds
+     }
+   else
+     {
+      StrCurrentDate[0] = '\0';
+      StrCurrentTime[0] = '\0';
+     }
+
    /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
       Lay_StartRoundFrame (NULL,Txt_Report_of_use_of_the_platform,
-			   Rep_PutIconToPrintMyUsageReport);
+                           Rep_PutIconToPrintMyUsageReport);
    fprintf (Gbl.F.Out,"<div class=\"LEFT_TOP\" style=\"margin:10px;\">");
 
+   /***** Head *****/
+   fprintf (Gbl.F.Out,"<h1>%s</h1>",Txt_Report_of_use_of_the_platform);
+   fprintf (Gbl.F.Out,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
+   if (StrCurrentDate[0])
+      fprintf (Gbl.F.Out,", %s",StrCurrentDate);
+   fprintf (Gbl.F.Out,"</h2>");
+
    /***** Personal information *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+   fprintf (Gbl.F.Out,"<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Personal_information);
 
@@ -211,15 +244,15 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Figures *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+   fprintf (Gbl.F.Out,"<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Figures);
 
    /***** Get figures *****/
    Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
 
-   /***** Time since first click *****/
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_From_TIME);
+   /***** Time since first click until now *****/
+   fprintf (Gbl.F.Out,"<li>%s ",Txt_TIME_Since);
    if (UsrFigures.FirstClickTimeUTC)
      {
       if ((gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime)) != NULL)
@@ -231,6 +264,9 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                   tm_FirstClickTime.tm_hour,		// hours
                   tm_FirstClickTime.tm_min,		// minutes
 		  tm_FirstClickTime.tm_sec);		// seconds
+	 if (StrCurrentDate[0])
+	    fprintf (Gbl.F.Out," %s %s %s UTC",
+	             Txt_TIME_until,StrCurrentDate,StrCurrentTime);
 	 if (UsrFigures.NumDays > 0)
 	    fprintf (Gbl.F.Out," (%d %s)",
 		     UsrFigures.NumDays,
@@ -239,7 +275,11 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 	}
      }
    else	// Time of first click is unknown
+     {
       fprintf (Gbl.F.Out,"?");
+      if (StrCurrentDate[0])
+         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDate,StrCurrentTime);
+     }
    fprintf (Gbl.F.Out,"</li>");
 
    /***** Number of clicks *****/
@@ -336,9 +376,11 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Current courses *****/
-   fprintf (Gbl.F.Out,"<h2>%s (actuales)</h2>"	// TODO: Need translation!!!
-	              "<ul>",
-	    Txt_Courses);
+   fprintf (Gbl.F.Out,"<h3>%s",Txt_Courses);
+   if (StrCurrentDate[0])
+      fprintf (Gbl.F.Out," (%s)",StrCurrentDate);
+   fprintf (Gbl.F.Out,"</h3>"
+	              "<ul>");
 
    /* Number of courses in which the user is student/teacher */
    MaxHitsPerYear = Rep_GetMaxHitsPerYear (BrowserTimeZone,UsrFigures.FirstClickTimeUTC);
@@ -354,7 +396,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Historic courses *****/
-   fprintf (Gbl.F.Out,"<h2>%s (hist&oacute;rico)</h2>"	// TODO: Need translation!!!
+   fprintf (Gbl.F.Out,"<h3>%s (hist&oacute;rico)</h3>"	// TODO: Need translation!!!
 	              "<ul>",
 	    Txt_Courses);
 
@@ -371,7 +413,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** Global hits *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
+   fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
    Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
                           BrowserTimeZone,
                           UsrFigures.FirstClickTimeUTC,
