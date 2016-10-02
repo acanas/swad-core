@@ -13980,11 +13980,11 @@ const char *Txt_Hits =	// hits = visits, clicks, page views...
 #elif L==3
 	"Hits";
 #elif L==4
-	"Accesos";
+	"Accesos (clics)";
 #elif L==5
 	"Visites";
 #elif L==6
-	"Accesos";		// Okoteve traducción
+	"Accesos (clics)";		// Okoteve traducción
 #elif L==7
 	"Visite";
 #elif L==8
@@ -23875,9 +23875,30 @@ const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
 #elif L==7
 	"senza corso di origine";
 #elif L==8
-	"Oczywiscie nie pochodzenia";
+	"kurs nie pochodzenia";
 #elif L==9
 	"no course of origin";		// Necessita de tradução
+#endif
+
+const char *Txt_no_course_selected =
+#if   L==1
+	"cap assignatura seleccionada";
+#elif L==2
+	"kein Kurs ausgew&auml;hlt";
+#elif L==3
+	"no course selected";
+#elif L==4
+	"ninguna asignatura seleccionada";
+#elif L==5
+	"pas de mati&egrave;re choisi";
+#elif L==6
+	"ninguna asignatura seleccionada";
+#elif L==7
+	"nessun corso scelto";
+#elif L==8
+	"kurs nie jest wybrany";
+#elif L==9
+	"nenhuma disciplina seleccionada";
 #endif
 
 const char *Txt_No_centres =
