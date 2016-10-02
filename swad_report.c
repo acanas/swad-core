@@ -392,6 +392,13 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    fprintf (Gbl.F.Out,"</ul>");
 
+   /***** Global hits *****/
+   fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
+   Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
+                          UsrFigures.FirstClickTimeUTC,
+                          &tm_FirstClickTime,
+                          0);
+
    /***** Current courses *****/
    fprintf (Gbl.F.Out,"<h3>%s",Txt_Courses);
    if (StrCurrentDate[0])
@@ -426,13 +433,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 					 MaxHitsPerYear);
 
    fprintf (Gbl.F.Out,"</ul>");
-
-   /***** Global hits *****/
-   fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
-   Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
-                          UsrFigures.FirstClickTimeUTC,
-                          &tm_FirstClickTime,
-                          0);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>");
