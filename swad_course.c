@@ -1999,7 +1999,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    unsigned long NumRows;
    bool CrsFound = false;
 
-   if (Crs->CrsCod < 0)
+   if (Crs->CrsCod <= 0)
      {
       Crs->CrsCod = -1L;
       Crs->DegCod = -1L;

@@ -77,20 +77,25 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
+static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
+                                            time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
                                               const char *BrowserTimeZone,
                                               time_t FirstClickTimeUTC,
                                               struct tm *tm_FirstClickTime,
                                               unsigned long MaxHitsPerYear);
-static void Rep_WriteRowCrsData (MYSQL_ROW row,
+static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+					       const char *BrowserTimeZone,
+                                               time_t FirstClickTimeUTC,
+                                               struct tm *tm_FirstClickTime,
+                                               unsigned long MaxHitsPerYear);
+static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  const char *BrowserTimeZone,
                                  time_t FirstClickTimeUTC,
                                  struct tm *tm_FirstClickTime,
                                  unsigned long MaxHitsPerYear);
 
-static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
-                                            time_t FirstClickTimeUTC);
-static void Rep_ShowMyHitsPerYear (long CrsCod,
+static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    const char *BrowserTimeZone,
                                    time_t FirstClickTimeUTC,
                                    struct tm *tm_FirstClickTime,
@@ -141,12 +146,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_message;
    extern const char *Txt_messages;
    extern const char *Txt_Courses;
-   extern const char *Txt_USER_in_COURSE;
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_course;
-   extern const char *Txt_courses;
-   extern const char *Txt_teachers_ABBREVIATION;
-   extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_Hits;
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
    unsigned NumID;
@@ -157,7 +156,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    unsigned NumFiles;
    unsigned NumPublicFiles;
    Rol_Role_t Role;
-   unsigned NumCrss;
    unsigned long MaxHitsPerYear;
 
    /***** Get client time zone *****/
@@ -337,47 +335,44 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    fprintf (Gbl.F.Out,"</ul>");
 
-   /***** Courses *****/
-   fprintf (Gbl.F.Out,"<h2>%s</h2>"
+   /***** Current courses *****/
+   fprintf (Gbl.F.Out,"<h2>%s (actuales)</h2>"	// TODO: Need translation!!!
 	              "<ul>",
 	    Txt_Courses);
 
-   /***** Number of courses in which the user is student/teacher *****/
+   /* Number of courses in which the user is student/teacher */
    MaxHitsPerYear = Rep_GetMaxHitsPerYear (BrowserTimeZone,UsrFigures.FirstClickTimeUTC);
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
 	Role++)
-     {
-      NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
-      sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-      fprintf (Gbl.F.Out,"<li>%s: %u %s",
-	       Gbl.Title,
-	       NumCrss,
-	       NumCrss == 1 ? Txt_course :
-		              Txt_courses);
-      if (NumCrss)
-	{
-	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
-		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
-		  Txt_teachers_ABBREVIATION,
-		  Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
-		  Txt_students_ABBREVIATION);
-
-         /* List my courses with this role */
-	 Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-                                           BrowserTimeZone,
-	                                   UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
-	                                   MaxHitsPerYear);
-	}
-      fprintf (Gbl.F.Out,"</li>");
-     }
+      /* List my courses with this role */
+      Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+					BrowserTimeZone,
+					UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
+					MaxHitsPerYear);
 
    fprintf (Gbl.F.Out,"</ul>");
 
+   /***** Historic courses *****/
+   fprintf (Gbl.F.Out,"<h2>%s (hist&oacute;rico)</h2>"	// TODO: Need translation!!!
+	              "<ul>",
+	    Txt_Courses);
+
+   /* Number of courses in which the user clicked as student/teacher */
+   for (Role  = Rol_STUDENT;
+	Role <= Rol_TEACHER;
+	Role++)
+      /* List my courses with this role */
+      Rep_GetAndWriteHistoricCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+					 BrowserTimeZone,
+					 UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
+					 MaxHitsPerYear);
+
+   fprintf (Gbl.F.Out,"</ul>");
 
    /***** Global hits *****/
    fprintf (Gbl.F.Out,"<h2>%s</h2>",Txt_Hits);
-   Rep_ShowMyHitsPerYear (-1L,
+   Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
                           BrowserTimeZone,
                           UsrFigures.FirstClickTimeUTC,
                           &tm_FirstClickTime,
@@ -405,133 +400,6 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 		          NULL);
   }
 
-/*****************************************************************************/
-/************************** Write courses of a user **************************/
-/*****************************************************************************/
-
-static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-					      const char *BrowserTimeZone,
-                                              time_t FirstClickTimeUTC,
-                                              struct tm *tm_FirstClickTime,
-                                              unsigned long MaxHitsPerYear)
-  {
-   char Query[1024];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCrss;
-   unsigned NumCrs;
-
-   /***** Get courses of a user from database *****/
-   /*
-   SELECT degrees.DegCod	0
-	  courses.CrsCod	1
-	  courses.FullName	2
-	  courses.Year		3
-	  degrees.FullName	4
-   */
-   sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,courses.FullName,courses.Year,degrees.FullName"
-                  " FROM crs_usr,courses,degrees"
-                  " WHERE crs_usr.UsrCod='%ld'"
-                  " AND crs_usr.Role='%u'"
-                  " AND crs_usr.CrsCod=courses.CrsCod"
-                  " AND courses.DegCod=degrees.DegCod"
-                  " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-            UsrDat->UsrCod,(unsigned) Role);
-
-   /***** List the courses (one row per course) *****/
-   if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
-     {
-      /* Heading row */
-      fprintf (Gbl.F.Out,"<ol>");
-
-      /* Write courses */
-      for (NumCrs = 1;
-	   NumCrs <= NumCrss;
-	   NumCrs++)
-        {
-         /* Get next course */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Write data of this course */
-         Rep_WriteRowCrsData (row,
-                              BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
-                              MaxHitsPerYear);
-        }
-
-      /* End table */
-      fprintf (Gbl.F.Out,"</ol>");
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************** Write the data of a course (result of a query) ***************/
-/*****************************************************************************/
-
-static void Rep_WriteRowCrsData (MYSQL_ROW row,
-                                 const char *BrowserTimeZone,
-                                 time_t FirstClickTimeUTC,
-                                 struct tm *tm_FirstClickTime,
-                                 unsigned long MaxHitsPerYear)
-  {
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_teachers_ABBREVIATION;
-   extern const char *Txt_students_ABBREVIATION;
-   struct Degree Deg;
-   long CrsCod;
-   unsigned Year;
-   unsigned NumTchs;
-   unsigned NumStds;
-
-   /*
-   SELECT degrees.DegCod	0
-	  courses.CrsCod	1
-	  courses.FullName	2
-	  courses.Year		3
-	  degrees.FullName	4
-   */
-
-   /***** Get degree code (row[0]) *****/
-   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of degree.");
-   if (!Deg_GetDataOfDegreeByCod (&Deg))
-      Lay_ShowErrorAndExit ("Degree not found.");
-
-   /***** Get course code (row[1]) *****/
-   if ((CrsCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
-      Lay_ShowErrorAndExit ("Wrong code of course.");
-
-   /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
-
-   /***** Start row *****/
-   fprintf (Gbl.F.Out,"<li>");
-
-   /***** Write course full name (row[2]) *****/
-   fprintf (Gbl.F.Out,"<strong>%s</strong> -",row[2]);
-
-   /***** Write year (row[3]) *****/
-   if ((Year = Deg_ConvStrToYear (row[3])))
-      fprintf (Gbl.F.Out," %s",Txt_YEAR_OF_DEGREE[Year]);
-
-   /***** Write degree full name (row[4]) *****/
-   fprintf (Gbl.F.Out," %s",row[4]);
-
-   /***** Write number of teachers / students in course *****/
-   fprintf (Gbl.F.Out," (%u %s / %u %s)<br />",
-            NumTchs,Txt_teachers_ABBREVIATION,
-            NumStds,Txt_students_ABBREVIATION);
-
-   /***** Write hits per year for this course *****/
-   Rep_ShowMyHitsPerYear (CrsCod,
-                          BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
-                          MaxHitsPerYear);
-
-   fprintf (Gbl.F.Out,"</li>");
-  }
 
 /*****************************************************************************/
 /************ Get the maximum number of hits per course-year-role ************/
@@ -549,12 +417,12 @@ static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
    sprintf (Query,"SELECT MAX(N) FROM (SELECT "
 	          "CrsCod,"
 	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
+	          "Role,"
 	          "COUNT(*) AS N"
 	          " FROM log_full"
 	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
 	          " AND UsrCod='%ld'"
-	          " AND CrsCod>'0'"
-	          " GROUP BY CrsCod,Year)"
+	          " GROUP BY CrsCod,Year,Role)"
 	          " AS hits_per_crs_year",
 	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
@@ -571,10 +439,215 @@ static unsigned long Rep_GetMaxHitsPerYear (const char *BrowserTimeZone,
   }
 
 /*****************************************************************************/
+/************************** Write courses of a user **************************/
+/*****************************************************************************/
+
+static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+					      const char *BrowserTimeZone,
+                                              time_t FirstClickTimeUTC,
+                                              struct tm *tm_FirstClickTime,
+                                              unsigned long MaxHitsPerYear)
+  {
+   extern const char *Txt_USER_in_COURSE;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_course;
+   extern const char *Txt_courses;
+   extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_students_ABBREVIATION;
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+   long CrsCod;
+
+   NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
+   sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+   fprintf (Gbl.F.Out,"<li>%s %u %s",
+	    Gbl.Title,
+	    NumCrss,
+	    NumCrss == 1 ? Txt_course :
+			   Txt_courses);
+   if (NumCrss)
+     {
+      fprintf (Gbl.F.Out," (%u %s / %u %s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
+	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
+	       Txt_students_ABBREVIATION);
+
+      /***** Get courses of a user from database *****/
+      sprintf (Query,"SELECT courses.CrsCod,degrees.FullName,courses.Year,courses.FullName"
+		     " FROM crs_usr,courses,degrees"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.Role='%u'"
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod=degrees.DegCod"
+		     " ORDER BY degrees.FullName,courses.Year,courses.FullName",
+	       UsrDat->UsrCod,(unsigned) Role);
+
+      /***** List the courses (one row per course) *****/
+      if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+	{
+	 /* Heading row */
+	 fprintf (Gbl.F.Out,"<ol>");
+
+	 /* Write courses */
+	 for (NumCrs = 1;
+	      NumCrs <= NumCrss;
+	      NumCrs++)
+	   {
+	    /* Get next course */
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get course code (row[0]) */
+	    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	    /* Write data of this course */
+	    Rep_WriteRowCrsData (CrsCod,Role,
+				 BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+				 MaxHitsPerYear);
+	   }
+
+	 /* End table */
+	 fprintf (Gbl.F.Out,"</ol>");
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   fprintf (Gbl.F.Out,"</li>");
+  }
+
+/*****************************************************************************/
+/************************** Write courses of a user **************************/
+/*****************************************************************************/
+
+static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+					       const char *BrowserTimeZone,
+                                               time_t FirstClickTimeUTC,
+                                               struct tm *tm_FirstClickTime,
+                                               unsigned long MaxHitsPerYear)
+  {
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char Query[1024];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+   long CrsCod;
+
+   /***** Get courses of a user from database *****/
+   sprintf (Query,"SELECT CrsCod,"
+	          "COUNT(*) AS N"
+	          " FROM log_full"
+	          " WHERE UsrCod='%ld' AND Role='%u'"
+                  " GROUP BY CrsCod ORDER BY N DESC",
+            UsrDat->UsrCod,(unsigned) Role);
+
+   /***** List the courses (one row per course) *****/
+   if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
+     {
+      /* Heading row */
+      sprintf (Gbl.Title,"Accesos como %s",	// TODO: Need translation
+               Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+      fprintf (Gbl.F.Out,"<li>%s:"
+	                 "<ol>",
+	       Gbl.Title);
+
+      /* Write courses */
+      for (NumCrs = 1;
+	   NumCrs <= NumCrss;
+	   NumCrs++)
+        {
+         /* Get next course */
+         row = mysql_fetch_row (mysql_res);
+
+	 /* Get course code (row[0]) */
+	 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+
+         /* Write data of this course */
+         Rep_WriteRowCrsData (CrsCod,Role,
+                              BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                              MaxHitsPerYear);
+        }
+
+      /* End of list */
+      fprintf (Gbl.F.Out,"</ol>"
+	                 "</li>");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Write the data of a course (result of a query) ***************/
+/*****************************************************************************/
+
+static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
+                                 const char *BrowserTimeZone,
+                                 time_t FirstClickTimeUTC,
+                                 struct tm *tm_FirstClickTime,
+                                 unsigned long MaxHitsPerYear)
+  {
+   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_students_ABBREVIATION;
+   struct Course Crs;
+   struct Degree Deg;
+
+   /***** Get course data *****/
+   Crs.CrsCod = CrsCod;
+   Crs_GetDataOfCourseByCod (&Crs);
+
+   /***** Get degree data *****/
+   Deg.DegCod = Crs.DegCod;
+   Deg_GetDataOfDegreeByCod (&Deg);
+
+   /***** Start row *****/
+   fprintf (Gbl.F.Out,"<li>");
+
+   if (CrsCod > 0)	// CrsCod > 0 in log ==> course selected
+     {
+      if (Crs.CrsCod > 0)	// Course exists
+	{
+	 /***** Write course full name *****/
+	 fprintf (Gbl.F.Out,"<strong>%s</strong> -",Crs.FullName);
+
+	 /***** Write year *****/
+	 if (Crs.Year)
+	    fprintf (Gbl.F.Out," %s",Txt_YEAR_OF_DEGREE[Crs.Year]);
+
+	 /***** Write degree full name *****/
+	 fprintf (Gbl.F.Out," %s",Deg.FullName);
+
+	 /***** Write number of teachers / students in course *****/
+	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
+		  Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs.CrsCod),Txt_teachers_ABBREVIATION,
+		  Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
+	}
+      else
+         fprintf (Gbl.F.Out,"(asignatura desconocida/eliminada)");	// TODO: Need translation
+     }
+   else	// CrsCod <= 0 in log ==> no course selected
+      fprintf (Gbl.F.Out,"(asignatura no seleccionada)");	// TODO: Need translation
+
+   /***** Write hits per year for this course *****/
+   fprintf (Gbl.F.Out,"<br />");
+   Rep_ShowMyHitsPerYear (false,CrsCod,Role,
+                          BrowserTimeZone,FirstClickTimeUTC,tm_FirstClickTime,
+                          MaxHitsPerYear);
+
+   fprintf (Gbl.F.Out,"</li>");
+  }
+
+/*****************************************************************************/
 /********************** Write my hits grouped by years ***********************/
 /*****************************************************************************/
 
-static void Rep_ShowMyHitsPerYear (long CrsCod,
+static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    const char *BrowserTimeZone,
                                    time_t FirstClickTimeUTC,
                                    struct tm *tm_FirstClickTime,
@@ -582,6 +655,7 @@ static void Rep_ShowMyHitsPerYear (long CrsCod,
   {
    char Query[1024];
    char SubQueryCrs[128];
+   char SubQueryRol[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -592,21 +666,27 @@ static void Rep_ShowMyHitsPerYear (long CrsCod,
    struct Sta_Hits Hits;
 
    /***** Make the query *****/
-   if (CrsCod > 0)
-      sprintf (SubQueryCrs," AND CrsCod='%ld'",CrsCod);
-   else
+   if (AnyCourse)
       SubQueryCrs[0] = '\0';
+   else
+      sprintf (SubQueryCrs," AND CrsCod='%ld'",CrsCod);
+
+   if (Role == Rol_UNKNOWN)	// Here Rol_UNKNOWN means any role
+      SubQueryRol[0] = '\0';
+   else
+      sprintf (SubQueryRol," AND Role='%u'",(unsigned) Role);
 
    sprintf (Query,"SELECT SQL_NO_CACHE "
 		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'%s')) AS Year,"
 		  "COUNT(*) FROM log_full"
                   " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-		  " AND UsrCod='%ld'%s"
+		  " AND UsrCod='%ld'%s%s"
 		  " GROUP BY Year DESC",
 	    BrowserTimeZone,
             (long) FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    SubQueryCrs);
+	    SubQueryCrs,
+	    SubQueryRol);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
    /***** Initialize first year *****/
