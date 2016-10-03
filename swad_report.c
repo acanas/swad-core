@@ -90,6 +90,9 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
                                             struct tm *tm_FirstClickTime,
                                             const char *StrCurrentDate,
                                             unsigned long MaxHitsPerYear);
+static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
+                                             struct tm *tm_FirstClickTime,
+                                             unsigned long MaxHitsPerYear);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
@@ -129,8 +132,6 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
-   extern const char *Txt_Courses;
-   extern const char *Txt_historical_log;
    struct UsrFigures UsrFigures;
    time_t CurrentTime;
    struct tm tm_CurrentTime;
@@ -139,7 +140,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 				//          1234567890
    char StrCurrentTime[8+1];	// Example: 19:03:49
 				//          12345678
-   Rol_Role_t Role;
    unsigned long MaxHitsPerYear;
 
    /***** Get current date-time *****/
@@ -192,20 +192,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                                    StrCurrentDate,MaxHitsPerYear);
 
    /***** Historic courses *****/
-   fprintf (Gbl.F.Out,"<h3>%s (%s)</h3>"
-	              "<ul>",
-	    Txt_Courses,Txt_historical_log);
-
-   /* Number of courses in which the user clicked as student/teacher */
-   for (Role  = Rol_STUDENT;
-	Role <= Rol_TEACHER;
-	Role++)
-      /* List my courses with this role */
-      Rep_GetAndWriteHistoricCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-					 UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime,
-					 MaxHitsPerYear);
-
-   fprintf (Gbl.F.Out,"</ul>");
+   Rep_WriteSectionHistoricCourses (&UsrFigures,&tm_FirstClickTime,
+                                    MaxHitsPerYear);
 
    /***** End frame *****/
    fprintf (Gbl.F.Out,"</div>\n");
@@ -549,6 +537,38 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
       Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
 					UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
 					MaxHitsPerYear);
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</section>\n");
+  }
+
+/*****************************************************************************/
+/***** Write section for user's historic courses in user's usage report ******/
+/*****************************************************************************/
+
+static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
+                                             struct tm *tm_FirstClickTime,
+                                             unsigned long MaxHitsPerYear)
+  {
+   extern const char *Txt_Courses;
+   extern const char *Txt_historical_log;
+   Rol_Role_t Role;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Out,"<section>"
+                      "<h3>%s (%s)</h3>"
+	              "<ul>",
+	    Txt_Courses,Txt_historical_log);
+
+   /***** Number of courses in which the user clicked as student/teacher *****/
+   for (Role  = Rol_STUDENT;
+	Role <= Rol_TEACHER;
+	Role++)
+      /* List my courses with this role */
+      Rep_GetAndWriteHistoricCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+					 UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
+					 MaxHitsPerYear);
 
    /***** End of section *****/
    fprintf (Gbl.F.Out,"</ul>"
