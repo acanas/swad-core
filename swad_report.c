@@ -79,6 +79,7 @@ static void Rep_PutIconToPrintMyUsageReport (void);
 
 static void Rep_WriteHeader (const char *StrCurrentDate);
 static void Rep_WriteSectionPlatform (void);
+static void Rep_WriteSectionUsrInfo (void);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
@@ -118,11 +119,6 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
-   extern const char *Txt_Name;
-   extern const char *Txt_Personal_information;
-   extern const char *Txt_Email;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
    extern const char *Txt_Figures;
    extern const char *Txt_TIME_Since;
    extern const char *Txt_TIME_until;
@@ -145,8 +141,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
    extern const char *Txt_Hits;
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
-   struct Institution Ins;
    struct UsrFigures UsrFigures;
    time_t CurrentTime;
    struct tm tm_CurrentTime;
@@ -193,34 +187,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    Rep_WriteSectionPlatform ();
 
    /***** Personal information *****/
-   fprintf (Gbl.F.Out,"<h3>%s</h3>"
-	              "<ul>",
-	    Txt_Personal_information);
-
-   /* User's name */
-   fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
-            Txt_Name,
-            Gbl.Usrs.Me.UsrDat.FullName);
-
-   /* User's e-mail */
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
-            Txt_Email,
-            Gbl.Usrs.Me.UsrDat.Email);
-
-   /* User's country */
-   Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
-            Txt_Country,
-            CtyName);
-
-   /* User's institution */
-   Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
-            Txt_Institution,
-            Ins.FullName);
-
-   fprintf (Gbl.F.Out,"</ul>");
+   Rep_WriteSectionUsrInfo ();
 
    /***** Figures *****/
    fprintf (Gbl.F.Out,"<h3>%s</h3>"
@@ -466,6 +433,54 @@ static void Rep_WriteSectionPlatform (void)
    /***** Server URL *****/
    fprintf (Gbl.F.Out,"<li>%s: <a href=\"%s\">%s</a></li>",
             Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</section>");
+  }
+
+/*****************************************************************************/
+/*********** Write section for user's info in user's usage report ************/
+/*****************************************************************************/
+
+static void Rep_WriteSectionUsrInfo (void)
+  {
+   extern const char *Txt_Personal_information;
+   extern const char *Txt_Name;
+   extern const char *Txt_Email;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   struct Institution Ins;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Out,"<section>"
+	              "<h3>%s</h3>"
+	              "<ul>",
+	    Txt_Personal_information);
+
+   /***** User's name *****/
+   fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
+            Txt_Name,
+            Gbl.Usrs.Me.UsrDat.FullName);
+
+   /***** User's e-mail *****/
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Email,
+            Gbl.Usrs.Me.UsrDat.Email);
+
+   /***** User's country *****/
+   Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Country,
+            CtyName);
+
+   /***** User's institution *****/
+   Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+            Txt_Institution,
+            Ins.FullName);
 
    /***** End of section *****/
    fprintf (Gbl.F.Out,"</ul>"
