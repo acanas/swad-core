@@ -77,6 +77,9 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
+static void Rep_WriteHeader (const char *StrCurrentDate);
+static void Rep_WriteSectionPlatform (void);
+
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
                                               time_t FirstClickTimeUTC,
@@ -115,15 +118,11 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
-   extern const char *Txt_Report_of_use_of_PLATFORM;
-   extern const char *Txt_Teaching_platform;
    extern const char *Txt_Name;
-   extern const char *Txt_TAGLINE;
    extern const char *Txt_Personal_information;
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   extern const char *Txt_URL;
    extern const char *Txt_Figures;
    extern const char *Txt_TIME_Since;
    extern const char *Txt_TIME_until;
@@ -186,34 +185,12 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                            Rep_PutIconToPrintMyUsageReport);
 
    /***** Head *****/
-   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"<div style=\"margin:10px; text-align:center;\">"
-                      "<h1>%s</h1>"
-                      "<h2>%s",
-            Gbl.Title,
-            Gbl.Usrs.Me.UsrDat.FullName);
-   if (StrCurrentDate[0])
-      fprintf (Gbl.F.Out,", %s",StrCurrentDate);
-   fprintf (Gbl.F.Out,"</h2>"
-                      "</div>");
+   Rep_WriteHeader (StrCurrentDate);
 
-   fprintf (Gbl.F.Out,"<div style=\"margin:10px; text-align:left;\">");
+   fprintf (Gbl.F.Out,"<div style=\"margin:2em; text-align:left;\">");
 
    /***** Platform *****/
-   fprintf (Gbl.F.Out,"<h3>%s</h3>"
-	              "<ul>",
-	    Txt_Teaching_platform);
-
-   /* Platform name */
-   fprintf (Gbl.F.Out,"<li>%s: %s, %s</li>",
-            Txt_Name,
-            Cfg_PLATFORM_FULL_NAME,Txt_TAGLINE);
-
-   /* Server URL */
-   fprintf (Gbl.F.Out,"<li>%s: <a href=\"%s\">%s</a></li>",
-            Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
-
-   fprintf (Gbl.F.Out,"</ul>");
+   Rep_WriteSectionPlatform ();
 
    /***** Personal information *****/
    fprintf (Gbl.F.Out,"<h3>%s</h3>"
@@ -439,6 +416,61 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 		          NULL);
   }
 
+/*****************************************************************************/
+/******************** Write header of user's usage report ********************/
+/*****************************************************************************/
+
+static void Rep_WriteHeader (const char *StrCurrentDate)
+  {
+   extern const char *Txt_Report_of_use_of_PLATFORM;
+
+   /***** Start of header *****/
+   fprintf (Gbl.F.Out,"<header style=\"margin:2em; text-align:center;\">");
+
+   /***** Main title *****/
+   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   fprintf (Gbl.F.Out,"<h1>%s</h1>",Gbl.Title);
+
+   /***** Subtitle *****/
+   fprintf (Gbl.F.Out,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
+   if (StrCurrentDate[0])
+      fprintf (Gbl.F.Out,", %s",StrCurrentDate);
+   fprintf (Gbl.F.Out,"</h2>");
+
+   /***** End of header *****/
+   fprintf (Gbl.F.Out,"</header>");
+  }
+
+/*****************************************************************************/
+/************* Write section for platform in user's usage report *************/
+/*****************************************************************************/
+
+static void Rep_WriteSectionPlatform (void)
+  {
+   extern const char *Txt_Teaching_platform;
+   extern const char *Txt_Name;
+   extern const char *Txt_TAGLINE;
+   extern const char *Txt_URL;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Out,"<section>"
+	              "<h3>%s</h3>"
+	              "<ul>",
+	    Txt_Teaching_platform);
+
+   /***** Platform name *****/
+   fprintf (Gbl.F.Out,"<li>%s: %s, %s</li>",
+            Txt_Name,
+            Cfg_PLATFORM_FULL_NAME,Txt_TAGLINE);
+
+   /***** Server URL *****/
+   fprintf (Gbl.F.Out,"<li>%s: <a href=\"%s\">%s</a></li>",
+            Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</section>");
+  }
 
 /*****************************************************************************/
 /************ Get the maximum number of hits per course-year-role ************/
