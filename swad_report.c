@@ -80,6 +80,10 @@ static void Rep_PutIconToPrintMyUsageReport (void);
 static void Rep_WriteHeader (const char *StrCurrentDate);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
+static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
+                                        struct tm *tm_FirstClickTime,
+                                        const char *StrCurrentDate,
+                                        const char *StrCurrentTime);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
@@ -119,25 +123,6 @@ void Rep_PrintMyUsageReport (void)
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
-   extern const char *Txt_Figures;
-   extern const char *Txt_TIME_Since;
-   extern const char *Txt_TIME_until;
-   extern const char *Txt_day;
-   extern const char *Txt_days;
-   extern const char *Txt_Clicks;
-   extern const char *Txt_Files_uploaded;
-   extern const char *Txt_file;
-   extern const char *Txt_files;
-   extern const char *Txt_public_FILES;
-   extern const char *Txt_Downloads;
-   extern const char *Txt_download;
-   extern const char *Txt_downloads;
-   extern const char *Txt_Forum_posts;
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
-   extern const char *Txt_Messages_sent;
-   extern const char *Txt_message;
-   extern const char *Txt_messages;
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
    extern const char *Txt_Hits;
@@ -149,8 +134,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 				//          1234567890
    char StrCurrentTime[8+1];	// Example: 19:03:49
 				//          12345678
-   unsigned NumFiles;
-   unsigned NumPublicFiles;
    Rol_Role_t Role;
    unsigned long MaxHitsPerYear;
 
@@ -190,136 +173,11 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    Rep_WriteSectionUsrInfo ();
 
    /***** Figures *****/
-   fprintf (Gbl.F.Out,"<h3>%s</h3>"
-	              "<ul>",
-	    Txt_Figures);
-
-   /* Get figures */
    Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
-
-   /* Time since first click until now */
-   fprintf (Gbl.F.Out,"<li>%s ",Txt_TIME_Since);
    if (UsrFigures.FirstClickTimeUTC)
-     {
-      if ((gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime)) != NULL)
-	{
-	 fprintf (Gbl.F.Out,"%04d-%02d-%02d %02d:%02d:%02d UTC",
-                  1900 + tm_FirstClickTime.tm_year,	// year
-                  1 + tm_FirstClickTime.tm_mon,		// month
-                  tm_FirstClickTime.tm_mday,		// day of the month
-                  tm_FirstClickTime.tm_hour,		// hours
-                  tm_FirstClickTime.tm_min,		// minutes
-		  tm_FirstClickTime.tm_sec);		// seconds
-	 if (StrCurrentDate[0])
-	    fprintf (Gbl.F.Out," %s %s %s UTC",
-	             Txt_TIME_until,StrCurrentDate,StrCurrentTime);
-	 if (UsrFigures.NumDays > 0)
-	    fprintf (Gbl.F.Out," (%d %s)",
-		     UsrFigures.NumDays,
-		     (UsrFigures.NumDays == 1) ? Txt_day :
-						 Txt_days);
-	}
-     }
-   else	// Time of first click is unknown
-     {
-      fprintf (Gbl.F.Out,"?");
-      if (StrCurrentDate[0])
-         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDate,StrCurrentTime);
-     }
-   fprintf (Gbl.F.Out,"</li>");
-
-   /* Number of clicks */
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Clicks);
-   if (UsrFigures.NumClicks >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures.NumClicks);
-      if (UsrFigures.NumDays > 0)
-	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures.NumClicks /
-			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
-	}
-     }
-   else	// Number of clicks is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
-
-   /* Number of files currently published */
-   if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
-   else
-      NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<li>"
-		      "%s: %u %s (%u %s)"
-		      "</li>",
-	    Txt_Files_uploaded,
-	    NumFiles,
-	    (NumFiles == 1) ? Txt_file :
-		              Txt_files,
-	    NumPublicFiles,Txt_public_FILES);
-
-   /* Number of file views */
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
-   if (UsrFigures.NumFileViews >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld %s",
-               UsrFigures.NumFileViews,
-	       (UsrFigures.NumFileViews == 1) ? Txt_download :
-						Txt_downloads);
-      if (UsrFigures.NumDays > 0)
-	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
-			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
-	}
-     }
-   else	// Number of file views is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
-
-   /* Number of posts in forums */
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Forum_posts);
-   if (UsrFigures.NumForPst >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld %s",
-	       UsrFigures.NumForPst,
-	       (UsrFigures.NumForPst == 1) ? Txt_post :
-					     Txt_posts);
-      if (UsrFigures.NumDays > 0)
-	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures.NumForPst /
-			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
-	}
-     }
-   else	// Number of forum posts is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
-
-   /* Number of messages sent */
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Messages_sent);
-   if (UsrFigures.NumMsgSnt >= 0)
-     {
-      fprintf (Gbl.F.Out,"%ld %s",
-	       UsrFigures.NumMsgSnt,
-	       (UsrFigures.NumMsgSnt == 1) ? Txt_message :
-					     Txt_messages);
-      if (UsrFigures.NumDays > 0)
-	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
-			    (float) UsrFigures.NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
-	}
-     }
-   else	// Number of messages sent is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
-
-   fprintf (Gbl.F.Out,"</ul>");
+      gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
+   Rep_WriteSectionUsrFigures (&UsrFigures,&tm_FirstClickTime,
+                               StrCurrentDate,StrCurrentTime);
 
    /***** Global hits *****/
    fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
@@ -481,6 +339,170 @@ static void Rep_WriteSectionUsrInfo (void)
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</section>");
+  }
+
+/*****************************************************************************/
+/********* Write section for user's figures in user's usage report ***********/
+/*****************************************************************************/
+
+static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
+                                        struct tm *tm_FirstClickTime,
+                                        const char *StrCurrentDate,
+                                        const char *StrCurrentTime)
+  {
+   extern const char *Txt_Figures;
+   extern const char *Txt_TIME_Since;
+   extern const char *Txt_TIME_until;
+   extern const char *Txt_day;
+   extern const char *Txt_days;
+   extern const char *Txt_Clicks;
+   extern const char *Txt_Files_uploaded;
+   extern const char *Txt_file;
+   extern const char *Txt_files;
+   extern const char *Txt_public_FILES;
+   extern const char *Txt_Downloads;
+   extern const char *Txt_download;
+   extern const char *Txt_downloads;
+   extern const char *Txt_Forum_posts;
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
+   extern const char *Txt_Messages_sent;
+   extern const char *Txt_message;
+   extern const char *Txt_messages;
+   unsigned NumFiles;
+   unsigned NumPublicFiles;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Out,"<section>"
+                      "<h3>%s</h3>"
+	              "<ul>",
+	    Txt_Figures);
+
+   /***** Time since first click until now *****/
+   fprintf (Gbl.F.Out,"<li>%s ",Txt_TIME_Since);
+   if (UsrFigures->FirstClickTimeUTC)
+     {
+      if (tm_FirstClickTime != NULL)
+	{
+	 fprintf (Gbl.F.Out,"%04d-%02d-%02d %02d:%02d:%02d UTC",
+                  1900 + tm_FirstClickTime->tm_year,	// year
+                  1 + tm_FirstClickTime->tm_mon,	// month
+                  tm_FirstClickTime->tm_mday,		// day of the month
+                  tm_FirstClickTime->tm_hour,		// hours
+                  tm_FirstClickTime->tm_min,		// minutes
+		  tm_FirstClickTime->tm_sec);		// seconds
+	 if (StrCurrentDate[0])
+	    fprintf (Gbl.F.Out," %s %s %s UTC",
+	             Txt_TIME_until,StrCurrentDate,StrCurrentTime);
+	 if (UsrFigures->NumDays > 0)
+	    fprintf (Gbl.F.Out," (%d %s)",
+		     UsrFigures->NumDays,
+		     (UsrFigures->NumDays == 1) ? Txt_day :
+						  Txt_days);
+	}
+     }
+   else	// Time of first click is unknown
+     {
+      fprintf (Gbl.F.Out,"?");
+      if (StrCurrentDate[0])
+         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDate,StrCurrentTime);
+     }
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of clicks *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Clicks);
+   if (UsrFigures->NumClicks >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld",UsrFigures->NumClicks);
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures->NumClicks /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	}
+     }
+   else	// Number of clicks is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of files currently published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   else
+      NumPublicFiles = 0;
+   fprintf (Gbl.F.Out,"<li>"
+		      "%s: %u %s (%u %s)"
+		      "</li>",
+	    Txt_Files_uploaded,
+	    NumFiles,
+	    (NumFiles == 1) ? Txt_file :
+		              Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
+
+   /***** Number of file views *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
+   if (UsrFigures->NumFileViews >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld %s",
+               UsrFigures->NumFileViews,
+	       (UsrFigures->NumFileViews == 1) ? Txt_download :
+						 Txt_downloads);
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures->NumFileViews /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	}
+     }
+   else	// Number of file views is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of posts in forums *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Forum_posts);
+   if (UsrFigures->NumForPst >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld %s",
+	       UsrFigures->NumForPst,
+	       (UsrFigures->NumForPst == 1) ? Txt_post :
+					      Txt_posts);
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures->NumForPst /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	}
+     }
+   else	// Number of forum posts is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
+
+   /***** Number of messages sent *****/
+   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Messages_sent);
+   if (UsrFigures->NumMsgSnt >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld %s",
+	       UsrFigures->NumMsgSnt,
+	       (UsrFigures->NumMsgSnt == 1) ? Txt_message :
+					      Txt_messages);
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out," (");
+	 Str_WriteFloatNum ((float) UsrFigures->NumMsgSnt /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	}
+     }
+   else	// Number of messages sent is unknown
+      fprintf (Gbl.F.Out,"?");
+   fprintf (Gbl.F.Out,"</li>");
 
    /***** End of section *****/
    fprintf (Gbl.F.Out,"</ul>"
