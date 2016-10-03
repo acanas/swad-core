@@ -120,7 +120,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Name;
    extern const char *Txt_TAGLINE;
    extern const char *Txt_Personal_information;
-   extern const char *Txt_ID;
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
@@ -147,7 +146,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
    extern const char *Txt_Hits;
-   unsigned NumID;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    struct Institution Ins;
    struct UsrFigures UsrFigures;
@@ -226,19 +224,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
             Txt_Name,
             Gbl.Usrs.Me.UsrDat.FullName);
-
-   /* User's ID */
-   fprintf (Gbl.F.Out,"<li>%s:",
-            Txt_ID);
-   for (NumID = 0;
-	NumID < Gbl.Usrs.Me.UsrDat.IDs.Num;
-	NumID++)
-     {
-      if (NumID)
-	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out," %s",Gbl.Usrs.Me.UsrDat.IDs.List[NumID].ID);
-     }
-   fprintf (Gbl.F.Out,"</li>");
 
    /* User's e-mail */
    fprintf (Gbl.F.Out,"<li>%s: %s</li>",
