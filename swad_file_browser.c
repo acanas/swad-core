@@ -1508,7 +1508,6 @@ static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata,
                                                    const char *FileNameToShow);
-static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileType,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_GetFileNameToShow (Brw_FileBrowser_t FileBrowser,unsigned Level,Brw_FileType_t FileType,
@@ -5860,7 +5859,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
+void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
   {
    extern const char *Txt_Link;
    extern const char *Txt_X_file;

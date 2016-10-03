@@ -44,7 +44,7 @@
 /*****************************************************************************/
 
 #define Rep_MIN_CLICKS_CRS 100	// Minimum number of clicks to show a course in historic log
-#define Rep_MAX_BAR_WIDTH 80	// Maximum width of graphic bar
+#define Rep_MAX_BAR_WIDTH 40	// Maximum width of graphic bar
 
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
@@ -56,12 +56,6 @@
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
-
-typedef enum
-  {
-   Rep_SEE,
-   Rep_PRINT,
-  } Rep_SeeOrPrint_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -77,10 +71,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
-static void Rep_PutIconToPrintMyUsageReport (void);
-
-static void Rep_WriteHeader (FILE *FileDst,const char *StrCurrentDateUTC);
+static void Rep_WriteHeader (const char *StrCurrentDateUTC,const char *Permalink);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
@@ -142,7 +133,8 @@ void Rep_ReqMyUsageReport (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">%s",Gbl.Usrs.Me.UsrDat.FullName);
+   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
+	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
    if (StrCurrentDateUTC[0])
       fprintf (Gbl.F.Out,"<br />%s",StrCurrentDateUTC);
    fprintf (Gbl.F.Out,"</div>");
@@ -156,20 +148,13 @@ void Rep_ReqMyUsageReport (void)
 
 void Rep_ShowMyUsageReport (void)
   {
-   Rep_ShowOrPrintMyUsageReport (false);
-  }
-
-void Rep_PrintMyUsageReport (void)
-  {
-   Rep_ShowOrPrintMyUsageReport (true);
-  }
-
-static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
-  {
+   extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
+   extern const char *Txt_Download;
    struct UsrFigures UsrFigures;
    char PathReports[PATH_MAX+1];
    char PathFileReport[PATH_MAX+1];
+   char Permalink[PATH_MAX+1];
    struct tm tm_FirstClickTime;
    char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
 					//          1234567890
@@ -181,27 +166,27 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    /***** Get current date-time *****/
    Dat_GetCurrentDateTimeUTC (StrCurrentDateUTC,StrCurrentTimeUTC);
 
-   /***** Start frame *****/
-   if (SeeOrPrint == Rep_SEE)
-      Lay_StartRoundFrame (NULL,Txt_Report,
-                           Rep_PutIconToPrintMyUsageReport);
-
    /***** Path for reports *****/
-   sprintf (PathReports,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_REP);
+   sprintf (PathReports,"%s/%s",Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
    Fil_CreateDirIfNotExists (PathReports);
 
    /***** Create a new empty syllabus *****/
    /* Path of the private directory for the file with the report */
    sprintf (PathFileReport,"%s/%s.html",
 	    PathReports,Gbl.UniqueNameEncrypted);
+   sprintf (Permalink,"%s/%s/%s.html",
+            Cfg_URL_SWAD_PUBLIC,
+            Cfg_FOLDER_REP,
+            Gbl.UniqueNameEncrypted);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
 
    /***** Start file *****/
-   fprintf (Gbl.F.Rep,"<div style=\"margin:2em; text-align:left;\">\n");
+   Lay_StartHTMLFile (Gbl.F.Rep,Txt_Report);
+   fprintf (Gbl.F.Rep,"<div style=\"margin:1em;text-align:left;\">\n");
 
    /***** Header *****/
-   Rep_WriteHeader (Gbl.F.Rep,StrCurrentDateUTC);
+   Rep_WriteHeader (StrCurrentDateUTC,Permalink);
 
    /***** Platform *****/
    Rep_WriteSectionPlatform ();
@@ -214,7 +199,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    GetUsrFiguresAgain = Prf_GetAndStoreAllUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
    if (GetUsrFiguresAgain)
       Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
-
    if (UsrFigures.FirstClickTimeUTC)
       gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
    Rep_WriteSectionUsrFigures (&UsrFigures,&tm_FirstClickTime,
@@ -233,61 +217,72 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                                     MaxHitsPerYear);
 
    /***** End file *****/
-   fprintf (Gbl.F.Rep,"</div>\n");
+   fprintf (Gbl.F.Rep,"</div>\n"
+                      "</body>\n"
+	              "</html>\n");
 
-   /***** Open report file for reading *****/
-   if ((Gbl.F.Rep = fopen (PathFileReport,"rb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open report file.");
-
-   /***** Copy from report file to output file *****/
-   Fil_FastCopyOfOpenFiles (Gbl.F.Rep,Gbl.F.Out);
-
-   /***** Close and remove report file *****/
+   /***** Close report file *****/
    Fil_CloseReportFile ();
-   unlink (PathFileReport);
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
+
+   /***** Header *****/
+   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
+	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
+   if (StrCurrentDateUTC[0])
+      fprintf (Gbl.F.Out,"<br />%s",StrCurrentDateUTC);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Put anchor and report filename *****/
+   fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME\""
+		      " title=\"%s\" target=\"_blank\">",
+	    Permalink,
+	    Txt_Report);
+   Brw_PutIconFile (32,Brw_IS_FILE,Permalink);
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
+		      "<img src=\"%s/download64x64.png\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICON40x40\">"
+		      "</a>"
+		      "</div>",
+	    Permalink,
+	    Gbl.Prefs.IconsURL,
+	    Txt_Download,Txt_Download);
 
    /***** End frame *****/
-   if (SeeOrPrint == Rep_SEE)
-      Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/********************* Put icon to print my usage report *********************/
-/*****************************************************************************/
-
-static void Rep_PutIconToPrintMyUsageReport (void)
-  {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnMyUsgRep,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-		          NULL);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
 /******************** Write header of user's usage report ********************/
 /*****************************************************************************/
 
-static void Rep_WriteHeader (FILE *FileDst,const char *StrCurrentDateUTC)
+static void Rep_WriteHeader (const char *StrCurrentDateUTC,const char *Permalink)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
 
    /***** Start of header *****/
-   fprintf (FileDst,"<header style=\"margin:2em; text-align:center;\">");
+   fprintf (Gbl.F.Rep,"<header style=\"text-align:center;\">");
 
    /***** Main title *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   fprintf (FileDst,"<h1>%s</h1>",Gbl.Title);
+   fprintf (Gbl.F.Rep,"<h1>%s</h1>",Gbl.Title);
 
    /***** Subtitle *****/
-   fprintf (FileDst,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
+   fprintf (Gbl.F.Rep,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
    if (StrCurrentDateUTC[0])
-      fprintf (FileDst,", %s",StrCurrentDateUTC);
-   fprintf (FileDst,"</h2>");
+      fprintf (Gbl.F.Rep,", %s",StrCurrentDateUTC);
+   fprintf (Gbl.F.Rep,"</h2>");
+
+   /***** Permalink *****/
+   fprintf (Gbl.F.Rep,"<a href=\"%s\" target=\"_blank\">%s</a>\n",
+            Permalink,Permalink);
 
    /***** End of header *****/
-   fprintf (FileDst,"</header>\n");
+   fprintf (Gbl.F.Rep,"</header>\n");
   }
 
 /*****************************************************************************/
@@ -303,7 +298,7 @@ static void Rep_WriteSectionPlatform (void)
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-	              "<h3>%s</h3>"
+	              "<h2>%s</h2>"
 	              "<ul>",
 	    Txt_Teaching_platform);
 
@@ -337,7 +332,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-	              "<h3>%s</h3>"
+	              "<h2>%s</h2>"
 	              "<ul>",
 	    Txt_Personal_information);
 
@@ -402,7 +397,7 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h3>%s</h3>"
+                      "<h2>%s</h2>"
 	              "<ul>",
 	    Txt_Figures);
 
@@ -548,7 +543,7 @@ static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h3>%s</h3>",
+                      "<h2>%s</h2>",
 	    Txt_Hits);
 
    /***** Global (in any course) hits per year *****/
@@ -576,11 +571,11 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h3>%s",
+                      "<h2>%s",
             Txt_Courses);
    if (StrCurrentDateUTC[0])
       fprintf (Gbl.F.Rep," (%s)",StrCurrentDateUTC);
-   fprintf (Gbl.F.Rep,"</h3>"
+   fprintf (Gbl.F.Rep,"</h2>"
 	              "<ul>");
 
    /***** Number of courses in which the user is student/teacher *****/
@@ -612,7 +607,7 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h3>%s (%s)</h3>",
+                      "<h2>%s (%s)</h2>",
 	    Txt_Courses,Txt_historical_log);
    fprintf (Gbl.F.Rep,Txt_Only_courses_with_more_than_X_clicks_are_shown,
             Rep_MIN_CLICKS_CRS);
@@ -956,7 +951,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 	   Year--)
         {
          /* Write the year */
-         fprintf (Gbl.F.Rep,"%04u ",Year);
+         fprintf (Gbl.F.Rep,"%04u&nbsp;",Year);
 
          /* Draw bar proportional to number of hits */
          Rep_DrawBarNumHits (Year == LastYear ? Hits.Num :
@@ -972,7 +967,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
         Year--)
      {
       /* Write the year */
-      fprintf (Gbl.F.Rep,"%04u ",Year);
+      fprintf (Gbl.F.Rep,"%04u&nbsp;",Year);
 
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
@@ -999,12 +994,8 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
          fprintf (Gbl.F.Rep,Rep_BLOCK);
 
       /***** Write the number of hits *****/
-      fprintf (Gbl.F.Rep," ");
+      fprintf (Gbl.F.Rep,"&nbsp;");
       Str_WriteFloatNum (Gbl.F.Rep,HitsNum);
      }
-   else
-      /***** Write the number of clicks *****/
-      fprintf (Gbl.F.Rep,"0");
-
    fprintf (Gbl.F.Rep,"<br />");
   }

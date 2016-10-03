@@ -222,6 +222,8 @@ void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *FilFolLnkName);
 
+void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
+
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 

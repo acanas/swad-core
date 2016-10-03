@@ -1887,7 +1887,6 @@ static bool Inf_CheckAndShowRichTxt (void)
 
 int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    char FileNameHTMLTmp[PATH_MAX+1];
@@ -1914,16 +1913,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
                                      "Can not create temporary file");
 
       /***** Write start of HTML code *****/
-      fprintf (FileHTMLTmp,"<!DOCTYPE html>\n"
-			    "<html lang=\"%s\">\n"
-			    "<head>\n"
-			    "<meta http-equiv=\"Content-Type\""
-			    " content=\"text/html;charset=windows-1252\" />\n"
-			    "<title>%s</title>\n"
-			    "</head>\n"
-			    "<body>\n",
-	       Txt_STR_LANG_ID[Gbl.Prefs.Language],	// Language
-	       Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);		// Page title
+      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
 
       /***** Write plain text into text buffer *****/
       fprintf (FileHTMLTmp,"<div class=\"DAT LEFT_MIDDLE\">\n");

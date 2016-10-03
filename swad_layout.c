@@ -1730,6 +1730,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 	    IsLastItemInLevel[Level] ? "subend" :
 				       "submid");
   }
+
 /*****************************************************************************/
 /************************** Help for the text editor *************************/
 /*****************************************************************************/
@@ -1767,4 +1768,24 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
             Txt_Text,Text,
             Txt_Inline_math,InlineMath,
             Txt_Equation_centered,Equation);
+  }
+
+/*****************************************************************************/
+/************************** Help for the text editor *************************/
+/*****************************************************************************/
+
+void Lay_StartHTMLFile (FILE *File,const char *Title)
+  {
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+
+   fprintf (File,"<!DOCTYPE html>\n"
+		 "<html lang=\"%s\">\n"
+		 "<head>\n"
+		 "<meta http-equiv=\"Content-Type\""
+		 " content=\"text/html;charset=windows-1252\" />\n"
+		 "<title>%s</title>\n"
+		 "</head>\n"
+		 "<body>\n",
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language],	// Language
+	    Title);					// Page title
   }
