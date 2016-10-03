@@ -481,7 +481,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 if (UsrFigures.NumDays > 0)
 	   {
 	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum ((float) UsrFigures.NumClicks /
+	    Str_WriteFloatNum (Gbl.F.Out,
+	                       (float) UsrFigures.NumClicks /
 			       (float) UsrFigures.NumDays);
 	    fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
 	    Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
@@ -510,7 +511,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 if (UsrFigures.NumDays > 0)
 	   {
 	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum ((float) UsrFigures.NumFileViews /
+	    Str_WriteFloatNum (Gbl.F.Out,
+	                       (float) UsrFigures.NumFileViews /
 			       (float) UsrFigures.NumDays);
 	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
@@ -536,7 +538,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 if (UsrFigures.NumDays > 0)
 	   {
 	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum ((float) UsrFigures.NumForPst /
+	    Str_WriteFloatNum (Gbl.F.Out,
+	                       (float) UsrFigures.NumForPst /
 			       (float) UsrFigures.NumDays);
 	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
@@ -563,7 +566,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	 if (UsrFigures.NumDays > 0)
 	   {
 	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum ((float) UsrFigures.NumMsgSnt /
+	    Str_WriteFloatNum (Gbl.F.Out,
+	                       (float) UsrFigures.NumMsgSnt /
 			       (float) UsrFigures.NumDays);
 	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
 	   }
@@ -1460,7 +1464,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	                    " style=\"height:50px;\">",
 	          Gbl.RowEvenOdd);
-	 Str_WriteFloatNum (NumClicksPerDay);
+	 Str_WriteFloatNum (Gbl.F.Out,NumClicksPerDay);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}

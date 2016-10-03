@@ -50,6 +50,7 @@ struct Files
    FILE *Out;		// File with the HTML output of this CGI
    FILE *Tmp;		// Temporary file to save stdin
    FILE *XML;		// XML file for syllabus, for directory tree
+   FILE *Rep;		// Temporary file to save report
   };
 
 #define Fil_MAX_BYTES_FILE_SIZE_STRING 32
@@ -73,7 +74,9 @@ void Fil_CreateDirIfNotExists (const char *Path);
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory);
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
+
 void Fil_CloseXMLFile (void);
+void Fil_CloseReportFile (void);
 
 void Fil_WriteFileSizeBrief (double SizeInBytes,
                              char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING]);

@@ -1856,7 +1856,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 		  UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? 'c' :
 			                                     'v',
 		  BarWidth);
-      Str_WriteFloatNum (Hits.Num);
+      Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;</td>"
 	                 "</tr>");
      }
@@ -2319,14 +2319,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	                 " style=\"width:%upx;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      Str_WriteFloatNum ((float) Interval * HitsMax / 5.0);
+      Str_WriteFloatNum (Gbl.F.Out,(float) Interval * HitsMax / 5.0);
       fprintf (Gbl.F.Out,"</td>");
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\""
 	              " style=\"width:%upx;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   Str_WriteFloatNum (HitsMax);
+   Str_WriteFloatNum (Gbl.F.Out,HitsMax);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>"
 	              "<tr>");
@@ -2365,7 +2365,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float Hits
      {
       Sta_SetColor (ColorType,HitsNum[Hour],HitsMax,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
-      Str_WriteFloatNum (HitsNum[Hour]);
+      Str_WriteFloatNum (Gbl.F.Out,HitsNum[Hour]);
       fprintf (Gbl.F.Out,"\" style=\"width:%upx;"
 	                 " background-color:#%02X%02X%02X;\">"
                          "</td>",
@@ -2727,7 +2727,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       fprintf (Gbl.F.Out,"%u%%<br />",
 	       (unsigned) (((Hits->Num * 100.0) /
 		            Hits->Total) + 0.5));
-      Str_WriteFloatNum (Hits->Num);
+      Str_WriteFloatNum (Gbl.F.Out,Hits->Num);
       fprintf (Gbl.F.Out,"<br />");
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
@@ -3740,7 +3740,7 @@ static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float Hit
 	       Gbl.Prefs.IconsURL,Color,BarWidth);
 
       /***** Write the number of hits *****/
-      Str_WriteFloatNum (HitsNum);
+      Str_WriteFloatNum (Gbl.F.Out,HitsNum);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
                (unsigned) (((HitsNum * 100.0) /
         	            HitsTotal) + 0.5));

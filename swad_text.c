@@ -27046,7 +27046,7 @@ const char *Txt_Online_tutoring =
 	"Tutoria on-line";
 #endif
 
-const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =
+const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Nom&eacute;s es mostren les assignatures amb m&eacute;s de %u clics.";
 #elif L==2

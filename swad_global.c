@@ -116,6 +116,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.Out = stdout;
    Gbl.F.Tmp = NULL;
    Gbl.F.XML = NULL;
+   Gbl.F.Rep = NULL;	// Report
 
    Gbl.Form.Num = -1;			// Number of form. It's increased by 1 at the begin of each form
    Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
@@ -473,5 +474,6 @@ void Gbl_Cleanup (void)
    if (Gbl.F.Tmp)
       fclose (Gbl.F.Tmp);
    Fil_CloseXMLFile ();
+   Fil_CloseReportFile ();
    Par_FreeParams ();
   }

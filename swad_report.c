@@ -28,6 +28,7 @@
 // #include <stdbool.h>		// For boolean type
 // #include <stdio.h>		// For sprintf
 // #include <string.h>		// For string functions
+#include <unistd.h>		// For unlink
 
 #include "swad_database.h"
 #include "swad_global.h"
@@ -79,7 +80,7 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
-static void Rep_WriteHeader (const char *StrCurrentDateUTC);
+static void Rep_WriteHeader (FILE *FileDst,const char *StrCurrentDateUTC);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
@@ -140,7 +141,7 @@ void Rep_ReqMyUsageReport (void)
    Lay_StartRoundFrame (NULL,Txt_Report,NULL);
 
    /***** Header *****/
-   Rep_WriteHeader (StrCurrentDateUTC);
+   Rep_WriteHeader (Gbl.F.Out,StrCurrentDateUTC);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
@@ -163,7 +164,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
    struct UsrFigures UsrFigures;
-
+   char PathReports[PATH_MAX+1];
+   char PathFileReport[PATH_MAX+1];
    struct tm tm_FirstClickTime;
    char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
 					//          1234567890
@@ -178,10 +180,23 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    if (SeeOrPrint == Rep_SEE)
       Lay_StartRoundFrame (NULL,Txt_Report,
                            Rep_PutIconToPrintMyUsageReport);
-   fprintf (Gbl.F.Out,"<div style=\"margin:2em; text-align:left;\">\n");
+
+   /***** Path for reports *****/
+   sprintf (PathReports,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_REP);
+   Fil_CreateDirIfNotExists (PathReports);
+
+   /***** Create a new empty syllabus *****/
+   /* Path of the private directory for the file with the report */
+   sprintf (PathFileReport,"%s/%s.html",
+	    PathReports,Gbl.UniqueNameEncrypted);
+   if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
+      Lay_ShowErrorAndExit ("Can not create report file.");
+
+   /***** Start file *****/
+   fprintf (Gbl.F.Rep,"<div style=\"margin:2em; text-align:left;\">\n");
 
    /***** Header *****/
-   Rep_WriteHeader (StrCurrentDateUTC);
+   Rep_WriteHeader (Gbl.F.Rep,StrCurrentDateUTC);
 
    /***** Platform *****/
    Rep_WriteSectionPlatform ();
@@ -208,8 +223,21 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    Rep_WriteSectionHistoricCourses (&UsrFigures,&tm_FirstClickTime,
                                     MaxHitsPerYear);
 
+   /***** End file *****/
+   fprintf (Gbl.F.Rep,"</div>\n");
+
+   /***** Open report file for reading *****/
+   if ((Gbl.F.Rep = fopen (PathFileReport,"rb")) == NULL)
+      Lay_ShowErrorAndExit ("Can not open report file.");
+
+   /***** Copy from report file to output file *****/
+   Fil_FastCopyOfOpenFiles (Gbl.F.Rep,Gbl.F.Out);
+
+   /***** Close and remove report file *****/
+   Fil_CloseReportFile ();
+   unlink (PathFileReport);
+
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</div>\n");
    if (SeeOrPrint == Rep_SEE)
       Lay_EndRoundFrame ();
   }
@@ -232,25 +260,25 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 /******************** Write header of user's usage report ********************/
 /*****************************************************************************/
 
-static void Rep_WriteHeader (const char *StrCurrentDateUTC)
+static void Rep_WriteHeader (FILE *FileDst,const char *StrCurrentDateUTC)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
 
    /***** Start of header *****/
-   fprintf (Gbl.F.Out,"<header style=\"margin:2em; text-align:center;\">");
+   fprintf (FileDst,"<header style=\"margin:2em; text-align:center;\">");
 
    /***** Main title *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"<h1>%s</h1>",Gbl.Title);
+   fprintf (FileDst,"<h1>%s</h1>",Gbl.Title);
 
    /***** Subtitle *****/
-   fprintf (Gbl.F.Out,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
+   fprintf (FileDst,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
    if (StrCurrentDateUTC[0])
-      fprintf (Gbl.F.Out,", %s",StrCurrentDateUTC);
-   fprintf (Gbl.F.Out,"</h2>");
+      fprintf (FileDst,", %s",StrCurrentDateUTC);
+   fprintf (FileDst,"</h2>");
 
    /***** End of header *****/
-   fprintf (Gbl.F.Out,"</header>\n");
+   fprintf (FileDst,"</header>\n");
   }
 
 /*****************************************************************************/
@@ -265,22 +293,22 @@ static void Rep_WriteSectionPlatform (void)
    extern const char *Txt_URL;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Teaching_platform);
 
    /***** Platform name *****/
-   fprintf (Gbl.F.Out,"<li>%s: %s, %s</li>",
+   fprintf (Gbl.F.Rep,"<li>%s: %s, %s</li>",
             Txt_Name,
             Cfg_PLATFORM_FULL_NAME,Txt_TAGLINE);
 
    /***** Server URL *****/
-   fprintf (Gbl.F.Out,"<li>%s: <a href=\"%s\">%s</a></li>",
+   fprintf (Gbl.F.Rep,"<li>%s: <a href=\"%s\">%s</a></li>",
             Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</ul>"
+   fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
 
@@ -299,36 +327,36 @@ static void Rep_WriteSectionUsrInfo (void)
    struct Institution Ins;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
 	              "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Personal_information);
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<li>%s: <strong>%s</strong></li>",
+   fprintf (Gbl.F.Rep,"<li>%s: <strong>%s</strong></li>",
             Txt_Name,
             Gbl.Usrs.Me.UsrDat.FullName);
 
    /***** User's e-mail *****/
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+   fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Email,
             Gbl.Usrs.Me.UsrDat.Email);
 
    /***** User's country *****/
    Cty_GetCountryName (Gbl.Usrs.Me.UsrDat.CtyCod,CtyName);
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+   fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Country,
             CtyName);
 
    /***** User's institution *****/
    Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   fprintf (Gbl.F.Out,"<li>%s: %s</li>",
+   fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</ul>"
+   fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
 
@@ -364,18 +392,18 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
    unsigned NumPublicFiles;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Figures);
 
    /***** Time since first click until now *****/
-   fprintf (Gbl.F.Out,"<li>%s ",Txt_TIME_Since);
+   fprintf (Gbl.F.Rep,"<li>%s ",Txt_TIME_Since);
    if (UsrFigures->FirstClickTimeUTC)
      {
       if (tm_FirstClickTime != NULL)
 	{
-	 fprintf (Gbl.F.Out,"%04d-%02d-%02d %02d:%02d:%02d UTC",
+	 fprintf (Gbl.F.Rep,"%04d-%02d-%02d %02d:%02d:%02d UTC",
                   1900 + tm_FirstClickTime->tm_year,	// year
                   1 + tm_FirstClickTime->tm_mon,	// month
                   tm_FirstClickTime->tm_mday,		// day of the month
@@ -383,10 +411,10 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
                   tm_FirstClickTime->tm_min,		// minutes
 		  tm_FirstClickTime->tm_sec);		// seconds
 	 if (StrCurrentDateUTC[0])
-	    fprintf (Gbl.F.Out," %s %s %s UTC",
+	    fprintf (Gbl.F.Rep," %s %s %s UTC",
 	             Txt_TIME_until,StrCurrentDateUTC,StrCurrentTimeUTC);
 	 if (UsrFigures->NumDays > 0)
-	    fprintf (Gbl.F.Out," (%d %s)",
+	    fprintf (Gbl.F.Rep," (%d %s)",
 		     UsrFigures->NumDays,
 		     (UsrFigures->NumDays == 1) ? Txt_day :
 						  Txt_days);
@@ -394,35 +422,36 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
      }
    else	// Time of first click is unknown
      {
-      fprintf (Gbl.F.Out,"?");
+      fprintf (Gbl.F.Rep,"?");
       if (StrCurrentDateUTC[0])
-         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDateUTC,StrCurrentTimeUTC);
+         fprintf (Gbl.F.Rep," - %s %s UTC",StrCurrentDateUTC,StrCurrentTimeUTC);
      }
-   fprintf (Gbl.F.Out,"</li>");
+   fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of clicks *****/
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Clicks);
+   fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Clicks);
    if (UsrFigures->NumClicks >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld",UsrFigures->NumClicks);
+      fprintf (Gbl.F.Rep,"%ld",UsrFigures->NumClicks);
       if (UsrFigures->NumDays > 0)
 	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures->NumClicks /
+	 fprintf (Gbl.F.Rep," (");
+	 Str_WriteFloatNum (Gbl.F.Rep,
+	                    (float) UsrFigures->NumClicks /
 			    (float) UsrFigures->NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
    else	// Number of clicks is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
+      fprintf (Gbl.F.Rep,"?");
+   fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of files currently published *****/
    if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
       NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
    else
       NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<li>"
+   fprintf (Gbl.F.Rep,"<li>"
 		      "%s: %u %s (%u %s)"
 		      "</li>",
 	    Txt_Files_uploaded,
@@ -432,67 +461,70 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
 	    NumPublicFiles,Txt_public_FILES);
 
    /***** Number of file views *****/
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Downloads);
+   fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Downloads);
    if (UsrFigures->NumFileViews >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld %s",
+      fprintf (Gbl.F.Rep,"%ld %s",
                UsrFigures->NumFileViews,
 	       (UsrFigures->NumFileViews == 1) ? Txt_download :
 						 Txt_downloads);
       if (UsrFigures->NumDays > 0)
 	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures->NumFileViews /
+	 fprintf (Gbl.F.Rep," (");
+	 Str_WriteFloatNum (Gbl.F.Rep,
+	                    (float) UsrFigures->NumFileViews /
 			    (float) UsrFigures->NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
    else	// Number of file views is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
+      fprintf (Gbl.F.Rep,"?");
+   fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of posts in forums *****/
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Forum_posts);
+   fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Forum_posts);
    if (UsrFigures->NumForPst >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld %s",
+      fprintf (Gbl.F.Rep,"%ld %s",
 	       UsrFigures->NumForPst,
 	       (UsrFigures->NumForPst == 1) ? Txt_post :
 					      Txt_posts);
       if (UsrFigures->NumDays > 0)
 	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures->NumForPst /
+	 fprintf (Gbl.F.Rep," (");
+	 Str_WriteFloatNum (Gbl.F.Rep,
+	                    (float) UsrFigures->NumForPst /
 			    (float) UsrFigures->NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
    else	// Number of forum posts is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
+      fprintf (Gbl.F.Rep,"?");
+   fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of messages sent *****/
-   fprintf (Gbl.F.Out,"<li>%s: ",Txt_Messages_sent);
+   fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Messages_sent);
    if (UsrFigures->NumMsgSnt >= 0)
      {
-      fprintf (Gbl.F.Out,"%ld %s",
+      fprintf (Gbl.F.Rep,"%ld %s",
 	       UsrFigures->NumMsgSnt,
 	       (UsrFigures->NumMsgSnt == 1) ? Txt_message :
 					      Txt_messages);
       if (UsrFigures->NumDays > 0)
 	{
-	 fprintf (Gbl.F.Out," (");
-	 Str_WriteFloatNum ((float) UsrFigures->NumMsgSnt /
+	 fprintf (Gbl.F.Rep," (");
+	 Str_WriteFloatNum (Gbl.F.Rep,
+	                    (float) UsrFigures->NumMsgSnt /
 			    (float) UsrFigures->NumDays);
-	 fprintf (Gbl.F.Out," / %s)",Txt_day);
+	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
    else	// Number of messages sent is unknown
-      fprintf (Gbl.F.Out,"?");
-   fprintf (Gbl.F.Out,"</li>");
+      fprintf (Gbl.F.Rep,"?");
+   fprintf (Gbl.F.Rep,"</li>");
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</ul>"
+   fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
 
@@ -506,7 +538,7 @@ static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
    extern const char *Txt_Hits;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
 	    Txt_Hits);
 
@@ -518,7 +550,7 @@ static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
                           0);	// MaxHitsPerYear not passed as an argument but computed inside the function
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</section>\n");
+   fprintf (Gbl.F.Rep,"</section>\n");
   }
 
 /*****************************************************************************/
@@ -534,12 +566,12 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
    Rol_Role_t Role;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s",
             Txt_Courses);
    if (StrCurrentDateUTC[0])
-      fprintf (Gbl.F.Out," (%s)",StrCurrentDateUTC);
-   fprintf (Gbl.F.Out,"</h3>"
+      fprintf (Gbl.F.Rep," (%s)",StrCurrentDateUTC);
+   fprintf (Gbl.F.Rep,"</h3>"
 	              "<ul>");
 
    /***** Number of courses in which the user is student/teacher *****/
@@ -552,7 +584,7 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
 					MaxHitsPerYear);
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</ul>"
+   fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
 
@@ -570,12 +602,12 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
    Rol_Role_t Role;
 
    /***** Start of section *****/
-   fprintf (Gbl.F.Out,"<section>"
+   fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s (%s)</h3>",
 	    Txt_Courses,Txt_historical_log);
-   fprintf (Gbl.F.Out,Txt_Only_courses_with_more_than_X_clicks_are_shown,
+   fprintf (Gbl.F.Rep,Txt_Only_courses_with_more_than_X_clicks_are_shown,
             Rep_MIN_CLICKS_CRS);
-   fprintf (Gbl.F.Out,"<ul>");
+   fprintf (Gbl.F.Rep,"<ul>");
 
    /***** Number of courses in which the user clicked as student/teacher *****/
    for (Role  = Rol_STUDENT;
@@ -587,7 +619,7 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
 					 MaxHitsPerYear);
 
    /***** End of section *****/
-   fprintf (Gbl.F.Out,"</ul>"
+   fprintf (Gbl.F.Rep,"</ul>"
 	              "</section>\n");
   }
 
@@ -652,14 +684,14 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 
    NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
    sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-   fprintf (Gbl.F.Out,"<li>%s %u %s",
+   fprintf (Gbl.F.Rep,"<li>%s %u %s",
 	    Gbl.Title,
 	    NumCrss,
 	    NumCrss == 1 ? Txt_course :
 			   Txt_courses);
    if (NumCrss)
      {
-      fprintf (Gbl.F.Out," (%u %s / %u %s)",
+      fprintf (Gbl.F.Rep," (%u %s / %u %s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
@@ -679,7 +711,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
       if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
 	{
 	 /* Heading row */
-	 fprintf (Gbl.F.Out,"<ol>");
+	 fprintf (Gbl.F.Rep,"<ol>");
 
 	 /* Write courses */
 	 for (NumCrs = 1;
@@ -699,14 +731,14 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 	   }
 
 	 /* End table */
-	 fprintf (Gbl.F.Out,"</ol>");
+	 fprintf (Gbl.F.Rep,"</ol>");
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   fprintf (Gbl.F.Out,"</li>");
+   fprintf (Gbl.F.Rep,"</li>");
   }
 
 /*****************************************************************************/
@@ -743,7 +775,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
       /* Heading row */
       sprintf (Gbl.Title,Txt_Hits_as_a_USER,
                Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-      fprintf (Gbl.F.Out,"<li>%s:"
+      fprintf (Gbl.F.Rep,"<li>%s:"
 	                 "<ol>",
 	       Gbl.Title);
 
@@ -765,7 +797,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
         }
 
       /* End of list */
-      fprintf (Gbl.F.Out,"</ol>"
+      fprintf (Gbl.F.Rep,"</ol>"
 	                 "</li>");
      }
 
@@ -799,40 +831,40 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    Deg_GetDataOfDegreeByCod (&Deg);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<li>");
+   fprintf (Gbl.F.Rep,"<li>");
 
    if (CrsCod > 0)	// CrsCod > 0 in log ==> course selected
      {
       if (Crs.CrsCod > 0)	// Course exists
 	{
 	 /***** Write course full name *****/
-	 fprintf (Gbl.F.Out,"<strong>%s</strong> -",Crs.FullName);
+	 fprintf (Gbl.F.Rep,"<strong>%s</strong> -",Crs.FullName);
 
 	 /***** Write year *****/
 	 if (Crs.Year)
-	    fprintf (Gbl.F.Out," %s",Txt_YEAR_OF_DEGREE[Crs.Year]);
+	    fprintf (Gbl.F.Rep," %s",Txt_YEAR_OF_DEGREE[Crs.Year]);
 
 	 /***** Write degree full name *****/
-	 fprintf (Gbl.F.Out," %s",Deg.FullName);
+	 fprintf (Gbl.F.Rep," %s",Deg.FullName);
 
 	 /***** Write number of teachers / students in course *****/
-	 fprintf (Gbl.F.Out," (%u %s / %u %s)",
+	 fprintf (Gbl.F.Rep," (%u %s / %u %s)",
 		  Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs.CrsCod),Txt_teachers_ABBREVIATION,
 		  Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
 	}
       else
-         fprintf (Gbl.F.Out,"(%s)",Txt_unknown_removed_course);
+         fprintf (Gbl.F.Rep,"(%s)",Txt_unknown_removed_course);
      }
    else	// CrsCod <= 0 in log ==> no course selected
-      fprintf (Gbl.F.Out,"(%s)",Txt_no_course_selected);
+      fprintf (Gbl.F.Rep,"(%s)",Txt_no_course_selected);
 
    /***** Write hits per year for this course *****/
-   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Rep,"<br />");
    Rep_ShowMyHitsPerYear (false,CrsCod,Role,
                           FirstClickTimeUTC,tm_FirstClickTime,
                           MaxHitsPerYear);
 
-   fprintf (Gbl.F.Out,"</li>");
+   fprintf (Gbl.F.Rep,"</li>");
   }
 
 /*****************************************************************************/
@@ -915,7 +947,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 	   Year--)
         {
          /* Write the year */
-         fprintf (Gbl.F.Out,"%04u ",Year);
+         fprintf (Gbl.F.Rep,"%04u ",Year);
 
          /* Draw bar proportional to number of hits */
          Rep_DrawBarNumHits (Year == LastYear ? Hits.Num :
@@ -931,7 +963,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
         Year--)
      {
       /* Write the year */
-      fprintf (Gbl.F.Out,"%04u ",Year);
+      fprintf (Gbl.F.Rep,"%04u ",Year);
 
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
@@ -955,15 +987,15 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
       for (i = 0;
 	   i < BarWidth;
 	   i++)
-         fprintf (Gbl.F.Out,Rep_BLOCK);
+         fprintf (Gbl.F.Rep,Rep_BLOCK);
 
       /***** Write the number of hits *****/
-      fprintf (Gbl.F.Out," ");
-      Str_WriteFloatNum (HitsNum);
+      fprintf (Gbl.F.Rep," ");
+      Str_WriteFloatNum (Gbl.F.Rep,HitsNum);
      }
    else
       /***** Write the number of clicks *****/
-      fprintf (Gbl.F.Out,"0");
+      fprintf (Gbl.F.Rep,"0");
 
-   fprintf (Gbl.F.Out,"<br />");
+   fprintf (Gbl.F.Rep,"<br />");
   }

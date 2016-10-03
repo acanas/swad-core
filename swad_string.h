@@ -76,7 +76,7 @@ char *Str_ConvertToLowerText (char *Str);
 char Str_ConvertToUpperLetter (char Ch);
 char Str_ConvertToLowerLetter (char Ch);
 
-void Str_WriteFloatNum (float Number);
+void Str_WriteFloatNum (FILE *FileDst,float Number);
 void Str_ConvertStrFloatCommaToStrFloatPoint (char *Str);
 float Str_GetFloatNumFromStr (const char *Str);
 void Str_SetDecimalPointToUS (void);

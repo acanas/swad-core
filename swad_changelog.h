@@ -143,13 +143,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.8.1 (2016-10-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.9 (2016-10-03)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.9:     Oct 03, 2016	User's usage report is written into a temporary file. (205795 lines)
         Version 16.8.1:   Oct 03, 2016	Do not show courses with a few clicks in user's usage report. (205747 lines)
         Version 16.8:     Oct 03, 2016	New option to view user's usage report. (205720 lines)
 					1 change necessary in database:

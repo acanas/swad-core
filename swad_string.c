@@ -813,7 +813,7 @@ char Str_ConvertToLowerLetter (char Ch)
 /******** Write a number in floating point with the correct accuracy *********/
 /*****************************************************************************/
 
-void Str_WriteFloatNum (float Number)
+void Str_WriteFloatNum (FILE *FileDst,float Number)
   {
    double IntegerPart;
    double FractionaryPart;
@@ -822,7 +822,7 @@ void Str_WriteFloatNum (float Number)
    FractionaryPart = modf ((double) Number,&IntegerPart);
 
    if (FractionaryPart == 0.0)
-      fprintf (Gbl.F.Out,"%.0f",IntegerPart);
+      fprintf (FileDst,"%.0f",IntegerPart);
    else
      {
       if (IntegerPart != 0.0 || FractionaryPart >= 0.1)
@@ -839,7 +839,7 @@ void Str_WriteFloatNum (float Number)
          Format = "%.7f";
       else
          Format = "%e";
-      fprintf (Gbl.F.Out,Format,Number);
+      fprintf (FileDst,Format,Number);
      }
   }
 

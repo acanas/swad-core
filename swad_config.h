@@ -398,6 +398,9 @@
 /* Folder for temporary XML files received to import test questions, inside private swad directory */
 #define Cfg_FOLDER_TEST				"test"			// Created automatically the first time it is accessed
 
+/* Folder for reports, inside private swad directory */
+#define Cfg_FOLDER_REP 				"rep"			// Created automatically the first time it is accessed
+
 /* Folder for compression of assignments and works into a zip files, inside private swad directory */
 #define Cfg_FOLDER_ZIP				"zip"			// Created automatically the first time it is accessed
 
