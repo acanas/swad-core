@@ -76,6 +76,9 @@ struct DateTime
 void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);
 
+void Dat_GetCurrentDateTimeUTC (char StrCurrentDateUTC[10+1],
+                                char StrCurrentTimeUTC[8+1]);
+
 time_t Dat_GetUNIXTimeFromStr (const char *Str);
 bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
 

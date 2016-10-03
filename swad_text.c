@@ -13321,6 +13321,27 @@ const char *Txt_Generate_exam =
 	"Gerar teste";
 #endif
 
+const char *Txt_Generate_report =
+#if   L==1
+	"Generar informe";
+#elif L==2
+	"Generieren Nutzungsbericht";
+#elif L==3
+	"Generate report";
+#elif L==4
+	"Generar informe";
+#elif L==5
+	"G&eacute;n&eacute;rer le rapport";
+#elif L==6
+	"Generar informe";	// Okoteve traducción
+#elif L==7
+	"Crea rapporto";
+#elif L==8
+	"Wygeneruj raport";
+#elif L==9
+	"Gerar relat&oacute;rio";
+#endif
+
 const char *Txt_Get_a_new_password =
 #if   L==1
 	"Rebre una nova contrasenya";
@@ -19027,7 +19048,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Visitas"
 #endif
 	,
-	// ActSeeMyUsgRep
+	// ActReqMyUsgRep
 #if   L==1
 	"Informe"
 #elif L==2
@@ -20900,7 +20921,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estat&iacute;sticas de acesso &agrave; plataforma"
 #endif
 	,
-	// ActSeeMyUsgRep
+	// ActReqMyUsgRep
 #if   L==1
 	"Informe sobre el meu &uacute;s de la plataforma"
 #elif L==2

@@ -72,9 +72,9 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+246+186+156+172+36+30+87)
+#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+246+186+156+172+36+31+87)
 
-#define Act_MAX_ACTION_COD 1585
+#define Act_MAX_ACTION_COD 1586
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 20
 
@@ -1335,7 +1335,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeePhoDeg		(ActUnbUsrLst+  3)
 #define ActReqStaCrs		(ActUnbUsrLst+  4)
 #define ActReqAccGbl		(ActUnbUsrLst+  5)
-#define ActSeeMyUsgRep		(ActUnbUsrLst+  6)
+#define ActReqMyUsgRep		(ActUnbUsrLst+  6)
 
 // Secondary actions
 #define ActSeeOneSvy		(ActUnbUsrLst+  7)
@@ -1363,7 +1363,8 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActSeeAccCrs		(ActUnbUsrLst+ 28)
 #define ActSeeAllStaCrs		(ActUnbUsrLst+ 29)
 
-#define ActPrnMyUsgRep		(ActUnbUsrLst+ 30)
+#define ActSeeMyUsgRep		(ActUnbUsrLst+ 30)
+#define ActPrnMyUsgRep		(ActUnbUsrLst+ 31)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

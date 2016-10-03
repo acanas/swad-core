@@ -77,18 +77,18 @@ extern struct Globals Gbl;
 static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint);
 static void Rep_PutIconToPrintMyUsageReport (void);
 
-static void Rep_WriteHeader (const char *StrCurrentDate);
+static void Rep_WriteHeader (const char *StrCurrentDateUTC);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
                                         struct tm *tm_FirstClickTime,
-                                        const char *StrCurrentDate,
-                                        const char *StrCurrentTime);
+                                        const char *StrCurrentDateUTC,
+                                        const char *StrCurrentTimeUTC);
 static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
                                         struct tm *tm_FirstClickTime);
 static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
                                             struct tm *tm_FirstClickTime,
-                                            const char *StrCurrentDate,
+                                            const char *StrCurrentDateUTC,
                                             unsigned long MaxHitsPerYear);
 static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
                                              struct tm *tm_FirstClickTime,
@@ -119,6 +119,34 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
 /********* Show my usage report (report on my use of the platform) ***********/
 /*****************************************************************************/
 
+void Rep_ReqMyUsageReport (void)
+  {
+   extern const char *Txt_Report;
+   extern const char *Txt_Generate_report;
+   char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
+					//          1234567890
+   char StrCurrentTimeUTC[8+1];		// Example: 19:03:49
+					//          12345678
+
+   /***** Get current date-time *****/
+   Dat_GetCurrentDateTimeUTC (StrCurrentDateUTC,StrCurrentTimeUTC);
+
+   /***** Form to show my usage report *****/
+   Act_FormStart (ActSeeMyUsgRep);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Report,NULL);
+
+   /***** Header *****/
+   Rep_WriteHeader (StrCurrentDateUTC);
+
+   /***** Send button and end frame *****/
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
+
+   /***** End of form *****/
+   Act_FormEnd ();
+  }
+
 void Rep_ShowMyUsageReport (void)
   {
    Rep_ShowOrPrintMyUsageReport (false);
@@ -133,33 +161,16 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_Report;
    struct UsrFigures UsrFigures;
-   time_t CurrentTime;
-   struct tm tm_CurrentTime;
+
    struct tm tm_FirstClickTime;
-   char StrCurrentDate[10+1];	// Example: 2016-10-02
-				//          1234567890
-   char StrCurrentTime[8+1];	// Example: 19:03:49
-				//          12345678
+   char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
+					//          1234567890
+   char StrCurrentTimeUTC[8+1];		// Example: 19:03:49
+					//          12345678
    unsigned long MaxHitsPerYear;
 
    /***** Get current date-time *****/
-   time (&CurrentTime);
-   if ((gmtime_r (&CurrentTime,&tm_CurrentTime)) != NULL)
-     {
-      sprintf (StrCurrentDate,"%04d-%02d-%02d",
-	       1900 + tm_CurrentTime.tm_year,	// year
-	       1 + tm_CurrentTime.tm_mon,	// month
-	       tm_CurrentTime.tm_mday);		// day of the month
-      sprintf (StrCurrentTime,"%02d:%02d:%02d",
-	       tm_CurrentTime.tm_hour,		// hours
-	       tm_CurrentTime.tm_min,		// minutes
-	       tm_CurrentTime.tm_sec);		// seconds
-     }
-   else
-     {
-      StrCurrentDate[0] = '\0';
-      StrCurrentTime[0] = '\0';
-     }
+   Dat_GetCurrentDateTimeUTC (StrCurrentDateUTC,StrCurrentTimeUTC);
 
    /***** Start frame *****/
    if (SeeOrPrint == Rep_SEE)
@@ -167,8 +178,8 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                            Rep_PutIconToPrintMyUsageReport);
    fprintf (Gbl.F.Out,"<div style=\"margin:2em; text-align:left;\">\n");
 
-   /***** Head *****/
-   Rep_WriteHeader (StrCurrentDate);
+   /***** Header *****/
+   Rep_WriteHeader (StrCurrentDateUTC);
 
    /***** Platform *****/
    Rep_WriteSectionPlatform ();
@@ -181,7 +192,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    if (UsrFigures.FirstClickTimeUTC)
       gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
    Rep_WriteSectionUsrFigures (&UsrFigures,&tm_FirstClickTime,
-                               StrCurrentDate,StrCurrentTime);
+                               StrCurrentDateUTC,StrCurrentTimeUTC);
 
    /***** Global hits *****/
    Rep_WriteSectionGlobalHits (&UsrFigures,&tm_FirstClickTime);
@@ -189,7 +200,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    /***** Current courses *****/
    MaxHitsPerYear = Rep_GetMaxHitsPerYear (UsrFigures.FirstClickTimeUTC);
    Rep_WriteSectionCurrentCourses (&UsrFigures,&tm_FirstClickTime,
-                                   StrCurrentDate,MaxHitsPerYear);
+                                   StrCurrentDateUTC,MaxHitsPerYear);
 
    /***** Historic courses *****/
    Rep_WriteSectionHistoricCourses (&UsrFigures,&tm_FirstClickTime,
@@ -219,7 +230,7 @@ static void Rep_PutIconToPrintMyUsageReport (void)
 /******************** Write header of user's usage report ********************/
 /*****************************************************************************/
 
-static void Rep_WriteHeader (const char *StrCurrentDate)
+static void Rep_WriteHeader (const char *StrCurrentDateUTC)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
 
@@ -232,8 +243,8 @@ static void Rep_WriteHeader (const char *StrCurrentDate)
 
    /***** Subtitle *****/
    fprintf (Gbl.F.Out,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
-   if (StrCurrentDate[0])
-      fprintf (Gbl.F.Out,", %s",StrCurrentDate);
+   if (StrCurrentDateUTC[0])
+      fprintf (Gbl.F.Out,", %s",StrCurrentDateUTC);
    fprintf (Gbl.F.Out,"</h2>");
 
    /***** End of header *****/
@@ -325,8 +336,8 @@ static void Rep_WriteSectionUsrInfo (void)
 
 static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
                                         struct tm *tm_FirstClickTime,
-                                        const char *StrCurrentDate,
-                                        const char *StrCurrentTime)
+                                        const char *StrCurrentDateUTC,
+                                        const char *StrCurrentTimeUTC)
   {
    extern const char *Txt_Figures;
    extern const char *Txt_TIME_Since;
@@ -369,9 +380,9 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
                   tm_FirstClickTime->tm_hour,		// hours
                   tm_FirstClickTime->tm_min,		// minutes
 		  tm_FirstClickTime->tm_sec);		// seconds
-	 if (StrCurrentDate[0])
+	 if (StrCurrentDateUTC[0])
 	    fprintf (Gbl.F.Out," %s %s %s UTC",
-	             Txt_TIME_until,StrCurrentDate,StrCurrentTime);
+	             Txt_TIME_until,StrCurrentDateUTC,StrCurrentTimeUTC);
 	 if (UsrFigures->NumDays > 0)
 	    fprintf (Gbl.F.Out," (%d %s)",
 		     UsrFigures->NumDays,
@@ -382,8 +393,8 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
    else	// Time of first click is unknown
      {
       fprintf (Gbl.F.Out,"?");
-      if (StrCurrentDate[0])
-         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDate,StrCurrentTime);
+      if (StrCurrentDateUTC[0])
+         fprintf (Gbl.F.Out," - %s %s UTC",StrCurrentDateUTC,StrCurrentTimeUTC);
      }
    fprintf (Gbl.F.Out,"</li>");
 
@@ -514,7 +525,7 @@ static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
 
 static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
                                             struct tm *tm_FirstClickTime,
-                                            const char *StrCurrentDate,
+                                            const char *StrCurrentDateUTC,
                                             unsigned long MaxHitsPerYear)
   {
    extern const char *Txt_Courses;
@@ -524,8 +535,8 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
    fprintf (Gbl.F.Out,"<section>"
                       "<h3>%s",
             Txt_Courses);
-   if (StrCurrentDate[0])
-      fprintf (Gbl.F.Out," (%s)",StrCurrentDate);
+   if (StrCurrentDateUTC[0])
+      fprintf (Gbl.F.Out," (%s)",StrCurrentDateUTC);
    fprintf (Gbl.F.Out,"</h3>"
 	              "<ul>");
 

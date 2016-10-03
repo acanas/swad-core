@@ -1285,7 +1285,7 @@ Statistics:
        1100. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
        1101. ActReqStaCrs		Request statistics of courses
        1102. ActReqAccGbl		Request query of clicks to the complete platform
-        NEW. ActSeeMyUsgRep		Show my usage report
+        NEW. ActReqMyUsgRep		Request my usage report
 
        1103. ActSeeOneSvy		Show one survey
        1104. ActAnsSvy			Answer a survey
@@ -1310,6 +1310,7 @@ Statistics:
        1123. ActReqAccCrs		Request query of clicks in the course
        1124. ActSeeAccCrs		Query clicks to current course
        1125. ActSeeAllStaCrs		Show statistics of courses
+        NEW. ActSeeMyUsgRep		Show my usage report
         NEW. ActPrnMyUsgRep		Print my usage report
 Profile:
        1126. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
@@ -2710,7 +2711,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
    /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
    /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
-   /* ActSeeMyUsgRep	*/{1582, 5,TabSta,ActSeeMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ShowMyUsageReport		,"report64x64.png"	},
+   /* ActReqMyUsgRep	*/{1586, 5,TabSta,ActReqMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ReqMyUsageReport		,"report64x64.png"	},
 
    // Actions not in menu:
    /* ActSeeOneSvy	*/{ 982,-1,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_SeeOneSurvey		,NULL},
@@ -2740,7 +2741,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAccCrs	*/{ 119,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeCrsAccesses		,NULL},
    /* ActSeeAllStaCrs	*/{ 768,-1,TabSta,ActReqAccGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ind_ShowIndicatorsCourses	,NULL},
 
-   /* ActPrnMyUsgRep	*/{1583, 5,TabSta,ActSeeMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rep_PrintMyUsageReport		,NULL},
+   /* ActSeeMyUsgRep	*/{1582,-1,TabSta,ActReqMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ShowMyUsageReport		,NULL},
+   /* ActPrnMyUsgRep	*/{1583, 5,TabSta,ActReqMyUsgRep	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rep_PrintMyUsageReport		,NULL},
 
    // TabPrf ******************************************************************
    // Actions in menu:
@@ -4442,6 +4444,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActPrnMyUsgRep,		// #1583
 	ActChkUsrAcc,		// #1584
 	ActAutUsrNew,		// #1585
+	ActReqMyUsgRep,		// #1586
 	};
 
 /*****************************************************************************/

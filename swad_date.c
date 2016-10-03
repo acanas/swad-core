@@ -104,6 +104,48 @@ void Dat_GetAndConvertCurrentDateTime (void)
   }
 
 /*****************************************************************************/
+/********************* Get current date and time in UTC **********************/
+/*****************************************************************************/
+/*
+char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
+				//          1234567890
+char StrCurrentTimeUTC[8+1];	// Example: 19:03:49
+				//          12345678
+*/
+void Dat_GetCurrentDateTimeUTC (char StrCurrentDateUTC[10+1],
+                                char StrCurrentTimeUTC[8+1])
+  {
+   time_t CurrentTime;
+   struct tm tm_CurrentTime;
+
+   if (StrCurrentDateUTC &&
+       StrCurrentDateUTC)	// If both pointers are not NULL
+     {
+      /***** Initialize to empty strings *****/
+      if (StrCurrentDateUTC)
+         StrCurrentDateUTC[0] = '\0';
+      if (StrCurrentTimeUTC)
+         StrCurrentTimeUTC[0] = '\0';
+
+      /***** Get current time UTC *****/
+      time (&CurrentTime);
+      if ((gmtime_r (&CurrentTime,&tm_CurrentTime)) != NULL)
+	{
+	 if (StrCurrentDateUTC)	// If not NULL
+	    sprintf (StrCurrentDateUTC,"%04d-%02d-%02d",
+		     1900 + tm_CurrentTime.tm_year,	// year
+		     1 + tm_CurrentTime.tm_mon,		// month
+		     tm_CurrentTime.tm_mday);		// day of the month
+	 if (StrCurrentTimeUTC)	// If not NULL
+	    sprintf (StrCurrentTimeUTC,"%02d:%02d:%02d",
+		     tm_CurrentTime.tm_hour,		// hours
+		     tm_CurrentTime.tm_min,		// minutes
+		     tm_CurrentTime.tm_sec);		// seconds
+	}
+     }
+  }
+
+/*****************************************************************************/
 /************ Get UNIX time (seconds since 1970 UTC) from string *************/
 /*****************************************************************************/
 
