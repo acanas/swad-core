@@ -84,6 +84,8 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
                                         struct tm *tm_FirstClickTime,
                                         const char *StrCurrentDate,
                                         const char *StrCurrentTime);
+static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
+                                        struct tm *tm_FirstClickTime);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
@@ -125,7 +127,6 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
    extern const char *Txt_Report;
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
-   extern const char *Txt_Hits;
    struct UsrFigures UsrFigures;
    time_t CurrentTime;
    struct tm tm_CurrentTime;
@@ -180,11 +181,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
                                StrCurrentDate,StrCurrentTime);
 
    /***** Global hits *****/
-   fprintf (Gbl.F.Out,"<h3>%s</h3>",Txt_Hits);
-   Rep_ShowMyHitsPerYear (true,-1L,Rol_UNKNOWN,
-                          UsrFigures.FirstClickTimeUTC,
-                          &tm_FirstClickTime,
-                          0);
+   Rep_WriteSectionGlobalHits (&UsrFigures,&tm_FirstClickTime);
 
    /***** Current courses *****/
    fprintf (Gbl.F.Out,"<h3>%s",Txt_Courses);
@@ -507,6 +504,31 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
    /***** End of section *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</section>");
+  }
+
+/*****************************************************************************/
+/******** Write section for user's global hits in user's usage report ********/
+/*****************************************************************************/
+
+static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
+                                        struct tm *tm_FirstClickTime)
+  {
+   extern const char *Txt_Hits;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Out,"<section>"
+                      "<h3>%s</h3>",
+	    Txt_Hits);
+
+   /***** Global (in any course) hits per year *****/
+   Rep_ShowMyHitsPerYear (true,-1L,	// Any course
+                          Rol_UNKNOWN,	// Any role
+                          UsrFigures->FirstClickTimeUTC,
+                          tm_FirstClickTime,
+                          0);	// MaxHitsPerYear not passed as an argument but computed inside the function
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
