@@ -25,9 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <stdbool.h>		// For boolean type
-// #include <stdio.h>		// For sprintf
-// #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
@@ -44,14 +41,15 @@
 /*****************************************************************************/
 
 #define Rep_MIN_CLICKS_CRS 100	// Minimum number of clicks to show a course in historic log
-#define Rep_MAX_BAR_WIDTH 40	// Maximum width of graphic bar
+#define Rep_MAX_BAR_WIDTH 50	// Maximum width of graphic bar
 
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&block;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&equiv;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&bull;"	// HTML code for a block in graphic bar
-#define Rep_BLOCK "&squf;"	// HTML code for a block in graphic bar
+// #define Rep_BLOCK "&squf;"	// HTML code for a block in graphic bar
+#define Rep_BLOCK "-"
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -207,7 +205,8 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 
    /***** Start file *****/
    Lay_StartHTMLFile (Gbl.F.Rep,Txt_Report);
-   fprintf (Gbl.F.Rep,"<div style=\"margin:1em;text-align:left;\">\n");
+   fprintf (Gbl.F.Rep,"<body style=\"margin:1em;text-align:left;"
+	              "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">\n");
 
    /***** Header *****/
    Rep_WriteHeader (CurrentTimeUTC,Permalink);
@@ -240,8 +239,7 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                                     MaxHitsPerYear);
 
    /***** End file *****/
-   fprintf (Gbl.F.Rep,"</div>\n"
-                      "</body>\n"
+   fprintf (Gbl.F.Rep,"</body>\n"
 	              "</html>\n");
 
    /***** Close report file *****/
@@ -293,7 +291,7 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 
 static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
   {
-   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
+   fprintf (Gbl.F.Out,"<div class=\"DAT_N\" style=\"margin-bottom:10px;\">"
 	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
    if (CurrentTimeUTC->StrDate[0])
       fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC->StrDate);
@@ -310,7 +308,7 @@ static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
    extern const char *Txt_Report_of_use_of_PLATFORM;
 
    /***** Start of header *****/
-   fprintf (Gbl.F.Rep,"<header style=\"text-align:center;\">");
+   fprintf (Gbl.F.Rep,"<header>");
 
    /***** Main title *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
@@ -1034,10 +1032,15 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
      {
       /***** Draw bar with a with proportional to the number of hits *****/
       BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
-      for (i = 0;
-	   i < BarWidth;
-	   i++)
-         fprintf (Gbl.F.Rep,Rep_BLOCK);
+      if (BarWidth)
+	{
+         fprintf (Gbl.F.Rep,"<strong>");
+	 for (i = 0;
+	      i < BarWidth;
+	      i++)
+	    fprintf (Gbl.F.Rep,Rep_BLOCK);
+         fprintf (Gbl.F.Rep,"</strong>");
+	}
 
       /***** Write the number of hits *****/
       fprintf (Gbl.F.Rep,"&nbsp;");

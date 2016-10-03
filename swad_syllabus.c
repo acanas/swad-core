@@ -842,7 +842,8 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 
    /***** Write start of HTML code *****/
    Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
-   fprintf (FileHTMLTmp,"<table>\n");
+   fprintf (FileHTMLTmp,"<body>\n"
+                        "<table>\n");
 
    /***** Set width of columns of the table *****/
    fprintf (FileHTMLTmp,"<colgroup>\n");
@@ -852,7 +853,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
       fprintf (FileHTMLTmp,"<col width=\"%d\" />\n",
 	       i * Syl_WIDTH_NUM_SYLLABUS);
    fprintf (FileHTMLTmp,"<col width=\"*\" />\n"
-			 "</colgroup>\n");
+			"</colgroup>\n");
 
    /***** Write all items of the current syllabus into text buffer *****/
    for (NumItem = 0;
@@ -880,8 +881,8 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 
       /***** Text of the item *****/
       fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s LEFT_TOP\">"
-			    "%s"
-			    "</td>",
+			   "%s"
+			   "</td>",
 	       LstItemsSyllabus.NumLevels - LstItemsSyllabus.Lst[NumItem].Level + 1,
 	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level],
 	       LstItemsSyllabus.Lst[NumItem].Text);
@@ -891,8 +892,8 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
      }
 
    fprintf (FileHTMLTmp,"</table>\n"
-			 "</html>\n"
-			 "</body>\n");
+			"</html>\n"
+			"</body>\n");
   }
 
 /*****************************************************************************/

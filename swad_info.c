@@ -1914,10 +1914,10 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
 
       /***** Write start of HTML code *****/
       Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+      fprintf (FileHTMLTmp,"<body>\n"
+                           "<div class=\"DAT LEFT_MIDDLE\">\n");
 
       /***** Write plain text into text buffer *****/
-      fprintf (FileHTMLTmp,"<div class=\"DAT LEFT_MIDDLE\">\n");
-
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML

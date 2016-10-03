@@ -1784,8 +1784,7 @@ void Lay_StartHTMLFile (FILE *File,const char *Title)
 		 "<meta http-equiv=\"Content-Type\""
 		 " content=\"text/html;charset=windows-1252\" />\n"
 		 "<title>%s</title>\n"
-		 "</head>\n"
-		 "<body>\n",
+		 "</head>\n",
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language],	// Language
 	    Title);					// Page title
   }
