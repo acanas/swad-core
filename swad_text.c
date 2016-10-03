@@ -27046,6 +27046,27 @@ const char *Txt_Online_tutoring =
 	"Tutoria on-line";
 #endif
 
+const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =
+#if   L==1
+	"Nom&eacute;s es mostren les assignatures amb m&eacute;s de %u clics.";
+#elif L==2
+	"Nur Kurse mit mehr als %u Klicks angezeigt.";
+#elif L==3
+	"Only courses with more than %u clicks are shown.";
+#elif L==4
+	"Solo se muestran las asignaturas con m&aacute;s de %u clics.";
+#elif L==5
+	"Seuls les cours avec plus de %u clics sont pr&eacute;sent&eacute;s.";
+#elif L==6
+	"Solo se muestran las asignaturas con m&aacute;s de %u clics.";	// Okoteve traducción
+#elif L==7
+	"Solo i corsi con pi&ugrave; di %u scatti sono mostrati.";
+#elif L==8
+	"Tylko kursy z ponad 100 klikni&eogon;&cacute; s&aogon; pokazane.";
+#elif L==9
+	"Somente disciplinas com mais de %u cliques s&atilde;o mostradas.";
+#endif
+
 const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"nom&eacute;s si l'&agrave;mbit &eacute;s %s";

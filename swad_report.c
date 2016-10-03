@@ -42,7 +42,9 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Rep_MIN_CLICKS_CRS 100	// Minimum number of clicks to show a course in historic log
 #define Rep_MAX_BAR_WIDTH 80	// Maximum width of graphic bar
+
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&blk12;"	// HTML code for a block in graphic bar
 // #define Rep_BLOCK "&block;"	// HTML code for a block in graphic bar
@@ -564,13 +566,16 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
   {
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
+   extern const char *Txt_Only_courses_with_more_than_X_clicks_are_shown;
    Rol_Role_t Role;
 
    /***** Start of section *****/
    fprintf (Gbl.F.Out,"<section>"
-                      "<h3>%s (%s)</h3>"
-	              "<ul>",
+                      "<h3>%s (%s)</h3>",
 	    Txt_Courses,Txt_historical_log);
+   fprintf (Gbl.F.Out,Txt_Only_courses_with_more_than_X_clicks_are_shown,
+            Rep_MIN_CLICKS_CRS);
+   fprintf (Gbl.F.Out,"<ul>");
 
    /***** Number of courses in which the user clicked as student/teacher *****/
    for (Role  = Rol_STUDENT;
@@ -593,7 +598,7 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
   {
-   char Query[1024];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long MaxHitsPerYear = 0;
@@ -638,7 +643,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
    extern const char *Txt_courses;
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
-   char Query[1024];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -715,7 +720,7 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
   {
    extern const char *Txt_Hits_as_a_USER;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -723,12 +728,14 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
    long CrsCod;
 
    /***** Get courses of a user from database *****/
-   sprintf (Query,"SELECT CrsCod,"
-	          "COUNT(*) AS N"
+   sprintf (Query,"SELECT CrsCod,COUNT(*) AS N"
 	          " FROM log_full"
 	          " WHERE UsrCod='%ld' AND Role='%u'"
-                  " GROUP BY CrsCod ORDER BY N DESC",
-            UsrDat->UsrCod,(unsigned) Role);
+                  " GROUP BY CrsCod"
+	          " HAVING N>'%u'"
+                  " ORDER BY N DESC",
+            UsrDat->UsrCod,(unsigned) Role,
+            Rep_MIN_CLICKS_CRS);
 
    /***** List the courses (one row per course) *****/
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
@@ -837,7 +844,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    struct tm *tm_FirstClickTime,
                                    unsigned long MaxHitsPerYear)
   {
-   char Query[1024];
+   char Query[512];
    char SubQueryCrs[128];
    char SubQueryRol[128];
    MYSQL_RES *mysql_res;
