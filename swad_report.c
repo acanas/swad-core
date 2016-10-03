@@ -83,6 +83,7 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                                      char *Permalink);
 static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                                         const char *Permalink);
+static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
                              const char *Permalink);
@@ -144,11 +145,7 @@ void Rep_ReqMyUsageReport (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
-	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
-   if (CurrentTimeUTC.StrDate[0])
-      fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC.StrDate);
-   fprintf (Gbl.F.Out,"</div>");
+   Req_TitleReport (&CurrentTimeUTC);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
@@ -267,11 +264,7 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
-	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
-   if (CurrentTimeUTC->StrDate[0])
-      fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC->StrDate);
-   fprintf (Gbl.F.Out,"</div>");
+   Req_TitleReport (CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
    fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">");
@@ -292,6 +285,19 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* Write title of user's usage report ********************/
+/*****************************************************************************/
+
+static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">"
+	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
+   if (CurrentTimeUTC->StrDate[0])
+      fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC->StrDate);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
