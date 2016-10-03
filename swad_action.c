@@ -2503,11 +2503,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
 
    /* ActSeePubPrf	*/{1402,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFirstClickTime	,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumClicks		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumFileViews	,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumForPst		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateNumMsgSnt		,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
 
    /* ActFolUsr		*/{1410,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
    /* ActUnfUsr		*/{1411,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},

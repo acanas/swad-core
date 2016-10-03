@@ -124,7 +124,7 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
 
 void Rep_ReqMyUsageReport (void)
   {
-   extern const char *Txt_Report;
+   extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Generate_report;
    char StrCurrentDateUTC[10+1];	// Example: 2016-10-02
 					//          1234567890
@@ -138,10 +138,14 @@ void Rep_ReqMyUsageReport (void)
    Act_FormStart (ActSeeMyUsgRep);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Report,NULL);
+   sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   Rep_WriteHeader (Gbl.F.Out,StrCurrentDateUTC);
+   fprintf (Gbl.F.Out,"<div class=\"DAT_N\">%s",Gbl.Usrs.Me.UsrDat.FullName);
+   if (StrCurrentDateUTC[0])
+      fprintf (Gbl.F.Out,"<br />%s",StrCurrentDateUTC);
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
@@ -171,6 +175,7 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 					//          1234567890
    char StrCurrentTimeUTC[8+1];		// Example: 19:03:49
 					//          12345678
+   bool GetUsrFiguresAgain;
    unsigned long MaxHitsPerYear;
 
    /***** Get current date-time *****/
@@ -206,6 +211,10 @@ static void Rep_ShowOrPrintMyUsageReport (Rep_SeeOrPrint_t SeeOrPrint)
 
    /***** Figures *****/
    Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
+   GetUsrFiguresAgain = Prf_GetAndStoreAllUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
+   if (GetUsrFiguresAgain)
+      Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&UsrFigures);
+
    if (UsrFigures.FirstClickTimeUTC)
       gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
    Rep_WriteSectionUsrFigures (&UsrFigures,&tm_FirstClickTime,

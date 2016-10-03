@@ -756,19 +756,65 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   }
 
 /*****************************************************************************/
-/********* Calculate first click time and show user's profile again **********/
+/********** Calculate user's figures and show user's profile again ***********/
 /*****************************************************************************/
 
-void Prf_CalculateFirstClickTime (void)
+void Prf_CalculateFigures (void)
   {
+   struct UsrFigures UsrFigures;
+
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get first click time from log and store as user's figure *****/
-   Prf_GetFirstClickFromLogAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
+   Prf_GetUsrFigures (Gbl.Usrs.Other.UsrDat.UsrCod,&UsrFigures);
+   Prf_GetAndStoreAllUsrFigures (Gbl.Usrs.Other.UsrDat.UsrCod,&UsrFigures);
 
    /***** Show user's profile again *****/
    Prf_GetUsrDatAndShowUserProfile ();
+  }
+
+/*****************************************************************************/
+/*** Calculate and store all figures in user's profile not yet calculated ****/
+/*****************************************************************************/
+// Return true if any figure has been calculated and stored
+
+bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
+  {
+   bool UsrFiguresModified = false;
+
+   if (!UsrFigures->FirstClickTimeUTC)
+     {
+      /***** Get first click time from log and store as user's figure *****/
+      Prf_GetFirstClickFromLogAndStoreAsUsrFigure (UsrCod);
+      UsrFiguresModified = true;
+     }
+   if (UsrFigures->NumClicks < 0)
+     {
+      /***** Get number of clicks and store as user's figure *****/
+      Prf_GetNumClicksAndStoreAsUsrFigure (UsrCod);
+      UsrFiguresModified = true;
+     }
+   if (UsrFigures->NumFileViews < 0)
+     {
+      /***** Get number of file views and store as user's figure *****/
+      Prf_GetNumFileViewsAndStoreAsUsrFigure (UsrCod);
+      UsrFiguresModified = true;
+     }
+   if (UsrFigures->NumForPst < 0)
+     {
+      /***** Get number of forum posts and store as user's figure *****/
+      Prf_GetNumForPstAndStoreAsUsrFigure (UsrCod);
+      UsrFiguresModified = true;
+     }
+    if (UsrFigures->NumMsgSnt < 0)
+     {
+      /***** Get number of messages sent and store as user's figure *****/
+      Prf_GetNumMsgSntAndStoreAsUsrFigure (UsrCod);
+      UsrFiguresModified = true;
+     }
+
+   return UsrFiguresModified;
   }
 
 /*****************************************************************************/
@@ -819,22 +865,6 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
   }
 
 /*****************************************************************************/
-/********* Calculate number of clicks and show user's profile again **********/
-/*****************************************************************************/
-
-void Prf_CalculateNumClicks (void)
-  {
-   /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-
-   /***** Get number of clicks and store as user's figure *****/
-   Prf_GetNumClicksAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Show user's profile again *****/
-   Prf_GetUsrDatAndShowUserProfile ();
-  }
-
-/*****************************************************************************/
 /* Get number of clicks of a user from log table and store in user's figures */
 /*****************************************************************************/
 
@@ -867,22 +897,6 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
    }
 
 /*****************************************************************************/
-/******* Calculate number of file views and show user's profile again *******/
-/*****************************************************************************/
-
-void Prf_CalculateNumFileViews (void)
-  {
-   /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-
-   /***** Get number of file views and store as user's figure *****/
-   Prf_GetNumFileViewsAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Show user's profile again *****/
-   Prf_GetUsrDatAndShowUserProfile ();
-  }
-
-/*****************************************************************************/
 /**** Get number of file views sent by a user and store in user's figures ****/
 /*****************************************************************************/
 
@@ -913,22 +927,6 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
    }
 
 /*****************************************************************************/
-/******* Calculate number of forum posts and show user's profile again *******/
-/*****************************************************************************/
-
-void Prf_CalculateNumForPst (void)
-  {
-   /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-
-   /***** Get number of forum posts and store as user's figure *****/
-   Prf_GetNumForPstAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Show user's profile again *****/
-   Prf_GetUsrDatAndShowUserProfile ();
-  }
-
-/*****************************************************************************/
 /**** Get number of forum posts sent by a user and store in user's figures ***/
 /*****************************************************************************/
 
@@ -957,22 +955,6 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
      }
    }
-
-/*****************************************************************************/
-/****** Calculate number of messages sent and show user's profile again ******/
-/*****************************************************************************/
-
-void Prf_CalculateNumMsgSnt (void)
-  {
-   /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-
-   /***** Get number of messages sent and store as user's figure *****/
-   Prf_GetNumMsgSntAndStoreAsUsrFigure (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Show user's profile again *****/
-   Prf_GetUsrDatAndShowUserProfile ();
-  }
 
 /*****************************************************************************/
 /***** Get number of messages sent by a user and store in user's figures *****/

@@ -61,11 +61,8 @@ void Prf_ChangeProfileVisibility (void);
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
-void Prf_CalculateFirstClickTime (void);
-void Prf_CalculateNumClicks (void);
-void Prf_CalculateNumFileViews (void);
-void Prf_CalculateNumForPst (void);
-void Prf_CalculateNumMsgSnt (void);
+void Prf_CalculateFigures (void);
+bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
 void Prf_CreateNewUsrFigures (long UsrCod);
 void Prf_RemoveUsrFigures (long UsrCod);
