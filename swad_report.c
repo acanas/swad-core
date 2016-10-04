@@ -42,6 +42,8 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Rep_FILENAME_ROOT "report"
+
 #define Rep_MIN_CLICKS_CRS 100	// Minimum number of clicks to show a course in historic log
 #define Rep_MAX_BAR_WIDTH 50	// Maximum width of graphic bar
 
@@ -63,6 +65,8 @@ struct CurrentTimeUTC
 			//          1234567890
    char StrTime[8+1];	// Example: 19:03:49
 			//          12345678
+   unsigned Date;	// Example: 20161002
+   unsigned Time;	// Example: 190349
   };
 
 /*****************************************************************************/
@@ -80,10 +84,14 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
+                                     char *FilenameReport,
                                      char *Permalink);
 static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
+                                        const char *FilenameReport,
                                         const char *Permalink);
 static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC);
+
+static void Rep_GetCurrentDateTimeUTC (struct CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
                              const char *Permalink);
@@ -134,8 +142,7 @@ void Rep_ReqMyUsageReport (void)
    struct CurrentTimeUTC CurrentTimeUTC;
 
    /***** Get current date-time *****/
-   Dat_GetCurrentDateTimeUTC (CurrentTimeUTC.StrDate,
-                              CurrentTimeUTC.StrTime);
+   Rep_GetCurrentDateTimeUTC (&CurrentTimeUTC);
 
    /***** Form to show my usage report *****/
    Act_FormStart (ActSeeMyUsgRep);
@@ -161,13 +168,14 @@ void Rep_ReqMyUsageReport (void)
 void Rep_ShowMyUsageReport (void)
   {
    struct CurrentTimeUTC CurrentTimeUTC;
+   char FilenameReport[NAME_MAX+1];
    char Permalink[PATH_MAX+1];
 
    /***** Create my usage report *****/
-   Rep_CreateMyUsageReport (&CurrentTimeUTC,Permalink);
+   Rep_CreateMyUsageReport (&CurrentTimeUTC,FilenameReport,Permalink);
 
    /***** Put link to my usage report *****/
-   Rep_PutLinkToMyUsageReport (&CurrentTimeUTC,Permalink);
+   Rep_PutLinkToMyUsageReport (&CurrentTimeUTC,FilenameReport,Permalink);
   }
 
 /*****************************************************************************/
@@ -175,10 +183,10 @@ void Rep_ShowMyUsageReport (void)
 /*****************************************************************************/
 
 static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
+                                     char *FilenameReport,
                                      char *Permalink)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
-   extern const char *Txt_Report;
    struct UsrFigures UsrFigures;
    char PathReports[PATH_MAX+1];
    char PathDirReport[PATH_MAX+1];
@@ -188,8 +196,7 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
    unsigned long MaxHitsPerYear;
 
    /***** Get current date-time *****/
-   Dat_GetCurrentDateTimeUTC (CurrentTimeUTC->StrDate,
-                              CurrentTimeUTC->StrTime);
+   Rep_GetCurrentDateTimeUTC (CurrentTimeUTC);
 
    /***** Path for reports *****/
    sprintf (PathReports,"%s/%s",
@@ -210,20 +217,24 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
       Lay_ShowErrorAndExit ("Can not create directory for report.");
 
    /* Path of the public file with the report */
-   sprintf (PathFileReport,"%s/index.html",PathDirReport);
+   sprintf (FilenameReport,"%s_%06u_%06u.html",
+            Rep_FILENAME_ROOT,CurrentTimeUTC->Date,CurrentTimeUTC->Time);
+   sprintf (PathFileReport,"%s/%s",
+            PathDirReport,FilenameReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
 
    /* Permalink */
-   sprintf (Permalink,"%s/%s/%c%c/%s/",
+   sprintf (Permalink,"%s/%s/%c%c/%s/%s",
             Cfg_URL_SWAD_PUBLIC,
             Cfg_FOLDER_REP,
             Gbl.UniqueNameEncrypted[0],
             Gbl.UniqueNameEncrypted[1],
-            &Gbl.UniqueNameEncrypted[2]);
+            &Gbl.UniqueNameEncrypted[2],
+            FilenameReport);
 
    /***** Start file *****/
-   Lay_StartHTMLFile (Gbl.F.Rep,Txt_Report);
+   Lay_StartHTMLFile (Gbl.F.Rep,FilenameReport);
    fprintf (Gbl.F.Rep,"<body style=\"margin:1em;text-align:left;"
 	              "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">\n");
 
@@ -270,6 +281,7 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 /*****************************************************************************/
 
 static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
+                                        const char *FilenameReport,
                                         const char *Permalink)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
@@ -295,7 +307,7 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 	    Txt_Report,
             Gbl.Prefs.IconsURL,
             Txt_Report,
-	    Permalink);
+	    FilenameReport);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -312,6 +324,43 @@ static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
    if (CurrentTimeUTC->StrDate[0])
       fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC->StrDate);
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Get current date and time in UTC **********************/
+/*****************************************************************************/
+
+static void Rep_GetCurrentDateTimeUTC (struct CurrentTimeUTC *CurrentTimeUTC)
+  {
+   time_t CurrentTime;
+   struct tm tm_CurrentTime;
+
+   /***** Initialize to empty strings *****/
+   CurrentTimeUTC->StrDate[0] = '\0';
+   CurrentTimeUTC->StrTime[0] = '\0';
+
+   /***** Get current time UTC *****/
+   time (&CurrentTime);
+   if ((gmtime_r (&CurrentTime,&tm_CurrentTime)) != NULL)
+     {
+      /* Date and time as strings */
+      sprintf (CurrentTimeUTC->StrDate,"%04d-%02d-%02d",
+	       1900 + tm_CurrentTime.tm_year,	// year
+	       1 + tm_CurrentTime.tm_mon,	// month
+	       tm_CurrentTime.tm_mday);		// day of the month
+      sprintf (CurrentTimeUTC->StrTime,"%02d:%02d:%02d",
+	       tm_CurrentTime.tm_hour,		// hours
+	       tm_CurrentTime.tm_min,		// minutes
+	       tm_CurrentTime.tm_sec);		// seconds
+
+      /* Date and time as unsigned */
+      CurrentTimeUTC->Date = (1900 + tm_CurrentTime.tm_year) * 10000 +
+	                     (1 + tm_CurrentTime.tm_mon)     * 100   +
+	                     tm_CurrentTime.tm_mday;
+      CurrentTimeUTC->Time = tm_CurrentTime.tm_hour          * 10000 +
+	                     tm_CurrentTime.tm_min           * 100   +
+	                     tm_CurrentTime.tm_sec;
+     }
   }
 
 /*****************************************************************************/
