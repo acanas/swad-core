@@ -398,9 +398,6 @@
 /* Folder for temporary XML files received to import test questions, inside private swad directory */
 #define Cfg_FOLDER_TEST				"test"			// Created automatically the first time it is accessed
 
-/* Folder for reports, inside private swad directory */
-#define Cfg_FOLDER_REP 				"rep"			// Created automatically the first time it is accessed
-
 /* Folder for compression of assignments and works into a zip files, inside private swad directory */
 #define Cfg_FOLDER_ZIP				"zip"			// Created automatically the first time it is accessed
 
@@ -413,6 +410,9 @@
 #define Cfg_FOLDER_PHOTO			"photo"			// Created automatically the first time it is accessed
 /* Folders for temporary users' photos inside photos directories */
 #define Cfg_FOLDER_PHOTO_TMP			"tmp"			// Created automatically the first time it is accessed
+
+/* Folder for reports, inside public swad directory */
+#define Cfg_FOLDER_REP 				"rep"			// Created automatically the first time it is accessed
 
 /* Folder for banners, inside public swad directory */
 #define Cfg_FOLDER_BANNER			"banner"		// If not exists, it should be created during installation inside swad public directory!

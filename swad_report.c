@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <sys/stat.h>		// For mkdir
+#include <sys/types.h>		// For mkdir
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
@@ -179,6 +181,7 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
    extern const char *Txt_Report;
    struct UsrFigures UsrFigures;
    char PathReports[PATH_MAX+1];
+   char PathDirReport[PATH_MAX+1];
    char PathFileReport[PATH_MAX+1];
    struct tm tm_FirstClickTime;
    bool GetUsrFiguresAgain;
@@ -189,19 +192,35 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                               CurrentTimeUTC->StrTime);
 
    /***** Path for reports *****/
-   sprintf (PathReports,"%s/%s",Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
+   sprintf (PathReports,"%s/%s",
+            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
    Fil_CreateDirIfNotExists (PathReports);
 
-   /***** Create a new empty syllabus *****/
-   /* Path of the private directory for the file with the report */
-   sprintf (PathFileReport,"%s/%s.html",
-	    PathReports,Gbl.UniqueNameEncrypted);
-   sprintf (Permalink,"%s/%s/%s.html",
-            Cfg_URL_SWAD_PUBLIC,
-            Cfg_FOLDER_REP,
-            Gbl.UniqueNameEncrypted);
+   /***** Create a new report directory *****/
+   /* Path of the public directory for the file with the report */
+   sprintf (PathReports,"%s/%s/%c%c",
+            Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,
+            Gbl.UniqueNameEncrypted[0],
+            Gbl.UniqueNameEncrypted[1]);
+   Fil_CreateDirIfNotExists (PathReports);
+   sprintf (PathDirReport,"%s/%s",
+            PathReports,
+            &Gbl.UniqueNameEncrypted[2]);
+   if (mkdir (PathDirReport,(mode_t) 0xFFF))
+      Lay_ShowErrorAndExit ("Can not create directory for report.");
+
+   /* Path of the public file with the report */
+   sprintf (PathFileReport,"%s/index.html",PathDirReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
+
+   /* Permalink */
+   sprintf (Permalink,"%s/%s/%c%c/%s/",
+            Cfg_URL_SWAD_PUBLIC,
+            Cfg_FOLDER_REP,
+            Gbl.UniqueNameEncrypted[0],
+            Gbl.UniqueNameEncrypted[1],
+            &Gbl.UniqueNameEncrypted[2]);
 
    /***** Start file *****/
    Lay_StartHTMLFile (Gbl.F.Rep,Txt_Report);
@@ -255,7 +274,6 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
-   extern const char *Txt_Download;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
@@ -265,21 +283,19 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
    Req_TitleReport (CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
-   fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">");
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME\""
-		      " title=\"%s\" target=\"_blank\">",
-	    Permalink,
-	    Txt_Report);
-   Brw_PutIconFile (32,Brw_IS_FILE,Permalink);
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-		      "<img src=\"%s/download64x64.png\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON40x40\">"
+   fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">"
+                      "<a href=\"%s\" class=\"FILENAME\""
+		      " title=\"%s\" target=\"_blank\">"
+                      "<img src=\"%s/report64x64.png\" alt=\"%s\""
+	              " class=\"ICON64x64\" /><br />"
+                      "%s"
 		      "</a>"
 		      "</div>",
 	    Permalink,
-	    Gbl.Prefs.IconsURL,
-	    Txt_Download,Txt_Download);
+	    Txt_Report,
+            Gbl.Prefs.IconsURL,
+            Txt_Report,
+	    Permalink);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -306,22 +322,33 @@ static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
                              const char *Permalink)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_Date;
+   extern const char *Txt_Permalink;
 
    /***** Start of header *****/
    fprintf (Gbl.F.Rep,"<header>");
 
    /***** Main title *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Rep,"<h1>%s</h1>",Gbl.Title);
+   fprintf (Gbl.F.Rep,"<h1>%s</h1>"
+	              "<ul>",
+	    Gbl.Title);
 
-   /***** Subtitle *****/
-   fprintf (Gbl.F.Rep,"<h2>%s",Gbl.Usrs.Me.UsrDat.FullName);
-   if (CurrentTimeUTC->StrDate[0])
-      fprintf (Gbl.F.Rep,", %s",CurrentTimeUTC->StrDate);
-   fprintf (Gbl.F.Rep,"</h2>");
+   /***** User *****/
+   fprintf (Gbl.F.Rep,"<li>%s: <strong>%s</strong></li>",
+	    Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
+	    Gbl.Usrs.Me.UsrDat.FullName);
+
+   /***** Date-time *****/
+   fprintf (Gbl.F.Rep,"<li>%s: %s %s UTC</li>",
+            Txt_Date,
+	    CurrentTimeUTC->StrDate,
+	    CurrentTimeUTC->StrTime);
 
    /***** Permalink *****/
-   fprintf (Gbl.F.Rep,"<a href=\"%s\" target=\"_blank\">%s</a>\n",
+   fprintf (Gbl.F.Rep,"<li>%s: <a href=\"%s\" target=\"_blank\">%s</a></li>",
+            Txt_Permalink,
             Permalink,Permalink);
 
    /***** End of header *****/
@@ -380,7 +407,7 @@ static void Rep_WriteSectionUsrInfo (void)
 	    Txt_Personal_information);
 
    /***** User's name *****/
-   fprintf (Gbl.F.Rep,"<li>%s: <strong>%s</strong></li>",
+   fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Name,
             Gbl.Usrs.Me.UsrDat.FullName);
 
@@ -458,7 +485,9 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
 		  tm_FirstClickTime->tm_sec);		// seconds
 	 if (CurrentTimeUTC->StrDate[0])
 	    fprintf (Gbl.F.Rep," %s %s %s UTC",
-	             Txt_TIME_until,CurrentTimeUTC->StrDate,CurrentTimeUTC->StrTime);
+	             Txt_TIME_until,
+	             CurrentTimeUTC->StrDate,
+	             CurrentTimeUTC->StrTime);
 	 if (UsrFigures->NumDays > 0)
 	    fprintf (Gbl.F.Rep," (%d %s)",
 		     UsrFigures->NumDays,

@@ -1508,6 +1508,7 @@ static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata,
                                                    const char *FileNameToShow);
+static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileType,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_GetFileNameToShow (Brw_FileBrowser_t FileBrowser,unsigned Level,Brw_FileType_t FileType,
@@ -5859,7 +5860,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
+static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName)
   {
    extern const char *Txt_Link;
    extern const char *Txt_X_file;
@@ -9879,7 +9880,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON40x40\">"
+			 " class=\"ICON40x40\" />"
 			 "</a>",
 	       FileNameToShow,
 	       Gbl.Prefs.IconsURL,

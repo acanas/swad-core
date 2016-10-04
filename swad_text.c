@@ -27838,6 +27838,27 @@ const char *Txt_PERCENT_of_users =
 	"% de utilizadores";
 #endif
 
+const char *Txt_Permalink =
+#if   L==1
+	"Enlla&ccedil; permanent";
+#elif L==2
+	"Permalink";
+#elif L==3
+	"Permalink";
+#elif L==4
+	"Permalink";
+#elif L==5
+	"Permalien";
+#elif L==6
+	"Permalink";	// Okoteve traducción
+#elif L==7
+	"Permalink";
+#elif L==8
+	"Odno&sacute;nik bezpo&sacute;redni";
+#elif L==9
+	"Liga&ccedil;&atilde;o permanente";
+#endif
+
 const char *Txt_Personal_information =
 #if   L==1
 	"Dades personals";
