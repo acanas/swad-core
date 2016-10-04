@@ -235,8 +235,9 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 
    /***** Start file *****/
    Lay_StartHTMLFile (Gbl.F.Rep,FilenameReport);
-   fprintf (Gbl.F.Rep,"<body style=\"margin:1em;text-align:left;"
-	              "font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;\">\n");
+   fprintf (Gbl.F.Rep,"<body style=\"margin:1em;"
+	              " text-align:left;"
+	              " font-family:Helvetica,Arial,sans-serif;\">\n");
 
    /***** Header *****/
    Rep_WriteHeader (CurrentTimeUTC,Permalink);
@@ -319,10 +320,24 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 
 static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
   {
-   fprintf (Gbl.F.Out,"<div class=\"DAT_N\" style=\"margin-bottom:10px;\">"
-	              "%s",Gbl.Usrs.Me.UsrDat.FullName);
-   if (CurrentTimeUTC->StrDate[0])
-      fprintf (Gbl.F.Out,"<br />%s",CurrentTimeUTC->StrDate);
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_Date;
+
+   fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"margin-bottom:10px;\">");
+
+   /***** User *****/
+   fprintf (Gbl.F.Out,"%s: <span class=\"DAT_N_BOLD\">%s</span>",
+	    Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
+	    Gbl.Usrs.Me.UsrDat.FullName);
+
+   fprintf (Gbl.F.Out,"<br />");
+
+   /***** Report date *****/
+   fprintf (Gbl.F.Out,"%s: <span class=\"DAT_N\">%s %s UTC</span>",
+	    Txt_Date,
+	    CurrentTimeUTC->StrDate,
+	    CurrentTimeUTC->StrTime);
+
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -396,12 +411,18 @@ static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
 	    CurrentTimeUTC->StrTime);
 
    /***** Permalink *****/
-   fprintf (Gbl.F.Rep,"<li>%s: <a href=\"%s\" target=\"_blank\">%s</a></li>",
+   fprintf (Gbl.F.Rep,"<li>%s: "
+	              "<a href=\"%s\" target=\"_blank\""
+		      " style=\"text-decoration:none;\">"
+	              "%s"
+	              "</a>"
+	              "</li>",
             Txt_Permalink,
             Permalink,Permalink);
 
    /***** End of header *****/
-   fprintf (Gbl.F.Rep,"</header>\n");
+   fprintf (Gbl.F.Rep,"</ul>"
+	              "</header>\n");
   }
 
 /*****************************************************************************/
@@ -417,7 +438,7 @@ static void Rep_WriteSectionPlatform (void)
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-	              "<h2>%s</h2>"
+	              "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Teaching_platform);
 
@@ -427,7 +448,12 @@ static void Rep_WriteSectionPlatform (void)
             Cfg_PLATFORM_FULL_NAME,Txt_TAGLINE);
 
    /***** Server URL *****/
-   fprintf (Gbl.F.Rep,"<li>%s: <a href=\"%s\">%s</a></li>",
+   fprintf (Gbl.F.Rep,"<li>%s: "
+	              "<a href=\"%s\" target=\"_blank\""
+		      " style=\"text-decoration:none;\">"
+	              "%s"
+	              "</a>"
+	              "</li>",
             Txt_URL,Cfg_URL_SWAD_SERVER,Cfg_URL_SWAD_SERVER);
 
    /***** End of section *****/
@@ -451,7 +477,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-	              "<h2>%s</h2>"
+	              "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Personal_information);
 
@@ -515,7 +541,7 @@ static void Rep_WriteSectionUsrFigures (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h2>%s</h2>"
+                      "<h3>%s</h3>"
 	              "<ul>",
 	    Txt_Figures);
 
@@ -665,7 +691,7 @@ static void Rep_WriteSectionGlobalHits (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h2>%s</h2>",
+                      "<h3>%s</h3>",
 	    Txt_Hits);
 
    /***** Global (in any course) hits per year *****/
@@ -693,11 +719,11 @@ static void Rep_WriteSectionCurrentCourses (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h2>%s",
+                      "<h3>%s",
             Txt_Courses);
    if (CurrentTimeUTC->StrDate[0])
       fprintf (Gbl.F.Rep," (%s)",CurrentTimeUTC->StrDate);
-   fprintf (Gbl.F.Rep,"</h2>"
+   fprintf (Gbl.F.Rep,"</h3>"
 	              "<ul>");
 
    /***** Number of courses in which the user is student/teacher *****/
@@ -729,7 +755,7 @@ static void Rep_WriteSectionHistoricCourses (struct UsrFigures *UsrFigures,
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
-                      "<h2>%s (%s)</h2>",
+                      "<h3>%s (%s)</h3>",
 	    Txt_Courses,Txt_historical_log);
    fprintf (Gbl.F.Rep,Txt_Only_courses_with_more_than_X_clicks_are_shown,
             Rep_MIN_CLICKS_CRS);
@@ -817,7 +843,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 			   Txt_courses);
    if (NumCrss)
      {
-      fprintf (Gbl.F.Rep," (%u %s / %u %s)",
+      fprintf (Gbl.F.Rep," (%u %s / %u %s):",
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
 	       Txt_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
