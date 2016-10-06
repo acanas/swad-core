@@ -260,6 +260,7 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
+   extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
@@ -282,6 +283,8 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
             Gbl.Prefs.IconsURL,
             Txt_Report,
 	    FilenameReport);
+   fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",
+            Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

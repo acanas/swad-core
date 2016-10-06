@@ -46907,25 +46907,25 @@ const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: 
 	" (this field is filled in the records of %u students)";		// Necessita de tradução
 #endif
 
-const char *Txt_This_option_is_now_in_DOCUM_Edit =
+const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =
 #if   L==1
-	"Aquesta opci&oacute; est&agrave; ara en Documents &gt; Editar";
+	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el seu compte de l'usuari.";
 #elif L==2
-	"Diese Option ist jetzt in Documents &gt; Bearbeiten";
+	"Diese Verbindung bleibt aktiv, solange das Konto Ihres Benutzers vorhanden.";
 #elif L==3
-	"This option is now in Documents &gt; Edit";
+	"This link will remain active as long as your user's account exists.";
 #elif L==4
-	"Esta opci&oacute;n se encuentra ahora en Documentos &gt; Editar";
+	"Este enlace permanecer&aacute; activo mientras exista su cuenta del usuario.";
 #elif L==5
-	"Cette option est d&eacute;sormais dans Documents &gt; &Eacute;diter";
+	"Ce lien restera actif aussi longtemps que votre compte de l'utilisateur existe.";
 #elif L==6
-	"Esta opci&oacute;n se encuentra ahora en Documentos &gt; Editar";	// Okoteve traducción
+	"Este enlace permanecer&aacute; activo mientras exista su cuenta del usuario.";	// Okoteve traducción
 #elif L==7
-	"Questa opzione &egrave; disponibile ora in Documenti &gt; Editare";
+	"Questo link rimarr&agrave; attiva finch&eacute; esiste il tuo account utente.";
 #elif L==8
-	"Ta opcja jest ju&zdot; w Dokumentach &gt; Edytuj";
+	"Ten link pozostanie aktywna tak d&lstrok;ugo, jak istnieje konto u&zdot;ytkownika.";
 #elif L==9
-	"Esta op&ccedil;&atilde;o est&aacute; agora em Documentos &gt; Editar";
+	"Este link permanecer&aacute; ativo enquanto existir a sua conta do usu&aacute;rio.";
 #endif
 
 const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums =
