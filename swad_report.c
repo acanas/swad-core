@@ -411,6 +411,7 @@ static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
 	    CurrentTimeUTC->StrTime);
 
    /***** Permalink *****/
+   /*
    fprintf (Gbl.F.Rep,"<li>%s: "
 	              "<a href=\"%s\" target=\"_blank\""
 		      " style=\"text-decoration:none;\">"
@@ -419,6 +420,7 @@ static void Rep_WriteHeader (struct CurrentTimeUTC *CurrentTimeUTC,
 	              "</li>",
             Txt_Permalink,
             Permalink,Permalink);
+   */
 
    /***** End of header *****/
    fprintf (Gbl.F.Rep,"</ul>"

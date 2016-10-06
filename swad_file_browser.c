@@ -1615,13 +1615,6 @@ void Brw_GetParAndInitFileBrowser (void)
      {
       /***** Documents of institution *****/
       case ActSeeAdmDocIns:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    /* These roles can edit documents of institution */
-	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_INS;
-	 else
-	    /* The rest of roles can not edit documents of institution */
-	    Gbl.FileBrowser.Type = Brw_SHOW_DOCUM_INS;
-         break;
       case ActChgToSeeDocIns:	// Access to see a documents zone
       case ActSeeDocIns:
       case ActExpSeeDocIns:
@@ -1681,13 +1674,6 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of centre *****/
       case ActSeeAdmDocCtr:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    /* These roles can edit documents of centre */
-	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_CTR;
-	 else
-	    /* The rest of roles can not edit documents of centre */
-	    Gbl.FileBrowser.Type = Brw_SHOW_DOCUM_CTR;
-         break;
       case ActChgToSeeDocCtr:	// Access to see a documents zone
       case ActSeeDocCtr:
       case ActExpSeeDocCtr:
@@ -1747,13 +1733,6 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of degree *****/
       case ActSeeAdmDocDeg:	// Access to a documents zone from menu
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    /* These roles can edit documents of degree */
-	    Gbl.FileBrowser.Type = Brw_ADMI_DOCUM_DEG;
-	 else
-	    /* The rest of roles can not edit documents of degree */
-	    Gbl.FileBrowser.Type = Brw_SHOW_DOCUM_DEG;
-         break;
       case ActChgToSeeDocDeg:	// Access to see a documents zone
       case ActSeeDocDeg:
       case ActExpSeeDocDeg:
@@ -1813,22 +1792,6 @@ void Brw_GetParAndInitFileBrowser (void)
 
       /***** Documents of course/group *****/
       case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
-         /* Set file browser type acording to last group accessed */
-	 switch (Gbl.Usrs.Me.LoggedRole)
-	   {
-	    case Rol_TEACHER:
-	    case Rol_SYS_ADM:
-	       /* These roles can edit documents of course/groups */
-	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_ADMI_DOCUM_GRP :
-								         Brw_ADMI_DOCUM_CRS;
-	       break;
-	    default:
-	       /* The rest of roles can not edit documents of course/groups */
-	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_SHOW_DOCUM_GRP :
-								         Brw_SHOW_DOCUM_CRS;
-	       break;
-	   }
-         break;
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_SHOW_DOCUM_GRP :

@@ -138,18 +138,22 @@
 
 // TODO: Send a message to the user when rejecting a request for enrollment. Suggested by Javier Fernández Baldomero.
 // TODO: Create a table with IPs to block temporarily multiple access to the action used to check ID for empty accounts
+// TODO: Every action should have a minimum time between two clicks on it (for example "Generate a report" should have 60 s)
+
+// TODO: FIX BUG: Centre and degree admins should see buttons to admin users even a course is not selected
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.13.2 (2016-10-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.14 (2016-10-06)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.14:    Oct 06, 2016	By default, teachers see (do not edit) documents. Now they must click on small edit icon to edit. (205875 lines)
         Version 16.13.2:  Oct 05, 2016	User's usage report is open to any logged user. (205907 lines)
         Version 16.13.1:  Oct 04, 2016	Changes in user's usage report. (205906 lines)
         Version 16.13:    Oct 04, 2016	New filename for user's usage report. (205883 lines)
