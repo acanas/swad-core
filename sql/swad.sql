@@ -1321,6 +1321,19 @@ CREATE TABLE IF NOT EXISTS usr_nicknames (
 	UNIQUE INDEX(UsrCod,Nickname),
 	UNIQUE INDEX(Nickname));
 --
+-- Table usr_report: stores users' usage reports
+--
+CREATE TABLE IF NOT EXISTS usr_report (
+	RepCod INT NOT NULL AUTO_INCREMENT,
+	UsrCod INT NOT NULL,
+	ReportTime DATETIME NOT NULL,
+	UniqueDirL CHAR(2) NOT NULL,
+	UniqueDirR CHAR(41) NOT NULL,
+	Filename VARCHAR(255) NOT NULL,
+	Permalink VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(RepCod),
+	INDEX(UsrCod));
+--
 -- Table usr_webs: stores users' web and social networks
 --
 CREATE TABLE IF NOT EXISTS usr_webs (

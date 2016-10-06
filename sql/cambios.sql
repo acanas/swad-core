@@ -11637,5 +11637,9 @@ SELECT COUNT(*) FROM msg_content LEFT JOIN msg_snt ON (msg_content.MsgCod=msg_sn
 SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'Europe/Berlin')) AS Year,COUNT(*) FROM log_full WHERE ClickTime>=FROM_UNIXTIME('0') AND UsrCod='1' GROUP BY Year DESC;
 		  
 		  
-		  
+		 
+----- SWAD 16.15 (2016/10/06) -----
+		 
+CREATE TABLE IF NOT EXISTS usr_report (RepCod INT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,ReportTime DATETIME NOT NULL,UniqueDirL CHAR(2) NOT NULL,UniqueDirR CHAR(41) NOT NULL,Filename VARCHAR(255) NOT NULL,Permalink VARCHAR(255) NOT NULL,UNIQUE INDEX(RepCod),INDEX(UsrCod));
+		
 

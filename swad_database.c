@@ -2782,6 +2782,33 @@ mysql> DESCRIBE usr_nicknames;
                    "UNIQUE INDEX(UsrCod,Nickname),"
                    "UNIQUE INDEX(Nickname))");
 
+   /***** Table usr_report *****/
+/*
+mysql> DESCRIBE usr_report;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| RepCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| UsrCod     | int(11)      | NO   | MUL | NULL    |                |
+| ReportTime | datetime     | NO   |     | NULL    |                |
+| UniqueDirL | char(2)      | NO   |     | NULL    |                |
+| UniqueDirR | char(41)     | NO   |     | NULL    |                |
+| Filename   | varchar(255) | NO   |     | NULL    |                |
+| Permalink  | varchar(255) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_report ("
+                   "RepCod INT NOT NULL AUTO_INCREMENT,"
+		   "UsrCod INT NOT NULL,"
+	           "ReportTime DATETIME NOT NULL,"
+	           "UniqueDirL CHAR(2) NOT NULL,"	//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+	           "UniqueDirR CHAR(41) NOT NULL,"	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+	           "Filename VARCHAR(255) NOT NULL,"	// Report filename
+	           "Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink)
+	           "UNIQUE INDEX(RepCod),"
+		   "INDEX(UsrCod))");
+
 /***** Table usr_webs *****/
 /*
 mysql> DESCRIBE usr_webs;
