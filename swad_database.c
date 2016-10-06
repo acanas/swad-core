@@ -2785,17 +2785,17 @@ mysql> DESCRIBE usr_nicknames;
    /***** Table usr_report *****/
 /*
 mysql> DESCRIBE usr_report;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| RepCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
-| UsrCod     | int(11)      | NO   | MUL | NULL    |                |
-| ReportTime | datetime     | NO   |     | NULL    |                |
-| UniqueDirL | char(2)      | NO   |     | NULL    |                |
-| UniqueDirR | char(41)     | NO   |     | NULL    |                |
-| Filename   | varchar(255) | NO   |     | NULL    |                |
-| Permalink  | varchar(255) | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| RepCod        | int(11)      | NO   | PRI | NULL    | auto_increment |
+| UsrCod        | int(11)      | NO   | MUL | NULL    |                |
+| ReportTimeUTC | datetime     | NO   |     | NULL    |                |
+| UniqueDirL    | char(2)      | NO   |     | NULL    |                |
+| UniqueDirR    | char(41)     | NO   |     | NULL    |                |
+| Filename      | varchar(255) | NO   |     | NULL    |                |
+| Permalink     | varchar(255) | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_report ("

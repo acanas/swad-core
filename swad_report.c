@@ -91,11 +91,13 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                                         const char *Permalink);
 static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC);
 
-static void Rep_GetCurrentDateTimeUTC (struct CurrentTimeUTC *CurrentTimeUTC);
+static void Rep_GetCurrentDateTimeUTC (struct tm *tm_CurrentTime,
+                                       struct CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_CreateNewReportFile (const struct CurrentTimeUTC *CurrentTimeUTC,
                                      char *FilenameReport,char *Permalink);
-static void Rep_CreateNewReportEntryIntoDB (const char *FilenameReport,
+static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
+                                            const char *FilenameReport,
                                             const char *Permalink);
 static void Rep_WriteHeader (const struct CurrentTimeUTC *CurrentTimeUTC,
                              const char *Permalink);
@@ -143,10 +145,6 @@ void Rep_ReqMyUsageReport (void)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Generate_report;
-   struct CurrentTimeUTC CurrentTimeUTC;
-
-   /***** Get current date-time *****/
-   Rep_GetCurrentDateTimeUTC (&CurrentTimeUTC);
 
    /***** Form to show my usage report *****/
    Act_FormStart (ActSeeMyUsgRep);
@@ -156,7 +154,7 @@ void Rep_ReqMyUsageReport (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   Req_TitleReport (&CurrentTimeUTC);
+   Req_TitleReport (NULL);	// NULL means do not write date
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Generate_report);
@@ -191,19 +189,20 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
                                      char *Permalink)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
+   struct tm tm_CurrentTime;
    struct UsrFigures UsrFigures;
    struct tm tm_FirstClickTime;
    bool GetUsrFiguresAgain;
    unsigned long MaxHitsPerYear;
 
    /***** Get current date-time *****/
-   Rep_GetCurrentDateTimeUTC (CurrentTimeUTC);
+   Rep_GetCurrentDateTimeUTC (&tm_CurrentTime,CurrentTimeUTC);
 
    /***** Create a new report file *****/
    Rep_CreateNewReportFile (CurrentTimeUTC,FilenameReport,Permalink);
 
    /***** Store report entry into database *****/
-   Rep_CreateNewReportEntryIntoDB (FilenameReport,Permalink);
+   Rep_CreateNewReportEntryIntoDB (&tm_CurrentTime,FilenameReport,Permalink);
 
    /***** Start file *****/
    Lay_StartHTMLFile (Gbl.F.Rep,FilenameReport);
@@ -289,6 +288,7 @@ static void Rep_PutLinkToMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
 /*****************************************************************************/
 /********************* Write title of user's usage report ********************/
 /*****************************************************************************/
+// CurrentTimeUTC == NULL ==> do not write date
 
 static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
   {
@@ -302,13 +302,13 @@ static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
 	    Txt_User[Gbl.Usrs.Me.UsrDat.Sex],
 	    Gbl.Usrs.Me.UsrDat.FullName);
 
-   fprintf (Gbl.F.Out,"<br />");
-
    /***** Report date *****/
-   fprintf (Gbl.F.Out,"%s: <span class=\"DAT_N\">%s %s UTC</span>",
-	    Txt_Date,
-	    CurrentTimeUTC->StrDate,
-	    CurrentTimeUTC->StrTime);
+   if (CurrentTimeUTC)
+      fprintf (Gbl.F.Out,"<br />"
+			 "%s: <span class=\"DAT_N\">%s %s UTC</span>",
+	       Txt_Date,
+	       CurrentTimeUTC->StrDate,
+	       CurrentTimeUTC->StrTime);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -317,10 +317,10 @@ static void Req_TitleReport (struct CurrentTimeUTC *CurrentTimeUTC)
 /********************* Get current date and time in UTC **********************/
 /*****************************************************************************/
 
-static void Rep_GetCurrentDateTimeUTC (struct CurrentTimeUTC *CurrentTimeUTC)
+static void Rep_GetCurrentDateTimeUTC (struct tm *tm_CurrentTime,
+                                       struct CurrentTimeUTC *CurrentTimeUTC)
   {
    time_t CurrentTime;
-   struct tm tm_CurrentTime;
 
    /***** Initialize to empty strings *****/
    CurrentTimeUTC->StrDate[0] = '\0';
@@ -328,25 +328,25 @@ static void Rep_GetCurrentDateTimeUTC (struct CurrentTimeUTC *CurrentTimeUTC)
 
    /***** Get current time UTC *****/
    time (&CurrentTime);
-   if ((gmtime_r (&CurrentTime,&tm_CurrentTime)) != NULL)
+   if ((gmtime_r (&CurrentTime,tm_CurrentTime)) != NULL)
      {
       /* Date and time as strings */
       sprintf (CurrentTimeUTC->StrDate,"%04d-%02d-%02d",
-	       1900 + tm_CurrentTime.tm_year,	// year
-	       1 + tm_CurrentTime.tm_mon,	// month
-	       tm_CurrentTime.tm_mday);		// day of the month
+	       1900 + tm_CurrentTime->tm_year,	// year
+	       1 + tm_CurrentTime->tm_mon,	// month
+	       tm_CurrentTime->tm_mday);	// day of the month
       sprintf (CurrentTimeUTC->StrTime,"%02d:%02d:%02d",
-	       tm_CurrentTime.tm_hour,		// hours
-	       tm_CurrentTime.tm_min,		// minutes
-	       tm_CurrentTime.tm_sec);		// seconds
+	       tm_CurrentTime->tm_hour,		// hours
+	       tm_CurrentTime->tm_min,		// minutes
+	       tm_CurrentTime->tm_sec);		// seconds
 
       /* Date and time as unsigned */
-      CurrentTimeUTC->Date = (1900 + tm_CurrentTime.tm_year) * 10000 +
-	                     (1 + tm_CurrentTime.tm_mon)     * 100   +
-	                     tm_CurrentTime.tm_mday;
-      CurrentTimeUTC->Time = tm_CurrentTime.tm_hour          * 10000 +
-	                     tm_CurrentTime.tm_min           * 100   +
-	                     tm_CurrentTime.tm_sec;
+      CurrentTimeUTC->Date = (1900 + tm_CurrentTime->tm_year) * 10000 +
+	                     (1 + tm_CurrentTime->tm_mon)     * 100   +
+	                     tm_CurrentTime->tm_mday;
+      CurrentTimeUTC->Time = tm_CurrentTime->tm_hour          * 10000 +
+	                     tm_CurrentTime->tm_min           * 100   +
+	                     tm_CurrentTime->tm_sec;
      }
   }
 
@@ -404,17 +404,26 @@ static void Rep_CreateNewReportFile (const struct CurrentTimeUTC *CurrentTimeUTC
 /************** Insert a new user's usage report into database ***************/
 /*****************************************************************************/
 
-static void Rep_CreateNewReportEntryIntoDB (const char *FilenameReport,
+static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
+                                            const char *FilenameReport,
                                             const char *Permalink)
   {
    char Query[1024+PATH_MAX*2];
 
    /***** Insert a new user's usage report into database *****/
    sprintf (Query,"INSERT INTO usr_report"
-	          " (UsrCod,ReportTimeUTC,UniqueDirL,UniqueDirR,Filename,Permalink)"
+	          " (UsrCod,ReportTimeUTC,"
+	          "UniqueDirL,UniqueDirR,Filename,Permalink)"
                   " VALUES"
-                  " ('%ld',UTC_TIMESTAMP(),'%c%c','%s','%s','%s')",
+                  " ('%ld','%04d-%02d-%02d %02d:%02d:%02d',"
+                  "'%c%c','%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
+	    1900 + tm_CurrentTime->tm_year,	// year
+	    1 + tm_CurrentTime->tm_mon,		// month
+	    tm_CurrentTime->tm_mday,		// day of the month
+	    tm_CurrentTime->tm_hour,		// hours
+	    tm_CurrentTime->tm_min,		// minutes
+	    tm_CurrentTime->tm_sec,		// seconds
             Gbl.UniqueNameEncrypted[0],		//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
             Gbl.UniqueNameEncrypted[1],
             &Gbl.UniqueNameEncrypted[2],	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string

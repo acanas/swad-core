@@ -146,13 +146,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.15.1 (2016-10-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.15.3 (2016-10-06)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.15.3:  Oct 06, 2016	Do not write date when requesting a user's usage report. (205965 lines)
+        Version 16.15.2:  Oct 06, 2016	Code refactoring in user's usage report. (205966 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS usr_report (RepCod INT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,ReportTimeUTC DATETIME NOT NULL,UniqueDirL CHAR(2) NOT NULL,UniqueDirR CHAR(41) NOT NULL,Filename VARCHAR(255) NOT NULL,Permalink VARCHAR(255) NOT NULL,UNIQUE INDEX(RepCod),INDEX(UsrCod));
+
         Version 16.15.1:  Oct 06, 2016	User's usage reports are stored into database. (205950 lines)
         Version 16.15:    Oct 06, 2016	New database table to store user's usage reports. (205896 lines)
         Version 16.14:    Oct 06, 2016	By default, teachers see (do not edit) documents. Now they must click on small edit icon to edit. (205875 lines)
