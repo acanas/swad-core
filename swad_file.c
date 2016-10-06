@@ -426,6 +426,70 @@ void Fil_CreateDirIfNotExists (const char *Path)
   }
 
 /*****************************************************************************/
+/************************ Remove a directory recursively *********************/
+/*****************************************************************************/
+// If the tree of directories and files exists, remove it
+
+void Fil_RemoveTree (const char *Path)
+  {
+   struct stat FileStatus;
+   struct dirent **FileList;
+   int NumFile,NumFiles;
+   char PathFileRel[PATH_MAX+1];
+   bool Error;
+
+   if (Fil_CheckIfPathExists (Path))
+     {
+      lstat (Path,&FileStatus);
+      if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	{
+	 if (rmdir (Path))
+	   {
+	    Error = false;
+	    if (errno == ENOTEMPTY)
+	      {
+	       /***** Remove each directory and file under this directory *****/
+	       /* Scan the directory */
+	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
+		 {
+		  /* Remove recursively all the directories and files */
+		  for (NumFile = 0;
+		       NumFile < NumFiles;
+		       NumFile++)
+		    {
+		     if (strcmp (FileList[NumFile]->d_name,".") &&
+			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		       {
+			sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
+			Fil_RemoveTree (PathFileRel);
+		       }
+		     free ((void *) FileList[NumFile]);
+		    }
+		  free ((void *) FileList);
+		 }
+	       else
+		  Lay_ShowErrorAndExit ("Error while scanning directory.");
+
+	       /***** Remove of new the directory, now empty *****/
+	       if (rmdir (Path))
+		  Error = true;
+	      }
+	    else
+	       Error = true;
+	    if (Error)
+	      {
+	       sprintf (Gbl.Message,"Can not remove folder %s.",Path);
+	       Lay_ShowErrorAndExit (Gbl.Message);
+	      }
+	   }
+	}
+      else					// It's a file
+	 if (unlink (Path))
+	    Lay_ShowErrorAndExit ("Can not remove file.");
+     }
+  }
+
+/*****************************************************************************/
 /********************* Remove old temporary directories **********************/
 /*****************************************************************************/
 
@@ -573,4 +637,3 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
    else
       sprintf (FileSizeStr,"%.1f&nbsp;TiB",SizeInBytes / Ti);
   }
-

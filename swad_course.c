@@ -2303,10 +2303,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    /***** Remove directories of the course *****/
    sprintf (PathRelCrs,"%s/%s/%ld",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
-   Brw_RemoveTree (PathRelCrs);
+   Fil_RemoveTree (PathRelCrs);
    sprintf (PathRelCrs,"%s/%s/%ld",
             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
-   Brw_RemoveTree (PathRelCrs);
+   Fil_RemoveTree (PathRelCrs);
   }
 
 /*****************************************************************************/

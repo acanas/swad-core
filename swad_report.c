@@ -27,7 +27,6 @@
 
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
-#include <unistd.h>		// For unlink
 
 #include "swad_database.h"
 #include "swad_global.h"
@@ -136,6 +135,9 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    unsigned long MaxHitsPerYear);
 static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
                                 unsigned MaxBarWidth);
+
+static void Rep_RemoveUsrReportsFiles (long UsrCod);
+static void Rep_RemoveUsrReportsFromDB (long UsrCod);
 
 /*****************************************************************************/
 /******* Request my usage report (report on my use of the platform) **********/
@@ -428,7 +430,7 @@ static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
             Gbl.UniqueNameEncrypted[1],
             &Gbl.UniqueNameEncrypted[2],	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
             FilenameReport,Permalink);
-   DB_QueryINSERT (Query,"can not create new report");
+   DB_QueryINSERT (Query,"can not create new user's usage report");
   }
 
 /*****************************************************************************/
@@ -1204,4 +1206,67 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
       Str_WriteFloatNum (Gbl.F.Rep,HitsNum);
      }
    fprintf (Gbl.F.Rep,"<br />");
+  }
+
+/*****************************************************************************/
+/********** Remove all user's usage report of a user from database ***********/
+/*****************************************************************************/
+
+void Rep_RemoveUsrUsageReports (long UsrCod)
+  {
+   /***** Remove all user's usage report files of a user *****/
+   Rep_RemoveUsrReportsFiles (UsrCod);
+
+   /***** Remove all user's usage reports of a user from database *****/
+   Rep_RemoveUsrReportsFromDB (UsrCod);
+  }
+
+/*****************************************************************************/
+/********** Remove all user's usage reports of a user from database **********/
+/*****************************************************************************/
+
+static void Rep_RemoveUsrReportsFiles (long UsrCod)
+  {
+   char Query[128];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumReports;
+   unsigned NumReport;
+   char PathUniqueDirReport[PATH_MAX+1];
+
+   /***** Get directories for the reports *****/
+   sprintf (Query,"SELECT UniqueDirL,UniqueDirR FROM usr_report"
+	          " WHERE UsrCod='%ld'",
+	    UsrCod);
+   NumReports = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's usage reports");
+
+   /***** Remove the reports *****/
+   for (NumReport = 0;
+	NumReport < NumReports;
+	NumReport++)
+     {
+      /* Get next report */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Remove report directory and file */
+      sprintf (PathUniqueDirReport,"%s/%s/%s/%s",
+	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,row[0],row[1]);
+      Fil_RemoveTree (PathUniqueDirReport);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********** Remove all user's usage reports of a user from database **********/
+/*****************************************************************************/
+
+static void Rep_RemoveUsrReportsFromDB (long UsrCod)
+  {
+   char Query[128];
+
+   /***** Insert a new user's usage report into database *****/
+   sprintf (Query,"DELETE FROM usr_report WHERE UsrCod='%ld'",UsrCod);
+   DB_QueryDELETE (Query,"can not remove user's usage reports");
   }

@@ -426,5 +426,5 @@ void Log_RemoveLogo (Sco_Scope_t Scope)
 	    (unsigned) (Cod % 100),
 	    (unsigned) Cod,
 	    (unsigned) Cod);
-   Brw_RemoveTree (FileNameLogo);
+   Fil_RemoveTree (FileNameLogo);
   }

@@ -146,13 +146,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.15.3 (2016-10-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.15.5 (2016-10-06)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.15.5:  Oct 06, 2016	Fix bug removing user's usage reports. (206023 lines)
+        Version 16.15.4:  Oct 06, 2016	When a user is removed, all his/her user's usage reports are removed. (206022 lines)
         Version 16.15.3:  Oct 06, 2016	Do not write date when requesting a user's usage report. (205965 lines)
         Version 16.15.2:  Oct 06, 2016	Code refactoring in user's usage report. (205966 lines)
 					1 change necessary in database:

@@ -1609,7 +1609,7 @@ void Ctr_RemoveCentre (void)
 	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 	       (unsigned) (Ctr.CtrCod % 100),
 	       (unsigned) Ctr.CtrCod);
-      Brw_RemoveTree (PathCtr);
+      Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
       sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",

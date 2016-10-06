@@ -217,7 +217,6 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
 
 void Brw_RemoveExpiredExpandedFolders (void);
 
-void Brw_RemoveTree (const char *Path);
 void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *FilFolLnkName);

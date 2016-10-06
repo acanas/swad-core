@@ -2387,7 +2387,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 	    Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
 	    (unsigned) (DegCod % 100),
 	    (unsigned) DegCod);
-   Brw_RemoveTree (PathDeg);
+   Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
    sprintf (Query,"DELETE FROM admin WHERE Scope='Deg' AND Cod='%ld'",

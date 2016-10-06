@@ -2897,7 +2897,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
                UsrCod,	// User's code
                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
                FolderName);
-      Brw_RemoveTree (PathFolder);
+      Fil_RemoveTree (PathFolder);
      }
 
    /***** Free structure that stores the query result *****/
@@ -6411,7 +6411,7 @@ void Brw_RemSubtreeInFileBrowser (void)
       sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Remove the whole tree *****/
-      Brw_RemoveTree (Path);
+      Fil_RemoveTree (Path);
 
       /* If a folder is removed,
          it is necessary to remove it from the database and all the files o folders under that folder */
@@ -6432,70 +6432,6 @@ void Brw_RemSubtreeInFileBrowser (void)
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
-  }
-
-/*****************************************************************************/
-/************************* Remove a folder recursively ***********************/
-/*****************************************************************************/
-// If the tree of directories and files exists, remove it
-
-void Brw_RemoveTree (const char *Path)
-  {
-   struct stat FileStatus;
-   struct dirent **FileList;
-   int NumFile,NumFiles;
-   char PathFileRel[PATH_MAX+1];
-   bool Error;
-
-   if (Fil_CheckIfPathExists (Path))
-     {
-      lstat (Path,&FileStatus);
-      if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	{
-	 if (rmdir (Path))
-	   {
-	    Error = false;
-	    if (errno == ENOTEMPTY)
-	      {
-	       /***** Remove each directory and file under this directory *****/
-	       /* Scan the directory */
-	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
-		 {
-		  /* Remove recursively all the directories and files */
-		  for (NumFile = 0;
-		       NumFile < NumFiles;
-		       NumFile++)
-		    {
-		     if (strcmp (FileList[NumFile]->d_name,".") &&
-			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
-		       {
-			sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
-			Brw_RemoveTree (PathFileRel);
-		       }
-		     free ((void *) FileList[NumFile]);
-		    }
-		  free ((void *) FileList);
-		 }
-	       else
-		  Lay_ShowErrorAndExit ("Error while scanning directory.");
-
-	       /***** Remove of new the directory, now empty *****/
-	       if (rmdir (Path))
-		  Error = true;
-	      }
-	    else
-	       Error = true;
-	    if (Error)
-	      {
-	       sprintf (Gbl.Message,"Can not remove folder %s.",Path);
-	       Lay_ShowErrorAndExit (Gbl.Message);
-	      }
-	   }
-	}
-      else					// It's a file
-	 if (unlink (Path))
-	    Lay_ShowErrorAndExit ("Can not remove file.");
-     }
   }
 
 /*****************************************************************************/
@@ -8378,7 +8314,7 @@ void Brw_RecFolderFileBrowser (void)
 	    Brw_SetMaxQuota ();
             if (Brw_CheckIfQuotaExceded ())
 	      {
-	       Brw_RemoveTree (Path);
+	       Fil_RemoveTree (Path);
                sprintf (Gbl.Message,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
                         Gbl.FileBrowser.NewFilFolLnkName);
                Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -8666,7 +8602,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                      /* Rename the temporary */
                      if (rename (PathTmp,Path))	// Fail
 	               {
-	                Brw_RemoveTree (PathTmp);
+	                Fil_RemoveTree (PathTmp);
                         sprintf (Gbl.Message,Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
                                  Gbl.FileBrowser.NewFilFolLnkName);
 	               }
@@ -8677,7 +8613,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 	                Brw_SetMaxQuota ();
                         if (Brw_CheckIfQuotaExceded ())
 	                  {
-	                   Brw_RemoveTree (Path);
+	                   Fil_RemoveTree (Path);
 	                   sprintf (Gbl.Message,Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
 		                    Gbl.FileBrowser.NewFilFolLnkName);
 	                  }
@@ -8748,7 +8684,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                        }
 	            }
                   else	// Error in file reception. File probably too big
-	             Brw_RemoveTree (PathTmp);
+	             Fil_RemoveTree (PathTmp);
                  }
               }
            }
@@ -8858,7 +8794,7 @@ void Brw_RecLinkFileBrowser (void)
 		  Brw_SetMaxQuota ();
 		  if (Brw_CheckIfQuotaExceded ())
 		    {
-		     Brw_RemoveTree (Path);
+		     Fil_RemoveTree (Path);
 		     sprintf (Gbl.Message,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
 			      FileName);
 		     Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -11254,7 +11190,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    /***** Remove group zones *****/
    sprintf (PathGrpFileZones,"%s/%s/%ld/grp/%ld",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod);
-   Brw_RemoveTree (PathGrpFileZones);
+   Fil_RemoveTree (PathGrpFileZones);
   }
 
 /*****************************************************************************/
@@ -11273,7 +11209,7 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_Quie
    sprintf (PathUsrInCrs,"%s/%s/%ld/usr/%02u/%ld",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs->CrsCod,
             (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
-   Brw_RemoveTree (PathUsrInCrs);
+   Fil_RemoveTree (PathUsrInCrs);
    // If this was the last user in his/her subfolder ==> the subfolder will be empty
 
    /***** Write message *****/

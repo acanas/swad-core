@@ -213,7 +213,7 @@ void ZIP_CreateZIPAsgWrk (void)
       Lay_ShowErrorAndExit ("Can not compress files into zip file.");
 
    /***** Remove the directory of compression *****/
-   Brw_RemoveTree (Path);
+   Fil_RemoveTree (Path);
   }
 
 /*****************************************************************************/
@@ -457,7 +457,7 @@ static void ZIP_CompressFolderIntoZIP (void)
      }
 
    /***** Remove the directory of compression *****/
-   Brw_RemoveTree (PathCompression);
+   Fil_RemoveTree (PathCompression);
   }
 
 /*****************************************************************************/

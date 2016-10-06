@@ -1497,7 +1497,7 @@ void Ins_RemoveInstitution (void)
 	       Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
 	       (unsigned) (Ins.InsCod % 100),
 	       (unsigned) Ins.InsCod);
-      Brw_RemoveTree (PathIns);
+      Fil_RemoveTree (PathIns);
 
       /***** Remove institution *****/
       sprintf (Query,"DELETE FROM institutions WHERE InsCod='%ld'",

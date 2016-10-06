@@ -68,9 +68,12 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
 bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param);
 void Fil_CreateUpdateFile  (const char *CurrentName,const char *ExtensionOldName,char *OldName,char *NewName,FILE **NewFile);
 void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char *NewName,FILE *NewFile);
+
 bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew);
 bool Fil_CheckIfPathExists (const char *Path);
 void Fil_CreateDirIfNotExists (const char *Path);
+void Fil_RemoveTree (const char *Path);
+
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory);
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);

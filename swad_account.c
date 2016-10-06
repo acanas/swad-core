@@ -40,6 +40,7 @@
 #include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_profile.h"
+#include "swad_report.h"
 #include "swad_social.h"
 
 /*****************************************************************************/
@@ -994,6 +995,9 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove user from table of seen announcements *****/
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
+   /***** Remove user's usage reports *****/
+   Rep_RemoveUsrUsageReports (UsrDat->UsrCod);
+
    /***** Remove user from table of connected users *****/
    sprintf (Query,"DELETE FROM connected WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
@@ -1045,7 +1049,7 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 
    /***** Remove files of the user's briefcase from disc *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
-   Brw_RemoveTree (PathRelUsr);
+   Fil_RemoveTree (PathRelUsr);
   }
 
 /*****************************************************************************/

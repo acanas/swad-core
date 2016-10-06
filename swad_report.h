@@ -43,4 +43,6 @@ void Rep_ReqMyUsageReport (void);
 void Rep_ShowMyUsageReport (void);
 void Rep_PrintMyUsageReport (void);
 
+void Rep_RemoveUsrUsageReports (long UsrCod);
+
 #endif
