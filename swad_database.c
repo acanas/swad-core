@@ -2801,7 +2801,7 @@ mysql> DESCRIBE usr_report;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_report ("
                    "RepCod INT NOT NULL AUTO_INCREMENT,"
 		   "UsrCod INT NOT NULL,"
-	           "ReportTime DATETIME NOT NULL,"
+	           "ReportTimeUTC DATETIME NOT NULL,"
 	           "UniqueDirL CHAR(2) NOT NULL,"	//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
 	           "UniqueDirR CHAR(41) NOT NULL,"	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
 	           "Filename VARCHAR(255) NOT NULL,"	// Report filename
