@@ -146,13 +146,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.16 (2016-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.16.1 (2016-10-07)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.16.1:  Oct 07, 2016	Fixed bug in user's usage report. (206108 lines)
         Version 16.16:    Oct 07, 2016	Order current courses in user's usage report by number of clicks.
 				        Do not write number of users in historic courses.
 				        Clicks without course selected are shown apart. (206085 lines)

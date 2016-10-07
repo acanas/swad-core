@@ -848,22 +848,44 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
   {
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long MaxHitsPerYear = 0;
 
-   sprintf (Query,"SELECT MAX(N) FROM (SELECT "
+   sprintf (Query,"SELECT MAX(N) FROM ("
+		  // Clicks without course selected ---------------------------
+	          "SELECT "
+	          "'-1' AS CrsCod,"
+	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
+	          "'%u' AS Role,"
+	          "COUNT(*) AS N"
+	          " FROM log_full"
+	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
+	          " AND UsrCod='%ld'"
+	          " AND CrsCod<='0'"
+	          " GROUP BY Year"
+		  // ----------------------------------------------------------
+	          " UNION "
+		  // Clicks as student or teacher in courses ------------------
+	          "SELECT "
 	          "CrsCod,"
 	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
 	          "Role,"
 	          "COUNT(*) AS N"
 	          " FROM log_full"
 	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-	          " AND UsrCod='%ld' AND Role>='%u' AND Role<='%u'"
-	          " GROUP BY CrsCod,Year,Role)"
-	          " AS hits_per_crs_year",
+	          " AND UsrCod='%ld'"
+	          " AND Role>='%u'"	// Student
+	          " AND Role<='%u'"	// Teacher
+	          " AND CrsCod>'0'"
+	          " GROUP BY CrsCod,Year,Role"
+		  // ----------------------------------------------------------
+	          ") AS hits_per_crs_year",
+	    (unsigned) Rol_UNKNOWN,
             (long) FirstClickTimeUTC,
+	    Gbl.Usrs.Me.UsrDat.UsrCod,
+	    (long) FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Rol_STUDENT,
 	    (unsigned) Rol_TEACHER);
