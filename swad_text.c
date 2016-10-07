@@ -14056,6 +14056,27 @@ const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning
 	"Visitas (cliques) como %s";
 #endif
 
+const char *Txt_Hits_without_course_selected =	// hits = visits, clicks, page views...
+#if   L==1
+	"Accessos (clics) sense assignatura seleccionada";
+#elif L==2
+	"Anmeldungen (Klicks) ohne Kurs ausgew&auml;hlt";
+#elif L==3
+	"Hits (clicks) without course selected";
+#elif L==4
+	"Accesos (clics) sin asignatura seleccionada";
+#elif L==5
+	"Visites (clics) sans mati&egrave;re s&eacute;lectionn&eacute;e";
+#elif L==6
+	"Accesos (clics) sin asignatura seleccionada";		// Okoteve traducción
+#elif L==7
+	"Visite (scatti) senza corso selezionato";
+#elif L==8
+	"Ods&lstrok;on (klikni&eogon;cia) bez oczywi&sacute;cie wybrana";
+#elif L==9
+	"Visitas (cliques) sem disciplina selecionada";
+#endif
+
 const char *Txt_Holiday =
 #if   L==1
 	"Festivitat";

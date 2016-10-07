@@ -116,18 +116,22 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
                                              unsigned long MaxHitsPerYear);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
-static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-                                              time_t FirstClickTimeUTC,
-                                              const struct tm *tm_FirstClickTime,
-                                              unsigned long MaxHitsPerYear);
-static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
+static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
+                                          time_t FirstClickTimeUTC,
+                                          const struct tm *tm_FirstClickTime,
+                                          unsigned long MaxHitsPerYear);
+static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
+                                                      const struct tm *tm_FirstClickTime,
+                                                      unsigned long MaxHitsPerYear);
+static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
                                                time_t FirstClickTimeUTC,
                                                const struct tm *tm_FirstClickTime,
                                                unsigned long MaxHitsPerYear);
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  time_t FirstClickTimeUTC,
                                  const struct tm *tm_FirstClickTime,
-                                 unsigned long MaxHitsPerYear);
+                                 unsigned long MaxHitsPerYear,
+                                 bool WriteNumUsrs);
 
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    time_t FirstClickTimeUTC,
@@ -789,9 +793,9 @@ static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
 	Role <= Rol_TEACHER;
 	Role++)
       /* List my courses with this role */
-      Rep_GetAndWriteCurrentCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
-					UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-					MaxHitsPerYear);
+      Rep_GetAndWriteMyCurrentCrss (Role,
+				    UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
+				    MaxHitsPerYear);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</ul>"
@@ -819,12 +823,16 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
             Rep_MIN_CLICKS_CRS);
    fprintf (Gbl.F.Rep,"<ul>");
 
-   /***** Number of courses in which the user clicked as student/teacher *****/
+   /********* Historic clicks of a user without course selected ***********/
+   Rep_GetAndWriteMyHistoricClicsWithoutCrs (UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
+				           MaxHitsPerYear);
+
+   /***** Historic courses in which the user clicked as student/teacher *****/
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
 	Role++)
       /* List my courses with this role */
-      Rep_GetAndWriteHistoricCrssOfAUsr (&Gbl.Usrs.Me.UsrDat,Role,
+      Rep_GetAndWriteMyHistoricCrss (Role,
 					 UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
 					 MaxHitsPerYear);
 
@@ -871,13 +879,13 @@ static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
   }
 
 /*****************************************************************************/
-/************************** Write courses of a user **************************/
+/************************* Write my current courses **************************/
 /*****************************************************************************/
 
-static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-                                              time_t FirstClickTimeUTC,
-                                              const struct tm *tm_FirstClickTime,
-                                              unsigned long MaxHitsPerYear)
+static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
+                                          time_t FirstClickTimeUTC,
+                                          const struct tm *tm_FirstClickTime,
+                                          unsigned long MaxHitsPerYear)
   {
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -892,7 +900,7 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
    unsigned NumCrs;
    long CrsCod;
 
-   NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
+   NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
    sprintf (Gbl.Title,Txt_USER_in_COURSE,Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
    fprintf (Gbl.F.Rep,"<li>%s %u %s",
 	    Gbl.Title,
@@ -908,14 +916,16 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 	       Txt_students_ABBREVIATION);
 
       /***** Get courses of a user from database *****/
-      sprintf (Query,"SELECT courses.CrsCod,degrees.FullName,courses.Year,courses.FullName"
-		     " FROM crs_usr,courses,degrees"
-		     " WHERE crs_usr.UsrCod='%ld'"
-		     " AND crs_usr.Role='%u'"
-		     " AND crs_usr.CrsCod=courses.CrsCod"
-		     " AND courses.DegCod=degrees.DegCod"
-		     " ORDER BY degrees.FullName,courses.Year,courses.FullName",
-	       UsrDat->UsrCod,(unsigned) Role);
+      sprintf (Query,"SELECT crs_usr.CrsCod,log_full.CrsCod,COUNT(*) AS N"
+	             " FROM crs_usr LEFT JOIN log_full ON"
+	             " (crs_usr.CrsCod=log_full.CrsCod"
+	             " AND crs_usr.UsrCod=log_full.UsrCod"
+	             " AND crs_usr.Role=log_full.Role)"
+	             " WHERE crs_usr.UsrCod='%ld'"
+	             " AND crs_usr.Role='%u'"
+	             " GROUP BY crs_usr.CrsCod"
+	             " ORDER BY N DESC,log_full.CrsCod DESC",
+	       Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
 
       /***** List the courses (one row per course) *****/
       if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
@@ -937,7 +947,8 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
 	    /* Write data of this course */
 	    Rep_WriteRowCrsData (CrsCod,Role,
 				 FirstClickTimeUTC,tm_FirstClickTime,
-				 MaxHitsPerYear);
+				 MaxHitsPerYear,
+				 true);	// Write number of users in course
 	   }
 
 	 /* End table */
@@ -952,13 +963,40 @@ static void Rep_GetAndWriteCurrentCrssOfAUsr (const struct UsrData *UsrDat,Rol_R
   }
 
 /*****************************************************************************/
-/************************** Write courses of a user **************************/
+/************* Write my historic clicks without course selected **************/
 /*****************************************************************************/
 
-static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role,
-                                               time_t FirstClickTimeUTC,
-                                               const struct tm *tm_FirstClickTime,
-                                               unsigned long MaxHitsPerYear)
+static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
+                                                      const struct tm *tm_FirstClickTime,
+                                                      unsigned long MaxHitsPerYear)
+  {
+   extern const char *Txt_Hits_without_course_selected;
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Rep,"<li>%s:"
+		      "<ol>",
+	    Txt_Hits_without_course_selected);
+
+   /***** Historic clicks *****/
+   Rep_WriteRowCrsData (-1L,
+                        Rol_UNKNOWN,	// Role does not matter
+			FirstClickTimeUTC,tm_FirstClickTime,
+			MaxHitsPerYear,
+			false);	// Do not write number of users in course
+
+   /***** End of list *****/
+   fprintf (Gbl.F.Rep,"</ol>"
+		      "</li>");
+  }
+
+/*****************************************************************************/
+/********************** Write historic courses of a user *********************/
+/*****************************************************************************/
+
+static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
+                                           time_t FirstClickTimeUTC,
+                                           const struct tm *tm_FirstClickTime,
+                                           unsigned long MaxHitsPerYear)
   {
    extern const char *Txt_Hits_as_a_USER;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -969,14 +1007,14 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
    unsigned NumCrs;
    long CrsCod;
 
-   /***** Get courses of a user from database *****/
+   /***** Get historic courses of a user from log *****/
    sprintf (Query,"SELECT CrsCod,COUNT(*) AS N"
 	          " FROM log_full"
-	          " WHERE UsrCod='%ld' AND Role='%u'"
+	          " WHERE UsrCod='%ld' AND Role='%u' AND CrsCod>'0'"
                   " GROUP BY CrsCod"
 	          " HAVING N>'%u'"
                   " ORDER BY N DESC",
-            UsrDat->UsrCod,(unsigned) Role,
+            Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
             Rep_MIN_CLICKS_CRS);
 
    /***** List the courses (one row per course) *****/
@@ -1003,8 +1041,9 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
          /* Write data of this course */
          Rep_WriteRowCrsData (CrsCod,Role,
                               FirstClickTimeUTC,tm_FirstClickTime,
-                              MaxHitsPerYear);
-        }
+                              MaxHitsPerYear,
+			      false);	// Do not write number of users in course
+	}
 
       /* End of list */
       fprintf (Gbl.F.Rep,"</ol>"
@@ -1022,7 +1061,8 @@ static void Rep_GetAndWriteHistoricCrssOfAUsr (const struct UsrData *UsrDat,Rol_
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  time_t FirstClickTimeUTC,
                                  const struct tm *tm_FirstClickTime,
-                                 unsigned long MaxHitsPerYear)
+                                 unsigned long MaxHitsPerYear,
+                                 bool WriteNumUsrs)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
@@ -1058,9 +1098,10 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 fprintf (Gbl.F.Rep," %s",Deg.FullName);
 
 	 /***** Write number of teachers / students in course *****/
-	 fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		  Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs.CrsCod),Txt_teachers_ABBREVIATION,
-		  Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
+	 if (WriteNumUsrs)
+	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
+		     Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs.CrsCod),Txt_teachers_ABBREVIATION,
+		     Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
 	}
       else
          fprintf (Gbl.F.Rep,"(%s)",Txt_unknown_removed_course);
