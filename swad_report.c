@@ -123,9 +123,7 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
-                                          time_t FirstClickTimeUTC,
-                                          const struct tm *tm_FirstClickTime,
-                                          unsigned long MaxHitsPerYear);
+                                          const struct Rep_Report *Report);
 static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
                                                       const struct tm *tm_FirstClickTime,
                                                       unsigned long MaxHitsPerYear);
@@ -863,10 +861,7 @@ static void Rep_WriteSectionCurrentCourses (const struct Rep_Report *Report)
 	Role <= Rol_TEACHER;
 	Role++)
       /* List my courses with this role */
-      Rep_GetAndWriteMyCurrentCrss (Role,
-				    Report->UsrFigures.FirstClickTimeUTC,
-				    &Report->tm_FirstClickTime,
-				    Report->MaxHitsPerYear);
+      Rep_GetAndWriteMyCurrentCrss (Role,Report);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</ul>"
@@ -979,9 +974,7 @@ static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
 /*****************************************************************************/
 
 static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
-                                          time_t FirstClickTimeUTC,
-                                          const struct tm *tm_FirstClickTime,
-                                          unsigned long MaxHitsPerYear)
+                                          const struct Rep_Report *Report)
   {
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1042,8 +1035,9 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 
 	    /* Write data of this course */
 	    Rep_WriteRowCrsData (CrsCod,Role,
-				 FirstClickTimeUTC,tm_FirstClickTime,
-				 MaxHitsPerYear,
+				 Report->UsrFigures.FirstClickTimeUTC,
+				 &Report->tm_FirstClickTime,
+				 Report->MaxHitsPerYear,
 				 true);	// Write number of users in course
 	   }
 
