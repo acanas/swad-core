@@ -110,8 +110,7 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
 static void Rep_CreateNewReportFile (struct Rep_Report *Report);
 static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report);
-static void Rep_WriteHeader (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                             const char *Permalink);
+static void Rep_WriteHeader (const struct Rep_Report *Report);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
@@ -225,7 +224,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 	              " font-family:Helvetica,Arial,sans-serif;\">\n");
 
    /***** Header *****/
-   Rep_WriteHeader (&Report->CurrentTimeUTC,Report->Permalink);
+   Rep_WriteHeader (Report);
 
    /***** Platform *****/
    Rep_WriteSectionPlatform ();
@@ -449,8 +448,7 @@ static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
 /******************** Write header of user's usage report ********************/
 /*****************************************************************************/
 
-static void Rep_WriteHeader (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                             const char *Permalink)
+static void Rep_WriteHeader (const struct Rep_Report *Report)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_User[Usr_NUM_SEXS];
@@ -474,8 +472,8 @@ static void Rep_WriteHeader (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
    /***** Date-time *****/
    fprintf (Gbl.F.Rep,"<li>%s: %s %s UTC</li>",
             Txt_Date,
-	    CurrentTimeUTC->StrDate,
-	    CurrentTimeUTC->StrTime);
+	    Report->CurrentTimeUTC.StrDate,
+	    Report->CurrentTimeUTC.StrTime);
 
    /***** Permalink *****/
    fprintf (Gbl.F.Rep,"<li>%s: "
@@ -485,7 +483,7 @@ static void Rep_WriteHeader (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
 	              "</a>"
 	              "</li>",
             Txt_Permalink,
-            Permalink,Permalink);
+            Report->Permalink,Report->Permalink);
 
    /***** End of header *****/
    fprintf (Gbl.F.Rep,"</ul>"
