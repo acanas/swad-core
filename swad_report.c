@@ -755,10 +755,12 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
                                         const struct tm *tm_FirstClickTime)
   {
+   extern const char *Txt_Hits_per_year;
+
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
-	    "Accesos (clics) por a&ntilde;o");	// TODO: Need translation!!!!
+	    Txt_Hits_per_year);
 
    /***** Global (in any course) hits per year *****/
    Rep_ShowMyHitsPerYear (true,-1L,	// Any course
