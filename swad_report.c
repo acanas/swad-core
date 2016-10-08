@@ -661,7 +661,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"%ld %s",
                Report->UsrFigures.NumFileViews,
 	       (Report->UsrFigures.NumFileViews == 1) ? Txt_download :
-						 Txt_downloads);
+						        Txt_downloads);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
@@ -682,7 +682,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"%ld %s",
 	       Report->UsrFigures.NumForPst,
 	       (Report->UsrFigures.NumForPst == 1) ? Txt_post :
-					      Txt_posts);
+					             Txt_posts);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
