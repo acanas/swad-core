@@ -109,9 +109,7 @@ static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
 static void Rep_CreateNewReportFile (struct Rep_Report *Report);
-static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
-                                            const char *FilenameReport,
-                                            const char *Permalink);
+static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report);
 static void Rep_WriteHeader (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
                              const char *Permalink);
 static void Rep_WriteSectionPlatform (void);
@@ -218,7 +216,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    Rep_CreateNewReportFile (Report);
 
    /***** Store report entry into database *****/
-   Rep_CreateNewReportEntryIntoDB (&Report->tm_CurrentTime,Report->FilenameReport,Report->Permalink);
+   Rep_CreateNewReportEntryIntoDB (Report);
 
    /***** Start file *****/
    Lay_StartHTMLFile (Gbl.F.Rep,Report->FilenameReport);
@@ -422,9 +420,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 /************** Insert a new user's usage report into database ***************/
 /*****************************************************************************/
 
-static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
-                                            const char *FilenameReport,
-                                            const char *Permalink)
+static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
   {
    char Query[1024+PATH_MAX*2];
 
@@ -436,16 +432,16 @@ static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
                   " ('%ld','%04d-%02d-%02d %02d:%02d:%02d',"
                   "'%c%c','%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-	    1900 + tm_CurrentTime->tm_year,	// year
-	    1 + tm_CurrentTime->tm_mon,		// month
-	    tm_CurrentTime->tm_mday,		// day of the month
-	    tm_CurrentTime->tm_hour,		// hours
-	    tm_CurrentTime->tm_min,		// minutes
-	    tm_CurrentTime->tm_sec,		// seconds
+	    1900 + Report->tm_CurrentTime.tm_year,	// year
+	    1 +  Report->tm_CurrentTime.tm_mon,		// month
+	    Report->tm_CurrentTime.tm_mday,		// day of the month
+	    Report->tm_CurrentTime.tm_hour,		// hours
+	    Report->tm_CurrentTime.tm_min,		// minutes
+	    Report->tm_CurrentTime.tm_sec,		// seconds
             Gbl.UniqueNameEncrypted[0],		//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
             Gbl.UniqueNameEncrypted[1],
             &Gbl.UniqueNameEncrypted[2],	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-            FilenameReport,Permalink);
+            Report->FilenameReport,Report->Permalink);
    DB_QueryINSERT (Query,"can not create new user's usage report");
   }
 
