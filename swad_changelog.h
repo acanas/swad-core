@@ -148,13 +148,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.17.1 (2016-10-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.17.2 (2016-10-08)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.17.2:  Oct 08, 2016	Message translated in user's usage report. (? lines)
         Version 16.17.1:  Oct 08, 2016	Message translated in user's usage report. (206211 lines)
         Version 16.17:    Oct 08, 2016	List of most frequent actions in user's usage report. (206189 lines)
         Version 16.16.1:  Oct 07, 2016	Fixed bug in user's usage report. (206108 lines)

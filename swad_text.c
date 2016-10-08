@@ -14056,6 +14056,27 @@ const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning
 	"Visitas (cliques) como %s";
 #endif
 
+const char *Txt_Hits_per_action =	// hits = visits, clicks, page views...
+#if   L==1
+	"Accessos (clics) per acci&oacute;";
+#elif L==2
+	"Anmeldungen (Klicks) pro Handlung";
+#elif L==3
+	"Hits (clicks) per action";
+#elif L==4
+	"Accesos (clics) por acci&oacute;n";
+#elif L==5
+	"Visites (clics) par action";
+#elif L==6
+	"Accesos (clics) por acci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Visite (clic) per azione";
+#elif L==8
+	"Ods&lstrok;on (klikni&eogon;cia) dzia&lstrok;anie";
+#elif L==9
+	"Visitas (cliques) por a&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Hits_per_year =	// hits = visits, clicks, page views...
 #if   L==1
 	"Accessos (clics) per any";

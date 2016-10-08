@@ -781,6 +781,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -795,7 +796,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
-	    "Accesos (clics) por acci&oacute;n");	// TODO: Need translation!!!!
+	    Txt_Hits_per_action);
 
    /***** Make the query *****/
    sprintf (Query,"SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
