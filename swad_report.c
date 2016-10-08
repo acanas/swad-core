@@ -115,32 +115,22 @@ static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report);
 static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures);
-static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report);
+static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report);
 static void Rep_WriteSectionCurrentCourses (const struct Rep_Report *Report);
-static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures,
-                                             const struct tm *tm_FirstClickTime,
-                                             unsigned long MaxHitsPerYear);
+static void Rep_WriteSectionHistoricCourses (const struct Rep_Report *Report);
 
 static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC);
 static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
                                           const struct Rep_Report *Report);
-static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
-                                                      const struct tm *tm_FirstClickTime,
-                                                      unsigned long MaxHitsPerYear);
+static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (const struct Rep_Report *Report);
 static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
-                                               time_t FirstClickTimeUTC,
-                                               const struct tm *tm_FirstClickTime,
-                                               unsigned long MaxHitsPerYear);
+                                           const struct Rep_Report *Report);
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
-                                 time_t FirstClickTimeUTC,
-                                 const struct tm *tm_FirstClickTime,
-                                 unsigned long MaxHitsPerYear,
+                                 const struct Rep_Report *Report,
                                  bool WriteNumUsrs);
 
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
-                                   time_t FirstClickTimeUTC,
-                                   const struct tm *tm_FirstClickTime,
-                                   unsigned long MaxHitsPerYear);
+                                   const struct Rep_Report *Report);
 static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
                                         unsigned long NumRows,
                                         MYSQL_RES *mysql_res,unsigned Field);
@@ -244,8 +234,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    Rep_WriteSectionCurrentCourses (Report);
 
    /***** Historic courses *****/
-   Rep_WriteSectionHistoricCourses (&Report->UsrFigures,&Report->tm_FirstClickTime,
-                                    Report->MaxHitsPerYear);
+   Rep_WriteSectionHistoricCourses (Report);
 
    /***** End file *****/
    fprintf (Gbl.F.Rep,"</body>\n"
@@ -735,7 +724,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
 /******** Write section for user's global hits in user's usage report ********/
 /*****************************************************************************/
 
-static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report)
+static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_per_year;
 
@@ -745,11 +734,10 @@ static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report)
 	    Txt_Hits_per_year);
 
    /***** Global (in any course) hits per year *****/
+   Report->MaxHitsPerYear = 0;	// MaxHitsPerYear not passed as an argument but computed inside the function
    Rep_ShowMyHitsPerYear (true,-1L,	// Any course
                           Rol_UNKNOWN,	// Any role
-                          Report->UsrFigures.FirstClickTimeUTC,
-                          &Report->tm_FirstClickTime,
-                          0);	// MaxHitsPerYear not passed as an argument but computed inside the function
+                          Report);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</section>\n");
@@ -872,9 +860,7 @@ static void Rep_WriteSectionCurrentCourses (const struct Rep_Report *Report)
 /***** Write section for user's historic courses in user's usage report ******/
 /*****************************************************************************/
 
-static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures,
-                                             const struct tm *tm_FirstClickTime,
-                                             unsigned long MaxHitsPerYear)
+static void Rep_WriteSectionHistoricCourses (const struct Rep_Report *Report)
   {
    extern const char *Txt_Courses;
    extern const char *Txt_historical_log;
@@ -890,17 +876,14 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
    fprintf (Gbl.F.Rep,"<ul>");
 
    /********* Historic clicks of a user without course selected ***********/
-   Rep_GetAndWriteMyHistoricClicsWithoutCrs (UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-				             MaxHitsPerYear);
+   Rep_GetAndWriteMyHistoricClicsWithoutCrs (Report);
 
    /***** Historic courses in which the user clicked as student/teacher *****/
    for (Role  = Rol_STUDENT;
 	Role <= Rol_TEACHER;
 	Role++)
       /* List my courses with this role */
-      Rep_GetAndWriteMyHistoricCrss (Role,
-				     UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-				     MaxHitsPerYear);
+      Rep_GetAndWriteMyHistoricCrss (Role,Report);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</ul>"
@@ -1034,10 +1017,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /* Write data of this course */
-	    Rep_WriteRowCrsData (CrsCod,Role,
-				 Report->UsrFigures.FirstClickTimeUTC,
-				 &Report->tm_FirstClickTime,
-				 Report->MaxHitsPerYear,
+	    Rep_WriteRowCrsData (CrsCod,Role,Report,
 				 true);	// Write number of users in course
 	   }
 
@@ -1056,9 +1036,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 /************* Write my historic clicks without course selected **************/
 /*****************************************************************************/
 
-static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
-                                                      const struct tm *tm_FirstClickTime,
-                                                      unsigned long MaxHitsPerYear)
+static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (const struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_without_course_selected;
 
@@ -1070,8 +1048,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
    /***** Historic clicks *****/
    Rep_WriteRowCrsData (-1L,
                         Rol_UNKNOWN,	// Role does not matter
-			FirstClickTimeUTC,tm_FirstClickTime,
-			MaxHitsPerYear,
+			Report,
 			false);	// Do not write number of users in course
 
    /***** End of list *****/
@@ -1084,9 +1061,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (time_t FirstClickTimeUTC,
 /*****************************************************************************/
 
 static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
-                                           time_t FirstClickTimeUTC,
-                                           const struct tm *tm_FirstClickTime,
-                                           unsigned long MaxHitsPerYear)
+                                           const struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_as_a_USER;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1129,9 +1104,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 	 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Write data of this course */
-         Rep_WriteRowCrsData (CrsCod,Role,
-                              FirstClickTimeUTC,tm_FirstClickTime,
-                              MaxHitsPerYear,
+         Rep_WriteRowCrsData (CrsCod,Role,Report,
 			      false);	// Do not write number of users in course
 	}
 
@@ -1149,9 +1122,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
-                                 time_t FirstClickTimeUTC,
-                                 const struct tm *tm_FirstClickTime,
-                                 unsigned long MaxHitsPerYear,
+                                 const struct Rep_Report *Report,
                                  bool WriteNumUsrs)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
@@ -1201,9 +1172,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Write hits per year for this course *****/
    fprintf (Gbl.F.Rep,"<br />");
-   Rep_ShowMyHitsPerYear (false,CrsCod,Role,
-                          FirstClickTimeUTC,tm_FirstClickTime,
-                          MaxHitsPerYear);
+   Rep_ShowMyHitsPerYear (false,CrsCod,Role,Report);
 
    fprintf (Gbl.F.Rep,"</li>");
   }
@@ -1213,9 +1182,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 /*****************************************************************************/
 
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
-                                   time_t FirstClickTimeUTC,
-                                   const struct tm *tm_FirstClickTime,
-                                   unsigned long MaxHitsPerYear)
+                                   const struct Rep_Report *Report)
   {
    char Query[512];
    char SubQueryCrs[128];
@@ -1246,22 +1213,22 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                   " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
 		  " AND UsrCod='%ld'%s%s"
 		  " GROUP BY Year DESC",
-            (long) FirstClickTimeUTC,
+            (long) Report->UsrFigures.FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    SubQueryCrs,
 	    SubQueryRol);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
    /***** Initialize first year *****/
-   Gbl.DateRange.DateIni.Date.Year = 1900 + tm_FirstClickTime->tm_year;
+   Gbl.DateRange.DateIni.Date.Year = 1900 + Report->tm_FirstClickTime.tm_year;
 
    /***** Initialize LastYear *****/
    LastYear = Gbl.Now.Date.Year;
 
    /***** Set maximum number of hits per year *****/
-   if (MaxHitsPerYear)
+   if (Report->MaxHitsPerYear)
       /* Set maximum number of hits per year from parameter */
-      Hits.Max = MaxHitsPerYear;
+      Hits.Max = Report->MaxHitsPerYear;
    else
      {
       /* Compute maximum number of hits per year */
