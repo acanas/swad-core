@@ -3700,10 +3700,12 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
    unsigned long NumRow;
    MYSQL_ROW row;
 
+   /***** For each row... *****/
    for (NumRow = 1, Hits->Max = Hits->Total = 0.0;
 	NumRow <= NumRows;
 	NumRow++)
      {
+      /* Get row */
       row = mysql_fetch_row (mysql_res);
 
       /* Get number of hits */

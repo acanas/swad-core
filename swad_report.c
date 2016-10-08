@@ -70,6 +70,12 @@ struct CurrentTimeUTC
    unsigned Time;	// Example: 190349
   };
 
+struct Rep_Hits
+  {
+   unsigned long Num;
+   unsigned long Max;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -140,7 +146,10 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    time_t FirstClickTimeUTC,
                                    const struct tm *tm_FirstClickTime,
                                    unsigned long MaxHitsPerYear);
-static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
+static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
+                                        unsigned long NumRows,
+                                        MYSQL_RES *mysql_res,unsigned Field);
+static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
                                 unsigned MaxBarWidth);
 
 static void Rep_RemoveUsrReportsFiles (long UsrCod);
@@ -789,10 +798,10 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned long NumRow;
-   struct Sta_Hits Hits;
+   struct Rep_Hits Hits;
    long ActCod;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
-   long NumClicks;
+   unsigned long NumClicks;
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
@@ -808,7 +817,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
 
    /***** Compute maximum number of hits per action *****/
-   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+   Rep_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1);
    mysql_data_seek (mysql_res,0);
 
    /***** Write rows *****/
@@ -821,9 +830,10 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
       /* Get the action (row[0]) */
       ActCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get number hits (in row[1]) */
-      Hits.Num = Str_GetFloatNumFromStr (row[1]);
-      NumClicks += (long) Hits.Num;
+      /* Get number of hits (row[1]) */
+      if (sscanf (row[1],"%lu",&Hits.Num) != 1)
+	 Hits.Num = 0;
+      NumClicks += Hits.Num;
 
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (Hits.Num,Hits.Max,Rep_MAX_BAR_WIDTH);
@@ -843,7 +853,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
      }
 
    /***** Draw bar for the rest of the clicks *****/
-   if (UsrFigures->NumClicks > NumClicks)
+   if ((unsigned long) UsrFigures->NumClicks > NumClicks)
       fprintf (Gbl.F.Rep,"%ld&nbsp;%s<br />",
                UsrFigures->NumClicks - NumClicks,
                Txt_Other_actions);
@@ -1250,7 +1260,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    unsigned ReadYear;
    unsigned LastYear;
    unsigned Year;
-   struct Sta_Hits Hits;
+   struct Rep_Hits Hits;
 
    /***** Make the query *****/
    if (AnyCourse)
@@ -1284,11 +1294,11 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    /***** Set maximum number of hits per year *****/
    if (MaxHitsPerYear)
       /* Set maximum number of hits per year from parameter */
-      Hits.Max = (float) MaxHitsPerYear;
+      Hits.Max = MaxHitsPerYear;
    else
      {
       /* Compute maximum number of hits per year */
-      Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+      Rep_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1);
       mysql_data_seek (mysql_res,0);
      }
 
@@ -1304,7 +1314,8 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 	 Lay_ShowErrorAndExit ("Wrong date.");
 
       /* Get number hits (in row[1]) */
-      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      if (sscanf (row[1],"%lu",&Hits.Num) != 1)
+	 Hits.Num = 0;
 
       for (Year = LastYear;
 	   Year >= ReadYear;
@@ -1315,7 +1326,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 
          /* Draw bar proportional to number of hits */
          Rep_DrawBarNumHits (Year == LastYear ? Hits.Num :
-                        	                0.0,
+                        	                0,
                              Hits.Max,Rep_MAX_BAR_WIDTH);
          fprintf (Gbl.F.Rep,"<br />");
         }
@@ -1334,8 +1345,37 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
       fprintf (Gbl.F.Rep,"%04u&nbsp;",Year);
 
       /* Draw bar proportional to number of hits */
-      Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
+      Rep_DrawBarNumHits (0,Hits.Max,Rep_MAX_BAR_WIDTH);
       fprintf (Gbl.F.Rep,"<br />");
+     }
+  }
+
+/*****************************************************************************/
+/*************** Compute maximum and total number of hits ********************/
+/*****************************************************************************/
+
+static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
+                                        unsigned long NumRows,
+                                        MYSQL_RES *mysql_res,unsigned Field)
+  {
+   unsigned long NumRow;
+   MYSQL_ROW row;
+
+   /***** For each row... *****/
+   for (NumRow = 1, Hits->Max = 0;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get number of hits */
+      if (sscanf (row[Field],"%lu",&Hits->Num) != 1)
+	 Hits->Num = 0;
+
+      /* Update maximum hits */
+      if (Hits->Num > Hits->Max)
+	 Hits->Max = Hits->Num;
      }
   }
 
@@ -1343,16 +1383,16 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 /********************* Draw a bar with the number of hits ********************/
 /*****************************************************************************/
 
-static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
+static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
                                 unsigned MaxBarWidth)
   {
    unsigned BarWidth;
    unsigned i;
 
-   if (HitsNum != 0.0)
+   if (HitsNum)
      {
       /***** Draw bar with a with proportional to the number of hits *****/
-      BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
+      BarWidth = (unsigned) ((((float) HitsNum * (float) MaxBarWidth) / (float) HitsMax) + 0.5);
       if (BarWidth)
 	{
          fprintf (Gbl.F.Rep,"<strong>");
