@@ -783,6 +783,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
    extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_Other_actions;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -843,9 +844,9 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
 
    /***** Draw bar for the rest of the clicks *****/
    if (UsrFigures->NumClicks > NumClicks)
-      fprintf (Gbl.F.Rep,"%ld&nbsp;(%s)<br />",
+      fprintf (Gbl.F.Rep,"%ld&nbsp;%s<br />",
                UsrFigures->NumClicks - NumClicks,
-               "otras acciones");	// TODO: Need translation!!!!
+               Txt_Other_actions);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

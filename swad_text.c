@@ -27502,6 +27502,27 @@ const char *Txt_Original_message =
 	"Mensagem original";
 #endif
 
+const char *Txt_Other_actions =
+#if   L==1
+	"Altres accions";
+#elif L==2
+	"Andere Handlungen";
+#elif L==3
+	"Other actions";
+#elif L==4
+	"Otras acciones";
+#elif L==5
+	"Autres actions";
+#elif L==6
+	"Otras acciones";	// Okoteve traducción
+#elif L==7
+	"Altri azioni";
+#elif L==8
+	"Inne dzia&lstrok;ania";
+#elif L==9
+	"Outras a&ccedil;&otilde;es";
+#endif
+
 const char *Txt_Other_countries =
 #if   L==1
 	"Altres pa&iuml;sos";
