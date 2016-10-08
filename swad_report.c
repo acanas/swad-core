@@ -106,8 +106,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report);
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report);
 static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 
-static void Rep_GetCurrentDateTimeUTC (struct tm *tm_CurrentTime,
-                                       struct Rep_CurrentTimeUTC *CurrentTimeUTC);
+static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
 static void Rep_CreateNewReportFile (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
                                      char *FilenameReport,char *Permalink);
@@ -214,7 +213,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    bool GetUsrFiguresAgain;
 
    /***** Get current date-time *****/
-   Rep_GetCurrentDateTimeUTC (&Report->tm_CurrentTime,&Report->CurrentTimeUTC);
+   Rep_GetCurrentDateTimeUTC (Report);
 
    /***** Create a new report file *****/
    Rep_CreateNewReportFile (&Report->CurrentTimeUTC,Report->FilenameReport,Report->Permalink);
@@ -339,36 +338,35 @@ static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 /********************* Get current date and time in UTC **********************/
 /*****************************************************************************/
 
-static void Rep_GetCurrentDateTimeUTC (struct tm *tm_CurrentTime,
-                                       struct Rep_CurrentTimeUTC *CurrentTimeUTC)
+static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
   {
    time_t CurrentTime;
 
    /***** Initialize to empty strings *****/
-   CurrentTimeUTC->StrDate[0] = '\0';
-   CurrentTimeUTC->StrTime[0] = '\0';
+   Report->CurrentTimeUTC.StrDate[0] = '\0';
+   Report->CurrentTimeUTC.StrTime[0] = '\0';
 
    /***** Get current time UTC *****/
    time (&CurrentTime);
-   if ((gmtime_r (&CurrentTime,tm_CurrentTime)) != NULL)
+   if ((gmtime_r (&CurrentTime,&Report->tm_CurrentTime)) != NULL)
      {
       /* Date and time as strings */
-      sprintf (CurrentTimeUTC->StrDate,"%04d-%02d-%02d",
-	       1900 + tm_CurrentTime->tm_year,	// year
-	       1 + tm_CurrentTime->tm_mon,	// month
-	       tm_CurrentTime->tm_mday);	// day of the month
-      sprintf (CurrentTimeUTC->StrTime,"%02d:%02d:%02d",
-	       tm_CurrentTime->tm_hour,		// hours
-	       tm_CurrentTime->tm_min,		// minutes
-	       tm_CurrentTime->tm_sec);		// seconds
+      sprintf (Report->CurrentTimeUTC.StrDate,"%04d-%02d-%02d",
+	       1900 + Report->tm_CurrentTime.tm_year,	// year
+	       1 + Report->tm_CurrentTime.tm_mon,	// month
+	       Report->tm_CurrentTime.tm_mday);		// day of the month
+      sprintf (Report->CurrentTimeUTC.StrTime,"%02d:%02d:%02d",
+	       Report->tm_CurrentTime.tm_hour,		// hours
+	       Report->tm_CurrentTime.tm_min,		// minutes
+	       Report->tm_CurrentTime.tm_sec);		// seconds
 
       /* Date and time as unsigned */
-      CurrentTimeUTC->Date = (1900 + tm_CurrentTime->tm_year) * 10000 +
-	                     (1 + tm_CurrentTime->tm_mon)     * 100   +
-	                     tm_CurrentTime->tm_mday;
-      CurrentTimeUTC->Time = tm_CurrentTime->tm_hour          * 10000 +
-	                     tm_CurrentTime->tm_min           * 100   +
-	                     tm_CurrentTime->tm_sec;
+      Report->CurrentTimeUTC.Date = (1900 + Report->tm_CurrentTime.tm_year) * 10000 +
+	                               (1 + Report->tm_CurrentTime.tm_mon)  * 100   +
+	                                    Report->tm_CurrentTime.tm_mday;
+      Report->CurrentTimeUTC.Time = Report->tm_CurrentTime.tm_hour          * 10000 +
+	                            Report->tm_CurrentTime.tm_min           * 100   +
+	                            Report->tm_CurrentTime.tm_sec;
      }
   }
 
