@@ -84,8 +84,8 @@ struct Rep_Report
    struct Rep_CurrentTimeUTC CurrentTimeUTC;
    struct Rep_Hits Hits;
    unsigned long MaxHitsPerYear;
-   char *FilenameReport;
-   char *Permalink;
+   char FilenameReport[NAME_MAX+1];
+   char Permalink[PATH_MAX+1];
   };
 
 /*****************************************************************************/
@@ -102,12 +102,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rep_CreateMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                     char *FilenameReport,
-                                     char *Permalink);
-static void Rep_PutLinkToMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                        const char *FilenameReport,
-                                        const char *Permalink);
+static void Rep_CreateMyUsageReport (struct Rep_Report *Report);
+static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report);
 static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_GetCurrentDateTimeUTC (struct tm *tm_CurrentTime,
@@ -199,46 +195,41 @@ void Rep_ReqMyUsageReport (void)
 
 void Rep_ShowMyUsageReport (void)
   {
-   struct Rep_CurrentTimeUTC CurrentTimeUTC;
-   char FilenameReport[NAME_MAX+1];
-   char Permalink[PATH_MAX+1];
+   struct Rep_Report Report;
 
    /***** Create my usage report *****/
-   Rep_CreateMyUsageReport (&CurrentTimeUTC,FilenameReport,Permalink);
+   Rep_CreateMyUsageReport (&Report);
 
    /***** Put link to my usage report *****/
-   Rep_PutLinkToMyUsageReport (&CurrentTimeUTC,FilenameReport,Permalink);
+   Rep_PutLinkToMyUsageReport (&Report);
   }
 
 /*****************************************************************************/
 /******** Create my usage report (report on my use of the platform) **********/
 /*****************************************************************************/
 
-static void Rep_CreateMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                     char *FilenameReport,
-                                     char *Permalink)
+static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
-   struct Rep_Report Report;
    bool GetUsrFiguresAgain;
 
    /***** Get current date-time *****/
-   Rep_GetCurrentDateTimeUTC (&Report.tm_CurrentTime,CurrentTimeUTC);
+   Rep_GetCurrentDateTimeUTC (&Report->tm_CurrentTime,&Report->CurrentTimeUTC);
 
    /***** Create a new report file *****/
-   Rep_CreateNewReportFile (CurrentTimeUTC,FilenameReport,Permalink);
+   Rep_CreateNewReportFile (&Report->CurrentTimeUTC,Report->FilenameReport,Report->Permalink);
 
    /***** Store report entry into database *****/
-   Rep_CreateNewReportEntryIntoDB (&Report.tm_CurrentTime,FilenameReport,Permalink);
+   Rep_CreateNewReportEntryIntoDB (&Report->tm_CurrentTime,Report->FilenameReport,Report->Permalink);
 
    /***** Start file *****/
-   Lay_StartHTMLFile (Gbl.F.Rep,FilenameReport);
+   Lay_StartHTMLFile (Gbl.F.Rep,Report->FilenameReport);
    fprintf (Gbl.F.Rep,"<body style=\"margin:1em;"
 	              " text-align:left;"
 	              " font-family:Helvetica,Arial,sans-serif;\">\n");
 
    /***** Header *****/
-   Rep_WriteHeader (CurrentTimeUTC,Permalink);
+   Rep_WriteHeader (&Report->CurrentTimeUTC,Report->Permalink);
 
    /***** Platform *****/
    Rep_WriteSectionPlatform ();
@@ -247,28 +238,28 @@ static void Rep_CreateMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
    Rep_WriteSectionUsrInfo ();
 
    /***** Figures *****/
-   Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report.UsrFigures);
-   GetUsrFiguresAgain = Prf_GetAndStoreAllUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report.UsrFigures);
+   Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report->UsrFigures);
+   GetUsrFiguresAgain = Prf_GetAndStoreAllUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report->UsrFigures);
    if (GetUsrFiguresAgain)
-      Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report.UsrFigures);
-   if (Report.UsrFigures.FirstClickTimeUTC)
-      gmtime_r (&Report.UsrFigures.FirstClickTimeUTC,&Report.tm_FirstClickTime);
-   Rep_WriteSectionUsrFigures (&Report.UsrFigures,&Report.tm_FirstClickTime,CurrentTimeUTC);
+      Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report->UsrFigures);
+   if (Report->UsrFigures.FirstClickTimeUTC)
+      gmtime_r (&Report->UsrFigures.FirstClickTimeUTC,&Report->tm_FirstClickTime);
+   Rep_WriteSectionUsrFigures (&Report->UsrFigures,&Report->tm_FirstClickTime,&Report->CurrentTimeUTC);
 
    /***** Global count of hits *****/
-   Rep_WriteSectionGlobalHits (&Report.UsrFigures,&Report.tm_FirstClickTime);
+   Rep_WriteSectionGlobalHits (&Report->UsrFigures,&Report->tm_FirstClickTime);
 
    /***** Global hits distributed by action *****/
-   Rep_WriteSectionHitsPerAction (&Report.UsrFigures);
+   Rep_WriteSectionHitsPerAction (&Report->UsrFigures);
 
    /***** Current courses *****/
-   Report.MaxHitsPerYear = Rep_GetMaxHitsPerYear (Report.UsrFigures.FirstClickTimeUTC);
-   Rep_WriteSectionCurrentCourses (&Report.UsrFigures,&Report.tm_FirstClickTime,
-                                   CurrentTimeUTC,Report.MaxHitsPerYear);
+   Report->MaxHitsPerYear = Rep_GetMaxHitsPerYear (Report->UsrFigures.FirstClickTimeUTC);
+   Rep_WriteSectionCurrentCourses (&Report->UsrFigures,&Report->tm_FirstClickTime,
+                                   &Report->CurrentTimeUTC,Report->MaxHitsPerYear);
 
    /***** Historic courses *****/
-   Rep_WriteSectionHistoricCourses (&Report.UsrFigures,&Report.tm_FirstClickTime,
-                                    Report.MaxHitsPerYear);
+   Rep_WriteSectionHistoricCourses (&Report->UsrFigures,&Report->tm_FirstClickTime,
+                                    Report->MaxHitsPerYear);
 
    /***** End file *****/
    fprintf (Gbl.F.Rep,"</body>\n"
@@ -282,9 +273,7 @@ static void Rep_CreateMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
 /******* Put link to my usage report (report on my use of the platform) ******/
 /*****************************************************************************/
 
-static void Rep_PutLinkToMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                        const char *FilenameReport,
-                                        const char *Permalink)
+static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
   {
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
@@ -295,7 +284,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUT
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Header *****/
-   Req_TitleReport (CurrentTimeUTC);
+   Req_TitleReport (&Report->CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
    fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">"
@@ -306,11 +295,11 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_CurrentTimeUTC *CurrentTimeUT
                       "%s"
 		      "</a>"
 		      "</div>",
-	    Permalink,
+	    Report->Permalink,
 	    Txt_Report,
             Gbl.Prefs.IconsURL,
             Txt_Report,
-	    FilenameReport);
+	    Report->FilenameReport);
    fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",
             Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
 
