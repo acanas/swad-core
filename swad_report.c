@@ -116,10 +116,7 @@ static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report);
 static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures);
 static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report);
-static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
-                                            const struct tm *tm_FirstClickTime,
-                                            const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                            unsigned long MaxHitsPerYear);
+static void Rep_WriteSectionCurrentCourses (const struct Rep_Report *Report);
 static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures,
                                              const struct tm *tm_FirstClickTime,
                                              unsigned long MaxHitsPerYear);
@@ -246,8 +243,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 
    /***** Current courses *****/
    Report->MaxHitsPerYear = Rep_GetMaxHitsPerYear (Report->UsrFigures.FirstClickTimeUTC);
-   Rep_WriteSectionCurrentCourses (&Report->UsrFigures,&Report->tm_FirstClickTime,
-                                   &Report->CurrentTimeUTC,Report->MaxHitsPerYear);
+   Rep_WriteSectionCurrentCourses (Report);
 
    /***** Historic courses *****/
    Rep_WriteSectionHistoricCourses (&Report->UsrFigures,&Report->tm_FirstClickTime,
@@ -848,10 +844,7 @@ static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
 /****** Write section for user's current courses in user's usage report ******/
 /*****************************************************************************/
 
-static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
-                                            const struct tm *tm_FirstClickTime,
-                                            const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                            unsigned long MaxHitsPerYear)
+static void Rep_WriteSectionCurrentCourses (const struct Rep_Report *Report)
   {
    extern const char *Txt_Courses;
    Rol_Role_t Role;
@@ -860,8 +853,8 @@ static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s",
             Txt_Courses);
-   if (CurrentTimeUTC->StrDate[0])
-      fprintf (Gbl.F.Rep," (%s)",CurrentTimeUTC->StrDate);
+   if (Report->CurrentTimeUTC.StrDate[0])
+      fprintf (Gbl.F.Rep," (%s)",Report->CurrentTimeUTC.StrDate);
    fprintf (Gbl.F.Rep,"</h3>"
 	              "<ul>");
 
@@ -871,8 +864,9 @@ static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteMyCurrentCrss (Role,
-				    UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-				    MaxHitsPerYear);
+				    Report->UsrFigures.FirstClickTimeUTC,
+				    &Report->tm_FirstClickTime,
+				    Report->MaxHitsPerYear);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</ul>"
