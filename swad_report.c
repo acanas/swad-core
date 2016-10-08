@@ -115,8 +115,7 @@ static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report);
 static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures);
-static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
-                                        const struct tm *tm_FirstClickTime);
+static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report);
 static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
                                             const struct tm *tm_FirstClickTime,
                                             const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
@@ -240,7 +239,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    Rep_WriteSectionUsrFigures (Report);
 
    /***** Global count of hits *****/
-   Rep_WriteSectionGlobalHits (&Report->UsrFigures,&Report->tm_FirstClickTime);
+   Rep_WriteSectionGlobalHits (Report);
 
    /***** Global hits distributed by action *****/
    Rep_WriteSectionHitsPerAction (&Report->UsrFigures);
@@ -742,8 +741,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
 /******** Write section for user's global hits in user's usage report ********/
 /*****************************************************************************/
 
-static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
-                                        const struct tm *tm_FirstClickTime)
+static void Rep_WriteSectionGlobalHits (const struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_per_year;
 
@@ -755,8 +753,8 @@ static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
    /***** Global (in any course) hits per year *****/
    Rep_ShowMyHitsPerYear (true,-1L,	// Any course
                           Rol_UNKNOWN,	// Any role
-                          UsrFigures->FirstClickTimeUTC,
-                          tm_FirstClickTime,
+                          Report->UsrFigures.FirstClickTimeUTC,
+                          &Report->tm_FirstClickTime,
                           0);	// MaxHitsPerYear not passed as an argument but computed inside the function
 
    /***** End of section *****/
