@@ -273,9 +273,11 @@ void Sta_LogAccess (const char *Comments)
 
    /***** Insert access into database *****/
    /* Log access in historical log (log_full) */
-   sprintf (Query,"INSERT INTO log_full (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
+   sprintf (Query,"INSERT INTO log_full "
+	          "(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
+                  " VALUES "
+                  "('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
             Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
@@ -298,9 +300,11 @@ void Sta_LogAccess (const char *Comments)
       LogCod = DB_QueryINSERTandReturnCode (Query,"can not log access (full)");
 
    /* Log access in recent log (log_recent) */
-   sprintf (Query,"INSERT INTO log_recent (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
+   sprintf (Query,"INSERT INTO log_recent "
+	          "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
-                  " VALUES ('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
+                  " VALUES "
+                  "('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
                   "'%u',NOW(),'%ld','%ld','%s')",
             LogCod,Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
@@ -3002,8 +3006,8 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
       row = mysql_fetch_row (mysql_res);
 
       /* Write the action */
-      if (sscanf (row[0],"%ld",&ActCod) != 1)
-	 Lay_ShowErrorAndExit ("Wrong action code.");
+      ActCod = Str_ConvertStrCodToLongCod (row[0]);
+
       if (ActCod >= 0)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"LOG RIGHT_TOP\">"

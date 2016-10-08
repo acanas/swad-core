@@ -32,6 +32,7 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
+#include "swad_tab.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -44,6 +45,7 @@
 #define Rep_FILENAME_ROOT "report"
 
 #define Rep_MIN_CLICKS_CRS 100	// Minimum number of clicks to show a course in historic log
+#define Rep_MAX_ACTIONS	    50  // Maximum number of actions in list of frequent actions
 #define Rep_MAX_BAR_WIDTH 50	// Maximum width of graphic bar
 
 // #define Rep_BLOCK "&boxH;"	// HTML code for a block in graphic bar
@@ -105,6 +107,7 @@ static void Rep_WriteSectionUsrInfo (void);
 static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
                                         const struct tm *tm_FirstClickTime,
                                         const struct CurrentTimeUTC *CurrentTimeUTC);
+static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures);
 static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
                                         const struct tm *tm_FirstClickTime);
 static void Rep_WriteSectionCurrentCourses (const struct UsrFigures *UsrFigures,
@@ -234,8 +237,11 @@ static void Rep_CreateMyUsageReport (struct CurrentTimeUTC *CurrentTimeUTC,
       gmtime_r (&UsrFigures.FirstClickTimeUTC,&tm_FirstClickTime);
    Rep_WriteSectionUsrFigures (&UsrFigures,&tm_FirstClickTime,CurrentTimeUTC);
 
-   /***** Global hits *****/
+   /***** Global count of hits *****/
    Rep_WriteSectionGlobalHits (&UsrFigures,&tm_FirstClickTime);
+
+   /***** Global hits distributed by action *****/
+   Rep_WriteSectionHitsPerAction (&UsrFigures);
 
    /***** Current courses *****/
    MaxHitsPerYear = Rep_GetMaxHitsPerYear (UsrFigures.FirstClickTimeUTC);
@@ -749,12 +755,10 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
                                         const struct tm *tm_FirstClickTime)
   {
-   extern const char *Txt_Hits;
-
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"
                       "<h3>%s</h3>",
-	    Txt_Hits);
+	    "Accesos (clics) por a&ntilde;o");	// TODO: Need translation!!!!
 
    /***** Global (in any course) hits per year *****/
    Rep_ShowMyHitsPerYear (true,-1L,	// Any course
@@ -762,6 +766,86 @@ static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
                           UsrFigures->FirstClickTimeUTC,
                           tm_FirstClickTime,
                           0);	// MaxHitsPerYear not passed as an argument but computed inside the function
+
+   /***** End of section *****/
+   fprintf (Gbl.F.Rep,"</section>\n");
+  }
+
+/*****************************************************************************/
+/******** Write section for user's global hits in user's usage report ********/
+/*****************************************************************************/
+
+static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures)
+  {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   unsigned long NumRow;
+   struct Sta_Hits Hits;
+   long ActCod;
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   long NumClicks;
+
+   /***** Start of section *****/
+   fprintf (Gbl.F.Rep,"<section>"
+                      "<h3>%s</h3>",
+	    "Accesos (clics) por acci&oacute;n");	// TODO: Need translation!!!!
+
+   /***** Make the query *****/
+   sprintf (Query,"SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
+                  " WHERE ClickTime>=FROM_UNIXTIME('%ld') AND UsrCod='%ld'"
+		  " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
+            (long) UsrFigures->FirstClickTimeUTC,Gbl.Usrs.Me.UsrDat.UsrCod,
+	    Rep_MAX_ACTIONS);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get clicks");
+
+   /***** Compute maximum number of hits per action *****/
+   Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
+   mysql_data_seek (mysql_res,0);
+
+   /***** Write rows *****/
+   for (NumRow = 1, NumClicks = 0;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the action (row[0]) */
+      ActCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get number hits (in row[1]) */
+      Hits.Num = Str_GetFloatNumFromStr (row[1]);
+      NumClicks += (long) Hits.Num;
+
+      /* Draw bar proportional to number of hits */
+      Rep_DrawBarNumHits (Hits.Num,Hits.Max,Rep_MAX_BAR_WIDTH);
+
+      /* Write action text */
+      fprintf (Gbl.F.Rep,"&nbsp;");
+      if (ActCod >= 0)
+	{
+	 if (Txt_TABS_FULL_TXT[Act_Actions[Act_FromActCodToAction[ActCod]].Tab])
+	    fprintf (Gbl.F.Rep,"%s &gt; ",
+		     Txt_TABS_FULL_TXT[Act_Actions[Act_FromActCodToAction[ActCod]].Tab]);
+	 fprintf (Gbl.F.Rep,"%s",Act_GetActionTextFromDB (ActCod,ActTxt));
+	}
+      else
+	 fprintf (Gbl.F.Rep,"?");
+      fprintf (Gbl.F.Rep,"<br />");
+     }
+
+   /***** Draw bar for the rest of the clicks *****/
+   if (UsrFigures->NumClicks > NumClicks)
+      fprintf (Gbl.F.Rep,"%ld&nbsp;(%s)<br />",
+               UsrFigures->NumClicks - NumClicks,
+               "otras acciones");	// TODO: Need translation!!!!
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</section>\n");
@@ -825,7 +909,7 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
 
    /********* Historic clicks of a user without course selected ***********/
    Rep_GetAndWriteMyHistoricClicsWithoutCrs (UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-				           MaxHitsPerYear);
+				             MaxHitsPerYear);
 
    /***** Historic courses in which the user clicked as student/teacher *****/
    for (Role  = Rol_STUDENT;
@@ -833,8 +917,8 @@ static void Rep_WriteSectionHistoricCourses (const struct UsrFigures *UsrFigures
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteMyHistoricCrss (Role,
-					 UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
-					 MaxHitsPerYear);
+				     UsrFigures->FirstClickTimeUTC,tm_FirstClickTime,
+				     MaxHitsPerYear);
 
    /***** End of section *****/
    fprintf (Gbl.F.Rep,"</ul>"
@@ -896,6 +980,9 @@ static unsigned long Rep_GetMaxHitsPerYear (time_t FirstClickTimeUTC)
    if (row[0])	// There are questions
       if (sscanf (row[0],"%lu",&MaxHitsPerYear) != 1)
          Lay_ShowErrorAndExit ("Error when getting maximum hits.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    return MaxHitsPerYear;
   }
@@ -1226,9 +1313,13 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
          Rep_DrawBarNumHits (Year == LastYear ? Hits.Num :
                         	                0.0,
                              Hits.Max,Rep_MAX_BAR_WIDTH);
+         fprintf (Gbl.F.Rep,"<br />");
         }
       LastYear = Year;
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** Finally, show the oldest years without clicks *****/
    for (Year = LastYear;
@@ -1240,6 +1331,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
 
       /* Draw bar proportional to number of hits */
       Rep_DrawBarNumHits (0.0,Hits.Max,Rep_MAX_BAR_WIDTH);
+      fprintf (Gbl.F.Rep,"<br />");
      }
   }
 
@@ -1271,7 +1363,6 @@ static void Rep_DrawBarNumHits (float HitsNum,float HitsMax,
       fprintf (Gbl.F.Rep,"&nbsp;");
       Str_WriteFloatNum (Gbl.F.Rep,HitsNum);
      }
-   fprintf (Gbl.F.Rep,"<br />");
   }
 
 /*****************************************************************************/

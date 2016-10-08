@@ -11644,7 +11644,8 @@ CREATE TABLE IF NOT EXISTS usr_report (RepCod INT NOT NULL AUTO_INCREMENT,UsrCod
 		
 
 
-
+--------------------------------------------------
+--------------------------------------------------
 
 
 SELECT CrsCod,COUNT(*) AS N FROM crs_usr LEFT JOIN log_full ON (crs_usr.CrsCod=log_full.CrsCod AND crs_usr.UsrCod=log_full.UsrCod AND crs_usr.Role=log_full.Role) WHERE UsrCod='7' AND Role='3' GROUP BY CrsCod ORDER BY N DESC;

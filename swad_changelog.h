@@ -142,17 +142,20 @@
 
 // TODO: FIX BUG: Centre and degree admins should see buttons to admin users even a course is not selected
 
+// TODO: Generar informe -> ¿Realmente desea generar un informe... (puede tardar varios segundos...)? -> Generar informe.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.16.1 (2016-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.17 (2016-10-08)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.17:    Oct 08, 2016	List of most frequent actions in user's usage report. (206189 lines)
         Version 16.16.1:  Oct 07, 2016	Fixed bug in user's usage report. (206108 lines)
         Version 16.16:    Oct 07, 2016	Order current courses in user's usage report by number of clicks.
 				        Do not write number of users in historic courses.
@@ -207,7 +210,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1586','es','N','Soli
         Version 16.4.1:   Sep 29, 2016	Changes in hits in current courses in user's usage report. (205316 lines)
         Version 16.4:     Sep 29, 2016	Hits in current courses in user's usage report. (205299 lines)
         Version 16.3.2:   Sep 28, 2016	Changes in behaviour of button to follow user. (205277 lines)
-        Version 16.3.1:   Sep 28, 2016	Two different messagesrelated to new account merged into one.
+        Version 16.3.1:   Sep 28, 2016	Two different messages related to new account merged into one.
 					Changes in form to create new account. (205271 lines)
         Version 16.3:     Sep 26, 2016	Message translated.
 					Code refactoring of list with empty accounts for an ID. (205287 lines)
