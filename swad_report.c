@@ -108,8 +108,7 @@ static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
-static void Rep_CreateNewReportFile (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                     char *FilenameReport,char *Permalink);
+static void Rep_CreateNewReportFile (struct Rep_Report *Report);
 static void Rep_CreateNewReportEntryIntoDB (const struct tm *tm_CurrentTime,
                                             const char *FilenameReport,
                                             const char *Permalink);
@@ -216,7 +215,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    Rep_GetCurrentDateTimeUTC (Report);
 
    /***** Create a new report file *****/
-   Rep_CreateNewReportFile (&Report->CurrentTimeUTC,Report->FilenameReport,Report->Permalink);
+   Rep_CreateNewReportFile (Report);
 
    /***** Store report entry into database *****/
    Rep_CreateNewReportEntryIntoDB (&Report->tm_CurrentTime,Report->FilenameReport,Report->Permalink);
@@ -374,8 +373,7 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
 /*************** Create a new file for user's usage report *******************/
 /*****************************************************************************/
 
-static void Rep_CreateNewReportFile (const struct Rep_CurrentTimeUTC *CurrentTimeUTC,
-                                     char *FilenameReport,char *Permalink)
+static void Rep_CreateNewReportFile (struct Rep_Report *Report)
   {
    char PathReports[PATH_MAX+1];
    char PathUniqueDirL[PATH_MAX+1];
@@ -403,21 +401,21 @@ static void Rep_CreateNewReportFile (const struct Rep_CurrentTimeUTC *CurrentTim
       Lay_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */
-   sprintf (FilenameReport,"%s_%06u_%06u.html",
-            Rep_FILENAME_ROOT,CurrentTimeUTC->Date,CurrentTimeUTC->Time);
+   sprintf (Report->FilenameReport,"%s_%06u_%06u.html",
+            Rep_FILENAME_ROOT,Report->CurrentTimeUTC.Date,Report->CurrentTimeUTC.Time);
    sprintf (PathFileReport,"%s/%s",
-            PathUniqueDirR,FilenameReport);
+            PathUniqueDirR,Report->FilenameReport);
    if ((Gbl.F.Rep = fopen (PathFileReport,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
-   sprintf (Permalink,"%s/%s/%c%c/%s/%s",
+   sprintf (Report->Permalink,"%s/%s/%c%c/%s/%s",
             Cfg_URL_SWAD_PUBLIC,
             Cfg_FOLDER_REP,
             Gbl.UniqueNameEncrypted[0],
             Gbl.UniqueNameEncrypted[1],
             &Gbl.UniqueNameEncrypted[2],
-            FilenameReport);
+            Report->FilenameReport);
   }
 
 /*****************************************************************************/
