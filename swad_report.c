@@ -113,9 +113,7 @@ static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report);
 static void Rep_WriteHeader (const struct Rep_Report *Report);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
-static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
-                                        const struct tm *tm_FirstClickTime,
-                                        const struct Rep_CurrentTimeUTC *CurrentTimeUTC);
+static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report);
 static void Rep_WriteSectionHitsPerAction (const struct UsrFigures *UsrFigures);
 static void Rep_WriteSectionGlobalHits (const struct UsrFigures *UsrFigures,
                                         const struct tm *tm_FirstClickTime);
@@ -239,7 +237,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
       Prf_GetUsrFigures (Gbl.Usrs.Me.UsrDat.UsrCod,&Report->UsrFigures);
    if (Report->UsrFigures.FirstClickTimeUTC)
       gmtime_r (&Report->UsrFigures.FirstClickTimeUTC,&Report->tm_FirstClickTime);
-   Rep_WriteSectionUsrFigures (&Report->UsrFigures,&Report->tm_FirstClickTime,&Report->CurrentTimeUTC);
+   Rep_WriteSectionUsrFigures (Report);
 
    /***** Global count of hits *****/
    Rep_WriteSectionGlobalHits (&Report->UsrFigures,&Report->tm_FirstClickTime);
@@ -578,9 +576,7 @@ static void Rep_WriteSectionUsrInfo (void)
 /********* Write section for user's figures in user's usage report ***********/
 /*****************************************************************************/
 
-static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
-                                        const struct tm *tm_FirstClickTime,
-                                        const struct Rep_CurrentTimeUTC *CurrentTimeUTC)
+static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
   {
    extern const char *Txt_Figures;
    extern const char *Txt_TIME_Since;
@@ -612,50 +608,47 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 
    /***** Time since first click until now *****/
    fprintf (Gbl.F.Rep,"<li>%s ",Txt_TIME_Since);
-   if (UsrFigures->FirstClickTimeUTC)
+   if (Report->UsrFigures.FirstClickTimeUTC)
      {
-      if (tm_FirstClickTime != NULL)
-	{
-	 fprintf (Gbl.F.Rep,"%04d-%02d-%02d %02d:%02d:%02d UTC",
-                  1900 + tm_FirstClickTime->tm_year,	// year
-                  1 + tm_FirstClickTime->tm_mon,	// month
-                  tm_FirstClickTime->tm_mday,		// day of the month
-                  tm_FirstClickTime->tm_hour,		// hours
-                  tm_FirstClickTime->tm_min,		// minutes
-		  tm_FirstClickTime->tm_sec);		// seconds
-	 if (CurrentTimeUTC->StrDate[0])
-	    fprintf (Gbl.F.Rep," %s %s %s UTC",
-	             Txt_TIME_until,
-	             CurrentTimeUTC->StrDate,
-	             CurrentTimeUTC->StrTime);
-	 if (UsrFigures->NumDays > 0)
-	    fprintf (Gbl.F.Rep," (%d %s)",
-		     UsrFigures->NumDays,
-		     (UsrFigures->NumDays == 1) ? Txt_day :
-						  Txt_days);
-	}
+      fprintf (Gbl.F.Rep,"%04d-%02d-%02d %02d:%02d:%02d UTC",
+	       1900 + Report->tm_FirstClickTime.tm_year,	// year
+	       1 + Report->tm_FirstClickTime.tm_mon,		// month
+	       Report->tm_FirstClickTime.tm_mday,		// day of the month
+	       Report->tm_FirstClickTime.tm_hour,		// hours
+	       Report->tm_FirstClickTime.tm_min,		// minutes
+	       Report->tm_FirstClickTime.tm_sec);		// seconds
+      if (Report->CurrentTimeUTC.StrDate[0])
+	 fprintf (Gbl.F.Rep," %s %s %s UTC",
+		  Txt_TIME_until,
+		  Report->CurrentTimeUTC.StrDate,
+		  Report->CurrentTimeUTC.StrTime);
+      if (Report->UsrFigures.NumDays > 0)
+	 fprintf (Gbl.F.Rep," (%d %s)",
+		  Report->UsrFigures.NumDays,
+		  (Report->UsrFigures.NumDays == 1) ? Txt_day :
+						      Txt_days);
      }
    else	// Time of first click is unknown
      {
       fprintf (Gbl.F.Rep,"?");
-      if (CurrentTimeUTC->StrDate[0])
+      if (Report->CurrentTimeUTC.StrDate[0])
          fprintf (Gbl.F.Rep," - %s %s UTC",
-                  CurrentTimeUTC->StrDate,
-                  CurrentTimeUTC->StrTime);
+                  Report->CurrentTimeUTC.StrDate,
+                  Report->CurrentTimeUTC.StrTime);
      }
    fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of clicks *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Clicks);
-   if (UsrFigures->NumClicks >= 0)
+   if (Report->UsrFigures.NumClicks >= 0)
      {
-      fprintf (Gbl.F.Rep,"%ld",UsrFigures->NumClicks);
-      if (UsrFigures->NumDays > 0)
+      fprintf (Gbl.F.Rep,"%ld",Report->UsrFigures.NumClicks);
+      if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
 	 Str_WriteFloatNum (Gbl.F.Rep,
-	                    (float) UsrFigures->NumClicks /
-			    (float) UsrFigures->NumDays);
+	                    (float) Report->UsrFigures.NumClicks /
+			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -679,18 +672,18 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 
    /***** Number of file views *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Downloads);
-   if (UsrFigures->NumFileViews >= 0)
+   if (Report->UsrFigures.NumFileViews >= 0)
      {
       fprintf (Gbl.F.Rep,"%ld %s",
-               UsrFigures->NumFileViews,
-	       (UsrFigures->NumFileViews == 1) ? Txt_download :
+               Report->UsrFigures.NumFileViews,
+	       (Report->UsrFigures.NumFileViews == 1) ? Txt_download :
 						 Txt_downloads);
-      if (UsrFigures->NumDays > 0)
+      if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
 	 Str_WriteFloatNum (Gbl.F.Rep,
-	                    (float) UsrFigures->NumFileViews /
-			    (float) UsrFigures->NumDays);
+	                    (float) Report->UsrFigures.NumFileViews /
+			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -700,18 +693,18 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Forum_posts);
-   if (UsrFigures->NumForPst >= 0)
+   if (Report->UsrFigures.NumForPst >= 0)
      {
       fprintf (Gbl.F.Rep,"%ld %s",
-	       UsrFigures->NumForPst,
-	       (UsrFigures->NumForPst == 1) ? Txt_post :
+	       Report->UsrFigures.NumForPst,
+	       (Report->UsrFigures.NumForPst == 1) ? Txt_post :
 					      Txt_posts);
-      if (UsrFigures->NumDays > 0)
+      if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
 	 Str_WriteFloatNum (Gbl.F.Rep,
-	                    (float) UsrFigures->NumForPst /
-			    (float) UsrFigures->NumDays);
+	                    (float) Report->UsrFigures.NumForPst /
+			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
@@ -721,18 +714,18 @@ static void Rep_WriteSectionUsrFigures (const struct UsrFigures *UsrFigures,
 
    /***** Number of messages sent *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Messages_sent);
-   if (UsrFigures->NumMsgSnt >= 0)
+   if (Report->UsrFigures.NumMsgSnt >= 0)
      {
       fprintf (Gbl.F.Rep,"%ld %s",
-	       UsrFigures->NumMsgSnt,
-	       (UsrFigures->NumMsgSnt == 1) ? Txt_message :
-					      Txt_messages);
-      if (UsrFigures->NumDays > 0)
+	       Report->UsrFigures.NumMsgSnt,
+	       (Report->UsrFigures.NumMsgSnt == 1) ? Txt_message :
+					             Txt_messages);
+      if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
 	 Str_WriteFloatNum (Gbl.F.Rep,
-	                    (float) UsrFigures->NumMsgSnt /
-			    (float) UsrFigures->NumDays);
+	                    (float) Report->UsrFigures.NumMsgSnt /
+			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
      }
