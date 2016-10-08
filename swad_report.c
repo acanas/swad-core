@@ -762,6 +762,8 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    unsigned long NumRows;
    unsigned long NumRow;
    long ActCod;
+   Act_Action_t Action;
+   Act_Tab_t Tab;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    unsigned long NumClicks;
 
@@ -804,9 +806,13 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Gbl.F.Rep,"&nbsp;");
       if (ActCod >= 0)
 	{
-	 if (Txt_TABS_FULL_TXT[Act_Actions[Act_FromActCodToAction[ActCod]].Tab])
-	    fprintf (Gbl.F.Rep,"%s &gt; ",
-		     Txt_TABS_FULL_TXT[Act_Actions[Act_FromActCodToAction[ActCod]].Tab]);
+	 Action = Act_FromActCodToAction[ActCod];
+	 if (Action >= 0)
+	   {
+	    Tab = Act_Actions[Act_Actions[Action].SuperAction].Tab;
+	    if (Txt_TABS_FULL_TXT[Tab])
+	       fprintf (Gbl.F.Rep,"%s &gt; ",Txt_TABS_FULL_TXT[Tab]);
+	   }
 	 fprintf (Gbl.F.Rep,"%s",Act_GetActionTextFromDB (ActCod,ActTxt));
 	}
       else

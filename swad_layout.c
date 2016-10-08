@@ -896,17 +896,18 @@ static void Lay_WriteTitleAction (void)
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
    extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   Act_Action_t SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div id=\"action_title\""
 	              " style=\"background-image:url('%s/%s/%s');\">",
 	    Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-	    Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].Icon);
+	    Act_Actions[SuperAction].Icon);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
-	    Txt_TABS_FULL_TXT[Act_Actions[Gbl.Action.Act].Tab],
+	    Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],
 	    Act_GetTitleAction (Gbl.Action.Act));
 
    /***** Subtitle *****/

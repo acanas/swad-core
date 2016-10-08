@@ -225,7 +225,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],128);
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Act_Actions[Action].SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';
@@ -287,7 +287,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Action].Tab],128);
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Act_Actions[Action].SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';

@@ -4501,14 +4501,15 @@ void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *Breadcru
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Act_Action_t Superaction = Act_Actions[Action].SuperAction;
+   Act_Tab_t Tab = Act_Actions[Superaction].Tab;
    char *Arrow;
 
    Arrow = HTML ? "&gt;" :
 	          ">";
    sprintf (BreadcrumbStr,"%s %s %s %s %s",
             Cfg_URL_SWAD_CGI,Arrow,
-            Txt_TABS_FULL_TXT[Act_Actions[Superaction].Tab],Arrow,
-            Txt_MENU_TITLE[Act_Actions[Superaction].Tab][Act_Actions[Superaction].IndexInMenu]);
+            Txt_TABS_FULL_TXT[Tab],Arrow,
+            Txt_MENU_TITLE[Tab][Act_Actions[Superaction].IndexInMenu]);
   }
 
 /*****************************************************************************/
