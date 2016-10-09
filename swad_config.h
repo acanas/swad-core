@@ -28,8 +28,8 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
-#define OPENSWAD_ORG		// Comment this line if not applicable
+#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
@@ -83,14 +83,6 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
-#define Cfg_EXTERNAL_LOGIN_URL			""
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
 
 #define Cfg_GOOGLE_ANALYTICS			""
@@ -131,14 +123,6 @@
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
-#define Cfg_EXTERNAL_LOGIN_URL			""
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
 
@@ -198,22 +182,6 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
-#define Cfg_EXTERNAL_LOGIN_URL			""
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-/*
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	"./prado"	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		"PRADO (Plataforma de Recursos de Apoyo a la Docencia)"
-#define Cfg_EXTERNAL_LOGIN_URL			"https://oficinavirtual.ugr.es/"
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		"pradouser"
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	"pradosession"
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
-*/
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
 
 #define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
@@ -268,14 +236,6 @@
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
-
-#define Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND	""	// Client of the web service called by this CGI
-#define Cfg_EXTERNAL_LOGIN_SERVICE_NAME		""
-#define Cfg_EXTERNAL_LOGIN_URL			""
-#define Cfg_NAME_PARAM_IMPORTED_USR_ID		""
-#define Cfg_NAME_PARAM_IMPORTED_SESSION_ID	""
-#define Cfg_MAX_LENGTH_IMPORTED_USR_ID		255	// The same size as that of column ImportedUsrId in table imported_sessions
-#define Cfg_MAX_LENGTH_IMPORTED_SESSION_ID	255	// The same size as that of column ImportedSessionId in table imported_sessions
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
 

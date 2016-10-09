@@ -220,8 +220,7 @@ void Lay_WriteStartOfPage (void)
 
    /* Redirect to correct language */
    if ((Gbl.Action.Act == ActAutUsrInt ||
-        Gbl.Action.Act == ActAutUsrNew ||
-        Gbl.Action.Act == ActAutUsrExt) &&					// Action is log in
+        Gbl.Action.Act == ActAutUsrNew) &&					// Action is log in
        Gbl.Usrs.Me.Logged &&							// I am just logged
        Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
       Lay_WriteRedirectionToMyLanguage ();
@@ -323,7 +322,6 @@ void Lay_WriteStartOfPage (void)
    /* Write new year greeting */
    if (Gbl.Action.Act == ActAutUsrInt ||
        Gbl.Action.Act == ActAutUsrNew ||
-       Gbl.Action.Act == ActAutUsrExt ||
        Gbl.Action.Act == ActAutUsrChgLan)
       if (Gbl.Now.Date.Month == 1 &&
 	  Gbl.Now.Date.Day == 1)
@@ -987,8 +985,7 @@ static void Lay_ShowRightColumn (void)
    /***** SWADroid advertisement *****/
    if (!Gbl.Usrs.Me.Logged ||
        Gbl.Action.Act == ActAutUsrInt ||
-       Gbl.Action.Act == ActAutUsrNew ||
-       Gbl.Action.Act == ActAutUsrExt)
+       Gbl.Action.Act == ActAutUsrNew)
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"

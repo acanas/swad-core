@@ -48,7 +48,6 @@
 #include "swad_forum.h"
 #include "swad_holiday.h"
 #include "swad_image.h"
-#include "swad_import.h"
 #include "swad_icon.h"
 #include "swad_indicator.h"
 #include "swad_institution.h"
@@ -144,12 +143,6 @@ struct Globals
    char IP[Cns_MAX_LENGTH_IP+1];
    char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Used for session id, temporary directory names, etc.
 
-   struct
-     {
-      char ExternalUsrId[Cfg_MAX_LENGTH_IMPORTED_USR_ID+1];	// External user ID
-      char ExternalSesId[Cfg_MAX_LENGTH_IMPORTED_SESSION_ID+1];	// External session ID
-      Rol_Role_t ExternalRole;
-     } Imported;
    struct
      {
       Txt_Language_t Language;

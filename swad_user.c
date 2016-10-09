@@ -120,11 +120,9 @@ static void Usr_RemoveTemporaryTableMyCourses (void);
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
-static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void);
 static bool Usr_ChkUsrAndGetUsrDataFromSession (void);
 static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void);
 static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
-static void Usr_ShowAlertNoUsrWithThisID (void);
 
 static void Usr_SetUsrRoleAndPrefs (void);
 
@@ -189,8 +187,6 @@ static void Usr_PutIconToShowTchsAllData (void);
 static void Usr_ShowGstsAllDataParams (void);
 static void Usr_ShowStdsAllDataParams (void);
 static void Usr_ShowTchsAllDataParams (void);
-
-static void Usr_PutLinkToListOfficialStudents (void);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t RoleInClassPhoto);
@@ -2148,23 +2144,6 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrExt)	// Login from external web service
-	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromExternalLogin ())	// User logged in
-	      {
-	       Gbl.Usrs.Me.Logged = true;
-	       Usr_SetUsrRoleAndPrefs ();
-
-	       Act_AdjustCurrentAction ();
-	       Ses_CreateSession ();
-
-	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
-
-	       Imp_InsertImpSessionInDB ();
-	      }
-	    else
-	       PutFormLogin = true;
-	   }
 	}
      }
 
@@ -2354,158 +2333,6 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
   }
 
 /*****************************************************************************/
-/************ Check user and get user's data when external login *************/
-/*****************************************************************************/
-// Returns true if user logged in successfully
-// Returns false if user not logged in
-
-static bool Usr_ChkUsrAndGetUsrDataFromExternalLogin (void)
-  {
-   struct ListUsrCods ListUsrCods;
-   bool ItSeemsANewUsrIsEnteringFromExternalSite = false;
-   char PathRelParamsToCommandsPriv[PATH_MAX+1];
-   char FileNameParams[PATH_MAX+1];
-   FILE *FileParams;
-   char Command[2048];
-   int ReturnCode;
-
-   /* Login from external service using ID (not necessarily unique) is not secure.
-      Example: Assume a first user who uses an account with private files, messages, etc.
-               If he/she is the unique user with this ID confirmed
-               or if he/she is the unique user with this ID,
-               another second user with the same ID
-               would enter from external service into the first user's account.
-      The solution would be that external service should use e-mail, that is unique. */
-
-   /***** Copy user's identifier received from external site *****/
-   strncpy (Gbl.Usrs.Me.UsrIdLogin,Gbl.Imported.ExternalUsrId,Usr_MAX_BYTES_USR_LOGIN);
-   Gbl.Usrs.Me.UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN] = '\0';
-   // Users' IDs are always stored internally in capitals and without leading zeros
-   Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
-
-   /***** Check if user's ID is valid *****/
-   if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Me.UsrIdLogin))
-     {
-      /***** Allocate space for the list *****/
-      ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
-
-      strncpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,ID_MAX_LENGTH_USR_ID);
-      Gbl.Usrs.Me.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-      Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
-
-      /* Check if user's ID exists in database, and get user's data */
-      if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,true))	// Try first only confirmed IDs
-	{
-	 if (ListUsrCods.NumUsrs == 1)	// Only one user with this ID confirmed
-	   {
-	    /* Free memory used for list of users' codes found for this ID */
-  	    Usr_FreeListUsrCods (&ListUsrCods);
-
-	    /* Get user's data */
-	    Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);
-	   }
-	 else	// ListUsrCods.NumUsrs > 1 ==> more than one user with this ID confirmed
-	   {
-	    /* Free memory used for list of users' codes found for this ID */
-	    Usr_FreeListUsrCods (&ListUsrCods);
-
-	    Usr_ShowAlertThereAreMoreThanOneUsr ();
-	    return false;
-	   }
-	}
-      else if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Me.UsrDat,NULL,&ListUsrCods,false))	// If there are no users with this ID confirmed, try with all IDs, not only the confirmed ones
-	{
-	 if (ListUsrCods.NumUsrs == 1)	// Only one user with this ID
-	   {
-	    /* Free memory used for list of users' codes found for this ID */
-	    Usr_FreeListUsrCods (&ListUsrCods);
-
-	    /* Mark user's ID as confirmed */
-	    ID_ConfirmUsrID (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.UsrIdLogin);
-
-	    /* Get user's data */
-	    Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);
-	   }
-	 else	// ListUsrCods.NumUsrs > 1
-	   {
-	    /* Free memory used for list of users' codes found for this ID */
-	    Usr_FreeListUsrCods (&ListUsrCods);
-
-	    Usr_ShowAlertThereAreMoreThanOneUsr ();
-	    return false;
-	   }
-	}
-      else
-	 ItSeemsANewUsrIsEnteringFromExternalSite = true;
-     }
-   else	// String is not a valid user's nickname, e-mail or ID
-     {
-      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
-     }
-
-   /***** Validate session:
-          the call to SWAD is really coming from external site? *****/
-   if (Gbl.Imported.ExternalUsrId[0] &&
-       Gbl.Imported.ExternalSesId[0])
-     {
-      /***** Parameters to command used to import data are passed through a temporary file *****/
-      /* If the private directory does not exist, create it */
-      sprintf (PathRelParamsToCommandsPriv,"%s/%s",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_PARAM);
-      Fil_CreateDirIfNotExists (PathRelParamsToCommandsPriv);
-
-      /* First of all, we remove the oldest temporary files.
-	 Such temporary files have been created by me or by other users.
-	 This is a bit sloppy, but they must be removed by someone.
-	 Here "oldest" means more than x time from their creation */
-      Fil_RemoveOldTmpFiles (PathRelParamsToCommandsPriv,Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS,false);
-
-      /* Create a new temporary file *****/
-      sprintf (FileNameParams,"%s/%s",PathRelParamsToCommandsPriv,Gbl.UniqueNameEncrypted);
-      if ((FileParams = fopen (FileNameParams,"wb")) == NULL)
-	 Lay_ShowErrorAndExit ("Can not open file to send parameters to command.");
-      fprintf (FileParams,"1\n0\n%s\n%s\n",
-	       Gbl.Imported.ExternalUsrId,Gbl.Imported.ExternalSesId);
-      fclose (FileParams);
-
-      /***** Validate imported session *****/
-      sprintf (Command,"%s %s",Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND,FileNameParams);
-      ReturnCode = system (Command);
-      unlink (FileNameParams);        // File with parameters is no longer necessary
-      if (ReturnCode == -1)
-	 Lay_ShowErrorAndExit ("Error when running command to validate imported session.");
-      ReturnCode = WEXITSTATUS(ReturnCode);
-      switch (ReturnCode)
-	{
-	 case Rol_STUDENT:	// Student
-	 case Rol_TEACHER:	// Teacher
-	    Gbl.Imported.ExternalRole = (Rol_Role_t) ReturnCode;
-	    break;
-	 default:
-	    sprintf (Gbl.Message,"Error %d while validating session.",ReturnCode);
-	    Lay_ShowErrorAndExit (Gbl.Message);
-	    break;
-	}
-
-      // Now we know than imported session (external login) is valid
-      if (ItSeemsANewUsrIsEnteringFromExternalSite)
-	{
-	 /***** User does not exist in the platform *****/
-	 Usr_ShowAlertNoUsrWithThisID ();
-         return false;
-	}
-     }
-   else	// External user's ID or session are not valid
-     {
-      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
-     }
-
-   return true;	// User is now logged
-  }
-
-/*****************************************************************************/
 /******** Check user and get user's data when the session is open ************/
 /*****************************************************************************/
 
@@ -2562,23 +2389,6 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
   }
 
 /*****************************************************************************/
-/********** Show alert indicating that this ID does not exist ****************/
-/*****************************************************************************/
-
-static void Usr_ShowAlertNoUsrWithThisID (void)
-  {
-   extern const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_;
-
-   Gbl.Action.Act = ActFrmLogIn;
-   Tab_SetCurrentTab ();
-   sprintf (Gbl.Message,Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_,
-	    Cfg_PLATFORM_SHORT_NAME,
-	    Gbl.Usrs.Me.UsrIdLogin,
-	    Cfg_PLATFORM_SHORT_NAME);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-  }
-
-/*****************************************************************************/
 /**** Check if users exists, if his password is correct, get his data... *****/
 /*****************************************************************************/
 
@@ -2614,8 +2424,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    /***** Get my last data *****/
    Usr_GetMyLastData ();
    if (Gbl.Action.Act == ActAutUsrInt ||
-       Gbl.Action.Act == ActAutUsrNew ||
-       Gbl.Action.Act == ActAutUsrExt)	// If I just logged in...
+       Gbl.Action.Act == ActAutUsrNew)	// If I just logged in...
      {
       /***** WhatToSearch is stored in session,
              but in login it is got from user's last data *****/
@@ -6887,9 +6696,6 @@ void Usr_SeeStudents (void)
       /* Put link to go to admin several users */
       Enr_PutLinkToAdminSeveralUsrs (Rol_STUDENT);
 
-      /* Put link to list official students */
-      Usr_PutLinkToListOfficialStudents ();
-
       /* Put link to edit record fields */
       Rec_PutLinkToEditRecordFields ();
 
@@ -7255,26 +7061,6 @@ static void Usr_ShowTchsAllDataParams (void)
    Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (ActLstTchAll);
-  }
-
-/*****************************************************************************/
-/******************* Put a link to list official students ********************/
-/*****************************************************************************/
-
-static void Usr_PutLinkToListOfficialStudents (void)
-  {
-   extern const char *Txt_Official_students;
-   bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
-
-   if (ExternalUsrsServiceAvailable &&				// There is an external service for authentication and official lists
-       Gbl.Imported.ExternalUsrId[0] &&			// I was authenticated from external service...
-       Gbl.Imported.ExternalSesId[0] &&
-       Gbl.Imported.ExternalRole == Rol_TEACHER)	// ...as a teacher
-      /***** Link to list official students *****/
-      Lay_PutContextualLink (ActGetExtLstStd,NULL,
-                             "list64x64.gif",
-                             Txt_Official_students,Txt_Official_students,
-		             NULL);
   }
 
 /*****************************************************************************/

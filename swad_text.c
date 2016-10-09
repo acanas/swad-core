@@ -26983,27 +26983,6 @@ const char *Txt_Office =
 	"Gabinete";
 #endif
 
-const char *Txt_Official_students =
-#if   L==1
-	"Estudiants oficials";
-#elif L==2
-	"Offizielle Teilnehmer";
-#elif L==3
-	"Official students";
-#elif L==4
-	"Estudiantes oficiales";
-#elif L==5
-	"&Eacute;tudiants officiels";
-#elif L==6
-	"Estudiantes oficiales";	// Okoteve traducción
-#elif L==7
-	"Studenti ufficiali";
-#elif L==8
-	"Dziennik student&oacute;w";
-#elif L==9
-	"Estudantes oficiais";
-#endif
-
 const char *Txt_One_message_has_been_deleted =
 #if   L==1
 	"Se ha eliminado un mensaje.";			// Necessita traduccio
@@ -27275,48 +27254,6 @@ const char *Txt_Opening_of_groups =
 	"Opening of groups";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Opening of groups";		// Necessita de tradução
-#endif
-
-const char *Txt_Option_a_Import_students_from_the_official_lists =
-#if   L==1
-	"Opci&oacute;n a): Obtenga estudiantes de las listas oficiales";	// Necessita traduccio
-#elif L==2
-	"Option a): Import students from the official lists";			// Need Übersetzung
-#elif L==3
-	"Option a): Import students from the official lists";
-#elif L==4
-	"Opci&oacute;n a): Obtenga estudiantes de las listas oficiales";
-#elif L==5
-	"Option a): Import students from the official lists";			// Besoin de traduction
-#elif L==6
-	"Opci&oacute;n a): Obtenga estudiantes de las listas oficiales";	// Okoteve traducción
-#elif L==7
-	"Opzione a): Importa studenti dalle liste ufficiali";
-#elif L==8
-	"Opcja a): Student&oacute;w Import z oficjalnej listy";
-#elif L==9
-	"Option a): Import students from the official lists";			// Necessita de tradução
-#endif
-
-const char *Txt_Option_b_Type_or_paste_a_list_of_users =
-#if   L==1
-	"Opci&oacute;n b): Escriba o pegue una lista de usuarios";	// Necessita traduccio
-#elif L==2
-	"Option b): Type or paste a list of users";						// Need Übersetzung
-#elif L==3
-	"Option b): Type or paste a list of users";
-#elif L==4
-	"Opci&oacute;n b): Escriba o pegue una lista de usuarios";
-#elif L==5
-	"Option b): Type or paste a list of users";						// Besoin de traduction
-#elif L==6
-	"Opci&oacute;n b): Escriba o pegue una lista de usuarios";	// Okoteve traducción
-#elif L==7
-	"Opzione b): Scrivi o incolla una lista di utenti";
-#elif L==8
-	"Opcja b): Wpisz lub wklej liste uzytkownik&oacute;w";
-#elif L==9
-	"Option b): Type or paste a list of users";						// Necessita de tradução
 #endif
 
 const char *Txt_Option_under_development =
@@ -35791,27 +35728,6 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Necessita de tradução
-#endif
-
-const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course =
-#if   L==1
-	"Seleccione los grupos de estudiantes que desee inscribir en / eliminar de esta asignatura.";	// Necessita traduccio
-#elif L==2
-	"Select the groups of students you want to register in / remove from this course.";		// Need Übersetzung
-#elif L==3
-	"Select the groups of students you want to register in / remove from this course.";
-#elif L==4
-	"Seleccione los grupos de estudiantes que desee inscribir en / eliminar de esta asignatura.";
-#elif L==5
-	"Select the groups of students you want to register in / remove from this course.";		// Besoin de traduction
-#elif L==6
-	"Seleccione los grupos de estudiantes que desee inscribir en / eliminar de esta asignatura.";	// Okoteve traducción
-#elif L==7
-	"Seleziona i gruppi di studenti che vuoi registrare in / rimuovere da questo corso.";
-#elif L==8
-	"Select the groups of students you want to register in / remove from this course.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Select the groups of students you want to register in / remove from this course.";		// Necessita de tradução
 #endif
 
 const char *Txt_Send =
@@ -46609,7 +46525,8 @@ const char *Txt_There_is_no_empty_account_associated_with_your_ID_X_ =	// Warnin
 #elif L==4
 	"No existe ninguna cuenta vac&iacute;a (a&uacute;n no usada)"
 	" asociada a su ID <strong>%s</strong>."
-	" Si cree que puede haber sido inscrito/a con otro ID, compru&eacute;belo, por favor.";
+	" Si cree que puede haber sido inscrito/a con otro ID"
+	" (DNI con letra final o sin ella, NIE, c&eacute;dula, etc.), compru&eacute;belo, por favor.";
 #elif L==5
 	"Il n'y a pas de compte vide (pas encore utilis&eacute;)"
 	" associ&eacute; &agrave; votre ID <strong>%s</strong>."
@@ -46749,63 +46666,6 @@ const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important
 #elif L==9
 	"There is no user"
 	" with e-mail <strong>%s</strong>.";	// Necessita de tradução
-#endif
-
-const char *Txt_There_is_no_user_in_X_with_ID_Y_If_you_already_have_an_account_on_Z_ =	// Warning: it is very important to include three %s in the following sentences
-#if   L==1
-	"No existe ning&uacute;n usuario en %s"
-	" con el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>."
-	" Si usted ya tiene cuenta en %s,"
-	" inicie sesi&oacute;n y a&ntilde;ada este ID a su cuenta."
-	" Si no tiene cuenta, puede crear una nueva.";		// Necessita traduccio
-#elif L==2
-	"There is no user in %s"
-	" with ID <strong>%s</strong>."
-	" If you already have an account on %s,"
-	" login and add this ID to your account."
-	" If you have no account, you can create a new one.";	// Übersetzung notwendig
-#elif L==3
-	"There is no user in %s"
-	" with ID <strong>%s</strong>."
-	" If you already have an account on %s,"
-	" login and add this ID to your account."
-	" If you have no account, you can create a new one.";
-#elif L==4
-	"No existe ning&uacute;n usuario en %s"
-	" con el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>."
-	" Si usted ya tiene cuenta en %s,"
-	" inicie sesi&oacute;n y a&ntilde;ada este ID a su cuenta."
-	" Si no tiene cuenta, puede crear una nueva.";
-#elif L==5
-	"Il n'ya pas d'utilisateur dans %s"
-	" avec ID <strong>%s</strong>."
-	" Si vous avez d&eacute;j&agrave; un compte sur %s,"
-	" vous connecter et ajouter cet ID &agrave; votre compte."
-	" Si vous n'avez pas de compte, vous pouvez en cr&eacute;er un nouveau.";
-#elif L==6
-	"No existe ning&uacute;n usuario en %s"
-	" con el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>."
-	" Si usted ya tiene cuenta en %s,"
-	" inicie sesi&oacute;n y a&ntilde;ada este ID a su cuenta."
-	" Si no tiene cuenta, puede crear una nueva.";		// Okoteve traducción
-#elif L==7
-	"Non c'&egrave; nessun utente in %s"
-	" con ID <strong>%s</strong>."
-	" Se hai gi&agrave; un account su %s,"
-	" login e inserire questo ID al tuo account."
-	" Se non avete account, &egrave; possibile crearne uno nuovo.";
-#elif L==8
-	"There is no user in %s"
-	" with ID <strong>%s</strong>."
-	" If you already have an account on %s,"
-	" login and add this ID to your account."
-	" If you have no account, you can create a new one.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"There is no user in %s"
-	" with ID <strong>%s</strong>."
-	" If you already have an account on %s,"
-	" login and add this ID to your account."
-	" If you have no account, you can create a new one.";	// Necessita de tradução
 #endif
 
 const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X =	// Warning: it is very important to include %s in the following sentences

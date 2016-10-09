@@ -918,8 +918,6 @@ Users:
 	760. ActRenGrp			Request renaming of a group of students
 	761. ActChgMaxStdGrp		Request change in the number máximo of students of a group
 
-	762. ActGetExtLstStd		Get external lists of students
-
 	763. ActLstGst			List main data of administrators
 
 	764. ActPrnGstPho		Show the class photo of guests ready to be printed
@@ -1329,7 +1327,6 @@ Profile:
 
        1138. ActAutUsrInt		Authentify user internally (directly from the platform)
         NEW. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
-       1139. ActAutUsrExt		Authentify user externally (remotely from an external site)
        1140. ActAutUsrChgLan		Change language to my language just after authentication
        1141. ActAnnSee			Mark announcement as seen
        1142. ActChgMyRol		Change type of logged user
@@ -2306,8 +2303,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenGrp		*/{ 121,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RenameGroup		,NULL},
    /* ActChgMaxStdGrp	*/{ 106,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMaxStdsGrp		,NULL},
 
-   /* ActGetExtLstStd	*/{ 796,-1,TabUsr,ActLstStd		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Imp_ListMyImpGrpsAndStdsNoForm	,NULL},
-
    /* ActLstGst		*/{ 587,-1,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_SeeGuests			,NULL},
 
    /* ActPrnGstPho	*/{1190,-1,TabUsr,ActLstStd		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_SeeGstClassPhotoPrn	,NULL},
@@ -2762,7 +2757,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAutUsrNew	*/{1585,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrExt	*/{ 794,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAutUsrChgLan	*/{1077,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
    /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
@@ -3647,9 +3641,9 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRcvURLTchGui,	// #791
 	ActAdmAsgWrkUsr,	// #792
 	-1,			// #793 (obsolete action)
-	ActAutUsrExt,		// #794
+	-1,			// #794 (obsolete action)
 	-1,			// #795 (obsolete action)
-	ActGetExtLstStd,	// #796
+	-1,			// #796 (obsolete action)
 	-1,			// #797 (obsolete action)
 	-1,			// #798 (obsolete action)
 	-1,			// #799 (obsolete action)

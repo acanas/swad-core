@@ -668,18 +668,7 @@ void Par_GetMainParameters (void)
       return;
      }
 
-   /* Check if SWAD is called from an external site */
-   Imp_GetImpUsrAndSession ();
-   if (Gbl.Imported.ExternalUsrId[0] &&
-       Gbl.Imported.ExternalSesId[0])
-     {
-      Gbl.Action.Act = ActAutUsrExt;
-      Tab_SetCurrentTab ();
-      return;
-     }
-   // SWAD is not called from external site
-
-   /***** Set dfault action *****/
+   /***** Set default action *****/
    Gbl.Action.Act = ActUnk;
 
    /***** Get another user's nickname, if exists
@@ -725,10 +714,7 @@ void Par_GetMainParameters (void)
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
       if (Ses_GetSessionData ())
-        {
 	 Gbl.Session.IsOpen = true;
-         Imp_GetImpSessionData ();
-        }
       else
 	{
 	 Gbl.Session.HasBeenDisconnected = true;
@@ -743,10 +729,7 @@ void Par_GetMainParameters (void)
 	{
 	 /***** Get user's code, password, current degree and current course from stored session *****/
 	 if (Ses_GetSessionData ())
-	   {
 	    Gbl.Session.IsOpen = true;
-	    Imp_GetImpSessionData ();
-	   }
 	 else
 	   {
 	    Gbl.Session.HasBeenDisconnected = true;

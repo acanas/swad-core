@@ -99,7 +99,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
-static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecifiedUsrs);
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
@@ -581,9 +580,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Admin_several_students;
    extern const char *Txt_Admin_several_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
-   extern const char *Txt_Option_a_Import_students_from_the_official_lists;
-   extern const char *Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course;
-   extern const char *Txt_Option_b_Type_or_paste_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
    extern const char *Txt_Step_2_Select_the_desired_action;
    extern const char *Txt_Step_3_Optionally_select_groups;
@@ -591,7 +587,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrollment_removing;
    extern const char *Txt_Confirm;
-   bool ExternalUsrsServiceAvailable = (Cfg_EXTERNAL_LOGIN_CLIENT_COMMAND[0] != '\0');
 
    /***** Put contextual links *****/
    if (Role == Rol_STUDENT &&		// Users to admin: students
@@ -622,25 +617,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
             Txt_Step_1_Provide_a_list_of_users);
-
-   if (ExternalUsrsServiceAvailable)
-     {
-      /* Option a: get students from official lists */
-      fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
-			 "%s"
-			 "</div>",
-	       The_ClassTitle[Gbl.Prefs.Theme],
-	       Txt_Option_a_Import_students_from_the_official_lists);
-      Lay_ShowAlert (Lay_INFO,Txt_Select_the_groups_of_students_you_want_to_register_in_remove_from_this_course);
-      Imp_ListMyImpGrpsAndStdsForm ();
-
-      /* Option b: get students' IDs from pasted text */
-      fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
-			 "%s"
-			 "</div>",
-	       The_ClassTitle[Gbl.Prefs.Theme],
-	       Txt_Option_b_Type_or_paste_a_list_of_users);
-     }
 
    Lay_ShowAlert (Lay_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
@@ -1223,12 +1199,8 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    extern const char *Txt_No_user_has_been_enrolled;
    extern const char *Txt_One_user_has_been_enrolled;
    extern const char *Txt_X_users_have_been_enrolled_including_possible_repetitions;
-   char ListExternalGrpCods[Imp_MAX_BYTES_LIST_EXTERNAL_GRP_CODS+1];
-   char ExternalStr[1+10+1+Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
-   char ExternalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
-   long LongNum;
    struct
      {
       bool RemoveUsrs;
@@ -1241,7 +1213,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    unsigned NumUsrFound;
    const char *Ptr;
    unsigned NumCurrentUsr;
-   long GrpCod;
    unsigned NumUsrsRegistered = 0;
    unsigned NumUsrsRemoved = 0;
    unsigned NumUsrsEliminated = 0;
@@ -1333,9 +1304,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
    if (!ErrorInForm)
      {
-      /***** Get external groups of students *****/
-      Par_GetParMultiToText ("ImpGrpCod",ListExternalGrpCods,Imp_MAX_BYTES_LIST_EXTERNAL_GRP_CODS);
-
       /***** Get groups to which register/remove users *****/
       LstGrps.NumGrps = 0;
       if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
@@ -1386,25 +1354,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
 
 	    /***** Loop 1: go through form list setting if a student must be removed *****/
-	    /* Step a: Get students from a list of official groups */
-	    if (Role == Rol_STUDENT)
-	      {
-	       Ptr = ListExternalGrpCods;
-	       while (*Ptr)
-		 {
-		  /* Find next external group code and course code in list */
-		  Str_GetNextStringUntilSeparator (&Ptr,ExternalStr,1+10+1+Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-		  if (sscanf (ExternalStr,"%ld_%s",&LongNum,ExternalCrsCod) == 2)
-		    {
-		     GrpCod = LongNum;
-
-		     /* Mark users belonging to this official group as removable */
-		     Enr_MarkOfficialStdsAsRemovable (GrpCod,WhatToDo.RemoveSpecifiedUsrs);
-		    }
-		 }
-	      }
-
-	    /* Step b: Get users from a list of users' IDs */
+	    /* Get users from a list of users' IDs */
 	    Ptr = ListUsrsIDs;
 	    while (*Ptr)
 	      {
@@ -1524,28 +1474,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       /***** Register users *****/
       if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
 	{
-	 /***** Step a: Get users from a list of official groups *****/
-	 if (Role == Rol_STUDENT)
-	   {
-	    Ptr = ListExternalGrpCods;
-	    while (*Ptr)
-	      {
-	       /* Find next official group code in list */
-	       Str_GetNextStringUntilSeparator (&Ptr,ExternalStr,1+10+1+Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-	       if (sscanf (ExternalStr,"%ld_%s",&LongNum,ExternalCrsCod) == 2)
-		 {
-		  GrpCod = LongNum;
-
-		  /* Import official group of users */
-		  Imp_ImportStdsFromAnImpGrp (GrpCod,&LstGrps,&NumUsrsRegistered);
-
-		  /* Update the institutional course code to the external course code */
-		  Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,ExternalCrsCod);
-		 }
-	      }
-	   }
-
-	 /***** Step b: Get users from a list of users' IDs ******/
+	 /***** Get users from a list of users' IDs ******/
 	 Ptr = ListUsrsIDs;
 	 while (*Ptr)
 	   {
@@ -1723,65 +1652,6 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
      }
 
    (*NumUsrsRegistered)++;
-  }
-
-/*****************************************************************************/
-/****** Mark the students belonging to an official group as removable ********/
-/*****************************************************************************/
-
-static void Enr_MarkOfficialStdsAsRemovable (long ImpGrpCod,bool RemoveSpecifiedUsrs)
-  {
-   char Query[1024];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumStds;
-   unsigned NumStd;
-   unsigned NumUsr;
-   struct ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
-   unsigned NumUsrFound;
-
-   /***** Get imported students belonging to this group from database *****/
-   sprintf (Query,"SELECT UsrID FROM imported_students WHERE GrpCod='%ld'",
-            ImpGrpCod);
-   NumStds = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get imported students");
-
-   /***** Mark the students from this official group as removable *****/
-   for (NumStd = 0;
-        NumStd < NumStds;
-        NumStd++)        // For each student inside the official group...
-     {
-      /* Get user's ID of the student from official list */
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Allocate space for the list *****/
-      ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
-
-      strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,row[0],ID_MAX_LENGTH_USR_ID);
-      Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
-      Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
-
-      /* Check if this official user's ID is in the list of students */
-      if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))
-         if (ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,&ListUsrCods,false))	// User(s) found
-           {
-	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
-		 NumUsr++)
-	       for (NumUsrFound = 0;
-		    NumUsrFound < ListUsrCods.NumUsrs;
-		    NumUsrFound++)
-		  if (Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-		     Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
-
-	    /* Free memory used for list of users' codes found for this ID */
-	    Usr_FreeListUsrCods (&ListUsrCods);
-           }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
