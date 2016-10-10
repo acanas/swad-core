@@ -155,7 +155,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 16.19.1:  Oct 10, 2016	Message to report that confirmation e-mail has been sent. (? lines)
+        Version 16.19.1:  Oct 10, 2016	Message to report that confirmation e-mail has been sent. (205203 lines)
         Version 16.19:    Oct 10, 2016	Warning in User > Session to confirm user's e-mail address.
 					Changes in form to edit user's account. (205194 lines)
         Version 16.18.1:  Oct 10, 2016	Warning in User > Account to confirm user's e-mail address. (205116 lines)

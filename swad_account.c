@@ -437,6 +437,10 @@ void Acc_ShowFormChangeMyAccount (void)
 	 IShouldFillID = true;
      }
 
+   /***** Show alert to report that confirmation e-mail has been sent *****/
+   if (Gbl.Usrs.Me.ConfirmEmailJustSent)
+      Mai_ShowMsgConfirmEmailHasBeenSent ();
+
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Pwd_PutLinkToChangeMyPassword ();
@@ -462,17 +466,12 @@ void Acc_ShowFormChangeMyAccount (void)
    Acc_PrintAccountSeparator ();
 
    /***** E-mail *****/
-   if (IMustFillEmail || IShouldConfirmEmail ||
-       Gbl.Usrs.Me.ConfirmEmailJustSent)
+   if (IMustFillEmail || IShouldConfirmEmail)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\">");
-      if (IMustFillEmail)
-	 Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_email_address);
-      else if (IShouldConfirmEmail)
-	 Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
-      else	// Gbl.Usrs.Me.ConfirmEmailJustSent
-	 Mai_ShowMsgConfirmEmailHasBeenSent ();
+      Lay_ShowAlert (Lay_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
+	                                          Txt_Please_check_and_confirm_your_email_address);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

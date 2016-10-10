@@ -1407,8 +1407,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	       /***** Send message via email
 		      to confirm the new email address *****/
 	       if (ItsMe)
-		  if (Mai_SendMailMsgToConfirmEmail ())
-		     Mai_ShowMsgConfirmEmailHasBeenSent ();
+		  Mai_SendMailMsgToConfirmEmail ();
 	      }
 	    else
 	      {
