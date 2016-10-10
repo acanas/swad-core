@@ -1372,7 +1372,6 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
   {
    extern const char *Txt_The_email_address_X_matches_one_previously_registered;
    extern const char *Txt_The_email_address_X_has_been_registered_successfully;
-   extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
@@ -1409,11 +1408,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 		      to confirm the new email address *****/
 	       if (ItsMe)
 		  if (Mai_SendMailMsgToConfirmEmail ())
-		    {
-		     sprintf (Gbl.Message,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
-			      Gbl.Usrs.Me.UsrDat.Email);
-		     Lay_ShowAlert (Lay_INFO,Gbl.Message);
-		    }
+		     Mai_ShowMsgConfirmEmailHasBeenSent ();
 	      }
 	    else
 	      {
@@ -1545,7 +1540,6 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running script to send e-mail.");
-   Gbl.Usrs.Me.ConfirmEmailJustSent = true;
 
    /***** Remove temporary file *****/
    unlink (Gbl.Msg.FileNameMail);
@@ -1555,6 +1549,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    switch (ReturnCode)
      {
       case 0: // Message sent successfully
+         Gbl.Usrs.Me.ConfirmEmailJustSent = true;
          return true;
       case 1:
          Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
@@ -1569,14 +1564,27 @@ bool Mai_SendMailMsgToConfirmEmail (void)
   }
 
 /*****************************************************************************/
-/************************* Set my pending password ***************************/
+/******* Show alert to report that confirmation e-mail has been sent *********/
+/*****************************************************************************/
+
+void Mai_ShowMsgConfirmEmailHasBeenSent (void)
+  {
+   extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
+
+   sprintf (Gbl.Message,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
+	    Gbl.Usrs.Me.UsrDat.Email);
+   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+  }
+
+/*****************************************************************************/
+/************************* Insert mail hey in database ***********************/
 /*****************************************************************************/
 
 static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1])
   {
    char Query[512+Mai_LENGTH_EMAIL_CONFIRM_KEY];
 
-   /***** Remove expired pending passwords from database *****/
+   /***** Remove expired pending e-mails from database *****/
    sprintf (Query,"DELETE FROM pending_emails"
                   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);

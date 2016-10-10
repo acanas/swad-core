@@ -462,12 +462,17 @@ void Acc_ShowFormChangeMyAccount (void)
    Acc_PrintAccountSeparator ();
 
    /***** E-mail *****/
-   if (IMustFillEmail || IShouldConfirmEmail)
+   if (IMustFillEmail || IShouldConfirmEmail ||
+       Gbl.Usrs.Me.ConfirmEmailJustSent)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\">");
-      Lay_ShowAlert (Lay_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
-                                                  Txt_Please_check_and_confirm_your_email_address);
+      if (IMustFillEmail)
+	 Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_email_address);
+      else if (IShouldConfirmEmail)
+	 Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
+      else	// Gbl.Usrs.Me.ConfirmEmailJustSent
+	 Mai_ShowMsgConfirmEmailHasBeenSent ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }

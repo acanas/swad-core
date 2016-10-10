@@ -83,6 +83,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail);
 
 void Mai_PutButtonToCheckEmailAddress (void);
 bool Mai_SendMailMsgToConfirmEmail (void);
+void Mai_ShowMsgConfirmEmailHasBeenSent (void);
 void Mai_ConfirmEmail (void);
 
 void Mai_CreateFileNameMail (void);

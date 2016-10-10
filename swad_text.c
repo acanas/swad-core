@@ -1418,39 +1418,39 @@ const char *Txt_A_face_marked_in_red_has_been_detected_ =
 const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Se ha enviado un mensaje"
-	" a la direcci&oacute;n de correo %s"
+	" a la direcci&oacute;n de correo <strong>%s</strong>"
 	" para confirmar dicha direcci&oacute;n.";	// Necessita traduccio
 #elif L==2
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";			// Need Übersetzung
 #elif L==3
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";
 #elif L==4
 	"Se ha enviado un mensaje"
-	" a la direcci&oacute;n de correo %s"
+	" a la direcci&oacute;n de correo <strong>%s</strong>"
 	" para confirmar dicha direcci&oacute;n.";
 #elif L==5
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";			// Besoin de traduction
 #elif L==6
 	"Se ha enviado un mensaje"
-	" a la direcci&oacute;n de correo %s"
+	" a la direcci&oacute;n de correo <strong>%s</strong>"
 	" para confirmar dicha direcci&oacute;n.";	// Okoteve traducción
 #elif L==7
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";			// Bisogno di traduzione
 #elif L==8
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"A message has been sent"
-	" to e-mail address %s"
+	" to e-mail address <strong>%s</strong>"
 	" to confirm that address.";			// Necessita de tradução
 #endif
 
@@ -42243,31 +42243,31 @@ const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is ver
 const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" ya hab&iacute;a sido registrada por otro usuario.";	// Necessita traduccio
+	" ya ha sido registrada por otro usuario.";	// Necessita traduccio
 #elif L==2
 	"The e-mail address <strong>%s</strong>"
-	" had been registered by another user.";		// Need Übersetzung
+	" had been registered by another user.";	// Need Übersetzung
 #elif L==3
 	"The e-mail address <strong>%s</strong>"
 	" had been registered by another user.";
 #elif L==4
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" ya hab&iacute;a sido registrada por otro usuario.";
+	" ya ha sido registrada por otro usuario.";
 #elif L==5
 	"The e-mail address <strong>%s</strong>"
-	" had been enrolled by another user.";			// Besoin de traduction
+	" had been enrolled by another user.";		// Besoin de traduction
 #elif L==6
 	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" ya hab&iacute;a sido registrada por otro usuario.";	// Okoteve traducción
+	" ya ha sido registrada por otro usuario.";	// Okoteve traducción
 #elif L==7
 	"Il e-mail <strong>%s</strong>"
 	" &egrave; stato registrato da un altro utente.";
 #elif L==8
 	"The e-mail address <strong>%s</strong>"
-	" had been registered by another user.";		// Potrzebujesz tlumaczenie
+	" had been registered by another user.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"The e-mail address <strong>%s</strong>"
-	" had been registered by another user.";		// Necessita de tradução
+	" had been registered by another user.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
