@@ -411,6 +411,7 @@ void Acc_ShowFormChangeMyAccount (void)
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Please_fill_in_your_email_address;
    extern const char *Txt_Please_fill_in_your_ID;
+   extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_User_account;
 
    /***** Get current user's nickname and e-mail address
@@ -425,6 +426,8 @@ void Acc_ShowFormChangeMyAccount (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_email_address);
    else if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
+   else if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed)
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");

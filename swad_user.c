@@ -1698,7 +1698,7 @@ void Usr_WelcomeUsr (void)
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                    " style=\"margin:12px;\">");
 
-         /***** User's first name *****/
+         /***** Welcome to a user *****/
          if (Gbl.Usrs.Me.UsrDat.FirstName[0])
            {
             CongratulateMyBirthday = false;
