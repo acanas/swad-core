@@ -301,6 +301,7 @@ struct Globals
          unsigned NumAccWithoutPhoto;
          char PhotoURL[PATH_MAX+1];
          time_t TimeLastAccToThisFileBrowser;
+         bool ConfirmEmailJustSent;	// An e-mail to confirm my e-mail address has just been sent
          struct
            {
             bool Filled;	// My institutions are already filled?

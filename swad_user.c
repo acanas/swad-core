@@ -1685,9 +1685,9 @@ void Usr_WelcomeUsr (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Happy_birthday;
-   extern const char *Txt_Welcome[Usr_NUM_SEXS];
-   extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
+   extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
+   extern const char *Txt_Welcome[Usr_NUM_SEXS];
    extern const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
    bool CongratulateMyBirthday;
 
@@ -1723,6 +1723,11 @@ void Usr_WelcomeUsr (void)
            }
          else
             Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
+
+         /***** Warning to confirm my e-mail address *****/
+         if (Gbl.Usrs.Me.UsrDat.Email[0] &&
+             !Gbl.Usrs.Me.UsrDat.EmailConfirmed)
+            Mai_PutButtonToCheckEmailAddress ();
 
 	 /***** Show help to enroll me *****/
 	 Hlp_ShowHelpWhatWouldYouLikeToDo ();

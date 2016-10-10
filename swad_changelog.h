@@ -148,13 +148,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.18.1 (2016-10-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.19 (2016-10-10)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.19:    Oct 10, 2016	Warning in User > Session to confirm user's e-mail address.
+					Changes in form to edit user's account. (205194 lines)
         Version 16.18.1:  Oct 10, 2016	Warning in User > Account to confirm user's e-mail address. (205116 lines)
         Version 16.18:    Oct 09, 2016	Removed external authentication (previously used at University of Granada). (205092 lines)
 					4 changes necessary in database:

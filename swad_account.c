@@ -411,23 +411,31 @@ void Acc_ShowFormChangeMyAccount (void)
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Please_fill_in_your_email_address;
    extern const char *Txt_Please_fill_in_your_ID;
-   extern const char *Txt_Please_confirm_your_email_address;
+   extern const char *Txt_Please_check_and_confirm_your_email_address;
    extern const char *Txt_User_account;
+   bool IMustFillNickname   = false;
+   bool IMustFillEmail      = false;
+   bool IShouldConfirmEmail = false;
+   bool IShouldFillID       = false;
 
    /***** Get current user's nickname and e-mail address
           It's necessary because current nickname or e-mail could be just updated *****/
    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Check nickname and e-mail *****/
+   /***** Check nickname, e-mail and ID *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+      IMustFillNickname = true;
    else if (!Gbl.Usrs.Me.UsrDat.Email[0])
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_email_address);
-   else if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
-   else if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_confirm_your_email_address);
+      IMustFillEmail = true;
+   else
+     {
+      if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// E-mail not yet confirmed
+	  !Gbl.Usrs.Me.ConfirmEmailJustSent)		// Do not ask for e-mail confirmation when confirmation e-mail is just sent
+	 IShouldConfirmEmail = true;
+      if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
+	 IShouldFillID = true;
+     }
 
    /***** Put links to change my password and to remove my account*****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -440,18 +448,43 @@ void Acc_ShowFormChangeMyAccount (void)
    Lay_StartRoundFrameTable (NULL,2,Txt_User_account);
 
    /***** Nickname *****/
+   if (IMustFillNickname)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"2\">");
+      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
    Nck_ShowFormChangeUsrNickname ();
 
    /***** Separator *****/
    Acc_PrintAccountSeparator ();
 
    /***** E-mail *****/
+   if (IMustFillEmail || IShouldConfirmEmail)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"2\">");
+      Lay_ShowAlert (Lay_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
+                                                  Txt_Please_check_and_confirm_your_email_address);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
    Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** Separator *****/
    Acc_PrintAccountSeparator ();
 
    /***** User's ID *****/
+   if (IShouldFillID)
+     {
+      fprintf (Gbl.F.Out,"<tr>"
+	                 "<td colspan=\"2\">");
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
    ID_ShowFormChangeUsrID (&Gbl.Usrs.Me.UsrDat,true);
 
    /***** End of table *****/

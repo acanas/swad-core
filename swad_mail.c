@@ -1474,7 +1474,29 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
   }
 
 /*****************************************************************************/
-/********************** Show form for changing my password *******************/
+/********** Put button to go to check and confirm my e-mail address **********/
+/*****************************************************************************/
+
+void Mai_PutButtonToCheckEmailAddress (void)
+  {
+   extern const char *Txt_Email_unconfirmed;
+   extern const char *Txt_Please_check_and_confirm_your_email_address;
+   extern const char *Txt_Check;
+
+   /***** Start form *****/
+   Act_FormStart (ActFrmUsrAcc);
+
+   /***** Frame with button to go to account *****/
+   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL);
+   Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Check);
+
+   /***** End form *****/
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************** Send mail message to confirm my e-mail address ***************/
 /*****************************************************************************/
 // Return true on success
 // Return false on error
@@ -1523,6 +1545,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running script to send e-mail.");
+   Gbl.Usrs.Me.ConfirmEmailJustSent = true;
 
    /***** Remove temporary file *****/
    unlink (Gbl.Msg.FileNameMail);
@@ -1535,14 +1558,12 @@ bool Mai_SendMailMsgToConfirmEmail (void)
          return true;
       case 1:
          Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
-         // Lay_ShowAlert (Lay_ERROR,Command);
          return false;
       default:
          sprintf (Gbl.Message,"Internal error: an email message has not been sent successfully."
                               " Error code returned by the script: %d",
                   ReturnCode);
          Lay_ShowAlert (Lay_ERROR,Gbl.Message);
-         // Lay_ShowAlert (Lay_ERROR,Command);
          return false;
      }
   }

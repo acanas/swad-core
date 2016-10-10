@@ -4489,7 +4489,7 @@ const char *Txt_Chat_rooms =
 	"Chat rooms";
 #endif
 
-const char *Txt_Check =	// Button to check if an account is already created with a user's ID
+const char *Txt_Check =
 #if   L==1
 	"Comprovar";
 #elif L==2
@@ -4981,7 +4981,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" vost&egrave; pot crear abans de sol&middot;licitar la vostra inscripci&oacute; en ella"
 	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
 #elif L==2
-	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Benutzerkonto @%s erstellt."
+	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Benutzerkonto <strong>@%s</strong> erstellt."
 	" Jetzt %s finden Sie einige Daten in Ihrem Profil."
 	" Vervollst&auml;ndigen anfordern und dann werden Sie in der Lage,"
 	" f&uuml;r die Einschreibung in Kurse an."
@@ -4989,48 +4989,48 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" k&ouml;nnen Sie es vor der Anwendung f&uuml;r die Immatrikulation in es zu erstellen"
 	" (das gleiche gilt f&uuml;r Einrichtungen, Zentren und Grad).";
 #elif L==3
-	"Congratulations! You have created your account @%s."
+	"Congratulations! You have created your account <strong>@%s</strong>."
 	" Now %s will request you some data to complete your profile."
 	" Then you will be able to apply for enrollment in courses."
 	" If a course does not exist,"
 	" you can create it before applying for enrollment in it"
 	" (the same applies to institutions, centres and degrees).";
 #elif L==4
-	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
+	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
 	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
 	" Usted podr&aacute; despu&eacute;s solicitar su inscripci&oacute;n en asignaturas."
 	" Si una asignatura no existe,"
 	" puede crearla antes de solicitar su inscripci&oacute;n en ella"
 	" (lo mismo es aplicable a instituciones, centros y titulaciones).";
 #elif L==5
-	"F&eacute;licitations! Vous avez cr&eacute;&eacute; votre compte @%s."
+	"F&eacute;licitations! Vous avez cr&eacute;&eacute; votre compte <strong>@%s</strong>."
 	" Maintenant %s vous demander&aacute; certaines donn&eacute;es pour compl&eacute;ter votre profil."
 	" Vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
 	" Si une mati&egrave;re ne existe pas,"
 	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
 	" (la m&ecirc;me chose se applique aux institutions, centres et degr&eacute;s).";
 #elif L==6
-	"&iexcl;Enhorabuena! Ha creado su cuenta @%s."
+	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
 	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
 	" Usted podr&aacute; despu&eacute;s solicitar su inscripci&oacute;n en asignaturas."
 	" Si una asignatura no existe,"
 	" puede crearla antes de solicitar su inscripci&oacute;n en ella"
 	" (lo mismo es aplicable a instituciones, centros y titulaciones).";	// Okoteve traducción
 #elif L==7
-	"Congratulazioni! Avete creato il vostro account %s."
+	"Congratulazioni! Avete creato il vostro account <strong>@%s</strong>."
 	" Ora %s chieder&agrave; alcuni dati per completare il tuo profilo."
 	" Allora si sar&agrave; in grado di applicare per l'iscrizione ai corsi."
 	" Se un corso non esiste, &egrave; possibile crearlo prima di applicare per l'iscrizione in esso"
 	" (lo stesso vale per le istituzioni, centri e gradi).";
 #elif L==8
-	"Gratulujemy! Utworzeniu konta @%s."
+	"Gratulujemy! Utworzeniu konta <strong>@%s</strong>."
 	" Teraz %s zwr&oacute;ci Ci kilka danych, aby zako&nacute;czy&cacute; sw&oacute;j profil."
 	" Nast&eogon;pnie b&eogon;dzie mo&zdot;na ubiega&cacute; si&eogon; o przyj&eogon;cie na kursy."
 	" Je&sacute;li kurs nie istnieje,"
 	" mo&zdot;na go utworzy&cacute; przed ubieganiem si&egrave; o przyj&eogon;cie w nim"
 	" (to samo odnosi si&eogon; do instytucji, plac&oacute;wek i stopni).";
 #elif L==9
-	"Parab&eacute;ns! Voc&ecirc; criou seu ACC conta."
+	"Parab&eacute;ns! Voc&ecirc; criou seu conta <strong>@%s</strong>."
 	" Agora %s vai pedir-lhe alguns dados para completar o seu perfil."
 	" Em seguida, voc&ecirc; ser&aacute; capaz de aplicar para a matrícula em cursos."
 	" Se uma disciplina n&atilde;o existir,"
@@ -10396,6 +10396,27 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 	"E-mail <strong>%s</strong> usuniete.";
 #elif L==9
 	"E-mail <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Email_unconfirmed =
+#if   L==1
+	"Correo no confirmado";	// Necessita traduccio
+#elif L==2
+	"E-mail unconfirmed";	// Need Übersetzung
+#elif L==3
+	"E-mail unconfirmed";
+#elif L==4
+	"Correo no confirmado";
+#elif L==5
+	"E-mail unconfirmed";	// Besoin de traduction
+#elif L==6
+	"Correo no confirmado";	// Okoteve traducción
+#elif L==7
+	"E-mail unconfirmed";	// Bisogno di traduzione
+#elif L==8
+	"E-mail unconfirmed";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"E-mail unconfirmed";	// Necessita de tradução
 #endif
 
 const char *Txt_End_date =
@@ -28302,25 +28323,25 @@ const char *Txt_PLACES_ORDER[2] =
 #endif
 	};
 
-const char *Txt_Please_confirm_your_email_address =
+const char *Txt_Please_check_and_confirm_your_email_address =
 #if   L==1
-	"Si us plau, confirmeu la vostra adre&ccedil;a de correu.";
+	"Si us plau, comproveu i confirmeu la vostra adre&ccedil;a de correu.";
 #elif L==2
-	"Bitte best&auml;tigen Sie Ihre E-Mail-Adresse.";
+	"Bitte &uuml;berpr&uuml;fen Sie und Ihre E-Mail-Adresse best&auml;tigen.";
 #elif L==3
-	"Please confirm your email address.";
+	"Please check and confirm your email address.";
 #elif L==4
-	"Por favor, confirme su direcci&oacute;n de correo.";
+	"Por favor, compruebe y confirme su direcci&oacute;n de correo.";
 #elif L==5
-	"S'il vous pla&iacute;t, confirmez votre adresse e-mail.";
+	"S'il vous pla&iacute;t, v&eacute;rifiez et confirmez votre adresse e-mail.";
 #elif L==6
-	"Por favor, confirme su direcci&oacute;n de correo.";	// Okoteve traducción
+	"Por favor, compruebe y confirme su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7
-	"Per favore, conferma il tuo indirizzo e-mail.";
+	"Per favore, verifica e conferma il tuo indirizzo e-mail.";
 #elif L==8
-	"Prosz&eogon;, potwierd&zacute; sw&oacute;j w tym adresu e-mail.";
+	"Prosz&eogon; sprawdzi&cacute; i potwierdzi&cacute; sw&oacute;j adres e-mail.";
 #elif L==9
-	"Por favor, por favor confirme o seu endere&ccedil;o de e-mail.";
+	"Por favor, verificar e confirmar o seu endere&ccedil;o de e-mail.";
 #endif
 
 const char *Txt_Please_enter_your_ID =
@@ -46792,21 +46813,21 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 #if   L==1
 	"Ha ocurrido un problema enviando autom&aacute;ticamente un correo.";	// Necessita traduccio
 #elif L==2
-	"There was a problem sending an email automatically.";						// Übersetzung notwendig
+	"There was a problem sending an email automatically.";			// Übersetzung notwendig
 #elif L==3
 	"There was a problem sending an email automatically.";
 #elif L==4
 	"Ha ocurrido un problema enviando autom&aacute;ticamente un correo.";
 #elif L==5
-	"There was a problem sending an email automatically.";						// Besoin de traduction
+	"There was a problem sending an email automatically.";			// Besoin de traduction
 #elif L==6
 	"Ha ocurrido un problema enviando autom&aacute;ticamente un correo.";	// Okoteve traducción
 #elif L==7
 	"C'&egrave; stato un problema inviando automaticamente un'e-mail.";
 #elif L==8
-	"There was a problem sending an email automatically.";						// Potrzebujesz tlumaczenie
+	"There was a problem sending an email automatically.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"There was a problem sending an email automatically.";						// Necessita de tradução
+	"There was a problem sending an email automatically.";			// Necessita de tradução
 #endif
 
 const char *Txt_There_was_an_error_in_assessing_the_test_X =	// Warning: it is very important to include %u in the following sentences

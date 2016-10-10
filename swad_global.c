@@ -176,6 +176,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.MyCourses.Num = 0;
    Gbl.Usrs.Me.MyAdminDegs.Num = 0;
    Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
+   Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An e-mail to confirm my e-mail address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
    Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
