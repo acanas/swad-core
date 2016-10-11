@@ -63,16 +63,17 @@ extern struct Globals Gbl;
 
 typedef enum
   {
+   Brw_ICON_NONE = 0,
+   Brw_ICON_VIEW = 1,
+   Brw_ICON_EDIT = 2
+  } Brw_IconViewEdit_t;
+
+typedef enum
+  {
    Brw_EXPAND_TREE_NOTHING,
    Brw_EXPAND_TREE_PLUS,
    Brw_EXPAND_TREE_MINUS,
   } Brw_ExpandTree_t;
-
-typedef enum
-  {
-   Brw_SHOW,
-   Brw_ADMIN,
-  } Brw_ShowOrAdmin_t;
 
 struct Brw_NumObjects
   {
@@ -1464,6 +1465,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconToEditFileBrowser (void);
 static void Brw_PutIconToShowFileBrowser (void);
+static void Brw_PutButtonToShowEdit (Brw_IconViewEdit_t IconViewEdit);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
@@ -3493,17 +3495,12 @@ static void Brw_ShowFileBrowser (void)
    struct Brw_NumObjects Removed;
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
-   enum
-     {
-      ICON_NONE = 0,
-      ICON_SHOW = 1,
-      ICON_EDIT = 2
-     } IconShowEdit;
+   Brw_IconViewEdit_t IconViewEdit;
    static void (*FunctionToDrawContextualIcons[]) (void) =
      {
-      NULL,				// ICON_NONE
-      Brw_PutIconToShowFileBrowser,	// ICON_SHOW
-      Brw_PutIconToEditFileBrowser	// ICON_EDIT
+      NULL,				// Brw_ICON_NONE
+      Brw_PutIconToShowFileBrowser,	// Brw_ICON_VIEW
+      Brw_PutIconToEditFileBrowser	// Brw_ICON_EDIT
      };
 
    /***** Set title of file browser *****/
@@ -3536,46 +3533,46 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_GRP] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_GRP
 
    /***** Set contextual icon in frame *****/
-   IconShowEdit = ICON_NONE;
+   IconViewEdit = Brw_ICON_NONE;
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    IconShowEdit = ICON_EDIT;
+	    IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_INS:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    IconShowEdit = ICON_SHOW;
+	    IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_CTR:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    IconShowEdit = ICON_EDIT;
+	    IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_CTR:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    IconShowEdit = ICON_SHOW;
+	    IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_DEG:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    IconShowEdit = ICON_EDIT;
+	    IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_DEG:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    IconShowEdit = ICON_SHOW;
+	    IconViewEdit = Brw_ICON_VIEW;
 	 break;
       case Brw_SHOW_DOCUM_CRS:
       case Brw_SHOW_DOCUM_GRP:
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
-	    IconShowEdit = ICON_EDIT;
+	    IconViewEdit = Brw_ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
-	    IconShowEdit = ICON_SHOW;
+	    IconViewEdit = Brw_ICON_VIEW;
 	 break;
       default:
 	 break;
@@ -3603,7 +3600,7 @@ static void Brw_ShowFileBrowser (void)
    Gbl.FileBrowser.Id++;
    fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
    Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-                        FunctionToDrawContextualIcons[IconShowEdit]);
+                        FunctionToDrawContextualIcons[IconViewEdit]);
 
    /***** Subtitle *****/
    Brw_WriteSubtitleOfFileBrowser ();
@@ -3621,6 +3618,9 @@ static void Brw_ShowFileBrowser (void)
       Brw_ShowSizeOfFileTree ();
       Brw_StoreSizeOfFileTreeInDB ();
      }
+
+   /***** Put button to show / edit *****/
+   Brw_PutButtonToShowEdit (IconViewEdit);
 
    /***** End of frame *****/
    Lay_EndRoundFrame ();
@@ -3657,6 +3657,40 @@ static void Brw_PutIconToShowFileBrowser (void)
 			     "eye-on64x64.png",
 			     Txt_View,NULL,
                              NULL);
+  }
+
+/*****************************************************************************/
+/***************** Put button to view / edit file browser ********************/
+/*****************************************************************************/
+
+static void Brw_PutButtonToShowEdit (Brw_IconViewEdit_t IconViewEdit)
+  {
+   extern const char *Txt_View;
+   extern const char *Txt_Edit;
+
+   switch (IconViewEdit)
+     {
+      case Brw_ICON_NONE:
+	 break;
+      case Brw_ICON_VIEW:
+         if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
+           {
+	    Act_FormStart (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
+	    Brw_PutParamsContextualLink ();
+	    Lay_PutConfirmButton (Txt_View);
+            Act_FormEnd ();
+           }
+	 break;
+      case Brw_ICON_EDIT:
+         if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
+           {
+	    Act_FormStart (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
+	    Brw_PutParamsContextualLink ();
+	    Lay_PutConfirmButton (Txt_Edit);
+            Act_FormEnd ();
+           }
+	 break;
+     }
   }
 
 /*****************************************************************************/

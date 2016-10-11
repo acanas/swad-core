@@ -148,13 +148,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.19.3 (2016-10-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.20 (2016-10-11)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.20:    Oct 11, 2016	New button to edit/view file browser. (205241 lines)
         Version 16.19.3:  Oct 11, 2016	Code optimization in file browser. (205210 lines)
         Version 16.19.2:  Oct 11, 2016	Code optimization in file browser. (205198 lines)
         Version 16.19.1:  Oct 10, 2016	Message to report that confirmation e-mail has been sent. (205203 lines)
