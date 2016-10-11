@@ -3554,19 +3554,13 @@ static void Brw_ShowFileBrowser (void)
 	 break;
       case Brw_SHOW_DOCUM_CRS:
       case Brw_SHOW_DOCUM_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
-	 break;
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
-	 break;
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
 	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
 	 break;
+      case Brw_ADMI_DOCUM_CRS:
+      case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
