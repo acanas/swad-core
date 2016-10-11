@@ -1463,7 +1463,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconToEditFileBrowser (void);
-static void Brw_PutIconToSeeFileBrowser (void);
+static void Brw_PutIconToShowFileBrowser (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
@@ -3490,10 +3490,21 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Works_area;
    extern const char *Txt_Temporary_private_storage_area;
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
-   void (*FunctionToDrawContextualIcons) (void);
    struct Brw_NumObjects Removed;
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+   enum
+     {
+      ICON_NONE = 0,
+      ICON_SHOW = 1,
+      ICON_EDIT = 2
+     } IconShowEdit;
+   static void (*FunctionToDrawContextualIcons[]) (void) =
+     {
+      NULL,				// ICON_NONE
+      Brw_PutIconToShowFileBrowser,	// ICON_SHOW
+      Brw_PutIconToEditFileBrowser	// ICON_EDIT
+     };
 
    /***** Set title of file browser *****/
    Brw_TitleOfFileBrowser[Brw_UNKNOWN       ] = NULL;					// Brw_UNKNOWN
@@ -3524,47 +3535,47 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_CRS] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_CRS
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_GRP] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_GRP
 
-   /***** Set function to write contextual icons in frame *****/
-   FunctionToDrawContextualIcons = NULL;
+   /***** Set contextual icon in frame *****/
+   IconShowEdit = ICON_NONE;
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	    IconShowEdit = ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_INS:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	    IconShowEdit = ICON_SHOW;
 	 break;
       case Brw_SHOW_DOCUM_CTR:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	    IconShowEdit = ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_CTR:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	    IconShowEdit = ICON_SHOW;
 	 break;
       case Brw_SHOW_DOCUM_DEG:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	    IconShowEdit = ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_DEG:
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	    IconShowEdit = ICON_SHOW;
 	 break;
       case Brw_SHOW_DOCUM_CRS:
       case Brw_SHOW_DOCUM_GRP:
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
-	    FunctionToDrawContextualIcons = Brw_PutIconToEditFileBrowser;
+	    IconShowEdit = ICON_EDIT;
 	 break;
       case Brw_ADMI_DOCUM_CRS:
       case Brw_ADMI_DOCUM_GRP:
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
 	 if (IAmTeacherOrSysAdm)
-	    FunctionToDrawContextualIcons = Brw_PutIconToSeeFileBrowser;
+	    IconShowEdit = ICON_SHOW;
 	 break;
       default:
 	 break;
@@ -3592,7 +3603,7 @@ static void Brw_ShowFileBrowser (void)
    Gbl.FileBrowser.Id++;
    fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
    Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-                        FunctionToDrawContextualIcons);
+                        FunctionToDrawContextualIcons[IconShowEdit]);
 
    /***** Subtitle *****/
    Brw_WriteSubtitleOfFileBrowser ();
@@ -3633,10 +3644,10 @@ static void Brw_PutIconToEditFileBrowser (void)
   }
 
 /*****************************************************************************/
-/************************ Put icon to see file browser ***********************/
+/************************ Put icon to show file browser **********************/
 /*****************************************************************************/
 
-static void Brw_PutIconToSeeFileBrowser (void)
+static void Brw_PutIconToShowFileBrowser (void)
   {
    extern const char *Txt_View;
 
