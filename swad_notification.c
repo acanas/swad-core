@@ -1527,7 +1527,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    extern const char *Txt_TAB_Messages_NO_HTML[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_Notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
-   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1549,8 +1548,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    /***** Return 0 notifications and 0 mails when error *****/
    *NumNotif = *NumMails = 0;
 
-   Str_GetMailBox (ToUsrDat->Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
-   if (Mai_CheckIfMailDomainIsAllowedForNotifications (MailDomain))
+   if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat))
      {
       /***** Get pending notifications of this user from database ******/
       sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod"
@@ -1620,7 +1618,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get forum type */
 	    if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-	        NotifyEvent == Ntf_EVENT_FORUM_REPLY)
+		NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	       ForumType = For_GetForumTypeOfAPost (Cod);
 
 	    /* Information about the type of this event */
@@ -1699,7 +1697,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		  Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
 		  Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
 		  Cfg_AUTOMATIC_EMAIL_FROM,
-                  Gbl.Config.SMTPPassword,
+		  Gbl.Config.SMTPPassword,
 		  ToUsrDat->Email,
 		  Cfg_PLATFORM_SHORT_NAME,
 		  Txt_Notifications_NO_HTML[ToUsrLanguage],
@@ -1724,7 +1722,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/
 	 sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-	                " WHERE ToUsrCod='%ld'"
+			" WHERE ToUsrCod='%ld'"
 			" AND (Status & %u)<>0 AND (Status & %u)=0  AND (Status & %u)=0",
 		  (unsigned) Ntf_STATUS_BIT_SENT,ToUsrDat->UsrCod,
 		  (unsigned) Ntf_STATUS_BIT_EMAIL,
@@ -1862,8 +1860,15 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Act_FormStart (ActChgNtfPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
-   fprintf (Gbl.F.Out,"<tr>"
+   Lay_StartRoundFrame (NULL,Txt_Notifications,NULL);
+
+   /***** Warning if I can not receive e-mail notifications *****/
+   if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
+      Mai_WriteWarningEmailNotifications ();
+
+   /***** List of notifications *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+	              "<tr>"
 		      "<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
@@ -1903,8 +1908,10 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</tr>");
      }
 
+   fprintf (Gbl.F.Out,"</table>");
+
    /***** Button to save changes and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save_changes);
+   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Act_FormEnd ();

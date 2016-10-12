@@ -763,7 +763,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    unsigned long NumRow;
    long ActCod;
    Act_Action_t Action;
-   Act_Tab_t Tab;
+   Tab_Tab_t Tab;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    unsigned long NumClicks;
 

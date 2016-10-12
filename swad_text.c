@@ -19260,7 +19260,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	// ActFrmUsrAcc
+	// ActFrmMyAcc
 #if   L==1
 	"Compte"
 #elif L==2
@@ -21133,7 +21133,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	// ActFrmUsrAcc
+	// ActFrmMyAcc
 #if   L==1
 	"Creaci&oacute; o edici&oacute; del meu compte d'usuari"
 #elif L==2
@@ -52632,43 +52632,43 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" if you don't send your photo.";			// Necessita de tradução
 #endif
 
-const char *Txt_You_can_only_receive_email_notifications_if_ =
+const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include four %s in the following sentences
 #if   L==1
-	"Solo podr&aacute; recibir notificaciones por correo"
-	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en PLATAFORMA &gt; Dominios.";		// Necessita traduccio
+	"Nom&eacute;s podr&agrave; rebre notificacions per correu"
+	" si la seva adre&ccedil;a de correu est&agrave; confirmada (%s &gt; %s)"
+	" i acaba en un dels dominis permesos (%s &gt; %s).";
 #elif L==2
-	"You can only receive email notifications"
-	" if your email ends in one of the domains"
-	" listed in SYSTEM &gt; Domains.";			// Need Übersetzung
+	"Sie k&ouml;nnen nur E-Mail-Anmeldungen zu erhalten,"
+	" wenn Sie Ihre E-Mail-Adresse best&uuml;tigt wird (%s &gt; %s),"
+	" und endet in einer der erlaubt Domains (%s &gt; %s).";
 #elif L==3
 	"You can only receive email notifications"
-	" if your email ends in one of the domains"
-	" listed in SYSTEM &gt; Domains.";
+	" if your email address is confirmed (%s &gt; %s)"
+	" and ends in one of the allowed domains (%s &gt; %s).";
 #elif L==4
 	"Solo podr&aacute; recibir notificaciones por correo"
-	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en PLATAFORMA &gt; Dominios.";
+	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
+	" y termina en uno de los dominios permitidos (%s &gt; %s).";
 #elif L==5
-	"You can only receive email notifications"
-	" if your email ends in one of the domains"
-	" listed in SYSTEM &gt; Domains.";			// Besoin de traduction
+	"Vous ne pouvez recevoir des notifications par email"
+	" si votre adresse e-mail est confirm&eacute; (%s &gt; %s)"
+	" et se termine dans l'un des domaines autoris&eacute;s (%s &gt; %s).";
 #elif L==6
 	"Solo podr&aacute; recibir notificaciones por correo"
-	" si su direcci&oacute;n de correo termina en uno de los dominios"
-	" listados en PLATAFORMA &gt; Dominios.";	// Okoteve traducción
+	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
+	" y termina en uno de los dominios permitidos (%s &gt; %s).";				// Okoteve traducción
 #elif L==7
 	"Puoi solo ricevere e-mail di notifica"
-	" se la tua e-mail termina in uno dei campi"
-	" listati in PIATTAFORMA &gt; Campi.";
+	" se la tua e-mail &egrave; confermata (%s &gt; %s)"
+	" e si termina in uno dei domini consentiti (%s &gt; %s).";
 #elif L==8
-	"You can only receive email notifications"
-	" if your email ends in one of the domains"
-	" listed in SYSTEM &gt; Domains.";			// Potrzebujesz tlumaczenie
+	"Mo&zdot;na otrzyma&cacute; tylko informacj&eogon;,"
+	" czy adres e-mail jest potwierdzone (%s &gt; %s),"
+	" a ko&nacute;czy si&eogon; w jednej z dozwolone domeny (%s &gt; %s).";
 #elif L==9
-	"You can only receive email notifications"
-	" if your email ends in one of the domains"
-	" listed in SYSTEM &gt; Domains.";			// Necessita de tradução
+	"Voc&ecirc; s&oacute; pode receber notifica&ccedil;&otilde;es de e-mail"
+	" se o seu endere&ccedil;o de e-mail est&aacute; confirmado (%s &gt; %s)"
+	" e termina em um dos dom&iacute;nios permitidos (%s &gt; %s).";
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences

@@ -848,7 +848,7 @@ void Par_GetMainParameters (void)
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Tab_NUM_TABS)
 	      {
-	       Gbl.Action.Tab = (Act_Tab_t) UnsignedNum;
+	       Gbl.Action.Tab = (Tab_Tab_t) UnsignedNum;
 	       Tab_DisableIncompatibleTabs ();
 	      }
      }

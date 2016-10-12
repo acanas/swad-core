@@ -51,7 +51,7 @@ typedef enum
 /*****************************************************************************/
 
 void Acc_PutLinkToCreateAccount (void);
-void Acc_ShowFormAccount (void);
+void Acc_ShowFormMyAccount (void);
 
 void Acc_CheckIfEmptyAccountExists (void);
 

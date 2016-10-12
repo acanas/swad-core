@@ -480,7 +480,7 @@ void ID_PutLinkToChangeUsrIDs (void)
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Lay_PutContextualLink (ActFrmUsrAcc,NULL,
+      Lay_PutContextualLink (ActFrmMyAcc,NULL,
 			     "arroba64x64.gif",
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);

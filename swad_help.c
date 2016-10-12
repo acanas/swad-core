@@ -231,7 +231,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,
                Cfg_PLATFORM_SHORT_NAME);
       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
-					   ActFrmUsrAcc,
+					   ActFrmMyAcc,
 					   "BT_CREATE",Txt_Create_account);
      }
 

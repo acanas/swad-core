@@ -673,7 +673,7 @@ static void Usr_GetMyLastData (void)
       if (sscanf (row[2],"%u",&UnsignedNum) == 1)
          if (UnsignedNum >= 1 ||
              UnsignedNum <= Tab_NUM_TABS)
-            Gbl.Usrs.Me.UsrLast.LastTab = (Act_Tab_t) UnsignedNum;
+            Gbl.Usrs.Me.UsrLast.LastTab = (Tab_Tab_t) UnsignedNum;
 
       /* Get last access to notifications */
       Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;

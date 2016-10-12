@@ -169,7 +169,7 @@ struct UsrLast
   {
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    long LastCrs;
-   Act_Tab_t LastTab;
+   Tab_Tab_t LastTab;
    long LastAccNotif;
   };
 

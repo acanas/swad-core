@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_cryptography.h"
+#include "swad_tab.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -37,24 +38,6 @@
 /*****************************************************************************/
 
 #define Act_MAX_LENGTH_ACTION_TXT	255
-
-// Related with tabs and actions
-typedef enum
-  {
-   TabUnk =  0,
-   TabSys =  1,
-   TabCty =  2,
-   TabIns =  3,
-   TabCtr =  4,
-   TabDeg =  5,
-   TabCrs =  6,
-   TabAss =  7,
-   TabUsr =  8,
-   TabSoc =  9,
-   TabMsg = 10,
-   TabSta = 11,
-   TabPrf = 12,
-  } Act_Tab_t;
 
 typedef enum
   {
@@ -1372,7 +1355,7 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActMyCrs		(ActSeeMyUsgRep+ 3)
 #define ActSeeMyTT		(ActSeeMyUsgRep+ 4)
 #define ActSeeMyAgd		(ActSeeMyUsgRep+ 5)
-#define ActFrmUsrAcc		(ActSeeMyUsgRep+ 6)
+#define ActFrmMyAcc		(ActSeeMyUsgRep+ 6)
 #define ActReqEdiRecCom		(ActSeeMyUsgRep+ 7)
 #define ActEdiPrf		(ActSeeMyUsgRep+ 8)
 #define ActAdmBrf		(ActSeeMyUsgRep+ 9)
@@ -1478,7 +1461,7 @@ struct Act_Actions
   {
    long ActCod;	// Unique, time-persistent numerical code for the action
    signed int IndexInMenu;
-   Act_Tab_t Tab;
+   Tab_Tab_t Tab;
    Act_Action_t SuperAction;
    unsigned PermisIfIBelongToCrs;
    unsigned PermisIfIDontBelongToCrs;

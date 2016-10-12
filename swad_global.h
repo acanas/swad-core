@@ -168,7 +168,7 @@ struct Globals
    bool YearOK;
    struct
      {
-      Act_Tab_t Tab;
+      Tab_Tab_t Tab;
       Act_Action_t Act;
       bool UsesAJAX;
      } Action;

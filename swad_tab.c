@@ -68,7 +68,7 @@ const char *Tab_TabIcons[Tab_NUM_TABS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab);
+static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab);
 
 static void Tab_WriteBreadcrumbHome (void);
 static void Tab_WriteBreadcrumbTab (void);
@@ -86,7 +86,7 @@ void Tab_DrawTabs (void)
    extern const char *The_TabOffBgColors[The_NUM_THEMES];
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
-   Act_Tab_t NumTab;
+   Tab_Tab_t NumTab;
    bool ICanViewTab;
 
    /***** Table start *****/
@@ -94,8 +94,8 @@ void Tab_DrawTabs (void)
 	              "<ul class=\"LIST_CENTER\">");
 
    /***** Draw the tabs *****/
-   for (NumTab = (Act_Tab_t) 1;
-        NumTab <= (Act_Tab_t) Tab_NUM_TABS - 1;
+   for (NumTab = (Tab_Tab_t) 1;
+        NumTab <= (Tab_Tab_t) Tab_NUM_TABS - 1;
         NumTab++)
      {
       ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
@@ -167,7 +167,7 @@ void Tab_DrawTabs (void)
 /************************* Check if I can view a tab *************************/
 /*****************************************************************************/
 
-static bool Tab_CheckIfICanViewTab (Act_Tab_t Tab)
+static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
   {
    switch (Tab)
      {

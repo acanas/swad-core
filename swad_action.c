@@ -1315,7 +1315,7 @@ Profile:
        1128. ActMyCrs			Select one of my courses
        1129. ActSeeMyTT			Show the timetable of all courses of the logged user
         NEW. ActSeeMyAgd		Show my agenda (personal organizer)
-       1130. ActFrmUsrAcc		Show form to the creation or change of user's account
+       1130. ActFrmMyAcc		Show form to the creation or change of user's account
        1131. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
        1132. ActEdiPrf			Show forms to edit preferences
        1133. ActAdmBrf			Show the briefcase of private archives
@@ -2744,7 +2744,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
    /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Agd_ShowMyAgenda		,"date64x64.gif"	},
-   /* ActFrmUsrAcc	*/{  36, 5,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormAccount		,"arroba64x64.gif"	},
+   /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
    /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
@@ -2761,24 +2761,24 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
-   /* ActChkUsrAcc	*/{1584,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_CheckIfEmptyAccountExists	,NULL},
-   /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
+   /* ActChkUsrAcc	*/{1584,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_CheckIfEmptyAccountExists	,NULL},
+   /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
 
-   /* ActRemID_Me	*/{1147,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
-   /* ActNewIDMe	*/{1148,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewMyUsrID			,NULL},
+   /* ActRemID_Me	*/{1147,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
+   /* ActNewIDMe	*/{1148,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewMyUsrID			,NULL},
 
-   /* ActRemOldNic	*/{1089,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_RemoveNick			,NULL},
-   /* ActChgNic		*/{  37,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_UpdateNick			,NULL},
+   /* ActRemOldNic	*/{1089,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_RemoveNick			,NULL},
+   /* ActChgNic		*/{  37,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_UpdateNick			,NULL},
 
-   /* ActRemMaiMe	*/{1090,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveMyUsrEmail		,NULL},
-   /* ActNewMaiMe	*/{1088,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,May_NewMyUsrEmail		,NULL},
-   /* ActCnfMai		*/{1091,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ConfirmEmail		,NULL},
+   /* ActRemMaiMe	*/{1090,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveMyUsrEmail		,NULL},
+   /* ActNewMaiMe	*/{1088,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,May_NewMyUsrEmail		,NULL},
+   /* ActCnfMai		*/{1091,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ConfirmEmail		,NULL},
 
-   /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
-   /* ActChgPwd		*/{  35,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
+   /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
+   /* ActChgPwd		*/{  35,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
 
-   /* ActReqRemMyAcc	*/{1430,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AskIfRemoveMyAccount	,NULL},
-   /* ActRemMyAcc	*/{1431,-1,TabPrf,ActFrmUsrAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemoveMyAccount		,NULL},
+   /* ActReqRemMyAcc	*/{1430,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AskIfRemoveMyAccount	,NULL},
+   /* ActRemMyAcc	*/{1431,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemoveMyAccount		,NULL},
 
    /* ActChgMyData	*/{ 298,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
 
@@ -2816,7 +2816,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMnu		*/{1243,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Mnu_ChangeMenu		,Pre_EditPrefs			,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ntf_ChangeNotifyEvents	,Pre_EditPrefs			,NULL},
 
-   /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmUsrAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode			,NULL},
+   /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode			,NULL},
 
    /* ActPrnMyTT	*/{ 409,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
    /* ActEdiTut		*/{  65,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
@@ -2883,7 +2883,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #33 (obsolete action)
 	ActFrmChgMyPwd,		// #34
 	ActChgPwd,		// #35
-	ActFrmUsrAcc,		// #36
+	ActFrmMyAcc,		// #36
 	ActChgNic,		// #37
 	-1,			// #38 (obsolete action)
 	-1,			// #39 (obsolete action)
@@ -4495,7 +4495,7 @@ void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *Breadcru
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Act_Action_t Superaction = Act_Actions[Action].SuperAction;
-   Act_Tab_t Tab = Act_Actions[Superaction].Tab;
+   Tab_Tab_t Tab = Act_Actions[Superaction].Tab;
    char *Arrow;
 
    Arrow = HTML ? "&gt;" :
@@ -4837,7 +4837,7 @@ void Act_AdjustCurrentAction (void)
          case ActFrmChgMyPwd:
             break;
          default:
-	    Gbl.Action.Act = ActFrmUsrAcc;
+	    Gbl.Action.Act = ActFrmMyAcc;
 	    Tab_SetCurrentTab ();
             return;
         }
@@ -4852,7 +4852,7 @@ void Act_AdjustCurrentAction (void)
       switch (Gbl.Action.Act)
         {
          case ActHom: case ActLogOut:
-         case ActFrmUsrAcc: case ActFrmChgMyPwd:
+         case ActFrmMyAcc: case ActFrmChgMyPwd:
             break;
          default:
 	    Gbl.Action.Act = ActReqEdiRecCom;
@@ -4869,7 +4869,7 @@ void Act_AdjustCurrentAction (void)
       switch (Gbl.Action.Act)
         {
          case ActHom: case ActLogOut:
-         case ActFrmUsrAcc: case ActFrmChgMyPwd:
+         case ActFrmMyAcc: case ActFrmChgMyPwd:
          case ActReqEdiRecCom:
             break;
          default:
@@ -4884,7 +4884,7 @@ void Act_AdjustCurrentAction (void)
       switch (Gbl.Action.Act)
         {
          case ActHom: case ActLogOut:
-         case ActFrmUsrAcc: case ActFrmChgMyPwd:
+         case ActFrmMyAcc: case ActFrmChgMyPwd:
          case ActReqEdiRecCom: case ActReqEdiMyIns:
             break;
          default:
@@ -4917,7 +4917,7 @@ void Act_AdjustCurrentAction (void)
                case ActHom:
                case ActMnu:
                case ActLogOut:
-               case ActFrmUsrAcc:
+               case ActFrmMyAcc:
                case ActFrmChgMyPwd:
                case ActReqEdiRecCom:
                case ActReqEdiMyIns:

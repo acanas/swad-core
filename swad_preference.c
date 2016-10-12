@@ -65,8 +65,6 @@ static void Pre_UpdateSideColsOnUsrDataTable (void);
 void Pre_EditPrefs (void)
   {
    extern const char *Txt_Language;
-   extern const char *Txt_You_can_only_receive_email_notifications_if_;
-   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
 
    /***** Language, first day of week *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
@@ -115,10 +113,6 @@ void Pre_EditPrefs (void)
 
       /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
-
-      Str_GetMailBox (Gbl.Usrs.Me.UsrDat.Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
-      if (!Mai_CheckIfMailDomainIsAllowedForNotifications (MailDomain))
-         Lay_ShowAlert (Lay_WARNING,Txt_You_can_only_receive_email_notifications_if_);
      }
   }
 

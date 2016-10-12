@@ -37,6 +37,7 @@
 #include "swad_mail.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
+#include "swad_tab.h"
 #include "swad_text.h"
 
 /*****************************************************************************/
@@ -66,6 +67,8 @@ extern struct Globals Gbl;
 static void Mai_GetParamMaiOrderType (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain);
+
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
 static void Mai_RenameMailDomain (Cns_ShortOrFullName_t ShortOrFullName);
@@ -308,10 +311,27 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
   }
 
 /*****************************************************************************/
+/************ Check if user can receive notifications via e-mail *************/
+/*****************************************************************************/
+
+bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
+  {
+   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
+
+   /***** Check #1: is my e-mail address confirmed? *****/
+   if (!UsrDat->EmailConfirmed)
+      return false;
+
+   /***** Check #2: if my mail domain allowed? *****/
+   Str_GetMailBox (UsrDat->Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
+   return Mai_CheckIfMailDomainIsAllowedForNotif (MailDomain);
+  }
+
+/*****************************************************************************/
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-bool Mai_CheckIfMailDomainIsAllowedForNotifications (const char *MailDomain)
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain)
   {
    char Query[512];
 
@@ -319,6 +339,29 @@ bool Mai_CheckIfMailDomainIsAllowedForNotifications (const char *MailDomain)
    sprintf (Query,"SELECT COUNT(*) FROM mail_domains WHERE Domain='%s'",
             MailDomain);
    return (DB_QueryCOUNT (Query,"can not check if a mail domain is allowed for notifications") != 0);
+  }
+
+/*****************************************************************************/
+/***************** Show warning about notifications via e-mail ***************/
+/*****************************************************************************/
+
+void Mai_WriteWarningEmailNotifications (void)
+  {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_You_can_only_receive_email_notifications_if_;
+   extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
+   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   Act_Action_t SuperActionMyAccount   = Act_Actions[ActFrmMyAcc].SuperAction;
+   Act_Action_t SuperActionMailDomains = Act_Actions[ActSeeMai  ].SuperAction;
+   Tab_Tab_t TabMyAccount   = Act_Actions[SuperActionMyAccount  ].Tab;
+   Tab_Tab_t TabMailDomains = Act_Actions[SuperActionMailDomains].Tab;
+
+   sprintf (Gbl.Message,Txt_You_can_only_receive_email_notifications_if_,
+	    Txt_TABS_SHORT_TXT[TabMyAccount  ],
+	    Txt_MENU_TITLE[TabMyAccount  ][Act_Actions[SuperActionMyAccount  ].IndexInMenu],
+            Txt_TABS_SHORT_TXT[TabMailDomains],
+	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu]);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -1050,7 +1093,7 @@ void Mai_PutLinkToChangeOtherUsrEmail (void)
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Lay_PutContextualLink (ActFrmUsrAcc,NULL,
+      Lay_PutContextualLink (ActFrmMyAcc,NULL,
                              "msg64x64.gif",
 			     Txt_Change_email,Txt_Change_email,
                              NULL);
@@ -1478,7 +1521,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
    extern const char *Txt_Check;
 
    /***** Start form *****/
-   Act_FormStart (ActFrmUsrAcc);
+   Act_FormStart (ActFrmMyAcc);
 
    /***** Frame with button to go to account *****/
    Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL);

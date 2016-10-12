@@ -97,7 +97,7 @@ void Acc_PutLinkToCreateAccount (void)
   {
    extern const char *Txt_Create_account;
 
-   Lay_PutContextualLink (ActFrmUsrAcc,NULL,
+   Lay_PutContextualLink (ActFrmMyAcc,NULL,
                           "arroba64x64.gif",
                           Txt_Create_account,Txt_Create_account,
                           NULL);
@@ -107,7 +107,7 @@ void Acc_PutLinkToCreateAccount (void)
 /******** Show form to change my account or to create a new account **********/
 /*****************************************************************************/
 
-void Acc_ShowFormAccount (void)
+void Acc_ShowFormMyAccount (void)
   {
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
 
@@ -394,7 +394,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
    /***** Button to go to request the creation of a new account *****/
-   Act_FormStart (ActFrmUsrAcc);
+   Act_FormStart (ActFrmMyAcc);
    Lay_PutCreateButton (Txt_Create_a_new_account);
    Act_FormEnd ();
 
