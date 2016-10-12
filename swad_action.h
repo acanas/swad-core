@@ -1480,7 +1480,6 @@ struct Act_Actions
 bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
-void Act_GetBreadcrumbStrForAction (Act_Action_t Action,bool HTML,char *BreadcrumbStr);
 char *Act_GetActionTextFromDB (long ActCod,char *Txt);
 
 void Act_FormGoToStart (Act_Action_t NextAction);
