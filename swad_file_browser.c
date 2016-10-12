@@ -1471,7 +1471,7 @@ static void Brw_UpdateLastAccess (void);
 static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
 static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
-static void Brw_ShowSizeOfFileTree (void);
+static void Brw_ShowAndStoreSizeOfFileTree (void);
 static void Brw_StoreSizeOfFileTreeInDB (void);
 
 static void Brw_PutParamsContextualLink (void);
@@ -3613,11 +3613,7 @@ static void Brw_ShowFileBrowser (void)
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Show and store number of documents found *****/
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-     {
-      Brw_ShowSizeOfFileTree ();
-      Brw_StoreSizeOfFileTreeInDB ();
-     }
+   Brw_ShowAndStoreSizeOfFileTree ();
 
    /***** Put button to show / edit *****/
    Brw_PutButtonToShowEdit (IconViewEdit);
@@ -3980,7 +3976,7 @@ static void Brw_InitHiddenLevels (void)
 /************************* Show size of a file browser ***********************/
 /*****************************************************************************/
 
-static void Brw_ShowSizeOfFileTree (void)
+static void Brw_ShowAndStoreSizeOfFileTree (void)
   {
    extern const char *Txt_level;
    extern const char *Txt_levels;
@@ -3991,28 +3987,38 @@ static void Brw_ShowSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
-   Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
-   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
-                      "%u %s; %lu %s; %lu %s; %s",
-            Gbl.FileBrowser.Size.NumLevls,
-            Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
-        	                                 Txt_levels ,
-            Gbl.FileBrowser.Size.NumFolds,
-            Gbl.FileBrowser.Size.NumFolds == 1 ? Txt_folder :
-        	                                 Txt_folders,
-            Gbl.FileBrowser.Size.NumFiles,
-            Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
-        	                                 Txt_files,
-            FileSizeStr);
-   if (Gbl.FileBrowser.Size.MaxQuota)
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+
+   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
      {
-      Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
-      fprintf (Gbl.F.Out," (%.1f%% %s %s)",
-	       100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
-		        (double) Gbl.FileBrowser.Size.MaxQuota),
-	       Txt_of_PART_OF_A_TOTAL,
+      Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
+      fprintf (Gbl.F.Out,"%u %s; %lu %s; %lu %s; %s",
+	       Gbl.FileBrowser.Size.NumLevls,
+	       Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
+						    Txt_levels ,
+	       Gbl.FileBrowser.Size.NumFolds,
+	       Gbl.FileBrowser.Size.NumFolds == 1 ? Txt_folder :
+						    Txt_folders,
+	       Gbl.FileBrowser.Size.NumFiles,
+	       Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
+						    Txt_files,
 	       FileSizeStr);
+
+      if (Gbl.FileBrowser.Size.MaxQuota)
+	{
+	 Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
+	 fprintf (Gbl.F.Out," (%.1f%% %s %s)",
+		  100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
+			   (double) Gbl.FileBrowser.Size.MaxQuota),
+		  Txt_of_PART_OF_A_TOTAL,
+		  FileSizeStr);
+	}
+
+      Brw_StoreSizeOfFileTreeInDB ();
      }
+   else
+     fprintf (Gbl.F.Out,"&nbsp;");	// Blank to occupy the same space as the text for the browser size
+
    fprintf (Gbl.F.Out,"</div>");
   }
 

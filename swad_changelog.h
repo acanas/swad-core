@@ -148,13 +148,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.21.2 (2016-10-12)"
+#define Log_PLATFORM_VERSION	"SWAD 16.21.3 (2016-10-12)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.21.3:  Oct 12, 2016	Changes in layout of file browser. (205266 lines)
         Version 16.21.2:  Oct 12, 2016	Unused code removed from actions. (205263 lines)
         Version 16.21.1:  Oct 12, 2016	Code refactoring in actions. (205280 lines)
         Version 16.21:    Oct 12, 2016	Code refactoring related with warning about e-mail notifications.
