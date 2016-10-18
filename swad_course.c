@@ -146,8 +146,8 @@ void Crs_PrintConfiguration (void)
 
 static void Crs_Configuration (bool PrintView)
   {
-   // extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -161,6 +161,7 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
+   unsigned NumDeg;
    unsigned Year;
    int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
@@ -201,6 +202,47 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+
+   /***** Course degree *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s RIGHT_MIDDLE\">"
+                      "%s:"
+                      "</td>"
+                      "<td class=\"DAT LEFT_MIDDLE\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Degree);
+
+   /* Get list of degrees administrated by me */
+   Deg_GetListDegsAdminByMe ();
+
+   /* Put form to select degree */
+   if (Gbl.Usrs.Me.MyAdminDegs.Num)
+     {
+      Act_FormStart (ActChgCrsDegCfg);
+      fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
+			 " class=\"INPUT_DEGREE\""
+			 " onchange=\"document.getElementById('%s').submit();\">",
+	       Gbl.Form.Id);
+      for (NumDeg = 0;
+	   NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
+	   NumDeg++)
+	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod,
+		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
+											    "",
+		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].ShortName);
+      fprintf (Gbl.F.Out,"</select>");
+
+      Act_FormEnd ();
+     }
+   else
+      fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
+
+   /* Free list of degrees administrated by me */
+   Deg_FreeListMyAdminDegs ();
+
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2382,6 +2424,100 @@ void Crs_ChangeInsCrsCod (void)
   }
 
 /*****************************************************************************/
+/***************** Change the degree of the current course *******************/
+/*****************************************************************************/
+
+void Crs_ChangeCrsDegreeInConfig (void)
+  {
+   extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
+   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
+   extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
+   bool ICanChangeCrsToNewDeg;
+   char Query[512];
+   struct Degree NewDeg;
+   struct Centre NewCtr;
+
+   /***** Get new degree from form *****/
+   /* Get new degree code */
+   if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   /* Get data of new degree */
+   Deg_GetDataOfDegreeByCod (&NewDeg);
+
+   /***** Check if I have permission to change course to this degree *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_DEG_ADM:
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_DEG,
+						      NewDeg.DegCod);
+	 break;
+      case Rol_CTR_ADM:
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_CTR,
+						      NewDeg.CtrCod);
+	 break;
+      case Rol_INS_ADM:
+	 /* Get data of centre of new degree */
+	 NewCtr.CtrCod = NewDeg.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&NewCtr);
+
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_INS,
+						      NewCtr.InsCod);
+	 break;
+      case Rol_SYS_ADM:
+         ICanChangeCrsToNewDeg = true;
+         break;
+      default:
+         ICanChangeCrsToNewDeg = false;
+         break;
+     }
+
+   /***** If I have permission to change course to this new degree... *****/
+   if (ICanChangeCrsToNewDeg)
+     {
+      /***** If name of course was in database in the new degree... *****/
+      if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
+						"ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.ShortName);
+	 Gbl.Error = true;
+	}
+      else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
+						     "FullName",Gbl.CurrentCrs.Crs.FullName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.FullName);
+	 Gbl.Error = true;
+	}
+      else	// Update degree in database
+	{
+	 /***** Update degree in table of courses *****/
+	 sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
+		  NewDeg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+	 DB_QueryUPDATE (Query,"can not move course to another degree");
+	 Gbl.CurrentCrs.Crs.DegCod = NewDeg.DegCod;
+
+	 /***** Initialize again current course, degree, centre... *****/
+      	 Deg_InitCurrentCourse ();
+
+	 /***** Create message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
+		  Gbl.CurrentCrs.Crs.FullName,NewDeg.FullName);
+	}
+     }
+   else	// I have no permission to change course to this new degree
+     {
+      sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
+               NewDeg.FullName);
+      Gbl.Error = true;
+     }
+  }
+
+/*****************************************************************************/
 /****** Change the degree of a course (move course to another degree) ********/
 /*****************************************************************************/
 
@@ -2390,12 +2526,12 @@ void Crs_ChangeCrsDegree (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Course *Crs;
    bool ICanChangeCrsToNewDeg;
    char Query[512];
    struct Degree NewDeg;
+   struct Centre NewCtr;
 
    Crs = &Gbl.Degs.EditingCrs;
 
@@ -2408,59 +2544,69 @@ void Crs_ChangeCrsDegree (void)
    if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
-   /* Check if I have permission to change course to this degree */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      ICanChangeCrsToNewDeg = true;
-   else	if (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM)
-      ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                   Sco_SCOPE_DEG,
-                                                   NewDeg.DegCod);
-   else
-      ICanChangeCrsToNewDeg = false;
-
    /***** Get data of course and new degree *****/
    Crs_GetDataOfCourseByCod (Crs);
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_DEG_ADM:
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_DEG,
+						      NewDeg.DegCod);
+	 break;
+      case Rol_CTR_ADM:
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_CTR,
+						      NewDeg.CtrCod);
+	 break;
+      case Rol_INS_ADM:
+	 /* Get data of centre of new degree */
+	 NewCtr.CtrCod = NewDeg.CtrCod;
+	 Ctr_GetDataOfCentreByCod (&NewCtr);
+
+	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Sco_SCOPE_INS,
+						      NewCtr.InsCod);
+	 break;
+      case Rol_SYS_ADM:
+         ICanChangeCrsToNewDeg = true;
+         break;
+      default:
+         ICanChangeCrsToNewDeg = false;
+         break;
+     }
+
    /***** If I have permission to change course to this new degree... *****/
    if (ICanChangeCrsToNewDeg)
      {
-      /***** If new degree has current course year... *****/
-      if (Crs->Year <= Deg_MAX_YEARS_PER_DEGREE)
-        {
-         /***** If name of course was in database in the new degree... *****/
-         if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
-                                                   "ShortName",Crs->ShortName,-1L))
-           {
-            sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-                     Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
-            Gbl.Error = true;
-           }
-         else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
-                                                        "FullName",Crs->FullName,-1L))
-           {
-            sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-                     Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
-            Gbl.Error = true;
-           }
-         else	// Update degree in database
-           {
-            /***** Update degree in table of courses *****/
-            sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
-                     NewDeg.DegCod,Crs->CrsCod);
-            DB_QueryUPDATE (Query,"can not move course to another degree");
-            Crs->DegCod = NewDeg.DegCod;
+      /***** If name of course was in database in the new degree... *****/
+      if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
+						"ShortName",Crs->ShortName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
+	 Gbl.Error = true;
+	}
+      else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
+						     "FullName",Crs->FullName,-1L))
+	{
+	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
+	 Gbl.Error = true;
+	}
+      else	// Update degree in database
+	{
+	 /***** Update degree in table of courses *****/
+	 sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
+		  NewDeg.DegCod,Crs->CrsCod);
+	 DB_QueryUPDATE (Query,"can not move course to another degree");
+	 Crs->DegCod = NewDeg.DegCod;
 
-            /***** Create message to show the change made *****/
-            sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
-                     Crs->FullName,NewDeg.FullName);
-           }
-        }
-      else	// New degree has no current course year
-        {
-         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
-         Gbl.Error = true;
-        }
+	 /***** Create message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
+		  Crs->FullName,NewDeg.FullName);
+	}
      }
    else	// I have no permission to change course to this new degree
      {

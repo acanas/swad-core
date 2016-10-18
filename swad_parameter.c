@@ -647,7 +647,6 @@ void Par_GetMainParameters (void)
    unsigned UnsignedNum;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    char LongStr[1+10+1];
-   char YearStr[2+1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
    Gbl.CurrentCty.Cty.CtyCod =
@@ -655,7 +654,6 @@ void Par_GetMainParameters (void)
    Gbl.CurrentCtr.Ctr.CtrCod =
    Gbl.CurrentDeg.Deg.DegCod =
    Gbl.CurrentCrs.Crs.CrsCod = -1L;
-   Gbl.YearOK = false;
 
    // First of all, get action, and session identifier.
    // So, if other parameters have been stored in the database, there will be no problems to get them.
@@ -774,7 +772,6 @@ void Par_GetMainParameters (void)
    if (LongStr[0])	// Parameter "cty" available
      {
       Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.YearOK = false;
       Gbl.CurrentIns.Ins.InsCod =
       Gbl.CurrentCtr.Ctr.CtrCod =
       Gbl.CurrentDeg.Deg.DegCod =
@@ -786,7 +783,6 @@ void Par_GetMainParameters (void)
    if (LongStr[0])	// Parameter "ins" available
      {
       Gbl.CurrentIns.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.YearOK = false;
       Gbl.CurrentCtr.Ctr.CtrCod =
       Gbl.CurrentDeg.Deg.DegCod =
       Gbl.CurrentCrs.Crs.CrsCod = -1L;
@@ -797,7 +793,6 @@ void Par_GetMainParameters (void)
    if (LongStr[0])	// Parameter "ctr" available
      {
       Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.YearOK = false;
       Gbl.CurrentDeg.Deg.DegCod =
       Gbl.CurrentCrs.Crs.CrsCod = -1L;
      }
@@ -807,37 +802,13 @@ void Par_GetMainParameters (void)
    if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
-      if (Gbl.CurrentDeg.Deg.DegCod > 0)
-        {
-         /***** Get possible course year *****/
-         Par_GetParToText ("CrsYear",YearStr,2);
-         if (YearStr[0])	// Parameter CrsYear available
-           {
-            Gbl.CurrentCrs.Crs.Year = Deg_ConvStrToYear (YearStr);
-            Gbl.YearOK = true;
-           }
-
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;	// Reset possible course from session
-        }
-      else
-         Gbl.CurrentCty.Cty.CtyCod =
-         Gbl.CurrentIns.Ins.InsCod =
-         Gbl.CurrentCtr.Ctr.CtrCod =
-         Gbl.CurrentDeg.Deg.DegCod =
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;
+      Gbl.CurrentCrs.Crs.CrsCod = -1L;	// Reset possible course from session
      }
 
    /***** Get numerical course code if exists (from menu) *****/
    Par_GetParToText ("crs",LongStr,1+10);
    if (LongStr[0])	// Parameter "crs" available
       Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
-   else
-     {
-      // Try old parameter "CrsCod" (allowed for compatibility with old links, to be removed in 2016)
-      Par_GetParToText ("CrsCod",LongStr,1+10);
-      if (LongStr[0])	// Parameter "CrsCod" available
-	 Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
-     }
 
    /***** Get tab to activate *****/
    Gbl.Action.Tab = TabUnk;

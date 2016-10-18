@@ -165,7 +165,6 @@ struct Globals
       long UsrCod;
      } Session;
 
-   bool YearOK;
    struct
      {
       Tab_Tab_t Tab;

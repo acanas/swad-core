@@ -877,13 +877,9 @@ void Deg_InitCurrentCourse (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       if (Crs_GetDataOfCourseByCod (&Gbl.CurrentCrs.Crs))		// Course found
-        {
          Gbl.CurrentDeg.Deg.DegCod = Gbl.CurrentCrs.Crs.DegCod;
-         Gbl.YearOK = true;
-        }
       else
         {
-         Gbl.YearOK = false;
          Gbl.CurrentIns.Ins.InsCod =
          Gbl.CurrentCtr.Ctr.CtrCod =
          Gbl.CurrentDeg.Deg.DegCod =
@@ -903,7 +899,6 @@ void Deg_InitCurrentCourse (void)
          /***** Degree type is available, so get degree type data *****/
          if (!DT_GetDataOfDegreeTypeByCod (&Gbl.CurrentDegTyp.DegTyp))	// Degree type not found
            {
-	    Gbl.YearOK = false;
 	    Gbl.CurrentIns.Ins.InsCod =
 	    Gbl.CurrentCtr.Ctr.CtrCod =
 	    Gbl.CurrentDeg.Deg.DegTypCod =
@@ -913,15 +908,12 @@ void Deg_InitCurrentCourse (void)
 	}
       else
         {
-         Gbl.YearOK = false;
          Gbl.CurrentIns.Ins.InsCod =
          Gbl.CurrentCtr.Ctr.CtrCod =
          Gbl.CurrentDeg.Deg.DegCod =
          Gbl.CurrentCrs.Crs.CrsCod = -1L;
         }
      }
-   else
-      Gbl.YearOK = false;
 
    /***** If centre code is available, get centre data *****/
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
@@ -929,13 +921,8 @@ void Deg_InitCurrentCourse (void)
       if (Ctr_GetDataOfCentreByCod (&Gbl.CurrentCtr.Ctr))	// Centre found
          Gbl.CurrentIns.Ins.InsCod = Gbl.CurrentCtr.Ctr.InsCod;
       else
-        {
          Gbl.CurrentCtr.Ctr.CtrCod = -1L;
-         Gbl.YearOK = false;
-        }
      }
-   else
-      Gbl.YearOK = false;
 
    /***** If numerical institution code is available, get institution data *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)
@@ -944,7 +931,6 @@ void Deg_InitCurrentCourse (void)
 	 Gbl.CurrentCty.Cty.CtyCod = Gbl.CurrentIns.Ins.CtyCod;
       else
         {
-         Gbl.YearOK = false;
          Gbl.CurrentCty.Cty.CtyCod =
          Gbl.CurrentIns.Ins.InsCod =
          Gbl.CurrentCtr.Ctr.CtrCod =
@@ -958,7 +944,6 @@ void Deg_InitCurrentCourse (void)
      {
       if (!Cty_GetDataOfCountryByCod (&Gbl.CurrentCty.Cty,Cty_GET_BASIC_DATA))	// Country not found
         {
-         Gbl.YearOK = false;
          Gbl.CurrentCty.Cty.CtyCod =
          Gbl.CurrentIns.Ins.InsCod =
          Gbl.CurrentCtr.Ctr.CtrCod =
@@ -966,10 +951,6 @@ void Deg_InitCurrentCourse (void)
          Gbl.CurrentCrs.Crs.CrsCod = -1L;
         }
      }
-
-   /***** Once we know course code, adjust action and tab *****/
-   // if (Gbl.Action.Act != ActMnu)
-   //   Lay_SetCurrentTab ();	// Use the tab associated to current action
 
    /***** Initialize default fields for edition to current values *****/
    Gbl.Inss.EditingIns.CtyCod    = Gbl.CurrentCty.Cty.CtyCod;
@@ -1913,33 +1894,48 @@ void Deg_GetListDegsAdminByMe (void)
    MYSQL_ROW row;
    unsigned NumDeg;
 
+   /***** Set default list *****/
+   Gbl.Usrs.Me.MyAdminDegs.Num = 0;
+   Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
+
    /***** Get degrees admin by me from database *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                     "ShortName,FullName,WWW"
-                     " FROM degrees"
-                     " WHERE CtrCod='%ld'"
-                     " ORDER BY ShortName",
-               Gbl.CurrentCtr.Ctr.CtrCod);
-   // TODO: put an if to select all degrees for admins of all degrees !!!!!!!!!!!!!
-   else	// Gbl.Usrs.Me.LoggedRole == Rol_ROLE_DEG_ADM
-      sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-                     "degrees.ShortName,degrees.FullName,degrees.WWW"
-                     " FROM admin,degrees"
-                     " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
-                     " AND admin.Cod=degrees.DegCod"
-                     " ORDER BY degrees.ShortName",
-               Gbl.Usrs.Me.UsrDat.UsrCod);
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
+			"ShortName,FullName,WWW"
+			" FROM degrees"
+			" WHERE CtrCod='%ld'"
+			" ORDER BY ShortName",
+		  Gbl.CurrentCtr.Ctr.CtrCod);
+	 break;
+      case Rol_DEG_ADM:
+	 sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
+			"degrees.ShortName,degrees.FullName,degrees.WWW"
+			" FROM admin,degrees"
+			" WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+			" AND admin.Cod=degrees.DegCod"
+			" ORDER BY degrees.ShortName",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+	 break;
+      default:
+	 /* I can not admin any degree */
+	 return;
+     }
+
    Gbl.Usrs.Me.MyAdminDegs.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
 
    /***** Count number of rows in result *****/
    if (Gbl.Usrs.Me.MyAdminDegs.Num) // Degrees found...
      {
       /***** Create list with degrees of this type *****/
-      if ((Gbl.Usrs.Me.MyAdminDegs.Lst = (struct Degree *) calloc (Gbl.Usrs.Me.MyAdminDegs.Num,sizeof (struct Degree))) == NULL)
+      if ((Gbl.Usrs.Me.MyAdminDegs.Lst = (struct Degree *) calloc (Gbl.Usrs.Me.MyAdminDegs.Num,
+                                                                   sizeof (struct Degree))) == NULL)
          Lay_ShowErrorAndExit ("Nout enough memory to store degrees admin by you.");
 
-      /***** Get the degrees of this type *****/
+      /***** Get the degrees *****/
       for (NumDeg = 0;
 	   NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
 	   NumDeg++)
@@ -1949,8 +1945,6 @@ void Deg_GetListDegsAdminByMe (void)
          Deg_GetDataOfDegreeFromRow (&(Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg]),row);
         }
      }
-   else
-      Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -147,8 +147,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Session.IsOpen = false;
    Gbl.Session.HasBeenDisconnected = false;
 
-   Gbl.YearOK = false;
-
    Gbl.Usrs.Me.UsrIdLogin[0] = '\0';
    Gbl.Usrs.Me.LoginPlainPassword[0] = '\0';
    Gbl.Usrs.Me.UsrDat.UsrCod = -1L;

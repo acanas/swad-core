@@ -448,6 +448,7 @@ Course:
 	316. ActCrsSch			Search for courses, teachers, documents...
 
 	317. ActPrnCrsInf		Print information on the course
+	NEW. ActChgCrsDegCfg		Request change of degree in course configuration
 	318. ActChgInsCrsCodCfg		Change institutional code in course configuration
 	319. ActChgCrsYeaCfg		Change year/semester in course configuration
 	320. ActEdiCrsInf		Edit general information about the course
@@ -1800,9 +1801,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDegSch		*/{1185,-1,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
 
    /* ActPrnCrsInf	*/{1028,-1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Crs_PrintConfiguration		,NULL},
+   /* ActChgCrsDegCfg	*/{1587,-1,TabCrs,ActSeeCrsInf		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsDegreeInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActChgInsCrsCodCfg*/{1024,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeInsCrsCodInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActChgCrsYeaCfg	*/{1573,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsYearInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActEdiCrsInf	*/{ 848,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
+
    /* ActEdiTchGui	*/{ 785,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
 
    /* ActPrnCrsTT	*/{ 152,-1,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
@@ -4437,6 +4440,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChkUsrAcc,		// #1584
 	ActAutUsrNew,		// #1585
 	ActReqMyUsgRep,		// #1586
+	ActChgCrsDegCfg,	// #1587
 	};
 
 /*****************************************************************************/

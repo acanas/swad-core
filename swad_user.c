@@ -748,7 +748,7 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
   }
 
 /*****************************************************************************/
-/*********** Check if a user is an administrator of an institution ***********/
+/***** Check if a user is an administrator of a degree/centre/institution ****/
 /*****************************************************************************/
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
