@@ -212,8 +212,11 @@ static void Crs_Configuration (bool PrintView)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Degree);
 
-   /* Get list of degrees administrated by me */
-   Deg_GetListDegsAdminByMe ();
+   if (PrintView)
+      Gbl.Usrs.Me.MyAdminDegs.Num = 0;
+   else
+      /* Get list of degrees administrated by me */
+      Deg_GetListDegsAdminByMe ();
 
    /* Put form to select degree */
    if (Gbl.Usrs.Me.MyAdminDegs.Num)
@@ -234,12 +237,12 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</select>");
 
       Act_FormEnd ();
-     }
-   else
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
 
-   /* Free list of degrees administrated by me */
-   Deg_FreeListMyAdminDegs ();
+      /* Free list of degrees administrated by me */
+      Deg_FreeListMyAdminDegs ();
+     }
+   else	// I can not change degree
+      fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

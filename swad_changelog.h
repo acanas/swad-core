@@ -148,15 +148,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.22 (2016-10-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.22.1 (2016-10-19)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.22.1:  Oct 19, 2016	Fixed bug in course configuration. (205373 lines)
         Version 16.22:    Oct 19, 2016	New form in course configuration to change course degree.
-					Code refactorization related with courses and degrees. (205367 lines)
+					Code refactorization related with courses and degrees. (205369 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1587','es','N','Mover asignatura a otra titulac.');
+
         Version 16.21.3:  Oct 12, 2016	Changes in layout of file browser. (205266 lines)
         Version 16.21.2:  Oct 12, 2016	Unused code removed from actions. (205263 lines)
         Version 16.21.1:  Oct 12, 2016	Code refactoring in actions. (205280 lines)
