@@ -99,7 +99,6 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
 static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod);
-static bool Crs_CheckIfICanChangeCrsToNewDeg (struct Degree *NewDeg);
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
@@ -216,32 +215,31 @@ static void Crs_Configuration (bool PrintView)
             Txt_Degree);
 
    /* Get list of degrees administrated by me */
-   if (!PrintView)
-      Deg_GetListDegsAdminByMe ();
-
-   /* Put form to select degree */
    if (!PrintView &&
-       Gbl.Usrs.Me.MyAdminDegs.Num)
+       Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)	// Only centre admins, institution admins and system admin can move a course to another degree
      {
+      /* Get list of degrees of the current centre */
+      Deg_GetListDegsOfCurrentCtr ();
+
+      /* Put form to select degree */
       Act_FormStart (ActChgCrsDegCfg);
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
 			 " class=\"INPUT_DEGREE\""
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumDeg = 0;
-	   NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
+	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
 	   NumDeg++)
 	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod,
-		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
-											    "",
-		  Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].ShortName);
+		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod,
+		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
+										            "",
+		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShortName);
       fprintf (Gbl.F.Out,"</select>");
-
       Act_FormEnd ();
 
-      /* Free list of degrees administrated by me */
-      Deg_FreeListMyAdminDegs ();
+      /* Free list of degrees of the current centre */
+      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
      }
    else	// I can not move course to another degree
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
@@ -954,8 +952,8 @@ void Crs_ReqEditCourses (void)
       /***** Get list of courses in this degree *****/
       Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
-      /***** Get list of degrees administrated by me *****/
-      Deg_GetListDegsAdminByMe ();
+      /***** Get list of degrees in this centre *****/
+      Deg_GetListDegsOfCurrentCtr ();
 
       /***** Put form to edit courses *****/
       Crs_EditCourses ();
@@ -963,8 +961,8 @@ void Crs_ReqEditCourses (void)
       /***** Free list of courses in this degree *****/
       Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
 
-      /***** Free list of degrees administrated by me *****/
-      Deg_FreeListMyAdminDegs ();
+      /***** Free list of degrees in this centre *****/
+      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
      }
   }
 
@@ -1427,13 +1425,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
 	    for (NumDeg = 0;
-		 NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
+		 NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
 		 NumDeg++)
 	       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod,
-			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
-												  "",
-			Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg].ShortName);
+			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod,
+			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
+										                  "",
+			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShortName);
 	    fprintf (Gbl.F.Out,"</select>");
 	    Act_FormEnd ();
 	   }
@@ -2434,7 +2432,7 @@ void Crs_ChangeCrsDegreeInConfig (void)
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
    /***** If I have permission to change course to this new degree... *****/
-   if (Crs_CheckIfICanChangeCrsToNewDeg (&NewDeg))
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
@@ -2519,7 +2517,7 @@ void Crs_ChangeCrsDegree (void)
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
    /***** If I have permission to change course to this new degree... *****/
-   if (Crs_CheckIfICanChangeCrsToNewDeg (&NewDeg))
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
@@ -2567,43 +2565,6 @@ static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod)
    sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
 	    DegCod,CrsCod);
    DB_QueryUPDATE (Query,"can not move course to another degree");
-  }
-
-/*****************************************************************************/
-/************* Check if I can change the course to a new degree **************/
-/*****************************************************************************/
-
-static bool Crs_CheckIfICanChangeCrsToNewDeg (struct Degree *NewDeg)
-  {
-   struct Centre NewCtr;
-
-   /***** Check if I have permission to change course to this degree *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_DEG_ADM:
-	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-				     Sco_SCOPE_DEG,
-				     NewDeg->DegCod);
-	 break;
-      case Rol_CTR_ADM:
-	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-				     Sco_SCOPE_CTR,
-				     NewDeg->CtrCod);
-	 break;
-      case Rol_INS_ADM:
-	 /* Get data of centre of new degree */
-	 NewCtr.CtrCod = NewDeg->CtrCod;
-	 Ctr_GetDataOfCentreByCod (&NewCtr);
-
-	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-				     Sco_SCOPE_INS,
-				     NewCtr.InsCod);
-	 break;
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
   }
 
 /*****************************************************************************/

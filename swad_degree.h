@@ -110,9 +110,8 @@ unsigned Deg_ConvStrToYear (const char *StrYear);
 void Deg_EditDegrees (void);
 
 void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs);
+void Deg_GetListDegsOfCurrentCtr (void);
 void Deg_FreeListDegs (struct ListDegrees *Degs);
-void Deg_GetListDegsAdminByMe (void);
-void Deg_FreeListMyAdminDegs (void);
 
 void Deg_RecFormReqDeg (void);
 void Deg_RecFormNewDeg (void);

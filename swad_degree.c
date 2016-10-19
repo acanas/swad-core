@@ -102,8 +102,6 @@ static void Deg_ListDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
-static void Deg_GetListDegsOfCurrentCtr (void);
-static void Deg_FreeListDegsOfCurrentCtr (void);
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
@@ -1045,7 +1043,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       Deg_ListDegrees ();
 
       /***** Free list of degrees and centres *****/
-      Deg_FreeListDegsOfCurrentCtr ();
+      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
       Ctr_FreeListCentres ();
      }
   }
@@ -1082,10 +1080,10 @@ static void Deg_ListDegreesForEdition (void)
 
    /***** List the degrees *****/
    for (NumDeg = 0;
-	NumDeg < Gbl.CurrentCtr.Ctr.NumDegs;
+	NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
 	NumDeg++)
      {
-      Deg = &(Gbl.CurrentCtr.LstDegs[NumDeg]);
+      Deg = &(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]);
 
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
@@ -1617,7 +1615,7 @@ static void Deg_ListDegrees (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Deg_PutIconToEditDegrees :
                                                   NULL);
 
-   if (Gbl.CurrentCtr.Ctr.NumDegs)	// There are degrees in the current centre
+   if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
@@ -1625,9 +1623,9 @@ static void Deg_ListDegrees (void)
 
       /***** List the degrees *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.CurrentCtr.Ctr.NumDegs;
+	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
 	   NumDeg++)
-	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.LstDegs[NumDeg]),NumDeg + 1);
+	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
@@ -1639,8 +1637,8 @@ static void Deg_ListDegrees (void)
    if (ICanEdit)
      {
       Act_FormStart (ActEdiDeg);
-      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.NumDegs ? Txt_Create_another_degree :
-	                                                 Txt_Create_degree);
+      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
+	                                                  Txt_Create_degree);
       Act_FormEnd ();
      }
 
@@ -1779,7 +1777,7 @@ void Deg_EditDegrees (void)
 	 Deg_PutFormToCreateDegree ();
 
 	 /***** Forms to edit current degrees *****/
-	 if (Gbl.CurrentCtr.Ctr.NumDegs)
+	 if (Gbl.CurrentCtr.Ctr.Degs.Num)
 	   {
 	    if (Gbl.Ctrs.Num)
 	       Deg_ListDegreesForEdition ();
@@ -1806,7 +1804,7 @@ void Deg_EditDegrees (void)
    Ctr_FreeListCentres ();
 
    /***** Free list of degrees in the current centre *****/
-   Deg_FreeListDegsOfCurrentCtr ();
+   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
   }
 
 /*****************************************************************************/
@@ -1856,24 +1854,10 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
   }
 
 /*****************************************************************************/
-/*********************** Free list of all the degrees ************************/
-/*****************************************************************************/
-
-void Deg_FreeListDegs (struct ListDegrees *Degs)
-  {
-   if (Degs->Lst)
-     {
-      free ((void *) Degs->Lst);
-      Degs->Lst = NULL;
-      Degs->Num = 0;
-     }
-  }
-
-/*****************************************************************************/
 /************ Get a list with the degrees of the current centre **************/
 /*****************************************************************************/
 
-static void Deg_GetListDegsOfCurrentCtr (void)
+void Deg_GetListDegsOfCurrentCtr (void)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1891,121 +1875,41 @@ static void Deg_GetListDegsOfCurrentCtr (void)
    /***** Count number of rows in result *****/
    if (NumRows) // Degrees found...
      {
-      Gbl.CurrentCtr.Ctr.NumDegs = (unsigned) NumRows;
+      Gbl.CurrentCtr.Ctr.Degs.Num = (unsigned) NumRows;
 
       /***** Create list with degrees of this centre *****/
-      if ((Gbl.CurrentCtr.LstDegs = (struct Degree *) calloc (Gbl.CurrentCtr.Ctr.NumDegs,sizeof (struct Degree))) == NULL)
+      if ((Gbl.CurrentCtr.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.CurrentCtr.Ctr.Degs.Num,
+                                                                   sizeof (struct Degree))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store degrees of a centre.");
 
       /***** Get the degrees of this centre *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.CurrentCtr.Ctr.NumDegs;
+	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
 	   NumDeg++)
         {
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&(Gbl.CurrentCtr.LstDegs[NumDeg]),row);
+         Deg_GetDataOfDegreeFromRow (&Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg],row);
         }
      }
-   else	// Error: degrees should be found, but really they haven't be found. This never should happen.
-      Gbl.CurrentCtr.Ctr.NumDegs = 0;
+   else
+      Gbl.CurrentCtr.Ctr.Degs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/***************** Free list of degrees of the current centre ****************/
+/*************************** Free list of degrees ****************************/
 /*****************************************************************************/
 
-static void Deg_FreeListDegsOfCurrentCtr (void)
+void Deg_FreeListDegs (struct ListDegrees *Degs)
   {
-   if (Gbl.CurrentCtr.LstDegs)
+   if (Degs->Lst)
      {
-      free ((void *) Gbl.CurrentCtr.LstDegs);
-      Gbl.CurrentCtr.LstDegs = NULL;
-      Gbl.CurrentCtr.Ctr.NumDegs = 0;
-     }
-  }
-
-/*****************************************************************************/
-/*********** Create a list with the degrees administrated by me **************/
-/*****************************************************************************/
-
-void Deg_GetListDegsAdminByMe (void)
-  {
-   char Query[1024];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumDeg;
-
-   /***** Set default list *****/
-   Gbl.Usrs.Me.MyAdminDegs.Num = 0;
-   Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
-
-   /***** Get degrees admin by me from database *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-			"ShortName,FullName,WWW"
-			" FROM degrees"
-			" WHERE CtrCod='%ld'"
-			" ORDER BY ShortName",
-		  Gbl.CurrentCtr.Ctr.CtrCod);
-	 break;
-      case Rol_DEG_ADM:
-	 sprintf (Query,"SELECT degrees.DegCod,degrees.CtrCod,degrees.DegTypCod,degrees.Status,degrees.RequesterUsrCod,"
-			"degrees.ShortName,degrees.FullName,degrees.WWW"
-			" FROM admin,degrees"
-			" WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
-			" AND admin.Cod=degrees.DegCod"
-			" ORDER BY degrees.ShortName",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-	 break;
-      default:
-	 /* I can not admin any degree */
-	 return;
-     }
-
-   Gbl.Usrs.Me.MyAdminDegs.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
-
-   /***** Count number of rows in result *****/
-   if (Gbl.Usrs.Me.MyAdminDegs.Num) // Degrees found...
-     {
-      /***** Create list with degrees of this type *****/
-      if ((Gbl.Usrs.Me.MyAdminDegs.Lst = (struct Degree *) calloc (Gbl.Usrs.Me.MyAdminDegs.Num,
-                                                                   sizeof (struct Degree))) == NULL)
-         Lay_ShowErrorAndExit ("Nout enough memory to store degrees admin by you.");
-
-      /***** Get the degrees *****/
-      for (NumDeg = 0;
-	   NumDeg < Gbl.Usrs.Me.MyAdminDegs.Num;
-	   NumDeg++)
-        {
-         /* Get next degree */
-         row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&(Gbl.Usrs.Me.MyAdminDegs.Lst[NumDeg]),row);
-        }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/***************** Free list of degrees administrated by me ******************/
-/*****************************************************************************/
-
-void Deg_FreeListMyAdminDegs (void)
-  {
-   if (Gbl.Usrs.Me.MyAdminDegs.Lst)
-     {
-      free ((void *) Gbl.Usrs.Me.MyAdminDegs.Lst);
-      Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
-      Gbl.Usrs.Me.MyAdminDegs.Num = 0;
+      free ((void *) Degs->Lst);
+      Degs->Lst = NULL;
+      Degs->Num = 0;
      }
   }
 

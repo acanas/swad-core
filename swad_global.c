@@ -172,8 +172,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.MyDegrees.Filled = false;
    Gbl.Usrs.Me.MyCourses.Filled = false;
    Gbl.Usrs.Me.MyCourses.Num = 0;
-   Gbl.Usrs.Me.MyAdminDegs.Num = 0;
-   Gbl.Usrs.Me.MyAdminDegs.Lst = NULL;
    Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An e-mail to confirm my e-mail address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
@@ -222,6 +220,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCtr.Ctr.PlcCod = -1L;
    Gbl.CurrentCtr.Ctr.ShortName[0] = '\0';
    Gbl.CurrentCtr.Ctr.FullName[0] = '\0';
+   Gbl.CurrentCtr.Ctr.Degs.Num = 0;
+   Gbl.CurrentCtr.Ctr.Degs.Lst = NULL;
 
    Gbl.CurrentDegTyp.DegTyp.DegTypCod = -1L;
    Gbl.CurrentDegTyp.DegTyp.DegTypName[0] = '\0';
@@ -445,7 +445,7 @@ void Gbl_Cleanup (void)
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInDegree (&Gbl.Degs.EditingDeg);
-   Deg_FreeListMyAdminDegs ();
+   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
    DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();

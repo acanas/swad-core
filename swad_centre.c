@@ -754,7 +754,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "%u"
 		      "</td>",
 	    TxtClassNormal,BgColor,
-	    Ctr->NumDegs);
+	    Ctr->Degs.Num);
 
    /***** Number of courses *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -937,7 +937,7 @@ void Ctr_GetListCentres (long InsCod)
             Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
 
          /* Get number of degrees in this centre */
-         Ctr->NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+         Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
 
          /* Get number of courses in this centre */
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
@@ -973,7 +973,8 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->FullName[0]  = '\0';
    Ctr->WWW[0]       = '\0';
    Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
-   Ctr->NumDegs = Ctr->NumCrss = 0;
+   Ctr->Degs.Num =
+   Ctr->NumCrss  = 0;
    Ctr->NumUsrs = 0;
 
    /***** Check if centre code is correct *****/
@@ -1031,7 +1032,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
             Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
 
          /* Get number of degrees in this centre */
-         Ctr->NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+         Ctr->Degs.Num = Deg_GetNumDegsInCtr (Ctr->CtrCod);
 
          /* Get number of courses in this centre */
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
@@ -1285,7 +1286,7 @@ static void Ctr_ListCentresForEdition (void)
       /* Put icon to remove centre */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Ctr->NumDegs ||
+      if (Ctr->Degs.Num ||
 	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
 	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
           !ICanEdit)
@@ -1439,7 +1440,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
-               Ctr->NumDegs);
+               Ctr->Degs.Num);
 
       /* Number of users in courses of this centre */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1595,7 +1596,7 @@ void Ctr_RemoveCentre (void)
    Ctr_GetDataOfCentreByCod (&Ctr);
 
    /***** Check if this centre has teachers *****/
-   if (Ctr.NumDegs ||
+   if (Ctr.Degs.Num ||
        Ctr.NumUsrsWhoClaimToBelongToCtr ||
        Ctr.NumUsrs)	// Centre has degrees or users ==> don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);

@@ -342,11 +342,6 @@ struct Globals
                long DegCod;
               } Crss[Crs_MAX_COURSES_PER_USR];
            } MyCourses;
-         struct
-           {
-            unsigned Num;
-            struct Degree *Lst;
-           } MyAdminDegs;	// List of degrees administrated by me
 	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
@@ -418,7 +413,6 @@ struct Globals
    struct
      {
       struct Centre Ctr;
-      struct Degree *LstDegs;	// List of degrees of current centre
      } CurrentCtr;
    struct
      {
