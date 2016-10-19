@@ -148,13 +148,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.22.1 (2016-10-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.22.2 (2016-10-19)"
 #define CSS_FILE		"swad15.229.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.22.2:  Oct 19, 2016	Code refactoring in course configuration.
+					Fixed bug in selector of courses in breadcrumb. (205350 lines)
         Version 16.22.1:  Oct 19, 2016	Fixed bug in course configuration. (205373 lines)
         Version 16.22:    Oct 19, 2016	New form in course configuration to change course degree.
 					Code refactorization related with courses and degrees. (205369 lines)

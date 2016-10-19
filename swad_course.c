@@ -98,6 +98,8 @@ static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
+static bool Crs_CheckIfICanChangeCrsToNewDeg (struct Degree *NewDeg);
+
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
@@ -1078,7 +1080,7 @@ void Crs_WriteSelectorMyCourses (void)
                                                   ActSysReqSch);
 
    /***** Start of selector of courses *****/
-   fprintf (Gbl.F.Out,"<select name=\"CrsCod\""
+   fprintf (Gbl.F.Out,"<select name=\"crs\""
 	              " style=\"width:130px; margin:1px;\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
@@ -2436,10 +2438,8 @@ void Crs_ChangeCrsDegreeInConfig (void)
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
-   bool ICanChangeCrsToNewDeg;
-   char Query[512];
    struct Degree NewDeg;
-   struct Centre NewCtr;
+   char Query[128];
 
    /***** Get new degree from form *****/
    /* Get new degree code */
@@ -2448,38 +2448,8 @@ void Crs_ChangeCrsDegreeInConfig (void)
    /* Get data of new degree */
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
-   /***** Check if I have permission to change course to this degree *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_DEG_ADM:
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_DEG,
-						      NewDeg.DegCod);
-	 break;
-      case Rol_CTR_ADM:
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_CTR,
-						      NewDeg.CtrCod);
-	 break;
-      case Rol_INS_ADM:
-	 /* Get data of centre of new degree */
-	 NewCtr.CtrCod = NewDeg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&NewCtr);
-
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_INS,
-						      NewCtr.InsCod);
-	 break;
-      case Rol_SYS_ADM:
-         ICanChangeCrsToNewDeg = true;
-         break;
-      default:
-         ICanChangeCrsToNewDeg = false;
-         break;
-     }
-
    /***** If I have permission to change course to this new degree... *****/
-   if (ICanChangeCrsToNewDeg)
+   if (Crs_CheckIfICanChangeCrsToNewDeg (&NewDeg))
      {
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
@@ -2531,10 +2501,8 @@ void Crs_ChangeCrsDegree (void)
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Course *Crs;
-   bool ICanChangeCrsToNewDeg;
-   char Query[512];
    struct Degree NewDeg;
-   struct Centre NewCtr;
+   char Query[128];
 
    Crs = &Gbl.Degs.EditingCrs;
 
@@ -2551,37 +2519,8 @@ void Crs_ChangeCrsDegree (void)
    Crs_GetDataOfCourseByCod (Crs);
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_DEG_ADM:
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_DEG,
-						      NewDeg.DegCod);
-	 break;
-      case Rol_CTR_ADM:
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_CTR,
-						      NewDeg.CtrCod);
-	 break;
-      case Rol_INS_ADM:
-	 /* Get data of centre of new degree */
-	 NewCtr.CtrCod = NewDeg.CtrCod;
-	 Ctr_GetDataOfCentreByCod (&NewCtr);
-
-	 ICanChangeCrsToNewDeg = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Sco_SCOPE_INS,
-						      NewCtr.InsCod);
-	 break;
-      case Rol_SYS_ADM:
-         ICanChangeCrsToNewDeg = true;
-         break;
-      default:
-         ICanChangeCrsToNewDeg = false;
-         break;
-     }
-
    /***** If I have permission to change course to this new degree... *****/
-   if (ICanChangeCrsToNewDeg)
+   if (Crs_CheckIfICanChangeCrsToNewDeg (&NewDeg))
      {
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
@@ -2616,6 +2555,43 @@ void Crs_ChangeCrsDegree (void)
       sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
                NewDeg.FullName);
       Gbl.Error = true;
+     }
+  }
+
+/*****************************************************************************/
+/************* Check if I can change the course to a new degree **************/
+/*****************************************************************************/
+
+static bool Crs_CheckIfICanChangeCrsToNewDeg (struct Degree *NewDeg)
+  {
+   struct Centre NewCtr;
+
+   /***** Check if I have permission to change course to this degree *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_DEG_ADM:
+	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+				     Sco_SCOPE_DEG,
+				     NewDeg->DegCod);
+	 break;
+      case Rol_CTR_ADM:
+	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+				     Sco_SCOPE_CTR,
+				     NewDeg->CtrCod);
+	 break;
+      case Rol_INS_ADM:
+	 /* Get data of centre of new degree */
+	 NewCtr.CtrCod = NewDeg->CtrCod;
+	 Ctr_GetDataOfCentreByCod (&NewCtr);
+
+	 return Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+				     Sco_SCOPE_INS,
+				     NewCtr.InsCod);
+	 break;
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
      }
   }
 
