@@ -205,7 +205,7 @@ static void Crs_Configuration (bool PrintView)
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
-   /***** Course degree *****/
+   /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
@@ -214,14 +214,13 @@ static void Crs_Configuration (bool PrintView)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Degree);
 
-   if (PrintView)
-      Gbl.Usrs.Me.MyAdminDegs.Num = 0;
-   else
-      /* Get list of degrees administrated by me */
+   /* Get list of degrees administrated by me */
+   if (!PrintView)
       Deg_GetListDegsAdminByMe ();
 
    /* Put form to select degree */
-   if (Gbl.Usrs.Me.MyAdminDegs.Num)
+   if (!PrintView &&
+       Gbl.Usrs.Me.MyAdminDegs.Num)
      {
       Act_FormStart (ActChgCrsDegCfg);
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
@@ -243,7 +242,7 @@ static void Crs_Configuration (bool PrintView)
       /* Free list of degrees administrated by me */
       Deg_FreeListMyAdminDegs ();
      }
-   else	// I can not change degree
+   else	// I can not move course to another degree
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
 
    fprintf (Gbl.F.Out,"</td>"
@@ -754,21 +753,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
    Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/** Show message of success after changing a course in course configuration **/
-/*****************************************************************************/
-
-void Crs_ContEditAfterChgCrsInConfig (void)
-  {
-   /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
-			      Lay_SUCCESS,
-		  Gbl.Message);
-
-   /***** Show the form again *****/
-   Crs_ShowIntroduction ();
   }
 
 /*****************************************************************************/
@@ -2441,11 +2425,12 @@ void Crs_ChangeCrsDegreeInConfig (void)
    struct Degree NewDeg;
    char Query[128];
 
-   /***** Get new degree from form *****/
-   /* Get new degree code */
+   /***** Get parameters from form *****/
+   /* Get parameter with degree code */
    if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
-   /* Get data of new degree */
+
+   /***** Get data of new degree *****/
    Deg_GetDataOfDegreeByCod (&NewDeg);
 
    /***** If I have permission to change course to this new degree... *****/
@@ -2472,14 +2457,16 @@ void Crs_ChangeCrsDegreeInConfig (void)
 	 sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
 		  NewDeg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
 	 DB_QueryUPDATE (Query,"can not move course to another degree");
-	 Gbl.CurrentCrs.Crs.DegCod = NewDeg.DegCod;
+	 Gbl.CurrentCrs.Crs.DegCod =
+	 Gbl.CurrentDeg.Deg.DegCod = NewDeg.DegCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
       	 Deg_InitCurrentCourse ();
 
 	 /***** Create message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
-		  Gbl.CurrentCrs.Crs.FullName,NewDeg.FullName);
+		  Gbl.CurrentCrs.Crs.FullName,
+		  Gbl.CurrentDeg.Deg.FullName);
 	}
      }
    else	// I have no permission to change course to this new degree
@@ -2488,6 +2475,21 @@ void Crs_ChangeCrsDegreeInConfig (void)
                NewDeg.FullName);
       Gbl.Error = true;
      }
+  }
+
+/*****************************************************************************/
+/** Show message of success after changing a course in course configuration **/
+/*****************************************************************************/
+
+void Crs_ContEditAfterChgCrsInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
+
+   /***** Show the form again *****/
+   Crs_ShowIntroduction ();
   }
 
 /*****************************************************************************/

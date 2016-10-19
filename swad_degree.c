@@ -287,15 +287,17 @@ void Deg_PrintConfiguration (void)
 static void Deg_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Courses;
-   extern const char *Txt_Courses_of_DEGREE_X;
+   extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumCtr;
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -321,6 +323,47 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+
+      /***** Centre *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Centre);
+
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admin can move a degree to another centre
+	{
+	 /* Get list of centres of the current institution */
+	 Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+
+	 /* Put form to select centre */
+	 Act_FormStart (ActChgDegCtrCfg);
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\""
+			    " class=\"INPUT_CENTRE\""
+			    " onchange=\"document.getElementById('%s').submit();\">",
+		  Gbl.Form.Id);
+	 for (NumCtr = 0;
+	      NumCtr < Gbl.Ctrs.Num;
+	      NumCtr++)
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		     Gbl.Ctrs.Lst[NumCtr].CtrCod,
+		     Gbl.Ctrs.Lst[NumCtr].CtrCod == Gbl.CurrentCtr.Ctr.CtrCod ? " selected=\"selected\"" :
+										"",
+		     Gbl.Ctrs.Lst[NumCtr].ShortName);
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
+
+	 /* Free list of centres */
+	 Ctr_FreeListCentres ();
+	}
+      else	// I can not edit centre
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Degree full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2538,12 +2581,60 @@ static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const
 /************************ Change the centre of a degree **********************/
 /*****************************************************************************/
 
+void Deg_ChangeDegreeCtrInConfig (void)
+  {
+   extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
+   struct Centre NewCtr;
+   char Query[128];
+
+   /***** Get parameters from form *****/
+   /* Get parameter with centre code */
+   NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
+
+   /***** Get data of new centre *****/
+   Ctr_GetDataOfCentreByCod (&NewCtr);
+
+   /***** Update centre in table of degrees *****/
+   sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
+            NewCtr.CtrCod,Gbl.CurrentDeg.Deg.DegCod);
+   DB_QueryUPDATE (Query,"can not update the centre of a degree");
+   Gbl.CurrentDeg.Deg.CtrCod =
+   Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
+
+   /***** Initialize again current course, degree, centre... *****/
+   Deg_InitCurrentCourse ();
+
+   /***** Create message to show the change made *****/
+   sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
+	    Gbl.CurrentDeg.Deg.FullName,
+	    Gbl.CurrentCtr.Ctr.FullName);
+  }
+
+/*****************************************************************************/
+/** Show message of success after changing a course in course configuration **/
+/*****************************************************************************/
+
+void Deg_ContEditAfterChgDegInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
+
+   /***** Show the form again *****/
+   Deg_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/************************ Change the centre of a degree **********************/
+/*****************************************************************************/
+
 void Deg_ChangeDegreeCtr (void)
   {
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Degree *Deg;
    struct Centre NewCtr;
-   char Query[512];
+   char Query[128];
 
    Deg = &Gbl.Degs.EditingDeg;
 
