@@ -111,6 +111,8 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod);
 
+static void Deg_UpdateDegCentreDB (long DegCod,long CtrCod);
+
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
 /*****************************************************************************/
@@ -2585,7 +2587,6 @@ void Deg_ChangeDegreeCtrInConfig (void)
   {
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Centre NewCtr;
-   char Query[128];
 
    /***** Get parameters from form *****/
    /* Get parameter with centre code */
@@ -2595,9 +2596,7 @@ void Deg_ChangeDegreeCtrInConfig (void)
    Ctr_GetDataOfCentreByCod (&NewCtr);
 
    /***** Update centre in table of degrees *****/
-   sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
-            NewCtr.CtrCod,Gbl.CurrentDeg.Deg.DegCod);
-   DB_QueryUPDATE (Query,"can not update the centre of a degree");
+   Deg_UpdateDegCentreDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
    Gbl.CurrentDeg.Deg.CtrCod =
    Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
 
@@ -2611,7 +2610,7 @@ void Deg_ChangeDegreeCtrInConfig (void)
   }
 
 /*****************************************************************************/
-/** Show message of success after changing a course in course configuration **/
+/** Show message of success after changing a degree in course configuration **/
 /*****************************************************************************/
 
 void Deg_ContEditAfterChgDegInConfig (void)
@@ -2634,7 +2633,6 @@ void Deg_ChangeDegreeCtr (void)
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Degree *Deg;
    struct Centre NewCtr;
-   char Query[128];
 
    Deg = &Gbl.Degs.EditingDeg;
 
@@ -2651,9 +2649,7 @@ void Deg_ChangeDegreeCtr (void)
    Ctr_GetDataOfCentreByCod (&NewCtr);
 
    /***** Update centre in table of degrees *****/
-   sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
-            NewCtr.CtrCod,Deg->DegCod);
-   DB_QueryUPDATE (Query,"can not update the centre of a degree");
+   Deg_UpdateDegCentreDB (Deg->DegCod,NewCtr.CtrCod);
    Deg->CtrCod = NewCtr.CtrCod;
 
    /***** Write message to show the change made *****/
@@ -2666,6 +2662,20 @@ void Deg_ChangeDegreeCtr (void)
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
+  }
+
+/*****************************************************************************/
+/********************** Update centre in table of degrees ********************/
+/*****************************************************************************/
+
+static void Deg_UpdateDegCentreDB (long DegCod,long CtrCod)
+  {
+   char Query[128];
+
+   /***** Update centre in table of degrees *****/
+   sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
+            CtrCod,DegCod);
+   DB_QueryUPDATE (Query,"can not update the centre of a degree");
   }
 
 /*****************************************************************************/
