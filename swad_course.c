@@ -98,6 +98,7 @@ static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
+static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod);
 static bool Crs_CheckIfICanChangeCrsToNewDeg (struct Degree *NewDeg);
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
@@ -2423,7 +2424,6 @@ void Crs_ChangeCrsDegreeInConfig (void)
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Degree NewDeg;
-   char Query[128];
 
    /***** Get parameters from form *****/
    /* Get parameter with degree code */
@@ -2454,9 +2454,7 @@ void Crs_ChangeCrsDegreeInConfig (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
-		  NewDeg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
-	 DB_QueryUPDATE (Query,"can not move course to another degree");
+	 Crs_UpdateCrsDegreeDB (Gbl.CurrentCrs.Crs.CrsCod,NewDeg.DegCod);
 	 Gbl.CurrentCrs.Crs.DegCod =
 	 Gbl.CurrentDeg.Deg.DegCod = NewDeg.DegCod;
 
@@ -2504,7 +2502,6 @@ void Crs_ChangeCrsDegree (void)
    extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Course *Crs;
    struct Degree NewDeg;
-   char Query[128];
 
    Crs = &Gbl.Degs.EditingCrs;
 
@@ -2542,9 +2539,7 @@ void Crs_ChangeCrsDegree (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
-		  NewDeg.DegCod,Crs->CrsCod);
-	 DB_QueryUPDATE (Query,"can not move course to another degree");
+	 Crs_UpdateCrsDegreeDB (Crs->CrsCod,NewDeg.DegCod);
 	 Crs->DegCod = NewDeg.DegCod;
 
 	 /***** Create message to show the change made *****/
@@ -2558,6 +2553,20 @@ void Crs_ChangeCrsDegree (void)
                NewDeg.FullName);
       Gbl.Error = true;
      }
+  }
+
+/*****************************************************************************/
+/********************** Update degree in table of courses ********************/
+/*****************************************************************************/
+
+static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod)
+  {
+   char Query[128];
+
+   /***** Update degree in table of courses *****/
+   sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
+	    DegCod,CrsCod);
+   DB_QueryUPDATE (Query,"can not move course to another degree");
   }
 
 /*****************************************************************************/
