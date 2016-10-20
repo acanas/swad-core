@@ -46617,27 +46617,6 @@ const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
 	"There is no knowing how many users not logged have accessed.";				// Necessita de tradução
 #endif
 
-const char *Txt_There_is_no_list_of_centres =
-#if   L==1
-	"No hay lista de centros.";		// Necessita traduccio
-#elif L==2
-	"There is no list of centres.";		// Übersetzung notwendig
-#elif L==3
-	"There is no list of centres.";
-#elif L==4
-	"No hay lista de centros.";
-#elif L==5
-	"There is no list of centres.";		// Besoin de traduction
-#elif L==6
-	"No hay lista de centros.";		// Okoteve traducción
-#elif L==7
-	"Non c'&egrave; la lista de centri.";
-#elif L==8
-	"There is no list of centres.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There is no list of centres.";		// Necessita de tradução
-#endif
-
 const char *Txt_There_is_no_list_of_types_of_degree =
 #if   L==1
 	"No hay lista de tipos de titulaci&oacute;n.";	// Necessita traduccio
@@ -46657,27 +46636,6 @@ const char *Txt_There_is_no_list_of_types_of_degree =
 	"There is no list of types of degree.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"There is no list of types of degree.";		// Necessita de tradução
-#endif
-
-const char *Txt_There_is_no_list_of_institutions =
-#if   L==1
-	"No hay lista de instituciones.";		// Necessita traduccio
-#elif L==2
-	"There is no list of institutions.";		// Übersetzung notwendig
-#elif L==3
-	"There is no list of institutions.";
-#elif L==4
-	"No hay lista de instituciones.";
-#elif L==5
-	"There is no list of institutions.";		// Besoin de traduction
-#elif L==6
-	"No hay lista de instituciones.";		// Okoteve traducción
-#elif L==7
-	"Non c'&egrave; la lista delle istituzioni.";
-#elif L==8
-	"There is no list of institutions.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There is no list of institutions.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important to include %s in the following sentences
@@ -53182,57 +53140,6 @@ const char *Txt_You_have_written_X_posts_in_this_thread =		// Warning: it is ver
 	"You have written %u posts in this thread";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; escreveu %u posts neste thread";
-#endif
-
-const char *Txt_You_must_create_at_least_one_centre_before_creating_degrees =
-#if   L==1
-	"Debe crear al menos un centro antes de crear titulaciones.";	// Necessita traduccio
-#elif L==2
-	"You must create at least one centre before creating degrees.";	// Übersetzung notwendig
-#elif L==3
-	"You must create at least one centre before creating degrees.";
-#elif L==4
-	"Debe crear al menos un centro antes de crear titulaciones.";
-#elif L==5
-	"You must create at least one centre before creating degrees.";	// Besoin de traduction
-#elif L==6
-	"Debe crear al menos un centro antes de crear titulaciones.";	// Okoteve traducción
-#elif L==7
-	"Devi creare almeno un centro prima di creare lauree.";
-#elif L==8
-	"You must create at least one centro before creating degrees.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"You must create at least one centro before creating degrees.";	// Necessita de tradução
-#endif
-
-const char *Txt_You_must_create_at_least_one_institution_before_creating_centres =
-#if   L==1
-	"Debe crear al menos una instituci&oacute;n"
-	" antes de crear centros.";		// Necessita traduccio
-#elif L==2
-	"You must create at least one institution"
-	" before creating centres.";		// Übersetzung notwendig
-#elif L==3
-	"You must create at least one institution"
-	" before creating centres.";
-#elif L==4
-	"Debe crear al menos una instituci&oacute;n"
-	" antes de crear centros.";
-#elif L==5
-	"You must create at least one institution"
-	" before creating centres.";		// Besoin de traduction
-#elif L==6
-	"Debe crear al menos una instituci&oacute;n"
-	" antes de crear centros.";		// Okoteve traducción
-#elif L==7
-	"Devi creare almeno un'istituzione"
-	" prima di creare centri.";
-#elif L==8
-	"You must create at least one institution"
-	" before creating centres.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"You must create at least one institution"
-	" before creating centres.";		// Necessita de tradução
 #endif
 
 const char *Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees =

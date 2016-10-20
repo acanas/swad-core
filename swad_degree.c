@@ -1352,7 +1352,7 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
    Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1713,53 +1713,32 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
 void Deg_EditDegrees (void)
   {
-   extern const char *Txt_There_is_no_list_of_centres;
-   extern const char *Txt_You_must_create_at_least_one_centre_before_creating_degrees;
    extern const char *Txt_There_is_no_list_of_types_of_degree;
    extern const char *Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees;
 
    /***** Get list of degrees in the current centre *****/
    Deg_GetListDegsOfCurrentCtr ();
 
-   /***** Get list of centres of the current institution *****/
-   Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+   /***** Get list of degree types *****/
+   DT_GetListDegreeTypes ();
 
-   if (Gbl.Ctrs.Num)
+   if (Gbl.Degs.DegTypes.Num)
      {
-      /***** Get list of degree types *****/
-      DT_GetListDegreeTypes ();
+      /***** Put a form to create a new degree *****/
+      Deg_PutFormToCreateDegree ();
 
-      if (Gbl.Degs.DegTypes.Num)
-	{
-	 /***** Put a form to create a new degree *****/
-	 Deg_PutFormToCreateDegree ();
-
-	 /***** Forms to edit current degrees *****/
-	 if (Gbl.CurrentCtr.Ctr.Degs.Num)
-	   {
-	    if (Gbl.Ctrs.Num)
-	       Deg_ListDegreesForEdition ();
-	    else
-	       Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_centres);
-	   }
-	}
-      else	// No degree types
-	{
-	 Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_types_of_degree);
-	 Lay_ShowAlert (Lay_INFO,Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees);
-	}
-
-      /***** Free list of degree types *****/
-      DT_FreeListDegreeTypes ();
+      /***** Forms to edit current degrees *****/
+      if (Gbl.CurrentCtr.Ctr.Degs.Num)
+         Deg_ListDegreesForEdition ();
      }
-   else	// No centres
+   else	// No degree types
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_centres);
-      Lay_ShowAlert (Lay_INFO,Txt_You_must_create_at_least_one_centre_before_creating_degrees);
+      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_types_of_degree);
+      Lay_ShowAlert (Lay_INFO,Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees);
      }
 
-   /***** Free list of centres of the current institution *****/
-   Ctr_FreeListCentres ();
+   /***** Free list of degree types *****/
+   DT_FreeListDegreeTypes ();
 
    /***** Free list of degrees in the current centre *****/
    Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);

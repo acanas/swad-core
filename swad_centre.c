@@ -848,40 +848,24 @@ static void Ctr_GetParamCtrOrderType (void)
 
 void Ctr_EditCentres (void)
   {
-   extern const char *Txt_There_is_no_list_of_institutions;
-   extern const char *Txt_You_must_create_at_least_one_institution_before_creating_centres;
+   /***** Get list of places *****/
+   Plc_GetListPlaces ();
 
-   /***** Get list of institutions of the current country *****/
-   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
-   if (Gbl.Inss.Num)
-     {
-      /***** Get list of places *****/
-      Plc_GetListPlaces ();
+   /***** Get list of centres *****/
+   Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
-      /***** Get list of centres *****/
-      Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+   /***** Put a form to create a new centre *****/
+   Ctr_PutFormToCreateCentre ();
 
-      /***** Put a form to create a new centre *****/
-      Ctr_PutFormToCreateCentre ();
+   /***** List current centres *****/
+   if (Gbl.Ctrs.Num)
+      Ctr_ListCentresForEdition ();
 
-      /***** List current centres *****/
-      if (Gbl.Ctrs.Num)
-	 Ctr_ListCentresForEdition ();
+   /***** Free list of centres *****/
+   Ctr_FreeListCentres ();
 
-      /***** Free list of centres *****/
-      Ctr_FreeListCentres ();
-
-      /***** Free list of places *****/
-      Plc_FreeListPlaces ();
-     }
-   else	// No institutions
-     {
-      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_institutions);
-      Lay_ShowAlert (Lay_INFO,Txt_You_must_create_at_least_one_institution_before_creating_centres);
-     }
-
-   /***** Free list of institutions *****/
-   Ins_FreeListInstitutions ();
+   /***** Free list of places *****/
+   Plc_FreeListPlaces ();
   }
 
 /*****************************************************************************/
@@ -1297,8 +1281,6 @@ static void Ctr_ListCentresForEdition (void)
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    unsigned NumCtr;
    struct Centre *Ctr;
-   struct Institution Ins;
-   unsigned NumIns;
    unsigned NumPlc;
    char WWW[Ctr_MAX_LENGTH_WWW_ON_SCREEN+1];
    struct UsrData UsrDat;
@@ -1320,10 +1302,6 @@ static void Ctr_ListCentresForEdition (void)
 	NumCtr++)
      {
       Ctr = &Gbl.Ctrs.Lst[NumCtr];
-
-      /* Get data of institution of this centre */
-      Ins.InsCod = Ctr->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       ICanEdit = Ctr_CheckIfICanEdit (Ctr);
 
@@ -1355,30 +1333,6 @@ static void Ctr_ListCentresForEdition (void)
 	                 " style=\"width:25px;\">",
                Ctr->FullName);
       Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,NULL,true);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Institution */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// I can select institution
-	{
-	 Act_FormStart (ActChgCtrIns);
-	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
-	 for (NumIns = 0;
-	      NumIns < Gbl.Inss.Num;
-	      NumIns++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Inss.Lst[NumIns].InsCod,
-		     (Gbl.Inss.Lst[NumIns].InsCod == Ctr->InsCod) ? " selected=\"selected\"" :
-			                                            "",
-		     Gbl.Inss.Lst[NumIns].ShortName);
-	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
-	}
-      else
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShortName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place */
@@ -1734,46 +1688,6 @@ void Ctr_ContEditAfterChgCtrInConfig (void)
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
-/********************* Change the institution of a centre ********************/
-/*****************************************************************************/
-
-void Ctr_ChangeCentreIns (void)
-  {
-   extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
-   struct Centre *Ctr;
-   struct Institution NewIns;
-
-   Ctr = &Gbl.Ctrs.EditingCtr;
-
-   /***** Get parameters from form *****/
-   /* Get the code of the centre */
-   if ((Ctr->CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of centre is missing.");
-
-   /* Get parameter with institution code */
-   NewIns.InsCod = Ins_GetParamOtherInsCod ();
-
-   /***** Get data of centre and new institution *****/
-   Ctr_GetDataOfCentreByCod (Ctr);
-   Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
-
-   /***** Update institution in table of centres *****/
-   Ctr_UpdateCtrInsDB (Ctr->CtrCod,NewIns.InsCod);
-   Ctr->InsCod = NewIns.InsCod;
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
-	    Ctr->FullName,NewIns.FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Put button to go to centre changed *****/
-   Ctr_PutButtonToGoToCtr (Ctr);
-
-   /***** Show the form again *****/
-   Ctr_EditCentres ();
   }
 
 /*****************************************************************************/
@@ -2374,18 +2288,6 @@ static void Ctr_PutFormToCreateCentre (void)
    Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Institution *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthInsCod\" style=\"width:62px;\""
-                      " disabled=\"disabled\">"
-                      "<option value=\"%ld\" selected=\"selected\">"
-                      "%s"
-                      "</option>"
-                      "</select>"
-                      "</td>",
-            Gbl.CurrentIns.Ins.InsCod,
-	    Gbl.CurrentIns.Ins.ShortName);
-
    /***** Place *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
@@ -2539,7 +2441,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 static void Ctr_PutHeadCentresForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Institution;
    extern const char *Txt_Place;
    extern const char *Txt_Short_name_of_the_centre;
    extern const char *Txt_Full_name_of_the_centre;
@@ -2569,9 +2470,6 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2589,7 +2487,6 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_Institution,
             Txt_Place,
             Txt_Short_name_of_the_centre,
             Txt_Full_name_of_the_centre,

@@ -191,7 +191,6 @@ Institution:
 	 90. ActReqCtr			Request the creation of a request for a new centre (a teacher makes the petition to an administrator)
 	 91. ActNewCtr			Request the creation of a centre
 	 92. ActRemCtr			Remove centre
-	 93. ActChgCtrIns		Request change of the institution of a centre
 	 94. ActChgCtrPlc		Request change of the place of a centre
 	 95. ActRenCtrSho		Change short name centre
 	 96. ActRenCtrFul		Change full name centre
@@ -1539,7 +1538,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqCtr		*/{1208,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormReqCtr		,NULL},
    /* ActNewCtr		*/{ 685,-1,TabIns,ActSeeCtr		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormNewCtr		,NULL},
    /* ActRemCtr		*/{ 686,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RemoveCentre		,NULL},
-   /* ActChgCtrIns	*/{ 720,-1,TabIns,ActSeeCtr		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCentreIns		,NULL},
    /* ActChgDegPlc	*/{ 706,-1,TabIns,ActSeeCtr		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCentrePlace		,NULL},
    /* ActRenCtrSho	*/{ 682,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ctr_RenameCentreShort	,Ctr_ContEditAfterChgCtr	,NULL},
    /* ActRenCtrFul	*/{ 684,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ctr_RenameCentreFull	,Ctr_ContEditAfterChgCtr	,NULL},
@@ -3572,7 +3570,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgHldStrDat,	// #717
 	ActChgHldEndDat,	// #718
 	-1,			// #719 (obsolete action)
-	ActChgCtrIns,		// #720
+	-1,			// #720 (obsolete action)
 	ActChgDptIns,		// #721
 	-1,			// #722 (obsolete action)
 	ActSeeForGenTch,	// #723

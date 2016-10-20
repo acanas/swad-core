@@ -1215,10 +1215,6 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Get list of countries *****/
-   Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-   Cty_GetListCountries (Cty_GET_BASIC_DATA);
-
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
@@ -1419,7 +1415,6 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
   }
-
 
 /*****************************************************************************/
 /************ Check if I can edit, remove, etc. an institution ***************/
@@ -2019,10 +2014,6 @@ static void Ins_PutFormToCreateInstitution (void)
    struct Institution *Ins;
 
    Ins = &Gbl.Inss.EditingIns;
-
-   /***** Get list of countries *****/
-   Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
-   Cty_GetListCountries (Cty_GET_BASIC_DATA);
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)

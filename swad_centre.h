@@ -107,7 +107,6 @@ long Ctr_GetParamOtherCtrCod (void);
 void Ctr_RemoveCentre (void);
 void Ctr_ChangeCtrInsInConfig (void);
 void Ctr_ContEditAfterChgCtrInConfig (void);
-void Ctr_ChangeCentreIns (void);
 void Ctr_ChangeCentrePlace (void);
 void Ctr_RenameCentreShort (void);
 void Ctr_RenameCentreFull (void);
