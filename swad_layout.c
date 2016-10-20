@@ -231,7 +231,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
+   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
       fprintf (Gbl.F.Out,"<body onload=\"init()\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
@@ -352,7 +352,7 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>");	// main_zone_central_container
 
       /***** Write page footer *****/
-      if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
+      if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
          Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
@@ -453,7 +453,7 @@ static void Lay_WriteScripts (void)
 #endif
 
    /***** Scripts used only in main window *****/
-   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
+   if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
      {
       Lay_WriteScriptInit ();
       Lay_WriteScriptParamsAJAX ();
@@ -1387,7 +1387,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
 	    // Here Gbl.F.Out is stdout
-	    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
+	    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
 	       Lay_WriteAboutZone ();
 
 	    fprintf (Gbl.F.Out,"</body>\n"

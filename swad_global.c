@@ -435,7 +435,7 @@ void Gbl_Cleanup (void)
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&
        !Gbl.HiddenParamsInsertedIntoDB)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();

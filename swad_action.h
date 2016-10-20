@@ -41,14 +41,14 @@
 
 typedef enum
   {
-   Act_CONTENT_NORM,
-   Act_CONTENT_DATA,
+   Act_CONT_NORM,
+   Act_CONT_DATA,
   } Act_Content_t;
 
 typedef enum
   {
-   Act_MAIN_WINDOW,
-   Act_NEW_WINDOW,
+   Act_THIS_WINDOW,	// The current tab in the browser
+   Act_BLNK_WINDOW,	// A new blank tab in the browser
    Act_UPLOAD_FILE,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
    Act_DOWNLD_FILE,	// Download a file in a new window. Do not write HTML content.
   } Act_BrowserWindow_t;

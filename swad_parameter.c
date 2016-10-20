@@ -83,7 +83,7 @@ bool Par_GetQueryString (void)
      {
       /***** GET method *****/
       Gbl.Params.GetMethod = true;
-      Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
+      Gbl.ContentReceivedByCGI = Act_CONT_NORM;
 
       /* Get content length */
       Gbl.Params.ContentLength = strlen (getenv ("QUERY_STRING"));
@@ -119,7 +119,7 @@ bool Par_GetQueryString (void)
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
-         Gbl.ContentReceivedByCGI = Act_CONTENT_DATA;
+         Gbl.ContentReceivedByCGI = Act_CONT_DATA;
          Par_GetBoundary ();
          return Fil_ReadStdinIntoTmpFile ();
         }
@@ -129,7 +129,7 @@ bool Par_GetQueryString (void)
         }
       else
         {
-         Gbl.ContentReceivedByCGI = Act_CONTENT_NORM;
+         Gbl.ContentReceivedByCGI = Act_CONT_NORM;
 
 	 /* Allocate memory for query string */
 	 if ((Gbl.Params.QueryString = (char *) malloc (Gbl.Params.ContentLength + 1)) == NULL)
@@ -216,10 +216,10 @@ void Par_CreateListOfParams (void)
    if (Gbl.Params.ContentLength)
       switch (Gbl.ContentReceivedByCGI)
 	{
-	 case Act_CONTENT_NORM:
+	 case Act_CONT_NORM:
 	    Par_CreateListOfParamsFromQueryString ();
 	    break;
-	 case Act_CONTENT_DATA:
+	 case Act_CONT_DATA:
 	    Par_CreateListOfParamsFromTmpFile ();
 	    break;
 	}
@@ -515,11 +515,11 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	    // Check if the name of the parameter is the same
 	    switch (Gbl.ContentReceivedByCGI)
 	      {
-	       case Act_CONTENT_NORM:
+	       case Act_CONT_NORM:
 		  ParamFound = !strncmp (ParamName,&Gbl.Params.QueryString[Param->Name.Start],
 					 Param->Name.Length);
 		  break;
-	       case Act_CONTENT_DATA:
+	       case Act_CONT_DATA:
 		  fseek (Gbl.F.Tmp,Param->Name.Start,SEEK_SET);
 		  for (i = 0, ParamFound = true;
 		       i < Param->Name.Length && ParamFound;
@@ -575,12 +575,12 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		  /* Copy parameter value */
 		  switch (Gbl.ContentReceivedByCGI)
 		    {
-		     case Act_CONTENT_NORM:
+		     case Act_CONT_NORM:
 			if (PtrDst)
 			   strncpy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
 				    Param->Value.Length);
 			break;
-		     case Act_CONTENT_DATA:
+		     case Act_CONT_DATA:
 		        if (Param->FileName.Start == 0 &&	// Copy into destination only if it's not a file
 		            PtrDst)
 		          {

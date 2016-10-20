@@ -80,7 +80,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1209 actions in one CGI:
+1213 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -163,25 +163,25 @@ Country:
 	 68. ActReqIns			Request the creation of a request for a new institution (a teacher makes the petition to an administrator)
 	 69. ActNewIns			Request the creation of an institution
 	 70. ActRemIns			Remove institution
-	 72. ActRenInsSho		Change short name of institution
-	 73. ActRenInsFul		Change full name of institution
-	 74. ActChgInsWWW		Change web of institution
-	 75. ActChgInsSta		Request change of status of an institution
+	 71. ActRenInsSho		Change short name of institution
+	 72. ActRenInsFul		Change full name of institution
+	 73. ActChgInsWWW		Change web of institution
+	 74. ActChgInsSta		Request change of status of an institution
 Institution:
-	 76. ActInsReqSch		Request search in institution tab
+	 75. ActInsReqSch		Request search in institution tab
 
-	 77. ActSeeInsInf		Show information on the current institution
-	 78. ActSeeCtr			List centres
-	 79. ActSeeDpt			List departments
-	 80. ActSeePlc			List places
-	 81. ActSeeHld			List holidays
-	 82. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
-	 83. ActAdmShaIns		Admin the shared files zone of the institution
+	 76. ActSeeInsInf		Show information on the current institution
+	 77. ActSeeCtr			List centres
+	 78. ActSeeDpt			List departments
+	 79. ActSeePlc			List places
+	 80. ActSeeHld			List holidays
+	 81. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
+	 82. ActAdmShaIns		Admin the shared files zone of the institution
 
-	 84. ActInsSch			Search for courses, teachers, documents...
+	 83. ActInsSch			Search for courses, teachers, documents...
 
-	 85. ActPrnInsInf		Print information on the current institution
-	NEW. ActChgInsCtyCfg		Change country of institution in institution configuration
+	 84. ActPrnInsInf		Print information on the current institution
+	 85. ActChgInsCtyCfg		Change country of institution in institution configuration
 	 86. ActReqInsLog		Show form to send the logo of the current institution
 	 87. ActRecInsLog		Receive and store the logo of the current institution
 	 88. ActRemInsLog		Remove the logo of the current institution
@@ -190,98 +190,98 @@ Institution:
 	 90. ActReqCtr			Request the creation of a request for a new centre (a teacher makes the petition to an administrator)
 	 91. ActNewCtr			Request the creation of a centre
 	 92. ActRemCtr			Remove centre
-	 94. ActChgCtrPlc		Request change of the place of a centre
-	 95. ActRenCtrSho		Change short name centre
-	 96. ActRenCtrFul		Change full name centre
-	 97. ActChgCtrWWW		Change web of centre
-	 98. ActChgCtrSta		Request change of status of a centre
+	 93. ActChgCtrPlc		Request change of the place of a centre
+	 94. ActRenCtrSho		Change short name centre
+	 95. ActRenCtrFul		Change full name centre
+	 96. ActChgCtrWWW		Change web of centre
+	 97. ActChgCtrSta		Request change of status of a centre
 
-	 99. ActEdiDpt			Edit departments
-	100. ActNewDpt			Request the creation of a department
-	101. ActRemDpt			Remove department
-	102. ActChgDptIns		Request change of the institution of a department
-	103. ActRenDptSho		Change short name department
-	104. ActRenDptFul		Change full name department
-	105. ActChgDptWWW		Change web of department
+	 98. ActEdiDpt			Edit departments
+	 99. ActNewDpt			Request the creation of a department
+	100. ActRemDpt			Remove department
+	101. ActChgDptIns		Request change of the institution of a department
+	102. ActRenDptSho		Change short name department
+	103. ActRenDptFul		Change full name department
+	104. ActChgDptWWW		Change web of department
 
-	106. ActEdiPlc			Edit places
-	107. ActNewPlc			Request the creation of a place
-	108. ActRemPlc			Remove a place
-	109. ActRenPlcSho		Change short name of a place
-	110. ActRenPlcFul		Change full name of a place
+	105. ActEdiPlc			Edit places
+	106. ActNewPlc			Request the creation of a place
+	107. ActRemPlc			Remove a place
+	108. ActRenPlcSho		Change short name of a place
+	109. ActRenPlcFul		Change full name of a place
 
-	111. ActEdiHld			Edit holidays
-	112. ActNewHld			Request the creation of a holiday
-	113. ActRemHld			Remove a holiday
-	114. ActChgHldPlc		Change place of a holiday
-	115. ActChgHldTyp		Change type of a holiday
-	116. ActChgHldStrDat		Change start date of a holiday
-	117. ActChgHldEndDat		Change end date of a holiday
-	118. ActRenHld			Change name of a holiday
+	110. ActEdiHld			Edit holidays
+	111. ActNewHld			Request the creation of a holiday
+	112. ActRemHld			Remove a holiday
+	113. ActChgHldPlc		Change place of a holiday
+	114. ActChgHldTyp		Change type of a holiday
+	115. ActChgHldStrDat		Change start date of a holiday
+	116. ActChgHldEndDat		Change end date of a holiday
+	117. ActRenHld			Change name of a holiday
 
-	119. ActChgToSeeDocIns		Change to see institution documents
+	118. ActChgToSeeDocIns		Change to see institution documents
 
-	120. ActSeeDocIns		See the files of the documents zone of the institution
-	121. ActExpSeeDocIns		Expand a folder in institution documents
-	122. ActConSeeDocIns		Contract a folder in institution documents
-	123. ActZIPSeeDocIns		Compress a folder in institution documents
-	124. ActReqDatSeeDocIns		Ask for metadata of a file of the documents zone of the institution
-	125. ActDowSeeDocIns		Download a file in documents zone of the institution
+	119. ActSeeDocIns		See the files of the documents zone of the institution
+	120. ActExpSeeDocIns		Expand a folder in institution documents
+	121. ActConSeeDocIns		Contract a folder in institution documents
+	122. ActZIPSeeDocIns		Compress a folder in institution documents
+	123. ActReqDatSeeDocIns		Ask for metadata of a file of the documents zone of the institution
+	124. ActDowSeeDocIns		Download a file in documents zone of the institution
 
-	126. ActChgToAdmDocIns		Change to administrate institution documents
+	125. ActChgToAdmDocIns		Change to administrate institution documents
 
-	127. ActAdmDocIns		Admin the files of the documents zone of the institution
-	128. ActReqRemFilDocIns		Request removal of a file in the documents zone of the institution
-	129. ActRemFilDocIns		Remove a file in the documents zone of the institution
-	130. ActRemFolDocIns		Remove a folder empty the documents zone of the institution
-	131. ActCopDocIns		Set source of copy in the documents zone of the institution
-	132. ActPasDocIns		Paste a folder or file in the documents zone of the institution
-	133. ActRemTreDocIns		Remove a folder no empty in the documents zone of the institution
-	134. ActFrmCreDocIns		Form to crear a folder or file in the documents zone of the institution
-	135. ActCreFolDocIns		Create a new folder in the documents zone of the institution
-	136. ActCreLnkDocIns		Create a new link in the documents zone of the institution
-	137. ActRenFolDocIns		Rename a folder in the documents zone of the institution
-	138. ActRcvFilDocInsDZ		Receive a file in the documents zone of the institution using Dropzone.js
-	139. ActRcvFilDocInsCla		Receive a file in the documents zone of the institution using the classic way
-	140. ActExpAdmDocIns		Expand a folder when administrating the documents zone of the institution
-	141. ActConAdmDocIns		Contract a folder when administrating the documents zone of the institution
-	142. ActZIPAdmDocIns		Compress a folder when administrating the documents zone of the institution
-	143. ActShoDocIns		Show hidden folder or file of the documents zone of the institution
-	144. ActHidDocIns		Hide folder or file of the documents zone of the institution
-	145. ActReqDatAdmDocIns		Ask for metadata of a file of the documents zone of the institution
-	146. ActChgDatAdmDocIns		Change metadata of a file of the documents zone of the institution
-	147. ActDowAdmDocIns		Download a file of the documents zone of the institution
+	126. ActAdmDocIns		Admin the files of the documents zone of the institution
+	127. ActReqRemFilDocIns		Request removal of a file in the documents zone of the institution
+	128. ActRemFilDocIns		Remove a file in the documents zone of the institution
+	129. ActRemFolDocIns		Remove a folder empty the documents zone of the institution
+	130. ActCopDocIns		Set source of copy in the documents zone of the institution
+	131. ActPasDocIns		Paste a folder or file in the documents zone of the institution
+	132. ActRemTreDocIns		Remove a folder no empty in the documents zone of the institution
+	133. ActFrmCreDocIns		Form to crear a folder or file in the documents zone of the institution
+	134. ActCreFolDocIns		Create a new folder in the documents zone of the institution
+	135. ActCreLnkDocIns		Create a new link in the documents zone of the institution
+	136. ActRenFolDocIns		Rename a folder in the documents zone of the institution
+	137. ActRcvFilDocInsDZ		Receive a file in the documents zone of the institution using Dropzone.js
+	138. ActRcvFilDocInsCla		Receive a file in the documents zone of the institution using the classic way
+	139. ActExpAdmDocIns		Expand a folder when administrating the documents zone of the institution
+	140. ActConAdmDocIns		Contract a folder when administrating the documents zone of the institution
+	141. ActZIPAdmDocIns		Compress a folder when administrating the documents zone of the institution
+	142. ActShoDocIns		Show hidden folder or file of the documents zone of the institution
+	143. ActHidDocIns		Hide folder or file of the documents zone of the institution
+	144. ActReqDatAdmDocIns		Ask for metadata of a file of the documents zone of the institution
+	145. ActChgDatAdmDocIns		Change metadata of a file of the documents zone of the institution
+	146. ActDowAdmDocIns		Download a file of the documents zone of the institution
 
-	148. ActReqRemFilShaIns		Request removal of a shared file of the institution
-	149. ActRemFilShaIns		Remove a shared file of the institution
-	150. ActRemFolShaIns		Remove an empty shared folder of the institution
-	151. ActCopShaIns		Set source of copy in shared zone of the institution
-	152. ActPasShaIns		Paste a folder or file in shared zone of the institution
-	153. ActRemTreShaIns		Remove a folder no empty of shared zone of the institution
-	154. ActFrmCreShaIns		Form to crear a folder or file in shared zone of the institution
-	155. ActCreFolShaIns		Create a new folder in shared zone of the institution
-	156. ActCreLnkShaIns		Create a new link in shared zone of the institution
-	157. ActRenFolShaIns		Rename a folder in shared zone of the institution
-	158. ActRcvFilShaInsDZ		Receive a file in shared zone of the institution using Dropzone.js
-	159. ActRcvFilShaInsCla		Receive a file in shared zone of the institution using the classic way
-	160. ActExpShaIns		Expand a folder in shared zone of the institution
-	161. ActConShaIns		Contract a folder in shared zone of the institution
-	162. ActZIPShaIns		Compress a folder in shared zone of the institution
-	163. ActReqDatShaIns		Ask for metadata of a file of the shared zone of the institution
-	164. ActChgDatShaIns		Change metadata of a file of the shared zone of the institution
-	165. ActDowShaIns		Download a file of the shared zone of the institution
+	147. ActReqRemFilShaIns		Request removal of a shared file of the institution
+	148. ActRemFilShaIns		Remove a shared file of the institution
+	149. ActRemFolShaIns		Remove an empty shared folder of the institution
+	150. ActCopShaIns		Set source of copy in shared zone of the institution
+	151. ActPasShaIns		Paste a folder or file in shared zone of the institution
+	152. ActRemTreShaIns		Remove a folder no empty of shared zone of the institution
+	153. ActFrmCreShaIns		Form to crear a folder or file in shared zone of the institution
+	154. ActCreFolShaIns		Create a new folder in shared zone of the institution
+	155. ActCreLnkShaIns		Create a new link in shared zone of the institution
+	156. ActRenFolShaIns		Rename a folder in shared zone of the institution
+	157. ActRcvFilShaInsDZ		Receive a file in shared zone of the institution using Dropzone.js
+	158. ActRcvFilShaInsCla		Receive a file in shared zone of the institution using the classic way
+	159. ActExpShaIns		Expand a folder in shared zone of the institution
+	160. ActConShaIns		Contract a folder in shared zone of the institution
+	161. ActZIPShaIns		Compress a folder in shared zone of the institution
+	162. ActReqDatShaIns		Ask for metadata of a file of the shared zone of the institution
+	163. ActChgDatShaIns		Change metadata of a file of the shared zone of the institution
+	164. ActDowShaIns		Download a file of the shared zone of the institution
 Centre:
-	166. ActCtrReqSch		Request search in centre tab
+	165. ActCtrReqSch		Request search in centre tab
 
-	167. ActSeeCtrInf		Show information on the current centre
-	168. ActSeeDeg			List degrees of a type
-	169. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
-	170. ActAdmShaCtr		Admin the shared files zone of the centre
+	166. ActSeeCtrInf		Show information on the current centre
+	167. ActSeeDeg			List degrees of a type
+	168. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
+	169. ActAdmShaCtr		Admin the shared files zone of the centre
 
-	171. ActCtrSch			Search for courses, teachers, documents...
+	170. ActCtrSch			Search for courses, teachers, documents...
 
-	172. ActPrnCtrInf		Print information on the current centre
-	NEW. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
+	171. ActPrnCtrInf		Print information on the current centre
+	172. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
 	173. ActReqCtrLog		Show form to send the logo of the current centre
 	174. ActRecCtrLog		Receive and store the logo of the current centre
 	175. ActRemCtrLog		Remove the logo of the current centre
@@ -296,72 +296,72 @@ Centre:
 	183. ActRenDegSho		Request change of the short name of a degree
 	184. ActRenDegFul		Request change of the full name of a degree
 	185. ActChgDegTyp		Request change of the type of a degree
-	187. ActChgDegWWW		Request change of the web of a degree
-	188. ActChgDegSta		Request change of status of a degree
+	186. ActChgDegWWW		Request change of the web of a degree
+	187. ActChgDegSta		Request change of status of a degree
 
-	189. ActChgToSeeDocCtr		Change to see centre documents
+	188. ActChgToSeeDocCtr		Change to see centre documents
 
-	190. ActSeeDocCtr		See the files of the documents zone of the centre
-	191. ActExpSeeDocCtr		Expand a folder in centre documents
-	192. ActConSeeDocCtr		Contract a folder in centre documents
-	193. ActZIPSeeDocCtr		Compress a folder in centre documents
-	194. ActReqDatSeeDocCtr		Ask for metadata of a file of the documents zone of the centre
-	195. ActDowSeeDocCtr		Download a file in documents zone of the centre
+	189. ActSeeDocCtr		See the files of the documents zone of the centre
+	190. ActExpSeeDocCtr		Expand a folder in centre documents
+	191. ActConSeeDocCtr		Contract a folder in centre documents
+	192. ActZIPSeeDocCtr		Compress a folder in centre documents
+	193. ActReqDatSeeDocCtr		Ask for metadata of a file of the documents zone of the centre
+	194. ActDowSeeDocCtr		Download a file in documents zone of the centre
 
-	196. ActChgToAdmDocCtr		Change to administrate centre documents
+	195. ActChgToAdmDocCtr		Change to administrate centre documents
 
-	197. ActAdmDocCtr		Admin the files of the documents zone of the centre
-	198. ActReqRemFilDocCtr		Request removal of a file in the documents zone of the centre
-	199. ActRemFilDocCtr		Remove a file in the documents zone of the centre
-	200. ActRemFolDocCtr		Remove a folder empty the documents zone of the centre
-	201. ActCopDocCtr		Set source of copy in the documents zone of the centre
-	202. ActPasDocCtr		Paste a folder or file in the documents zone of the centre
-	203. ActRemTreDocCtr		Remove a folder no empty in the documents zone of the centre
-	204. ActFrmCreDocCtr		Form to crear a folder or file in the documents zone of the centre
-	205. ActCreFolDocCtr		Create a new folder in the documents zone of the centre
-	206. ActCreLnkDocCtr		Create a new link in the documents zone of the centre
-	207. ActRenFolDocCtr		Rename a folder in the documents zone of the centre
-	208. ActRcvFilDocCtrDZ		Receive a file in the documents zone of the centre using Dropzone.js
-	209. ActRcvFilDocCtrCla		Receive a file in the documents zone of the centre using the classic way
-	210. ActExpAdmDocCtr		Expand a folder when administrating the documents zone of the centre
-	211. ActConAdmDocCtr		Contract a folder when administrating the documents zone of the centre
-	212. ActZIPAdmDocCtr		Compress a folder when administrating the documents zone of the centre
-	213. ActShoDocCtr		Show hidden folder or file of the documents zone of the centre
-	214. ActHidDocCtr		Hide folder or file of the documents zone of the centre
-	215. ActReqDatAdmDocCtr		Ask for metadata of a file of the documents zone of the centre
-	216. ActChgDatAdmDocCtr		Change metadata of a file of the documents zone of the centre
-	217. ActDowAdmDocCtr		Download a file of the documents zone of the centre
+	196. ActAdmDocCtr		Admin the files of the documents zone of the centre
+	197. ActReqRemFilDocCtr		Request removal of a file in the documents zone of the centre
+	198. ActRemFilDocCtr		Remove a file in the documents zone of the centre
+	199. ActRemFolDocCtr		Remove a folder empty the documents zone of the centre
+	200. ActCopDocCtr		Set source of copy in the documents zone of the centre
+	201. ActPasDocCtr		Paste a folder or file in the documents zone of the centre
+	202. ActRemTreDocCtr		Remove a folder no empty in the documents zone of the centre
+	203. ActFrmCreDocCtr		Form to crear a folder or file in the documents zone of the centre
+	204. ActCreFolDocCtr		Create a new folder in the documents zone of the centre
+	205. ActCreLnkDocCtr		Create a new link in the documents zone of the centre
+	206. ActRenFolDocCtr		Rename a folder in the documents zone of the centre
+	207. ActRcvFilDocCtrDZ		Receive a file in the documents zone of the centre using Dropzone.js
+	208. ActRcvFilDocCtrCla		Receive a file in the documents zone of the centre using the classic way
+	209. ActExpAdmDocCtr		Expand a folder when administrating the documents zone of the centre
+	210. ActConAdmDocCtr		Contract a folder when administrating the documents zone of the centre
+	211. ActZIPAdmDocCtr		Compress a folder when administrating the documents zone of the centre
+	212. ActShoDocCtr		Show hidden folder or file of the documents zone of the centre
+	213. ActHidDocCtr		Hide folder or file of the documents zone of the centre
+	214. ActReqDatAdmDocCtr		Ask for metadata of a file of the documents zone of the centre
+	215. ActChgDatAdmDocCtr		Change metadata of a file of the documents zone of the centre
+	216. ActDowAdmDocCtr		Download a file of the documents zone of the centre
 
-	218. ActReqRemFilShaCtr		Request removal of a shared file of the centre
-	219. ActRemFilShaCtr		Remove a shared file of the centre
-	220. ActRemFolShaCtr		Remove an empty shared folder of the centre
-	221. ActCopShaCtr		Set source of copy in shared zone of the centre
-	222. ActPasShaCtr		Paste a folder or file in shared zone of the centre
-	223. ActRemTreShaCtr		Remove a folder no empty of shared zone of the centre
-	224. ActFrmCreShaCtr		Form to crear a folder or file in shared zone of the centre
-	225. ActCreFolShaCtr		Create a new folder in shared zone of the centre
-	226. ActCreLnkShaCtr		Create a new link in shared zone of the centre
-	227. ActRenFolShaCtr		Rename a folder in shared zone of the centre
-	228. ActRcvFilShaCtrDZ		Receive a file in shared zone of the centre using Dropzone.js
-	229. ActRcvFilShaCtrCla		Receive a file in shared zone of the centre using the classic way
-	230. ActExpShaCtr		Expand a folder in shared zone of the centre
-	231. ActConShaCtr		Contract a folder in shared zone of the centre
-	232. ActZIPShaCtr		Compress a folder in shared zone of the centre
-	233. ActReqDatShaCtr		Ask for metadata of a file of the shared zone of the centre
-	234. ActChgDatShaCtr		Change metadata of a file of the shared zone of the centre
-	235. ActDowShaCtr		Download a file of the shared zone of the centre
+	217. ActReqRemFilShaCtr		Request removal of a shared file of the centre
+	218. ActRemFilShaCtr		Remove a shared file of the centre
+	219. ActRemFolShaCtr		Remove an empty shared folder of the centre
+	220. ActCopShaCtr		Set source of copy in shared zone of the centre
+	221. ActPasShaCtr		Paste a folder or file in shared zone of the centre
+	222. ActRemTreShaCtr		Remove a folder no empty of shared zone of the centre
+	223. ActFrmCreShaCtr		Form to crear a folder or file in shared zone of the centre
+	224. ActCreFolShaCtr		Create a new folder in shared zone of the centre
+	225. ActCreLnkShaCtr		Create a new link in shared zone of the centre
+	226. ActRenFolShaCtr		Rename a folder in shared zone of the centre
+	227. ActRcvFilShaCtrDZ		Receive a file in shared zone of the centre using Dropzone.js
+	228. ActRcvFilShaCtrCla		Receive a file in shared zone of the centre using the classic way
+	229. ActExpShaCtr		Expand a folder in shared zone of the centre
+	230. ActConShaCtr		Contract a folder in shared zone of the centre
+	231. ActZIPShaCtr		Compress a folder in shared zone of the centre
+	232. ActReqDatShaCtr		Ask for metadata of a file of the shared zone of the centre
+	233. ActChgDatShaCtr		Change metadata of a file of the shared zone of the centre
+	234. ActDowShaCtr		Download a file of the shared zone of the centre
 Degree:
-	236. ActDegReqSch		Request search in degree tab
+	235. ActDegReqSch		Request search in degree tab
 
-	237. ActSeeDegInf		Show information on the current degree
-	238. ActSeeCrs			List courses of a degree
-	239. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
-	240. ActAdmShaDeg		Admin the shared files zone of the degree
+	236. ActSeeDegInf		Show information on the current degree
+	237. ActSeeCrs			List courses of a degree
+	238. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
+	239. ActAdmShaDeg		Admin the shared files zone of the degree
 
-	241. ActDegSch			Search for courses, teachers, documents...
+	240. ActDegSch			Search for courses, teachers, documents...
 
-	242. ActPrnDegInf		Print information on the current degree
-	NEW. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
+	241. ActPrnDegInf		Print information on the current degree
+	242. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
 	243. ActReqDegLog		Show form to send the logo of the current degree
 	244. ActRecDegLog		Receive and store the logo of the current degree
 	245. ActRemDegLog		Remove the logo of the current degree
@@ -371,83 +371,83 @@ Degree:
 	248. ActNewCrs			Request the creation of a course
 	249. ActRemCrs			Request the removal of a course
 	250. ActChgInsCrsCod		Request change of institutional code of a course
-	252. ActChgCrsYea		Request change of year of a course inside of its degree
-	253. ActRenCrsSho		Request change of short name of a course
-	254. ActRenCrsFul		Request change of full name of a course
-	255. ActChgCrsSta		Request change of status of a course
+	251. ActChgCrsYea		Request change of year of a course inside of its degree
+	252. ActRenCrsSho		Request change of short name of a course
+	253. ActRenCrsFul		Request change of full name of a course
+	254. ActChgCrsSta		Request change of status of a course
 
-	256. ActChgToSeeDocDeg		Change to see degree documents
+	255. ActChgToSeeDocDeg		Change to see degree documents
 
-	257. ActSeeDocDeg		See the files of the documents zone of the degree
-	258. ActExpSeeDocDeg		Expand a folder in degree documents
-	259. ActConSeeDocDeg		Contract a folder in degree documents
-	260. ActZIPSeeDocDeg		Compress a folder in degree documents
-	261. ActReqDatSeeDocDeg		Ask for metadata of a file of the documents zone of the degree
-	262. ActDowSeeDocDeg		Download a file in documents zone of the degree
+	256. ActSeeDocDeg		See the files of the documents zone of the degree
+	257. ActExpSeeDocDeg		Expand a folder in degree documents
+	258. ActConSeeDocDeg		Contract a folder in degree documents
+	259. ActZIPSeeDocDeg		Compress a folder in degree documents
+	260. ActReqDatSeeDocDeg		Ask for metadata of a file of the documents zone of the degree
+	261. ActDowSeeDocDeg		Download a file in documents zone of the degree
 
-	263. ActChgToAdmDocDeg		Change to administrate degree documents
+	262. ActChgToAdmDocDeg		Change to administrate degree documents
 
-	264. ActAdmDocDeg		Admin the files of the documents zone of the degree
-	265. ActReqRemFilDocDeg		Request removal of a file in the documents zone of the degree
-	266. ActRemFilDocDeg		Remove a file in the documents zone of the degree
-	267. ActRemFolDocDeg		Remove a folder empty the documents zone of the degree
-	268. ActCopDocDeg		Set source of copy in the documents zone of the degree
-	269. ActPasDocDeg		Paste a folder or file in the documents zone of the degree
-	270. ActRemTreDocDeg		Remove a folder no empty in the documents zone of the degree
-	271. ActFrmCreDocDeg		Form to crear a folder or file in the documents zone of the degree
-	272. ActCreFolDocDeg		Create a new folder in the documents zone of the degree
-	273. ActCreLnkDocDeg		Create a new link in the documents zone of the degree
-	274. ActRenFolDocDeg		Rename a folder in the documents zone of the degree
-	275. ActRcvFilDocDegDZ		Receive a file in the documents zone of the degree using Dropzone.js
-	276. ActRcvFilDocDegCla		Receive a file in the documents zone of the degree using the classic way
-	277. ActExpAdmDocDeg		Expand a folder when administrating the documents zone of the degree
-	278. ActConAdmDocDeg		Contract a folder when administrating the documents zone of the degree
-	279. ActZIPAdmDocDeg		Compress a folder when administrating the documents zone of the degree
-	280. ActShoDocDeg		Show hidden folder or file of the documents zone of the degree
-	281. ActHidDocDeg		Hide folder or file of the documents zone of the degree
-	282. ActReqDatAdmDocDeg		Ask for metadata of a file of the documents zone of the degree
-	283. ActChgDatAdmDocDeg		Change metadata of a file of the documents zone of the degree
-	284. ActDowAdmDocDeg		Download a file of the documents zone of the degree
+	263. ActAdmDocDeg		Admin the files of the documents zone of the degree
+	264. ActReqRemFilDocDeg		Request removal of a file in the documents zone of the degree
+	265. ActRemFilDocDeg		Remove a file in the documents zone of the degree
+	266. ActRemFolDocDeg		Remove a folder empty the documents zone of the degree
+	267. ActCopDocDeg		Set source of copy in the documents zone of the degree
+	268. ActPasDocDeg		Paste a folder or file in the documents zone of the degree
+	269. ActRemTreDocDeg		Remove a folder no empty in the documents zone of the degree
+	270. ActFrmCreDocDeg		Form to crear a folder or file in the documents zone of the degree
+	271. ActCreFolDocDeg		Create a new folder in the documents zone of the degree
+	272. ActCreLnkDocDeg		Create a new link in the documents zone of the degree
+	273. ActRenFolDocDeg		Rename a folder in the documents zone of the degree
+	274. ActRcvFilDocDegDZ		Receive a file in the documents zone of the degree using Dropzone.js
+	275. ActRcvFilDocDegCla		Receive a file in the documents zone of the degree using the classic way
+	276. ActExpAdmDocDeg		Expand a folder when administrating the documents zone of the degree
+	277. ActConAdmDocDeg		Contract a folder when administrating the documents zone of the degree
+	278. ActZIPAdmDocDeg		Compress a folder when administrating the documents zone of the degree
+	279. ActShoDocDeg		Show hidden folder or file of the documents zone of the degree
+	280. ActHidDocDeg		Hide folder or file of the documents zone of the degree
+	281. ActReqDatAdmDocDeg		Ask for metadata of a file of the documents zone of the degree
+	282. ActChgDatAdmDocDeg		Change metadata of a file of the documents zone of the degree
+	283. ActDowAdmDocDeg		Download a file of the documents zone of the degree
 
-	285. ActReqRemFilShaDeg		Request removal of a shared file of the degree
-	286. ActRemFilShaDeg		Remove a shared file of the degree
-	287. ActRemFolShaDeg		Remove an empty shared folder of the degree
-	288. ActCopShaDeg		Set source of copy in shared zone of the degree
-	289. ActPasShaDeg		Paste a folder or file in shared zone of the degree
-	290. ActRemTreShaDeg		Remove a folder no empty of shared zone of the degree
-	291. ActFrmCreShaDeg		Form to crear a folder or file in shared zone of the degree
-	292. ActCreFolShaDeg		Create a new folder in shared zone of the degree
-	293. ActCreLnkShaDeg		Create a new link in shared zone of the degree
-	294. ActRenFolShaDeg		Rename a folder in shared zone of the degree
-	295. ActRcvFilShaDegDZ		Receive a file in shared zone of the degree using Dropzone.js
-	296. ActRcvFilShaDegCla		Receive a file in shared zone of the degree using the classic way
-	297. ActExpShaDeg		Expand a folder in shared zone of the degree
-	298. ActConShaDeg		Contract a folder in shared zone of the degree
-	299. ActZIPShaDeg		Compress a folder in shared zone of the degree
-	300. ActReqDatShaDeg		Ask for metadata of a file of the shared zone of the degree
-	301. ActChgDatShaDeg		Change metadata of a file of the shared zone of the degree
-	302. ActDowShaDeg		Download a file of the shared zone of the degree
+	284. ActReqRemFilShaDeg		Request removal of a shared file of the degree
+	285. ActRemFilShaDeg		Remove a shared file of the degree
+	286. ActRemFolShaDeg		Remove an empty shared folder of the degree
+	287. ActCopShaDeg		Set source of copy in shared zone of the degree
+	288. ActPasShaDeg		Paste a folder or file in shared zone of the degree
+	289. ActRemTreShaDeg		Remove a folder no empty of shared zone of the degree
+	290. ActFrmCreShaDeg		Form to crear a folder or file in shared zone of the degree
+	291. ActCreFolShaDeg		Create a new folder in shared zone of the degree
+	292. ActCreLnkShaDeg		Create a new link in shared zone of the degree
+	293. ActRenFolShaDeg		Rename a folder in shared zone of the degree
+	294. ActRcvFilShaDegDZ		Receive a file in shared zone of the degree using Dropzone.js
+	295. ActRcvFilShaDegCla		Receive a file in shared zone of the degree using the classic way
+	296. ActExpShaDeg		Expand a folder in shared zone of the degree
+	297. ActConShaDeg		Contract a folder in shared zone of the degree
+	298. ActZIPShaDeg		Compress a folder in shared zone of the degree
+	299. ActReqDatShaDeg		Ask for metadata of a file of the shared zone of the degree
+	300. ActChgDatShaDeg		Change metadata of a file of the shared zone of the degree
+	301. ActDowShaDeg		Download a file of the shared zone of the degree
 Course:
-	303. ActCrsReqSch		Request search in course tab
+	302. ActCrsReqSch		Request search in course tab
 
-	304. ActSeeCrsInf		Show information on the current course
-	305. ActSeeTchGui		Show teaching guide of the course
-	306. ActSeeSyl			Show syllabus (lectures or practicals)
-	307. ActSeeSylLec		Show the syllabus of lectures
-	308. ActSeeSylPra		Show the syllabus of practicals
-	309. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
+	303. ActSeeCrsInf		Show information on the current course
+	304. ActSeeTchGui		Show teaching guide of the course
+	305. ActSeeSyl			Show syllabus (lectures or practicals)
+	306. ActSeeSylLec		Show the syllabus of lectures
+	307. ActSeeSylPra		Show the syllabus of practicals
+	308. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
 
-	310. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
-	311. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
-	312. ActSeeCrsTT		Show the timetable
-	313. ActSeeBib			Show the bibliography
-	314. ActSeeFAQ			Show the FAQ
-	315. ActSeeCrsLnk		Show links related to the course
+	309. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
+	310. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
+	311. ActSeeCrsTT		Show the timetable
+	312. ActSeeBib			Show the bibliography
+	313. ActSeeFAQ			Show the FAQ
+	314. ActSeeCrsLnk		Show links related to the course
 
-	316. ActCrsSch			Search for courses, teachers, documents...
+	315. ActCrsSch			Search for courses, teachers, documents...
 
-	317. ActPrnCrsInf		Print information on the course
-	NEW. ActChgCrsDegCfg		Request change of degree in course configuration
+	316. ActPrnCrsInf		Print information on the course
+	317. ActChgCrsDegCfg		Request change of degree in course configuration
 	318. ActChgInsCrsCodCfg		Change institutional code in course configuration
 	319. ActChgCrsYeaCfg		Change year/semester in course configuration
 	320. ActEdiCrsInf		Edit general information about the course
@@ -1188,15 +1188,15 @@ Social:
        1008. ActCutThrForInsTch		Cut a thread of forum of teachers of the institution
        1009. ActCutThrForGenUsr		Cut a thread of forum of users general
        1010. ActCutThrForGenTch		Cut a thread of forum of teachers general
-       1001. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
-       1002. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
-       1003. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
-       1004. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
-       1005. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
-       1006. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
-       1007. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
-       1008. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
-       1009. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
+       1011. ActCutThrForSWAUsr		Cut a thread of forum of users of the platform
+       1012. ActCutThrForSWATch		Cut a thread of forum of teachers of the platform
+       1013. ActPasThrForCrsUsr		Paste a thread of forum of users of the course
+       1014. ActPasThrForCrsTch		Paste a thread of forum of teachers of the course
+       1015. ActPasThrForDegUsr		Paste a thread of forum of users of the degree
+       1016. ActPasThrForDegTch		Paste a thread of forum of teachers of the degree
+       1017. ActPasThrForCtrUsr		Paste a thread of forum of users of centre
+       1018. ActPasThrForCtrTch		Paste a thread of forum of teachers of centre
+       1019. ActPasThrForInsUsr		Paste a thread of forum of users of the institution
        1020. ActPasThrForInsTch		Paste a thread of forum of teachers of the institution
        1021. ActPasThrForGenUsr		Paste a thread of forum of users general
        1022. ActPasThrForGenTch		Paste a thread of forum of teachers general
@@ -1283,1567 +1283,1565 @@ Statistics:
        1100. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
        1101. ActReqStaCrs		Request statistics of courses
        1102. ActReqAccGbl		Request query of clicks to the complete platform
-        NEW. ActReqMyUsgRep		Request my usage report
+       1103. ActReqMyUsgRep		Request my usage report
 
-       1103. ActSeeOneSvy		Show one survey
-       1104. ActAnsSvy			Answer a survey
-       1105. ActFrmNewSvy		Form to create a new survey
-       1106. ActEdiOneSvy		Edit one survey
-       1107. ActNewSvy			Create new survey
-       1108. ActChgSvy			Modify data of an existing survey
-       1109. ActReqRemSvy		Request the removal of a survey
-       1110. ActRemSvy			Remove survey
-       1111. ActReqRstSvy		Request the reset of answers of a survey
-       1112. ActRstSvy			Reset answers of survey
-       1113. ActHidSvy			Hide survey
-       1114. ActShoSvy			Show survey
-       1115. ActEdiOneSvyQst		Edit a new question for a survey
-       1116. ActRcvSvyQst		Receive a question of a survey
-       1117. ActReqRemSvyQst		Request the removal of a question of a survey
-       1118. ActRemSvyQst		Confirm the removal of a question of a survey
-       1119. ActSeeUseGbl		Show use of the platform
-       1120. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1121. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1122. ActSeeAccGbl		Query clicks to the complete platform
-       1123. ActReqAccCrs		Request query of clicks in the course
-       1124. ActSeeAccCrs		Query clicks to current course
-       1125. ActSeeAllStaCrs		Show statistics of courses
-        NEW. ActSeeMyUsgRep		Show my usage report
+       1104. ActSeeOneSvy		Show one survey
+       1105. ActAnsSvy			Answer a survey
+       1106. ActFrmNewSvy		Form to create a new survey
+       1107. ActEdiOneSvy		Edit one survey
+       1108. ActNewSvy			Create new survey
+       1109. ActChgSvy			Modify data of an existing survey
+       1110. ActReqRemSvy		Request the removal of a survey
+       1111. ActRemSvy			Remove survey
+       1112. ActReqRstSvy		Request the reset of answers of a survey
+       1113. ActRstSvy			Reset answers of survey
+       1114. ActHidSvy			Hide survey
+       1115. ActShoSvy			Show survey
+       1116. ActEdiOneSvyQst		Edit a new question for a survey
+       1117. ActRcvSvyQst		Receive a question of a survey
+       1118. ActReqRemSvyQst		Request the removal of a question of a survey
+       1119. ActRemSvyQst		Confirm the removal of a question of a survey
+       1120. ActSeeUseGbl		Show use of the platform
+       1121. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1122. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1123. ActSeeAccGbl		Query clicks to the complete platform
+       1124. ActReqAccCrs		Request query of clicks in the course
+       1125. ActSeeAccCrs		Query clicks to current course
+       1126. ActSeeAllStaCrs		Show statistics of courses
+       1127. ActSeeMyUsgRep		Show my usage report
 Profile:
-       1126. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
-       1127. ActFrmRolSes		Show form to log out and to change current role in this session
-       1128. ActMyCrs			Select one of my courses
-       1129. ActSeeMyTT			Show the timetable of all courses of the logged user
-        NEW. ActSeeMyAgd		Show my agenda (personal organizer)
-       1130. ActFrmMyAcc		Show form to the creation or change of user's account
-       1131. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1132. ActEdiPrf			Show forms to edit preferences
-       1133. ActAdmBrf			Show the briefcase of private archives
-       1134. ActMFUAct			Show most frequently used actions
+       1128. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
+       1129. ActFrmRolSes		Show form to log out and to change current role in this session
+       1130. ActMyCrs			Select one of my courses
+       1131. ActSeeMyTT			Show the timetable of all courses of the logged user
+       1132. ActSeeMyAgd		Show my agenda (personal organizer)
+       1133. ActFrmMyAcc		Show form to the creation or change of user's account
+       1134. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1135. ActEdiPrf			Show forms to edit preferences
+       1136. ActAdmBrf			Show the briefcase of private archives
+       1137. ActMFUAct			Show most frequently used actions
 
-       1135. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1136. ActSndNewPwd		Send a new password via e-mail
-       1137. ActLogOut			Close session
+       1138. ActReqSndNewPwd		Show form to send a new password via e-mail
+       1139. ActSndNewPwd		Send a new password via e-mail
+       1140. ActLogOut			Close session
 
-       1138. ActAutUsrInt		Authentify user internally (directly from the platform)
-        NEW. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
-       1140. ActAutUsrChgLan		Change language to my language just after authentication
-       1141. ActAnnSee			Mark announcement as seen
-       1142. ActChgMyRol		Change type of logged user
+       1141. ActAutUsrInt		Authentify user internally (directly from the platform)
+       1142. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
+       1143. ActAutUsrChgLan		Change language to my language just after authentication
+       1144. ActAnnSee			Mark announcement as seen
+       1145. ActChgMyRol		Change type of logged user
 
-        NEW. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
-       1143. ActCreUsrAcc		Create new user account
-       1144. ActRemID_Me		Remove one of my user's IDs
-       1145. ActNewIDMe			Create a new user's ID for me
-       1146. ActRemOldNic		Remove one of my old nicknames
-       1147. ActChgNic			Change my nickname
-       1148. ActRemMaiMe		Remove one of my old e-mails
-       1149. ActNewMaiMe		Change my e-mail address
-       1150. ActCnfMai			Confirm e-mail address
-       1151. ActFrmChgMyPwd		Show form to the change of the password
-       1152. ActChgPwd			Change the password
-       1153. ActReqRemMyAcc		Request the removal of my account
-       1154. ActRemMyAcc		Remove my account
+       1146. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
+       1147. ActCreUsrAcc		Create new user account
+       1148. ActRemID_Me		Remove one of my user's IDs
+       1149. ActNewIDMe			Create a new user's ID for me
+       1150. ActRemOldNic		Remove one of my old nicknames
+       1151. ActChgNic			Change my nickname
+       1152. ActRemMaiMe		Remove one of my old e-mails
+       1153. ActNewMaiMe		Change my e-mail address
+       1154. ActCnfMai			Confirm e-mail address
+       1155. ActFrmChgMyPwd		Show form to the change of the password
+       1156. ActChgPwd			Change the password
+       1157. ActReqRemMyAcc		Request the removal of my account
+       1158. ActRemMyAcc		Remove my account
 
-       1145. ActChgMyData		Update my personal data
+       1159. ActChgMyData		Update my personal data
 
-       1156. ActReqMyPho		Show form to send my photo
-       1157. ActDetMyPho		Receive my photo and detect faces on it
-       1158. ActUpdMyPho		Update my photo
-       1159. ActReqRemMyPho		Request the removal of my photo
-       1160. ActRemMyPho		Remove my photo
+       1160. ActReqMyPho		Show form to send my photo
+       1161. ActDetMyPho		Receive my photo and detect faces on it
+       1162. ActUpdMyPho		Update my photo
+       1163. ActReqRemMyPho		Request the removal of my photo
+       1164. ActRemMyPho		Remove my photo
 
-       1161. ActEdiPri			Edit my privacy
-       1162. ActChgPriPho		Change privacy of my photo
-       1163. ActChgPriPrf		Change privacy of my public profile
+       1165. ActEdiPri			Edit my privacy
+       1166. ActChgPriPho		Change privacy of my photo
+       1167. ActChgPriPrf		Change privacy of my public profile
 
-       1164. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1165. ActChgCtyMyIns		Change the country of my institution
-       1166. ActChgMyIns		Change my institution
-       1167. ActChgMyCtr		Change my centre
-       1168. ActChgMyDpt		Change my department
-       1169. ActChgMyOff		Change my office
-       1170. ActChgMyOffPho		Change my office phone
+       1168. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1169. ActChgCtyMyIns		Change the country of my institution
+       1170. ActChgMyIns		Change my institution
+       1171. ActChgMyCtr		Change my centre
+       1172. ActChgMyDpt		Change my department
+       1173. ActChgMyOff		Change my office
+       1174. ActChgMyOffPho		Change my office phone
 
-       1171. ActReqEdiMyNet		Request the edition of my social networks
-       1172. ActChgMyNet		Change my web and social networks
+       1175. ActReqEdiMyNet		Request the edition of my social networks
+       1176. ActChgMyNet		Change my web and social networks
 
-       1173. ActChgThe			Change theme
-       1174. ActReqChgLan		Ask if change language
-       1175. ActChgLan			Change language
-       1176. ActChg1stDay		Change first day of the week
-       1177. ActChgCol			Change side columns
-       1178. ActHidLftCol		Hide left side column
-       1179. ActHidRgtCol		Hide right side column
-       1180. ActShoLftCol		Show left side column
-       1181. ActShoRgtCol		Show right side column
-       1182. ActChgIco			Change icon set
-       1183. ActChgMnu			Change menu
-       1184. ActChgNtfPrf		Change whether to notify by e-mail new messages
-       1185. ActPrnUsrQR		Show my QR code ready to print
+       1177. ActChgThe			Change theme
+       1178. ActReqChgLan		Ask if change language
+       1179. ActChgLan			Change language
+       1180. ActChg1stDay		Change first day of the week
+       1181. ActChgCol			Change side columns
+       1182. ActHidLftCol		Hide left side column
+       1183. ActHidRgtCol		Hide right side column
+       1184. ActShoLftCol		Show left side column
+       1185. ActShoRgtCol		Show right side column
+       1186. ActChgIco			Change icon set
+       1187. ActChgMnu			Change menu
+       1188. ActChgNtfPrf		Change whether to notify by e-mail new messages
+       1189. ActPrnUsrQR		Show my QR code ready to print
 
-       1186. ActPrnMyTT			Show the timetable listo to impresión of all my courses
-       1187. ActEdiTut			Edit the timetable of tutorías
-       1188. ActChgTut			Modify the timetable of tutorías
-       1189. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+       1190. ActPrnMyTT			Show the timetable listo to impresión of all my courses
+       1191. ActEdiTut			Edit the timetable of tutorías
+       1192. ActChgTut			Modify the timetable of tutorías
+       1193. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 
-       1190. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1191. ActRemFilBrf		Remove a file of the briefcase
-       1192. ActRemFolBrf		Remove a folder empty of the briefcase
-       1193. ActCopBrf			Set source of copy in the briefcase
-       1194. ActPasBrf			Paste a folder or file in the briefcase
-       1195. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1196. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1197. ActCreFolBrf		Create a new folder in the briefcase
-       1198. ActCreLnkBrf		Create a new link in the briefcase
-       1199. ActRenFolBrf		Rename a folder of the briefcase
-       1200. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1201. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1202. ActExpBrf			Expand a folder in briefcase
-       1203. ActConBrf			Contract a folder in briefcase
-       1204. ActZIPBrf			Compress a folder in briefcase
-       1205. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1206. ActChgDatBrf		Change metadata of a file in the briefcase
-       1207. ActDowBrf			Download a file in the briefcase
-       1208. ActReqRemOldBrf		Ask for removing old files in the briefcase
-       1209. ActRemOldBrf		Remove old files in the briefcase
+       1194. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1195. ActRemFilBrf		Remove a file of the briefcase
+       1196. ActRemFolBrf		Remove a folder empty of the briefcase
+       1197. ActCopBrf			Set source of copy in the briefcase
+       1198. ActPasBrf			Paste a folder or file in the briefcase
+       1199. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1200. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1201. ActCreFolBrf		Create a new folder in the briefcase
+       1202. ActCreLnkBrf		Create a new link in the briefcase
+       1203. ActRenFolBrf		Rename a folder of the briefcase
+       1204. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1205. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1206. ActExpBrf			Expand a folder in briefcase
+       1207. ActConBrf			Contract a folder in briefcase
+       1208. ActZIPBrf			Compress a folder in briefcase
+       1209. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1210. ActChgDatBrf		Change metadata of a file in the briefcase
+       1211. ActDowBrf			Download a file in the briefcase
+       1212. ActReqRemOldBrf		Ask for removing old files in the briefcase
+       1213. ActRemOldBrf		Remove old files in the briefcase
 */
 
 struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
   {
    // TabUnk ******************************************************************
    // Actions not in menu:
-   /* ActAll		*/{ 645,-1,TabUnk,ActAll		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},	// Used for statistics
-   /* ActUnk		*/{ 194,-1,TabUnk,ActUnk		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},
-   /* ActHom		*/{ 844,-1,TabUnk,ActHom		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},
-   /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,NULL				,NULL},
-   /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshNotifsAndConnected	,NULL},
-   /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lay_RefreshLastClicks		,NULL},
-   /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActRefNewSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshNewTimelineGbl	,NULL},
-   /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshOldTimelineGbl	,NULL},
-   /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RefreshOldTimelineUsr	,NULL},
-   /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_WebService			,NULL},
+   /* ActAll		*/{ 645,-1,TabUnk,ActAll		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,NULL				,NULL},	// Used for statistics
+   /* ActUnk		*/{ 194,-1,TabUnk,ActUnk		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,NULL				,NULL},
+   /* ActHom		*/{ 844,-1,TabUnk,ActHom		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,NULL				,NULL},
+   /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,NULL				,NULL},
+   /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lay_RefreshNotifsAndConnected	,NULL},
+   /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lay_RefreshLastClicks		,NULL},
+   /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActRefNewSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RefreshNewTimelineGbl	,NULL},
+   /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RefreshOldTimelineGbl	,NULL},
+   /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RefreshOldTimelineUsr	,NULL},
+   /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_WebService			,NULL},
 
    // TabSys ******************************************************************
    // Actions in menu:
-   /* ActSysReqSch	*/{ 627, 0,TabSys,ActSysReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqSysSearch		,"search64x64.gif"	},
-
-   /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
-   /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_SeePending			,"mygroups64x64.gif"	},
-   /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
-   /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_SeeDegreeTypes		,"grouptypes64x64.gif"	},
-   /* ActSeeMai		*/{ 855, 5,TabSys,ActSeeMai		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_SeeMailDomains		,"email64x64.gif"	},
-   /* ActSeeBan		*/{1137, 6,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_SeeBanners			,"picture64x64.gif"	},
-   /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_SeeLinks			,"link64x64.gif"	},
-   /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ListPlugins		,"blocks64x64.gif"	},
-   /* ActSetUp		*/{ 840, 9,TabSys,ActSetUp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Set_Setup			,"lightning64x64.gif"	},
-
-   // Actions not in menu:
-   /* ActSysSch		*/{ 628,-1,TabSys,ActSysReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
-   /* ActEdiDegTyp	*/{ 573,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_ReqEditDegreeTypes		,NULL},
-
-   /* ActEdiCty		*/{ 863,-1,TabSys,ActSeeCty		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_EditCountries		,NULL},
-   /* ActNewCty		*/{ 864,-1,TabSys,ActSeeCty		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_RecFormNewCountry		,NULL},
-   /* ActRemCty		*/{ 893,-1,TabSys,ActSeeCty		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_RemoveCountry		,NULL},
-   /* ActRenCty		*/{ 866,-1,TabSys,ActSeeCty		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_RenameCountry		,NULL},
-   /* ActChgCtyWWW	*/{1157,-1,TabSys,ActSeeCty		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_ChangeCtyWWW		,NULL},
-
-   /* ActNewDegTyp	*/{ 537,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_RecFormNewDegreeType		,NULL},
-   /* ActRemDegTyp	*/{ 545,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_RemoveDegreeType		,NULL},
-   /* ActRenDegTyp	*/{ 538,-1,TabSys,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_RenameDegreeType		,NULL},
-
-   /* ActRemOldCrs	*/{1110,-1,TabSys,ActReqRemOldCrs	,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_RemoveOldCrss		,NULL},
-
-   /* ActEdiMai		*/{ 856,-1,TabSys,ActSeeMai		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_EditMailDomains		,NULL},
-   /* ActNewMai		*/{ 857,-1,TabSys,ActSeeMai		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RecFormNewMailDomain	,NULL},
-   /* ActRemMai		*/{ 860,-1,TabSys,ActSeeMai		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveMailDomain		,NULL},
-   /* ActRenMaiSho	*/{ 858,-1,TabSys,ActSeeMai		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RenameMailDomainShort	,NULL},
-   /* ActRenMaiFul	*/{ 859,-1,TabSys,ActSeeMai		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RenameMailDomainFull	,NULL},
-
-   /* ActEdiBan		*/{1138,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_EditBanners		,NULL},
-   /* ActNewBan		*/{1139,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_RecFormNewBanner		,NULL},
-   /* ActRemBan		*/{1140,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_RemoveBanner		,NULL},
-   /* ActShoBan		*/{1212,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_ShowBanner			,NULL},
-   /* ActHidBan		*/{1213,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_HideBanner			,NULL},
-   /* ActRenBanSho	*/{1141,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_RenameBannerShort		,NULL},
-   /* ActRenBanFul	*/{1142,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_RenameBannerFull		,NULL},
-   /* ActChgBanImg	*/{1144,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_ChangeBannerImg		,NULL},
-   /* ActChgBanWWW	*/{1143,-1,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ban_ChangeBannerWWW		,NULL},
-   /* ActClkBan		*/{1145,-1,TabSys,ActSeeBan		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
-
-   /* ActEdiLnk		*/{ 749,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_EditLinks			,NULL},
-   /* ActNewLnk		*/{ 750,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_RecFormNewLink		,NULL},
-   /* ActRemLnk		*/{ 897,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_RemoveLink			,NULL},
-   /* ActRenLnkSho	*/{ 753,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_RenameLinkShort		,NULL},
-   /* ActRenLnkFul	*/{ 751,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_RenameLinkFull		,NULL},
-   /* ActChgLnkWWW	*/{ 752,-1,TabSys,ActSeeLnk		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Lnk_ChangeLinkWWW		,NULL},
+   /* ActSysReqSch	*/{ 627, 0,TabSys,ActSysReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqSysSearch		,"search64x64.gif"	},
+   /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
+   /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"mygroups64x64.gif"	},
+   /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
+   /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypes		,"grouptypes64x64.gif"	},
+   /* ActSeeMai		*/{ 855, 5,TabSys,ActSeeMai		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_SeeMailDomains		,"email64x64.gif"	},
+   /* ActSeeBan		*/{1137, 6,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
+   /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
+   /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
+   /* ActSetUp		*/{ 840, 9,TabSys,ActSetUp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
 
    // Actions not in menu:
-   /* ActEdiPlg		*/{ 778,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_EditPlugins		,NULL},
-   /* ActNewPlg		*/{ 779,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_RecFormNewPlg		,NULL},
-   /* ActRemPlg		*/{ 889,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_RemovePlugin		,NULL},
-   /* ActRenPlg		*/{ 782,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_RenamePlugin		,NULL},
-   /* ActChgPlgDes	*/{ 888,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ChangePlgDescription	,NULL},
-   /* ActChgPlgLog	*/{ 781,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ChangePlgLogo		,NULL},
-   /* ActChgPlgAppKey	*/{ 986,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ChangePlgAppKey		,NULL},
-   /* ActChgPlgURL	*/{ 783,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ChangePlgURL		,NULL},
-   /* ActChgPlgIP	*/{ 780,-1,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plg_ChangePlgIP		,NULL},
+   /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
+   /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_ReqEditDegreeTypes		,NULL},
+
+   /* ActEdiCty		*/{ 863,-1,TabUnk,ActSeeCty		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_EditCountries		,NULL},
+   /* ActNewCty		*/{ 864,-1,TabUnk,ActSeeCty		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RecFormNewCountry		,NULL},
+   /* ActRemCty		*/{ 893,-1,TabUnk,ActSeeCty		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RemoveCountry		,NULL},
+   /* ActRenCty		*/{ 866,-1,TabUnk,ActSeeCty		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RenameCountry		,NULL},
+   /* ActChgCtyWWW	*/{1157,-1,TabUnk,ActSeeCty		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ChangeCtyWWW		,NULL},
+
+   /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RecFormNewDegreeType	,NULL},
+   /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RemoveDegreeType		,NULL},
+   /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDegTyp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RenameDegreeType		,NULL},
+
+   /* ActRemOldCrs	*/{1110,-1,TabUnk,ActReqRemOldCrs	,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveOldCrss		,NULL},
+
+   /* ActEdiMai		*/{ 856,-1,TabUnk,ActSeeMai		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_EditMailDomains		,NULL},
+   /* ActNewMai		*/{ 857,-1,TabUnk,ActSeeMai		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RecFormNewMailDomain	,NULL},
+   /* ActRemMai		*/{ 860,-1,TabUnk,ActSeeMai		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveMailDomain		,NULL},
+   /* ActRenMaiSho	*/{ 858,-1,TabUnk,ActSeeMai		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainShort	,NULL},
+   /* ActRenMaiFul	*/{ 859,-1,TabUnk,ActSeeMai		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainFull	,NULL},
+
+   /* ActEdiBan		*/{1138,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_EditBanners		,NULL},
+   /* ActNewBan		*/{1139,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RecFormNewBanner		,NULL},
+   /* ActRemBan		*/{1140,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RemoveBanner		,NULL},
+   /* ActShoBan		*/{1212,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ShowBanner			,NULL},
+   /* ActHidBan		*/{1213,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_HideBanner			,NULL},
+   /* ActRenBanSho	*/{1141,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerShort		,NULL},
+   /* ActRenBanFul	*/{1142,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerFull		,NULL},
+   /* ActChgBanImg	*/{1144,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerImg		,NULL},
+   /* ActChgBanWWW	*/{1143,-1,TabUnk,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerWWW		,NULL},
+   /* ActClkBan		*/{1145,-1,TabUnk,ActSeeBan		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
+
+   /* ActEdiLnk		*/{ 749,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_EditLinks			,NULL},
+   /* ActNewLnk		*/{ 750,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_RecFormNewLink		,NULL},
+   /* ActRemLnk		*/{ 897,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_RemoveLink			,NULL},
+   /* ActRenLnkSho	*/{ 753,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_RenameLinkShort		,NULL},
+   /* ActRenLnkFul	*/{ 751,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_RenameLinkFull		,NULL},
+   /* ActChgLnkWWW	*/{ 752,-1,TabUnk,ActSeeLnk		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_ChangeLinkWWW		,NULL},
+
+   /* ActEdiPlg		*/{ 778,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_EditPlugins		,NULL},
+   /* ActNewPlg		*/{ 779,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_RecFormNewPlg		,NULL},
+   /* ActRemPlg		*/{ 889,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_RemovePlugin		,NULL},
+   /* ActRenPlg		*/{ 782,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_RenamePlugin		,NULL},
+   /* ActChgPlgDes	*/{ 888,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgDescription	,NULL},
+   /* ActChgPlgLog	*/{ 781,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgLogo		,NULL},
+   /* ActChgPlgAppKey	*/{ 986,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgAppKey		,NULL},
+   /* ActChgPlgURL	*/{ 783,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgURL		,NULL},
+   /* ActChgPlgIP	*/{ 780,-1,TabUnk,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgIP		,NULL},
 
    // TabCty ******************************************************************
    // Actions in menu:
-   /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqCtySearch		,"search64x64.gif"	},
+   /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtySearch		,"search64x64.gif"	},
 
-   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_ShowConfiguration		,"cty64x64.gif"		},
-   /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ShowInssOfCurrentCty	,"institution64x64.gif"	},
+   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ShowConfiguration		,"cty64x64.gif"		},
+   /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowInssOfCurrentCty	,"institution64x64.gif"	},
 
    // Actions not in menu:
-   /* ActCtySch		*/{1181,-1,TabCty,ActCtyReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CtySearch			,NULL},
+   /* ActCtySch		*/{1181,-1,TabUnk,ActCtyReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtySearch			,NULL},
 
-   /* ActPrnCtyInf	*/{1156,-1,TabCty,ActSeeCtyInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Cty_PrintConfiguration		,NULL},
-   /* ActChgCtyMapAtt	*/{1158,-1,TabCty,ActSeeCtyInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cty_ChangeCtyMapAttribution	,NULL},
+   /* ActPrnCtyInf	*/{1156,-1,TabUnk,ActSeeCtyInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cty_PrintConfiguration		,NULL},
+   /* ActChgCtyMapAtt	*/{1158,-1,TabUnk,ActSeeCtyInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ChangeCtyMapAttribution	,NULL},
 
-   /* ActEdiIns		*/{ 697,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_EditInstitutions		,NULL},
-   /* ActReqIns		*/{1210,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormReqIns		,NULL},
-   /* ActNewIns		*/{ 698,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormNewIns		,NULL},
-   /* ActRemIns		*/{ 759,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RemoveInstitution		,NULL},
-   /* ActRenInsSho	*/{ 702,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsShort		,Ins_ContEditAfterChgIns	,NULL},
-   /* ActRenInsFul	*/{ 701,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsFull		,Ins_ContEditAfterChgIns	,NULL},
-   /* ActChgInsWWW	*/{ 700,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsWWW		,NULL},
-   /* ActChgInsSta	*/{1211,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsStatus		,NULL},
+   /* ActEdiIns		*/{ 697,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_EditInstitutions		,NULL},
+   /* ActReqIns		*/{1210,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_RecFormReqIns		,NULL},
+   /* ActNewIns		*/{ 698,-1,TabUnk,ActSeeIns		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_RecFormNewIns		,NULL},
+   /* ActRemIns		*/{ 759,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_RemoveInstitution		,NULL},
+   /* ActRenInsSho	*/{ 702,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ins_RenameInsShort		,Ins_ContEditAfterChgIns	,NULL},
+   /* ActRenInsFul	*/{ 701,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ins_RenameInsFull		,Ins_ContEditAfterChgIns	,NULL},
+   /* ActChgInsWWW	*/{ 700,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ChangeInsWWW		,NULL},
+   /* ActChgInsSta	*/{1211,-1,TabUnk,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ChangeInsStatus		,NULL},
 
    // TabIns ******************************************************************
    // Actions in menu:
-   /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqInsSearch		,"search64x64.gif"	},
+   /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqInsSearch		,"search64x64.gif"	},
 
-   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ShowConfiguration		,"ins64x64.gif"		},
-   /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
-   /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_SeeDepts			,"houseteachers64x64.gif"},
-   /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_SeePlaces			,"earth64x64.gif"	},
-   /* ActSeeHld		*/{ 707, 5,TabIns,ActSeeHld		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_SeeHolidays		,"date64x64.gif"	},
-   /* ActSeeAdmDocIns	*/{1249, 6,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmShaIns	*/{1382, 7,TabIns,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
+   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowConfiguration		,"ins64x64.gif"		},
+   /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
+   /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
+   /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"earth64x64.gif"	},
+   /* ActSeeHld		*/{ 707, 5,TabIns,ActSeeHld		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,"date64x64.gif"	},
+   /* ActSeeAdmDocIns	*/{1249, 6,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmShaIns	*/{1382, 7,TabIns,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
 
    // Actions not in menu:
-   /* ActInsSch		*/{1182,-1,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
+   /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
 
-   /* ActPrnInsInf	*/{1154,-1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ins_PrintConfiguration		,NULL},
-   /* ActChgInsCtyCfg	*/{1590,-1,TabIns,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_ChangeInsCtyInConfig,Ins_ContEditAfterChgInsInConfig,NULL},
-   /* ActReqInsLog	*/{1245,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RequestLogo		,NULL},
-   /* ActRecInsLog	*/{ 699,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ins_ReceiveLogo		,Ins_ShowConfiguration		,NULL},
-   /* ActRemInsLog	*/{1341,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ins_RemoveLogo		,Ins_ShowConfiguration		,NULL},
+   /* ActPrnInsInf	*/{1154,-1,TabUnk,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ins_PrintConfiguration		,NULL},
+   /* ActChgInsCtyCfg	*/{1590,-1,TabUnk,ActSeeIns		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ins_ChangeInsCtyInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
+   /* ActReqInsLog	*/{1245,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_RequestLogo		,NULL},
+   /* ActRecInsLog	*/{ 699,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ins_ReceiveLogo		,Ins_ShowConfiguration		,NULL},
+   /* ActRemInsLog	*/{1341,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ins_RemoveLogo			,Ins_ShowConfiguration		,NULL},
 
-   /* ActEdiCtr		*/{ 681,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_EditCentres		,NULL},
-   /* ActReqCtr		*/{1208,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormReqCtr		,NULL},
-   /* ActNewCtr		*/{ 685,-1,TabIns,ActSeeCtr		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RecFormNewCtr		,NULL},
-   /* ActRemCtr		*/{ 686,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RemoveCentre		,NULL},
-   /* ActChgDegPlc	*/{ 706,-1,TabIns,ActSeeCtr		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCentrePlace		,NULL},
-   /* ActRenCtrSho	*/{ 682,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ctr_RenameCentreShort	,Ctr_ContEditAfterChgCtr	,NULL},
-   /* ActRenCtrFul	*/{ 684,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ctr_RenameCentreFull	,Ctr_ContEditAfterChgCtr	,NULL},
-   /* ActChgCtrWWW	*/{ 683,-1,TabIns,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCtrWWW		,NULL},
-   /* ActChgCtrSta	*/{1209,-1,TabIns,ActSeeCtr		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCtrStatus		,NULL},
+   /* ActEdiCtr		*/{ 681,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_EditCentres		,NULL},
+   /* ActReqCtr		*/{1208,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RecFormReqCtr		,NULL},
+   /* ActNewCtr		*/{ 685,-1,TabUnk,ActSeeCtr		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RecFormNewCtr		,NULL},
+   /* ActRemCtr		*/{ 686,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RemoveCentre		,NULL},
+   /* ActChgDegPlc	*/{ 706,-1,TabUnk,ActSeeCtr		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCentrePlace		,NULL},
+   /* ActRenCtrSho	*/{ 682,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreShort		,Ctr_ContEditAfterChgCtr	,NULL},
+   /* ActRenCtrFul	*/{ 684,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreFull		,Ctr_ContEditAfterChgCtr	,NULL},
+   /* ActChgCtrWWW	*/{ 683,-1,TabUnk,ActSeeCtr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWW		,NULL},
+   /* ActChgCtrSta	*/{1209,-1,TabUnk,ActSeeCtr		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrStatus		,NULL},
 
-   /* ActEdiDpt		*/{ 677,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_EditDepartments		,NULL},
-   /* ActNewDpt		*/{ 687,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_RecFormNewDpt		,NULL},
-   /* ActRemDpt		*/{ 690,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_RemoveDepartment		,NULL},
-   /* ActChgDptIns	*/{ 721,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_ChangeDepartIns		,NULL},
-   /* ActRenDptSho	*/{ 688,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_RenameDepartShort		,NULL},
-   /* ActRenDptFul	*/{ 689,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_RenameDepartFull		,NULL},
-   /* ActChgDptWWW	*/{ 691,-1,TabIns,ActSeeDpt		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dpt_ChangeDptWWW		,NULL},
+   /* ActEdiDpt		*/{ 677,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_EditDepartments		,NULL},
+   /* ActNewDpt		*/{ 687,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RecFormNewDpt		,NULL},
+   /* ActRemDpt		*/{ 690,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RemoveDepartment		,NULL},
+   /* ActChgDptIns	*/{ 721,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_ChangeDepartIns		,NULL},
+   /* ActRenDptSho	*/{ 688,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RenameDepartShort		,NULL},
+   /* ActRenDptFul	*/{ 689,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RenameDepartFull		,NULL},
+   /* ActChgDptWWW	*/{ 691,-1,TabUnk,ActSeeDpt		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_ChangeDptWWW		,NULL},
 
-   /* ActEdiPlc		*/{ 704,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_EditPlaces			,NULL},
-   /* ActNewPlc		*/{ 705,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RecFormNewPlace		,NULL},
-   /* ActRemPlc		*/{ 776,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RemovePlace		,NULL},
-   /* ActRenPlcSho	*/{ 894,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RenamePlaceShort		,NULL},
-   /* ActRenPlcFul	*/{ 895,-1,TabIns,ActSeePlc		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Plc_RenamePlaceFull		,NULL},
+   /* ActEdiPlc		*/{ 704,-1,TabUnk,ActSeePlc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_EditPlaces			,NULL},
+   /* ActNewPlc		*/{ 705,-1,TabUnk,ActSeePlc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RecFormNewPlace		,NULL},
+   /* ActRemPlc		*/{ 776,-1,TabUnk,ActSeePlc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RemovePlace		,NULL},
+   /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeePlc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceShort		,NULL},
+   /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeePlc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceFull		,NULL},
 
-   /* ActEdiHld		*/{ 713,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_EditHolidays		,NULL},
-   /* ActNewHld		*/{ 714,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RecFormNewHoliday		,NULL},
-   /* ActRemHld		*/{ 716,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RemoveHoliday		,NULL},
-   /* ActChgHldPlc	*/{ 896,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayPlace		,NULL},
-   /* ActChgHldTyp	*/{ 715,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeHolidayType		,NULL},
-   /* ActChgHldStrDat	*/{ 717,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeStartDate		,NULL},
-   /* ActChgHldEndDat	*/{ 718,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_ChangeEndDate		,NULL},
-   /* ActRenHld		*/{ 766,-1,TabIns,ActSeeHld		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Hld_RenameHoliday		,NULL},
+   /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_EditHolidays		,NULL},
+   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RecFormNewHoliday		,NULL},
+   /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RemoveHoliday		,NULL},
+   /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayPlace		,NULL},
+   /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayType		,NULL},
+   /* ActChgHldStrDat	*/{ 717,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeStartDate		,NULL},
+   /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeEndDate		,NULL},
+   /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeHld		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RenameHoliday		,NULL},
 
-   /* ActChgToSeeDocIns	*/{1308,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeDocIns	*/{1308,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActSeeDocIns	*/{1309,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeDocIns	*/{1310,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeDocIns	*/{1311,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPSeeDocIns	*/{1312,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatSeeDocIns*/{1313,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActDowSeeDocIns   */{1314,-1,TabIns,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActSeeDocIns	*/{1309,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocIns	*/{1310,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocIns	*/{1311,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocIns	*/{1312,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocIns*/{1313,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocIns   */{1314,-1,TabUnk,ActSeeAdmDocIns	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmDocIns	*/{1315,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmDocIns	*/{1315,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmDocIns	*/{1316,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilDocIns*/{1317,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilDocIns	*/{1318,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolDocIns	*/{1319,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopDocIns	*/{1320,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasDocIns	*/{1321,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreDocIns	*/{1322,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreDocIns	*/{1323,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolDocIns	*/{1324,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkDocIns	*/{1325,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolDocIns	*/{1326,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilDocInsDZ	*/{1327,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilDocInsCla*/{1328,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmDocIns	*/{1329,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmDocIns	*/{1330,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmDocIns	*/{1331,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoDocIns	*/{1332,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidDocIns	*/{1333,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmDocIns*/{1334,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmDocIns*/{1335,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmDocIns   */{1336,-1,TabIns,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmDocIns	*/{1316,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocIns*/{1317,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocIns	*/{1318,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocIns	*/{1319,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocIns	*/{1320,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocIns	*/{1321,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocIns	*/{1322,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocIns	*/{1323,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocIns	*/{1324,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocIns	*/{1325,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocIns	*/{1326,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocInsDZ	*/{1327,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilDocInsCla*/{1328,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocIns	*/{1329,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocIns	*/{1330,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocIns	*/{1331,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocIns	*/{1332,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocIns	*/{1333,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocIns*/{1334,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocIns*/{1335,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocIns   */{1336,-1,TabUnk,ActSeeAdmDocIns	,0x180,0x180,0x180,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilShaIns*/{1383,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilShaIns	*/{1384,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolShaIns	*/{1385,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopShaIns	*/{1386,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasShaIns	*/{1387,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreShaIns	*/{1388,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreShaIns	*/{1389,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolShaIns	*/{1390,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkShaIns	*/{1391,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolShaIns	*/{1392,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilShaInsDZ	*/{1393,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilShaInsCla*/{1394,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpShaIns	*/{1395,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConShaIns	*/{1396,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPShaIns	*/{1397,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatShaIns	*/{1398,-1,TabIns,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatShaIns	*/{1399,-1,TabIns,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowShaIns      */{1400,-1,TabIns,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilShaIns*/{1383,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilShaIns	*/{1384,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolShaIns	*/{1385,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopShaIns	*/{1386,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasShaIns	*/{1387,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreShaIns	*/{1388,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreShaIns	*/{1389,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolShaIns	*/{1390,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkShaIns	*/{1391,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolShaIns	*/{1392,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilShaInsDZ	*/{1393,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilShaInsCla*/{1394,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpShaIns	*/{1395,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConShaIns	*/{1396,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPShaIns	*/{1397,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatShaIns	*/{1398,-1,TabUnk,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatShaIns	*/{1399,-1,TabUnk,ActAdmShaIns		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowShaIns      */{1400,-1,TabUnk,ActAdmShaIns		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    // TabCtr ******************************************************************
    // Actions in menu:
-   /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqCtrSearch		,"search64x64.gif"	},
+   /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtrSearch		,"search64x64.gif"	},
 
-   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ShowConfiguration		,"ctr64x64.gif"		},
-   /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
-   /* ActSeeAdmDocCtr	*/{1248, 3,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmShaCtr	*/{1363, 4,TabCtr,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
+   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowConfiguration		,"ctr64x64.gif"		},
+   /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
+   /* ActSeeAdmDocCtr	*/{1248, 3,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmShaCtr	*/{1363, 4,TabCtr,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
 
    // Actions not in menu:
-   /* ActCtrSch		*/{1183,-1,TabCtr,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
+   /* ActCtrSch		*/{1183,-1,TabUnk,ActCtrReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
 
-   /* ActPrnCtrInf	*/{1152,-1,TabCtr,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ctr_PrintConfiguration		,NULL},
-   /* ActChgCtrInsCfg	*/{1589,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
-   /* ActReqCtrLog	*/{1244,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RequestLogo		,NULL},
-   /* ActRecCtrLog	*/{1051,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
-   /* ActRemCtrLog	*/{1342,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ctr_RemoveLogo		,Ctr_ShowConfiguration		,NULL},
-   /* ActReqCtrPho	*/{1160,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_RequestPhoto		,NULL},
-   /* ActRecCtrPho	*/{1161,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Ctr_ReceivePhoto		,NULL},
-   /* ActChgCtrPhoAtt	*/{1159,-1,TabCtr,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ctr_ChangeCtrPhotoAttribution	,NULL},
+   /* ActPrnCtrInf	*/{1152,-1,TabUnk,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ctr_PrintConfiguration		,NULL},
+   /* ActChgCtrInsCfg	*/{1589,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
+   /* ActReqCtrLog	*/{1244,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestLogo		,NULL},
+   /* ActRecCtrLog	*/{1051,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
+   /* ActRemCtrLog	*/{1342,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_RemoveLogo			,Ctr_ShowConfiguration		,NULL},
+   /* ActReqCtrPho	*/{1160,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestPhoto		,NULL},
+   /* ActRecCtrPho	*/{1161,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Ctr_ReceivePhoto		,NULL},
+   /* ActChgCtrPhoAtt	*/{1159,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrPhotoAttribution	,NULL},
 
-   /* ActEdiDeg		*/{ 536,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_EditDegrees		,NULL},
-   /* ActReqDeg		*/{1206,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RecFormReqDeg		,NULL},
-   /* ActNewDeg		*/{ 540,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RecFormNewDeg		,NULL},
-   /* ActRemDeg		*/{ 542,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RemoveDegree		,NULL},
-   /* ActRenDegSho	*/{ 546,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Deg_RenameDegreeShort	,Deg_ContEditAfterChgDeg	,NULL},
-   /* ActRenDegFul	*/{ 547,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Deg_RenameDegreeFull	,Deg_ContEditAfterChgDeg	,NULL},
-   /* ActChgDegTyp	*/{ 544,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_ChangeDegreeType		,NULL},
-   /* ActChgDegWWW	*/{ 554,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegWWW		,NULL},
-   /* ActChgDegSta	*/{1207,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegStatus		,NULL},
+   /* ActEdiDeg		*/{ 536,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_EditDegrees		,NULL},
+   /* ActReqDeg		*/{1206,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RecFormReqDeg		,NULL},
+   /* ActNewDeg		*/{ 540,-1,TabUnk,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RecFormNewDeg		,NULL},
+   /* ActRemDeg		*/{ 542,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RemoveDegree		,NULL},
+   /* ActRenDegSho	*/{ 546,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Deg_RenameDegreeShort		,Deg_ContEditAfterChgDeg	,NULL},
+   /* ActRenDegFul	*/{ 547,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Deg_RenameDegreeFull		,Deg_ContEditAfterChgDeg	,NULL},
+   /* ActChgDegTyp	*/{ 544,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_ChangeDegreeType		,NULL},
+   /* ActChgDegWWW	*/{ 554,-1,TabUnk,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ChangeDegWWW		,NULL},
+   /* ActChgDegSta	*/{1207,-1,TabUnk,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ChangeDegStatus		,NULL},
 
-   /* ActChgToSeeDocCtr	*/{1279,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeDocCtr	*/{1279,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActSeeDocCtr	*/{1280,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeDocCtr	*/{1281,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeDocCtr	*/{1282,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPSeeDocCtr	*/{1283,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatSeeDocCtr*/{1284,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActDowSeeDocCtr   */{1285,-1,TabCtr,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActSeeDocCtr	*/{1280,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocCtr	*/{1281,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocCtr	*/{1282,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocCtr	*/{1283,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocCtr*/{1284,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocCtr   */{1285,-1,TabUnk,ActSeeAdmDocCtr	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmDocCtr	*/{1286,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmDocCtr	*/{1286,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmDocCtr	*/{1287,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilDocCtr*/{1288,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilDocCtr	*/{1289,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolDocCtr	*/{1290,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopDocCtr	*/{1291,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasDocCtr	*/{1292,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreDocCtr	*/{1293,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreDocCtr	*/{1294,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolDocCtr	*/{1295,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkDocCtr	*/{1296,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolDocCtr	*/{1297,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilDocCtrDZ	*/{1298,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilDocCtrCla*/{1299,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmDocCtr	*/{1300,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmDocCtr	*/{1301,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmDocCtr	*/{1302,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoDocCtr	*/{1303,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidDocCtr	*/{1304,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmDocCtr*/{1305,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmDocCtr*/{1306,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmDocCtr   */{1307,-1,TabCtr,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmDocCtr	*/{1287,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocCtr*/{1288,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocCtr	*/{1289,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocCtr	*/{1290,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocCtr	*/{1291,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocCtr	*/{1292,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocCtr	*/{1293,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocCtr	*/{1294,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocCtr	*/{1295,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocCtr	*/{1296,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocCtr	*/{1297,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocCtrDZ	*/{1298,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilDocCtrCla*/{1299,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocCtr	*/{1300,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocCtr	*/{1301,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocCtr	*/{1302,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocCtr	*/{1303,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocCtr	*/{1304,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocCtr*/{1305,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocCtr*/{1306,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocCtr   */{1307,-1,TabUnk,ActSeeAdmDocCtr	,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilShaCtr*/{1364,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilShaCtr	*/{1365,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolShaCtr	*/{1366,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopShaCtr	*/{1367,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasShaCtr	*/{1368,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreShaCtr	*/{1369,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreShaCtr	*/{1370,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolShaCtr	*/{1371,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkShaCtr	*/{1372,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolShaCtr	*/{1373,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilShaCtrDZ	*/{1374,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilShaCtrCla*/{1375,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpShaCtr	*/{1376,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConShaCtr	*/{1377,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPShaCtr	*/{1378,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatShaCtr	*/{1379,-1,TabCtr,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatShaCtr	*/{1380,-1,TabCtr,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowShaCtr      */{1381,-1,TabCtr,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilShaCtr*/{1364,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilShaCtr	*/{1365,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolShaCtr	*/{1366,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopShaCtr	*/{1367,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasShaCtr	*/{1368,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreShaCtr	*/{1369,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreShaCtr	*/{1370,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolShaCtr	*/{1371,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkShaCtr	*/{1372,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolShaCtr	*/{1373,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilShaCtrDZ	*/{1374,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilShaCtrCla*/{1375,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpShaCtr	*/{1376,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConShaCtr	*/{1377,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPShaCtr	*/{1378,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatShaCtr	*/{1379,-1,TabUnk,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatShaCtr	*/{1380,-1,TabUnk,ActAdmShaCtr		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowShaCtr      */{1381,-1,TabUnk,ActAdmShaCtr		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    // TabDeg ******************************************************************
    // Actions in menu:
-   /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqDegSearch		,"search64x64.gif"	},
+   /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqDegSearch		,"search64x64.gif"	},
 
-   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ShowConfiguration		,"deg64x64.gif"		},
-   /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ShowCrssOfCurrentDeg	,"coursesdegree64x64.gif"},
-   /* ActSeeAdmDocDeg	*/{1247, 3,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmShaDeg	*/{1344, 4,TabDeg,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
+   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowConfiguration		,"deg64x64.gif"		},
+   /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowCrssOfCurrentDeg	,"coursesdegree64x64.gif"},
+   /* ActSeeAdmDocDeg	*/{1247, 3,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmShaDeg	*/{1344, 4,TabDeg,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
 
    // Actions not in menu:
-   /* ActDegSch		*/{1184,-1,TabDeg,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
+   /* ActDegSch		*/{1184,-1,TabUnk,ActDegReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
 
-   /* ActPrnDegInf	*/{1150,-1,TabDeg,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Deg_PrintConfiguration		,NULL},
-   /* ActChgDegCtrCfg	*/{1588,-1,TabDeg,ActSeeDegInf		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,Deg_ChangeDegCtrInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
-   /* ActReqDegLog	*/{1246,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_RequestLogo		,NULL},
-   /* ActRecDegLog	*/{ 553,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Deg_ReceiveLogo		,Deg_ShowConfiguration		,NULL},
-   /* ActRemDegLog	*/{1343,-1,TabDeg,ActSeeDegInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Deg_RemoveLogo		,Deg_ShowConfiguration		,NULL},
+   /* ActPrnDegInf	*/{1150,-1,TabUnk,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Deg_PrintConfiguration		,NULL},
+   /* ActChgDegCtrCfg	*/{1588,-1,TabUnk,ActSeeDegInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,Deg_ChangeDegCtrInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
+   /* ActReqDegLog	*/{1246,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RequestLogo		,NULL},
+   /* ActRecDegLog	*/{ 553,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Deg_ReceiveLogo		,Deg_ShowConfiguration		,NULL},
+   /* ActRemDegLog	*/{1343,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Deg_RemoveLogo			,Deg_ShowConfiguration		,NULL},
 
-   /* ActEdiCrs		*/{ 555,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqEditCourses		,NULL},
-   /* ActReqCrs		*/{1053,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActNewCrs		*/{ 556,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActRemCrs		*/{ 560,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_RemoveCourse		,NULL},
-   /* ActChgInsCrsCod	*/{1025,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeInsCrsCod		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActChgCrsYea	*/{ 561,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsYear		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActRenCrsSho	*/{ 563,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseShort	,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActRenCrsFul	*/{ 564,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseFull	,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActChgCrsSta	*/{1055,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsStatus		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActEdiCrs		*/{ 555,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqEditCourses		,NULL},
+   /* ActReqCrs		*/{1053,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActNewCrs		*/{ 556,-1,TabUnk,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActRemCrs		*/{ 560,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveCourse		,NULL},
+   /* ActChgInsCrsCod	*/{1025,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeInsCrsCod		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActChgCrsYea	*/{ 561,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsYear		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActRenCrsSho	*/{ 563,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RenameCourseShort		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActRenCrsFul	*/{ 564,-1,TabUnk,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RenameCourseFull		,Crs_ContEditAfterChgCrs	,NULL},
+   /* ActChgCrsSta	*/{1055,-1,TabUnk,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsStatus		,Crs_ContEditAfterChgCrs	,NULL},
 
-   /* ActChgToSeeDocDeg	*/{1250,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeDocDeg	*/{1250,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActSeeDocDeg	*/{1251,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeDocDeg	*/{1252,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeDocDeg	*/{1253,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPSeeDocDeg	*/{1254,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatSeeDocDeg*/{1255,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActDowSeeDocDeg   */{1256,-1,TabDeg,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActSeeDocDeg	*/{1251,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocDeg	*/{1252,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocDeg	*/{1253,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocDeg	*/{1254,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocDeg*/{1255,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocDeg   */{1256,-1,TabUnk,ActSeeAdmDocDeg	,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmDocDeg	*/{1257,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmDocDeg	*/{1257,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmDocDeg	*/{1258,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilDocDeg*/{1259,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilDocDeg	*/{1260,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolDocDeg	*/{1261,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopDocDeg	*/{1262,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasDocDeg	*/{1263,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreDocDeg	*/{1264,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreDocDeg	*/{1265,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolDocDeg	*/{1266,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkDocDeg	*/{1267,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolDocDeg	*/{1268,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilDocDegDZ	*/{1269,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilDocDegCla*/{1270,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmDocDeg	*/{1271,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmDocDeg	*/{1272,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmDocDeg	*/{1273,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoDocDeg	*/{1274,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidDocDeg	*/{1275,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmDocDeg*/{1276,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmDocDeg*/{1277,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmDocDeg   */{1278,-1,TabDeg,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmDocDeg	*/{1258,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocDeg*/{1259,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocDeg	*/{1260,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocDeg	*/{1261,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocDeg	*/{1262,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocDeg	*/{1263,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocDeg	*/{1264,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocDeg	*/{1265,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocDeg	*/{1266,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocDeg	*/{1267,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocDeg	*/{1268,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocDegDZ	*/{1269,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilDocDegCla*/{1270,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocDeg	*/{1271,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocDeg	*/{1272,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocDeg	*/{1273,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocDeg	*/{1274,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocDeg	*/{1275,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocDeg*/{1276,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocDeg*/{1277,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocDeg   */{1278,-1,TabUnk,ActSeeAdmDocDeg	,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilShaDeg*/{1345,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilShaDeg	*/{1346,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolShaDeg	*/{1347,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopShaDeg	*/{1348,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasShaDeg	*/{1349,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreShaDeg	*/{1350,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreShaDeg	*/{1351,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolShaDeg	*/{1352,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkShaDeg	*/{1353,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolShaDeg	*/{1354,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilShaDegDZ	*/{1355,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilShaDegCla*/{1356,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpShaDeg	*/{1357,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConShaDeg	*/{1358,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPShaDeg	*/{1359,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatShaDeg	*/{1360,-1,TabDeg,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatShaDeg	*/{1361,-1,TabDeg,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowShaDeg      */{1362,-1,TabDeg,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilShaDeg*/{1345,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilShaDeg	*/{1346,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolShaDeg	*/{1347,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopShaDeg	*/{1348,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasShaDeg	*/{1349,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreShaDeg	*/{1350,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreShaDeg	*/{1351,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolShaDeg	*/{1352,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkShaDeg	*/{1353,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolShaDeg	*/{1354,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilShaDegDZ	*/{1355,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilShaDegCla*/{1356,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpShaDeg	*/{1357,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConShaDeg	*/{1358,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPShaDeg	*/{1359,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatShaDeg	*/{1360,-1,TabUnk,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatShaDeg	*/{1361,-1,TabUnk,ActAdmShaDeg		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowShaDeg      */{1362,-1,TabUnk,ActAdmShaDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    // TabCrs ******************************************************************
    // Actions in menu:
-   /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sch_ReqCrsSearch		,"search64x64.gif"	},
+   /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCrsSearch		,"search64x64.gif"	},
 
-   /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ShowIntroduction		,"info64x64.gif"	},
-   /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"guide64x64.gif"	},
-   /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"presentation64x64.gif"},
-   /* ActSeeAdmDocCrsGrp*/{   0, 4,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmTchCrsGrp	*/{1525, 5,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
-   /* ActAdmShaCrsGrp	*/{ 461, 6,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
-   /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeBib		*/{  32, 8,TabCrs,ActSeeBib		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"books64x64.gif"	},
-   /* ActSeeFAQ		*/{  54, 9,TabCrs,ActSeeFAQ		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"faq64x64.gif"		},
-   /* ActSeeCrsLnk	*/{   9,10,TabCrs,ActSeeCrsLnk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"link64x64.gif"	},
+   /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowIntroduction		,"info64x64.gif"	},
+   /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"guide64x64.gif"	},
+   /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"presentation64x64.gif"},
+   /* ActSeeAdmDocCrsGrp*/{   0, 4,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmTchCrsGrp	*/{1525, 5,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folder64x64.gif"	},
+   /* ActAdmShaCrsGrp	*/{ 461, 6,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"folderusers64x64.gif"	},
+   /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
+   /* ActSeeBib		*/{  32, 8,TabCrs,ActSeeBib		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"books64x64.gif"	},
+   /* ActSeeFAQ		*/{  54, 9,TabCrs,ActSeeFAQ		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},
+   /* ActSeeCrsLnk	*/{   9,10,TabCrs,ActSeeCrsLnk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"link64x64.gif"	},
 
    // Actions not in menu:
-   /* ActDegSch		*/{1185,-1,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
+   /* ActDegSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
 
-   /* ActPrnCrsInf	*/{1028,-1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Crs_PrintConfiguration		,NULL},
-   /* ActChgCrsDegCfg	*/{1587,-1,TabCrs,ActSeeCrsInf		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsDegInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   /* ActChgInsCrsCodCfg*/{1024,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeInsCrsCodInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   /* ActChgCrsYeaCfg	*/{1573,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsYearInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
-   /* ActEdiCrsInf	*/{ 848,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
+   /* ActPrnCrsInf	*/{1028,-1,TabUnk,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Crs_PrintConfiguration		,NULL},
+   /* ActChgCrsDegCfg	*/{1587,-1,TabUnk,ActSeeCrsInf		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsDegInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
+   /* ActChgInsCrsCodCfg*/{1024,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeInsCrsCodInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
+   /* ActChgCrsYeaCfg	*/{1573,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsYearInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
+   /* ActEdiCrsInf	*/{ 848,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
-   /* ActEdiTchGui	*/{ 785,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
+   /* ActEdiTchGui	*/{ 785,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
-   /* ActPrnCrsTT	*/{ 152,-1,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiCrsTT	*/{  45,-1,TabCrs,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
-   /* ActChgCrsTT	*/{  53,-1,TabCrs,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_EditCrsTimeTable		,NULL},
-   /* ActChgCrsTT1stDay	*/{1486,-1,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
+   /* ActPrnCrsTT	*/{ 152,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
+   /* ActEdiCrsTT	*/{  45,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT	*/{  53,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT1stDay	*/{1486,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
-   /* ActSeeSylLec	*/{  28,-1,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,NULL},
-   /* ActSeeSylPra	*/{  20,-1,TabCrs,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,NULL},
-   /* ActEdiSylLec	*/{  44,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActEdiSylPra	*/{  74,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActDelItmSylLec	*/{ 218,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_RemoveItemSyllabus		,NULL},
-   /* ActDelItmSylPra	*/{ 183,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_RemoveItemSyllabus		,NULL},
-   /* ActUp_IteSylLec	*/{ 221,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_UpItemSyllabus		,NULL},
-   /* ActUp_IteSylPra	*/{ 213,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_UpItemSyllabus		,NULL},
-   /* ActDwnIteSylLec	*/{ 220,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_DownItemSyllabus		,NULL},
-   /* ActDwnIteSylPra	*/{ 212,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_DownItemSyllabus		,NULL},
-   /* ActRgtIteSylLec	*/{ 223,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_RightItemSyllabus		,NULL},
-   /* ActRgtIteSylPra	*/{ 215,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_RightItemSyllabus		,NULL},
-   /* ActLftIteSylLec	*/{ 222,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_LeftItemSyllabus		,NULL},
-   /* ActLftIteSylPra	*/{ 214,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_LeftItemSyllabus		,NULL},
-   /* ActInsIteSylLec	*/{ 217,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_InsertItemSyllabus		,NULL},
-   /* ActInsIteSylPra	*/{ 181,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_InsertItemSyllabus		,NULL},
-   /* ActModIteSylLec	*/{ 211,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_ModifyItemSyllabus		,NULL},
-   /* ActModIteSylPra	*/{ 216,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_ModifyItemSyllabus		,NULL},
+   /* ActSeeSylLec	*/{  28,-1,TabUnk,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,NULL},
+   /* ActSeeSylPra	*/{  20,-1,TabUnk,ActSeeSyl		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,NULL},
+   /* ActEdiSylLec	*/{  44,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
+   /* ActEdiSylPra	*/{  74,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
+   /* ActDelItmSylLec	*/{ 218,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_RemoveItemSyllabus		,NULL},
+   /* ActDelItmSylPra	*/{ 183,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_RemoveItemSyllabus		,NULL},
+   /* ActUp_IteSylLec	*/{ 221,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_UpItemSyllabus		,NULL},
+   /* ActUp_IteSylPra	*/{ 213,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_UpItemSyllabus		,NULL},
+   /* ActDwnIteSylLec	*/{ 220,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_DownItemSyllabus		,NULL},
+   /* ActDwnIteSylPra	*/{ 212,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_DownItemSyllabus		,NULL},
+   /* ActRgtIteSylLec	*/{ 223,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_RightItemSyllabus		,NULL},
+   /* ActRgtIteSylPra	*/{ 215,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_RightItemSyllabus		,NULL},
+   /* ActLftIteSylLec	*/{ 222,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_LeftItemSyllabus		,NULL},
+   /* ActLftIteSylPra	*/{ 214,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_LeftItemSyllabus		,NULL},
+   /* ActInsIteSylLec	*/{ 217,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_InsertItemSyllabus		,NULL},
+   /* ActInsIteSylPra	*/{ 181,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_InsertItemSyllabus		,NULL},
+   /* ActModIteSylLec	*/{ 211,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_ModifyItemSyllabus		,NULL},
+   /* ActModIteSylPra	*/{ 216,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_ModifyItemSyllabus		,NULL},
 
-   /* ActChgToSeeDocCrs	*/{1195,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeDocCrs	*/{1195,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActSeeDocCrs	*/{1078,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeDocCrs	*/{ 462,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeDocCrs	*/{ 476,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPSeeDocCrs	*/{1124,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatSeeDocCrs*/{1033,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActDowSeeDocCrs   */{1111,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActSeeDocCrs	*/{1078,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocCrs	*/{ 462,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocCrs	*/{ 476,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocCrs	*/{1124,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocCrs*/{1033,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocCrs   */{1111,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActSeeDocGrp	*/{1200,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeDocGrp	*/{ 488,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeDocGrp	*/{ 489,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPSeeDocGrp	*/{1125,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatSeeDocGrp*/{1034,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActDowSeeDocGrp   */{1112,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActSeeDocGrp	*/{1200,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeDocGrp	*/{ 488,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeDocGrp	*/{ 489,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPSeeDocGrp	*/{1125,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatSeeDocGrp*/{1034,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActDowSeeDocGrp   */{1112,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmDocCrs	*/{1196,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmDocCrs	*/{1196,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmDocCrs	*/{  12,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilDocCrs*/{ 479,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilDocCrs	*/{ 480,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolDocCrs	*/{ 497,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopDocCrs	*/{ 470,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasDocCrs	*/{ 478,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreDocCrs	*/{ 498,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreDocCrs	*/{ 481,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolDocCrs	*/{ 491,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkDocCrs	*/{1225,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolDocCrs	*/{ 535,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilDocCrsDZ	*/{1214,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilDocCrsCla*/{ 482,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmDocCrs	*/{ 477,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmDocCrs	*/{ 494,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmDocCrs	*/{1126,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoDocCrs	*/{ 464,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidDocCrs	*/{ 465,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmDocCrs*/{1029,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmDocCrs*/{ 996,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmDocCrs   */{1113,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmDocCrs	*/{  12,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocCrs*/{ 479,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocCrs	*/{ 480,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocCrs	*/{ 497,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocCrs	*/{ 470,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocCrs	*/{ 478,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocCrs	*/{ 498,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocCrs	*/{ 481,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocCrs	*/{ 491,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocCrs	*/{1225,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocCrs	*/{ 535,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocCrsDZ	*/{1214,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilDocCrsCla*/{ 482,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocCrs	*/{ 477,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocCrs	*/{ 494,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocCrs	*/{1126,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocCrs	*/{ 464,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocCrs	*/{ 465,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocCrs*/{1029,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocCrs*/{ 996,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocCrs   */{1113,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActAdmDocGrp	*/{1201,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilDocGrp*/{ 473,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilDocGrp	*/{ 474,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolDocGrp	*/{ 484,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopDocGrp	*/{ 472,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasDocGrp	*/{ 471,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreDocGrp	*/{ 485,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreDocGrp	*/{ 468,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolDocGrp	*/{ 469,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkDocGrp	*/{1231,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolDocGrp	*/{ 490,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilDocGrpDZ	*/{1215,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilDocGrpCla*/{ 483,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmDocGrp	*/{ 486,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmDocGrp	*/{ 487,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmDocGrp	*/{1127,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoDocGrp	*/{ 493,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidDocGrp	*/{ 492,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmDocGrp*/{1030,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmDocGrp*/{ 998,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmDocGrp   */{1114,-1,TabCrs,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmDocGrp	*/{1201,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilDocGrp*/{ 473,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilDocGrp	*/{ 474,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolDocGrp	*/{ 484,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopDocGrp	*/{ 472,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasDocGrp	*/{ 471,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreDocGrp	*/{ 485,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreDocGrp	*/{ 468,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolDocGrp	*/{ 469,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkDocGrp	*/{1231,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolDocGrp	*/{ 490,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilDocGrpDZ	*/{1215,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL			,NULL},
+   /* ActRcvFilDocGrpCla*/{ 483,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmDocGrp	*/{ 486,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmDocGrp	*/{ 487,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmDocGrp	*/{1127,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoDocGrp	*/{ 493,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidDocGrp	*/{ 492,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmDocGrp*/{1030,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmDocGrp*/{ 998,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmDocGrp   */{1114,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x110,0x100,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmTch	*/{1526,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmTch	*/{1526,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmTchCrs	*/{1527,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilTchCrs*/{1528,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilTchCrs	*/{1529,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolTchCrs	*/{1530,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopTchCrs	*/{1531,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasTchCrs	*/{1532,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreTchCrs	*/{1533,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreTchCrs	*/{1534,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolTchCrs	*/{1535,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkTchCrs	*/{1536,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolTchCrs	*/{1537,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilTchCrsDZ	*/{1538,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilTchCrsCla*/{1539,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpTchCrs	*/{1540,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConTchCrs	*/{1541,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPTchCrs	*/{1542,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatTchCrs	*/{1543,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatTchCrs	*/{1544,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowTchCrs      */{1545,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmTchCrs	*/{1527,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilTchCrs*/{1528,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilTchCrs	*/{1529,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolTchCrs	*/{1530,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopTchCrs	*/{1531,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasTchCrs	*/{1532,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreTchCrs	*/{1533,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreTchCrs	*/{1534,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolTchCrs	*/{1535,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkTchCrs	*/{1536,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolTchCrs	*/{1537,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilTchCrsDZ	*/{1538,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilTchCrsCla*/{1539,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpTchCrs	*/{1540,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConTchCrs	*/{1541,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPTchCrs	*/{1542,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatTchCrs	*/{1543,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatTchCrs	*/{1544,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowTchCrs      */{1545,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActAdmTchGrp	*/{1546,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilTchGrp*/{1547,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilTchGrp	*/{1548,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolTchGrp	*/{1549,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopTchGrp	*/{1550,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasTchGrp	*/{1551,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreTchGrp	*/{1552,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreTchGrp	*/{1553,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolTchGrp	*/{1554,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkTchGrp	*/{1555,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolTchGrp	*/{1556,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilTchGrpDZ	*/{1557,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilTchGrpCla*/{1558,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpTchGrp	*/{1559,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConTchGrp	*/{1560,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPTchGrp	*/{1561,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatTchGrp	*/{1562,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatTchGrp	*/{1563,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowTchGrp      */{1564,-1,TabCrs,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmTchGrp	*/{1546,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilTchGrp*/{1547,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilTchGrp	*/{1548,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolTchGrp	*/{1549,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopTchGrp	*/{1550,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasTchGrp	*/{1551,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreTchGrp	*/{1552,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreTchGrp	*/{1553,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolTchGrp	*/{1554,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkTchGrp	*/{1555,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolTchGrp	*/{1556,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilTchGrpDZ	*/{1557,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilTchGrpCla*/{1558,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpTchGrp	*/{1559,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConTchGrp	*/{1560,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPTchGrp	*/{1561,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatTchGrp	*/{1562,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatTchGrp	*/{1563,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowTchGrp      */{1564,-1,TabUnk,ActAdmTchCrsGrp	,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActChgToAdmSha	*/{1197,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmSha	*/{1197,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmShaCrs	*/{1202,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilShaCrs*/{ 327,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilShaCrs	*/{ 328,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolShaCrs	*/{ 325,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopShaCrs	*/{ 330,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasShaCrs	*/{ 331,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreShaCrs	*/{ 332,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreShaCrs	*/{ 323,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolShaCrs	*/{ 324,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkShaCrs	*/{1226,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolShaCrs	*/{ 329,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilShaCrsDZ	*/{1216,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilShaCrsCla*/{ 326,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpShaCrs	*/{ 421,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConShaCrs	*/{ 422,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPShaCrs	*/{1128,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatShaCrs	*/{1031,-1,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatShaCrs	*/{1000,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowShaCrs      */{1115,-1,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmShaCrs	*/{1202,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilShaCrs*/{ 327,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilShaCrs	*/{ 328,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolShaCrs	*/{ 325,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopShaCrs	*/{ 330,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasShaCrs	*/{ 331,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreShaCrs	*/{ 332,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreShaCrs	*/{ 323,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolShaCrs	*/{ 324,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkShaCrs	*/{1226,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolShaCrs	*/{ 329,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilShaCrsDZ	*/{1216,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilShaCrsCla*/{ 326,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpShaCrs	*/{ 421,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConShaCrs	*/{ 422,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPShaCrs	*/{1128,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatShaCrs	*/{1031,-1,TabUnk,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatShaCrs	*/{1000,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowShaCrs      */{1115,-1,TabUnk,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActAdmShaGrp	*/{1203,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilShaGrp*/{ 341,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilShaGrp	*/{ 342,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolShaGrp	*/{ 338,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopShaGrp	*/{ 336,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasShaGrp	*/{ 337,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreShaGrp	*/{ 339,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreShaGrp	*/{ 333,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolShaGrp	*/{ 334,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkShaGrp	*/{1227,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolShaGrp	*/{ 340,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilShaGrpDZ	*/{1217,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilShaGrpCla*/{ 335,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpShaGrp	*/{ 427,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConShaGrp	*/{ 426,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPShaGrp	*/{1129,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatShaGrp	*/{1032,-1,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatShaGrp	*/{1002,-1,TabCrs,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowShaGrp      */{1116,-1,TabCrs,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActAdmShaGrp	*/{1203,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilShaGrp*/{ 341,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilShaGrp	*/{ 342,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolShaGrp	*/{ 338,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopShaGrp	*/{ 336,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasShaGrp	*/{ 337,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreShaGrp	*/{ 339,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreShaGrp	*/{ 333,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolShaGrp	*/{ 334,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkShaGrp	*/{1227,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolShaGrp	*/{ 340,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilShaGrpDZ	*/{1217,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilShaGrpCla*/{ 335,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpShaGrp	*/{ 427,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConShaGrp	*/{ 426,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPShaGrp	*/{1129,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatShaGrp	*/{1032,-1,TabUnk,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatShaGrp	*/{1002,-1,TabUnk,ActAdmShaCrsGrp	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowShaGrp      */{1116,-1,TabUnk,ActAdmShaCrsGrp	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActEdiBib		*/{  76,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActEdiFAQ		*/{ 109,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActEdiCrsLnk	*/{  96,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
+   /* ActEdiBib		*/{  76,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
+   /* ActEdiFAQ		*/{ 109,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
+   /* ActEdiCrsLnk	*/{  96,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
-   /* ActChgFrcReaCrsInf*/{ 877,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaTchGui*/{ 870,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaSylLec*/{ 871,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaSylPra*/{ 872,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaBib	*/{ 873,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaFAQ	*/{ 874,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgFrcReaCrsLnk*/{ 875,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaCrsInf*/{ 877,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaTchGui*/{ 870,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaSylLec*/{ 871,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaSylPra*/{ 872,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaBib	*/{ 873,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaFAQ	*/{ 874,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgFrcReaCrsLnk*/{ 875,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
 
-   /* ActChgHavReaCrsInf*/{ 878,-1,TabCrs,ActSeeCrsInf		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaTchGui*/{ 886,-1,TabCrs,ActSeeTchGui		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaSylLec*/{ 880,-1,TabCrs,ActSeeSyl		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaSylPra*/{ 887,-1,TabCrs,ActSeeSyl		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaBib	*/{ 884,-1,TabCrs,ActSeeBib		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaFAQ	*/{ 879,-1,TabCrs,ActSeeFAQ		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActChgHavReaCrsLnk*/{ 885,-1,TabCrs,ActSeeCrsLnk		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaCrsInf*/{ 878,-1,TabUnk,ActSeeCrsInf		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaTchGui*/{ 886,-1,TabUnk,ActSeeTchGui		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaSylLec*/{ 880,-1,TabUnk,ActSeeSyl		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaSylPra*/{ 887,-1,TabUnk,ActSeeSyl		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaBib	*/{ 884,-1,TabUnk,ActSeeBib		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaFAQ	*/{ 879,-1,TabUnk,ActSeeFAQ		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActChgHavReaCrsLnk*/{ 885,-1,TabUnk,ActSeeCrsLnk		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
 
-   /* ActSelInfSrcCrsInf*/{ 849,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcTchGui*/{ 789,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcSylLec*/{ 378,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcSylPra*/{ 382,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcBib	*/{ 370,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcFAQ	*/{ 380,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActSelInfSrcCrsLnk*/{ 385,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcCrsInf*/{ 849,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcTchGui*/{ 789,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcSylLec*/{ 378,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcSylPra*/{ 382,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcBib	*/{ 370,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcFAQ	*/{ 380,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActSelInfSrcCrsLnk*/{ 385,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
 
-   /* ActRcvURLCrsInf	*/{ 854,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLTchGui	*/{ 791,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLSylLec	*/{ 403,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLSylPra	*/{ 402,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLBib	*/{ 224,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLFAQ	*/{ 234,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvURLCrsLnk	*/{ 182,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLCrsInf	*/{ 854,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLTchGui	*/{ 791,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLSylLec	*/{ 403,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLSylPra	*/{ 402,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLBib	*/{ 224,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLFAQ	*/{ 234,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvURLCrsLnk	*/{ 182,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
 
-   /* ActRcvPagCrsInf	*/{ 853,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagTchGui	*/{ 788,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagSylLec	*/{ 381,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagSylPra	*/{ 383,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagBib	*/{ 185,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagFAQ	*/{ 219,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActRcvPagCrsLnk	*/{ 164,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagCrsInf	*/{ 853,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagTchGui	*/{ 788,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagSylLec	*/{ 381,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagSylPra	*/{ 383,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagBib	*/{ 185,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagFAQ	*/{ 219,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActRcvPagCrsLnk	*/{ 164,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
 
-   /* ActEditorCrsInf	*/{ 852,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorCourseInfo		,NULL},
-   /* ActEditorTchGui	*/{ 786,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorTeachingGuide	,NULL},
-   /* ActEditorSylLec	*/{ 372,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_EditSyllabus		,NULL},
-   /* ActEditorSylPra	*/{ 371,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Syl_EditSyllabus		,NULL},
-   /* ActEditorBib	*/{ 376,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorBibliography		,NULL},
-   /* ActEditorFAQ	*/{ 404,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorFAQ   		,NULL},
-   /* ActEditorCrsLnk	*/{ 388,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorLinks		,NULL},
+   /* ActEditorCrsInf	*/{ 852,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorCourseInfo		,NULL},
+   /* ActEditorTchGui	*/{ 786,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorTeachingGuide	,NULL},
+   /* ActEditorSylLec	*/{ 372,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_EditSyllabus		,NULL},
+   /* ActEditorSylPra	*/{ 371,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Syl_EditSyllabus		,NULL},
+   /* ActEditorBib	*/{ 376,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorBibliography		,NULL},
+   /* ActEditorFAQ	*/{ 404,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorFAQ   		,NULL},
+   /* ActEditorCrsLnk	*/{ 388,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorLinks		,NULL},
 
-   /* ActPlaTxtEdiCrsInf*/{ 850,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActPlaTxtEdiTchGui*/{ 787,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActPlaTxtEdiSylLec*/{ 379,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActPlaTxtEdiSylPra*/{ 389,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActPlaTxtEdiBib	*/{ 377,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActPlaTxtEdiFAQ	*/{ 405,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo   	,NULL},
-   /* ActPlaTxtEdiCrsLnk*/{ 400,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiCrsInf*/{ 850,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiTchGui*/{ 787,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiSylLec*/{ 379,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiSylPra*/{ 389,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiBib	*/{ 377,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActPlaTxtEdiFAQ	*/{ 405,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo   	,NULL},
+   /* ActPlaTxtEdiCrsLnk*/{ 400,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
 
-   /* ActRchTxtEdiCrsInf*/{1093,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRchTxtEdiTchGui*/{1094,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRchTxtEdiSylLec*/{1095,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRchTxtEdiSylPra*/{1096,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRchTxtEdiBib	*/{1097,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRchTxtEdiFAQ	*/{1098,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo   		,NULL},
-   /* ActRchTxtEdiCrsLnk*/{1099,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiCrsInf*/{1093,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiTchGui*/{1094,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiSylLec*/{1095,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiSylPra*/{1096,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiBib	*/{1097,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRchTxtEdiFAQ	*/{1098,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo   		,NULL},
+   /* ActRchTxtEdiCrsLnk*/{1099,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
 
-   /* ActRcvPlaTxtCrsInf*/{ 851,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtTchGui*/{ 790,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtSylLec*/{ 394,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtSylPra*/{ 396,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtBib	*/{ 398,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtFAQ	*/{ 406,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvPlaTxtCrsLnk*/{ 401,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtCrsInf*/{ 851,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtTchGui*/{ 790,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtSylLec*/{ 394,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtSylPra*/{ 396,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtBib	*/{ 398,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtFAQ	*/{ 406,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvPlaTxtCrsLnk*/{ 401,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
 
-   /* ActRcvRchTxtCrsInf*/{1101,-1,TabCrs,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtTchGui*/{1102,-1,TabCrs,ActSeeTchGui		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtSylLec*/{1103,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtSylPra*/{1104,-1,TabCrs,ActSeeSyl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtBib	*/{1105,-1,TabCrs,ActSeeBib		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtFAQ	*/{1106,-1,TabCrs,ActSeeFAQ		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
-   /* ActRcvRchTxtCrsLnk*/{1107,-1,TabCrs,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtCrsInf*/{1101,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtTchGui*/{1102,-1,TabUnk,ActSeeTchGui		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtSylLec*/{1103,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtSylPra*/{1104,-1,TabUnk,ActSeeSyl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtBib	*/{1105,-1,TabUnk,ActSeeBib		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtFAQ	*/{1106,-1,TabUnk,ActSeeFAQ		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActRcvRchTxtCrsLnk*/{1107,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
 
    // TabAss ******************************************************************
    // Actions in menu:
-   /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ShowInfo			,"infogrades64x64.gif"	},
-   /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_SeeAssignments		,"desk64x64.gif"	},
-   /* ActAdmAsgWrkUsr	*/{ 792, 2,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"editfolderuser64x64.gif"},
-   /* ActReqAsgWrkCrs	*/{ 899, 3,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskEditWorksCrs		,"folderusers64x64.gif"	},
-   /* ActReqTst		*/{ 103, 4,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowFormAskTst		,"test64x64.gif"	},
-   /* ActSeeCal		*/{  16, 5,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cal_DrawCalendar		,"date64x64.gif"	},
-   /* ActSeeAllExaAnn	*/{  85, 6,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
-   /* ActSeeAdmMrk	*/{  17, 7,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"grades64x64.gif"	},
+   /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"infogrades64x64.gif"	},
+   /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
+   /* ActAdmAsgWrkUsr	*/{ 792, 2,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"editfolderuser64x64.gif"},
+   /* ActReqAsgWrkCrs	*/{ 899, 3,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskEditWorksCrs		,"folderusers64x64.gif"	},
+   /* ActReqTst		*/{ 103, 4,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
+   /* ActSeeCal		*/{  16, 5,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendar		,"date64x64.gif"	},
+   /* ActSeeAllExaAnn	*/{  85, 6,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActSeeAdmMrk	*/{  17, 7,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"grades64x64.gif"	},
 
    // Actions not in menu:
-   /* ActEdiAss		*/{  69,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_FormsToSelSendInfo		,NULL},
-   /* ActChgFrcReaAss	*/{ 883,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeForceReadInfo	,NULL},
-   /* ActChgHavReaAss	*/{ 898,-1,TabAss,ActSeeAss		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ChangeIHaveReadInfo	,NULL},
-   /* ActSelInfSrcAss	*/{ 384,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_SetInfoSrc			,NULL},
-   /* ActRcvURLAss	*/{ 235,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_ReceiveURLInfo		,NULL},
-   /* ActRcvPagAss	*/{ 184,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Inf_ReceivePagInfo		,NULL},
-   /* ActEditorAss	*/{ 386,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditorAssessment		,NULL},
-   /* ActPlaTxtEdiAss	*/{ 387,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditPlainTxtInfo		,NULL},
-   /* ActRchTxtEdiAss	*/{1100,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_EditRichTxtInfo		,NULL},
-   /* ActRcvPlaTxtAss	*/{ 397,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangePlainTxtInfo	,NULL},
-   /* ActRcvRchTxtAss	*/{1108,-1,TabAss,ActSeeAss		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Inf_RecAndChangeRichTxtInfo	,NULL},
+   /* ActEdiAss		*/{  69,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
+   /* ActChgFrcReaAss	*/{ 883,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeForceReadInfo	,NULL},
+   /* ActChgHavReaAss	*/{ 898,-1,TabUnk,ActSeeAss		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ChangeIHaveReadInfo	,NULL},
+   /* ActSelInfSrcAss	*/{ 384,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_SetInfoSrc			,NULL},
+   /* ActRcvURLAss	*/{ 235,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ReceiveURLInfo		,NULL},
+   /* ActRcvPagAss	*/{ 184,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Inf_ReceivePagInfo		,NULL},
+   /* ActEditorAss	*/{ 386,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditorAssessment		,NULL},
+   /* ActPlaTxtEdiAss	*/{ 387,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditPlainTxtInfo		,NULL},
+   /* ActRchTxtEdiAss	*/{1100,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_EditRichTxtInfo		,NULL},
+   /* ActRcvPlaTxtAss	*/{ 397,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangePlainTxtInfo	,NULL},
+   /* ActRcvRchTxtAss	*/{1108,-1,TabUnk,ActSeeAss		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
 
-   /* ActFrmNewAsg	*/{ 812,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_RequestCreatOrEditAsg	,NULL},
-   /* ActEdiOneAsg	*/{ 814,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_RequestCreatOrEditAsg	,NULL},
-   /* ActNewAsg		*/{ 803,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_RecFormAssignment		,NULL},
-   /* ActChgAsg		*/{ 815,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_RecFormAssignment		,NULL},
-   /* ActReqRemAsg	*/{ 813,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_AskRemAssignment		,NULL},
-   /* ActRemAsg		*/{ 806,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_RemoveAssignment		,NULL},
-   /* ActHidAsg		*/{ 964,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_HideAssignment		,NULL},
-   /* ActShoAsg		*/{ 965,-1,TabAss,ActSeeAsg		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Asg_ShowAssignment		,NULL},
+   /* ActFrmNewAsg	*/{ 812,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
+   /* ActEdiOneAsg	*/{ 814,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
+   /* ActNewAsg		*/{ 803,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
+   /* ActChgAsg		*/{ 815,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
+   /* ActReqRemAsg	*/{ 813,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_AskRemAssignment		,NULL},
+   /* ActRemAsg		*/{ 806,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RemoveAssignment		,NULL},
+   /* ActHidAsg		*/{ 964,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_HideAssignment		,NULL},
+   /* ActShoAsg		*/{ 965,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_ShowAssignment		,NULL},
 
-   /* ActAdmAsgWrkCrs	*/{ 139,-1,TabAss,ActReqAsgWrkCrs	,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActAdmAsgWrkCrs	*/{ 139,-1,TabUnk,ActReqAsgWrkCrs	,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActReqRemFilAsgUsr*/{ 834,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilAsgUsr	*/{ 833,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolAsgUsr	*/{ 827,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopAsgUsr	*/{ 829,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasAsgUsr	*/{ 830,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreAsgUsr	*/{ 828,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreAsgUsr	*/{ 825,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolAsgUsr	*/{ 826,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkAsgUsr	*/{1232,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolAsgUsr	*/{ 839,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilAsgUsrDZ	*/{1218,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilAsgUsrCla*/{ 832,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAsgUsr	*/{ 824,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAsgUsr	*/{ 831,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAsgUsr	*/{1130,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatAsgUsr	*/{1039,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAsgUsr	*/{1040,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAsgUsr      */{1117,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilAsgUsr*/{ 834,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilAsgUsr	*/{ 833,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolAsgUsr	*/{ 827,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopAsgUsr	*/{ 829,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasAsgUsr	*/{ 830,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreAsgUsr	*/{ 828,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreAsgUsr	*/{ 825,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolAsgUsr	*/{ 826,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkAsgUsr	*/{1232,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolAsgUsr	*/{ 839,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilAsgUsrDZ	*/{1218,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilAsgUsrCla*/{ 832,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAsgUsr	*/{ 824,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAsgUsr	*/{ 831,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAsgUsr	*/{1130,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatAsgUsr	*/{1039,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAsgUsr	*/{1040,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAsgUsr      */{1117,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilWrkUsr*/{ 288,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilWrkUsr	*/{ 169,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolWrkUsr	*/{ 228,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopWrkUsr	*/{ 314,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasWrkUsr	*/{ 318,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreWrkUsr	*/{ 278,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreWrkUsr	*/{ 150,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolWrkUsr	*/{ 172,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkWrkUsr	*/{1228,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolWrkUsr	*/{ 204,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilWrkUsrDZ	*/{1219,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilWrkUsrCla*/{ 148,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpWrkUsr	*/{ 423,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConWrkUsr	*/{ 425,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPWrkUsr	*/{1131,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatWrkUsr	*/{1041,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatWrkUsr	*/{1042,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowWrkUsr      */{1118,-1,TabAss,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilWrkUsr*/{ 288,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilWrkUsr	*/{ 169,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolWrkUsr	*/{ 228,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopWrkUsr	*/{ 314,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasWrkUsr	*/{ 318,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreWrkUsr	*/{ 278,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreWrkUsr	*/{ 150,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolWrkUsr	*/{ 172,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkWrkUsr	*/{1228,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolWrkUsr	*/{ 204,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilWrkUsrDZ	*/{1219,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilWrkUsrCla*/{ 148,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpWrkUsr	*/{ 423,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConWrkUsr	*/{ 425,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPWrkUsr	*/{1131,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatWrkUsr	*/{1041,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatWrkUsr	*/{1042,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowWrkUsr      */{1118,-1,TabUnk,ActAdmAsgWrkUsr	,0x008,0x000,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilAsgCrs*/{ 837,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilAsgCrs	*/{ 838,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolAsgCrs	*/{ 820,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopAsgCrs	*/{ 836,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasAsgCrs	*/{ 821,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreAsgCrs	*/{ 822,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreAsgCrs	*/{ 817,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolAsgCrs	*/{ 818,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkAsgCrs	*/{1233,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolAsgCrs	*/{ 823,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilAsgCrsDZ	*/{1220,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilAsgCrsCla*/{ 846,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAsgCrs	*/{ 819,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAsgCrs	*/{ 835,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAsgCrs	*/{1132,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatAsgCrs	*/{1043,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAsgCrs	*/{1044,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAsgCrs      */{1119,-1,TabAss,ActReqAsgWrkCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilAsgCrs*/{ 837,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilAsgCrs	*/{ 838,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolAsgCrs	*/{ 820,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopAsgCrs	*/{ 836,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasAsgCrs	*/{ 821,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreAsgCrs	*/{ 822,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreAsgCrs	*/{ 817,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolAsgCrs	*/{ 818,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkAsgCrs	*/{1233,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolAsgCrs	*/{ 823,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilAsgCrsDZ	*/{1220,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilAsgCrsCla*/{ 846,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAsgCrs	*/{ 819,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAsgCrs	*/{ 835,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAsgCrs	*/{1132,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatAsgCrs	*/{1043,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAsgCrs	*/{1044,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAsgCrs      */{1119,-1,TabUnk,ActReqAsgWrkCrs	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActReqRemFilWrkCrs*/{ 289,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilWrkCrs	*/{ 209,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolWrkCrs	*/{ 210,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopWrkCrs	*/{ 312,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasWrkCrs	*/{ 319,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreWrkCrs	*/{ 279,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreWrkCrs	*/{ 205,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolWrkCrs	*/{ 206,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkWrkCrs	*/{1229,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolWrkCrs	*/{ 208,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilWrkCrsDZ	*/{1221,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilWrkCrsCla*/{ 207,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpWrkCrs	*/{ 416,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConWrkCrs	*/{ 424,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPWrkCrs	*/{1133,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatWrkCrs	*/{1045,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatWrkCrs	*/{1046,-1,TabAss,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowWrkCrs      */{1120,-1,TabAss,ActReqAsgWrkCrs	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemFilWrkCrs*/{ 289,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilWrkCrs	*/{ 209,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolWrkCrs	*/{ 210,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopWrkCrs	*/{ 312,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasWrkCrs	*/{ 319,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreWrkCrs	*/{ 279,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreWrkCrs	*/{ 205,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolWrkCrs	*/{ 206,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkWrkCrs	*/{1229,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolWrkCrs	*/{ 208,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilWrkCrsDZ	*/{1221,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilWrkCrsCla*/{ 207,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpWrkCrs	*/{ 416,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConWrkCrs	*/{ 424,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPWrkCrs	*/{1133,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatWrkCrs	*/{1045,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatWrkCrs	*/{1046,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowWrkCrs      */{1120,-1,TabUnk,ActReqAsgWrkCrs	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActSeeTst		*/{  29,-1,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowNewTestExam		,NULL},
-   /* ActAssTst		*/{  98,-1,TabAss,ActReqTst		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_AssessTestExam		,NULL},
+   /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowNewTestExam		,NULL},
+   /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_AssessTestExam		,NULL},
 
-   /* ActEdiTstQst	*/{ 104,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Tst_SetIniEndDates		,Tst_ShowFormAskEditTsts	,NULL},
-   /* ActEdiOneTstQst	*/{ 105,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowFormEditOneQst		,NULL},
-   /* ActReqImpTstQst	*/{1007,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TsI_ShowFormImportQstsFromXML	,NULL},
-   /* ActImpTstQst	*/{1008,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,TsI_ImportQstsFromXML		,NULL},
-   /* ActLstTstQst	*/{ 132,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ListQuestionsToEdit	,NULL},
-   /* ActRcvTstQst	*/{ 126,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Tst_ReceiveQst			,NULL},
-   /* ActReqRemTstQst	*/{1523,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RequestRemoveQst		,NULL},
-   /* ActRemTstQst	*/{ 133,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RemoveQst			,NULL},
-   /* ActShfTstQst	*/{ 455,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ChangeShuffleQst		,NULL},
+   /* ActEdiTstQst	*/{ 104,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_ShowFormAskEditTsts	,NULL},
+   /* ActEdiOneTstQst	*/{ 105,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormEditOneQst		,NULL},
+   /* ActReqImpTstQst	*/{1007,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TsI_ShowFormImportQstsFromXML	,NULL},
+   /* ActImpTstQst	*/{1008,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,TsI_ImportQstsFromXML		,NULL},
+   /* ActLstTstQst	*/{ 132,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ListQuestionsToEdit	,NULL},
+   /* ActRcvTstQst	*/{ 126,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Tst_ReceiveQst			,NULL},
+   /* ActReqRemTstQst	*/{1523,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_RequestRemoveQst		,NULL},
+   /* ActRemTstQst	*/{ 133,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_RemoveQst			,NULL},
+   /* ActShfTstQst	*/{ 455,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ChangeShuffleQst		,NULL},
 
-   /* ActCfgTst		*/{ 451,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowFormConfig		,NULL},
-   /* ActEnableTag	*/{ 453,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_EnableTag			,NULL},
-   /* ActDisableTag	*/{ 452,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_DisableTag			,NULL},
-   /* ActRenTag		*/{ 143,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_RenameTag			,NULL},
-   /* ActRcvCfgTst	*/{ 454,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ReceiveConfigTst		,NULL},
+   /* ActCfgTst		*/{ 451,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormConfig		,NULL},
+   /* ActEnableTag	*/{ 453,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_EnableTag			,NULL},
+   /* ActDisableTag	*/{ 452,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_DisableTag			,NULL},
+   /* ActRenTag		*/{ 143,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_RenameTag			,NULL},
+   /* ActRcvCfgTst	*/{ 454,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ReceiveConfigTst		,NULL},
 
-   /* ActReqSeeMyTstExa	*/{1083,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Tst_SetIniEndDates		,Tst_SelDatesToSeeMyExams	,NULL},
-   /* ActSeeMyTstExa	*/{1084,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowMyExams		,NULL},
-   /* ActSeeOneTstExaMe	*/{1085,-1,TabAss,ActReqTst		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneExam		,NULL},
-   /* ActReqSeeUsrTstExa*/{1080,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsExams	,NULL},
-   /* ActSeeUsrTstExa	*/{1081,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowUsrsExams		,NULL},
-   /* ActSeeOneTstExaOth*/{1082,-1,TabAss,ActReqTst		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Tst_ShowOneExam		,NULL},
+   /* ActReqSeeMyTstExa	*/{1083,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelDatesToSeeMyExams	,NULL},
+   /* ActSeeMyTstExa	*/{1084,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowMyExams		,NULL},
+   /* ActSeeOneTstExaMe	*/{1085,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneExam		,NULL},
+   /* ActReqSeeUsrTstExa*/{1080,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsExams	,NULL},
+   /* ActSeeUsrTstExa	*/{1081,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsExams		,NULL},
+   /* ActSeeOneTstExaOth*/{1082,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneExam		,NULL},
 
-   /* ActPrnCal		*/{  71,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Cal_DrawCalendar		,NULL},
-   /* ActChgCal1stDay	*/{1485,-1,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
+   /* ActPrnCal		*/{  71,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_DrawCalendar		,NULL},
+   /* ActChgCal1stDay	*/{1485,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
 
-   /* ActSeeOneExaAnn	*/{1572,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
-   /* ActSeeDatExaAnn	*/{1571,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Exa_GetDateToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
-   /* ActEdiExaAnn	*/{  91,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_PutFrmEditAExamAnnouncement,NULL},
-   /* ActRcvExaAnn	*/{ 110,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_ReceiveExamAnnouncement	,NULL},
-   /* ActPrnExaAnn	*/{ 179,-1,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Exa_PrintExamAnnouncement	,NULL},
-   /* ActRemExaAnn	*/{ 187,-1,TabAss,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Exa_RemoveExamAnnouncement	,NULL},
+   /* ActSeeOneExaAnn	*/{1572,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
+   /* ActSeeDatExaAnn	*/{1571,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetDateToHighlight		,Exa_ListExamAnnouncementsSee	,NULL},
+   /* ActEdiExaAnn	*/{  91,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_PutFrmEditAExamAnnouncement,NULL},
+   /* ActRcvExaAnn	*/{ 110,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ReceiveExamAnnouncement	,NULL},
+   /* ActPrnExaAnn	*/{ 179,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Exa_PrintExamAnnouncement	,NULL},
+   /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_RemoveExamAnnouncement	,NULL},
 
-   /* ActChgToSeeMrk	*/{1198,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToSeeMrk	*/{1198,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActSeeMrkCrs	*/{1079,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeMrkCrs	*/{ 528,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeMrkCrs	*/{ 527,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActReqDatSeeMrkCrs*/{1086,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActSeeMyMrkCrs	*/{ 523,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,Mrk_ShowMyMarks		,NULL				,NULL},
+   /* ActSeeMrkCrs	*/{1079,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeMrkCrs	*/{ 528,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeMrkCrs	*/{ 527,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActReqDatSeeMrkCrs*/{1086,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActSeeMyMrkCrs	*/{ 523,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,Mrk_ShowMyMarks		,NULL				,NULL},
 
-   /* ActSeeMrkGrp	*/{1204,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActExpSeeMrkGrp	*/{ 605,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConSeeMrkGrp	*/{ 609,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActReqDatSeeMrkGrp*/{1087,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActSeeMyMrkGrp	*/{ 524,-1,TabAss,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,Mrk_ShowMyMarks		,NULL				,NULL},
+   /* ActSeeMrkGrp	*/{1204,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActExpSeeMrkGrp	*/{ 605,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConSeeMrkGrp	*/{ 609,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActReqDatSeeMrkGrp*/{1087,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActSeeMyMrkGrp	*/{ 524,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,Mrk_ShowMyMarks		,NULL				,NULL},
 
-   /* ActChgToAdmMrk	*/{1199,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActChgToAdmMrk	*/{1199,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
-   /* ActAdmMrkCrs	*/{ 284,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilMrkCrs*/{ 595,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilMrkCrs	*/{ 533,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolMrkCrs	*/{ 530,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopMrkCrs	*/{ 501,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasMrkCrs	*/{ 507,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreMrkCrs	*/{ 534,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreMrkCrs	*/{ 596,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolMrkCrs	*/{ 506,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActRenFolMrkCrs	*/{ 574,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilMrkCrsDZ	*/{1222,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilMrkCrsCla*/{ 516,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmMrkCrs	*/{ 607,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmMrkCrs	*/{ 621,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmMrkCrs	*/{1134,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoMrkCrs	*/{1191,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidMrkCrs	*/{1192,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmMrkCrs*/{1035,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmMrkCrs*/{1036,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmMrkCrs   */{1121,-1,TabAss,ActSeeAdmMrk		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   /* ActChgNumRowHeaCrs*/{ 503,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mrk_ChangeNumRowsHeader	,NULL},
-   /* ActChgNumRowFooCrs*/{ 504,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mrk_ChangeNumRowsFooter	,NULL},
+   /* ActAdmMrkCrs	*/{ 284,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilMrkCrs*/{ 595,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilMrkCrs	*/{ 533,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolMrkCrs	*/{ 530,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopMrkCrs	*/{ 501,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasMrkCrs	*/{ 507,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreMrkCrs	*/{ 534,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreMrkCrs	*/{ 596,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolMrkCrs	*/{ 506,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActRenFolMrkCrs	*/{ 574,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilMrkCrsDZ	*/{1222,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilMrkCrsCla*/{ 516,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmMrkCrs	*/{ 607,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmMrkCrs	*/{ 621,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmMrkCrs	*/{1134,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoMrkCrs	*/{1191,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidMrkCrs	*/{1192,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmMrkCrs*/{1035,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmMrkCrs*/{1036,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmMrkCrs   */{1121,-1,TabUnk,ActSeeAdmMrk		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActChgNumRowHeaCrs*/{ 503,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mrk_ChangeNumRowsHeader	,NULL},
+   /* ActChgNumRowFooCrs*/{ 504,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mrk_ChangeNumRowsFooter	,NULL},
 
-   /* ActAdmMrkGrp	*/{1205,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,NULL},
-   /* ActReqRemFilMrkGrp*/{ 600,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilMrkGrp	*/{ 509,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolMrkGrp	*/{ 520,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopMrkGrp	*/{ 519,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasMrkGrp	*/{ 502,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreMrkGrp	*/{ 521,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreMrkGrp	*/{ 601,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolMrkGrp	*/{ 513,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActRenFolMrkGrp	*/{ 529,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilMrkGrpDZ	*/{1223,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilMrkGrpCla*/{ 514,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpAdmMrkGrp	*/{ 631,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConAdmMrkGrp	*/{ 900,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPAdmMrkGrp	*/{1135,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActShoMrkGrp	*/{1193,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsVisible	,NULL},
-   /* ActHidMrkGrp	*/{1194,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_SetDocumentAsHidden	,NULL},
-   /* ActReqDatAdmMrkGrp*/{1037,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatAdmMrkGrp*/{1038,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowAdmMrkGrp   */{1122,-1,TabAss,ActSeeAdmMrk		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   /* ActChgNumRowHeaGrp*/{ 510,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mrk_ChangeNumRowsHeader	,NULL},
-   /* ActChgNumRowFooGrp*/{ 511,-1,TabAss,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mrk_ChangeNumRowsFooter	,NULL},
+   /* ActAdmMrkGrp	*/{1205,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   /* ActReqRemFilMrkGrp*/{ 600,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilMrkGrp	*/{ 509,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolMrkGrp	*/{ 520,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopMrkGrp	*/{ 519,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasMrkGrp	*/{ 502,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreMrkGrp	*/{ 521,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreMrkGrp	*/{ 601,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolMrkGrp	*/{ 513,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActRenFolMrkGrp	*/{ 529,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilMrkGrpDZ	*/{1223,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilMrkGrpCla*/{ 514,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpAdmMrkGrp	*/{ 631,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConAdmMrkGrp	*/{ 900,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPAdmMrkGrp	*/{1135,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActShoMrkGrp	*/{1193,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   /* ActHidMrkGrp	*/{1194,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_SetDocumentAsHidden	,NULL},
+   /* ActReqDatAdmMrkGrp*/{1037,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatAdmMrkGrp*/{1038,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowAdmMrkGrp   */{1122,-1,TabUnk,ActSeeAdmMrk		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActChgNumRowHeaGrp*/{ 510,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mrk_ChangeNumRowsHeader	,NULL},
+   /* ActChgNumRowFooGrp*/{ 511,-1,TabUnk,ActSeeAdmMrk		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mrk_ChangeNumRowsFooter	,NULL},
 
    // TabUsr ******************************************************************
    // Actions in menu:
-   /* ActReqSelGrp	*/{ 116, 0,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ReqRegisterInGrps		,"mygroups64x64.gif"	},
-   /* ActLstStd		*/{ 678, 1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_SeeStudents		,"usrs64x64.gif"	},
-   /* ActLstTch		*/{ 679, 2,TabUsr,ActLstTch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_SeeTeachers		,"tch64x64.gif"		},
-   /* ActLstOth		*/{1186, 3,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListDataAdms		,"adm64x64.gif"		},
-   /* ActSeeAtt		*/{ 861, 4,TabUsr,ActSeeAtt		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_SeeAttEvents		,"rollcall64x64.gif"	},
-   /* ActReqSignUp	*/{1054, 5,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqSignUpInCrs		,"enrollmentrequest64x64.gif"},
-   /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ShowEnrollmentRequests	,"enrollmentrequest64x64.gif"},
-   /* ActLstCon		*/{ 995, 7,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowConnectedUsrs		,"userplugged64x64.gif"	},
+   /* ActReqSelGrp	*/{ 116, 0,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ReqRegisterInGrps		,"mygroups64x64.gif"	},
+   /* ActLstStd		*/{ 678, 1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_SeeStudents		,"usrs64x64.gif"	},
+   /* ActLstTch		*/{ 679, 2,TabUsr,ActLstTch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_SeeTeachers		,"tch64x64.gif"		},
+   /* ActLstOth		*/{1186, 3,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListDataAdms		,"adm64x64.gif"		},
+   /* ActSeeAtt		*/{ 861, 4,TabUsr,ActSeeAtt		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_SeeAttEvents		,"rollcall64x64.gif"	},
+   /* ActReqSignUp	*/{1054, 5,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqSignUpInCrs		,"enrollmentrequest64x64.gif"},
+   /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ShowEnrollmentRequests	,"enrollmentrequest64x64.gif"},
+   /* ActLstCon		*/{ 995, 7,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Con_ShowConnectedUsrs		,"userplugged64x64.gif"	},
 
    // Actions not in menu:
-   /* ActChgGrp		*/{ 118,-1,TabUsr,ActReqSelGrp		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMyGrpsAndShowChanges	,NULL},
+   /* ActChgGrp		*/{ 118,-1,TabUnk,ActReqSelGrp		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeMyGrpsAndShowChanges	,NULL},
 
-   /* ActReqEdiGrp	*/{ 108,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ReqEditGroups		,NULL},
+   /* ActReqEdiGrp	*/{ 108,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ReqEditGroups		,NULL},
 
-   /* ActNewGrpTyp	*/{ 174,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RecFormNewGrpTyp		,NULL},
-   /* ActReqRemGrpTyp	*/{ 236,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ReqRemGroupType		,NULL},
-   /* ActRemGrpTyp	*/{ 237,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RemoveGroupType		,NULL},
-   /* ActRenGrpTyp	*/{ 304,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RenameGroupType		,NULL},
-   /* ActChgMdtGrpTyp	*/{ 303,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMandatGrpTyp		,NULL},
-   /* ActChgMulGrpTyp	*/{ 302,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMultiGrpTyp		,NULL},
-   /* ActChgTimGrpTyp	*/{1061,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeOpenTimeGrpTyp	,NULL},
+   /* ActNewGrpTyp	*/{ 174,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RecFormNewGrpTyp		,NULL},
+   /* ActReqRemGrpTyp	*/{ 236,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ReqRemGroupType		,NULL},
+   /* ActRemGrpTyp	*/{ 237,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RemoveGroupType		,NULL},
+   /* ActRenGrpTyp	*/{ 304,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RenameGroupType		,NULL},
+   /* ActChgMdtGrpTyp	*/{ 303,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeMandatGrpTyp		,NULL},
+   /* ActChgMulGrpTyp	*/{ 302,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeMultiGrpTyp		,NULL},
+   /* ActChgTimGrpTyp	*/{1061,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeOpenTimeGrpTyp	,NULL},
 
-   /* ActNewGrp		*/{ 122,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RecFormNewGrp		,NULL},
-   /* ActReqRemGrp	*/{ 107,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ReqRemGroup		,NULL},
-   /* ActRemGrp		*/{ 175,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RemoveGroup		,NULL},
-   /* ActOpeGrp		*/{ 322,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_OpenGroup			,NULL},
-   /* ActCloGrp		*/{ 321,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_CloseGroup			,NULL},
-   /* ActEnaFilZonGrp	*/{ 495,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_EnableFileZonesGrp		,NULL},
-   /* ActDisFilZonGrp	*/{ 496,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_DisableFileZonesGrp	,NULL},
-   /* ActChgGrpTyp	*/{ 167,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeGroupType		,NULL},
-   /* ActRenGrp		*/{ 121,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_RenameGroup		,NULL},
-   /* ActChgMaxStdGrp	*/{ 106,-1,TabUsr,ActReqSelGrp		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Grp_ChangeMaxStdsGrp		,NULL},
+   /* ActNewGrp		*/{ 122,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RecFormNewGrp		,NULL},
+   /* ActReqRemGrp	*/{ 107,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ReqRemGroup		,NULL},
+   /* ActRemGrp		*/{ 175,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RemoveGroup		,NULL},
+   /* ActOpeGrp		*/{ 322,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_OpenGroup			,NULL},
+   /* ActCloGrp		*/{ 321,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_CloseGroup			,NULL},
+   /* ActEnaFilZonGrp	*/{ 495,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_EnableFileZonesGrp		,NULL},
+   /* ActDisFilZonGrp	*/{ 496,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_DisableFileZonesGrp	,NULL},
+   /* ActChgGrpTyp	*/{ 167,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeGroupType		,NULL},
+   /* ActRenGrp		*/{ 121,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_RenameGroup		,NULL},
+   /* ActChgMaxStdGrp	*/{ 106,-1,TabUnk,ActReqSelGrp		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Grp_ChangeMaxStdsGrp		,NULL},
 
-   /* ActLstGst		*/{ 587,-1,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_SeeGuests			,NULL},
+   /* ActLstGst		*/{ 587,-1,TabUnk,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_SeeGuests			,NULL},
 
-   /* ActPrnGstPho	*/{1190,-1,TabUsr,ActLstStd		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_SeeGstClassPhotoPrn	,NULL},
-   /* ActPrnStdPho	*/{ 120,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x1E0,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_SeeStdClassPhotoPrn	,NULL},
-   /* ActPrnTchPho	*/{ 443,-1,TabUsr,ActLstTch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_SeeTchClassPhotoPrn	,NULL},
-   /* ActLstGstAll	*/{1189,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAllDataGsts		,NULL},
-   /* ActLstStdAll	*/{  42,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAllDataStds		,NULL},
-   /* ActLstTchAll	*/{ 578,-1,TabUsr,ActLstTch		,0x1F0,0x1F0,0x1E0,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_ListAllDataTchs 		,NULL},
+   /* ActPrnGstPho	*/{1190,-1,TabUnk,ActLstStd		,0x100,0x100,0x100,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_SeeGstClassPhotoPrn	,NULL},
+   /* ActPrnStdPho	*/{ 120,-1,TabUnk,ActLstStd		,0x1F8,0x1E0,0x1E0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_SeeStdClassPhotoPrn	,NULL},
+   /* ActPrnTchPho	*/{ 443,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_SeeTchClassPhotoPrn	,NULL},
+   /* ActLstGstAll	*/{1189,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_ListAllDataGsts		,NULL},
+   /* ActLstStdAll	*/{  42,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_ListAllDataStds		,NULL},
+   /* ActLstTchAll	*/{ 578,-1,TabUnk,ActLstTch		,0x1F0,0x1F0,0x1E0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_ListAllDataTchs 		,NULL},
 
-   /* ActSeeRecOneStd	*/{1174,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_GetUsrAndShowRecordOneStdCrs,NULL},
-   /* ActSeeRecOneTch	*/{1175,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
+   /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneStdCrs,NULL},
+   /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
 
-   /* ActSeeRecSevGst	*/{1187,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsGsts		,NULL},
-   /* ActSeeRecSevStd	*/{  89,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsStdsForEdit	,NULL},
-   /* ActSeeRecSevTch	*/{  22,-1,TabUsr,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ListRecordsTchs		,NULL},
-   /* ActPrnRecSevGst	*/{1188,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rec_ListRecordsGsts		,NULL},
-   /* ActPrnRecSevStd	*/{ 111,-1,TabUsr,ActLstStd		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rec_ListRecordsStdsForPrint	,NULL},
-   /* ActPrnRecSevTch	*/{ 127,-1,TabUsr,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Rec_ListRecordsTchs		,NULL},
+   /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsGsts		,NULL},
+   /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsStdsForEdit	,NULL},
+   /* ActSeeRecSevTch	*/{  22,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsTchs		,NULL},
+   /* ActPrnRecSevGst	*/{1188,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsGsts		,NULL},
+   /* ActPrnRecSevStd	*/{ 111,-1,TabUnk,ActLstStd		,0x118,0x100,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsStdsForPrint	,NULL},
+   /* ActPrnRecSevTch	*/{ 127,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsTchs		,NULL},
 
-   /* ActRcvRecOthUsr	*/{ 300,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowOtherCrsRecord,NULL},
-   /* ActEdiRecFie	*/{ 292,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReqEditRecordFields	,NULL},
-   /* ActNewFie		*/{ 293,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReceiveFormField		,NULL},
-   /* ActReqRemFie	*/{ 294,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ReqRemField		,NULL},
-   /* ActRemFie		*/{ 295,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_RemoveField		,NULL},
-   /* ActRenFie		*/{ 296,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_RenameField		,NULL},
-   /* ActChgRowFie	*/{ 305,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeLinesField		,NULL},
-   /* ActChgVisFie	*/{ 297,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChangeVisibilityField	,NULL},
-   /* ActRcvRecCrs	*/{ 301,-1,TabUsr,ActLstStd		,0x108,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateAndShowMyCrsRecord	,NULL},
+   /* ActRcvRecOthUsr	*/{ 300,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowOtherCrsRecord,NULL},
+   /* ActEdiRecFie	*/{ 292,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ReqEditRecordFields	,NULL},
+   /* ActNewFie		*/{ 293,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ReceiveFormField		,NULL},
+   /* ActReqRemFie	*/{ 294,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ReqRemField		,NULL},
+   /* ActRemFie		*/{ 295,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_RemoveField		,NULL},
+   /* ActRenFie		*/{ 296,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_RenameField		,NULL},
+   /* ActChgRowFie	*/{ 305,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChangeLinesField		,NULL},
+   /* ActChgVisFie	*/{ 297,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChangeVisibilityField	,NULL},
+   /* ActRcvRecCrs	*/{ 301,-1,TabUnk,ActLstStd		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
-   /* ActReqEnrSevStd	*/{1426,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminStds		,NULL},
-   /* ActReqEnrSevTch	*/{1427,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAdminTchs		,NULL},
+   /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
+   /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
 
-   /* ActReqLstStdAtt	*/{1073,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ReqListStdsAttendanceCrs	,NULL},
-   /* ActSeeLstMyAtt	*/{1473,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListMyAttendanceCrs	,NULL},
-   /* ActPrnLstMyAtt	*/{1474,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_PrintMyAttendanceCrs	,NULL},
-   /* ActSeeLstStdAtt	*/{1074,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_ListStdsAttendanceCrs	,NULL},
-   /* ActPrnLstStdAtt	*/{1075,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Usr_PrintStdsAttendanceCrs	,NULL},
-   /* ActFrmNewAtt	*/{1063,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RequestCreatOrEditAttEvent	,NULL},
-   /* ActEdiOneAtt	*/{1064,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RequestCreatOrEditAttEvent	,NULL},
-   /* ActNewAtt		*/{1065,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RecFormAttEvent		,NULL},
-   /* ActChgAtt		*/{1066,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RecFormAttEvent		,NULL},
-   /* ActReqRemAtt	*/{1067,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_AskRemAttEvent		,NULL},
-   /* ActRemAtt		*/{1068,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_GetAndRemAttEvent		,NULL},
-   /* ActHidAtt		*/{1069,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_HideAttEvent		,NULL},
-   /* ActShoAtt		*/{1070,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_ShowAttEvent		,NULL},
-   /* ActSeeOneAtt	*/{1071,-1,TabUsr,ActSeeAtt		,0x118,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_SeeOneAttEvent		,NULL},
-   /* ActRecAttStd	*/{1072,-1,TabUsr,ActSeeAtt		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RegisterStudentsInAttEvent	,NULL},
-   /* ActRecAttMe	*/{1076,-1,TabUsr,ActSeeAtt		,0x008,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Att_RegisterMeAsStdInAttEvent	,NULL},
+   /* ActReqLstStdAtt	*/{1073,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ReqListStdsAttendanceCrs	,NULL},
+   /* ActSeeLstMyAtt	*/{1473,-1,TabUnk,ActSeeAtt		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListMyAttendanceCrs	,NULL},
+   /* ActPrnLstMyAtt	*/{1474,-1,TabUnk,ActSeeAtt		,0x008,0x000,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintMyAttendanceCrs	,NULL},
+   /* ActSeeLstStdAtt	*/{1074,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListStdsAttendanceCrs	,NULL},
+   /* ActPrnLstStdAtt	*/{1075,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintStdsAttendanceCrs	,NULL},
+   /* ActFrmNewAtt	*/{1063,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
+   /* ActEdiOneAtt	*/{1064,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
+   /* ActNewAtt		*/{1065,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RecFormAttEvent		,NULL},
+   /* ActChgAtt		*/{1066,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RecFormAttEvent		,NULL},
+   /* ActReqRemAtt	*/{1067,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_AskRemAttEvent		,NULL},
+   /* ActRemAtt		*/{1068,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_GetAndRemAttEvent		,NULL},
+   /* ActHidAtt		*/{1069,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_HideAttEvent		,NULL},
+   /* ActShoAtt		*/{1070,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_ShowAttEvent		,NULL},
+   /* ActSeeOneAtt	*/{1071,-1,TabUnk,ActSeeAtt		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_SeeOneAttEvent		,NULL},
+   /* ActRecAttStd	*/{1072,-1,TabUnk,ActSeeAtt		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RegisterStudentsInAttEvent	,NULL},
+   /* ActRecAttMe	*/{1076,-1,TabUnk,ActSeeAtt		,0x008,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RegisterMeAsStdInAttEvent	,NULL},
 
-   /* ActSignUp		*/{1056,-1,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_SignUpInCrs		,NULL},
-   /* ActUpdSignUpReq	*/{1522,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_UpdateEnrollmentRequests	,NULL},
-   /* ActReqRejSignUp	*/{1058,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRejectSignUp		,NULL},
-   /* ActRejSignUp	*/{1059,-1,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RejectSignUp		,NULL},
+   /* ActSignUp		*/{1056,-1,TabUnk,ActReqSignUp		,0x000,0x006,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_SignUpInCrs		,NULL},
+   /* ActUpdSignUpReq	*/{1522,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_UpdateEnrollmentRequests	,NULL},
+   /* ActReqRejSignUp	*/{1058,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRejectSignUp		,NULL},
+   /* ActRejSignUp	*/{1059,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RejectSignUp		,NULL},
 
-   /* ActReqMdfOneOth	*/{1414,-1,TabUsr,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemOth		,NULL},
-   /* ActReqMdfOneStd	*/{1415,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemStd		,NULL},
-   /* ActReqMdfOneTch	*/{1416,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRegRemTch		,NULL},
+   /* ActReqMdfOneOth	*/{1414,-1,TabUnk,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRegRemOth		,NULL},
+   /* ActReqMdfOneStd	*/{1415,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRegRemStd		,NULL},
+   /* ActReqMdfOneTch	*/{1416,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRegRemTch		,NULL},
 
-   /* ActReqMdfOth	*/{1418,-1,TabUsr,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherOth	,NULL},
-   /* ActReqMdfStd	*/{1419,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherStd	,NULL},
-   /* ActReqMdfTch	*/{1420,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskIfRegRemAnotherTch	,NULL},
+   /* ActReqMdfOth	*/{1418,-1,TabUnk,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherOth	,NULL},
+   /* ActReqMdfStd	*/{1419,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherStd	,NULL},
+   /* ActReqMdfTch	*/{1420,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherTch	,NULL},
 
-   /* ActReqOthPho	*/{1432,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
-   /* ActReqStdPho	*/{1433,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
-   /* ActReqTchPho	*/{1434,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_SendPhotoUsr		,NULL},
+   /* ActReqOthPho	*/{1432,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_SendPhotoUsr		,NULL},
+   /* ActReqStdPho	*/{1433,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_SendPhotoUsr		,NULL},
+   /* ActReqTchPho	*/{1434,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_SendPhotoUsr		,NULL},
 
-   /* ActDetOthPho	*/{1435,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecOtherUsrPhotoDetFaces	,NULL},
-   /* ActDetStdPho	*/{1436,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecOtherUsrPhotoDetFaces	,NULL},
-   /* ActDetTchPho	*/{1437,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecOtherUsrPhotoDetFaces	,NULL},
+   /* ActDetOthPho	*/{1435,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Pho_RecOtherUsrPhotoDetFaces	,NULL},
+   /* ActDetStdPho	*/{1436,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Pho_RecOtherUsrPhotoDetFaces	,NULL},
+   /* ActDetTchPho	*/{1437,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Pho_RecOtherUsrPhotoDetFaces	,NULL},
 
-   /* ActUpdOthPho	*/{1438,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
-   /* ActUpdStdPho	*/{1439,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
-   /* ActUpdTchPho	*/{1440,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdOthPho	*/{1438,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdStdPho	*/{1439,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   /* ActUpdTchPho	*/{1440,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
 
-   /* ActRemOthPho	*/{1574,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
-   /* ActRemStdPho	*/{1575,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
-   /* ActRemTchPho	*/{1576,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveUsrPhoto		,NULL},
-   /* ActRemOthPho	*/{1441,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
-   /* ActRemStdPho	*/{1442,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
-   /* ActRemTchPho	*/{1443,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemOthPho	*/{1574,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqRemoveUsrPhoto		,NULL},
+   /* ActRemStdPho	*/{1575,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqRemoveUsrPhoto		,NULL},
+   /* ActRemTchPho	*/{1576,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqRemoveUsrPhoto		,NULL},
+   /* ActRemOthPho	*/{1441,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemStdPho	*/{1442,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_RemoveUsrPhoto		,NULL},
+   /* ActRemTchPho	*/{1443,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_RemoveUsrPhoto		,NULL},
 
-   /* ActCreOth		*/{1444,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
-   /* ActCreStd		*/{1445,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
-   /* ActCreTch		*/{1446,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_CreateNewUsr		,NULL},
+   /* ActCreOth		*/{1444,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
+   /* ActCreStd		*/{1445,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
+   /* ActCreTch		*/{1446,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
 
-   /* ActUpdOth		*/{1422,-1,TabUsr,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
-   /* ActUpdStd		*/{1423,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
-   /* ActUpdTch		*/{1424,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ModifyUsr			,NULL},
+   /* ActUpdOth		*/{1422,-1,TabUnk,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ModifyUsr			,NULL},
+   /* ActUpdStd		*/{1423,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ModifyUsr			,NULL},
+   /* ActUpdTch		*/{1424,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ModifyUsr			,NULL},
 
-   /* ActReqAccEnrStd	*/{1456,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActReqAccEnrTch	*/{1457,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqAcceptRegisterInCrs	,NULL},
-   /* ActAccEnrStd	*/{1458,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActAccEnrTch	*/{1459,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AcceptRegisterMeInCrs	,NULL},
-   /* ActRemMe_Std	*/{1460,-1,TabUsr,ActLstStd		,0x1E8,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
-   /* ActRemMe_Tch	*/{1461,-1,TabUsr,ActLstTch		,0x1F0,0x000,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActReqAccEnrStd	*/{1456,-1,TabUnk,ActLstStd		,0x1E8,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActReqAccEnrTch	*/{1457,-1,TabUnk,ActLstTch		,0x1F0,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActAccEnrStd	*/{1458,-1,TabUnk,ActLstStd		,0x1E8,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActAccEnrTch	*/{1459,-1,TabUnk,ActLstTch		,0x1F0,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActRemMe_Std	*/{1460,-1,TabUnk,ActLstStd		,0x1E8,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActRemMe_Tch	*/{1461,-1,TabUnk,ActLstTch		,0x1F0,0x000,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
 
-   /* ActNewAdmIns	*/{1337,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToIns		,NULL},
-   /* ActRemAdmIns	*/{1338,-1,TabUsr,ActLstOth		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmIns			,NULL},
+   /* ActNewAdmIns	*/{1337,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToIns		,NULL},
+   /* ActRemAdmIns	*/{1338,-1,TabUnk,ActLstOth		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemAdmIns			,NULL},
 
-   /* ActNewAdmCtr	*/{1339,-1,TabUsr,ActLstOth		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToCtr		,NULL},
-   /* ActRemAdmCtr	*/{1340,-1,TabUsr,ActLstOth		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmCtr			,NULL},
+   /* ActNewAdmCtr	*/{1339,-1,TabUnk,ActLstOth		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToCtr		,NULL},
+   /* ActRemAdmCtr	*/{1340,-1,TabUnk,ActLstOth		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemAdmCtr			,NULL},
 
-   /* ActNewAdmDeg	*/{ 586,-1,TabUsr,ActLstOth		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AddAdmToDeg		,NULL},
-   /* ActRemAdmDeg	*/{ 584,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAdmDeg			,NULL},
+   /* ActNewAdmDeg	*/{ 586,-1,TabUnk,ActLstOth		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToDeg		,NULL},
+   /* ActRemAdmDeg	*/{ 584,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemAdmDeg			,NULL},
 
-   /* ActRcvFrmEnrSevStd*/{1428,-1,TabUsr,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminStds	,NULL},
-   /* ActRcvFrmEnrSevTch*/{1429,-1,TabUsr,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_ReceiveFormAdminTchs	,NULL},
+   /* ActRcvFrmEnrSevStd*/{1428,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminStds	,NULL},
+   /* ActRcvFrmEnrSevTch*/{1429,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminTchs	,NULL},
 
-   /* ActReqCnfID_Oth	*/{1565,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Std	*/{1566,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Tch	*/{1567,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActCnfID_Oth	*/{1568,-1,TabUsr,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Std	*/{1569,-1,TabUsr,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
-   /* ActCnfID_Tch	*/{1570,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ConfirmOtherUsrID		,NULL},
+   /* ActReqCnfID_Oth	*/{1565,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Std	*/{1566,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActReqCnfID_Tch	*/{1567,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
+   /* ActCnfID_Oth	*/{1568,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Std	*/{1569,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
+   /* ActCnfID_Tch	*/{1570,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
 
-   /* ActFrmIDsOth	*/{1447,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-   /* ActFrmIDsStd	*/{1448,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-   /* ActFrmIDsTch	*/{1449,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_ShowFormOthIDs		,NULL},
-   /* ActRemID_Oth	*/{1450,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-   /* ActRemID_Std	*/{1451,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-   /* ActRemID_Tch	*/{1452,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveOtherUsrID		,NULL},
-   /* ActNewID_Oth	*/{1453,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
-   /* ActNewID_Std	*/{1454,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
-   /* ActNewID_Tch	*/{1455,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewOtherUsrID		,NULL},
+   /* ActFrmIDsOth	*/{1447,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ShowFormOthIDs		,NULL},
+   /* ActFrmIDsStd	*/{1448,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ShowFormOthIDs		,NULL},
+   /* ActFrmIDsTch	*/{1449,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ShowFormOthIDs		,NULL},
+   /* ActRemID_Oth	*/{1450,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RemoveOtherUsrID		,NULL},
+   /* ActRemID_Std	*/{1451,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RemoveOtherUsrID		,NULL},
+   /* ActRemID_Tch	*/{1452,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RemoveOtherUsrID		,NULL},
+   /* ActNewID_Oth	*/{1453,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_NewOtherUsrID		,NULL},
+   /* ActNewID_Std	*/{1454,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_NewOtherUsrID		,NULL},
+   /* ActNewID_Tch	*/{1455,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_NewOtherUsrID		,NULL},
 
-   /* ActFrmPwdOth	*/{1464,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
-   /* ActFrmPwdStd	*/{1465,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
-   /* ActFrmPwdTch	*/{1466,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormOthPwd		,NULL},
-   /* ActChgPwdOth	*/{1467,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
-   /* ActChgPwdStd	*/{1468,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
-   /* ActChgPwdTch	*/{1469,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActFrmPwdOth	*/{1464,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormOthPwd		,NULL},
+   /* ActFrmPwdStd	*/{1465,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormOthPwd		,NULL},
+   /* ActFrmPwdTch	*/{1466,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormOthPwd		,NULL},
+   /* ActChgPwdOth	*/{1467,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdStd	*/{1468,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
+   /* ActChgPwdTch	*/{1469,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Pwd_UpdateOtherPwd1		,Pwd_UpdateOtherPwd2		,NULL},
 
-   /* ActFrmMaiOth	*/{1475,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
-   /* ActFrmMaiStd	*/{1476,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
-   /* ActFrmMaiTch	*/{1477,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ShowFormOthEmail		,NULL},
-   /* ActRemMaiOth	*/{1478,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
-   /* ActRemMaiStd	*/{1479,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
-   /* ActRemMaiTch	*/{1480,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveOtherUsrEmail	,NULL},
-   /* ActNewMaiOth	*/{1481,-1,TabUsr,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
-   /* ActNewMaiStd	*/{1482,-1,TabUsr,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
-   /* ActNewMaiTch	*/{1483,-1,TabUsr,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_NewOtherUsrEmail		,NULL},
+   /* ActFrmMaiOth	*/{1475,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ShowFormOthEmail		,NULL},
+   /* ActFrmMaiStd	*/{1476,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ShowFormOthEmail		,NULL},
+   /* ActFrmMaiTch	*/{1477,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ShowFormOthEmail		,NULL},
+   /* ActRemMaiOth	*/{1478,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActRemMaiStd	*/{1479,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActRemMaiTch	*/{1480,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
+   /* ActNewMaiOth	*/{1481,-1,TabUnk,ActLstOth		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
+   /* ActNewMaiStd	*/{1482,-1,TabUnk,ActLstStd		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
+   /* ActNewMaiTch	*/{1483,-1,TabUnk,ActLstTch		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
 
-   /* ActRemStdCrs	*/{1462,-1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
-   /* ActRemTchCrs	*/{1463,-1,TabUsr,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemStdCrs	*/{1462,-1,TabUnk,ActLstStd		,0x1F8,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemTchCrs	*/{1463,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
 
-   /* ActRemUsrGbl	*/{  62,-1,TabUsr,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_GetUsrCodAndRemUsrGbl	,NULL},
+   /* ActRemUsrGbl	*/{  62,-1,TabUnk,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_GetUsrCodAndRemUsrGbl	,NULL},
 
-   /* ActReqRemAllStdCrs*/{  88,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemAllStdsThisCrs	,NULL},
-   /* ActRemAllStdCrs	*/{  87,-1,TabUsr,ActLstStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemAllStdsThisCrs		,NULL},
+   /* ActReqRemAllStdCrs*/{  88,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskRemAllStdsThisCrs	,NULL},
+   /* ActRemAllStdCrs	*/{  87,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemAllStdsThisCrs		,NULL},
 
-   /* ActReqRemOldUsr	*/{ 590,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_AskRemoveOldUsrs		,NULL},
-   /* ActRemOldUsr	*/{ 773,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Enr_RemoveOldUsrs		,NULL},
+   /* ActReqRemOldUsr	*/{ 590,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskRemoveOldUsrs		,NULL},
+   /* ActRemOldUsr	*/{ 773,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemoveOldUsrs		,NULL},
 
-   /* ActLstDupUsr	*/{1578,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_ListDuplicateUsrs		,NULL},
-   /* ActLstSimUsr	*/{1579,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_GetUsrCodAndListSimilarUsrs,NULL},
-   /* ActRemDupUsr	*/{1580,-1,TabUsr,ActLstOth		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Dup_RemoveUsrFromListDupUsrs	,NULL},
+   /* ActLstDupUsr	*/{1578,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dup_ListDuplicateUsrs		,NULL},
+   /* ActLstSimUsr	*/{1579,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dup_GetUsrCodAndListSimilarUsrs,NULL},
+   /* ActRemDupUsr	*/{1580,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dup_RemoveUsrFromListDupUsrs	,NULL},
 
-   /* ActLstClk		*/{ 989,-1,TabUsr,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Con_ShowLastClicks		,NULL},
+   /* ActLstClk		*/{ 989,-1,TabUnk,ActLstCon		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Con_ShowLastClicks		,NULL},
 
    // TabSoc ******************************************************************
-   /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ShowTimelineGbl		,"soc64x64.png"		},
-   /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_SeeSocialProfiles		,"prf64x64.gif"		},
-   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumList		,"forum64x64.gif"	},
-   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Cht_ShowChatRooms		,"chat64x64.gif"	},
+   /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_ShowTimelineGbl		,"soc64x64.png"		},
+   /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_SeeSocialProfiles		,"prf64x64.gif"		},
+   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumList		,"forum64x64.gif"	},
+   /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
-   /* ActRcvSocPstGbl	*/{1492,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ReceiveSocialPostGbl	,NULL},
-   /* ActRcvSocComGbl	*/{1503,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ReceiveCommentGbl		,NULL},
-   /* ActShaSocNotGbl	*/{1495,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_ShareSocialNoteGbl		,NULL},
-   /* ActUnsSocNotGbl	*/{1496,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_UnshareSocialNoteGbl	,NULL},
-   /* ActFavSocNotGbl	*/{1512,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_FavSocialNoteGbl		,NULL},
-   /* ActUnfSocNotGbl	*/{1513,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_UnfavSocialNoteGbl		,NULL},
-   /* ActFavSocComGbl	*/{1516,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_FavSocialCommentGbl	,NULL},
-   /* ActUnfSocComGbl	*/{1517,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_UnfavSocialCommentGbl	,NULL},
-   /* ActReqRemSocPubGbl*/{1494,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RequestRemSocialNoteGbl	,NULL},
-   /* ActRemSocPubGbl	*/{1493,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RemoveSocialNoteGbl	,NULL},
-   /* ActReqRemSocComGbl*/{1505,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RequestRemSocialComGbl	,NULL},
-   /* ActRemSocComGbl	*/{1507,-1,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Soc_MarkMyNotifAsSeen	,Soc_RemoveSocialComGbl		,NULL},
+   /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_ReceiveSocialPostGbl	,NULL},
+   /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_ReceiveCommentGbl		,NULL},
+   /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_ShareSocialNoteGbl		,NULL},
+   /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_UnshareSocialNoteGbl	,NULL},
+   /* ActFavSocNotGbl	*/{1512,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_FavSocialNoteGbl		,NULL},
+   /* ActUnfSocNotGbl	*/{1513,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_UnfavSocialNoteGbl		,NULL},
+   /* ActFavSocComGbl	*/{1516,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_FavSocialCommentGbl	,NULL},
+   /* ActUnfSocComGbl	*/{1517,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_UnfavSocialCommentGbl	,NULL},
+   /* ActReqRemSocPubGbl*/{1494,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RequestRemSocialNoteGbl	,NULL},
+   /* ActRemSocPubGbl	*/{1493,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RemoveSocialNoteGbl	,NULL},
+   /* ActReqRemSocComGbl*/{1505,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RequestRemSocialComGbl	,NULL},
+   /* ActRemSocComGbl	*/{1507,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RemoveSocialComGbl		,NULL},
 
-   /* ActReqPubPrf	*/{1401,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_RequestUserProfile		,NULL},
+   /* ActReqPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_RequestUserProfile		,NULL},
 
-   /* ActRcvSocPstUsr	*/{1498,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Soc_ReceiveSocialPostUsr	,NULL},
-   /* ActRcvSocComUsr	*/{1504,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Soc_ReceiveCommentUsr		,NULL},
-   /* ActShaSocNotUsr	*/{1499,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_ShareSocialNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1500,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnshareSocialNoteUsr	,NULL},
-   /* ActFavSocNotUsr	*/{1514,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialNoteUsr		,NULL},
-   /* ActUnfSocNotUsr	*/{1515,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialNoteUsr		,NULL},
-   /* ActFavSocComUsr	*/{1518,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_FavSocialCommentUsr	,NULL},
-   /* ActUnfSocComUsr	*/{1519,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_UnfavSocialCommentUsr	,NULL},
-   /* ActReqRemSocPubUsr*/{1501,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialNoteUsr	,NULL},
-   /* ActRemSocPubUsr	*/{1502,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialNoteUsr	,NULL},
-   /* ActReqRemSocComGbl*/{1506,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RequestRemSocialComUsr	,NULL},
-   /* ActRemSocComGbl	*/{1508,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Soc_RemoveSocialComUsr		,NULL},
+   /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Soc_ReceiveSocialPostUsr	,NULL},
+   /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Soc_ReceiveCommentUsr		,NULL},
+   /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_ShareSocialNoteUsr		,NULL},
+   /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_UnshareSocialNoteUsr	,NULL},
+   /* ActFavSocNotUsr	*/{1514,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_FavSocialNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_UnfavSocialNoteUsr		,NULL},
+   /* ActFavSocComUsr	*/{1518,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_FavSocialCommentUsr	,NULL},
+   /* ActUnfSocComUsr	*/{1519,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_UnfavSocialCommentUsr	,NULL},
+   /* ActReqRemSocPubUsr*/{1501,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RequestRemSocialNoteUsr	,NULL},
+   /* ActRemSocPubUsr	*/{1502,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RemoveSocialNoteUsr	,NULL},
+   /* ActReqRemSocComGbl*/{1506,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RequestRemSocialComUsr	,NULL},
+   /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_CalculateFigures		,NULL},
+   /* ActSeePubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
+   /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumFilVie	*/{1409,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumForPst	*/{1408,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
+   /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
 
-   /* ActFolUsr		*/{1410,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_FollowUsr			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabSoc,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_UnfollowUsr		,NULL},
-   /* ActSeeFlg		*/{1412,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowing		,NULL},
-   /* ActSeeFlr		*/{1413,-1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Fol_ListFollowers		,NULL},
+   /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_FollowUsr			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_UnfollowUsr		,NULL},
+   /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_ListFollowing		,NULL},
+   /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_ListFollowers		,NULL},
 
-   /* ActSeeForCrsUsr	*/{ 345,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCrsTch	*/{ 431,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForDegUsr	*/{ 241,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForDegTch	*/{ 243,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCtrUsr	*/{ 901,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForCtrTch	*/{ 430,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForInsUsr	*/{ 725,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForInsTch	*/{ 724,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForGenUsr	*/{ 726,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForGenTch	*/{ 723,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForSWAUsr	*/{ 242,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
-   /* ActSeeForSWATch	*/{ 245,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowForumThrs		,NULL},
+   /* ActSeeForCrsUsr	*/{ 345,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForCrsTch	*/{ 431,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForDegUsr	*/{ 241,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForDegTch	*/{ 243,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForCtrUsr	*/{ 901,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForCtrTch	*/{ 430,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForInsUsr	*/{ 725,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForInsTch	*/{ 724,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForGenUsr	*/{ 726,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForGenTch	*/{ 723,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForSWAUsr	*/{ 242,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
+   /* ActSeeForSWATch	*/{ 245,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,NULL},
 
-   /* ActSeePstForCrsUsr*/{ 346,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCrsTch*/{ 347,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForDegUsr*/{ 255,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForDegTch*/{ 291,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCtrUsr*/{ 348,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForCtrTch*/{ 902,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForInsUsr*/{ 730,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForInsTch*/{ 746,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForGenUsr*/{ 727,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForGenTch*/{ 731,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForSWAUsr*/{ 244,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
-   /* ActSeePstForSWATch*/{ 246,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCrsUsr*/{ 346,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCrsTch*/{ 347,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForDegUsr*/{ 255,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForDegTch*/{ 291,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCtrUsr*/{ 348,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForCtrTch*/{ 902,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForInsUsr*/{ 730,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForInsTch*/{ 746,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForGenUsr*/{ 727,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForGenTch*/{ 731,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForSWAUsr*/{ 244,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
+   /* ActSeePstForSWATch*/{ 246,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowThrPsts		,NULL},
 
-   /* ActRcvThrForCrsUsr*/{ 350,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCrsTch*/{ 754,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForDegUsr*/{ 252,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForDegTch*/{ 247,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCtrUsr*/{ 903,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForCtrTch*/{ 904,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForInsUsr*/{ 737,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForInsTch*/{ 769,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForGenUsr*/{ 736,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForGenTch*/{ 765,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForSWAUsr*/{ 258,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvThrForSWATch*/{ 259,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvThrForCrsUsr*/{ 350,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForCrsTch*/{ 754,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForDegUsr*/{ 252,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForDegTch*/{ 247,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForCtrUsr*/{ 903,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForCtrTch*/{ 904,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForInsUsr*/{ 737,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForInsTch*/{ 769,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForGenUsr*/{ 736,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForGenTch*/{ 765,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForSWAUsr*/{ 258,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvThrForSWATch*/{ 259,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
 
-   /* ActRcvRepForCrsUsr*/{ 599,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCrsTch*/{ 755,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForDegUsr*/{ 606,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForDegTch*/{ 617,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCtrUsr*/{ 905,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForCtrTch*/{ 906,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForInsUsr*/{ 740,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForInsTch*/{ 770,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForGenUsr*/{ 747,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForGenTch*/{ 816,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForSWAUsr*/{ 603,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
-   /* ActRcvRepForSWATch*/{ 622,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,For_RecForumPst		,NULL},
+   /* ActRcvRepForCrsUsr*/{ 599,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForCrsTch*/{ 755,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForDegUsr*/{ 606,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForDegTch*/{ 617,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForCtrUsr*/{ 905,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForCtrTch*/{ 906,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForInsUsr*/{ 740,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForInsTch*/{ 770,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForGenUsr*/{ 747,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForGenTch*/{ 816,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForSWAUsr*/{ 603,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
+   /* ActRcvRepForSWATch*/{ 622,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,For_RecForumPst		,NULL},
 
-   /* ActReqDelThrCrsUsr*/{ 867,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCrsTch*/{ 869,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrDegUsr*/{ 907,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrDegTch*/{ 908,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCtrUsr*/{ 909,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrCtrTch*/{ 910,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrInsUsr*/{ 911,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrInsTch*/{ 912,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrGenUsr*/{ 913,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrGenTch*/{ 914,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrSWAUsr*/{ 881,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
-   /* ActReqDelThrSWATch*/{ 915,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCrsUsr*/{ 867,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCrsTch*/{ 869,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrDegUsr*/{ 907,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrDegTch*/{ 908,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCtrUsr*/{ 909,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrCtrTch*/{ 910,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrInsUsr*/{ 911,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrInsTch*/{ 912,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrGenUsr*/{ 913,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrGenTch*/{ 914,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrSWAUsr*/{ 881,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
+   /* ActReqDelThrSWATch*/{ 915,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ReqDelThr			,NULL},
 
-   /* ActDelThrForCrsUsr*/{ 868,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCrsTch*/{ 876,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForDegUsr*/{ 916,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForDegTch*/{ 917,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCtrUsr*/{ 918,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForCtrTch*/{ 919,-1,TabSoc,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForInsUsr*/{ 920,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForInsTch*/{ 921,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForGenUsr*/{ 922,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForGenTch*/{ 923,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForSWAUsr*/{ 882,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
-   /* ActDelThrForSWATch*/{ 924,-1,TabSoc,ActSeeFor		,0x104,0x104,0x104,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelThr			,NULL},
+   /* ActDelThrForCrsUsr*/{ 868,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForCrsTch*/{ 876,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForDegUsr*/{ 916,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForDegTch*/{ 917,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForCtrUsr*/{ 918,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForCtrTch*/{ 919,-1,TabUnk,ActSeeFor		,0x1E4,0x1E4,0x1E4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForInsUsr*/{ 920,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForInsTch*/{ 921,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForGenUsr*/{ 922,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForGenTch*/{ 923,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForSWAUsr*/{ 882,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
+   /* ActDelThrForSWATch*/{ 924,-1,TabUnk,ActSeeFor		,0x104,0x104,0x104,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelThr			,NULL},
 
-   /* ActCutThrForCrsUsr*/{ 926,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCrsTch*/{ 927,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForDegUsr*/{ 928,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForDegTch*/{ 929,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCtrUsr*/{ 930,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForCtrTch*/{ 931,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForInsUsr*/{ 932,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForInsTch*/{ 933,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForGenUsr*/{ 934,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForGenTch*/{ 935,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForSWAUsr*/{ 890,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
-   /* ActCutThrForSWATch*/{ 936,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_CutThr			,NULL},
+   /* ActCutThrForCrsUsr*/{ 926,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForCrsTch*/{ 927,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForDegUsr*/{ 928,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForDegTch*/{ 929,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForCtrUsr*/{ 930,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForCtrTch*/{ 931,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForInsUsr*/{ 932,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForInsTch*/{ 933,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForGenUsr*/{ 934,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForGenTch*/{ 935,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForSWAUsr*/{ 890,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
+   /* ActCutThrForSWATch*/{ 936,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_CutThr			,NULL},
 
-   /* ActPasThrForCrsUsr*/{ 891,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCrsTch*/{ 937,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForDegUsr*/{ 938,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForDegTch*/{ 939,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCtrUsr*/{ 940,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForCtrTch*/{ 941,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForInsUsr*/{ 942,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForInsTch*/{ 943,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForGenUsr*/{ 944,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForGenTch*/{ 945,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForSWAUsr*/{ 946,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
-   /* ActPasThrForSWATch*/{ 947,-1,TabSoc,ActSeeFor		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_PasteThr			,NULL},
+   /* ActPasThrForCrsUsr*/{ 891,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForCrsTch*/{ 937,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForDegUsr*/{ 938,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForDegTch*/{ 939,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForCtrUsr*/{ 940,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForCtrTch*/{ 941,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForInsUsr*/{ 942,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForInsTch*/{ 943,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForGenUsr*/{ 944,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForGenTch*/{ 945,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForSWAUsr*/{ 946,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
+   /* ActPasThrForSWATch*/{ 947,-1,TabUnk,ActSeeFor		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_PasteThr			,NULL},
 
-   /* ActDelPstForCrsUsr*/{ 602,-1,TabSoc,ActSeeFor		,0x11C,0x11C,0x11C,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCrsTch*/{ 756,-1,TabSoc,ActSeeFor		,0x114,0x114,0x114,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForDegUsr*/{ 608,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForDegTch*/{ 680,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCtrUsr*/{ 948,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForCtrTch*/{ 949,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForInsUsr*/{ 743,-1,TabSoc,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForInsTch*/{ 772,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForGenUsr*/{ 735,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForGenTch*/{ 950,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForSWAUsr*/{ 613,-1,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
-   /* ActDelPstForSWATch*/{ 623,-1,TabSoc,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DelPst			,NULL},
+   /* ActDelPstForCrsUsr*/{ 602,-1,TabUnk,ActSeeFor		,0x11C,0x11C,0x11C,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForCrsTch*/{ 756,-1,TabUnk,ActSeeFor		,0x114,0x114,0x114,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForDegUsr*/{ 608,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForDegTch*/{ 680,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForCtrUsr*/{ 948,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForCtrTch*/{ 949,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForInsUsr*/{ 743,-1,TabUnk,ActSeeFor		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForInsTch*/{ 772,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForGenUsr*/{ 735,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForGenTch*/{ 950,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForSWAUsr*/{ 613,-1,TabUnk,ActSeeFor		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
+   /* ActDelPstForSWATch*/{ 623,-1,TabUnk,ActSeeFor		,0x1F4,0x1F4,0x1F4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DelPst			,NULL},
 
-   /* ActEnbPstForCrsUsr*/{ 624,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCrsTch*/{ 951,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForDegUsr*/{ 616,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForDegTch*/{ 619,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCtrUsr*/{ 952,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForCtrTch*/{ 953,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForInsUsr*/{ 954,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForInsTch*/{ 955,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForGenUsr*/{ 956,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForGenTch*/{ 957,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForSWAUsr*/{ 632,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
-   /* ActEnbPstForSWATch*/{ 634,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_EnbPst			,NULL},
+   /* ActEnbPstForCrsUsr*/{ 624,-1,TabUnk,ActSeeFor		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForCrsTch*/{ 951,-1,TabUnk,ActSeeFor		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForDegUsr*/{ 616,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForDegTch*/{ 619,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForCtrUsr*/{ 952,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForCtrTch*/{ 953,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForInsUsr*/{ 954,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForInsTch*/{ 955,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForGenUsr*/{ 956,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForGenTch*/{ 957,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForSWAUsr*/{ 632,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
+   /* ActEnbPstForSWATch*/{ 634,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_EnbPst			,NULL},
 
-   /* ActDisPstForCrsUsr*/{ 610,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCrsTch*/{ 958,-1,TabSoc,ActSeeFor		,0x110,0x110,0x110,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForDegUsr*/{ 615,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForDegTch*/{ 618,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCtrUsr*/{ 959,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForCtrTch*/{ 960,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForInsUsr*/{ 961,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForInsTch*/{ 962,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForGenUsr*/{ 963,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForGenTch*/{ 925,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForSWAUsr*/{ 625,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
-   /* ActDisPstForSWATch*/{ 635,-1,TabSoc,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,For_DisPst			,NULL},
+   /* ActDisPstForCrsUsr*/{ 610,-1,TabUnk,ActSeeFor		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForCrsTch*/{ 958,-1,TabUnk,ActSeeFor		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForDegUsr*/{ 615,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForDegTch*/{ 618,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForCtrUsr*/{ 959,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForCtrTch*/{ 960,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForInsUsr*/{ 961,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForInsTch*/{ 962,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForGenUsr*/{ 963,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForGenTch*/{ 925,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForSWAUsr*/{ 625,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
+   /* ActDisPstForSWATch*/{ 635,-1,TabUnk,ActSeeFor		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_DisPst			,NULL},
 
-   /* ActCht		*/{  52,-1,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_NEW_WINDOW ,Cht_OpenChatWindow		,NULL				,NULL},
+   /* ActCht		*/{  52,-1,TabUnk,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_BLNK_WINDOW,Cht_OpenChatWindow		,NULL				,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
-   /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,"bell64x64.gif"	},
-   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
-   /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ListFullNotices		,"note64x64.gif"	},
-   /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
-   /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
-   /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
-   /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ListEMails			,"email64x64.gif"	},
+   /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_ShowMyNotifications	,"bell64x64.gif"	},
+   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
+   /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Not_ListFullNotices		,"note64x64.gif"	},
+   /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
+   /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
+   /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
+   /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ListEMails			,"email64x64.gif"	},
 
    // Actions not in menu:
-   /* ActWriAnn		*/{1237,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ShowFormAnnouncement	,NULL},
-   /* ActRcvAnn		*/{1238,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_ReceiveAnnouncement	,NULL},
-   /* ActHidAnn		*/{1470,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_HideActiveAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
-   /* ActRevAnn		*/{1471,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ann_RevealHiddenAnnouncement,Ann_ShowAllAnnouncements	,NULL},
-   /* ActRemAnn		*/{1236,-1,TabMsg,ActSeeAnn		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_RemoveAnnouncement		,NULL},
+   /* ActWriAnn		*/{1237,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ShowFormAnnouncement	,NULL},
+   /* ActRcvAnn		*/{1238,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ReceiveAnnouncement	,NULL},
+   /* ActHidAnn		*/{1470,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ann_HideActiveAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
+   /* ActRevAnn		*/{1471,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ann_RevealHiddenAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
+   /* ActRemAnn		*/{1236,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_RemoveAnnouncement		,NULL},
 
-   /* ActSeeOneNot	*/{1164,-1,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_GetNotCodToHighlight	,Not_ListFullNotices		,NULL},
-   /* ActWriNot		*/{  59,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_ShowFormNotice		,NULL},
-   /* ActRcvNot		*/{  60,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
-   /* ActHidNot		*/{ 763,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_HideActiveNotice	,Not_ListFullNotices		,NULL},
-   /* ActRevNot		*/{ 764,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RevealHiddenNotice	,Not_ListFullNotices		,NULL},
-   /* ActReqRemNot	*/{1472,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Not_RequestRemNotice		,NULL},
-   /* ActRemNot		*/{  73,-1,TabMsg,ActSeeAllNot		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
+   /* ActSeeOneNot	*/{1164,-1,TabUnk,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Not_GetNotCodToHighlight	,Not_ListFullNotices		,NULL},
+   /* ActWriNot		*/{  59,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Not_ShowFormNotice		,NULL},
+   /* ActRcvNot		*/{  60,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
+   /* ActHidNot		*/{ 763,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Not_HideActiveNotice		,Not_ListFullNotices		,NULL},
+   /* ActRevNot		*/{ 764,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Not_RevealHiddenNotice		,Not_ListFullNotices		,NULL},
+   /* ActReqRemNot	*/{1472,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Not_RequestRemNotice		,NULL},
+   /* ActRemNot		*/{  73,-1,TabUnk,ActSeeAllNot		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
 
-   /* ActSeeNewNtf	*/{ 991,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_ShowMyNotifications	,NULL},
-   /* ActMrkNtfSee	*/{1146,-1,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ntf_MarkAllNotifAsSeen		,NULL},
+   /* ActSeeNewNtf	*/{ 991,-1,TabUnk,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_ShowMyNotifications	,NULL},
+   /* ActMrkNtfSee	*/{1146,-1,TabUnk,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_MarkAllNotifAsSeen		,NULL},
 
-   /* ActRcvMsgUsr	*/{  27,-1,TabMsg,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Msg_RecMsgFromUsr		,NULL},
-   /* ActReqDelAllSntMsg*/{ 604,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ReqDelAllSntMsgs		,NULL},
-   /* ActReqDelAllRcvMsg*/{ 593,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ReqDelAllRecMsgs		,NULL},
-   /* ActDelAllSntMsg	*/{ 434,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_DelAllSntMsgs		,NULL},
-   /* ActDelAllRcvMsg	*/{ 436,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_DelAllRecMsgs		,NULL},
-   /* ActDelSntMsg	*/{  90,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_DelSntMsg			,NULL},
-   /* ActDelRcvMsg	*/{  64,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_DelRecMsg			,NULL},
-   /* ActExpSntMsg	*/{ 664,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ExpSntMsg			,NULL},
-   /* ActExpRcvMsg	*/{ 663,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ExpRecMsg			,NULL},
-   /* ActConSntMsg	*/{1020,-1,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ConSntMsg			,NULL},
-   /* ActConRcvMsg	*/{1019,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ConRecMsg			,NULL},
+   /* ActRcvMsgUsr	*/{  27,-1,TabUnk,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Msg_RecMsgFromUsr		,NULL},
+   /* ActReqDelAllSntMsg*/{ 604,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ReqDelAllSntMsgs		,NULL},
+   /* ActReqDelAllRcvMsg*/{ 593,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ReqDelAllRecMsgs		,NULL},
+   /* ActDelAllSntMsg	*/{ 434,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_DelAllSntMsgs		,NULL},
+   /* ActDelAllRcvMsg	*/{ 436,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_DelAllRecMsgs		,NULL},
+   /* ActDelSntMsg	*/{  90,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_DelSntMsg			,NULL},
+   /* ActDelRcvMsg	*/{  64,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_DelRecMsg			,NULL},
+   /* ActExpSntMsg	*/{ 664,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ExpSntMsg			,NULL},
+   /* ActExpRcvMsg	*/{ 663,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ExpRecMsg			,NULL},
+   /* ActConSntMsg	*/{1020,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ConSntMsg			,NULL},
+   /* ActConRcvMsg	*/{1019,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ConRecMsg			,NULL},
 
-   /* ActLstBanUsr	*/{1017,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_ListBannedUsrs		,NULL},
-   /* ActBanUsrMsg	*/{1015,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_BanSenderWhenShowingMsgs	,NULL},
-   /* ActUnbUsrMsg	*/{1016,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenShowingMsgs	,NULL},
-   /* ActUnbUsrLst	*/{1018,-1,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Msg_UnbanSenderWhenListingUsrs	,NULL},
+   /* ActLstBanUsr	*/{1017,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ListBannedUsrs		,NULL},
+   /* ActBanUsrMsg	*/{1015,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_BanSenderWhenShowingMsgs	,NULL},
+   /* ActUnbUsrMsg	*/{1016,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_UnbanSenderWhenShowingMsgs	,NULL},
+   /* ActUnbUsrLst	*/{1018,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_UnbanSenderWhenListingUsrs	,NULL},
 
    // TabSta ******************************************************************
    // Actions in menu:
-   /* ActSeeAllSvy	*/{ 966, 0,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_ReqUseOfPlatform		,"pie64x64.gif"		},
-   /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
-   /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
-   /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
-   /* ActReqMyUsgRep	*/{1586, 5,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ReqMyUsageReport		,"report64x64.png"	},
+   /* ActSeeAllSvy	*/{ 966, 0,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
+   /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqUseOfPlatform		,"pie64x64.gif"		},
+   /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
+   /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
+   /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
+   /* ActReqMyUsgRep	*/{1586, 5,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
 
    // Actions not in menu:
-   /* ActSeeOneSvy	*/{ 982,-1,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_SeeOneSurvey		,NULL},
-   /* ActAnsSvy		*/{ 983,-1,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_ReceiveSurveyAnswers	,NULL},
-   /* ActFrmNewSvy	*/{ 973,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActEdiOneSvy	*/{ 974,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActNewSvy		*/{ 968,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RecFormSurvey		,NULL},
-   /* ActChgSvy		*/{ 975,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RecFormSurvey		,NULL},
-   /* ActReqRemSvy	*/{ 976,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_AskRemSurvey		,NULL},
-   /* ActRemSvy		*/{ 969,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RemoveSurvey		,NULL},
+   /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
+   /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
+   /* ActFrmNewSvy	*/{ 973,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActEdiOneSvy	*/{ 974,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActNewSvy		*/{ 968,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActChgSvy		*/{ 975,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActReqRemSvy	*/{ 976,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskRemSurvey		,NULL},
+   /* ActRemSvy		*/{ 969,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveSurvey		,NULL},
 
-   /* ActReqRstSvy	*/{ 984,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_AskResetSurvey		,NULL},
-   /* ActRstSvy		*/{ 985,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_ResetSurvey		,NULL},
+   /* ActReqRstSvy	*/{ 984,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskResetSurvey		,NULL},
+   /* ActRstSvy		*/{ 985,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ResetSurvey		,NULL},
 
-   /* ActHidSvy		*/{ 977,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_HideSurvey			,NULL},
-   /* ActShoSvy		*/{ 978,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_UnhideSurvey		,NULL},
-   /* ActEdiOneSvyQst	*/{ 979,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestEditQuestion	,NULL},
-   /* ActRcvSvyQst	*/{ 980,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_ReceiveQst			,NULL},
-   /* ActReqRemSvyQst	*/{1524,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RequestRemoveQst		,NULL},
-   /* ActRemSvyQst	*/{ 981,-1,TabSta,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Svy_RemoveQst			,NULL},
+   /* ActHidSvy		*/{ 977,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_HideSurvey			,NULL},
+   /* ActShoSvy		*/{ 978,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_UnhideSurvey		,NULL},
+   /* ActEdiOneSvyQst	*/{ 979,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestEditQuestion	,NULL},
+   /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
+   /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
+   /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
 
-   /* ActSeeUseGbl	*/{  84,-1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_ShowUseOfPlatform		,NULL},
-   /* ActPrnPhoDeg	*/{ 448,-1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Pho_PrintPhotoDegree  		,NULL},
-   /* ActCalPhoDeg	*/{ 444,-1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_CalcPhotoDegree		,NULL},
-   /* ActSeeAccGbl	*/{  79,-1,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeGblAccesses		,NULL},
-   /* ActReqAccCrs	*/{ 594,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
-   /* ActSeeAccCrs	*/{ 119,-1,TabSta,ActReqAccGbl		,0x110,0x100,0x000,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Sta_SeeCrsAccesses		,NULL},
-   /* ActSeeAllStaCrs	*/{ 768,-1,TabSta,ActReqAccGbl		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ind_ShowIndicatorsCourses	,NULL},
+   /* ActSeeUseGbl	*/{  84,-1,TabUnk,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ShowUseOfPlatform		,NULL},
+   /* ActPrnPhoDeg	*/{ 448,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Pho_PrintPhotoDegree  		,NULL},
+   /* ActCalPhoDeg	*/{ 444,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_CalcPhotoDegree		,NULL},
+   /* ActSeeAccGbl	*/{  79,-1,TabUnk,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeGblAccesses		,NULL},
+   /* ActReqAccCrs	*/{ 594,-1,TabUnk,ActReqAccGbl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
+   /* ActSeeAccCrs	*/{ 119,-1,TabUnk,ActReqAccGbl		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeCrsAccesses		,NULL},
+   /* ActSeeAllStaCrs	*/{ 768,-1,TabUnk,ActReqAccGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ind_ShowIndicatorsCourses	,NULL},
 
-   /* ActSeeMyUsgRep	*/{1582,-1,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rep_ShowMyUsageReport		,NULL},
+   /* ActSeeMyUsgRep	*/{1582,-1,TabUnk,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ShowMyUsageReport		,NULL},
 
    // TabPrf ******************************************************************
    // Actions in menu:
-   /* ActFrmLogIn	*/{1521, 0,TabPrf,ActFrmLogIn		,0x001,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteLandingPage		,"keyuser64x64.gif"	},
-   /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
-   /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
-   /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Agd_ShowMyAgenda		,"date64x64.gif"	},
-   /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
-   /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
-   /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_EditPrefs			,"heart64x64.gif"	},
-   /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
-   /* ActMFUAct		*/{ 993, 9,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,MFU_ShowMyMFUActions		,"star64x64.gif"	},
+   /* ActFrmLogIn	*/{1521, 0,TabPrf,ActFrmLogIn		,0x001,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteLandingPage		,"keyuser64x64.gif"	},
+   /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
+   /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
+   /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
+   /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"date64x64.gif"	},
+   /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
+   /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
+   /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
+   /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
+   /* ActMFUAct		*/{ 993, 9,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
-   /* ActReqSndNewPwd	*/{ 665,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormSendNewPwd		,NULL},
-   /* ActSndNewPwd	*/{ 633,-1,TabPrf,ActFrmLogIn		,0x000,0x001,0x001,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
-   /* ActLogOut		*/{  10,-1,TabPrf,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
+   /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,0x000,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormSendNewPwd		,NULL},
+   /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,0x000,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
+   /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
 
-   /* ActAutUsrInt	*/{   6,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrNew	*/{1585,-1,TabPrf,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrChgLan	*/{1077,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Usr_WelcomeUsr			,NULL},
-   /* ActAnnSee		*/{1234,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ann_MarkAnnouncementAsSeen	,NULL},
-   /* ActChgMyRol	*/{ 589,-1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
+   /* ActAutUsrInt	*/{   6,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActAutUsrNew	*/{1585,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActAutUsrChgLan	*/{1077,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
+   /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
-   /* ActChkUsrAcc	*/{1584,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_CheckIfEmptyAccountExists	,NULL},
-   /* ActCreUsrAcc	*/{1163,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AfterCreationNewAccount	,NULL},
+   /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
+   /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
 
-   /* ActRemID_Me	*/{1147,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_RemoveMyUsrID		,NULL},
-   /* ActNewIDMe	*/{1148,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ID_NewMyUsrID			,NULL},
+   /* ActRemID_Me	*/{1147,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RemoveMyUsrID		,NULL},
+   /* ActNewIDMe	*/{1148,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_NewMyUsrID			,NULL},
 
-   /* ActRemOldNic	*/{1089,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_RemoveNick			,NULL},
-   /* ActChgNic		*/{  37,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Nck_UpdateNick			,NULL},
+   /* ActRemOldNic	*/{1089,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Nck_RemoveNick			,NULL},
+   /* ActChgNic		*/{  37,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Nck_UpdateNick			,NULL},
 
-   /* ActRemMaiMe	*/{1090,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_RemoveMyUsrEmail		,NULL},
-   /* ActNewMaiMe	*/{1088,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,May_NewMyUsrEmail		,NULL},
-   /* ActCnfMai		*/{1091,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Mai_ConfirmEmail		,NULL},
+   /* ActRemMaiMe	*/{1090,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveMyUsrEmail		,NULL},
+   /* ActNewMaiMe	*/{1088,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,May_NewMyUsrEmail		,NULL},
+   /* ActCnfMai		*/{1091,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ConfirmEmail		,NULL},
 
-   /* ActFrmChgMyPwd	*/{  34,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pwd_ShowFormChgPwd		,NULL},
-   /* ActChgPwd		*/{  35,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
+   /* ActFrmChgMyPwd	*/{  34,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormChgPwd		,NULL},
+   /* ActChgPwd		*/{  35,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Pwd_ActChgMyPwd1		,Pwd_ActChgMyPwd2		,NULL},
 
-   /* ActReqRemMyAcc	*/{1430,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_AskIfRemoveMyAccount	,NULL},
-   /* ActRemMyAcc	*/{1431,-1,TabPrf,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Acc_RemoveMyAccount		,NULL},
+   /* ActReqRemMyAcc	*/{1430,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AskIfRemoveMyAccount	,NULL},
+   /* ActRemMyAcc	*/{1431,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_RemoveMyAccount		,NULL},
 
-   /* ActChgMyData	*/{ 298,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
+   /* ActChgMyData	*/{ 298,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
 
-   /* ActReqMyPho	*/{  30,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqMyPhotoWithContextLinks	,NULL},
-   /* ActDetMyPho	*/{ 693,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Pho_RecMyPhotoDetFaces		,NULL},
-   /* ActUpdMyPho	*/{ 694,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
-   /* ActReqRemMyPho	*/{1577,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ReqRemoveMyPhoto		,NULL},
-   /* ActRemMyPho	*/{ 428,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
+   /* ActReqMyPho	*/{  30,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqMyPhotoWithContextLinks	,NULL},
+   /* ActDetMyPho	*/{ 693,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Pho_RecMyPhotoDetFaces		,NULL},
+   /* ActUpdMyPho	*/{ 694,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Pho_UpdateMyPhoto1		,Pho_UpdateMyPhoto2		,NULL},
+   /* ActReqRemMyPho	*/{1577,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqRemoveMyPhoto		,NULL},
+   /* ActRemMyPho	*/{ 428,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Pho_RemoveMyPhoto1		,Pho_RemoveMyPhoto2		,NULL},
 
-   /* ActEdiPri		*/{1403,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pri_EditMyPrivacy		,NULL},
-   /* ActChgPriPho	*/{ 774,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pho_ChangePhotoVisibility	,NULL},
-   /* ActChgPriPrf	*/{1404,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Prf_ChangeProfileVisibility	,NULL},
+   /* ActEdiPri		*/{1403,-1,TabUnk,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pri_EditMyPrivacy		,NULL},
+   /* ActChgPriPho	*/{ 774,-1,TabUnk,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ChangePhotoVisibility	,NULL},
+   /* ActChgPriPrf	*/{1404,-1,TabUnk,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_ChangeProfileVisibility	,NULL},
 
-   /* ActReqEdiMyIns	*/{1165,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ShowFormMyInsCtrDpt	,NULL},
-   /* ActChgCtyMyIns	*/{1166,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_ChgCountryOfMyInstitution	,NULL},
-   /* ActChgMyIns	*/{1167,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyInstitution	,NULL},
-   /* ActChgMyCtr	*/{1168,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyCentre		,NULL},
-   /* ActChgMyDpt	*/{1169,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyDepartment		,NULL},
-   /* ActChgMyOff	*/{1170,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyOffice		,NULL},
-   /* ActChgMyOffPho	*/{1171,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Rec_UpdateMyOfficePhone	,NULL},
+   /* ActReqEdiMyIns	*/{1165,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMyInsCtrDpt	,NULL},
+   /* ActChgCtyMyIns	*/{1166,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChgCountryOfMyInstitution	,NULL},
+   /* ActChgMyIns	*/{1167,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateMyInstitution	,NULL},
+   /* ActChgMyCtr	*/{1168,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateMyCentre		,NULL},
+   /* ActChgMyDpt	*/{1169,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateMyDepartment		,NULL},
+   /* ActChgMyOff	*/{1170,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateMyOffice		,NULL},
+   /* ActChgMyOffPho	*/{1171,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateMyOfficePhone	,NULL},
 
-   /* ActReqEdiMyNet	*/{1172,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_ShowFormMyWebsAndSocialNets,NULL},
-   /* ActChgMyNet	*/{1173,-1,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Net_UpdateMyWebsAndSocialNets	,NULL},
+   /* ActReqEdiMyNet	*/{1172,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Net_ShowFormMyWebsAndSocialNets,NULL},
+   /* ActChgMyNet	*/{1173,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Net_UpdateMyWebsAndSocialNets	,NULL},
 
-   /* ActChgThe		*/{ 841,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,The_ChangeTheme		,Pre_EditPrefs			,NULL},
-   /* ActReqChgLan	*/{ 992,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Pre_AskChangeLanguage		,NULL},
-   /* ActChgLan		*/{ 654,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
-   /* ActChg1stDay	*/{1484,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
-   /* ActChgCol		*/{ 674,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},
-   /* ActHidLftCol	*/{ 668,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_HideLeftCol		,Pre_EditPrefs			,NULL},
-   /* ActHidRgtCol	*/{ 669,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_HideRightCol		,Pre_EditPrefs			,NULL},
-   /* ActShoLftCol	*/{ 670,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ShowLeftCol		,Pre_EditPrefs			,NULL},
-   /* ActShoRgtCol	*/{ 671,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Pre_ShowRightCol		,Pre_EditPrefs			,NULL},
-   /* ActChgIco		*/{1092,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ico_ChangeIconSet		,Pre_EditPrefs			,NULL},
-   /* ActChgMnu		*/{1243,-1,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Mnu_ChangeMenu		,Pre_EditPrefs			,NULL},
-   /* ActChgNtfPrf	*/{ 775,-1,TabPrf,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ntf_ChangeNotifyEvents	,Pre_EditPrefs			,NULL},
+   /* ActChgThe		*/{ 841,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,The_ChangeTheme		,Pre_EditPrefs			,NULL},
+   /* ActReqChgLan	*/{ 992,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_AskChangeLanguage		,NULL},
+   /* ActChgLan		*/{ 654,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
+   /* ActChg1stDay	*/{1484,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
+   /* ActChgCol		*/{ 674,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},
+   /* ActHidLftCol	*/{ 668,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_HideLeftCol		,Pre_EditPrefs			,NULL},
+   /* ActHidRgtCol	*/{ 669,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_HideRightCol		,Pre_EditPrefs			,NULL},
+   /* ActShoLftCol	*/{ 670,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ShowLeftCol		,Pre_EditPrefs			,NULL},
+   /* ActShoRgtCol	*/{ 671,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ShowRightCol		,Pre_EditPrefs			,NULL},
+   /* ActChgIco		*/{1092,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Ico_ChangeIconSet		,Pre_EditPrefs			,NULL},
+   /* ActChgMnu		*/{1243,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Mnu_ChangeMenu			,Pre_EditPrefs			,NULL},
+   /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ntf_ChangeNotifyEvents		,Pre_EditPrefs			,NULL},
 
-   /* ActPrnUsrQR	*/{1022,-1,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,QR_PrintQRCode			,NULL},
+   /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,QR_PrintQRCode			,NULL},
 
-   /* ActPrnMyTT	*/{ 409,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiTut		*/{  65,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
-   /* ActChgTut		*/{  48,-1,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,TT_ShowMyTutTimeTable		,NULL},
-   /* ActChgMyTT1stDay	*/{1487,-1,TabPrf,ActSeeMyTT		,0x1FF,0x1FF,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
+   /* ActPrnMyTT	*/{ 409,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
+   /* ActEdiTut		*/{  65,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowMyTutTimeTable		,NULL},
+   /* ActChgTut		*/{  48,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowMyTutTimeTable		,NULL},
+   /* ActChgMyTT1stDay	*/{1487,-1,TabUnk,ActSeeMyTT		,0x1FF,0x1FF,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
-   /* ActReqRemFilBrf	*/{ 286,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemFileFromTree		,NULL},
-   /* ActRemFilBrf	*/{ 155,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFileFromTree		,NULL},
-   /* ActRemFolBrf	*/{ 196,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemFolderFromTree		,NULL},
-   /* ActCopBrf		*/{ 311,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_CopyFromFileBrowser	,NULL},
-   /* ActPasBrf		*/{ 315,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_PasteIntoFileBrowser	,NULL},
-   /* ActRemTreBrf	*/{ 276,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemSubtreeInFileBrowser	,NULL},
-   /* ActFrmCreBrf	*/{ 597,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFormFileBrowser	,NULL},
-   /* ActCreFolBrf	*/{ 170,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecFolderFileBrowser	,NULL},
-   /* ActCreLnkBrf	*/{1230,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RecLinkFileBrowser		,NULL},
-   /* ActRenFolBrf	*/{ 197,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RenFolderFileBrowser	,NULL},
-   /* ActRcvFilBrfDZ	*/{1224,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone,NULL				,NULL},
-   /* ActRcvFilBrfCla	*/{ 153,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_DATA,Act_MAIN_WINDOW,NULL			,Brw_RcvFileInFileBrwClassic	,NULL},
-   /* ActExpBrf		*/{ 410,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ExpandFileTree		,NULL},
-   /* ActConBrf		*/{ 411,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ContractFileTree		,NULL},
-   /* ActZIPBrf		*/{1136,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,ZIP_CompressFileTree		,NULL},
-   /* ActReqDatBrf	*/{1047,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ShowFileMetadata		,NULL},
-   /* ActChgDatBrf	*/{1048,-1,TabPrf,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_ChgFileMetadata		,NULL},
-   /* ActDowBrf         */{1123,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   /* ActReqRemOldBrf   */{1488,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_AskRemoveOldFiles		,NULL},
-   /* ActRemOldBrf      */{1489,-1,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Brw_RemoveOldFilesBriefcase	,NULL},
+   /* ActReqRemFilBrf	*/{ 286,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},
+   /* ActRemFilBrf	*/{ 155,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFileFromTree		,NULL},
+   /* ActRemFolBrf	*/{ 196,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemFolderFromTree		,NULL},
+   /* ActCopBrf		*/{ 311,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   /* ActPasBrf		*/{ 315,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   /* ActRemTreBrf	*/{ 276,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   /* ActFrmCreBrf	*/{ 597,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   /* ActCreFolBrf	*/{ 170,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   /* ActCreLnkBrf	*/{1230,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   /* ActRenFolBrf	*/{ 197,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   /* ActRcvFilBrfDZ	*/{1224,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   /* ActRcvFilBrfCla	*/{ 153,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   /* ActExpBrf		*/{ 410,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ExpandFileTree		,NULL},
+   /* ActConBrf		*/{ 411,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ContractFileTree		,NULL},
+   /* ActZIPBrf		*/{1136,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ZIP_CompressFileTree		,NULL},
+   /* ActReqDatBrf	*/{1047,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileMetadata		,NULL},
+   /* ActChgDatBrf	*/{1048,-1,TabUnk,ActAdmBrf		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
+   /* ActDowBrf         */{1123,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   /* ActReqRemOldBrf   */{1488,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemoveOldFiles		,NULL},
+   /* ActRemOldBrf      */{1489,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemoveOldFilesBriefcase	,NULL},
   };
 
 Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!
@@ -4604,14 +4602,14 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
             fprintf (Gbl.F.Out," onsubmit=\"%s;\"",OnSubmit);
       switch (Act_Actions[NextAction].BrowserWindow)
 	{
-	 case Act_NEW_WINDOW:
+	 case Act_BLNK_WINDOW:
 	 case Act_DOWNLD_FILE:
 	    fprintf (Gbl.F.Out," target=\"_blank\"");
 	    break;
 	 default:
 	    break;
 	}
-      if (Act_Actions[NextAction].ContentType == Act_CONTENT_DATA)
+      if (Act_Actions[NextAction].ContentType == Act_CONT_DATA)
 	 fprintf (Gbl.F.Out," enctype=\"multipart/form-data\"");
       fprintf (Gbl.F.Out," accept-charset=\"windows-1252\">");
 

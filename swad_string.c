@@ -994,7 +994,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
          switch (ChangeFrom)
            {
             case Str_FROM_FORM:
-               if (Gbl.ContentReceivedByCGI == Act_CONTENT_DATA)
+               if (Gbl.ContentReceivedByCGI == Act_CONT_DATA)
         	  // The form contained data and was sent with content type multipart/form-data
 		  switch (Ch)
 		    {

@@ -1126,7 +1126,7 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    bool PutForm = !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
 
    /***** Get country name *****/
    Cty_GetCountryName (CtyCod,CtyName);

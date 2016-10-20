@@ -128,7 +128,7 @@ int main (int argc, char *argv[])
 	 Con_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
-	 if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW)
+	 if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
 	    Ses_GetNumSessions ();
 
 	 /***** Check user and get user's data *****/

@@ -2062,7 +2062,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
      }
 
    PutFormLinks = !Gbl.Form.Inside &&						// Only if not inside another form
-                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW;	// Only in main window
+                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
@@ -2268,7 +2268,7 @@ static void Rec_PutIconsCommands (void)
 	                         Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
-       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_MAIN_WINDOW &&	// Only in main window
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
       fprintf (Gbl.F.Out,"<div class=\"REC_SHORTCUTS\">");
