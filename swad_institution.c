@@ -78,6 +78,7 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 static void Ins_PutParamOtherInsCod (long InsCod);
 static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
+static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
 static void Ins_PutButtonToGoToIns (struct Institution *Ins);
 
 static void Ins_PutFormToCreateInstitution (void);
@@ -264,6 +265,7 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -277,6 +279,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Departments;
    extern const char *Txt_Users_of_the_institution;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumCty;
    bool PutLink = !PrintView && Gbl.CurrentIns.Ins.WWW[0];
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
@@ -301,6 +304,47 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+
+      /***** Country *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Country);
+
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can move an institution to another country
+	{
+	 /* Get list of countries */
+         Cty_GetListCountries (Cty_GET_BASIC_DATA);
+
+	 /* Put form to select country */
+	 Act_FormStart (ActChgInsCtyCfg);
+	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
+			    " class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\">",
+		  Gbl.Form.Id);
+	 for (NumCty = 0;
+	      NumCty < Gbl.Ctys.Num;
+	      NumCty++)
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		     Gbl.Ctys.Lst[NumCty].CtyCod,
+		     Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod ? " selected=\"selected\"" :
+										"",
+		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
+
+	 /* Free list of countries */
+	 Cty_FreeListCountries ();
+	}
+      else	// I can not move institution to another country
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Institution full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1594,9 +1638,9 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
      {
+      Gbl.Error = true;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
                CurrentInsName);
-      Gbl.Error = true;
      }
    else
      {
@@ -1606,9 +1650,9 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
          /***** If institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,Gbl.CurrentCty.Cty.CtyCod))
            {
+            Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
                      NewInsName);
-            Gbl.Error = true;
            }
          else
            {
@@ -1655,13 +1699,78 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 /******************* Change the country of a institution *********************/
 /*****************************************************************************/
 
-void Ins_ChangeInsCountry (void)
+void Ins_ChangeInsCtyInConfig (void)
+  {
+   extern const char *Txt_The_institution_X_already_exists;
+   extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
+   struct Country NewCty;
+
+   /***** Get parameters from form *****/
+   /* Get the new country code for the institution */
+   if ((NewCty.CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of country is missing.");
+
+   /***** Check if country has changed *****/
+   if (NewCty.CtyCod != Gbl.CurrentIns.Ins.CtyCod)
+     {
+      /***** Get data of the country from database *****/
+      Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
+
+      /***** Check if it already exists an institution with the same name in the new country *****/
+      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShortName,-1L,NewCty.CtyCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+		  Gbl.CurrentIns.Ins.ShortName);
+	}
+      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+		  Gbl.CurrentIns.Ins.FullName);
+	}
+      else
+	{
+	 /***** Update the table changing the country of the institution *****/
+	 Ins_UpdateInsCtyDB (Gbl.CurrentIns.Ins.InsCod,NewCty.CtyCod);
+         Gbl.CurrentIns.Ins.CtyCod =
+         Gbl.CurrentCty.Cty.CtyCod = NewCty.CtyCod;
+
+	 /***** Initialize again current course, degree, centre... *****/
+	 Deg_InitCurrentCourse ();
+
+	 /***** Write message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
+		  Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
+	}
+     }
+  }
+
+/*****************************************************************************/
+/*** Show msg. of success after changing an institution in instit. config. ***/
+/*****************************************************************************/
+
+void Ins_ContEditAfterChgInsInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
+
+   /***** Show the form again *****/
+   Ins_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/******************* Change the country of a institution *********************/
+/*****************************************************************************/
+
+void Ins_ChangeInsCty (void)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Institution *Ins;
    struct Country NewCty;
-   char Query[256];
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -1699,10 +1808,7 @@ void Ins_ChangeInsCountry (void)
       else
 	{
 	 /***** Update the table changing the country of the institution *****/
-	 sprintf (Query,"UPDATE institutions SET CtyCod='%ld'"
-	                " WHERE InsCod='%ld'",
-		  NewCty.CtyCod,Ins->InsCod);
-	 DB_QueryUPDATE (Query,"can not update the country of an institution");
+	 Ins_UpdateInsCtyDB (Ins->InsCod,NewCty.CtyCod);
          Ins->CtyCod = NewCty.CtyCod;
 
 	 /***** Write message to show the change made *****/
@@ -1717,6 +1823,20 @@ void Ins_ChangeInsCountry (void)
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
+  }
+
+/*****************************************************************************/
+/****************** Update country in table of institutions ******************/
+/*****************************************************************************/
+
+static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod)
+  {
+   char Query[128];
+
+   /***** Update country in table of institutions *****/
+   sprintf (Query,"UPDATE institutions SET CtyCod='%ld' WHERE InsCod='%ld'",
+            CtyCod,InsCod);
+   DB_QueryUPDATE (Query,"can not update the country of an institution");
   }
 
 /*****************************************************************************/

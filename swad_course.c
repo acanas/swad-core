@@ -93,8 +93,8 @@ static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_RecFormRequestOrCreateCrs (unsigned Status);
 static void Crs_GetParamsNewCourse (struct Course *Crs);
-static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
-                                                  const char *FieldName,const char *Name,long CrsCod);
+static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                                 long DegCod,unsigned Year);
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
@@ -1882,33 +1882,33 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 	  Crs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
-	                                           "ShortName",Crs->ShortName,-1L))
+	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
+	                                          Crs->DegCod,Crs->Year))
 	   {
+            Gbl.Error = true;
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
 	             Crs->ShortName);
-            Gbl.Error = true;
 	   }
-	 else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
-	                                                "FullName",Crs->FullName,-1L))
+	 else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
+	                                               Crs->DegCod,Crs->Year))
 	   {
+            Gbl.Error = true;
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
 		     Crs->FullName);
-            Gbl.Error = true;
 	   }
 	 else	// Add new requested course to database
 	    Crs_CreateCourse (Crs,Status);
 	}
       else	// If there is not a course name
 	{
-	 sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
 	 Gbl.Error = true;
+	 sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
 	}
      }
    else	// Year not valid
      {
-      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
       Gbl.Error = true;
+      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
      }
   }
 
@@ -1939,8 +1939,8 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 /********** Check if the name of course exists in existing courses ***********/
 /*****************************************************************************/
 
-static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
-                                                  const char *FieldName,const char *Name,long CrsCod)
+static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                                 long DegCod,unsigned Year)
   {
    char Query[512];
 
@@ -2406,8 +2406,8 @@ void Crs_ChangeInsCrsCod (void)
      }
    else
      {
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
       Gbl.Error = true;
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
      }
   }
 
@@ -2435,19 +2435,19 @@ void Crs_ChangeCrsDegInConfig (void)
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
       /***** If name of course was in database in the new degree... *****/
-      if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
-						"ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L))
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L,
+                                               NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.ShortName);
-	 Gbl.Error = true;
 	}
-      else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year,
-						     "FullName",Gbl.CurrentCrs.Crs.FullName,-1L))
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
+                                                    NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.FullName);
-	 Gbl.Error = true;
 	}
       else	// Update degree in database
 	{
@@ -2467,9 +2467,9 @@ void Crs_ChangeCrsDegInConfig (void)
      }
    else	// I have no permission to change course to this new degree
      {
+      Gbl.Error = true;
       sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
                NewDeg.FullName);
-      Gbl.Error = true;
      }
   }
 
@@ -2520,19 +2520,19 @@ void Crs_ChangeCrsDegree (void)
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
      {
       /***** If name of course was in database in the new degree... *****/
-      if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
-						"ShortName",Crs->ShortName,-1L))
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
+                                               NewDeg.DegCod,Crs->Year))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
-	 Gbl.Error = true;
 	}
-      else if (Crs_CheckIfCourseNameExistsInCourses (NewDeg.DegCod,Crs->Year,
-						     "FullName",Crs->FullName,-1L))
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
+                                                    NewDeg.DegCod,Crs->Year))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
-	 Gbl.Error = true;
 	}
       else	// Update degree in database
 	{
@@ -2547,9 +2547,9 @@ void Crs_ChangeCrsDegree (void)
      }
    else	// I have no permission to change course to this new degree
      {
+      Gbl.Error = true;
       sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
                NewDeg.FullName);
-      Gbl.Error = true;
      }
   }
 
@@ -2587,21 +2587,19 @@ void Crs_ChangeCrsYearInConfig (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,
-                                                NewYear,"ShortName",
-                                                Gbl.CurrentCrs.Crs.ShortName,-1L))
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L,
+                                               Gbl.CurrentCrs.Crs.DegCod,NewYear))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
-	 Gbl.Error = true;
 	}
-      else if (Crs_CheckIfCourseNameExistsInCourses (Gbl.CurrentCrs.Crs.DegCod,
-                                                     NewYear,"FullName",
-                                                     Gbl.CurrentCrs.Crs.FullName,-1L))
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
+                                                    Gbl.CurrentCrs.Crs.DegCod,NewYear))
 	{
+	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.FullName,Txt_YEAR_OF_DEGREE[NewYear]);
-	 Gbl.Error = true;
 	}
       else	// Update year in database
 	{
@@ -2615,8 +2613,8 @@ void Crs_ChangeCrsYearInConfig (void)
      }
    else	// Year not valid
      {
-      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
       Gbl.Error = true;
+      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
      }
   }
 
@@ -2657,21 +2655,19 @@ void Crs_ChangeCrsYear (void)
       if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
-         if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,
-                                                   NewYear,"ShortName",
-                                                   Crs->ShortName,-1L))
+         if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
+                                                  Crs->DegCod,NewYear))
            {
+            Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
-            Gbl.Error = true;
            }
-         else if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,
-                                                        NewYear,"FullName",
-                                                        Crs->FullName,-1L))
+         else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
+                                                       Crs->DegCod,NewYear))
            {
+            Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->FullName,Txt_YEAR_OF_DEGREE[NewYear]);
-            Gbl.Error = true;
            }
          else	// Update year in database
            {
@@ -2685,14 +2681,14 @@ void Crs_ChangeCrsYear (void)
         }
       else	// Year not valid
         {
-         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
          Gbl.Error = true;
+         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
         }
      }
    else
      {
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
       Gbl.Error = true;
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
      }
   }
 
@@ -2814,9 +2810,9 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
       /***** Check if new name is empty *****/
       if (!NewCrsName[0])
         {
+         Gbl.Error = true;
          sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_course_X_empty,
                   CurrentCrsName);
-         Gbl.Error = true;
         }
       else
         {
@@ -2824,12 +2820,12 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
          if (strcmp (CurrentCrsName,NewCrsName))	// Different names
            {
             /***** If course was in database... *****/
-            if (Crs_CheckIfCourseNameExistsInCourses (Crs->DegCod,Crs->Year,
-                                                      ParamName,NewCrsName,Crs->CrsCod))
+            if (Crs_CheckIfCrsNameExistsInYearOfDeg (ParamName,NewCrsName,Crs->CrsCod,
+                                                     Crs->DegCod,Crs->Year))
               {
+               Gbl.Error = true;
                sprintf (Gbl.Message,Txt_The_course_X_already_exists,
                         NewCrsName);
-               Gbl.Error = true;
               }
             else
               {
@@ -2856,8 +2852,8 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
      }
    else
      {
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
       Gbl.Error = true;
+      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
      }
 
    return CourseHasBeenRenamed;

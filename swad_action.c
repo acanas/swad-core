@@ -182,6 +182,7 @@ Institution:
 	 84. ActInsSch			Search for courses, teachers, documents...
 
 	 85. ActPrnInsInf		Print information on the current institution
+	NEW. ActChgInsCtyCfg		Change country of institution in institution configuration
 	 86. ActReqInsLog		Show form to send the logo of the current institution
 	 87. ActRecInsLog		Receive and store the logo of the current institution
 	 88. ActRemInsLog		Remove the logo of the current institution
@@ -1509,7 +1510,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqIns		*/{1210,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormReqIns		,NULL},
    /* ActNewIns		*/{ 698,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormNewIns		,NULL},
    /* ActRemIns		*/{ 759,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RemoveInstitution		,NULL},
-   /* ActChgInsCty	*/{ 865,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsCountry		,NULL},
+   /* ActChgInsCty	*/{ 865,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsCty		,NULL},
    /* ActRenInsSho	*/{ 702,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsShort		,Ins_ContEditAfterChgIns	,NULL},
    /* ActRenInsFul	*/{ 701,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsFull		,Ins_ContEditAfterChgIns	,NULL},
    /* ActChgInsWWW	*/{ 700,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsWWW		,NULL},
@@ -1531,6 +1532,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActInsSch		*/{1182,-1,TabIns,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_MAIN_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
 
    /* ActPrnInsInf	*/{1154,-1,TabIns,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONTENT_NORM,Act_NEW_WINDOW ,NULL			,Ins_PrintConfiguration		,NULL},
+   /* ActChgInsCtyCfg	*/{1590,-1,TabIns,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_ChangeInsCtyInConfig,Ins_ContEditAfterChgInsInConfig,NULL},
    /* ActReqInsLog	*/{1245,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RequestLogo		,NULL},
    /* ActRecInsLog	*/{ 699,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ins_ReceiveLogo		,Ins_ShowConfiguration		,NULL},
    /* ActRemInsLog	*/{1341,-1,TabIns,ActSeeInsInf		,0x100,0x100,0x100,Act_CONTENT_DATA,Act_MAIN_WINDOW,Ins_RemoveLogo		,Ins_ShowConfiguration		,NULL},
@@ -4447,6 +4449,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgCrsDegCfg,	// #1587
 	ActChgDegCtrCfg,	// #1588
 	ActChgCtrInsCfg,	// #1589
+	ActChgInsCtyCfg,	// #1590
 	};
 
 /*****************************************************************************/

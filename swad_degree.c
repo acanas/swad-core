@@ -107,7 +107,7 @@ static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
-static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod);
+static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 
@@ -1966,13 +1966,13 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
       if (Deg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"ShortName",Deg->ShortName,-1L))
+	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Deg->ShortName,-1L,Deg->CtrCod))
 	   {
 	    sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
 		     Deg->ShortName);
 	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	   }
-	 else if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,"FullName",Deg->FullName,-1L))
+	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Deg->FullName,-1L,Deg->CtrCod))
 	   {
 	    sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
 		     Deg->FullName);
@@ -2426,9 +2426,9 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    /***** Check if new name is empty *****/
    if (!NewDegName[0])
      {
+      Gbl.Error = true;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_degree_X_empty,
                CurrentDegName);
-      Gbl.Error = true;
      }
    else
      {
@@ -2436,11 +2436,11 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
       if (strcmp (CurrentDegName,NewDegName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_CheckIfDegreeNameExists (Deg->CtrCod,ParamName,NewDegName,Deg->DegCod))
+         if (Deg_CheckIfDegNameExistsInCtr (ParamName,NewDegName,Deg->DegCod,Deg->CtrCod))
            {
+            Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
                      NewDegName);
-            Gbl.Error = true;
            }
          else
            {
@@ -2472,7 +2472,7 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
 /********************* Check if the name of degree exists ********************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod)
+static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod)
   {
    char Query[512];
 
@@ -2489,6 +2489,7 @@ static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const
 
 void Deg_ChangeDegCtrInConfig (void)
   {
+   extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Centre NewCtr;
 
@@ -2496,21 +2497,41 @@ void Deg_ChangeDegCtrInConfig (void)
    /* Get parameter with centre code */
    NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
 
-   /***** Get data of new centre *****/
-   Ctr_GetDataOfCentreByCod (&NewCtr);
+   /***** Check if institution has changed *****/
+   if (NewCtr.CtrCod != Gbl.CurrentDeg.Deg.CtrCod)
+     {
+      /***** Get data of new centre *****/
+      Ctr_GetDataOfCentreByCod (&NewCtr);
 
-   /***** Update centre in table of degrees *****/
-   Deg_UpdateDegCtrDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
-   Gbl.CurrentDeg.Deg.CtrCod =
-   Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
+      /***** Check if it already exists a degree with the same name in the new centre *****/
+      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShortName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
+		  Gbl.CurrentDeg.Deg.ShortName);
+	}
+      else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
+		  Gbl.CurrentDeg.Deg.FullName);
+	}
+      else
+	{
+	 /***** Update centre in table of degrees *****/
+	 Deg_UpdateDegCtrDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
+	 Gbl.CurrentDeg.Deg.CtrCod =
+	 Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
 
-   /***** Initialize again current course, degree, centre... *****/
-   Deg_InitCurrentCourse ();
+	 /***** Initialize again current course, degree, centre... *****/
+	 Deg_InitCurrentCourse ();
 
-   /***** Create message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
-	    Gbl.CurrentDeg.Deg.FullName,
-	    Gbl.CurrentCtr.Ctr.FullName);
+	 /***** Create message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
+		  Gbl.CurrentDeg.Deg.FullName,
+		  Gbl.CurrentCtr.Ctr.FullName);
+	}
+     }
   }
 
 /*****************************************************************************/

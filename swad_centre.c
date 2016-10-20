@@ -92,7 +92,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
-static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
+static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
 static void Ctr_PutFormToCreateCentre (void);
@@ -1677,6 +1677,7 @@ void Ctr_RemoveCentre (void)
 
 void Ctr_ChangeCtrInsInConfig (void)
   {
+   extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
    struct Institution NewIns;
 
@@ -1684,20 +1685,40 @@ void Ctr_ChangeCtrInsInConfig (void)
    /* Get parameter with institution code */
    NewIns.InsCod = Ins_GetParamOtherInsCod ();
 
-   /***** Get data of new institution *****/
-   Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
+   /***** Check if institution has changed *****/
+   if (NewIns.InsCod != Gbl.CurrentCtr.Ctr.InsCod)
+     {
+      /***** Get data of new institution *****/
+      Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
-   /***** Update institution in table of centres *****/
-   Ctr_UpdateCtrInsDB (Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod);
-   Gbl.CurrentCtr.Ctr.InsCod =
-   Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
+      /***** Check if it already exists a centre with the same name in the new institution *****/
+      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.CurrentCtr.Ctr.ShortName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
+		  Gbl.CurrentCtr.Ctr.ShortName);
+	}
+      else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.CurrentCtr.Ctr.FullName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
+	{
+	 Gbl.Error = true;
+	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
+		  Gbl.CurrentCtr.Ctr.FullName);
+	}
+      else
+	{
+	 /***** Update institution in table of centres *****/
+	 Ctr_UpdateCtrInsDB (Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod);
+	 Gbl.CurrentCtr.Ctr.InsCod =
+	 Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
 
-   /***** Initialize again current course, degree, centre... *****/
-   Deg_InitCurrentCourse ();
+	 /***** Initialize again current course, degree, centre... *****/
+	 Deg_InitCurrentCourse ();
 
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
-	    Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
+	 /***** Write message to show the change made *****/
+	 sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+		  Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
+	}
+     }
   }
 
 /*****************************************************************************/
@@ -1889,9 +1910,9 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
      {
+      Gbl.Error = true;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
                CurrentCtrName);
-      Gbl.Error = true;
      }
    else
      {
@@ -1899,11 +1920,11 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_CheckIfCentreNameExistsInCurrentIns (ParamName,NewCtrName,Ctr->CtrCod))
+         if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
            {
+            Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      NewCtrName);
-            Gbl.Error = true;
            }
          else
            {
@@ -1935,14 +1956,14 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
 /********************* Check if the name of centre exists ********************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod)
+static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
    char Query[512];
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
 	          " WHERE InsCod='%ld' AND %s='%s' AND CtrCod<>'%ld'",
-            Gbl.CurrentIns.Ins.InsCod,FieldName,Name,CtrCod);
+            InsCod,FieldName,Name,CtrCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a centre already existed") != 0);
   }
 
@@ -2633,13 +2654,13 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       if (Ctr->WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCentreNameExistsInCurrentIns ("ShortName",Ctr->ShortName,-1L))
+         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr->ShortName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      Ctr->ShortName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
-         else if (Ctr_CheckIfCentreNameExistsInCurrentIns ("FullName",Ctr->FullName,-1L))
+         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr->FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      Ctr->FullName);
