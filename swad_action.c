@@ -163,7 +163,6 @@ Country:
 	 68. ActReqIns			Request the creation of a request for a new institution (a teacher makes the petition to an administrator)
 	 69. ActNewIns			Request the creation of an institution
 	 70. ActRemIns			Remove institution
-	 71. ActChgInsCty		Change country of institution
 	 72. ActRenInsSho		Change short name of institution
 	 73. ActRenInsFul		Change full name of institution
 	 74. ActChgInsWWW		Change web of institution
@@ -1507,7 +1506,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqIns		*/{1210,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormReqIns		,NULL},
    /* ActNewIns		*/{ 698,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RecFormNewIns		,NULL},
    /* ActRemIns		*/{ 759,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_RemoveInstitution		,NULL},
-   /* ActChgInsCty	*/{ 865,-1,TabCty,ActSeeIns		,0x100,0x100,0x100,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsCty		,NULL},
    /* ActRenInsSho	*/{ 702,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsShort		,Ins_ContEditAfterChgIns	,NULL},
    /* ActRenInsFul	*/{ 701,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Ins_RenameInsFull		,Ins_ContEditAfterChgIns	,NULL},
    /* ActChgInsWWW	*/{ 700,-1,TabCty,ActSeeIns		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Ins_ChangeInsWWW		,NULL},
@@ -3715,7 +3713,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeCty,		// #862
 	ActEdiCty,		// #863
 	ActNewCty,		// #864
-	ActChgInsCty,		// #865
+	-1,			// #865 (obsolete action)
 	ActRenCty,		// #866
 	ActReqDelThrCrsUsr,	// #867
 	ActDelThrForCrsUsr,	// #868

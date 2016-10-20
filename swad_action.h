@@ -55,7 +55,7 @@ typedef enum
 
 typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1+9+51+15+90+70+67+247+186+155+172+36+30+86)
+#define Act_NUM_ACTIONS	(1+9+51+14+90+70+67+247+186+155+172+36+30+86)
 
 #define Act_MAX_ACTION_COD 1590
 
@@ -160,11 +160,10 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActReqIns		(ActChgPlgIP+  8)
 #define ActNewIns		(ActChgPlgIP+  9)
 #define ActRemIns		(ActChgPlgIP+ 10)
-#define ActChgInsCty		(ActChgPlgIP+ 11)
-#define ActRenInsSho		(ActChgPlgIP+ 12)
-#define ActRenInsFul		(ActChgPlgIP+ 13)
-#define ActChgInsWWW		(ActChgPlgIP+ 14)
-#define ActChgInsSta		(ActChgPlgIP+ 15)
+#define ActRenInsSho		(ActChgPlgIP+ 11)
+#define ActRenInsFul		(ActChgPlgIP+ 12)
+#define ActChgInsWWW		(ActChgPlgIP+ 13)
+#define ActChgInsSta		(ActChgPlgIP+ 14)
 
 /*****************************************************************************/
 /****************************** Institution tab ******************************/

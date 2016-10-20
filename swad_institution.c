@@ -1202,11 +1202,9 @@ void Ins_WriteSelectorOfInstitution (void)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_Institutions_of_COUNTRY_X;
-   extern const char *Txt_Another_country;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Institution *Ins;
-   unsigned NumCty;
    char WWW[Ins_MAX_LENGTH_WWW_ON_SCREEN+1];
    struct UsrData UsrDat;
    bool ICanEdit;
@@ -1258,36 +1256,6 @@ static void Ins_ListInstitutionsForEdition (void)
 	                 " style=\"width:25px;\">",
                Ins->FullName);
       Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,NULL,true);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Country */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	{
-	 Act_FormStart (ActChgInsCty);
-	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:40px;\""
-			    " onchange=\"document.getElementById('%s').submit();\" />"
-			    "<option value=\"0\"",
-		  Gbl.Form.Id);
-	 if (Ins->CtyCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_country);
-	 for (NumCty = 0;
-	      NumCty < Gbl.Ctys.Num;
-	      NumCty++)
-	   {
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Ctys.Lst[NumCty].CtyCod);
-	    if (Ins->CtyCod == Gbl.Ctys.Lst[NumCty].CtyCod)
-	       fprintf (Gbl.F.Out," selected=\"selected\"");
-	    fprintf (Gbl.F.Out,">%s</option>",
-		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	   }
-	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
-	}
-      else
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution short name */
@@ -1757,70 +1725,6 @@ void Ins_ContEditAfterChgInsInConfig (void)
   }
 
 /*****************************************************************************/
-/******************* Change the country of a institution *********************/
-/*****************************************************************************/
-
-void Ins_ChangeInsCty (void)
-  {
-   extern const char *Txt_The_institution_X_already_exists;
-   extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
-   struct Institution *Ins;
-   struct Country NewCty;
-
-   Ins = &Gbl.Inss.EditingIns;
-
-   /***** Get parameters from form *****/
-   /* Get the code of the institution */
-   if ((Ins->InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
-
-   /* Get the new country code for the institution */
-   if ((NewCty.CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
-
-   /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
-
-   /***** Get data of the country from database *****/
-   Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
-
-   /***** Check if country has changed *****/
-   if (NewCty.CtyCod != Ins->CtyCod)
-     {
-      /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins->ShortName,-1L,NewCty.CtyCod))
-	{
-	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
-		  Ins->ShortName);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-	}
-      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins->FullName,-1L,NewCty.CtyCod))
-	{
-	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
-		  Ins->FullName);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-	}
-      else
-	{
-	 /***** Update the table changing the country of the institution *****/
-	 Ins_UpdateInsCtyDB (Ins->InsCod,NewCty.CtyCod);
-         Ins->CtyCod = NewCty.CtyCod;
-
-	 /***** Write message to show the change made *****/
-	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		  Ins->FullName,NewCty.Name[Gbl.Prefs.Language]);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-	 /***** Put button to go to institution changed *****/
-         Ins_PutButtonToGoToIns (Ins);
-	}
-     }
-
-   /***** Show the form again *****/
-   Ins_EditInstitutions ();
-  }
-
-/*****************************************************************************/
 /****************** Update country in table of institutions ******************/
 /*****************************************************************************/
 
@@ -2045,18 +1949,6 @@ static void Ins_PutFormToCreateInstitution (void)
    Log_DrawLogo (Sco_SCOPE_INS,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Country *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthCtyCod\""
-                      " style=\"width:40px;\" disabled=\"disabled\">"
-                      "<option value=\"%ld\" selected=\"selected\">"
-                      "%s"
-                      "</option>"
-                      "</select>"
-                      "</td>",
-            Gbl.CurrentCty.Cty.CtyCod,
-            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-
    /***** Institution short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
@@ -2126,7 +2018,6 @@ static void Ins_PutFormToCreateInstitution (void)
 static void Ins_PutHeadInstitutionsForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Country;
    extern const char *Txt_Short_name_of_the_institution;
    extern const char *Txt_Full_name_of_the_institution;
    extern const char *Txt_WWW;
@@ -2143,9 +2034,6 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "%s"
                       "</th>"
                       "<th></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2172,7 +2060,6 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_Country,
             Txt_Short_name_of_the_institution,
             Txt_Full_name_of_the_institution,
             Txt_WWW,
