@@ -52905,36 +52905,6 @@ const char *Txt_You_dont_have_permission_to_edit_this_course =
 	"You don't have permission to edit this course.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Usted no tiene permiso para mover asignaturas"
-	" a la titulaci&oacute;n <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2
-	"You don't have permission to move courses"
-	" to the degree <strong>%s</strong>.";		// Need Übersetzung
-#elif L==3
-	"You don't have permission to move courses"
-	" to the degree <strong>%s</strong>.";
-#elif L==4
-	"Usted no tiene permiso para mover asignaturas"
-	" a la titulaci&oacute;n <strong>%s</strong>.";
-#elif L==5
-	"You don't have permission to move courses"
-	" to the degree <strong>%s</strong>.";		// Besoin de traduction
-#elif L==6
-	"Usted no tiene permiso para mover asignaturas"
-	" a la titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Non hai l'autorizzazione di spostare i corsi"
-	" nella laurea <strong>%s</strong>.";
-#elif L==8
-	"You don't have permission to move courses"
-	" to the degree <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"You don't have permission to move courses"
-	" to the degree <strong>%s</strong>.";		// Necessita de tradução
-#endif
-
 const char *Txt_You_dont_have_permission_to_perform_this_action =
 #if   L==1
 	"Vost&egrave; no t&eacute; perm&iacute;s"

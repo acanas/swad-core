@@ -2497,7 +2497,7 @@ void Deg_ChangeDegCtrInConfig (void)
    /* Get parameter with centre code */
    NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
 
-   /***** Check if institution has changed *****/
+   /***** Check if centre has changed *****/
    if (NewCtr.CtrCod != Gbl.CurrentDeg.Deg.CtrCod)
      {
       /***** Get data of new centre *****/

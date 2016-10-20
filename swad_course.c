@@ -2420,7 +2420,6 @@ void Crs_ChangeCrsDegInConfig (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Degree NewDeg;
 
    /***** Get parameters from form *****/
@@ -2428,12 +2427,12 @@ void Crs_ChangeCrsDegInConfig (void)
    if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
-   /***** Get data of new degree *****/
-   Deg_GetDataOfDegreeByCod (&NewDeg);
-
-   /***** If I have permission to change course to this new degree... *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+   /***** Check if degree has changed *****/
+   if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
      {
+      /***** Get data of new degree *****/
+      Deg_GetDataOfDegreeByCod (&NewDeg);
+
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L,
                                                NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
@@ -2465,12 +2464,6 @@ void Crs_ChangeCrsDegInConfig (void)
 		  Gbl.CurrentDeg.Deg.FullName);
 	}
      }
-   else	// I have no permission to change course to this new degree
-     {
-      Gbl.Error = true;
-      sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
-               NewDeg.FullName);
-     }
   }
 
 /*****************************************************************************/
@@ -2497,7 +2490,6 @@ void Crs_ChangeCrsDegree (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   extern const char *Txt_You_dont_have_permission_to_move_courses_to_the_degree_X;
    struct Course *Crs;
    struct Degree NewDeg;
 
@@ -2512,13 +2504,13 @@ void Crs_ChangeCrsDegree (void)
    if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
-   /***** Get data of course and new degree *****/
-   Crs_GetDataOfCourseByCod (Crs);
-   Deg_GetDataOfDegreeByCod (&NewDeg);
-
-   /***** If I have permission to change course to this new degree... *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+   /***** Check if degree has changed *****/
+   if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
      {
+      /***** Get data of course and new degree *****/
+      Crs_GetDataOfCourseByCod (Crs);
+      Deg_GetDataOfDegreeByCod (&NewDeg);
+
       /***** If name of course was in database in the new degree... *****/
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
                                                NewDeg.DegCod,Crs->Year))
@@ -2544,12 +2536,6 @@ void Crs_ChangeCrsDegree (void)
 	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
 		  Crs->FullName,NewDeg.FullName);
 	}
-     }
-   else	// I have no permission to change course to this new degree
-     {
-      Gbl.Error = true;
-      sprintf (Gbl.Message,Txt_You_dont_have_permission_to_move_courses_to_the_degree_X,
-               NewDeg.FullName);
      }
   }
 
