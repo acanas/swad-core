@@ -298,7 +298,6 @@ Centre:
 	183. ActRenDegSho		Request change of the short name of a degree
 	184. ActRenDegFul		Request change of the full name of a degree
 	185. ActChgDegTyp		Request change of the type of a degree
-	186. ActChgDegCtr		Request change of the centre of a degree
 	187. ActChgDegWWW		Request change of the web of a degree
 	188. ActChgDegSta		Request change of status of a degree
 
@@ -1650,7 +1649,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenDegSho	*/{ 546,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Deg_RenameDegreeShort	,Deg_ContEditAfterChgDeg	,NULL},
    /* ActRenDegFul	*/{ 547,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Deg_RenameDegreeFull	,Deg_ContEditAfterChgDeg	,NULL},
    /* ActChgDegTyp	*/{ 544,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,DT_ChangeDegreeType		,NULL},
-   /* ActChgDegCtr	*/{1049,-1,TabCtr,ActSeeDeg		,0x180,0x180,0x180,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegreeCtr		,NULL},
    /* ActChgDegWWW	*/{ 554,-1,TabCtr,ActSeeDeg		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabCtr,ActSeeDeg		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Deg_ChangeDegStatus		,NULL},
 
@@ -3903,7 +3901,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
         ActChgDatWrkCrs,	// #1046
         ActReqDatBrf,		// #1047
         ActChgDatBrf,		// #1048
-	ActChgDegCtr,		// #1049
+	-1,			// #1049 (obsolete action)
 	-1,			// #1050 (obsolete action)
 	ActRecCtrLog,		// #1051
 	-1,			// #1052 (obsolete action)

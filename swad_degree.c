@@ -1061,7 +1061,6 @@ static void Deg_ListDegreesForEdition (void)
    unsigned NumDeg;
    struct DegreeType *DegTyp;
    struct Degree *Deg;
-   unsigned NumCtr;
    unsigned NumDegTyp;
    char WWW[Deg_MAX_LENGTH_WWW_ON_SCREEN+1];
    struct UsrData UsrDat;
@@ -1114,30 +1113,6 @@ static void Deg_ListDegreesForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
                Deg->FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,NULL,true);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Centre */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// I can select centre
-	{
-	 Act_FormStart (ActChgDegCtr);
-	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:62px;\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
-	 for (NumCtr = 0;
-	      NumCtr < Gbl.Ctrs.Num;
-	      NumCtr++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Ctrs.Lst[NumCtr].CtrCod,
-		     (Gbl.Ctrs.Lst[NumCtr].CtrCod == Deg->CtrCod) ? " selected=\"selected\"" :
-			                                            "",
-		     Gbl.Ctrs.Lst[NumCtr].ShortName);
-	 fprintf (Gbl.F.Out,"</select>");
-	 Act_FormEnd ();
-	}
-      else
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShortName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree short name */
@@ -1381,18 +1356,6 @@ static void Deg_PutFormToCreateDegree (void)
    Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Centre *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"OthCtrCod\""
-                      " style=\"width:62px;\" disabled=\"disabled\">"
-                      "<option value=\"%ld\" selected=\"selected\">"
-                      "%s"
-                      "</option>"
-                      "</select>"
-                      "</td>",
-            Gbl.CurrentCtr.Ctr.CtrCod,
-	    Gbl.CurrentCtr.Ctr.ShortName);
-
    /***** Degree short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
@@ -1502,7 +1465,6 @@ static void Deg_PutHeadDegreesForSeeing (void)
 static void Deg_PutHeadDegreesForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Centre;
    extern const char *Txt_Short_name_of_the_degree;
    extern const char *Txt_Full_name_of_the_degree;
    extern const char *Txt_Type;
@@ -1529,9 +1491,6 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1543,7 +1502,6 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_Centre,
             Txt_Short_name_of_the_degree,
             Txt_Full_name_of_the_degree,
             Txt_Type,
@@ -2547,46 +2505,6 @@ void Deg_ContEditAfterChgDegInConfig (void)
 
    /***** Show the form again *****/
    Deg_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
-/************************ Change the centre of a degree **********************/
-/*****************************************************************************/
-
-void Deg_ChangeDegreeCtr (void)
-  {
-   extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
-   struct Degree *Deg;
-   struct Centre NewCtr;
-
-   Deg = &Gbl.Degs.EditingDeg;
-
-   /***** Get parameters from form *****/
-   /* Get degree code */
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
-
-   /* Get parameter with centre code */
-   NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
-
-   /***** Get data of degree and new centre *****/
-   Deg_GetDataOfDegreeByCod (Deg);
-   Ctr_GetDataOfCentreByCod (&NewCtr);
-
-   /***** Update centre in table of degrees *****/
-   Deg_UpdateDegCtrDB (Deg->DegCod,NewCtr.CtrCod);
-   Deg->CtrCod = NewCtr.CtrCod;
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
-	    Deg->FullName,NewCtr.FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Put button to go to degree changed *****/
-   Deg_PutButtonToGoToDeg (Deg);
-
-   /***** Show the form again *****/
-   Deg_EditDegrees ();
   }
 
 /*****************************************************************************/
