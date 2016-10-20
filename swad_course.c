@@ -98,7 +98,7 @@ static bool Crs_CheckIfCourseNameExistsInCourses (long DegCod,unsigned Year,
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
-static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod);
+static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod);
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
@@ -224,7 +224,7 @@ static void Crs_Configuration (bool PrintView)
       /* Put form to select degree */
       Act_FormStart (ActChgCrsDegCfg);
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-			 " class=\"INPUT_DEGREE\""
+			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumDeg = 0;
@@ -1421,7 +1421,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Act_FormStart (ActChgCrsDeg);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-			       " class=\"INPUT_DEGREE\""
+			       " class=\"INPUT_SHORT_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
 	    for (NumDeg = 0;
@@ -1658,7 +1658,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthDegCod\""
-                      " class=\"INPUT_DEGREE\""
+                      " class=\"INPUT_SHORT_NAME\""
                       " disabled=\"disabled\">"
                       "<option value=\"%ld\">%s</option>"
                       "</select>"
@@ -2415,7 +2415,7 @@ void Crs_ChangeInsCrsCod (void)
 /***************** Change the degree of the current course *******************/
 /*****************************************************************************/
 
-void Crs_ChangeCrsDegreeInConfig (void)
+void Crs_ChangeCrsDegInConfig (void)
   {
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
@@ -2452,7 +2452,7 @@ void Crs_ChangeCrsDegreeInConfig (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_UpdateCrsDegreeDB (Gbl.CurrentCrs.Crs.CrsCod,NewDeg.DegCod);
+	 Crs_UpdateCrsDegDB (Gbl.CurrentCrs.Crs.CrsCod,NewDeg.DegCod);
 	 Gbl.CurrentCrs.Crs.DegCod =
 	 Gbl.CurrentDeg.Deg.DegCod = NewDeg.DegCod;
 
@@ -2537,7 +2537,7 @@ void Crs_ChangeCrsDegree (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_UpdateCrsDegreeDB (Crs->CrsCod,NewDeg.DegCod);
+	 Crs_UpdateCrsDegDB (Crs->CrsCod,NewDeg.DegCod);
 	 Crs->DegCod = NewDeg.DegCod;
 
 	 /***** Create message to show the change made *****/
@@ -2557,7 +2557,7 @@ void Crs_ChangeCrsDegree (void)
 /********************** Update degree in table of courses ********************/
 /*****************************************************************************/
 
-static void Crs_UpdateCrsDegreeDB (long CrsCod,long DegCod)
+static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
   {
    char Query[128];
 

@@ -144,17 +144,26 @@
 
 // TODO: Generar informe -> ¿Realmente desea generar un informe... (puede tardar varios segundos...)? -> Generar informe.
 
+// TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.24 (2016-10-20)"
-#define CSS_FILE		"swad15.229.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.25 (2016-10-20)"
+#define CSS_FILE		"swad16.25.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.25:    Oct 19, 2016	New form in centre configuration to move centre to another institution. (205416 lines)
+					4 changes necessary in database:
+UPDATE actions SET Txt='Mover titulaci&oacute;n a otro centro' WHERE ActCod='1049' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1588','es','N','Mover titulaci&oacute;n a otro centro');
+UPDATE actions SET Txt='Mover centro a otra instituci&oacute;n' WHERE ActCod='720' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1589','es','N','Mover centro a otra instituci&oacute;n');
+
         Version 16.24:    Oct 20, 2016	Code refactoring in list of degrees. (205326 lines)
         Version 16.23.2:  Oct 19, 2016	Code refactoring in course edition. (205448 lines)
         Version 16.23.1:  Oct 19, 2016	Code refactoring in degree edition. (205441 lines)

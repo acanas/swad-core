@@ -109,7 +109,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const char *Name,long DegCod);
 
-static void Deg_UpdateDegCentreDB (long DegCod,long CtrCod);
+static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
@@ -342,7 +342,7 @@ static void Deg_Configuration (bool PrintView)
 	 /* Put form to select centre */
 	 Act_FormStart (ActChgDegCtrCfg);
 	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\""
-			    " class=\"INPUT_CENTRE\""
+			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
 	 for (NumCtr = 0;
@@ -359,7 +359,7 @@ static void Deg_Configuration (bool PrintView)
 	 /* Free list of centres */
 	 Ctr_FreeListCentres ();
 	}
-      else	// I can not edit centre
+      else	// I can not move degree to another centre
 	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
 
       fprintf (Gbl.F.Out,"</td>"
@@ -2487,7 +2487,7 @@ static bool Deg_CheckIfDegreeNameExists (long CtrCod,const char *FieldName,const
 /************************ Change the centre of a degree **********************/
 /*****************************************************************************/
 
-void Deg_ChangeDegreeCtrInConfig (void)
+void Deg_ChangeDegCtrInConfig (void)
   {
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Centre NewCtr;
@@ -2500,7 +2500,7 @@ void Deg_ChangeDegreeCtrInConfig (void)
    Ctr_GetDataOfCentreByCod (&NewCtr);
 
    /***** Update centre in table of degrees *****/
-   Deg_UpdateDegCentreDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
+   Deg_UpdateDegCtrDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
    Gbl.CurrentDeg.Deg.CtrCod =
    Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
 
@@ -2514,7 +2514,7 @@ void Deg_ChangeDegreeCtrInConfig (void)
   }
 
 /*****************************************************************************/
-/** Show message of success after changing a degree in course configuration **/
+/** Show message of success after changing a degree in degree configuration **/
 /*****************************************************************************/
 
 void Deg_ContEditAfterChgDegInConfig (void)
@@ -2553,7 +2553,7 @@ void Deg_ChangeDegreeCtr (void)
    Ctr_GetDataOfCentreByCod (&NewCtr);
 
    /***** Update centre in table of degrees *****/
-   Deg_UpdateDegCentreDB (Deg->DegCod,NewCtr.CtrCod);
+   Deg_UpdateDegCtrDB (Deg->DegCod,NewCtr.CtrCod);
    Deg->CtrCod = NewCtr.CtrCod;
 
    /***** Write message to show the change made *****/
@@ -2572,7 +2572,7 @@ void Deg_ChangeDegreeCtr (void)
 /********************** Update centre in table of degrees ********************/
 /*****************************************************************************/
 
-static void Deg_UpdateDegCentreDB (long DegCod,long CtrCod)
+static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
   {
    char Query[128];
 

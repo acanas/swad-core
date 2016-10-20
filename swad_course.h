@@ -119,7 +119,7 @@ void Crs_GetShortNamesByCod (long CrsCod,char *CrsShortName,char *DegShortName);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCodInConfig (void);
 void Crs_ChangeInsCrsCod (void);
-void Crs_ChangeCrsDegreeInConfig (void);
+void Crs_ChangeCrsDegInConfig (void);
 void Crs_ChangeCrsDegree (void);
 void Crs_ChangeCrsYearInConfig (void);
 void Crs_ChangeCrsYear (void);

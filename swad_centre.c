@@ -90,6 +90,7 @@ static bool Ctr_CheckIfICanEdit (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
+static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCentreNameExistsInCurrentIns (const char *FieldName,const char *Name,long CtrCod);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
@@ -256,6 +257,7 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
@@ -268,6 +270,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_Courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumIns;
    struct Place Plc;
    char PathPhoto[PATH_MAX+1];
    bool PhotoExists;
@@ -355,6 +358,47 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+
+      /***** Institution *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Institution);
+
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can move a centre to another institution
+	{
+	 /* Get list of institutions of the current country */
+         Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
+
+	 /* Put form to select institution */
+	 Act_FormStart (ActChgCtrInsCfg);
+	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\""
+			    " class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\">",
+		  Gbl.Form.Id);
+	 for (NumIns = 0;
+	      NumIns < Gbl.Inss.Num;
+	      NumIns++)
+	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		     Gbl.Inss.Lst[NumIns].InsCod,
+		     Gbl.Inss.Lst[NumIns].InsCod == Gbl.CurrentIns.Ins.InsCod ? " selected=\"selected\"" :
+										"",
+		     Gbl.Inss.Lst[NumIns].ShortName);
+	 fprintf (Gbl.F.Out,"</select>");
+	 Act_FormEnd ();
+
+	 /* Free list of institutions */
+	 Ins_FreeListInstitutions ();
+	}
+      else	// I can not move centre to another institution
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.FullName);
+
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1631,12 +1675,55 @@ void Ctr_RemoveCentre (void)
 /********************* Change the institution of a centre ********************/
 /*****************************************************************************/
 
+void Ctr_ChangeCtrInsInConfig (void)
+  {
+   extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
+   struct Institution NewIns;
+
+   /***** Get parameters from form *****/
+   /* Get parameter with institution code */
+   NewIns.InsCod = Ins_GetParamOtherInsCod ();
+
+   /***** Get data of new institution *****/
+   Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
+
+   /***** Update institution in table of centres *****/
+   Ctr_UpdateCtrInsDB (Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod);
+   Gbl.CurrentCtr.Ctr.InsCod =
+   Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
+
+   /***** Initialize again current course, degree, centre... *****/
+   Deg_InitCurrentCourse ();
+
+   /***** Write message to show the change made *****/
+   sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+	    Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
+  }
+
+/*****************************************************************************/
+/** Show message of success after changing a centre in centre configuration **/
+/*****************************************************************************/
+
+void Ctr_ContEditAfterChgCtrInConfig (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/********************* Change the institution of a centre ********************/
+/*****************************************************************************/
+
 void Ctr_ChangeCentreIns (void)
   {
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
    struct Centre *Ctr;
    struct Institution NewIns;
-   char Query[512];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
 
@@ -1653,9 +1740,7 @@ void Ctr_ChangeCentreIns (void)
    Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
    /***** Update institution in table of centres *****/
-   sprintf (Query,"UPDATE centres SET InsCod='%ld' WHERE CtrCod='%ld'",
-            NewIns.InsCod,Ctr->CtrCod);
-   DB_QueryUPDATE (Query,"can not update the institution of a centre");
+   Ctr_UpdateCtrInsDB (Ctr->CtrCod,NewIns.InsCod);
    Ctr->InsCod = NewIns.InsCod;
 
    /***** Write message to show the change made *****/
@@ -1668,6 +1753,20 @@ void Ctr_ChangeCentreIns (void)
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
+  }
+
+/*****************************************************************************/
+/******************* Update institution in table of centres ******************/
+/*****************************************************************************/
+
+static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
+  {
+   char Query[128];
+
+   /***** Update institution in table of centres *****/
+   sprintf (Query,"UPDATE centres SET InsCod='%ld' WHERE CtrCod='%ld'",
+            InsCod,CtrCod);
+   DB_QueryUPDATE (Query,"can not update the institution of a centre");
   }
 
 /*****************************************************************************/
