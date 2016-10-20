@@ -140,6 +140,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    unsigned NumAct;
    long ActCod;
    Act_Action_t Action;
+   Act_Action_t SuperAction;
    Act_Action_t MoreRecentActionInCurrentTab = ActUnk;
 
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
@@ -162,12 +163,15 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
          ActCod = Str_ConvertStrCodToLongCod (row[0]);
          if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
             if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
-               if (Act_Actions[Action].Tab == Gbl.Action.Tab)
+              {
+               SuperAction = Act_Actions[Action].SuperAction;
+               if (Act_Actions[SuperAction].Tab == Gbl.Action.Tab)
                   if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                     {
                      MoreRecentActionInCurrentTab = Action;
                      break;
                     }
+              }
         }
 
       /***** Free structure that stores the query result *****/
@@ -205,6 +209,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
+   Act_Action_t SuperAction;
    const char *Title;
    char TabStr[128+1];
    char MenuStr[128+1];
@@ -225,7 +230,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Act_Actions[Action].SuperAction].Tab],128);
+	 SuperAction = Act_Actions[Action].SuperAction;
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';
@@ -262,6 +268,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
+   Act_Action_t SuperAction;
    const char *Title;
    char TabStr[128+1];
    char MenuStr[128+1];
@@ -287,7 +294,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       if ((Title = Act_GetTitleAction (Action)) != NULL)
         {
 	 /* Action string */
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[Act_Actions[Action].SuperAction].Tab],128);
+	 SuperAction = Act_Actions[Action].SuperAction;
+	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';

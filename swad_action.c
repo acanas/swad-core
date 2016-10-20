@@ -4472,10 +4472,12 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 const char *Act_GetTitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   Act_Action_t SuperAction = Act_Actions[Action].SuperAction;
+   Act_Action_t SuperAction;
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
+
+   SuperAction = Act_Actions[Action].SuperAction;
    return Txt_MENU_TITLE[Act_Actions[SuperAction].Tab][Act_Actions[SuperAction].IndexInMenu];
   }
 
@@ -4486,10 +4488,13 @@ const char *Act_GetTitleAction (Act_Action_t Action)
 const char *Act_GetSubtitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   Act_Action_t SuperAction;
 
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return NULL;
-   return Txt_MENU_SUBTITLE[Act_Actions[Act_Actions[Action].SuperAction].Tab][Act_Actions[Act_Actions[Action].SuperAction].IndexInMenu];
+
+   SuperAction = Act_Actions[Action].SuperAction;
+   return Txt_MENU_SUBTITLE[Act_Actions[SuperAction].Tab][Act_Actions[SuperAction].IndexInMenu];
   }
 
 /*****************************************************************************/

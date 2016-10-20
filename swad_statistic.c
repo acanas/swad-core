@@ -727,7 +727,9 @@ static void Sta_WriteSelectorAction (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
-   Act_Action_t NumAction;
+   Act_Action_t Action;
+   Act_Action_t SuperAction;
+   Tab_Tab_t Tab;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -738,21 +740,22 @@ static void Sta_WriteSelectorAction (void)
                       "<select name=\"StatAct\" id=\"StatAct\""
                       " style=\"width:375px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
-   for (NumAction = (Act_Action_t) 0;
-	NumAction < Act_NUM_ACTIONS;
-	NumAction++)
+   for (Action = (Act_Action_t) 0;
+	Action < Act_NUM_ACTIONS;
+	Action++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) NumAction);
-      if (NumAction == Gbl.Stat.NumAction)
+      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Action);
+      if (Action == Gbl.Stat.NumAction)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">");
-      if (NumAction)
-         fprintf (Gbl.F.Out,"%u: ",NumAction);
-      if (Txt_TABS_SHORT_TXT[Act_Actions[NumAction].Tab])
-         fprintf (Gbl.F.Out,"%s &gt; ",
-                  Txt_TABS_SHORT_TXT[Act_Actions[NumAction].Tab]);
+      if (Action)
+         fprintf (Gbl.F.Out,"%u: ",(unsigned) Action);
+      SuperAction = Act_Actions[Action].SuperAction;
+      Tab = Act_Actions[SuperAction].Tab;
+      if (Txt_TABS_SHORT_TXT[Tab])
+         fprintf (Gbl.F.Out,"%s &gt; ",Txt_TABS_SHORT_TXT[Tab]);
       fprintf (Gbl.F.Out,"%s",
-               Act_GetActionTextFromDB (Act_Actions[NumAction].ActCod,ActTxt));
+               Act_GetActionTextFromDB (Act_Actions[Action].ActCod,ActTxt));
      }
 
    fprintf (Gbl.F.Out,"</select>"

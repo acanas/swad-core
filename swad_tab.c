@@ -262,8 +262,7 @@ static void Tab_WriteBreadcrumbTab (void)
    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>",
-	    Txt_TABS_FULL_TXT[Gbl.Action.Tab]);
+   fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_FULL_TXT[Gbl.Action.Tab]);
    Act_FormEnd ();
   }
 
@@ -294,8 +293,10 @@ static void Tab_WriteBreadcrumbAction (void)
 void Tab_SetCurrentTab (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   Act_Action_t SuperAction;
 
-   Gbl.Action.Tab = Act_Actions[Gbl.Action.Act].Tab;
+   SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
+   Gbl.Action.Tab = Act_Actions[SuperAction].Tab;
 
    /***** Change action and tab if country, institution, centre or degree
           are incompatible with the current tab *****/
@@ -341,7 +342,9 @@ void Tab_SetCurrentTab (void)
       default:
          break;
      }
-   Gbl.Action.Tab = Act_Actions[Gbl.Action.Act].Tab;
+
+   SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
+   Gbl.Action.Tab = Act_Actions[SuperAction].Tab;
 
    Tab_DisableIncompatibleTabs ();
   }
