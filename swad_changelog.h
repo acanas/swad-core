@@ -150,17 +150,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.26.1 (2016-10-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.27 (2016-10-20)"
 #define CSS_FILE		"swad16.25.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.27:    Oct 20, 2016	Removed degree in edition of courses. (205433 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod='565';
+
         Version 16.26.1:  Oct 20, 2016	Removed warning message in course edition. (205524 lines)
         Version 16.26:    Oct 20, 2016	New form in institution configuration to move institution to another country. (205566 lines)
 					2 changes necessary in database:
-UPDATE actions SET Txt='Mover instituci&oacute;n a otro pa&iacute;s' WHERE ActCod='???' AND Language='es';
+UPDATE actions SET Txt='Mover instituci&oacute;n a otro pa&iacute;s' WHERE ActCod='865' AND Language='es';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1590','es','N','Mover instituci&oacute;n a otro pa&iacute;s');
 
         Version 16.25:    Oct 20, 2016	New form in centre configuration to move centre to another institution. (205416 lines)

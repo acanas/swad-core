@@ -1355,7 +1355,6 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    struct Course *Crs;
    unsigned YearAux;
-   unsigned NumDeg;
    unsigned NumCrs;
    struct UsrData UsrDat;
    bool ICanEdit;
@@ -1412,31 +1411,6 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
-	 fprintf (Gbl.F.Out,"</td>");
-
-	 /* Degree */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">");
-	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-	   {
-	    Act_FormStart (ActChgCrsDeg);
-	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
-			       " class=\"INPUT_SHORT_NAME\""
-			       " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.Form.Id);
-	    for (NumDeg = 0;
-		 NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
-		 NumDeg++)
-	       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod,
-			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
-										                  "",
-			Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShortName);
-	    fprintf (Gbl.F.Out,"</select>");
-	    Act_FormEnd ();
-	   }
-	 else
-	    fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShortName);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Course year */
@@ -1655,17 +1629,6 @@ static void Crs_PutFormToCreateCourse (void)
             Crs_LENGTH_INSTITUTIONAL_CRS_COD,
             Crs->InstitutionalCrsCod);
 
-   /***** Degree *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"OthDegCod\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " disabled=\"disabled\">"
-                      "<option value=\"%ld\">%s</option>"
-                      "</select>"
-                      "</td>",
-            Gbl.CurrentDeg.Deg.DegCod,
-            Gbl.CurrentDeg.Deg.ShortName);
-
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<select name=\"OthCrsYear\" style=\"width:50px;\">");
@@ -1681,7 +1644,7 @@ static void Crs_PutFormToCreateCourse (void)
 	              "</td>");
 
    /***** Course short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
@@ -1689,7 +1652,7 @@ static void Crs_PutFormToCreateCourse (void)
             Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName);
 
    /***** Course full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\" />"
@@ -1780,7 +1743,6 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Code;
    extern const char *Txt_Institutional_code;
    extern const char *Txt_optional;
-   extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Short_name_of_the_course;
    extern const char *Txt_Full_name_of_the_course;
@@ -1796,9 +1758,6 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s (%s)"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
@@ -1824,7 +1783,6 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "</tr>",
             Txt_Code,
             Txt_Institutional_code,Txt_optional,
-            Txt_Degree,
             Txt_Year_OF_A_DEGREE,
             Txt_Short_name_of_the_course,
             Txt_Full_name_of_the_course,
@@ -2479,64 +2437,6 @@ void Crs_ContEditAfterChgCrsInConfig (void)
 
    /***** Show the form again *****/
    Crs_ShowIntroduction ();
-  }
-
-/*****************************************************************************/
-/****** Change the degree of a course (move course to another degree) ********/
-/*****************************************************************************/
-
-void Crs_ChangeCrsDegree (void)
-  {
-   extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   struct Course *Crs;
-   struct Degree NewDeg;
-
-   Crs = &Gbl.Degs.EditingCrs;
-
-   /***** Get parameters from form *****/
-   /* Get course code */
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
-
-   /* Get new degree code */
-   if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
-
-   /***** Check if degree has changed *****/
-   if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
-     {
-      /***** Get data of course and new degree *****/
-      Crs_GetDataOfCourseByCod (Crs);
-      Deg_GetDataOfDegreeByCod (&NewDeg);
-
-      /***** If name of course was in database in the new degree... *****/
-      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
-                                               NewDeg.DegCod,Crs->Year))
-	{
-	 Gbl.Error = true;
-	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->ShortName);
-	}
-      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
-                                                    NewDeg.DegCod,Crs->Year))
-	{
-	 Gbl.Error = true;
-	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		  Txt_YEAR_OF_DEGREE[Crs->Year],NewDeg.FullName,Crs->FullName);
-	}
-      else	// Update degree in database
-	{
-	 /***** Update degree in table of courses *****/
-	 Crs_UpdateCrsDegDB (Crs->CrsCod,NewDeg.DegCod);
-	 Crs->DegCod = NewDeg.DegCod;
-
-	 /***** Create message to show the change made *****/
-	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
-		  Crs->FullName,NewDeg.FullName);
-	}
-     }
   }
 
 /*****************************************************************************/

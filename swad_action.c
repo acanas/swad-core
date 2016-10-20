@@ -374,7 +374,6 @@ Degree:
 	248. ActNewCrs			Request the creation of a course
 	249. ActRemCrs			Request the removal of a course
 	250. ActChgInsCrsCod		Request change of institutional code of a course
-	251. ActChgCrsDeg		Request change of degree of a course
 	252. ActChgCrsYea		Request change of year of a course inside of its degree
 	253. ActRenCrsSho		Request change of short name of a course
 	254. ActRenCrsFul		Request change of full name of a course
@@ -1730,7 +1729,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewCrs		*/{ 556,-1,TabDeg,ActSeeCrs		,0x1E0,0x1E0,0x1E0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRemCrs		*/{ 560,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,NULL			,Crs_RemoveCourse		,NULL},
    /* ActChgInsCrsCod	*/{1025,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeInsCrsCod		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActChgCrsDeg	*/{ 565,-1,TabDeg,ActSeeCrs		,0x1C0,0x1C0,0x1C0,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsDegree		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgCrsYea	*/{ 561,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_ChangeCrsYear		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRenCrsSho	*/{ 563,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseShort	,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRenCrsFul	*/{ 564,-1,TabDeg,ActSeeCrs		,0x1FE,0x1FE,0x1FE,Act_CONTENT_NORM,Act_MAIN_WINDOW,Crs_RenameCourseFull	,Crs_ContEditAfterChgCrs	,NULL},
@@ -3421,7 +3419,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	-1,			// #562
 	ActRenCrsSho,		// #563
 	ActRenCrsFul,		// #564
-	ActChgCrsDeg,		// #565
+	-1,			// #565 (obsolete action)
 	-1,			// #566 (obsolete action)
 	-1,			// #567 (obsolete action)
 	-1,			// #568 (obsolete action)
