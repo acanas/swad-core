@@ -378,15 +378,29 @@ static void Ins_Configuration (bool PrintView)
       /***** Institution short name *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "</tr>",
+	                 "%s:"
+	                 "</td>"
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
-	       Txt_Short_name,
-	       Gbl.CurrentIns.Ins.ShortName);
+	       Txt_Short_name);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can edit institution short name
+	{
+	 Act_FormStart (ActRenInsShoCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,
+		  Gbl.CurrentIns.Ins.ShortName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit institution short name
+	 fprintf (Gbl.F.Out,"%s",
+		  Gbl.CurrentIns.Ins.ShortName);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
 
       /***** Institution WWW *****/
       if (Gbl.CurrentIns.Ins.WWW[0])
@@ -1538,6 +1552,11 @@ void Ins_RenameInsShort (void)
   {
    Ins_GetInsCodFromForm ();
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHORT_NAME);
+  }
+
+void Ins_RenameInsShortInConfig (void)
+  {
+   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
