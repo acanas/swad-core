@@ -81,6 +81,7 @@ static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
 static void Ins_PutButtonToGoToIns (struct Institution *Ins);
 
 static void Ins_PutFormToCreateInstitution (void);
@@ -403,15 +404,27 @@ static void Ins_Configuration (bool PrintView)
 	                 "</tr>");
 
       /***** Institution WWW *****/
-      if (Gbl.CurrentIns.Ins.WWW[0])
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Web);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can change institution WWW
 	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Web);
+	 Act_FormStart (ActChgInsWWWCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Cns_MAX_LENGTH_WWW,
+		  Gbl.CurrentIns.Ins.WWW,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not change institution WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
@@ -419,9 +432,8 @@ static void Ins_Configuration (bool PrintView)
 			    "</div>",
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.WWW);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Shortcut to the institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1328,7 +1340,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,Ins->WWW,
+		  Cns_MAX_LENGTH_WWW,
+		  Ins->WWW,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
@@ -1781,7 +1794,6 @@ void Ins_ChangeInsWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Institution *Ins;
-   char Query[256+Cns_MAX_LENGTH_WWW];
    char NewWWW[Cns_MAX_LENGTH_WWW+1];
 
    Ins = &Gbl.Inss.EditingIns;
@@ -1800,14 +1812,12 @@ void Ins_ChangeInsWWW (void)
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
-      /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE institutions SET WWW='%s' WHERE InsCod='%ld'",
-               NewWWW,Ins->InsCod);
-      DB_QueryUPDATE (Query,"can not update the web of an institution");
+      /***** Update database changing old WWW by new WWW *****/
+      Ins_UpdateInsWWWDB (Ins->InsCod,NewWWW);
+      strcpy (Ins->WWW,NewWWW);
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
-               NewWWW);
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Put button to go to institution changed *****/
@@ -1817,8 +1827,49 @@ void Ins_ChangeInsWWW (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Ins->WWW,NewWWW);
    Ins_EditInstitutions ();
+  }
+
+void Ins_ChangeInsWWWInConfig (void)
+  {
+   extern const char *Txt_The_new_web_address_is_X;
+   extern const char *Txt_You_can_not_leave_the_web_address_empty;
+   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+
+   /***** Get parameters from form *****/
+   /* Get the new WWW for the institution */
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+
+   /***** Check if new WWW is empty *****/
+   if (NewWWW[0])
+     {
+      /***** Update database changing old WWW by new WWW *****/
+      Ins_UpdateInsWWWDB (Gbl.CurrentIns.Ins.InsCod,NewWWW);
+      strcpy (Gbl.CurrentIns.Ins.WWW,NewWWW);
+
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Show the form again *****/
+   Ins_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/**************** Update database changing old WWW by new WWW ****************/
+/*****************************************************************************/
+
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+  {
+   char Query[256+Cns_MAX_LENGTH_WWW];
+
+   /***** Update database changing old WWW by new WWW *****/
+   sprintf (Query,"UPDATE institutions SET WWW='%s' WHERE InsCod='%ld'",
+	    NewWWW,InsCod);
+   DB_QueryUPDATE (Query,"can not update the web of an institution");
   }
 
 /*****************************************************************************/

@@ -117,6 +117,7 @@ void Ins_RenameInsFullInConfig (void);
 void Ins_ChangeInsCtyInConfig (void);
 void Ins_ContEditAfterChgInsInConfig (void);
 void Ins_ChangeInsWWW (void);
+void Ins_ChangeInsWWWInConfig (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 
