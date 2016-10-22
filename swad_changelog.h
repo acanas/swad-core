@@ -150,13 +150,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.32 (2016-10-22)"
-#define CSS_FILE		"swad16.25.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.32.1 (2016-10-22)"
+#define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.32.1:  Oct 22, 2016	Width of institution web limited using CSS. (205152 lines)
         Version 16.32:    Oct 22, 2016	New form in institution configuration to change short name. (205141 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1592','es','N','Cambiar nombre breve ins.');

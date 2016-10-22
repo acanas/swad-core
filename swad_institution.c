@@ -409,17 +409,18 @@ static void Ins_Configuration (bool PrintView)
 			    "<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
+			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Web,
-		  Gbl.CurrentIns.Ins.WWW);
-	 Str_LimitLengthHTMLStr (Gbl.CurrentIns.Ins.WWW,20);
-	 fprintf (Gbl.F.Out,"%s"
+		  Txt_Web);
+	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
+			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+	                    "%s"
 			    "</a>"
-			    "</td>"
-			    "</tr>",
+			    "</div>",
+		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.WWW);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 	}
 
       /***** Shortcut to the institution *****/
