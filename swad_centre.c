@@ -91,7 +91,8 @@ static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
-static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
+static void Ctr_GetCtrCodFromForm (void);
+static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
@@ -408,12 +409,21 @@ static void Ctr_Configuration (bool PrintView)
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
-		  Gbl.CurrentCtr.Ctr.WWW);
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)	// Only centre admins and system admins can edit centre full name
+	{
+	 Act_FormStart (ActRenCtrFulCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,
+		  Gbl.CurrentCtr.Ctr.FullName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit centre full name
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
@@ -1751,13 +1761,8 @@ void Ctr_ChangeCentrePlace (void)
 
 void Ctr_RenameCentreShort (void)
   {
-   struct Centre *Ctr;
-
-   Ctr = &Gbl.Ctrs.EditingCtr;
-
-   if (Ctr_RenameCentre (Ctr,Cns_SHORT_NAME))
-      if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)	// If renaming current centre...
-         strcpy (Gbl.CurrentCtr.Ctr.ShortName,Ctr->ShortName);	// Overwrite current centre name in order to show correctly in page title and heading
+   Ctr_GetCtrCodFromForm ();
+   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
@@ -1766,22 +1771,31 @@ void Ctr_RenameCentreShort (void)
 
 void Ctr_RenameCentreFull (void)
   {
-   struct Centre *Ctr;
+   Ctr_GetCtrCodFromForm ();
+   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_FULL_NAME);
+  }
 
-   Ctr = &Gbl.Ctrs.EditingCtr;
+void Ctr_RenameCentreFullInConfig (void)
+  {
+   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_FULL_NAME);
+  }
 
-   if (Ctr_RenameCentre (Ctr,Cns_FULL_NAME))
-      if (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)	// If renaming current centre...
-         strcpy (Gbl.CurrentCtr.Ctr.FullName,Ctr->FullName);	// Overwrite current centre name in order to show correctly in page title and heading
+/*****************************************************************************/
+/************************ Get the code of the centre *************************/
+/*****************************************************************************/
+
+static void Ctr_GetCtrCodFromForm (void)
+  {
+   /***** Get the code of the centre *****/
+   if ((Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of centre is missing.");
   }
 
 /*****************************************************************************/
 /************************ Change the name of a centre ************************/
 /*****************************************************************************/
-// Returns true if the centre is renamed
-// Returns false if the centre is not renamed
 
-static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName)
+static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty;
    extern const char *Txt_The_centre_X_already_exists;
@@ -1793,7 +1807,6 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
    char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
-   bool CentreHasBeenRenamed = false;
 
    switch (ShortOrFullName)
      {
@@ -1812,10 +1825,6 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
      }
 
    /***** Get parameters from form *****/
-   /* Get the code of the centre */
-   if ((Ctr->CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of centre is missing.");
-
    /* Get the new name for the centre */
    Par_GetParToText (ParamName,NewCtrName,MaxLength);
 
@@ -1855,16 +1864,12 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
 	    /* Change current centre name in order to display it properly */
 	    strncpy (CurrentCtrName,NewCtrName,MaxLength);
 	    CurrentCtrName[MaxLength] = '\0';
-
-	    CentreHasBeenRenamed = true;
            }
         }
       else	// The same name
          sprintf (Gbl.Message,Txt_The_name_of_the_centre_X_has_not_changed,
                   CurrentCtrName);
      }
-
-   return CentreHasBeenRenamed;
   }
 
 /*****************************************************************************/

@@ -371,8 +371,7 @@ static void Ins_Configuration (bool PrintView)
 	 Act_FormEnd ();
 	}
       else	// I can not edit institution full name
-	 fprintf (Gbl.F.Out,"%s",
-		  Gbl.CurrentIns.Ins.FullName);
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.FullName);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -398,8 +397,7 @@ static void Ins_Configuration (bool PrintView)
 	 Act_FormEnd ();
 	}
       else	// I can not edit institution short name
-	 fprintf (Gbl.F.Out,"%s",
-		  Gbl.CurrentIns.Ins.ShortName);
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShortName);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 

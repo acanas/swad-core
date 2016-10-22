@@ -285,6 +285,7 @@ Centre:
 
 	171. ActPrnCtrInf		Print information on the current centre
 	172. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
+	NEW. ActRenCtrFulCfg		Change full name centre in centre configuration
 	173. ActReqCtrLog		Show form to send the logo of the current centre
 	174. ActRecCtrLog		Receive and store the logo of the current centre
 	175. ActRemCtrLog		Remove the logo of the current centre
@@ -1635,6 +1636,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActPrnCtrInf	*/{1152,-1,TabUnk,ActSeeCtrInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ctr_PrintConfiguration		,NULL},
    /* ActChgCtrInsCfg	*/{1589,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
+   /* ActRenCtrFulCfg	*/{1594,-1,TabUnk,ActSeeCtrInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreFullInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    /* ActReqCtrLog	*/{1244,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestLogo		,NULL},
    /* ActRecCtrLog	*/{1051,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
    /* ActRemCtrLog	*/{1342,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_RemoveLogo			,Ctr_ShowConfiguration		,NULL},
@@ -4449,6 +4451,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRenInsFulCfg,	// #1591
 	ActRenInsShoCfg,	// #1592
 	ActChgInsWWWCfg,	// #1593
+	ActRenCtrFulCfg,	// #1594
 	};
 
 /*****************************************************************************/
