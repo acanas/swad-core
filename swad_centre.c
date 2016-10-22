@@ -1786,7 +1786,7 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_centre_X_has_not_changed;
-   char Query[512];
+   char Query[128+Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
@@ -1872,7 +1872,7 @@ static bool Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
 
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
-   char Query[512];
+   char Query[256+Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
@@ -2589,7 +2589,10 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
-   char Query[1024];
+   char Query[512+
+              Ctr_MAX_LENGTH_CENTRE_SHORT_NAME+
+              Ctr_MAX_LENGTH_CENTRE_FULL_NAME+
+              Cns_MAX_LENGTH_WWW];
 
    /***** Create a new centre *****/
    sprintf (Query,"INSERT INTO centres (InsCod,PlcCod,Status,RequesterUsrCod,"
