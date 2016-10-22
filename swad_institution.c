@@ -76,8 +76,9 @@ static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 static void Ins_PutParamOtherInsCod (long InsCod);
-static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
+static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
+static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
 static void Ins_PutButtonToGoToIns (struct Institution *Ins);
 
@@ -354,15 +355,22 @@ static void Ins_Configuration (bool PrintView)
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Institution);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"DAT_N\" title=\"%s\">",
-		  Gbl.CurrentIns.Ins.WWW,
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can edit institution full name
+	{
+	 Act_FormStart (ActRenInsFulCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,
+		  Gbl.CurrentIns.Ins.FullName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit institution full name
+	 fprintf (Gbl.F.Out,"%s",
 		  Gbl.CurrentIns.Ins.FullName);
-      fprintf (Gbl.F.Out,"%s",
-	       Gbl.CurrentIns.Ins.FullName);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -1002,7 +1010,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
                                     Ins_GetExtraData_t GetExtraData)
   {
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool InsFound;
@@ -1090,7 +1098,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
 
 void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1098,8 +1106,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
    if (Ins->InsCod > 0)
      {
       /***** Get the short name of an institution from database *****/
-      sprintf (Query,"SELECT ShortName FROM institutions"
-		     " WHERE InsCod ='%ld'",
+      sprintf (Query,"SELECT ShortName FROM institutions WHERE InsCod ='%ld'",
 	       Ins->InsCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
 	{
@@ -1135,7 +1142,7 @@ void Ins_FreeListInstitutions (void)
 void Ins_WriteSelectorOfInstitution (void)
   {
    extern const char *Txt_Institution;
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumInss;
@@ -1286,7 +1293,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName,
+		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,
+		  Ins->FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
@@ -1476,7 +1484,7 @@ void Ins_RemoveInstitution (void)
   {
    extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution;
    extern const char *Txt_Institution_X_removed;
-   char Query[512];
+   char Query[128];
    struct Institution Ins;
    char PathIns[PATH_MAX+1];
 
@@ -1527,13 +1535,11 @@ void Ins_RemoveInstitution (void)
 
 void Ins_RenameInsShort (void)
   {
-   struct Institution *Ins;
+   /* Get the code of the institution */
+   if ((Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of institution is missing.");
 
-   Ins = &Gbl.Inss.EditingIns;
-
-   if (Ins_RenameInstitution (Ins,Cns_SHORT_NAME))
-      if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)	// If renaming current institution...
-         strcpy (Gbl.CurrentIns.Ins.ShortName,Ins->ShortName);	// Overwrite current institution name in order to show correctly in page title and heading
+   Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
@@ -1542,34 +1548,33 @@ void Ins_RenameInsShort (void)
 
 void Ins_RenameInsFull (void)
   {
-   struct Institution *Ins;
+   /* Get the code of the institution */
+   if ((Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of institution is missing.");
 
-   Ins = &Gbl.Inss.EditingIns;
+   Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_FULL_NAME);
+  }
 
-   if (Ins_RenameInstitution (Ins,Cns_FULL_NAME))
-      if (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod)	// If renaming current institution...
-         strcpy (Gbl.CurrentIns.Ins.FullName,Ins->FullName);	// Overwrite current institution name in order to show correctly in page title and heading
+void Ins_RenameInsFullInConfig (void)
+  {
+   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
-// Returns true if the institution is renamed
-// Returns false if the institution is not renamed
 
-static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName)
+static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_institution_X_empty;
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_institution_X_has_not_changed;
-   char Query[512];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
    char NewInsName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
-   bool InstitutionHasBeenRenamed = false;
 
    switch (ShortOrFullName)
      {
@@ -1587,12 +1592,7 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
          break;
      }
 
-   /***** Get parameters from form *****/
-   /* Get the code of the institution */
-   if ((Ins->InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
-
-   /* Get the new name for the institution */
+   /***** Get the new name for the institution from form *****/
    Par_GetParToText (ParamName,NewInsName,MaxLength);
 
    /***** Get from the database the old names of the institution *****/
@@ -1620,9 +1620,7 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod='%ld'",
-                     FieldName,NewInsName,Ins->InsCod);
-            DB_QueryUPDATE (Query,"can not update the name of an institution");
+            Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
             /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_institution_X_has_been_renamed_as_Y,
@@ -1631,16 +1629,12 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
 	    /* Change current institution name in order to display it properly */
 	    strncpy (CurrentInsName,NewInsName,MaxLength);
 	    CurrentInsName[MaxLength] = '\0';
-
-            InstitutionHasBeenRenamed = true;
            }
         }
       else	// The same name
          sprintf (Gbl.Message,Txt_The_name_of_the_institution_X_has_not_changed,
                   CurrentInsName);
      }
-
-   return InstitutionHasBeenRenamed;
   }
 
 /*****************************************************************************/
@@ -1649,13 +1643,27 @@ static bool Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
 
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
   {
-   char Query[512];
+   char Query[256+Ins_MAX_LENGTH_INSTITUTION_FULL_NAME];
 
    /***** Get number of institutions in current country with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions"
                   " WHERE CtyCod='%ld' AND %s='%s' AND InsCod<>'%ld'",
             CtyCod,FieldName,Name,InsCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of an institution already existed") != 0);
+  }
+
+/*****************************************************************************/
+/************ Update institution name in table of institutions ***************/
+/*****************************************************************************/
+
+static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
+  {
+   char Query[128+Ins_MAX_LENGTH_INSTITUTION_FULL_NAME];
+
+   /***** Update institution changing old name by new name */
+   sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod='%ld'",
+	    FieldName,NewInsName,InsCod);
+   DB_QueryUPDATE (Query,"can not update the name of an institution");
   }
 
 /*****************************************************************************/
@@ -2151,7 +2159,10 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
-   char Query[2048];
+   char Query[512+
+              Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME+
+              Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+
+              Cns_MAX_LENGTH_WWW];
 
    /***** Create a new institution *****/
    sprintf (Query,"INSERT INTO institutions (CtyCod,Status,RequesterUsrCod,"
@@ -2179,7 +2190,7 @@ static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
 
 unsigned Ins_GetNumInssTotal (void)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Get total number of degrees from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions");
@@ -2192,7 +2203,7 @@ unsigned Ins_GetNumInssTotal (void)
 
 unsigned Ins_GetNumInssInCty (long CtyCod)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Get number of degrees of a place from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions"

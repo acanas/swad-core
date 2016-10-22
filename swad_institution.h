@@ -112,6 +112,7 @@ long Ins_GetParamOtherInsCod (void);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
+void Ins_RenameInsFullInConfig (void);
 void Ins_ChangeInsCtyInConfig (void);
 void Ins_ContEditAfterChgInsInConfig (void);
 void Ins_ChangeInsWWW (void);

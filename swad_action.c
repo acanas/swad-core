@@ -182,6 +182,7 @@ Institution:
 
 	 84. ActPrnInsInf		Print information on the current institution
 	 85. ActChgInsCtyCfg		Change country of institution in institution configuration
+	NEW. ActRenInsFulCfg		Change full name of institution in institution configuration
 	 86. ActReqInsLog		Show form to send the logo of the current institution
 	 87. ActRecInsLog		Receive and store the logo of the current institution
 	 88. ActRemInsLog		Remove the logo of the current institution
@@ -1525,7 +1526,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
 
    /* ActPrnInsInf	*/{1154,-1,TabUnk,ActSeeInsInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ins_PrintConfiguration		,NULL},
-   /* ActChgInsCtyCfg	*/{1590,-1,TabUnk,ActSeeIns		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ins_ChangeInsCtyInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
+   /* ActChgInsCtyCfg	*/{1590,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ins_ChangeInsCtyInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
+   /* ActRenInsFulCfg	*/{1591,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ins_RenameInsFullInConfig	,Ins_ContEditAfterChgInsInConfig,NULL},
    /* ActReqInsLog	*/{1245,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_RequestLogo		,NULL},
    /* ActRecInsLog	*/{ 699,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ins_ReceiveLogo		,Ins_ShowConfiguration		,NULL},
    /* ActRemInsLog	*/{1341,-1,TabUnk,ActSeeInsInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Ins_RemoveLogo			,Ins_ShowConfiguration		,NULL},
@@ -4440,6 +4442,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgDegCtrCfg,	// #1588
 	ActChgCtrInsCfg,	// #1589
 	ActChgInsCtyCfg,	// #1590
+	ActRenInsFulCfg,	// #1591
 	};
 
 /*****************************************************************************/
