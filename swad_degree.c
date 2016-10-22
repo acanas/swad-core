@@ -1535,7 +1535,10 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
-   char Query[1024];
+   char Query[512+
+              Deg_MAX_LENGTH_DEGREE_SHORT_NAME +
+              Deg_MAX_LENGTH_DEGREE_FULL_NAME +
+              Cns_MAX_LENGTH_WWW];
 
    /***** Create a new degree *****/
    sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
@@ -2325,7 +2328,7 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_degree_X_has_not_changed;
-   char Query[512];
+   char Query[512+Deg_MAX_LENGTH_DEGREE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning

@@ -150,14 +150,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.31.2 (2016-10-22)"
+#define Log_PLATFORM_VERSION	"SWAD 16.31.4 (2016-10-22)"
 #define CSS_FILE		"swad16.25.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 16.31.2:  Oct 22, 2016	Code refactoring in renaming of centre. (205108 lines)
+        Version 16.31.4:  Oct 22, 2016	Code refactoring in courses. (205114 lines)
+        Version 16.31.3:  Oct 22, 2016	Code refactoring in degrees. (205112 lines)
+        Version 16.31.2:  Oct 22, 2016	Code refactoring in centres. (205108 lines)
         Version 16.31.1:  Oct 22, 2016	Code optimization in renaming of institution. (205104 lines)
         Version 16.31:    Oct 22, 2016	New form in institution configuration to change full name. (205097 lines)
 					1 change necessary in database:

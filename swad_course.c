@@ -1917,7 +1917,9 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
-   char Query[2048];
+   char Query[512 +
+              Crs_MAX_LENGTH_COURSE_SHORT_NAME +
+              Crs_MAX_LENGTH_COURSE_FULL_NAME];
 
    /***** Insert new course into pending requests *****/
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
@@ -2656,7 +2658,7 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char Query[512];
+   char Query[128 + Crs_MAX_LENGTH_COURSE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
