@@ -76,6 +76,7 @@ static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 static void Ins_PutParamOtherInsCod (long InsCod);
+static void Ins_GetInsCodFromForm (void);
 static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
@@ -1535,10 +1536,7 @@ void Ins_RemoveInstitution (void)
 
 void Ins_RenameInsShort (void)
   {
-   /* Get the code of the institution */
-   if ((Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
-
+   Ins_GetInsCodFromForm ();
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHORT_NAME);
   }
 
@@ -1548,16 +1546,24 @@ void Ins_RenameInsShort (void)
 
 void Ins_RenameInsFull (void)
   {
-   /* Get the code of the institution */
-   if ((Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
-
+   Ins_GetInsCodFromForm ();
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_FULL_NAME);
   }
 
 void Ins_RenameInsFullInConfig (void)
   {
    Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_FULL_NAME);
+  }
+
+/*****************************************************************************/
+/********************** Get the code of the institution **********************/
+/*****************************************************************************/
+
+static void Ins_GetInsCodFromForm (void)
+  {
+   /***** Get the code of the institution *****/
+   if ((Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of institution is missing.");
   }
 
 /*****************************************************************************/
