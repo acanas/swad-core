@@ -457,6 +457,7 @@ Course:
 
 	316. ActPrnCrsInf		Print information on the course
 	317. ActChgCrsDegCfg		Request change of degree in course configuration
+	NEW. ActRenCrsFulCfg		Request change of full name of a course in course configuration
 	318. ActChgInsCrsCodCfg		Change institutional code in course configuration
 	319. ActChgCrsYeaCfg		Change year/semester in course configuration
 	320. ActEdiCrsInf		Edit general information about the course
@@ -1816,6 +1817,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActPrnCrsInf	*/{1028,-1,TabUnk,ActSeeCrsInf		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Crs_PrintConfiguration		,NULL},
    /* ActChgCrsDegCfg	*/{1587,-1,TabUnk,ActSeeCrsInf		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsDegInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
+   /* ActRenCrsFulCfg	*/{1600,-1,TabUnk,ActSeeCrsInf		,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RenameCourseFullInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActChgInsCrsCodCfg*/{1024,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeInsCrsCodInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActChgCrsYeaCfg	*/{1573,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsYearInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},
    /* ActEdiCrsInf	*/{ 848,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
@@ -4467,6 +4469,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRenDegFulCfg,	// #1597
 	ActRenDegShoCfg,	// #1598
 	ActChgDegWWWCfg,	// #1599
+	ActRenCrsFulCfg,	// #1600
 	};
 
 /*****************************************************************************/

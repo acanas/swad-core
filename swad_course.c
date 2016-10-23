@@ -103,7 +103,9 @@ static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod);
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
-static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
+
+static void Crs_GetCrsCodFromForm (void);
+static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
 
@@ -250,16 +252,31 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"DAT_N LEFT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Course,
-            Gbl.CurrentCrs.Crs.FullName);
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_Course);
+   if (!PrintView &&
+       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+      // Only degree admins, centre admins, institution admins and system admins can edit course full name
+     {
+      /* Form to change course full name */
+      Act_FormStart (ActRenCrsFulCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Crs_MAX_LENGTH_COURSE_FULL_NAME,
+	       Gbl.CurrentCrs.Crs.FullName,
+	       Gbl.Form.Id);
+      Act_FormEnd ();
+     }
+   else	// I can not edit course full name
+      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.FullName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2622,13 +2639,8 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 
 void Crs_RenameCourseShort (void)
   {
-   struct Course *Crs;
-
-   Crs = &Gbl.Degs.EditingCrs;
-
-   if (Crs_RenameCourse (Crs,Cns_SHORT_NAME))
-      if (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod)	// If renaming current course...
-         strcpy (Gbl.CurrentCrs.Crs.ShortName,Crs->ShortName);	// Overwrite current course name in order to show correctly in page title and heading
+   Crs_GetCrsCodFromForm ();
+   Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
@@ -2637,22 +2649,31 @@ void Crs_RenameCourseShort (void)
 
 void Crs_RenameCourseFull (void)
   {
-   struct Course *Crs;
+   Crs_GetCrsCodFromForm ();
+   Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_FULL_NAME);
+  }
 
-   Crs = &Gbl.Degs.EditingCrs;
+void Crs_RenameCourseFullInConfig (void)
+  {
+   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_FULL_NAME);
+  }
 
-   if (Crs_RenameCourse (Crs,Cns_FULL_NAME))
-      if (Crs->CrsCod == Gbl.CurrentCrs.Crs.CrsCod)	// If renaming current course...
-         strcpy (Gbl.CurrentCrs.Crs.FullName,Crs->FullName);	// Overwrite current course name in order to show correctly in page title and heading
+/*****************************************************************************/
+/************************ Get the code of the course *************************/
+/*****************************************************************************/
+
+static void Crs_GetCrsCodFromForm (void)
+  {
+   /***** Get the code of the course *****/
+   if ((Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of course is missing.");
   }
 
 /*****************************************************************************/
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
-// Returns true if the course is renamed
-// Returns false if the course is not renamed
 
-static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName)
+static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty;
    extern const char *Txt_The_course_X_already_exists;
@@ -2665,7 +2686,6 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentCrsName = NULL;		// Initialized to avoid warning
    char NewCrsName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
-   bool CourseHasBeenRenamed = false;
 
    switch (ShortOrFullName)
      {
@@ -2684,10 +2704,6 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
      }
 
    /***** Get parameters from form *****/
-   /* Get the code of the course */
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
-
    /* Get the new name for the course */
    Par_GetParToText (ParamName,NewCrsName,MaxLength);
 
@@ -2730,8 +2746,6 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
                /* Change current course name in order to display it properly */
                strncpy (CurrentCrsName,NewCrsName,MaxLength);
                CurrentCrsName[MaxLength] = '\0';
-
-               CourseHasBeenRenamed = true;
               }
            }
          else	// The same name
@@ -2744,8 +2758,6 @@ static bool Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
       Gbl.Error = true;
       strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
      }
-
-   return CourseHasBeenRenamed;
   }
 
 /*****************************************************************************/
