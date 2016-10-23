@@ -334,7 +334,8 @@ static void Deg_Configuration (bool PrintView)
 	       Txt_Centre);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admin can move a degree to another centre
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 // Only institution admins and system admin can move a degree to another centre
 	{
 	 /* Get list of centres of the current institution */
 	 Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);

@@ -113,6 +113,7 @@ void Ctr_RenameCentreShortInConfig (void);
 void Ctr_RenameCentreFull (void);
 void Ctr_RenameCentreFullInConfig (void);
 void Ctr_ChangeCtrWWW (void);
+void Ctr_ChangeCtrWWWInConfig (void);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
 

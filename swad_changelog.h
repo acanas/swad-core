@@ -150,13 +150,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.35 (2016-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.36 (2016-10-23)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.36:    Oct 23, 2016	New form in centre configuration to change WWW. (205311 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1596','es','N','Cambiar web de centro');
+
         Version 16.35:    Oct 23, 2016	New form in centre configuration to change short name. (205248 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1595','es','N','Cambiar nombre breve centro');

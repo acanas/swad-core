@@ -94,6 +94,7 @@ static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static void Ctr_GetCtrCodFromForm (void);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
+static void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
 static void Ctr_PutFormToCreateCentre (void);
@@ -370,7 +371,8 @@ static void Ctr_Configuration (bool PrintView)
 	       Txt_Institution);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can move a centre to another institution
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 // Only system admins can move a centre to another institution
 	{
 	 /* Get list of institutions of the current country */
          Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
@@ -410,8 +412,10 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admins can edit centre full name
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 // Only institution admins and system admins can edit centre full name
 	{
+	 /* Form to change centre full name */
 	 Act_FormStart (ActRenCtrFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -436,8 +440,10 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admins can edit centre short name
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 // Only institution admins and system admins can edit centre short name
 	{
+	 /* Form to change centre short name */
 	 Act_FormStart (ActRenCtrShoCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -454,15 +460,29 @@ static void Ctr_Configuration (bool PrintView)
 			 "</tr>");
 
       /***** Centre WWW *****/
-      if (Gbl.CurrentCtr.Ctr.WWW[0])
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Web);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 // Only institution admins and system admins can change centre WWW
 	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Web);
+	 /* Form to change centre WWW */
+	 Act_FormStart (ActChgCtrWWWCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Cns_MAX_LENGTH_WWW,
+		  Gbl.CurrentCtr.Ctr.WWW,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not change centre WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
@@ -470,9 +490,8 @@ static void Ctr_Configuration (bool PrintView)
 			    "</div>",
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.WWW);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Shortcut to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1914,7 +1933,6 @@ void Ctr_ChangeCtrWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Centre *Ctr;
-   char Query[256+Cns_MAX_LENGTH_WWW];
    char NewWWW[Cns_MAX_LENGTH_WWW+1];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
@@ -1933,28 +1951,64 @@ void Ctr_ChangeCtrWWW (void)
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
-      /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod='%ld'",
-               NewWWW,Ctr->CtrCod);
-      DB_QueryUPDATE (Query,"can not update the web of a centre");
+      /***** Update database changing old WWW by new WWW *****/
+      Ctr_UpdateCtrWWWDB (Ctr->CtrCod,NewWWW);
+      strcpy (Ctr->WWW,NewWWW);
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
-               NewWWW);
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Put button to go to centre changed *****/
       Ctr_PutButtonToGoToCtr (Ctr);
      }
    else
-     {
-      sprintf (Gbl.Message,"%s",Txt_You_can_not_leave_the_web_address_empty);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
+      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Ctr->WWW,NewWWW);
    Ctr_EditCentres ();
+  }
+
+void Ctr_ChangeCtrWWWInConfig (void)
+  {
+   extern const char *Txt_The_new_web_address_is_X;
+   extern const char *Txt_You_can_not_leave_the_web_address_empty;
+   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+
+   /***** Get parameters from form *****/
+   /* Get the new WWW for the centre */
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+
+   /***** Check if new WWW is empty *****/
+   if (NewWWW[0])
+     {
+      /***** Update database changing old WWW by new WWW *****/
+      Ctr_UpdateCtrWWWDB (Gbl.CurrentCtr.Ctr.CtrCod,NewWWW);
+      strcpy (Gbl.CurrentCtr.Ctr.WWW,NewWWW);
+
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Show the form again *****/
+   Ctr_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/**************** Update database changing old WWW by new WWW ****************/
+/*****************************************************************************/
+
+static void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+  {
+   char Query[256+Cns_MAX_LENGTH_WWW];
+
+   /***** Update database changing old WWW by new WWW *****/
+   sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod='%ld'",
+	    NewWWW,CtrCod);
+   DB_QueryUPDATE (Query,"can not update the web of a centre");
   }
 
 /*****************************************************************************/

@@ -216,7 +216,8 @@ static void Crs_Configuration (bool PrintView)
 
    /* Get list of degrees administrated by me */
    if (!PrintView &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)	// Only centre admins, institution admins and system admin can move a course to another degree
+       Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admin can move a course to another degree
      {
       /* Get list of degrees of the current centre */
       Deg_GetListDegsOfCurrentCtr ();

@@ -318,7 +318,8 @@ static void Ins_Configuration (bool PrintView)
 	       Txt_Country);
 
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can move an institution to another country
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 // Only system admins can move an institution to another country
 	{
 	 /* Get list of countries */
          Cty_GetListCountries (Cty_GET_BASIC_DATA);
@@ -358,8 +359,10 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Institution);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can edit institution full name
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 // Only system admins can edit institution full name
 	{
+	 /* Form to change institution full name */
 	 Act_FormStart (ActRenInsFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -384,8 +387,10 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can edit institution short name
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 // Only system admins can edit institution short name
 	{
+	 /* Form to change institution short name */
 	 Act_FormStart (ActRenInsShoCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
@@ -410,8 +415,10 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only system admins can change institution WWW
+	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 // Only system admins can change institution WWW
 	{
+	 /* Form to change institution WWW */
 	 Act_FormStart (ActChgInsWWWCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
