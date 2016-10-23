@@ -410,7 +410,7 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)	// Only centre admins and system admins can edit centre full name
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admins can edit centre full name
 	{
 	 Act_FormStart (ActRenCtrFulCfg);
 	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -430,15 +430,28 @@ static void Ctr_Configuration (bool PrintView)
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "</tr>",
+	                 "%s:"
+	                 "</td>"
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
-	       Txt_Short_name,
-	       Gbl.CurrentCtr.Ctr.ShortName);
+	       Txt_Short_name);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Only institution admins and system admins can edit centre short name
+	{
+	 Act_FormStart (ActRenCtrShoCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,
+		  Gbl.CurrentCtr.Ctr.ShortName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit centre short name
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShortName);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Centre WWW *****/
       if (Gbl.CurrentCtr.Ctr.WWW[0])
@@ -1763,6 +1776,11 @@ void Ctr_RenameCentreShort (void)
   {
    Ctr_GetCtrCodFromForm ();
    Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHORT_NAME);
+  }
+
+void Ctr_RenameCentreShortInConfig (void)
+  {
+   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
