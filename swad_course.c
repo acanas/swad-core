@@ -216,7 +216,6 @@ static void Crs_Configuration (bool PrintView)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Degree);
 
-   /* Get list of degrees administrated by me */
    if (!PrintView &&
        Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admin can move a course to another degree
@@ -280,16 +279,31 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Short_name,
-            Gbl.CurrentCrs.Crs.ShortName);
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_Short_name);
+   if (!PrintView &&
+       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+      // Only degree admins, centre admins, institution admins and system admins can edit course short name
+     {
+      /* Form to change course short name */
+      Act_FormStart (ActRenCrsShoCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Crs_MAX_LENGTH_COURSE_SHORT_NAME,
+	       Gbl.CurrentCrs.Crs.ShortName,
+	       Gbl.Form.Id);
+      Act_FormEnd ();
+     }
+   else	// I can not edit course short name
+      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.ShortName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    /***** Course year *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2641,6 +2655,11 @@ void Crs_RenameCourseShort (void)
   {
    Crs_GetCrsCodFromForm ();
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHORT_NAME);
+  }
+
+void Crs_RenameCourseShortInConfig (void)
+  {
+   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
