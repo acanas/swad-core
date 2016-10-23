@@ -126,6 +126,7 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
+void Deg_RenameDegreeShortInConfig (void);
 void Deg_RenameDegreeFull (void);
 void Deg_RenameDegreeFullInConfig (void);
 void Deg_ChangeDegCtrInConfig (void);

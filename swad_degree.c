@@ -398,15 +398,30 @@ static void Deg_Configuration (bool PrintView)
       /***** Degree short name *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "</tr>",
+	                 "%s:"
+	                 "</td>"
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
-	       Txt_Short_name,
-	       Gbl.CurrentDeg.Deg.ShortName);
+	       Txt_Short_name);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins can edit degree short name
+	{
+	 /* Form to change degree short name */
+	 Act_FormStart (ActRenDegShoCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_SHORT_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,
+		  Gbl.CurrentDeg.Deg.ShortName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit degree short name
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShortName);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Degree WWW *****/
       if (Gbl.CurrentDeg.Deg.WWW[0])
@@ -2303,7 +2318,13 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
 void Deg_RenameDegreeShort (void)
   {
+   Deg_GetDegCodFromForm ();
    Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHORT_NAME);
+  }
+
+void Deg_RenameDegreeShortInConfig (void)
+  {
+   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
