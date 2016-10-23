@@ -1680,8 +1680,7 @@ void Ctr_ChangeCtrInsInConfig (void)
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
    struct Institution NewIns;
 
-   /***** Get parameters from form *****/
-   /* Get parameter with institution code */
+   /***** Get parameter with institution code *****/
    NewIns.InsCod = Ins_GetParamOtherInsCod ();
 
    /***** Check if institution has changed *****/

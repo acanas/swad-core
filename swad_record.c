@@ -3790,8 +3790,7 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   if ((Ins.InsCod = Ins_GetParamOtherInsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution is missing.");
+   Ins.InsCod = Ins_GetParamOtherInsCod ();
 
    /* Get country of institution */
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
