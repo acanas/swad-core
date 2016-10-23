@@ -104,7 +104,6 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
-static void Crs_GetCrsCodFromForm (void);
 static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
@@ -1980,8 +1979,7 @@ void Crs_RemoveCourse (void)
    struct Course Crs;
 
    /***** Get course code *****/
-   if ((Crs.CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
+   Crs.CrsCod = Crs_GetParamOtherCrsCod ();
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (&Crs);
@@ -2374,8 +2372,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
+   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
 
    /* Get institutional code */
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
@@ -2558,8 +2555,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
+   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
 
    /* Get parameter with year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
@@ -2653,7 +2649,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 
 void Crs_RenameCourseShort (void)
   {
-   Crs_GetCrsCodFromForm ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ();
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHORT_NAME);
   }
 
@@ -2668,24 +2664,13 @@ void Crs_RenameCourseShortInConfig (void)
 
 void Crs_RenameCourseFull (void)
   {
-   Crs_GetCrsCodFromForm ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ();
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_FULL_NAME);
   }
 
 void Crs_RenameCourseFullInConfig (void)
   {
    Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************************ Get the code of the course *************************/
-/*****************************************************************************/
-
-static void Crs_GetCrsCodFromForm (void)
-  {
-   /***** Get the code of the course *****/
-   if ((Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
   }
 
 /*****************************************************************************/
@@ -2796,8 +2781,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   if ((Crs->CrsCod = Crs_GetParamOtherCrsCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of course is missing.");
+   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
 
    /* Get parameter with status */
    Par_GetParToText ("Status",UnsignedNum,1);
@@ -3000,10 +2984,14 @@ static void Crs_PutParamOtherCrsCod (long CrsCod)
 static long Crs_GetParamOtherCrsCod (void)
   {
    char LongStr[1+10+1];
+   long CrsCod;
 
    /***** Get parameter with code of course *****/
    Par_GetParToText ("OthCrsCod",LongStr,1+10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   if ((CrsCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
+      Lay_ShowErrorAndExit ("Code of course is missing.");
+
+   return CrsCod;
   }
 
 /*****************************************************************************/
