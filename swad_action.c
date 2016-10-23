@@ -368,6 +368,7 @@ Degree:
 
 	241. ActPrnDegInf		Print information on the current degree
 	242. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
+	NEW. ActRenDegFulCfg		Request change of the full name of a degree in degree configuration
 	243. ActReqDegLog		Show form to send the logo of the current degree
 	244. ActRecDegLog		Receive and store the logo of the current degree
 	245. ActRemDegLog		Remove the logo of the current degree
@@ -1724,6 +1725,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActPrnDegInf	*/{1150,-1,TabUnk,ActSeeDegInf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Deg_PrintConfiguration		,NULL},
    /* ActChgDegCtrCfg	*/{1588,-1,TabUnk,ActSeeDegInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,Deg_ChangeDegCtrInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
+   /* ActRenDegFulCfg	*/{1597,-1,TabUnk,ActSeeDegInf		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,Deg_RenameDegreeFullInConfig	,Deg_ContEditAfterChgDegInConfig,NULL},
    /* ActReqDegLog	*/{1246,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RequestLogo		,NULL},
    /* ActRecDegLog	*/{ 553,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Deg_ReceiveLogo		,Deg_ShowConfiguration		,NULL},
    /* ActRemDegLog	*/{1343,-1,TabUnk,ActSeeDegInf		,0x100,0x100,0x100,Act_CONT_DATA,Act_THIS_WINDOW,Deg_RemoveLogo			,Deg_ShowConfiguration		,NULL},
@@ -4458,6 +4460,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRenCtrFulCfg,	// #1594
 	ActRenCtrShoCfg,	// #1595
 	ActChgCtrWWWCfg,	// #1596
+	ActRenDegFulCfg,	// #1597
 	};
 
 /*****************************************************************************/

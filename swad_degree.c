@@ -106,7 +106,8 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
-static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
+static void Deg_GetDegCodFromForm (void);
+static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
@@ -374,17 +375,25 @@ static void Deg_Configuration (bool PrintView)
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Degree);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"DAT_N\" title=\"%s\">",
-		  Gbl.CurrentDeg.Deg.WWW,
-		  Gbl.CurrentDeg.Deg.FullName);
-      fprintf (Gbl.F.Out,"%s",
-	       Gbl.CurrentDeg.Deg.FullName);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins can edit degree full name
+	{
+	 /* Form to change degree full name */
+	 Act_FormStart (ActRenDegFulCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_FULL_NAME\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Deg_MAX_LENGTH_DEGREE_FULL_NAME,
+		  Gbl.CurrentDeg.Deg.FullName,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not edit degree full name
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
       fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+			 "</tr>");
 
       /***** Degree short name *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2294,13 +2303,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
 void Deg_RenameDegreeShort (void)
   {
-   struct Degree *Deg;
-
-   Deg = &Gbl.Degs.EditingDeg;
-
-   if (Deg_RenameDegree (Deg,Cns_SHORT_NAME))
-      if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)	// If renaming current degree...
-         strcpy (Gbl.CurrentDeg.Deg.ShortName,Deg->ShortName);	// Overwrite current degree name in order to show correctly in page title and heading
+   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHORT_NAME);
   }
 
 /*****************************************************************************/
@@ -2309,22 +2312,31 @@ void Deg_RenameDegreeShort (void)
 
 void Deg_RenameDegreeFull (void)
   {
-   struct Degree *Deg;
+   Deg_GetDegCodFromForm ();
+   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_FULL_NAME);
+  }
 
-   Deg = &Gbl.Degs.EditingDeg;
+void Deg_RenameDegreeFullInConfig (void)
+  {
+   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_FULL_NAME);
+  }
 
-   if (Deg_RenameDegree (Deg,Cns_FULL_NAME))
-      if (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod)	// If renaming current degree...
-         strcpy (Gbl.CurrentDeg.Deg.FullName,Deg->FullName);	// Overwrite current degree name in order to show correctly in page title and heading
+/*****************************************************************************/
+/************************ Get the code of the degree *************************/
+/*****************************************************************************/
+
+static void Deg_GetDegCodFromForm (void)
+  {
+   /***** Get the code of the degree *****/
+   if ((Gbl.Degs.EditingDeg.DegCod = Deg_GetParamOtherDegCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of degree is missing.");
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
-// Returns true if the degree is renamed
-// Returns false if the degree is not renamed
 
-static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName)
+static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_degree_X_empty;
    extern const char *Txt_The_degree_X_already_exists;
@@ -2336,7 +2348,6 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentDegName = NULL;		// Initialized to avoid warning
    char NewDegName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
-   bool DegreeHasBeenRenamed = false;
 
    switch (ShortOrFullName)
      {
@@ -2355,10 +2366,6 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
      }
 
    /***** Get parameters from form *****/
-   /* Get the code of the degree */
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
-
    /* Get the new name for the degree */
    Par_GetParToText (ParamName,NewDegName,MaxLength);
 
@@ -2398,16 +2405,12 @@ static bool Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
 	    /* Change current degree name in order to display it properly */
 	    strncpy (CurrentDegName,NewDegName,MaxLength);
 	    CurrentDegName[MaxLength] = '\0';
-
-	    DegreeHasBeenRenamed = true;
            }
         }
       else	// The same name
          sprintf (Gbl.Message,Txt_The_name_of_the_degree_X_has_not_changed,
                   CurrentDegName);
      }
-
-   return DegreeHasBeenRenamed;
   }
 
 /*****************************************************************************/
