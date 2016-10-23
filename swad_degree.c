@@ -109,8 +109,8 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_GetDegCodFromForm (void);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
-
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
 
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
@@ -424,15 +424,29 @@ static void Deg_Configuration (bool PrintView)
 			 "</tr>");
 
       /***** Degree WWW *****/
-      if (Gbl.CurrentDeg.Deg.WWW[0])
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">",
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       Txt_Web);
+      if (!PrintView &&
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins can change degree WWW
 	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_Web);
+	 /* Form to change degree WWW */
+	 Act_FormStart (ActChgDegWWWCfg);
+	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	                    " maxlength=\"%u\" value=\"%s\""
+                            " class=\"INPUT_WWW\""
+			    " onchange=\"document.getElementById('%s').submit();\" />",
+		  Cns_MAX_LENGTH_WWW,
+		  Gbl.CurrentDeg.Deg.WWW,
+		  Gbl.Form.Id);
+	 Act_FormEnd ();
+	}
+      else	// I can not change degree WWW
 	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
@@ -440,9 +454,8 @@ static void Deg_Configuration (bool PrintView)
 			    "</div>",
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.WWW);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Shortcut to the degree *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2538,7 +2551,6 @@ void Deg_ChangeDegWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Degree *Deg;
-   char Query[256+Cns_MAX_LENGTH_WWW];
    char NewWWW[Cns_MAX_LENGTH_WWW+1];
 
    Deg = &Gbl.Degs.EditingDeg;
@@ -2558,27 +2570,63 @@ void Deg_ChangeDegWWW (void)
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",
-               NewWWW,Deg->DegCod);
-      DB_QueryUPDATE (Query,"can not update the web of a degree");
+      Deg_UpdateDegWWWDB (Deg->DegCod,NewWWW);
+      strcpy (Deg->WWW,NewWWW);
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
-               NewWWW);
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
       /***** Put button to go to degree changed *****/
       Deg_PutButtonToGoToDeg (Deg);
      }
    else
-     {
-      sprintf (Gbl.Message,"%s",Txt_You_can_not_leave_the_web_address_empty);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-     }
+      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Deg->WWW,NewWWW);
    Deg_EditDegrees ();
+  }
+
+void Deg_ChangeDegWWWInConfig (void)
+  {
+   extern const char *Txt_The_new_web_address_is_X;
+   extern const char *Txt_You_can_not_leave_the_web_address_empty;
+   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+
+   /***** Get parameters from form *****/
+   /* Get the new WWW for the degree */
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+
+   /***** Check if new WWW is empty *****/
+   if (NewWWW[0])
+     {
+      /***** Update the table changing old WWW by new WWW *****/
+      Deg_UpdateDegWWWDB (Gbl.CurrentDeg.Deg.DegCod,NewWWW);
+      strcpy (Gbl.CurrentDeg.Deg.WWW,NewWWW);
+
+      /***** Write message to show the change made *****/
+      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Show the form again *****/
+   Deg_ShowConfiguration ();
+  }
+
+/*****************************************************************************/
+/**************** Update database changing old WWW by new WWW ****************/
+/*****************************************************************************/
+
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+  {
+   char Query[256+Cns_MAX_LENGTH_WWW];
+
+   /***** Update database changing old WWW by new WWW *****/
+   sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",
+	    NewWWW,DegCod);
+   DB_QueryUPDATE (Query,"can not update the web of a degree");
   }
 
 /*****************************************************************************/

@@ -150,13 +150,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.38 (2016-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.39 (2016-10-23)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.39:    Oct 23, 2016	New form in degree configuration to change WWW. (205404 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Cambiar web de titulaci&oacute;n' WHERE ActCod='554' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1599','es','N','Cambiar web de titulaci&oacute;n');
+
         Version 16.38:    Oct 23, 2016	New form in degree configuration to change full name. (205354 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1598','es','N','Cambiar nombre breve titulac.');

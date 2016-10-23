@@ -132,6 +132,7 @@ void Deg_RenameDegreeFullInConfig (void);
 void Deg_ChangeDegCtrInConfig (void);
 void Deg_ContEditAfterChgDegInConfig (void);
 void Deg_ChangeDegWWW (void);
+void Deg_ChangeDegWWWInConfig (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
