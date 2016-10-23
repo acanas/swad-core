@@ -2411,10 +2411,8 @@ void Crs_ChangeCrsDegInConfig (void)
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    struct Degree NewDeg;
 
-   /***** Get parameters from form *****/
-   /* Get parameter with degree code */
-   if ((NewDeg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   /***** Get parameter with degree code *****/
+   NewDeg.DegCod = Deg_GetParamOtherDegCod ();
 
    /***** Check if degree has changed *****/
    if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)

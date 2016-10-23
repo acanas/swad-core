@@ -1274,8 +1274,7 @@ void Pho_CalcPhotoDegree (void)
    Fil_RemoveOldTmpFiles (PathPhotosTmpPriv,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES,false);
 
    /***** Get the degree which photo will be computed *****/
-   if ((DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   DegCod = Deg_GetParamOtherDegCod ();
 
    /***** Prevent the computing of an average photo too recently updated *****/
    if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=

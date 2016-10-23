@@ -106,7 +106,6 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
-static void Deg_GetDegCodFromForm (void);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
@@ -1987,8 +1986,7 @@ void Deg_RemoveDegree (void)
    struct Degree Deg;
 
    /***** Get degree code *****/
-   if ((Deg.DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   Deg.DegCod = Deg_GetParamOtherDegCod ();
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (&Deg);
@@ -2036,10 +2034,14 @@ static void Deg_PutParamOtherDegCod (long DegCod)
 long Deg_GetParamOtherDegCod (void)
   {
    char LongStr[1+10+1];
+   long DegCod;
 
    /***** Get parameter with code of degree *****/
    Par_GetParToText ("OthDegCod",LongStr,1+10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   if ((DegCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
+      Lay_ShowErrorAndExit ("Code of degree is missing.");
+
+   return DegCod;
   }
 
 /*****************************************************************************/
@@ -2331,7 +2333,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
 void Deg_RenameDegreeShort (void)
   {
-   Deg_GetDegCodFromForm ();
+   Gbl.Degs.EditingDeg.DegCod = Deg_GetParamOtherDegCod ();
    Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHORT_NAME);
   }
 
@@ -2346,24 +2348,13 @@ void Deg_RenameDegreeShortInConfig (void)
 
 void Deg_RenameDegreeFull (void)
   {
-   Deg_GetDegCodFromForm ();
+   Gbl.Degs.EditingDeg.DegCod = Deg_GetParamOtherDegCod ();
    Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_FULL_NAME);
   }
 
 void Deg_RenameDegreeFullInConfig (void)
   {
    Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************************ Get the code of the degree *************************/
-/*****************************************************************************/
-
-static void Deg_GetDegCodFromForm (void)
-  {
-   /***** Get the code of the degree *****/
-   if ((Gbl.Degs.EditingDeg.DegCod = Deg_GetParamOtherDegCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
   }
 
 /*****************************************************************************/
@@ -2557,8 +2548,7 @@ void Deg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   Deg->DegCod = Deg_GetParamOtherDegCod ();
 
    /* Get the new WWW for the degree */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
@@ -2646,8 +2636,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   Deg->DegCod = Deg_GetParamOtherDegCod ();
 
    /* Get parameter with status */
    Par_GetParToText ("Status",UnsignedNum,1);

@@ -813,8 +813,7 @@ void DT_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   if ((Deg->DegCod = Deg_GetParamOtherDegCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of degree is missing.");
+   Deg->DegCod = Deg_GetParamOtherDegCod ();
 
    /* Get the new degree type */
    NewDegTypCod = DT_GetParamOtherDegTypCod ();
