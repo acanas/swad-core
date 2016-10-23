@@ -2986,7 +2986,7 @@ static long Crs_GetParamOtherCrsCod (void)
 
    /***** Get parameter with code of course *****/
    Par_GetParToText ("OthCrsCod",LongStr,1+10);
-   if ((CrsCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
+   if ((CrsCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
       Lay_ShowErrorAndExit ("Code of course is missing.");
 
    return CrsCod;

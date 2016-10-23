@@ -2038,7 +2038,7 @@ long Deg_GetParamOtherDegCod (void)
 
    /***** Get parameter with code of degree *****/
    Par_GetParToText ("OthDegCod",LongStr,1+10);
-   if ((DegCod = Str_ConvertStrCodToLongCod (LongStr)) < 0)
+   if ((DegCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    return DegCod;
@@ -2463,8 +2463,7 @@ void Deg_ChangeDegCtrInConfig (void)
    extern const char *Txt_The_degree_X_has_been_moved_to_the_centre_Y;
    struct Centre NewCtr;
 
-   /***** Get parameters from form *****/
-   /* Get parameter with centre code */
+   /***** Get parameter with centre code *****/
    NewCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
 
    /***** Check if centre has changed *****/

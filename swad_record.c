@@ -3794,12 +3794,9 @@ void Rec_UpdateMyInstitution (void)
       Lay_ShowErrorAndExit ("Code of institution is missing.");
 
    /* Get country of institution */
-   if (Ins.InsCod > 0)
-     {
-      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-      if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
-	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
-     }
+   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+   if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
+      Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
 
    /***** Update institution, centre and department *****/
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
@@ -3821,18 +3818,14 @@ void Rec_UpdateMyCentre (void)
 
    /***** Get my centre *****/
    /* Get centre code */
-   if ((Ctr.CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of centre is missing.");
+   Ctr.CtrCod = Ctr_GetParamOtherCtrCod ();
 
    /* Get institution of centre */
-   if (Ctr.CtrCod > 0)
+   Ctr_GetDataOfCentreByCod (&Ctr);
+   if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
      {
-      Ctr_GetDataOfCentreByCod (&Ctr);
-      if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
-	{
-	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
-         Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
-	}
+      Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
+      Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
      }
 
    /***** Update institution, centre and department *****/
@@ -3857,14 +3850,11 @@ void Rec_UpdateMyDepartment (void)
       Lay_ShowErrorAndExit ("Code of department is missing.");
 
    /* Get institution of department */
-   if (Dpt.DptCod > 0)
+   Dpt_GetDataOfDepartmentByCod (&Dpt);
+   if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.InsCod)
      {
-      Dpt_GetDataOfDepartmentByCod (&Dpt);
-      if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.InsCod)
-	{
-	 Gbl.Usrs.Me.UsrDat.InsCod = Dpt.InsCod;
-         Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
-	}
+      Gbl.Usrs.Me.UsrDat.InsCod = Dpt.InsCod;
+      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
      }
 
    /***** Update institution, centre and department *****/
