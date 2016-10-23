@@ -112,6 +112,7 @@ static void Crs_PutLinkToSearchCourses (void);
 static void Sch_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
+static long Crs_GetAndCheckParamOtherCrsCod (void);
 static long Crs_GetParamOtherCrsCod (void);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
@@ -1979,7 +1980,7 @@ void Crs_RemoveCourse (void)
    struct Course Crs;
 
    /***** Get course code *****/
-   Crs.CrsCod = Crs_GetParamOtherCrsCod ();
+   Crs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (&Crs);
@@ -2372,7 +2373,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
+   Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get institutional code */
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
@@ -2412,7 +2413,7 @@ void Crs_ChangeCrsDegInConfig (void)
    struct Degree NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.DegCod = Deg_GetParamOtherDegCod ();
+   NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /***** Check if degree has changed *****/
    if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
@@ -2553,7 +2554,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
+   Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get parameter with year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
@@ -2647,7 +2648,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 
 void Crs_RenameCourseShort (void)
   {
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHORT_NAME);
   }
 
@@ -2662,7 +2663,7 @@ void Crs_RenameCourseShortInConfig (void)
 
 void Crs_RenameCourseFull (void)
   {
-   Gbl.Degs.EditingCrs.CrsCod = Crs_GetParamOtherCrsCod ();
+   Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
    Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_FULL_NAME);
   }
 
@@ -2779,7 +2780,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs->CrsCod = Crs_GetParamOtherCrsCod ();
+   Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get parameter with status */
    Par_GetParToText ("Status",UnsignedNum,1);
@@ -2979,17 +2980,24 @@ static void Crs_PutParamOtherCrsCod (long CrsCod)
 /********************* Get parameter with code of course *********************/
 /*****************************************************************************/
 
-static long Crs_GetParamOtherCrsCod (void)
+static long Crs_GetAndCheckParamOtherCrsCod (void)
   {
-   char LongStr[1+10+1];
    long CrsCod;
 
-   /***** Get parameter with code of course *****/
-   Par_GetParToText ("OthCrsCod",LongStr,1+10);
-   if ((CrsCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
+   /***** Get and check parameter with code of course *****/
+   if ((CrsCod = Crs_GetParamOtherCrsCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of course is missing.");
 
    return CrsCod;
+  }
+
+static long Crs_GetParamOtherCrsCod (void)
+  {
+   char LongStr[1+10+1];
+
+   /***** Get parameter with code of course *****/
+   Par_GetParToText ("OthCrsCod",LongStr,1+10);
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/

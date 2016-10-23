@@ -108,7 +108,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins);
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
 void Ins_PutParamInsCod (long InsCod);
-long Ins_GetParamOtherInsCod (void);
+long Ins_GetAndCheckParamOtherInsCod (void);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsShortInConfig (void);

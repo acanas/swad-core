@@ -813,7 +813,7 @@ void DT_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg->DegCod = Deg_GetParamOtherDegCod ();
+   Deg->DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /* Get the new degree type */
    NewDegTypCod = DT_GetParamOtherDegTypCod ();

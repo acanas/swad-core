@@ -75,7 +75,10 @@ static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Institution *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
+
 static void Ins_PutParamOtherInsCod (long InsCod);
+static long Ins_GetParamOtherInsCod (void);
+
 static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
@@ -1500,17 +1503,24 @@ static void Ins_PutParamOtherInsCod (long InsCod)
 /******************* Get parameter with code of institution ******************/
 /*****************************************************************************/
 
-long Ins_GetParamOtherInsCod (void)
+long Ins_GetAndCheckParamOtherInsCod (void)
   {
-   char LongStr[1+10+1];
    long InsCod;
 
-   /***** Get parameter with code of institution *****/
-   Par_GetParToText ("OthInsCod",LongStr,1+10);
-   if ((InsCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
+   /***** Get and check parameter with code of institution *****/
+   if ((InsCod = Ins_GetParamOtherInsCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of institution is missing.");
 
    return InsCod;
+  }
+
+static long Ins_GetParamOtherInsCod (void)
+  {
+   char LongStr[1+10+1];
+
+   /***** Get parameter with code of institution *****/
+   Par_GetParToText ("OthInsCod",LongStr,1+10);
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
@@ -1526,7 +1536,7 @@ void Ins_RemoveInstitution (void)
    char PathIns[PATH_MAX+1];
 
    /***** Get institution code *****/
-   Ins.InsCod = Ins_GetParamOtherInsCod ();
+   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /***** Get data of the institution from database *****/
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_EXTRA_DATA);
@@ -1571,7 +1581,7 @@ void Ins_RemoveInstitution (void)
 
 void Ins_RenameInsShort (void)
   {
-   Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHORT_NAME);
   }
 
@@ -1586,7 +1596,7 @@ void Ins_RenameInsShortInConfig (void)
 
 void Ins_RenameInsFull (void)
   {
-   Gbl.Inss.EditingIns.InsCod = Ins_GetParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
    Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_FULL_NAME);
   }
 
@@ -1711,10 +1721,8 @@ void Ins_ChangeInsCtyInConfig (void)
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Country NewCty;
 
-   /***** Get parameters from form *****/
-   /* Get the new country code for the institution */
-   if ((NewCty.CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
+   /***** Get the new country code for the institution *****/
+   NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /***** Check if country has changed *****/
    if (NewCty.CtyCod != Gbl.CurrentIns.Ins.CtyCod)
@@ -1796,7 +1804,7 @@ void Ins_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Ins->InsCod = Ins_GetParamOtherInsCod ();
+   Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get the new WWW for the institution */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
@@ -1884,7 +1892,7 @@ void Ins_ChangeInsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get institution code */
-   Ins->InsCod = Ins_GetParamOtherInsCod ();
+   Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get parameter with status */
    Par_GetParToText ("Status",UnsignedNum,1);

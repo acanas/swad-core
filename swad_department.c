@@ -668,7 +668,7 @@ void Dpt_ChangeDepartIns (void)
       Lay_ShowErrorAndExit ("Code of department is missing.");
 
    /* Get parameter with institution code */
-   Dpt->InsCod = Ins_GetParamOtherInsCod ();
+   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /***** Update institution in table of departments *****/
    sprintf (Query,"UPDATE departments SET InsCod='%ld' WHERE DptCod='%ld'",
@@ -1005,7 +1005,7 @@ void Dpt_RecFormNewDpt (void)
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt->InsCod = Ins_GetParamOtherInsCod ();
+   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get department short name */
    Par_GetParToText ("ShortName",Dpt->ShortName,MAX_LENGTH_DEPARTMENT_SHORT_NAME);

@@ -89,7 +89,10 @@ static void Ctr_ListCentresForEdition (void);
 static bool Ctr_CheckIfICanEdit (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
+
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
+static long Ctr_GetParamOtherCtrCod (void);
+
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
@@ -1607,17 +1610,24 @@ static void Ctr_PutParamOtherCtrCod (long CtrCod)
 /****************** Get parameter with code of other centre ******************/
 /*****************************************************************************/
 
-long Ctr_GetParamOtherCtrCod (void)
+long Ctr_GetAndCheckParamOtherCtrCod (void)
   {
-   char LongStr[1+10+1];
    long CtrCod;
 
-   /***** Get parameter with code of centre *****/
-   Par_GetParToText ("OthCtrCod",LongStr,1+10);
-   if ((CtrCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
+   /***** Get and check parameter with code of centre *****/
+   if ((CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of centre is missing.");
 
    return CtrCod;
+  }
+
+static long Ctr_GetParamOtherCtrCod (void)
+  {
+   char LongStr[1+10+1];
+
+   /***** Get parameter with code of centre *****/
+   Par_GetParToText ("OthCtrCod",LongStr,1+10);
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
@@ -1633,7 +1643,7 @@ void Ctr_RemoveCentre (void)
    char PathCtr[PATH_MAX+1];
 
    /***** Get centre code *****/
-   Ctr.CtrCod = Ctr_GetParamOtherCtrCod ();
+   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /***** Get data of the centre from database *****/
    Ctr_GetDataOfCentreByCod (&Ctr);
@@ -1681,7 +1691,7 @@ void Ctr_ChangeCtrInsInConfig (void)
    struct Institution NewIns;
 
    /***** Get parameter with institution code *****/
-   NewIns.InsCod = Ins_GetParamOtherInsCod ();
+   NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /***** Check if institution has changed *****/
    if (NewIns.InsCod != Gbl.CurrentCtr.Ctr.InsCod)
@@ -1763,7 +1773,7 @@ void Ctr_ChangeCentrePlace (void)
 
    /***** Get parameters from form *****/
    /* Get centre code */
-   Ctr->CtrCod = Ctr_GetParamOtherCtrCod ();
+   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with centre code */
    NewPlcCod = Plc_GetParamPlcCod ();
@@ -1793,7 +1803,7 @@ void Ctr_ChangeCentrePlace (void)
 
 void Ctr_RenameCentreShort (void)
   {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
    Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHORT_NAME);
   }
 
@@ -1808,7 +1818,7 @@ void Ctr_RenameCentreShortInConfig (void)
 
 void Ctr_RenameCentreFull (void)
   {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
    Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_FULL_NAME);
   }
 
@@ -1928,7 +1938,7 @@ void Ctr_ChangeCtrWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the centre */
-   Ctr->CtrCod = Ctr_GetParamOtherCtrCod ();
+   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get the new WWW for the centre */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
@@ -2016,7 +2026,7 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Get parameters from form *****/
    /* Get centre code */
-   Ctr->CtrCod = Ctr_GetParamOtherCtrCod ();
+   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with status */
    Par_GetParToText ("Status",UnsignedNum,1);

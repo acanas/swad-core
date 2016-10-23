@@ -28594,6 +28594,27 @@ const char *Txt_Please_review_your_privacy_preferences =
 	"Por favor, revise suas prefer&ecirc;ncias de privacidade.";
 #endif
 
+const char *Txt_Please_select_the_country_of_your_institution =
+#if   L==1
+	"Si us plau, seleccioneu el pa&iacute;s de la vostra instituci&oacute;.";
+#elif L==2
+	"Bitte w&auml;hlen Sie das Land Ihrer Einrichtung aus";
+#elif L==3
+	"Please select the country of your institution.";
+#elif L==4
+	"Por favor, seleccione el pa&iacute;s de su instituci&oacute;n.";
+#elif L==5
+	"S'il vous pla&iacute;t, s&eacute;lectionnez le pays de votre &eacute;tablissement.";
+#elif L==6
+	"Por favor, seleccione el pa&iacute;s de su instituci&oacute;n.";	// Okoteve traducción
+#elif L==7
+	"Per favore, selezionare il paese di la tua istituzione accademica.";
+#elif L==8
+	"Prosz&eogon;, wybra&cacute; kraj swojej instytucji.";
+#elif L==9
+	"Por favor, selecione o pa&iacute;s da sua institui&ccedil;&atilde;o.";
+#endif
+
 const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile_applications =
 #if   L==1
 	"Por favor, especifique si permite el acceso"

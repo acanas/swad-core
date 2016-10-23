@@ -74,6 +74,8 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
 static void Cty_FreeMapAttribution (char **MapAttribution);
 static void Cty_ListCountriesForEdition (void);
 static void Cty_PutParamOtherCtyCod (long CtyCod);
+static long Cty_GetParamOtherCtyCod (void);
+
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod);
 static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2+1]);
 static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod);
@@ -1527,7 +1529,18 @@ static void Cty_PutParamOtherCtyCod (long CtyCod)
 /******************* Get parameter with code of country **********************/
 /*****************************************************************************/
 
-long Cty_GetParamOtherCtyCod (void)
+long Cty_GetAndCheckParamOtherCtyCod (void)
+  {
+   long CtyCod;
+
+   /***** Get and check parameter with code of country *****/
+   if ((CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of country is missing.");
+
+   return CtyCod;
+  }
+
+static long Cty_GetParamOtherCtyCod (void)
   {
    char LongStr[1+10+1];
 
@@ -1548,8 +1561,7 @@ void Cty_RemoveCountry (void)
    struct Country Cty;
 
    /***** Get country code *****/
-   if ((Cty.CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
+   Cty.CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /***** Get data of the country from database *****/
    Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
@@ -1596,8 +1608,7 @@ void Cty_RenameCountry (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the country */
-   if ((Cty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
+   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /* Get the lenguage */
    Language = Pre_GetParamLanguage ();
@@ -1715,8 +1726,7 @@ void Cty_ChangeCtyWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the country */
-   if ((Cty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of country is missing.");
+   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /* Get the lenguage */
    Language = Pre_GetParamLanguage ();

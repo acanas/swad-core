@@ -3505,6 +3505,7 @@ void Rec_PutLinkToChangeMyInsCtrDpt (void)
 void Rec_ShowFormMyInsCtrDpt (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Please_select_the_country_of_your_institution;
    extern const char *Txt_Please_fill_in_your_institution;
    extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
@@ -3524,9 +3525,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumDpt;
    bool IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
 
-   /***** If there is no institution, centre or department *****/
-   if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0 ||
-       Gbl.Usrs.Me.UsrDat.InsCod < 0)
+   /***** If there is no country, institution, centre or department *****/
+   if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
+      Lay_ShowAlert (Lay_WARNING,Txt_Please_select_the_country_of_your_institution);
+   else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_institution);
    else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER)) &&
             (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
@@ -3764,14 +3766,12 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
 void Rec_ChgCountryOfMyInstitution (void)
   {
-   /***** Get country of my institution *****/
-   /* Get country code */
-   if ((Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetParamOtherCtyCod ()) < 0)
-      Lay_ShowErrorAndExit ("Code of institution country is missing.");
+   /***** Get country code of my institution *****/
+   Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /***** Update institution, centre and department *****/
    // When country changes, the institution, centre and department must be reset
-   Gbl.Usrs.Me.UsrDat.InsCod = -1L;
+   Gbl.Usrs.Me.UsrDat.InsCod     = -1L;
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
    Enr_UpdateInstitutionCentreDepartment ();
@@ -3790,12 +3790,15 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   Ins.InsCod = Ins_GetParamOtherInsCod ();
+   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get country of institution */
-   Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
-      Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
+   if (Ins.InsCod > 0)
+     {
+      Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
+      if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
+	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
+     }
 
    /***** Update institution, centre and department *****/
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
@@ -3817,14 +3820,17 @@ void Rec_UpdateMyCentre (void)
 
    /***** Get my centre *****/
    /* Get centre code */
-   Ctr.CtrCod = Ctr_GetParamOtherCtrCod ();
+   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get institution of centre */
-   Ctr_GetDataOfCentreByCod (&Ctr);
-   if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
+   if (Ctr.CtrCod > 0)
      {
-      Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
-      Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+      Ctr_GetDataOfCentreByCod (&Ctr);
+      if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
+	{
+	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
+	 Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
+	}
      }
 
    /***** Update institution, centre and department *****/
@@ -3849,11 +3855,14 @@ void Rec_UpdateMyDepartment (void)
       Lay_ShowErrorAndExit ("Code of department is missing.");
 
    /* Get institution of department */
-   Dpt_GetDataOfDepartmentByCod (&Dpt);
-   if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.InsCod)
+   if (Dpt.DptCod > 0)
      {
-      Gbl.Usrs.Me.UsrDat.InsCod = Dpt.InsCod;
-      Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
+      Dpt_GetDataOfDepartmentByCod (&Dpt);
+      if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.InsCod)
+	{
+	 Gbl.Usrs.Me.UsrDat.InsCod = Dpt.InsCod;
+	 Gbl.Usrs.Me.UsrDat.Tch.CtrCod = -1L;
+	}
      }
 
    /***** Update institution, centre and department *****/
