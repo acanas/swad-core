@@ -1773,7 +1773,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -1821,7 +1821,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write the user's ID if user is a student in current course */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat);
       fprintf (Gbl.F.Out,"&nbsp;</td>");

@@ -146,19 +146,19 @@
 
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
 // TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
-// TODO: Column ID in statistic of hits in a course should be left aligned
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.41.9 (2016-10-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.41.10 (2016-10-24)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.41.10: Oct 24, 2016	Column ID in statistic of hits in a course is now left aligned. (205474 lines)
         Version 16.41.9:  Oct 24, 2016	Changed permissions to edit institution logo and institution WWW. (205474 lines)
         Version 16.41.8:  Oct 24, 2016	Changed permissions to edit degree logo and degree WWW. (205472 lines)
         Version 16.41.7:  Oct 24, 2016	Changed permissions to edit centre WWW. (205466 lines)
