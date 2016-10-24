@@ -330,7 +330,7 @@ static void Deg_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Centre);
 
@@ -377,7 +377,8 @@ static void Deg_Configuration (bool PrintView)
 	       Txt_Degree);
       if (!PrintView &&
 	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins can edit degree full name
+	 // Only centre admins, institution admins and system admins
+	 // can edit degree full name
 	{
 	 /* Form to change degree full name */
 	 Act_FormStart (ActRenDegFulCfg);
@@ -405,7 +406,8 @@ static void Deg_Configuration (bool PrintView)
 	       Txt_Short_name);
       if (!PrintView &&
 	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins can edit degree short name
+	 // Only centre admins, institution admins and system admins
+	 // can edit degree short name
 	{
 	 /* Form to change degree short name */
 	 Act_FormStart (ActRenDegShoCfg);
@@ -432,8 +434,9 @@ static void Deg_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins can change degree WWW
+	  Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+	 // Only degree admins, centre admins, institution admins
+	 // and system admins can change degree WWW
 	{
 	 /* Form to change degree WWW */
 	 Act_FormStart (ActChgDegWWWCfg);
@@ -565,6 +568,8 @@ static void Deg_PutIconsToPrintAndUpload (void)
                           NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+      // Only degree admins, centre admins, institution admins and system admins
+      // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_DEG);
   }

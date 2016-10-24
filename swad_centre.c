@@ -662,7 +662,7 @@ static void Ctr_PutIconsToPrintAndUpload (void)
                           NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-      // Only centre admins, institution admins and centre admins
+      // Only centre admins, institution admins and system admins
       // have permission to upload logo and photo of the centre
      {
       /***** Link to upload logo of centre *****/
