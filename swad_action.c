@@ -1645,7 +1645,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCtrInsCfg	*/{1589,-1,TabUnk,ActSeeCtrInf		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_ChangeCtrInsInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    /* ActRenCtrShoCfg	*/{1595,-1,TabUnk,ActSeeCtrInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreShortInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
    /* ActRenCtrFulCfg	*/{1594,-1,TabUnk,ActSeeCtrInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,Ctr_RenameCentreFullInConfig	,Ctr_ContEditAfterChgCtrInConfig,NULL},
-   /* ActChgCtrWWWCfg	*/{1596,-1,TabUnk,ActSeeCtrInf		,0x180,0x180,0x180,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWWInConfig	,NULL},
+   /* ActChgCtrWWWCfg	*/{1596,-1,TabUnk,ActSeeCtrInf		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWWInConfig	,NULL},
    /* ActReqCtrLog	*/{1244,-1,TabUnk,ActSeeCtrInf		,0x1C0,0x1C0,0x1C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestLogo		,NULL},
    /* ActRecCtrLog	*/{1051,-1,TabUnk,ActSeeCtrInf		,0x1C0,0x1C0,0x1C0,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_ReceiveLogo		,Ctr_ShowConfiguration		,NULL},
    /* ActRemCtrLog	*/{1342,-1,TabUnk,ActSeeCtrInf		,0x1C0,0x1C0,0x1C0,Act_CONT_DATA,Act_THIS_WINDOW,Ctr_RemoveLogo			,Ctr_ShowConfiguration		,NULL},

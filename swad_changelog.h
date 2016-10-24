@@ -152,13 +152,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.41.6 (2016-10-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.41.7 (2016-10-24)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.41.7:  Oct 24, 2016	Changed permissions to edit centre WWW. (205466 lines)
         Version 16.41.6:  Oct 24, 2016	Changed permissions to edit logo, photo and photo attribution of centre. (205464 lines)
         Version 16.41.5:  Oct 23, 2016	Code refactoring in countries, institutions, centres, degrees and courses. (205456 lines)
         Version 16.41.4:  Oct 23, 2016	Code refactoring in institutions. (205398 lines)

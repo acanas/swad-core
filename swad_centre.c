@@ -371,7 +371,7 @@ static void Ctr_Configuration (bool PrintView)
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
+			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Institution);
 
@@ -473,8 +473,9 @@ static void Ctr_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-	 // Only institution admins and system admins can change centre WWW
+	  Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and system admins
+	 // can change centre WWW
 	{
 	 /* Form to change centre WWW */
 	 Act_FormStart (ActChgCtrWWWCfg);
