@@ -145,18 +145,21 @@
 // TODO: Generar informe -> ¿Realmente desea generar un informe... (puede tardar varios segundos...)? -> Generar informe.
 
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
+// TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
+// TODO: Column ID in statistic of hits in a course should be left aligned
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.41.5 (2016-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.41.6 (2016-10-24)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.41.6:  Oct 24, 2016	Changed permissions to edit logo, photo and photo attribution of centre. (205464 lines)
         Version 16.41.5:  Oct 23, 2016	Code refactoring in countries, institutions, centres, degrees and courses. (205456 lines)
         Version 16.41.4:  Oct 23, 2016	Code refactoring in institutions. (205398 lines)
         Version 16.41.3:  Oct 23, 2016	Code refactoring in centres. (205408 lines)

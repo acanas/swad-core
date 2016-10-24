@@ -336,7 +336,10 @@ static void Ctr_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Photo attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
+	 if (!PrintView &&
+	     Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+	    // Only centre admins, institution admins and centre admins
+	    // have permission to edit photo attribution
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtrPhoAtt);
@@ -658,6 +661,8 @@ static void Ctr_PutIconsToPrintAndUpload (void)
                           NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and centre admins
+      // have permission to upload logo and photo of the centre
      {
       /***** Link to upload logo of centre *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_CTR);
