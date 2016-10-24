@@ -140,8 +140,6 @@
 // TODO: Create a table with IPs to block temporarily multiple access to the action used to check ID for empty accounts
 // TODO: Every action should have a minimum time between two clicks on it (for example "Generate a report" should have 60 s)
 
-// TODO: FIX BUG: Centre and degree admins should see buttons to admin users even a course is not selected
-
 // TODO: Generar informe -> ¿Realmente desea generar un informe... (puede tardar varios segundos...)? -> Generar informe.
 
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
@@ -151,13 +149,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.41.10 (2016-10-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.42 (2016-10-24)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.42:    Oct 24, 2016	Changres in rules to admin other user and change other user's photo. (205481 lines)
         Version 16.41.10: Oct 24, 2016	Column ID in statistic of hits in a course is now left aligned. (205474 lines)
         Version 16.41.9:  Oct 24, 2016	Changed permissions to edit institution logo and institution WWW. (205474 lines)
         Version 16.41.8:  Oct 24, 2016	Changed permissions to edit degree logo and degree WWW. (205472 lines)

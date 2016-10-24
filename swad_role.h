@@ -44,6 +44,9 @@
    as user permanent roles in courses,
    but a user may be logged temporarily as other roles
 */
+// TODO: Teachers/students should be teachers/students only inside their courses
+//       Outside their courses a user (not logged as admin) should be Rol_VISITOR
+//	 (with similar permissions as Rol_VISITOR but labeled as "User")
 #define Rol_NUM_ROLES 9
 typedef enum
   {

@@ -142,10 +142,9 @@ bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
      {
       case Rol_TEACHER:
 	 /* If I am a teacher in current course,
-	    I only can change the photo of users from current course */
-	 return Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-	                                    Gbl.CurrentCrs.Crs.CrsCod,
-	                                    true);
+	    I only can change the photo of students from current course */
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&
+	         UsrDat->Accepted);
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can change the photo of users from current degree */

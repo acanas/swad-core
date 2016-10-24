@@ -46195,9 +46195,9 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 #if   L==1
 	"No hi ha centres amb sol&middot;licituds de titulacions pendents de confirmar.";
 #elif L==2
-	"There are no centres with requests for degrees to be confirmed";		// Need Übersetzung
+	"There are no centres with requests for degrees to be confirmed.";		// Need Übersetzung
 #elif L==3
-	"There are no centres with requests for degrees to be confirmed";
+	"There are no centres with requests for degrees to be confirmed.";
 #elif L==4
 	"No hay centros con solicitudes de titulaciones pendientes de confirmar.";
 #elif L==5
@@ -46207,18 +46207,18 @@ const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 #elif L==7
 	"Non ci sono centri con richieste di gradi pendenti de confermare.";
 #elif L==8
-	"There are no centres with requests for degrees to be confirmed";		// Potrzebujesz tlumaczenie
+	"There are no centres with requests for degrees to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"There are no centres with requests for degrees to be confirmed";		// Necessita de tradução
+	"There are no centres with requests for degrees to be confirmed.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed =
 #if   L==1
 	"No hi ha pa&iuml;sos amb sol&middot;licituds de institucions pendents de confirmar.";
 #elif L==2
-	"There are no countries with requests for institutions to be confirmed";		// Need Übersetzung
+	"There are no countries with requests for institutions to be confirmed.";		// Need Übersetzung
 #elif L==3
-	"There are no countries with requests for institutions to be confirmed";
+	"There are no countries with requests for institutions to be confirmed.";
 #elif L==4
 	"No hay pa&iacute;ses con solicitudes de instituciones pendientes de confirmar.";
 #elif L==5
@@ -46228,18 +46228,18 @@ const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_conf
 #elif L==7
 	"Non ci sono paesi con richieste di istituzioni pendenti de confermare.";
 #elif L==8
-	"There are no countries with requests for institutions to be confirmed";		// Potrzebujesz tlumaczenie
+	"There are no countries with requests for institutions to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"There are no countries with requests for institutions to be confirmed";		// Necessita de tradução
+	"There are no countries with requests for institutions to be confirmed.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 #if   L==1
 	"No hi ha titulacions amb sol&middot;licituds d'assignatures pendents de confirmar.";
 #elif L==2
-	"There are no degrees with requests for courses to be confirmed";		// Need Übersetzung
+	"There are no degrees with requests for courses to be confirmed.";		// Need Übersetzung
 #elif L==3
-	"There are no degrees with requests for courses to be confirmed";
+	"There are no degrees with requests for courses to be confirmed.";
 #elif L==4
 	"No hay titulaciones con solicitudes de asignaturas pendientes de confirmar.";
 #elif L==5
@@ -46249,18 +46249,18 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 #elif L==7
 	"Non ci sono gradi con richieste di corsi pendenti de confermare.";
 #elif L==8
-	"There are no degrees with requests for courses to be confirmed";		// Potrzebujesz tlumaczenie
+	"There are no degrees with requests for courses to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"There are no degrees with requests for courses to be confirmed";		// Necessita de tradução
+	"There are no degrees with requests for courses to be confirmed.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confirmed =
 #if   L==1
 	"No hi ha institucions amb sol&middot;licituds de centres pendents de confirmar.";
 #elif L==2
-	"There are no institutions with requests for centres to be confirmed";		// Need Übersetzung
+	"There are no institutions with requests for centres to be confirmed.";		// Need Übersetzung
 #elif L==3
-	"There are no institutions with requests for centres to be confirmed";
+	"There are no institutions with requests for centres to be confirmed.";
 #elif L==4
 	"No hay instituciones con solicitudes de centros pendientes de confirmar.";
 #elif L==5
@@ -46270,9 +46270,9 @@ const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confir
 #elif L==7
 	"Non ci sono istituzioni con richieste di centri pendenti de confermare.";
 #elif L==8
-	"There are no institutions with requests for centres to be confirmed";		// Potrzebujesz tlumaczenie
+	"There are no institutions with requests for centres to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"There are no institutions with requests for centres to be confirmed";		// Necessita de tradução
+	"There are no institutions with requests for centres to be confirmed.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_departments =

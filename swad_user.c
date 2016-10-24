@@ -6073,21 +6073,25 @@ void Usr_ListDataAdms (void)
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
    /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /* Put link to remove old users */
-      Usr_PutLinkToSeeGuests ();
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	 /* Put link to remove old users */
+	 Usr_PutLinkToSeeGuests ();
 
       /* Put link to go to admin one user */
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
 
-      /* Put link to list possible duplicate users */
-      Dup_PutLinkToListDupUsrs ();
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	{
+	 /* Put link to list possible duplicate users */
+	 Dup_PutLinkToListDupUsrs ();
 
-      /* Put link to remove old users */
-      Enr_PutLinkToRemOldUsrs ();
+	 /* Put link to remove old users */
+	 Enr_PutLinkToRemOldUsrs ();
+	}
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -6690,28 +6694,27 @@ void Usr_SeeStudents (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-       Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)	// I am logged as teacher or admin
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /* Put link to go to admin one user */
-      Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)	// I am logged as teacher or admin
+	{
+	 /* Put link to go to admin one user */
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
-      /* Put link to go to admin several users */
-      Enr_PutLinkToAdminSeveralUsrs (Rol_STUDENT);
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+	   {
+	    /* Put link to go to admin several users */
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_STUDENT);
 
-      /* Put link to edit record fields */
-      Rec_PutLinkToEditRecordFields ();
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-   else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      /* Put link to go to admin one user */
-      Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+	    /* Put link to edit record fields */
+	    Rec_PutLinkToEditRecordFields ();
+	   }
+   	}
+      else
+	 /* Put link to go to admin one user */
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -6863,8 +6866,7 @@ void Usr_SeeTeachers (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)		// ...or I am logged as teacher or admin
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)		// I am logged as teacher or admin
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -6872,7 +6874,8 @@ void Usr_SeeTeachers (void)
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
 
       /* Put link to go to admin several users */
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+          Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
          Enr_PutLinkToAdminSeveralUsrs (Rol_TEACHER);
 
       fprintf (Gbl.F.Out,"</div>");

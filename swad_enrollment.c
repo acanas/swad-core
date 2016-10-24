@@ -2890,13 +2890,12 @@ static bool Enr_CheckIfICanAdminOtherUsrs (void)
       case Rol_STUDENT:
 	 return false;
       case Rol_TEACHER:
+	 // A teacher can be logged as teacher outside of his/her courses
+	 // TODO: Teachers/students should be teachers/students only inside their courses
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
       case Rol_DEG_ADM:
-	 return (Gbl.CurrentDeg.Deg.DegCod > 0);
       case Rol_CTR_ADM:
-	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0);
       case Rol_INS_ADM:
-	 return (Gbl.CurrentIns.Ins.InsCod > 0);
       case Rol_SYS_ADM:
 	 return true;
      }
@@ -3106,7 +3105,8 @@ static void Enr_ShowFormToEditOtherUsr (void)
       Mai_PutLinkToChangeOtherUsrEmail ();	// Put link (form) to change user's e-mail
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
      }
-   Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
+   if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+      Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
