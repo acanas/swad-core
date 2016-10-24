@@ -417,8 +417,9 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
-	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	 // Only system admins can change institution WWW
+	  Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
+	 // Only institution admins and system admins
+	 // can change institution WWW
 	{
 	 /* Form to change institution WWW */
 	 Act_FormStart (ActChgInsWWWCfg);
