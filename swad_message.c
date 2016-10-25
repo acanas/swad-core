@@ -1751,7 +1751,7 @@ static void Msg_ShowSentOrReceivedMessages (Msg_TypeOfMessages_t TypeOfMessages)
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
 	                 " style=\"width:100%%;\">");
 
-      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
+      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
            NumRow <= Pagination.LastItemVisible;
            NumRow++)

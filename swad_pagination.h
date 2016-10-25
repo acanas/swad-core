@@ -53,12 +53,12 @@ struct Pagination	// Used for threads and messages pagination
    unsigned NumItems;
    int StartPage;
    int LeftPage;
-   int CurrentPage;
+   int CurrentPage;	// 1, 2, 3...
    int RightPage;
    int EndPage;
    int NumPags;
-   unsigned FirstItemVisible;
-   unsigned LastItemVisible;
+   unsigned FirstItemVisible;	// 1, 2, 3...
+   unsigned LastItemVisible;	// 1, 2, 3...
    bool MoreThanOnePage;
   };
 

@@ -96,7 +96,8 @@ static void Svy_PutIconToCreateNewSvy (void);
 static void Svy_PutButtonToCreateNewSvy (void);
 static void Svy_PutParamsToCreateNewSvy (void);
 static void Svy_PutFormToSelectWhichGroupsToShow (void);
-static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool ShowOnlyThisSvyComplete);
+static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
+                               bool ShowOnlyThisSvyComplete);
 static void Svy_WriteAuthor (struct Survey *Svy);
 static void Svy_WriteStatus (struct Survey *Svy);
 static void Svy_GetParamSvyOrderType (void);
@@ -110,9 +111,10 @@ static long Svy_GetParamSvyCod (void);
 static void Svy_PutButtonToResetSurvey (void);
 
 static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy);
-static bool Svy_SetDefaultAndAllowedForEdition (void);
+static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
-static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,unsigned NumUsrsToBeNotifiedByEMail);
+static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                         unsigned NumUsrsToBeNotifiedByEMail);
 static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt);
 static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod);
@@ -223,6 +225,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+
+	 /* Form to change order */
 	 Act_FormStart (ActSeeAllSvy);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -235,6 +239,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
+
 	 fprintf (Gbl.F.Out,"</th>");
 	}
       fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
@@ -251,7 +256,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       for (NumSvy = Pagination.FirstItemVisible;
 	   NumSvy <= Pagination.LastItemVisible;
 	   NumSvy++)
-	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy-1],SvyQst,false);
+	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy - 1],SvyQst,false);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
@@ -372,7 +377,8 @@ void Svy_SeeOneSurvey (void)
 /****************************** Show one survey ******************************/
 /*****************************************************************************/
 
-static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool ShowOnlyThisSvyComplete)
+static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
+                               bool ShowOnlyThisSvyComplete)
   {
    extern const char *Txt_Survey;
    extern const char *Txt_Today;
@@ -473,6 +479,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
       if (Svy.Status.ICanAnswer)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+
 	 Act_FormStart (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrderType ();
@@ -480,12 +487,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Lay_PutCreateButtonInline (Txt_Answer_survey);
 	 Act_FormEnd ();
+
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       /* Possible button to see the result of the survey */
       else if (Svy.Status.ICanViewResults)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+
 	 Act_FormStart (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrderType ();
@@ -493,6 +502,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Lay_PutConfirmButtonInline (Txt_View_survey_results);
 	 Act_FormEnd ();
+
 	 fprintf (Gbl.F.Out,"</div>");
 	}
      }
@@ -554,7 +564,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,bool Sh
    /* Text of the survey */
    Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<p class=\"%s\">"
                       "%s"
@@ -721,11 +731,14 @@ static void Svy_GetParamSvyOrderType (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
+   /***** Set default order type *****/
+   Gbl.Svys.SelectedOrderType = Svy_ORDER_BY_START_DATE;
+
+   /***** Get parameter from form with the order type *****/
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Svys.SelectedOrderType = (tSvysOrderType) UnsignedNum;
-   else
-      Gbl.Svys.SelectedOrderType = Svy_ORDER_BY_START_DATE;
+      if (UnsignedNum < Svy_NUM_ORDERS)
+         Gbl.Svys.SelectedOrderType = (tSvysOrderType) UnsignedNum;
   }
 
 /*****************************************************************************/
@@ -982,6 +995,14 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
          if (Svy->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
             Lay_ShowErrorAndExit ("Wrong survey course.");
 
+      /* Set survey scope */
+      if (Svy->CrsCod > 0)
+         Svy->Scope = Sco_SCOPE_CRS;
+      else if (Svy->DegCod > 0)
+         Svy->Scope = Sco_SCOPE_DEG;
+      else
+	 Svy->Scope = Sco_SCOPE_SYS;
+
       /* Get whether the survey is hidden (row[3]) */
       Svy->Status.Visible = (row[3][0] == 'N');
 
@@ -1049,15 +1070,16 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
          case Rol_TEACHER:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0) &&
                                           !Svy->Status.ICanAnswer;
-            Svy->Status.ICanEdit = Svy->CrsCod > 0 &&
+            Svy->Status.ICanEdit = Svy->Scope == Sco_SCOPE_CRS &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
          case Rol_DEG_ADM:
             Svy->Status.ICanViewResults = false;
-            Svy->Status.ICanEdit = Svy->DegCod > 0 &&
-                                   Svy->CrsCod < 0 &&
+            Svy->Status.ICanEdit = Svy->Scope == Sco_SCOPE_DEG &&
                                    Svy->Status.IBelongToDegCrsGrps;
             break;
+         // TODO: Add Rol_CTR_ADM
+         // TODO: Add Rol_INS_ADM
          case Rol_SYS_ADM:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0);
             Svy->Status.ICanEdit = true;
@@ -1072,7 +1094,9 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
      {
       /* Initialize to empty survey */
       Svy->SvyCod = -1L;
-      Svy->Roles = 0;
+      Svy->Scope  = Sco_SCOPE_UNK;
+      Svy->Roles  = 0;
+      Svy->UsrCod = -1L;
       Svy->TimeUTC[Svy_START_TIME] =
       Svy->TimeUTC[Svy_END_TIME  ] = (time_t) 0;
       Svy->Title[0] = '\0';
@@ -1513,10 +1537,12 @@ void Svy_RequestCreatOrEditSvy (void)
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
+      Svy.Scope  = Sco_SCOPE_UNK;
+      Svy.Roles  = (1 << Rol_STUDENT);
+      Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Svy.TimeUTC[Svy_START_TIME] = Gbl.StartExecutionTimeUTC;
       Svy.TimeUTC[Svy_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
       Svy.Title[0] = '\0';
-      Svy.Roles = (1 << Rol_STUDENT);
       Svy.NumQsts = 0;
       Svy.NumUsrs = 0;
       Svy.Status.Visible = true;
@@ -1548,7 +1574,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Lay_StartRoundFrameTable (NULL,2,ItsANewSurvey ? Txt_New_survey :
 	                                            Txt_Edit_survey);
 
-   /***** Survey for anywhere, degree or course? *****/
+   /***** Scope of the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
                       "<label class=\"%s\">%s:</label>"
@@ -1556,8 +1582,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Scope);
-   if (!Svy_SetDefaultAndAllowedForEdition ())
-      Lay_ShowErrorAndExit ("You don't have permission to edit surveys here.");
+   Svy_SetDefaultAndAllowedScope (&Svy);
    Sco_GetScope ("ScopeSvy");
    Sco_PutSelectorScope ("ScopeSvy",false);
    fprintf (Gbl.F.Out,"</td>"
@@ -1630,43 +1655,72 @@ void Svy_RequestCreatOrEditSvy (void)
 /*****************************************************************************/
 /*** Set default and allowed location ranges depending on logged user type ***/
 /*****************************************************************************/
-// Return true if user can edit surveys in current location
+// Return true if user can edit survey
+// Return false if user can not edit survey
 
-static bool Svy_SetDefaultAndAllowedForEdition (void)
+static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
   {
+   bool ICanEdit = false;
+
+   /***** Set default scope *****/
    Gbl.Scope.Default = Sco_SCOPE_UNK;
    Gbl.Scope.Allowed = 0;
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-         if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-           {
-            Gbl.Scope.Default = Sco_SCOPE_CRS;
-            Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
-            return true;
-           }
-         return false;
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	   {
+	    if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	       Svy->Scope = Sco_SCOPE_CRS;
+	    if (Svy->Scope == Sco_SCOPE_CRS)
+	      {
+               Gbl.Scope.Default = Svy->Scope;
+	       Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
+	       ICanEdit = true;
+	      }
+	   }
+         break;
        case Rol_DEG_ADM:
-         if (Gbl.CurrentDeg.Deg.DegCod > 0)
-           {
-            Gbl.Scope.Default = Sco_SCOPE_DEG;
-            Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
-            return true;
-           }
-         return false;
+	 if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	    Svy->Scope = Sco_SCOPE_DEG;
+	 if (Svy->Scope == Sco_SCOPE_DEG)
+	   {
+	    Gbl.Scope.Default = Svy->Scope;
+	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
+	    ICanEdit = true;
+	   }
+         break;
+      // TODO: Add Rol_CTR_ADM
+      // TODO: Add Rol_INS_ADM
       case Rol_SYS_ADM:
-         Gbl.Scope.Default = Sco_SCOPE_SYS;
+	 if (Svy->Scope == Sco_SCOPE_UNK)
+	   {
+	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	       Svy->Scope = Sco_SCOPE_CRS;
+	    else if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	       Svy->Scope = Sco_SCOPE_DEG;
+	    // TODO: Add Sco_SCOPE_CTR
+	    // TODO: Add Sco_SCOPE_INS
+	    // TODO: Add Sco_SCOPE_CTY
+	    else
+	       Svy->Scope = Sco_SCOPE_SYS;
+	   }
+         Gbl.Scope.Default = Svy->Scope;
          Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	                     // 1 << Sco_SCOPE_CTY     |	// TODO: Add this scope
+	                     // 1 << Sco_SCOPE_CTY |	// TODO: Add this scope
 	                     // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
-	                     // 1 << Sco_SCOPE_CTR      |	// TODO: Add this scope
-                             1 << Sco_SCOPE_DEG      |
+	                     // 1 << Sco_SCOPE_CTR |	// TODO: Add this scope
+                             1 << Sco_SCOPE_DEG    |
                              1 << Sco_SCOPE_CRS;
-         return true;
+	 ICanEdit = true;
+	 break;
       default:
-         return false;
+	 break;
      }
+
+   if (!ICanEdit)
+      Lay_ShowErrorAndExit ("You don't have permission to edit surveys here.");
   }
 
 /*****************************************************************************/
@@ -1765,12 +1819,14 @@ void Svy_RecFormSurvey (void)
       case Sco_SCOPE_SYS:
          NewSvy.DegCod = -1L;
          NewSvy.CrsCod = -1L;
+         NewSvy.Scope = Sco_SCOPE_SYS;
          break;
       case Sco_SCOPE_DEG:
          if (Gbl.CurrentDeg.Deg.DegCod > 0)
            {
             NewSvy.DegCod = Gbl.CurrentDeg.Deg.DegCod;
             NewSvy.CrsCod = -1L;
+            NewSvy.Scope = Sco_SCOPE_DEG;
            }
          else
             Lay_ShowErrorAndExit ("Wrong survey location.");
@@ -1780,6 +1836,7 @@ void Svy_RecFormSurvey (void)
            {
             NewSvy.DegCod = -1L;	// DegCod doen't mind when CrsCod > 0
             NewSvy.CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+            NewSvy.Scope = Sco_SCOPE_CRS;
            }
          else
             Lay_ShowErrorAndExit ("Wrong survey location.");
@@ -1859,7 +1916,8 @@ void Svy_RecFormSurvey (void)
 /*********** Update number of users notified in table of surveys *************/
 /*****************************************************************************/
 
-static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,unsigned NumUsrsToBeNotifiedByEMail)
+static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                         unsigned NumUsrsToBeNotifiedByEMail)
   {
    char Query[512];
 
@@ -1915,7 +1973,8 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
-   sprintf (Query,"UPDATE surveys SET DegCod='%ld',CrsCod='%ld',Roles='%u',"
+   sprintf (Query,"UPDATE surveys"
+	          " SET DegCod='%ld',CrsCod='%ld',Roles='%u',"
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
 	          "Title='%s',Txt='%s'"

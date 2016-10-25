@@ -252,7 +252,7 @@ static void Att_ShowAllAttEvents (void)
       for (NumAttEvent = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
 	   NumAttEvent <= Pagination.LastItemVisible;
 	   NumAttEvent++)
-	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent-1],false);
+	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent - 1],false);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");

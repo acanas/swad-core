@@ -89,7 +89,7 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
       Pagination->CurrentPage = 1;  // If there is only a page, the number of page to show is 1
 
    Pagination->LastItemVisible = Pagination->CurrentPage * Pag_ITEMS_PER_PAGE;
-   Pagination->FirstItemVisible = Pagination->LastItemVisible - (Pag_ITEMS_PER_PAGE-1);
+   Pagination->FirstItemVisible = Pagination->LastItemVisible - (Pag_ITEMS_PER_PAGE - 1);
    if (Pagination->LastItemVisible > Pagination->NumItems)
       Pagination->LastItemVisible = Pagination->NumItems;
   }

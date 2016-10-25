@@ -1057,7 +1057,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
       /***** Show posts from this page, the author and the date of last reply *****/
       Lay_StartRoundFrameTable (NULL,2,Txt_Messages);
 
-      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible-1));
+      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
            NumRow <= Pagination.LastItemVisible;
            NumRow++)
@@ -2559,7 +2559,7 @@ void For_ShowForumThrs (void)
    Gbl.Pag.CurrentPage = (unsigned) PaginationThrs.CurrentPage;
 
    /***** Fill the list of threads for current page *****/
-   mysql_data_seek (mysql_res,(my_ulonglong) (PaginationThrs.FirstItemVisible-1));
+   mysql_data_seek (mysql_res,(my_ulonglong) (PaginationThrs.FirstItemVisible - 1));
    for (NumThr = PaginationThrs.FirstItemVisible, NumThrInScreen = 0;
         NumThr <= PaginationThrs.LastItemVisible;
         NumThr++, NumThrInScreen++)

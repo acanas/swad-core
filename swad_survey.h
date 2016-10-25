@@ -47,10 +47,11 @@ struct Survey
    long SvyCod;
    long DegCod;
    long CrsCod;
+   Sco_Scope_t Scope;
    unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER)
    long UsrCod;
-   time_t TimeUTC[Svy_NUM_DATES];
    char Title[Svy_MAX_LENGTH_SURVEY_TITLE+1];
+   time_t TimeUTC[Svy_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
    struct
@@ -66,6 +67,7 @@ struct Survey
      } Status;
   };
 
+#define Svy_NUM_ORDERS 2
 typedef enum
   {
    Svy_ORDER_BY_START_DATE = 0,

@@ -11649,3 +11649,20 @@ CREATE TABLE IF NOT EXISTS usr_report (RepCod INT NOT NULL AUTO_INCREMENT,UsrCod
 
 
 SELECT CrsCod,COUNT(*) AS N FROM crs_usr LEFT JOIN log_full ON (crs_usr.CrsCod=log_full.CrsCod AND crs_usr.UsrCod=log_full.UsrCod AND crs_usr.Role=log_full.Role) WHERE UsrCod='7' AND Role='3' GROUP BY CrsCod ORDER BY N DESC;
+
+
+
+
+
+
+
+
+
+(SELECT crs_usr.UsrCod FROM surveys,crs_usr WHERE surveys.SvyCod='6' AND surveys.SvyCod NOT IN (SELECT SvyCod FROM svy_grp WHERE SvyCod='6') AND surveys.CrsCod=crs_usr.CrsCod AND crs_usr.UsrCod<>'1' AND (surveys.Roles&(1<<crs_usr.Role))<>0)
+ UNION 
+(SELECT DISTINCT crs_grp_usr.UsrCod FROM svy_grp,crs_grp_usr,surveys,crs_usr WHERE svy_grp.SvyCod='6' AND svy_grp.GrpCod=crs_grp_usr.GrpCod AND crs_grp_usr.UsrCod=crs_usr.UsrCod AND crs_grp_usr.UsrCod<>'1' AND svy_grp.SvyCod=surveys.SvyCod AND surveys.CrsCod=crs_usr.CrsCod AND (surveys.Roles&(1<<crs_usr.Role))<>0);
+
+
+
+
+
