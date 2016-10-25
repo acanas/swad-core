@@ -149,13 +149,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.42 (2016-10-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.42.1 (2016-10-25)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.42.1:  Oct 25, 2016	Added button "New question" in survey when the survey has no questions.
+					Change in layout of survey questions. (205485 lines)
         Version 16.42:    Oct 24, 2016	Changres in rules to admin other user and change other user's photo. (205481 lines)
         Version 16.41.10: Oct 24, 2016	Column ID in statistic of hits in a course is now left aligned. (205474 lines)
         Version 16.41.9:  Oct 24, 2016	Changed permissions to edit institution logo and institution WWW. (205474 lines)

@@ -2958,12 +2958,14 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    else	// This survey has no questions
       Lay_ShowAlert (Lay_INFO,Txt_This_survey_has_no_questions);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   if (Svy->Status.ICanEdit && Editing)
+   if (Svy->Status.ICanEdit &&	// I can edit
+       (!NumQsts ||		// This survey has no questions
+	Editing))		// I am editing
       /***** Put button to add a new question in this survey *****/
       Svy_PutButtonToCreateNewQuestion ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -3040,7 +3042,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    /***** Write the answers *****/
    if (NumAnswers)
      {
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"width:100%%;\">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\">");
       for (NumAns = 0;
 	   NumAns < NumAnswers;
 	   NumAns++)
