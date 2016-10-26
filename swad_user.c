@@ -939,6 +939,53 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
   }
 
 /*****************************************************************************/
+/**** Get all my countries (those of my courses) and store them in a list ****/
+/*****************************************************************************/
+
+void Usr_GetMyCountries (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCty;
+   unsigned NumCtys;
+   long CtyCod;
+
+   /***** If my countries are yet filled, there's nothing to do *****/
+   if (!Gbl.Usrs.Me.MyCountries.Filled)
+     {
+      Gbl.Usrs.Me.MyCountries.Num = 0;
+
+      /***** Get my institutions from database *****/
+      if ((NumCtys = (unsigned) Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res)) > 0) // Countries found
+         for (NumCty = 0;
+              NumCty < NumCtys;
+              NumCty++)
+           {
+            /* Get next country */
+            row = mysql_fetch_row (mysql_res);
+
+            /* Get country code */
+            if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+              {
+               if (Gbl.Usrs.Me.MyCountries.Num == Cty_MAX_COUNTRIES_PER_USR)
+                  Lay_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
+
+               Gbl.Usrs.Me.MyCountries.Ctys[Gbl.Usrs.Me.MyCountries.Num].CtyCod  = CtyCod;
+               Gbl.Usrs.Me.MyCountries.Ctys[Gbl.Usrs.Me.MyCountries.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+               Gbl.Usrs.Me.MyCountries.Num++;
+              }
+           }
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Set boolean that indicates that my institutions are yet filled *****/
+      Gbl.Usrs.Me.MyCountries.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
 /** Get all my institutions (those of my courses) and store them in a list ***/
 /*****************************************************************************/
 
@@ -1296,9 +1343,28 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
   }
 
 /*****************************************************************************/
+/********************** Check if I belong to a country **********************/
+/*****************************************************************************/
+
+bool Usr_CheckIfIBelongToCty (long CtyCod)
+  {
+   unsigned NumMyCty;
+
+   /***** Fill the list with the institutions I belong to *****/
+   Usr_GetMyCountries ();
+
+   /***** Check if the country passed as parameter is any of my countries *****/
+   for (NumMyCty = 0;
+        NumMyCty < Gbl.Usrs.Me.MyCountries.Num;
+        NumMyCty++)
+      if (Gbl.Usrs.Me.MyCountries.Ctys[NumMyCty].CtyCod == CtyCod)
+         return true;
+   return false;
+  }
+
+/*****************************************************************************/
 /******************** Check if I belong to an institution ********************/
 /*****************************************************************************/
-// The list of my institutions must be filled before calling this function
 
 bool Usr_CheckIfIBelongToIns (long InsCod)
   {
@@ -1319,7 +1385,6 @@ bool Usr_CheckIfIBelongToIns (long InsCod)
 /*****************************************************************************/
 /*********************** Check if I belong to a centre ***********************/
 /*****************************************************************************/
-// The list of my centres must be filled before calling this function
 
 bool Usr_CheckIfIBelongToCtr (long CtrCod)
   {
@@ -1340,7 +1405,6 @@ bool Usr_CheckIfIBelongToCtr (long CtrCod)
 /*****************************************************************************/
 /*********************** Check if I belong to a degree ***********************/
 /*****************************************************************************/
-// The list of my degrees must be filled before calling this function
 
 bool Usr_CheckIfIBelongToDeg (long DegCod)
   {
@@ -1361,7 +1425,6 @@ bool Usr_CheckIfIBelongToDeg (long DegCod)
 /*****************************************************************************/
 /*********************** Check if I belong to a course ***********************/
 /*****************************************************************************/
-// The list of my courses must be filled before calling this function
 
 bool Usr_CheckIfIBelongToCrs (long CrsCod)
   {

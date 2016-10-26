@@ -234,11 +234,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
+
+void Usr_GetMyCountries (void);
 void Usr_GetMyInstitutions (void);
 void Usr_GetMyCentres (void);
 void Usr_GetMyDegrees (void);
 void Usr_GetMyCourses (void);
 void Usr_FreeMyCourses (void);
+
 bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
                                  long InsCod,
                                  bool CountOnlyAcceptedCourses);
@@ -251,6 +254,8 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,
 bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
                                  long CrsCod,
                                  bool CountOnlyAcceptedCourses);
+
+bool Usr_CheckIfIBelongToCty (long CtyCod);
 bool Usr_CheckIfIBelongToIns (long InsCod);
 bool Usr_CheckIfIBelongToCtr (long CtrCod);
 bool Usr_CheckIfIBelongToDeg (long DegCod);

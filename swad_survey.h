@@ -45,9 +45,8 @@ typedef enum
 struct Survey
   {
    long SvyCod;
-   long DegCod;
-   long CrsCod;
    Sco_Scope_t Scope;
+   long Cod;		// Country, institution, centre, degree or course code
    unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER)
    long UsrCod;
    char Title[Svy_MAX_LENGTH_SURVEY_TITLE+1];
@@ -59,7 +58,7 @@ struct Survey
       bool Visible;		// Survey is not hidden
       bool Open;		// Start date <= now <= end date
       bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
-      bool IBelongToDegCrsGrps;	// I can answer this survey (it is associated to no groups or (if associated to groups) I belong to any of the groups
+      bool IBelongToScope;	// I belong to the scope of this survey
       bool IHaveAnswered;	// I have already answered this survey
       bool ICanAnswer;
       bool ICanViewResults;

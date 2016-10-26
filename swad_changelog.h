@@ -145,17 +145,20 @@
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
 // TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
 
+// TODO: Cuando se crea una cuenta nueva, debería ponerse a 0 las estadísticas del perfil del usuario
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.43 (2016-10-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.44 (2016-10-27)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.44:    Oct 27, 2016	New scopes (centre, institution, country) of surveys. Not finished. (205826 lines)
         Version 16.43:    Oct 26, 2016	Fixed bugs and code refactoring in scope of surveys. (205537 lines)
         Version 16.42.1:  Oct 25, 2016	Added button "New question" in survey when the survey has no questions.
 					Change in layout of survey questions. (205485 lines)

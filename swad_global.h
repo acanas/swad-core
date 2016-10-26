@@ -307,6 +307,16 @@ struct Globals
             unsigned Num;
             struct
               {
+               long CtyCod;
+               Rol_Role_t MaxRole;
+              } Ctys[Cty_MAX_COUNTRIES_PER_USR];
+           } MyCountries;
+         struct
+           {
+            bool Filled;	// My institutions are already filled?
+            unsigned Num;
+            struct
+              {
                long InsCod;
                Rol_Role_t MaxRole;
               } Inss[Ins_MAX_INSTITUTIONS_PER_USR];

@@ -104,6 +104,10 @@ static void Svy_GetParamSvyOrderType (void);
 
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
 static void Svy_PutParams (void);
+
+static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
+                                           unsigned *HiddenAllowed);
+
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt);
 static void Svy_PutParamSvyCod (long SvyCod);
 static long Svy_GetParamSvyCod (void);
@@ -188,10 +192,6 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    struct Pagination Pagination;
    unsigned NumSvy;
    bool ICanEdit = Svy_CheckIfICanCreateSvy ();
-
-   /***** Get number of groups in current course *****/
-   if (!Gbl.CurrentCrs.Grps.NumGrps)
-      Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of surveys *****/
    Svy_GetListSurveys ();
@@ -386,6 +386,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
    extern const char *Txt_Scope;
+   extern const char *Txt_Country;
+   extern const char *Txt_Institution;
+   extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Users;
@@ -535,14 +538,36 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Scope);
-   if (Svy.CrsCod > 0)
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_Course,Gbl.CurrentCrs.Crs.ShortName);
-   else if (Svy.DegCod > 0)
-      fprintf (Gbl.F.Out,"%s %s",
-               Txt_Degree,Gbl.CurrentDeg.Deg.ShortName);
-   else
-      fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_SHORT_NAME);
+   switch (Svy.Scope)
+     {
+      case Sco_SCOPE_UNK:	// Unknown
+         Lay_ShowErrorAndExit ("Wrong survey scope.");
+         break;
+      case Sco_SCOPE_SYS:	// System
+         fprintf (Gbl.F.Out,"%s",
+                  Cfg_PLATFORM_SHORT_NAME);
+	 break;
+      case Sco_SCOPE_CTY:	// Country
+         fprintf (Gbl.F.Out,"%s %s",
+                  Txt_Country,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	 break;
+      case Sco_SCOPE_INS:	// Institution
+         fprintf (Gbl.F.Out,"%s %s",
+                  Txt_Institution,Gbl.CurrentIns.Ins.ShortName);
+	 break;
+      case Sco_SCOPE_CTR:	// Centre
+         fprintf (Gbl.F.Out,"%s %s",
+                  Txt_Centre,Gbl.CurrentCtr.Ctr.ShortName);
+	 break;
+      case Sco_SCOPE_DEG:	// Degree
+         fprintf (Gbl.F.Out,"%s %s",
+                  Txt_Degree,Gbl.CurrentDeg.Deg.ShortName);
+ 	 break;
+      case Sco_SCOPE_CRS:	// Course
+	 fprintf (Gbl.F.Out,"%s %s",
+	          Txt_Course,Gbl.CurrentCrs.Crs.ShortName);
+	 break;
+     }
    fprintf (Gbl.F.Out,"</div>");
 
    /* Users' roles who can answer the survey */
@@ -557,7 +582,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"</div>");
 
    /* Groups whose users can answer this survey */
-   if (Svy.CrsCod > 0)
+   if (Svy.Scope == Sco_SCOPE_CRS)
       if (Gbl.CurrentCrs.Grps.NumGrps)
          Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Svy);
 
@@ -588,10 +613,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
    /***** Mark possible notification as seen *****/
-   if (Svy.CrsCod > 0)	// Only course surveys are notified
+   if (Svy.Scope == Sco_SCOPE_CRS)	// Only course surveys are notified
       Ntf_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
-	                  SvyCod,Svy.CrsCod,
-	                  Gbl.Usrs.Me.UsrDat.UsrCod);
+	                   SvyCod,Svy.Cod,
+	                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End frame *****/
    if (ShowOnlyThisSvyComplete)
@@ -695,7 +720,7 @@ static void Svy_WriteStatus (struct Survey *Svy)
                Txt_SURVEY_Type_of_user_not_allowed);
 
    /* Write whether survey can be answered by me or not depending on groups */
-   if (Svy->Status.IBelongToDegCrsGrps)
+   if (Svy->Status.IBelongToScope)
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Svy->Status.Visible ? "STATUS_GREEN" :
         	                     "STATUS_GREEN_LIGHT",
@@ -818,105 +843,73 @@ static void Svy_PutParams (void)
 
 void Svy_GetListSurveys (void)
   {
-   char HiddenSubQuery[256];
+   char SubQuery[Sco_NUM_SCOPES][128];
    char OrderBySubQuery[256];
    char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumSvy;
+   unsigned ScopesAllowed = 0;
+   unsigned HiddenAllowed = 0;
+   long Cods[Sco_NUM_SCOPES];
+   Sco_Scope_t Scope;
+   bool SubQueryFilled;
 
+   /***** Free list of surveys *****/
    if (Gbl.Svys.LstIsRead)
       Svy_FreeListSurveys ();
 
-   /***** Get list of surveys from database *****/
-   switch (Gbl.Svys.SelectedOrderType)
-     {
-      case Svy_ORDER_BY_START_DATE:
-         sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
-         break;
-      case Svy_ORDER_BY_END_DATE:
-         sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
-         break;
-     }
+   /***** Set allowed and hidden scopes to get list depending on my user's role *****/
+   Svy_SetAllowedAndHiddenScopes (&ScopesAllowed,&HiddenAllowed);
 
-   if (Gbl.CurrentDeg.Deg.DegCod < 0)	// If no degree selected
+   /***** Get list of surveys from database *****/
+   Cods[Sco_SCOPE_SYS] = -1L;				// System
+   Cods[Sco_SCOPE_CTY] = Gbl.CurrentCty.Cty.CtyCod;	// Country
+   Cods[Sco_SCOPE_INS] = Gbl.CurrentIns.Ins.InsCod;	// Institution
+   Cods[Sco_SCOPE_CTR] = Gbl.CurrentCtr.Ctr.CtrCod;	// Centre
+   Cods[Sco_SCOPE_DEG] = Gbl.CurrentDeg.Deg.DegCod;	// Degree
+   Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
+
+   for (Scope = Sco_SCOPE_SYS, SubQueryFilled = false;
+	Scope < Sco_SCOPE_CRS;
+	Scope++)
+      if (ScopesAllowed & 1 << Scope)
+	{
+	 sprintf (SubQuery[Scope],"%s(Scope='%u' AND Cod='%ld'%s)",
+	          SubQueryFilled ? " OR " :
+	        	           "",
+		  (unsigned) Scope,Cods[Scope],
+		  (ScopesAllowed & 1 << Sco_SCOPE_SYS) ? "" :
+							 " AND Hidden='N'");
+	 SubQueryFilled = true;
+	}
+      else
+	 SubQuery[Scope][0] = '\0';
+
+   if (SubQueryFilled)
      {
-      switch (Gbl.Usrs.Me.LoggedRole)
-        {
-         case Rol_SYS_ADM:
-            HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
-            break;
-         default:
-            sprintf (HiddenSubQuery," AND Hidden='N'");	// Show only visible surveys
-            break;
-        }
+      switch (Gbl.Svys.SelectedOrderType)
+	{
+	 case Svy_ORDER_BY_START_DATE:
+	    sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
+	    break;
+	 case Svy_ORDER_BY_END_DATE:
+	    sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
+	    break;
+	}
+
       sprintf (Query,"SELECT SvyCod"
-                     " FROM surveys"
-                     " WHERE DegCod='-1' AND CrsCod='-1'%s"
-                     " ORDER BY %s",
-               HiddenSubQuery,
-               OrderBySubQuery);
-     }
-   else if ((Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.CurrentCrs.Crs.CrsCod < 0) ||		// If degree selected, but no course selected
-             Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM)				// or if I am a degree administrator
-     {
-      switch (Gbl.Usrs.Me.LoggedRole)
-        {
-         case Rol_DEG_ADM:
-         case Rol_SYS_ADM:
-            HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
-            break;
-         default:
-            sprintf (HiddenSubQuery," AND Hidden='N'");	// Show only visible surveys
-            break;
-        }
-      sprintf (Query,"SELECT SvyCod"
-                     " FROM surveys"
-                     " WHERE ((DegCod='-1' AND CrsCod='-1')"
-                     " OR (DegCod='%ld' AND CrsCod='-1'))%s"
-                     " ORDER BY %s",
-               Gbl.CurrentDeg.Deg.DegCod,
-               HiddenSubQuery,
-               OrderBySubQuery);
-     }
-   else	if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-            Gbl.Usrs.Me.LoggedRole != Rol_DEG_ADM)
-     {
-      switch (Gbl.Usrs.Me.LoggedRole)
-        {
-         case Rol_TEACHER:
-         case Rol_SYS_ADM:
-            HiddenSubQuery[0] = '\0';			// Show all surveys, visible or hidden
-            break;
-         default:
-            sprintf (HiddenSubQuery," AND Hidden='N'");	// Show only visible surveys
-            break;
-        }
-      if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-         sprintf (Query,"SELECT SvyCod"
-                        " FROM surveys"
-                        " WHERE ((DegCod='-1' AND CrsCod='-1')"
-                        " OR (DegCod='%ld' AND CrsCod='-1')"
-                        " OR (CrsCod='%ld'"
-                        " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
-                        " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
-                        " WHERE crs_grp_usr.UsrCod='%ld' AND svy_grp.GrpCod=crs_grp_usr.GrpCod))))%s"
-                        " ORDER BY %s",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.Usrs.Me.UsrDat.UsrCod,
-                  HiddenSubQuery,OrderBySubQuery);
-      else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-         sprintf (Query,"SELECT SvyCod"
-                        " FROM surveys"
-                        " WHERE ((DegCod='-1' AND CrsCod='-1')"
-                        " OR (DegCod='%ld' AND CrsCod='-1')"
-                        " OR CrsCod='%ld')%s"
-                        " ORDER BY %s",
-                  Gbl.CurrentDeg.Deg.DegCod,
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  HiddenSubQuery,OrderBySubQuery);
+		     " FROM surveys"
+		     " WHERE %s%s%s%s%s%s"
+		     " ORDER BY %s",
+		  SubQuery[Sco_SCOPE_SYS],
+		  SubQuery[Sco_SCOPE_CTY],
+		  SubQuery[Sco_SCOPE_INS],
+		  SubQuery[Sco_SCOPE_CTR],
+		  SubQuery[Sco_SCOPE_DEG],
+		  SubQuery[Sco_SCOPE_CRS],
+		  OrderBySubQuery);
      }
    else
       Lay_ShowErrorAndExit ("Can not get list of surveys.");
@@ -952,6 +945,172 @@ void Svy_GetListSurveys (void)
   }
 
 /*****************************************************************************/
+/*** Set allowed and hidden scopes to get list depending on my user's role ***/
+/*****************************************************************************/
+
+static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
+                                           unsigned *HiddenAllowed)
+  {
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_UNKNOWN:	// User not logged in *********************************
+	 *ScopesAllowed = 0;
+	 *HiddenAllowed = 0;
+         break;
+      case Rol__GUEST_:	// User not belonging to any course *******************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 break;
+      case Rol_VISITOR:	// Student or teacher in other courses...
+   	   	   	// ...but not belonging to the current course *********
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
+		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		 }
+	      }
+	   }
+         break;
+      case Rol_STUDENT:	// Student in current course **************************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
+		    {
+		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		     if (Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod))
+			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
+		    }
+		 }
+	      }
+	   }
+         break;
+      case Rol_TEACHER:	// Teacher in current course **************************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
+		    {
+		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		     if (Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod))
+		       {
+			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
+			*HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A teacher can view hidden course surveys
+		       }
+		    }
+		 }
+	      }
+	   }
+         break;
+      case Rol_DEG_ADM:	// Degree administrator *******************************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+		  if (Gbl.CurrentDeg.Deg.DegCod > 0)		// Degree selected
+		    {
+		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		     *HiddenAllowed |= 1 << Sco_SCOPE_DEG;	// A degree admin can view hidden degree surveys
+		    }
+	         }
+	      }
+	   }
+	 break;
+      case Rol_CTR_ADM:	// Centre administrator *******************************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+		  *HiddenAllowed |= 1 << Sco_SCOPE_CTR;		// A centre admin can view hidden centre surveys
+		 }
+	      }
+	   }
+	 break;
+      case Rol_INS_ADM:	// Institution administrator **************************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 0;
+	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       *HiddenAllowed |= 1 << Sco_SCOPE_INS;		// An institution admin can view hidden institution surveys
+	      }
+	   }
+	 break;
+      case Rol_SYS_ADM:	// System administrator (superuser) *******************
+	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *HiddenAllowed = 1 << Sco_SCOPE_SYS;			// A system admin can view hidden system surveys
+	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	   {
+	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
+	    *HiddenAllowed |= 1 << Sco_SCOPE_CTY;		// A system admin can view hidden country surveys
+	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	      {
+	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
+	       *HiddenAllowed |= 1 << Sco_SCOPE_INS;		// A system admin can view hidden institution surveys
+	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+		 {
+		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
+	          *HiddenAllowed |= 1 << Sco_SCOPE_CTR;		// A system admin can view hidden centre surveys
+		  if (Gbl.CurrentDeg.Deg.DegCod > 0)		// Degree selected
+		    {
+		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+	             *HiddenAllowed |= 1 << Sco_SCOPE_DEG;	// A system admin can view hidden degree surveys
+		     if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+		       {
+			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
+	                *HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A system admin can view hidden course surveys
+		       }
+		    }
+		 }
+	      }
+	   }
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /********************* Get survey data using its code ************************/
 /*****************************************************************************/
 
@@ -963,7 +1122,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
    unsigned long NumRows;
 
    /***** Build query *****/
-   sprintf (Query,"SELECT SvyCod,DegCod,CrsCod,Hidden,Roles,UsrCod,"
+   sprintf (Query,"SELECT SvyCod,Scope,Cod,Hidden,Roles,UsrCod,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
@@ -983,25 +1142,12 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       /* Get code of the survey (row[0]) */
       Svy->SvyCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get code of the degree (row[1]) */
-      Svy->DegCod = Str_ConvertStrCodToLongCod (row[1]);
-      if (Svy->DegCod > 0)
-         if (Svy->DegCod != Gbl.CurrentDeg.Deg.DegCod)
-            Lay_ShowErrorAndExit ("Wrong survey degree.");
+      /* Get survey scope (row[1]) */
+      if ((Svy->Scope = Sco_GetScopeFromUnsignedStr (row[1])) == Sco_SCOPE_UNK)
+         Lay_ShowErrorAndExit ("Wrong survey scope.");
 
-      /* Get code of the course (row[2]) */
-      Svy->CrsCod = Str_ConvertStrCodToLongCod (row[2]);
-      if (Svy->CrsCod > 0)
-         if (Svy->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
-            Lay_ShowErrorAndExit ("Wrong survey course.");
-
-      /* Set survey scope */
-      if (Svy->CrsCod > 0)
-         Svy->Scope = Sco_SCOPE_CRS;
-      else if (Svy->DegCod > 0)
-         Svy->Scope = Sco_SCOPE_DEG;
-      else
-	 Svy->Scope = Sco_SCOPE_SYS;
+      /* Get code of the country, institution, centre, degree or course (row[2]) */
+      Svy->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
       Svy->Status.Visible = (row[3][0] == 'N');
@@ -1033,15 +1179,31 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.LoggedRole));
 
       /* Do I belong to valid groups to answer this survey? */
-      if (Svy->DegCod < 0 && Svy->CrsCod < 0)
-         Svy->Status.IBelongToDegCrsGrps = Gbl.Usrs.Me.Logged;
-      else if (Svy->DegCod > 0 && Svy->CrsCod < 0)
-         Svy->Status.IBelongToDegCrsGrps = Usr_CheckIfIBelongToDeg (Svy->DegCod);
-      else if (Svy->CrsCod > 0)
-         Svy->Status.IBelongToDegCrsGrps = Usr_CheckIfIBelongToCrs (Svy->CrsCod) &&
-                                           Svy_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
-      else
-         Lay_ShowErrorAndExit ("Wrong survey scope.");
+      switch (Svy->Scope)
+        {
+	 case Sco_SCOPE_UNK:	// Unknown
+            Lay_ShowErrorAndExit ("Wrong survey scope.");
+	    break;
+	 case Sco_SCOPE_SYS:	// System
+            Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
+	    break;
+	 case Sco_SCOPE_CTY:	// Country
+            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCty (Svy->Cod);
+	    break;
+	 case Sco_SCOPE_INS:	// Institution
+            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToIns (Svy->Cod);
+	    break;
+	 case Sco_SCOPE_CTR:	// Centre
+            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCtr (Svy->Cod);
+	    break;
+	 case Sco_SCOPE_DEG:	// Degree
+            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToDeg (Svy->Cod);
+	    break;
+	 case Sco_SCOPE_CRS:	// Course
+	    Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Svy->Cod) &&
+					 Svy_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
+	    break;
+        }
 
       /* Have I answered this survey? */
       Svy->Status.IHaveAnswered = Svy_CheckIfIHaveAnsweredSvy (Svy->SvyCod);
@@ -1051,7 +1213,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
                                 Svy->Status.Visible &&
                                 Svy->Status.Open &&
                                 Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                Svy->Status.IBelongToDegCrsGrps &&
+                                Svy->Status.IBelongToScope &&
                                !Svy->Status.IHaveAnswered;
 
       /* Can I view results of the survey?
@@ -1059,56 +1221,92 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       switch (Gbl.Usrs.Me.LoggedRole)
         {
          case Rol_STUDENT:
-            Svy->Status.ICanViewResults = (Svy->NumQsts != 0) &&
-                                          Svy->Status.Visible &&
-                                          Svy->Status.Open &&
-                                          Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                          Svy->Status.IBelongToDegCrsGrps &&
-                                          Svy->Status.IHaveAnswered;
-            Svy->Status.ICanEdit = false;
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
+        	                           Svy->Scope == Sco_SCOPE_DEG ||
+        	                           Svy->Scope == Sco_SCOPE_CTR ||
+        	                           Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                          (Svy->NumQsts != 0) &&
+                                           Svy->Status.Visible &&
+                                           Svy->Status.Open &&
+                                           Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+                                           Svy->Status.IBelongToScope &&
+                                           Svy->Status.IHaveAnswered;
+            Svy->Status.ICanEdit         = false;
             break;
          case Rol_TEACHER:
-            Svy->Status.ICanViewResults = (Svy->NumQsts != 0) &&
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
+        	                           Svy->Scope == Sco_SCOPE_DEG ||
+        	                           Svy->Scope == Sco_SCOPE_CTR ||
+        	                           Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                           Svy->NumQsts != 0 &&
                                           !Svy->Status.ICanAnswer;
-            Svy->Status.ICanEdit = Svy->Scope == Sco_SCOPE_CRS &&
-                                   Svy->Status.IBelongToDegCrsGrps;
+            Svy->Status.ICanEdit        =  Svy->Scope == Sco_SCOPE_CRS &&
+                                           Svy->Status.IBelongToScope;
             break;
          case Rol_DEG_ADM:
-            Svy->Status.ICanViewResults = false;
-            Svy->Status.ICanEdit = Svy->Scope == Sco_SCOPE_DEG &&
-                                   Svy->Status.IBelongToDegCrsGrps;
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_DEG ||
+        	                           Svy->Scope == Sco_SCOPE_CTR ||
+        	                           Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                          (Svy->NumQsts != 0) &&
+                                          !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit        =  Svy->Scope == Sco_SCOPE_DEG &&
+                                           Svy->Status.IBelongToScope;
             break;
-         // TODO: Add Rol_CTR_ADM
-         // TODO: Add Rol_INS_ADM
+         case Rol_CTR_ADM:
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CTR ||
+        	                           Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                          (Svy->NumQsts != 0) &&
+                                          !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit        =  Svy->Scope == Sco_SCOPE_CTR &&
+                                           Svy->Status.IBelongToScope;
+            break;
+         case Rol_INS_ADM:
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                          (Svy->NumQsts != 0) &&
+                                          !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit        =  Svy->Scope == Sco_SCOPE_INS &&
+                                           Svy->Status.IBelongToScope;
+            break;
          case Rol_SYS_ADM:
             Svy->Status.ICanViewResults = (Svy->NumQsts != 0);
-            Svy->Status.ICanEdit = true;
+            Svy->Status.ICanEdit        = true;
             break;
          default:
             Svy->Status.ICanViewResults = false;
-            Svy->Status.ICanEdit = false;
+            Svy->Status.ICanEdit        = false;
             break;
         }
      }
    else
      {
       /* Initialize to empty survey */
-      Svy->SvyCod = -1L;
-      Svy->Scope  = Sco_SCOPE_UNK;
-      Svy->Roles  = 0;
-      Svy->UsrCod = -1L;
+      Svy->SvyCod                  = -1L;
+      Svy->Scope                   = Sco_SCOPE_UNK;
+      Svy->Roles                   = 0;
+      Svy->UsrCod                  = -1L;
       Svy->TimeUTC[Svy_START_TIME] =
       Svy->TimeUTC[Svy_END_TIME  ] = (time_t) 0;
-      Svy->Title[0] = '\0';
-      Svy->NumQsts = 0;
-      Svy->NumUsrs = 0;
-      Svy->Status.Visible = true;
-      Svy->Status.Open = false;
+      Svy->Title[0]                = '\0';
+      Svy->NumQsts                 = 0;
+      Svy->NumUsrs                 = 0;
+      Svy->Status.Visible                         = true;
+      Svy->Status.Open                            = false;
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Svy->Status.IBelongToDegCrsGrps = false;
-      Svy->Status.IHaveAnswered = false;
-      Svy->Status.ICanAnswer = false;
-      Svy->Status.ICanViewResults = false;
+      Svy->Status.IBelongToScope                  = false;
+      Svy->Status.IHaveAnswered                   = false;
+      Svy->Status.ICanAnswer                      = false;
+      Svy->Status.ICanViewResults                 = false;
+      Svy->Status.ICanEdit                        = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1495,8 +1693,8 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM surveys"
-                  " WHERE DegCod='%ld' AND CrsCod='%ld' AND Title='%s' AND SvyCod<>'%ld'",
-            Svy->DegCod,Svy->CrsCod,Svy->Title,Svy->SvyCod);
+                  " WHERE Scope='%u' AND Cod='%ld' AND Title='%s' AND SvyCod<>'%ld'",
+            (unsigned) Svy->Scope,Svy->Cod,Svy->Title,Svy->SvyCod);
    return (DB_QueryCOUNT (Query,"can not get similar surveys") != 0);
   }
 
@@ -1548,7 +1746,7 @@ void Svy_RequestCreatOrEditSvy (void)
       Svy.Status.Visible = true;
       Svy.Status.Open = true;
       Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Svy.Status.IBelongToDegCrsGrps = false;
+      Svy.Status.IBelongToScope = false;
       Svy.Status.IHaveAnswered = false;
       Svy.Status.ICanAnswer = false;
       Svy.Status.ICanViewResults = false;
@@ -1653,10 +1851,8 @@ void Svy_RequestCreatOrEditSvy (void)
   }
 
 /*****************************************************************************/
-/*** Set default and allowed location ranges depending on logged user type ***/
+/****** Set default and allowed scopes depending on logged user's role *******/
 /*****************************************************************************/
-// Return true if user can edit survey
-// Return false if user can not edit survey
 
 static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
   {
@@ -1668,7 +1864,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TEACHER:	// Teachers only can edit course surveys
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	   {
 	    if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
@@ -1681,7 +1877,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
 	      }
 	   }
          break;
-       case Rol_DEG_ADM:
+      case Rol_DEG_ADM:	// Degree admins only can edit degree surveys
 	 if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
 	    Svy->Scope = Sco_SCOPE_DEG;
 	 if (Svy->Scope == Sco_SCOPE_DEG)
@@ -1691,27 +1887,48 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
 	    ICanEdit = true;
 	   }
          break;
-      // TODO: Add Rol_CTR_ADM
-      // TODO: Add Rol_INS_ADM
-      case Rol_SYS_ADM:
-	 if (Svy->Scope == Sco_SCOPE_UNK)
+      case Rol_CTR_ADM:	// Centre admins only can edit centre surveys
+	 if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	    Svy->Scope = Sco_SCOPE_CTR;
+	 if (Svy->Scope == Sco_SCOPE_CTR)
 	   {
-	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    Gbl.Scope.Default = Svy->Scope;
+	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
+	    ICanEdit = true;
+	   }
+         break;
+      case Rol_INS_ADM:	// Institution admins only can edit institution surveys
+	 if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	    Svy->Scope = Sco_SCOPE_INS;
+	 if (Svy->Scope == Sco_SCOPE_INS)
+	   {
+	    Gbl.Scope.Default = Svy->Scope;
+	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS;
+	    ICanEdit = true;
+	   }
+         break;
+      case Rol_SYS_ADM:// System admins can edit any survey
+	 if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	   {
+	    if      (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	       Svy->Scope = Sco_SCOPE_CRS;
 	    else if (Gbl.CurrentDeg.Deg.DegCod > 0)
 	       Svy->Scope = Sco_SCOPE_DEG;
-	    // TODO: Add Sco_SCOPE_CTR
-	    // TODO: Add Sco_SCOPE_INS
-	    // TODO: Add Sco_SCOPE_CTY
+	    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	       Svy->Scope = Sco_SCOPE_CTR;
+	    else if (Gbl.CurrentIns.Ins.InsCod > 0)
+	       Svy->Scope = Sco_SCOPE_INS;
+	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+	       Svy->Scope = Sco_SCOPE_CTY;
 	    else
 	       Svy->Scope = Sco_SCOPE_SYS;
 	   }
          Gbl.Scope.Default = Svy->Scope;
-         Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	                     // 1 << Sco_SCOPE_CTY |	// TODO: Add this scope
-	                     // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
-	                     // 1 << Sco_SCOPE_CTR |	// TODO: Add this scope
-                             1 << Sco_SCOPE_DEG    |
+         Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	                     1 << Sco_SCOPE_CTY |
+	                     1 << Sco_SCOPE_INS |
+	                     1 << Sco_SCOPE_CTR |
+                             1 << Sco_SCOPE_DEG |
                              1 << Sco_SCOPE_CRS;
 	 ICanEdit = true;
 	 break;
@@ -1785,7 +2002,8 @@ void Svy_RecFormSurvey (void)
   {
    extern const char *Txt_Already_existed_a_survey_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_survey;
-   struct Survey OldSvy,NewSvy;
+   struct Survey OldSvy;
+   struct Survey NewSvy;
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
    bool NewSurveyIsCorrect = true;
@@ -1795,51 +2013,62 @@ void Svy_RecFormSurvey (void)
    /***** Get the code of the survey *****/
    ItsANewSurvey = ((NewSvy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
 
-   if (!ItsANewSurvey)
+   if (ItsANewSurvey)
+      NewSvy.Scope = Sco_SCOPE_UNK;
+   else
      {
       /* Get data of the old (current) survey from database */
       OldSvy.SvyCod = NewSvy.SvyCod;
       Svy_GetDataOfSurveyByCod (&OldSvy);
       if (!OldSvy.Status.ICanEdit)
          Lay_ShowErrorAndExit ("You can not update this survey.");
+      NewSvy.Scope = OldSvy.Scope;
      }
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	               // 1 << Sco_SCOPE_CTY |	// TODO: Add this scope
-	               // 1 << Sco_SCOPE_INS |	// TODO: Add this scope
-	               // 1 << Sco_SCOPE_CTR |	// TODO: Add this scope
-                       1 << Sco_SCOPE_DEG    |
-                       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_SYS;
+   Svy_SetDefaultAndAllowedScope (&NewSvy);
    Sco_GetScope ("ScopeSvy");
-
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-         NewSvy.DegCod = -1L;
-         NewSvy.CrsCod = -1L;
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
          NewSvy.Scope = Sco_SCOPE_SYS;
+         NewSvy.Cod = -1L;
+         break;
+      case Sco_SCOPE_CTY:
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	 NewSvy.Scope = Sco_SCOPE_CTY;
+	 NewSvy.Cod = Gbl.CurrentCty.Cty.CtyCod;
+         break;
+      case Sco_SCOPE_INS:
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.LoggedRole != Rol_INS_ADM)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	 NewSvy.Scope = Sco_SCOPE_INS;
+	 NewSvy.Cod = Gbl.CurrentIns.Ins.InsCod;
+         break;
+      case Sco_SCOPE_CTR:
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.LoggedRole != Rol_CTR_ADM)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	 NewSvy.Scope = Sco_SCOPE_CTR;
+	 NewSvy.Cod = Gbl.CurrentCtr.Ctr.CtrCod;
          break;
       case Sco_SCOPE_DEG:
-         if (Gbl.CurrentDeg.Deg.DegCod > 0)
-           {
-            NewSvy.DegCod = Gbl.CurrentDeg.Deg.DegCod;
-            NewSvy.CrsCod = -1L;
-            NewSvy.Scope = Sco_SCOPE_DEG;
-           }
-         else
-            Lay_ShowErrorAndExit ("Wrong survey location.");
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.LoggedRole != Rol_DEG_ADM)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	 NewSvy.Scope = Sco_SCOPE_DEG;
+	 NewSvy.Cod = Gbl.CurrentDeg.Deg.DegCod;
          break;
       case Sco_SCOPE_CRS:
-         if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-           {
-            NewSvy.DegCod = -1L;	// DegCod doen't mind when CrsCod > 0
-            NewSvy.CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
-            NewSvy.Scope = Sco_SCOPE_CRS;
-           }
-         else
-            Lay_ShowErrorAndExit ("Wrong survey location.");
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM &&
+	     Gbl.Usrs.Me.LoggedRole != Rol_TEACHER)
+	    Lay_ShowErrorAndExit ("Wrong survey scope.");
+	 NewSvy.Scope = Sco_SCOPE_CRS;
+	 NewSvy.Cod = Gbl.CurrentCrs.Crs.CrsCod;
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -1900,8 +2129,8 @@ void Svy_RecFormSurvey (void)
    else
       Svy_RequestCreatOrEditSvy ();
 
-   /***** Notify by e-mail about the new assignment *****/
-   if (NewSvy.CrsCod > 0)	// Notify only the surveys for a course, not for a degree or global
+   /***** Notify by e-mail about the new survey *****/
+   if (NewSvy.Scope == Sco_SCOPE_CRS)	// Notify only the surveys for a course, not for a degree or global
      {
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewSvy.SvyCod)))
          Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (NewSvy.SvyCod,NumUsrsToBeNotifiedByEMail);
@@ -1939,12 +2168,12 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
 
    /***** Create a new survey *****/
    sprintf (Query,"INSERT INTO surveys"
-	          " (DegCod,CrsCod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES ('%ld','%ld','N','%u','%ld',"
+	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+                  " VALUES ('%u','%ld','N','%u','%ld',"
                   "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s')",
-            Svy->DegCod,
-            Svy->CrsCod,
+            (unsigned) Svy->Scope,
+            Svy->Cod,
             Svy->Roles,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Svy->TimeUTC[Svy_START_TIME],
@@ -1974,12 +2203,12 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
 
    /***** Update the data of the survey *****/
    sprintf (Query,"UPDATE surveys"
-	          " SET DegCod='%ld',CrsCod='%ld',Roles='%u',"
+	          " SET Scope='%u',Cod='%ld',Roles='%u',"
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
 	          "Title='%s',Txt='%s'"
                   " WHERE SvyCod='%ld'",
-            Svy->DegCod,Svy->CrsCod,
+            (unsigned) Svy->Scope,Svy->Cod,
             Svy->Roles,
             Svy->TimeUTC[Svy_START_TIME],
             Svy->TimeUTC[Svy_END_TIME  ],
