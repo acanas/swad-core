@@ -2244,7 +2244,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    sprintf (Query,"DELETE FROM notices WHERE CrsCod='%ld'",CrsCod);
    DB_QueryDELETE (Query,"can not remove notices in a course");
 
-   /***** Remove all the threads and posts in forums of a course *****/
+   /***** Remove all the threads and posts in forums of the course *****/
    For_RemoveCrsForums (CrsCod);
 
    /***** Remove all test exams made in the course *****/

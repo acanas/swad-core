@@ -140,6 +140,7 @@ void For_RemoveExpiredThrsClipboards (void);
 void For_RemoveThrCodFromThrClipboard (long ThrCod);
 void For_RemoveUsrFromThrClipboard (long UsrCod);
 
+void For_RemoveDegForums (long DegCod);
 void For_RemoveCrsForums (long CrsCod);
 
 #endif
