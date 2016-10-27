@@ -8127,11 +8127,11 @@ static void Sta_GetAndShowSurveysStats (void)
 
    /***** Get the number of surveys and the average number of questions per survey from this location
           (all the platform, current degree or current course) *****/
-   if ((NumSurveys = Svy_GetNumSurveys (Gbl.Scope.Current,&NumNotif)))
+   if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
-      if ((NumCoursesWithSurveys = Svy_GetNumCoursesWithSurveys (Gbl.Scope.Current)) != 0)
+      if ((NumCoursesWithSurveys = Svy_GetNumCoursesWithCrsSurveys (Gbl.Scope.Current)) != 0)
          NumSurveysPerCourse = (float) NumSurveys / (float) NumCoursesWithSurveys;
-      NumQstsPerSurvey = Svy_GetNumQstsPerSurvey (Gbl.Scope.Current);
+      NumQstsPerSurvey = Svy_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
      }
 
    /***** Table start *****/

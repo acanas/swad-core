@@ -36,15 +36,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES] =
+const char *Sco_ScopeDB[Sco_NUM_SCOPES] =
   {
-   NULL,	// Sco_SCOPE_UNK
-   "Sys",	// Sco_SCOPE_SYS,
-   NULL,	// Sco_SCOPE_CTY,
-   "Ins",	// Sco_SCOPE_INS,
-   "Ctr",	// Sco_SCOPE_CTR,
-   "Deg",	// Sco_SCOPE_DEG,
-   NULL,	// Sco_SCOPE_CRS,
+   "Unk",	// Sco_SCOPE_UNK
+   "Sys",	// Sco_SCOPE_SYS
+   "Cty",	// Sco_SCOPE_CTY
+   "Ins",	// Sco_SCOPE_INS
+   "Ctr",	// Sco_SCOPE_CTR
+   "Deg",	// Sco_SCOPE_DEG
+   "Crs",	// Sco_SCOPE_CRS
   };
 
 /*****************************************************************************/
@@ -294,7 +294,7 @@ void Sco_SetScopesForListingStudents (void)
   }
 
 /*****************************************************************************/
-/*************************** Get scope from string ***************************/
+/*********************** Get scope from unsigned string **********************/
 /*****************************************************************************/
 
 Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
@@ -304,6 +304,23 @@ Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Sco_NUM_SCOPES)
          return (Sco_Scope_t) UnsignedNum;
+
+   return Sco_SCOPE_UNK;
+  }
+
+/*****************************************************************************/
+/*********************** Get scope from database string **********************/
+/*****************************************************************************/
+
+Sco_Scope_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
+  {
+   Sco_Scope_t Scope;
+
+   for (Scope = Sco_SCOPE_UNK;
+	Scope < Sco_NUM_SCOPES;
+	Scope++)
+      if (!strcmp (Sco_ScopeDB[Scope],ScopeDBStr))
+	 return Scope;
 
    return Sco_SCOPE_UNK;
   }

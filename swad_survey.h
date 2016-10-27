@@ -109,8 +109,8 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope);
-unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif);
-float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope);
+unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope);
+unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif);
+float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope);
 
 #endif

@@ -3181,7 +3181,7 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
 
 static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   {
-   extern const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES];
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y;
    char Query[512];
@@ -3195,7 +3195,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
       /***** Insert or replace administrator in current institution/centre/degree *****/
       sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
                      " VALUES ('%ld','%s','%ld')",
-               UsrDat->UsrCod,Sco_ScopeAdminDB[Scope],Cod);
+               UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryREPLACE (Query,"can not create administrator");
 
       sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y,
@@ -3820,7 +3820,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
 static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName)
   {
-   extern const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES];
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
    char Query[1024];
@@ -3830,7 +3830,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
                      " WHERE UsrCod='%ld' AND Scope='%s' AND Cod='%ld'",
-               UsrDat->UsrCod,Sco_ScopeAdminDB[Scope],Cod);
+               UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryDELETE (Query,"can not remove an administrator");
 
       sprintf (Gbl.Message,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,

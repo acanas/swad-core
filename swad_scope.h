@@ -61,5 +61,6 @@ void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 
 Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
+Sco_Scope_t Sco_GetScopeFromDBStr (const char *ScopeDBStr);
 
 #endif

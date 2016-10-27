@@ -2086,27 +2086,31 @@ mysql> DESCRIBE sta_notif;
    /***** Table surveys *****/
 /*
 mysql> DESCRIBE surveys;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| SvyCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| DegCod    | int(11)       | NO   | MUL | -1      |                |
-| CrsCod    | int(11)       | NO   |     | -1      |                |
-| Hidden    | enum('N','Y') | NO   |     | N       |                |
-| NumNotif  | int(11)       | NO   |     | 0       |                |
-| Roles     | int(11)       | NO   |     | 0       |                |
-| UsrCod    | int(11)       | NO   |     | NULL    |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| Title     | varchar(255)  | NO   |     | NULL    |                |
-| Txt       | text          | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                      | Null | Key | Default | Extra          |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| SvyCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
+| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
+| Cod       | int(11)                                   | NO   |     | -1      |                |
+| DegCod    | int(11)                                   | NO   |     | -1      |                |
+| CrsCod    | int(11)                                   | NO   |     | -1      |                |
+| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
+| NumNotif  | int(11)                                   | NO   |     | 0       |                |
+| Roles     | int(11)                                   | NO   |     | 0       |                |
+| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
+| StartTime | datetime                                  | NO   |     | NULL    |                |
+| EndTime   | datetime                                  | NO   |     | NULL    |                |
+| Title     | varchar(255)                              | NO   |     | NULL    |                |
+| Txt       | text                                      | NO   |     | NULL    |                |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS surveys ("
                    "SvyCod INT NOT NULL AUTO_INCREMENT,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
+	           "Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
+	           "Cod INT NOT NULL DEFAULT -1,"
+		      "DegCod INT NOT NULL DEFAULT -1,"	// TODO: DROP COLUMN
+		      "CrsCod INT NOT NULL DEFAULT -1,"	// TODO: DROP COLUMN
                    "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "NumNotif INT NOT NULL DEFAULT 0,"
                    "Roles INT NOT NULL DEFAULT 0,"
@@ -2115,8 +2119,9 @@ mysql> DESCRIBE surveys;
                    "EndTime DATETIME NOT NULL,"
                    "Title VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(SvyCod),"
-                   "INDEX(DegCod,CrsCod,Hidden))");
+                   "PRIMARY KEY(SvyCod),"
+	           "UNIQUE INDEX(SvyCod,Scope,Cod,Hidden),"
+	           "INDEX(Scope,Cod,Hidden))");
 
    /***** Table svy_answers *****/
 /*

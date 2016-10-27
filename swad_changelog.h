@@ -146,18 +146,39 @@
 // TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
 
 // TODO: Cuando se crea una cuenta nueva, debería ponerse a 0 las estadísticas del perfil del usuario
+// TODO: Import ID, e-mail, Surname1, Surname2, Name from CSV, suggested by Javier Melero
+
+// TODO: Delete surveys of centre, institution or country on deletion of centre, institution or country
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.44 (2016-10-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.45 (2016-10-27)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.45:    Oct 27, 2016	Changes in database table for surveys. Not finished. (205927 lines)
+					12 changes necessary in database:
+ALTER TABLE surveys ADD COLUMN Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys' AFTER SvyCod;
+ALTER TABLE surveys ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER Scope;
+
+UPDATE surveys SET Scope='Sys' WHERE DegCod<='0' AND CrsCod<='0';
+UPDATE surveys SET Scope='Deg' WHERE DegCod>'0' AND CrsCod<='0';
+UPDATE surveys SET Scope='Crs' WHERE CrsCod>'0';
+
+UPDATE surveys SET Cod='-1' WHERE Scope='Sys';
+UPDATE surveys SET Cod=DegCod WHERE Scope='Deg';
+UPDATE surveys SET Cod=CrsCod WHERE Scope='Crs';
+
+DROP INDEX DegCod ON surveys;
+ALTER TABLE surveys ADD PRIMARY KEY(SvyCod);
+DROP INDEX SvyCod ON surveys;
+ALTER TABLE surveys ADD UNIQUE INDEX(SvyCod,Scope,Cod,Hidden),ADD INDEX(Scope,Cod,Hidden);
+
         Version 16.44:    Oct 27, 2016	New scopes (centre, institution, country) of surveys. Not finished. (205826 lines)
         Version 16.43:    Oct 26, 2016	Fixed bugs and code refactoring in scope of surveys. (205537 lines)
         Version 16.42.1:  Oct 25, 2016	Added button "New question" in survey when the survey has no questions.

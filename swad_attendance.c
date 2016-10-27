@@ -1672,12 +1672,12 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
                         " FROM att_events"
                         " WHERE CrsCod>'0'");
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
                         " FROM centres,degrees,courses,att_events"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -1687,7 +1687,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
                         " FROM degrees,courses,att_events"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1696,7 +1696,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT (att_events.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT att_events.CrsCod)"
                         " FROM courses,att_events"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.Status=0"
@@ -1704,7 +1704,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope)
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
                         " FROM att_events"
                         " WHERE CrsCod='%ld'",
                   Gbl.CurrentCrs.Crs.CrsCod);

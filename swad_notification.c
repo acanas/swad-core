@@ -1155,6 +1155,7 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1327,7 +1328,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                         " WHERE surveys.SvyCod='%ld'"
                         " AND surveys.SvyCod NOT IN"
                         " (SELECT SvyCod FROM svy_grp WHERE SvyCod='%ld')"
-                        " AND surveys.CrsCod=crs_usr.CrsCod"
+                        " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod<>'%ld'"
                         " AND (surveys.Roles&(1<<crs_usr.Role))<>0)"
                         " UNION "
@@ -1338,10 +1339,15 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                         " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
                         " AND crs_grp_usr.UsrCod<>'%ld'"
                         " AND svy_grp.SvyCod=surveys.SvyCod"
-                        " AND surveys.CrsCod=crs_usr.CrsCod"
+                        " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
                         " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
-                  Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                  Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                  Cod,
+                  Cod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS],
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  Cod,
+                  Gbl.Usrs.Me.UsrDat.UsrCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
      }
 

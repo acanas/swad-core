@@ -11663,6 +11663,26 @@ SELECT CrsCod,COUNT(*) AS N FROM crs_usr LEFT JOIN log_full ON (crs_usr.CrsCod=l
 (SELECT DISTINCT crs_grp_usr.UsrCod FROM svy_grp,crs_grp_usr,surveys,crs_usr WHERE svy_grp.SvyCod='6' AND svy_grp.GrpCod=crs_grp_usr.GrpCod AND crs_grp_usr.UsrCod=crs_usr.UsrCod AND crs_grp_usr.UsrCod<>'1' AND svy_grp.SvyCod=surveys.SvyCod AND surveys.CrsCod=crs_usr.CrsCod AND (surveys.Roles&(1<<crs_usr.Role))<>0);
 
 
+----- swad-core 16.45 (2016/10/27) -----
+
+ALTER TABLE surveys ADD COLUMN Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys' AFTER SvyCod;
+ALTER TABLE surveys ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER Scope;
+
+UPDATE surveys SET Scope='Sys' WHERE DegCod<='0' AND CrsCod<='0';
+UPDATE surveys SET Scope='Deg' WHERE DegCod>'0' AND CrsCod<='0';
+UPDATE surveys SET Scope='Crs' WHERE CrsCod>'0';
+
+UPDATE surveys SET Cod='-1' WHERE Scope='Sys';
+UPDATE surveys SET Cod=DegCod WHERE Scope='Deg';
+UPDATE surveys SET Cod=CrsCod WHERE Scope='Crs';
+
+DROP INDEX DegCod ON surveys;
+ALTER TABLE surveys ADD PRIMARY KEY(SvyCod);
+DROP INDEX SvyCod ON surveys;
+ALTER TABLE surveys ADD UNIQUE INDEX(SvyCod,Scope,Cod,Hidden),ADD INDEX(Scope,Cod,Hidden);
 
 
+----- TODO: Eliminar columnas sin uso en futuras versiones -----
 
+ALTER TABLE surveys DROP COLUMN DegCod;
+ALTER TABLE surveys DROP COLUMN CrsCod;

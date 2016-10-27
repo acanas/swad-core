@@ -753,15 +753,15 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
   {
-   extern const char *Sco_ScopeAdminDB[Sco_NUM_SCOPES];
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[128];
 
-   if (Sco_ScopeAdminDB[Scope])
+   if (Sco_ScopeDB[Scope])
      {
       /***** Get if a user is administrator of a degree from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM admin"
 		     " WHERE UsrCod='%ld' AND Scope='%s' AND Cod='%ld'",
-	       UsrCod,Sco_ScopeAdminDB[Scope],Cod);
+	       UsrCod,Sco_ScopeDB[Scope],Cod);
       return (DB_QueryCOUNT (Query,"can not check if a user is administrator") != 0);
      }
    return false;

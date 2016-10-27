@@ -1,4 +1,4 @@
-// swad_survey2.c: surveys
+// swad_survey.c: surveys
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -899,8 +899,7 @@ void Svy_GetListSurveys (void)
 	    break;
 	}
 
-      sprintf (Query,"SELECT SvyCod"
-		     " FROM surveys"
+      sprintf (Query,"SELECT SvyCod FROM surveys"
 		     " WHERE %s%s%s%s%s%s"
 		     " ORDER BY %s",
 		  SubQuery[Sco_SCOPE_SYS],
@@ -1143,7 +1142,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       Svy->SvyCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get survey scope (row[1]) */
-      if ((Svy->Scope = Sco_GetScopeFromUnsignedStr (row[1])) == Sco_SCOPE_UNK)
+      if ((Svy->Scope = Sco_GetScopeFromDBStr (row[1])) == Sco_SCOPE_UNK)
          Lay_ShowErrorAndExit ("Wrong survey scope.");
 
       /* Get code of the country, institution, centre, degree or course (row[2]) */
@@ -1689,12 +1688,15 @@ void Svy_UnhideSurvey (void)
 
 static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM surveys"
-                  " WHERE Scope='%u' AND Cod='%ld' AND Title='%s' AND SvyCod<>'%ld'",
-            (unsigned) Svy->Scope,Svy->Cod,Svy->Title,Svy->SvyCod);
+                  " WHERE Scope='%s' AND Cod='%ld'"
+                  " AND Title='%s' AND SvyCod<>'%ld'",
+            Sco_ScopeDB[Svy->Scope],Svy->Cod,
+            Svy->Title,Svy->SvyCod);
    return (DB_QueryCOUNT (Query,"can not get similar surveys") != 0);
   }
 
@@ -2163,16 +2165,17 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
 
 static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_survey_X;
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new survey *****/
    sprintf (Query,"INSERT INTO surveys"
 	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES ('%u','%ld','N','%u','%ld',"
+                  " VALUES ('%s','%ld','N','%u','%ld',"
                   "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s')",
-            (unsigned) Svy->Scope,
+            Sco_ScopeDB[Svy->Scope],
             Svy->Cod,
             Svy->Roles,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2198,17 +2201,18 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
 
 static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_survey_has_been_modified;
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
    sprintf (Query,"UPDATE surveys"
-	          " SET Scope='%u',Cod='%ld',Roles='%u',"
+	          " SET Scope='%s',Cod='%ld',Roles='%u',"
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
 	          "Title='%s',Txt='%s'"
                   " WHERE SvyCod='%ld'",
-            (unsigned) Svy->Scope,Svy->Cod,
+            Sco_ScopeDB[Svy->Scope],Svy->Cod,
             Svy->Roles,
             Svy->TimeUTC[Svy_START_TIME],
             Svy->TimeUTC[Svy_END_TIME  ],
@@ -2279,8 +2283,11 @@ void Svy_RemoveGroup (long GrpCod)
    char Query[256];
 
    /***** Remove group from all the surveys *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE GrpCod='%ld'",GrpCod);
-   DB_QueryDELETE (Query,"can not remove group from the associations between surveys and groups");
+   sprintf (Query,"DELETE FROM svy_grp"
+	          " WHERE GrpCod='%ld'",
+	    GrpCod);
+   DB_QueryDELETE (Query,"can not remove group"
+	                 " from the associations between surveys and groups");
   }
 
 /*****************************************************************************/
@@ -2293,9 +2300,11 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
 
    /***** Remove group from all the surveys *****/
    sprintf (Query,"DELETE FROM svy_grp USING crs_grp,svy_grp"
-                  " WHERE crs_grp.GrpTypCod='%ld' AND crs_grp.GrpCod=svy_grp.GrpCod",
+                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " AND crs_grp.GrpCod=svy_grp.GrpCod",
             GrpTypCod);
-   DB_QueryDELETE (Query,"can not remove groups of a type from the associations between surveys and groups");
+   DB_QueryDELETE (Query,"can not remove groups of a type"
+	                 " from the associations between surveys and groups");
   }
 
 /*****************************************************************************/
@@ -2392,38 +2401,43 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
 
 void Svy_RemoveDegSurveys (long DegCod)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
 
    /***** Remove all the users in degree surveys
           (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_users USING surveys,svy_users"
-                  " WHERE surveys.DegCod='%ld' AND surveys.CrsCod='-1'"
+   sprintf (Query,"DELETE FROM svy_users"
+	          " USING surveys,svy_users"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_users.SvyCod",
-            DegCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered surveys in a degree");
+            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
+   DB_QueryDELETE (Query,"can not remove users"
+	                 " who had answered surveys in a degree");
 
    /***** Remove all the answers in degree surveys
           (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_answers USING surveys,svy_questions,svy_answers"
-                  " WHERE surveys.DegCod='%ld' AND surveys.CrsCod='-1'"
+   sprintf (Query,"DELETE FROM svy_answers"
+	          " USING surveys,svy_questions,svy_answers"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            DegCod);
+            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
    DB_QueryDELETE (Query,"can not remove answers of surveys in a degree");
 
    /***** Remove all the questions in this survey
           (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_questions USING surveys,svy_questions"
-                  " WHERE surveys.DegCod='%ld' AND surveys.CrsCod='-1'"
+   sprintf (Query,"DELETE FROM svy_questions"
+	          " USING surveys,svy_questions"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod",
-            DegCod);
+            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
    DB_QueryDELETE (Query,"can not remove questions of surveys in a degree");
 
    /***** Remove degree surveys
           (not including surveys of courses in degree) *****/
    sprintf (Query,"DELETE FROM surveys"
-                  " WHERE surveys.DegCod='%ld' AND surveys.CrsCod='-1'",
-            DegCod);
+                  " WHERE Scope='%s' AND Cod='%ld'",
+            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
    DB_QueryDELETE (Query,"can not remove all the surveys of a course");
   }
 
@@ -2433,38 +2447,48 @@ void Svy_RemoveDegSurveys (long DegCod)
 
 void Svy_RemoveCrsSurveys (long CrsCod)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
 
    /***** Remove all the users in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_users USING surveys,svy_users"
-                  " WHERE surveys.CrsCod='%ld'"
+   sprintf (Query,"DELETE FROM svy_users"
+	          " USING surveys,svy_users"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_users.SvyCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove users who are answered surveys in a course");
+            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
+   DB_QueryDELETE (Query,"can not remove users"
+	                 " who had answered surveys in a course");
 
    /***** Remove all the answers in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_answers USING surveys,svy_questions,svy_answers"
-                  " WHERE surveys.CrsCod='%ld'"
+   sprintf (Query,"DELETE FROM svy_answers"
+	          " USING surveys,svy_questions,svy_answers"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            CrsCod);
+            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
    DB_QueryDELETE (Query,"can not remove answers of surveys in a course");
 
    /***** Remove all the questions in course surveys *****/
-   sprintf (Query,"DELETE FROM svy_questions USING surveys,svy_questions"
-                  " WHERE surveys.CrsCod='%ld'"
+   sprintf (Query,"DELETE FROM svy_questions"
+	          " USING surveys,svy_questions"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod",
-            CrsCod);
+            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
    DB_QueryDELETE (Query,"can not remove questions of surveys in a course");
 
    /***** Remove groups *****/
-   sprintf (Query,"DELETE FROM svy_grp USING surveys,svy_grp"
-                  " WHERE surveys.CrsCod='%ld' AND surveys.SvyCod=svy_grp.SvyCod",
-            CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the groups associated to surveys of a course");
+   sprintf (Query,"DELETE FROM svy_grp"
+	          " USING surveys,svy_grp"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                  " AND surveys.SvyCod=svy_grp.SvyCod",
+            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
+   DB_QueryDELETE (Query,"can not remove all the groups"
+	                 " associated to surveys of a course");
 
    /***** Remove course surveys *****/
-   sprintf (Query,"DELETE FROM surveys WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM surveys"
+	          " WHERE Scope='%s' AND Cod='%ld'",
+            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
    DB_QueryDELETE (Query,"can not remove all the surveys of a course");
   }
 
@@ -2481,7 +2505,8 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
                   " WHERE SvyCod='%ld'"
                   " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
                   " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod='%ld' AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
+                  " WHERE crs_grp_usr.UsrCod='%ld'"
+                  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
             SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if I can do a survey") != 0);
   }
@@ -3712,8 +3737,9 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
 // Returns the number of courses with surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
+unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3723,48 +3749,58 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT Cod)"
                         " FROM surveys"
-                        " WHERE CrsCod>'0'");
+                        " WHERE Scope='%s'",
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM institutions,centres,degrees,courses,surveys"
 			" WHERE institutions.CtyCod='%ld'"
 			" AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM centres,degrees,courses,surveys"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM degrees,courses,surveys"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentCtr.Ctr.CtrCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT (surveys.CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM courses,surveys"
                         " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentDeg.Deg.DegCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT (CrsCod))"
+         sprintf (Query,"SELECT COUNT(DISTINCT Cod)"
                         " FROM surveys"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE Scope='%s' AND Cod='%ld'",
+                  Sco_ScopeDB[Sco_SCOPE_CRS],
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3785,13 +3821,14 @@ unsigned Svy_GetNumCoursesWithSurveys (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/*************************** Get number of surveys ***************************/
+/******************** Get number of surveys for courses **********************/
 /*****************************************************************************/
 // Returns the number of surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3803,7 +3840,8 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM surveys"
-                        " WHERE CrsCod>'0'");
+                        " WHERE Scope='%s'",
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
@@ -3812,8 +3850,10 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentCty.Cty.CtyCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
@@ -3821,28 +3861,36 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentIns.Ins.InsCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM degrees,courses,surveys"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentCtr.Ctr.CtrCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM courses,surveys"
                         " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=surveys.CrsCod",
-                  Gbl.CurrentDeg.Deg.DegCod);
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'",
+                  Gbl.CurrentDeg.Deg.DegCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM surveys"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE surveys.Scope='%s'"
+                        " AND CrsCod='%ld'",
+                  Sco_ScopeDB[Sco_SCOPE_CRS],
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3872,26 +3920,28 @@ unsigned Svy_GetNumSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
   }
 
 /*****************************************************************************/
-/*************** Get average number of questions per survey ******************/
+/************ Get average number of questions per course survey **************/
 /*****************************************************************************/
 
-float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
+float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float NumQstsPerSurvey;
 
-   /***** Get number of courses per user from database *****/
+   /***** Get number of questions per survey from database *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"
-                        " WHERE surveys.CrsCod>'0'"
+                        " WHERE surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
-                        " GROUP BY svy_questions.SvyCod) AS NumQstsTable");
+                        " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
@@ -3901,10 +3951,12 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod"
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-                  Gbl.CurrentCty.Cty.CtyCod);
+                  Gbl.CurrentCty.Cty.CtyCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
@@ -3913,10 +3965,12 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod"
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-                  Gbl.CurrentIns.Ins.InsCod);
+                  Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
@@ -3924,28 +3978,34 @@ float Svy_GetNumQstsPerSurvey (Sco_Scope_t Scope)
                         " FROM degrees,courses,surveys,svy_questions"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=surveys.CrsCod"
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+                  Gbl.CurrentCtr.Ctr.CtrCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM courses,surveys,svy_questions"
                         " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=surveys.CrsCod"
+                        " AND courses.CrsCod=surveys.Cod"
+                        " AND surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-                  Gbl.CurrentDeg.Deg.DegCod);
+                  Gbl.CurrentDeg.Deg.DegCod,
+                  Sco_ScopeDB[Sco_SCOPE_CRS]);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"
-                        " WHERE surveys.CrsCod='%ld'"
+                        " WHERE surveys.Scope='%s'"
+                        " AND surveys.CrsCod='%ld'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+                  Sco_ScopeDB[Sco_SCOPE_CRS],
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
