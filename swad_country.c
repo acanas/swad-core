@@ -1573,6 +1573,9 @@ void Cty_RemoveCountry (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
      {
+      /***** Remove surveys of the country *****/
+      Svy_RemoveSurveys (Sco_SCOPE_CTY,Cty.CtyCod);
+
       /***** Remove country *****/
       sprintf (Query,"DELETE FROM countries WHERE CtyCod='%03ld'",
                Cty.CtyCod);
