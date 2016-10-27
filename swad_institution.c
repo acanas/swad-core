@@ -1551,6 +1551,12 @@ void Ins_RemoveInstitution (void)
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
+      /***** Remove all the threads and posts in forums of the institution *****/
+      For_RemoveForums (Sco_SCOPE_INS,Ins.InsCod);
+
+      /***** Remove surveys of the institution *****/
+      Svy_RemoveSurveys (Sco_SCOPE_INS,Ins.InsCod);
+
       /***** Remove information related to files in institution *****/
       Brw_RemoveInsFilesFromDB (Ins.InsCod);
 
