@@ -4412,3 +4412,45 @@ void For_RemoveUsrFromThrClipboard (long UsrCod)
    sprintf (Query,"DELETE FROM forum_thr_clip WHERE UsrCod='%ld'",UsrCod);
    DB_QueryDELETE (Query,"can not remove a thread from the clipboard of a user");
   }
+
+/*****************************************************************************/
+/********** Remove all the threads and posts in forums of a course ***********/
+/*****************************************************************************/
+
+void For_RemoveCrsForums (long CrsCod)
+  {
+   char Query[512];
+
+   /***** Remove disabled posts *****/
+   sprintf (Query,"DELETE FROM forum_disabled_post"
+	          " USING forum_thread,forum_post,forum_disabled_post"
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod"
+                  " AND forum_post.PstCod=forum_disabled_post.PstCod",
+            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
+   DB_QueryDELETE (Query,"can not remove disabled posts in forums of a course");
+
+   /***** Remove posts *****/
+   sprintf (Query,"DELETE FROM forum_post USING forum_thread,forum_post"
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod",
+            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
+   DB_QueryDELETE (Query,"can not remove posts in forums of a course");
+
+   /***** Remove threads read *****/
+   sprintf (Query,"DELETE FROM forum_thr_read USING forum_thread,forum_thr_read"
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
+            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
+   DB_QueryDELETE (Query,"can not remove read threads in forums of a course");
+
+   /***** Remove threads *****/
+   sprintf (Query,"DELETE FROM forum_thread"
+                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " AND Location='%ld'",
+            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
+   DB_QueryDELETE (Query,"can not remove threads in forums of a course");
+  }

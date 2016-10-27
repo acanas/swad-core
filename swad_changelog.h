@@ -154,13 +154,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.45.2 (2016-10-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.45.3 (2016-10-27)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.45.3:  Oct 27, 2016	Code refactoring in course forums. (205906 lines)
         Version 16.45.2:  Oct 27, 2016	Code refactoring related with scopes. (205896 lines)
         Version 16.45.1:  Oct 27, 2016	Fixed bugs in surveys. (? lines)
         Version 16.45:    Oct 27, 2016	Changes in database table for surveys. Not finished. (205927 lines)
