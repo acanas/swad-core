@@ -63,8 +63,8 @@ const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
    0x1E0,	// For_FORUM_DEGREE_TCHS
    0x1C0,	// For_FORUM_CENTRE_USRS
    0x1C0,	// For_FORUM_CENTRE_TCHS
-   0x180,	// For_FORUM_INSTITUTION_USRS
-   0x180,	// For_FORUM_INSTITUTION_TCHS
+   0x180,	// For_FORUM_INSTIT_USRS
+   0x180,	// For_FORUM_INSTIT_TCHS
    0x100,	// For_FORUM_GLOBAL_USRS
    0x100,	// For_FORUM_GLOBAL_TCHS
    0x100,	// For_FORUM_SWAD_USRS
@@ -567,8 +567,8 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
                         " VALUES ('%u','-1','%ld','%ld')",
                   (unsigned) ForumType,FirstPstCod,FirstPstCod);
          break;
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES ('%u','%ld','%ld','%ld')",
@@ -1029,7 +1029,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          case For_FORUM_CENTRE_USRS:		case For_FORUM_CENTRE_TCHS:
             ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
             break;
-         case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+         case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
             ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
             break;
          case For_FORUM_DEGREE_USRS:		case For_FORUM_DEGREE_TCHS:
@@ -1430,8 +1430,8 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
    /***** Get number of posts from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ins.InsCod);
          break;
@@ -1577,7 +1577,7 @@ void For_SetForumTypeAndRestrictAccess (void)
       case ActCutThrForInsUsr:	case ActPasThrForInsUsr:
       case ActDelPstForInsUsr:
       case ActEnbPstForInsUsr:	case ActDisPstForInsUsr:
-         Gbl.Forum.ForumType = For_FORUM_INSTITUTION_USRS;
+         Gbl.Forum.ForumType = For_FORUM_INSTIT_USRS;
          Gbl.Forum.Level = 1;
          break;
       case ActSeeForInsTch:	case ActSeePstForInsTch:
@@ -1586,7 +1586,7 @@ void For_SetForumTypeAndRestrictAccess (void)
       case ActCutThrForInsTch:	case ActPasThrForInsTch:
       case ActDelPstForInsTch:
       case ActEnbPstForInsTch:	case ActDisPstForInsTch:
-	 Gbl.Forum.ForumType = For_FORUM_INSTITUTION_TCHS;
+	 Gbl.Forum.ForumType = For_FORUM_INSTIT_TCHS;
          Gbl.Forum.Level = 1;
 	 break;
       case ActSeeForCtrUsr:	case ActSeePstForCtrUsr:
@@ -1672,11 +1672,11 @@ void For_SetForumTypeAndRestrictAccess (void)
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
                          Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_TEACHER);
          break;
-      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTIT_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
                          Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_STUDENT);
          break;
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
                          Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_TEACHER);
          break;
@@ -1977,13 +1977,13 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastIte
 
       /***** Link to the forum of users from this institution *****/
       IsLastItemInLevel[1] = (IsLastIns && !ICanSeeTeacherForum);
-      For_WriteLinkToAForum (For_FORUM_INSTITUTION_USRS,false,1,IsLastItemInLevel);
+      For_WriteLinkToAForum (For_FORUM_INSTIT_USRS,false,1,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this institution *****/
       if (ICanSeeTeacherForum)
         {
          IsLastItemInLevel[1] = IsLastIns;
-         For_WriteLinkToAForum (For_FORUM_INSTITUTION_TCHS,false,1,IsLastItemInLevel);
+         For_WriteLinkToAForum (For_FORUM_INSTIT_TCHS,false,1,IsLastItemInLevel);
         }
      }
    return InsCod;
@@ -2123,8 +2123,8 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
       case For_FORUM_DEGREE_USRS:
@@ -2186,10 +2186,10 @@ void For_SetForumName (For_ForumType_t ForumType,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
-      case For_FORUM_INSTITUTION_USRS:
+      case For_FORUM_INSTIT_USRS:
          strcpy (ForumName,Ins->ShortName);
          break;
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (ForumName,"%s%s",Ins->ShortName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
@@ -2278,8 +2278,8 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[NextAct].ActCod,ActTxt),Style,NULL);
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          Log_DrawLogo (Sco_SCOPE_INS,Gbl.Forum.Ins.InsCod,ForumName,20,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
@@ -2327,8 +2327,8 @@ unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned Nu
    /***** Get last time I read this forum from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ins.InsCod);
          break;
@@ -2385,8 +2385,8 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
           > specified time from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ins.InsCod);
          break;
@@ -2507,8 +2507,8 @@ void For_ShowForumThrs (void)
    /***** Get threads of a forum from database *****/
    switch (Gbl.Forum.ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:
-      case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",
                   Gbl.Forum.Ins.InsCod);
          break;
@@ -2745,7 +2745,7 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
       case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
       case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
          return 1;	// Only one forum
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> 0 <= number of institutions forums for an institution <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
@@ -2913,7 +2913,7 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                         " WHERE ForumType='%u'",
                   (unsigned) ForumType);
          break;
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> Number of threads in institution forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -3061,7 +3061,7 @@ unsigned For_GetNumThrsInForum (For_ForumType_t ForumType)
    /***** Get number of threads in a forum from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND Location='%ld'",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
@@ -3107,7 +3107,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                         " AND forum_thread.ThrCod=forum_post.ThrCod",
                   (unsigned) ForumType);
          break;
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> Number of posts in institutions forums for an institution
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post"
@@ -3294,7 +3294,7 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
    /***** Get number of posts in a forum from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
@@ -4297,7 +4297,7 @@ bool For_CheckIfThrBelongsToForum (long ThrCod,For_ForumType_t ForumType)
    /***** Get if a thread belong to current forum from database *****/
    switch (ForumType)
      {
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
@@ -4334,7 +4334,7 @@ void For_MoveThrToCurrentForum (long ThrCod)
          sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='-1' WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,ThrCod);
          break;
-      case For_FORUM_INSTITUTION_USRS:	case For_FORUM_INSTITUTION_TCHS:
+      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='%ld' WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Ins.InsCod,ThrCod);
          break;
@@ -4417,80 +4417,76 @@ void For_RemoveUsrFromThrClipboard (long UsrCod)
 /********** Remove all the threads and posts in forums of a degree ***********/
 /*****************************************************************************/
 
-void For_RemoveDegForums (long DegCod)
+void For_RemoveForums (Sco_Scope_t Scope,long Cod)
   {
+   static const struct
+     {
+      For_ForumType_t Usrs;
+      For_ForumType_t Tchs;
+     } ForumType[Sco_NUM_SCOPES] =
+     {
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_UNK	// No forums for this scope
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_SYS	// Not removable
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_CTY	// No forums for this scope
+	{For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},	// Sco_SCOPE_INS
+	{For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},	// Sco_SCOPE_CTR
+	{For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},	// Sco_SCOPE_DEG
+	{For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},	// Sco_SCOPE_CRS
+     };
    char Query[512];
 
    /***** Remove disabled posts *****/
    sprintf (Query,"DELETE FROM forum_disabled_post"
 	          " USING forum_thread,forum_post,forum_disabled_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_post.ThrCod AND forum_post.PstCod=forum_disabled_post.PstCod",
-            For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS,DegCod);
-   DB_QueryDELETE (Query,"can not remove the disabled posts in forums of a degree");
+                  " WHERE"
+                  " (forum_thread.ForumType='%u'"
+                  " OR"
+                  " forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod"
+                  " AND forum_post.PstCod=forum_disabled_post.PstCod",
+            ForumType[Scope].Usrs,
+            ForumType[Scope].Tchs,
+            Cod);
+   DB_QueryDELETE (Query,"can not remove the disabled posts in forums");
 
    /***** Remove posts *****/
    sprintf (Query,"DELETE FROM forum_post"
 	          " USING forum_thread,forum_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_post.ThrCod",
-            For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS,DegCod);
-   DB_QueryDELETE (Query,"can not remove posts in forums of a degree");
+                  " WHERE"
+                  " (forum_thread.ForumType='%u'"
+                  " OR"
+                  " forum_thread.ForumType='%u')"
+                  " AND forum_thread.Location='%ld'"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod",
+            ForumType[Scope].Usrs,
+            ForumType[Scope].Tchs,
+            Cod);
+   DB_QueryDELETE (Query,"can not remove posts in forums");
 
    /***** Remove threads read *****/
    sprintf (Query,"DELETE FROM forum_thr_read"
 	          " USING forum_thread,forum_thr_read"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld' AND forum_thread.ThrCod=forum_thr_read.ThrCod",
-            For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS,DegCod);
-   DB_QueryDELETE (Query,"can not remove read threads in forums of a degree");
-
-   /***** Remove threads *****/
-   sprintf (Query,"DELETE FROM forum_thread"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND Location='%ld'",
-            For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS,DegCod);
-   DB_QueryDELETE (Query,"can not remove threads in forums of a degree");
-  }
-
-/*****************************************************************************/
-/********** Remove all the threads and posts in forums of a course ***********/
-/*****************************************************************************/
-
-void For_RemoveCrsForums (long CrsCod)
-  {
-   char Query[512];
-
-   /***** Remove disabled posts *****/
-   sprintf (Query,"DELETE FROM forum_disabled_post"
-	          " USING forum_thread,forum_post,forum_disabled_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld'"
-                  " AND forum_thread.ThrCod=forum_post.ThrCod"
-                  " AND forum_post.PstCod=forum_disabled_post.PstCod",
-            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
-   DB_QueryDELETE (Query,"can not remove disabled posts in forums of a course");
-
-   /***** Remove posts *****/
-   sprintf (Query,"DELETE FROM forum_post USING forum_thread,forum_post"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld'"
-                  " AND forum_thread.ThrCod=forum_post.ThrCod",
-            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
-   DB_QueryDELETE (Query,"can not remove posts in forums of a course");
-
-   /***** Remove threads read *****/
-   sprintf (Query,"DELETE FROM forum_thr_read USING forum_thread,forum_thr_read"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " WHERE"
+                  " (forum_thread.ForumType='%u'"
+                  " OR"
+                  " forum_thread.ForumType='%u')"
                   " AND forum_thread.Location='%ld'"
                   " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
-            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
-   DB_QueryDELETE (Query,"can not remove read threads in forums of a course");
+            ForumType[Scope].Usrs,
+            ForumType[Scope].Tchs,
+            Cod);
+   DB_QueryDELETE (Query,"can not remove read threads in forums");
 
    /***** Remove threads *****/
    sprintf (Query,"DELETE FROM forum_thread"
-                  " WHERE (forum_thread.ForumType='%u' OR forum_thread.ForumType='%u')"
+                  " WHERE"
+                  " (forum_thread.ForumType='%u'"
+                  " OR"
+                  " forum_thread.ForumType='%u')"
                   " AND Location='%ld'",
-            For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS,CrsCod);
-   DB_QueryDELETE (Query,"can not remove threads in forums of a course");
+            ForumType[Scope].Usrs,
+            ForumType[Scope].Tchs,
+            Cod);
+   DB_QueryDELETE (Query,"can not remove threads in forums");
   }

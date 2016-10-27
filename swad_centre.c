@@ -1661,6 +1661,12 @@ void Ctr_RemoveCentre (void)
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else	// Centre has no teachers ==> remove it
      {
+      /***** Remove all the threads and posts in forums of the centre *****/
+      For_RemoveForums (Sco_SCOPE_CTR,Ctr.CtrCod);
+
+      /***** Remove surveys of the centre *****/
+      Svy_RemoveSurveys (Sco_SCOPE_CTR,Ctr.CtrCod);
+
       /***** Remove information related to files in centre *****/
       Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
 

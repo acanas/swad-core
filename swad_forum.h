@@ -31,6 +31,7 @@
 #include "swad_degree.h"
 #include "swad_institution.h"
 #include "swad_pagination.h"
+#include "swad_scope.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -54,8 +55,8 @@ typedef enum
    For_FORUM_DEGREE_TCHS	=  3,
    For_FORUM_CENTRE_USRS	=  4,
    For_FORUM_CENTRE_TCHS	=  5,
-   For_FORUM_INSTITUTION_USRS	=  6,
-   For_FORUM_INSTITUTION_TCHS	=  7,
+   For_FORUM_INSTIT_USRS	=  6,
+   For_FORUM_INSTIT_TCHS	=  7,
    For_FORUM_GLOBAL_USRS	=  8,
    For_FORUM_GLOBAL_TCHS	=  9,
    For_FORUM_SWAD_USRS		= 10,
@@ -140,7 +141,6 @@ void For_RemoveExpiredThrsClipboards (void);
 void For_RemoveThrCodFromThrClipboard (long ThrCod);
 void For_RemoveUsrFromThrClipboard (long UsrCod);
 
-void For_RemoveDegForums (long DegCod);
-void For_RemoveCrsForums (long CrsCod);
+void For_RemoveForums (Sco_Scope_t Scope,long DegCod);
 
 #endif

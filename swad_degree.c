@@ -2284,13 +2284,11 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Remove surveys of the degree
-          (not including surveys of courses in degree,
-          already removed) *****/
-   Svy_RemoveSurveys (Sco_SCOPE_DEG,DegCod);
-
    /***** Remove all the threads and posts in forums of the degree *****/
-   For_RemoveDegForums (DegCod);
+   For_RemoveForums (Sco_SCOPE_DEG,DegCod);
+
+   /***** Remove surveys of the degree *****/
+   Svy_RemoveSurveys (Sco_SCOPE_DEG,DegCod);
 
    /***** Remove information related to files in degree *****/
    Brw_RemoveDegFilesFromDB (DegCod);
