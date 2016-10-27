@@ -1265,14 +1265,15 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // to not send requests to be a student to admins)
 	    // ==> send notification to administrators or superusers
 	    sprintf (Query,"SELECT UsrCod FROM admin"
-	 		   " WHERE (Scope='Sys'"
-	 		   " OR (Scope='Ins' AND Cod='%ld')"
-	 		   " OR (Scope='Ctr' AND Cod='%ld')"
-	 		   " OR (Scope='Deg' AND Cod='%ld'))"
+	 		   " WHERE (Scope='%s'"
+	 		   " OR (Scope='%s' AND Cod='%ld')"
+	 		   " OR (Scope='%s' AND Cod='%ld')"
+	 		   " OR (Scope='%s' AND Cod='%ld'))"
 	 		   " AND UsrCod<>'%ld'",
-	 	     Gbl.CurrentIns.Ins.InsCod,
-	 	     Gbl.CurrentCtr.Ctr.CtrCod,
-	 	     Gbl.CurrentDeg.Deg.DegCod,
+	 	     Sco_ScopeDB[Sco_SCOPE_SYS],
+	 	     Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+	 	     Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+	 	     Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod,
 	 	     Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:	// New comment to one of my social notes or comments

@@ -2176,8 +2176,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
                   " VALUES ('%s','%ld','N','%u','%ld',"
                   "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s')",
-            Sco_ScopeDB[Svy->Scope],
-            Svy->Cod,
+            Sco_ScopeDB[Svy->Scope],Svy->Cod,
             Svy->Roles,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Svy->TimeUTC[Svy_START_TIME],
@@ -2397,56 +2396,11 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
   }
 
 /*****************************************************************************/
-/********************* Remove all the surveys of a degree ********************/
+/************ Remove all the surveys of a place on the hierarchy *************/
+/************ (country, institution, centre, degree or course)   *************/
 /*****************************************************************************/
 
-void Svy_RemoveDegSurveys (long DegCod)
-  {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512];
-
-   /***** Remove all the users in degree surveys
-          (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_users"
-	          " USING surveys,svy_users"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
-                  " AND surveys.SvyCod=svy_users.SvyCod",
-            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
-   DB_QueryDELETE (Query,"can not remove users"
-	                 " who had answered surveys in a degree");
-
-   /***** Remove all the answers in degree surveys
-          (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_answers"
-	          " USING surveys,svy_questions,svy_answers"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
-                  " AND surveys.SvyCod=svy_questions.SvyCod"
-                  " AND svy_questions.QstCod=svy_answers.QstCod",
-            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
-   DB_QueryDELETE (Query,"can not remove answers of surveys in a degree");
-
-   /***** Remove all the questions in this survey
-          (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM svy_questions"
-	          " USING surveys,svy_questions"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
-                  " AND surveys.SvyCod=svy_questions.SvyCod",
-            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
-   DB_QueryDELETE (Query,"can not remove questions of surveys in a degree");
-
-   /***** Remove degree surveys
-          (not including surveys of courses in degree) *****/
-   sprintf (Query,"DELETE FROM surveys"
-                  " WHERE Scope='%s' AND Cod='%ld'",
-            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
-   DB_QueryDELETE (Query,"can not remove all the surveys of a course");
-  }
-
-/*****************************************************************************/
-/********************* Remove all the surveys of a course ********************/
-/*****************************************************************************/
-
-void Svy_RemoveCrsSurveys (long CrsCod)
+void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
@@ -2456,9 +2410,9 @@ void Svy_RemoveCrsSurveys (long CrsCod)
 	          " USING surveys,svy_users"
                   " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_users.SvyCod",
-            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
+            Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove users"
-	                 " who had answered surveys in a course");
+	                 " who had answered surveys in a place on the hierarchy");
 
    /***** Remove all the answers in course surveys *****/
    sprintf (Query,"DELETE FROM svy_answers"
@@ -2466,31 +2420,31 @@ void Svy_RemoveCrsSurveys (long CrsCod)
                   " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
-            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
-   DB_QueryDELETE (Query,"can not remove answers of surveys in a course");
+            Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE (Query,"can not remove answers of surveys in a place on the hierarchy");
 
    /***** Remove all the questions in course surveys *****/
    sprintf (Query,"DELETE FROM svy_questions"
 	          " USING surveys,svy_questions"
                   " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_questions.SvyCod",
-            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
-   DB_QueryDELETE (Query,"can not remove questions of surveys in a course");
+            Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE (Query,"can not remove questions of surveys in a place on the hierarchy");
 
    /***** Remove groups *****/
    sprintf (Query,"DELETE FROM svy_grp"
 	          " USING surveys,svy_grp"
                   " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                   " AND surveys.SvyCod=svy_grp.SvyCod",
-            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
+            Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove all the groups"
 	                 " associated to surveys of a course");
 
    /***** Remove course surveys *****/
    sprintf (Query,"DELETE FROM surveys"
 	          " WHERE Scope='%s' AND Cod='%ld'",
-            Sco_ScopeDB[Sco_SCOPE_CRS],CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the surveys of a course");
+            Sco_ScopeDB[Scope],Cod);
+   DB_QueryDELETE (Query,"can not remove all the surveys in a place on the hierarchy");
   }
 
 /*****************************************************************************/
@@ -4002,12 +3956,10 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"
-                        " WHERE surveys.Scope='%s'"
-                        " AND surveys.CrsCod='%ld'"
+                        " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-                  Sco_ScopeDB[Sco_SCOPE_CRS],
-                  Gbl.CurrentCrs.Crs.CrsCod);
+                  Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");

@@ -98,8 +98,7 @@ void Svy_RecFormSurvey (void);
 bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod);
 void Svy_RemoveGroup (long GrpCod);
 void Svy_RemoveGroupsOfType (long GrpTypCod);
-void Svy_RemoveDegSurveys (long DegCod);
-void Svy_RemoveCrsSurveys (long CrsCod);
+void Svy_RemoveSurveys (long CrsCod);
 
 void Svy_RequestEditQuestion (void);
 void Svy_ReceiveQst (void);

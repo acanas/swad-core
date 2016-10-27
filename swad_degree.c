@@ -137,6 +137,7 @@ void Deg_SeePending (void)
 
 void Deg_SeeDegWithPendingCrss (void)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -155,12 +156,13 @@ void Deg_SeeDegWithPendingCrss (void)
       case Rol_DEG_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
                         " FROM admin,courses,degrees"
-                        " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                        " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                         " AND admin.Cod=courses.DegCod"
                         " AND (courses.Status & %u)<>0"
                         " AND courses.DegCod=degrees.DegCod"
                         " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-                  Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Crs_STATUS_BIT_PENDING);
+                  Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+                  (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
@@ -2250,6 +2252,7 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2281,8 +2284,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Remove surveys of the degree (not including surveys of courses in degree, already removed) *****/
-   Svy_RemoveDegSurveys (DegCod);
+   /***** Remove surveys of the degree
+          (not including surveys of courses in degree,
+          already removed) *****/
+   Svy_RemoveSurveys (Sco_SCOPE_DEG,DegCod);
 
    /***** Remove all the threads and posts in degree forums *****/
    /* Remove disabled posts */
@@ -2327,8 +2332,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   sprintf (Query,"DELETE FROM admin WHERE Scope='Deg' AND Cod='%ld'",
-            DegCod);
+   sprintf (Query,"DELETE FROM admin WHERE Scope='%s' AND Cod='%ld'",
+            Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
    DB_QueryDELETE (Query,"can not remove administrators of a degree");
 
    /***** Remove the degree *****/
@@ -2854,6 +2859,7 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 
 void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_all_degrees;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -2868,30 +2874,31 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    sprintf (Query,"(SELECT '%u' AS S,'-1' AS Cod,'' AS FullName"
 	          " FROM admin"
 	          " WHERE UsrCod='%ld'"
-	          " AND Scope='Sys')"
+	          " AND Scope='%s')"
                   " UNION "
                   "(SELECT '%u' AS S,admin.Cod,institutions.FullName"
                   " FROM admin,institutions"
                   " WHERE admin.UsrCod='%ld'"
-                  " AND admin.Scope='Ins'"
+                  " AND admin.Scope='%s'"
                   " AND admin.Cod=institutions.InsCod)"
                   " UNION "
                   "(SELECT '%u' AS S,admin.Cod,centres.FullName"
                   " FROM admin,centres"
                   " WHERE admin.UsrCod='%ld'"
-                  " AND admin.Scope='Ctr'"
+                  " AND admin.Scope='%s'"
                   " AND admin.Cod=centres.CtrCod)"
                   " UNION "
                   "(SELECT '%u' AS S,admin.Cod,degrees.FullName"
                   " FROM admin,degrees"
                   " WHERE admin.UsrCod='%ld'"
-                  " AND admin.Scope='Deg'"
+                  " AND admin.Scope='%s'"
                   " AND admin.Cod=degrees.DegCod)"
                   " ORDER BY S,FullName",
-            (unsigned) Sco_SCOPE_SYS,UsrCod,
-            (unsigned) Sco_SCOPE_INS,UsrCod,
-            (unsigned) Sco_SCOPE_CTR,UsrCod,
-            (unsigned) Sco_SCOPE_DEG,UsrCod);
+            (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
+            (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+            (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+            (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]);
+
    if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions, centres, degrees admin by a user")))
       /***** Get the list of degrees *****/
       for (NumRow = 1;

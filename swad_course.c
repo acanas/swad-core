@@ -2230,7 +2230,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    Att_RemoveCrsAttEvents (CrsCod);
 
    /***** Remove surveys of the course *****/
-   Svy_RemoveCrsSurveys (CrsCod);
+   Svy_RemoveSurveys (Sco_SCOPE_CRS,CrsCod);
 
    /***** Remove notices in the course *****/
    /* Copy all notices from the course to table of deleted notices */

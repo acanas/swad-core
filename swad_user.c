@@ -773,12 +773,13 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
 
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[128];
 
    /***** Get if a user is superuser from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM admin"
-                  " WHERE UsrCod='%ld' AND Scope='Sys'",
-            UsrCod);
+                  " WHERE UsrCod='%ld' AND Scope='%s'",
+            UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
    return (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
   }
 
@@ -4114,6 +4115,7 @@ void Usr_DropTmpTableWithCandidateUsrs (void)
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[1024];
    const char *QueryFields =
       "UsrCod,"
@@ -4156,30 +4158,31 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
          sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Sys')"
+                        " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,institutions"
-                        " WHERE admin.Scope='Ins'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=institutions.InsCod"
                         " AND institutions.CtyCod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,centres,institutions"
-                        " WHERE admin.Scope='Ctr'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
                         " AND institutions.CtyCod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees,centres,institutions"
-                        " WHERE admin.Scope='Deg'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
                         " AND institutions.CtyCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  Gbl.CurrentCty.Cty.CtyCod,
-                  Gbl.CurrentCty.Cty.CtyCod);
+                  Sco_ScopeDB[Sco_SCOPE_SYS],
+                  Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentCty.Cty.CtyCod,
+                  Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCty.Cty.CtyCod,
+                  Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:	// System admins,
 				// admins of the current institution,
@@ -4187,26 +4190,27 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
          sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Sys')"
+                        " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Ins' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,centres"
-                        " WHERE admin.Scope='Ctr'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=centres.CtrCod"
                         " AND centres.InsCod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees,centres"
-                        " WHERE admin.Scope='Deg'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " AND centres.InsCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Gbl.CurrentIns.Ins.InsCod);
+                  Sco_ScopeDB[Sco_SCOPE_SYS],
+                  Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:	// System admins,
 				// admins of the current institution,
@@ -4215,44 +4219,46 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
          sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Sys')"
+                        " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Ins' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Ctr' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees"
-                        " WHERE admin.Scope='Deg'"
+                        " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+                  Sco_ScopeDB[Sco_SCOPE_SYS],
+                  Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+                  Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:	// System admins
 				// and admins of the current institution, centre or degree
          sprintf (Query,"SELECT %s FROM usr_data"
                         " WHERE UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Sys')"
+                        " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Ins' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Ctr' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='Deg' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod='%ld')"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
-                  Gbl.CurrentIns.Ins.InsCod,
-                  Gbl.CurrentCtr.Ctr.CtrCod,
-                  Gbl.CurrentDeg.Deg.DegCod);
+                  Sco_ScopeDB[Sco_SCOPE_SYS],
+                  Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
+                  Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
+                  Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
 	 Lay_ShowErrorAndExit ("Wrong scope.");

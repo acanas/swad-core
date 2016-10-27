@@ -2080,6 +2080,7 @@ void Enr_UpdateEnrollmentRequests (void)
 
 static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Enrollment_requests;
    extern const char *Txt_Scope;
@@ -2190,12 +2191,12 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
                         RolesSelected);
                break;
             case Rol_CTR_ADM:
@@ -2206,13 +2207,13 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ctr'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
                         RolesSelected);
                break;
             case Rol_INS_ADM:
@@ -2223,14 +2224,14 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ins'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
                         RolesSelected);
                break;
            case Rol_SYS_ADM:
@@ -2284,7 +2285,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
                               " AND centres.InsCod=institutions.InsCod"
@@ -2293,7 +2294,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
                         Gbl.CurrentCty.Cty.CtyCod,
                         RolesSelected);
                break;
@@ -2305,7 +2306,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ctr'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=centres.CtrCod"
                               " AND centres.InsCod=institutions.InsCod"
                               " AND institutions.CtyCod='%ld'"
@@ -2314,7 +2315,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
                         Gbl.CurrentCty.Cty.CtyCod,
                         RolesSelected);
                break;
@@ -2326,7 +2327,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ins'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=institutions.InsCod"
                               " AND institutions.CtyCod='%ld'"
                               " AND institutions.InsCod=centres.InsCod"
@@ -2335,7 +2336,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
                         Gbl.CurrentCty.Cty.CtyCod,
                         RolesSelected);
                break;
@@ -2395,7 +2396,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
                               " AND centres.InsCod='%ld'"
@@ -2403,7 +2404,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
                         Gbl.CurrentIns.Ins.InsCod,
                         RolesSelected);
                break;
@@ -2415,7 +2416,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Ctr'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=centres.CtrCod"
                               " AND centres.InsCod='%ld'"
                               " AND centres.CtrCod=degrees.CtrCod"
@@ -2423,7 +2424,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
                         Gbl.CurrentIns.Ins.InsCod,
                         RolesSelected);
                break;
@@ -2482,14 +2483,14 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='Deg'"
+                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
                               " AND degrees.CtrCod='%ld'"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
-                        Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
                         Gbl.CurrentCtr.Ctr.CtrCod,
                         RolesSelected);
                break;
