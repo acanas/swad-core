@@ -11679,7 +11679,7 @@ UPDATE surveys SET Cod=CrsCod WHERE Scope='Crs';
 DROP INDEX DegCod ON surveys;
 ALTER TABLE surveys ADD PRIMARY KEY(SvyCod);
 DROP INDEX SvyCod ON surveys;
-ALTER TABLE surveys ADD UNIQUE INDEX(SvyCod,Scope,Cod,Hidden),ADD INDEX(Scope,Cod,Hidden);
+ALTER TABLE surveys ADD UNIQUE INDEX(Scope,Cod);
 
 
 ----- TODO: Eliminar columnas sin uso en futuras versiones -----

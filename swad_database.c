@@ -2109,8 +2109,6 @@ mysql> DESCRIBE surveys;
                    "SvyCod INT NOT NULL AUTO_INCREMENT,"
 	           "Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
 	           "Cod INT NOT NULL DEFAULT -1,"
-		      "DegCod INT NOT NULL DEFAULT -1,"	// TODO: DROP COLUMN
-		      "CrsCod INT NOT NULL DEFAULT -1,"	// TODO: DROP COLUMN
                    "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "NumNotif INT NOT NULL DEFAULT 0,"
                    "Roles INT NOT NULL DEFAULT 0,"
@@ -2119,9 +2117,8 @@ mysql> DESCRIBE surveys;
                    "EndTime DATETIME NOT NULL,"
                    "Title VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
-                   "PRIMARY KEY(SvyCod),"
-	           "UNIQUE INDEX(SvyCod,Scope,Cod,Hidden),"
-	           "INDEX(Scope,Cod,Hidden))");
+                   "UNIQUE INDEX(SvyCod),"
+	           "INDEX(Scope,Cod)");
 
    /***** Table svy_answers *****/
 /*

@@ -843,6 +843,7 @@ static void Svy_PutParams (void)
 
 void Svy_GetListSurveys (void)
   {
+   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char SubQuery[Sco_NUM_SCOPES][128];
    char OrderBySubQuery[256];
    char Query[2048];
@@ -872,14 +873,14 @@ void Svy_GetListSurveys (void)
    Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
 
    for (Scope = Sco_SCOPE_SYS, SubQueryFilled = false;
-	Scope < Sco_SCOPE_CRS;
+	Scope <= Sco_SCOPE_CRS;
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
-	 sprintf (SubQuery[Scope],"%s(Scope='%u' AND Cod='%ld'%s)",
+	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod='%ld'%s)",
 	          SubQueryFilled ? " OR " :
 	        	           "",
-		  (unsigned) Scope,Cods[Scope],
+		  Sco_ScopeDB[Scope],Cods[Scope],
 		  (ScopesAllowed & 1 << Sco_SCOPE_SYS) ? "" :
 							 " AND Hidden='N'");
 	 SubQueryFilled = true;

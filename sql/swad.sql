@@ -989,8 +989,8 @@ CREATE TABLE IF NOT EXISTS sta_notif (
 --
 CREATE TABLE IF NOT EXISTS surveys (
 	SvyCod INT NOT NULL AUTO_INCREMENT,
-	DegCod INT NOT NULL DEFAULT -1,
-	CrsCod INT NOT NULL DEFAULT -1,
+	Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',
+	Cod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NumNotif INT NOT NULL DEFAULT 0,
 	Roles INT NOT NULL DEFAULT 0,
@@ -1000,7 +1000,7 @@ CREATE TABLE IF NOT EXISTS surveys (
 	Title VARCHAR(255) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(SvyCod),
-	INDEX(DegCod,CrsCod,Hidden));
+	INDEX(Scope,Cod));
 --
 -- Table svy_answers: stores the answers to the surveys
 --
