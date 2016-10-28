@@ -679,8 +679,8 @@ static void Svy_WriteStatus (struct Survey *Svy)
    extern const char *Txt_Open_survey;
    extern const char *Txt_SURVEY_Type_of_user_not_allowed;
    extern const char *Txt_SURVEY_Type_of_user_allowed;
-   extern const char *Txt_SURVEY_You_belong_to_degree_coruse_or_groups;
-   extern const char *Txt_SURVEY_You_dont_belong_to_degree_coruse_or_groups;
+   extern const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey;
+   extern const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey;
    extern const char *Txt_SURVEY_You_have_already_answered;
    extern const char *Txt_SURVEY_You_have_not_answered;
 
@@ -724,12 +724,12 @@ static void Svy_WriteStatus (struct Survey *Svy)
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Svy->Status.Visible ? "STATUS_GREEN" :
         	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_You_belong_to_degree_coruse_or_groups);
+               Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
    else
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Svy->Status.Visible ? "STATUS_RED" :
         	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_You_dont_belong_to_degree_coruse_or_groups);
+               Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
 
    /* Write whether survey has been already answered by me or not */
    if (Svy->Status.IHaveAnswered)

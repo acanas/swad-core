@@ -39677,46 +39677,46 @@ const char *Txt_Survey =
 	"Inqu&eacute;rito";
 #endif
 
-const char *Txt_SURVEY_You_belong_to_degree_coruse_or_groups =
+const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
 #if   L==1
-	"Pertenece a titulaci&oacute;n, asignatura o grupo(s)";	// Necessita traduccio
+	"Pertany a l'&agrave;mbit de l'enquesta";
 #elif L==2
-	"You belong to degree, course or group(s)";		// Need Übersetzung
+	"Sie geh&ouml;ren zum Umfang der Umfrage";
 #elif L==3
-	"You belong to degree, course or group(s)";
+	"You belong to the scope of the survey";
 #elif L==4
-	"Pertenece a titulaci&oacute;n, asignatura o grupo(s)";
+	"Pertenece al &aacute;mbito de la encuesta";
 #elif L==5
-	"You belong to degree, course or group(s)";		// Besoin de traduction
+	"Vous appartenez &agrave; la port&eacute;e de l'enqu&ecirc;te";
 #elif L==6
-	"Pertenece a titulaci&oacute;n, asignatura o grupo(s)";	// Okoteve traducción
+	"Pertenece al &aacute;mbito de la encuesta";	// Okoteve traducción
 #elif L==7
-	"Appartieni alla laurea, corso o gruppo";
+	"Voi appartenete al campo d'indagine";
 #elif L==8
-	"You belong to degree, course or group(s)";		// Potrzebujesz tlumaczenie
+	"Nale&zdot;ysz do zakresu badania";
 #elif L==9
-	"You belong to degree, course or group(s)";		// Necessita de tradução
+	"Voc&ecirc; pertence ao &acirc;mbito do inqu&eacute;rito";
 #endif
 
-const char *Txt_SURVEY_You_dont_belong_to_degree_coruse_or_groups =
+const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey =
 #if   L==1
-	"No pertenece a titulaci&oacute;n, asignatura o grupo(s)";	// Necessita traduccio
+	"No pertany a l'&agrave;mbit de l'enquesta";
 #elif L==2
-	"You don't belong to degree, course or group(s)";		// Need Übersetzung
+	"Sie geh&ouml;ren nicht zum Umfang der Befragung";
 #elif L==3
-	"You don't belong to degree, course or group(s)";
+	"You don't belong to the scope of the survey)";
 #elif L==4
-	"No pertenece a titulaci&oacute;n, asignatura o grupo(s)";
+	"No pertenece al &aacute;mbito de la encuesta";
 #elif L==5
-	"You don't belong to degree, course or group(s)";		// Besoin de traduction
+	"Vous n'appartenez pas &agrave; la port&eacute;e de l'enqu&ecirc;te";
 #elif L==6
-	"No pertenece a titulaci&oacute;n, asignatura o grupo(s)";	// Okoteve traducción
+	"No pertenece al &aacute;mbito de la encuesta";	// Okoteve traducción
 #elif L==7
-	"Non appartieni alla laurea, corso o gruppo(s)";
+	"Voi non appartieni al campo d'indagine";
 #elif L==8
-	"You don't belong to degree, course or group(s)";		// Potrzebujesz tlumaczenie
+	"Nie nale&zdot;&aogon; do zakresu badania";
 #elif L==9
-	"You don't belong to degree, course or group(s)";		// Necessita de tradução
+	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do inqu&eacute;rito";
 #endif
 
 const char *Txt_SURVEY_You_have_already_answered =
