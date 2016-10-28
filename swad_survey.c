@@ -193,6 +193,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    unsigned NumSvy;
    bool ICanEdit = Svy_CheckIfICanCreateSvy ();
 
+   /***** Get number of groups in current course *****/
+   if (!Gbl.CurrentCrs.Grps.NumGrps)
+      Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
+
    /***** Get list of surveys *****/
    Svy_GetListSurveys ();
 
@@ -844,7 +848,7 @@ static void Svy_PutParams (void)
 void Svy_GetListSurveys (void)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char SubQuery[Sco_NUM_SCOPES][128];
+   char SubQuery[Sco_NUM_SCOPES][256];
    char OrderBySubQuery[256];
    char Query[2048];
    MYSQL_RES *mysql_res;
@@ -872,8 +876,9 @@ void Svy_GetListSurveys (void)
    Cods[Sco_SCOPE_DEG] = Gbl.CurrentDeg.Deg.DegCod;	// Degree
    Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
 
+   /* Fill subqueries for system, country, institution, centre and degree */
    for (Scope = Sco_SCOPE_SYS, SubQueryFilled = false;
-	Scope <= Sco_SCOPE_CRS;
+	Scope <= Sco_SCOPE_DEG;
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
@@ -881,12 +886,44 @@ void Svy_GetListSurveys (void)
 	          SubQueryFilled ? " OR " :
 	        	           "",
 		  Sco_ScopeDB[Scope],Cods[Scope],
-		  (ScopesAllowed & 1 << Sco_SCOPE_SYS) ? "" :
-							 " AND Hidden='N'");
+		  (HiddenAllowed & 1 << Scope) ? "" :
+						 " AND Hidden='N'");
 	 SubQueryFilled = true;
 	}
       else
 	 SubQuery[Scope][0] = '\0';
+
+   /* Fill subquery for course */
+   if (ScopesAllowed & 1 << Sco_SCOPE_CRS)
+     {
+      if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+	 sprintf (SubQuery[Scope],"%s("
+	                          "Scope='%s' AND Cod='%ld'%s"
+	                          " AND "
+	                          "(SvyCod NOT IN"
+	                          " (SELECT SvyCod FROM svy_grp)"
+	                          " OR"
+                                  " SvyCod IN"
+                                  " (SELECT svy_grp.SvyCod"
+                                  " FROM svy_grp,crs_grp_usr"
+                                  " WHERE crs_grp_usr.UsrCod='%ld'"
+                                  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
+	                          ")",
+	          SubQueryFilled ? " OR " :
+	        	           "",
+		  Sco_ScopeDB[Scope],Cods[Sco_SCOPE_CRS],
+		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+						         " AND Hidden='N'",
+                  Gbl.Usrs.Me.UsrDat.UsrCod);
+      else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
+	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod='%ld'%s)",
+	          SubQueryFilled ? " OR " :
+	        	           "",
+		  Sco_ScopeDB[Scope],Cods[Sco_SCOPE_CRS],
+		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+						         " AND Hidden='N'");
+      SubQueryFilled = true;
+     }
 
    if (SubQueryFilled)
      {
